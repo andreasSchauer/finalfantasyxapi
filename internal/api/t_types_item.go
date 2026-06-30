@@ -1,10 +1,12 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 type expItem struct {
 	testGeneral
 	expUnique
 	untypedItem        int32
-	category           int32
+	category           database.ItemCategory
 	monsters           []testMonItemAmts
 	treasures          map[int32]int32
 	shops              []int32
@@ -23,7 +25,7 @@ func compareItems(test test, exp expItem, got Item) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "untyped item", test.cfg.e.allItems.endpoint, exp.untypedItem, got.UntypedItem)
-	compIdApiResource(test, "category", test.cfg.e.itemCategory.endpoint, exp.category, got.Category)
+	compare(test, "category", string(exp.category), got.Category)
 	checkTestStructsInSlice(test, "monsters", exp.monsters, got.Monsters, compareMonItemAmts)
 	checkResAmtsID(test, "treasures", exp.treasures, got.Treasures)
 	checkResIDsInSlice(test, "shops", test.cfg.e.shops.endpoint, exp.shops, got.Shops)

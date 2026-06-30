@@ -14,7 +14,7 @@ func getMultipleAPIResources[T seeding.Lookupable, R any, A APIResource, L APIRe
 
 	dbIDs, err := i.getMultipleQuery(r.Context(), name)
 	if err != nil {
-		return zeroType, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'.", i.resTypeSing, name), err)
+		return zeroType, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'.", i.resTypeSingle, name), err)
 	}
 
 	return idsToAPIResourceList(cfg, r, i, dbIDs)

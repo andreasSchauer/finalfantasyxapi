@@ -39,7 +39,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}
 
-		elementID, err := checkQueryNameID(elementStr, cfg.e.elements.resTypeSing, queryParam, cfg.l.Elements)
+		elementID, err := checkQueryNameID(elementStr, cfg.e.elements.resTypeSingle, queryParam, cfg.l.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -48,7 +48,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 		}
 		elemMap[elementID] = true
 
-		affinity, err := checkQueryEnum(affinityStr, cfg.e.elementalAffinity.endpoint, queryParam, cfg.t.ElementalAffinity)
+		affinity, err := checkQueryEnum(affinityStr, cfg.e.monsters.endpoint, queryParam, cfg.t.ElementalAffinity)
 		if err != nil {
 			return nil, err
 		}

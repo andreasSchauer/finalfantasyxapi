@@ -47,24 +47,23 @@ func getLocationSectionRelations(cfg *Config, r *http.Request, locIDs []int32) (
 	var treasureJunctions []Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = getDbJunctions(ctx, locIDs, i.resTypeSing, cfg.e.treasures.resTypeSing, cfg.db.GetLocationTreasureIdPairs, juncLocationTreasure)
+		treasureJunctions, err = getDbJunctions(ctx, locIDs, i.resTypeSingle, cfg.e.treasures.resTypeSingle, cfg.db.GetLocationTreasureIdPairs, juncLocationTreasure)
 		return err
 	})
-	
+
 	var shopJunctions []Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = getDbJunctions(ctx, locIDs, i.resTypeSing, cfg.e.shops.resTypeSing, cfg.db.GetLocationShopIdPairs, juncLocationShop)
+		shopJunctions, err = getDbJunctions(ctx, locIDs, i.resTypeSingle, cfg.e.shops.resTypeSingle, cfg.db.GetLocationShopIdPairs, juncLocationShop)
 		return err
 	})
-	
+
 	var monsterJunctions []Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = getDbJunctions(ctx, locIDs, i.resTypeSing, cfg.e.monsters.resTypeSing, cfg.db.GetLocationMonsterIdPairs, juncLocationMonster)
+		monsterJunctions, err = getDbJunctions(ctx, locIDs, i.resTypeSingle, cfg.e.monsters.resTypeSingle, cfg.db.GetLocationMonsterIdPairs, juncLocationMonster)
 		return err
 	})
-	
 
 	err := g.Wait()
 	if err != nil {

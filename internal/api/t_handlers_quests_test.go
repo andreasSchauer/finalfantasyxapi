@@ -3,6 +3,8 @@ package api
 import (
 	"net/http"
 	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 func TestGetQuest(t *testing.T) {
@@ -26,7 +28,7 @@ func TestGetQuest(t *testing.T) {
 				id:   1,
 				name: "monster arena",
 			},
-			questType:  1,
+			questType:  database.QuestTypeSidequest,
 			typedQuest: "/sidequests/1",
 		},
 		{
@@ -40,7 +42,7 @@ func TestGetQuest(t *testing.T) {
 				id:   47,
 				name: "valefor - first win",
 			},
-			questType:  2,
+			questType:  database.QuestTypeSubquest,
 			typedQuest: "/subquests/37",
 		},
 		{
@@ -56,7 +58,7 @@ func TestGetQuest(t *testing.T) {
 				id:   80,
 				name: "6 or 7 guardian spheres",
 			},
-			questType:  2,
+			questType:  database.QuestTypeSubquest,
 			typedQuest: "/subquests/70",
 		},
 	}

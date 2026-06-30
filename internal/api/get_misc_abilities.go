@@ -50,7 +50,7 @@ func (cfg *Config) retrieveMiscAbilities(r *http.Request, i handlerInput[seeding
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
 		intListQuery(cfg, r, i, ids, qpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSing, cfg.l.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass),
+		nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSingle, cfg.l.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass),
 		boolQuery(r, i, ids, qpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
 		boolQuery(r, i, ids, qpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
 		boolQuery2(r, i, ids, qpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType)),

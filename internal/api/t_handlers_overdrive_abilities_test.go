@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -50,10 +51,10 @@ func TestGetOverdriveAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     3,
-								damageFormula:  1,
+								damageType:     database.DamageTypeSpecial,
+								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 34,
 							},
 						},
@@ -107,17 +108,17 @@ func TestGetOverdriveAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     2,
+								attackType:     database.AttackTypeHeal,
 								targetStat:     1,
-								damageType:     3,
-								damageFormula:  6,
+								damageType:     database.DamageTypeSpecial,
+								damageFormula:  database.DamageFormulaPercentageMax,
 								damageConstant: 16,
 							},
 							{
-								attackType:     2,
+								attackType:     database.AttackTypeHeal,
 								targetStat:     2,
-								damageType:     3,
-								damageFormula:  6,
+								damageType:     database.DamageTypeSpecial,
+								damageFormula:  database.DamageFormulaPercentageMax,
 								damageConstant: 16,
 							},
 						},
@@ -243,10 +244,10 @@ func TestGetOverdriveAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     3,
-								damageFormula:  1,
+								damageType:     database.DamageTypeSpecial,
+								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 4,
 							},
 						},
@@ -280,10 +281,10 @@ func TestGetOverdriveAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     3,
-								damageFormula:  1,
+								damageType:     database.DamageTypeSpecial,
+								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 24,
 							},
 						},

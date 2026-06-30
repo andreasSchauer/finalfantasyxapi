@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -26,7 +27,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					"battle interactions":                1,
 					"battle interactions 0 stat changes": 1,
 					"used by":                            3,
-					"monster formations":                 3,
+					"monster-formations":                 3,
 				},
 			},
 			expNameVer:        newExpNameVer(4, "talk", 1),
@@ -77,7 +78,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					"battle interactions":               1,
 					"battle interactions 0 mod changes": 1,
 					"used by":                           1,
-					"monster formations":                1,
+					"monster-formations":                1,
 				},
 			},
 			expNameVer:        newExpNameVer(6, "talk", 3),
@@ -127,7 +128,7 @@ func TestGetTriggerCommand(t *testing.T) {
 				expLengths: map[string]int{
 					"battle interactions": 1,
 					"used by":             3,
-					"monster formations":  1,
+					"monster-formations":  1,
 				},
 			},
 			expNameVer:        newExpNameVer(12, "struggle", 0),
@@ -156,10 +157,10 @@ func TestGetTriggerCommand(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     1,
-								damageFormula:  1,
+								damageType:     database.DamageTypePhysical,
+								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 16,
 							},
 						},

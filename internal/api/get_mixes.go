@@ -22,7 +22,7 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seeding.Mix, Mix, Name
 	response := Mix{
 		ID:           mix.ID,
 		Name:         mix.Name,
-		Category:     enumToNamedAPIResource(cfg, cfg.e.mixCategory.endpoint, mix.Category, cfg.t.MixCategory),
+		Category:     mix.Category,
 		Overdrive:    nameToNamedAPIResource(cfg, cfg.e.overdrives, overdrive.Name, nil),
 		Description:  overdrive.Description,
 		Effect:       overdrive.Effect,

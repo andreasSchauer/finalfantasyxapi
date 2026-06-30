@@ -3,11 +3,11 @@ package api
 type Treasure struct {
 	ID              int32                              `json:"id"`
 	Area            AreaAPIResource                    `json:"area"`
-	Availability    NamedAPIResource                   `json:"availability"`
+	Availability    string			                   `json:"availability"`
 	IsAnimaTreasure bool                               `json:"is_anima_treasure"`
 	Notes           *string                            `json:"notes,omitempty"`
 	TreasureType    string                             `json:"treasure_type"`
-	LootType        NamedAPIResource                   `json:"loot_type"`
+	LootType        string			                   `json:"loot_type"`
 	GilAmount       *int32                             `json:"gil_amount,omitempty"`
 	Items           []ResourceAmount[TypedAPIResource] `json:"items,omitempty"`
 	Equipment       *FoundEquipment                    `json:"equipment,omitempty"`

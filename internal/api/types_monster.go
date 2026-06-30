@@ -15,12 +15,12 @@ type Monster struct {
 	AppliedState         *AppliedState        `json:"applied_state,omitempty"`
 	AgilityParameters    *AgilityParams       `json:"agility_parameters"`
 	Notes                *string              `json:"notes,omitempty"`
-	Species              NamedAPIResource     `json:"species"`
-	Availability         NamedAPIResource     `json:"availability"`
+	Species              string			      `json:"species"`
+	Availability         string			      `json:"availability"`
 	IsRepeatable         bool                 `json:"is_repeatable"`
 	CanBeCaptured        bool                 `json:"can_be_captured"`
 	AreaConquestLocation *string              `json:"area_conquest_location,omitempty"`
-	Category             NamedAPIResource     `json:"category"`
+	Category             string			      `json:"category"`
 	CTBIconType          string               `json:"ctb_icon_type"`
 	HasOverdrive         bool                 `json:"has_overdrive"`
 	IsUnderwater         bool                 `json:"is_underwater"`

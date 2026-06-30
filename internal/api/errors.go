@@ -54,11 +54,11 @@ func newHTTPErrorDB(fetchType ResTypePlural, parentItem seeding.Lookupable, err 
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", fetchType, parentItem), err)
 }
 
-func newHTTPErrorDbPairs(childResType, parentResType ResTypeSingular, err error) httpError {
+func newHTTPErrorDbPairs(childResType, parentResType ResTypeSingle, err error) httpError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs.", childResType, parentResType), err)
 }
 
-func newHTTPErrorDbOne(fetchType ResTypeSingular, parentItem seeding.Lookupable, err error) httpError {
+func newHTTPErrorDbOne(fetchType ResTypeSingle, parentItem seeding.Lookupable, err error) httpError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", fetchType, parentItem), err)
 }
 

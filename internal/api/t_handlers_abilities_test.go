@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -32,7 +33,7 @@ func TestGetAbility(t *testing.T) {
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: true,
 			canCopyCat:       false,
-			abilityType:      6,
+			abilityType:      database.AbilityTypeEnemyAbility,
 			typedAbility:     "/enemy-abilities/340",
 			monsters:         []int32{38, 176},
 			battleInteractions: []expBattleInteraction{
@@ -53,10 +54,10 @@ func TestGetAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     1,
-								damageFormula:  8,
+								damageType:     database.DamageTypePhysical,
+								damageFormula:  database.DamageFormulaSpecialNoVar,
 								damageConstant: 12,
 							},
 						},
@@ -111,7 +112,7 @@ func TestGetAbility(t *testing.T) {
 			rank:             h.GetInt32Ptr(6),
 			appearsInHelpBar: true,
 			canCopyCat:       false,
-			abilityType:      2,
+			abilityType:      database.AbilityTypeOverdriveAbility,
 			typedAbility:     "/overdrive-abilities/167",
 			monsters:         []int32{},
 			battleInteractions: []expBattleInteraction{
@@ -153,7 +154,7 @@ func TestGetAbility(t *testing.T) {
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: true,
 			canCopyCat:       true,
-			abilityType:      1,
+			abilityType:      database.AbilityTypePlayerAbility,
 			typedAbility:     "/player-abilities/72",
 			monsters:         []int32{45, 47, 65, 86, 94, 167},
 			battleInteractions: []expBattleInteraction{
@@ -174,10 +175,10 @@ func TestGetAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     2,
-								damageFormula:  3,
+								damageType:     database.DamageTypeMagical,
+								damageFormula:  database.DamageFormulaMagVsMdf,
 								damageConstant: 12,
 							},
 						},

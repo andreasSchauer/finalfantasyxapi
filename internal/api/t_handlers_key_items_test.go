@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -30,7 +31,7 @@ func TestGetKeyItem(t *testing.T) {
 			},
 			expUnique:       newExpUnique(39, "al bhed primer v"),
 			untypedItem:     151,
-			category:        3,
+			category:        database.KeyItemCategoryPrimer,
 			celestialWeapon: nil,
 			primer:          h.GetInt32Ptr(5),
 			areas:           []int32{65, 170},
@@ -50,7 +51,7 @@ func TestGetKeyItem(t *testing.T) {
 			},
 			expUnique:       newExpUnique(23, "mercury crest"),
 			untypedItem:     135,
-			category:        2,
+			category:        database.KeyItemCategoryCelestial,
 			celestialWeapon: h.GetInt32Ptr(7),
 			primer:          nil,
 			areas:           []int32{172},
@@ -70,7 +71,7 @@ func TestGetKeyItem(t *testing.T) {
 			},
 			expUnique:       newExpUnique(8, "mark of conquest"),
 			untypedItem:     120,
-			category:        5,
+			category:        database.KeyItemCategoryOther,
 			celestialWeapon: nil,
 			primer:          nil,
 			areas:           []int32{205},
@@ -90,7 +91,7 @@ func TestGetKeyItem(t *testing.T) {
 			},
 			expUnique:       newExpUnique(39, "al bhed primer v"),
 			untypedItem:     151,
-			category:        3,
+			category:        database.KeyItemCategoryPrimer,
 			celestialWeapon: nil,
 			primer:          h.GetInt32Ptr(5),
 			areas:           []int32{65, 170},
@@ -110,7 +111,7 @@ func TestGetKeyItem(t *testing.T) {
 			},
 			expUnique:       newExpUnique(39, "al bhed primer v"),
 			untypedItem:     151,
-			category:        3,
+			category:        database.KeyItemCategoryPrimer,
 			celestialWeapon: nil,
 			primer:          h.GetInt32Ptr(5),
 			areas:           []int32{},

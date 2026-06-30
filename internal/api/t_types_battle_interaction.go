@@ -1,5 +1,7 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 type expBattleInteraction struct {
 	target                    string
 	abilityRange              *int32
@@ -72,18 +74,18 @@ func compareDamages(test test, fieldName string, exp expDamage, got Damage) {
 }
 
 type expAbilityDamage struct {
-	attackType     int32
+	attackType     database.AttackType
 	targetStat     int32
-	damageType     int32
-	damageFormula  int32
+	damageType     database.DamageType
+	damageFormula  database.DamageFormula
 	damageConstant int32
 }
 
 func compareAbilityDamages(test test, fieldName string, exp expAbilityDamage, got AbilityDamage) {
-	compIdApiResource(test, fieldName+" - ad attack type", test.cfg.e.attackType.endpoint, exp.attackType, got.AttackType)
+	compare(test, fieldName+" - ad attack type", string(exp.attackType), got.AttackType)
 	compIdApiResource(test, fieldName+" - ad target stat", test.cfg.e.stats.endpoint, exp.targetStat, got.TargetStat)
-	compIdApiResource(test, fieldName+" - ad damage type", test.cfg.e.damageType.endpoint, exp.damageType, got.DamageType)
-	compIdApiResource(test, fieldName+" - ad damage formula", test.cfg.e.damageFormula.endpoint, exp.damageFormula, got.DamageFormula)
+	compare(test, fieldName+" - ad damage type", string(exp.damageType), got.DamageType)
+	compare(test, fieldName+" - ad damage formula", string(exp.damageFormula), got.DamageFormula)
 	compare(test, fieldName+" - ad damage constant", exp.damageConstant, got.DamageConstant)
 }
 

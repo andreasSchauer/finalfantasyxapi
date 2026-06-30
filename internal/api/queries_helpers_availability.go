@@ -18,7 +18,7 @@ type avlParams struct {
 func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (avlParams, error) {
 	queryParamAvl := i.queryLookup[qpnAvailability]
 	
-	availabilities, err := parseEnumListQuery(cfg, r, cfg.e.availabilityType.endpoint, queryParamAvl, cfg.t.AvailabilityType)
+	availabilities, err := parseEnumListQuery(cfg, r, i.endpoint, queryParamAvl, cfg.t.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return avlParams{}, err
 	}

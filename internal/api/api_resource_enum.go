@@ -1,8 +1,7 @@
 package api
 
 import (
-	"fmt"
-	"net/http"
+
 	"slices"
 	"strconv"
 
@@ -11,68 +10,34 @@ import (
 
 type EnumApiResourceList struct {
 	ListParams
-	Results []EnumAPIResource `json:"results"`
+	Results []EnumVal `json:"results"`
 }
 
 func (l EnumApiResourceList) getListParams() ListParams {
 	return l.ListParams
 }
 
-func (l EnumApiResourceList) getResults() []HasAPIResource {
-	return toHasAPIResSlice(l.Results)
-}
-
-type EnumAPIResource struct {
+type EnumVal struct {
 	ID          int32  `json:"id"`
 	Name        string `json:"name"`
-	URL         string `json:"url"`
 	Description string `json:"description,omitempty"`
 }
 
-func (r EnumAPIResource) IsZero() bool {
-	return r.ID == 0
+func (e EnumVal) IsZero() bool {
+	return e.ID == 0
 }
 
-func (r EnumAPIResource) GetID() int32 {
-	return r.ID
+func (e EnumVal) GetID() int32 {
+	return e.ID
 }
 
-func (r EnumAPIResource) GetURL() string {
-	return r.URL
-}
-
-func (r EnumAPIResource) ToKeyFields() []any {
-	return []any{
-		r.Name,
-	}
-}
-
-func (r EnumAPIResource) Error() string {
-	return fmt.Sprintf("enum api resource with url: %s", r.URL)
-}
-
-func (r EnumAPIResource) GetAPIResource() APIResource {
-	return r
-}
-
-func (r EnumAPIResource) GetTestKey() string {
-	return r.Name
-}
-
-func enumToNamedAPIResource[E, N any](cfg *Config, endpoint EndpointName, key string, et EnumType[E, N]) NamedAPIResource {
-	enumRes, _ := GetEnumAPIResource(key, et)
-
-	resource := newNamedAPIResourceSimple(cfg, endpoint, enumRes.ID, enumRes.Name)
-
-	return resource
-}
 
 // Searches an EnumAPIResource based on its value or an idString (mostly from queries)
-func GetEnumAPIResource[E, N any](key string, et EnumType[E, N]) (EnumAPIResource, error) {
+func CheckEnumVal[E, N any](key string, et EnumType[E, N]) (EnumVal, error) {
 	id, err := strconv.Atoi(key)
 	if err == nil {
 		if id > len(et.lookup) || id <= 0 {
-			return EnumAPIResource{}, errIdNotFound
+			return EnumVal{}, errIdNotFound
 		}
 		for _, res := range et.lookup {
 			if int32(id) == res.ID {
@@ -92,41 +57,27 @@ func GetEnumAPIResource[E, N any](key string, et EnumType[E, N]) (EnumAPIResourc
 		return res, nil
 	}
 
-	return EnumAPIResource{}, errNoResource
+	return EnumVal{}, errNoResource
 }
 
-func newEnumAPIResourceList(cfg *Config, r *http.Request, resources []EnumAPIResource) (EnumApiResourceList, error) {
-	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
-	if err != nil {
-		return EnumApiResourceList{}, err
-	}
 
-	list := EnumApiResourceList{
-		ListParams: listParams,
-		Results:    shownResources,
-	}
-
-	return list, nil
-}
-
-func createEnumResourceSlice(cfg *Config, endpoint EndpointName, lookup map[string]EnumAPIResource) []EnumAPIResource {
-	resources := []EnumAPIResource{}
+func createEnumValSlice(lookup map[string]EnumVal) []EnumVal {
+	resources := []EnumVal{}
 
 	for _, resource := range lookup {
-		resource.URL = createResourceURL(cfg, endpoint, resource.ID)
 		resources = append(resources, resource)
 	}
 
-	slices.SortStableFunc(resources, sortAPIResources)
+	slices.SortStableFunc(resources, h.SortOnId)
 
 	return resources
 }
 
-func enumSliceToMap(enumTypes []EnumAPIResource) map[string]EnumAPIResource {
-	typeMap := make(map[string]EnumAPIResource)
+func enumSliceToMap(enumTypes []EnumVal) map[string]EnumVal {
+	typeMap := make(map[string]EnumVal)
 
 	for i, enumType := range enumTypes {
-		typeMap[enumType.Name] = EnumAPIResource{
+		typeMap[enumType.Name] = EnumVal{
 			ID:          int32(i + 1),
 			Name:        enumType.Name,
 			Description: enumType.Description,

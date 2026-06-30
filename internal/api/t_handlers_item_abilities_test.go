@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -32,7 +33,7 @@ func TestGetItemAbility(t *testing.T) {
 			canCopyCat:          true,
 			untypedAbility:      294,
 			item:                2,
-			category:            1,
+			category:            database.ItemCategoryHealing,
 			CanUseOutsideBattle: true,
 			battleInteractions: []expBattleInteraction{
 				{
@@ -52,10 +53,10 @@ func TestGetItemAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     2,
+								attackType:     database.AttackTypeHeal,
 								targetStat:     1,
-								damageType:     3,
-								damageFormula:  8,
+								damageType:     database.DamageTypeSpecial,
+								damageFormula:  database.DamageFormulaSpecialNoVar,
 								damageConstant: 20,
 							},
 						},
@@ -90,7 +91,7 @@ func TestGetItemAbility(t *testing.T) {
 			canCopyCat:          true,
 			untypedAbility:      340,
 			item:                48,
-			category:            2,
+			category:            database.ItemCategoryOffensive,
 			CanUseOutsideBattle: false,
 			battleInteractions: []expBattleInteraction{
 				{
@@ -110,10 +111,10 @@ func TestGetItemAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     3,
-								damageFormula:  9,
+								damageType:     database.DamageTypeSpecial,
+								damageFormula:  database.DamageFormulaSpecialVar,
 								damageConstant: 20,
 							},
 						},
@@ -152,7 +153,7 @@ func TestGetItemAbility(t *testing.T) {
 			canCopyCat:          true,
 			untypedAbility:      354,
 			item:                62,
-			category:            2,
+			category:            database.ItemCategoryOffensive,
 			CanUseOutsideBattle: false,
 			battleInteractions: []expBattleInteraction{
 				{
@@ -172,17 +173,17 @@ func TestGetItemAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     3,
+								attackType:     database.AttackTypeAbsorb,
 								targetStat:     1,
-								damageType:     3,
-								damageFormula:  9,
+								damageType:     database.DamageTypeSpecial,
+								damageFormula:  database.DamageFormulaSpecialVar,
 								damageConstant: 30,
 							},
 							{
-								attackType:     3,
+								attackType:     database.AttackTypeAbsorb,
 								targetStat:     2,
-								damageType:     3,
-								damageFormula:  9,
+								damageType:     database.DamageTypeSpecial,
+								damageFormula:  database.DamageFormulaSpecialVar,
 								damageConstant: 30,
 							},
 						},
@@ -217,7 +218,7 @@ func TestGetItemAbility(t *testing.T) {
 			canCopyCat:          true,
 			untypedAbility:      358,
 			item:                66,
-			category:            3,
+			category:            database.ItemCategorySupport,
 			CanUseOutsideBattle: false,
 			battleInteractions: []expBattleInteraction{
 				{
@@ -266,7 +267,7 @@ func TestGetItemAbility(t *testing.T) {
 			canCopyCat:          true,
 			untypedAbility:      361,
 			item:                69,
-			category:            3,
+			category:            database.ItemCategorySupport,
 			CanUseOutsideBattle: false,
 			battleInteractions: []expBattleInteraction{
 				{

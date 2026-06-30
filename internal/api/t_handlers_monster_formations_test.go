@@ -14,7 +14,7 @@ func TestGetMonsterFormation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/332",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "monster formation with provided id '332' doesn't exist. max id: 331.",
+				expectedErr:    "monster-formation with provided id '332' doesn't exist. max id: 331.",
 			},
 		},
 		{

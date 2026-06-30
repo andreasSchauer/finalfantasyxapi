@@ -20,7 +20,7 @@ func (cfg *Config) getStatusCondition(r *http.Request, i handlerInput[seeding.St
 	response := StatusCondition{
 		ID:                      status.ID,
 		Name:                    status.Name,
-		Category:                enumToNamedAPIResource(cfg, cfg.e.statusConditionCategory.endpoint, status.Category, cfg.t.StatusConditionCategory),
+		Category:                status.Category,
 		IsPermanent:             status.IsPermanent,
 		Visualization:           status.Visualization,
 		Effect:                  status.Effect,

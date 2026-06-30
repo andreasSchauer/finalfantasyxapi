@@ -21,7 +21,7 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Subloc
 		ID:                    sublocation.ID,
 		Name:                  sublocation.Name,
 		ParentLocation:        nameToNamedAPIResource(cfg, cfg.e.locations, sublocation.Location.Name, nil),
-		Availability:          enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, sublocation.Availability, cfg.t.AvailabilityType),
+		Availability:          sublocation.Availability,
 		ConnectedSublocations: rel.ConnectedSublocations,
 		Areas:                 rel.Areas,
 		LocRel:                rel.LocRel,

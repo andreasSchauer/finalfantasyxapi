@@ -1,10 +1,12 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 type expShop struct {
 	testGeneral
 	expIdOnly
 	area        int32
-	category    int32
+	category    database.ShopCategory
 	preAirship  *testSubShop
 	postAirship *testSubShop
 }
@@ -17,7 +19,7 @@ func compareShops(test test, exp expShop, got Shop) {
 	test.t.Helper()
 	compareExpIdOnly(test, exp.expIdOnly, got.ID)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
-	compIdApiResource(test, "category", test.cfg.e.shopCategory.endpoint, exp.category, got.Category)
+	compare(test, "category", string(exp.category), got.Category)
 	compTestStructPtrs(test, "pre airship", exp.preAirship, got.PreAirship, compareSubShops)
 	compTestStructPtrs(test, "post airship", exp.postAirship, got.PostAirship, compareSubShops)
 }

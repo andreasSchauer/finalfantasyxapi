@@ -4,7 +4,7 @@ type KeyItem struct {
 	ID              int32                `json:"id"`
 	Name            string               `json:"name"`
 	UntypedItem     TypedAPIResource     `json:"untyped_item"`
-	Category        NamedAPIResource     `json:"category"`
+	Category        string          	 `json:"category"`
 	Description     string               `json:"description"`
 	Effect          string               `json:"effect"`
 	CelestialWeapon *NamedAPIResource    `json:"celestial_weapon,omitempty"`

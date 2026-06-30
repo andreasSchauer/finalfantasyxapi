@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -45,7 +46,7 @@ func TestGetShop(t *testing.T) {
 			},
 			expIdOnly: newExpIdOnly(2),
 			area:      48,
-			category:  1,
+			category:  database.ShopCategoryStandard,
 			preAirship: &testSubShop{
 				items: []testShopItem{},
 				equipment: []testShopEquipment{
@@ -125,7 +126,7 @@ func TestGetShop(t *testing.T) {
 			},
 			expIdOnly: newExpIdOnly(16),
 			area:      122,
-			category:  1,
+			category:  database.ShopCategoryStandard,
 			preAirship: &testSubShop{
 				items: []testShopItem{
 					newTestShopItem(0, 1, 100),
@@ -196,7 +197,7 @@ func TestGetShop(t *testing.T) {
 			},
 			expIdOnly: newExpIdOnly(31),
 			area:      202,
-			category:  3,
+			category:  database.ShopCategoryTravelAgency,
 			preAirship: &testSubShop{
 				items: []testShopItem{
 					newTestShopItem(1, 2, 500),

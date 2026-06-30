@@ -5,7 +5,7 @@ import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 type MonsterFormation struct {
 	ID              int32                              `json:"id"`
 	Category        string                             `json:"category"`
-	Availability    NamedAPIResource                   `json:"availability"`
+	Availability    string			                   `json:"availability"`
 	IsForcedAmbush  bool                               `json:"is_forced_ambush"`
 	CanEscape       bool                               `json:"can_escape"`
 	Notes           *string                            `json:"notes,omitempty"`
@@ -18,18 +18,18 @@ type MonsterFormation struct {
 type EncounterArea struct {
 	Area          AreaAPIResource 	`json:"area"`
 	Specification *string         	`json:"specification"`
-	Availability  NamedAPIResource	`json:"availability"`
+	Availability  string			`json:"availability"`
 }
 
 func (ec EncounterArea) GetAPIResource() APIResource {
 	return ec.Area
 }
 
-func convertEncounterArea(cfg *Config, el seeding.EncounterArea) EncounterArea {
+func convertEncounterArea(cfg *Config, ea seeding.EncounterArea) EncounterArea {
 	return EncounterArea{
-		Area:          locAreaToAreaAPIResource(cfg, cfg.e.areas, el.LocationArea),
-		Specification: el.Specification,
-		Availability:  enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, el.Availability, cfg.t.AvailabilityType),
+		Area:          locAreaToAreaAPIResource(cfg, cfg.e.areas, ea.LocationArea),
+		Specification: ea.Specification,
+		Availability:  ea.Availability,
 	}
 }
 

@@ -3,7 +3,7 @@ package api
 type StatusCondition struct {
 	ID                      int32              `json:"id"`
 	Name                    string             `json:"name"`
-	Category                NamedAPIResource   `json:"category"`
+	Category                string			   `json:"category"`
 	IsPermanent             bool               `json:"is_permanent"`
 	Visualization           *string            `json:"visualization"`
 	Effect                  string             `json:"effect"`

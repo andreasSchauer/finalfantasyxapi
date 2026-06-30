@@ -40,6 +40,6 @@ func (cfg *Config) retrieveOverdrives(r *http.Request, i handlerInput[seeding.Ov
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
 		intListQuery(cfg, r, i, ids, qpnRank, cfg.db.GetOverdriveIDsByRank),
-		nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSing, cfg.l.CharClasses, ToIntManyNull(cfg.db.GetOverdriveIDsByUser)),
+		nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSingle, cfg.l.CharClasses, ToIntManyNull(cfg.db.GetOverdriveIDsByUser)),
 	})
 }

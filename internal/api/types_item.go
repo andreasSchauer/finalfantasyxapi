@@ -6,7 +6,7 @@ type Item struct {
 	ID                 int32                                `json:"id"`
 	Name               string                               `json:"name"`
 	UntypedItem        TypedAPIResource                     `json:"untyped_item"`
-	Category           NamedAPIResource                     `json:"category"`
+	Category           string               		        `json:"category"`
 	Description        string                               `json:"description"`
 	SgDescription      *string                              `json:"sg_description,omitempty"`
 	Effect             string                               `json:"effect"`

@@ -1,9 +1,11 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 type expMix struct {
 	testGeneral
 	expUnique
-	category     int32
+	category     database.MixCategory
 	overdrive    int32
 	combinations []testMixCombination
 }
@@ -15,7 +17,7 @@ func (e expMix) GetTestGeneral() testGeneral {
 func compareMixes(test test, exp expMix, got Mix) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResource(test, "category", test.cfg.e.mixCategory.endpoint, exp.category, got.Category)
+	compare(test, "category", string(exp.category), got.Category)
 	compIdApiResource(test, "overdrive", test.cfg.e.overdrives.endpoint, exp.overdrive, got.Overdrive)
 	checkTestStructsInSlice(test, "combinations", exp.combinations, got.Combinations, compareMixCombinations)
 }

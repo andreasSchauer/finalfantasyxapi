@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -30,7 +31,7 @@ func TestGetPlayerUnit(t *testing.T) {
 				id:   1,
 				name: "tidus",
 			},
-			unitType:         1,
+			unitType:         database.UnitTypeCharacter,
 			typedUnit:        "/characters/1",
 			area:             1,
 			celestialWeapon:  h.GetInt32Ptr(1),
@@ -49,7 +50,7 @@ func TestGetPlayerUnit(t *testing.T) {
 				id:   8,
 				name: "seymour",
 			},
-			unitType:         1,
+			unitType:         database.UnitTypeCharacter,
 			typedUnit:        "/characters/8",
 			area:             103,
 			celestialWeapon:  nil,
@@ -68,7 +69,7 @@ func TestGetPlayerUnit(t *testing.T) {
 				id:   10,
 				name: "ifrit",
 			},
-			unitType:         2,
+			unitType:         database.UnitTypeAeon,
 			typedUnit:        "/aeons/2",
 			area:             61,
 			celestialWeapon:  h.GetInt32Ptr(3),
@@ -87,7 +88,7 @@ func TestGetPlayerUnit(t *testing.T) {
 				id:   15,
 				name: "yojimbo",
 			},
-			unitType:         2,
+			unitType:         database.UnitTypeAeon,
 			typedUnit:        "/aeons/7",
 			area:             212,
 			celestialWeapon:  h.GetInt32Ptr(6),
@@ -106,7 +107,7 @@ func TestGetPlayerUnit(t *testing.T) {
 				id:   16,
 				name: "cindy",
 			},
-			unitType:         2,
+			unitType:         database.UnitTypeAeon,
 			typedUnit:        "/aeons/8",
 			area:             210,
 			celestialWeapon:  nil,

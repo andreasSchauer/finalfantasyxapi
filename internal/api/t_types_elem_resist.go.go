@@ -1,15 +1,15 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 type testElemResist struct {
 	element  int32
-	affinity int32
+	affinity database.ElementalAffinity
 }
 
 func compareElemResists(test test, fieldName string, exp testElemResist, got ElementalResist) {
 	test.t.Helper()
-	elemEndpoint := test.cfg.e.elements.endpoint
-	affinityEndpoint := test.cfg.e.elementalAffinity.endpoint
 
-	compIdApiResource(test, fieldName+" - elements", elemEndpoint, exp.element, got.Element)
-	compIdApiResource(test, fieldName+" - affinities", affinityEndpoint, exp.affinity, got.Affinity)
+	compIdApiResource(test, fieldName+" - elements", test.cfg.e.elements.endpoint, exp.element, got.Element)
+	compare(test, fieldName+" - affinities", string(exp.affinity), got.Affinity)
 }

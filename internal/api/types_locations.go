@@ -3,7 +3,7 @@ package api
 type Location struct {
 	ID                 int32              `json:"id"`
 	Name               string             `json:"name"`
-	Availability       NamedAPIResource   `json:"availability"`
+	Availability       string   		  `json:"availability"`
 	ConnectedLocations []NamedAPIResource `json:"connected_locations"`
 	Sublocations       []NamedAPIResource `json:"sublocations"`
 	LocRel
@@ -13,7 +13,7 @@ type Sublocation struct {
 	ID                    int32              `json:"id"`
 	Name                  string             `json:"name"`
 	ParentLocation        NamedAPIResource   `json:"parent_location"`
-	Availability      	  NamedAPIResource 	 `json:"availability"`
+	Availability      	  string 			 `json:"availability"`
 	ConnectedSublocations []NamedAPIResource `json:"connected_sublocations"`
 	Areas                 []AreaAPIResource  `json:"areas"`
 	LocRel
@@ -27,7 +27,7 @@ type Area struct {
 	DisplayName       string           `json:"display_name"`
 	ParentLocation    NamedAPIResource `json:"parent_location"`
 	ParentSublocation NamedAPIResource `json:"parent_sublocation"`
-	Availability      NamedAPIResource `json:"availability"`
+	Availability      string 		   `json:"availability"`
 	HasSaveSphere     bool             `json:"has_save_sphere"`
 	AirshipDropOff    bool             `json:"airship_drop_off"`
 	HasCompSphere     bool             `json:"has_comp_sphere"`

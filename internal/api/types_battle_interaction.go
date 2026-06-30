@@ -81,20 +81,20 @@ func convertDamage(cfg *Config, d seeding.Damage) Damage {
 
 type AbilityDamage struct {
 	Condition      *string          `json:"condition,omitempty"`
-	AttackType     NamedAPIResource `json:"attack_type"`
+	AttackType     string 			`json:"attack_type"`
 	TargetStat     NamedAPIResource `json:"target_stat"`
-	DamageType     NamedAPIResource `json:"damage_type"`
-	DamageFormula  NamedAPIResource `json:"damage_formula"`
+	DamageType     string 			`json:"damage_type"`
+	DamageFormula  string 			`json:"damage_formula"`
 	DamageConstant int32            `json:"damage_constant"`
 }
 
 func convertAbilityDamage(cfg *Config, ad seeding.AbilityDamage) AbilityDamage {
 	return AbilityDamage{
 		Condition:      ad.Condition,
-		AttackType:     enumToNamedAPIResource(cfg, cfg.e.attackType.endpoint, ad.AttackType, cfg.t.AttackType),
+		AttackType:     ad.AttackType,
 		TargetStat:     nameToNamedAPIResource(cfg, cfg.e.stats, ad.TargetStat, nil),
-		DamageType:     enumToNamedAPIResource(cfg, cfg.e.damageType.endpoint, ad.DamageType, cfg.t.DamageType),
-		DamageFormula:  enumToNamedAPIResource(cfg, cfg.e.damageFormula.endpoint, ad.DamageFormula, cfg.t.DamageFormula),
+		DamageType:     ad.DamageType,
+		DamageFormula:  ad.DamageFormula,
 		DamageConstant: ad.DamageConstant,
 	}
 }

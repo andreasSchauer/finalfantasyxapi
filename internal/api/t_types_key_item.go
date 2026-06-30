@@ -1,10 +1,12 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 type expKeyItem struct {
 	testGeneral
 	expUnique
 	untypedItem     int32
-	category        int32
+	category        database.KeyItemCategory
 	celestialWeapon *int32
 	primer          *int32
 	areas           []int32
@@ -20,7 +22,7 @@ func compareKeyItems(test test, exp expKeyItem, got KeyItem) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compIdApiResource(test, "untyped item", test.cfg.e.allItems.endpoint, exp.untypedItem, got.UntypedItem)
-	compIdApiResource(test, "category", test.cfg.e.keyItemCategory.endpoint, exp.category, got.Category)
+	compare(test, "category", string(exp.category), got.Category)
 	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.e.celestialWeapons.endpoint, exp.celestialWeapon, got.CelestialWeapon)
 	compIdApiResourcePtrs(test, "primer", test.cfg.e.primers.endpoint, exp.primer, got.Primer)
 	checkResIDsInSlice(test, "areas", test.cfg.e.areas.endpoint, exp.areas, got.Areas)

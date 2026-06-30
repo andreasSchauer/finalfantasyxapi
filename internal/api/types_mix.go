@@ -5,7 +5,7 @@ import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 type Mix struct {
 	ID           int32            `json:"id"`
 	Name         string           `json:"name"`
-	Category     NamedAPIResource `json:"category"`
+	Category     string			  `json:"category"`
 	Overdrive    NamedAPIResource `json:"overdrive"`
 	Description  string           `json:"description"`
 	Effect       string           `json:"effect"`

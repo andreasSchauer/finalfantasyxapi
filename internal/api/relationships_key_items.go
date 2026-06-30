@@ -13,7 +13,7 @@ import (
 func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyItem) (KeyItem, error) {
 	var rel KeyItem
 	g, ctx := errgroup.WithContext(r.Context())
-	
+
 	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.keyItems, keyItem.ID)
 	if err != nil {
 		return KeyItem{}, err
@@ -67,7 +67,7 @@ func getKeyItemCelestialWeapon(cfg *Config, ctx context.Context, keyItem seeding
 
 	celestialID, err := cfg.db.GetKeyItemCelestialWeapon(ctx, database.KeyItemBase(keyItemBase))
 	if err != nil {
-		return nil, newHTTPErrorDbOne(cfg.e.celestialWeapons.resTypeSing, keyItem, err)
+		return nil, newHTTPErrorDbOne(cfg.e.celestialWeapons.resTypeSingle, keyItem, err)
 	}
 
 	celestialRes := idToNamedAPIResource(cfg, cfg.e.celestialWeapons, celestialID)

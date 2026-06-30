@@ -1,12 +1,14 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 type expAbility struct {
 	testGeneral
 	expNameVer
 	rank               *int32
 	appearsInHelpBar   bool
 	canCopyCat         bool
-	abilityType        int32
+	abilityType        database.AbilityType
 	typedAbility       string
 	monsters           []int32
 	battleInteractions []expBattleInteraction
@@ -19,7 +21,7 @@ func (e expAbility) GetTestGeneral() testGeneral {
 func compareAbilities(test test, exp expAbility, got Ability) {
 	test.t.Helper()
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
-	compIdApiResource(test, "ability type", test.cfg.e.abilityType.endpoint, exp.abilityType, got.Type)
+	compare(test, "ability type", string(exp.abilityType), string(got.Type))
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
@@ -63,7 +65,7 @@ type expItemAbility struct {
 	canCopyCat          bool
 	untypedAbility      int32
 	item                int32
-	category            int32
+	category            database.ItemCategory
 	CanUseOutsideBattle bool
 	battleInteractions  []expBattleInteraction
 }
@@ -80,7 +82,7 @@ func compareItemAbilities(test test, exp expItemAbility, got ItemAbility) {
 	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
 	compIdApiResource(test, "untyped ability", test.cfg.e.abilities.endpoint, exp.untypedAbility, got.UntypedAbility)
 	compIdApiResource(test, "item", test.cfg.e.items.endpoint, exp.item, got.Item)
-	compIdApiResource(test, "category", test.cfg.e.itemCategory.endpoint, exp.category, got.Category)
+	compare(test, "category", string(exp.category), got.Category)
 	compare(test, "can use outside battle", exp.CanUseOutsideBattle, got.CanUseOutsideBattle)
 	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
@@ -201,6 +203,6 @@ func compareTriggerCommands(test test, exp expTriggerCommand, got TriggerCommand
 	compIdApiResource(test, "untyped ability", test.cfg.e.abilities.endpoint, exp.untypedAbility, got.UntypedAbility)
 	compIdApiResourcePtrs(test, "topmenu", test.cfg.e.topmenus.endpoint, exp.topmenu, got.Topmenu)
 	checkResIDsInSlice(test, "used by", test.cfg.e.characterClasses.endpoint, exp.usedBy, got.UsedBy)
-	checkResIDsInSlice(test, "monster formations", test.cfg.e.monsterFormations.endpoint, exp.monsterFormations, got.MonsterFormations)
+	checkResIDsInSlice(test, "monster-formations", test.cfg.e.monsterFormations.endpoint, exp.monsterFormations, got.MonsterFormations)
 	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }

@@ -9,37 +9,37 @@ import (
 )
 
 type QueryParam struct {
-	ID               int                        `json:"-"`
-	Name             QueryParamName             `json:"name"`
-	Type             QueryParamType             `json:"param_type"`
-	Description      string                     `json:"description"`
-	ExampleVals      []string                   `json:"-"`
-	Usage            string                     `json:"usage"`
-	ExampleUses      []string                   `json:"example_uses"`
-	IsExclusive      bool                       `json:"only_use_alone"`
-	ForSingle        bool                       `json:"for_single"`
-	ForList          bool                       `json:"for_list"`
-	ForSegment       *SectionName               `json:"for_segment"`
-	IsRequired       bool                       `json:"is_required"`
-	TypeLookup       map[string]EnumAPIResource `json:"-"`
-	RequiredParams   []QueryParamName           `json:"required_params,omitempty"`
-	UsableWith       []QueryParamName           `json:"usable_with,omitempty"`
-	ReplacedBy       []QueryParamName           `json:"replaced_by,omitempty"`
-	ForbiddenParams  []QueryParamName           `json:"forbidden_params,omitempty"`
-	ReferencesInt    []EndpointName             `json:"-"`
-	References       []string                   `json:"references,omitempty"`
-	AllowedIDs       []int32                    `json:"-"`
-	AllowedResources []string                   `json:"allowed_resources,omitempty"`
-	AllowedValues    []QueryValue               `json:"allowed_values,omitempty"`
-	AllowedIntRange  []int                      `json:"allowed_int_range,omitempty"`
-	AllowedResTypes  []string                   `json:"allowed_res_types,omitempty"`
-	DefaultVal       *int                       `json:"default_value,omitempty"`
-	SpecialInputs    []SpecialQueryInput        `json:"special_inputs,omitempty"`
+	ID               int                 `json:"-"`
+	Name             QueryParamName      `json:"name"`
+	Type             QueryParamType      `json:"param_type"`
+	Description      string              `json:"description"`
+	ExampleVals      []string            `json:"-"`
+	Usage            string              `json:"usage"`
+	ExampleUses      []string            `json:"example_uses"`
+	IsExclusive      bool                `json:"only_use_alone"`
+	ForSingle        bool                `json:"for_single"`
+	ForList          bool                `json:"for_list"`
+	ForSegment       *SectionName        `json:"for_segment"`
+	IsRequired       bool                `json:"is_required"`
+	EnumLookup       map[string]EnumVal  `json:"-"`
+	RequiredParams   []QueryParamName    `json:"required_params,omitempty"`
+	UsableWith       []QueryParamName    `json:"usable_with,omitempty"`
+	ReplacedBy       []QueryParamName    `json:"replaced_by,omitempty"`
+	ForbiddenParams  []QueryParamName    `json:"forbidden_params,omitempty"`
+	ReferencesInt    []EndpointName      `json:"-"`
+	References       []string            `json:"references,omitempty"`
+	AllowedIDs       []int32             `json:"-"`
+	AllowedResources []string            `json:"allowed_resources,omitempty"`
+	AllowedValues    []QueryValue        `json:"allowed_values,omitempty"`
+	AllowedIntRange  []int               `json:"allowed_int_range,omitempty"`
+	AllowedResTypes  []string            `json:"allowed_res_types,omitempty"`
+	DefaultVal       *int                `json:"default_value,omitempty"`
+	SpecialInputs    []SpecialQueryInput `json:"special_inputs,omitempty"`
 }
 
 type SpecialQueryInput struct {
 	Key QuerySpecialVal `json:"key"`
-	Val int    			`json:"value"`
+	Val int             `json:"value"`
 }
 
 // QueryLookup holds all the Query Parameters for the application
@@ -231,13 +231,13 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 		p.ExampleUses = []string{s + "true", s + "false"}
 
 	case qptEnum:
-		enums := createEnumResourceSlice(cfg, "", p.TypeLookup)
+		enums := createEnumValSlice(p.EnumLookup)
 		e := enums[0].Name
 		p.Usage = s + "{value|id}"
 		p.ExampleUses = []string{s + "1", s + e}
 
 	case qptEnumList:
-		enums := createEnumResourceSlice(cfg, "", p.TypeLookup)
+		enums := createEnumValSlice(p.EnumLookup)
 		e1 := enums[0].Name
 		e2 := enums[1].Name
 		p.Usage = s + "{value|id},..."
@@ -303,7 +303,7 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 		for _, input := range p.SpecialInputs {
 			usageTrimmed := strings.TrimSuffix(p.Usage, "}")
 			p.Usage = fmt.Sprintf("%s|'%s'}", usageTrimmed, input.Key)
-			p.ExampleUses = append(p.ExampleUses, s + string(input.Key))
+			p.ExampleUses = append(p.ExampleUses, s+string(input.Key))
 		}
 	}
 
@@ -318,8 +318,8 @@ func (cfg *Config) initLocationsParams() {
 			Type:          qptEnumList,
 			ForList:       false,
 			ForSingle:     true,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -334,8 +334,8 @@ func (cfg *Config) initLocationsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -355,7 +355,7 @@ func (cfg *Config) initLocationsParams() {
 		},
 		{
 			Name:          qpnMonster,
-			Description:   "Searches for locations where the specified monster can be found. If combined with 'availability', the location must contain a monster formation with the monster and whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the monster must have a monster formation whose farmability matches the given value based on its category.",
+			Description:   "Searches for locations where the specified monster can be found. If combined with 'availability', the location must contain a monster-formation with the monster and whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the monster must have a monster-formation whose farmability matches the given value based on its category.",
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
@@ -414,7 +414,7 @@ func (cfg *Config) initLocationsParams() {
 		},
 		{
 			Name:        qpnMonsters,
-			Description: "Searches for locations that have monsters. If combined with 'availability', the location must inhabit at least one monster formation whose most accessible availability matches one of the specified availabilities.",
+			Description: "Searches for locations that have monsters. If combined with 'availability', the location must inhabit at least one monster-formation whose most accessible availability matches one of the specified availabilities.",
 			Type:        qptBool,
 			ForList:     true,
 			ForSingle:   false,
@@ -422,7 +422,7 @@ func (cfg *Config) initLocationsParams() {
 		},
 		{
 			Name:        qpnBossFights,
-			Description: "Searches for locations that have bosses. If combined with 'availability', the location must inhabit at least one boss fight whose most accessible availability matches one of the specified availabilities (based on its monster formation).",
+			Description: "Searches for locations that have bosses. If combined with 'availability', the location must inhabit at least one boss fight whose most accessible availability matches one of the specified availabilities (based on its monster-formation).",
 			Type:        qptBool,
 			ForList:     true,
 			ForSingle:   false,
@@ -473,8 +473,8 @@ func (cfg *Config) initSublocationsParams() {
 			Type:          qptEnumList,
 			ForList:       false,
 			ForSingle:     true,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -497,8 +497,8 @@ func (cfg *Config) initSublocationsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -518,7 +518,7 @@ func (cfg *Config) initSublocationsParams() {
 		},
 		{
 			Name:          qpnMonster,
-			Description:   "Searches for sublocations where the specified monster can be found. If combined with 'availability', the sublocation must contain a monster formation with the monster and whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the monster must have a monster formation whose farmability matches the given value based on its category.",
+			Description:   "Searches for sublocations where the specified monster can be found. If combined with 'availability', the sublocation must contain a monster-formation with the monster and whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the monster must have a monster-formation whose farmability matches the given value based on its category.",
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
@@ -577,7 +577,7 @@ func (cfg *Config) initSublocationsParams() {
 		},
 		{
 			Name:        qpnMonsters,
-			Description: "Searches for sublocations that have monsters. If combined with 'availability', the sublocation must inhabit at least one monster formation whose most accessible availability matches one of the specified availabilities.",
+			Description: "Searches for sublocations that have monsters. If combined with 'availability', the sublocation must inhabit at least one monster-formation whose most accessible availability matches one of the specified availabilities.",
 			Type:        qptBool,
 			ForList:     true,
 			ForSingle:   false,
@@ -585,7 +585,7 @@ func (cfg *Config) initSublocationsParams() {
 		},
 		{
 			Name:        qpnBossFights,
-			Description: "Searches for sublocations that have bosses. If combined with 'availability', the sublocation must inhabit at least one boss fight whose most accessible availability matches one of the specified availabilities (based on its monster formation).",
+			Description: "Searches for sublocations that have bosses. If combined with 'availability', the sublocation must inhabit at least one boss fight whose most accessible availability matches one of the specified availabilities (based on its monster-formation).",
 			Type:        qptBool,
 			ForList:     true,
 			ForSingle:   false,
@@ -636,8 +636,8 @@ func (cfg *Config) initAreasParams() {
 			Type:          qptEnumList,
 			ForList:       false,
 			ForSingle:     true,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -669,8 +669,8 @@ func (cfg *Config) initAreasParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -690,7 +690,7 @@ func (cfg *Config) initAreasParams() {
 		},
 		{
 			Name:          qpnMonster,
-			Description:   "Searches for areas where the specified monster can be found. If combined with 'availability', the area must contain a monster formation with the monster and whose most accessible availability matches one of the specified availabilities (based on the formation's encounter areas). If combined with 'repeatable', the monster must have a monster formation whose farmability matches the given value based on its category.",
+			Description:   "Searches for areas where the specified monster can be found. If combined with 'availability', the area must contain a monster-formation with the monster and whose most accessible availability matches one of the specified availabilities (based on the formation's encounter areas). If combined with 'repeatable', the monster must have a monster-formation whose farmability matches the given value based on its category.",
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
@@ -777,7 +777,7 @@ func (cfg *Config) initAreasParams() {
 		},
 		{
 			Name:        qpnMonsters,
-			Description: "Searches for areas that have monsters. If combined with 'availability', the area must inhabit at least one monster formation whose most accessible availability matches one of the specified availabilities (based on its encounter areas).",
+			Description: "Searches for areas that have monsters. If combined with 'availability', the area must inhabit at least one monster-formation whose most accessible availability matches one of the specified availabilities (based on its encounter areas).",
 			Type:        qptBool,
 			ForList:     true,
 			ForSingle:   false,
@@ -785,7 +785,7 @@ func (cfg *Config) initAreasParams() {
 		},
 		{
 			Name:        qpnBossFights,
-			Description: "Searches for areas that have bosses. If combined with 'availability', the area must inhabit at least one boss fight whose most accessible availability matches one of the specified availabilities (based on its monster formation's encounter areas).",
+			Description: "Searches for areas that have bosses. If combined with 'availability', the area must inhabit at least one boss fight whose most accessible availability matches one of the specified availabilities (based on its monster-formation's encounter areas).",
 			Type:        qptBool,
 			ForList:     true,
 			ForSingle:   false,
@@ -832,7 +832,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 	params := []QueryParam{
 		{
 			Name:          qpnMonster,
-			Description:   "Searches for monster formations that feature the specified monster.",
+			Description:   "Searches for monster-formations that feature the specified monster.",
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
@@ -840,21 +840,21 @@ func (cfg *Config) initMonsterFormationsParams() {
 		},
 		{
 			Name:          qpnCategory,
-			Description:   "Searches for monster formations with the specified monster-formation-categories.",
+			Description:   "Searches for monster-formations with the specified monster-formation-categories.",
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.MonsterFormationCategory.lookup,
-			ReferencesInt: []EndpointName{epMonsterFormationCategory},
+			EnumLookup:    cfg.t.MonsterFormationCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpMonsterFormationCategory)},
 		},
 		{
 			Name:          qpnAvailability,
-			Description:   "Searches for monster formations with the given availabilities. If combined with the 'area' parameter, the availability of the monster formation in this specific area is used. If a monster-formation has multiple availabilities, because there are multiple ways of encountering it (like via always-accessible random encounter and via scripted story-fight), this filter defines the most accessible version of it as its actual availability. In that case, the monster formation won't show up for the other availability types, even if it technically can have that availability, since it can be encountered easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
+			Description:   "Searches for monster-formations with the given availabilities. If combined with the 'area' parameter, the availability of the monster-formation in this specific area is used. If a monster-formation has multiple availabilities, because there are multiple ways of encountering it (like via always-accessible random encounter and via scripted story-fight), this filter defines the most accessible version of it as its actual availability. In that case, the monster-formation won't show up for the other availability types, even if it technically can have that availability, since it can be encountered easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -866,14 +866,14 @@ func (cfg *Config) initMonsterFormationsParams() {
 		},
 		{
 			Name:        qpnRepeatable,
-			Description: "Searches for monsters that can be farmed. If this parameter is combined with the 'area' parameter, it takes the repeatability directly from the monster formations that occur in the specified area. Is combinable with 'availability'. In that case, the search looks for the monster formation that is the most accessible while also being farmable and checks, if this availability matches the given availabilities. It can be that more results show up at less accessible availability values than without using 'repeatable', because the more accessible sources aren't farmable.",
+			Description: "Searches for monsters that can be farmed. If this parameter is combined with the 'area' parameter, it takes the repeatability directly from the monster-formations that occur in the specified area. Is combinable with 'availability'. In that case, the search looks for the monster-formation that is the most accessible while also being farmable and checks, if this availability matches the given availabilities. It can be that more results show up at less accessible availability values than without using 'repeatable', because the more accessible sources aren't farmable.",
 			Type:        qptBool,
 			ForList:     true,
 			ForSingle:   false,
 		},
 		{
 			Name:          qpnLocation,
-			Description:   "Searches for monster formations that appear within the specified location. If combined with 'availability', this parameter searches for monster formations within this location whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monster formations within this location whose farmability matches the given value based on its category.",
+			Description:   "Searches for monster-formations that appear within the specified location. If combined with 'availability', this parameter searches for monster-formations within this location whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monster-formations within this location whose farmability matches the given value based on its category.",
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
@@ -882,7 +882,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		},
 		{
 			Name:          qpnSublocation,
-			Description:   "Searches for monster formations that appear within the specified sublocation. If combined with 'availability', this parameter searches for monster formations within this sublocation whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monster formations within this sublocation whose farmability matches the given value based on its category.",
+			Description:   "Searches for monster-formations that appear within the specified sublocation. If combined with 'availability', this parameter searches for monster-formations within this sublocation whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monster-formations within this sublocation whose farmability matches the given value based on its category.",
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
@@ -891,7 +891,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		},
 		{
 			Name:          qpnArea,
-			Description:   "Searches for monster formations that appear within the specified area. If combined with 'availability', this parameter searches for monster formations within this area whose most accessible availability matches one of the specified availabilities (based on the formation's encounter areas). If combined with 'repeatable', this parameter searches for monster formations within this area whose farmability matches the given value based on its category.",
+			Description:   "Searches for monster-formations that appear within the specified area. If combined with 'availability', this parameter searches for monster-formations within this area whose most accessible availability matches one of the specified availabilities (based on the formation's encounter areas). If combined with 'repeatable', this parameter searches for monster-formations within this area whose farmability matches the given value based on its category.",
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
@@ -900,7 +900,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		},
 		{
 			Name:        qpnAmbush,
-			Description: "Searches for monster formations that are forced ambushes.",
+			Description: "Searches for monster-formations that are forced ambushes.",
 			Type:        qptBool,
 			ForList:     true,
 			ForSingle:   false,
@@ -919,8 +919,8 @@ func (cfg *Config) initShopsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.ShopCategory.lookup,
-			ReferencesInt: []EndpointName{epShopCategory},
+			EnumLookup:    cfg.t.ShopCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpShopCategory)},
 		},
 		{
 			Name:          qpnAvailability,
@@ -928,8 +928,8 @@ func (cfg *Config) initShopsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:          qpnLocation,
@@ -1071,16 +1071,17 @@ func (cfg *Config) initTreasuresParams() {
 			Type:          qptEnum,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.LootType.lookup,
-			ReferencesInt: []EndpointName{epLootType},
+			EnumLookup:    cfg.t.LootType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpLootType)},
 		},
 		{
-			Name:        qpnTreasureType,
-			Description: "Searches for treasures with the specified treasure type.",
-			Type:        qptEnum,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.TreasureType.lookup,
+			Name:          qpnTreasureType,
+			Description:   "Searches for treasures with the specified treasure type.",
+			Type:          qptEnum,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.TreasureType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpTreasureType)},
 		},
 		{
 			Name:        qpnAnima,
@@ -1095,8 +1096,8 @@ func (cfg *Config) initTreasuresParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 	}
 
@@ -1112,8 +1113,8 @@ func (cfg *Config) initQuestsParams() {
 			Type:          qptEnum,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.QuestType.lookup,
-			ReferencesInt: []EndpointName{epQuestType},
+			EnumLookup:    cfg.t.QuestType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpQuestType)},
 		},
 		{
 			Name:          qpnAvailability,
@@ -1121,8 +1122,8 @@ func (cfg *Config) initQuestsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:        qpnRepeatable,
@@ -1145,8 +1146,8 @@ func (cfg *Config) initSidequestsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 	}
 
@@ -1162,8 +1163,8 @@ func (cfg *Config) initSubquestsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:        qpnRepeatable,
@@ -1181,12 +1182,13 @@ func (cfg *Config) initSubquestsParams() {
 func (cfg *Config) initArenaCreationsParams() {
 	params := []QueryParam{
 		{
-			Name:        qpnCategory,
-			Description: "Searches for monster formations with the specified arena-creation-categories.",
-			Type:        qptEnumList,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.ArenaCreationCategory.lookup,
+			Name:          qpnCategory,
+			Description:   "Searches for monster-formations with the specified arena-creation-categories.",
+			Type:          qptEnumList,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.ArenaCreationCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpArenaCreationCategory)},
 		},
 	}
 
@@ -1197,12 +1199,13 @@ func (cfg *Config) initArenaCreationsParams() {
 func (cfg *Config) initBlitzballPrizesParams() {
 	params := []QueryParam{
 		{
-			Name:        qpnCategory,
-			Description: "Searches for blitzball prize tables with the specified blitzball-tournament-category.",
-			Type:        qptEnum,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.BlitzballTournamentCategory.lookup,
+			Name:          qpnCategory,
+			Description:   "Searches for blitzball prize tables with the specified blitzball-tournament-category.",
+			Type:          qptEnum,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.BlitzballTournamentCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpBlitzballTournamentCategory)},
 		},
 	}
 
@@ -1253,20 +1256,22 @@ func (cfg *Config) initSongsParams() {
 			ForSingle:   false,
 		},
 		{
-			Name:        qpnComposer,
-			Description: "Searches for songs that were composed by the stated composer.",
-			Type:        qptEnum,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.Composer.lookup,
+			Name:          qpnComposer,
+			Description:   "Searches for songs that were composed by the stated composer.",
+			Type:          qptEnum,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.Composer.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpComposer)},
 		},
 		{
-			Name:        qpnArranger,
-			Description: "Searches for songs that were arranged by the stated arranger.",
-			Type:        qptEnum,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.Arranger.lookup,
+			Name:          qpnArranger,
+			Description:   "Searches for songs that were arranged by the stated arranger.",
+			Type:          qptEnum,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.Arranger.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpArranger)},
 		},
 	}
 
@@ -1298,8 +1303,8 @@ func (cfg *Config) initPlayerUnitsParams() {
 			Type:          qptEnum,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.UnitType.lookup,
-			ReferencesInt: []EndpointName{epUnitType},
+			EnumLookup:    cfg.t.UnitType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpUnitType)},
 		},
 	}
 
@@ -1310,12 +1315,13 @@ func (cfg *Config) initPlayerUnitsParams() {
 func (cfg *Config) initCharactersParams() {
 	params := []QueryParam{
 		{
-			Name:        qpnOsgStats,
-			Description: "Adds all stat gains within the character's stated sphere grid to their base stats. This includes stat nodes behind sphere locks.",
-			Type:        qptEnum,
-			ForList:     false,
-			ForSingle:   true,
-			TypeLookup:  cfg.t.SphereGridType.lookup,
+			Name:          qpnOsgStats,
+			Description:   "Adds all stat gains within the character's stated sphere grid to their base stats. This includes stat nodes behind sphere locks.",
+			Type:          qptEnum,
+			ForList:       false,
+			ForSingle:     true,
+			EnumLookup:    cfg.t.SphereGridType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpSphereGridType)},
 		},
 		{
 			Name:        qpnStoryBased,
@@ -1372,12 +1378,13 @@ func (cfg *Config) initAeonsParams() {
 func (cfg *Config) initCharacterClassesParams() {
 	params := []QueryParam{
 		{
-			Name:        qpnCategory,
-			Description: "Searches for character classes with the specified categories.",
-			Type:        qptEnumList,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.CharacterClassCategory.lookup,
+			Name:          qpnCategory,
+			Description:   "Searches for character classes with the specified categories.",
+			Type:          qptEnumList,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.CharacterClassCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpCharacterClassCategory)},
 		},
 	}
 
@@ -1393,8 +1400,8 @@ func (cfg *Config) initMonstersParams() {
 			Type:          qptEnumList,
 			ForList:       false,
 			ForSingle:     true,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -1447,7 +1454,7 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses:   []string{"?elemental_resists=fire=weak,water=absorb", "?elemental_resists=1=3,2=4"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{epElements, epElementalAffinity},
+			ReferencesInt: []EndpointName{epElements, EndpointName(enumEpElementalAffinity)},
 		},
 		{
 			Name:          qpnStatusResists,
@@ -1524,12 +1531,12 @@ func (cfg *Config) initMonstersParams() {
 		},
 		{
 			Name:          qpnAvailability,
-			Description:   "Searches for monsters with the given availabilities. If combined with a geographical filter, it takes the availability directly from the monster formations that occur in the specified location, sublocation, or area. If a monster has multiple availabilities, because there are multiple ways of encountering it (like via always-accessible random encounter and via scripted story-fight), this filter defines the most accessible version of it as its actual availability. In that case, the monster won't show up for the other availability types, even if it technically can have that availability, since it can be encountered easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
+			Description:   "Searches for monsters with the given availabilities. If combined with a geographical filter, it takes the availability directly from the monster-formations that occur in the specified location, sublocation, or area. If a monster has multiple availabilities, because there are multiple ways of encountering it (like via always-accessible random encounter and via scripted story-fight), this filter defines the most accessible version of it as its actual availability. In that case, the monster won't show up for the other availability types, even if it technically can have that availability, since it can be encountered easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -1541,14 +1548,14 @@ func (cfg *Config) initMonstersParams() {
 		},
 		{
 			Name:        qpnRepeatable,
-			Description: "Searches for monsters that can be farmed. If this parameter is combined with a geographical filter, it takes the repeatability directly from the monster formations that occur in the specified location, sublocation, or area. Is combinable with 'availability'. The availability assigned to the monster is from the monster formation that is the most accessible while also being farmable. The query then checks, if this availability matches the given availabilities. It can be that more results show up at less accessible availability values than without using 'repeatable', because the more accessible sources aren't farmable.",
+			Description: "Searches for monsters that can be farmed. If this parameter is combined with a geographical filter, it takes the repeatability directly from the monster-formations that occur in the specified location, sublocation, or area. Is combinable with 'availability'. The availability assigned to the monster is from the monster-formation that is the most accessible while also being farmable. The query then checks, if this availability matches the given availabilities. It can be that more results show up at less accessible availability values than without using 'repeatable', because the more accessible sources aren't farmable.",
 			Type:        qptBool,
 			ForList:     true,
 			ForSingle:   false,
 		},
 		{
 			Name:          qpnLocation,
-			Description:   "Searches for monsters that appear within the specified location. If combined with 'availability', this parameter searches for monsters that are part of at least one monster formation within this location whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monsters that are part of at least one monster formation within this location whose farmability matches the given value based on its category.",
+			Description:   "Searches for monsters that appear within the specified location. If combined with 'availability', this parameter searches for monsters that are part of at least one monster-formation within this location whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monsters that are part of at least one monster-formation within this location whose farmability matches the given value based on its category.",
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
@@ -1557,7 +1564,7 @@ func (cfg *Config) initMonstersParams() {
 		},
 		{
 			Name:          qpnSublocation,
-			Description:   "Searches for monsters that appear within the specified sublocation. If combined with 'availability', this parameter searches for monsters that are part of at least one monster formation within this sublocation whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monsters that are part of at least one monster formation within this sublocation whose farmability matches the given value based on its category.",
+			Description:   "Searches for monsters that appear within the specified sublocation. If combined with 'availability', this parameter searches for monsters that are part of at least one monster-formation within this sublocation whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monsters that are part of at least one monster-formation within this sublocation whose farmability matches the given value based on its category.",
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
@@ -1566,7 +1573,7 @@ func (cfg *Config) initMonstersParams() {
 		},
 		{
 			Name:          qpnArea,
-			Description:   "Searches for monsters that appear within the specified area. If combined with 'availability', this parameter searches for monsters that are part of at least one monster formation within this area whose most accessible availability matches one of the specified availabilities (based on the formation's encounter areas). If combined with 'repeatable', this parameter searches for monsters that are part of at least one monster formation within this area whose farmability matches the given value based on its category.",
+			Description:   "Searches for monsters that appear within the specified area. If combined with 'availability', this parameter searches for monsters that are part of at least one monster-formation within this area whose most accessible availability matches one of the specified availabilities (based on the formation's encounter areas). If combined with 'repeatable', this parameter searches for monsters that are part of at least one monster-formation within this area whose farmability matches the given value based on its category.",
 			Type:          qptId,
 			ForList:       true,
 			ForSingle:     false,
@@ -1615,16 +1622,17 @@ func (cfg *Config) initMonstersParams() {
 			Type:          qptEnum,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.MonsterSpecies.lookup,
-			ReferencesInt: []EndpointName{epMonsterSpecies},
+			EnumLookup:    cfg.t.MonsterSpecies.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpMonsterSpecies)},
 		},
 		{
-			Name:        qpnCreationArea,
-			Description: "Searches for monsters that need to be captured in the specified area to create its area creation.",
-			Type:        qptEnum,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.CreationArea.lookup,
+			Name:          qpnCreationArea,
+			Description:   "Searches for monsters that need to be captured in the specified area to create its area creation.",
+			Type:          qptEnum,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.CreationArea.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpCreationArea)},
 		},
 		{
 			Name:          qpnCategory,
@@ -1632,8 +1640,8 @@ func (cfg *Config) initMonstersParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.MonsterCategory.lookup,
-			ReferencesInt: []EndpointName{epMonsterCategory},
+			EnumLookup:    cfg.t.MonsterCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpMonsterCategory)},
 		},
 	}
 
@@ -1649,8 +1657,8 @@ func (cfg *Config) initAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AbilityType.lookup,
-			ReferencesInt: []EndpointName{epAbilityType},
+			EnumLookup:    cfg.t.AbilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAbilityType)},
 		},
 		{
 			Name:        qpnRank,
@@ -1682,12 +1690,13 @@ func (cfg *Config) initAbilitiesParams() {
 			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
-			Name:        qpnTargetType,
-			Description: "Searches for abilities with the specified target types.",
-			Type:        qptEnumList,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.TargetType.lookup,
+			Name:          qpnTargetType,
+			Description:   "Searches for abilities with the specified target types.",
+			Type:          qptEnumList,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.TargetType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpTargetType)},
 		},
 		{
 			Name:        qpnUserAtk,
@@ -1723,8 +1732,8 @@ func (cfg *Config) initAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{epAttackType},
+			EnumLookup:    cfg.t.AttackType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAttackType)},
 		},
 		{
 			Name:          qpnDamageType,
@@ -1732,8 +1741,8 @@ func (cfg *Config) initAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.DamageType.lookup,
-			ReferencesInt: []EndpointName{epDamageType},
+			EnumLookup:    cfg.t.DamageType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpDamageType)},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -1741,8 +1750,8 @@ func (cfg *Config) initAbilitiesParams() {
 			Type:          qptEnum,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{epDamageFormula},
+			EnumLookup:    cfg.t.DamageFormula.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpDamageFormula)},
 		},
 		{
 			Name:        qpnCanCrit,
@@ -1856,8 +1865,8 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.PlayerAbilityCategory.lookup,
-			ReferencesInt: []EndpointName{epPlayerAbilityCategory},
+			EnumLookup:    cfg.t.PlayerAbilityCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpPlayerAbilityCategory)},
 		},
 		{
 			Name:        qpnOutsideBattle,
@@ -1932,12 +1941,13 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ReferencesInt: []EndpointName{epItems},
 		},
 		{
-			Name:        qpnTargetType,
-			Description: "Searches for player abilities with the specified target types.",
-			Type:        qptEnumList,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.TargetType.lookup,
+			Name:          qpnTargetType,
+			Description:   "Searches for player abilities with the specified target types.",
+			Type:          qptEnumList,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.TargetType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpTargetType)},
 		},
 		{
 			Name:        qpnUserAtk,
@@ -1973,8 +1983,8 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{epAttackType},
+			EnumLookup:    cfg.t.AttackType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAttackType)},
 		},
 		{
 			Name:          qpnDamageType,
@@ -1982,8 +1992,8 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.DamageType.lookup,
-			ReferencesInt: []EndpointName{epDamageType},
+			EnumLookup:    cfg.t.DamageType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpDamageType)},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -1991,8 +2001,8 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Type:          qptEnum,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{epDamageFormula},
+			EnumLookup:    cfg.t.DamageFormula.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpDamageFormula)},
 		},
 		{
 			Name:          qpnElement,
@@ -2074,12 +2084,13 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ReferencesInt: []EndpointName{epStats},
 		},
 		{
-			Name:        qpnTargetType,
-			Description: "Searches for overdrive abilities with the specified target types.",
-			Type:        qptEnumList,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.TargetType.lookup,
+			Name:          qpnTargetType,
+			Description:   "Searches for overdrive abilities with the specified target types.",
+			Type:          qptEnumList,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.TargetType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpTargetType)},
 		},
 		{
 			Name:          qpnAttackType,
@@ -2087,8 +2098,8 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{epAttackType},
+			EnumLookup:    cfg.t.AttackType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAttackType)},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -2096,8 +2107,8 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			Type:          qptEnum,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{epDamageFormula},
+			EnumLookup:    cfg.t.DamageFormula.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpDamageFormula)},
 		},
 		{
 			Name:        qpnCanCrit,
@@ -2166,8 +2177,8 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.ItemCategory.lookup,
-			ReferencesInt: []EndpointName{epItemCategory},
+			EnumLookup:    cfg.t.ItemCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpItemCategory)},
 		},
 		{
 			Name:        qpnOutsideBattle,
@@ -2186,12 +2197,13 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ReferencesInt: []EndpointName{epStats},
 		},
 		{
-			Name:        qpnTargetType,
-			Description: "Searches for item abilities with the specified target types.",
-			Type:        qptEnumList,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.TargetType.lookup,
+			Name:          qpnTargetType,
+			Description:   "Searches for item abilities with the specified target types.",
+			Type:          qptEnumList,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.TargetType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpTargetType)},
 		},
 		{
 			Name:          qpnAttackType,
@@ -2199,8 +2211,8 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{epAttackType},
+			EnumLookup:    cfg.t.AttackType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAttackType)},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -2208,8 +2220,8 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Type:          qptEnum,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{epDamageFormula},
+			EnumLookup:    cfg.t.DamageFormula.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpDamageFormula)},
 		},
 		{
 			Name:          qpnElement,
@@ -2393,12 +2405,13 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
-			Name:        qpnTargetType,
-			Description: "Searches for enemy abilities with the specified target types.",
-			Type:        qptEnumList,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.TargetType.lookup,
+			Name:          qpnTargetType,
+			Description:   "Searches for enemy abilities with the specified target types.",
+			Type:          qptEnumList,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.TargetType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpTargetType)},
 		},
 		{
 			Name:        qpnDarkable,
@@ -2427,8 +2440,8 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{epAttackType},
+			EnumLookup:    cfg.t.AttackType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAttackType)},
 		},
 		{
 			Name:          qpnDamageType,
@@ -2436,8 +2449,8 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.DamageType.lookup,
-			ReferencesInt: []EndpointName{epDamageType},
+			EnumLookup:    cfg.t.DamageType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpDamageType)},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -2445,8 +2458,8 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Type:          qptEnum,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{epDamageFormula},
+			EnumLookup:    cfg.t.DamageFormula.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpDamageFormula)},
 		},
 		{
 			Name:        qpnCanCrit,
@@ -2549,8 +2562,8 @@ func (cfg *Config) initAllItemsParams() {
 			Type:          qptEnumList,
 			ForList:       false,
 			ForSingle:     true,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -2565,8 +2578,8 @@ func (cfg *Config) initAllItemsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.ItemType.lookup,
-			ReferencesInt: []EndpointName{epItemType},
+			EnumLookup:    cfg.t.ItemType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpItemType)},
 		},
 		{
 			Name:          qpnAvailability,
@@ -2574,8 +2587,8 @@ func (cfg *Config) initAllItemsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -2642,8 +2655,8 @@ func (cfg *Config) initItemsParams() {
 			Type:          qptEnumList,
 			ForList:       false,
 			ForSingle:     true,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -2674,8 +2687,8 @@ func (cfg *Config) initItemsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.ItemCategory.lookup,
-			ReferencesInt: []EndpointName{epItemCategory},
+			EnumLookup:    cfg.t.ItemCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpItemCategory)},
 		},
 		{
 			Name:          qpnAvailability,
@@ -2683,8 +2696,8 @@ func (cfg *Config) initItemsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -2751,8 +2764,8 @@ func (cfg *Config) initKeyItemsParams() {
 			Type:          qptEnumList,
 			ForList:       false,
 			ForSingle:     true,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:          qpnAvailability,
@@ -2760,8 +2773,8 @@ func (cfg *Config) initKeyItemsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:          qpnCategory,
@@ -2769,8 +2782,8 @@ func (cfg *Config) initKeyItemsParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.KeyItemCategory.lookup,
-			ReferencesInt: []EndpointName{epKeyItemCategory},
+			EnumLookup:    cfg.t.KeyItemCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpKeyItemCategory)},
 		},
 		{
 			Name:          qpnMethods,
@@ -2822,8 +2835,8 @@ func (cfg *Config) initSpheresParams() {
 			Type:          qptEnumList,
 			ForList:       false,
 			ForSingle:     true,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -2833,12 +2846,13 @@ func (cfg *Config) initSpheresParams() {
 			ForSingle:   true,
 		},
 		{
-			Name:        qpnColor,
-			Description: "Searches for spheres with any of the given colors.",
-			Type:        qptEnumList,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.SphereColor.lookup,
+			Name:          qpnColor,
+			Description:   "Searches for spheres with any of the given colors.",
+			Type:          qptEnumList,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.SphereColor.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpSphereColor)},
 		},
 		{
 			Name:          qpnAvailability,
@@ -2846,8 +2860,8 @@ func (cfg *Config) initSpheresParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -2914,8 +2928,8 @@ func (cfg *Config) initPrimersParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 	}
 
@@ -2949,8 +2963,8 @@ func (cfg *Config) initMixesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.MixCategory.lookup,
-			ReferencesInt: []EndpointName{epMixCategory},
+			EnumLookup:    cfg.t.MixCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpMixCategory)},
 		},
 		{
 			Name:          qpnReqItem,
@@ -2985,8 +2999,8 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       false,
 			ForSingle:     true,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -3001,8 +3015,8 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -3025,16 +3039,17 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Type:          qptEnumList,
 			ForList:       true,
 			ForSingle:     false,
-			TypeLookup:    cfg.t.AutoAbilityCategory.lookup,
-			ReferencesInt: []EndpointName{epAutoAbilityCategory},
+			EnumLookup:    cfg.t.AutoAbilityCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAutoAbilityCategory)},
 		},
 		{
-			Name:        qpnType,
-			Description: "Searches for auto-abilities that are of the specified equip type.",
-			Type:        qptEnum,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.EquipType.lookup,
+			Name:          qpnType,
+			Description:   "Searches for auto-abilities that are of the specified equip type.",
+			Type:          qptEnum,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.EquipType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpEquipType)},
 		},
 		{
 			Name:          qpnMonster,
@@ -3132,12 +3147,13 @@ func (cfg *Config) initEquipmentTablesParams() {
 			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
 		{
-			Name:        qpnType,
-			Description: "Searches for equipment tables that are of the specified equip type.",
-			Type:        qptEnum,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.EquipType.lookup,
+			Name:          qpnType,
+			Description:   "Searches for equipment tables that are of the specified equip type.",
+			Type:          qptEnum,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.EquipType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpEquipType)},
 		},
 		{
 			Name:        qpnCelestialWeapon,
@@ -3169,8 +3185,8 @@ func (cfg *Config) initEquipmentParams() {
 			Type:          qptEnumList,
 			ForList:       false,
 			ForSingle:     true,
-			TypeLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{epAvailabilityType},
+			EnumLookup:    cfg.t.AvailabilityType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpAvailabilityType)},
 		},
 		{
 			Name:          qpnAutoAbilities,
@@ -3190,12 +3206,13 @@ func (cfg *Config) initEquipmentParams() {
 			ReferencesInt: []EndpointName{epCharacters},
 		},
 		{
-			Name:        qpnType,
-			Description: "Searches for equipment that is of the specified equip type.",
-			Type:        qptEnum,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.EquipType.lookup,
+			Name:          qpnType,
+			Description:   "Searches for equipment that is of the specified equip type.",
+			Type:          qptEnum,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.EquipType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpEquipType)},
 		},
 		{
 			Name:        qpnCelestialWeapon,
@@ -3213,12 +3230,13 @@ func (cfg *Config) initEquipmentParams() {
 func (cfg *Config) initCelestialWeaponsParams() {
 	params := []QueryParam{
 		{
-			Name:        qpnFormula,
-			Description: "Searches for celestial-weapons that are of the specified celestial formula.",
-			Type:        qptEnum,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.CelestialFormula.lookup,
+			Name:          qpnFormula,
+			Description:   "Searches for celestial-weapons that are of the specified celestial formula.",
+			Type:          qptEnum,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.CelestialFormula.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpCelestialFormula)},
 		},
 	}
 
@@ -3244,12 +3262,13 @@ func (cfg *Config) initStatsParams() {
 func (cfg *Config) initOverdriveModesParams() {
 	params := []QueryParam{
 		{
-			Name:        qpnType,
-			Description: "Searches for overdrive modes that are of the specified overdrive-mode-type.",
-			Type:        qptEnum,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.OverdriveModeType.lookup,
+			Name:          qpnType,
+			Description:   "Searches for overdrive modes that are of the specified overdrive-mode-type.",
+			Type:          qptEnum,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.OverdriveModeType.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpOverdriveModeType)},
 		},
 	}
 
@@ -3313,12 +3332,13 @@ func (cfg *Config) initStatusConditionsParams() {
 			DefaultVal: h.GetIntPtr(1),
 		},
 		{
-			Name:        qpnCategory,
-			Description: "Searches for status conditions that are of the specified status condition categories.",
-			Type:        qptEnumList,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.StatusConditionCategory.lookup,
+			Name:          qpnCategory,
+			Description:   "Searches for status conditions that are of the specified status condition categories.",
+			Type:          qptEnumList,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.StatusConditionCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpStatusConditionCategory)},
 		},
 	}
 
@@ -3329,12 +3349,13 @@ func (cfg *Config) initStatusConditionsParams() {
 func (cfg *Config) initModifiersParams() {
 	params := []QueryParam{
 		{
-			Name:        qpnCategory,
-			Description: "Searches for modifiers that are of the specified modifier categories.",
-			Type:        qptEnumList,
-			ForList:     true,
-			ForSingle:   false,
-			TypeLookup:  cfg.t.ModifierCategory.lookup,
+			Name:          qpnCategory,
+			Description:   "Searches for modifiers that are of the specified modifier categories.",
+			Type:          qptEnumList,
+			ForList:       true,
+			ForSingle:     false,
+			EnumLookup:    cfg.t.ModifierCategory.lookup,
+			ReferencesInt: []EndpointName{EndpointName(enumEpModifierCategory)},
 		},
 	}
 

@@ -7,12 +7,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	idStr := segments[0]
 	sectionName := segments[1]
 
-	parseRes, err := parseID(idStr, i.resTypeSing, len(i.objLookup))
+	parseRes, err := parseID(idStr, i.resTypeSingle, len(i.objLookup))
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -59,7 +58,6 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 	respondWithJSON(w, http.StatusOK, list)
 }
 
-
 func handleParameters[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := string(snParameters)
 	err := verifyDefaultParamsOnly(cfg, r, i, &segment)
@@ -74,7 +72,6 @@ func handleParameters[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
-
 func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := string(snSections)
 	err := verifyDefaultParamsOnly(cfg, r, i, &segment)
@@ -88,7 +85,6 @@ func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	}
 	respondWithJSON(w, http.StatusOK, sectionList)
 }
-
 
 func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := string(snSimple)
@@ -105,7 +101,7 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 	if handleHTTPError(w, err) {
 		return
 	}
-	
+
 	queryParamIDs := i.queryLookup[qpnIDs]
 	_, err = checkEmptyQuery(r, queryParamIDs)
 	if queryIsEmpty(err) {

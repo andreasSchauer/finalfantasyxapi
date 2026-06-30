@@ -3,10 +3,9 @@ package api
 import (
 	"slices"
 
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
-
-
 
 // s1 [1,2,3] s2 [2,3,4,5] => [1,2,3,4,5]
 func combineIdSlices(idSlices ...[]int32) []int32 {
@@ -83,15 +82,7 @@ func sortNamesByID[T seeding.Lookupable](s []string, lookup map[string]T) []stri
 		A, _ := seeding.GetResource(a, lookup)
 		B, _ := seeding.GetResource(b, lookup)
 
-		if A.GetID() < B.GetID() {
-			return -1
-		}
-
-		if A.GetID() > B.GetID() {
-			return 1
-		}
-
-		return 0
+		return h.SortOnId(A, B)
 	})
 
 	return s

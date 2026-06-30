@@ -3,7 +3,7 @@ package api
 type AutoAbility struct {
 	ID                     int32                             `json:"id"`
 	Name                   string                            `json:"name"`
-	Category               NamedAPIResource                  `json:"category"`
+	Category               string                  			 `json:"category"`
 	Description            *string                           `json:"description"`
 	Effect                 string                            `json:"effect"`
 	EquipType              string                            `json:"equip_type"`

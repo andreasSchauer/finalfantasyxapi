@@ -1,12 +1,14 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 type expMonster struct {
 	testGeneral
 	expNameVer
 	appliedState     *testAppliedState
 	agility          *testAgilityParams
-	species          int32
-	ctbIconType      string
+	species          database.MonsterSpecies
+	ctbIconType      database.CtbIconType
 	distance         int32
 	properties       []int32
 	autoAbilities    []int32
@@ -31,8 +33,8 @@ func (e expMonster) GetTestGeneral() testGeneral {
 func compareMonsters(test test, exp expMonster, got Monster) {
 	test.t.Helper()
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
-	compIdApiResource(test, "species", test.cfg.e.monsterSpecies.endpoint, exp.species, got.Species)
-	compare(test, "ctb icon type", exp.ctbIconType, got.CTBIconType)
+	compare(test, "species", string(exp.species), got.Species)
+	compare(test, "ctb icon type", string(exp.ctbIconType), got.CTBIconType)
 	compare(test, "distance", exp.distance, got.Distance)
 	checkResAmtTypes(test, "base stats", exp.baseStats, statsToBaseStats(got.Stats))
 	checkResAmtTypes(test, "status resists", exp.statusResists, got.StatusResists)

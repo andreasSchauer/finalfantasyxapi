@@ -39,7 +39,7 @@ func getResPtrDB[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", i.resTypeSing, item), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", i.resTypeSingle, item), err)
 	}
 
 	res := i.idToResFunc(cfg, i, dbID)

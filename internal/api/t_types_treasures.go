@@ -1,13 +1,15 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 type expTreasure struct {
 	testGeneral
 	expIdOnly
 	area            int32
-	availability    int32
+	availability    database.AvailabilityType
 	isAnimaTreasure bool
-	treasureType    string
-	lootType        int32
+	treasureType    database.TreasureType
+	lootType        database.LootType
 	gilAmount       *int32
 	items           []testResAmount[TypedAPIResource]
 	equipment       *testFoundEquipment
@@ -21,10 +23,10 @@ func compareTreasures(test test, exp expTreasure, got Treasure) {
 	test.t.Helper()
 	compareExpIdOnly(test, exp.expIdOnly, got.ID)
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
-	compIdApiResource(test, "availability", test.cfg.e.availabilityType.endpoint, exp.availability, got.Availability)
+	compare(test, "availability", string(exp.availability), got.Availability)
 	compare(test, "is anima treasure", exp.isAnimaTreasure, got.IsAnimaTreasure)
-	compare(test, "treasure type", exp.treasureType, got.TreasureType)
-	compIdApiResource(test, "loot type", test.cfg.e.lootType.endpoint, exp.lootType, got.LootType)
+	compare(test, "treasure type", string(exp.treasureType), got.TreasureType)
+	compare(test, "loot type", string(exp.lootType), got.LootType)
 	compare(test, "gil amount", exp.gilAmount, got.GilAmount)
 	compTestStructSlices(test, "items", exp.items, got.Items, compareResAmounts)
 	compTestStructPtrs(test, "equipment", exp.equipment, got.Equipment, compareFoundEquipment)

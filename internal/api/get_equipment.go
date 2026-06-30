@@ -44,7 +44,7 @@ func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.Equ
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
 		idListQuery(cfg, r, i, ids, qpnAutoAbilities, cfg.l.AutoAbilities, cfg.db.GetEquipmentIDsByAutoAbility),
-		nameIdQuery(r, i, ids, qpnCharacter, cfg.e.characters.resTypeSing, cfg.e.characters.objLookup, cfg.db.GetEquipmentIDsByCharacter),
+		nameIdQuery(r, i, ids, qpnCharacter, cfg.e.characters.resTypeSingle, cfg.e.characters.objLookup, cfg.db.GetEquipmentIDsByCharacter),
 		enumQuery(r, i, cfg.t.EquipType, ids, qpnType, cfg.db.GetEquipmentIDsByEquipType),
 		boolQuery2(r, i, ids, qpnCelestialWeapon, cfg.db.GetEquipmentIDsCelestialWeapon),
 	})

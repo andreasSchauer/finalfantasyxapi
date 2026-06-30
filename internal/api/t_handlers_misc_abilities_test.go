@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -73,10 +74,10 @@ func TestGetMiscAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     1,
-								damageFormula:  1,
+								damageType:     database.DamageTypePhysical,
+								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 16,
 							},
 						},
@@ -130,10 +131,10 @@ func TestGetMiscAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     1,
-								damageFormula:  1,
+								damageType:     database.DamageTypePhysical,
+								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 18,
 							},
 						},
@@ -187,10 +188,10 @@ func TestGetMiscAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     1,
-								damageFormula:  1,
+								damageType:     database.DamageTypePhysical,
+								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 14,
 							},
 						},

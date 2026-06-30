@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -52,10 +53,10 @@ func TestGetEnemyAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     1,
-								damageFormula:  1,
+								damageType:     database.DamageTypePhysical,
+								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 16,
 							},
 						},
@@ -108,10 +109,10 @@ func TestGetEnemyAbility(t *testing.T) {
 					damage: &expDamage{
 						damageCalc: []expAbilityDamage{
 							{
-								attackType:     1,
+								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
-								damageType:     3,
-								damageFormula:  12,
+								damageType:     database.DamageTypeSpecial,
+								damageFormula:  database.DamageFormulaSpecialKills,
 								damageConstant: 100,
 							},
 						},

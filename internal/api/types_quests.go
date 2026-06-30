@@ -1,22 +1,25 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+)
 
 type Quest struct {
-	ID           int32            `json:"id"`
-	Name         string           `json:"name"`
-	Type         NamedAPIResource `json:"type"`
-	TypedQuest   QuestAPIResource `json:"typed_quest"`
-	Availability NamedAPIResource `json:"availability"`
-	IsRepeatable bool             `json:"is_repeatable"`
-	Completion   *QuestCompletion `json:"completion"`
+	ID           int32            	`json:"id"`
+	Name         string           	`json:"name"`
+	Type         database.QuestType `json:"type"`
+	TypedQuest   QuestAPIResource 	`json:"typed_quest"`
+	Availability string			 	`json:"availability"`
+	IsRepeatable bool             	`json:"is_repeatable"`
+	Completion   *QuestCompletion 	`json:"completion"`
 }
 
 type Sidequest struct {
 	ID           int32              `json:"id"`
 	Name         string             `json:"name"`
 	UntypedQuest QuestAPIResource   `json:"untyped_quest"`
-	Availability NamedAPIResource   `json:"availability"`
+	Availability string			    `json:"availability"`
 	IsRepeatable bool               `json:"is_repeatable"`
 	Completion   *QuestCompletion   `json:"completion"`
 	Subquests    []QuestAPIResource `json:"subquests"`
@@ -26,7 +29,7 @@ type Subquest struct {
 	ID              int32             `json:"id"`
 	Name            string            `json:"name"`
 	UntypedQuest    QuestAPIResource  `json:"untyped_quest"`
-	Availability    NamedAPIResource  `json:"availability"`
+	Availability    string			  `json:"availability"`
 	IsRepeatable    bool              `json:"is_repeatable"`
 	ParentSidequest QuestAPIResource  `json:"parent_sidequest"`
 	Completion      QuestCompletion   `json:"completion"`

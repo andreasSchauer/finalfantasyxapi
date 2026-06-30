@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -173,8 +174,8 @@ func TestGetMonster(t *testing.T) {
 				minICV:      h.GetInt32Ptr(48),
 				maxICV:      h.GetInt32Ptr(53),
 			},
-			species:       19,
-			ctbIconType:   "monster",
+			species:       database.MonsterSpeciesElemental,
+			ctbIconType:   database.CtbIconTypeMonster,
 			distance:      1,
 			properties:    []int32{2},
 			autoAbilities: []int32{},
@@ -247,11 +248,11 @@ func TestGetMonster(t *testing.T) {
 				armorAbilities:  []int32{58},
 			},
 			elemResists: []testElemResist{
-				{element: 1, affinity: 3},
-				{element: 2, affinity: 5},
-				{element: 3, affinity: 2},
-				{element: 4, affinity: 3},
-				{element: 5, affinity: 1},
+				{element: 1, affinity: database.ElementalAffinityHalved},
+				{element: 2, affinity: database.ElementalAffinityAbsorb},
+				{element: 3, affinity: database.ElementalAffinityWeak},
+				{element: 4, affinity: database.ElementalAffinityHalved},
+				{element: 5, affinity: database.ElementalAffinityNeutral},
 			},
 			statusImmunities: []int32{1, 4, 14},
 			statusResists: map[string]int32{
@@ -379,11 +380,11 @@ func TestGetMonster(t *testing.T) {
 				armorAbilities:  []int32{55, 58, 61, 64},
 			},
 			elemResists: []testElemResist{
-				{element: 1, affinity: 5},
-				{element: 2, affinity: 5},
-				{element: 3, affinity: 5},
-				{element: 4, affinity: 2},
-				{element: 5, affinity: 5},
+				{element: 1, affinity: database.ElementalAffinityAbsorb},
+				{element: 2, affinity: database.ElementalAffinityAbsorb},
+				{element: 3, affinity: database.ElementalAffinityAbsorb},
+				{element: 4, affinity: database.ElementalAffinityWeak},
+				{element: 5, affinity: database.ElementalAffinityAbsorb},
 			},
 			statusImmunities: []int32{2, 6, 8, 13, 15, 33, 43, 46},
 			statusResists: map[string]int32{
@@ -394,10 +395,10 @@ func TestGetMonster(t *testing.T) {
 				IsTemporary: false,
 				Change: &testAltStateChange{
 					ElemResists: []testElemResist{
-						{element: 1, affinity: 6},
-						{element: 2, affinity: 6},
-						{element: 3, affinity: 6},
-						{element: 4, affinity: 6},
+						{element: 1, affinity: database.ElementalAffinityVaries},
+						{element: 2, affinity: database.ElementalAffinityVaries},
+						{element: 3, affinity: database.ElementalAffinityVaries},
+						{element: 4, affinity: database.ElementalAffinityVaries},
 					},
 				},
 			},
@@ -645,23 +646,23 @@ func TestGetMonster(t *testing.T) {
 			elemResists: []testElemResist{
 				{
 					element:  1,
-					affinity: 3,
+					affinity: database.ElementalAffinityHalved,
 				},
 				{
 					element:  2,
-					affinity: 3,
+					affinity: database.ElementalAffinityHalved,
 				},
 				{
 					element:  3,
-					affinity: 3,
+					affinity: database.ElementalAffinityHalved,
 				},
 				{
 					element:  4,
-					affinity: 3,
+					affinity: database.ElementalAffinityHalved,
 				},
 				{
 					element:  5,
-					affinity: 1,
+					affinity: database.ElementalAffinityNeutral,
 				},
 			},
 		},
@@ -692,23 +693,23 @@ func TestGetMonster(t *testing.T) {
 			elemResists: []testElemResist{
 				{
 					element:  1,
-					affinity: 4,
+					affinity: database.ElementalAffinityImmune,
 				},
 				{
 					element:  2,
-					affinity: 1,
+					affinity: database.ElementalAffinityNeutral,
 				},
 				{
 					element:  3,
-					affinity: 1,
+					affinity: database.ElementalAffinityNeutral,
 				},
 				{
 					element:  4,
-					affinity: 4,
+					affinity: database.ElementalAffinityImmune,
 				},
 				{
 					element:  5,
-					affinity: 1,
+					affinity: database.ElementalAffinityNeutral,
 				},
 			},
 		},
@@ -739,23 +740,23 @@ func TestGetMonster(t *testing.T) {
 			elemResists: []testElemResist{
 				{
 					element:  1,
-					affinity: 2,
+					affinity: database.ElementalAffinityWeak,
 				},
 				{
 					element:  2,
-					affinity: 1,
+					affinity: database.ElementalAffinityNeutral,
 				},
 				{
 					element:  3,
-					affinity: 1,
+					affinity: database.ElementalAffinityNeutral,
 				},
 				{
 					element:  4,
-					affinity: 5,
+					affinity: database.ElementalAffinityAbsorb,
 				},
 				{
 					element:  5,
-					affinity: 1,
+					affinity: database.ElementalAffinityNeutral,
 				},
 			},
 		},

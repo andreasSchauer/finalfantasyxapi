@@ -6,7 +6,7 @@ import (
 
 type ElementalResist struct {
 	Element  NamedAPIResource `json:"element"`
-	Affinity NamedAPIResource `json:"affinity"`
+	Affinity string			  `json:"affinity"`
 }
 
 func (er ElementalResist) GetAPIResource() APIResource {
@@ -16,14 +16,14 @@ func (er ElementalResist) GetAPIResource() APIResource {
 func convertElemResist(cfg *Config, er seeding.ElementalResist) ElementalResist {
 	return ElementalResist{
 		Element:  nameToNamedAPIResource(cfg, cfg.e.elements, er.Element, nil),
-		Affinity: enumToNamedAPIResource(cfg, cfg.e.elementalAffinity.endpoint, er.Affinity, cfg.t.ElementalAffinity),
+		Affinity: er.Affinity,
 	}
 }
 
 func newElemResist(cfg *Config, element, affinity string) ElementalResist {
 	return ElementalResist{
 		Element:  nameToNamedAPIResource(cfg, cfg.e.elements, element, nil),
-		Affinity: enumToNamedAPIResource(cfg, cfg.e.elementalAffinity.endpoint, affinity, cfg.t.ElementalAffinity),
+		Affinity: affinity,
 	}
 }
 

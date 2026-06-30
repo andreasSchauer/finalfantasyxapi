@@ -22,7 +22,7 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 		Name:               location.Name,
 		ConnectedLocations: rel.ConnectedLocations,
 		Sublocations:       rel.Sublocations,
-		Availability:       enumToNamedAPIResource(cfg, cfg.e.availabilityType.endpoint, location.Availability, cfg.t.AvailabilityType),
+		Availability:       location.Availability,
 		LocRel:             rel.LocRel,
 	}
 

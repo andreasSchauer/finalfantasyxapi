@@ -61,28 +61,6 @@ type endpoints struct {
 	statusConditions handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]
 	modifiers        handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]
 	agilityTiers     handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]
-
-	abilityType handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	unitType    handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	itemType    handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	questType   handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-
-	attackType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	autoAbilityCategory      handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	availabilityType         handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	damageFormula            handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	damageType               handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	elementalAffinity        handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	itemCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	keyItemCategory          handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	lootType                 handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	mixCategory              handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	monsterCategory          handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	monsterFormationCategory handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	monsterSpecies           handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	playerAbilityCategory    handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	shopCategory             handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
-	statusConditionCategory  handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -90,7 +68,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.locations = handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epLocations,
-		resTypeSing:   rtsLocations,
+		resTypeSingle: rtsLocations,
 		resTypePlural: rtpLocations,
 		objLookup:     cfg.l.Locations,
 		objLookupID:   cfg.l.LocationsID,
@@ -147,7 +125,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.sublocations = handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epSublocations,
-		resTypeSing:   rtsSublocations,
+		resTypeSingle: rtsSublocations,
 		resTypePlural: rtpSublocations,
 		objLookup:     cfg.l.Sublocations,
 		objLookupID:   cfg.l.SublocationsID,
@@ -198,7 +176,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.areas = handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]{
 		endpoint:      epAreas,
-		resTypeSing:   rtsAreas,
+		resTypeSingle: rtsAreas,
 		resTypePlural: rtpAreas,
 		objLookup:     cfg.l.Areas,
 		objLookupID:   cfg.l.AreasID,
@@ -241,7 +219,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.monsterFormations = handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      epMonsterFormations,
-		resTypeSing:   rtsMonsterFormations,
+		resTypeSingle: rtsMonsterFormations,
 		resTypePlural: rtpMonsterFormations,
 		objLookup:     cfg.l.MonsterFormations,
 		objLookupID:   cfg.l.MonsterFormationsID,
@@ -266,7 +244,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.shops = handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      epShops,
-		resTypeSing:   rtsShops,
+		resTypeSingle: rtsShops,
 		resTypePlural: rtpShops,
 		objLookup:     cfg.l.Shops,
 		objLookupID:   cfg.l.ShopsID,
@@ -286,7 +264,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.treasures = handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      epTreasures,
-		resTypeSing:   rtsTreasures,
+		resTypeSingle: rtsTreasures,
 		resTypePlural: rtpTreasures,
 		objLookup:     cfg.l.Treasures,
 		objLookupID:   cfg.l.TreasuresID,
@@ -301,7 +279,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.quests = handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]{
 		endpoint:      epQuests,
-		resTypeSing:   rtsQuests,
+		resTypeSingle: rtsQuests,
 		resTypePlural: rtpQuests,
 		objLookup:     cfg.l.Quests,
 		objLookupID:   cfg.l.QuestsID,
@@ -316,7 +294,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.sidequests = handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]{
 		endpoint:      epSidequests,
-		resTypeSing:   rtsSidequests,
+		resTypeSingle: rtsSidequests,
 		resTypePlural: rtpSidequests,
 		objLookup:     cfg.l.Sidequests,
 		objLookupID:   cfg.l.SidequestsID,
@@ -337,7 +315,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.subquests = handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]{
 		endpoint:      epSubquests,
-		resTypeSing:   rtsSubquests,
+		resTypeSingle: rtsSubquests,
 		resTypePlural: rtpSubquests,
 		objLookup:     cfg.l.Subquests,
 		objLookupID:   cfg.l.SubquestsID,
@@ -352,7 +330,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.arenaCreations = handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epArenaCreations,
-		resTypeSing:   rtsArenaCreations,
+		resTypeSingle: rtsArenaCreations,
 		resTypePlural: rtpArenaCreations,
 		objLookup:     cfg.l.ArenaCreations,
 		objLookupID:   cfg.l.ArenaCreationsID,
@@ -366,7 +344,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.blitzballPrizes = handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epBlitzballPrizes,
-		resTypeSing:   rtsBlitzballPrizes,
+		resTypeSingle: rtsBlitzballPrizes,
 		resTypePlural: rtpBlitzballPrizes,
 		objLookup:     cfg.l.Positions,
 		objLookupID:   cfg.l.PositionsID,
@@ -380,7 +358,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.songs = handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epSongs,
-		resTypeSing:   rtsSongs,
+		resTypeSingle: rtsSongs,
 		resTypePlural: rtpSongs,
 		objLookup:     cfg.l.Songs,
 		objLookupID:   cfg.l.SongsID,
@@ -394,7 +372,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.fmvs = handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epFMVs,
-		resTypeSing:   rtsFMVs,
+		resTypeSingle: rtsFMVs,
 		resTypePlural: rtpFMVs,
 		objLookup:     cfg.l.FMVs,
 		objLookupID:   cfg.l.FMVsID,
@@ -408,7 +386,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.playerUnits = handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]{
 		endpoint:      epPlayerUnits,
-		resTypeSing:   rtsPlayerUnits,
+		resTypeSingle: rtsPlayerUnits,
 		resTypePlural: rtpPlayerUnits,
 		objLookup:     cfg.l.PlayerUnits,
 		objLookupID:   cfg.l.PlayerUnitsID,
@@ -422,7 +400,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.characters = handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epCharacters,
-		resTypeSing:   rtsCharacters,
+		resTypeSingle: rtsCharacters,
 		resTypePlural: rtpCharacters,
 		objLookup:     cfg.l.Characters,
 		objLookupID:   cfg.l.CharactersID,
@@ -458,7 +436,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.aeons = handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epAeons,
-		resTypeSing:   rtsAeons,
+		resTypeSingle: rtsAeons,
 		resTypePlural: rtpAeons,
 		objLookup:     cfg.l.Aeons,
 		objLookupID:   cfg.l.AeonsID,
@@ -489,7 +467,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.characterClasses = handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epCharacterClasses,
-		resTypeSing:   rtsCharacterClasses,
+		resTypeSingle: rtsCharacterClasses,
 		resTypePlural: rtpCharacterClasses,
 		objLookup:     cfg.l.CharClasses,
 		objLookupID:   cfg.l.CharClassesID,
@@ -521,7 +499,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.monsters = handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]{
 		endpoint:         epMonsters,
-		resTypeSing:      rtsMonsters,
+		resTypeSingle:    rtsMonsters,
 		resTypePlural:    rtpMonsters,
 		objLookup:        cfg.l.Monsters,
 		objLookupID:      cfg.l.MonstersID,
@@ -556,7 +534,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.abilities = handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]{
 		endpoint:      epAbilities,
-		resTypeSing:   rtsAbilities,
+		resTypeSingle: rtsAbilities,
 		resTypePlural: rtpAbilities,
 		objLookup:     cfg.l.Abilities,
 		objLookupID:   cfg.l.AbilitiesID,
@@ -575,7 +553,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.playerAbilities = handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:         epPlayerAbilities,
-		resTypeSing:      rtsPlayerAbilities,
+		resTypeSingle:    rtsPlayerAbilities,
 		resTypePlural:    rtpPlayerAbilities,
 		objLookup:        cfg.l.PlayerAbilities,
 		objLookupID:      cfg.l.PlayerAbilitiesID,
@@ -600,7 +578,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.overdriveAbilities = handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:         epOverdriveAbilities,
-		resTypeSing:      rtsOverdriveAbilities,
+		resTypeSingle:    rtsOverdriveAbilities,
 		resTypePlural:    rtpOverdriveAbilities,
 		objLookup:        cfg.l.OverdriveAbilities,
 		objLookupID:      cfg.l.OverdriveAbilitiesID,
@@ -620,7 +598,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.itemAbilities = handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epItemAbilities,
-		resTypeSing:   rtsItemAbilities,
+		resTypeSingle: rtsItemAbilities,
 		resTypePlural: rtpItemAbilities,
 		objLookup:     cfg.l.ItemAbilities,
 		objLookupID:   cfg.l.ItemAbilitiesID,
@@ -639,7 +617,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.triggerCommands = handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]{
 		endpoint:         epTriggerCommands,
-		resTypeSing:      rtsTriggerCommands,
+		resTypeSingle:    rtsTriggerCommands,
 		resTypePlural:    rtpTriggerCommands,
 		objLookup:        cfg.l.TriggerCommands,
 		objLookupID:      cfg.l.TriggerCommandsID,
@@ -659,7 +637,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.miscAbilities = handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:         epMiscAbilities,
-		resTypeSing:      rtsMiscAbilities,
+		resTypeSingle:    rtsMiscAbilities,
 		resTypePlural:    rtpMiscAbilities,
 		objLookup:        cfg.l.MiscAbilities,
 		objLookupID:      cfg.l.MiscAbilitiesID,
@@ -679,7 +657,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.enemyAbilities = handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:         epEnemyAbilities,
-		resTypeSing:      rtsEnemyAbilities,
+		resTypeSingle:    rtsEnemyAbilities,
 		resTypePlural:    rtpEnemyAbilities,
 		objLookup:        cfg.l.EnemyAbilities,
 		objLookupID:      cfg.l.EnemyAbilitiesID,
@@ -704,7 +682,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.aeonCommands = handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epAeonCommands,
-		resTypeSing:   rtsAeonCommands,
+		resTypeSingle: rtsAeonCommands,
 		resTypePlural: rtpAeonCommands,
 		objLookup:     cfg.l.AeonCommands,
 		objLookupID:   cfg.l.AeonCommandsID,
@@ -718,7 +696,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.overdriveCommands = handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epOverdriveCommands,
-		resTypeSing:   rtsOverdriveCommands,
+		resTypeSingle: rtsOverdriveCommands,
 		resTypePlural: rtpOverdriveCommands,
 		objLookup:     cfg.l.OverdriveCommands,
 		objLookupID:   cfg.l.OverdriveCommandsID,
@@ -742,7 +720,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.overdrives = handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epOverdrives,
-		resTypeSing:   rtsOverdrives,
+		resTypeSingle: rtsOverdrives,
 		resTypePlural: rtpOverdrives,
 		objLookup:     cfg.l.Overdrives,
 		objLookupID:   cfg.l.OverdrivesID,
@@ -765,7 +743,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.ronsoRages = handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epRonsoRages,
-		resTypeSing:   rtsRonsoRages,
+		resTypeSingle: rtsRonsoRages,
 		resTypePlural: rtpRonsoRages,
 		objLookup:     cfg.l.RonsoRages,
 		objLookupID:   cfg.l.RonsoRagesID,
@@ -786,7 +764,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.submenus = handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epSubmenus,
-		resTypeSing:   rtsSubmenus,
+		resTypeSingle: rtsSubmenus,
 		resTypePlural: rtpSubmenus,
 		objLookup:     cfg.l.Submenus,
 		objLookupID:   cfg.l.SubmenusID,
@@ -806,7 +784,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.topmenus = handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epTopmenus,
-		resTypeSing:   rtsTopmenus,
+		resTypeSingle: rtsTopmenus,
 		resTypePlural: rtpTopmenus,
 		objLookup:     cfg.l.Topmenus,
 		objLookupID:   cfg.l.TopmenusID,
@@ -826,7 +804,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.allItems = handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]{
 		endpoint:      epAllItems,
-		resTypeSing:   rtsAllItems,
+		resTypeSingle: rtsAllItems,
 		resTypePlural: rtpAllItems,
 		objLookup:     cfg.l.MasterItems,
 		objLookupID:   cfg.l.MasterItemsID,
@@ -841,7 +819,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.items = handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epItems,
-		resTypeSing:   rtsItems,
+		resTypeSingle: rtsItems,
 		resTypePlural: rtpItems,
 		objLookup:     cfg.l.Items,
 		objLookupID:   cfg.l.ItemsID,
@@ -862,7 +840,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.spheres = handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epSpheres,
-		resTypeSing:   rtsSpheres,
+		resTypeSingle: rtsSpheres,
 		resTypePlural: rtpSpheres,
 		objLookup:     cfg.l.Spheres,
 		objLookupID:   cfg.l.SpheresID,
@@ -877,7 +855,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.keyItems = handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epKeyItems,
-		resTypeSing:   rtsKeyItems,
+		resTypeSingle: rtsKeyItems,
 		resTypePlural: rtpKeyItems,
 		objLookup:     cfg.l.KeyItems,
 		objLookupID:   cfg.l.KeyItemsID,
@@ -892,7 +870,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.primers = handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epPrimers,
-		resTypeSing:   rtsPrimers,
+		resTypeSingle: rtsPrimers,
 		resTypePlural: rtpPrimers,
 		objLookup:     cfg.l.Primers,
 		objLookupID:   cfg.l.PrimersID,
@@ -907,7 +885,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.mixes = handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epMixes,
-		resTypeSing:   rtsMixes,
+		resTypeSingle: rtsMixes,
 		resTypePlural: rtpMixes,
 		objLookup:     cfg.l.Mixes,
 		objLookupID:   cfg.l.MixesID,
@@ -926,7 +904,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.autoAbilities = handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epAutoAbilities,
-		resTypeSing:   rtsAutoAbilities,
+		resTypeSingle: rtsAutoAbilities,
 		resTypePlural: rtpAutoAbilities,
 		objLookup:     cfg.l.AutoAbilities,
 		objLookupID:   cfg.l.AutoAbilitiesID,
@@ -946,7 +924,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.equipmentTables = handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      epEquipmentTables,
-		resTypeSing:   rtsEquipmentTables,
+		resTypeSingle: rtsEquipmentTables,
 		resTypePlural: rtpEquipmentTables,
 		objLookup:     cfg.l.EquipmentTables,
 		objLookupID:   cfg.l.EquipmentTablesID,
@@ -960,7 +938,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.equipment = handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epEquipment,
-		resTypeSing:   rtsEquipment,
+		resTypeSingle: rtsEquipment,
 		resTypePlural: rtpEquipment,
 		objLookup:     cfg.l.EquipmentNames,
 		objLookupID:   cfg.l.EquipmentNamesID,
@@ -974,7 +952,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.celestialWeapons = handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epCelestialWeapons,
-		resTypeSing:   rtsCelestialWeapons,
+		resTypeSingle: rtsCelestialWeapons,
 		resTypePlural: rtpCelestialWeapons,
 		objLookup:     cfg.l.CelestialWeapons,
 		objLookupID:   cfg.l.CelestialWeaponsID,
@@ -994,7 +972,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.stats = handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epStats,
-		resTypeSing:   rtsStats,
+		resTypeSingle: rtsStats,
 		resTypePlural: rtpStats,
 		objLookup:     cfg.l.Stats,
 		objLookupID:   cfg.l.StatsID,
@@ -1008,7 +986,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.properties = handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epProperties,
-		resTypeSing:   rtsProperties,
+		resTypeSingle: rtsProperties,
 		resTypePlural: rtpProperties,
 		objLookup:     cfg.l.Properties,
 		objLookupID:   cfg.l.PropertiesID,
@@ -1022,7 +1000,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.overdriveModes = handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epOverdriveModes,
-		resTypeSing:   rtsOverdriveModes,
+		resTypeSingle: rtsOverdriveModes,
 		resTypePlural: rtpOverdriveModes,
 		objLookup:     cfg.l.OverdriveModes,
 		objLookupID:   cfg.l.OverdriveModesID,
@@ -1036,7 +1014,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.elements = handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epElements,
-		resTypeSing:   rtsElements,
+		resTypeSingle: rtsElements,
 		resTypePlural: rtpElements,
 		objLookup:     cfg.l.Elements,
 		objLookupID:   cfg.l.ElementsID,
@@ -1050,7 +1028,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.statusConditions = handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epStatusConditions,
-		resTypeSing:   rtsStatusConditions,
+		resTypeSingle: rtsStatusConditions,
 		resTypePlural: rtpStatusConditions,
 		objLookup:     cfg.l.StatusConditions,
 		objLookupID:   cfg.l.StatusConditionsID,
@@ -1064,7 +1042,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.modifiers = handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]{
 		endpoint:      epModifiers,
-		resTypeSing:   rtsModifiers,
+		resTypeSingle: rtsModifiers,
 		resTypePlural: rtpModifiers,
 		objLookup:     cfg.l.Modifiers,
 		objLookupID:   cfg.l.ModifiersID,
@@ -1078,7 +1056,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.agilityTiers = handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]{
 		endpoint:      epAgilityTiers,
-		resTypeSing:   rtsAgilityTiers,
+		resTypeSingle: rtsAgilityTiers,
 		resTypePlural: rtpAgilityTiers,
 		objLookup:     nil,
 		objLookupID:   cfg.l.AgilityTiersID,
@@ -1088,166 +1066,6 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetAgilityTierIDs,
 		getSingleFunc: cfg.getAgilityTier,
 		retrieveFunc:  cfg.retrieveAgilityTiers,
-	}
-
-	e.abilityType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epAbilityType,
-		resTypeSing:   rtsAbilityType,
-		resTypePlural: rtpAbilityType,
-		objLookup:     cfg.t.AbilityType.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.unitType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epUnitType,
-		resTypeSing:   rtsUnitType,
-		resTypePlural: rtpUnitType,
-		objLookup:     cfg.t.UnitType.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.itemType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epItemType,
-		resTypeSing:   rtsItemType,
-		resTypePlural: rtpItemType,
-		objLookup:     cfg.t.ItemType.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.questType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epQuestType,
-		resTypeSing:   rtsQuestType,
-		resTypePlural: rtpQuestType,
-		objLookup:     cfg.t.QuestType.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.attackType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epAttackType,
-		resTypeSing:   rtsAttackType,
-		resTypePlural: rtpAttackType,
-		objLookup:     cfg.t.AttackType.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.autoAbilityCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epAutoAbilityCategory,
-		resTypeSing:   rtsAutoAbilityCategory,
-		resTypePlural: rtpAutoAbilityCategory,
-		objLookup:     cfg.t.AutoAbilityCategory.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.availabilityType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epAvailabilityType,
-		resTypeSing:   rtsAvailabilityType,
-		resTypePlural: rtpAvailabilityType,
-		objLookup:     cfg.t.AvailabilityType.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.damageFormula = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epDamageFormula,
-		resTypeSing:   rtsDamageFormula,
-		resTypePlural: rtpDamageFormula,
-		objLookup:     cfg.t.DamageFormula.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.damageType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epDamageType,
-		resTypeSing:   rtsDamageType,
-		resTypePlural: rtpDamageType,
-		objLookup:     cfg.t.DamageType.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.elementalAffinity = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epElementalAffinity,
-		resTypeSing:   rtsElementalAffinity,
-		resTypePlural: rtpElementalAffinity,
-		objLookup:     cfg.t.ElementalAffinity.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.itemCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epItemCategory,
-		resTypeSing:   rtsItemCategory,
-		resTypePlural: rtpItemCategory,
-		objLookup:     cfg.t.ItemCategory.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.keyItemCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epKeyItemCategory,
-		resTypeSing:   rtsKeyItemCategory,
-		resTypePlural: rtpKeyItemCategory,
-		objLookup:     cfg.t.KeyItemCategory.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.lootType = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epLootType,
-		resTypeSing:   rtsLootType,
-		resTypePlural: rtpLootType,
-		objLookup:     cfg.t.LootType.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.mixCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epMixCategory,
-		resTypeSing:   rtsMixCategory,
-		resTypePlural: rtpMixCategory,
-		objLookup:     cfg.t.MixCategory.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.monsterCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epMonsterCategory,
-		resTypeSing:   rtsMonsterCategory,
-		resTypePlural: rtpMonsterCategory,
-		objLookup:     cfg.t.MonsterCategory.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.monsterFormationCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epMonsterFormationCategory,
-		resTypeSing:   rtsMonsterFormationCategory,
-		resTypePlural: rtpMonsterFormationCategory,
-		objLookup:     cfg.t.MonsterFormationCategory.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.monsterSpecies = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epMonsterSpecies,
-		resTypeSing:   rtsMonsterSpecies,
-		resTypePlural: rtpMonsterSpecies,
-		objLookup:     cfg.t.MonsterSpecies.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.playerAbilityCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epPlayerAbilityCategory,
-		resTypeSing:   rtsPlayerAbilityCategory,
-		resTypePlural: rtpPlayerAbilityCategory,
-		objLookup:     cfg.t.PlayerAbilityCategory.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.shopCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epShopCategory,
-		resTypeSing:   rtsShopCategory,
-		resTypePlural: rtpShopCategory,
-		objLookup:     cfg.t.ShopCategory.lookup,
-		resToListFunc: newEnumAPIResourceList,
-	}
-
-	e.statusConditionCategory = handlerInput[EnumAPIResource, EnumAPIResource, EnumAPIResource, EnumApiResourceList]{
-		endpoint:      epStatusConditionCategory,
-		resTypeSing:   rtsStatusConditionCategory,
-		resTypePlural: rtpStatusConditionCategory,
-		objLookup:     cfg.t.StatusConditionCategory.lookup,
-		resToListFunc: newEnumAPIResourceList,
 	}
 
 	cfg.e = &e

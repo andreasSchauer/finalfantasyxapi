@@ -39,7 +39,7 @@ func handleEndpointIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResou
 		return
 	}
 
-	parseRes, err := parseID(segment, i.resTypeSing, len(i.objLookupID))
+	parseRes, err := parseID(segment, i.resTypeSingle, len(i.objLookupID))
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -70,7 +70,7 @@ func handleEndpointNameOrID[T seeding.Lookupable, R any, A APIResource, L APIRes
 		return
 	}
 
-	parseRes, err := parseSingleSegmentResource(i.resTypeSing, segment, i.objLookup)
+	parseRes, err := parseSingleSegmentResource(i.resTypeSingle, segment, i.objLookup)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -96,7 +96,7 @@ func handleEndpointNameVersion[T seeding.Lookupable, R any, A APIResource, L API
 	name := segments[0]
 	versionStr := segments[1]
 
-	parseRes, err := parseNameVersionResource(i.resTypeSing, name, versionStr, i.objLookup)
+	parseRes, err := parseNameVersionResource(i.resTypeSingle, name, versionStr, i.objLookup)
 	if handleHTTPError(w, err) {
 		return
 	}

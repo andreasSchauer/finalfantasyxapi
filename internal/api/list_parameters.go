@@ -46,6 +46,12 @@ func createQueryParamRefResURLs(cfg *Config, params []QueryParam) []QueryParam {
 
 		for j := range param.ReferencesInt {
 			ref := param.ReferencesInt[j]
+
+			if param.Type == qptEnum || param.Type == qptEnumList {
+				param.References[j] = createEnumURL(cfg, ref)
+				continue
+			}
+
 			param.References[j] = createListURL(cfg, ref)
 		}
 		paramsNew[i] = param
@@ -68,11 +74,11 @@ func getAllowedResources[T seeding.Lookupable, R any, A APIResource, L APIResour
 
 func getAllowedValuesFromTypes(cfg *Config, params []QueryParam) []QueryParam {
 	for idx, param := range params {
-		if param.TypeLookup == nil {
+		if param.EnumLookup == nil {
 			continue
 		}
 
-		types := createEnumResourceSlice(cfg, "", param.TypeLookup)
+		types := createEnumValSlice(param.EnumLookup)
 
 		for _, typeRes := range types {
 			param.AllowedValues = append(param.AllowedValues, QueryValue(typeRes.Name))

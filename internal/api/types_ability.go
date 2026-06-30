@@ -4,22 +4,23 @@ import (
 	"fmt"
 	"slices"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type Ability struct {
-	ID                 int32               `json:"id"`
-	Name               string              `json:"name"`
-	Version            *int32              `json:"version,omitempty"`
-	Specification      *string             `json:"specification,omitempty"`
-	Type               NamedAPIResource    `json:"type"`
-	TypedAbility       NamedAPIResource    `json:"typed_ability"`
-	Rank               *int32              `json:"rank"`
-	AppearsInHelpBar   bool                `json:"appears_in_help_bar"`
-	CanCopycat         bool                `json:"can_copycat"`
-	Monsters           []NamedAPIResource  `json:"monsters"`
-	BattleInteractions []BattleInteraction `json:"battle_interactions"`
+	ID                 int32               	`json:"id"`
+	Name               string              	`json:"name"`
+	Version            *int32              	`json:"version,omitempty"`
+	Specification      *string             	`json:"specification,omitempty"`
+	Type               database.AbilityType `json:"type"`
+	TypedAbility       NamedAPIResource    	`json:"typed_ability"`
+	Rank               *int32              	`json:"rank"`
+	AppearsInHelpBar   bool                	`json:"appears_in_help_bar"`
+	CanCopycat         bool                	`json:"can_copycat"`
+	Monsters           []NamedAPIResource  	`json:"monsters"`
+	BattleInteractions []BattleInteraction 	`json:"battle_interactions"`
 }
 
 type EnemyAbility struct {
@@ -46,7 +47,7 @@ type ItemAbility struct {
 	Item                NamedAPIResource    `json:"item"`
 	Description         string              `json:"description"`
 	Effect              string              `json:"effect"`
-	Category            NamedAPIResource    `json:"category"`
+	Category            string  		    `json:"category"`
 	CanUseOutsideBattle bool                `json:"can_use_outside_battle"`
 	Cursor              string              `json:"cursor"`
 	RelatedStats        []NamedAPIResource  `json:"related_stats"`
@@ -78,7 +79,7 @@ type PlayerAbility struct {
 	Rank                  *int32                            `json:"rank"`
 	AppearsInHelpBar      bool                              `json:"appears_in_help_bar"`
 	CanCopycat            bool                              `json:"can_copycat"`
-	Category              NamedAPIResource                  `json:"category"`
+	Category              string		                    `json:"category"`
 	Description           *string                           `json:"description"`
 	Effect                string                            `json:"effect"`
 	Topmenu               *NamedAPIResource                 `json:"topmenu"`

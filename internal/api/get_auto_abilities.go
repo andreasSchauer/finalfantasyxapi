@@ -23,7 +23,7 @@ func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seeding.AutoAb
 		Description:            autoAbility.Description,
 		Effect:                 autoAbility.Effect,
 		EquipType:              autoAbility.Type,
-		Category:               enumToNamedAPIResource(cfg, cfg.e.autoAbilityCategory.endpoint, autoAbility.Category, cfg.t.AutoAbilityCategory),
+		Category:               autoAbility.Category,
 		RelatedStats:           namesToNamedAPIResources(cfg, cfg.e.stats, autoAbility.RelatedStats),
 		AbilityValue:           autoAbility.AbilityValue,
 		RequiredItem:           nameAmountPtrToResAmtPtr(cfg, cfg.e.allItems, autoAbility.RequiredItem),

@@ -52,7 +52,7 @@ func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seedi
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSing, cfg.l.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
-		nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSing, cfg.l.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
+		nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSingle, cfg.l.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
+		nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSingle, cfg.l.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
 	})
 }

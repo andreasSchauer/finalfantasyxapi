@@ -50,7 +50,7 @@ func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 	queryParamUser := i.queryLookup[queryName]
 	queryParamBomb := i.queryLookup[qpnBombWpn]
 
-	unitID, err := parseNameIdQuery(r, queryParamUser, cfg.e.playerUnits.resTypeSing, cfg.e.playerUnits.objLookup)
+	unitID, err := parseNameIdQuery(r, queryParamUser, cfg.e.playerUnits.resTypeSingle, cfg.e.playerUnits.objLookup)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -85,7 +85,7 @@ func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 }
 
 func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
-	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingular(repl.unit.Type), queryParamUser, cfg.l.Characters)
+	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), queryParamUser, cfg.l.Characters)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -101,7 +101,7 @@ func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam
 }
 
 func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
-	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingular(repl.unit.Type), queryParamUser, cfg.l.Aeons)
+	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), queryParamUser, cfg.l.Aeons)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -117,7 +117,7 @@ func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (un
 
 func verifyAbilityUsage(cfg *Config, ability userAbility, repl unitRepl, queryName QueryParamName) error {
 	if !ability.canUseAbility(cfg, repl.unit.Name) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, cfg.e.playerUnits.resTypeSing, repl.unit.Name, ability), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, cfg.e.playerUnits.resTypeSingle, repl.unit.Name, ability), nil)
 	}
 
 	return nil

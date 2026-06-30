@@ -56,7 +56,7 @@ func getQueryIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList
 func getQueryNameIdPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 
-	id, err := parseNameIdQuery(r, queryParam, i.resTypeSing, i.objLookup)
+	id, err := parseNameIdQuery(r, queryParam, i.resTypeSingle, i.objLookup)
 	if err != nil {
 		return nil, err
 	}

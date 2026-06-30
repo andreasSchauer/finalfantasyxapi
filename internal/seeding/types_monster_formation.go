@@ -39,7 +39,7 @@ func (mf MonsterFormation) GetID() int32 {
 }
 
 func (mf MonsterFormation) Error() string {
-	return fmt.Sprintf("monster formation with version: %s, %s, %s", h.PtrToString(mf.Version), mf.MonsterSelection, mf.FormationData)
+	return fmt.Sprintf("monster-formation with version: %s, %s, %s", h.PtrToString(mf.Version), mf.MonsterSelection, mf.FormationData)
 }
 
 func (mf MonsterFormation) GetResParamsUnnamed() ResParamsUnnamed {

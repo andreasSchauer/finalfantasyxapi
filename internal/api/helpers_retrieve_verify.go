@@ -17,7 +17,7 @@ func verifyParamsAndGet[T seeding.Lookupable, R any, A APIResource, L APIResourc
 
 	resource, err := seeding.GetResourceByID(id, i.objLookupID)
 	if err != nil {
-		return zeroType, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with id '%d' doesn't exist.", i.resTypeSing, id), err)
+		return zeroType, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with id '%d' doesn't exist.", i.resTypeSingle, id), err)
 	}
 
 	return resource, nil

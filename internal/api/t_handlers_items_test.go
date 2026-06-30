@@ -3,6 +3,8 @@ package api
 import (
 	"net/http"
 	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	//h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -34,7 +36,7 @@ func TestGetItem(t *testing.T) {
 			},
 			expUnique:   newExpUnique(69, "three stars"),
 			untypedItem: 69,
-			category:    3,
+			category:    database.ItemCategorySupport,
 			monsters: []testMonItemAmts{
 				{
 					index:   0,
@@ -127,7 +129,7 @@ func TestGetItem(t *testing.T) {
 			},
 			expUnique:   newExpUnique(26, "fire gem"),
 			untypedItem: 26,
-			category:    2,
+			category:    database.ItemCategoryOffensive,
 			monsters: []testMonItemAmts{
 				{
 					index:   0,
@@ -172,7 +174,7 @@ func TestGetItem(t *testing.T) {
 			},
 			expUnique:   newExpUnique(2, "hi-potion"),
 			untypedItem: 2,
-			category:    1,
+			category:    database.ItemCategoryHealing,
 			monsters: []testMonItemAmts{
 				{
 					index:     1,
@@ -224,7 +226,7 @@ func TestGetItem(t *testing.T) {
 			},
 			expUnique:   newExpUnique(64, "stamina tablet"),
 			untypedItem: 64,
-			category:    3,
+			category:    database.ItemCategorySupport,
 			monsters: []testMonItemAmts{
 				{
 					index:   0,
@@ -268,7 +270,7 @@ func TestGetItem(t *testing.T) {
 			},
 			expUnique:   newExpUnique(64, "stamina tablet"),
 			untypedItem: 64,
-			category:    3,
+			category:    database.ItemCategorySupport,
 			monsters: []testMonItemAmts{
 				{
 					index:       0,

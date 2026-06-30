@@ -3,6 +3,8 @@ package api
 import (
 	"net/http"
 	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 func TestGetMix(t *testing.T) {
@@ -25,7 +27,7 @@ func TestGetMix(t *testing.T) {
 				},
 			},
 			expUnique: newExpUnique(23, "tidal wave"),
-			category:  9,
+			category:  database.MixCategoryWaterElemental,
 			overdrive: 74,
 			combinations: []testMixCombination{
 				{
@@ -55,7 +57,7 @@ func TestGetMix(t *testing.T) {
 				},
 			},
 			expUnique: newExpUnique(23, "tidal wave"),
-			category:  9,
+			category:  database.MixCategoryWaterElemental,
 			overdrive: 74,
 			combinations: []testMixCombination{
 				{
@@ -80,7 +82,7 @@ func TestGetMix(t *testing.T) {
 				},
 			},
 			expUnique: newExpUnique(34, "ultra potion"),
-			category:  1,
+			category:  database.MixCategoryRecovery,
 			overdrive: 85,
 			combinations: []testMixCombination{
 				{

@@ -3,6 +3,8 @@ package api
 import (
 	"net/http"
 	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 func TestGetAllItem(t *testing.T) {
@@ -23,7 +25,7 @@ func TestGetAllItem(t *testing.T) {
 			},
 			expUnique: newExpUnique(4, "mega-potion"),
 			typedItem: "/items/4",
-			itemType:  1,
+			itemType:  database.ItemTypeItem,
 			obtainableFrom: ObtainableFrom{
 				Monsters:  		 true,
 				Treasures: 		 true,
@@ -40,7 +42,7 @@ func TestGetAllItem(t *testing.T) {
 			},
 			expUnique: newExpUnique(111, "underdog's secret"),
 			typedItem: "/items/111",
-			itemType:  1,
+			itemType:  database.ItemTypeItem,
 			obtainableFrom: ObtainableFrom{
 				Monsters:  		 true,
 				Treasures: 		 false,
@@ -57,7 +59,7 @@ func TestGetAllItem(t *testing.T) {
 			},
 			expUnique: newExpUnique(130, "saturn sigil"),
 			typedItem: "/key-items/18",
-			itemType:  2,
+			itemType:  database.ItemTypeKeyItem,
 			obtainableFrom: ObtainableFrom{
 				Monsters:  		 false,
 				Treasures: 		 false,
@@ -74,7 +76,7 @@ func TestGetAllItem(t *testing.T) {
 			},
 			expUnique: newExpUnique(2, "hi-potion"),
 			typedItem: "/items/2",
-			itemType:  1,
+			itemType:  database.ItemTypeItem,
 			obtainableFrom: ObtainableFrom{
 				Monsters:  		 true,
 				Treasures: 		 true,
@@ -91,7 +93,7 @@ func TestGetAllItem(t *testing.T) {
 			},
 			expUnique: newExpUnique(2, "hi-potion"),
 			typedItem: "/items/2",
-			itemType:  1,
+			itemType:  database.ItemTypeItem,
 			obtainableFrom: ObtainableFrom{
 				Monsters:  		 true,
 				Treasures: 		 false,
@@ -108,7 +110,7 @@ func TestGetAllItem(t *testing.T) {
 			},
 			expUnique: newExpUnique(2, "hi-potion"),
 			typedItem: "/items/2",
-			itemType:  1,
+			itemType:  database.ItemTypeItem,
 			obtainableFrom: ObtainableFrom{
 				Monsters:  		 true,
 				Treasures: 		 true,
@@ -125,7 +127,7 @@ func TestGetAllItem(t *testing.T) {
 			},
 			expUnique: newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
-			itemType:  1,
+			itemType:  database.ItemTypeItem,
 			obtainableFrom: ObtainableFrom{
 				Monsters:  		 true,
 				Treasures: 		 false,
@@ -142,7 +144,7 @@ func TestGetAllItem(t *testing.T) {
 			},
 			expUnique: newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
-			itemType:  1,
+			itemType:  database.ItemTypeItem,
 			obtainableFrom: ObtainableFrom{
 				Monsters:  		 true,
 				Treasures: 		 false,
@@ -159,7 +161,7 @@ func TestGetAllItem(t *testing.T) {
 			},
 			expUnique: newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
-			itemType:  1,
+			itemType:  database.ItemTypeItem,
 			obtainableFrom: ObtainableFrom{
 				Monsters:  		 true,
 				Treasures: 		 false,
@@ -176,7 +178,7 @@ func TestGetAllItem(t *testing.T) {
 			},
 			expUnique: newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
-			itemType:  1,
+			itemType:  database.ItemTypeItem,
 			obtainableFrom: ObtainableFrom{
 				Monsters:  		 false,
 				Treasures: 		 false,

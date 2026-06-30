@@ -10,7 +10,7 @@ type Junction struct {
 }
 
 // queries db for junctionPairs and converts them into a []Junction
-func getDbJunctions[R any](ctx context.Context, ids []int32, parentResType, childResType ResTypeSingular, dbQuery func(context.Context, []int32) ([]R, error), converter func(R) Junction) ([]Junction, error) {
+func getDbJunctions[R any](ctx context.Context, ids []int32, parentResType, childResType ResTypeSingle, dbQuery func(context.Context, []int32) ([]R, error), converter func(R) Junction) ([]Junction, error) {
 	dbJunctions, err := dbQuery(ctx, ids)
 	if err != nil {
 		return nil, newHTTPErrorDbPairs(parentResType, childResType, err)

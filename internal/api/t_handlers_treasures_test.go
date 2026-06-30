@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -54,10 +55,10 @@ func TestGetTreasure(t *testing.T) {
 			},
 			expIdOnly:       newExpIdOnly(199),
 			area:            160,
-			availability:    2,
+			availability:    database.AvailabilityTypePreStory,
 			isAnimaTreasure: false,
-			treasureType:    "chest",
-			lootType:        1,
+			treasureType:    database.TreasureTypeChest,
+			lootType:        database.LootTypeItem,
 			gilAmount:       nil,
 			items: []testResAmount[TypedAPIResource]{
 				newTestResAmount[TypedAPIResource](82, 1),
@@ -73,10 +74,10 @@ func TestGetTreasure(t *testing.T) {
 			},
 			expIdOnly:       newExpIdOnly(13),
 			area:            15,
-			availability:    2,
+			availability:    database.AvailabilityTypePreStory,
 			isAnimaTreasure: false,
-			treasureType:    "object",
-			lootType:        1,
+			treasureType:    database.TreasureTypeObject,
+			lootType:        database.LootTypeItem,
 			gilAmount:       nil,
 			items: []testResAmount[TypedAPIResource]{
 				newTestResAmount[TypedAPIResource](147, 1),
@@ -92,10 +93,10 @@ func TestGetTreasure(t *testing.T) {
 			},
 			expIdOnly:       newExpIdOnly(62),
 			area:            61,
-			availability:    1,
+			availability:    database.AvailabilityTypeAlways,
 			isAnimaTreasure: true,
-			treasureType:    "chest",
-			lootType:        2,
+			treasureType:    database.TreasureTypeChest,
+			lootType:        database.LootTypeEquipment,
 			gilAmount:       nil,
 			items:           nil,
 			equipment: &testFoundEquipment{
@@ -113,10 +114,10 @@ func TestGetTreasure(t *testing.T) {
 			},
 			expIdOnly:       newExpIdOnly(284),
 			area:            214,
-			availability:    1,
+			availability:    database.AvailabilityTypeAlways,
 			isAnimaTreasure: false,
-			treasureType:    "chest",
-			lootType:        3,
+			treasureType:    database.TreasureTypeChest,
+			lootType:        database.LootTypeGil,
 			gilAmount:       h.GetInt32Ptr(20000),
 			items:           nil,
 			equipment:       nil,
@@ -130,10 +131,10 @@ func TestGetTreasure(t *testing.T) {
 			},
 			expIdOnly:       newExpIdOnly(45),
 			area:            42,
-			availability:    3,
+			availability:    database.AvailabilityTypePost,
 			isAnimaTreasure: false,
-			treasureType:    "gift",
-			lootType:        1,
+			treasureType:    database.TreasureTypeGift,
+			lootType:        database.LootTypeItem,
 			gilAmount:       nil,
 			items: []testResAmount[TypedAPIResource]{
 				newTestResAmount[TypedAPIResource](97, 1),

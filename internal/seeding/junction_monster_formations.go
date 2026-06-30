@@ -11,7 +11,7 @@ func (l *Lookup) getMonsterFormationEncounterAreas(mf MonsterFormation) ([]Encou
 }
 
 func (l *Lookup) seedJuncMonsterFormationsEncounterAreas(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "monster formations + encounter areas"
+	const desc string = "monster-formations + encounter areas"
 	jParams, err := processJunctions(l, desc, l.json.monsterFormations, l.getMonsterFormationEncounterAreas)
 	if err != nil {
 		return err
@@ -29,7 +29,7 @@ func (l *Lookup) getMonsterFormationTriggerCommands(mf MonsterFormation) ([]Form
 }
 
 func (l *Lookup) seedJuncMonsterFormationsTriggerCommands(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "monster formations + trigger commands"
+	const desc string = "monster-formations + trigger commands"
 	jParams, err := processJunctions(l, desc, l.json.monsterFormations, l.getMonsterFormationTriggerCommands)
 	if err != nil {
 		return err

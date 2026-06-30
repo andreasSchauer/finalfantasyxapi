@@ -31,7 +31,7 @@ func (l *Lookup) loop5SeedMonsterFormations(qtx *database.Queries, ctx context.C
 
 	dbRows, err := qtx.CreateMonsterFormationBulk(ctx, params)
 	if err != nil {
-		return fmt.Errorf("couldn't create monster formations: %v", err)
+		return fmt.Errorf("couldn't create monster-formations: %v", err)
 	}
 
 	for i, row := range dbRows {
