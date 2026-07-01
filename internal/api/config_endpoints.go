@@ -1,11 +1,15 @@
 package api
 
 import (
+	"slices"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type endpoints struct {
+	epSlice		 []EndpointName
+
 	locations    handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
 	sublocations handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]
 	areas        handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
@@ -64,6 +68,7 @@ type endpoints struct {
 
 	enums handlerInputEnums
 }
+
 
 func (cfg *Config) EndpointsInit() {
 	e := endpoints{}
@@ -1073,9 +1078,67 @@ func (cfg *Config) EndpointsInit() {
 	e.enums = handlerInputEnums{
 		endpoint:    epEnums,
 		usage:       []string{"/api/enums", "/api/enums/{enum_name}"},
-		enumLookup:  cfg.t.Lookup,
+		lookup:      cfg.t.Lookup,
 		queryLookup: cfg.q.enums,
 	}
 
 	cfg.e = &e
+	cfg.e.epSlice = e.initializeEndpointSlice()
+}
+
+func (e endpoints) initializeEndpointSlice() []EndpointName {
+	endpoints := []EndpointName{
+		e.locations.endpoint,
+		e.sublocations.endpoint,
+		e.areas.endpoint,
+		e.monsterFormations.endpoint,
+		e.shops.endpoint,
+		e.treasures.endpoint,
+		e.quests.endpoint,
+		e.sidequests.endpoint,
+		e.subquests.endpoint,
+		e.arenaCreations.endpoint,
+		e.blitzballPrizes.endpoint,
+		e.songs.endpoint,
+		e.fmvs.endpoint,
+		e.playerUnits.endpoint,
+		e.characters.endpoint,
+		e.aeons.endpoint,
+		e.characterClasses.endpoint,
+		e.monsters.endpoint,
+		e.abilities.endpoint,
+		e.playerAbilities.endpoint,
+		e.overdriveAbilities.endpoint,
+		e.itemAbilities.endpoint,
+		e.triggerCommands.endpoint,
+		e.miscAbilities.endpoint,
+		e.enemyAbilities.endpoint,
+		e.aeonCommands.endpoint,
+		e.overdriveCommands.endpoint,
+		e.overdrives.endpoint,
+		e.ronsoRages.endpoint,
+		e.submenus.endpoint,
+		e.topmenus.endpoint,
+		e.allItems.endpoint,
+		e.items.endpoint,
+		e.spheres.endpoint,
+		e.keyItems.endpoint,
+		e.primers.endpoint,
+		e.mixes.endpoint,
+		e.autoAbilities.endpoint,
+		e.equipmentTables.endpoint,
+		e.equipment.endpoint,
+		e.celestialWeapons.endpoint,
+		e.stats.endpoint,
+		e.properties.endpoint,
+		e.overdriveModes.endpoint,
+		e.elements.endpoint,
+		e.statusConditions.endpoint,
+		e.modifiers.endpoint,
+		e.agilityTiers.endpoint,
+		e.enums.endpoint,
+	}
+
+	slices.Sort(endpoints)
+	return endpoints
 }

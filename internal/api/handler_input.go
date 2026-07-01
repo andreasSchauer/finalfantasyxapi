@@ -27,6 +27,13 @@ type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 type handlerInputEnums struct {
 	endpoint    EndpointName
 	usage       []string
-	enumLookup  map[string]EnumResponse
+	lookup      map[string]EnumResponse
+	queryLookup map[QueryParamName]QueryParam
+}
+
+type handlerInputEndpoints struct {
+	endpoint    EndpointName
+	usage       []string
+	lookup  	map[string]string
 	queryLookup map[QueryParamName]QueryParam
 }

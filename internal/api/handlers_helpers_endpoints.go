@@ -166,7 +166,7 @@ func handleEnumsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	enums := typeLookupToSlice(i.enumLookup)
+	enums := enumLookupToSlice(i.lookup)
 	resources := enumsToNamedAPIResources(cfg, enums)
 
 	resourceList, err := newNamedAPIResourceList(cfg, r, resources)
@@ -184,13 +184,12 @@ func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	enum, err := parseEnumsEndpointSegment(cfg, i, segment)
+	enum, key, err := parseEnumsEndpointSegment(cfg, i, segment)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	enumName := string(enum.Name)
-	err = verifyQueryParamsKey(r, i.endpoint, i.queryLookup, &enumName)
+	err = verifyQueryParamsKey(r, i.endpoint, i.queryLookup, &key)
 	if handleHTTPError(w, err) {
 		return
 	}
