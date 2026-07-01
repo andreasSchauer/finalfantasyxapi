@@ -11,8 +11,8 @@ func createListURL(cfg *Config, endpoint EndpointName) string {
 	return fmt.Sprintf("http://%s/api/%s", cfg.host, endpoint)
 }
 
-func createEnumURL(cfg *Config, endpoint EndpointName) string {
-	return fmt.Sprintf("http://%s/api/enums/%s", cfg.host, endpoint)
+func createEnumURL(cfg *Config, e EnumName) string {
+	return fmt.Sprintf("http://%s/api/%s/%s", cfg.host, epEnums, getEnumKey(e))
 }
 
 func urlToPath(cfg *Config, url string) string {

@@ -70,6 +70,6 @@ const (
 )
 
 
-func getEnumEndpoint(e EnumName) EndpointName {
-	return EndpointName(h.GetNameWithDashes(string(e), " "))
+func getEnumKey(e EnumName) string {
+	return h.GetNameWithUnderscores(string(e))
 }

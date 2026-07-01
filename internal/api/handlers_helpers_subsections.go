@@ -28,8 +28,7 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 		return
 	}
 
-	q.Set(string(qpnLimit), getLimitMax(cfg))
-	r.URL.RawQuery = q.Encode()
+	setLimitMax(cfg, r, q)
 
 	// this is for the simple subsection /endpoint/{id}/simple,
 	// also used when aspects of the resource itself need to be simplified (like /aeons/{id}/stats)
@@ -60,12 +59,30 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 
 func handleParameters[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := string(snParameters)
-	err := verifyDefaultParamsOnly(cfg, r, i, &segment)
+	err := verifyQueryParamsAltListID(cfg, r, i.endpoint, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	parameterList, err := getQueryParamList(cfg, r, i)
+	setLimitMax(cfg, r, r.URL.Query())
+
+	parameterList, err := getQueryParamList(cfg, r, i.endpoint, i.queryLookup)
+	if handleHTTPError(w, err) {
+		return
+	}
+	respondWithJSON(w, http.StatusOK, parameterList)
+}
+
+func handleParametersEnums(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums) {
+	segment := string(snParameters)
+	err := verifyQueryParamsAltListKey(cfg, r, i.endpoint, &segment)
+	if handleHTTPError(w, err) {
+		return
+	}
+	
+	setLimitMax(cfg, r, r.URL.Query())
+
+	parameterList, err := getQueryParamList(cfg, r, i.endpoint, i.queryLookup)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -74,10 +91,12 @@ func handleParameters[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 
 func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := string(snSections)
-	err := verifyDefaultParamsOnly(cfg, r, i, &segment)
+	err := verifyQueryParamsAltListID(cfg, r, i.endpoint, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
+	
+	setLimitMax(cfg, r, r.URL.Query())
 
 	sectionList, err := getSectionList(cfg, r, i)
 	if handleHTTPError(w, err) {
@@ -97,7 +116,7 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 
 	var ids []int32
 
-	err := verifyQueryParams(r, i, nil, &segment)
+	err := verifyQueryParamsID(r, i.endpoint, i.queryLookup, nil, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -115,9 +134,7 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 			return
 		}
 
-		q := r.URL.Query()
-		q.Set(string(qpnLimit), getLimitMax(cfg))
-		r.URL.RawQuery = q.Encode()
+		setLimitMax(cfg, r, r.URL.Query())
 	}
 
 	resources, err := createSimpleResources(cfg, r, ids, i.subsections[SectionName(segment)])

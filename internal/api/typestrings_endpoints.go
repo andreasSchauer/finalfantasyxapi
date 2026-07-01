@@ -51,6 +51,7 @@ const (
 	epStatusConditions         EndpointName = "status-conditions"
 	epModifiers                EndpointName = "modifiers"
 	epAgilityTiers             EndpointName = "agility-tiers"
+	epEnums					   EndpointName = "enums"
 )
 
 type ResTypeSingle string

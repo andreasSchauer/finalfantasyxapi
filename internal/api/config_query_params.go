@@ -5,32 +5,33 @@ import (
 )
 
 type QueryParam struct {
-	ID               int                 `json:"-"`
-	Name             QueryParamName      `json:"name"`
-	Type             QueryParamType      `json:"param_type"`
-	Description      string              `json:"description"`
-	ExampleVals      []string            `json:"-"`
-	Usage            string              `json:"usage"`
-	ExampleUses      []string            `json:"example_uses"`
-	IsExclusive      bool                `json:"only_use_alone"`
-	ForSingle        bool                `json:"for_single"`
-	ForList          bool                `json:"for_list"`
-	ForSegment       *SectionName        `json:"for_segment"`
-	IsRequired       bool                `json:"is_required"`
-	EnumLookup       map[string]EnumVal  `json:"-"`
-	RequiredParams   []QueryParamName    `json:"required_params,omitempty"`
-	UsableWith       []QueryParamName    `json:"usable_with,omitempty"`
-	ReplacedBy       []QueryParamName    `json:"replaced_by,omitempty"`
-	ForbiddenParams  []QueryParamName    `json:"forbidden_params,omitempty"`
-	ReferencesInt    []EndpointName      `json:"-"`
-	References       []string            `json:"references,omitempty"`
-	AllowedIDs       []int32             `json:"-"`
-	AllowedResources []string            `json:"allowed_resources,omitempty"`
-	AllowedValues    []QueryValue        `json:"allowed_values,omitempty"`
-	AllowedIntRange  []int               `json:"allowed_int_range,omitempty"`
-	AllowedResTypes  []string            `json:"allowed_res_types,omitempty"`
-	DefaultVal       *int                `json:"default_value,omitempty"`
-	SpecialInputs    []SpecialQueryInput `json:"special_inputs,omitempty"`
+	ID               	int                 `json:"-"`
+	Name             	QueryParamName      `json:"name"`
+	Type             	QueryParamType      `json:"param_type"`
+	Description      	string              `json:"description"`
+	ExampleVals      	[]string            `json:"-"`
+	Usage            	string              `json:"usage"`
+	ExampleUses      	[]string            `json:"example_uses"`
+	IsExclusive      	bool                `json:"only_use_alone"`
+	ForSingle        	bool                `json:"for_single"`
+	ForList          	bool                `json:"for_list"`
+	ForSegment       	*SectionName        `json:"for_segment"`
+	EnumLookup       	map[string]EnumVal  `json:"-"`
+	RequiredParams   	[]QueryParamName    `json:"required_params,omitempty"`
+	UsableWith       	[]QueryParamName    `json:"usable_with,omitempty"`
+	ReplacedBy       	[]QueryParamName    `json:"replaced_by,omitempty"`
+	ForbiddenParams  	[]QueryParamName    `json:"forbidden_params,omitempty"`
+	ReferencesInt    	[]EndpointName      `json:"-"`
+	ReferencesEnumsInt	[]EnumName       	`json:"-"`
+	References       	[]string            `json:"references,omitempty"`
+	ReferencesEnums  	[]string            `json:"references_enums,omitempty"`
+	AllowedIDs       	[]int32             `json:"-"`
+	AllowedResources 	[]string            `json:"allowed_resources,omitempty"`
+	AllowedValues    	[]QueryValue        `json:"allowed_values,omitempty"`
+	AllowedIntRange  	[]int               `json:"allowed_int_range,omitempty"`
+	AllowedResTypes  	[]string            `json:"allowed_res_types,omitempty"`
+	DefaultVal       	*int                `json:"default_value,omitempty"`
+	SpecialInputs    	[]SpecialQueryInput `json:"special_inputs,omitempty"`
 }
 
 type SpecialQueryInput struct {
@@ -48,7 +49,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:       false,
 			ForSingle:     true,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -64,7 +65,7 @@ func (cfg *Config) initLocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -203,7 +204,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:       false,
 			ForSingle:     true,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -227,7 +228,7 @@ func (cfg *Config) initSublocationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -366,7 +367,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:       false,
 			ForSingle:     true,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -399,7 +400,7 @@ func (cfg *Config) initAreasParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -574,7 +575,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.MonsterFormationCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameMonsterFormationCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameMonsterFormationCategory},
 		},
 		{
 			Name:          qpnAvailability,
@@ -583,7 +584,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -649,7 +650,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.ShopCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameShopCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameShopCategory},
 		},
 		{
 			Name:          qpnAvailability,
@@ -658,7 +659,7 @@ func (cfg *Config) initShopsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:          qpnLocation,
@@ -801,7 +802,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.LootType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameLootType)},
+			ReferencesEnumsInt: []EnumName{enumNameLootType},
 		},
 		{
 			Name:          qpnTreasureType,
@@ -810,7 +811,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.TreasureType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameTreasureType)},
+			ReferencesEnumsInt: []EnumName{enumNameTreasureType},
 		},
 		{
 			Name:        qpnAnima,
@@ -826,7 +827,7 @@ func (cfg *Config) initTreasuresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 	}
 
@@ -843,7 +844,7 @@ func (cfg *Config) initQuestsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.QuestType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameQuestType)},
+			ReferencesEnumsInt: []EnumName{enumNameQuestType},
 		},
 		{
 			Name:          qpnAvailability,
@@ -852,7 +853,7 @@ func (cfg *Config) initQuestsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:        qpnRepeatable,
@@ -876,7 +877,7 @@ func (cfg *Config) initSidequestsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 	}
 
@@ -893,7 +894,7 @@ func (cfg *Config) initSubquestsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:        qpnRepeatable,
@@ -917,7 +918,7 @@ func (cfg *Config) initArenaCreationsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.ArenaCreationCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameArenaCreationCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameArenaCreationCategory},
 		},
 	}
 
@@ -934,7 +935,7 @@ func (cfg *Config) initBlitzballPrizesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.BlitzballTournamentCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameBlitzballTournamentCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameBlitzballTournamentCategory},
 		},
 	}
 
@@ -991,7 +992,7 @@ func (cfg *Config) initSongsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.Composer.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameComposer)},
+			ReferencesEnumsInt: []EnumName{enumNameComposer},
 		},
 		{
 			Name:          qpnArranger,
@@ -1000,7 +1001,7 @@ func (cfg *Config) initSongsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.Arranger.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameArranger)},
+			ReferencesEnumsInt: []EnumName{enumNameArranger},
 		},
 	}
 
@@ -1033,7 +1034,7 @@ func (cfg *Config) initPlayerUnitsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.UnitType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameUnitType)},
+			ReferencesEnumsInt: []EnumName{enumNameUnitType},
 		},
 	}
 
@@ -1050,7 +1051,7 @@ func (cfg *Config) initCharactersParams() {
 			ForList:       false,
 			ForSingle:     true,
 			EnumLookup:    cfg.t.SphereGridType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameSphereGridType)},
+			ReferencesEnumsInt: []EnumName{enumNameSphereGridType},
 		},
 		{
 			Name:        qpnStoryBased,
@@ -1113,7 +1114,7 @@ func (cfg *Config) initCharacterClassesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.CharacterClassCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameCharacterClassCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameCharacterClassCategory},
 		},
 	}
 
@@ -1130,7 +1131,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       false,
 			ForSingle:     true,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -1183,7 +1184,8 @@ func (cfg *Config) initMonstersParams() {
 			ExampleUses:   []string{"?elemental_resists=fire=weak,water=absorb", "?elemental_resists=1=3,2=4"},
 			ForList:       true,
 			ForSingle:     false,
-			ReferencesInt: []EndpointName{epElements, getEnumEndpoint(enumNameElementalAffinity)},
+			ReferencesInt: []EndpointName{epElements},
+			ReferencesEnumsInt: []EnumName{enumNameElementalAffinity},
 		},
 		{
 			Name:          qpnStatusResists,
@@ -1265,7 +1267,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -1352,7 +1354,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.MonsterSpecies.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameMonsterSpecies)},
+			ReferencesEnumsInt: []EnumName{enumNameMonsterSpecies},
 		},
 		{
 			Name:          qpnCreationArea,
@@ -1361,7 +1363,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.CreationArea.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameCreationArea)},
+			ReferencesEnumsInt: []EnumName{enumNameCreationArea},
 		},
 		{
 			Name:          qpnCategory,
@@ -1370,7 +1372,7 @@ func (cfg *Config) initMonstersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.MonsterCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameMonsterCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameMonsterCategory},
 		},
 	}
 
@@ -1387,7 +1389,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AbilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAbilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAbilityType},
 		},
 		{
 			Name:        qpnRank,
@@ -1425,7 +1427,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.TargetType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameTargetType)},
+			ReferencesEnumsInt: []EnumName{enumNameTargetType},
 		},
 		{
 			Name:        qpnUserAtk,
@@ -1462,7 +1464,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAttackType)},
+			ReferencesEnumsInt: []EnumName{enumNameAttackType},
 		},
 		{
 			Name:          qpnDamageType,
@@ -1471,7 +1473,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.DamageType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameDamageType)},
+			ReferencesEnumsInt: []EnumName{enumNameDamageType},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -1480,7 +1482,7 @@ func (cfg *Config) initAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameDamageFormula)},
+			ReferencesEnumsInt: []EnumName{enumNameDamageFormula},
 		},
 		{
 			Name:        qpnCanCrit,
@@ -1595,7 +1597,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.PlayerAbilityCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNamePlayerAbilityCategory)},
+			ReferencesEnumsInt: []EnumName{enumNamePlayerAbilityCategory},
 		},
 		{
 			Name:        qpnOutsideBattle,
@@ -1676,7 +1678,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.TargetType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameTargetType)},
+			ReferencesEnumsInt: []EnumName{enumNameTargetType},
 		},
 		{
 			Name:        qpnUserAtk,
@@ -1713,7 +1715,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAttackType)},
+			ReferencesEnumsInt: []EnumName{enumNameAttackType},
 		},
 		{
 			Name:          qpnDamageType,
@@ -1722,7 +1724,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.DamageType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameDamageType)},
+			ReferencesEnumsInt: []EnumName{enumNameDamageType},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -1731,7 +1733,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameDamageFormula)},
+			ReferencesEnumsInt: []EnumName{enumNameDamageFormula},
 		},
 		{
 			Name:          qpnElement,
@@ -1819,7 +1821,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.TargetType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameTargetType)},
+			ReferencesEnumsInt: []EnumName{enumNameTargetType},
 		},
 		{
 			Name:          qpnAttackType,
@@ -1828,7 +1830,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAttackType)},
+			ReferencesEnumsInt: []EnumName{enumNameAttackType},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -1837,7 +1839,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameDamageFormula)},
+			ReferencesEnumsInt: []EnumName{enumNameDamageFormula},
 		},
 		{
 			Name:        qpnCanCrit,
@@ -1907,7 +1909,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.ItemCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameItemCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameItemCategory},
 		},
 		{
 			Name:        qpnOutsideBattle,
@@ -1932,7 +1934,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.TargetType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameTargetType)},
+			ReferencesEnumsInt: []EnumName{enumNameTargetType},
 		},
 		{
 			Name:          qpnAttackType,
@@ -1941,7 +1943,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAttackType)},
+			ReferencesEnumsInt: []EnumName{enumNameAttackType},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -1950,7 +1952,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameDamageFormula)},
+			ReferencesEnumsInt: []EnumName{enumNameDamageFormula},
 		},
 		{
 			Name:          qpnElement,
@@ -2140,7 +2142,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.TargetType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameTargetType)},
+			ReferencesEnumsInt: []EnumName{enumNameTargetType},
 		},
 		{
 			Name:        qpnDarkable,
@@ -2170,7 +2172,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AttackType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAttackType)},
+			ReferencesEnumsInt: []EnumName{enumNameAttackType},
 		},
 		{
 			Name:          qpnDamageType,
@@ -2179,7 +2181,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.DamageType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameDamageType)},
+			ReferencesEnumsInt: []EnumName{enumNameDamageType},
 		},
 		{
 			Name:          qpnDamageFormula,
@@ -2188,7 +2190,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.DamageFormula.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameDamageFormula)},
+			ReferencesEnumsInt: []EnumName{enumNameDamageFormula},
 		},
 		{
 			Name:        qpnCanCrit,
@@ -2292,7 +2294,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       false,
 			ForSingle:     true,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -2308,7 +2310,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.ItemType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameItemType)},
+			ReferencesEnumsInt: []EnumName{enumNameItemType},
 		},
 		{
 			Name:          qpnAvailability,
@@ -2317,7 +2319,7 @@ func (cfg *Config) initAllItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -2385,7 +2387,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       false,
 			ForSingle:     true,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -2417,7 +2419,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.ItemCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameItemCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameItemCategory},
 		},
 		{
 			Name:          qpnAvailability,
@@ -2426,7 +2428,7 @@ func (cfg *Config) initItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -2494,7 +2496,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       false,
 			ForSingle:     true,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:          qpnAvailability,
@@ -2503,7 +2505,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:          qpnCategory,
@@ -2512,7 +2514,7 @@ func (cfg *Config) initKeyItemsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.KeyItemCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameKeyItemCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameKeyItemCategory},
 		},
 		{
 			Name:          qpnMethods,
@@ -2565,7 +2567,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:       false,
 			ForSingle:     true,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -2581,7 +2583,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.SphereColor.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameSphereColor)},
+			ReferencesEnumsInt: []EnumName{enumNameSphereColor},
 		},
 		{
 			Name:          qpnAvailability,
@@ -2590,7 +2592,7 @@ func (cfg *Config) initSpheresParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -2658,7 +2660,7 @@ func (cfg *Config) initPrimersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 	}
 
@@ -2693,7 +2695,7 @@ func (cfg *Config) initMixesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.MixCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameMixCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameMixCategory},
 		},
 		{
 			Name:          qpnReqItem,
@@ -2729,7 +2731,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       false,
 			ForSingle:     true,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:        qpnRelRepeatable,
@@ -2745,7 +2747,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:           qpnPreAirship,
@@ -2769,7 +2771,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.AutoAbilityCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAutoAbilityCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameAutoAbilityCategory},
 		},
 		{
 			Name:          qpnType,
@@ -2778,7 +2780,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.EquipType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameEquipType)},
+			ReferencesEnumsInt: []EnumName{enumNameEquipType},
 		},
 		{
 			Name:          qpnMonster,
@@ -2882,7 +2884,7 @@ func (cfg *Config) initEquipmentTablesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.EquipType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameEquipType)},
+			ReferencesEnumsInt: []EnumName{enumNameEquipType},
 		},
 		{
 			Name:        qpnCelestialWeapon,
@@ -2915,7 +2917,7 @@ func (cfg *Config) initEquipmentParams() {
 			ForList:       false,
 			ForSingle:     true,
 			EnumLookup:    cfg.t.AvailabilityType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameAvailabilityType)},
+			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
 			Name:          qpnAutoAbilities,
@@ -2941,7 +2943,7 @@ func (cfg *Config) initEquipmentParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.EquipType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameEquipType)},
+			ReferencesEnumsInt: []EnumName{enumNameEquipType},
 		},
 		{
 			Name:        qpnCelestialWeapon,
@@ -2965,7 +2967,7 @@ func (cfg *Config) initCelestialWeaponsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.CelestialFormula.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameCelestialFormula)},
+			ReferencesEnumsInt: []EnumName{enumNameCelestialFormula},
 		},
 	}
 
@@ -2997,7 +2999,7 @@ func (cfg *Config) initOverdriveModesParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.OverdriveModeType.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameOverdriveModeType)},
+			ReferencesEnumsInt: []EnumName{enumNameOverdriveModeType},
 		},
 	}
 
@@ -3067,7 +3069,7 @@ func (cfg *Config) initStatusConditionsParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.StatusConditionCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameStatusConditionCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameStatusConditionCategory},
 		},
 	}
 
@@ -3084,7 +3086,7 @@ func (cfg *Config) initModifiersParams() {
 			ForList:       true,
 			ForSingle:     false,
 			EnumLookup:    cfg.t.ModifierCategory.lookup,
-			ReferencesInt: []EndpointName{getEnumEndpoint(enumNameModifierCategory)},
+			ReferencesEnumsInt: []EnumName{enumNameModifierCategory},
 		},
 	}
 

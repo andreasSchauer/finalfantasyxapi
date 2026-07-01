@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -72,6 +73,24 @@ func routerNameVersion[T seeding.Lookupable, R any, A APIResource, L APIResource
 
 	default:
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
+		return
+	}
+}
+
+func routerEnums(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums) {
+	segments := getPathSegments(r.URL.Path, i.endpoint)
+
+	switch len(segments) {
+	case 0:
+		handleEnumsEndpointList(cfg, w, r, i)
+		return
+
+	case 1:
+		handleEnumsEndpointSingle(cfg, w, r, i, segments)
+		return
+
+	default:
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", h.FormatStringSlice(i.usage)), nil)
 		return
 	}
 }

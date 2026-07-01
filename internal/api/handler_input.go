@@ -23,3 +23,10 @@ type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 	avlFunc          func(*Config, *http.Request, []int32) ([]int32, error)
 	subsections      map[SectionName]Subsection
 }
+
+type handlerInputEnums struct {
+	endpoint    EndpointName
+	usage       []string
+	enumLookup  map[string]EnumResponse
+	queryLookup map[QueryParamName]QueryParam
+}

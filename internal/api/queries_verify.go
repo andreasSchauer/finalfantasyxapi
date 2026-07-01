@@ -1,24 +1,21 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func verifyDefaultParamsOnly[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], segment *string) error {
+// verifies the correct usage of all query parameters of an alternative list that is used on an endpoint that expects ids as its primary key for single resources, like /endpoint/sections, or /endpoint/parameters
+func verifyQueryParamsAltListID(cfg *Config, r *http.Request, endpoint EndpointName, listName *string) error {
 	q := r.URL.Query()
 
 	for query := range q {
-		queryParam, ok := cfg.q.defaultParams[QueryParamName(query)]
-		if !ok {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("only default parameters are allowed when using /api/%s/%s. available default parameters: %s.", i.endpoint, *segment, queryMapToString(cfg.q.defaultParams)), nil)
+		queryParam, err := getParamAltList(cfg, endpoint, query, listName)
+		if err != nil {
+			return err
 		}
 
-		err := verifyQueryUsage(q, queryParam, i.endpoint, nil, segment)
+		err = verifyQueryUsageID(q, queryParam, endpoint, cfg.q.defaultParams, nil, listName)
 		if err != nil {
 			return err
 		}
@@ -27,21 +24,17 @@ func verifyDefaultParamsOnly[T seeding.Lookupable, R any, A APIResource, L APIRe
 	return nil
 }
 
-func verifyQueryParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], id *int32, segment *string) error {
+// verifies the correct usage of all query parameters of an endpoint that uses ids as its primary key for single resources, like /endpoint/{id}.
+func verifyQueryParamsID(r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, id *int32, segment *string) error {
 	q := r.URL.Query()
-	canUseExclusiveParam := verifyExclusiveParam(q, i.queryLookup)
 
 	for query := range q {
-		queryParam, ok := i.queryLookup[QueryParamName(query)]
-		if !ok {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s. use /api/%s/parameters for available parameters.", query, i.endpoint, i.endpoint), nil)
+		queryParam, err := getParamEndpoint(endpoint, queryLookup, query)
+		if err != nil {
+			return err
 		}
 
-		if queryParam.IsExclusive && !canUseExclusiveParam {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' can't be combined with other parameters.", queryParam.Name), nil)
-		}
-
-		err := verifyQueryUsage(q, queryParam, i.endpoint, id, segment)
+		err = verifyQueryUsageID(q, queryParam, endpoint, queryLookup, id, segment)
 		if err != nil {
 			return err
 		}
@@ -50,47 +43,29 @@ func verifyQueryParams[T seeding.Lookupable, R any, A APIResource, L APIResource
 	return nil
 }
 
-func verifyExclusiveParam(q url.Values, lookup map[QueryParamName]QueryParam) bool {
-	for query := range q {
-		queryParam, ok := lookup[QueryParamName(query)]
-		if !ok {
-			return false
-		}
-
-		if queryParam.IsExclusive && len(q) > 1 {
-			return false
-		}
+// checks the usage of an endpoint that uses ids as its primary key for single resources, like /locations/{id}.
+func verifyQueryUsageID(q url.Values, queryParam QueryParam, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, id *int32, segment *string) error {
+	err := verifyExclusiveParam(q, queryParam, queryLookup)
+	if err != nil {
+		return err
 	}
 
-	return true
-}
-
-func isDefaultParam(cfg *Config, queryName QueryParamName) bool {
-	_, ok := cfg.q.defaultParams[queryName]
-	return ok
-}
-
-func verifyQueryUsage(q url.Values, queryParam QueryParam, endpoint EndpointName, id *int32, segment *string) error {
-	if queryParam.ForSegment != nil && !segmentsMatch(queryParam.ForSegment, segment) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in the following format: '/api/%s/%s%s'.", queryParam.Name, queryParam.Name, endpoint, *queryParam.ForSegment, queryParam.Usage), nil)
+	err = verifySegmentOnlyParam(queryParam, segment, endpoint)
+	if err != nil {
+		return err
 	}
 
-	if queryParam.ForSingle {
-		if id == nil {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used with single-resource-endpoints.", queryParam.Name, queryParam.Name), nil)
-		}
-
-		err := verifyAllowedIDs(queryParam, *id)
-		if err != nil {
-			return err
-		}
+	err = verifySingleResourceParamID(queryParam, id)
+	if err != nil {
+		return err
 	}
 
-	if queryParam.ForList && id != nil {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used with list-endpoints.", queryParam.Name, queryParam.Name), nil)
+	err = verifyListResourceParamID(queryParam, id)
+	if err != nil {
+		return err
 	}
 
-	err := verifyRequiredParams(q, queryParam)
+	err = verifyRequiredParams(q, queryParam)
 	if err != nil {
 		return err
 	}
@@ -108,83 +83,80 @@ func verifyQueryUsage(q url.Values, queryParam QueryParam, endpoint EndpointName
 	return nil
 }
 
-func segmentsMatch(sParam *SectionName, sReq *string) bool {
-	switch {
-	case sParam == nil && sReq == nil:
-		return true
+// verifies the correct usage of all query parameters of an alternative list that is used on an endpoint that expects keys as its primary key for single resources, like /enums/parameters
+func verifyQueryParamsAltListKey(cfg *Config, r *http.Request, endpoint EndpointName, listName *string) error {
+	q := r.URL.Query()
 
-	case sParam != nil && sReq != nil:
-		segment := *sParam
-		return string(segment) == *sReq
-
-	default:
-		return false
-	}
-}
-
-func verifyAllowedIDs(queryParam QueryParam, id int32) error {
-	if queryParam.AllowedIDs == nil {
-		return nil
-	}
-
-	allowedIDPresent := false
-
-	for _, reqID := range queryParam.AllowedIDs {
-		if id == reqID {
-			allowedIDPresent = true
+	for query := range q {
+		queryParam, err := getParamAltList(cfg, endpoint, query, listName)
+		if err != nil {
+			return err
 		}
-	}
-	if !allowedIDPresent {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%d'. parameter '%s' can only be used with ids: %s.", id, queryParam.Name, h.FormatIntSlice(queryParam.AllowedIDs)), nil)
-	}
 
-	return nil
-}
-
-func verifyRequiredParams(q url.Values, queryParam QueryParam) error {
-	if queryParam.RequiredParams == nil {
-		return nil
-	}
-
-	for _, reqParam := range queryParam.RequiredParams {
-		reqParamVal := q.Get(string(reqParam))
-
-		if reqParamVal == "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. when using parameter '%s', the following parameter(s) must be present: %s.", queryParam.Name, queryParam.Name, formatQpnSlice(queryParam.RequiredParams)), nil)
+		err = verifyQueryUsageKey(q, queryParam, endpoint, cfg.q.defaultParams, nil, listName)
+		if err != nil {
+			return err
 		}
 	}
 
 	return nil
 }
 
-func verifyForbiddenParams(q url.Values, queryParam QueryParam) error {
-	if queryParam.ForbiddenParams == nil {
-		return nil
-	}
+// verifies the correct usage of all query parameters of an endpoint that uses keys as its primary key for single resources, like /enums/{EnumName}.
+func verifyQueryParamsKey(r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, key *string) error {
+	q := r.URL.Query()
 
-	for _, frbParam := range queryParam.ForbiddenParams {
-		frbParamVal := q.Get(string(frbParam))
+	for query := range q {
+		queryParam, err := getParamEndpoint(endpoint, queryLookup, query)
+		if err != nil {
+			return err
+		}
 
-		if frbParamVal != "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can't be used in combination with the following parameter(s): %s.", queryParam.Name, queryParam.Name, formatQpnSlice(queryParam.ForbiddenParams)), nil)
+		err = verifyQueryUsageKey(q, queryParam, endpoint, queryLookup, key, nil)
+		if err != nil {
+			return err
 		}
 	}
 
 	return nil
 }
 
-func verifyUsableWith(q url.Values, queryParam QueryParam) error {
-	if queryParam.UsableWith == nil {
-		return nil
+// checks the usage of an endpoint that uses keys as its primary key for single resources, like /enums/{EnumName}.
+func verifyQueryUsageKey(q url.Values, queryParam QueryParam, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, key, segment *string) error {
+	err := verifyExclusiveParam(q, queryParam, queryLookup)
+	if err != nil {
+		return err
 	}
 
-	for _, reqParam := range queryParam.UsableWith {
-		reqParamVal := q.Get(string(reqParam))
-
-		if reqParamVal != "" {
-			return nil
-		}
+	err = verifySegmentOnlyParam(queryParam, segment, endpoint)
+	if err != nil {
+		return err
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in combination with at least one of the following parameters: %s.", queryParam.Name, queryParam.Name, formatQpnSlice(queryParam.UsableWith)), nil)
+	err = verifySingleResourceParamKey(queryParam, key)
+	if err != nil {
+		return err
+	}
+
+	err = verifyListResourceParamKey(queryParam, key)
+	if err != nil {
+		return err
+	}
+
+	err = verifyRequiredParams(q, queryParam)
+	if err != nil {
+		return err
+	}
+
+	err = verifyForbiddenParams(q, queryParam)
+	if err != nil {
+		return err
+	}
+
+	err = verifyUsableWith(q, queryParam)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

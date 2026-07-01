@@ -159,3 +159,41 @@ func handleEndpointSubOrNameVer[T seeding.Lookupable, R any, A APIResource, L AP
 		return
 	}
 }
+
+func handleEnumsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums) {
+	err := verifyQueryParamsKey(r, i.endpoint, i.queryLookup, nil)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	enums := typeLookupToSlice(i.enumLookup)
+	resources := enumsToNamedAPIResources(cfg, enums)
+
+	resourceList, err := newNamedAPIResourceList(cfg, r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+	respondWithJSON(w, http.StatusOK, resourceList)
+}
+
+func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums, segments []string) {
+	segment := segments[0]
+
+	if segment == string(snParameters) {
+		handleParametersEnums(cfg, w, r, i)
+		return
+	}
+
+	enum, err := parseEnumsEndpointSegment(cfg, i, segment)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	enumName := string(enum.Name)
+	err = verifyQueryParamsKey(r, i.endpoint, i.queryLookup, &enumName)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, enum)
+}

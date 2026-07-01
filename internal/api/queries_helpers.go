@@ -3,6 +3,7 @@ package api
 import (
 	"cmp"
 	"net/http"
+	"net/url"
 	"slices"
 	"strconv"
 	"strings"
@@ -108,4 +109,9 @@ func getLimitMax(cfg *Config) string {
 	}
 
 	return ""
+}
+
+func setLimitMax(cfg *Config, r *http.Request, q url.Values) {
+	q.Set(string(qpnLimit), getLimitMax(cfg))
+	r.URL.RawQuery = q.Encode()
 }

@@ -1,12 +1,15 @@
 package api
 
 import (
+	"cmp"
+	"slices"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 // Types holds all the enum types for the application that are either used as endpoint or query param
 type Types struct {
-	Lookup		map[EndpointName]EnumResponse
+	Lookup		map[string]EnumResponse
 
 	AbilityType EnumType[database.AbilityType, any]
 	UnitType    EnumType[database.UnitType, any]
@@ -74,7 +77,7 @@ type Types struct {
 
 func (cfg *Config) TypeLookupInit() {
 	cfg.t = &Types{
-		Lookup: make(map[EndpointName]EnumResponse),
+		Lookup: make(map[string]EnumResponse),
 	}
 
 	cfg.t.initAbilityType()
@@ -139,4 +142,17 @@ func (cfg *Config) TypeLookupInit() {
 	cfg.t.initDelayType()
 	cfg.t.initDurationType()
 	cfg.t.initTargetType()
+}
+
+func typeLookupToSlice(lookup map[string]EnumResponse) []EnumResponse {
+	enums := make([]EnumResponse, 0, len(lookup))
+
+	for key := range lookup {
+		enums = append(enums, lookup[key])
+	}
+
+	slices.SortFunc(enums, func(a, b EnumResponse) int{
+		return cmp.Compare(a.Name, b.Name)
+	})
+	return enums
 }

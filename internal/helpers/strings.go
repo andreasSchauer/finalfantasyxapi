@@ -66,6 +66,12 @@ func GetNameWithDashes(name, separator string) string {
 	return strings.ReplaceAll(nameLower, separator, "-")
 }
 
+func GetNameWithUnderscores(name string) string {
+	nameLower := strings.ToLower(name)
+	nameLower = strings.ReplaceAll(nameLower, " ", "_")
+	return strings.ReplaceAll(nameLower, "-", "_")
+}
+
 func StringSliceToListString(s []string) string {
 	return strings.Join(s, ", ")
 }

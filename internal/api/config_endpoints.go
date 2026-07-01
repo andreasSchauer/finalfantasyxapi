@@ -61,6 +61,8 @@ type endpoints struct {
 	statusConditions handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]
 	modifiers        handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]
 	agilityTiers     handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]
+
+	enums handlerInputEnums
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -1066,6 +1068,13 @@ func (cfg *Config) EndpointsInit() {
 		retrieveQuery: cfg.db.GetAgilityTierIDs,
 		getSingleFunc: cfg.getAgilityTier,
 		retrieveFunc:  cfg.retrieveAgilityTiers,
+	}
+
+	e.enums = handlerInputEnums{
+		endpoint:    epEnums,
+		usage:       []string{"/api/enums", "/api/enums/{enum_name}"},
+		enumLookup:  cfg.t.Lookup,
+		queryLookup: cfg.q.enums,
 	}
 
 	cfg.e = &e

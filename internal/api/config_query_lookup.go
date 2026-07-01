@@ -65,6 +65,8 @@ type QueryLookup struct {
 	statusConditions map[QueryParamName]QueryParam
 	modifiers        map[QueryParamName]QueryParam
 	agilityTiers     map[QueryParamName]QueryParam
+
+	enums			 map[QueryParamName]QueryParam
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -152,4 +154,6 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initStatusConditionsParams()
 	cfg.initModifiersParams()
 	cfg.initAgilityTierParams()
+
+	cfg.q.enums = cfg.assignDefaultParams()
 }

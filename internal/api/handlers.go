@@ -193,3 +193,7 @@ func (cfg *Config) HandleModifiers(w http.ResponseWriter, r *http.Request) {
 func (cfg *Config) HandleAgilityTiers(w http.ResponseWriter, r *http.Request) {
 	routerIdOnly(cfg, w, r, cfg.e.agilityTiers)
 }
+
+func (cfg *Config) HandleEnums(w http.ResponseWriter, r *http.Request) {
+	routerEnums(cfg, w, r, cfg.e.enums)
+}

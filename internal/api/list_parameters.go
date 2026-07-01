@@ -2,8 +2,6 @@ package api
 
 import (
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type QueryParameterList struct {
@@ -15,11 +13,11 @@ func (l QueryParameterList) getListParams() ListParams {
 	return l.ListParams
 }
 
-func getQueryParamList[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (QueryParameterList, error) {
+func getQueryParamList(cfg *Config, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) (QueryParameterList, error) {
 
-	queryParams := queryMapToSlice(i.queryLookup)
-	queryParams = getAllowedResources(cfg, i, queryParams)
-	queryParams = getAllowedValuesFromTypes(cfg, queryParams)
+	queryParams := queryMapToSlice(queryLookup)
+	queryParams = getAllowedResources(cfg, endpoint, queryParams)
+	queryParams = getAllowedValuesFromTypes(queryParams)
 
 	listParams, shownResources, err := createPaginatedList(cfg, r, queryParams)
 	if err != nil {
@@ -45,13 +43,13 @@ func createQueryParamRefResURLs(cfg *Config, params []QueryParam) []QueryParam {
 		param.References = make([]string, len(param.ReferencesInt))
 
 		for j := range param.ReferencesInt {
-			ref := param.ReferencesInt[j]
-
 			if param.Type == qptEnum || param.Type == qptEnumList {
+				ref := param.ReferencesEnumsInt[j]
 				param.References[j] = createEnumURL(cfg, ref)
 				continue
 			}
-
+			
+			ref := param.ReferencesInt[j]
 			param.References[j] = createListURL(cfg, ref)
 		}
 		paramsNew[i] = param
@@ -60,10 +58,10 @@ func createQueryParamRefResURLs(cfg *Config, params []QueryParam) []QueryParam {
 	return paramsNew
 }
 
-func getAllowedResources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], params []QueryParam) []QueryParam {
+func getAllowedResources(cfg *Config, endpoint EndpointName, params []QueryParam) []QueryParam {
 	for idx, param := range params {
 		for _, id := range param.AllowedIDs {
-			allowedRes := createResourceURL(cfg, i.endpoint, id)
+			allowedRes := createResourceURL(cfg, endpoint, id)
 			param.AllowedResources = append(param.AllowedResources, allowedRes)
 		}
 		params[idx] = param
@@ -72,7 +70,7 @@ func getAllowedResources[T seeding.Lookupable, R any, A APIResource, L APIResour
 	return params
 }
 
-func getAllowedValuesFromTypes(cfg *Config, params []QueryParam) []QueryParam {
+func getAllowedValuesFromTypes(params []QueryParam) []QueryParam {
 	for idx, param := range params {
 		if param.EnumLookup == nil {
 			continue

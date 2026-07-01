@@ -56,3 +56,18 @@ func parseNameVersionResource[T seeding.Lookupable](resourceType ResTypeSingle, 
 
 	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s', version '%s'", resourceType, name, versionStr), err)
 }
+
+func parseEnumsEndpointSegment(cfg *Config, i handlerInputEnums, segment string) (EnumResponse, error) {
+	decoded, err := url.PathUnescape(segment)
+	if err != nil {
+		return EnumResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding.", err)
+	}
+
+	enum, ok := i.enumLookup[decoded]
+	if !ok {
+		return EnumResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("enum '%s' not found.", decoded), nil)
+	}
+	enum.UsedByEndpoints = endpointsToURLs(cfg, enum.UsedByEndpointsInt)
+
+	return enum, nil
+}
