@@ -67,6 +67,7 @@ type QueryLookup struct {
 	agilityTiers     map[QueryParamName]QueryParam
 
 	enums			 map[QueryParamName]QueryParam
+	endpoints		 map[QueryParamName]QueryParam
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -156,4 +157,5 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initAgilityTierParams()
 
 	cfg.q.enums = cfg.assignDefaultParams()
+	cfg.q.endpoints = cfg.assignDefaultParams()
 }

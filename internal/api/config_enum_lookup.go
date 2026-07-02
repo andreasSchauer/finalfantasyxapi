@@ -7,9 +7,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-// Types holds all the enum types for the application that are either used as endpoint or query param
-type Types struct {
-	Lookup 		map[string]EnumResponse
+// Enums holds all the enum types for the application that are either used as endpoint or query param
+type Enums struct {
+	Lookup map[string]EnumResponse
 
 	AbilityType EnumType[database.AbilityType, any]
 	UnitType    EnumType[database.UnitType, any]
@@ -75,8 +75,8 @@ type Types struct {
 	TargetType        EnumType[database.TargetType, database.NullTargetType]
 }
 
-func (cfg *Config) TypeLookupInit() {
-	cfg.t = &Types{
+func (cfg *Config) EnumLookupInit() {
+	cfg.t = &Enums{
 		Lookup: make(map[string]EnumResponse),
 	}
 

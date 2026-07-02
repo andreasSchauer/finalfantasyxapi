@@ -112,6 +112,11 @@ func getLimitMax(cfg *Config) string {
 }
 
 func setLimitMax(cfg *Config, r *http.Request, q url.Values) {
+	limit := q.Get(string(qpnLimit))
+	if limit != "" {
+		return
+	}
+
 	q.Set(string(qpnLimit), getLimitMax(cfg))
 	r.URL.RawQuery = q.Encode()
 }

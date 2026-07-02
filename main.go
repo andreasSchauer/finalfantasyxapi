@@ -82,6 +82,7 @@ func main() {
 	mux.HandleFunc("GET /api/agility-tiers/", apiCfg.HandleAgilityTiers)
 
 	mux.HandleFunc("GET /api/enums/", apiCfg.HandleEnums)
+	mux.HandleFunc("GET /api/endpoints/", apiCfg.HandleEndpoints)
 
 	srv := &http.Server{
 		Addr:    ":" + port,

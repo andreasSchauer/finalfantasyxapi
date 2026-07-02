@@ -180,7 +180,7 @@ func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Reque
 	segment := segments[0]
 
 	if segment == string(snParameters) {
-		handleParametersEnums(cfg, w, r, i)
+		handleParametersKey(cfg, w, r, i.endpoint, i.queryLookup)
 		return
 	}
 
@@ -195,4 +195,32 @@ func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Reque
 	}
 
 	respondWithJSON(w, http.StatusOK, enum)
+}
+
+func handleEndpointsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints) {
+	err := verifyQueryParamsKey(r, i.endpoint, i.queryLookup, nil)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	endpoints := cfg.e.epSlice
+	resources := endpointsToNamedAPIResources(cfg, endpoints)
+	setLimitMax(cfg, r, r.URL.Query())
+
+	resourceList, err := newNamedAPIResourceList(cfg, r, resources)
+	if handleHTTPError(w, err) {
+		return
+	}
+	respondWithJSON(w, http.StatusOK, resourceList)
+}
+
+func handleEndpointsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints, segments []string) {
+	segment := segments[0]
+
+	if segment == string(snParameters) {
+		handleParametersKey(cfg, w, r, i.endpoint, i.queryLookup)
+		return
+	}
+
+	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests.", nil)
 }

@@ -197,3 +197,7 @@ func (cfg *Config) HandleAgilityTiers(w http.ResponseWriter, r *http.Request) {
 func (cfg *Config) HandleEnums(w http.ResponseWriter, r *http.Request) {
 	routerEnums(cfg, w, r, cfg.e.enums)
 }
+
+func (cfg *Config) HandleEndpoints(w http.ResponseWriter, r *http.Request) {
+	routerEndpoints(cfg, w, r, cfg.e.endpoints)
+}

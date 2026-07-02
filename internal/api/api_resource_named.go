@@ -118,6 +118,25 @@ func enumsToNamedAPIResources(cfg *Config, enums []EnumResponse) []NamedAPIResou
 	return resources
 }
 
+
+func endpointToNamedAPIResource(cfg *Config, e EndpointName) NamedAPIResource {
+	return NamedAPIResource{
+		Name: string(e),
+		URL: createListURL(cfg, e),
+	}
+}
+
+func endpointsToNamedAPIResources(cfg *Config, endpoints []EndpointName) []NamedAPIResource {
+	resources := make([]NamedAPIResource, 0, len(endpoints))
+
+	for _, ep := range endpoints {
+		resource := endpointToNamedAPIResource(cfg, ep)
+		resources = append(resources, resource)
+	}
+
+	return resources
+}
+
 func newNamedAPIResourceList(cfg *Config, r *http.Request, resources []NamedAPIResource) (NamedApiResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {

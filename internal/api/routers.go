@@ -94,3 +94,21 @@ func routerEnums(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerI
 		return
 	}
 }
+
+func routerEndpoints(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints) {
+	segments := getPathSegments(r.URL.Path, i.endpoint)
+
+	switch len(segments) {
+	case 0:
+		handleEndpointsEndpointList(cfg, w, r, i)
+		return
+
+	case 1:
+		handleEndpointsEndpointSingle(cfg, w, r, i, segments)
+		return
+
+	default:
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", h.FormatStringSlice(i.usage)), nil)
+		return
+	}
+}

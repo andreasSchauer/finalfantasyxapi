@@ -16,7 +16,7 @@ type Config struct {
 	db          *database.Queries
 	dbConn      *sql.DB
 	l           *seeding.Lookup
-	t           *Types
+	t           *Enums
 	q           *QueryLookup
 	e           *endpoints
 	platform    string
@@ -68,7 +68,7 @@ func ConfigInit() (*Config, error) {
 		return nil, err
 	}
 
-	apiCfg.TypeLookupInit()
+	apiCfg.EnumLookupInit()
 	apiCfg.QueryLookupInit()
 	apiCfg.EndpointsInit()
 

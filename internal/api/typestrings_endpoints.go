@@ -52,6 +52,7 @@ const (
 	epModifiers                EndpointName = "modifiers"
 	epAgilityTiers             EndpointName = "agility-tiers"
 	epEnums					   EndpointName = "enums"
+	epEndpoints				   EndpointName = "endpoints"
 )
 
 type ResTypeSingle string

@@ -73,16 +73,16 @@ func handleParameters[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
-func handleParametersEnums(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums) {
+func handleParametersKey(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) {
 	segment := string(snParameters)
-	err := verifyQueryParamsAltListKey(cfg, r, i.endpoint, &segment)
+	err := verifyQueryParamsAltListKey(cfg, r, endpoint, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
-	
+
 	setLimitMax(cfg, r, r.URL.Query())
 
-	parameterList, err := getQueryParamList(cfg, r, i.endpoint, i.queryLookup)
+	parameterList, err := getQueryParamList(cfg, r, endpoint, queryLookup)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -95,7 +95,7 @@ func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	if handleHTTPError(w, err) {
 		return
 	}
-	
+
 	setLimitMax(cfg, r, r.URL.Query())
 
 	sectionList, err := getSectionList(cfg, r, i)

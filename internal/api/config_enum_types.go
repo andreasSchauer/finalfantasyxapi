@@ -1,6 +1,8 @@
 package api
 
 import (
+	"slices"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -14,11 +16,11 @@ type EnumType[E, N any] struct {
 }
 
 type EnumResponse struct {
-	Name				EnumName		`json:"name"`
-	Description			string			`json:"description"`
-	UsedByEndpointsInt	[]EndpointName	`json:"-"`
-	UsedByEndpoints		[]string		`json:"used_by_endpoints"`
-	Values				[]EnumVal		`json:"values"`
+	Name               EnumName       `json:"name"`
+	Description        string         `json:"description"`
+	UsedByEndpointsInt []EndpointName `json:"-"`
+	UsedByEndpoints    []string       `json:"used_by_endpoints"`
+	Values             []EnumVal      `json:"values"`
 }
 
 func endpointsToURLs(cfg *Config, source []EndpointName) []string {
@@ -29,17 +31,17 @@ func endpointsToURLs(cfg *Config, source []EndpointName) []string {
 		urls = append(urls, url)
 	}
 
+	slices.Sort(urls)
 	return urls
 }
 
+func (t *Enums) initAbilityType() {
+	enumDescription := "whoa"
 
-func (t *Types) initAbilityType() {
-	enumDescription := ""
-	
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.AbilityTypePlayerAbility),
-			Description: "Abilities that can either be learned via the sphere grid or are learned by aeons.",
+			Description: "Abilities that can either be learned via the sphere grid and/or are learned by aeons.",
 		},
 		{
 			Name:        string(database.AbilityTypeOverdriveAbility),
@@ -72,16 +74,16 @@ func (t *Types) initAbilityType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameAbilityType)] = EnumResponse{
-		Name: 				enumNameAbilityType,
-		Description: 		enumDescription,
-		UsedByEndpointsInt: 	[]EndpointName{},
-		Values: 			getEnumValIDs(typeSlice),
+		Name:               enumNameAbilityType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{epPlayerAbilities, epOverdriveAbilities, epItemAbilities, epTriggerCommands, epMiscAbilities, epEnemyAbilities},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initUnitType() {
+func (t *Enums) initUnitType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.UnitTypeCharacter),
@@ -102,16 +104,16 @@ func (t *Types) initUnitType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameUnitType)] = EnumResponse{
-		Name: 			enumNameUnitType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameUnitType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initItemType() {
+func (t *Enums) initItemType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.ItemTypeItem),
@@ -132,16 +134,16 @@ func (t *Types) initItemType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameItemType)] = EnumResponse{
-		Name: 			enumNameItemType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameItemType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initQuestType() {
+func (t *Enums) initQuestType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.QuestTypeSidequest),
@@ -162,16 +164,16 @@ func (t *Types) initQuestType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameQuestType)] = EnumResponse{
-		Name: 			enumNameQuestType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameQuestType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initAaActivationCondition() {
+func (t *Enums) initAaActivationCondition() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.AaActivationConditionAlways),
@@ -198,16 +200,16 @@ func (t *Types) initAaActivationCondition() {
 	}
 
 	t.Lookup[getEnumKey(enumNameAaActivationCondition)] = EnumResponse{
-		Name: 			enumNameAaActivationCondition,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameAaActivationCondition,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initAlterationType() {
+func (t *Enums) initAlterationType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.AlterationTypeChange),
@@ -227,16 +229,16 @@ func (t *Types) initAlterationType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameAlterationType)] = EnumResponse{
-		Name: 			enumNameAlterationType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameAlterationType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initAreaConnectionType() {
+func (t *Enums) initAreaConnectionType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.AreaConnectionTypeBothDirections),
@@ -259,16 +261,16 @@ func (t *Types) initAreaConnectionType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameAreaConnectionType)] = EnumResponse{
-		Name: 			enumNameAreaConnectionType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameAreaConnectionType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initArenaCreationCategory() {
+func (t *Enums) initArenaCreationCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.MaCreationCategoryArea),
@@ -290,16 +292,16 @@ func (t *Types) initArenaCreationCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameArenaCreationCategory)] = EnumResponse{
-		Name: 			enumNameArenaCreationCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameArenaCreationCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initArmorType() {
+func (t *Enums) initArmorType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.ArmorTypeShield),
@@ -334,16 +336,16 @@ func (t *Types) initArmorType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameArmorType)] = EnumResponse{
-		Name: 			enumNameArmorType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameArmorType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initArranger() {
+func (t *Enums) initArranger() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.ArrangerNobuouematsu),
@@ -368,16 +370,16 @@ func (t *Types) initArranger() {
 	}
 
 	t.Lookup[getEnumKey(enumNameArranger)] = EnumResponse{
-		Name: 			enumNameArranger,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameArranger,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initAutoAbilityCategory() {
+func (t *Enums) initAutoAbilityCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.AutoAbilityCategoryStatX),
@@ -436,16 +438,16 @@ func (t *Types) initAutoAbilityCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameAutoAbilityCategory)] = EnumResponse{
-		Name: 			enumNameAutoAbilityCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameAutoAbilityCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initAvailabilityType() {
+func (t *Enums) initAvailabilityType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.AvailabilityTypeAlways),
@@ -509,16 +511,16 @@ func (t *Types) initAvailabilityType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameAvailabilityType)] = EnumResponse{
-		Name: 			enumNameAvailabilityType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameAvailabilityType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initBgReplacementType() {
+func (t *Enums) initBgReplacementType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.BgReplacementTypeUntilTrigger),
@@ -537,16 +539,16 @@ func (t *Types) initBgReplacementType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameBgReplacementType)] = EnumResponse{
-		Name: 			enumNameBgReplacementType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameBgReplacementType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initBlitzballPositionSlot() {
+func (t *Enums) initBlitzballPositionSlot() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.BlitzballPositionSlot1st),
@@ -569,16 +571,16 @@ func (t *Types) initBlitzballPositionSlot() {
 	}
 
 	t.Lookup[getEnumKey(enumNameBlitzballPositionSlot)] = EnumResponse{
-		Name: 			enumNameBlitzballPositionSlot,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameBlitzballPositionSlot,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initBlitzballTournamentCategory() {
+func (t *Enums) initBlitzballTournamentCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.BlitzballTournamentCategoryLeague),
@@ -595,16 +597,16 @@ func (t *Types) initBlitzballTournamentCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameBlitzballTournamentCategory)] = EnumResponse{
-		Name: 			enumNameBlitzballTournamentCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameBlitzballTournamentCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initCelestialFormula() {
+func (t *Enums) initCelestialFormula() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.CelestialFormulaHpHigh),
@@ -627,16 +629,16 @@ func (t *Types) initCelestialFormula() {
 	}
 
 	t.Lookup[getEnumKey(enumNameCelestialFormula)] = EnumResponse{
-		Name: 			enumNameCelestialFormula,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameCelestialFormula,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initCharacterClassCategory() {
+func (t *Enums) initCharacterClassCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.CharacterClassCategoryGroup),
@@ -656,16 +658,16 @@ func (t *Types) initCharacterClassCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameCharacterClassCategory)] = EnumResponse{
-		Name: 			enumNameCharacterClassCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameCharacterClassCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initComposer() {
+func (t *Enums) initComposer() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.ComposerNobuouematsu),
@@ -687,16 +689,16 @@ func (t *Types) initComposer() {
 	}
 
 	t.Lookup[getEnumKey(enumNameComposer)] = EnumResponse{
-		Name: 			enumNameComposer,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameComposer,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initCounterType() {
+func (t *Enums) initCounterType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.CounterTypePhysical),
@@ -717,16 +719,16 @@ func (t *Types) initCounterType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameCounterType)] = EnumResponse{
-		Name: 			enumNameCounterType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameCounterType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initCTBIconType() {
+func (t *Enums) initCTBIconType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.CtbIconTypeMonster),
@@ -757,16 +759,16 @@ func (t *Types) initCTBIconType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameCTBIconType)] = EnumResponse{
-		Name: 			enumNameCTBIconType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameCTBIconType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initCreationArea() {
+func (t *Enums) initCreationArea() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.MaCreationAreaBesaid),
@@ -818,16 +820,16 @@ func (t *Types) initCreationArea() {
 	}
 
 	t.Lookup[getEnumKey(enumNameCreationArea)] = EnumResponse{
-		Name: 			enumNameCreationArea,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameCreationArea,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initCreationsUnlockedCategory() {
+func (t *Enums) initCreationsUnlockedCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.CreationsUnlockedCategoryArea),
@@ -846,16 +848,16 @@ func (t *Types) initCreationsUnlockedCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameCreationsUnlockedCategory)] = EnumResponse{
-		Name: 			enumNameCreationsUnlockedCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameCreationsUnlockedCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initElementalAffinity() {
+func (t *Enums) initElementalAffinity() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.ElementalAffinityNeutral),
@@ -890,16 +892,16 @@ func (t *Types) initElementalAffinity() {
 	}
 
 	t.Lookup[getEnumKey(enumNameElementalAffinity)] = EnumResponse{
-		Name: 			enumNameElementalAffinity,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameElementalAffinity,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initEquipClass() {
+func (t *Enums) initEquipClass() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.EquipClassStandard),
@@ -922,16 +924,16 @@ func (t *Types) initEquipClass() {
 	}
 
 	t.Lookup[getEnumKey(enumNameEquipClass)] = EnumResponse{
-		Name: 			enumNameEquipClass,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameEquipClass,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initEquipType() {
+func (t *Enums) initEquipType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.EquipTypeWeapon),
@@ -948,16 +950,16 @@ func (t *Types) initEquipType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameEquipType)] = EnumResponse{
-		Name: 			enumNameEquipType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameEquipType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initItemCategory() {
+func (t *Enums) initItemCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.ItemCategoryHealing),
@@ -992,16 +994,16 @@ func (t *Types) initItemCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameItemCategory)] = EnumResponse{
-		Name: 			enumNameItemCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameItemCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initKeyItemCategory() {
+func (t *Enums) initKeyItemCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.KeyItemCategoryStory),
@@ -1032,17 +1034,17 @@ func (t *Types) initKeyItemCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameKeyItemCategory)] = EnumResponse{
-		Name: 			enumNameKeyItemCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameKeyItemCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initLootType() {
+func (t *Enums) initLootType() {
 
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.LootTypeItem),
@@ -1062,16 +1064,16 @@ func (t *Types) initLootType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameLootType)] = EnumResponse{
-		Name: 			enumNameLootType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameLootType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initMixCategory() {
+func (t *Enums) initMixCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.MixCategoryRecovery),
@@ -1130,16 +1132,16 @@ func (t *Types) initMixCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameMixCategory)] = EnumResponse{
-		Name: 			enumNameMixCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameMixCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initModifierCategory() {
+func (t *Enums) initModifierCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.ModifierCategoryFixedValue),
@@ -1166,16 +1168,16 @@ func (t *Types) initModifierCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameModifierCategory)] = EnumResponse{
-		Name: 			enumNameModifierCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameModifierCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initMonsterFormationCategory() {
+func (t *Enums) initMonsterFormationCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.MonsterFormationCategoryRandomEncounter),
@@ -1210,16 +1212,16 @@ func (t *Types) initMonsterFormationCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameMonsterFormationCategory)] = EnumResponse{
-		Name: 			enumNameMonsterFormationCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameMonsterFormationCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initMonsterSpecies() {
+func (t *Enums) initMonsterSpecies() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.MonsterSpeciesAdamantoise),
@@ -1398,16 +1400,16 @@ func (t *Types) initMonsterSpecies() {
 	}
 
 	t.Lookup[getEnumKey(enumNameMonsterSpecies)] = EnumResponse{
-		Name: 			enumNameMonsterSpecies,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameMonsterSpecies,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initMonsterCategory() {
+func (t *Enums) initMonsterCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.MonsterCategoryMonster),
@@ -1427,16 +1429,16 @@ func (t *Types) initMonsterCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameMonsterCategory)] = EnumResponse{
-		Name: 			enumNameMonsterCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameMonsterCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initMusicUseCase() {
+func (t *Enums) initMusicUseCase() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.MusicUseCaseBlitzballGame),
@@ -1473,16 +1475,16 @@ func (t *Types) initMusicUseCase() {
 	}
 
 	t.Lookup[getEnumKey(enumNameMusicUseCase)] = EnumResponse{
-		Name: 			enumNameMusicUseCase,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameMusicUseCase,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initNodePosition() {
+func (t *Enums) initNodePosition() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.NodePositionNeighboring),
@@ -1505,16 +1507,16 @@ func (t *Types) initNodePosition() {
 	}
 
 	t.Lookup[getEnumKey(enumNameNodePosition)] = EnumResponse{
-		Name: 			enumNameNodePosition,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameNodePosition,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initNodeState() {
+func (t *Enums) initNodeState() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.NodeStateActiveSelf),
@@ -1547,16 +1549,16 @@ func (t *Types) initNodeState() {
 	}
 
 	t.Lookup[getEnumKey(enumNameNodeState)] = EnumResponse{
-		Name: 			enumNameNodeState,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameNodeState,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initNodeType() {
+func (t *Enums) initNodeType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.NodeTypeHp),
@@ -1624,16 +1626,16 @@ func (t *Types) initNodeType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameNodeType)] = EnumResponse{
-		Name: 			enumNameNodeType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameNodeType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initNullifyArmored() {
+func (t *Enums) initNullifyArmored() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.NullifyArmoredTarget),
@@ -1652,16 +1654,16 @@ func (t *Types) initNullifyArmored() {
 	}
 
 	t.Lookup[getEnumKey(enumNameNullifyArmored)] = EnumResponse{
-		Name: 			enumNameNullifyArmored,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameNullifyArmored,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initOverdriveModeType() {
+func (t *Enums) initOverdriveModeType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.OverdriveModeTypeFormula),
@@ -1680,16 +1682,16 @@ func (t *Types) initOverdriveModeType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameOverdriveModeType)] = EnumResponse{
-		Name: 			enumNameOverdriveModeType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameOverdriveModeType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initPlayerAbilityCategory() {
+func (t *Enums) initPlayerAbilityCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.PlayerAbilityCategorySkill),
@@ -1715,16 +1717,16 @@ func (t *Types) initPlayerAbilityCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNamePlayerAbilityCategory)] = EnumResponse{
-		Name: 			enumNamePlayerAbilityCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNamePlayerAbilityCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initShopCategory() {
+func (t *Enums) initShopCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.ShopCategoryStandard),
@@ -1747,16 +1749,16 @@ func (t *Types) initShopCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameShopCategory)] = EnumResponse{
-		Name: 			enumNameShopCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameShopCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initShopType() {
+func (t *Enums) initShopType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.ShopTypePreAirship),
@@ -1775,16 +1777,16 @@ func (t *Types) initShopType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameShopType)] = EnumResponse{
-		Name: 			enumNameShopType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameShopType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initSpecialActionType() {
+func (t *Enums) initSpecialActionType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.SpecialActionTypeBribe),
@@ -1809,16 +1811,16 @@ func (t *Types) initSpecialActionType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameSpecialActionType)] = EnumResponse{
-		Name: 			enumNameSpecialActionType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameSpecialActionType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initSphereColor() {
+func (t *Enums) initSphereColor() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.SphereColorRed),
@@ -1847,16 +1849,16 @@ func (t *Types) initSphereColor() {
 	}
 
 	t.Lookup[getEnumKey(enumNameSphereColor)] = EnumResponse{
-		Name: 			enumNameSphereColor,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameSphereColor,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initSphereEffect() {
+func (t *Enums) initSphereEffect() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.SphereEffectActivation),
@@ -1879,16 +1881,16 @@ func (t *Types) initSphereEffect() {
 	}
 
 	t.Lookup[getEnumKey(enumNameSphereEffect)] = EnumResponse{
-		Name: 			enumNameSphereEffect,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameSphereEffect,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initSphereGridType() {
+func (t *Enums) initSphereGridType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.SphereGridTypeStandard),
@@ -1905,16 +1907,16 @@ func (t *Types) initSphereGridType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameSphereGridType)] = EnumResponse{
-		Name: 			enumNameSphereGridType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameSphereGridType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initStatusConditionCategory() {
+func (t *Enums) initStatusConditionCategory() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.StatusConditionCategoryNegative),
@@ -1934,16 +1936,16 @@ func (t *Types) initStatusConditionCategory() {
 	}
 
 	t.Lookup[getEnumKey(enumNameStatusConditionCategory)] = EnumResponse{
-		Name: 			enumNameStatusConditionCategory,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameStatusConditionCategory,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initTreasureType() {
+func (t *Enums) initTreasureType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.TreasureTypeChest),
@@ -1966,16 +1968,16 @@ func (t *Types) initTreasureType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameTreasureType)] = EnumResponse{
-		Name: 			enumNameTreasureType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameTreasureType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initWeaponType() {
+func (t *Enums) initWeaponType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.WeaponTypeSword),
@@ -2010,16 +2012,16 @@ func (t *Types) initWeaponType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameWeaponType)] = EnumResponse{
-		Name: 			enumNameWeaponType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameWeaponType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initAccSourceType() {
+func (t *Enums) initAccSourceType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.AccSourceTypeAccuracy),
@@ -2038,16 +2040,16 @@ func (t *Types) initAccSourceType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameAccSourceType)] = EnumResponse{
-		Name: 			enumNameAccSourceType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameAccSourceType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initAttackType() {
+func (t *Enums) initAttackType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.AttackTypeAttack),
@@ -2067,16 +2069,16 @@ func (t *Types) initAttackType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameAttackType)] = EnumResponse{
-		Name: 			enumNameAttackType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameAttackType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initBreakDmgLimitType() {
+func (t *Enums) initBreakDmgLimitType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.BreakDmgLmtTypeAlways),
@@ -2097,16 +2099,16 @@ func (t *Types) initBreakDmgLimitType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameBreakDmgLimitType)] = EnumResponse{
-		Name: 			enumNameBreakDmgLimitType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameBreakDmgLimitType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initCalculationType() {
+func (t *Enums) initCalculationType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.CalculationTypeAddedPercentage),
@@ -2137,16 +2139,16 @@ func (t *Types) initCalculationType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameCalculationType)] = EnumResponse{
-		Name: 			enumNameCalculationType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameCalculationType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initCriticalType() {
+func (t *Enums) initCriticalType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.CriticalTypeCrit),
@@ -2171,16 +2173,16 @@ func (t *Types) initCriticalType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameCriticalType)] = EnumResponse{
-		Name: 			enumNameCriticalType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameCriticalType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initCtbAttackType() {
+func (t *Enums) initCtbAttackType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.CtbAttackTypeAttack),
@@ -2199,16 +2201,16 @@ func (t *Types) initCtbAttackType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameCtbAttackType)] = EnumResponse{
-		Name: 			enumNameCtbAttackType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameCtbAttackType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initDamageFormula() {
+func (t *Enums) initDamageFormula() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.DamageFormulaStrVsDef),
@@ -2287,16 +2289,16 @@ func (t *Types) initDamageFormula() {
 	}
 
 	t.Lookup[getEnumKey(enumNameDamageFormula)] = EnumResponse{
-		Name: 			enumNameDamageFormula,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameDamageFormula,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initDamageType() {
+func (t *Enums) initDamageType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.DamageTypePhysical),
@@ -2319,16 +2321,16 @@ func (t *Types) initDamageType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameDamageType)] = EnumResponse{
-		Name: 			enumNameDamageType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameDamageType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initDelayType() {
+func (t *Enums) initDelayType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.DelayTypeCtbBased),
@@ -2347,16 +2349,16 @@ func (t *Types) initDelayType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameDelayType)] = EnumResponse{
-		Name: 			enumNameDelayType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameDelayType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initDurationType() {
+func (t *Enums) initDurationType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.DurationTypeTurns),
@@ -2391,16 +2393,16 @@ func (t *Types) initDurationType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameDurationType)] = EnumResponse{
-		Name: 			enumNameDurationType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameDurationType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
-func (t *Types) initTargetType() {
+func (t *Enums) initTargetType() {
 	enumDescription := ""
-	
+
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.TargetTypeSelf),
@@ -2465,9 +2467,9 @@ func (t *Types) initTargetType() {
 	}
 
 	t.Lookup[getEnumKey(enumNameTargetType)] = EnumResponse{
-		Name: 			enumNameTargetType,
-		Description: 	enumDescription,
-		UsedByEndpointsInt: 		[]EndpointName{},
-		Values: 		getEnumValIDs(typeSlice),
+		Name:               enumNameTargetType,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{},
+		Values:             getEnumValIDs(typeSlice),
 	}
 }

@@ -34,6 +34,6 @@ type handlerInputEnums struct {
 type handlerInputEndpoints struct {
 	endpoint    EndpointName
 	usage       []string
-	lookup  	map[string]string
+	slice  		[]EndpointName
 	queryLookup map[QueryParamName]QueryParam
 }

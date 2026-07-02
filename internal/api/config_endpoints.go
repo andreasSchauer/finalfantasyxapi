@@ -8,65 +8,57 @@ import (
 )
 
 type endpoints struct {
-	epSlice		 []EndpointName
-
-	locations    handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
-	sublocations handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]
-	areas        handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
-
-	monsterFormations handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]
-	shops             handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
-	treasures         handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
-	quests            handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]
-	sidequests        handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]
-	subquests         handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]
-	arenaCreations    handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
-	blitzballPrizes   handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]
-	songs             handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
-	fmvs              handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]
-
-	playerUnits      handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]
-	characters       handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]
-	aeons            handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]
-	characterClasses handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]
-	monsters         handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]
-
-	abilities          handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]
-	playerAbilities    handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
-	overdriveAbilities handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]
-	itemAbilities      handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]
-	triggerCommands    handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]
-	miscAbilities      handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList]
-	enemyAbilities     handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
-
-	aeonCommands      handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]
-	overdriveCommands handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]
-	overdrives        handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]
-	ronsoRages        handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]
-	submenus          handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]
-	topmenus          handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]
-
-	allItems handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]
-	items    handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
-	keyItems handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]
-	spheres  handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]
-	primers  handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]
-	mixes    handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]
-
-	autoAbilities    handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]
-	equipmentTables  handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]
-	equipment        handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]
-	celestialWeapons handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]
-
-	stats            handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]
-	properties       handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]
-	overdriveModes   handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
-	elements         handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]
-	statusConditions handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]
-	modifiers        handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]
-	agilityTiers     handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]
-
-	enums handlerInputEnums
+	epSlice		 		[]EndpointName
+	locations    		handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
+	sublocations 		handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]
+	areas        		handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
+	monsterFormations 	handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]
+	shops             	handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
+	treasures         	handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
+	quests            	handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]
+	sidequests        	handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]
+	subquests         	handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]
+	arenaCreations    	handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
+	blitzballPrizes   	handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]
+	songs             	handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
+	fmvs              	handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]
+	playerUnits      	handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]
+	characters       	handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]
+	aeons            	handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]
+	characterClasses 	handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]
+	monsters         	handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]
+	abilities          	handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]
+	playerAbilities    	handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
+	overdriveAbilities 	handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]
+	itemAbilities      	handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]
+	triggerCommands    	handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]
+	miscAbilities      	handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList]
+	enemyAbilities     	handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
+	aeonCommands      	handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]
+	overdriveCommands 	handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]
+	overdrives        	handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]
+	ronsoRages        	handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]
+	submenus          	handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]
+	topmenus          	handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]
+	allItems 			handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]
+	items    			handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
+	keyItems 			handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]
+	spheres  			handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]
+	primers  			handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]
+	mixes    			handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]
+	autoAbilities    	handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]
+	equipmentTables  	handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]
+	equipment        	handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]
+	celestialWeapons 	handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]
+	stats            	handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]
+	properties       	handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]
+	overdriveModes   	handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
+	elements         	handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]
+	statusConditions 	handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]
+	modifiers        	handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]
+	agilityTiers     	handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]
+	enums 				handlerInputEnums
+	endpoints 			handlerInputEndpoints
 }
 
 
@@ -1082,8 +1074,16 @@ func (cfg *Config) EndpointsInit() {
 		queryLookup: cfg.q.enums,
 	}
 
+	e.endpoints = handlerInputEndpoints{
+		endpoint: 	 epEndpoints,
+		usage:		 []string{"/api/endpoints"},
+		queryLookup: cfg.q.endpoints,
+	}
+
 	cfg.e = &e
 	cfg.e.epSlice = e.initializeEndpointSlice()
+	e.endpoints.slice = e.epSlice
+
 }
 
 func (e endpoints) initializeEndpointSlice() []EndpointName {
@@ -1137,6 +1137,7 @@ func (e endpoints) initializeEndpointSlice() []EndpointName {
 		e.modifiers.endpoint,
 		e.agilityTiers.endpoint,
 		e.enums.endpoint,
+		e.endpoints.endpoint,
 	}
 
 	slices.Sort(endpoints)
