@@ -32,6 +32,7 @@ const (
 	enumNameEquipClass                  EnumName = "equip class"
 	enumNameEquipType                   EnumName = "equip type"
 	enumNameItemCategory                EnumName = "item category"
+	enumNameItemUsability				EnumName = "item usability"
 	enumNameKeyItemCategory             EnumName = "key-item category"
 	enumNameLootType                    EnumName = "loot type"
 	enumNameMixCategory                 EnumName = "mix category"

@@ -9,16 +9,14 @@ import (
 
 // Enums holds all the enum types for the application that are either used as endpoint or query param
 type Enums struct {
-	Lookup map[string]EnumResponse
-
-	AbilityType EnumType[database.AbilityType, any]
-	UnitType    EnumType[database.UnitType, any]
-	ItemType    EnumType[database.ItemType, any]
-	QuestType   EnumType[database.QuestType, any]
-
+	Lookup 						map[string]EnumResponse
+	AbilityType 				EnumType[database.AbilityType, any]
+	UnitType    				EnumType[database.UnitType, any]
+	ItemType   					EnumType[database.ItemType, any]
+	QuestType   				EnumType[database.QuestType, any]
 	AaActivationCondition       EnumType[database.AaActivationCondition, any]
 	ElementalAffinity           EnumType[database.ElementalAffinity, any]
-	AlterationType              EnumType[database.AlterationType, any]
+	//AlterationType              EnumType[database.AlterationType, any]				// internal?
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
 	ArmorType                   EnumType[database.ArmorType, any]
@@ -38,6 +36,7 @@ type Enums struct {
 	EquipClass                  EnumType[database.EquipClass, any]
 	EquipType                   EnumType[database.EquipType, any]
 	ItemCategory                EnumType[database.ItemCategory, any]
+	ItemUsability				EnumType[database.ItemUsability, any]
 	KeyItemCategory             EnumType[database.KeyItemCategory, any]
 	LootType                    EnumType[database.LootType, any]
 	MixCategory                 EnumType[database.MixCategory, any]
@@ -53,26 +52,25 @@ type Enums struct {
 	OverdriveModeType           EnumType[database.OverdriveModeType, any]
 	PlayerAbilityCategory       EnumType[database.PlayerAbilityCategory, any]
 	ShopCategory                EnumType[database.ShopCategory, any]
-	ShopType                    EnumType[database.ShopType, database.NullShopType]
-	SpecialActionType           EnumType[database.SpecialActionType, database.NullSpecialActionType]
+	//ShopType                    EnumType[database.ShopType, database.NullShopType] // internal?
 	SphereColor                 EnumType[database.SphereColor, any]
 	SphereEffect                EnumType[database.SphereEffect, any]
 	SphereGridType              EnumType[database.SphereGridType, any]
 	StatusConditionCategory     EnumType[database.StatusConditionCategory, any]
 	TreasureType                EnumType[database.TreasureType, any]
 	WeaponType                  EnumType[database.WeaponType, any]
-
-	AccSourceType     EnumType[database.AccSourceType, any]
-	AttackType        EnumType[database.AttackType, any]
-	BreakDmgLimitType EnumType[database.BreakDmgLmtType, database.NullBreakDmgLmtType]
-	CalculationType   EnumType[database.CalculationType, any]
-	CriticalType      EnumType[database.CriticalType, database.NullCriticalType]
-	CtbAttackType     EnumType[database.CtbAttackType, any]
-	DamageFormula     EnumType[database.DamageFormula, any]
-	DamageType        EnumType[database.DamageType, any]
-	DelayType         EnumType[database.DelayType, any]
-	DurationType      EnumType[database.DurationType, any]
-	TargetType        EnumType[database.TargetType, database.NullTargetType]
+	AccSourceType     			EnumType[database.AccSourceType, any]
+	AttackType        			EnumType[database.AttackType, any]
+	BreakDmgLimitType 			EnumType[database.BreakDmgLmtType, database.NullBreakDmgLmtType]
+	CalculationType   			EnumType[database.CalculationType, any]
+	CriticalType      			EnumType[database.CriticalType, database.NullCriticalType]
+	CtbAttackType     			EnumType[database.CtbAttackType, any]
+	DamageFormula     			EnumType[database.DamageFormula, any]
+	DamageType        			EnumType[database.DamageType, any]
+	DelayType         			EnumType[database.DelayType, any]
+	DurationType      			EnumType[database.DurationType, any]
+	SpecialActionType 			EnumType[database.SpecialActionType, database.NullSpecialActionType]
+	TargetType        			EnumType[database.TargetType, database.NullTargetType]
 }
 
 func (cfg *Config) EnumLookupInit() {
@@ -86,7 +84,7 @@ func (cfg *Config) EnumLookupInit() {
 	cfg.t.initQuestType()
 
 	cfg.t.initAaActivationCondition()
-	cfg.t.initAlterationType()
+	//cfg.t.initAlterationType()
 	cfg.t.initAreaConnectionType()
 	cfg.t.initArenaCreationCategory()
 	cfg.t.initArmorType()
@@ -107,6 +105,7 @@ func (cfg *Config) EnumLookupInit() {
 	cfg.t.initEquipClass()
 	cfg.t.initEquipType()
 	cfg.t.initItemCategory()
+	cfg.t.initItemUsability()
 	cfg.t.initKeyItemCategory()
 	cfg.t.initLootType()
 	cfg.t.initMixCategory()
@@ -122,7 +121,7 @@ func (cfg *Config) EnumLookupInit() {
 	cfg.t.initOverdriveModeType()
 	cfg.t.initPlayerAbilityCategory()
 	cfg.t.initShopCategory()
-	cfg.t.initShopType()
+	//cfg.t.initShopType()
 	cfg.t.initSpecialActionType()
 	cfg.t.initSphereColor()
 	cfg.t.initSphereEffect()
