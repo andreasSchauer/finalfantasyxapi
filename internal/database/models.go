@@ -2581,6 +2581,7 @@ const (
 	SpecialActionTypeStealGil          SpecialActionType = "steal-gil"
 	SpecialActionTypeStealItem         SpecialActionType = "steal-item"
 	SpecialActionTypeTransferOverdrive SpecialActionType = "transfer-overdrive"
+	SpecialActionTypeCopycat           SpecialActionType = "copycat"
 )
 
 func (e *SpecialActionType) Scan(src interface{}) error {

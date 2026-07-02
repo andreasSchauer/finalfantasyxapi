@@ -24,6 +24,7 @@ func (cfg *Config) getOverdrive(r *http.Request, i handlerInput[seeding.Overdriv
 		CanCopycat:         overdrive.CanCopycat,
 		UnlockCondition:    overdrive.UnlockCondition,
 		CountdownInSec:     overdrive.CountdownInSec,
+		Cursor: 			overdrive.Cursor,
 		User:               nameToNamedAPIResource(cfg, cfg.e.characterClasses, overdrive.User, nil),
 		OverdriveCommand:   namePtrToNamedAPIResPtr(cfg, cfg.e.overdriveCommands, overdrive.OverdriveCommand, nil),
 		OverdriveAbilities: refsToNamedAPIResources(cfg, overdrive.OverdriveAbilities),

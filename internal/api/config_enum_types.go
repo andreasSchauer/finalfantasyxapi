@@ -36,7 +36,7 @@ func endpointsToURLs(cfg *Config, source []EndpointName) []string {
 }
 
 func (t *Enums) initAbilityType() {
-	enumDescription := "whoa"
+	enumDescription := "States the type of an ability in cases, when its general endpoint is used."
 
 	typeSlice := []EnumVal{
 		{
@@ -82,7 +82,7 @@ func (t *Enums) initAbilityType() {
 }
 
 func (t *Enums) initUnitType() {
-	enumDescription := ""
+	enumDescription := "States the type of a player unit in cases, when its general endpoint is used."
 
 	typeSlice := []EnumVal{
 		{
@@ -112,7 +112,7 @@ func (t *Enums) initUnitType() {
 }
 
 func (t *Enums) initItemType() {
-	enumDescription := ""
+	enumDescription := "States the type of an item in cases, when its general endpoint is used."
 
 	typeSlice := []EnumVal{
 		{
@@ -142,7 +142,7 @@ func (t *Enums) initItemType() {
 }
 
 func (t *Enums) initQuestType() {
-	enumDescription := ""
+	enumDescription := "States the type of a quest in cases, when its general endpoint is used."
 
 	typeSlice := []EnumVal{
 		{
@@ -172,7 +172,7 @@ func (t *Enums) initQuestType() {
 }
 
 func (t *Enums) initAaActivationCondition() {
-	enumDescription := ""
+	enumDescription := "Determines, when the effects of an auto-ability are active."
 
 	typeSlice := []EnumVal{
 		{
@@ -239,16 +239,16 @@ func (t *Enums) initAlterationType() {
 }
 */
 func (t *Enums) initAreaConnectionType() {
-	enumDescription := ""
+	enumDescription := "Determines, how two areas are connected with each other."
 
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.AreaConnectionTypeBothDirections),
-			Description: "The edges of two areas are directly connected with each other, and you can freely zone between those areas.",
+			Description: "The edges of two areas are directly connected with each other, and you can freely move between those areas.",
 		},
 		{
 			Name:        string(database.AreaConnectionTypeOneDirection),
-			Description: "The edges of two areas are directly connected with each other, but you can only zone from area A to area B, and not vice versa.",
+			Description: "The edges of two areas are directly connected with each other, but you can only move from area A to area B, and not vice versa.",
 		},
 		{
 			Name:        string(database.AreaConnectionTypeWarp),
@@ -271,7 +271,7 @@ func (t *Enums) initAreaConnectionType() {
 }
 
 func (t *Enums) initArenaCreationCategory() {
-	enumDescription := ""
+	enumDescription := "The three categories of monster creations in the arena."
 
 	typeSlice := []EnumVal{
 		{
@@ -302,7 +302,7 @@ func (t *Enums) initArenaCreationCategory() {
 }
 
 func (t *Enums) initArmorType() {
-	enumDescription := ""
+	enumDescription := "The eight armor types, each one being associated with a character."
 
 	typeSlice := []EnumVal{
 		{
@@ -346,7 +346,7 @@ func (t *Enums) initArmorType() {
 }
 
 func (t *Enums) initArranger() {
-	enumDescription := ""
+	enumDescription := "The four people who arranged songs for this game."
 
 	typeSlice := []EnumVal{
 		{
@@ -380,7 +380,7 @@ func (t *Enums) initArranger() {
 }
 
 func (t *Enums) initAutoAbilityCategory() {
-	enumDescription := ""
+	enumDescription := "Divides auto-abilities into smaller categories."
 
 	typeSlice := []EnumVal{
 		{
@@ -448,7 +448,7 @@ func (t *Enums) initAutoAbilityCategory() {
 }
 
 func (t *Enums) initAvailabilityType() {
-	enumDescription := ""
+	enumDescription := "Defines, when in the game a resource is available. The four values arise from two conditions: pre- vs. post-airship and story-only vs. always available. If both conditions are false, the resource is available, as soon as the point in the game is reached where it is obtainable ('always'). One of the two conditions being true can be seen as equally hard to get ('pre-story' and 'post'). Which one is easier to reach, depends on where the player is in the game. Both conditions being true equates to the hardest level of obtainability (post-story)."
 
 	typeSlice := []EnumVal{
 		{
@@ -521,14 +521,16 @@ func (t *Enums) initAvailabilityType() {
 }
 
 func (t *Enums) initBgReplacementType() {
-	enumDescription := ""
+	enumDescription := "Describes the condition until which alternative background music replaces the regular background music of a particular set of areas."
 
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.BgReplacementTypeUntilTrigger),
+			Description: "The background music continues playing until a certain story- or event-trigger occurs.",
 		},
 		{
 			Name: string(database.BgReplacementTypeUntilZoneChange),
+			Description: "The background music continues playing until the current area is left and a zone-change occurs.",
 		},
 	}
 
@@ -549,7 +551,7 @@ func (t *Enums) initBgReplacementType() {
 }
 
 func (t *Enums) initBlitzballPositionSlot() {
-	enumDescription := ""
+	enumDescription := "The four end results after a blitzball tournament or league that result in a prize being given."
 
 	typeSlice := []EnumVal{
 		{
@@ -581,7 +583,7 @@ func (t *Enums) initBlitzballPositionSlot() {
 }
 
 func (t *Enums) initBlitzballTournamentCategory() {
-	enumDescription := ""
+	enumDescription := "The two different categories of blitzball competitions."
 
 	typeSlice := []EnumVal{
 		{
@@ -607,7 +609,7 @@ func (t *Enums) initBlitzballTournamentCategory() {
 }
 
 func (t *Enums) initCelestialFormula() {
-	enumDescription := ""
+	enumDescription := "The three formulae that are used for the damage calculation of a celestial weapon's skills and attack."
 
 	typeSlice := []EnumVal{
 		{
@@ -639,7 +641,7 @@ func (t *Enums) initCelestialFormula() {
 }
 
 func (t *Enums) initCharacterClassCategory() {
-	enumDescription := ""
+	enumDescription := "Divides character-classes into smaller categories."
 
 	typeSlice := []EnumVal{
 		{
@@ -668,7 +670,7 @@ func (t *Enums) initCharacterClassCategory() {
 }
 
 func (t *Enums) initComposer() {
-	enumDescription := ""
+	enumDescription := "The three people who composed songs for this game."
 
 	typeSlice := []EnumVal{
 		{
@@ -699,16 +701,16 @@ func (t *Enums) initComposer() {
 }
 
 func (t *Enums) initCounterType() {
-	enumDescription := ""
+	enumDescription := "Describes the two ways, in which a counter attack can be triggered."
 
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.CounterTypePhysical),
-			Description: "The user counters when being hit by a physical attack.",
+			Description: "The user counters when being targeted by a physical attack.",
 		},
 		{
 			Name:        string(database.CounterTypeMagical),
-			Description: "The user counters when being hit by a magical attack.",
+			Description: "The user counters when being targeted by a magical attack.",
 		},
 	}
 
@@ -729,7 +731,7 @@ func (t *Enums) initCounterType() {
 }
 
 func (t *Enums) initCTBIconType() {
-	enumDescription := ""
+	enumDescription := "Describes the icon that can be assigned to a monster in the CTB window."
 
 	typeSlice := []EnumVal{
 		{
@@ -769,7 +771,7 @@ func (t *Enums) initCTBIconType() {
 }
 
 func (t *Enums) initCreationArea() {
-	enumDescription := ""
+	enumDescription := "The locations in which monsters can be captured for the area conquest. While monsters can appear in different locations, each monster is only assigned one location for the area conquest. Some creation areas encompass more than one location, like Djose (includes Moonflow) or Mount Gagazet (includes Zanarkand Ruins)."
 
 	typeSlice := []EnumVal{
 		{
@@ -830,7 +832,7 @@ func (t *Enums) initCreationArea() {
 }
 
 func (t *Enums) initCreationsUnlockedCategory() {
-	enumDescription := ""
+	enumDescription := "Is used to determine, which of the other two conquests is required to have a certain amount of monsters to unlock an original creation in the monster arena."
 
 	typeSlice := []EnumVal{
 		{
@@ -858,7 +860,7 @@ func (t *Enums) initCreationsUnlockedCategory() {
 }
 
 func (t *Enums) initElementalAffinity() {
-	enumDescription := ""
+	enumDescription := "Determines how an element affects the damage a target takes."
 
 	typeSlice := []EnumVal{
 		{
@@ -902,7 +904,7 @@ func (t *Enums) initElementalAffinity() {
 }
 
 func (t *Enums) initEquipClass() {
-	enumDescription := ""
+	enumDescription := "Determines, if an equipment piece can be customized, or if its auto-abilities depend on different factors. Non-standard equipment is one-of-a-kind."
 
 	typeSlice := []EnumVal{
 		{
@@ -911,7 +913,7 @@ func (t *Enums) initEquipClass() {
 		},
 		{
 			Name:        string(database.EquipClassUnique),
-			Description: "The equipment piece is one of a kind and its auto-abilities can only be modified by progressing through the story.",
+			Description: "The equipment piece is one-of-a-kind and its auto-abilities can only be modified by progressing through the story.",
 		},
 		{
 			Name:        string(database.EquipClassCelestialWeapon),
@@ -934,7 +936,7 @@ func (t *Enums) initEquipClass() {
 }
 
 func (t *Enums) initEquipType() {
-	enumDescription := ""
+	enumDescription := "The two types of equipment."
 
 	typeSlice := []EnumVal{
 		{
@@ -960,7 +962,7 @@ func (t *Enums) initEquipType() {
 }
 
 func (t *Enums) initItemCategory() {
-	enumDescription := ""
+	enumDescription := "Divides items into smaller categories."
 
 	typeSlice := []EnumVal{
 		{
@@ -1004,7 +1006,7 @@ func (t *Enums) initItemCategory() {
 }
 
 func (t *Enums) initItemUsability() {
-	enumDescription := ""
+	enumDescription := "Determines, when and where an item can be used."
 
 	typeSlice := []EnumVal{
 		{
@@ -1040,7 +1042,7 @@ func (t *Enums) initItemUsability() {
 }
 
 func (t *Enums) initKeyItemCategory() {
-	enumDescription := ""
+	enumDescription := "Divides key-items into smaller categories."
 
 	typeSlice := []EnumVal{
 		{
@@ -1081,7 +1083,7 @@ func (t *Enums) initKeyItemCategory() {
 
 func (t *Enums) initLootType() {
 
-	enumDescription := ""
+	enumDescription := "Determines the type of loot a treasure contains."
 
 	typeSlice := []EnumVal{
 		{
@@ -1110,7 +1112,7 @@ func (t *Enums) initLootType() {
 }
 
 func (t *Enums) initMixCategory() {
-	enumDescription := ""
+	enumDescription := "Divides mixes into smaller categories."
 
 	typeSlice := []EnumVal{
 		{
@@ -1178,24 +1180,24 @@ func (t *Enums) initMixCategory() {
 }
 
 func (t *Enums) initModifierCategory() {
-	enumDescription := ""
+	enumDescription := "Divides modifiers into smaller categories."
 
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.ModifierCategoryFixedValue),
-			Description: "",
+			Description: "The modifier is a fixed value that can be changed to another value.",
 		},
 		{
 			Name:        string(database.ModifierCategoryDynamicValue),
-			Description: "",
+			Description: "The modifier is a value that depends on the context of the battle (current-hp, overdrive-gauge, initial-counter-value), or that can't be defined by a single value (mp-cost).",
 		},
 		{
 			Name:        string(database.ModifierCategoryFactor),
-			Description: "",
+			Description: "The modifier acts as a multiplier to its target.",
 		},
 		{
 			Name:        string(database.ModifierCategoryPercentage),
-			Description: "",
+			Description: "The modifier is a percentage from 0 to 100 in most cases. Meaning, these can be divided by 100 to convert them into factors. If a scenario for 255% is given in the modifier's description (255% being the game's equivalent for 'always'), then that value is also possible.",
 		},
 	}
 
@@ -1214,7 +1216,7 @@ func (t *Enums) initModifierCategory() {
 }
 
 func (t *Enums) initMonsterFormationCategory() {
-	enumDescription := ""
+	enumDescription := "Divides monster-formations into smaller categories."
 
 	typeSlice := []EnumVal{
 		{
@@ -1258,7 +1260,7 @@ func (t *Enums) initMonsterFormationCategory() {
 }
 
 func (t *Enums) initMonsterSpecies() {
-	enumDescription := ""
+	enumDescription := "Determines the species of a monster. Some of these are relevant for the species conquest. Monsters of the same species tend to use similar attacks and attack-patterns."
 
 	typeSlice := []EnumVal{
 		{
@@ -1446,7 +1448,7 @@ func (t *Enums) initMonsterSpecies() {
 }
 
 func (t *Enums) initMonsterCategory() {
-	enumDescription := ""
+	enumDescription := "Divides monsters into smaller categories."
 
 	typeSlice := []EnumVal{
 		{
@@ -1475,7 +1477,7 @@ func (t *Enums) initMonsterCategory() {
 }
 
 func (t *Enums) initMusicUseCase() {
-	enumDescription := ""
+	enumDescription := "Defines special use cases for songs that don't fall into the other listed categories, like the chocobo theme or the main menu theme."
 
 	typeSlice := []EnumVal{
 		{
@@ -1521,7 +1523,7 @@ func (t *Enums) initMusicUseCase() {
 }
 
 func (t *Enums) initNodePosition() {
-	enumDescription := ""
+	enumDescription := "Defines which nodes a sphere can target."
 
 	typeSlice := []EnumVal{
 		{
@@ -1530,7 +1532,7 @@ func (t *Enums) initNodePosition() {
 		},
 		{
 			Name:        string(database.NodePositionAllyPosition),
-			Description: "The sphere can only target nodes, another character is currently positioned.",
+			Description: "The sphere can only target nodes, where another character is currently positioned.",
 		},
 		{
 			Name:        string(database.NodePositionAny),
@@ -1553,7 +1555,7 @@ func (t *Enums) initNodePosition() {
 }
 
 func (t *Enums) initNodeState() {
-	enumDescription := ""
+	enumDescription := "Defines the state a node is in, in relation to all currently available characters on the sphere grid."
 
 	typeSlice := []EnumVal{
 		{
@@ -1595,7 +1597,7 @@ func (t *Enums) initNodeState() {
 }
 
 func (t *Enums) initNodeType() {
-	enumDescription := ""
+	enumDescription := "Defines every node on the sphere grid."
 
 	typeSlice := []EnumVal{
 		{
@@ -1672,7 +1674,7 @@ func (t *Enums) initNodeType() {
 }
 
 func (t *Enums) initNullifyArmored() {
-	enumDescription := ""
+	enumDescription := "In some cases, a monster's 'armored' property is nullified. This either happens, if it is the target of an attack by a user with 'piercing', or if suffers under the 'armor break' status (bearer)."
 
 	typeSlice := []EnumVal{
 		{
@@ -1700,7 +1702,7 @@ func (t *Enums) initNullifyArmored() {
 }
 
 func (t *Enums) initOverdriveModeType() {
-	enumDescription := ""
+	enumDescription := "Defines how an overdrive-mode fills up the overdrive gauge of its user."
 
 	typeSlice := []EnumVal{
 		{
@@ -1728,7 +1730,7 @@ func (t *Enums) initOverdriveModeType() {
 }
 
 func (t *Enums) initPlayerAbilityCategory() {
-	enumDescription := ""
+	enumDescription := "Divides player-abilities into smaller categories."
 
 	typeSlice := []EnumVal{
 		{
@@ -1763,7 +1765,7 @@ func (t *Enums) initPlayerAbilityCategory() {
 }
 
 func (t *Enums) initShopCategory() {
-	enumDescription := ""
+	enumDescription := "Divides shops into smaller categories."
 
 	typeSlice := []EnumVal{
 		{
@@ -1823,26 +1825,32 @@ func (t *Enums) initShopType() {
 }
 */
 func (t *Enums) initSphereColor() {
-	enumDescription := ""
+	enumDescription := "Defines all the colors the icon of a sphere can have in the menu. Additionally, these serve as the categories of spheres."
 
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.SphereColorRed),
+			Description: "Spheres that activate adjacent stat- and ability-nodes.",
 		},
 		{
 			Name: string(database.SphereColorYellow),
+			Description: "Spheres that activate remote nodes that, in most cases, have been activated by another character.",
 		},
 		{
 			Name: string(database.SphereColorBlack),
+			Description: "Key spheres that remove sphere locks.",
 		},
 		{
 			Name: string(database.SphereColorPurple),
+			Description: "Spheres that transform empty nodes into stat-nodes.",
 		},
 		{
 			Name: string(database.SphereColorBlue),
+			Description: "Reserved for the Clear Sphere, which transforms a stat-node into an empty node.",
 		},
 		{
 			Name: string(database.SphereColorWhite),
+			Description: "Spheres that move the user to a remote place on the grid.",
 		},
 	}
 
@@ -1861,7 +1869,7 @@ func (t *Enums) initSphereColor() {
 }
 
 func (t *Enums) initSphereEffect() {
-	enumDescription := ""
+	enumDescription := "Defines the effect, a sphere has on the target node, if used successfully."
 
 	typeSlice := []EnumVal{
 		{
@@ -1893,7 +1901,7 @@ func (t *Enums) initSphereEffect() {
 }
 
 func (t *Enums) initSphereGridType() {
-	enumDescription := ""
+	enumDescription := "The two types of sphere grid. Can only be chosen once, at the start of the game."
 
 	typeSlice := []EnumVal{
 		{
@@ -1919,7 +1927,7 @@ func (t *Enums) initSphereGridType() {
 }
 
 func (t *Enums) initStatusConditionCategory() {
-	enumDescription := ""
+	enumDescription := "Divides status-conditions into smaller categories."
 
 	typeSlice := []EnumVal{
 		{
@@ -1948,7 +1956,7 @@ func (t *Enums) initStatusConditionCategory() {
 }
 
 func (t *Enums) initTreasureType() {
-	enumDescription := ""
+	enumDescription := "Defines the manner of obtaining a treasure."
 
 	typeSlice := []EnumVal{
 		{
@@ -1957,11 +1965,11 @@ func (t *Enums) initTreasureType() {
 		},
 		{
 			Name:        string(database.TreasureTypeGift),
-			Description: "The treasure is a gift from an NPC.",
+			Description: "The treasure is a gift from an NPC, received by talking to them.",
 		},
 		{
 			Name:        string(database.TreasureTypeObject),
-			Description: "The treasure is found by interacting with an in-game object. Most of the time, the treasure is the object itself (Jecht Spheres, Al Bhed Primers), other times it's not.",
+			Description: "The treasure is found when interacting with an in-game object. Most of the time, the treasure is the object itself (Jecht Spheres, Al Bhed Primers), other times it's not (some Celestial Weapons).",
 		},
 	}
 
@@ -1980,7 +1988,7 @@ func (t *Enums) initTreasureType() {
 }
 
 func (t *Enums) initWeaponType() {
-	enumDescription := ""
+	enumDescription := "The eight weapon types, each one being associated with a character."
 
 	typeSlice := []EnumVal{
 		{
@@ -2024,7 +2032,7 @@ func (t *Enums) initWeaponType() {
 }
 
 func (t *Enums) initAccSourceType() {
-	enumDescription := ""
+	enumDescription := "Describes, how the accuracy of an action is calculated."
 
 	typeSlice := []EnumVal{
 		{
@@ -2052,17 +2060,20 @@ func (t *Enums) initAccSourceType() {
 }
 
 func (t *Enums) initAttackType() {
-	enumDescription := ""
+	enumDescription := "Defines the type of effect an action will have on the targets' HP/MP after damage calculation, in a normal situation (no elemental absorbtion, or 'Zombie' status)."
 
 	typeSlice := []EnumVal{
 		{
 			Name: string(database.AttackTypeAttack),
+			Description: "The action deals damage.",
 		},
 		{
 			Name: string(database.AttackTypeHeal),
+			Description: "The action restores HP/MP.",
 		},
 		{
 			Name: string(database.AttackTypeAbsorb),
+			Description: "The action deals damage and restores the same amount to its user.",
 		},
 	}
 
@@ -2081,7 +2092,7 @@ func (t *Enums) initAttackType() {
 }
 
 func (t *Enums) initBreakDmgLimitType() {
-	enumDescription := ""
+	enumDescription := "Defines, whether an ability breaks the damage limit by itself, or if it needs the auto-ability to be able to."
 
 	typeSlice := []EnumVal{
 		{
@@ -2111,7 +2122,7 @@ func (t *Enums) initBreakDmgLimitType() {
 }
 
 func (t *Enums) initCalculationType() {
-	enumDescription := ""
+	enumDescription := "Determines, how the value of a stat/modifier change is applied to its target stat/modifier, when it is activated."
 
 	typeSlice := []EnumVal{
 		{
@@ -2151,7 +2162,7 @@ func (t *Enums) initCalculationType() {
 }
 
 func (t *Enums) initCriticalType() {
-	enumDescription := ""
+	enumDescription := "Determines, which formula an ability uses to calculate critical hits."
 
 	typeSlice := []EnumVal{
 		{
@@ -2185,7 +2196,7 @@ func (t *Enums) initCriticalType() {
 }
 
 func (t *Enums) initCtbAttackType() {
-	enumDescription := ""
+	enumDescription := "Defines the type of effect an action will have on the targets' CTB. A negative effect is better known as 'Delay'."
 
 	typeSlice := []EnumVal{
 		{
@@ -2213,7 +2224,7 @@ func (t *Enums) initCtbAttackType() {
 }
 
 func (t *Enums) initDamageFormula() {
-	enumDescription := ""
+	enumDescription := "Determines the damage formula an action uses."
 
 	typeSlice := []EnumVal{
 		{
@@ -2301,12 +2312,12 @@ func (t *Enums) initDamageFormula() {
 }
 
 func (t *Enums) initDamageType() {
-	enumDescription := ""
+	enumDescription := "Determines, which type of damage an ability deals, and in turn, which status-conditions, properties, abilities, and auto-abilities can influence it."
 
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.DamageTypePhysical),
-			Description: "The damage can be reduced by 'Protect', 'Defend' 'Power Break', 'Sentinel', 'Shield', and 'Cheer', as well as 'Defense +X%' Auto-Abilities.",
+			Description: "The damage can be reduced by 'Protect', 'Defend' 'Power Break', 'Sentinel', 'Shield', and 'Cheer', as well as 'Defense +X%' Auto-Abilities. It can be increased by 'Strength +X%' Auto-Abilities.",
 		},
 		{
 			Name:        string(database.DamageTypeMagical),
@@ -2333,7 +2344,7 @@ func (t *Enums) initDamageType() {
 }
 
 func (t *Enums) initDelayType() {
-	enumDescription := ""
+	enumDescription := "Determines the type of delay an action deals."
 
 	typeSlice := []EnumVal{
 		{
@@ -2361,7 +2372,7 @@ func (t *Enums) initDelayType() {
 }
 
 func (t *Enums) initDurationType() {
-	enumDescription := ""
+	enumDescription := "Determines, how long an inflicted status-condition is active on the target unit."
 
 	typeSlice := []EnumVal{
 		{
@@ -2405,7 +2416,7 @@ func (t *Enums) initDurationType() {
 }
 
 func (t *Enums) initSpecialActionType() {
-	enumDescription := ""
+	enumDescription := "Defines special actions an ability can trigger."
 
 	typeSlice := []EnumVal{
 		{
@@ -2419,6 +2430,9 @@ func (t *Enums) initSpecialActionType() {
 		},
 		{
 			Name: string(database.SpecialActionTypeTransferOverdrive),
+		},
+		{
+			Name: string(database.SpecialActionTypeCopycat),
 		},
 	}
 
@@ -2439,7 +2453,7 @@ func (t *Enums) initSpecialActionType() {
 }
 
 func (t *Enums) initTargetType() {
-	enumDescription := ""
+	enumDescription := "Defines, which units an ability can target. This type is used for abilities, as well as the cursors that can be seen, when selecting a target. However, the two don't necessarily need to match (with Rikku's 'Mix' Overdrive being the prime example)."
 
 	typeSlice := []EnumVal{
 		{
@@ -2507,7 +2521,7 @@ func (t *Enums) initTargetType() {
 	t.Lookup[getEnumKey(enumNameTargetType)] = EnumResponse{
 		Name:               enumNameTargetType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []EndpointName{epAbilities, epPlayerAbilities, epOverdriveAbilities, epItemAbilities, epTriggerCommands, epMiscAbilities, epEnemyAbilities, epAeonCommands},
+		UsedByEndpointsInt: []EndpointName{epAbilities, epPlayerAbilities, epOverdriveAbilities, epItemAbilities, epTriggerCommands, epMiscAbilities, epEnemyAbilities, epAeonCommands, epOverdrives},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }

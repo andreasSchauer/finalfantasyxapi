@@ -12,6 +12,7 @@ type Overdrive struct {
 	CanCopycat         bool               `json:"can_copycat"`
 	UnlockCondition    *string            `json:"unlock_condition"`
 	CountdownInSec     *int32             `json:"countdown_in_sec"`
+	Cursor     		   *string            `json:"cursor"`
 	User               NamedAPIResource   `json:"user"`
 	OverdriveCommand   *NamedAPIResource  `json:"overdrive_command"`
 	OverdriveAbilities []NamedAPIResource `json:"overdrive_abilities"`

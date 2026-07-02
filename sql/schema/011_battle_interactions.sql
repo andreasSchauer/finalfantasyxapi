@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TYPE special_action_type AS ENUM ('bribe', 'steal-gil', 'steal-item', 'transfer-overdrive');
+CREATE TYPE special_action_type AS ENUM ('bribe', 'steal-gil', 'steal-item', 'transfer-overdrive', 'copycat');
 CREATE DOMAIN null_special_action_type AS special_action_type;
 
 
