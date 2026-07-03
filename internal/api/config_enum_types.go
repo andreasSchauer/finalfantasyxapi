@@ -206,38 +206,7 @@ func (t *Enums) initAaActivationCondition() {
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
-/*
-func (t *Enums) initAlterationType() {
-	//enumDescription := ""
 
-	typeSlice := []EnumVal{
-		{
-			Name: string(database.AlterationTypeChange),
-		},
-		{
-			Name: string(database.AlterationTypeGain),
-		},
-		{
-			Name: string(database.AlterationTypeLoss),
-		},
-	}
-
-	t.AlterationType = EnumType[database.AlterationType, any]{
-		name:     enumNameAlterationType,
-		lookup:   enumSliceToMap(typeSlice),
-		convFunc: func(s string) database.AlterationType { return database.AlterationType(s) },
-	}
-
-
-	t.Lookup[getEnumKey(enumNameAlterationType)] = EnumResponse{
-		Name:               enumNameAlterationType,
-		Description:        enumDescription,
-		UsedByEndpointsInt: []EndpointName{},
-		Values:             getEnumValIDs(typeSlice),
-	}
-
-}
-*/
 func (t *Enums) initAreaConnectionType() {
 	enumDescription := "Determines, how two areas are connected with each other."
 
@@ -1795,35 +1764,7 @@ func (t *Enums) initShopCategory() {
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
-/*
-func (t *Enums) initShopType() {
-	enumDescription := ""
 
-	typeSlice := []EnumVal{
-		{
-			Name: string(database.ShopTypePreAirship),
-		},
-		{
-			Name: string(database.ShopTypePostAirship),
-		},
-	}
-
-	t.ShopType = EnumType[database.ShopType, database.NullShopType]{
-		name:         enumNameShopType,
-		lookup:       enumSliceToMap(typeSlice),
-		convFunc:     func(s string) database.ShopType { return database.ShopType(s) },
-		nullConvFunc: database.ToNullShopType,
-		getNullEnum:  database.GetNullShopType,
-	}
-
-	t.Lookup[getEnumKey(enumNameShopType)] = EnumResponse{
-		Name:               enumNameShopType,
-		Description:        enumDescription,
-		UsedByEndpointsInt: []EndpointName{},
-		Values:             getEnumValIDs(typeSlice),
-	}
-}
-*/
 func (t *Enums) initSphereColor() {
 	enumDescription := "Defines all the colors the icon of a sphere can have in the menu. Additionally, these serve as the categories of spheres."
 

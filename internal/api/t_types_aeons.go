@@ -30,7 +30,7 @@ func compareAeons(test test, exp expAeon, got Aeon) {
 	compareAgilityParams(test, "agility params", exp.agility, got.AgilityParameters)
 	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.e.celestialWeapons.endpoint, exp.celestialWeapon, got.CelestialWeapon)
 	checkResIDsInSlice(test, "character classes", test.cfg.e.characterClasses.endpoint, exp.characterClasses, got.CharacterClasses)
-	checkResAmtTypes(test, "base stats", exp.baseStats, statsToBaseStats(got.Stats))
+	checkResAmtTypes(test, "base stats", exp.baseStats, got.BaseStats)
 	checkResIDsInSlice(test, "aeon commands", test.cfg.e.aeonCommands.endpoint, exp.aeonCommands, got.AeonCommands)
 	checkResIDsInSlice(test, "default abilities", test.cfg.e.playerAbilities.endpoint, exp.defaultPlayerAbilities, got.DefaultPlayerAbilities)
 	checkResIDsInSlice(test, "overdrives", test.cfg.e.overdrives.endpoint, exp.overdrives, got.Overdrives)

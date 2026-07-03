@@ -6,14 +6,14 @@ import (
 	"strings"
 )
 
-func (cfg *Config) assignDefaultParams() map[QueryParamName]QueryParam {
-	return cfg.completeQueryParamsInit([]QueryParam{}, false)
+func (cfg *Config) assignDefaultParams(sections map[SectionName]Subsection) map[QueryParamName]QueryParam {
+	return cfg.completeQueryParamsInit([]QueryParam{}, sections)
 }
 
-func (cfg *Config) completeQueryParamsInit(params []QueryParam, hasSimpleView bool) map[QueryParamName]QueryParam {
+func (cfg *Config) completeQueryParamsInit(params []QueryParam, sections map[SectionName]Subsection) map[QueryParamName]QueryParam {
 	params = slices.Concat(params, cfg.q.defaultParamSlice)
 
-	if hasSimpleView {
+	if hasSimpleView(sections) {
 		queryParamIDs := QueryParam{
 			Name:        qpnIDs,
 			Description: "Used to manually input the ids of resources to be batch-fetched for simple display. The original order will be preserved, but duplicates will be removed.",

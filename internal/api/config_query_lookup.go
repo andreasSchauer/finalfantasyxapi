@@ -126,12 +126,12 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initMiscAbilitiesParams()
 	cfg.initEnemyAbilitiesParams()
 
-	cfg.q.aeonCommands = cfg.assignDefaultParams()
-	cfg.q.overdriveCommands = cfg.assignDefaultParams()
+	cfg.q.aeonCommands = cfg.assignDefaultParams(cfg.e.aeonCommands.subsections)
+	cfg.q.overdriveCommands = cfg.assignDefaultParams(cfg.e.overdriveCommands.subsections)
 	cfg.initOverdrivesParams()
-	cfg.q.ronsoRages = cfg.assignDefaultParams()
+	cfg.q.ronsoRages = cfg.assignDefaultParams(cfg.e.ronsoRages.subsections)
 	cfg.initSubmenusParams()
-	cfg.q.topmenus = cfg.assignDefaultParams()
+	cfg.q.topmenus = cfg.assignDefaultParams(cfg.e.topmenus.subsections)
 
 	cfg.initAllItemsParams()
 	cfg.initItemsParams()
@@ -146,13 +146,22 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initCelestialWeaponsParams()
 
 	cfg.initStatsParams()
-	cfg.q.properties = cfg.assignDefaultParams()
+	cfg.q.properties = cfg.assignDefaultParams(cfg.e.properties.subsections)
 	cfg.initOverdriveModesParams()
-	cfg.q.elements = cfg.assignDefaultParams()
+	cfg.q.elements = cfg.assignDefaultParams(cfg.e.elements.subsections)
 	cfg.initStatusConditionsParams()
 	cfg.initModifiersParams()
 	cfg.initAgilityTierParams()
 
-	cfg.q.enums = cfg.assignDefaultParams()
-	cfg.q.endpoints = cfg.assignDefaultParams()
+	cfg.q.enums = cfg.assignDefaultParams(nil)
+	cfg.q.endpoints = cfg.assignDefaultParams(nil)
+
+	cfg.e.aeonCommands.queryLookup = cfg.q.aeonCommands
+	cfg.e.overdriveCommands.queryLookup = cfg.q.overdriveCommands
+	cfg.e.ronsoRages.queryLookup = cfg.q.ronsoRages
+	cfg.e.topmenus.queryLookup = cfg.q.topmenus
+	cfg.e.properties.queryLookup = cfg.q.properties
+	cfg.e.elements.queryLookup = cfg.q.elements
+	cfg.e.enums.queryLookup = cfg.q.enums
+	cfg.e.endpoints.queryLookup = cfg.q.endpoints
 }

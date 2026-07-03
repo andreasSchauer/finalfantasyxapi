@@ -69,8 +69,8 @@ func ConfigInit() (*Config, error) {
 	}
 
 	apiCfg.EnumLookupInit()
-	apiCfg.QueryLookupInit()
 	apiCfg.EndpointsInit()
+	apiCfg.QueryLookupInit()
 
 	return &apiCfg, nil
 }

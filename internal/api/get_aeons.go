@@ -46,8 +46,6 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 		return Aeon{}, err
 	}
 
-	response.Stats = createStats(response.BaseStats)
-
 	return response, nil
 }
 
