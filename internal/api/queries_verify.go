@@ -6,16 +6,16 @@ import (
 )
 
 // verifies the correct usage of all query parameters of an alternative list that is used on an endpoint that expects ids as its primary key for single resources, like /endpoint/sections, or /endpoint/parameters
-func verifyQueryParamsAltListID(cfg *Config, r *http.Request, endpoint EndpointName, listName *string) error {
+func verifyQueryParamsAltListIdEp(cfg *Config, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, listName *string) error {
 	q := r.URL.Query()
 
 	for query := range q {
-		queryParam, err := getParamAltList(cfg, endpoint, query, listName)
+		queryParam, err := getParamAltList(cfg, endpoint, queryLookup, query, listName)
 		if err != nil {
 			return err
 		}
 
-		err = verifyQueryUsageID(q, queryParam, endpoint, cfg.q.defaultParams, nil, listName)
+		err = verifyQueryUsageEp(q, queryParam, endpoint, cfg.q.defaultParams, nil, listName)
 		if err != nil {
 			return err
 		}
@@ -25,7 +25,7 @@ func verifyQueryParamsAltListID(cfg *Config, r *http.Request, endpoint EndpointN
 }
 
 // verifies the correct usage of all query parameters of an endpoint that uses ids as its primary key for single resources, like /endpoint/{id}.
-func verifyQueryParamsID(r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, id *int32, segment *string) error {
+func verifyQueryParamsIdEp(r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, id *int32, segment *string) error {
 	q := r.URL.Query()
 
 	for query := range q {
@@ -34,7 +34,7 @@ func verifyQueryParamsID(r *http.Request, endpoint EndpointName, queryLookup map
 			return err
 		}
 
-		err = verifyQueryUsageID(q, queryParam, endpoint, queryLookup, id, segment)
+		err = verifyQueryUsageEp(q, queryParam, endpoint, queryLookup, id, segment)
 		if err != nil {
 			return err
 		}
@@ -44,7 +44,7 @@ func verifyQueryParamsID(r *http.Request, endpoint EndpointName, queryLookup map
 }
 
 // checks the usage of an endpoint that uses ids as its primary key for single resources, like /locations/{id}.
-func verifyQueryUsageID(q url.Values, queryParam QueryParam, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, id *int32, segment *string) error {
+func verifyQueryUsageEp(q url.Values, queryParam QueryParam, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, id *int32, segment *string) error {
 	err := verifyExclusiveParam(q, queryParam, queryLookup)
 	if err != nil {
 		return err
@@ -84,16 +84,16 @@ func verifyQueryUsageID(q url.Values, queryParam QueryParam, endpoint EndpointNa
 }
 
 // verifies the correct usage of all query parameters of an alternative list that is used on an endpoint that expects keys as its primary key for single resources, like /enums/parameters
-func verifyQueryParamsAltListKey(cfg *Config, r *http.Request, endpoint EndpointName, listName *string) error {
+func verifyQueryParamsAltListKeyEp(cfg *Config, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, listName *string) error {
 	q := r.URL.Query()
 
 	for query := range q {
-		queryParam, err := getParamAltList(cfg, endpoint, query, listName)
+		queryParam, err := getParamAltList(cfg, endpoint, queryLookup, query, listName)
 		if err != nil {
 			return err
 		}
 
-		err = verifyQueryUsageKey(q, queryParam, endpoint, cfg.q.defaultParams, nil, listName)
+		err = verifyQueryUsageKeyEp(q, queryParam, endpoint, cfg.q.defaultParams, nil, listName)
 		if err != nil {
 			return err
 		}
@@ -103,7 +103,7 @@ func verifyQueryParamsAltListKey(cfg *Config, r *http.Request, endpoint Endpoint
 }
 
 // verifies the correct usage of all query parameters of an endpoint that uses keys as its primary key for single resources, like /enums/{EnumName}.
-func verifyQueryParamsKey(r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, key *string) error {
+func verifyQueryParamsKeyEp(r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, key *string) error {
 	q := r.URL.Query()
 
 	for query := range q {
@@ -112,7 +112,7 @@ func verifyQueryParamsKey(r *http.Request, endpoint EndpointName, queryLookup ma
 			return err
 		}
 
-		err = verifyQueryUsageKey(q, queryParam, endpoint, queryLookup, key, nil)
+		err = verifyQueryUsageKeyEp(q, queryParam, endpoint, queryLookup, key, nil)
 		if err != nil {
 			return err
 		}
@@ -122,7 +122,7 @@ func verifyQueryParamsKey(r *http.Request, endpoint EndpointName, queryLookup ma
 }
 
 // checks the usage of an endpoint that uses keys as its primary key for single resources, like /enums/{EnumName}.
-func verifyQueryUsageKey(q url.Values, queryParam QueryParam, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, key, segment *string) error {
+func verifyQueryUsageKeyEp(q url.Values, queryParam QueryParam, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, key, segment *string) error {
 	err := verifyExclusiveParam(q, queryParam, queryLookup)
 	if err != nil {
 		return err

@@ -25,7 +25,7 @@ func handleEndpointIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResou
 	segment := segments[0]
 
 	if segment == string(snParameters) {
-		handleParameters(cfg, w, r, i)
+		handleParameters(cfg, w, r, i.endpoint, i.queryLookup, verifyQueryParamsAltListIdEp)
 		return
 	}
 
@@ -56,7 +56,7 @@ func handleEndpointNameOrID[T seeding.Lookupable, R any, A APIResource, L APIRes
 	segment := segments[0]
 
 	if segment == string(snParameters) {
-		handleParameters(cfg, w, r, i)
+		handleParameters(cfg, w, r, i.endpoint, i.queryLookup, verifyQueryParamsAltListIdEp)
 		return
 	}
 
@@ -161,7 +161,7 @@ func handleEndpointSubOrNameVer[T seeding.Lookupable, R any, A APIResource, L AP
 }
 
 func handleEnumsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums) {
-	err := verifyQueryParamsKey(r, i.endpoint, i.queryLookup, nil)
+	err := verifyQueryParamsKeyEp(r, i.endpoint, i.queryLookup, nil)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -180,7 +180,7 @@ func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Reque
 	segment := segments[0]
 
 	if segment == string(snParameters) {
-		handleParametersKey(cfg, w, r, i.endpoint, i.queryLookup)
+		handleParameters(cfg, w, r, i.endpoint, i.queryLookup, verifyQueryParamsAltListKeyEp)
 		return
 	}
 
@@ -189,7 +189,7 @@ func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	err = verifyQueryParamsKey(r, i.endpoint, i.queryLookup, &key)
+	err = verifyQueryParamsKeyEp(r, i.endpoint, i.queryLookup, &key)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -198,7 +198,7 @@ func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Reque
 }
 
 func handleEndpointsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints) {
-	err := verifyQueryParamsKey(r, i.endpoint, i.queryLookup, nil)
+	err := verifyQueryParamsKeyEp(r, i.endpoint, i.queryLookup, nil)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -218,7 +218,7 @@ func handleEndpointsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.R
 	segment := segments[0]
 
 	if segment == string(snParameters) {
-		handleParametersKey(cfg, w, r, i.endpoint, i.queryLookup)
+		handleParameters(cfg, w, r, i.endpoint, i.queryLookup, verifyQueryParamsAltListKeyEp)
 		return
 	}
 

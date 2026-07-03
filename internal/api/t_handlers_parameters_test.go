@@ -3,11 +3,40 @@ package api
 import (
 	"net/http"
 	"testing"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func TestParameters(t *testing.T) {
 	t.Parallel()
 	tests := []expListNames{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/parameters?ass=max",
+				expectedStatus: http.StatusBadRequest,
+				endpoint:       testCfg.e.areas.endpoint,
+				handler:        testCfg.HandleAreas,
+				expectedErr: 	"parameter 'ass' does not exist for endpoint /areas. use /api/areas/parameters for available parameters.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/parameters?treasures=true",
+				expectedStatus: http.StatusBadRequest,
+				endpoint:       testCfg.e.areas.endpoint,
+				handler:        testCfg.HandleAreas,
+				expectedErr: 	"only the following default parameters are allowed when using /api/areas/parameters: 'limit', 'offset'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/enums/parameters?ass=max",
+				expectedStatus: http.StatusBadRequest,
+				endpoint:       testCfg.e.enums.endpoint,
+				handler:        testCfg.HandleEnums,
+				expectedErr: 	"parameter 'ass' does not exist for endpoint /enums. use /api/enums/parameters for available parameters.",
+			},
+		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/parameters?limit=max",
@@ -148,6 +177,27 @@ func TestParameters(t *testing.T) {
 			},
 			count:   14,
 			results: qpnsToNamedParams([]QueryParamName{qpnSublocation, qpnLootType, qpnTreasureType, qpnAnima, qpnAvailability}),
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/enums/parameters",
+				expectedStatus: http.StatusOK,
+				endpoint:       testCfg.e.enums.endpoint,
+				handler:        testCfg.HandleEnums,
+			},
+			count:   2,
+			results: qpnsToNamedParams([]QueryParamName{qpnLimit, qpnOffset}),
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/enums/parameters?limit=1",
+				expectedStatus: http.StatusOK,
+				endpoint:       testCfg.e.enums.endpoint,
+				handler:        testCfg.HandleEnums,
+			},
+			count:   2,
+			next:    h.GetStrPtr("/enums/parameters?limit=1&offset=1"),
+			results: qpnsToNamedParams([]QueryParamName{qpnLimit}),
 		},
 	}
 

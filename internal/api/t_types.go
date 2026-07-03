@@ -123,6 +123,22 @@ func (l expListIDs) getListParams() ListParams {
 	}
 }
 
+type expListPaths struct {
+	testGeneral
+	count    int
+	previous *string
+	next     *string
+	results  []string
+}
+
+func (l expListPaths) getListParams() ListParams {
+	return ListParams{
+		Count:    l.count,
+		Previous: l.previous,
+		Next:     l.next,
+	}
+}
+
 type expListNames struct {
 	testGeneral
 	count    int

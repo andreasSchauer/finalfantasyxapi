@@ -3,8 +3,6 @@ package api
 import (
 	"net/http"
 	"slices"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type SectionList struct {
@@ -16,8 +14,7 @@ func (l SectionList) getListParams() ListParams {
 	return l.ListParams
 }
 
-func getSectionList[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (SectionList, error) {
-	sectionMap := i.subsections
+func getSectionList(cfg *Config, r *http.Request, sectionMap map[SectionName]Subsection) (SectionList, error) {
 	sectionNames := []string{}
 
 	for section := range sectionMap {

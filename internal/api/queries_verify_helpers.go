@@ -9,7 +9,11 @@ import (
 )
 
 // used for alternative lists like /endpoint/sections and /endpoint/parameters. simply looks up the query param and returns an error, if it doesn't exist.
-func getParamAltList(cfg *Config, endpoint EndpointName, query string, listName *string) (QueryParam, error) {
+func getParamAltList(cfg *Config, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, query string, listName *string) (QueryParam, error) {
+	_, err := getParamEndpoint(endpoint, queryLookup, query)
+	if err != nil {
+		return QueryParam{}, err
+	}
 	queryParam, ok := cfg.q.defaultParams[QueryParamName(query)]
 	if !ok {
 		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s.", endpoint, *listName, queryMapToString(cfg.q.defaultParams)), nil)
@@ -61,7 +65,7 @@ func isDefaultParam(cfg *Config, queryName QueryParamName) bool {
 
 // checks, if a query param that is meant for single resource requests is used in the correct context. returns an error, if no id is provided (meaning the parameter was combined with a list request), or if the given id is not among the allowed ids, if that restriction exists for the query param. meant to be used for resource endpoints like /locations/{id}.
 func verifySingleResourceParamID(queryParam QueryParam, id *int32) error {
-	if queryParam.ForSingle {
+	if queryParam.ParamUse == puSingle {
 		if id == nil {
 			return errSingleResParam(queryParam.Name)
 		}
@@ -97,7 +101,7 @@ func verifyAllowedIDs(queryParam QueryParam, id int32) error {
 
 // checks, if a query param that is meant for list requests is used in the correct context. returns an error, if an id is provided (meaning the parameter was combined with a single resource request). meant to be used for resource endpoints like /locations.
 func verifyListResourceParamID(queryParam QueryParam, id *int32) error {
-	if queryParam.ForList && id != nil {
+	if queryParam.ParamUse == puList && id != nil {
 		return errListResParam(queryParam.Name)
 	}
 	return nil
@@ -105,7 +109,7 @@ func verifyListResourceParamID(queryParam QueryParam, id *int32) error {
 
 // checks, if a query param that is meant for single resource requests is used in the correct context. this function is used for endpoints that don't expect ids, but a different key, like EnumNames. returns an error, if no key is provided (meaning the parameter was combined with a list request). meant to be used for special endpoints like /enums/{enum_name}.
 func verifySingleResourceParamKey(queryParam QueryParam, key *string) error {
-	if queryParam.ForSingle {
+	if queryParam.ParamUse == puSingle {
 		if key == nil {
 			return errSingleResParam(queryParam.Name)
 		}
@@ -115,7 +119,7 @@ func verifySingleResourceParamKey(queryParam QueryParam, key *string) error {
 
 // checks, if a query param that is meant for list requests is used in the correct context. this function is used for endpoints that don't expect ids, but a different key, like EnumNames. returns an error, if a key is provided (meaning the parameter was combined with a list request). meant to be used for special endpoints like /enums.
 func verifyListResourceParamKey(queryParam QueryParam, key *string) error {
-	if queryParam.ForList && key != nil {
+	if queryParam.ParamUse == puList && key != nil {
 		return errListResParam(queryParam.Name)
 	}
 	return nil

@@ -6,7 +6,6 @@ import (
 	"strings"
 )
 
-
 func (cfg *Config) assignDefaultParams() map[QueryParamName]QueryParam {
 	return cfg.completeQueryParamsInit([]QueryParam{}, false)
 }
@@ -20,8 +19,7 @@ func (cfg *Config) completeQueryParamsInit(params []QueryParam, hasSimpleView bo
 			Description: "Used to manually input the ids of resources to be batch-fetched for simple display. The original order will be preserved, but duplicates will be removed.",
 			Type:        qptIdList,
 			IsExclusive: true,
-			ForList:     false,
-			ForSingle:   false,
+			ParamUse:    puSimple,
 			ForSegment:  getSnPtr(snSimple),
 		}
 		params = append(params, queryParamIDs)
@@ -32,8 +30,7 @@ func (cfg *Config) completeQueryParamsInit(params []QueryParam, hasSimpleView bo
 			Name:        qpnFlip,
 			Description: "Flips the filtered results in a list response and returns the negative.",
 			Type:        qptBool,
-			ForList:     true,
-			ForSingle:   false,
+			ParamUse:    puList,
 		}
 		params = append(params, queryParamFlip)
 	}
@@ -52,7 +49,7 @@ func hasSimpleView(sections map[SectionName]Subsection) bool {
 
 func hasFilters(cfg *Config, params []QueryParam) bool {
 	for _, param := range params {
-		if param.ForList && !hasParam(param, cfg.q.defaultParamSlice) {
+		if param.ParamUse == puList && !hasParam(param, cfg.q.defaultParamSlice) {
 			return true
 		}
 	}
@@ -73,7 +70,6 @@ func hasParam(target QueryParam, params []QueryParam) bool {
 
 	return false
 }
-
 
 func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 	s := fmt.Sprintf("?%s=", p.Name)

@@ -29,10 +29,10 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 	}
 
 	setLimitMax(cfg, r, q)
-
-	// this is for the simple subsection /endpoint/{id}/simple,
-	// also used when aspects of the resource itself need to be simplified (like /aeons/{id}/stats)
-	// the resource fetches itself and doesn't need a db query
+	
+	// if a subsection refers to the resource itself (/endpoint/{id}/simple, or /aeons/{id}/stats),
+	// it doesn't need a db query and can create a SimpleResource with the given id,
+	// instead of querying the db for relations of the given id
 	if subsection.dbQuery == nil {
 		if subsection.relationsFn != nil {
 			var err error
@@ -57,25 +57,9 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 	respondWithJSON(w, http.StatusOK, list)
 }
 
-func handleParameters[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+func handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, verifyFn func (*Config, *http.Request, EndpointName, map[QueryParamName]QueryParam, *string) error) {
 	segment := string(snParameters)
-	err := verifyQueryParamsAltListID(cfg, r, i.endpoint, &segment)
-	if handleHTTPError(w, err) {
-		return
-	}
-
-	setLimitMax(cfg, r, r.URL.Query())
-
-	parameterList, err := getQueryParamList(cfg, r, i.endpoint, i.queryLookup)
-	if handleHTTPError(w, err) {
-		return
-	}
-	respondWithJSON(w, http.StatusOK, parameterList)
-}
-
-func handleParametersKey(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) {
-	segment := string(snParameters)
-	err := verifyQueryParamsAltListKey(cfg, r, endpoint, &segment)
+	err := verifyFn(cfg, r, endpoint, queryLookup, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -91,14 +75,14 @@ func handleParametersKey(cfg *Config, w http.ResponseWriter, r *http.Request, en
 
 func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := string(snSections)
-	err := verifyQueryParamsAltListID(cfg, r, i.endpoint, &segment)
+	err := verifyQueryParamsAltListIdEp(cfg, r, i.endpoint, i.queryLookup, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
 
 	setLimitMax(cfg, r, r.URL.Query())
 
-	sectionList, err := getSectionList(cfg, r, i)
+	sectionList, err := getSectionList(cfg, r, i.subsections)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -114,27 +98,9 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 		return
 	}
 
-	var ids []int32
-
-	err := verifyQueryParamsID(r, i.endpoint, i.queryLookup, nil, &segment)
+	ids, err := getQueryIDs(cfg, r, i, &segment)
 	if handleHTTPError(w, err) {
 		return
-	}
-
-	queryParamIDs := i.queryLookup[qpnIDs]
-	_, err = checkEmptyQuery(r, queryParamIDs)
-	if queryIsEmpty(err) {
-		ids, err = i.retrieveFunc(r, i)
-		if handleHTTPError(w, err) {
-			return
-		}
-	} else {
-		ids, err = parseIdListQuery(cfg, r, queryParamIDs, i.objLookup)
-		if handleHTTPError(w, err) {
-			return
-		}
-
-		setLimitMax(cfg, r, r.URL.Query())
 	}
 
 	resources, err := createSimpleResources(cfg, r, ids, i.subsections[SectionName(segment)])
@@ -153,4 +119,26 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 	}
 
 	respondWithJSON(w, http.StatusOK, subResList)
+}
+
+func getQueryIDs[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], segment *string) ([]int32, error) {
+	err := verifyQueryParamsIdEp(r, i.endpoint, i.queryLookup, nil, segment)
+	if err != nil {
+		return nil, err
+	}
+
+	queryParamIDs := i.queryLookup[qpnIDs]
+	_, err = checkEmptyQuery(r, queryParamIDs)
+	if queryIsEmpty(err) {
+		return i.retrieveFunc(r, i)
+	}
+
+	ids, err := parseIdListQuery(cfg, r, queryParamIDs, i.objLookup)
+	if err != nil {
+		return nil, err
+	}
+
+	setLimitMax(cfg, r, r.URL.Query())
+
+	return ids, nil
 }

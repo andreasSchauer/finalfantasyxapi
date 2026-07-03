@@ -7,6 +7,13 @@ func compareAPIResourceLists[T APIResourceList](test test, endpoint EndpointName
 	checkResIDsInSlice(test, "results", endpoint, expList.results, gotList.getResults())
 }
 
+// checks the basic fields of an APIResourceList (count, pagination urls) and then checks for the stated resource paths
+func compareAPIResourceListPaths[T APIResourceList](test test, expList expListPaths, gotList T) {
+	test.t.Helper()
+	compareListParams(test, expList.getListParams(), gotList.getListParams())
+	checkResPathsInSlice(test, "results", expList.results, gotList.getResults())
+}
+
 // checks if both slices are present and if the provided slice of resources contains all stated resources
 func checkResPathsInSlice[T HasAPIResource](test test, fieldName string, expPaths []string, gotRes []T) {
 	test.t.Helper()

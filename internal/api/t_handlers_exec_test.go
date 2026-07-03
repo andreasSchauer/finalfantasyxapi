@@ -91,6 +91,31 @@ func testIdList[G any](t *testing.T, tests []expListIDs, endpoint EndpointName, 
 	}
 }
 
+// compareAPIResourceListPaths for api resources
+func testPathList[G any](t *testing.T, tests []expListPaths, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, expListPaths, G)) {
+	t.Helper()
+	for i, exp := range tests {
+		tc := exp.testGeneral
+		name := getTestName(testFuncName, tc.requestURL, i+1)
+
+		expHandler := handlerFunc
+		if handlerFunc == nil {
+			expHandler = exp.handler
+		}
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			test, got, err := setupTest[G](t, exp.testGeneral, name, expHandler)
+			if errors.Is(err, errCorrect) {
+				return
+			}
+
+			compFunc(test, exp, got)
+		})
+	}
+}
+
 // compareParameterLists for /parameters lists
 // compareSectionLists for /sections lists
 func testNameList[G any](t *testing.T, tests []expListNames, endpoint EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, EndpointName, expListNames, G)) {

@@ -4,7 +4,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
 	defaultParamSlice []QueryParam
@@ -66,8 +65,8 @@ type QueryLookup struct {
 	modifiers        map[QueryParamName]QueryParam
 	agilityTiers     map[QueryParamName]QueryParam
 
-	enums			 map[QueryParamName]QueryParam
-	endpoints		 map[QueryParamName]QueryParam
+	enums     map[QueryParamName]QueryParam
+	endpoints map[QueryParamName]QueryParam
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -78,8 +77,7 @@ func (cfg *Config) QueryLookupInit() {
 			Name:        qpnLimit,
 			Description: "Sets the amount of displayed entries in a list response. If not set manually, the default is 20. The value 'max' can also be used to forgo pagination of lists entirely.",
 			Type:        qptInt,
-			ForList:     true,
-			ForSingle:   false,
+			ParamUse:    puList,
 			SpecialInputs: []SpecialQueryInput{
 				{
 					Key: qsvMax,
@@ -92,8 +90,7 @@ func (cfg *Config) QueryLookupInit() {
 			Name:        qpnOffset,
 			Description: "Sets the offset from where to start the displayed entries in a list response. If not set manually, the default is 0.",
 			Type:        qptInt,
-			ForList:     true,
-			ForSingle:   false,
+			ParamUse:    puList,
 			DefaultVal:  h.GetIntPtr(0),
 		},
 	}
