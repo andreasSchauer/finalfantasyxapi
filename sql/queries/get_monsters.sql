@@ -241,6 +241,10 @@ SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE monster_id = $1 OR
 SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE area_id = $1 ORDER BY formation_id;
 
 
+-- name: GetMonsterFormationIDsByCanEscape :many
+SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE can_escape = $1 ORDER BY formation_id;
+
+
 -- name: GetMonsterFormationIDsBySublocation :many
 SELECT DISTINCT me.formation_id
 FROM mv_monster_encounters me

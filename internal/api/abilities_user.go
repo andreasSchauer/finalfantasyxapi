@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
@@ -15,9 +16,10 @@ type userAbility interface {
 }
 
 type unitRepl struct {
-	unit     seeding.PlayerUnit
-	bombWpn  bool
-	replVals biReplacement
+	unit     	seeding.PlayerUnit
+	bombWpn  	bool
+	isCelestial	bool
+	replVals 	biReplacement
 }
 
 type biReplacement struct {
@@ -25,6 +27,7 @@ type biReplacement struct {
 	ShatterRate    *int32
 	Accuracy       *Accuracy
 	DamageConstant *int32
+	DamageFormula  *string
 }
 
 func applyUser[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], ability userAbility, queryName QueryParamName) ([]BattleInteraction, error) {
@@ -49,6 +52,7 @@ func applyUser[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cf
 func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], queryName QueryParamName) (unitRepl, error) {
 	queryParamUser := i.queryLookup[queryName]
 	queryParamBomb := i.queryLookup[qpnBombWpn]
+	queryParamCelestialWpn := i.queryLookup[qpnCelestialWeapon]
 
 	unitID, err := parseNameIdQuery(r, queryParamUser, cfg.e.playerUnits.resTypeSingle, cfg.e.playerUnits.objLookup)
 	if err != nil {
@@ -61,10 +65,16 @@ func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 		return unitRepl{}, err
 	}
 
+	isCelestial, err := parseBooleanQuery(r, queryParamCelestialWpn)
+	if errExceptEmptyQuery(err) {
+		return unitRepl{}, err
+	}
+
 	repl := unitRepl{
-		unit:     unit,
-		bombWpn:  bombWpn,
-		replVals: biReplacement{},
+		unit:     		unit,
+		bombWpn:  		bombWpn,
+		isCelestial: 	isCelestial,
+		replVals: 		biReplacement{},
 	}
 
 	switch repl.unit.Type {
@@ -85,16 +95,28 @@ func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 }
 
 func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
+	charFormulas := map[string]database.DamageFormula{
+		string(database.CelestialFormulaHpHigh): database.DamageFormulaClstlHpHigh,
+		string(database.CelestialFormulaHpLow): database.DamageFormulaClstlHpLow,
+		string(database.CelestialFormulaMpHigh): database.DamageFormulaClstlMpHigh,
+	}
+
 	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), queryParamUser, cfg.l.Characters)
 	if err != nil {
 		return unitRepl{}, err
 	}
 	character, _ := seeding.GetResourceByID(id, cfg.l.CharactersID)
+	clstlWpn, _ := seeding.GetResourceByID(id, cfg.l.CelestialWeaponsID)
 
 	repl.replVals.Range = &character.PhysAtkRange
 
 	if repl.bombWpn {
 		repl.replVals.DamageConstant = h.GetInt32Ptr(18)
+	}
+
+	if repl.isCelestial {
+		formula := string(charFormulas[clstlWpn.Formula])
+		repl.replVals.DamageFormula = &formula
 	}
 
 	return repl, nil
@@ -143,6 +165,10 @@ func applyBiReplacement(battleInteractions []BattleInteraction, replVals biRepla
 
 		if replVals.DamageConstant != nil {
 			battleInteraction.Damage.DamageCalc[0].DamageConstant = *replVals.DamageConstant
+		}
+
+		if replVals.DamageFormula != nil {
+			battleInteraction.Damage.DamageCalc[0].DamageFormula = *replVals.DamageFormula
 		}
 
 		battleInteractions[i] = battleInteraction

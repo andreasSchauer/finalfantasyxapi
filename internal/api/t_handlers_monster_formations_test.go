@@ -259,6 +259,14 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			count:   70,
 			results: []int32{7, 20, 70, 78, 83, 171, 213, 255, 264, 295, 310, 331},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monster-formations?escape=false&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   82,
+			results: []int32{1, 38, 137, 183, 253, 279, 296},
+		},
 	}
 
 	testIdList(t, tests, testCfg.e.monsterFormations.endpoint, "RetrieveMonsterFormations", testCfg.HandleMonsterFormations, compareAPIResourceLists[UnnamedApiResourceList])

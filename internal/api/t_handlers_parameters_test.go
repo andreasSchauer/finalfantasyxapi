@@ -115,7 +115,7 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.monsterFormations.endpoint,
 				handler:        testCfg.HandleMonsterFormations,
 			},
-			count:   13,
+			count:   14,
 			results: qpnsToNamedParams([]QueryParamName{qpnMonster, qpnLocation, qpnAmbush, qpnCategory, qpnIDs}),
 		},
 		{

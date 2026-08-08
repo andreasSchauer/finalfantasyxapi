@@ -40,6 +40,7 @@ func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[see
 		idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetMonsterFormationIDsBySublocation),
 		idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetMonsterFormationIDsByArea),
 		boolQuery(r, i, ids, qpnAmbush, cfg.db.GetMonsterFormationIDsByForcedAmbush),
+		boolQuery(r, i, ids, qpnEscape, cfg.db.GetMonsterFormationIDsByCanEscape),
 		enumListQuery(cfg, r, i, cfg.t.MonsterFormationCategory, ids, qpnCategory, cfg.db.GetMonsterFormationIDsByCategory),
 	})
 }

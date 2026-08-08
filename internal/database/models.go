@@ -1083,6 +1083,9 @@ const (
 	DamageFormulaUserMaxHp         DamageFormula = "user-max-hp"
 	DamageFormulaSwallowedA        DamageFormula = "swallowed-a"
 	DamageFormulaSwallowedB        DamageFormula = "swallowed-b"
+	DamageFormulaClstlHpHigh       DamageFormula = "clstl-hp-high"
+	DamageFormulaClstlHpLow        DamageFormula = "clstl-hp-low"
+	DamageFormulaClstlMpHigh       DamageFormula = "clstl-mp-high"
 )
 
 func (e *DamageFormula) Scan(src interface{}) error {
@@ -4235,6 +4238,7 @@ type MvMonsterEncounter struct {
 	Area              string
 	AVersion          sql.NullInt32
 	SongID            sql.NullInt32
+	CelebrateVictory  sql.NullBool
 	FTriggerCommandID sql.NullInt32
 }
 

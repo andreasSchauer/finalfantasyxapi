@@ -13,10 +13,19 @@ Things I plan on adding:
 Things that are currently unclear/unknown:
 - There is conflicting information on song credits on the internet
 - Some names of areas I can't check, because I currently only have access to the German PS2 version of the game and thus am dependant on English videos and resources:
+    - for areas, I don't always use the exact area in the game, but areas where a player has actual control. if an area only exists for a cutscene or a fight (for example, oblitzerator), it might be left out
     - all of dream zanarkand (except overpass, where the save sphere is) (areas 1 to 5)
-    - the story-only area in kilika where the sending is performed (area 50; currently called 'square' derived from its German name 'Marktplatz', similar to Luca's 'square' area)
-    - the road at macalania temple that connects the antechamber with the chamber of the fayth (area 167). In the German version it has the same name as the road that leads to the temple
-    - which fayth areas are called 'chamber of the fayth' and which are called 'fayth'? (areas 14, 35, 63, 117, 168, 210, 212, 228)
+    - existing names for dream zanarkand:
+        - zanarkand
+        - zanarkand 2
+        - zanarkand - harbour
+        - boathouse - cabin (new subloc? gagazet dream?)
+        - zanarkand - harbour
+        - zanarkand - overpass
+        - zanarkand - overpass
+        - zanarkand - overpass
+        - zanarkand - harbor
+        - zanarkand stadium (new subloc?)
 - What is the critical plus value of monsters? (not for the equipment they drop, but for their own abilities) Is it the same?
 - What is the critical plus value of aeons' equipment? Currently, I'm assuming it's 3 for both as is standard for most equipment dropped by enemies
 - Does equipment bought in shops also have a critical plus value?

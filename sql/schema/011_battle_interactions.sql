@@ -20,7 +20,7 @@ CREATE TYPE attack_type AS ENUM ('attack', 'heal', 'absorb');
 CREATE TYPE damage_type AS ENUM ('physical', 'magical', 'special');
 
 
-CREATE TYPE damage_formula AS ENUM ('str-vs-def', 'str-ign-def', 'mag-vs-mdf', 'mag-ign-mdf', 'percentage-current', 'percentage-max', 'healing', 'special-no-var', 'special-var', 'special-magic', 'special-gil', 'special-kills', 'special-9999', 'fixed-9999', 'user-max-hp', 'swallowed-a', 'swallowed-b');
+CREATE TYPE damage_formula AS ENUM ('str-vs-def', 'str-ign-def', 'mag-vs-mdf', 'mag-ign-mdf', 'percentage-current', 'percentage-max', 'healing', 'special-no-var', 'special-var', 'special-magic', 'special-gil', 'special-kills', 'special-9999', 'fixed-9999', 'user-max-hp', 'swallowed-a', 'swallowed-b', 'clstl-hp-high', 'clstl-hp-low', 'clstl-mp-high');
 
 
 CREATE TYPE duration_type AS ENUM ('blocks', 'endless', 'instant', 'turns', 'inflictor-next-turn', 'auto');

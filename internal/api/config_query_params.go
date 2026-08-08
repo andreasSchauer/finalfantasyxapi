@@ -574,6 +574,12 @@ func (cfg *Config) initMonsterFormationsParams() {
 			Type:        qptBool,
 			ParamUse:    puList,
 		},
+		{
+			Name:        qpnEscape,
+			Description: "Searches for monster-formations that can be escaped.",
+			Type:        qptBool,
+			ParamUse:    puList,
+		},
 	}
 
 	paramsMap := cfg.completeQueryParamsInit(params, cfg.e.monsterFormations.subsections)
@@ -1422,6 +1428,13 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
+			Name:          qpnCelestialWeapon,
+			Description:   "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the player ability's damage formula will be replaced by the character's celestial weapon damage formula.",
+			Type:          qptBool,
+			ParamUse:      puSingle,
+			RequiredParams: []QueryParamName{qpnAbilityUser},
+		},
+		{
 			Name:           qpnBombWpn,
 			Description:    "If a player ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
 			Type:           qptBool,
@@ -1827,6 +1840,13 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
+			Name:          qpnCelestialWeapon,
+			Description:   "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the trigger command's damage formula will be replaced by the character's celestial weapon damage formula.",
+			Type:          qptBool,
+			ParamUse:      puSingle,
+			RequiredParams: []QueryParamName{qpnAbilityUser},
+		},
+		{
 			Name:           qpnBombWpn,
 			Description:    "If a trigger command is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
 			Type:           qptBool,
@@ -1860,15 +1880,22 @@ func (cfg *Config) initMiscAbilitiesParams() {
 	params := []QueryParam{
 		{
 			Name:          qpnAbilityUser,
-			Description:   "If an misc ability is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
+			Description:   "If a misc ability is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
 			Type:          qptNameId,
 			ExampleVals:   []string{"wakka", "valefor"},
 			ParamUse:      puSingle,
 			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
+			Name:          qpnCelestialWeapon,
+			Description:   "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the misc ability's damage formula will be replaced by the character's celestial weapon damage formula.",
+			Type:          qptBool,
+			ParamUse:      puSingle,
+			RequiredParams: []QueryParamName{qpnAbilityUser},
+		},
+		{
 			Name:           qpnBombWpn,
-			Description:    "If an misc ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
+			Description:    "If a misc ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
 			Type:           qptBool,
 			ParamUse:       puSingle,
 			RequiredParams: []QueryParamName{qpnAbilityUser},

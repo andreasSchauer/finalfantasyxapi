@@ -2236,6 +2236,18 @@ func (t *Enums) initDamageFormula() {
 			Name:        string(database.DamageFormulaSwallowedB),
 			Description: "",
 		},
+		{
+			Name:        string(database.DamageFormulaClstlHpHigh),
+			Description: "",
+		},
+		{
+			Name:        string(database.DamageFormulaClstlHpLow),
+			Description: "",
+		},
+		{
+			Name:        string(database.DamageFormulaClstlMpHigh),
+			Description: "",
+		},
 	}
 
 	t.DamageFormula = EnumType[database.DamageFormula, any]{

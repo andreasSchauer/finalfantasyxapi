@@ -81,6 +81,7 @@ SELECT DISTINCT
     g.area,
     g.version AS a_version,
     fbs.song_id,
+    fbs.celebrate_victory,
     jmft.trigger_command_id AS f_trigger_command_id
 FROM mv_geography g
 JOIN encounter_areas ea ON g.area_id = ea.area_id

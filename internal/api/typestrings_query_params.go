@@ -51,6 +51,7 @@ const (
 	qpnElement          QueryParamName = "element"
 	qpnElementalResists QueryParamName = "elemental_resists"
 	qpnEmptySlots       QueryParamName = "empty_slots"
+	qpnEscape       	QueryParamName = "escape"
 	qpnEquipment        QueryParamName = "equipment"
 	qpnExpSg            QueryParamName = "exp_sg"
 	qpnFlip             QueryParamName = "flip"

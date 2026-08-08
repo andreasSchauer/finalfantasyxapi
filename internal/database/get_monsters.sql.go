@@ -287,6 +287,33 @@ func (q *Queries) GetMonsterFormationIDsByArea(ctx context.Context, areaID int32
 	return items, nil
 }
 
+const getMonsterFormationIDsByCanEscape = `-- name: GetMonsterFormationIDsByCanEscape :many
+SELECT DISTINCT formation_id FROM mv_monster_encounters WHERE can_escape = $1 ORDER BY formation_id
+`
+
+func (q *Queries) GetMonsterFormationIDsByCanEscape(ctx context.Context, canEscape bool) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getMonsterFormationIDsByCanEscape, canEscape)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var formation_id int32
+		if err := rows.Scan(&formation_id); err != nil {
+			return nil, err
+		}
+		items = append(items, formation_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMonsterFormationIDsByCategory = `-- name: GetMonsterFormationIDsByCategory :many
 SELECT DISTINCT formation_id
 FROM mv_monster_encounters

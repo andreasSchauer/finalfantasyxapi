@@ -41,7 +41,7 @@ func TestGetMiscAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/1?ability_user=wakka",
+				requestURL:     "/api/misc-abilities/1?ability_user=wakka&celestial_weapon=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -77,7 +77,7 @@ func TestGetMiscAbility(t *testing.T) {
 								attackType:     database.AttackTypeAttack,
 								targetStat:     1,
 								damageType:     database.DamageTypePhysical,
-								damageFormula:  database.DamageFormulaStrVsDef,
+								damageFormula:  database.DamageFormulaClstlHpHigh,
 								damageConstant: 16,
 							},
 						},

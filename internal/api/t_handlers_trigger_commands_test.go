@@ -122,7 +122,7 @@ func TestGetTriggerCommand(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/trigger-commands/12?ability_user=wakka",
+				requestURL:     "/api/trigger-commands/12?ability_user=wakka&celestial_weapon=false",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
