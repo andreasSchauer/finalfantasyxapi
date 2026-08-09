@@ -183,7 +183,7 @@ func verifyForbiddenParams(q url.Values, queryParam QueryParam) error {
 	return nil
 }
 
-// checks, if at least one of the query params that the requested query param must be combined with is present. returns an error, if none of them are present.
+// checks, if at least one of the query params, that the requested query param must be combined with, is present. returns an error, if none of them are present.
 func verifyUsableWith(q url.Values, queryParam QueryParam) error {
 	if queryParam.UsableWith == nil {
 		return nil

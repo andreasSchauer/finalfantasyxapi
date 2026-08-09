@@ -23,6 +23,7 @@ func verifyParamsAndGet[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	return resource, nil
 }
 
+
 func verifyParamsAndRetrieve[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L]) ([]int32, error) {
 	err := verifyQueryParamsIdEp(r, i.endpoint, i.queryLookup, nil, nil)
 	if err != nil {
