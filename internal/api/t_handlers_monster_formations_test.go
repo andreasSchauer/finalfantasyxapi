@@ -32,6 +32,9 @@ func TestGetMonsterFormation(t *testing.T) {
 			category:       "boss-fight",
 			isForcedAmbush: false,
 			canEscape:      false,
+			ap:             20,
+			apOverkill:     30,
+			gil:            211,
 			bossMusic:      h.GetInt32Ptr(16),
 			monsters: map[string]int32{
 				"sinspawn echuilles": 1,
@@ -57,6 +60,9 @@ func TestGetMonsterFormation(t *testing.T) {
 			category:       "random-encounter",
 			isForcedAmbush: false,
 			canEscape:      true,
+			ap:             170,
+			apOverkill:     255,
+			gil:            140,
 			monsters: map[string]int32{
 				"garuda - 3": 1,
 			},
@@ -77,6 +83,9 @@ func TestGetMonsterFormation(t *testing.T) {
 			category:       "boss-fight",
 			isForcedAmbush: false,
 			canEscape:      false,
+			ap:             5080,
+			apOverkill:     7620,
+			gil:            8600,
 			bossMusic:      h.GetInt32Ptr(55),
 			monsters: map[string]int32{
 				"seymour":            1,
@@ -110,6 +119,9 @@ func TestGetMonsterFormation(t *testing.T) {
 			category:       "random-encounter",
 			isForcedAmbush: true,
 			canEscape:      true,
+			ap:             21000,
+			apOverkill:     31500,
+			gil:            1900,
 			monsters: map[string]int32{
 				"great malboro": 1,
 			},

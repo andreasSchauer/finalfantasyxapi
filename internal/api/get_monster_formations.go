@@ -19,6 +19,7 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.M
 		IsForcedAmbush:  formation.FormationData.IsForcedAmbush,
 		CanEscape:       formation.FormationData.CanEscape,
 		Notes:           formation.FormationData.Notes,
+		FormationLoot: 	 getFormationLoot(cfg, formation),
 		BossMusic:       convertObjPtr(cfg, formation.FormationData.BossMusic, convertFormationBossSong),
 		Monsters:        nameAmtsToResAmts(cfg, cfg.e.monsters, formation.Monsters),
 		Areas:           convertObjSlice(cfg, formation.EncounterAreas, convertEncounterArea),
@@ -26,6 +27,20 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.M
 	}
 
 	return response, nil
+}
+
+func getFormationLoot(cfg *Config, formation seeding.MonsterFormation) FormationLoot {
+	var loot FormationLoot
+
+	for _, monAmt := range formation.Monsters {
+		mon, _ := seeding.GetResourceByID(monAmt.MonsterID, cfg.l.MonstersID)
+
+		loot.AP += mon.AP * monAmt.Amount
+		loot.ApOverkill += mon.APOverkill * monAmt.Amount
+		loot.Gil += mon.Gil * monAmt.Amount
+	}
+
+	return loot
 }
 
 func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]) ([]int32, error) {

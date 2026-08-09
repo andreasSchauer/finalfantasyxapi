@@ -7,6 +7,9 @@ type expMonsterFormation struct {
 	isForcedAmbush  bool
 	canEscape       bool
 	bossMusic       *int32
+	ap              int32
+	apOverkill      int32
+	gil             int32
 	monsters        map[string]int32
 	areas           []int32
 	triggerCommands []testFormationTC
@@ -22,6 +25,9 @@ func compareMonsterFormations(test test, exp expMonsterFormation, got MonsterFor
 	compare(test, "category", exp.category, got.Category)
 	compare(test, "is forced ambush", exp.isForcedAmbush, got.IsForcedAmbush)
 	compare(test, "can escape", exp.canEscape, got.CanEscape)
+	compare(test, "ap", exp.ap, got.AP)
+	compare(test, "ap overkill", exp.apOverkill, got.ApOverkill)
+	compare(test, "gil", exp.gil, got.Gil)
 	compIdApiResourcePtrs(test, "boss song", test.cfg.e.songs.endpoint, exp.bossMusic, got.BossMusic)
 	checkResAmts(test, "monsters", exp.monsters, got.Monsters)
 	compTestStructSlices(test, "trigger commands", exp.triggerCommands, got.TriggerCommands, compareFormationTCs)

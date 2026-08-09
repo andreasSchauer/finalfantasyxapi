@@ -11,6 +11,7 @@ type MonsterFormationSimple struct {
 	URL            string   `json:"url"`
 	Category       string   `json:"category"`
 	IsForcedAmbush bool     `json:"is_forced_ambush"`
+	FormationLoot
 	Monsters       []string `json:"monsters"`
 	Areas          []string `json:"areas"`
 }
@@ -28,6 +29,7 @@ func createMonsterFormationSimple(cfg *Config, _ *http.Request, id int32, _ Subs
 		URL:            createResourceURL(cfg, i.endpoint, id),
 		Category:       formation.FormationData.Category,
 		IsForcedAmbush: formation.FormationData.IsForcedAmbush,
+		FormationLoot:  getFormationLoot(cfg, formation),
 		Monsters:       convertObjSlice(cfg, formation.Monsters, monsterAmountString),
 		Areas:          locAreaStrings(cfg, formation.EncounterAreas),
 	}

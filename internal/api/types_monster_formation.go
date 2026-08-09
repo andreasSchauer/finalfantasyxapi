@@ -9,10 +9,17 @@ type MonsterFormation struct {
 	IsForcedAmbush  bool                               `json:"is_forced_ambush"`
 	CanEscape       bool                               `json:"can_escape"`
 	Notes           *string                            `json:"notes,omitempty"`
+	FormationLoot
 	BossMusic       *FormationBossSong                 `json:"boss_music,omitempty"`
 	Monsters        []ResourceAmount[NamedAPIResource] `json:"monsters"`
 	Areas           []EncounterArea                    `json:"areas"`
 	TriggerCommands []FormationTriggerCommand          `json:"trigger_commands"`
+}
+
+type FormationLoot struct {
+	AP			int32		`json:"ap"`
+	ApOverkill	int32		`json:"ap_overkill"`
+	Gil			int32		`json:"gil"`
 }
 
 type EncounterArea struct {
