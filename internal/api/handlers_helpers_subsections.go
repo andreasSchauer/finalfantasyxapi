@@ -57,9 +57,10 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 	respondWithJSON(w, http.StatusOK, list)
 }
 
-func handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, verifyFn func (*Config, *http.Request, EndpointName, map[QueryParamName]QueryParam, *string) error) {
+
+func handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) {
 	segment := string(snParameters)
-	err := verifyFn(cfg, r, endpoint, queryLookup, &segment)
+	err := verifyQueryParamsAltList(cfg, r, endpoint, queryLookup, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -75,7 +76,7 @@ func handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request, endpo
 
 func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	segment := string(snSections)
-	err := verifyQueryParamsAltListIdEp(cfg, r, i.endpoint, i.queryLookup, &segment)
+	err := verifyQueryParamsAltList(cfg, r, i.endpoint, i.queryLookup, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -98,7 +99,7 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 		return
 	}
 
-	ids, err := getQueryIDs(cfg, r, i, &segment)
+	ids, err := getIDsQuery(cfg, r, i, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -121,8 +122,8 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 	respondWithJSON(w, http.StatusOK, subResList)
 }
 
-func getQueryIDs[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], segment *string) ([]int32, error) {
-	err := verifyQueryParamsIdEp(r, i.endpoint, i.queryLookup, nil, segment)
+func getIDsQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], segment *string) ([]int32, error) {
+	err := verifyQueryParams[int32](r, i.endpoint, i.queryLookup, nil, segment)
 	if err != nil {
 		return nil, err
 	}

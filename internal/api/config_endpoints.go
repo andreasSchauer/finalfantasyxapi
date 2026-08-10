@@ -8,7 +8,6 @@ import (
 )
 
 type endpoints struct {
-	epSlice		 		[]EndpointName
 	locations    		handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
 	sublocations 		handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]
 	areas        		handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
@@ -1031,8 +1030,7 @@ func (cfg *Config) EndpointsInit() {
 	}
 
 	cfg.e = &e
-	cfg.e.epSlice = e.initializeEndpointSlice()
-	e.endpoints.slice = e.epSlice
+	e.endpoints.slice = e.initializeEndpointSlice()
 
 }
 

@@ -12,5 +12,3 @@ func errSingleResParam(paramName QueryParamName) error {
 func errListResParam(paramName QueryParamName) error {
 	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used with list-endpoints.", paramName, paramName), nil)
 }
-
-

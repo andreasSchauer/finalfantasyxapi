@@ -1460,7 +1460,7 @@ func TestSubsectionMonsters(t *testing.T) {
 				requestURL:     "/api/monsters/?ids=1&location=15",
 				expectedStatus: http.StatusBadRequest,
 				handler:        testCfg.HandleMonsters,
-				expectedErr:    "parameter 'ids' can't be combined with other parameters.",
+				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'.",
 			},
 		},
 		{

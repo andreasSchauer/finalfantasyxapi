@@ -25,7 +25,7 @@ func handleEndpointIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResou
 	segment := segments[0]
 
 	if segment == string(snParameters) {
-		handleParameters(cfg, w, r, i.endpoint, i.queryLookup, verifyQueryParamsAltListIdEp)
+		handleParameters(cfg, w, r, i.endpoint, i.queryLookup)
 		return
 	}
 
@@ -56,7 +56,7 @@ func handleEndpointNameOrID[T seeding.Lookupable, R any, A APIResource, L APIRes
 	segment := segments[0]
 
 	if segment == string(snParameters) {
-		handleParameters(cfg, w, r, i.endpoint, i.queryLookup, verifyQueryParamsAltListIdEp)
+		handleParameters(cfg, w, r, i.endpoint, i.queryLookup)
 		return
 	}
 
@@ -160,8 +160,9 @@ func handleEndpointSubOrNameVer[T seeding.Lookupable, R any, A APIResource, L AP
 	}
 }
 
+// if len(segments) is 0, this function crafts the response for /enums
 func handleEnumsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums) {
-	err := verifyQueryParamsKeyEp(r, i.endpoint, i.queryLookup, nil)
+	err := verifyQueryParams[string](r, i.endpoint, i.queryLookup, nil, nil)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -176,11 +177,12 @@ func handleEnumsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request
 	respondWithJSON(w, http.StatusOK, resourceList)
 }
 
+// if len(segments) is 1, this function crafts the response for /enums/{enum_name} and /enums/parameters
 func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums, segments []string) {
 	segment := segments[0]
 
 	if segment == string(snParameters) {
-		handleParameters(cfg, w, r, i.endpoint, i.queryLookup, verifyQueryParamsAltListKeyEp)
+		handleParameters(cfg, w, r, i.endpoint, i.queryLookup)
 		return
 	}
 
@@ -189,7 +191,8 @@ func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	err = verifyQueryParamsKeyEp(r, i.endpoint, i.queryLookup, &key)
+	// happens after enum parsing, just for error priority reasons. if I prioritize wrong query param errors over wrong enum errors, I can simply swap the two functions
+	err = verifyQueryParams(r, i.endpoint, i.queryLookup, &key, nil)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -197,13 +200,14 @@ func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Reque
 	respondWithJSON(w, http.StatusOK, enum)
 }
 
+// if len(segments) is 0, this function crafts the response for /endpoints
 func handleEndpointsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints) {
-	err := verifyQueryParamsKeyEp(r, i.endpoint, i.queryLookup, nil)
+	err := verifyQueryParams[string](r, i.endpoint, i.queryLookup, nil, nil)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	endpoints := cfg.e.epSlice
+	endpoints := i.slice
 	resources := endpointsToNamedAPIResources(cfg, endpoints)
 	setLimitMax(cfg, r, r.URL.Query())
 
@@ -214,11 +218,12 @@ func handleEndpointsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Req
 	respondWithJSON(w, http.StatusOK, resourceList)
 }
 
+// if len(segments) is 1, this function checks if /endpoints was combined with 'parameters'. returns an error, if it wasn't
 func handleEndpointsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints, segments []string) {
 	segment := segments[0]
 
 	if segment == string(snParameters) {
-		handleParameters(cfg, w, r, i.endpoint, i.queryLookup, verifyQueryParamsAltListKeyEp)
+		handleParameters(cfg, w, r, i.endpoint, i.queryLookup)
 		return
 	}
 

@@ -11,7 +11,6 @@ func compare(test test, fieldName string, exp, got any) {
 	}
 
 	switch e := exp.(type) {
-
 	case int:
 		g, ok := got.(int)
 		if !ok {
