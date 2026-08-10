@@ -37,3 +37,10 @@ type handlerInputEndpoints struct {
 	slice  		[]EndpointName
 	queryLookup map[QueryParamName]QueryParam
 }
+
+type handlerInputService[R any] struct {
+	endpoint    EndpointName
+	usage       []string
+	queryLookup map[QueryParamName]QueryParam
+	serviceFn	func(*Config, *http.Request, handlerInputService[R]) (R, error)
+}

@@ -15,7 +15,7 @@ func vpFormat[T any](queryParam QueryParam, endpoint EndpointName, key *T, segme
 		return err
 	}
 	
-	err = vpList(queryParam, key)
+	err = vpNoKey(queryParam, key)
 	if err != nil {
 		return err
 	}
@@ -70,11 +70,16 @@ func verifyAllowedIDs(queryParam QueryParam, id int32) error {
 }
 
 
-// checks, if a query param that is meant for list requests is used in the correct context. returns an error, if a key is provided (meaning the parameter was combined with a single resource request).
-func vpList[T any](queryParam QueryParam, key *T) error {
+// checks, if a query param that is meant for list or service requests is used in the correct context. returns an error, if a key is provided (meaning the parameter was combined with a single resource request).
+func vpNoKey[T any](queryParam QueryParam, key *T) error {
 	if queryParam.ParamUse == puList && key != nil {
 		return errListResParam(queryParam.Name)
 	}
+
+	if queryParam.ParamUse == puService && key != nil {
+		return errServiceParam(queryParam.Name)
+	}
+
 	return nil
 }
 

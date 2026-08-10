@@ -7,9 +7,10 @@ import (
 type ParamUseType string
 
 const (
-	puSingle ParamUseType = "single"
-	puList   ParamUseType = "list"
-	puSimple ParamUseType = "simple"
+	puSingle 	ParamUseType = "single"
+	puList   	ParamUseType = "list"
+	puSimple 	ParamUseType = "simple"
+	puService	ParamUseType = "service"
 )
 
 type QueryParam struct {
@@ -21,6 +22,7 @@ type QueryParam struct {
 	Usage              string              `json:"usage"`
 	ExampleUses        []string            `json:"example_uses"`
 	IsExclusive        bool                `json:"only_use_alone"`
+	IsRequired         bool                `json:"is_required"`
 	ParamUse           ParamUseType        `json:"param_use_type"`
 	ForSegment         *SectionName        `json:"for_segment"`
 	EnumLookup         map[string]EnumVal  `json:"-"`
@@ -1078,7 +1080,7 @@ func (cfg *Config) initMonstersParams() {
 		{
 			Name:          qpnOmnisElements,
 			Description:   "Calculate the elemental affinities of Seymour Omnis by using exactly four of the letters 'f' (fire), 'l' (lightning), 'w' (water) and 'i' (ice). The letters represent the Mortiphasms pointing at Omnis. 0 of a color = 'neutral', 1 = 'halved', 2 = 'immune', 3 = 'absorb', 4 = 'absorb' + 'weak' to opposing element. The order of the letters doesn't matter.",
-			Type:          "other",
+			Type:          qptOther,
 			Usage:         "?omnis_elements={4xf|l|w|i}",
 			ExampleUses:   []string{"?omnis_elements=ifil", "?omnis_elements=llll", "?omnis_elements=wilf"},
 			ParamUse:      puSingle,
@@ -1088,7 +1090,7 @@ func (cfg *Config) initMonstersParams() {
 		{
 			Name:               qpnElementalResists,
 			Description:        "Searches for monsters that have the specified elemental affinities.",
-			Type:               "other",
+			Type:               qptOther,
 			Usage:              "?elemental_resists={element|id}={affinity|id},...",
 			ExampleUses:        []string{"?elemental_resists=fire=weak,water=absorb", "?elemental_resists=1=3,2=4"},
 			ParamUse:           puList,
@@ -2856,4 +2858,28 @@ func (cfg *Config) initAgilityTierParams() {
 	paramsMap := cfg.completeQueryParamsInit(params, cfg.e.agilityTiers.subsections)
 	cfg.q.agilityTiers = paramsMap
 	cfg.e.agilityTiers.queryLookup = paramsMap
+}
+
+func (cfg *Config) initAlBhedParams() {
+	params := []QueryParam{
+		{
+			Name:            qpnText,
+			Description:     "States the text you want to be translated. You can wrap letters that are already translated into square brackets to keep them unchanged. By default, it is assumed that you want to translate al bhed text into english.",
+			Type:            qptOther,
+			Usage: 			 "?text=cysbma%20daqd, ?text=c[am]bma%20da[x]d",
+			IsRequired: 	 true,
+			ParamUse:        puService,
+		},
+		{
+			Name:            qpnEn,
+			Description:     "When this parameter is true, the text will be translated from english into al bhed",
+			Type:            qptBool,
+			ParamUse:        puService,
+			RequiredParams:  []QueryParamName{qpnText},
+		},
+	}
+
+	paramsMap := querySliceToMap(cfg, params)
+	cfg.q.alBhed = paramsMap
+	cfg.e.alBhed.queryLookup = paramsMap
 }

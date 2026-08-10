@@ -84,6 +84,8 @@ func main() {
 	mux.HandleFunc("GET /api/enums/", apiCfg.HandleEnums)
 	mux.HandleFunc("GET /api/endpoints/", apiCfg.HandleEndpoints)
 
+	mux.HandleFunc("GET /api/al-bhed/", apiCfg.HandleAlBhed)
+
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: mux,

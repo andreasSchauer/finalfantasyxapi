@@ -38,6 +38,7 @@ func isDefaultParam(cfg *Config, queryName QueryParamName) bool {
 }
 
 
+
 // verifies the use of an exclusive query param
 func vpExclusive(q url.Values, queryParam QueryParam, queryLookup map[QueryParamName]QueryParam) error {
 	if queryParam.IsExclusive && !canUseExclusiveParam(q, queryLookup) {

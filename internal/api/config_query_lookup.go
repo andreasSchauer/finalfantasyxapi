@@ -67,6 +67,8 @@ type QueryLookup struct {
 
 	enums     map[QueryParamName]QueryParam
 	endpoints map[QueryParamName]QueryParam
+
+	alBhed			map[QueryParamName]QueryParam
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -164,4 +166,6 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.e.elements.queryLookup = cfg.q.elements
 	cfg.e.enums.queryLookup = cfg.q.enums
 	cfg.e.endpoints.queryLookup = cfg.q.endpoints
+
+	cfg.initAlBhedParams()
 }

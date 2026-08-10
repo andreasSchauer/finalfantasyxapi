@@ -7,6 +7,23 @@ import (
 )
 
 
+// verifies that required params are not empty
+func verifyRequiredParams(q url.Values, queryLookup map[QueryParamName]QueryParam) error {
+	for name, param := range queryLookup {
+		if !param.IsRequired {
+			continue
+		}
+		
+		val := q.Get(string(name))
+		if val == "" {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' can't be empty.", name), nil)
+		}
+	}
+
+	return nil
+}
+
+
 // verifies the correct usage of a query parameter
 func verifyQueryUsage[T any](q url.Values, queryParam QueryParam, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, key *T, segment *string) error {
 	err := vpFormat(queryParam, endpoint, key, segment)
@@ -33,7 +50,7 @@ func getParamEndpoint(endpoint EndpointName, queryLookup map[QueryParamName]Quer
 }
 
 
-// used for alternative lists like /endpoint/sections and /endpoint/parameters. simply looks up the query param and returns an error, if it doesn't exist.
+// used for alternative lists like /endpoint/sections and /endpoint/parameters. simply looks up the query param and returns an error, if it doesn't exist. enforces the used parameter to be a default parameter.
 func getParamAltList(cfg *Config, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, query string, listName *string) (QueryParam, error) {
 	_, err := getParamEndpoint(endpoint, queryLookup, query)
 	if err != nil {

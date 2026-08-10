@@ -123,11 +123,12 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 }
 
 func getIDsQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], segment *string) ([]int32, error) {
-	err := verifyQueryParams[int32](r, i.endpoint, i.queryLookup, nil, segment)
+	err := verifyQueryParams[any](r, i.endpoint, i.queryLookup, nil, segment)
 	if err != nil {
 		return nil, err
 	}
 
+	// ifs ids param is empty, just retrieve all ids
 	queryParamIDs := i.queryLookup[qpnIDs]
 	_, err = checkEmptyQuery(r, queryParamIDs)
 	if queryIsEmpty(err) {

@@ -112,3 +112,21 @@ func routerEndpoints(cfg *Config, w http.ResponseWriter, r *http.Request, i hand
 		return
 	}
 }
+
+func routerService[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
+	segments := getPathSegments(r.URL.Path, i.endpoint)
+
+	switch len(segments) {
+	case 0:
+		handleEndpointService(cfg, w, r, i)
+		return
+
+	case 1:
+		handleServiceEndpointSingle(cfg, w, r, i, segments)
+		return
+		
+	default:
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", h.FormatStringSlice(i.usage)), nil)
+		return
+	}
+}

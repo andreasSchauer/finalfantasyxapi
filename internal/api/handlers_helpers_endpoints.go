@@ -229,3 +229,23 @@ func handleEndpointsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.R
 
 	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests.", nil)
 }
+
+func handleServiceEndpointSingle[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R], segments []string) {
+	segment := segments[0]
+
+	if segment == string(snParameters) {
+		handleParameters(cfg, w, r, i.endpoint, i.queryLookup)
+		return
+	}
+
+	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. '/%s' doesn't support single-resource requests.", i.endpoint), nil)
+}
+
+func handleEndpointService[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
+	result, err := i.serviceFn(cfg, r, i)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, result)
+}
