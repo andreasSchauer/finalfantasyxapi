@@ -53,6 +53,15 @@ func checkEmptyQuery(r *http.Request, queryParam QueryParam) (string, error) {
 	return strings.ToLower(query), nil
 }
 
+func checkEmptyQueryNoLower(r *http.Request, queryParam QueryParam) (string, error) {
+	query := r.URL.Query().Get(string(queryParam.Name))
+	if query == "" {
+		return "", errEmptyQuery
+	}
+
+	return query, nil
+}
+
 // checks, if "none" was used as input and returns errQueryNone, if it was
 func checkNoneQuery(query string) error {
 	if query == "none" {

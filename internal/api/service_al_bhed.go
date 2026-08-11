@@ -1,9 +1,8 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
-	"net/url"
+	"unicode"
 )
 
 type AlBhedResponse struct {
@@ -26,16 +25,12 @@ func serviceAlBhed(cfg *Config, r *http.Request, i handlerInputService[AlBhedRes
 		return AlBhedResponse{}, err
 	}
 
-	result, err := initAlBhedResponse(r, i.queryLookup)
+	response, err := initAlBhedResponse(r, i.queryLookup)
 	if err != nil {
 		return AlBhedResponse{}, err
 	}
 
-	// assemble character map from al bhed primers (depending on from- and to-language)
-	// then do the translation
-	// add translated text to result
-
-	return result, nil
+	return translateAlBhed(cfg, response)
 }
 
 func initAlBhedResponse(r *http.Request, queryLookup map[QueryParamName]QueryParam) (AlBhedResponse, error) {
@@ -64,17 +59,89 @@ func initAlBhedResponse(r *http.Request, queryLookup map[QueryParamName]QueryPar
 	return response, nil
 }
 
-// move to different file once everything is working
-func parseTextQuery(r *http.Request, queryParam QueryParam) (string, error) {
-	text, err := checkEmptyQuery(r, queryParam)
-	if errExceptEmptyQuery(err) {
-		return "", err
+func translateAlBhed(cfg *Config, response AlBhedResponse) (AlBhedResponse, error) {
+	charLookup := initCharLookup(cfg, response.ToLanguage)
+	translatedRunes := []rune{}
+	translate := true
+	var err error
+
+	for _, char := range response.OriginalText {
+		if string(char) == "[" {
+			translate, err = setTranslator(translate, false)
+			if err != nil {
+				return AlBhedResponse{}, err
+			}
+			continue
+		}
+
+		if string(char) == "]" {
+			translate, err = setTranslator(translate, true)
+			if err != nil {
+				return AlBhedResponse{}, err
+			}
+			continue
+		}
+		
+		if !translate {
+			translatedRunes = append(translatedRunes, char)
+			continue
+		}
+
+		var isUpper bool
+		charLower := unicode.ToLower(char)
+		if char != charLower {
+			isUpper = true
+		}
+
+		newChar, ok := charLookup[charLower]
+		if !ok {
+			translatedRunes = append(translatedRunes, char)
+			continue
+		}
+
+		if isUpper {
+			newChar = unicode.ToUpper(newChar)
+		}
+
+		translatedRunes = append(translatedRunes, newChar)
 	}
 
-	decodedText, err := url.QueryUnescape(text)
-	if err != nil {
-		return "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid query encoding for parameter '%s'.", queryParam.Name), err)
+	if !translate {
+		return AlBhedResponse{}, newHTTPError(http.StatusBadRequest, "wrong format. all brackets must be closed.", nil)
 	}
 
-	return decodedText, nil
+	response.TranslatedText = string(translatedRunes)
+
+	return response, nil
+}
+
+func setTranslator(translate, newState bool) (bool, error) {
+	// this essentially means, the same bracket came twice without the other in between, like '[['
+	if translate == newState {
+		return false, newHTTPError(http.StatusBadRequest, "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket.", nil)
+	}
+	return newState, nil
+}
+
+func initCharLookup(cfg *Config, toLanguage Language) map[rune]rune {
+	charLookup := make(map[rune]rune)
+	
+	for _, primer := range cfg.l.Primers {
+		alBhedChar := charToRune(primer.AlBhedLetter)
+		englishChar := charToRune(primer.EnglishLetter)
+
+		if toLanguage == langAlBhed {
+			charLookup[englishChar] = alBhedChar
+			continue
+		}
+
+		charLookup[alBhedChar] = englishChar
+	}
+
+	return charLookup
+}
+
+func charToRune(char string) rune {
+	runes := []rune(char)
+	return runes[0]
 }
