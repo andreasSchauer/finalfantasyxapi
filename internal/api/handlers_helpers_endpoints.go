@@ -230,6 +230,36 @@ func handleEndpointsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.R
 	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests.", nil)
 }
 
+func handleEndpointService[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
+	var response R
+	var err error
+
+	switch r.Method {
+	case http.MethodGet:
+		err = verifyQueryParams[any](r, i.endpoint, i.queryLookup, nil, nil)
+		if handleHTTPError(w, err) {
+			return
+		}
+
+		response, err = i.serviceFnGet(cfg, r, i)
+		if handleHTTPError(w, err) {
+			return
+		}
+
+	case http.MethodPost:
+		if len (r.URL.Query()) > 0 {
+			respondWithError(w, http.StatusBadRequest, "POST requests shouldn't have any query parameters", nil)
+			return
+		}
+		response, err = i.serviceFnPost(cfg, r, i)
+		if handleHTTPError(w, err) {
+			return
+		}
+	}
+
+	respondWithJSON(w, http.StatusOK, response)
+}
+
 func handleServiceEndpointSingle[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R], segments []string) {
 	segment := segments[0]
 
@@ -239,13 +269,4 @@ func handleServiceEndpointSingle[R any](cfg *Config, w http.ResponseWriter, r *h
 	}
 
 	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. '/%s' doesn't support single-resource requests.", i.endpoint), nil)
-}
-
-func handleEndpointService[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
-	result, err := i.serviceFn(cfg, r, i)
-	if handleHTTPError(w, err) {
-		return
-	}
-
-	respondWithJSON(w, http.StatusOK, result)
 }

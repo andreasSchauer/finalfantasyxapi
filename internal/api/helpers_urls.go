@@ -1,7 +1,9 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -45,4 +47,14 @@ func getIdFromURL(url string) int32 {
 
 	id, _ := strconv.Atoi(idStr)
 	return int32(id)
+}
+
+func convertToStateURL[T any](cfg *Config, endpoint string, payload T) (string, error) {
+	jsonBytes, err := json.Marshal(payload)
+	if err != nil {
+		return "", newHTTPError(http.StatusInternalServerError, "couldn't marshal params", err)
+	}
+
+	jsonURL := url.QueryEscape(string(jsonBytes))
+	return fmt.Sprintf("http://%s/api/%s?state=%s", cfg.host, endpoint, jsonURL), nil
 }

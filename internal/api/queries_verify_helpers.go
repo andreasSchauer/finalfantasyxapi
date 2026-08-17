@@ -7,16 +7,37 @@ import (
 )
 
 
-// verifies that required params are not empty
-func verifyRequiredParams(q url.Values, queryLookup map[QueryParamName]QueryParam) error {
-	for name, param := range queryLookup {
+// verifies that either 'state' param is used alone, or that required params are not empty
+func verifyRequiredParams(r *http.Request, q url.Values, queryLookup map[QueryParamName]QueryParam) error {
+	var hasState bool
+	paramsAmt := len(q)
+
+	_, err := checkEmptyQuery(r, queryLookup[qpnState])
+	if errExceptEmptyQuery(err) {
+		return err
+	}
+	if !queryIsEmpty(err) {
+		hasState = true
+	}
+
+	if paramsAmt == 1 && hasState {
+		return nil
+	}
+	if paramsAmt > 1 && hasState {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' can't be coupled with other parameters", string(qpnState)), nil)
+	}
+	
+	for _, param := range queryLookup {
 		if !param.IsRequired {
 			continue
 		}
 		
-		val := q.Get(string(name))
-		if val == "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' can't be empty.", name), nil)
+		_, err := checkEmptyQuery(r, param)
+		if errExceptEmptyQuery(err) {
+			return err
+		}
+		if queryIsEmpty(err) && !hasState {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' can't be empty.", param.Name), nil)
 		}
 	}
 

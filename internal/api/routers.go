@@ -113,6 +113,7 @@ func routerEndpoints(cfg *Config, w http.ResponseWriter, r *http.Request, i hand
 	}
 }
 
+// while this works, maybe do a separate POST router + handlers
 func routerService[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
 	segments := getPathSegments(r.URL.Path, i.endpoint)
 
@@ -124,7 +125,7 @@ func routerService[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i
 	case 1:
 		handleServiceEndpointSingle(cfg, w, r, i, segments)
 		return
-		
+
 	default:
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", h.FormatStringSlice(i.usage)), nil)
 		return

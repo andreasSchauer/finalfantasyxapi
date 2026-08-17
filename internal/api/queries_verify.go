@@ -6,7 +6,7 @@ import "net/http"
 func verifyQueryParams[T any](r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam, key *T, segment *string) error {
 	q := r.URL.Query()
 
-	err := verifyRequiredParams(q, queryLookup)
+	err := verifyRequiredParams(r, q, queryLookup)
 	if err != nil {
 		return err
 	}

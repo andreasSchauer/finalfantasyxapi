@@ -7,10 +7,10 @@ import (
 type ParamUseType string
 
 const (
-	puSingle 	ParamUseType = "single"
-	puList   	ParamUseType = "list"
-	puSimple 	ParamUseType = "simple"
-	puService	ParamUseType = "service"
+	puSingle  ParamUseType = "single"
+	puList    ParamUseType = "list"
+	puSimple  ParamUseType = "simple"
+	puService ParamUseType = "service"
 )
 
 type QueryParam struct {
@@ -1430,10 +1430,10 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
-			Name:          qpnCelestialWeapon,
-			Description:   "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the player ability's damage formula will be replaced by the character's celestial weapon damage formula.",
-			Type:          qptBool,
-			ParamUse:      puSingle,
+			Name:           qpnCelestialWeapon,
+			Description:    "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the player ability's damage formula will be replaced by the character's celestial weapon damage formula.",
+			Type:           qptBool,
+			ParamUse:       puSingle,
 			RequiredParams: []QueryParamName{qpnAbilityUser},
 		},
 		{
@@ -1842,10 +1842,10 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
-			Name:          qpnCelestialWeapon,
-			Description:   "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the trigger command's damage formula will be replaced by the character's celestial weapon damage formula.",
-			Type:          qptBool,
-			ParamUse:      puSingle,
+			Name:           qpnCelestialWeapon,
+			Description:    "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the trigger command's damage formula will be replaced by the character's celestial weapon damage formula.",
+			Type:           qptBool,
+			ParamUse:       puSingle,
 			RequiredParams: []QueryParamName{qpnAbilityUser},
 		},
 		{
@@ -1889,10 +1889,10 @@ func (cfg *Config) initMiscAbilitiesParams() {
 			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
-			Name:          qpnCelestialWeapon,
-			Description:   "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the misc ability's damage formula will be replaced by the character's celestial weapon damage formula.",
-			Type:          qptBool,
-			ParamUse:      puSingle,
+			Name:           qpnCelestialWeapon,
+			Description:    "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the misc ability's damage formula will be replaced by the character's celestial weapon damage formula.",
+			Type:           qptBool,
+			ParamUse:       puSingle,
 			RequiredParams: []QueryParamName{qpnAbilityUser},
 		},
 		{
@@ -2863,19 +2863,27 @@ func (cfg *Config) initAgilityTierParams() {
 func (cfg *Config) initAlBhedParams() {
 	params := []QueryParam{
 		{
-			Name:            qpnText,
-			Description:     "States the text you want to be translated. You can wrap letters that are already translated into square brackets to keep them unchanged. By default, it is assumed that you want to translate al bhed text into english.",
-			Type:            qptOther,
-			Usage: 			 "?text=cysbma%20daqd, ?text=c[am]bma%20da[x]d",
-			IsRequired: 	 true,
-			ParamUse:        puService,
+			Name: 			qpnState,
+			Description: 	"",
+			Type: 			qptOther,
+			Usage: 			"",
+			ParamUse: 		puList,
 		},
 		{
-			Name:            qpnEn,
-			Description:     "When this parameter is true, the text will be translated from english into al bhed",
-			Type:            qptBool,
-			ParamUse:        puService,
-			RequiredParams:  []QueryParamName{qpnText},
+			Name:        qpnText,
+			Description: "States the text you want to be translated. You can wrap letters that are already translated into square brackets to keep them unchanged. By default, it is assumed that you want to translate al bhed text into english.",
+			Type:        qptOther,
+			Usage:       "?text=cysbma%20daqd, ?text=c[am]bma%20da[x]d",
+			IsRequired:  true,
+			ParamUse:    puService,
+		},
+		{
+			Name:           qpnDirection,
+			Description:    "When this parameter is true, the text will be translated from english into al bhed",
+			Type:           qptValue,
+			ParamUse:       puService,
+			RequiredParams: []QueryParamName{qpnText},
+			AllowedValues:  []QueryValue{qvToAlBhed, qvToEnglish},
 		},
 	}
 

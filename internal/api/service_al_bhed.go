@@ -5,67 +5,84 @@ import (
 	"unicode"
 )
 
-type AlBhedResponse struct {
-	TranslatedText string 	`json:"translated_text"`
-	OriginalText   string 	`json:"original_text"`
-	FromLanguage   Language `json:"from_language"`
-	ToLanguage     Language `json:"to_language"`
+type AlBhedParams struct {
+	Text      string     `json:"text"`
+	Direction QueryValue `json:"direction"`
 }
 
-type Language string
+type AlBhedResponse struct {
+	URL            string     `json:"url"`
+	TranslatedText string     `json:"translated_text"`
+	OriginalText   string     `json:"original_text"`
+	Direction      QueryValue `json:"direction"`
+}
 
 const (
-	langAlBhed		Language = "al bhed"
-	langEnglish		Language = "english"
+	qvToAlBhed  QueryValue = "to-al-bhed"
+	qvToEnglish QueryValue = "to-english"
 )
 
-func serviceAlBhed(cfg *Config, r *http.Request, i handlerInputService[AlBhedResponse]) (AlBhedResponse, error) {
-	err := verifyQueryParams[any](r, i.endpoint, i.queryLookup, nil, nil)
+func serviceAlBhedGet(cfg *Config, r *http.Request, i handlerInputService[AlBhedResponse]) (AlBhedResponse, error) {
+	params, err := initAlBhedParams(r, i.queryLookup)
 	if err != nil {
 		return AlBhedResponse{}, err
 	}
 
-	response, err := initAlBhedResponse(r, i.queryLookup)
-	if err != nil {
-		return AlBhedResponse{}, err
-	}
-
-	return translateAlBhed(cfg, response)
+	return translateAlBhed(cfg, i, params)
 }
 
-func initAlBhedResponse(r *http.Request, queryLookup map[QueryParamName]QueryParam) (AlBhedResponse, error) {
-	response := AlBhedResponse{
-		FromLanguage: langAlBhed,
-		ToLanguage:   langEnglish,
-	}
-
-	en, err := parseBooleanQuery(r, queryLookup[qpnEn])
-	if errExceptEmptyQuery(err) {
+func serviceAlBhedPost(cfg *Config, r *http.Request, i handlerInputService[AlBhedResponse]) (AlBhedResponse, error) {
+	var params AlBhedParams
+	params, err := decodeJsonBody(r, params)
+	if err != nil {
 		return AlBhedResponse{}, err
 	}
 
-	if en {
-		response.FromLanguage = langEnglish
-		response.ToLanguage = langAlBhed
+	return translateAlBhed(cfg, i, params)
+}
+
+
+func initAlBhedParams(r *http.Request, queryLookup map[QueryParamName]QueryParam) (AlBhedParams, error) {
+	var response AlBhedParams
+
+	response, err := convertStateParam(r, queryLookup, response)
+	if errExceptEmptyQuery(err) {
+		return AlBhedParams{}, err
+	}
+	if !queryIsEmpty(err) {
+		return response, nil
+	}
+
+	response.Direction = qvToAlBhed
+
+	direction, err := parseValueQuery(r, queryLookup[qpnDirection])
+	if errExceptEmptyQuery(err) {
+		return AlBhedParams{}, err
+	}
+	if direction == string(qvToEnglish) {
+		response.Direction = qvToEnglish
 	}
 
 	text, err := parseTextQuery(r, queryLookup[qpnText])
 	if errExceptEmptyQuery(err) {
-		return AlBhedResponse{}, err
+		return AlBhedParams{}, err
 	}
-
-	response.OriginalText = text
+	response.Text = text
 
 	return response, nil
 }
 
-func translateAlBhed(cfg *Config, response AlBhedResponse) (AlBhedResponse, error) {
-	charLookup := initCharLookup(cfg, response.ToLanguage)
+func translateAlBhed(cfg *Config, i handlerInputService[AlBhedResponse], params AlBhedParams) (AlBhedResponse, error) {
+	charLookup := initCharLookup(cfg, params.Direction)
+	response := AlBhedResponse{
+		OriginalText: params.Text,
+		Direction:    params.Direction,
+	}
 	translatedRunes := []rune{}
 	translate := true
 	var err error
 
-	for _, char := range response.OriginalText {
+	for _, char := range params.Text {
 		if string(char) == "[" {
 			translate, err = setTranslator(translate, false)
 			if err != nil {
@@ -81,7 +98,7 @@ func translateAlBhed(cfg *Config, response AlBhedResponse) (AlBhedResponse, erro
 			}
 			continue
 		}
-		
+
 		if !translate {
 			translatedRunes = append(translatedRunes, char)
 			continue
@@ -111,6 +128,10 @@ func translateAlBhed(cfg *Config, response AlBhedResponse) (AlBhedResponse, erro
 	}
 
 	response.TranslatedText = string(translatedRunes)
+	response.URL, err = convertToStateURL(cfg, string(i.endpoint), params)
+	if err != nil {
+		return AlBhedResponse{}, err
+	}
 
 	return response, nil
 }
@@ -123,14 +144,14 @@ func setTranslator(translate, newState bool) (bool, error) {
 	return newState, nil
 }
 
-func initCharLookup(cfg *Config, toLanguage Language) map[rune]rune {
+func initCharLookup(cfg *Config, direction QueryValue) map[rune]rune {
 	charLookup := make(map[rune]rune)
-	
+
 	for _, primer := range cfg.l.Primers {
 		alBhedChar := charToRune(primer.AlBhedLetter)
 		englishChar := charToRune(primer.EnglishLetter)
 
-		if toLanguage == langAlBhed {
+		if direction == qvToAlBhed {
 			charLookup[englishChar] = alBhedChar
 			continue
 		}

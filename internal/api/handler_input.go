@@ -34,13 +34,14 @@ type handlerInputEnums struct {
 type handlerInputEndpoints struct {
 	endpoint    EndpointName
 	usage       []string
-	slice  		[]EndpointName
+	slice       []EndpointName
 	queryLookup map[QueryParamName]QueryParam
 }
 
 type handlerInputService[R any] struct {
-	endpoint    EndpointName
-	usage       []string
-	queryLookup map[QueryParamName]QueryParam
-	serviceFn	func(*Config, *http.Request, handlerInputService[R]) (R, error)
+	endpoint      EndpointName
+	usage         []string
+	queryLookup   map[QueryParamName]QueryParam
+	serviceFnGet  func(*Config, *http.Request, handlerInputService[R]) (R, error)
+	serviceFnPost func(*Config, *http.Request, handlerInputService[R]) (R, error)
 }

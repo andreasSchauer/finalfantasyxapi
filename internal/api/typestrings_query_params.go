@@ -42,17 +42,17 @@ const (
 	qpnContainsItem     QueryParamName = "contains_item"
 	qpnCopycat          QueryParamName = "copycat"
 	qpnCreationArea     QueryParamName = "creation_area"
-	qpnCustomize		QueryParamName = "customize"
+	qpnCustomize        QueryParamName = "customize"
 	qpnDamageFormula    QueryParamName = "damage_formula"
 	qpnDamageType       QueryParamName = "damage_type"
 	qpnDarkable         QueryParamName = "darkable"
 	qpnDelay            QueryParamName = "delay"
+	qpnDirection        QueryParamName = "direction"
 	qpnDistance         QueryParamName = "distance"
 	qpnElement          QueryParamName = "element"
 	qpnElementalResists QueryParamName = "elemental_resists"
 	qpnEmptySlots       QueryParamName = "empty_slots"
-	qpnEn				QueryParamName = "en"
-	qpnEscape       	QueryParamName = "escape"
+	qpnEscape           QueryParamName = "escape"
 	qpnEquipment        QueryParamName = "equipment"
 	qpnExpSg            QueryParamName = "exp_sg"
 	qpnFlip             QueryParamName = "flip"
@@ -84,7 +84,7 @@ const (
 	qpnOffset           QueryParamName = "offset"
 	qpnOmnisElements    QueryParamName = "omnis_elements"
 	qpnOptional         QueryParamName = "optional"
-	qpnOsgStats			QueryParamName = "osg_stats"
+	qpnOsgStats         QueryParamName = "osg_stats"
 	qpnOutsideBattle    QueryParamName = "outside_battle"
 	qpnPreAirship       QueryParamName = "pre_airship"
 	qpnRank             QueryParamName = "rank"
@@ -110,10 +110,11 @@ const (
 	qpnStatusResists    QueryParamName = "status_resists"
 	qpnStoryBased       QueryParamName = "story_based"
 	qpnSublocation      QueryParamName = "sublocation"
+	qpnState			QueryParamName = "state"
 	qpnStdSg            QueryParamName = "std_sg"
 	qpnTable            QueryParamName = "table"
 	qpnTargetType       QueryParamName = "target_type"
-	qpnText				QueryParamName = "text"
+	qpnText             QueryParamName = "text"
 	qpnTopmenu          QueryParamName = "topmenu"
 	qpnTreasures        QueryParamName = "treasures"
 	qpnTreasureType     QueryParamName = "treasure_type"
@@ -167,7 +168,7 @@ const (
 	qptNameId        QueryParamType = "name/id"
 	qptNameIdList    QueryParamType = "name/id-list"
 	qptNameIdListNul QueryParamType = "name/id-list-nul"
-	qptOther		 QueryParamType = "other"
+	qptOther         QueryParamType = "other"
 	qptStat          QueryParamType = "stat"
 	qptValue         QueryParamType = "value"
 	qptValueList     QueryParamType = "value-list"
@@ -213,12 +214,11 @@ func formatQvSlice(qvs []QueryValue) string {
 	return h.FormatStringSlice(strings)
 }
 
-
 type QuerySpecialVal string
 
 const (
-	qsvMax			QuerySpecialVal = "max"
-	qsvImmune		QuerySpecialVal = "immune"
-	qsvInfinite		QuerySpecialVal = "infinite"
-	qsvAlways		QuerySpecialVal = "always"
+	qsvMax      QuerySpecialVal = "max"
+	qsvImmune   QuerySpecialVal = "immune"
+	qsvInfinite QuerySpecialVal = "infinite"
+	qsvAlways   QuerySpecialVal = "always"
 )
