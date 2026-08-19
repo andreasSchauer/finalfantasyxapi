@@ -44,4 +44,5 @@ type handlerInputService[R any] struct {
 	queryLookup   map[QueryParamName]QueryParam
 	serviceFnGet  func(*Config, *http.Request, handlerInputService[R]) (R, error)
 	serviceFnPost func(*Config, *http.Request, handlerInputService[R]) (R, error)
+	fieldDoc	  []FieldDoc
 }

@@ -104,7 +104,7 @@ func routerEndpoints(cfg *Config, w http.ResponseWriter, r *http.Request, i hand
 		return
 
 	case 1:
-		handleEndpointsEndpointSingle(cfg, w, r, i, segments)
+		handleEndpointsEndpointSections(cfg, w, r, i, segments)
 		return
 
 	default:
@@ -113,21 +113,34 @@ func routerEndpoints(cfg *Config, w http.ResponseWriter, r *http.Request, i hand
 	}
 }
 
-// while this works, maybe do a separate POST router + handlers
-func routerService[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
+func routerServiceGet[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
 	segments := getPathSegments(r.URL.Path, i.endpoint)
 
 	switch len(segments) {
 	case 0:
-		handleEndpointService(cfg, w, r, i)
+		handleEndpointServiceGet(cfg, w, r, i)
 		return
 
 	case 1:
-		handleServiceEndpointSingle(cfg, w, r, i, segments)
+		handleServiceEndpointSections(cfg, w, r, i, segments)
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", h.FormatStringSlice(i.usage)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: /api/%s?state={json_string}", i.endpoint), nil)
+		return
+	}
+}
+
+func routerServicePost[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
+	segments := getPathSegments(r.URL.Path, i.endpoint)
+
+	switch len(segments) {
+	case 0:
+		handleEndpointServicePost(cfg, w, r, i)
+		return
+
+	default:
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: /api/%s. Use /api/%s/body to learn more about the required json format for the request body.", i.endpoint, i.endpoint), nil)
 		return
 	}
 }

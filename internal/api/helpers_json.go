@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 )
@@ -44,30 +45,38 @@ func respondWithJSON(w http.ResponseWriter, code int, payload any) {
 }
 
 
-func convertStateParam[R any](r *http.Request, queryLookup map[QueryParamName]QueryParam, response R)(R, error) {
+func convertStateParam[R any](r *http.Request, queryLookup map[QueryParamName]QueryParam, params R)(R, map[string]any, error) {
 	var zero R
 
 	state, err := checkEmptyQuery(r, queryLookup[qpnState])
 	if err != nil {
-		return zero, err
+		return zero, nil, err
 	}
 
-	err = json.Unmarshal([]byte(state), &response)
-	if err != nil {
-		return zero, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid or corrupt payload for parameter '%s'", qpnState), err)
-	}
-
-	return response, nil
+	return readJsonRequest([]byte(state), params, fmt.Sprintf("invalid or corrupt payload for parameter '%s'", qpnState))
 }
 
-func decodeJsonBody[R any](r *http.Request, params R) (R, error) {
+func decodeJsonBody[R any](r *http.Request, params R) (R, map[string]any, error) {
 	var zero R
-	decoder := json.NewDecoder(r.Body)
 
-	err := decoder.Decode(&params)
+	bodyBytes, err := io.ReadAll(r.Body)
 	if err != nil {
-		return zero, newHTTPError(http.StatusBadRequest, "invalid or corrupt payload in request body", err)
+		return zero, nil, newHTTPError(http.StatusInternalServerError, "failed to read request body", err)
 	}
 
-	return params, nil
+	return readJsonRequest(bodyBytes, params, "invalid or corrupt payload in request body")
+}
+
+func readJsonRequest[R any](data []byte, params R, errMsg string) (R, map[string]any, error) {
+	var zero R
+
+	err := json.Unmarshal(data, &params)
+	if err != nil {
+		return zero, nil, newHTTPError(http.StatusBadRequest, errMsg, err)
+	}
+
+	var payloadMap map[string]any
+	_ = json.Unmarshal(data, &payloadMap)
+
+	return params, payloadMap, nil
 }

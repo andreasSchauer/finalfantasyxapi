@@ -219,7 +219,7 @@ func handleEndpointsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Req
 }
 
 // if len(segments) is 1, this function checks if /endpoints was combined with 'parameters'. returns an error, if it wasn't
-func handleEndpointsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints, segments []string) {
+func handleEndpointsEndpointSections(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints, segments []string) {
 	segment := segments[0]
 
 	if segment == string(snParameters) {
@@ -230,41 +230,44 @@ func handleEndpointsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.R
 	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests.", nil)
 }
 
-func handleEndpointService[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
-	var response R
-	var err error
+func handleEndpointServiceGet[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
+	err := verifyQueryParamsServiceGet(r, i.endpoint, i.queryLookup)
+	if handleHTTPError(w, err) {
+		return
+	}
 
-	switch r.Method {
-	case http.MethodGet:
-		err = verifyQueryParams[any](r, i.endpoint, i.queryLookup, nil, nil)
-		if handleHTTPError(w, err) {
-			return
-		}
-
-		response, err = i.serviceFnGet(cfg, r, i)
-		if handleHTTPError(w, err) {
-			return
-		}
-
-	case http.MethodPost:
-		if len (r.URL.Query()) > 0 {
-			respondWithError(w, http.StatusBadRequest, "POST requests shouldn't have any query parameters", nil)
-			return
-		}
-		response, err = i.serviceFnPost(cfg, r, i)
-		if handleHTTPError(w, err) {
-			return
-		}
+	response, err := i.serviceFnGet(cfg, r, i)
+	if handleHTTPError(w, err) {
+		return
 	}
 
 	respondWithJSON(w, http.StatusOK, response)
 }
 
-func handleServiceEndpointSingle[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R], segments []string) {
+func handleEndpointServicePost[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
+	err := verifyQueryParamsServicePost(r)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	response, err := i.serviceFnPost(cfg, r, i)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, response)
+}
+
+func handleServiceEndpointSections[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R], segments []string) {
 	segment := segments[0]
 
 	if segment == string(snParameters) {
 		handleParameters(cfg, w, r, i.endpoint, i.queryLookup)
+		return
+	}
+
+	if segment == string(snBody) {
+		handleBody(w, i.fieldDoc)
 		return
 	}
 

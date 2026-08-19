@@ -2850,6 +2850,48 @@ func (ns NullTargetType) Value() (driver.Value, error) {
 	return string(ns.TargetType), nil
 }
 
+type TranslationDirection string
+
+const (
+	TranslationDirectionToAlBhed  TranslationDirection = "to-al-bhed"
+	TranslationDirectionToEnglish TranslationDirection = "to-english"
+)
+
+func (e *TranslationDirection) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = TranslationDirection(s)
+	case string:
+		*e = TranslationDirection(s)
+	default:
+		return fmt.Errorf("unsupported scan type for TranslationDirection: %T", src)
+	}
+	return nil
+}
+
+type NullTranslationDirection struct {
+	TranslationDirection TranslationDirection
+	Valid                bool // Valid is true if TranslationDirection is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullTranslationDirection) Scan(value interface{}) error {
+	if value == nil {
+		ns.TranslationDirection, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.TranslationDirection.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullTranslationDirection) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.TranslationDirection), nil
+}
+
 type TreasureType string
 
 const (

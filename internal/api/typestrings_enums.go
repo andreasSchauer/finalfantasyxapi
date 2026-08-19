@@ -66,6 +66,8 @@ const (
 	enumNameDelayType         			EnumName = "delay type"
 	enumNameDurationType      			EnumName = "duration type"
 	enumNameTargetType        			EnumName = "target type"
+
+	enumNameTranslationDirection		EnumName = "translation direction"
 )
 
 

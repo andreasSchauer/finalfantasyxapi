@@ -9,13 +9,13 @@ import (
 
 // Enums holds all the enum types for the application that are either used as endpoint or query param
 type Enums struct {
-	Lookup 						map[string]EnumResponse
-	AbilityType 				EnumType[database.AbilityType, any]
-	UnitType    				EnumType[database.UnitType, any]
-	ItemType   					EnumType[database.ItemType, any]
-	QuestType   				EnumType[database.QuestType, any]
-	AaActivationCondition       EnumType[database.AaActivationCondition, any]
-	ElementalAffinity           EnumType[database.ElementalAffinity, any]
+	Lookup                map[string]EnumResponse
+	AbilityType           EnumType[database.AbilityType, any]
+	UnitType              EnumType[database.UnitType, any]
+	ItemType              EnumType[database.ItemType, any]
+	QuestType             EnumType[database.QuestType, any]
+	AaActivationCondition EnumType[database.AaActivationCondition, any]
+	ElementalAffinity     EnumType[database.ElementalAffinity, any]
 	//AlterationType              EnumType[database.AlterationType, any]				// internal?
 	AreaConnectionType          EnumType[database.AreaConnectionType, any]
 	ArenaCreationCategory       EnumType[database.MaCreationCategory, database.NullMaCreationCategory]
@@ -36,7 +36,7 @@ type Enums struct {
 	EquipClass                  EnumType[database.EquipClass, any]
 	EquipType                   EnumType[database.EquipType, any]
 	ItemCategory                EnumType[database.ItemCategory, any]
-	ItemUsability				EnumType[database.ItemUsability, any]
+	ItemUsability               EnumType[database.ItemUsability, any]
 	KeyItemCategory             EnumType[database.KeyItemCategory, any]
 	LootType                    EnumType[database.LootType, any]
 	MixCategory                 EnumType[database.MixCategory, any]
@@ -53,24 +53,25 @@ type Enums struct {
 	PlayerAbilityCategory       EnumType[database.PlayerAbilityCategory, any]
 	ShopCategory                EnumType[database.ShopCategory, any]
 	//ShopType                    EnumType[database.ShopType, database.NullShopType] // internal?
-	SphereColor                 EnumType[database.SphereColor, any]
-	SphereEffect                EnumType[database.SphereEffect, any]
-	SphereGridType              EnumType[database.SphereGridType, any]
-	StatusConditionCategory     EnumType[database.StatusConditionCategory, any]
-	TreasureType                EnumType[database.TreasureType, any]
-	WeaponType                  EnumType[database.WeaponType, any]
-	AccSourceType     			EnumType[database.AccSourceType, any]
-	AttackType        			EnumType[database.AttackType, any]
-	BreakDmgLimitType 			EnumType[database.BreakDmgLmtType, database.NullBreakDmgLmtType]
-	CalculationType   			EnumType[database.CalculationType, any]
-	CriticalType      			EnumType[database.CriticalType, database.NullCriticalType]
-	CtbAttackType     			EnumType[database.CtbAttackType, any]
-	DamageFormula     			EnumType[database.DamageFormula, any]
-	DamageType        			EnumType[database.DamageType, any]
-	DelayType         			EnumType[database.DelayType, any]
-	DurationType      			EnumType[database.DurationType, any]
-	SpecialActionType 			EnumType[database.SpecialActionType, database.NullSpecialActionType]
-	TargetType        			EnumType[database.TargetType, database.NullTargetType]
+	SphereColor             EnumType[database.SphereColor, any]
+	SphereEffect            EnumType[database.SphereEffect, any]
+	SphereGridType          EnumType[database.SphereGridType, any]
+	StatusConditionCategory EnumType[database.StatusConditionCategory, any]
+	TreasureType            EnumType[database.TreasureType, any]
+	WeaponType              EnumType[database.WeaponType, any]
+	AccSourceType           EnumType[database.AccSourceType, any]
+	AttackType              EnumType[database.AttackType, any]
+	BreakDmgLimitType       EnumType[database.BreakDmgLmtType, database.NullBreakDmgLmtType]
+	CalculationType         EnumType[database.CalculationType, any]
+	CriticalType            EnumType[database.CriticalType, database.NullCriticalType]
+	CtbAttackType           EnumType[database.CtbAttackType, any]
+	DamageFormula           EnumType[database.DamageFormula, any]
+	DamageType              EnumType[database.DamageType, any]
+	DelayType               EnumType[database.DelayType, any]
+	DurationType            EnumType[database.DurationType, any]
+	SpecialActionType       EnumType[database.SpecialActionType, database.NullSpecialActionType]
+	TargetType              EnumType[database.TargetType, database.NullTargetType]
+	TranslationDirection    EnumType[database.TranslationDirection, any]
 }
 
 func (cfg *Config) EnumLookupInit() {
@@ -141,6 +142,8 @@ func (cfg *Config) EnumLookupInit() {
 	cfg.t.initDelayType()
 	cfg.t.initDurationType()
 	cfg.t.initTargetType()
+
+	cfg.t.initTranslationDirection()
 }
 
 func enumLookupToSlice(lookup map[string]EnumResponse) []EnumResponse {

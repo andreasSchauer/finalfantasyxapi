@@ -14,6 +14,7 @@ const (
 	snSimple					SectionName = "simple"
 	snSections					SectionName = "sections"
 	snParameters				SectionName = "parameters"
+	snBody						SectionName = "body"
 	snAbilities					SectionName = "abilities"
 	snAreas						SectionName = "areas"
 	snAutoAbilities				SectionName = "auto-abilities"

@@ -202,6 +202,10 @@ func (cfg *Config) HandleEndpoints(w http.ResponseWriter, r *http.Request) {
 	routerEndpoints(cfg, w, r, cfg.e.endpoints)
 }
 
-func (cfg *Config) HandleAlBhed(w http.ResponseWriter, r *http.Request) {
-	routerService(cfg, w, r, cfg.e.alBhed)
+func (cfg *Config) HandleAlBhedGet(w http.ResponseWriter, r *http.Request) {
+	routerServiceGet(cfg, w, r, cfg.e.alBhed)
+}
+
+func (cfg *Config) HandleAlBhedPost(w http.ResponseWriter, r *http.Request) {
+	routerServicePost(cfg, w, r, cfg.e.alBhed)
 }

@@ -21,15 +21,15 @@ type QueryParam struct {
 	ExampleVals        []string            `json:"-"`
 	Usage              string              `json:"usage"`
 	ExampleUses        []string            `json:"example_uses"`
-	IsExclusive        bool                `json:"only_use_alone"`
-	IsRequired         bool                `json:"is_required"`
+	IsExclusive        bool                `json:"only_use_alone,omitempty"`
+	IsRequired         bool                `json:"is_required,omitempty"`
 	ParamUse           ParamUseType        `json:"param_use_type"`
-	ForSegment         *SectionName        `json:"for_segment"`
+	ForSegment         *SectionName        `json:"for_segment,omitempty"`
 	EnumLookup         map[string]EnumVal  `json:"-"`
 	RequiredParams     []QueryParamName    `json:"required_params,omitempty"`
 	UsableWith         []QueryParamName    `json:"usable_with,omitempty"`
 	ReplacedBy         []QueryParamName    `json:"replaced_by,omitempty"`
-	ForbiddenParams    []QueryParamName    `json:"forbidden_params,omitempty"`
+	ConflictsWith      []QueryParamName    `json:"conflicts_with,omitempty"`
 	ReferencesInt      []EndpointName      `json:"-"`
 	ReferencesEnumsInt []EnumName          `json:"-"`
 	References         []string            `json:"references,omitempty"`
@@ -624,48 +624,48 @@ func (cfg *Config) initShopsParams() {
 			ReferencesInt: []EndpointName{epSublocations},
 		},
 		{
-			Name:            qpnAutoAbility,
-			Description:     "Searches for shops that offer equipment with the specified auto-ability. Can be combined with 'empty_slots' and 'character' for more specific searches. If this query param is combined with 'availability', the availability of the shop's inventory is used ('pre-story' for pre-airship inventory and 'post' for post-airship inventory).",
-			Type:            qptId,
-			ParamUse:        puList,
-			ForbiddenParams: []QueryParamName{qpnItems, qpnEquipment},
-			ReplacedBy:      []QueryParamName{qpnAvailability},
-			ReferencesInt:   []EndpointName{epAutoAbilities},
+			Name:          qpnAutoAbility,
+			Description:   "Searches for shops that offer equipment with the specified auto-ability. Can be combined with 'empty_slots' and 'character' for more specific searches. If this query param is combined with 'availability', the availability of the shop's inventory is used ('pre-story' for pre-airship inventory and 'post' for post-airship inventory).",
+			Type:          qptId,
+			ParamUse:      puList,
+			ConflictsWith: []QueryParamName{qpnItems, qpnEquipment},
+			ReplacedBy:    []QueryParamName{qpnAvailability},
+			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
 		{
 			Name:            qpnEmptySlots,
 			Description:     "Searches for shops that offer equipment with the specified amounts of empty slots. Can be combined with 'auto_ability' and 'character' for more specific searches. If this query param is combined with 'availability', the availability of the shop's inventory is used ('pre-story' for pre-airship inventory and 'post' for post-airship inventory).",
 			Type:            qptIntList,
 			ParamUse:        puList,
-			ForbiddenParams: []QueryParamName{qpnItems, qpnEquipment},
+			ConflictsWith:   []QueryParamName{qpnItems, qpnEquipment},
 			ReplacedBy:      []QueryParamName{qpnAvailability},
 			AllowedIntRange: []int{0, 4},
 		},
 		{
-			Name:            qpnCharacter,
-			Description:     "Searches for shops that offer equipment for the specified character. Can be combined with 'auto_ability', 'empty_slots', and 'availability' for more specific searches. If this query param is combined with 'availability', the availability of the shop's inventory is used ('pre-story' for pre-airship inventory and 'post' for post-airship inventory).",
-			Type:            qptNameId,
-			ExampleVals:     []string{"wakka"},
-			ParamUse:        puList,
-			ForbiddenParams: []QueryParamName{qpnItems, qpnEquipment},
-			ReplacedBy:      []QueryParamName{qpnAvailability},
-			ReferencesInt:   []EndpointName{epCharacters},
+			Name:          qpnCharacter,
+			Description:   "Searches for shops that offer equipment for the specified character. Can be combined with 'auto_ability', 'empty_slots', and 'availability' for more specific searches. If this query param is combined with 'availability', the availability of the shop's inventory is used ('pre-story' for pre-airship inventory and 'post' for post-airship inventory).",
+			Type:          qptNameId,
+			ExampleVals:   []string{"wakka"},
+			ParamUse:      puList,
+			ConflictsWith: []QueryParamName{qpnItems, qpnEquipment},
+			ReplacedBy:    []QueryParamName{qpnAvailability},
+			ReferencesInt: []EndpointName{epCharacters},
 		},
 		{
-			Name:            qpnItems,
-			Description:     "Searches for shops that offer items. If this query param is combined with 'availability', the availability of the shop's inventory is used ('pre-story' for pre-airship inventory and 'post' for post-airship inventory).",
-			Type:            qptBool,
-			ParamUse:        puList,
-			ForbiddenParams: []QueryParamName{qpnAutoAbility, qpnCharacter, qpnEmptySlots},
-			ReplacedBy:      []QueryParamName{qpnAvailability},
+			Name:          qpnItems,
+			Description:   "Searches for shops that offer items. If this query param is combined with 'availability', the availability of the shop's inventory is used ('pre-story' for pre-airship inventory and 'post' for post-airship inventory).",
+			Type:          qptBool,
+			ParamUse:      puList,
+			ConflictsWith: []QueryParamName{qpnAutoAbility, qpnCharacter, qpnEmptySlots},
+			ReplacedBy:    []QueryParamName{qpnAvailability},
 		},
 		{
-			Name:            qpnEquipment,
-			Description:     "Searches for shops that offer equipment. If this query param is combined with 'availability', the availability of the shop's inventory is used ('pre-story' for pre-airship inventory and 'post' for post-airship inventory).",
-			Type:            qptBool,
-			ParamUse:        puList,
-			ForbiddenParams: []QueryParamName{qpnAutoAbility, qpnCharacter, qpnEmptySlots},
-			ReplacedBy:      []QueryParamName{qpnAvailability},
+			Name:          qpnEquipment,
+			Description:   "Searches for shops that offer equipment. If this query param is combined with 'availability', the availability of the shop's inventory is used ('pre-story' for pre-airship inventory and 'post' for post-airship inventory).",
+			Type:          qptBool,
+			ParamUse:      puList,
+			ConflictsWith: []QueryParamName{qpnAutoAbility, qpnCharacter, qpnEmptySlots},
+			ReplacedBy:    []QueryParamName{qpnAvailability},
 		},
 	}
 
@@ -2450,20 +2450,20 @@ func (cfg *Config) initPrimersParams() {
 func (cfg *Config) initMixesParams() {
 	params := []QueryParam{
 		{
-			Name:            qpnContainsItem,
-			Description:     "Modifies combinations to only display item combinations that include the specified item.",
-			Type:            qptNameId,
-			ExampleVals:     []string{"grenade", "power_sphere"},
-			ParamUse:        puSingle,
-			ForbiddenParams: []QueryParamName{qpnBest},
-			ReferencesInt:   []EndpointName{epItems},
+			Name:          qpnContainsItem,
+			Description:   "Modifies combinations to only display item combinations that include the specified item.",
+			Type:          qptNameId,
+			ExampleVals:   []string{"grenade", "power_sphere"},
+			ParamUse:      puSingle,
+			ConflictsWith: []QueryParamName{qpnBest},
+			ReferencesInt: []EndpointName{epItems},
 		},
 		{
-			Name:            qpnBest,
-			Description:     "Modifies combinations to only display the easiest item combinations to accumulate (hand-picked by the dev).",
-			Type:            qptBool,
-			ParamUse:        puSingle,
-			ForbiddenParams: []QueryParamName{qpnContainsItem},
+			Name:          qpnBest,
+			Description:   "Modifies combinations to only display the easiest item combinations to accumulate (hand-picked by the dev).",
+			Type:          qptBool,
+			ParamUse:      puSingle,
+			ConflictsWith: []QueryParamName{qpnContainsItem},
 		},
 		{
 			Name:               qpnCategory,
@@ -2861,33 +2861,8 @@ func (cfg *Config) initAgilityTierParams() {
 }
 
 func (cfg *Config) initAlBhedParams() {
-	params := []QueryParam{
-		{
-			Name: 			qpnState,
-			Description: 	"",
-			Type: 			qptOther,
-			Usage: 			"",
-			ParamUse: 		puList,
-		},
-		{
-			Name:        qpnText,
-			Description: "States the text you want to be translated. You can wrap letters that are already translated into square brackets to keep them unchanged. By default, it is assumed that you want to translate al bhed text into english.",
-			Type:        qptOther,
-			Usage:       "?text=cysbma%20daqd, ?text=c[am]bma%20da[x]d",
-			IsRequired:  true,
-			ParamUse:    puService,
-		},
-		{
-			Name:           qpnDirection,
-			Description:    "When this parameter is true, the text will be translated from english into al bhed",
-			Type:           qptValue,
-			ParamUse:       puService,
-			RequiredParams: []QueryParamName{qpnText},
-			AllowedValues:  []QueryValue{qvToAlBhed, qvToEnglish},
-		},
-	}
-
-	paramsMap := querySliceToMap(cfg, params)
+	exampleUses := []string{}
+	paramsMap := cfg.initComputeEndpointQueryParams(epAlBhed, exampleUses)
 	cfg.q.alBhed = paramsMap
 	cfg.e.alBhed.queryLookup = paramsMap
 }

@@ -1030,10 +1030,11 @@ func (cfg *Config) EndpointsInit() {
 	}
 
 	e.alBhed = handlerInputService[AlBhedResponse]{
-		endpoint:     epAlBhed,
-		usage:        []string{"/api/al-bhed?text=ajanouha%20ihtan", "/api/al-bhed?text=aja[ryon]a%20i[n]ta[r]", "/api/al-bhed?en=true&text=everyone%20under"},
-		serviceFnGet: serviceAlBhedGet,
-		serviceFnPost: serviceAlBhedPost,
+		endpoint:       epAlBhed,
+		usage:          []string{"/api/al-bhed?state={json_string}"},
+		serviceFnGet:   serviceAlBhedGet,
+		serviceFnPost:  serviceAlBhedPost,
+		fieldDoc: 		cfg.getAlBhedFieldDoc(),
 	}
 
 	cfg.e = &e

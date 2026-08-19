@@ -10,6 +10,21 @@ func (cfg *Config) assignDefaultParams(sections map[SectionName]Subsection) map[
 	return cfg.completeQueryParamsInit([]QueryParam{}, sections)
 }
 
+func (cfg *Config) initComputeEndpointQueryParams(endpoint EndpointName, exampleUses []string) map[QueryParamName]QueryParam {
+	params := []QueryParam{
+		{
+			Name: 			qpnState,
+			Description: 	fmt.Sprintf("Uses a stringified json body to assemble all the params needed for the computation. The body can be manually assembled. Using the POST method returns a URL with the body automatically assembled. Use /%s/body to learn more about the required json structure.", endpoint),
+			Type: 			qptOther,
+			Usage: 			"?state={json_string}",
+			ExampleUses: 	exampleUses,
+			ParamUse: 		puService,
+		},
+	}
+
+	return querySliceToMap(cfg, params)
+}
+
 func (cfg *Config) completeQueryParamsInit(params []QueryParam, sections map[SectionName]Subsection) map[QueryParamName]QueryParam {
 	params = slices.Concat(params, cfg.q.defaultParamSlice)
 

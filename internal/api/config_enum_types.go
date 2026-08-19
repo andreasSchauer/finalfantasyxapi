@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -494,11 +495,11 @@ func (t *Enums) initBgReplacementType() {
 
 	typeSlice := []EnumVal{
 		{
-			Name: string(database.BgReplacementTypeUntilTrigger),
+			Name:        string(database.BgReplacementTypeUntilTrigger),
 			Description: "The background music continues playing until a certain story- or event-trigger occurs.",
 		},
 		{
-			Name: string(database.BgReplacementTypeUntilZoneChange),
+			Name:        string(database.BgReplacementTypeUntilZoneChange),
 			Description: "The background music continues playing until the current area is left and a zone-change occurs.",
 		},
 	}
@@ -1770,27 +1771,27 @@ func (t *Enums) initSphereColor() {
 
 	typeSlice := []EnumVal{
 		{
-			Name: string(database.SphereColorRed),
+			Name:        string(database.SphereColorRed),
 			Description: "Spheres that activate adjacent stat- and ability-nodes.",
 		},
 		{
-			Name: string(database.SphereColorYellow),
+			Name:        string(database.SphereColorYellow),
 			Description: "Spheres that activate remote nodes that, in most cases, have been activated by another character.",
 		},
 		{
-			Name: string(database.SphereColorBlack),
+			Name:        string(database.SphereColorBlack),
 			Description: "Key spheres that remove sphere locks.",
 		},
 		{
-			Name: string(database.SphereColorPurple),
+			Name:        string(database.SphereColorPurple),
 			Description: "Spheres that transform empty nodes into stat-nodes.",
 		},
 		{
-			Name: string(database.SphereColorBlue),
+			Name:        string(database.SphereColorBlue),
 			Description: "Reserved for the Clear Sphere, which transforms a stat-node into an empty node.",
 		},
 		{
-			Name: string(database.SphereColorWhite),
+			Name:        string(database.SphereColorWhite),
 			Description: "Spheres that move the user to a remote place on the grid.",
 		},
 	}
@@ -2005,15 +2006,15 @@ func (t *Enums) initAttackType() {
 
 	typeSlice := []EnumVal{
 		{
-			Name: string(database.AttackTypeAttack),
+			Name:        string(database.AttackTypeAttack),
 			Description: "The action deals damage.",
 		},
 		{
-			Name: string(database.AttackTypeHeal),
+			Name:        string(database.AttackTypeHeal),
 			Description: "The action restores HP/MP.",
 		},
 		{
-			Name: string(database.AttackTypeAbsorb),
+			Name:        string(database.AttackTypeAbsorb),
 			Description: "The action deals damage and restores the same amount to its user.",
 		},
 	}
@@ -2475,6 +2476,34 @@ func (t *Enums) initTargetType() {
 		Name:               enumNameTargetType,
 		Description:        enumDescription,
 		UsedByEndpointsInt: []EndpointName{epAbilities, epPlayerAbilities, epOverdriveAbilities, epItemAbilities, epTriggerCommands, epMiscAbilities, epEnemyAbilities, epAeonCommands, epOverdrives},
+		Values:             getEnumValIDs(typeSlice),
+	}
+}
+
+func (t *Enums) initTranslationDirection() {
+	enumDescription := fmt.Sprintf("Determines the direction of translation for the /%s endpoint.", epAlBhed)
+
+	typeSlice := []EnumVal{
+		{
+			Name:        string(database.TranslationDirectionToAlBhed),
+			Description: "The given text is translated from English to Al Bhed.",
+		},
+		{
+			Name:        string(database.TranslationDirectionToEnglish),
+			Description: "The given text is translated from Al Bhed to English.",
+		},
+	}
+
+	t.TranslationDirection = EnumType[database.TranslationDirection, any]{
+		name:     enumNameTranslationDirection,
+		lookup:   enumSliceToMap(typeSlice),
+		convFunc: func(s string) database.TranslationDirection { return database.TranslationDirection(s) },
+	}
+
+	t.Lookup[getEnumKey(enumNameTranslationDirection)] = EnumResponse{
+		Name:               enumNameTranslationDirection,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{epAlBhed},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }

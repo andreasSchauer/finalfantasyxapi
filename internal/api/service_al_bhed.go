@@ -3,81 +3,73 @@ package api
 import (
 	"net/http"
 	"unicode"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type AlBhedParams struct {
-	Text      string     `json:"text"`
-	Direction QueryValue `json:"direction"`
-}
 
 type AlBhedResponse struct {
 	URL            string     `json:"url"`
 	TranslatedText string     `json:"translated_text"`
 	OriginalText   string     `json:"original_text"`
-	Direction      QueryValue `json:"direction"`
+	Direction      string 	  `json:"direction"`
 }
 
-const (
-	qvToAlBhed  QueryValue = "to-al-bhed"
-	qvToEnglish QueryValue = "to-english"
-)
 
+// the serviceGet and servicePost functions look like two functions that can probably be replaced by a generic function.
+// they basically take the verifyFn and the serviceFn as extras
+// could also make them methods of AlBhedParams (*params.verify, params.execute) and create one or two interfaces
 func serviceAlBhedGet(cfg *Config, r *http.Request, i handlerInputService[AlBhedResponse]) (AlBhedResponse, error) {
-	params, err := initAlBhedParams(r, i.queryLookup)
+	var params AlBhedParams
+	params, payloadMap, err := convertStateParam(r, i.queryLookup, params)
 	if err != nil {
 		return AlBhedResponse{}, err
 	}
 
-	return translateAlBhed(cfg, i, params)
+	url, err := convertToStateURL(cfg, string(i.endpoint), params)
+	if err != nil {
+		return AlBhedResponse{}, err
+	}
+
+	params, err = verifyAlBhedParams(cfg, params, payloadMap)
+	if err != nil {
+		return AlBhedResponse{}, err
+	}
+
+	return translateAlBhed(cfg, params, url)
 }
+
 
 func serviceAlBhedPost(cfg *Config, r *http.Request, i handlerInputService[AlBhedResponse]) (AlBhedResponse, error) {
 	var params AlBhedParams
-	params, err := decodeJsonBody(r, params)
+	params, payloadMap, err := decodeJsonBody(r, params)
 	if err != nil {
 		return AlBhedResponse{}, err
 	}
 
-	return translateAlBhed(cfg, i, params)
+	url, err := convertToStateURL(cfg, string(i.endpoint), params)
+	if err != nil {
+		return AlBhedResponse{}, err
+	}
+
+	params, err = verifyAlBhedParams(cfg, params, payloadMap)
+	if err != nil {
+		return AlBhedResponse{}, err
+	}
+
+	return translateAlBhed(cfg, params, url)
 }
 
 
-func initAlBhedParams(r *http.Request, queryLookup map[QueryParamName]QueryParam) (AlBhedParams, error) {
-	var response AlBhedParams
 
-	response, err := convertStateParam(r, queryLookup, response)
-	if errExceptEmptyQuery(err) {
-		return AlBhedParams{}, err
-	}
-	if !queryIsEmpty(err) {
-		return response, nil
-	}
-
-	response.Direction = qvToAlBhed
-
-	direction, err := parseValueQuery(r, queryLookup[qpnDirection])
-	if errExceptEmptyQuery(err) {
-		return AlBhedParams{}, err
-	}
-	if direction == string(qvToEnglish) {
-		response.Direction = qvToEnglish
-	}
-
-	text, err := parseTextQuery(r, queryLookup[qpnText])
-	if errExceptEmptyQuery(err) {
-		return AlBhedParams{}, err
-	}
-	response.Text = text
-
-	return response, nil
-}
-
-func translateAlBhed(cfg *Config, i handlerInputService[AlBhedResponse], params AlBhedParams) (AlBhedResponse, error) {
-	charLookup := initCharLookup(cfg, params.Direction)
+func translateAlBhed(cfg *Config, params AlBhedParams, url string) (AlBhedResponse, error) {
 	response := AlBhedResponse{
 		OriginalText: params.Text,
 		Direction:    params.Direction,
+		URL: 		  url,
 	}
+	
+	charLookup := initCharLookup(cfg, params.Direction)
 	translatedRunes := []rune{}
 	translate := true
 	var err error
@@ -128,10 +120,6 @@ func translateAlBhed(cfg *Config, i handlerInputService[AlBhedResponse], params 
 	}
 
 	response.TranslatedText = string(translatedRunes)
-	response.URL, err = convertToStateURL(cfg, string(i.endpoint), params)
-	if err != nil {
-		return AlBhedResponse{}, err
-	}
 
 	return response, nil
 }
@@ -144,14 +132,14 @@ func setTranslator(translate, newState bool) (bool, error) {
 	return newState, nil
 }
 
-func initCharLookup(cfg *Config, direction QueryValue) map[rune]rune {
+func initCharLookup(cfg *Config, direction string) map[rune]rune {
 	charLookup := make(map[rune]rune)
 
 	for _, primer := range cfg.l.Primers {
 		alBhedChar := charToRune(primer.AlBhedLetter)
 		englishChar := charToRune(primer.EnglishLetter)
 
-		if direction == qvToAlBhed {
+		if direction == string(database.TranslationDirectionToAlBhed) {
 			charLookup[englishChar] = alBhedChar
 			continue
 		}

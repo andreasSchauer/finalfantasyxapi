@@ -64,6 +64,17 @@ func createEnumValSlice(lookup map[string]EnumVal) []EnumVal {
 	return vals
 }
 
+func createEnumStringSlice(lookup map[string]EnumVal) []string {
+	enumVals := createEnumValSlice(lookup)
+	strings := []string{}
+
+	for _, val := range enumVals {
+		strings = append(strings, val.Name)
+	}
+
+	return strings
+}
+
 func enumSliceToMap(enumVals []EnumVal) map[string]EnumVal {
 	typeMap := make(map[string]EnumVal)
 

@@ -18,7 +18,7 @@ func vpContext(q url.Values, queryParam QueryParam, queryLookup map[QueryParamNa
 		return err
 	}
 
-	err = vpForbidden(q, queryParam)
+	err = vpConflictsWith(q, queryParam)
 	if err != nil {
 		return err
 	}
@@ -36,8 +36,6 @@ func isDefaultParam(cfg *Config, queryName QueryParamName) bool {
 	_, ok := cfg.q.defaultParams[queryName]
 	return ok
 }
-
-
 
 // verifies the use of an exclusive query param
 func vpExclusive(q url.Values, queryParam QueryParam, queryLookup map[QueryParamName]QueryParam) error {
@@ -81,17 +79,17 @@ func vpRequired(q url.Values, queryParam QueryParam) error {
 	return nil
 }
 
-// checks, if a forbidden query parameter of the requested query param is present. returns an error, if at least one forbidden param is present.
-func vpForbidden(q url.Values, queryParam QueryParam) error {
-	if queryParam.ForbiddenParams == nil {
+// checks, if a conflicting query parameter of the requested query param is present. returns an error, if at least one conflicting param is present.
+func vpConflictsWith(q url.Values, queryParam QueryParam) error {
+	if queryParam.ConflictsWith == nil {
 		return nil
 	}
 
-	for _, fbParam := range queryParam.ForbiddenParams {
-		fbParamVal := q.Get(string(fbParam))
+	for _, conflictParam := range queryParam.ConflictsWith {
+		fbParamVal := q.Get(string(conflictParam))
 
 		if fbParamVal != "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can't be used in combination with the following parameter(s): %s.", queryParam.Name, queryParam.Name, formatQpnSlice(queryParam.ForbiddenParams)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can't be used in combination with the following parameter(s): %s.", queryParam.Name, queryParam.Name, formatQpnSlice(queryParam.ConflictsWith)), nil)
 		}
 	}
 
