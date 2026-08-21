@@ -175,21 +175,21 @@ func setupTest[T any](t *testing.T, tc testGeneral, testName string, handlerFunc
 		req.Header.Set("Content-Type", "application/json")
 	}
 
-	rr := httptest.NewRecorder()
+	res := httptest.NewRecorder()
 
 	handler := http.HandlerFunc(handlerFunc)
-	handler.ServeHTTP(rr, req)
+	handler.ServeHTTP(res, req)
 
-	if rr.Code != tc.expectedStatus {
-		if rr.Code >= 400 {
-			t.Fatalf("expected status: %d, got %d, body=%s\n\n", tc.expectedStatus, rr.Code, rr.Body.String())
+	if res.Code != tc.expectedStatus {
+		if res.Code >= 400 {
+			t.Fatalf("expected status: %d, got %d, body=%s\n\n", tc.expectedStatus, res.Code, res.Body.String())
 		}
 			
-		t.Fatalf("expected status: %d, got %d\n\n", tc.expectedStatus, rr.Code,)
+		t.Fatalf("expected status: %d, got %d\n\n", tc.expectedStatus, res.Code,)
 	}
 
 	if tc.expectedErr != "" {
-		rawErr := rr.Body.String()
+		rawErr := res.Body.String()
 		if !strings.Contains(rawErr, tc.expectedErr) {
 			t.Fatalf("error mismatch.\n- want: %s\n- got %s\n\n", tc.expectedErr, rawErr)
 		}
@@ -197,7 +197,7 @@ func setupTest[T any](t *testing.T, tc testGeneral, testName string, handlerFunc
 	}
 
 	var got T
-	if err := json.NewDecoder(rr.Body).Decode(&got); err != nil {
+	if err := json.NewDecoder(res.Body).Decode(&got); err != nil {
 		t.Fatalf("failed to decode: %v\n\n", err)
 	}
 

@@ -43,6 +43,6 @@ type handlerInputService[P ServiceParams, R ServiceResponse] struct {
 	usage       []string
 	queryLookup map[QueryParamName]QueryParam
 	paramsDoc   ParamsDoc
-	verifyFn    func(*Config, P, map[string]any) (P, error)
+	verifyFn    func(*Config, P, map[FieldName]any) (P, error)
 	executeFn   func(*Config, P, string) (R, error)
 }

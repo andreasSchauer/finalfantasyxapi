@@ -24,7 +24,7 @@ func servicePost[P ServiceParams, R ServiceResponse](cfg *Config, r *http.Reques
 }
 
 
-func compute[P ServiceParams, R ServiceResponse](cfg *Config, i handlerInputService[P, R], params P, payloadMap map[string]any) (R, error) {
+func compute[P ServiceParams, R ServiceResponse](cfg *Config, i handlerInputService[P, R], params P, payloadMap map[FieldName]any) (R, error) {
 	var zero R
 
 	url, err := paramsToStateURL(cfg, i.endpoint, params)

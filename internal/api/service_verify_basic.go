@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func basicFieldChecks[T any](val T, fieldName string, values map[string]any, lookup map[string]FieldDoc) (T, error) {
+func basicFieldChecks[T any](val T, fieldName FieldName, values map[FieldName]any, lookup map[FieldName]FieldDoc) (T, error) {
 	var zero T
 	rules := lookup[fieldName]
 	valIsPresent := hasVal(val)
@@ -31,7 +29,7 @@ func basicFieldChecks[T any](val T, fieldName string, values map[string]any, loo
 	return assignDefaultVal(val, valIsPresent, rules), nil
 }
 
-func vfRequired(fieldName string, rules FieldDoc, valIsPresent bool) error {
+func vfRequired(fieldName FieldName, rules FieldDoc, valIsPresent bool) error {
 	if !valIsPresent && rules.Required {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be empty.", fieldName), nil)
 	}
@@ -39,7 +37,7 @@ func vfRequired(fieldName string, rules FieldDoc, valIsPresent bool) error {
 	return nil
 }
 
-func vfConflictsWith(fieldName string, rules FieldDoc, valIsPresent bool, values map[string]any, lookup map[string]FieldDoc) error {
+func vfConflictsWith(fieldName FieldName, rules FieldDoc, valIsPresent bool, values map[FieldName]any, lookup map[FieldName]FieldDoc) error {
 	if rules.ConflictsWith == nil {
 		return nil
 	}
@@ -53,7 +51,7 @@ func vfConflictsWith(fieldName string, rules FieldDoc, valIsPresent bool, values
 	return nil
 }
 
-func vfRequiredOr(fieldName string, rules FieldDoc, valIsPresent bool) error {
+func vfRequiredOr(fieldName FieldName, rules FieldDoc, valIsPresent bool) error {
 	if rules.RequiredOr == nil || valIsPresent {
 		return nil
 	}
@@ -69,7 +67,7 @@ func vfRequiredOr(fieldName string, rules FieldDoc, valIsPresent bool) error {
 
 	if !onePresent {
 		requiredFields := append(rules.RequiredOr, fieldName)
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: '%s'.", h.FormatStringSlice(requiredFields)), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: '%s'.", formatPfnSlice(requiredFields)), nil)
 	}
 
 	return nil

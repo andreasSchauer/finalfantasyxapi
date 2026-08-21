@@ -9,7 +9,7 @@ func (p AlBhedParams) GetDoc(cfg *Config) ParamsDoc {
 	return cfg.getAlBhedParamsDoc()
 }
 
-func verifyAlBhedParams(cfg *Config, params AlBhedParams, payloadMap map[string]any) (AlBhedParams, error) {
+func verifyAlBhedParams(cfg *Config, params AlBhedParams, payloadMap map[FieldName]any) (AlBhedParams, error) {
 	var err error
 
 	lookup := paramsDocToFieldMap(params.GetDoc(cfg))

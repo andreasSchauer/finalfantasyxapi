@@ -5,7 +5,7 @@ package api
 
 
 // verifies, if a field fulfills all its conditions. assigns a default value, if the field is empty. if the field is of a certain type, a type-specific verification function can be performed on the typed value.
-func verifyParamField[T any](val T, fieldName string, values map[string]any, lookup map[string]FieldDoc, verifyFn func(T, string, FieldDoc) error) (T, error) {
+func verifyParamField[T any](val T, fieldName FieldName, values map[FieldName]any, lookup map[FieldName]FieldDoc, verifyFn func(T, FieldName, FieldDoc) error) (T, error) {
 	var zero T
 	rules := lookup[fieldName]
 	
@@ -25,7 +25,7 @@ func verifyParamField[T any](val T, fieldName string, values map[string]any, loo
 }
 
 // verifies, if a pointer-field fulfills all its conditions. the basic checks are performed on the pointer itself. after that, the pointer is safely dereferenced and a type-specific verification function can be performed on the pointer's typed value. a pointer will never have a default value since it's optional.
-func verifyParamFieldPtr[T any](ptr *T, fieldName string, values map[string]any, lookup map[string]FieldDoc, verifyFn func(T, string, FieldDoc) error) (*T, error) {
+func verifyParamFieldPtr[T any](ptr *T, fieldName FieldName, values map[FieldName]any, lookup map[FieldName]FieldDoc, verifyFn func(T, FieldName, FieldDoc) error) (*T, error) {
 	rules := lookup[fieldName]
 	
 	ptr, err := basicFieldChecks(ptr, fieldName, values, lookup)
@@ -48,7 +48,7 @@ func verifyParamFieldPtr[T any](ptr *T, fieldName string, values map[string]any,
 }
 
 // verifies, if an array-field fulfills all its conditions. the basic checks as well as a max length check are performed on the array itself. after that, a type-specific verification function can be performed on each of the array's items.
-func verifyParamFieldArr[T any](arr []T, fieldName string, values map[string]any, lookup map[string]FieldDoc, verifyFn func(T, string, FieldDoc) error) ([]T, error) {
+func verifyParamFieldArr[T any](arr []T, fieldName FieldName, values map[FieldName]any, lookup map[FieldName]FieldDoc, verifyFn func(T, FieldName, FieldDoc) error) ([]T, error) {
 	rules := lookup[fieldName]
 	
 	arr, err := basicFieldChecks(arr, fieldName, values, lookup)

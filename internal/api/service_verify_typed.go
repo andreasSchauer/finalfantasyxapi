@@ -6,7 +6,7 @@ import (
 )
 
 
-func vfIntId(val int32, fieldName string, rules FieldDoc) error {
+func vfIntId(val int32, fieldName FieldName, rules FieldDoc) error {
 	if 	(rules.MinVal != nil && val < *rules.MinVal) ||
 		(rules.MaxVal != nil && val > *rules.MaxVal) {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("value '%d' of field '%s' is out of range. allowed range: %d to %d.", val, fieldName, *rules.MinVal, *rules.MaxVal), nil)
@@ -15,7 +15,7 @@ func vfIntId(val int32, fieldName string, rules FieldDoc) error {
 	return nil
 }
 
-func vfEnum(typedVal string, fieldName string, rules FieldDoc) error {
+func vfEnum(typedVal string, fieldName FieldName, rules FieldDoc) error {
 	if rules.EnumValues == nil {
 		return nil
 	}
@@ -35,7 +35,7 @@ func vfEnum(typedVal string, fieldName string, rules FieldDoc) error {
 	return nil
 }
 
-func vfArray[T any](arr []T, fieldName string, rules FieldDoc) error {
+func vfArray[T any](arr []T, fieldName FieldName, rules FieldDoc) error {
 	if rules.MaxArrayLen == nil {
 		return nil
 	}

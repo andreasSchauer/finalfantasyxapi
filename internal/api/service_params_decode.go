@@ -8,7 +8,7 @@ import (
 )
 
 
-func getParamsStateURL[P any](r *http.Request, queryLookup map[QueryParamName]QueryParam) (P, map[string]any, error) {
+func getParamsStateURL[P any](r *http.Request, queryLookup map[QueryParamName]QueryParam) (P, map[FieldName]any, error) {
 	var zero P
 	var params P
 
@@ -20,7 +20,7 @@ func getParamsStateURL[P any](r *http.Request, queryLookup map[QueryParamName]Qu
 	return readJsonRequest([]byte(state), params, fmt.Sprintf("invalid or corrupt payload for parameter '%s'", qpnState))
 }
 
-func getParamsJsonBody[P any](r *http.Request) (P, map[string]any, error) {
+func getParamsJsonBody[P any](r *http.Request) (P, map[FieldName]any, error) {
 	var zero P
 	var params P
 
@@ -32,7 +32,7 @@ func getParamsJsonBody[P any](r *http.Request) (P, map[string]any, error) {
 	return readJsonRequest(bodyBytes, params, "invalid or corrupt payload in request body")
 }
 
-func readJsonRequest[P any](data []byte, params P, errMsg string) (P, map[string]any, error) {
+func readJsonRequest[P any](data []byte, params P, errMsg string) (P, map[FieldName]any, error) {
 	var zero P
 
 	err := json.Unmarshal(data, &params)
@@ -40,7 +40,7 @@ func readJsonRequest[P any](data []byte, params P, errMsg string) (P, map[string
 		return zero, nil, newHTTPError(http.StatusBadRequest, errMsg, err)
 	}
 
-	var payloadMap map[string]any
+	var payloadMap map[FieldName]any
 	_ = json.Unmarshal(data, &payloadMap)
 
 	return params, payloadMap, nil
