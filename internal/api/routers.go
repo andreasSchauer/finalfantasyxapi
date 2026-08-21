@@ -113,7 +113,7 @@ func routerEndpoints(cfg *Config, w http.ResponseWriter, r *http.Request, i hand
 	}
 }
 
-func routerServiceGet[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
+func routerServiceGet[P ServiceParams, R ServiceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
 	segments := getPathSegments(r.URL.Path, i.endpoint)
 
 	switch len(segments) {
@@ -131,7 +131,7 @@ func routerServiceGet[R any](cfg *Config, w http.ResponseWriter, r *http.Request
 	}
 }
 
-func routerServicePost[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
+func routerServicePost[P ServiceParams, R ServiceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
 	segments := getPathSegments(r.URL.Path, i.endpoint)
 
 	switch len(segments) {

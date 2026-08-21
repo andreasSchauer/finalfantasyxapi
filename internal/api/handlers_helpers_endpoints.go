@@ -230,13 +230,13 @@ func handleEndpointsEndpointSections(cfg *Config, w http.ResponseWriter, r *http
 	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests.", nil)
 }
 
-func handleEndpointServiceGet[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
+func handleEndpointServiceGet[P ServiceParams, R ServiceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
 	err := verifyQueryParamsServiceGet(r, i.endpoint, i.queryLookup)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	response, err := i.serviceFnGet(cfg, r, i)
+	response, err := serviceGet(cfg, r, i)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -244,13 +244,13 @@ func handleEndpointServiceGet[R any](cfg *Config, w http.ResponseWriter, r *http
 	respondWithJSON(w, http.StatusOK, response)
 }
 
-func handleEndpointServicePost[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R]) {
+func handleEndpointServicePost[P ServiceParams, R ServiceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
 	err := verifyQueryParamsServicePost(r)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	response, err := i.serviceFnPost(cfg, r, i)
+	response, err := servicePost(cfg, r, i)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -258,7 +258,7 @@ func handleEndpointServicePost[R any](cfg *Config, w http.ResponseWriter, r *htt
 	respondWithJSON(w, http.StatusOK, response)
 }
 
-func handleServiceEndpointSections[R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[R], segments []string) {
+func handleServiceEndpointSections[P ServiceParams, R ServiceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
 	segment := segments[0]
 
 	if segment == string(snParameters) {
@@ -267,7 +267,7 @@ func handleServiceEndpointSections[R any](cfg *Config, w http.ResponseWriter, r 
 	}
 
 	if segment == string(snBody) {
-		handleBody(w, i.fieldDoc)
+		handleBody(w, i.paramsDoc)
 		return
 	}
 

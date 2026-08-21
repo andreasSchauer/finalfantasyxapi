@@ -58,7 +58,7 @@ type endpoints struct {
 	agilityTiers       handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]
 	enums              handlerInputEnums
 	endpoints          handlerInputEndpoints
-	alBhed             handlerInputService[AlBhedResponse]
+	alBhed             handlerInputService[AlBhedParams, AlBhedResponse]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -1029,12 +1029,12 @@ func (cfg *Config) EndpointsInit() {
 		usage:    []string{"/api/endpoints"},
 	}
 
-	e.alBhed = handlerInputService[AlBhedResponse]{
-		endpoint:       epAlBhed,
-		usage:          []string{"/api/al-bhed?state={json_string}"},
-		serviceFnGet:   serviceAlBhedGet,
-		serviceFnPost:  serviceAlBhedPost,
-		fieldDoc: 		cfg.getAlBhedFieldDoc(),
+	e.alBhed = handlerInputService[AlBhedParams, AlBhedResponse]{
+		endpoint:  epAlBhed,
+		usage:     []string{"/api/al-bhed?state={json_string}"},
+		paramsDoc: cfg.getAlBhedParamsDoc(),
+		verifyFn:  verifyAlBhedParams,
+		executeFn: translateAlBhed,
 	}
 
 	cfg.e = &e

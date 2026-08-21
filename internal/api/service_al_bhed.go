@@ -9,66 +9,24 @@ import (
 
 
 type AlBhedResponse struct {
-	URL            string     `json:"url"`
-	TranslatedText string     `json:"translated_text"`
-	OriginalText   string     `json:"original_text"`
-	Direction      string 	  `json:"direction"`
+	URL            string `json:"url"`
+	TranslatedText string `json:"translated_text"`
+	OriginalText   string `json:"original_text"`
+	Direction      string `json:"direction"`
 }
 
-
-// the serviceGet and servicePost functions look like two functions that can probably be replaced by a generic function.
-// they basically take the verifyFn and the serviceFn as extras
-// could also make them methods of AlBhedParams (*params.verify, params.execute) and create one or two interfaces
-func serviceAlBhedGet(cfg *Config, r *http.Request, i handlerInputService[AlBhedResponse]) (AlBhedResponse, error) {
-	var params AlBhedParams
-	params, payloadMap, err := convertStateParam(r, i.queryLookup, params)
-	if err != nil {
-		return AlBhedResponse{}, err
-	}
-
-	url, err := convertToStateURL(cfg, string(i.endpoint), params)
-	if err != nil {
-		return AlBhedResponse{}, err
-	}
-
-	params, err = verifyAlBhedParams(cfg, params, payloadMap)
-	if err != nil {
-		return AlBhedResponse{}, err
-	}
-
-	return translateAlBhed(cfg, params, url)
+func (r AlBhedResponse) GetURL() string {
+	return r.URL
 }
-
-
-func serviceAlBhedPost(cfg *Config, r *http.Request, i handlerInputService[AlBhedResponse]) (AlBhedResponse, error) {
-	var params AlBhedParams
-	params, payloadMap, err := decodeJsonBody(r, params)
-	if err != nil {
-		return AlBhedResponse{}, err
-	}
-
-	url, err := convertToStateURL(cfg, string(i.endpoint), params)
-	if err != nil {
-		return AlBhedResponse{}, err
-	}
-
-	params, err = verifyAlBhedParams(cfg, params, payloadMap)
-	if err != nil {
-		return AlBhedResponse{}, err
-	}
-
-	return translateAlBhed(cfg, params, url)
-}
-
 
 
 func translateAlBhed(cfg *Config, params AlBhedParams, url string) (AlBhedResponse, error) {
 	response := AlBhedResponse{
 		OriginalText: params.Text,
 		Direction:    params.Direction,
-		URL: 		  url,
+		URL:          url,
 	}
-	
+
 	charLookup := initCharLookup(cfg, params.Direction)
 	translatedRunes := []rune{}
 	translate := true

@@ -38,11 +38,11 @@ type handlerInputEndpoints struct {
 	queryLookup map[QueryParamName]QueryParam
 }
 
-type handlerInputService[R any] struct {
-	endpoint      EndpointName
-	usage         []string
-	queryLookup   map[QueryParamName]QueryParam
-	serviceFnGet  func(*Config, *http.Request, handlerInputService[R]) (R, error)
-	serviceFnPost func(*Config, *http.Request, handlerInputService[R]) (R, error)
-	fieldDoc	  []FieldDoc
+type handlerInputService[P ServiceParams, R ServiceResponse] struct {
+	endpoint    EndpointName
+	usage       []string
+	queryLookup map[QueryParamName]QueryParam
+	paramsDoc   ParamsDoc
+	verifyFn    func(*Config, P, map[string]any) (P, error)
+	executeFn   func(*Config, P, string) (R, error)
 }

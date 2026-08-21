@@ -49,7 +49,8 @@ func getIdFromURL(url string) int32 {
 	return int32(id)
 }
 
-func convertToStateURL[T any](cfg *Config, endpoint string, payload T) (string, error) {
+// problem is that this includes zero values
+func paramsToStateURL[T any](cfg *Config, endpoint EndpointName, payload T) (string, error) {
 	jsonBytes, err := json.Marshal(payload)
 	if err != nil {
 		return "", newHTTPError(http.StatusInternalServerError, "couldn't marshal params", err)

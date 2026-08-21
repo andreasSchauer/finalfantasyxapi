@@ -90,8 +90,8 @@ func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	respondWithJSON(w, http.StatusOK, sectionList)
 }
 
-func handleBody(w http.ResponseWriter, fields []FieldDoc) {
-	respondWithJSON(w, http.StatusOK, fields)
+func handleBody(w http.ResponseWriter, doc ParamsDoc) {
+	respondWithJSON(w, http.StatusOK, doc)
 }
 
 func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {

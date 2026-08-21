@@ -22,7 +22,6 @@ type QueryParam struct {
 	Usage              string              `json:"usage"`
 	ExampleUses        []string            `json:"example_uses"`
 	IsExclusive        bool                `json:"only_use_alone,omitempty"`
-	IsRequired         bool                `json:"is_required,omitempty"`
 	ParamUse           ParamUseType        `json:"param_use_type"`
 	ForSegment         *SectionName        `json:"for_segment,omitempty"`
 	EnumLookup         map[string]EnumVal  `json:"-"`
