@@ -1,9 +1,11 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -154,7 +156,25 @@ func setupTest[T any](t *testing.T, tc testGeneral, testName string, handlerFunc
 	t.Helper()
 	var zeroType T
 
-	req := httptest.NewRequest(http.MethodGet, tc.requestURL, nil)
+	if tc.method == "" {
+		tc.method = http.MethodGet
+	}
+
+	var body io.Reader
+	if tc.method == http.MethodPost && tc.requestBody != nil {
+		var buf bytes.Buffer
+		err := json.NewEncoder(&buf).Encode(tc.requestBody)
+		if err != nil {
+			t.Fatalf("failed to encode test request body: %v", err)
+		}
+		body = &buf
+	}
+
+	req := httptest.NewRequest(tc.method, tc.requestURL, body)
+	if body != nil {
+		req.Header.Set("Content-Type", "application/json")
+	}
+
 	rr := httptest.NewRecorder()
 
 	handler := http.HandlerFunc(handlerFunc)

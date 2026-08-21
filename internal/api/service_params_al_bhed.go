@@ -1,8 +1,8 @@
 package api
 
 type AlBhedParams struct {
-	Text      string `json:"text"`
-	Direction string `json:"direction"`
+	Text      string `json:"text,omitempty"`
+	Direction string `json:"direction,omitempty"`
 }
 
 func (p AlBhedParams) GetDoc(cfg *Config) ParamsDoc {

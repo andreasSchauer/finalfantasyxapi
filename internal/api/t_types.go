@@ -45,6 +45,8 @@ type testGeneral struct {
 	expLengths     map[string]int
 	endpoint       EndpointName
 	handler        func(http.ResponseWriter, *http.Request)
+	method		   string
+	requestBody	   any
 }
 
 type expNameVer struct {

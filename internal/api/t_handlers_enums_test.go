@@ -62,7 +62,7 @@ func TestRetrieveEnums(t *testing.T) {
 				requestURL:     "/api/enums?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   59,
+			count:   60,
 			results: []string{
 				"/enums/ability_type",
 				"/enums/blitzball_position_slot",
