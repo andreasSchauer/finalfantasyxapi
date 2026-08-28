@@ -4,8 +4,13 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"slices"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+// need to do an id check
+// if there is an id param and if there is an allowed ids slice, check if the slice contains the used id
 func basicFieldChecks[T any](val T, fieldName FieldName, valueMap map[FieldName]any, valTree ValidationTree) (T, error) {
 	var zero T
 	doc := valTree[fieldName].Doc
@@ -22,6 +27,11 @@ func basicFieldChecks[T any](val T, fieldName FieldName, valueMap map[FieldName]
 	}
 
 	err = vfRequiredOr(fieldName, doc, valIsPresent, valueMap)
+	if err != nil {
+		return zero, err
+	}
+
+	err = vfAllowedIDs(fieldName, doc, valueMap)
 	if err != nil {
 		return zero, err
 	}
@@ -68,6 +78,24 @@ func vfRequiredOr(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap
 	if !onePresent {
 		requiredFields := append(doc.RequiredOr, fieldName)
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: %s.", formatPfnSlice(requiredFields)), nil)
+	}
+
+	return nil
+}
+
+func vfAllowedIDs(fieldName FieldName, doc FieldDoc, valueMap map[FieldName]any) error {
+	idRaw, ok := valueMap[pfnID]
+	if !ok {
+		return nil
+	}
+	id := int32(idRaw.(float64))
+
+	if len(doc.AllowedIDs) == 0 {
+		return nil
+	}
+
+	if !slices.Contains(doc.AllowedIDs, id) {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following ids: %s", fieldName, h.FormatIntSlice(doc.AllowedIDs)), nil)
 	}
 
 	return nil

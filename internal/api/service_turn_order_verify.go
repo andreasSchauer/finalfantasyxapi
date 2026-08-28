@@ -31,21 +31,6 @@ func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, valueMap map[Fie
 		return TurnOrderParams{}, err
 	}
 
-	params.AglK, err = verifyParamField(cfg, params.AglK, pfnAglK, valueMap, valTree, vfIntId)
-	if err != nil {
-		return TurnOrderParams{}, err
-	}
-
-	params.AglY, err = verifyParamField(cfg, params.AglY, pfnAglY, valueMap, valTree, vfIntId)
-	if err != nil {
-		return TurnOrderParams{}, err
-	}
-
-	params.Battles, err = verifyParamField(cfg, params.Battles, pfnBattles, valueMap, valTree, vfIntId)
-	if err != nil {
-		return TurnOrderParams{}, err
-	}
-
 	params.Formation, err = verifyParamFieldPtr(cfg, params.Formation, pfnFormation, valueMap, valTree, vfIntId)
 	if err != nil {
 		return TurnOrderParams{}, err
@@ -72,7 +57,7 @@ func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, valueMap map[Fie
 func vfTurnOrderParty(cfg *Config, item turnOrderParty, _ FieldName, valueMap map[FieldName]any, valTree ValidationTree) (turnOrderParty, error) {
 	var err error
 	
-	item.Name, err = verifyParamField(cfg, item.Name, pfnName, valueMap, valTree, nil)
+	item.ID, err = verifyParamField(cfg, item.ID, pfnName, valueMap, valTree, vfIntId)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
@@ -104,6 +89,11 @@ func vfTurnOrderMon(cfg *Config, item turnOrderMon, _ FieldName, valueMap map[Fi
 	var err error
 	
 	item.ID, err = verifyParamField(cfg, item.ID, pfnID, valueMap, valTree, vfIntId)
+	if err != nil {
+		return turnOrderMon{}, err
+	}
+
+	item.AglOverride, err = verifyParamFieldPtr(cfg, item.AglOverride, pfnAglOverride, valueMap, valTree, vfIntId)
 	if err != nil {
 		return turnOrderMon{}, err
 	}

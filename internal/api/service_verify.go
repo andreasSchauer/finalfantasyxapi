@@ -39,7 +39,7 @@ func verifyParamFieldPtr[T any](cfg *Config, ptr *T, fieldName FieldName, valueM
 	}
 	
 	// do these inputs also work for struct pointers?
-	*ptr, err = verifyFn(cfg, *ptr, fieldName, valueMap, valTree)
+	*ptr, err = verifyParamField(cfg, *ptr, fieldName, valueMap, valTree, verifyFn)
 	if err != nil {
 		return nil, err
 	}

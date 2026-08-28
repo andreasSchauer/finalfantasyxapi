@@ -17,6 +17,7 @@ type FieldDoc struct {
 	MinVal        *int32      `json:"min_val,omitempty"`
 	MaxVal        *int32      `json:"max_val,omitempty"`
 	MaxArrayLen   *int        `json:"max_array_len,omitempty"`
+	AllowedIDs	  []int32	  `json:"allowed_ids,omitempty"`
 	EnumValues    []string    `json:"enum_values,omitempty"`
 	Description   string      `json:"description"`
 	ChildProps    []FieldDoc  `json:"child_properties,omitempty"`

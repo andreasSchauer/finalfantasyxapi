@@ -8,8 +8,7 @@ type FieldName string
 
 const (
 	pfnAgl			FieldName = "agl"
-	pfnAglK			FieldName = "agl_k"
-	pfnAglY			FieldName = "agl_y"
+	pfnAglOverride	FieldName = "agl_override"
 	pfnAltState		FieldName = "alt_state"
 	pfnAmt			FieldName = "amt"
 	pfnBattles		FieldName = "battles"

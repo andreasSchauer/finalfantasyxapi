@@ -12,9 +12,6 @@ type TurnOrderParams struct {
 	IgnFirstTurn bool                 `json:"ign_first_turn,omitempty"`
 	RNG          string               `json:"rng,omitempty"`
 	BattleStart  string               `json:"battle_start,omitempty"`
-	AglK         int32                `json:"agl_k,omitempty"`
-	AglY         int32                `json:"agl_y,omitempty"`
-	Battles      int32                `json:"battles,omitempty"`
 	Formation    *int32               `json:"formation,omitempty"`
 	Party        []turnOrderParty     `json:"party,omitempty"`
 	Mons         []turnOrderMon       `json:"mons,omitempty"`
@@ -26,7 +23,7 @@ func (p TurnOrderParams) GetDoc(cfg *Config) ParamsDoc {
 }
 
 type turnOrderParty struct {
-	Name   	string  `json:"name,omitempty"`
+	ID		int32	`json:"id"`
 	Agl    	int32   `json:"agl"`
 	FS     	bool    `json:"fs,omitempty"`
 	Status 	*string `json:"status,omitempty"`
@@ -35,6 +32,7 @@ type turnOrderParty struct {
 
 type turnOrderMon struct {
 	ID       	int32   `json:"id"`
+	AglOverride *int32	`json:"agl_override,omitempty"`
 	AltState 	*int32  `json:"alt_state,omitempty"`
 	Status   	*string `json:"status,omitempty"`
 	Offset		int32	`json:"offset,omitempty"`
@@ -80,29 +78,6 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 				Description: "Specify, if the battle starts normally, or if it starts as an ambush or preemptive strike. This field will have no effect, if 'ign_first_turn' is set to 'true'.",
 			},
 			{
-				Field:       pfnAglK,
-				Type:        "int",
-				DefaultVal:  6,
-				MinVal:      h.GetInt32Ptr(0),
-				MaxVal:      h.GetInt32Ptr(255),
-				Description: "Sets Kimahri's agility. When you look up Biran and Yenke Ronso (ids 167/168), their agility stat will get calculated using this value.",
-			},
-			{
-				Field:       pfnAglY,
-				Type:        "int",
-				DefaultVal:  10,
-				MinVal:      h.GetInt32Ptr(0),
-				MaxVal:      h.GetInt32Ptr(255),
-				Description: "Sets Yuna's agility. When you look up the possessed aeons (ids 216-225), their agility stat will automatically get calculated using this value and the value given by the 'battles' field.",
-			},
-			{
-				Field:       pfnBattles,
-				Type:        "int",
-				DefaultVal:  0,
-				MinVal:      h.GetInt32Ptr(0),
-				Description: "Sets the amount of battles the player has taken part in. When you look up the possessed aeons (ids 216-225), their agility stat will automatically get calculated using this value and the value given by the 'agl_y' field. The highest value that has an impact is 600, an amount that should have been comfortably reached by this point in the story on a casual playthrough. If you're unsure, just manually create a custom monster with your own aeon's agility stat.",
-			},
-			{
 				Field:         pfnFormation,
 				Type:          "int (id: monster formation)",
 				RequiredOr:    []FieldName{pfnParty, pfnMons, pfnMonsCustom},
@@ -121,7 +96,7 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 			},
 			{
 				Field:         pfnMons,
-				Type:          "array[turnOrderMons]",
+				Type:          "array[turnOrderMon]",
 				RequiredOr:    []FieldName{pfnFormation, pfnParty, pfnMonsCustom},
 				ConflictsWith: []FieldName{pfnFormation},
 				MaxArrayLen:   h.GetIntPtr(10),
@@ -130,7 +105,7 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 			},
 			{
 				Field:         pfnMonsCustom,
-				Type:          "array[turnOrderMonsCustom]",
+				Type:          "array[turnOrderMonCustom]",
 				RequiredOr:    []FieldName{pfnFormation, pfnParty, pfnMons},
 				ConflictsWith: []FieldName{pfnFormation},
 				MaxArrayLen:   h.GetIntPtr(10),
@@ -144,7 +119,13 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 
 func (cfg *Config) getFieldDocTurnOrderParty() []FieldDoc {
 	return []FieldDoc{
-		cfg.getFieldDocName("char"),
+		{
+			Field:       pfnID,
+			Type:        "int (id: playerUnit)",
+			MinVal:      h.GetInt32Ptr(1),
+			MaxVal:      h.GetInt32Ptr(int32(len(cfg.l.PlayerUnits))),
+			Description: "Specifies the id of the party member to be looked up.",
+		},
 		cfg.getFieldDocAgl(),
 		cfg.getFieldDocFS(),
 		cfg.getFieldDocStatus(),
@@ -160,6 +141,14 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 			MinVal:      h.GetInt32Ptr(1),
 			MaxVal:      h.GetInt32Ptr(int32(len(cfg.l.Monsters))),
 			Description: "Specifies the id of the monster to be looked up.",
+		},
+		{
+			Field:       pfnAglOverride,
+			Type:        "int",
+			MinVal:      h.GetInt32Ptr(0),
+			MaxVal:      h.GetInt32Ptr(255),
+			AllowedIDs:  []int32{167, 168, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225},
+			Description: "If a monster's agility stat is based on your party member's agility, you can use this field to override the monster's base (= lowest possible) agility stat. This applies to Biran and Yenke Ronso, and the possessed Aeons.",
 		},
 		{
 			Field:       pfnAltState,
