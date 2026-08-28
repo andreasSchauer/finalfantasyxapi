@@ -505,6 +505,49 @@ func (ns NullAvailabilityType) Value() (driver.Value, error) {
 	return string(ns.AvailabilityType), nil
 }
 
+type BattleStart string
+
+const (
+	BattleStartNormal     BattleStart = "normal"
+	BattleStartPreemptive BattleStart = "preemptive"
+	BattleStartAmbush     BattleStart = "ambush"
+)
+
+func (e *BattleStart) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = BattleStart(s)
+	case string:
+		*e = BattleStart(s)
+	default:
+		return fmt.Errorf("unsupported scan type for BattleStart: %T", src)
+	}
+	return nil
+}
+
+type NullBattleStart struct {
+	BattleStart BattleStart
+	Valid       bool // Valid is true if BattleStart is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullBattleStart) Scan(value interface{}) error {
+	if value == nil {
+		ns.BattleStart, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.BattleStart.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullBattleStart) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.BattleStart), nil
+}
+
 type BgReplacementType string
 
 const (
@@ -1425,6 +1468,49 @@ func (ns NullEquipmentSlotsType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.EquipmentSlotsType), nil
+}
+
+type HasteStatus string
+
+const (
+	HasteStatusHaste     HasteStatus = "haste"
+	HasteStatusSlow      HasteStatus = "slow"
+	HasteStatusAutoHaste HasteStatus = "auto-haste"
+)
+
+func (e *HasteStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = HasteStatus(s)
+	case string:
+		*e = HasteStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for HasteStatus: %T", src)
+	}
+	return nil
+}
+
+type NullHasteStatus struct {
+	HasteStatus HasteStatus
+	Valid       bool // Valid is true if HasteStatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullHasteStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.HasteStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.HasteStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullHasteStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.HasteStatus), nil
 }
 
 type ItemCategory string
@@ -2933,6 +3019,49 @@ func (ns NullTreasureType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.TreasureType), nil
+}
+
+type TurnOrderRng string
+
+const (
+	TurnOrderRngBest   TurnOrderRng = "best"
+	TurnOrderRngWorst  TurnOrderRng = "worst"
+	TurnOrderRngMedian TurnOrderRng = "median"
+)
+
+func (e *TurnOrderRng) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = TurnOrderRng(s)
+	case string:
+		*e = TurnOrderRng(s)
+	default:
+		return fmt.Errorf("unsupported scan type for TurnOrderRng: %T", src)
+	}
+	return nil
+}
+
+type NullTurnOrderRng struct {
+	TurnOrderRng TurnOrderRng
+	Valid        bool // Valid is true if TurnOrderRng is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullTurnOrderRng) Scan(value interface{}) error {
+	if value == nil {
+		ns.TurnOrderRng, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.TurnOrderRng.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullTurnOrderRng) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.TurnOrderRng), nil
 }
 
 type UnitType string

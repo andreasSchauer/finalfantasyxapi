@@ -67,7 +67,10 @@ const (
 	enumNameDurationType      			EnumName = "duration type"
 	enumNameTargetType        			EnumName = "target type"
 
+	enumNameBattleStart					EnumName = "battle start"
+	enumNameHasteStatus					EnumName = "haste status"
 	enumNameTranslationDirection		EnumName = "translation direction"
+	enumNameTurnOrderRNG				EnumName = "turn order rng"
 )
 
 

@@ -6,68 +6,68 @@ import (
 	"reflect"
 )
 
-func basicFieldChecks[T any](val T, fieldName FieldName, values map[FieldName]any, lookup map[FieldName]FieldDoc) (T, error) {
+func basicFieldChecks[T any](val T, fieldName FieldName, valueMap map[FieldName]any, valTree ValidationTree) (T, error) {
 	var zero T
-	rules := lookup[fieldName]
+	doc := valTree[fieldName].Doc
 	valIsPresent := hasVal(val)
 
-	err := vfRequired(fieldName, rules, valIsPresent)
+	err := vfRequired(fieldName, doc, valIsPresent)
 	if err != nil {
 		return zero, err
 	}
 
-	err = vfConflictsWith(fieldName, rules, valIsPresent, values, lookup)
+	err = vfConflictsWith(fieldName, doc, valIsPresent, valueMap, valTree)
 	if err != nil {
 		return zero, err
 	}
 
-	err = vfRequiredOr(fieldName, rules, valIsPresent)
+	err = vfRequiredOr(fieldName, doc, valIsPresent, valueMap)
 	if err != nil {
 		return zero, err
 	}
 
-	return assignDefaultVal(val, valIsPresent, rules), nil
+	return assignDefaultVal(val, valIsPresent, doc), nil
 }
 
-func vfRequired(fieldName FieldName, rules FieldDoc, valIsPresent bool) error {
-	if !valIsPresent && rules.Required {
+func vfRequired(fieldName FieldName, doc FieldDoc, valIsPresent bool) error {
+	if !valIsPresent && doc.Required {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be empty.", fieldName), nil)
 	}
 
 	return nil
 }
 
-func vfConflictsWith(fieldName FieldName, rules FieldDoc, valIsPresent bool, values map[FieldName]any, lookup map[FieldName]FieldDoc) error {
-	if rules.ConflictsWith == nil {
+func vfConflictsWith(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap map[FieldName]any, valTree ValidationTree) error {
+	if doc.ConflictsWith == nil {
 		return nil
 	}
 
-	for _, conflictingField := range rules.ConflictsWith {
-		if valIsPresent && hasVal(values[conflictingField]) {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be used in combination with field '%s'.", fieldName, lookup[conflictingField].Field), nil)
+	for _, conflictingField := range doc.ConflictsWith {
+		if valIsPresent && hasVal(valueMap[conflictingField]) {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be used in combination with field '%s'.", fieldName, valTree[conflictingField].Doc.Field), nil)
 		}
 	}
 
 	return nil
 }
 
-func vfRequiredOr(fieldName FieldName, rules FieldDoc, valIsPresent bool) error {
-	if rules.RequiredOr == nil || valIsPresent {
+func vfRequiredOr(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap map[FieldName]any) error {
+	if doc.RequiredOr == nil || valIsPresent {
 		return nil
 	}
-	
+
 	var onePresent bool
 
-	for _, option := range rules.RequiredOr {
-		if hasVal(option) {
+	for _, option := range doc.RequiredOr {
+		if hasVal(valueMap[option]) {
 			onePresent = true
 			break
 		}
 	}
 
 	if !onePresent {
-		requiredFields := append(rules.RequiredOr, fieldName)
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: '%s'.", formatPfnSlice(requiredFields)), nil)
+		requiredFields := append(doc.RequiredOr, fieldName)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: %s.", formatPfnSlice(requiredFields)), nil)
 	}
 
 	return nil
@@ -75,12 +75,12 @@ func vfRequiredOr(fieldName FieldName, rules FieldDoc, valIsPresent bool) error 
 
 // sideNote: a pointer is completely optional, so it will never have a default value.
 // otherwise it wouldn't be a pointer
-func assignDefaultVal[T any](val T, valIsPresent bool, rules FieldDoc) T {
-	if valIsPresent || !hasVal(rules.DefaultVal) {
+func assignDefaultVal[T any](val T, valIsPresent bool, doc FieldDoc) T {
+	if valIsPresent || !hasVal(doc.DefaultVal) {
 		return val
 	}
 
-	typedDefault, ok := rules.DefaultVal.(T)
+	typedDefault, ok := doc.DefaultVal.(T)
 	if ok {
 		return typedDefault
 	}
@@ -96,7 +96,7 @@ func hasVal(val any) bool {
 	switch t := val.(type) {
 	case string:
 		return t != ""
-	
+
 	case int32:
 		return t != 0
 

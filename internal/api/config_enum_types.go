@@ -2480,6 +2480,71 @@ func (t *Enums) initTargetType() {
 	}
 }
 
+func (t *Enums) initBattleStart() {
+	enumDescription := fmt.Sprintf("Determines  for the /%s endpoint.", epTurnOrder)
+
+	typeSlice := []EnumVal{
+		{
+			Name:        string(database.BattleStartNormal),
+			Description: "",
+		},
+		{
+			Name:        string(database.BattleStartPreemptive),
+			Description: "",
+		},
+		{
+			Name:        string(database.BattleStartAmbush),
+			Description: "",
+		},
+	}
+
+	t.BattleStart = EnumType[database.BattleStart, any]{
+		name:     enumNameBattleStart,
+		lookup:   enumSliceToMap(typeSlice),
+		convFunc: func(s string) database.BattleStart { return database.BattleStart(s) },
+	}
+
+	t.Lookup[getEnumKey(enumNameBattleStart)] = EnumResponse{
+		Name:               enumNameBattleStart,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{epTurnOrder},
+		Values:             getEnumValIDs(typeSlice),
+	}
+}
+
+func (t *Enums) initHasteStatus() {
+	enumDescription := fmt.Sprintf("Determines  for the /%s endpoint.", epTurnOrder)
+
+	typeSlice := []EnumVal{
+		{
+			Name:        string(database.HasteStatusHaste),
+			Description: "",
+		},
+		{
+			Name:        string(database.HasteStatusSlow),
+			Description: "",
+		},
+		{
+			Name:        string(database.HasteStatusAutoHaste),
+			Description: "",
+		},
+	}
+
+	t.HasteStatus = EnumType[database.HasteStatus, any]{
+		name:     enumNameTranslationDirection,
+		lookup:   enumSliceToMap(typeSlice),
+		convFunc: func(s string) database.HasteStatus { return database.HasteStatus(s) },
+	}
+
+	t.Lookup[getEnumKey(enumNameHasteStatus)] = EnumResponse{
+		Name:               enumNameHasteStatus,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{epTurnOrder},
+		Values:             getEnumValIDs(typeSlice),
+	}
+}
+
+
 func (t *Enums) initTranslationDirection() {
 	enumDescription := fmt.Sprintf("Determines the direction of translation for the /%s endpoint.", epAlBhed)
 
@@ -2504,6 +2569,38 @@ func (t *Enums) initTranslationDirection() {
 		Name:               enumNameTranslationDirection,
 		Description:        enumDescription,
 		UsedByEndpointsInt: []EndpointName{epAlBhed},
+		Values:             getEnumValIDs(typeSlice),
+	}
+}
+
+func (t *Enums) initTurnOrderRNG() {
+	enumDescription := fmt.Sprintf("Determines the RNG for the /%s endpoint.", epTurnOrder)
+
+	typeSlice := []EnumVal{
+		{
+			Name:        string(database.TurnOrderRngBest),
+			Description: "",
+		},
+		{
+			Name:        string(database.TurnOrderRngWorst),
+			Description: "",
+		},
+		{
+			Name:        string(database.TurnOrderRngMedian),
+			Description: "",
+		},
+	}
+
+	t.TurnOrderRNG = EnumType[database.TurnOrderRng, any]{
+		name:     enumNameTurnOrderRNG,
+		lookup:   enumSliceToMap(typeSlice),
+		convFunc: func(s string) database.TurnOrderRng { return database.TurnOrderRng(s) },
+	}
+
+	t.Lookup[getEnumKey(enumNameTurnOrderRNG)] = EnumResponse{
+		Name:               enumNameTurnOrderRNG,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{epTurnOrder},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }

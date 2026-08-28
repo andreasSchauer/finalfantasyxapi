@@ -43,18 +43,17 @@ func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName Quer
 	for _, change := range altState.Alts {
 		switch database.AlterationType(change.AlterationType) {
 		case database.AlterationTypeChange:
-			mon, appliedState, defaultState = applyAlt(mon, change, appliedState, defaultState)
+			mon, appliedState, defaultState = applyAltChange(mon, change, appliedState, defaultState)
 
 		case database.AlterationTypeGain:
-			mon, appliedState, defaultState = applyAltStateGain(mon, change, appliedState, defaultState)
+			mon, appliedState, defaultState = applyAltGain(mon, change, appliedState, defaultState)
 
 		case database.AlterationTypeLoss:
-			mon, appliedState, defaultState = applyAltStateLoss(mon, change, appliedState, defaultState)
+			mon, appliedState, defaultState = applyAltLoss(mon, change, appliedState, defaultState)
 		}
 	}
 
 	mon.AppliedState = &appliedState
-
 	if appliedState.IsZero() {
 		mon.AppliedState = nil
 	}
@@ -66,10 +65,9 @@ func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName Quer
 
 func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) (int, error) {
 	queryParam := cfg.q.monsters[queryName]
-	query := r.URL.Query().Get(string(queryParam.Name))
-
-	if query == "" {
-		return 0, errEmptyQuery
+	query, err := checkEmptyQuery(r, queryParam)
+	if err != nil {
+		return 0, err
 	}
 
 	if len(mon.AlteredStates) == 0 {
@@ -84,7 +82,7 @@ func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName QueryPar
 	return int(id), nil
 }
 
-func applyAlt(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
+func applyAltChange(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
 	defStateChange := Alt{
 		AlterationType: database.AlterationTypeChange,
 	}
@@ -103,7 +101,7 @@ func applyAlt(mon Monster, change Alt, appliedState AppliedState, defaultState A
 	return mon, appliedState, defaultState
 }
 
-func applyAltStateGain(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
+func applyAltGain(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
 	defStateLoss := Alt{
 		AlterationType: database.AlterationTypeLoss,
 	}
@@ -132,7 +130,7 @@ func applyAltStateGain(mon Monster, change Alt, appliedState AppliedState, defau
 	return mon, appliedState, defaultState
 }
 
-func applyAltStateLoss(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
+func applyAltLoss(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
 	defStateGain := Alt{
 		AlterationType: database.AlterationTypeGain,
 	}

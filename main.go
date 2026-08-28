@@ -89,6 +89,11 @@ func main() {
 	mux.HandleFunc("POST /api/al-bhed", apiCfg.HandleAlBhedPost)
 	mux.HandleFunc("POST /api/al-bhed/", apiCfg.HandleAlBhedPost)
 
+	mux.HandleFunc("GET /api/turn-order", apiCfg.HandleTurnOrderGet)
+	mux.HandleFunc("GET /api/turn-order/", apiCfg.HandleTurnOrderGet)
+	mux.HandleFunc("POST /api/turn-order", apiCfg.HandleTurnOrderPost)
+	mux.HandleFunc("POST /api/turn-order/", apiCfg.HandleTurnOrderPost)
+
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: mux,

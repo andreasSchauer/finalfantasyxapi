@@ -59,6 +59,7 @@ type endpoints struct {
 	enums              handlerInputEnums
 	endpoints          handlerInputEndpoints
 	alBhed             handlerInputService[AlBhedParams, AlBhedResponse]
+	turnOrder		   handlerInputService[TurnOrderParams, TurnOrderResponse]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -1031,10 +1032,18 @@ func (cfg *Config) EndpointsInit() {
 
 	e.alBhed = handlerInputService[AlBhedParams, AlBhedResponse]{
 		endpoint:  epAlBhed,
-		usage:     []string{"/api/al-bhed?state={json_string}"},
+		usage:     []string{"/api/al-bhed?state={json_string}"},	// can I not put this in the error message?
 		paramsDoc: cfg.getAlBhedParamsDoc(),
 		verifyFn:  verifyAlBhedParams,
 		executeFn: translateAlBhed,
+	}
+
+	e.turnOrder = handlerInputService[TurnOrderParams, TurnOrderResponse]{
+		endpoint:  epTurnOrder,
+		usage:     []string{"/api/turn-order?state={json_string}"},
+		paramsDoc: cfg.getTurnOrderParamsDoc(),
+		verifyFn:  verifyTurnOrderParams,
+		executeFn: calcTurnOrder,
 	}
 
 	cfg.e = &e
@@ -1095,6 +1104,7 @@ func (e endpoints) initializeEndpointSlice() []EndpointName {
 		e.enums.endpoint,
 		e.endpoints.endpoint,
 		e.alBhed.endpoint,
+		e.turnOrder.endpoint,
 	}
 
 	slices.Sort(endpoints)
