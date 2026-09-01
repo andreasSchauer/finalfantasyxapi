@@ -10,7 +10,7 @@ import (
 func getMonsterRelationships(cfg *Config, r *http.Request, monster seeding.Monster) (Monster, error) {
 	var rel Monster
 	g, ctx := errgroup.WithContext(r.Context())
-	
+
 	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.monsters, monster.ID)
 	if err != nil {
 		return Monster{}, err
@@ -21,13 +21,13 @@ func getMonsterRelationships(cfg *Config, r *http.Request, monster seeding.Monst
 		rel.Areas, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.areas, monster, availabilityParams, getMonsterAreaIDs(cfg))
 		return err
 	})
-	
+
 	g.Go(func() error {
 		var err error
 		rel.Formations, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.monsterFormations, monster, availabilityParams, getMonsterMonsterFormationIDs(cfg))
 		return err
 	})
-	
+
 	err = g.Wait()
 	if err != nil {
 		return Monster{}, err
@@ -106,7 +106,7 @@ func getMonsterPoisonDamage(cfg *Config, mon Monster) (*int32, error) {
 }
 
 func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*AgilityParams, error) {
-	agilityTier, err := getAgilityTier(cfg, r, mon.BaseStats)
+	agilityTier, err := getAgilityTierDB(cfg, r, mon.BaseStats)
 	if err != nil {
 		return nil, err
 	}

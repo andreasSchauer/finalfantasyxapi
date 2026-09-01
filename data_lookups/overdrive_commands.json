@@ -1,0 +1,86 @@
+[
+  {
+    "ID": 1,
+    "CharClassID": 5,
+    "TopmenuID": 3,
+    "SubmenuID": 14,
+    "name": "swordplay",
+    "description": "Press button at the right time for extra damage!",
+    "user": "tidus",
+    "rank": 0,
+    "topmenu": "left",
+    "open_submenu": "overdrives"
+  },
+  {
+    "ID": 2,
+    "CharClassID": 6,
+    "TopmenuID": 3,
+    "SubmenuID": 1,
+    "name": "grand summon",
+    "description": "Summon an aeon in Overdrive!",
+    "user": "yuna",
+    "rank": 0,
+    "topmenu": "left",
+    "open_submenu": "summon"
+  },
+  {
+    "ID": 3,
+    "CharClassID": 7,
+    "TopmenuID": 3,
+    "SubmenuID": 14,
+    "name": "slots",
+    "description": "Get the right combination for the ultimate shot!",
+    "user": "wakka",
+    "rank": 5,
+    "topmenu": "left",
+    "open_submenu": "overdrives"
+  },
+  {
+    "ID": 4,
+    "CharClassID": 8,
+    "TopmenuID": 3,
+    "SubmenuID": 14,
+    "name": "fury",
+    "description": "Unleash a barrage of spells on the enemy!",
+    "user": "lulu",
+    "rank": 0,
+    "topmenu": "left",
+    "open_submenu": "overdrives"
+  },
+  {
+    "ID": 5,
+    "CharClassID": 9,
+    "TopmenuID": 3,
+    "SubmenuID": 14,
+    "name": "ronso rage",
+    "description": "Use fiends’ skills against them!",
+    "user": "kimahri",
+    "rank": 0,
+    "topmenu": "left",
+    "open_submenu": "overdrives"
+  },
+  {
+    "ID": 6,
+    "CharClassID": 10,
+    "TopmenuID": 3,
+    "SubmenuID": 14,
+    "name": "bushido",
+    "description": "Enter commands for a lethal sword attack!",
+    "user": "auron",
+    "rank": 0,
+    "topmenu": "left",
+    "open_submenu": "overdrives"
+  },
+  {
+    "ID": 7,
+    "CharClassID": 11,
+    "TopmenuID": 3,
+    "SubmenuID": 10,
+    "name": "mix",
+    "description": "Combine items for various effects!",
+    "user": "rikku",
+    "rank": 5,
+    "topmenu": "left",
+    "open_submenu": "mix"
+  }
+]

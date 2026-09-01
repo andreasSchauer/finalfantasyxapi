@@ -62,7 +62,7 @@ func (ms MonsterSelection) ToHashFields() []any {
 	}
 
 	for _, mon := range ms.Monsters {
-		key := combineFields(mon.ToFormationHashFields())
+		key := CombineFields(mon.ToFormationHashFields())
 		monsterKeys = append(monsterKeys, key)
 	}
 

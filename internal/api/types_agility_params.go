@@ -13,7 +13,7 @@ type AgilityParams struct {
 	MaxICV      *int32             `json:"max_icv"`
 }
 
-func getAgilityTier(cfg *Config, r *http.Request, stats []BaseStat) (seeding.AgilityTier, error) {
+func getAgilityTierDB(cfg *Config, r *http.Request, stats []BaseStat) (seeding.AgilityTier, error) {
 	agilityStat := getBaseStat(cfg, "agility", stats)
 	agility := agilityStat.Value
 

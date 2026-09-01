@@ -19,7 +19,7 @@ func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Contex
 
 	for i, s := range sublocations {
 		params.DataHash[i] = generateDataHash(s)
-		params.LocationID[i] = s.Location.ID
+		params.LocationID[i] = s.LocationID
 		params.Name[i] = s.Name
 		params.Availability[i] = database.AvailabilityType(s.Availability)
 	}
@@ -47,7 +47,8 @@ func (l *Lookup) extractSublocations() []Sublocation {
 
 		for j := range location.Sublocations {
 			sublocation := &location.Sublocations[j]
-			sublocation.Location = *location
+			sublocation.Location = location.Name
+			sublocation.LocationID = location.ID
 			sublocations = append(sublocations, *sublocation)
 		}
 	}

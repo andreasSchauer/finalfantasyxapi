@@ -1,0 +1,92 @@
+[
+  {
+    "ID": 1,
+    "name": "tidus",
+    "Type": "character"
+  },
+  {
+    "ID": 2,
+    "name": "yuna",
+    "Type": "character"
+  },
+  {
+    "ID": 3,
+    "name": "wakka",
+    "Type": "character"
+  },
+  {
+    "ID": 4,
+    "name": "lulu",
+    "Type": "character"
+  },
+  {
+    "ID": 5,
+    "name": "kimahri",
+    "Type": "character"
+  },
+  {
+    "ID": 6,
+    "name": "auron",
+    "Type": "character"
+  },
+  {
+    "ID": 7,
+    "name": "rikku",
+    "Type": "character"
+  },
+  {
+    "ID": 8,
+    "name": "seymour",
+    "Type": "character"
+  },
+  {
+    "ID": 9,
+    "name": "valefor",
+    "Type": "aeon"
+  },
+  {
+    "ID": 10,
+    "name": "ifrit",
+    "Type": "aeon"
+  },
+  {
+    "ID": 11,
+    "name": "ixion",
+    "Type": "aeon"
+  },
+  {
+    "ID": 12,
+    "name": "shiva",
+    "Type": "aeon"
+  },
+  {
+    "ID": 13,
+    "name": "bahamut",
+    "Type": "aeon"
+  },
+  {
+    "ID": 14,
+    "name": "anima",
+    "Type": "aeon"
+  },
+  {
+    "ID": 15,
+    "name": "yojimbo",
+    "Type": "aeon"
+  },
+  {
+    "ID": 16,
+    "name": "cindy",
+    "Type": "aeon"
+  },
+  {
+    "ID": 17,
+    "name": "sandy",
+    "Type": "aeon"
+  },
+  {
+    "ID": 18,
+    "name": "mindy",
+    "Type": "aeon"
+  }
+]

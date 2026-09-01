@@ -10,6 +10,12 @@ import (
 func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, valueMap map[FieldName]any) (TurnOrderParams, error) {
 	var err error
 	valTree := compileValidationTree(cfg.getTurnOrderParamsDoc().Fields)
+	const monLimit int = 10
+
+	err = vfExistingFields(valueMap, valTree)
+	if err != nil {
+		return TurnOrderParams{}, err
+	}
 
 	params.TurnsAmt, err = verifyParamField(cfg, params.TurnsAmt, pfnTurnsAmt, valueMap, valTree, vfIntId)
 	if err != nil {
@@ -51,13 +57,23 @@ func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, valueMap map[Fie
 		return TurnOrderParams{}, err
 	}
 
+	totalMons := len(params.Mons) + len(params.MonsCustom)
+	if totalMons > monLimit {
+		return TurnOrderParams{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster limit exceeded. the total amount of monsters that can participate is %d. got: %d", monLimit, totalMons), nil)
+	}
+
 	return params, nil
 }
 
 func vfTurnOrderParty(cfg *Config, item turnOrderParty, _ FieldName, valueMap map[FieldName]any, valTree ValidationTree) (turnOrderParty, error) {
 	var err error
+
+	err = vfExistingFields(valueMap, valTree)
+	if err != nil {
+		return turnOrderParty{}, err
+	}
 	
-	item.ID, err = verifyParamField(cfg, item.ID, pfnName, valueMap, valTree, vfIntId)
+	item.ID, err = verifyParamField(cfg, item.ID, pfnID, valueMap, valTree, vfIntId)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
@@ -87,6 +103,11 @@ func vfTurnOrderParty(cfg *Config, item turnOrderParty, _ FieldName, valueMap ma
 
 func vfTurnOrderMon(cfg *Config, item turnOrderMon, _ FieldName, valueMap map[FieldName]any, valTree ValidationTree) (turnOrderMon, error) {
 	var err error
+
+	err = vfExistingFields(valueMap, valTree)
+	if err != nil {
+		return turnOrderMon{}, err
+	}
 	
 	item.ID, err = verifyParamField(cfg, item.ID, pfnID, valueMap, valTree, vfIntId)
 	if err != nil {
@@ -131,6 +152,11 @@ func vfTurnOrderMon(cfg *Config, item turnOrderMon, _ FieldName, valueMap map[Fi
 
 func vfTurnOrderMonCustom(cfg *Config, item turnOrderMonCustom, _ FieldName, valueMap map[FieldName]any, valTree ValidationTree) (turnOrderMonCustom, error) {
 	var err error
+
+	err = vfExistingFields(valueMap, valTree)
+	if err != nil {
+		return turnOrderMonCustom{}, err
+	}
 	
 	item.Name, err = verifyParamField(cfg, item.Name, pfnName, valueMap, valTree, nil)
 	if err != nil {

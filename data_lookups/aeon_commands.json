@@ -1,0 +1,629 @@
+[
+  {
+    "ID": 1,
+    "TopmenuID": 1,
+    "SubmenuID": 12,
+    "name": "pay",
+    "description": "Pay Yojimbo for his services.",
+    "effect": "Pay Gil to Yojimbo in order for him to execute one of his abilities. 0 Gil to dismiss.",
+    "topmenu": "main",
+    "open_submenu": "gil yojimbo",
+    "cursor": "self",
+    "possible_abilities": [
+      {
+        "user": "yojimbo",
+        "abilities": [
+          {
+            "name": "daigoro",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "kozuka",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "wakizashi",
+            "version": 1,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "wakizashi",
+            "version": 2,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "zanmato",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "dismiss",
+            "version": null,
+            "ability_type": "misc-ability"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": 2,
+    "TopmenuID": 1,
+    "SubmenuID": null,
+    "name": "do as you will.",
+    "description": "Let the Sisters do as they please.",
+    "effect": "Ask the Magus Sisters to use a wide range of actions. Cindy may use Life-spells, Black Magic, attack. Sandy may use her physical or special attack, or cast reflect on Cindy. Mindy will use her physical or special attack. If Cindy has Reflect, Mindy will use Black Magic on her.",
+    "topmenu": "main",
+    "open_submenu": null,
+    "cursor": "self",
+    "possible_abilities": [
+      {
+        "user": "cindy",
+        "abilities": [
+          {
+            "name": "attack",
+            "version": 2,
+            "ability_type": "misc-ability"
+          },
+          {
+            "name": "life",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "full-life",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "auto-life",
+            "version": 1,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "firaga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "thundaga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "waterga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "blizzaga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "flare",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "taking a break...",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      },
+      {
+        "user": "sandy",
+        "abilities": [
+          {
+            "name": "attack",
+            "version": 2,
+            "ability_type": "misc-ability"
+          },
+          {
+            "name": "razzia",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "reflect",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      },
+      {
+        "user": "mindy",
+        "abilities": [
+          {
+            "name": "attack",
+            "version": 2,
+            "ability_type": "misc-ability"
+          },
+          {
+            "name": "passado",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "doublecast",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "fira",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "thundara",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "watera",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "blizzara",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "firaga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "thundaga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "waterga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "blizzaga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "drain",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "osmose",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "bio",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "death",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "flare",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "taking a break...",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": 3,
+    "TopmenuID": 1,
+    "SubmenuID": null,
+    "name": "one more time.",
+    "description": "Ask the Sisters to repeat their last move.",
+    "effect": "Ask the Magus Sisters to repeat their last move. They might use their physical or special attack instead.",
+    "topmenu": "main",
+    "open_submenu": null,
+    "cursor": "self",
+    "possible_abilities": [
+      {
+        "user": "cindy",
+        "abilities": [
+          {
+            "name": "attack",
+            "version": 2,
+            "ability_type": "misc-ability"
+          },
+          {
+            "name": "camisade",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      },
+      {
+        "user": "sandy",
+        "abilities": [
+          {
+            "name": "attack",
+            "version": 2,
+            "ability_type": "misc-ability"
+          },
+          {
+            "name": "razzia",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      },
+      {
+        "user": "mindy",
+        "abilities": [
+          {
+            "name": "attack",
+            "version": 2,
+            "ability_type": "misc-ability"
+          },
+          {
+            "name": "passado",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "taking a break...",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": 4,
+    "TopmenuID": 1,
+    "SubmenuID": null,
+    "name": "fight!",
+    "description": "Ask the Sisters to physically attack.",
+    "effect": "Ask the Magus Sisters to attack. They will either use their physical, or their special attack.",
+    "topmenu": "main",
+    "open_submenu": null,
+    "cursor": "self",
+    "possible_abilities": [
+      {
+        "user": "cindy",
+        "abilities": [
+          {
+            "name": "attack",
+            "version": 2,
+            "ability_type": "misc-ability"
+          },
+          {
+            "name": "camisade",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "taking a break...",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      },
+      {
+        "user": "sandy",
+        "abilities": [
+          {
+            "name": "attack",
+            "version": 2,
+            "ability_type": "misc-ability"
+          },
+          {
+            "name": "razzia",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "taking a break...",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      },
+      {
+        "user": "mindy",
+        "abilities": [
+          {
+            "name": "attack",
+            "version": 2,
+            "ability_type": "misc-ability"
+          },
+          {
+            "name": "passado",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "taking a break...",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": 5,
+    "TopmenuID": 1,
+    "SubmenuID": null,
+    "name": "go, go!",
+    "description": "Ask the Sisters to use offensive magic and skills.",
+    "effect": "Ask Cindy to use black magic. She sometimes uses Pray first.",
+    "topmenu": "main",
+    "open_submenu": null,
+    "cursor": "self",
+    "possible_abilities": [
+      {
+        "user": "cindy",
+        "abilities": [
+          {
+            "name": "attack",
+            "version": 2,
+            "ability_type": "misc-ability"
+          },
+          {
+            "name": "camisade",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "pray",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "firaga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "thundaga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "waterga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "blizzaga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "drain",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "osmose",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "flare",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "ultima",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "taking a break...",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": 6,
+    "TopmenuID": 1,
+    "SubmenuID": null,
+    "name": "help each other!",
+    "description": "Ask the Sisters to use healing magic on each other.",
+    "effect": "Ask Cindy to cure or revive her sisters, or to cast Auto-Life.",
+    "topmenu": "main",
+    "open_submenu": null,
+    "cursor": "self",
+    "possible_abilities": [
+      {
+        "user": "cindy",
+        "abilities": [
+          {
+            "name": "camisade",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "cure",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "cura",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "curaga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "life",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "full-life",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "auto-life",
+            "version": 1,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "taking a break...",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": 7,
+    "TopmenuID": 1,
+    "SubmenuID": null,
+    "name": "defense!",
+    "description": "Ask the Sisters to use defensive and support magic.",
+    "effect": "Ask Sandy to use Haste, Protect, and Shell, or to cure her sisters.",
+    "topmenu": "main",
+    "open_submenu": null,
+    "cursor": "self",
+    "possible_abilities": [
+      {
+        "user": "sandy",
+        "abilities": [
+          {
+            "name": "attack",
+            "version": 2,
+            "ability_type": "misc-ability"
+          },
+          {
+            "name": "razzia",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "cure",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "cura",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "curaga",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "haste",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "protect",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "shell",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "nulall",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "taking a break...",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": 8,
+    "TopmenuID": 1,
+    "SubmenuID": null,
+    "name": "are you alright?",
+    "description": "Ask the Sisters to absorb HP and MP from the enemy.",
+    "effect": "Ask Mindy to absorb HP and MP, if hers are low.",
+    "topmenu": "main",
+    "open_submenu": null,
+    "cursor": "self",
+    "possible_abilities": [
+      {
+        "user": "mindy",
+        "abilities": [
+          {
+            "name": "lancet",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "drain",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "osmose",
+            "version": null,
+            "ability_type": "player-ability"
+          },
+          {
+            "name": "taking a break...",
+            "version": null,
+            "ability_type": "player-ability"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": 9,
+    "TopmenuID": 1,
+    "SubmenuID": null,
+    "name": "combine powers!",
+    "description": "Ask the Sisters for their combined attack.",
+    "effect": "The Magus Sisters will use Delta-Attack, if all their Overdrive Gauges are full.",
+    "topmenu": "main",
+    "open_submenu": null,
+    "cursor": "all-allies",
+    "possible_abilities": [
+      {
+        "user": "magus-sisters",
+        "abilities": [
+          {
+            "name": "delta attack",
+            "version": null,
+            "ability_type": "overdrive-ability"
+          }
+        ]
+      }
+    ]
+  }
+]

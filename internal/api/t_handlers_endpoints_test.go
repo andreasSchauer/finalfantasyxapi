@@ -27,7 +27,7 @@ func TestRetrieveEndpoints(t *testing.T) {
 				requestURL:     "/api/endpoints",
 				expectedStatus: http.StatusOK,
 			},
-			count:   51,
+			count:   52,
 			results: []string{
 				"/areas",
 				"/equipment-tables",

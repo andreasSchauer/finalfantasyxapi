@@ -1,0 +1,6912 @@
+[
+  {
+    "ID": 1,
+    "Version": 1,
+    "AreaID": 2,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the girl in pink on the far right 3 times and say 'Sure thing' when prompted.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 2,
+    "Version": 1,
+    "AreaID": 6,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 200,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 3,
+    "Version": 2,
+    "AreaID": 6,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 4,
+    "Version": 1,
+    "AreaID": 7,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 5,
+    "Version": 2,
+    "AreaID": 7,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "After defeating Geosgaeno.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 1,
+      "TreasureID": 5,
+      "EquipmentNameID": 4,
+      "name": "onion knight",
+      "abilities": [
+        "no ap"
+      ],
+      "empty_slots_amount": 3
+    }
+  },
+  {
+    "ID": 6,
+    "Version": 1,
+    "AreaID": 9,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 3,
+        "Type": "item",
+        "name": "x-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 7,
+    "Version": 1,
+    "AreaID": 10,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 114,
+        "Type": "key-item",
+        "name": "flint",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 8,
+    "Version": 1,
+    "AreaID": 11,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 9,
+    "Version": 2,
+    "AreaID": 11,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 113,
+        "Type": "key-item",
+        "name": "withered bouquet",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 10,
+    "Version": 1,
+    "AreaID": 12,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 11,
+    "Version": 1,
+    "AreaID": 13,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 10,
+        "Type": "item",
+        "name": "mega phoenix",
+        "amount": 4
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 12,
+    "Version": 2,
+    "AreaID": 13,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 8,
+        "Type": "item",
+        "name": "megalixir",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 13,
+    "Version": 1,
+    "AreaID": 15,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 147,
+        "Type": "key-item",
+        "name": "al bhed primer i",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 14,
+    "Version": 2,
+    "AreaID": 15,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Can be repeated infinitely, if you dive into the water, come back up, and talk to the guy again.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 15,
+    "Version": 1,
+    "AreaID": 20,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 11,
+        "Type": "item",
+        "name": "antidote",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 16,
+    "Version": 2,
+    "AreaID": 20,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 125,
+        "Type": "key-item",
+        "name": "moon crest",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 17,
+    "Version": 3,
+    "AreaID": 20,
+    "treasure_type": "gift",
+    "loot_type": "gil",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Only on arrival and before following Wakka. Talk to Keepa 2 times.",
+    "gil_amount": 200,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 18,
+    "Version": 4,
+    "AreaID": 20,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Only on arrival and before following Wakka. Talk to Datto 4 times.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 19,
+    "Version": 5,
+    "AreaID": 20,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Only on arrival and before following Wakka. Talk to Jassu 2 times.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 20,
+    "Version": 6,
+    "AreaID": 20,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Only on arrival and before following Wakka. Talk to Botta 2 times.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 21,
+    "Version": 7,
+    "AreaID": 20,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "When leaving the village, before going on the boat. Wait until the NPCs are on the pier.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 2,
+      "TreasureID": 21,
+      "EquipmentNameID": 1032,
+      "name": "seeker's ring",
+      "abilities": [
+        "hp +10%"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 22,
+    "Version": 8,
+    "AreaID": 20,
+    "treasure_type": "gift",
+    "loot_type": "gil",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "When leaving the village, before going on the boat. Wait until the NPCs are on the pier.",
+    "gil_amount": 400,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 23,
+    "Version": 9,
+    "AreaID": 20,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "When leaving the village, before going on the boat. Wait until the NPCs are on the pier.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 9,
+        "Type": "item",
+        "name": "phoenix down",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 24,
+    "Version": 10,
+    "AreaID": 20,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "When leaving the village, before going on the boat. Wait until the NPCs are on the pier.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 25,
+    "Version": 11,
+    "AreaID": 20,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "When leaving the village, before going on the boat. Wait until the NPCs are on the pier.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 16,
+        "Type": "item",
+        "name": "remedy",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 26,
+    "Version": 1,
+    "AreaID": 22,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 9,
+        "Type": "item",
+        "name": "phoenix down",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 27,
+    "Version": 2,
+    "AreaID": 22,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 28,
+    "Version": 3,
+    "AreaID": 22,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 11,
+        "Type": "item",
+        "name": "antidote",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 29,
+    "Version": 1,
+    "AreaID": 27,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Secret location. Found via coordinate search.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 3,
+      "TreasureID": 29,
+      "EquipmentNameID": 160,
+      "name": "dragoon lance",
+      "abilities": [
+        "magic counter",
+        "evade \u0026 counter"
+      ],
+      "empty_slots_amount": 2
+    }
+  },
+  {
+    "ID": 30,
+    "Version": 1,
+    "AreaID": 28,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Secret location. Found by entering the 'VICTORIOUS' password.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 4,
+      "TreasureID": 30,
+      "EquipmentNameID": 671,
+      "name": "victorious",
+      "abilities": [
+        "lightningproof",
+        "fireproof",
+        "iceproof"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 31,
+    "Version": 1,
+    "AreaID": 29,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Secret location. Found by entering the 'MURASAME' password.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 5,
+      "TreasureID": 31,
+      "EquipmentNameID": 98,
+      "name": "murasame",
+      "abilities": [
+        "piercing",
+        "one mp cost"
+      ],
+      "empty_slots_amount": 2
+    }
+  },
+  {
+    "ID": 32,
+    "Version": 1,
+    "AreaID": 36,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 9,
+        "Type": "item",
+        "name": "phoenix down",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 33,
+    "Version": 2,
+    "AreaID": 36,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 34,
+    "Version": 3,
+    "AreaID": 36,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 400,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 35,
+    "Version": 4,
+    "AreaID": 36,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 36,
+    "Version": 5,
+    "AreaID": 36,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "On the next morning, when leaving the village.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 6,
+      "TreasureID": 36,
+      "EquipmentNameID": 8,
+      "name": "brotherhood",
+      "abilities": [
+        "strength +5%"
+      ],
+      "empty_slots_amount": 3
+    }
+  },
+  {
+    "ID": 37,
+    "Version": 6,
+    "AreaID": 36,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After defeating Spherimorph.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 138,
+        "Type": "key-item",
+        "name": "jecht sphere 2",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 38,
+    "Version": 1,
+    "AreaID": 41,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 148,
+        "Type": "key-item",
+        "name": "al bhed primer ii",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 39,
+    "Version": 1,
+    "AreaID": 33,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": true,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 7,
+      "TreasureID": 39,
+      "EquipmentNameID": 332,
+      "name": "rod of wisdom",
+      "abilities": [
+        "magic +5%",
+        "magic +3%",
+        "sensor"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 40,
+    "Version": 1,
+    "AreaID": 35,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "You need to defeat Dark Valefor to get access to the temple again.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 92,
+        "Type": "item",
+        "name": "evasion sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 41,
+    "Version": 2,
+    "AreaID": 35,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "You need to defeat Dark Valefor to get access to the temple again.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 42,
+    "Version": 3,
+    "AreaID": 35,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "You need to defeat Dark Valefor to get access to the temple again.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 43,
+    "Version": 4,
+    "AreaID": 35,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "You need to defeat Dark Valefor to get access to the temple again.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 78,
+        "Type": "item",
+        "name": "wht magic sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 44,
+    "Version": 5,
+    "AreaID": 35,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "You need to defeat Dark Valefor to get access to the temple again.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 45,
+    "Version": 1,
+    "AreaID": 42,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Given by Clasko, if you have told him to become a Chocobo breeder outside the Macalania Travel Agency.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 97,
+        "Type": "item",
+        "name": "friend sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 46,
+    "Version": 1,
+    "AreaID": 43,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After defeating Spherimorph.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 139,
+        "Type": "key-item",
+        "name": "jecht sphere 3",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 47,
+    "Version": 1,
+    "AreaID": 45,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 16,
+        "Type": "item",
+        "name": "remedy",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 48,
+    "Version": 2,
+    "AreaID": 45,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "You can kick the suitcase until you have 20 potions.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 49,
+    "Version": 1,
+    "AreaID": 46,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 149,
+        "Type": "key-item",
+        "name": "al bhed primer iii",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 50,
+    "Version": 1,
+    "AreaID": 49,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 150,
+        "Type": "key-item",
+        "name": "al bhed primer iv",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 51,
+    "Version": 2,
+    "AreaID": 49,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Save the kid in the residential area and speak to the woman at the counter of the tavern.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 52,
+    "Version": 1,
+    "AreaID": 53,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 53,
+    "Version": 1,
+    "AreaID": 54,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 71,
+        "Type": "item",
+        "name": "mana sphere",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 54,
+    "Version": 2,
+    "AreaID": 54,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 8,
+      "TreasureID": 54,
+      "EquipmentNameID": 333,
+      "name": "scout",
+      "abilities": [
+        "icestrike",
+        "sensor"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 55,
+    "Version": 3,
+    "AreaID": 54,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "North of the chest with the Scout, talk to the crusader in blue armor twice.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 16,
+        "Type": "item",
+        "name": "remedy",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 56,
+    "Version": 4,
+    "AreaID": 54,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "From the intersection where you got the remedy, continue north, following the path to the next intersection. Talk to the crusader in blue.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 57,
+    "Version": 5,
+    "AreaID": 54,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 94,
+        "Type": "item",
+        "name": "luck sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 58,
+    "Version": 6,
+    "AreaID": 54,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Engage Lord Ochu from the east, and then flee. The crusader will give you the treasure.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 9,
+        "Type": "item",
+        "name": "phoenix down",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 59,
+    "Version": 7,
+    "AreaID": 54,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Speak to Luzzu twice before defeating Lord Ochu.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 11,
+        "Type": "item",
+        "name": "antidote",
+        "amount": 4
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 60,
+    "Version": 8,
+    "AreaID": 54,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Given by Luzzu after defeating Lord Ochu.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 61,
+    "Version": 9,
+    "AreaID": 54,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After defeating Lord Ochu.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 9,
+      "TreasureID": 61,
+      "EquipmentNameID": 908,
+      "name": "nulblaze shield",
+      "abilities": [
+        "sos nulblaze"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 62,
+    "Version": 1,
+    "AreaID": 61,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": true,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 10,
+      "TreasureID": 62,
+      "EquipmentNameID": 877,
+      "name": "red armlet",
+      "abilities": [
+        "fire ward",
+        "ice ward",
+        "lightning ward"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 63,
+    "Version": 1,
+    "AreaID": 63,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 94,
+        "Type": "item",
+        "name": "luck sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 64,
+    "Version": 2,
+    "AreaID": 63,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 88,
+        "Type": "item",
+        "name": "defense sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 65,
+    "Version": 3,
+    "AreaID": 63,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 91,
+        "Type": "item",
+        "name": "agility sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 66,
+    "Version": 4,
+    "AreaID": 63,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 93,
+        "Type": "item",
+        "name": "accuracy sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 67,
+    "Version": 1,
+    "AreaID": 64,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After the completing the Djose cloyster. Tell the researcher you've counted 11 seagulls.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 11,
+      "TreasureID": 67,
+      "EquipmentNameID": 116,
+      "name": "ace wizard",
+      "abilities": [
+        "magic +20%",
+        "magic +10%",
+        "magic +5%",
+        "magic +3%"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 68,
+    "Version": 1,
+    "AreaID": 65,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 151,
+        "Type": "key-item",
+        "name": "al bhed primer v",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 69,
+    "Version": 1,
+    "AreaID": 67,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 70,
+    "Version": 1,
+    "AreaID": 71,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After defeating Spherimorph.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 140,
+        "Type": "key-item",
+        "name": "jecht sphere 4",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 71,
+    "Version": 1,
+    "AreaID": 72,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After the events at Luca.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 131,
+        "Type": "key-item",
+        "name": "jupiter crest",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 72,
+    "Version": 1,
+    "AreaID": 73,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 152,
+        "Type": "key-item",
+        "name": "al bhed primer vi",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 73,
+    "Version": 2,
+    "AreaID": 73,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 74,
+    "Version": 1,
+    "AreaID": 75,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Win the game against the Luca Goers.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 87,
+        "Type": "item",
+        "name": "strength sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 75,
+    "Version": 1,
+    "AreaID": 76,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 600,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 76,
+    "Version": 2,
+    "AreaID": 76,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 12,
+      "TreasureID": 76,
+      "EquipmentNameID": 363,
+      "name": "tidal spear",
+      "abilities": [
+        "piercing",
+        "waterstrike"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 77,
+    "Version": 1,
+    "AreaID": 77,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After Mika's arrival.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 9,
+        "Type": "item",
+        "name": "phoenix down",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 78,
+    "Version": 1,
+    "AreaID": 80,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 85,
+        "Type": "item",
+        "name": "hp sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 79,
+    "Version": 2,
+    "AreaID": 80,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 89,
+        "Type": "item",
+        "name": "magic sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 80,
+    "Version": 1,
+    "AreaID": 84,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 153,
+        "Type": "key-item",
+        "name": "al bhed primer vii",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 81,
+    "Version": 1,
+    "AreaID": 86,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Win a blitzball tournament and speak to the woman at the counter. Need Celestial Mirror.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 13,
+      "TreasureID": 81,
+      "EquipmentNameID": 3,
+      "name": "world champion",
+      "abilities": [
+        "no ap"
+      ],
+      "empty_slots_amount": 3
+    }
+  },
+  {
+    "ID": 82,
+    "Version": 1,
+    "AreaID": 87,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 1000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 83,
+    "Version": 1,
+    "AreaID": 88,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Male NPC in yellow shirt.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 84,
+    "Version": 2,
+    "AreaID": 88,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Male NPC in blue shirt.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 14,
+      "TreasureID": 84,
+      "EquipmentNameID": 335,
+      "name": "hunter's spear",
+      "abilities": [
+        "piercing",
+        "sensor",
+        "strength +10%"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 85,
+    "Version": 3,
+    "AreaID": 88,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Female NPC near Maechen.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 11,
+        "Type": "item",
+        "name": "antidote",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 86,
+    "Version": 4,
+    "AreaID": 88,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 15,
+      "TreasureID": 86,
+      "EquipmentNameID": 345,
+      "name": "ice brand",
+      "abilities": [
+        "icestrike"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 87,
+    "Version": 5,
+    "AreaID": 88,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Loss against Belgemine.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 16,
+      "TreasureID": 87,
+      "EquipmentNameID": 1032,
+      "name": "seeker's ring",
+      "abilities": [
+        "hp +10%"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 88,
+    "Version": 6,
+    "AreaID": 88,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Win against Belgemine.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 17,
+      "TreasureID": 88,
+      "EquipmentNameID": 860,
+      "name": "echo ring",
+      "abilities": [
+        "hp +10%",
+        "silence ward"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 89,
+    "Version": 1,
+    "AreaID": 89,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Crusader in blue armor.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 18,
+      "TreasureID": 89,
+      "EquipmentNameID": 874,
+      "name": "red ring",
+      "abilities": [
+        "hp +10%",
+        "fire ward"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 90,
+    "Version": 2,
+    "AreaID": 89,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 16,
+        "Type": "item",
+        "name": "remedy",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 91,
+    "Version": 3,
+    "AreaID": 89,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the boy playing blitzball. Only, if you don't kick the blitzball.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 12,
+        "Type": "item",
+        "name": "soft",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 92,
+    "Version": 1,
+    "AreaID": 90,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Crusader in blue armor.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 81,
+        "Type": "item",
+        "name": "lv. 1 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 93,
+    "Version": 2,
+    "AreaID": 90,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Crusader in yellow armor. In the southern part of the area.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 11,
+        "Type": "item",
+        "name": "antidote",
+        "amount": 4
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 94,
+    "Version": 3,
+    "AreaID": 90,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 2000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 95,
+    "Version": 4,
+    "AreaID": 90,
+    "treasure_type": "gift",
+    "loot_type": "gil",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Crusader in yellow armor. In the middle part of the area.",
+    "gil_amount": 600,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 96,
+    "Version": 5,
+    "AreaID": 90,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Crusader in purple armor.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 97,
+    "Version": 6,
+    "AreaID": 90,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Female NPC after the Luzzu and Gatta cutscene.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 98,
+    "Version": 7,
+    "AreaID": 90,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 13,
+        "Type": "item",
+        "name": "eye drops",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 99,
+    "Version": 1,
+    "AreaID": 92,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the NPC.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 81,
+        "Type": "item",
+        "name": "lv. 1 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 100,
+    "Version": 2,
+    "AreaID": 92,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Given by Rin.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 154,
+        "Type": "key-item",
+        "name": "al bhed primer viii",
+        "amount": 1
+      },
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 101,
+    "Version": 1,
+    "AreaID": 94,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Only accessible via Chocobo.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 19,
+      "TreasureID": 101,
+      "EquipmentNameID": 342,
+      "name": "heat lance",
+      "abilities": [
+        "piercing",
+        "firestrike"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 102,
+    "Version": 2,
+    "AreaID": 94,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 155,
+        "Type": "key-item",
+        "name": "al bhed primer ix",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 103,
+    "Version": 1,
+    "AreaID": 95,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 104,
+    "Version": 1,
+    "AreaID": 96,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Only accessible via Chocobo.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 20,
+      "TreasureID": 104,
+      "EquipmentNameID": 333,
+      "name": "scout",
+      "abilities": [
+        "sensor",
+        "lightningstrike"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 105,
+    "Version": 2,
+    "AreaID": 96,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Only accessible via Chocobo.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 21,
+      "TreasureID": 105,
+      "EquipmentNameID": 357,
+      "name": "thunder blade",
+      "abilities": [
+        "piercing",
+        "lightningstrike"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 106,
+    "Version": 1,
+    "AreaID": 97,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Only accessible via Chocobo.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 74,
+        "Type": "item",
+        "name": "fortune sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 107,
+    "Version": 2,
+    "AreaID": 97,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 127,
+        "Type": "key-item",
+        "name": "mars crest",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 108,
+    "Version": 3,
+    "AreaID": 97,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After defeating Spherimorph.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 141,
+        "Type": "key-item",
+        "name": "jecht sphere 5",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 109,
+    "Version": 1,
+    "AreaID": 98,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Secret location. Found via coordinate search.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 22,
+      "TreasureID": 109,
+      "EquipmentNameID": 204,
+      "name": "sonar",
+      "abilities": [
+        "initiative",
+        "poisonstrike"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 110,
+    "Version": 1,
+    "AreaID": 99,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the crusader toward the south after the Seymour cutscene.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 23,
+      "TreasureID": 110,
+      "EquipmentNameID": 1002,
+      "name": "tough bangle",
+      "abilities": [
+        "hp +20%"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 111,
+    "Version": 2,
+    "AreaID": 99,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the crusader next to the one that gave you the Tough Bangle.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 16,
+        "Type": "item",
+        "name": "remedy",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 112,
+    "Version": 3,
+    "AreaID": 99,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Wait for three crusaders to gather. Talk to each of them.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 113,
+    "Version": 4,
+    "AreaID": 99,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Wait for three crusaders to gather. Talk to each of them.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 114,
+    "Version": 5,
+    "AreaID": 99,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Wait for three crusaders to gather. Talk to each of them.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 9,
+        "Type": "item",
+        "name": "phoenix down",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 115,
+    "Version": 6,
+    "AreaID": 99,
+    "treasure_type": "object",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Take the lift and exhibit the statue. Rusty Sword and Celestial Mirror needed.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 24,
+      "TreasureID": 115,
+      "EquipmentNameID": 6,
+      "name": "masamune",
+      "abilities": [
+        "no ap"
+      ],
+      "empty_slots_amount": 3
+    }
+  },
+  {
+    "ID": 116,
+    "Version": 7,
+    "AreaID": 99,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Only after completing the Cloyster of Trials at Djose Temple.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 12,
+        "Type": "item",
+        "name": "soft",
+        "amount": 4
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 117,
+    "Version": 1,
+    "AreaID": 100,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the first crusader.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 118,
+    "Version": 2,
+    "AreaID": 100,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 1000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 119,
+    "Version": 3,
+    "AreaID": 100,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the crusader next to the chest with 1000 gil.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 10
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 120,
+    "Version": 4,
+    "AreaID": 100,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 16,
+        "Type": "item",
+        "name": "remedy",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 121,
+    "Version": 5,
+    "AreaID": 100,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 122,
+    "Version": 1,
+    "AreaID": 101,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the first crusader.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 3,
+        "Type": "item",
+        "name": "x-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 123,
+    "Version": 2,
+    "AreaID": 101,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 25,
+      "TreasureID": 123,
+      "EquipmentNameID": 815,
+      "name": "serene armlet",
+      "abilities": [
+        "dark ward",
+        "berserk ward"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 124,
+    "Version": 3,
+    "AreaID": 101,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 156,
+        "Type": "key-item",
+        "name": "al bhed primer x",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 125,
+    "Version": 4,
+    "AreaID": 101,
+    "treasure_type": "gift",
+    "loot_type": "gil",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the second crusader.",
+    "gil_amount": 400,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 126,
+    "Version": 5,
+    "AreaID": 101,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the crusader in front of the final elevator.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 127,
+    "Version": 6,
+    "AreaID": 101,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After defeating Spherimorph.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 146,
+        "Type": "key-item",
+        "name": "auron's sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 128,
+    "Version": 1,
+    "AreaID": 103,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 26,
+      "TreasureID": 128,
+      "EquipmentNameID": 816,
+      "name": "serene bracer",
+      "abilities": [
+        "hp +5%",
+        "berserk ward"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 129,
+    "Version": 2,
+    "AreaID": 103,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 130,
+    "Version": 1,
+    "AreaID": 105,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 131,
+    "Version": 1,
+    "AreaID": 106,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Secret location. Found via coordinate search.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 27,
+      "TreasureID": 131,
+      "EquipmentNameID": 600,
+      "name": "phantom bangle",
+      "abilities": [
+        "ice eater",
+        "fire eater",
+        "water eater"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 132,
+    "Version": 1,
+    "AreaID": 107,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Secret location. Found by entering the 'GODHAND' password. Need Celestial Mirror to open.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 28,
+      "TreasureID": 132,
+      "EquipmentNameID": 7,
+      "name": "godhand",
+      "abilities": [
+        "no ap"
+      ],
+      "empty_slots_amount": 3
+    }
+  },
+  {
+    "ID": 133,
+    "Version": 1,
+    "AreaID": 108,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Backtrack at the beginning of the area and talk to the blue crusader twice.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 29,
+      "TreasureID": 133,
+      "EquipmentNameID": 394,
+      "name": "variable steel",
+      "abilities": [
+        "strength +3%"
+      ],
+      "empty_slots_amount": 3
+    }
+  },
+  {
+    "ID": 134,
+    "Version": 2,
+    "AreaID": 108,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "First crusader walking north.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 30,
+      "TreasureID": 134,
+      "EquipmentNameID": 839,
+      "name": "soft ring",
+      "abilities": [
+        "stoneproof"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 135,
+    "Version": 3,
+    "AreaID": 108,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Praying crusader towards the end of the highroad.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 136,
+    "Version": 4,
+    "AreaID": 108,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 9,
+        "Type": "item",
+        "name": "phoenix down",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 137,
+    "Version": 5,
+    "AreaID": 108,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 157,
+        "Type": "key-item",
+        "name": "al bhed primer xi",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 138,
+    "Version": 6,
+    "AreaID": 108,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 31,
+      "TreasureID": 138,
+      "EquipmentNameID": 869,
+      "name": "bright bangle",
+      "abilities": [
+        "dark ward"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 139,
+    "Version": 7,
+    "AreaID": 108,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Priest next to the crusader with the ether.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 140,
+    "Version": 8,
+    "AreaID": 108,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Crusader in the middle area, near the primer.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 141,
+    "Version": 1,
+    "AreaID": 109,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Only after completing the Cloyster of Trials at Djose Temple, before entering the Moonflow.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 32,
+      "TreasureID": 141,
+      "EquipmentNameID": 412,
+      "name": "halberd",
+      "abilities": [
+        "magic +20%"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 142,
+    "Version": 2,
+    "AreaID": 109,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Only after completing the Cloyster of Trials at Djose Temple. Talk to the priest.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 143,
+    "Version": 3,
+    "AreaID": 109,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Only after completing the Cloyster of Trials at Djose Temple. Talk to the blue crusader.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 10
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 144,
+    "Version": 1,
+    "AreaID": 110,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 4000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 145,
+    "Version": 2,
+    "AreaID": 110,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 73,
+        "Type": "item",
+        "name": "ability sphere",
+        "amount": 4
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 146,
+    "Version": 1,
+    "AreaID": 111,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Only after completing the Cloyster of Trials at Djose Temple.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 33,
+      "TreasureID": 146,
+      "EquipmentNameID": 410,
+      "name": "switch hitter",
+      "abilities": [
+        "strength +3%",
+        "strength +5%"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 147,
+    "Version": 1,
+    "AreaID": 112,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 148,
+    "Version": 1,
+    "AreaID": 113,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 16,
+        "Type": "item",
+        "name": "remedy",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 149,
+    "Version": 1,
+    "AreaID": 114,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 10,
+        "Type": "item",
+        "name": "mega phoenix",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 150,
+    "Version": 1,
+    "AreaID": 115,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": true,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 89,
+        "Type": "item",
+        "name": "magic sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 151,
+    "Version": 1,
+    "AreaID": 117,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 94,
+        "Type": "item",
+        "name": "luck sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 152,
+    "Version": 2,
+    "AreaID": 117,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 91,
+        "Type": "item",
+        "name": "agility sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 153,
+    "Version": 3,
+    "AreaID": 117,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 90,
+        "Type": "item",
+        "name": "magic def sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 154,
+    "Version": 1,
+    "AreaID": 118,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 81,
+        "Type": "item",
+        "name": "lv. 1 key sphere",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 155,
+    "Version": 2,
+    "AreaID": 118,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 3,
+        "Type": "item",
+        "name": "x-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 156,
+    "Version": 3,
+    "AreaID": 118,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 81,
+        "Type": "item",
+        "name": "lv. 1 key sphere",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 157,
+    "Version": 4,
+    "AreaID": 118,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 90,
+        "Type": "item",
+        "name": "magic def sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 158,
+    "Version": 5,
+    "AreaID": 118,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Loss against Belgemine.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 117,
+        "Type": "key-item",
+        "name": "summoner's soul",
+        "amount": 1
+      },
+      {
+        "ID": 41,
+        "Type": "item",
+        "name": "smoke bomb",
+        "amount": 6
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 159,
+    "Version": 6,
+    "AreaID": 118,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Win against Belgemine.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 117,
+        "Type": "key-item",
+        "name": "summoner's soul",
+        "amount": 1
+      },
+      {
+        "ID": 31,
+        "Type": "item",
+        "name": "dragon scale",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 160,
+    "Version": 1,
+    "AreaID": 120,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 9,
+        "Type": "item",
+        "name": "phoenix down",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 161,
+    "Version": 1,
+    "AreaID": 122,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 5000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 162,
+    "Version": 2,
+    "AreaID": 122,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After defeating Spherimorph.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 142,
+        "Type": "key-item",
+        "name": "jecht sphere 6",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 163,
+    "Version": 1,
+    "AreaID": 125,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 158,
+        "Type": "key-item",
+        "name": "al bhed primer xii",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 164,
+    "Version": 1,
+    "AreaID": 126,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 165,
+    "Version": 1,
+    "AreaID": 127,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 11,
+        "Type": "item",
+        "name": "antidote",
+        "amount": 4
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 166,
+    "Version": 1,
+    "AreaID": 128,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 167,
+    "Version": 1,
+    "AreaID": 129,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 168,
+    "Version": 2,
+    "AreaID": 129,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 169,
+    "Version": 1,
+    "AreaID": 132,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 159,
+        "Type": "key-item",
+        "name": "al bhed primer xiii",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 170,
+    "Version": 2,
+    "AreaID": 132,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 3000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 171,
+    "Version": 1,
+    "AreaID": 134,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Climb the stairs once you enter the mansion.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 172,
+    "Version": 1,
+    "AreaID": 136,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 28,
+        "Type": "item",
+        "name": "lightning marble",
+        "amount": 8
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 173,
+    "Version": 1,
+    "AreaID": 138,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After the passage to the Thunder Plains opens.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 133,
+        "Type": "key-item",
+        "name": "venus crest",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 174,
+    "Version": 2,
+    "AreaID": 138,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After talking to Wakka, the Brotherhood gets upgraded.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 34,
+      "TreasureID": 174,
+      "EquipmentNameID": 8,
+      "name": "brotherhood",
+      "abilities": [
+        "strength +5%",
+        "strength +10%",
+        "waterstrike",
+        "sensor"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 175,
+    "Version": 1,
+    "AreaID": 139,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 9,
+        "Type": "item",
+        "name": "phoenix down",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 176,
+    "Version": 2,
+    "AreaID": 139,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 177,
+    "Version": 3,
+    "AreaID": 139,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 5000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 178,
+    "Version": 4,
+    "AreaID": 139,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 35,
+      "TreasureID": 178,
+      "EquipmentNameID": 361,
+      "name": "water ball",
+      "abilities": [
+        "waterstrike"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 179,
+    "Version": 5,
+    "AreaID": 139,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After defeating Spherimorph.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 143,
+        "Type": "key-item",
+        "name": "jecht sphere 7",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 180,
+    "Version": 6,
+    "AreaID": 139,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Pray at three cactuar stones throughout the Thunder Plains. Follow the Qactuar and pray at the lightning tower. Celestial Mirror needed.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 36,
+      "TreasureID": 180,
+      "EquipmentNameID": 5,
+      "name": "spirit lance",
+      "abilities": [
+        "no ap"
+      ],
+      "empty_slots_amount": 3
+    }
+  },
+  {
+    "ID": 181,
+    "Version": 1,
+    "AreaID": 140,
+    "treasure_type": "object",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "After Wantz made a photo of Yuna. It's lying on the ground.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 37,
+      "TreasureID": 181,
+      "EquipmentNameID": 887,
+      "name": "yellow shield",
+      "abilities": [
+        "lightningproof"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 182,
+    "Version": 1,
+    "AreaID": 141,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 160,
+        "Type": "key-item",
+        "name": "al bhed primer xiv",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 183,
+    "Version": 1,
+    "AreaID": 142,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 3,
+        "Type": "item",
+        "name": "x-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 184,
+    "Version": 2,
+    "AreaID": 142,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 185,
+    "Version": 3,
+    "AreaID": 142,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 2000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 186,
+    "Version": 4,
+    "AreaID": 142,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 16,
+        "Type": "item",
+        "name": "remedy",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 187,
+    "Version": 1,
+    "AreaID": 143,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 38,
+      "TreasureID": 187,
+      "EquipmentNameID": 313,
+      "name": "sleepy cait sith",
+      "abilities": [
+        "sleeptouch"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 188,
+    "Version": 2,
+    "AreaID": 143,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 2000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 189,
+    "Version": 3,
+    "AreaID": 143,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After defeating Spherimorph.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 144,
+        "Type": "key-item",
+        "name": "jecht sphere 8",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 190,
+    "Version": 1,
+    "AreaID": 144,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 9,
+        "Type": "item",
+        "name": "phoenix down",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 191,
+    "Version": 1,
+    "AreaID": 145,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 16,
+        "Type": "item",
+        "name": "remedy",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 192,
+    "Version": 1,
+    "AreaID": 149,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 161,
+        "Type": "key-item",
+        "name": "al bhed primer xv",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 193,
+    "Version": 1,
+    "AreaID": 150,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 137,
+        "Type": "key-item",
+        "name": "jecht sphere 1",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 194,
+    "Version": 1,
+    "AreaID": 153,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After the events at Bevelle, on the next morning.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 39,
+      "TreasureID": 194,
+      "EquipmentNameID": 805,
+      "name": "lucid ring",
+      "abilities": [
+        "silence ward",
+        "confuse ward"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 195,
+    "Version": 1,
+    "AreaID": 156,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After the battle against Crawler.",
+    "gil_amount": 4000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 196,
+    "Version": 2,
+    "AreaID": 156,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 162,
+        "Type": "key-item",
+        "name": "al bhed primer xvi",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 197,
+    "Version": 1,
+    "AreaID": 159,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 81,
+        "Type": "item",
+        "name": "lv. 1 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 198,
+    "Version": 2,
+    "AreaID": 159,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 199,
+    "Version": 1,
+    "AreaID": 160,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 82,
+        "Type": "item",
+        "name": "lv. 2 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 200,
+    "Version": 2,
+    "AreaID": 160,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 40,
+      "TreasureID": 200,
+      "EquipmentNameID": 163,
+      "name": "avenger",
+      "abilities": [
+        "counterattack"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 201,
+    "Version": 1,
+    "AreaID": 161,
+    "treasure_type": "gift",
+    "loot_type": "gil",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the sitting female Al Bhed.",
+    "gil_amount": 400,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 202,
+    "Version": 1,
+    "AreaID": 162,
+    "treasure_type": "gift",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to Tromell before triggering the Jyscal cutscene.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 41,
+      "TreasureID": 202,
+      "EquipmentNameID": 720,
+      "name": "shell targe",
+      "abilities": [
+        "sos shell"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 203,
+    "Version": 2,
+    "AreaID": 162,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 5000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 204,
+    "Version": 3,
+    "AreaID": 162,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 3,
+        "Type": "item",
+        "name": "x-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 205,
+    "Version": 1,
+    "AreaID": 163,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the monk with the purple coat.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 206,
+    "Version": 2,
+    "AreaID": 163,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the brown/green male NPC.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 207,
+    "Version": 3,
+    "AreaID": 163,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 9,
+        "Type": "item",
+        "name": "phoenix down",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 208,
+    "Version": 1,
+    "AreaID": 164,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the female NPC with the yellow coat.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 209,
+    "Version": 2,
+    "AreaID": 164,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 16,
+        "Type": "item",
+        "name": "remedy",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 210,
+    "Version": 1,
+    "AreaID": 165,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": true,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 94,
+        "Type": "item",
+        "name": "luck sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 211,
+    "Version": 1,
+    "AreaID": 168,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "You need to defeat Dark Shiva to get access to the temple again.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 89,
+        "Type": "item",
+        "name": "magic sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 212,
+    "Version": 2,
+    "AreaID": 168,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "You need to defeat Dark Shiva to get access to the temple again.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 93,
+        "Type": "item",
+        "name": "accuracy sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 213,
+    "Version": 3,
+    "AreaID": 168,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "You need to defeat Dark Shiva to get access to the temple again.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 90,
+        "Type": "item",
+        "name": "magic def sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 214,
+    "Version": 1,
+    "AreaID": 169,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 21,
+        "Type": "item",
+        "name": "al bhed potion",
+        "amount": 8
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 215,
+    "Version": 2,
+    "AreaID": 169,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "If you missed it on the Salvage Ship.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 147,
+        "Type": "key-item",
+        "name": "al bhed primer i",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 216,
+    "Version": 3,
+    "AreaID": 169,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "If you missed it on the S.S. Liki.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 149,
+        "Type": "key-item",
+        "name": "al bhed primer iii",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 217,
+    "Version": 1,
+    "AreaID": 170,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 21,
+        "Type": "item",
+        "name": "al bhed potion",
+        "amount": 8
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 218,
+    "Version": 2,
+    "AreaID": 170,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 219,
+    "Version": 3,
+    "AreaID": 170,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 4
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 220,
+    "Version": 4,
+    "AreaID": 170,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "If you missed it on the S.S. Winno.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 151,
+        "Type": "key-item",
+        "name": "al bhed primer v",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 221,
+    "Version": 5,
+    "AreaID": 170,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "If you missed talking to Rin at the Thunder Plains Travel Agency.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 160,
+        "Type": "key-item",
+        "name": "al bhed primer xiv",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 222,
+    "Version": 1,
+    "AreaID": 171,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 3,
+        "Type": "item",
+        "name": "x-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 223,
+    "Version": 2,
+    "AreaID": 171,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 224,
+    "Version": 3,
+    "AreaID": 171,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 4
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 225,
+    "Version": 4,
+    "AreaID": 171,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 21,
+        "Type": "item",
+        "name": "al bhed potion",
+        "amount": 8
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 226,
+    "Version": 5,
+    "AreaID": 171,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 227,
+    "Version": 6,
+    "AreaID": 171,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 10000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 228,
+    "Version": 7,
+    "AreaID": 171,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 82,
+        "Type": "item",
+        "name": "lv. 2 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 229,
+    "Version": 8,
+    "AreaID": 171,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 163,
+        "Type": "key-item",
+        "name": "al bhed primer xvii",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 230,
+    "Version": 9,
+    "AreaID": 171,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 164,
+        "Type": "key-item",
+        "name": "al bhed primer xviii",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 231,
+    "Version": 1,
+    "AreaID": 172,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 135,
+        "Type": "key-item",
+        "name": "mercury crest",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 232,
+    "Version": 2,
+    "AreaID": 172,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 8
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 233,
+    "Version": 3,
+    "AreaID": 172,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 234,
+    "Version": 4,
+    "AreaID": 172,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 3,
+        "Type": "item",
+        "name": "x-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 235,
+    "Version": 5,
+    "AreaID": 172,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Sandragora guarding the chest.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 8,
+        "Type": "item",
+        "name": "megalixir",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 236,
+    "Version": 6,
+    "AreaID": 172,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Sandragora guarding the chest.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 98,
+        "Type": "item",
+        "name": "teleport sphere",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 237,
+    "Version": 1,
+    "AreaID": 173,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Secret location. Found via coordinate search.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 42,
+      "TreasureID": 237,
+      "EquipmentNameID": 72,
+      "name": "ascalon",
+      "abilities": [
+        "double ap"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 238,
+    "Version": 1,
+    "AreaID": 174,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 165,
+        "Type": "key-item",
+        "name": "al bhed primer xix",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 239,
+    "Version": 2,
+    "AreaID": 174,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 240,
+    "Version": 1,
+    "AreaID": 176,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 21,
+        "Type": "item",
+        "name": "al bhed potion",
+        "amount": 4
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 241,
+    "Version": 2,
+    "AreaID": 176,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 21,
+        "Type": "item",
+        "name": "al bhed potion",
+        "amount": 6
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 242,
+    "Version": 3,
+    "AreaID": 176,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 167,
+        "Type": "key-item",
+        "name": "al bhed primer xxi",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 243,
+    "Version": 4,
+    "AreaID": 176,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 82,
+        "Type": "item",
+        "name": "lv. 2 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 244,
+    "Version": 5,
+    "AreaID": 176,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 84,
+        "Type": "item",
+        "name": "lv. 4 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 245,
+    "Version": 1,
+    "AreaID": 177,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 166,
+        "Type": "key-item",
+        "name": "al bhed primer xx",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 246,
+    "Version": 2,
+    "AreaID": 177,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Answer the Al Bhed questions correctly.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 97,
+        "Type": "item",
+        "name": "friend sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 247,
+    "Version": 3,
+    "AreaID": 177,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "You get one item depending on your selection.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      },
+      {
+        "ID": 2,
+        "Type": "item",
+        "name": "hi-potion",
+        "amount": 1
+      },
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 1
+      },
+      {
+        "ID": 12,
+        "Type": "item",
+        "name": "soft",
+        "amount": 1
+      },
+      {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 1
+      },
+      {
+        "ID": 16,
+        "Type": "item",
+        "name": "remedy",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 248,
+    "Version": 1,
+    "AreaID": 178,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Answer the Al Bhed questions correctly.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 76,
+        "Type": "item",
+        "name": "special sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 249,
+    "Version": 2,
+    "AreaID": 178,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Answer the Al Bhed questions correctly.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 77,
+        "Type": "item",
+        "name": "skill sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 250,
+    "Version": 1,
+    "AreaID": 179,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 10000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 251,
+    "Version": 1,
+    "AreaID": 189,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Talk to the Al Bhed in the corner before fighting Evrae.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 21,
+        "Type": "item",
+        "name": "al bhed potion",
+        "amount": 4
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 252,
+    "Version": 1,
+    "AreaID": 197,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 168,
+        "Type": "key-item",
+        "name": "al bhed primer xxii",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 253,
+    "Version": 1,
+    "AreaID": 198,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": true,
+    "notes": "This chest is unmissable and counts as the Bevelle temple treasure for getting Anima.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 85,
+        "Type": "item",
+        "name": "hp sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 254,
+    "Version": 2,
+    "AreaID": 198,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 43,
+      "TreasureID": 254,
+      "EquipmentNameID": 258,
+      "name": "knight lance",
+      "abilities": [
+        "strength +3%",
+        "strength +5%",
+        "strength +10%"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 255,
+    "Version": 1,
+    "AreaID": 199,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 79,
+        "Type": "item",
+        "name": "blk magic sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 256,
+    "Version": 2,
+    "AreaID": 199,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 257,
+    "Version": 3,
+    "AreaID": 199,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 78,
+        "Type": "item",
+        "name": "wht magic sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 258,
+    "Version": 4,
+    "AreaID": 199,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 259,
+    "Version": 5,
+    "AreaID": 199,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Only accessible via warping.",
+    "gil_amount": 10000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 260,
+    "Version": 6,
+    "AreaID": 199,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Only accessible via warping.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 77,
+        "Type": "item",
+        "name": "skill sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 261,
+    "Version": 7,
+    "AreaID": 199,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Only accessible via warping.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 44,
+      "TreasureID": 261,
+      "EquipmentNameID": 805,
+      "name": "lucid ring",
+      "abilities": [
+        "silence ward",
+        "confuse ward",
+        "poison ward"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 262,
+    "Version": 1,
+    "AreaID": 200,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "No gates opened when fighting Evrae Altana.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 45,
+      "TreasureID": 262,
+      "EquipmentNameID": 165,
+      "name": "rematch",
+      "abilities": [
+        "evade \u0026 counter"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 263,
+    "Version": 2,
+    "AreaID": 200,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Maximum of one gate opened when fighting Evrae Altana.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 46,
+      "TreasureID": 263,
+      "EquipmentNameID": 163,
+      "name": "avenger",
+      "abilities": [
+        "counterattack"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 264,
+    "Version": 1,
+    "AreaID": 202,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 5000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 265,
+    "Version": 2,
+    "AreaID": 202,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 10000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 266,
+    "Version": 1,
+    "AreaID": 203,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Loss against Belgemine.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 118,
+        "Type": "key-item",
+        "name": "aeon's soul",
+        "amount": 1
+      },
+      {
+        "ID": 72,
+        "Type": "item",
+        "name": "speed sphere",
+        "amount": 30
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 267,
+    "Version": 2,
+    "AreaID": 203,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "pre-story",
+    "is_anima_treasure": false,
+    "notes": "Win against Belgemine.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 118,
+        "Type": "key-item",
+        "name": "aeon's soul",
+        "amount": 1
+      },
+      {
+        "ID": 70,
+        "Type": "item",
+        "name": "power sphere",
+        "amount": 30
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 268,
+    "Version": 3,
+    "AreaID": 203,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 82,
+        "Type": "item",
+        "name": "lv. 2 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 269,
+    "Version": 1,
+    "AreaID": 204,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 169,
+        "Type": "key-item",
+        "name": "al bhed primer xxiii",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 270,
+    "Version": 2,
+    "AreaID": 204,
+    "treasure_type": "object",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Win a race of Catcher Chocobo and the guard will disappear. Need Celestial Mirror to open.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 47,
+      "TreasureID": 270,
+      "EquipmentNameID": 1,
+      "name": "caladbolg",
+      "abilities": [
+        "no ap"
+      ],
+      "empty_slots_amount": 3
+    }
+  },
+  {
+    "ID": 271,
+    "Version": 1,
+    "AreaID": 205,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "Need Celestial Mirror to open.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 48,
+      "TreasureID": 271,
+      "EquipmentNameID": 2,
+      "name": "nirvana",
+      "abilities": [
+        "no ap"
+      ],
+      "empty_slots_amount": 3
+    }
+  },
+  {
+    "ID": 272,
+    "Version": 1,
+    "AreaID": 207,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 119,
+        "Type": "key-item",
+        "name": "rusty sword",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 273,
+    "Version": 1,
+    "AreaID": 208,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 170,
+        "Type": "key-item",
+        "name": "al bhed primer xxiv",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 274,
+    "Version": 1,
+    "AreaID": 210,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 88,
+        "Type": "item",
+        "name": "defense sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 275,
+    "Version": 1,
+    "AreaID": 211,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 8,
+        "Type": "item",
+        "name": "megalixir",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 276,
+    "Version": 2,
+    "AreaID": 211,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 82,
+        "Type": "item",
+        "name": "lv. 2 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 277,
+    "Version": 3,
+    "AreaID": 211,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 74,
+        "Type": "item",
+        "name": "fortune sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 278,
+    "Version": 4,
+    "AreaID": 211,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 171,
+        "Type": "key-item",
+        "name": "al bhed primer xxv",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 279,
+    "Version": 5,
+    "AreaID": 211,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 280,
+    "Version": 6,
+    "AreaID": 211,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 49,
+      "TreasureID": 280,
+      "EquipmentNameID": 400,
+      "name": "flexible arm",
+      "abilities": [],
+      "empty_slots_amount": 4
+    }
+  },
+  {
+    "ID": 281,
+    "Version": 7,
+    "AreaID": 211,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 3,
+        "Type": "item",
+        "name": "x-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 282,
+    "Version": 8,
+    "AreaID": 211,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 86,
+        "Type": "item",
+        "name": "mp sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 283,
+    "Version": 1,
+    "AreaID": 212,
+    "treasure_type": "gift",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 87,
+        "Type": "item",
+        "name": "strength sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 284,
+    "Version": 1,
+    "AreaID": 214,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 20000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 285,
+    "Version": 2,
+    "AreaID": 214,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 286,
+    "Version": 3,
+    "AreaID": 214,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 145,
+        "Type": "key-item",
+        "name": "braska's sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 287,
+    "Version": 4,
+    "AreaID": 214,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 50,
+      "TreasureID": 287,
+      "EquipmentNameID": 767,
+      "name": "defending bracer",
+      "abilities": [
+        "stoneproof",
+        "poisonproof"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 288,
+    "Version": 5,
+    "AreaID": 214,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 85,
+        "Type": "item",
+        "name": "hp sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 289,
+    "Version": 6,
+    "AreaID": 214,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 84,
+        "Type": "item",
+        "name": "lv. 4 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 290,
+    "Version": 1,
+    "AreaID": 215,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 129,
+        "Type": "key-item",
+        "name": "saturn crest",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 291,
+    "Version": 1,
+    "AreaID": 217,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 51,
+      "TreasureID": 291,
+      "EquipmentNameID": 674,
+      "name": "pep talk",
+      "abilities": [
+        "sos nulfrost",
+        "sos nulshock",
+        "sos nulblaze"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 292,
+    "Version": 1,
+    "AreaID": 218,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 81,
+        "Type": "item",
+        "name": "lv. 1 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 293,
+    "Version": 2,
+    "AreaID": 218,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 74,
+        "Type": "item",
+        "name": "fortune sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 294,
+    "Version": 3,
+    "AreaID": 218,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 96,
+        "Type": "item",
+        "name": "return sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 295,
+    "Version": 4,
+    "AreaID": 218,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 52,
+      "TreasureID": 295,
+      "EquipmentNameID": 605,
+      "name": "recovery ring",
+      "abilities": [
+        "hp stroll"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 296,
+    "Version": 1,
+    "AreaID": 222,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 74,
+        "Type": "item",
+        "name": "fortune sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 297,
+    "Version": 2,
+    "AreaID": 222,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 53,
+      "TreasureID": 297,
+      "EquipmentNameID": 617,
+      "name": "spiritual targe",
+      "abilities": [
+        "mp stroll"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 298,
+    "Version": 1,
+    "AreaID": 225,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 10000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 299,
+    "Version": 2,
+    "AreaID": 225,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 97,
+        "Type": "item",
+        "name": "friend sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 300,
+    "Version": 3,
+    "AreaID": 225,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 83,
+        "Type": "item",
+        "name": "lv. 3 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 301,
+    "Version": 1,
+    "AreaID": 226,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 94,
+        "Type": "item",
+        "name": "luck sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 302,
+    "Version": 1,
+    "AreaID": 227,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": true,
+    "notes": "You need to come back to the dome and do the second version of the Zanarkand Cloyster.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 54,
+      "TreasureID": 302,
+      "EquipmentNameID": 129,
+      "name": "magistral rod",
+      "abilities": [
+        "half mp cost"
+      ],
+      "empty_slots_amount": 2
+    }
+  },
+  {
+    "ID": 303,
+    "Version": 1,
+    "AreaID": 230,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "always",
+    "is_anima_treasure": false,
+    "notes": "After defeating Yunalesca, use the stairs to make the chest appear.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 123,
+        "Type": "key-item",
+        "name": "sun crest",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 304,
+    "Version": 1,
+    "AreaID": 232,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 76,
+        "Type": "item",
+        "name": "special sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 305,
+    "Version": 2,
+    "AreaID": 232,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 55,
+      "TreasureID": 305,
+      "EquipmentNameID": 598,
+      "name": "phantom ring",
+      "abilities": [
+        "water eater",
+        "fire eater",
+        "lightning eater"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 306,
+    "Version": 3,
+    "AreaID": 232,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 56,
+      "TreasureID": 306,
+      "EquipmentNameID": 265,
+      "name": "wizard lance",
+      "abilities": [
+        "magic +3%",
+        "magic +5%",
+        "magic +10%"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 307,
+    "Version": 4,
+    "AreaID": 232,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 308,
+    "Version": 5,
+    "AreaID": 232,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 83,
+        "Type": "item",
+        "name": "lv. 3 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 309,
+    "Version": 1,
+    "AreaID": 234,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "You need to defeat 35 fiends in the City of Dying Dreams to remove the glyph that blocks this chest.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 84,
+        "Type": "item",
+        "name": "lv. 4 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 310,
+    "Version": 2,
+    "AreaID": 234,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Use the lift.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 57,
+      "TreasureID": 310,
+      "EquipmentNameID": 18,
+      "name": "four-on-one",
+      "abilities": [
+        "waterstrike",
+        "firestrike",
+        "lightningstrike",
+        "icestrike"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 311,
+    "Version": 3,
+    "AreaID": 234,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 58,
+      "TreasureID": 311,
+      "EquipmentNameID": 767,
+      "name": "defending bracer",
+      "abilities": [
+        "darkproof",
+        "deathproof"
+      ],
+      "empty_slots_amount": 2
+    }
+  },
+  {
+    "ID": 312,
+    "Version": 4,
+    "AreaID": 234,
+    "treasure_type": "chest",
+    "loot_type": "gil",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": 20000,
+    "items": [],
+    "equipment": null
+  },
+  {
+    "ID": 313,
+    "Version": 5,
+    "AreaID": 234,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 85,
+        "Type": "item",
+        "name": "hp sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 314,
+    "Version": 6,
+    "AreaID": 234,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 88,
+        "Type": "item",
+        "name": "defense sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 315,
+    "Version": 7,
+    "AreaID": 234,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Examine the glyph.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 8,
+        "Type": "item",
+        "name": "megalixir",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 316,
+    "Version": 8,
+    "AreaID": 234,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 59,
+      "TreasureID": 316,
+      "EquipmentNameID": 87,
+      "name": "laevatein",
+      "abilities": [
+        "sos overdrive"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 317,
+    "Version": 1,
+    "AreaID": 236,
+    "treasure_type": "object",
+    "loot_type": "equipment",
+    "availability": "post-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 60,
+      "TreasureID": 317,
+      "EquipmentNameID": 86,
+      "name": "hrunting",
+      "abilities": [
+        "sos overdrive"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 318,
+    "Version": 2,
+    "AreaID": 236,
+    "treasure_type": "object",
+    "loot_type": "equipment",
+    "availability": "post-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 61,
+      "TreasureID": 318,
+      "EquipmentNameID": 262,
+      "name": "mage's staff",
+      "abilities": [
+        "magic +10%",
+        "magic +5%",
+        "magic +3%"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 319,
+    "Version": 3,
+    "AreaID": 236,
+    "treasure_type": "object",
+    "loot_type": "equipment",
+    "availability": "post-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 62,
+      "TreasureID": 319,
+      "EquipmentNameID": 172,
+      "name": "prism ball",
+      "abilities": [
+        "magic counter"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 320,
+    "Version": 4,
+    "AreaID": 236,
+    "treasure_type": "object",
+    "loot_type": "equipment",
+    "availability": "post-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 63,
+      "TreasureID": 320,
+      "EquipmentNameID": 208,
+      "name": "wicked cait sith",
+      "abilities": [
+        "deathstrike"
+      ],
+      "empty_slots_amount": 3
+    }
+  },
+  {
+    "ID": 321,
+    "Version": 5,
+    "AreaID": 236,
+    "treasure_type": "object",
+    "loot_type": "equipment",
+    "availability": "post-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 64,
+      "TreasureID": 321,
+      "EquipmentNameID": 258,
+      "name": "knight lance",
+      "abilities": [
+        "strength +10%",
+        "strength +5%",
+        "strength +3%"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 322,
+    "Version": 6,
+    "AreaID": 236,
+    "treasure_type": "object",
+    "loot_type": "equipment",
+    "availability": "post-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 65,
+      "TreasureID": 322,
+      "EquipmentNameID": 224,
+      "name": "still blade",
+      "abilities": [
+        "silencestrike",
+        "stonestrike"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 323,
+    "Version": 7,
+    "AreaID": 236,
+    "treasure_type": "object",
+    "loot_type": "equipment",
+    "availability": "post-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 66,
+      "TreasureID": 323,
+      "EquipmentNameID": 99,
+      "name": "infinity",
+      "abilities": [
+        "one mp cost",
+        "sensor"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 324,
+    "Version": 8,
+    "AreaID": 236,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "post-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 75,
+        "Type": "item",
+        "name": "attribute sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 325,
+    "Version": 9,
+    "AreaID": 236,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "post-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 77,
+        "Type": "item",
+        "name": "skill sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 326,
+    "Version": 10,
+    "AreaID": 236,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "post-story",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 78,
+        "Type": "item",
+        "name": "wht magic sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 327,
+    "Version": 1,
+    "AreaID": 239,
+    "treasure_type": "object",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 172,
+        "Type": "key-item",
+        "name": "al bhed primer xxvi",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 328,
+    "Version": 2,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "You need to touch two glyphs to open the path to this chest.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 98,
+        "Type": "item",
+        "name": "teleport sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 329,
+    "Version": 3,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #1.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 84,
+        "Type": "item",
+        "name": "lv. 4 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 330,
+    "Version": 4,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #2.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 67,
+      "TreasureID": 330,
+      "EquipmentNameID": 767,
+      "name": "defending bracer",
+      "abilities": [
+        "silenceproof",
+        "darkproof"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 331,
+    "Version": 5,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #3.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 68,
+      "TreasureID": 331,
+      "EquipmentNameID": 158,
+      "name": "turnover",
+      "abilities": [
+        "magic counter",
+        "counterattack"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 332,
+    "Version": 6,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #4.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 83,
+        "Type": "item",
+        "name": "lv. 3 key sphere",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 333,
+    "Version": 7,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #5.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 69,
+      "TreasureID": 333,
+      "EquipmentNameID": 766,
+      "name": "defending armlet",
+      "abilities": [
+        "stoneproof",
+        "poisonproof"
+      ],
+      "empty_slots_amount": 2
+    }
+  },
+  {
+    "ID": 334,
+    "Version": 8,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #6.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 97,
+        "Type": "item",
+        "name": "friend sphere",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 335,
+    "Version": 9,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #7.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 84,
+        "Type": "item",
+        "name": "lv. 4 key sphere",
+        "amount": 1
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 336,
+    "Version": 10,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #8.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 70,
+      "TreasureID": 336,
+      "EquipmentNameID": 598,
+      "name": "phantom ring",
+      "abilities": [
+        "ice eater",
+        "fire eater",
+        "lightning eater"
+      ],
+      "empty_slots_amount": 1
+    }
+  },
+  {
+    "ID": 337,
+    "Version": 11,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #9.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 71,
+      "TreasureID": 337,
+      "EquipmentNameID": 131,
+      "name": "cactuar wizard",
+      "abilities": [
+        "half mp cost"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 338,
+    "Version": 12,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "equipment",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #10.",
+    "gil_amount": null,
+    "items": [],
+    "equipment": {
+      "ID": 72,
+      "TreasureID": 338,
+      "EquipmentNameID": 50,
+      "name": "warmonger",
+      "abilities": [
+        "double ap",
+        "double overdrive"
+      ],
+      "empty_slots_amount": 0
+    }
+  },
+  {
+    "ID": 339,
+    "Version": 13,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #11.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 98,
+        "Type": "item",
+        "name": "teleport sphere",
+        "amount": 2
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 340,
+    "Version": 14,
+    "AreaID": 239,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "Omega Ruins chest minigame #12.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 99,
+        "Type": "item",
+        "name": "warp sphere",
+        "amount": 99
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 341,
+    "Version": 1,
+    "AreaID": 240,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": null,
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 97,
+        "Type": "item",
+        "name": "friend sphere",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  },
+  {
+    "ID": 342,
+    "Version": 2,
+    "AreaID": 240,
+    "treasure_type": "chest",
+    "loot_type": "item",
+    "availability": "post",
+    "is_anima_treasure": false,
+    "notes": "After defeating Omega Weapon.",
+    "gil_amount": null,
+    "items": [
+      {
+        "ID": 89,
+        "Type": "item",
+        "name": "magic sphere",
+        "amount": 3
+      }
+    ],
+    "equipment": null
+  }
+]

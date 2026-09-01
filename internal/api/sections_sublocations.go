@@ -31,7 +31,7 @@ func createSublocationSimple(cfg *Config, r *http.Request, id int32, subsection 
 	sublocationSimple := SublocationSimple{
 		ID:             sublocation.ID,
 		URL:            createResourceURL(cfg, i.endpoint, id),
-		ParentLocation: createSimpleRef(sublocation.Location.ID, sublocation.Location.Name, nil, nil),
+		ParentLocation: createSimpleRef(sublocation.LocationID, sublocation.Location, nil, nil),
 		Name:           sublocation.Name,
 		Shops:          convertObjSlice(cfg, shopIDs, idToShopLocSimple),
 		Treasures:      getTreasuresLocSimple(cfg, id, subsection),

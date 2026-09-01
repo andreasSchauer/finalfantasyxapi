@@ -1,0 +1,5746 @@
+[
+  {
+    "ID": 1,
+    "name": "potion",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 86,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 4
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 1,
+    "cursor": "single-target",
+    "description": "Restores 200 HP of one character.",
+    "effect": "Restores 200 HP of one target. Damages zombies.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "always",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 50,
+    "sell_value": 25
+  },
+  {
+    "ID": 2,
+    "name": "hi-potion",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 87,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 2,
+    "cursor": "single-target",
+    "description": "Restores 1000 HP of one character.",
+    "effect": "Restores 1000 HP of one target. Damages zombies.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "always",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 500,
+    "sell_value": 125
+  },
+  {
+    "ID": 3,
+    "name": "x-potion",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 76,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 3,
+    "cursor": "single-target",
+    "description": "Fully restores HP of one character.",
+    "effect": "Fully restores HP of one target (maximum of 9,999 HP). Damages Zombies.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "always",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 250
+  },
+  {
+    "ID": 4,
+    "name": "mega-potion",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 88,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 40
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 4,
+    "cursor": "target-party",
+    "description": "Restores 2000 HP of each party member.",
+    "effect": "Restores 2000 HP of target party. Damages Zombies.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "always",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 375
+  },
+  {
+    "ID": 5,
+    "name": "ether",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 89,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 2
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 5,
+    "cursor": "single-target",
+    "description": "Restores 100 MP of one character.",
+    "effect": "Restores 100 MP of one target. Lowers MP of zombies.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "always",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 250
+  },
+  {
+    "ID": 6,
+    "name": "turbo ether",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 90,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 10
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 6,
+    "cursor": "single-target",
+    "description": "Restores 500 MP of one character.",
+    "effect": "Restores 500 MP of one target. Lowers MP of zombies.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "always",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 750
+  },
+  {
+    "ID": 7,
+    "name": "elixir",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 76,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            },
+            {
+              "ID": 79,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 7,
+    "cursor": "single-target",
+    "description": "Fully restores one character's HP \u0026 MP.",
+    "effect": "Fully restores HP \u0026 MP of one target (maximum of 9,999 HP and 999 MP). Damages zombies.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "always",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 1250
+  },
+  {
+    "ID": 8,
+    "name": "megalixir",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 76,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            },
+            {
+              "ID": 79,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 8,
+    "cursor": "target-party",
+    "description": "Fully restores HP \u0026 MP of party.",
+    "effect": "Fully restores HP \u0026 MP of target party (maximum of 9,999 HP and 999 MP). Damages zombies.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "always",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 5000
+  },
+  {
+    "ID": 9,
+    "name": "phoenix down",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 91,
+              "condition": "Only KO'd characters and zombies.",
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 8
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 42,
+            "StatusConditionID": 41,
+            "name": "life",
+            "probability": 254,
+            "duration_type": "instant",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 9,
+    "cursor": "single-target",
+    "description": "Revives one character from KO.",
+    "effect": "Revives one character from KO with half of their max HP (maximum of 9,999 HP). Damages zombies and instant KO's them, if they're not immune to life.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 100,
+    "sell_value": 25
+  },
+  {
+    "ID": 10,
+    "name": "mega phoenix",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 78,
+              "condition": "Only KO'd characters and zombies.",
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 42,
+            "StatusConditionID": 41,
+            "name": "life",
+            "probability": 254,
+            "duration_type": "instant",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 10,
+    "cursor": "target-party",
+    "description": "Revives party from KO.",
+    "effect": "Revives party from KO and fully restores HP of revived characters (maximum of 9,999 HP). Damages zombies and instant KO's them, if they're not immune to life.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 1000
+  },
+  {
+    "ID": 11,
+    "name": "antidote",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "poison"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 11,
+    "cursor": "single-target",
+    "description": "Cures poison.",
+    "effect": "Cures poison of one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 50,
+    "sell_value": 12
+  },
+  {
+    "ID": 12,
+    "name": "soft",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "petrification"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 12,
+    "cursor": "single-target",
+    "description": "Cures petrification.",
+    "effect": "Cures petrification of one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 50,
+    "sell_value": 12
+  },
+  {
+    "ID": 13,
+    "name": "eye drops",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "darkness"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 13,
+    "cursor": "single-target",
+    "description": "Cures darkness.",
+    "effect": "Cures darkness of one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 50,
+    "sell_value": 12
+  },
+  {
+    "ID": 14,
+    "name": "echo screen",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "silence"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 14,
+    "cursor": "single-target",
+    "description": "Cures silence.",
+    "effect": "Cures silence of one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 50,
+    "sell_value": 12
+  },
+  {
+    "ID": 15,
+    "name": "holy water",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "zombie",
+          "curse"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 15,
+    "cursor": "single-target",
+    "description": "Cures zombie and curse.",
+    "effect": "Cures zombie and curse of one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 300,
+    "sell_value": 75
+  },
+  {
+    "ID": 16,
+    "name": "remedy",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "berserk",
+          "confusion",
+          "darkness",
+          "petrification",
+          "poison",
+          "silence",
+          "sleep",
+          "slow",
+          "zombie"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 16,
+    "cursor": "single-target",
+    "description": "Cures all status abnormalities.",
+    "effect": "Cures all status ailments of one target, except breaks, curse, doom, and KO.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 1500,
+    "sell_value": 375
+  },
+  {
+    "ID": 17,
+    "name": "power distiller",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 78,
+        "target": "single-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 103,
+            "StatusConditionID": 35,
+            "name": "power distiller",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 17,
+    "cursor": "single-enemy",
+    "description": "Makes one enemy drop Power Spheres.",
+    "effect": "Makes one enemy drop Power Spheres. The amount dropped equals the amount of items the enemy would have dropped normally.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "distiller",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 100,
+    "sell_value": 25
+  },
+  {
+    "ID": 18,
+    "name": "mana distiller",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 78,
+        "target": "single-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 104,
+            "StatusConditionID": 36,
+            "name": "mana distiller",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 18,
+    "cursor": "single-enemy",
+    "description": "Makes one enemy drop Mana Spheres.",
+    "effect": "Makes one enemy drop Mana Spheres. The amount dropped equals the amount of items the enemy would have dropped normally.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "distiller",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 100,
+    "sell_value": 25
+  },
+  {
+    "ID": 19,
+    "name": "speed distiller",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 78,
+        "target": "single-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 105,
+            "StatusConditionID": 37,
+            "name": "speed distiller",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 19,
+    "cursor": "single-enemy",
+    "description": "Makes one enemy drop Speed Spheres.",
+    "effect": "Makes one enemy drop Speed Spheres. The amount dropped equals the amount of items the enemy would have dropped normally.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "distiller",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 100,
+    "sell_value": 25
+  },
+  {
+    "ID": 20,
+    "name": "ability distiller",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 78,
+        "target": "single-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 106,
+            "StatusConditionID": 38,
+            "name": "ability distiller",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 20,
+    "cursor": "single-enemy",
+    "description": "Makes one enemy drop Ability Spheres.",
+    "effect": "Makes one enemy drop Ability Spheres. The amount dropped equals the amount of items the enemy would have dropped normally.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "distiller",
+    "usability": "in-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 100,
+    "sell_value": 25
+  },
+  {
+    "ID": 21,
+    "name": "al bhed potion",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 87,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "poison",
+          "silence",
+          "petrification"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 21,
+    "cursor": "target-party",
+    "description": "Cures poison, silence, petrification. Gives 1000 HP to all.",
+    "effect": "Cures poison, silence, and petrification and restores 1000 HP of target party.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": 1000,
+    "sell_value": 250
+  },
+  {
+    "ID": 22,
+    "name": "healing water",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 76,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 22,
+    "cursor": "target-party",
+    "description": "Fully restores HP of party.",
+    "effect": "Fully restores HP of target party. Maximum of 9,999 HP.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 125
+  },
+  {
+    "ID": 23,
+    "name": "tetra elemental",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 76,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 36,
+            "StatusConditionID": 23,
+            "name": "nulblaze",
+            "probability": 254,
+            "duration_type": "blocks",
+            "amount": 1
+          },
+          {
+            "ID": 37,
+            "StatusConditionID": 24,
+            "name": "nulshock",
+            "probability": 254,
+            "duration_type": "blocks",
+            "amount": 1
+          },
+          {
+            "ID": 38,
+            "StatusConditionID": 25,
+            "name": "nultide",
+            "probability": 254,
+            "duration_type": "blocks",
+            "amount": 1
+          },
+          {
+            "ID": 39,
+            "StatusConditionID": 26,
+            "name": "nulfrost",
+            "probability": 254,
+            "duration_type": "blocks",
+            "amount": 1
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 23,
+    "cursor": "single-target",
+    "description": "Fully restores HP and casts NulAll on party.",
+    "effect": "Fully restores HP (maximum of 9,999 HP) and casts NulAll on one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "healing",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 200
+  },
+  {
+    "ID": 24,
+    "name": "bomb fragment",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 79,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 15,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 1,
+          "element": "fire"
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 24,
+    "cursor": "single-target",
+    "description": "Deals fire damage to an enemy.",
+    "effect": "Deals around 600 HP of fire-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 25,
+    "name": "bomb core",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 80,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 15,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 1,
+          "element": "fire"
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 25,
+    "cursor": "single-target",
+    "description": "Deals fire damage to an enemy.",
+    "effect": "Deals around 1,000 HP of fire-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 26,
+    "name": "fire gem",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 81,
+        "target": "random-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 15,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 1,
+          "element": "fire"
+        },
+        "shatter_rate": 70,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 5,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 26,
+    "cursor": "all-enemies",
+    "description": "Deals fire damage to all enemies.",
+    "effect": "Deals five randomly distributed hits to enemy party that deal about 600 HP of fire-elemental special damage each.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 27,
+    "name": "electro marble",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 79,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 16,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 2,
+          "element": "lightning"
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 27,
+    "cursor": "single-target",
+    "description": "Deals lightning damage to an enemy.",
+    "effect": "Deals around 600 HP of lightning-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 28,
+    "name": "lightning marble",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 80,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 16,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 2,
+          "element": "lightning"
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 28,
+    "cursor": "single-target",
+    "description": "Deals lightning damage to an enemy.",
+    "effect": "Deals around 1,000 HP of lightning-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 29,
+    "name": "lightning gem",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 81,
+        "target": "random-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 16,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 2,
+          "element": "lightning"
+        },
+        "shatter_rate": 70,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 5,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 29,
+    "cursor": "all-enemies",
+    "description": "Deals lightning damage to all enemies.",
+    "effect": "Deals five randomly distributed hits to enemy party that deal about 600 HP of lightning-elemental special damage each.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 30,
+    "name": "fish scale",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 79,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 17,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 3,
+          "element": "water"
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 30,
+    "cursor": "single-target",
+    "description": "Deals water damage to an enemy.",
+    "effect": "Deals around 600 HP of water-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 31,
+    "name": "dragon scale",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 80,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 17,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 3,
+          "element": "water"
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 31,
+    "cursor": "single-target",
+    "description": "Deals water damage to an enemy.",
+    "effect": "Deals around 1,000 HP of water-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 32,
+    "name": "water gem",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 81,
+        "target": "random-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 17,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 3,
+          "element": "water"
+        },
+        "shatter_rate": 70,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 5,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 32,
+    "cursor": "all-enemies",
+    "description": "Deals water damage to all enemies.",
+    "effect": "Deals five randomly distributed hits to enemy party that deal about 600 HP of water-elemental special damage each.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 33,
+    "name": "antarctic wind",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 79,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 18,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 4,
+          "element": "ice"
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 33,
+    "cursor": "single-target",
+    "description": "Deals ice damage to an enemy.",
+    "effect": "Deals around 600 HP of ice-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 34,
+    "name": "arctic wind",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 80,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 18,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 4,
+          "element": "ice"
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 34,
+    "cursor": "single-target",
+    "description": "Deals ice damage to an enemy.",
+    "effect": "Deals around 1,000 HP of ice-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 35,
+    "name": "ice gem",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 81,
+        "target": "random-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 18,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 4,
+          "element": "ice"
+        },
+        "shatter_rate": 70,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 5,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 35,
+    "cursor": "all-enemies",
+    "description": "Deals ice damage to all enemies.",
+    "effect": "Deals five randomly distributed hits to enemy party that deal about 600 HP of ice-elemental special damage each.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 36,
+    "name": "grenade",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 82,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 14,
+          "damage_calc": [
+            {
+              "ID": 60,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 7
+            }
+          ],
+          "critical": "crit",
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 36,
+    "cursor": "target-party",
+    "description": "Damages all enemies.",
+    "effect": "Deals around 350 HP of non-elemental special damage to target party (can critical).",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": 300,
+    "sell_value": 75
+  },
+  {
+    "ID": 37,
+    "name": "frag grenade",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 82,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 14,
+          "damage_calc": [
+            {
+              "ID": 61,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 16
+            }
+          ],
+          "critical": "crit",
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 107,
+            "StatusConditionID": 20,
+            "name": "armor break",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 37,
+    "cursor": "target-party",
+    "description": "Inflicts damage and Armor Break on all enemies.",
+    "effect": "Inflicts Armor Break on target party and deals around 800 HP of non-elemental special damage (can critical).",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 125
+  },
+  {
+    "ID": 38,
+    "name": "sleeping powder",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 83,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 94,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 15
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 108,
+            "StatusConditionID": 14,
+            "name": "sleep",
+            "probability": 254,
+            "duration_type": "turns",
+            "amount": 8
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 38,
+    "cursor": "target-party",
+    "description": "Inflicts damage and sleep on all enemies.",
+    "effect": "Inflicts Sleep and deals around 750 HP of non-elemental special damage to target party.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 39,
+    "name": "dream powder",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 83,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 108,
+            "StatusConditionID": 14,
+            "name": "sleep",
+            "probability": 254,
+            "duration_type": "turns",
+            "amount": 8
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 39,
+    "cursor": "target-party",
+    "description": "Inflicts damage and sleep on all enemies.",
+    "effect": "Inflicts Sleep and deals around 1000 HP of non-elemental special damage to target party.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 40,
+    "name": "silence grenade",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 83,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 94,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 15
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 109,
+            "StatusConditionID": 13,
+            "name": "silence",
+            "probability": 254,
+            "duration_type": "turns",
+            "amount": 8
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 40,
+    "cursor": "target-party",
+    "description": "Inflicts damage and silence on all enemies.",
+    "effect": "Inflicts Silence and deals around 750 HP of non-elemental special damage to target party.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 37
+  },
+  {
+    "ID": 41,
+    "name": "smoke bomb",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 83,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 94,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 15
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 110,
+            "StatusConditionID": 4,
+            "name": "darkness",
+            "probability": 254,
+            "duration_type": "turns",
+            "amount": 8
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 41,
+    "cursor": "target-party",
+    "description": "Inflicts damage and darkness on all enemies.",
+    "effect": "Inflicts Darkness and deals around 750 HP of non-elemental special damage to target party.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 37
+  },
+  {
+    "ID": 42,
+    "name": "shadow gem",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 82,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 95,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-current",
+              "damage_constant": 8
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 42,
+    "cursor": "target-party",
+    "description": "Reduces HP of all enemies by half.",
+    "effect": "Deals gravity-based special damage to target party equal to half their current HP (maximum of 9,999 HP).",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 43,
+    "name": "shining gem",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 84,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 96,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 120
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 100,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 43,
+    "cursor": "single-target",
+    "description": "Damages an enemy.",
+    "effect": "Deals around 6,000 HP of non-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 44,
+    "name": "blessed gem",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 84,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 21,
+          "damage_calc": [
+            {
+              "ID": 97,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 160
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 5,
+          "element": "holy"
+        },
+        "shatter_rate": 100,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 44,
+    "cursor": "single-target",
+    "description": "Damages an enemy.",
+    "effect": "Deals around 8,000 HP of holy-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 125
+  },
+  {
+    "ID": 45,
+    "name": "supreme gem",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 84,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 98,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 200
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 100,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 45,
+    "cursor": "single-target",
+    "description": "Damages all enemies.",
+    "effect": "Deals around 10,000 HP of non-elemental special damage to one target (maximum of 9,999 HP).",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 250
+  },
+  {
+    "ID": 46,
+    "name": "poison fang",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 85,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 99,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 40
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 60,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 49,
+            "StatusConditionID": 11,
+            "name": "poison",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 46,
+    "cursor": "single-target",
+    "description": "Inflicts damage and poison on an enemy.",
+    "effect": "Inflicts Poison and deals around 2000 HP of non-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 47,
+    "name": "silver hourglass",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 86,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": {
+          "ID": 3,
+          "condition": "If slow was successfully inflicted.",
+          "ctb_attack_type": "attack",
+          "delay_type": "ctb-based",
+          "damage_constant": 8
+        },
+        "inflicted_status_conditions": [
+          {
+            "ID": 111,
+            "StatusConditionID": 15,
+            "name": "slow",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 47,
+    "cursor": "target-party",
+    "description": "Delays next turn of all enemies.",
+    "effect": "Inflicts Slow on target party.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 48,
+    "name": "gold hourglass",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 87,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 70,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": {
+          "ID": 2,
+          "condition": null,
+          "ctb_attack_type": "attack",
+          "delay_type": "tick-speed-based",
+          "damage_constant": 24
+        },
+        "inflicted_status_conditions": [
+          {
+            "ID": 111,
+            "StatusConditionID": 15,
+            "name": "slow",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 48,
+    "cursor": "target-party",
+    "description": "Damages all enemies and delays their next turn.",
+    "effect": "Inflicts Slow and weak Delay, and deals around 1000 HP of non-elemental special damage to target party.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 37
+  },
+  {
+    "ID": 49,
+    "name": "candle of life",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 112,
+            "StatusConditionID": 7,
+            "name": "doom",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 49,
+    "cursor": "single-target",
+    "description": "Casts Doom on an enemy.",
+    "effect": "Inflicts Doom on one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 50,
+    "name": "petrify grenade",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 71,
+        "target": "all-enemies",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 113,
+            "StatusConditionID": 10,
+            "name": "petrification",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 50,
+    "cursor": "all-enemies",
+    "description": "Petrifies all enemies.",
+    "effect": "Inflicts Petrification on all enemies.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 51,
+    "name": "farplane shadow",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 114,
+            "StatusConditionID": 5,
+            "name": "death",
+            "probability": 254,
+            "duration_type": "instant",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 51,
+    "cursor": "single-target",
+    "description": "Inflicts death on an enemy.",
+    "effect": "Inflicts Death on one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 52,
+    "name": "farplane wind",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 71,
+        "target": "all-enemies",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 114,
+            "StatusConditionID": 5,
+            "name": "death",
+            "probability": 254,
+            "duration_type": "instant",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 52,
+    "cursor": "all-enemies",
+    "description": "Inflicts death on all enemies.",
+    "effect": "Inflicts Death on all enemies.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 100
+  },
+  {
+    "ID": 53,
+    "name": "dark matter",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 88,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 19,
+          "damage_calc": [
+            {
+              "ID": 100,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 255
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": "always",
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 100,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 53,
+    "cursor": "target-party",
+    "description": "Deals major damage to all enemies.",
+    "effect": "Deals around 12,750 HP of non-elemental special damage to target party. Can break the damage limit without the auto-ability equipped.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 7500
+  },
+  {
+    "ID": 54,
+    "name": "chocobo feather",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 43,
+            "StatusConditionID": 22,
+            "name": "haste",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 54,
+    "cursor": "single-target",
+    "description": "Casts Haste on one character.",
+    "effect": "Casts Haste on one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 40
+  },
+  {
+    "ID": 55,
+    "name": "chocobo wing",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 43,
+            "StatusConditionID": 22,
+            "name": "haste",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 55,
+    "cursor": "target-party",
+    "description": "Casts Haste on party.",
+    "effect": "Casts Haste on target party.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 56,
+    "name": "lunar curtain",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 44,
+            "StatusConditionID": 30,
+            "name": "shell",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 56,
+    "cursor": "single-target",
+    "description": "Casts Shell on one character.",
+    "effect": "Casts Shell on one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 45
+  },
+  {
+    "ID": 57,
+    "name": "light curtain",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 45,
+            "StatusConditionID": 27,
+            "name": "protect",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 57,
+    "cursor": "single-target",
+    "description": "Casts Protect on one character.",
+    "effect": "Casts Protect on one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 45
+  },
+  {
+    "ID": 58,
+    "name": "star curtain",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 46,
+            "StatusConditionID": 28,
+            "name": "reflect",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 58,
+    "cursor": "single-target",
+    "description": "Casts Reflect on one character.",
+    "effect": "Casts Reflect on one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 45
+  },
+  {
+    "ID": 59,
+    "name": "healing spring",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 115,
+            "StatusConditionID": 29,
+            "name": "regen",
+            "probability": 254,
+            "duration_type": "turns",
+            "amount": 10
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 59,
+    "cursor": "single-target",
+    "description": "Casts Regen on one character.",
+    "effect": "Casts Regen on one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 150
+  },
+  {
+    "ID": 60,
+    "name": "mana spring",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 89,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 101,
+              "condition": null,
+              "attack_type": "absorb",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 10,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 60,
+    "cursor": "single-target",
+    "description": "Absorbs MP from an enemy.",
+    "effect": "Absorbs around 1000 MP from one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 61,
+    "name": "stamina spring",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 89,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 102,
+              "condition": null,
+              "attack_type": "absorb",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 8
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 10,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 61,
+    "cursor": "single-target",
+    "description": "Absorbs HP from an enemy.",
+    "effect": "Absorbs around 400 HP from one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 62,
+    "name": "soul spring",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 89,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 103,
+              "condition": null,
+              "attack_type": "absorb",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 30
+            },
+            {
+              "ID": 104,
+              "condition": null,
+              "attack_type": "absorb",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 30
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 10,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 62,
+    "cursor": "single-target",
+    "description": "Absorbs HP \u0026 MP from an enemy.",
+    "effect": "Absorbs around 1500 HP and MP from one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 100
+  },
+  {
+    "ID": 63,
+    "name": "purifying salt",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 89,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 66,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 22
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 10,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "power break",
+          "magic break",
+          "armor break",
+          "mental break",
+          "curse",
+          "slow",
+          "haste",
+          "protect",
+          "shell",
+          "reflect",
+          "regen",
+          "nulblaze",
+          "nulshock",
+          "nultide",
+          "nulfrost"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 63,
+    "cursor": "single-target",
+    "description": "Damages an enemy and dispels its magic effects.",
+    "effect": "Casts Dispel and deals around 1,100 HP of non-elemental special damage to one target.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "offensive",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 70
+  },
+  {
+    "ID": 64,
+    "name": "stamina tablet",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 90,
+        "target": "single-ally",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [
+          {
+            "ID": 5,
+            "StatID": 1,
+            "name": "hp",
+            "calculation_type": "multiply-highest",
+            "value": 2
+          }
+        ],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 64,
+    "cursor": "single-ally",
+    "description": "Doubles max HP of one character.",
+    "effect": "Doubles max HP of one character (maximum of 9,999 HP without 'Break HP Limit'). Effect goes away when KO'd.",
+    "related_stats": [
+      "hp"
+    ],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 200
+  },
+  {
+    "ID": 65,
+    "name": "mana tablet",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 90,
+        "target": "single-ally",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [
+          {
+            "ID": 6,
+            "StatID": 2,
+            "name": "mp",
+            "calculation_type": "multiply-highest",
+            "value": 2
+          }
+        ],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 65,
+    "cursor": "single-ally",
+    "description": "Doubles max MP of one character.",
+    "effect": "Doubles max MP of one character (maximum of 999 MP without 'Break MP Limit'). Effect goes away when KO'd.",
+    "related_stats": [
+      "mp"
+    ],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 500
+  },
+  {
+    "ID": 66,
+    "name": "stamina tonic",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 8,
+        "target": "all-allies",
+        "based_on_user_attack": false,
+        "range": null,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [
+          {
+            "ID": 5,
+            "StatID": 1,
+            "name": "hp",
+            "calculation_type": "multiply-highest",
+            "value": 2
+          }
+        ],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 66,
+    "cursor": "all-allies",
+    "description": "Doubles max HP of party.",
+    "effect": "Doubles max HP of party (maximum of 9,999 HP without 'Break HP Limit'). Effect goes away when KO'd.",
+    "related_stats": [
+      "hp"
+    ],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 400
+  },
+  {
+    "ID": 67,
+    "name": "mana tonic",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 8,
+        "target": "all-allies",
+        "based_on_user_attack": false,
+        "range": null,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [
+          {
+            "ID": 6,
+            "StatID": 2,
+            "name": "mp",
+            "calculation_type": "multiply-highest",
+            "value": 2
+          }
+        ],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 67,
+    "cursor": "all-allies",
+    "description": "Doubles max MP of party.",
+    "effect": "Doubles max MP of party (maximum of 999 MP without 'Break MP Limit'). Effect goes away when KO'd.",
+    "related_stats": [
+      "mp"
+    ],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 400
+  },
+  {
+    "ID": 68,
+    "name": "twin stars",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 90,
+        "target": "single-ally",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": [
+          {
+            "ID": 13,
+            "ModifierID": 16,
+            "name": "mp-cost",
+            "calculation_type": "set-value",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "ItemID": 68,
+    "cursor": "single-ally",
+    "description": "Reduces MP cost of one character to 0.",
+    "effect": "Reduces MP cost of one character to 0. Effect goes away when KO'd.",
+    "related_stats": [
+      "mp"
+    ],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 200
+  },
+  {
+    "ID": 69,
+    "name": "three stars",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 8,
+        "target": "all-allies",
+        "based_on_user_attack": false,
+        "range": null,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": [
+          {
+            "ID": 13,
+            "ModifierID": 16,
+            "name": "mp-cost",
+            "calculation_type": "set-value",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "ItemID": 69,
+    "cursor": "all-allies",
+    "description": "Reduces party's MP cost to 0.",
+    "effect": "Reduces MP cost of party to 0. Effect goes away when KO'd.",
+    "related_stats": [
+      "mp"
+    ],
+    "sphere_grid_description": null,
+    "category": "support",
+    "usability": "in-battle",
+    "available_menus": [
+      "use",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 2500
+  },
+  {
+    "ID": 70,
+    "name": "power sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Activates nodes on Sphere Grid.",
+    "effect": "Activates Strength, Defense, and HP nodes on the Sphere Grid.",
+    "related_stats": [
+      "hp",
+      "strength",
+      "defense"
+    ],
+    "sphere_grid_description": "Activates Strength, Defense, or HP node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 1
+  },
+  {
+    "ID": 71,
+    "name": "mana sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Activates nodes on Sphere Grid.",
+    "effect": "Activates Magic, Magic Defense, and MP nodes on the Sphere Grid.",
+    "related_stats": [
+      "mp",
+      "magic",
+      "magic defense"
+    ],
+    "sphere_grid_description": "Activates Magic, Magic Defense, or MP node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 1
+  },
+  {
+    "ID": 72,
+    "name": "speed sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Activates nodes on Sphere Grid.",
+    "effect": "Activates Agility, Accuracy, and Evasion nodes on the Sphere Grid.",
+    "related_stats": [
+      "agility",
+      "evasion",
+      "accuracy"
+    ],
+    "sphere_grid_description": "Activates Agility, Accuracy, or Evasion node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 1
+  },
+  {
+    "ID": 73,
+    "name": "ability sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Activates nodes on Sphere Grid.",
+    "effect": "Activates Ability nodes on the Sphere Grid.",
+    "related_stats": [],
+    "sphere_grid_description": "Activates Ability node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 1
+  },
+  {
+    "ID": 74,
+    "name": "fortune sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Activates nodes on Sphere Grid.",
+    "effect": "Activates Luck nodes on the Sphere Grid.",
+    "related_stats": [
+      "luck"
+    ],
+    "sphere_grid_description": "Activates Luck node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 5
+  },
+  {
+    "ID": 75,
+    "name": "attribute sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Activates Attribute nodes used by allies on Sphere Grid.",
+    "effect": "Activates an attribute-increasing node activated by another character on the Sphere Grid.",
+    "related_stats": [
+      "hp",
+      "mp",
+      "strength",
+      "defense",
+      "magic",
+      "magic defense",
+      "agility",
+      "luck",
+      "evasion",
+      "accuracy"
+    ],
+    "sphere_grid_description": "Activates Attribute node already used by ally.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 76,
+    "name": "special sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Activates Special nodes used by allies on Sphere Grid.",
+    "effect": "Activates a Special Ability node activated by another character on the Sphere Grid.",
+    "related_stats": [],
+    "sphere_grid_description": "Activates Special node already used by ally.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 77,
+    "name": "skill sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Activates Skill nodes used by allies on Sphere Grid.",
+    "effect": "Activates a Skill node activated by another character on the Sphere Grid.",
+    "related_stats": [],
+    "sphere_grid_description": "Activates Skill node already used by ally.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 78,
+    "name": "wht magic sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Activates White Magic nodes used by allies on Sphere Grid.",
+    "effect": "Activates a White Magic Ability node activated by another character on the Sphere Grid.",
+    "related_stats": [],
+    "sphere_grid_description": "Activates White Magic node already used by ally.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 79,
+    "name": "blk magic sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Activates Black Magic nodes used by allies on Sphere Grid.",
+    "effect": "Activates a Black Magic Ability node activated by another character on the Sphere Grid.",
+    "related_stats": [],
+    "sphere_grid_description": "Activates Black Magic node already used by ally.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 80,
+    "name": "master sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Activates any Ability or Attribute nodes on Sphere Grid.",
+    "effect": "Activates any node on the Sphere Grid, regardless of location and activation.",
+    "related_stats": [
+      "hp",
+      "mp",
+      "strength",
+      "defense",
+      "magic",
+      "magic defense",
+      "agility",
+      "luck",
+      "evasion",
+      "accuracy"
+    ],
+    "sphere_grid_description": "Activates any Ability or Attribute node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 81,
+    "name": "lv. 1 key sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Open Locks on Sphere Grid.",
+    "effect": "Changes a Lv. 1 Lock on the Sphere Grid into an empty node.",
+    "related_stats": [],
+    "sphere_grid_description": "Opens Lv. 1 Lock.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 25
+  },
+  {
+    "ID": 82,
+    "name": "lv. 2 key sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Open Locks on Sphere Grid.",
+    "effect": "Changes a Lv. 2 Lock on the Sphere Grid into an empty node.",
+    "related_stats": [],
+    "sphere_grid_description": "Opens Lv. 2 Lock.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 83,
+    "name": "lv. 3 key sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Open Locks on Sphere Grid.",
+    "effect": "Changes a Lv. 3 Lock on the Sphere Grid into an empty node.",
+    "related_stats": [],
+    "sphere_grid_description": "Opens Lv. 3 Lock.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 84,
+    "name": "lv. 4 key sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Open Locks on Sphere Grid.",
+    "effect": "Changes a Lv. 4 Lock on the Sphere Grid into an empty node.",
+    "related_stats": [],
+    "sphere_grid_description": "Opens Lv. 4 Lock.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 100
+  },
+  {
+    "ID": 85,
+    "name": "hp sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Fills empty nodes on Sphere Grid.",
+    "effect": "Converts an empty node on the Sphere Grid into 'HP +300'.",
+    "related_stats": [
+      "hp"
+    ],
+    "sphere_grid_description": "Changes empty node into HP node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 86,
+    "name": "mp sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Fills empty nodes on Sphere Grid.",
+    "effect": "Converts an empty node on the Sphere Grid into 'MP +40'.",
+    "related_stats": [
+      "mp"
+    ],
+    "sphere_grid_description": "Changes empty node into MP node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 87,
+    "name": "strength sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Fills empty nodes on Sphere Grid.",
+    "effect": "Converts an empty node on the Sphere Grid into 'Strength +4'.",
+    "related_stats": [
+      "strength"
+    ],
+    "sphere_grid_description": "Changes empty node into Strength node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 88,
+    "name": "defense sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Fills empty nodes on Sphere Grid.",
+    "effect": "Converts an empty node on the Sphere Grid into 'Defense +4'.",
+    "related_stats": [
+      "defense"
+    ],
+    "sphere_grid_description": "Changes empty node into Defense node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 89,
+    "name": "magic sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Fills empty nodes on Sphere Grid.",
+    "effect": "Converts an empty node on the Sphere Grid into 'Magic +4'.",
+    "related_stats": [
+      "magic"
+    ],
+    "sphere_grid_description": "Changes empty node into Magic node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 90,
+    "name": "magic def sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Fills empty nodes on Sphere Grid.",
+    "effect": "Converts an empty node on the Sphere Grid into 'Magic Def +4'.",
+    "related_stats": [
+      "magic defense"
+    ],
+    "sphere_grid_description": "Changes empty node into Magic Def node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 91,
+    "name": "agility sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Fills empty nodes on Sphere Grid.",
+    "effect": "Converts an empty node on the Sphere Grid into 'Agility +4'.",
+    "related_stats": [
+      "agility"
+    ],
+    "sphere_grid_description": "Changes empty node into Agility node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 92,
+    "name": "evasion sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Fills empty nodes on Sphere Grid.",
+    "effect": "Converts an empty node on the Sphere Grid into 'Evasion +4'.",
+    "related_stats": [
+      "evasion"
+    ],
+    "sphere_grid_description": "Changes empty node into Evasion node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 93,
+    "name": "accuracy sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Fills empty nodes on Sphere Grid.",
+    "effect": "Converts an empty node on the Sphere Grid into 'Accuracy +4'.",
+    "related_stats": [
+      "accuracy"
+    ],
+    "sphere_grid_description": "Changes empty node into Accuracy node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 94,
+    "name": "luck sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Fills empty nodes on Sphere Grid.",
+    "effect": "Converts an empty node on the Sphere Grid into 'Luck +4'.",
+    "related_stats": [
+      "luck"
+    ],
+    "sphere_grid_description": "Changes empty node into Luck node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 75
+  },
+  {
+    "ID": 95,
+    "name": "clear sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Clears nodes from Sphere Grid.",
+    "effect": "Converts an attribute-increasing node on the Sphere Grid into an empty node. Characters who activated that node previously will have their stats decreased, as if they never activated it.",
+    "related_stats": [
+      "hp",
+      "mp",
+      "strength",
+      "defense",
+      "magic",
+      "magic defense",
+      "agility",
+      "luck",
+      "evasion",
+      "accuracy"
+    ],
+    "sphere_grid_description": "Clears node from Grid.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": 10000,
+    "sell_value": 2500
+  },
+  {
+    "ID": 96,
+    "name": "return sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Changes current location on Sphere Grid.",
+    "effect": "Enables move to any node on the Sphere Grid that is already activated by the current character.",
+    "related_stats": [],
+    "sphere_grid_description": "Return to any previously activated node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 125
+  },
+  {
+    "ID": 97,
+    "name": "friend sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Changes current location on Sphere Grid.",
+    "effect": "Enables move to another character's location on the Sphere Grid.",
+    "related_stats": [],
+    "sphere_grid_description": "Move to any ally's location.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 150
+  },
+  {
+    "ID": 98,
+    "name": "teleport sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Changes current location on Sphere Grid.",
+    "effect": "Enables move to any node on the Sphere Grid that is already activated by a character.",
+    "related_stats": [],
+    "sphere_grid_description": "Move to any node activated by ally.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 200
+  },
+  {
+    "ID": 99,
+    "name": "warp sphere",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Changes current location on Sphere Grid.",
+    "effect": "Enables move to any node on the Sphere Grid.",
+    "related_stats": [],
+    "sphere_grid_description": "Move to any node.",
+    "category": "sphere",
+    "usability": "outside-battle",
+    "available_menus": [
+      "spheres",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 250
+  },
+  {
+    "ID": 100,
+    "name": "map",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Displays world map.",
+    "effect": "Displays the world map.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "outside-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": 50,
+    "sell_value": 12
+  },
+  {
+    "ID": 101,
+    "name": "rename card",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "Renames aeon.",
+    "effect": "Renames any Aeon.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "outside-battle",
+    "available_menus": [
+      "item",
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 5
+  },
+  {
+    "ID": 102,
+    "name": "musk",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "There seems to be some use for this...",
+    "effect": "Used for customization and mixes.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "unusable",
+    "available_menus": [
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 103,
+    "name": "hypello potion",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "There seems to be some use for this...",
+    "effect": "Used for customization and mixes.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "unusable",
+    "available_menus": [
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 104,
+    "name": "shining thorn",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "There seems to be some use for this...",
+    "effect": "Used for customization and mixes, and for teaching Aeons the Mental Break ability.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "unusable",
+    "available_menus": [
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 50
+  },
+  {
+    "ID": 105,
+    "name": "pendulum",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "There seems to be some use for this...",
+    "effect": "Used for customization and mixes.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "unusable",
+    "available_menus": [
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 1250
+  },
+  {
+    "ID": 106,
+    "name": "amulet",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "There seems to be some use for this...",
+    "effect": "Used for customization and mixes.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "unusable",
+    "available_menus": [
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 3450
+  },
+  {
+    "ID": 107,
+    "name": "designer wallet",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "There seems to be some use for this...",
+    "effect": "Used for customization and mixes.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "unusable",
+    "available_menus": [
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 200
+  },
+  {
+    "ID": 108,
+    "name": "door to tomorrow",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "There seems to be some use for this...",
+    "effect": "Used for customization and mixes.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "unusable",
+    "available_menus": [
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 2000
+  },
+  {
+    "ID": 109,
+    "name": "wings to discovery",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "There seems to be some use for this...",
+    "effect": "Used for customization and mixes.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "unusable",
+    "available_menus": [
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 7500
+  },
+  {
+    "ID": 110,
+    "name": "gambler's spirit",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "There seems to be some use for this...",
+    "effect": "Used for customization and mixes.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "unusable",
+    "available_menus": [
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 4000
+  },
+  {
+    "ID": 111,
+    "name": "underdog's secret",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "There seems to be some use for this...",
+    "effect": "Used for customization and mixes.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "unusable",
+    "available_menus": [
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 5000
+  },
+  {
+    "ID": 112,
+    "name": "winning formula",
+    "Type": "item",
+    "version": null,
+    "specification": null,
+    "rank": null,
+    "appears_in_help_bar": false,
+    "can_copycat": false,
+    "battle_interactions": [],
+    "ItemID": 0,
+    "cursor": "",
+    "description": "There seems to be some use for this...",
+    "effect": "Used for customization and mixes.",
+    "related_stats": [],
+    "sphere_grid_description": null,
+    "category": "other",
+    "usability": "unusable",
+    "available_menus": [
+      "mix"
+    ],
+    "base_price": null,
+    "sell_value": 10000
+  }
+]

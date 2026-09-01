@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type TurnOrderParams struct {
@@ -22,12 +23,23 @@ func (p TurnOrderParams) GetDoc(cfg *Config) ParamsDoc {
 	return cfg.getTurnOrderParamsDoc()
 }
 
+type participantInput interface {
+	getParticipantKey() string
+}
+
 type turnOrderParty struct {
 	ID		int32	`json:"id"`
 	Agl    	int32   `json:"agl"`
 	FS     	bool    `json:"fs,omitempty"`
 	Status 	*string `json:"status,omitempty"`
 	Offset	int32	`json:"offset,omitempty"`
+}
+
+func (p turnOrderParty) getParticipantKey() string {
+	return seeding.CombineFields([]any{
+		fmt.Sprintf("%T", p),
+		p.ID,
+	})
 }
 
 type turnOrderMon struct {
@@ -38,12 +50,34 @@ type turnOrderMon struct {
 	Offset		int32	`json:"offset,omitempty"`
 }
 
+func (p turnOrderMon) getParticipantKey() string {
+	return seeding.CombineFields([]any{
+		fmt.Sprintf("%T", p),
+		p.ID,
+		h.DerefOrNil(p.AglOverride),
+		h.DerefOrNil(p.AltState),
+		h.DerefOrNil(p.Status),
+		p.Offset,
+	})
+}
+
 type turnOrderMonCustom struct {
 	Name   	string  `json:"name,omitempty"`
 	Agl    	int32   `json:"agl"`
 	FS     	bool    `json:"fs,omitempty"`
 	Status 	*string `json:"status,omitempty"`
 	Offset	int32	`json:"offset,omitempty"`
+}
+
+func (p turnOrderMonCustom) getParticipantKey() string {
+	return seeding.CombineFields([]any{
+		fmt.Sprintf("%T", p),
+		p.Name,
+		p.Agl,
+		p.FS,
+		h.DerefOrNil(p.Status),
+		p.Offset,
+	})
 }
 
 func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
@@ -148,7 +182,7 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 			MinVal:      h.GetInt32Ptr(0),
 			MaxVal:      h.GetInt32Ptr(255),
 			AllowedIDs:  []int32{167, 168, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225},
-			Description: "If a monster's agility stat is based on your party member's agility, you can use this field to override the monster's base (= lowest possible) agility stat. This applies to Biran and Yenke Ronso, and the possessed Aeons.",
+			Description: "If a monster's agility stat is based on your party member's agility, you can use this field to override the monster's base (= lowest possible) agility stat. This applies to Biran and Yenke Ronso, as well as the possessed Aeons.",
 		},
 		{
 			Field:       pfnAltState,
@@ -175,8 +209,8 @@ func (cfg *Config) getFieldDocName(defName string) FieldDoc {
 	return FieldDoc{
 		Field:       pfnName,
 		Type:        "string",
-		DefaultVal:  fmt.Sprintf("%s {idx + 1}", defName),
-		Description: fmt.Sprintf("The name of the participant that will show up in the list. If no name was given, the name '%s', along with its index in the list + 1 will be used.", defName),
+		DefaultVal:  defName,
+		Description: fmt.Sprintf("The name of the participant that will show up in the list. If no name was given, the name '%s' will be used. Multiple participants with the same name (including the default name) will be numbered.", defName),
 	}
 }
 

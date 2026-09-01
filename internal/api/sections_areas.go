@@ -36,8 +36,8 @@ func createAreaSimple(cfg *Config, r *http.Request, id int32, subsection Subsect
 	areaSimple := AreaSimple{
 		ID:                area.ID,
 		URL:               createResourceURL(cfg, i.endpoint, id),
-		ParentLocation:    createSimpleRef(area.Sublocation.Location.ID, area.Sublocation.Location.Name, nil, nil),
-		ParentSublocation: createSimpleRef(area.Sublocation.ID, area.Sublocation.Name, nil, nil),
+		ParentLocation:    createSimpleRef(area.LocationID, area.Location, nil, nil),
+		ParentSublocation: createSimpleRef(area.SublocationID, area.Sublocation, nil, nil),
 		Name:              area.Name,
 		Version:           area.Version,
 		Specification:     area.Specification,

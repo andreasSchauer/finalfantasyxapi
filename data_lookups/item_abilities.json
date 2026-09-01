@@ -1,0 +1,3775 @@
+[
+  {
+    "ID": 1,
+    "name": "potion",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 86,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 4
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 1,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 2,
+    "name": "hi-potion",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 87,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 2,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 3,
+    "name": "x-potion",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 76,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 3,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 4,
+    "name": "mega-potion",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 88,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 40
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 4,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 5,
+    "name": "ether",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 89,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 2
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 5,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 6,
+    "name": "turbo ether",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 90,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 10
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 6,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 7,
+    "name": "elixir",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 76,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            },
+            {
+              "ID": 79,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 7,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 8,
+    "name": "megalixir",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 76,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            },
+            {
+              "ID": 79,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 8,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 9,
+    "name": "phoenix down",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 91,
+              "condition": "Only KO'd characters and zombies.",
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 8
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 42,
+            "StatusConditionID": 41,
+            "name": "life",
+            "probability": 254,
+            "duration_type": "instant",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 9,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 10,
+    "name": "mega phoenix",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 78,
+              "condition": "Only KO'd characters and zombies.",
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 42,
+            "StatusConditionID": 41,
+            "name": "life",
+            "probability": 254,
+            "duration_type": "instant",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 10,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 11,
+    "name": "antidote",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "poison"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 11,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 12,
+    "name": "soft",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "petrification"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 12,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 13,
+    "name": "eye drops",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "darkness"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 13,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 14,
+    "name": "echo screen",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "silence"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 14,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 15,
+    "name": "holy water",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "zombie",
+          "curse"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 15,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 16,
+    "name": "remedy",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "berserk",
+          "confusion",
+          "darkness",
+          "petrification",
+          "poison",
+          "silence",
+          "sleep",
+          "slow",
+          "zombie"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 16,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 17,
+    "name": "power distiller",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 78,
+        "target": "single-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 103,
+            "StatusConditionID": 35,
+            "name": "power distiller",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 17,
+    "cursor": "single-enemy"
+  },
+  {
+    "ID": 18,
+    "name": "mana distiller",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 78,
+        "target": "single-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 104,
+            "StatusConditionID": 36,
+            "name": "mana distiller",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 18,
+    "cursor": "single-enemy"
+  },
+  {
+    "ID": 19,
+    "name": "speed distiller",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 78,
+        "target": "single-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 105,
+            "StatusConditionID": 37,
+            "name": "speed distiller",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 19,
+    "cursor": "single-enemy"
+  },
+  {
+    "ID": 20,
+    "name": "ability distiller",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 78,
+        "target": "single-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 106,
+            "StatusConditionID": 38,
+            "name": "ability distiller",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 20,
+    "cursor": "single-enemy"
+  },
+  {
+    "ID": 21,
+    "name": "al bhed potion",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 87,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-no-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "poison",
+          "silence",
+          "petrification"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 21,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 22,
+    "name": "healing water",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 76,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 22,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 23,
+    "name": "tetra elemental",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 76,
+              "condition": null,
+              "attack_type": "heal",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-max",
+              "damage_constant": 16
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 36,
+            "StatusConditionID": 23,
+            "name": "nulblaze",
+            "probability": 254,
+            "duration_type": "blocks",
+            "amount": 1
+          },
+          {
+            "ID": 37,
+            "StatusConditionID": 24,
+            "name": "nulshock",
+            "probability": 254,
+            "duration_type": "blocks",
+            "amount": 1
+          },
+          {
+            "ID": 38,
+            "StatusConditionID": 25,
+            "name": "nultide",
+            "probability": 254,
+            "duration_type": "blocks",
+            "amount": 1
+          },
+          {
+            "ID": 39,
+            "StatusConditionID": 26,
+            "name": "nulfrost",
+            "probability": 254,
+            "duration_type": "blocks",
+            "amount": 1
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 23,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 24,
+    "name": "bomb fragment",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 79,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 15,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 1,
+          "element": "fire"
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 24,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 25,
+    "name": "bomb core",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 80,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 15,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 1,
+          "element": "fire"
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 25,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 26,
+    "name": "fire gem",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 81,
+        "target": "random-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 15,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 1,
+          "element": "fire"
+        },
+        "shatter_rate": 70,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 5,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 26,
+    "cursor": "all-enemies"
+  },
+  {
+    "ID": 27,
+    "name": "electro marble",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 79,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 16,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 2,
+          "element": "lightning"
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 27,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 28,
+    "name": "lightning marble",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 80,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 16,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 2,
+          "element": "lightning"
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 28,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 29,
+    "name": "lightning gem",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 81,
+        "target": "random-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 16,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 2,
+          "element": "lightning"
+        },
+        "shatter_rate": 70,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 5,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 29,
+    "cursor": "all-enemies"
+  },
+  {
+    "ID": 30,
+    "name": "fish scale",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 79,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 17,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 3,
+          "element": "water"
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 30,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 31,
+    "name": "dragon scale",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 80,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 17,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 3,
+          "element": "water"
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 31,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 32,
+    "name": "water gem",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 81,
+        "target": "random-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 17,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 3,
+          "element": "water"
+        },
+        "shatter_rate": 70,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 5,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 32,
+    "cursor": "all-enemies"
+  },
+  {
+    "ID": 33,
+    "name": "antarctic wind",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 79,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 18,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 4,
+          "element": "ice"
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 33,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 34,
+    "name": "arctic wind",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 80,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 18,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 4,
+          "element": "ice"
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 34,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 35,
+    "name": "ice gem",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 81,
+        "target": "random-enemy",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 18,
+          "damage_calc": [
+            {
+              "ID": 92,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 12
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 4,
+          "element": "ice"
+        },
+        "shatter_rate": 70,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 5,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 35,
+    "cursor": "all-enemies"
+  },
+  {
+    "ID": 36,
+    "name": "grenade",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 82,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 14,
+          "damage_calc": [
+            {
+              "ID": 60,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 7
+            }
+          ],
+          "critical": "crit",
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 36,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 37,
+    "name": "frag grenade",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 82,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 14,
+          "damage_calc": [
+            {
+              "ID": 61,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 16
+            }
+          ],
+          "critical": "crit",
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 107,
+            "StatusConditionID": 20,
+            "name": "armor break",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 37,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 38,
+    "name": "sleeping powder",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 83,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 94,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 15
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 108,
+            "StatusConditionID": 14,
+            "name": "sleep",
+            "probability": 254,
+            "duration_type": "turns",
+            "amount": 8
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 38,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 39,
+    "name": "dream powder",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 83,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 108,
+            "StatusConditionID": 14,
+            "name": "sleep",
+            "probability": 254,
+            "duration_type": "turns",
+            "amount": 8
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 39,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 40,
+    "name": "silence grenade",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 83,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 94,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 15
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 109,
+            "StatusConditionID": 13,
+            "name": "silence",
+            "probability": 254,
+            "duration_type": "turns",
+            "amount": 8
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 40,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 41,
+    "name": "smoke bomb",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 83,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 94,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 15
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 30,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 110,
+            "StatusConditionID": 4,
+            "name": "darkness",
+            "probability": 254,
+            "duration_type": "turns",
+            "amount": 8
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 41,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 42,
+    "name": "shadow gem",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 82,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 95,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "percentage-current",
+              "damage_constant": 8
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 50,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 42,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 43,
+    "name": "shining gem",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 84,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 96,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 120
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 100,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 43,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 44,
+    "name": "blessed gem",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 84,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 21,
+          "damage_calc": [
+            {
+              "ID": 97,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 160
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": 5,
+          "element": "holy"
+        },
+        "shatter_rate": 100,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 44,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 45,
+    "name": "supreme gem",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 84,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 98,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 200
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 100,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 45,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 46,
+    "name": "poison fang",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 85,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 99,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 40
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 60,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 49,
+            "StatusConditionID": 11,
+            "name": "poison",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 46,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 47,
+    "name": "silver hourglass",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 86,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": {
+          "ID": 3,
+          "condition": "If slow was successfully inflicted.",
+          "ctb_attack_type": "attack",
+          "delay_type": "ctb-based",
+          "damage_constant": 8
+        },
+        "inflicted_status_conditions": [
+          {
+            "ID": 111,
+            "StatusConditionID": 15,
+            "name": "slow",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 47,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 48,
+    "name": "gold hourglass",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 87,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 93,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 70,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": {
+          "ID": 2,
+          "condition": null,
+          "ctb_attack_type": "attack",
+          "delay_type": "tick-speed-based",
+          "damage_constant": 24
+        },
+        "inflicted_status_conditions": [
+          {
+            "ID": 111,
+            "StatusConditionID": 15,
+            "name": "slow",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 48,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 49,
+    "name": "candle of life",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 112,
+            "StatusConditionID": 7,
+            "name": "doom",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 49,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 50,
+    "name": "petrify grenade",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 71,
+        "target": "all-enemies",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 113,
+            "StatusConditionID": 10,
+            "name": "petrification",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 50,
+    "cursor": "all-enemies"
+  },
+  {
+    "ID": 51,
+    "name": "farplane shadow",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 114,
+            "StatusConditionID": 5,
+            "name": "death",
+            "probability": 254,
+            "duration_type": "instant",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 51,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 52,
+    "name": "farplane wind",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 71,
+        "target": "all-enemies",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 114,
+            "StatusConditionID": 5,
+            "name": "death",
+            "probability": 254,
+            "duration_type": "instant",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 52,
+    "cursor": "all-enemies"
+  },
+  {
+    "ID": 53,
+    "name": "dark matter",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 88,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 19,
+          "damage_calc": [
+            {
+              "ID": 100,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 255
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": "always",
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 100,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 53,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 54,
+    "name": "chocobo feather",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 43,
+            "StatusConditionID": 22,
+            "name": "haste",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 54,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 55,
+    "name": "chocobo wing",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 77,
+        "target": "target-party",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 43,
+            "StatusConditionID": 22,
+            "name": "haste",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 55,
+    "cursor": "target-party"
+  },
+  {
+    "ID": 56,
+    "name": "lunar curtain",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 44,
+            "StatusConditionID": 30,
+            "name": "shell",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 56,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 57,
+    "name": "light curtain",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 45,
+            "StatusConditionID": 27,
+            "name": "protect",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 57,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 58,
+    "name": "star curtain",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 46,
+            "StatusConditionID": 28,
+            "name": "reflect",
+            "probability": 254,
+            "duration_type": "endless",
+            "amount": null
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 58,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 59,
+    "name": "healing spring",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 76,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [
+          {
+            "ID": 115,
+            "StatusConditionID": 29,
+            "name": "regen",
+            "probability": 254,
+            "duration_type": "turns",
+            "amount": 10
+          }
+        ],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 59,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 60,
+    "name": "mana spring",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 89,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 101,
+              "condition": null,
+              "attack_type": "absorb",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 20
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 10,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 60,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 61,
+    "name": "stamina spring",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 89,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 102,
+              "condition": null,
+              "attack_type": "absorb",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 8
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 10,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 61,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 62,
+    "name": "soul spring",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 89,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 103,
+              "condition": null,
+              "attack_type": "absorb",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 30
+            },
+            {
+              "ID": 104,
+              "condition": null,
+              "attack_type": "absorb",
+              "StatID": 2,
+              "target_stat": "mp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 30
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 10,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 62,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 63,
+    "name": "purifying salt",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 89,
+        "target": "single-target",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": {
+          "ID": 4,
+          "damage_calc": [
+            {
+              "ID": 66,
+              "condition": null,
+              "attack_type": "attack",
+              "StatID": 1,
+              "target_stat": "hp",
+              "damage_type": "special",
+              "damage_formula": "special-var",
+              "damage_constant": 22
+            }
+          ],
+          "critical": null,
+          "critical_plus_val": null,
+          "is_piercing": true,
+          "break_dmg_lmt": null,
+          "ElementID": null,
+          "element": null
+        },
+        "shatter_rate": 10,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [
+          "power break",
+          "magic break",
+          "armor break",
+          "mental break",
+          "curse",
+          "slow",
+          "haste",
+          "protect",
+          "shell",
+          "reflect",
+          "regen",
+          "nulblaze",
+          "nulshock",
+          "nultide",
+          "nulfrost"
+        ],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 63,
+    "cursor": "single-target"
+  },
+  {
+    "ID": 64,
+    "name": "stamina tablet",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 90,
+        "target": "single-ally",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [
+          {
+            "ID": 5,
+            "StatID": 1,
+            "name": "hp",
+            "calculation_type": "multiply-highest",
+            "value": 2
+          }
+        ],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 64,
+    "cursor": "single-ally"
+  },
+  {
+    "ID": 65,
+    "name": "mana tablet",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 90,
+        "target": "single-ally",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [
+          {
+            "ID": 6,
+            "StatID": 2,
+            "name": "mp",
+            "calculation_type": "multiply-highest",
+            "value": 2
+          }
+        ],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 65,
+    "cursor": "single-ally"
+  },
+  {
+    "ID": 66,
+    "name": "stamina tonic",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 8,
+        "target": "all-allies",
+        "based_on_user_attack": false,
+        "range": null,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [
+          {
+            "ID": 5,
+            "StatID": 1,
+            "name": "hp",
+            "calculation_type": "multiply-highest",
+            "value": 2
+          }
+        ],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 66,
+    "cursor": "all-allies"
+  },
+  {
+    "ID": 67,
+    "name": "mana tonic",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 8,
+        "target": "all-allies",
+        "based_on_user_attack": false,
+        "range": null,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [
+          {
+            "ID": 6,
+            "StatID": 2,
+            "name": "mp",
+            "calculation_type": "multiply-highest",
+            "value": 2
+          }
+        ],
+        "modifier_changes": []
+      }
+    ],
+    "ItemID": 67,
+    "cursor": "all-allies"
+  },
+  {
+    "ID": 68,
+    "name": "twin stars",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 90,
+        "target": "single-ally",
+        "based_on_user_attack": false,
+        "range": 3,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": [
+          {
+            "ID": 13,
+            "ModifierID": 16,
+            "name": "mp-cost",
+            "calculation_type": "set-value",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "ItemID": 68,
+    "cursor": "single-ally"
+  },
+  {
+    "ID": 69,
+    "name": "three stars",
+    "version": null,
+    "specification": null,
+    "Type": "item-ability",
+    "rank": 2,
+    "appears_in_help_bar": true,
+    "can_copycat": true,
+    "battle_interactions": [
+      {
+        "ID": 8,
+        "target": "all-allies",
+        "based_on_user_attack": false,
+        "range": null,
+        "damage": null,
+        "shatter_rate": 0,
+        "accuracy": {
+          "ID": 1,
+          "acc_source": "rate",
+          "hit_chance": 255,
+          "acc_modifier": null
+        },
+        "affected_by": [],
+        "hit_amount": 1,
+        "special_action": null,
+        "inflicted_delay": null,
+        "inflicted_status_conditions": [],
+        "removed_status_conditions": [],
+        "copied_status_conditions": [],
+        "stat_changes": [],
+        "modifier_changes": [
+          {
+            "ID": 13,
+            "ModifierID": 16,
+            "name": "mp-cost",
+            "calculation_type": "set-value",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "ItemID": 69,
+    "cursor": "all-allies"
+  }
+]

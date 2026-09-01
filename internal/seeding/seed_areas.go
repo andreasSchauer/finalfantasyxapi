@@ -30,7 +30,7 @@ func (l *Lookup) loop3SeedAreas(qtx *database.Queries, ctx context.Context) erro
 
 	for i, a := range areas {
 		params.DataHash[i] = generateDataHash(a)
-		params.SublocationID[i] = a.Sublocation.ID
+		params.SublocationID[i] = a.SublocationID
 		params.Name[i] = a.Name
 		params.Version[i] = h.GetNullInt32(a.Version)
 		params.Specification[i] = h.GetNullString(a.Specification)
@@ -73,7 +73,10 @@ func (l *Lookup) extractAreas() ([]Area, error) {
 
 			for k := range sublocation.Areas {
 				area := &sublocation.Areas[k]
-				area.Sublocation = *sublocation
+				area.Location = location.Name
+				area.LocationID = location.ID
+				area.Sublocation = sublocation.Name
+				area.SublocationID = sublocation.ID
 				areas = append(areas, *area)
 			}
 		}

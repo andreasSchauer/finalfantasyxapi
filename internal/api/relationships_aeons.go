@@ -21,20 +21,20 @@ func getAeonRelationships(cfg *Config, r *http.Request, aeon seeding.Aeon) (Aeon
 		var err error
 		rel.CharacterClasses, err = getResourcesDbItem(cfg, ctx, cfg.e.characterClasses, aeon, cfg.db.GetAeonCharClassIDs)
 		return err
-	}) 
+	})
 
 	g.Go(func() error {
 		var err error
 		rel.AeonCommands, err = getResourcesDbItem(cfg, ctx, cfg.e.aeonCommands, aeon, cfg.db.GetAeonAeonCommandIDs)
 		return err
 	})
-	
+
 	g.Go(func() error {
 		var err error
 		rel.Overdrives, err = getResourcesDbItem(cfg, ctx, cfg.e.overdrives, aeon, cfg.db.GetAeonOverdriveIDs)
 		return err
 	})
-	
+
 	g.Go(func() error {
 		var err error
 		rel.DefaultPlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.playerAbilities, aeon, cfg.db.GetAeonDefaultAbilityIDs)
@@ -187,7 +187,7 @@ func yStatCalc(stat string, yParameter float64, aVals, bVals, yuna map[string]fl
 }
 
 func getAeonAgilityParams(cfg *Config, r *http.Request, aeon Aeon) (AgilityParams, error) {
-	agilityTier, err := getAgilityTier(cfg, r, aeon.BaseStats)
+	agilityTier, err := getAgilityTierDB(cfg, r, aeon.BaseStats)
 	if err != nil {
 		return AgilityParams{}, err
 	}

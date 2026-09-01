@@ -9,13 +9,14 @@ type Sublocation struct {
 	Name 			string 	`json:"sublocation"`
 	Availability 	string	`json:"availability"`
 	Areas    		[]Area 	`json:"areas"`
-	Location 		Location
+	LocationID		int32	`json:"location_id"`
+	Location 		string	`json:"location"`
 }
 
 func (s Sublocation) ToHashFields() []any {
 	return []any{
 		fmt.Sprintf("%T", s),
-		s.Location.ID,
+		s.LocationID,
 		s.Name,
 		s.Availability,
 	}

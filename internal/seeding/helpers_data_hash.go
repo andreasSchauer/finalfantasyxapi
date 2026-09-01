@@ -6,23 +6,23 @@ import (
 )
 
 func generateDataHash(h Hashable) string {
-	return combineFields(h.ToHashFields())
+	return CombineFields(h.ToHashFields())
 }
 
 func generateJunctionHash(j Junction, desc string) string {
-	return combineFields(j.ToHashFieldsJ(desc))
+	return CombineFields(j.ToHashFieldsJ(desc))
 }
 
 func (l *Lookup) GetHashID(h Hashable) (int32, error) {
 	id, ok := l.Hashes[generateDataHash(h)]
 	if !ok {
-		return 0, fmt.Errorf("no data hash available for %s", combineFields(h.ToHashFields()))
+		return 0, fmt.Errorf("no data hash available for %s", CombineFields(h.ToHashFields()))
 	}
 
 	return id, nil
 }
 
-func combineFields(fields []any) string {
+func CombineFields(fields []any) string {
 	var builder strings.Builder
 
 	for i, field := range fields {

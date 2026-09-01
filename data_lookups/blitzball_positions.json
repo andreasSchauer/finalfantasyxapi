@@ -1,0 +1,520 @@
+[
+  {
+    "ID": 1,
+    "category": "league",
+    "slot": "1st",
+    "items": [
+      {
+        "ID": 1,
+        "PositionID": 1,
+        "item": {
+          "ID": 8,
+          "Type": "item",
+          "name": "megalixir",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 2,
+        "PositionID": 1,
+        "item": {
+          "ID": 69,
+          "Type": "item",
+          "name": "three stars",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 3,
+        "PositionID": 1,
+        "item": {
+          "ID": 74,
+          "Type": "item",
+          "name": "fortune sphere",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 4,
+        "PositionID": 1,
+        "item": {
+          "ID": 111,
+          "Type": "item",
+          "name": "underdog's secret",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 5,
+        "PositionID": 1,
+        "item": {
+          "ID": 53,
+          "Type": "item",
+          "name": "dark matter",
+          "amount": 1
+        },
+        "chance": 10
+      },
+      {
+        "ID": 6,
+        "PositionID": 1,
+        "item": {
+          "ID": 81,
+          "Type": "item",
+          "name": "lv. 1 key sphere",
+          "amount": 1
+        },
+        "chance": 10
+      },
+      {
+        "ID": 7,
+        "PositionID": 1,
+        "item": {
+          "ID": 96,
+          "Type": "item",
+          "name": "return sphere",
+          "amount": 1
+        },
+        "chance": 10
+      },
+      {
+        "ID": 8,
+        "PositionID": 1,
+        "item": {
+          "ID": 98,
+          "Type": "item",
+          "name": "teleport sphere",
+          "amount": 1
+        },
+        "chance": 10
+      }
+    ]
+  },
+  {
+    "ID": 2,
+    "category": "league",
+    "slot": "2nd",
+    "items": [
+      {
+        "ID": 9,
+        "PositionID": 2,
+        "item": {
+          "ID": 3,
+          "Type": "item",
+          "name": "x-potion",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 10,
+        "PositionID": 2,
+        "item": {
+          "ID": 4,
+          "Type": "item",
+          "name": "mega-potion",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 11,
+        "PositionID": 2,
+        "item": {
+          "ID": 7,
+          "Type": "item",
+          "name": "elixir",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 12,
+        "PositionID": 2,
+        "item": {
+          "ID": 10,
+          "Type": "item",
+          "name": "mega phoenix",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 13,
+        "PositionID": 2,
+        "item": {
+          "ID": 2,
+          "Type": "item",
+          "name": "hi-potion",
+          "amount": 2
+        },
+        "chance": 5
+      },
+      {
+        "ID": 14,
+        "PositionID": 2,
+        "item": {
+          "ID": 5,
+          "Type": "item",
+          "name": "ether",
+          "amount": 1
+        },
+        "chance": 5
+      },
+      {
+        "ID": 15,
+        "PositionID": 2,
+        "item": {
+          "ID": 9,
+          "Type": "item",
+          "name": "phoenix down",
+          "amount": 2
+        },
+        "chance": 5
+      },
+      {
+        "ID": 16,
+        "PositionID": 2,
+        "item": {
+          "ID": 16,
+          "Type": "item",
+          "name": "remedy",
+          "amount": 2
+        },
+        "chance": 5
+      }
+    ]
+  },
+  {
+    "ID": 3,
+    "category": "league",
+    "slot": "3rd",
+    "items": [
+      {
+        "ID": 17,
+        "PositionID": 3,
+        "item": {
+          "ID": 70,
+          "Type": "item",
+          "name": "power sphere",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 18,
+        "PositionID": 3,
+        "item": {
+          "ID": 71,
+          "Type": "item",
+          "name": "mana sphere",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 19,
+        "PositionID": 3,
+        "item": {
+          "ID": 72,
+          "Type": "item",
+          "name": "speed sphere",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 20,
+        "PositionID": 3,
+        "item": {
+          "ID": 73,
+          "Type": "item",
+          "name": "ability sphere",
+          "amount": 1
+        },
+        "chance": 15
+      },
+      {
+        "ID": 21,
+        "PositionID": 3,
+        "item": {
+          "ID": 11,
+          "Type": "item",
+          "name": "antidote",
+          "amount": 1
+        },
+        "chance": 5
+      },
+      {
+        "ID": 22,
+        "PositionID": 3,
+        "item": {
+          "ID": 14,
+          "Type": "item",
+          "name": "echo screen",
+          "amount": 1
+        },
+        "chance": 5
+      },
+      {
+        "ID": 23,
+        "PositionID": 3,
+        "item": {
+          "ID": 13,
+          "Type": "item",
+          "name": "eye drops",
+          "amount": 1
+        },
+        "chance": 5
+      }
+    ]
+  },
+  {
+    "ID": 4,
+    "category": "league",
+    "slot": "top-scorer",
+    "items": [
+      {
+        "ID": 24,
+        "PositionID": 4,
+        "item": {
+          "ID": 5,
+          "Type": "item",
+          "name": "ether",
+          "amount": 1
+        },
+        "chance": 20
+      },
+      {
+        "ID": 25,
+        "PositionID": 4,
+        "item": {
+          "ID": 96,
+          "Type": "item",
+          "name": "return sphere",
+          "amount": 1
+        },
+        "chance": 20
+      },
+      {
+        "ID": 26,
+        "PositionID": 4,
+        "item": {
+          "ID": 101,
+          "Type": "item",
+          "name": "rename card",
+          "amount": 1
+        },
+        "chance": 20
+      },
+      {
+        "ID": 27,
+        "PositionID": 4,
+        "item": {
+          "ID": 3,
+          "Type": "item",
+          "name": "x-potion",
+          "amount": 1
+        },
+        "chance": 10
+      },
+      {
+        "ID": 28,
+        "PositionID": 4,
+        "item": {
+          "ID": 4,
+          "Type": "item",
+          "name": "mega-potion",
+          "amount": 1
+        },
+        "chance": 5
+      },
+      {
+        "ID": 29,
+        "PositionID": 4,
+        "item": {
+          "ID": 16,
+          "Type": "item",
+          "name": "remedy",
+          "amount": 2
+        },
+        "chance": 5
+      }
+    ]
+  },
+  {
+    "ID": 5,
+    "category": "tournament",
+    "slot": "1st",
+    "items": [
+      {
+        "ID": 30,
+        "PositionID": 5,
+        "item": {
+          "ID": 3,
+          "Type": "item",
+          "name": "x-potion",
+          "amount": 1
+        },
+        "chance": 30
+      },
+      {
+        "ID": 31,
+        "PositionID": 5,
+        "item": {
+          "ID": 7,
+          "Type": "item",
+          "name": "elixir",
+          "amount": 1
+        },
+        "chance": 30
+      },
+      {
+        "ID": 32,
+        "PositionID": 5,
+        "item": {
+          "ID": 2,
+          "Type": "item",
+          "name": "hi-potion",
+          "amount": 1
+        },
+        "chance": 5
+      },
+      {
+        "ID": 33,
+        "PositionID": 5,
+        "item": {
+          "ID": 16,
+          "Type": "item",
+          "name": "remedy",
+          "amount": 1
+        },
+        "chance": 5
+      }
+    ]
+  },
+  {
+    "ID": 6,
+    "category": "tournament",
+    "slot": "2nd",
+    "items": [
+      {
+        "ID": 34,
+        "PositionID": 6,
+        "item": {
+          "ID": 11,
+          "Type": "item",
+          "name": "antidote",
+          "amount": 4
+        },
+        "chance": 20
+      },
+      {
+        "ID": 35,
+        "PositionID": 6,
+        "item": {
+          "ID": 12,
+          "Type": "item",
+          "name": "soft",
+          "amount": 4
+        },
+        "chance": 20
+      },
+      {
+        "ID": 36,
+        "PositionID": 6,
+        "item": {
+          "ID": 13,
+          "Type": "item",
+          "name": "eye drops",
+          "amount": 4
+        },
+        "chance": 20
+      },
+      {
+        "ID": 37,
+        "PositionID": 6,
+        "item": {
+          "ID": 14,
+          "Type": "item",
+          "name": "echo screen",
+          "amount": 4
+        },
+        "chance": 20
+      }
+    ]
+  },
+  {
+    "ID": 7,
+    "category": "tournament",
+    "slot": "3rd",
+    "items": [
+      {
+        "ID": 38,
+        "PositionID": 7,
+        "item": {
+          "ID": 1,
+          "Type": "item",
+          "name": "potion",
+          "amount": 2
+        },
+        "chance": 20
+      },
+      {
+        "ID": 39,
+        "PositionID": 7,
+        "item": {
+          "ID": 9,
+          "Type": "item",
+          "name": "phoenix down",
+          "amount": 2
+        },
+        "chance": 20
+      }
+    ]
+  },
+  {
+    "ID": 8,
+    "category": "tournament",
+    "slot": "top-scorer",
+    "items": [
+      {
+        "ID": 40,
+        "PositionID": 8,
+        "item": {
+          "ID": 5,
+          "Type": "item",
+          "name": "ether",
+          "amount": 1
+        },
+        "chance": 20
+      },
+      {
+        "ID": 41,
+        "PositionID": 8,
+        "item": {
+          "ID": 96,
+          "Type": "item",
+          "name": "return sphere",
+          "amount": 1
+        },
+        "chance": 20
+      },
+      {
+        "ID": 42,
+        "PositionID": 8,
+        "item": {
+          "ID": 101,
+          "Type": "item",
+          "name": "rename card",
+          "amount": 1
+        },
+        "chance": 20
+      }
+    ]
+  }
+]

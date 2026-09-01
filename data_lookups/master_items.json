@@ -1,0 +1,862 @@
+[
+  {
+    "ID": 1,
+    "name": "potion",
+    "Type": "item"
+  },
+  {
+    "ID": 2,
+    "name": "hi-potion",
+    "Type": "item"
+  },
+  {
+    "ID": 3,
+    "name": "x-potion",
+    "Type": "item"
+  },
+  {
+    "ID": 4,
+    "name": "mega-potion",
+    "Type": "item"
+  },
+  {
+    "ID": 5,
+    "name": "ether",
+    "Type": "item"
+  },
+  {
+    "ID": 6,
+    "name": "turbo ether",
+    "Type": "item"
+  },
+  {
+    "ID": 7,
+    "name": "elixir",
+    "Type": "item"
+  },
+  {
+    "ID": 8,
+    "name": "megalixir",
+    "Type": "item"
+  },
+  {
+    "ID": 9,
+    "name": "phoenix down",
+    "Type": "item"
+  },
+  {
+    "ID": 10,
+    "name": "mega phoenix",
+    "Type": "item"
+  },
+  {
+    "ID": 11,
+    "name": "antidote",
+    "Type": "item"
+  },
+  {
+    "ID": 12,
+    "name": "soft",
+    "Type": "item"
+  },
+  {
+    "ID": 13,
+    "name": "eye drops",
+    "Type": "item"
+  },
+  {
+    "ID": 14,
+    "name": "echo screen",
+    "Type": "item"
+  },
+  {
+    "ID": 15,
+    "name": "holy water",
+    "Type": "item"
+  },
+  {
+    "ID": 16,
+    "name": "remedy",
+    "Type": "item"
+  },
+  {
+    "ID": 17,
+    "name": "power distiller",
+    "Type": "item"
+  },
+  {
+    "ID": 18,
+    "name": "mana distiller",
+    "Type": "item"
+  },
+  {
+    "ID": 19,
+    "name": "speed distiller",
+    "Type": "item"
+  },
+  {
+    "ID": 20,
+    "name": "ability distiller",
+    "Type": "item"
+  },
+  {
+    "ID": 21,
+    "name": "al bhed potion",
+    "Type": "item"
+  },
+  {
+    "ID": 22,
+    "name": "healing water",
+    "Type": "item"
+  },
+  {
+    "ID": 23,
+    "name": "tetra elemental",
+    "Type": "item"
+  },
+  {
+    "ID": 24,
+    "name": "bomb fragment",
+    "Type": "item"
+  },
+  {
+    "ID": 25,
+    "name": "bomb core",
+    "Type": "item"
+  },
+  {
+    "ID": 26,
+    "name": "fire gem",
+    "Type": "item"
+  },
+  {
+    "ID": 27,
+    "name": "electro marble",
+    "Type": "item"
+  },
+  {
+    "ID": 28,
+    "name": "lightning marble",
+    "Type": "item"
+  },
+  {
+    "ID": 29,
+    "name": "lightning gem",
+    "Type": "item"
+  },
+  {
+    "ID": 30,
+    "name": "fish scale",
+    "Type": "item"
+  },
+  {
+    "ID": 31,
+    "name": "dragon scale",
+    "Type": "item"
+  },
+  {
+    "ID": 32,
+    "name": "water gem",
+    "Type": "item"
+  },
+  {
+    "ID": 33,
+    "name": "antarctic wind",
+    "Type": "item"
+  },
+  {
+    "ID": 34,
+    "name": "arctic wind",
+    "Type": "item"
+  },
+  {
+    "ID": 35,
+    "name": "ice gem",
+    "Type": "item"
+  },
+  {
+    "ID": 36,
+    "name": "grenade",
+    "Type": "item"
+  },
+  {
+    "ID": 37,
+    "name": "frag grenade",
+    "Type": "item"
+  },
+  {
+    "ID": 38,
+    "name": "sleeping powder",
+    "Type": "item"
+  },
+  {
+    "ID": 39,
+    "name": "dream powder",
+    "Type": "item"
+  },
+  {
+    "ID": 40,
+    "name": "silence grenade",
+    "Type": "item"
+  },
+  {
+    "ID": 41,
+    "name": "smoke bomb",
+    "Type": "item"
+  },
+  {
+    "ID": 42,
+    "name": "shadow gem",
+    "Type": "item"
+  },
+  {
+    "ID": 43,
+    "name": "shining gem",
+    "Type": "item"
+  },
+  {
+    "ID": 44,
+    "name": "blessed gem",
+    "Type": "item"
+  },
+  {
+    "ID": 45,
+    "name": "supreme gem",
+    "Type": "item"
+  },
+  {
+    "ID": 46,
+    "name": "poison fang",
+    "Type": "item"
+  },
+  {
+    "ID": 47,
+    "name": "silver hourglass",
+    "Type": "item"
+  },
+  {
+    "ID": 48,
+    "name": "gold hourglass",
+    "Type": "item"
+  },
+  {
+    "ID": 49,
+    "name": "candle of life",
+    "Type": "item"
+  },
+  {
+    "ID": 50,
+    "name": "petrify grenade",
+    "Type": "item"
+  },
+  {
+    "ID": 51,
+    "name": "farplane shadow",
+    "Type": "item"
+  },
+  {
+    "ID": 52,
+    "name": "farplane wind",
+    "Type": "item"
+  },
+  {
+    "ID": 53,
+    "name": "dark matter",
+    "Type": "item"
+  },
+  {
+    "ID": 54,
+    "name": "chocobo feather",
+    "Type": "item"
+  },
+  {
+    "ID": 55,
+    "name": "chocobo wing",
+    "Type": "item"
+  },
+  {
+    "ID": 56,
+    "name": "lunar curtain",
+    "Type": "item"
+  },
+  {
+    "ID": 57,
+    "name": "light curtain",
+    "Type": "item"
+  },
+  {
+    "ID": 58,
+    "name": "star curtain",
+    "Type": "item"
+  },
+  {
+    "ID": 59,
+    "name": "healing spring",
+    "Type": "item"
+  },
+  {
+    "ID": 60,
+    "name": "mana spring",
+    "Type": "item"
+  },
+  {
+    "ID": 61,
+    "name": "stamina spring",
+    "Type": "item"
+  },
+  {
+    "ID": 62,
+    "name": "soul spring",
+    "Type": "item"
+  },
+  {
+    "ID": 63,
+    "name": "purifying salt",
+    "Type": "item"
+  },
+  {
+    "ID": 64,
+    "name": "stamina tablet",
+    "Type": "item"
+  },
+  {
+    "ID": 65,
+    "name": "mana tablet",
+    "Type": "item"
+  },
+  {
+    "ID": 66,
+    "name": "stamina tonic",
+    "Type": "item"
+  },
+  {
+    "ID": 67,
+    "name": "mana tonic",
+    "Type": "item"
+  },
+  {
+    "ID": 68,
+    "name": "twin stars",
+    "Type": "item"
+  },
+  {
+    "ID": 69,
+    "name": "three stars",
+    "Type": "item"
+  },
+  {
+    "ID": 70,
+    "name": "power sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 71,
+    "name": "mana sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 72,
+    "name": "speed sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 73,
+    "name": "ability sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 74,
+    "name": "fortune sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 75,
+    "name": "attribute sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 76,
+    "name": "special sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 77,
+    "name": "skill sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 78,
+    "name": "wht magic sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 79,
+    "name": "blk magic sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 80,
+    "name": "master sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 81,
+    "name": "lv. 1 key sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 82,
+    "name": "lv. 2 key sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 83,
+    "name": "lv. 3 key sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 84,
+    "name": "lv. 4 key sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 85,
+    "name": "hp sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 86,
+    "name": "mp sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 87,
+    "name": "strength sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 88,
+    "name": "defense sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 89,
+    "name": "magic sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 90,
+    "name": "magic def sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 91,
+    "name": "agility sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 92,
+    "name": "evasion sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 93,
+    "name": "accuracy sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 94,
+    "name": "luck sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 95,
+    "name": "clear sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 96,
+    "name": "return sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 97,
+    "name": "friend sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 98,
+    "name": "teleport sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 99,
+    "name": "warp sphere",
+    "Type": "item"
+  },
+  {
+    "ID": 100,
+    "name": "map",
+    "Type": "item"
+  },
+  {
+    "ID": 101,
+    "name": "rename card",
+    "Type": "item"
+  },
+  {
+    "ID": 102,
+    "name": "musk",
+    "Type": "item"
+  },
+  {
+    "ID": 103,
+    "name": "hypello potion",
+    "Type": "item"
+  },
+  {
+    "ID": 104,
+    "name": "shining thorn",
+    "Type": "item"
+  },
+  {
+    "ID": 105,
+    "name": "pendulum",
+    "Type": "item"
+  },
+  {
+    "ID": 106,
+    "name": "amulet",
+    "Type": "item"
+  },
+  {
+    "ID": 107,
+    "name": "designer wallet",
+    "Type": "item"
+  },
+  {
+    "ID": 108,
+    "name": "door to tomorrow",
+    "Type": "item"
+  },
+  {
+    "ID": 109,
+    "name": "wings to discovery",
+    "Type": "item"
+  },
+  {
+    "ID": 110,
+    "name": "gambler's spirit",
+    "Type": "item"
+  },
+  {
+    "ID": 111,
+    "name": "underdog's secret",
+    "Type": "item"
+  },
+  {
+    "ID": 112,
+    "name": "winning formula",
+    "Type": "item"
+  },
+  {
+    "ID": 113,
+    "name": "withered bouquet",
+    "Type": "key-item"
+  },
+  {
+    "ID": 114,
+    "name": "flint",
+    "Type": "key-item"
+  },
+  {
+    "ID": 115,
+    "name": "cloudy mirror",
+    "Type": "key-item"
+  },
+  {
+    "ID": 116,
+    "name": "celestial mirror",
+    "Type": "key-item"
+  },
+  {
+    "ID": 117,
+    "name": "summoner's soul",
+    "Type": "key-item"
+  },
+  {
+    "ID": 118,
+    "name": "aeon's soul",
+    "Type": "key-item"
+  },
+  {
+    "ID": 119,
+    "name": "rusty sword",
+    "Type": "key-item"
+  },
+  {
+    "ID": 120,
+    "name": "mark of conquest",
+    "Type": "key-item"
+  },
+  {
+    "ID": 121,
+    "name": "blossom crown",
+    "Type": "key-item"
+  },
+  {
+    "ID": 122,
+    "name": "flower sceptre",
+    "Type": "key-item"
+  },
+  {
+    "ID": 123,
+    "name": "sun crest",
+    "Type": "key-item"
+  },
+  {
+    "ID": 124,
+    "name": "sun sigil",
+    "Type": "key-item"
+  },
+  {
+    "ID": 125,
+    "name": "moon crest",
+    "Type": "key-item"
+  },
+  {
+    "ID": 126,
+    "name": "moon sigil",
+    "Type": "key-item"
+  },
+  {
+    "ID": 127,
+    "name": "mars crest",
+    "Type": "key-item"
+  },
+  {
+    "ID": 128,
+    "name": "mars sigil",
+    "Type": "key-item"
+  },
+  {
+    "ID": 129,
+    "name": "saturn crest",
+    "Type": "key-item"
+  },
+  {
+    "ID": 130,
+    "name": "saturn sigil",
+    "Type": "key-item"
+  },
+  {
+    "ID": 131,
+    "name": "jupiter crest",
+    "Type": "key-item"
+  },
+  {
+    "ID": 132,
+    "name": "jupiter sigil",
+    "Type": "key-item"
+  },
+  {
+    "ID": 133,
+    "name": "venus crest",
+    "Type": "key-item"
+  },
+  {
+    "ID": 134,
+    "name": "venus sigil",
+    "Type": "key-item"
+  },
+  {
+    "ID": 135,
+    "name": "mercury crest",
+    "Type": "key-item"
+  },
+  {
+    "ID": 136,
+    "name": "mercury sigil",
+    "Type": "key-item"
+  },
+  {
+    "ID": 137,
+    "name": "jecht sphere 1",
+    "Type": "key-item"
+  },
+  {
+    "ID": 138,
+    "name": "jecht sphere 2",
+    "Type": "key-item"
+  },
+  {
+    "ID": 139,
+    "name": "jecht sphere 3",
+    "Type": "key-item"
+  },
+  {
+    "ID": 140,
+    "name": "jecht sphere 4",
+    "Type": "key-item"
+  },
+  {
+    "ID": 141,
+    "name": "jecht sphere 5",
+    "Type": "key-item"
+  },
+  {
+    "ID": 142,
+    "name": "jecht sphere 6",
+    "Type": "key-item"
+  },
+  {
+    "ID": 143,
+    "name": "jecht sphere 7",
+    "Type": "key-item"
+  },
+  {
+    "ID": 144,
+    "name": "jecht sphere 8",
+    "Type": "key-item"
+  },
+  {
+    "ID": 145,
+    "name": "braska's sphere",
+    "Type": "key-item"
+  },
+  {
+    "ID": 146,
+    "name": "auron's sphere",
+    "Type": "key-item"
+  },
+  {
+    "ID": 147,
+    "name": "al bhed primer i",
+    "Type": "key-item"
+  },
+  {
+    "ID": 148,
+    "name": "al bhed primer ii",
+    "Type": "key-item"
+  },
+  {
+    "ID": 149,
+    "name": "al bhed primer iii",
+    "Type": "key-item"
+  },
+  {
+    "ID": 150,
+    "name": "al bhed primer iv",
+    "Type": "key-item"
+  },
+  {
+    "ID": 151,
+    "name": "al bhed primer v",
+    "Type": "key-item"
+  },
+  {
+    "ID": 152,
+    "name": "al bhed primer vi",
+    "Type": "key-item"
+  },
+  {
+    "ID": 153,
+    "name": "al bhed primer vii",
+    "Type": "key-item"
+  },
+  {
+    "ID": 154,
+    "name": "al bhed primer viii",
+    "Type": "key-item"
+  },
+  {
+    "ID": 155,
+    "name": "al bhed primer ix",
+    "Type": "key-item"
+  },
+  {
+    "ID": 156,
+    "name": "al bhed primer x",
+    "Type": "key-item"
+  },
+  {
+    "ID": 157,
+    "name": "al bhed primer xi",
+    "Type": "key-item"
+  },
+  {
+    "ID": 158,
+    "name": "al bhed primer xii",
+    "Type": "key-item"
+  },
+  {
+    "ID": 159,
+    "name": "al bhed primer xiii",
+    "Type": "key-item"
+  },
+  {
+    "ID": 160,
+    "name": "al bhed primer xiv",
+    "Type": "key-item"
+  },
+  {
+    "ID": 161,
+    "name": "al bhed primer xv",
+    "Type": "key-item"
+  },
+  {
+    "ID": 162,
+    "name": "al bhed primer xvi",
+    "Type": "key-item"
+  },
+  {
+    "ID": 163,
+    "name": "al bhed primer xvii",
+    "Type": "key-item"
+  },
+  {
+    "ID": 164,
+    "name": "al bhed primer xviii",
+    "Type": "key-item"
+  },
+  {
+    "ID": 165,
+    "name": "al bhed primer xix",
+    "Type": "key-item"
+  },
+  {
+    "ID": 166,
+    "name": "al bhed primer xx",
+    "Type": "key-item"
+  },
+  {
+    "ID": 167,
+    "name": "al bhed primer xxi",
+    "Type": "key-item"
+  },
+  {
+    "ID": 168,
+    "name": "al bhed primer xxii",
+    "Type": "key-item"
+  },
+  {
+    "ID": 169,
+    "name": "al bhed primer xxiii",
+    "Type": "key-item"
+  },
+  {
+    "ID": 170,
+    "name": "al bhed primer xxiv",
+    "Type": "key-item"
+  },
+  {
+    "ID": 171,
+    "name": "al bhed primer xxv",
+    "Type": "key-item"
+  },
+  {
+    "ID": 172,
+    "name": "al bhed primer xxvi",
+    "Type": "key-item"
+  }
+]

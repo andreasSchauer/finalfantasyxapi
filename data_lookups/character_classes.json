@@ -1,0 +1,200 @@
+[
+  {
+    "ID": 1,
+    "name": "characters",
+    "category": "group",
+    "members": [
+      "tidus",
+      "yuna",
+      "wakka",
+      "lulu",
+      "kimahri",
+      "auron",
+      "rikku"
+    ]
+  },
+  {
+    "ID": 2,
+    "name": "aeons",
+    "category": "group",
+    "members": [
+      "valefor",
+      "ifrit",
+      "ixion",
+      "shiva",
+      "bahamut",
+      "anima",
+      "yojimbo",
+      "cindy",
+      "sandy",
+      "mindy"
+    ]
+  },
+  {
+    "ID": 3,
+    "name": "standard-aeons",
+    "category": "group",
+    "members": [
+      "valefor",
+      "ifrit",
+      "ixion",
+      "shiva",
+      "bahamut",
+      "anima"
+    ]
+  },
+  {
+    "ID": 4,
+    "name": "magus-sisters",
+    "category": "group",
+    "members": [
+      "cindy",
+      "sandy",
+      "mindy"
+    ]
+  },
+  {
+    "ID": 5,
+    "name": "tidus",
+    "category": "character",
+    "members": [
+      "tidus"
+    ]
+  },
+  {
+    "ID": 6,
+    "name": "yuna",
+    "category": "character",
+    "members": [
+      "yuna"
+    ]
+  },
+  {
+    "ID": 7,
+    "name": "wakka",
+    "category": "character",
+    "members": [
+      "wakka"
+    ]
+  },
+  {
+    "ID": 8,
+    "name": "lulu",
+    "category": "character",
+    "members": [
+      "lulu"
+    ]
+  },
+  {
+    "ID": 9,
+    "name": "kimahri",
+    "category": "character",
+    "members": [
+      "kimahri"
+    ]
+  },
+  {
+    "ID": 10,
+    "name": "auron",
+    "category": "character",
+    "members": [
+      "auron"
+    ]
+  },
+  {
+    "ID": 11,
+    "name": "rikku",
+    "category": "character",
+    "members": [
+      "rikku"
+    ]
+  },
+  {
+    "ID": 12,
+    "name": "seymour",
+    "category": "character",
+    "members": [
+      "seymour"
+    ]
+  },
+  {
+    "ID": 13,
+    "name": "valefor",
+    "category": "aeon",
+    "members": [
+      "valefor"
+    ]
+  },
+  {
+    "ID": 14,
+    "name": "ifrit",
+    "category": "aeon",
+    "members": [
+      "ifrit"
+    ]
+  },
+  {
+    "ID": 15,
+    "name": "ixion",
+    "category": "aeon",
+    "members": [
+      "ixion"
+    ]
+  },
+  {
+    "ID": 16,
+    "name": "shiva",
+    "category": "aeon",
+    "members": [
+      "shiva"
+    ]
+  },
+  {
+    "ID": 17,
+    "name": "bahamut",
+    "category": "aeon",
+    "members": [
+      "bahamut"
+    ]
+  },
+  {
+    "ID": 18,
+    "name": "anima",
+    "category": "aeon",
+    "members": [
+      "anima"
+    ]
+  },
+  {
+    "ID": 19,
+    "name": "yojimbo",
+    "category": "aeon",
+    "members": [
+      "yojimbo"
+    ]
+  },
+  {
+    "ID": 20,
+    "name": "cindy",
+    "category": "aeon",
+    "members": [
+      "cindy"
+    ]
+  },
+  {
+    "ID": 21,
+    "name": "sandy",
+    "category": "aeon",
+    "members": [
+      "sandy"
+    ]
+  },
+  {
+    "ID": 22,
+    "name": "mindy",
+    "category": "aeon",
+    "members": [
+      "mindy"
+    ]
+  }
+]

@@ -1,0 +1,219 @@
+[
+  {
+    "ID": 1,
+    "name": "ap-gain",
+    "effect": "Modifies the amount of AP a character earns after a battle.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 2,
+    "name": "gil-gain",
+    "effect": "Modifies the amount of gil earned after a battle.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 3,
+    "name": "buff-factor-str-based",
+    "effect": "Modifies the buff-factor for attacks affected by defense. The buff-factor can be understood as a final multiplier in the defense calculation. A buff-factor of 0.9 means the final damage value is reduced by an additional 10%.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 4,
+    "name": "buff-factor-mag-based",
+    "effect": "Modifies the buff-factor for attacks affected by magic defense. The buff-factor can be understood as a final multiplier in the defense calculation. A buff-factor of 0.9 means the final damage value is reduced by an additional 10%.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 5,
+    "name": "accuracy-percentage",
+    "effect": "Modifies the chance of landing a hit before luck is considered.",
+    "type": "percentage",
+    "default_value": null
+  },
+  {
+    "ID": 6,
+    "name": "final-hit-rate",
+    "effect": "Modifies the chance of landing a hit after luck has been considered.",
+    "type": "percentage",
+    "default_value": null
+  },
+  {
+    "ID": 7,
+    "name": "final-evasion-rate",
+    "effect": "Modifies the chance of evading a hit after luck has been considered.",
+    "type": "percentage",
+    "default_value": null
+  },
+  {
+    "ID": 8,
+    "name": "critical-hit-rate",
+    "effect": "Modifies a unit's chance of landing a critical hit. A value of 255 means the unit is always landing critical hits.",
+    "type": "percentage",
+    "default_value": null
+  },
+  {
+    "ID": 9,
+    "name": "critical-hit-defense",
+    "effect": "Modifies a unit's chance of avoiding a critical hit.",
+    "type": "percentage",
+    "default_value": null
+  },
+  {
+    "ID": 10,
+    "name": "items-healing",
+    "effect": "Modifies the amount of healing an item does.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 11,
+    "name": "minimum-damage",
+    "effect": "Modifies the minimum amount of damage a character can inflict.",
+    "type": "fixed-value",
+    "default_value": 0
+  },
+  {
+    "ID": 12,
+    "name": "damage-limit",
+    "effect": "Modifies the maximum amount of damage a character can inflict.",
+    "type": "fixed-value",
+    "default_value": 9999
+  },
+  {
+    "ID": 13,
+    "name": "hp-limit",
+    "effect": "Modifies the maximum amount of HP a character can have.",
+    "type": "fixed-value",
+    "default_value": 9999
+  },
+  {
+    "ID": 14,
+    "name": "current-hp",
+    "effect": "Modifies a unit's current HP value.",
+    "type": "dynamic-value",
+    "default_value": null
+  },
+  {
+    "ID": 15,
+    "name": "mp-limit",
+    "effect": "Modifies the maximum amount of MP a character can have.",
+    "type": "fixed-value",
+    "default_value": 999
+  },
+  {
+    "ID": 16,
+    "name": "mp-cost",
+    "effect": "Modifies the MP-cost of a character's abilities.",
+    "type": "dynamic-value",
+    "default_value": null
+  },
+  {
+    "ID": 17,
+    "name": "overdrive-charge",
+    "effect": "Modifies the charge-rate of the overdrive gauge.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 18,
+    "name": "overdrive-gauge",
+    "effect": "Modifies the value of a unit's overdrive gauge. If it reaches 100, the unit can use its Overdrive.",
+    "type": "dynamic-value",
+    "default_value": null
+  },
+  {
+    "ID": 19,
+    "name": "physical-damage-dealt",
+    "effect": "Modifies the amount of physical damage a unit is dealing.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 20,
+    "name": "physical-damage-taken",
+    "effect": "Modifies the amount of physical damage a unit is taking.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 21,
+    "name": "magical-damage-dealt",
+    "effect": "Modifies the amount of magical damage a unit is dealing.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 22,
+    "name": "magical-damage-taken",
+    "effect": "Modifies the amount of magical damage a unit is taking.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 23,
+    "name": "special-damage-dealt",
+    "effect": "Modifies the amount of special damage a unit is dealing.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 24,
+    "name": "special-damage-taken",
+    "effect": "Modifies the amount of special damage a unit is taking.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 25,
+    "name": "preemptive-strike-chance",
+    "effect": "Modifies the chance of getting a preemptive strike at the start of a battle.",
+    "type": "percentage",
+    "default_value": 12.5
+  },
+  {
+    "ID": 26,
+    "name": "ambush-chance",
+    "effect": "Modifies the chance of getting ambushed at the start of a battle.",
+    "type": "percentage",
+    "default_value": 12.5
+  },
+  {
+    "ID": 27,
+    "name": "encounter-rate",
+    "effect": "Modifies the rate of getting into a random encounter.",
+    "type": "factor",
+    "default_value": 1
+  },
+  {
+    "ID": 28,
+    "name": "common-steal-rate",
+    "effect": "Modifies a character's chance of stealing the common item.",
+    "type": "percentage",
+    "default_value": 75
+  },
+  {
+    "ID": 29,
+    "name": "rare-steal-rate",
+    "effect": "Modifies a character's chance of stealing the rare item.",
+    "type": "percentage",
+    "default_value": 25
+  },
+  {
+    "ID": 30,
+    "name": "initial-counter-value",
+    "effect": "Modifies a unit's initial counter value at the start of a battle.",
+    "type": "dynamic-value",
+    "default_value": null
+  },
+  {
+    "ID": 31,
+    "name": "tick-speed",
+    "effect": "Modifies a unit's tick speed.",
+    "type": "factor",
+    "default_value": 1
+  }
+]

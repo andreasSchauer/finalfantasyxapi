@@ -1,0 +1,6314 @@
+[
+  {
+    "ID": 1,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "caladbolg"
+  },
+  {
+    "ID": 2,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "nirvana"
+  },
+  {
+    "ID": 3,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "world champion"
+  },
+  {
+    "ID": 4,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "onion knight"
+  },
+  {
+    "ID": 5,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "spirit lance"
+  },
+  {
+    "ID": 6,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "masamune"
+  },
+  {
+    "ID": 7,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "godhand"
+  },
+  {
+    "ID": 8,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "brotherhood"
+  },
+  {
+    "ID": 9,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "taming sword"
+  },
+  {
+    "ID": 10,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "herding staff"
+  },
+  {
+    "ID": 11,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "catcher"
+  },
+  {
+    "ID": 12,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "trapper mog"
+  },
+  {
+    "ID": 13,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "taming spear"
+  },
+  {
+    "ID": 14,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "beastmaster"
+  },
+  {
+    "ID": 15,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "iron grip"
+  },
+  {
+    "ID": 16,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "crystal sword"
+  },
+  {
+    "ID": 17,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "arc arcana"
+  },
+  {
+    "ID": 18,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "four-on-one"
+  },
+  {
+    "ID": 19,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "moomba quartet"
+  },
+  {
+    "ID": 20,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "quadforce"
+  },
+  {
+    "ID": 21,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "conquerer"
+  },
+  {
+    "ID": 22,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "deus ex machina"
+  },
+  {
+    "ID": 23,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "excalibur"
+  },
+  {
+    "ID": 24,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "abraxas"
+  },
+  {
+    "ID": 25,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "grand slam"
+  },
+  {
+    "ID": 26,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "soul of mog"
+  },
+  {
+    "ID": 27,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "gungnir"
+  },
+  {
+    "ID": 28,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "heaven's cloud"
+  },
+  {
+    "ID": 29,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "kaiser knuckles"
+  },
+  {
+    "ID": 30,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "ragnarok"
+  },
+  {
+    "ID": 31,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "heavenly axis"
+  },
+  {
+    "ID": 32,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "blowout"
+  },
+  {
+    "ID": 33,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "space soul"
+  },
+  {
+    "ID": 34,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "luin"
+  },
+  {
+    "ID": 35,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "muramasa"
+  },
+  {
+    "ID": 36,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "victorix"
+  },
+  {
+    "ID": 37,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "balmung"
+  },
+  {
+    "ID": 38,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "judgement"
+  },
+  {
+    "ID": 39,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "rout"
+  },
+  {
+    "ID": 40,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "space master"
+  },
+  {
+    "ID": 41,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "gae bolg"
+  },
+  {
+    "ID": 42,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "alkaid"
+  },
+  {
+    "ID": 43,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "unlimited"
+  },
+  {
+    "ID": 44,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "save the queen"
+  },
+  {
+    "ID": 45,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "seraphim rod"
+  },
+  {
+    "ID": 46,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "tie breaker"
+  },
+  {
+    "ID": 47,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "space king"
+  },
+  {
+    "ID": 48,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "venus gospel"
+  },
+  {
+    "ID": 49,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "peacemaker"
+  },
+  {
+    "ID": 50,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "warmonger"
+  },
+  {
+    "ID": 51,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "heartbreaker"
+  },
+  {
+    "ID": 52,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rod of roses"
+  },
+  {
+    "ID": 53,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "winning streak"
+  },
+  {
+    "ID": 54,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "space force"
+  },
+  {
+    "ID": 55,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "highwind"
+  },
+  {
+    "ID": 56,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "genji blade"
+  },
+  {
+    "ID": 57,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "overload"
+  },
+  {
+    "ID": 58,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "lionheart"
+  },
+  {
+    "ID": 59,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "nimbus rod"
+  },
+  {
+    "ID": 60,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "scoring spree"
+  },
+  {
+    "ID": 61,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "space energy"
+  },
+  {
+    "ID": 62,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "berserker"
+  },
+  {
+    "ID": 63,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "dragon killer"
+  },
+  {
+    "ID": 64,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "override"
+  },
+  {
+    "ID": 65,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "durandal"
+  },
+  {
+    "ID": 66,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "wonder wing"
+  },
+  {
+    "ID": 67,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "triple score"
+  },
+  {
+    "ID": 68,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "comet cactuar"
+  },
+  {
+    "ID": 69,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "horn of the ronso"
+  },
+  {
+    "ID": 70,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "painkiller"
+  },
+  {
+    "ID": 71,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "golden arm"
+  },
+  {
+    "ID": 72,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "ascalon"
+  },
+  {
+    "ID": 73,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "wing wand"
+  },
+  {
+    "ID": 74,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "double score"
+  },
+  {
+    "ID": 75,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "star cactuar"
+  },
+  {
+    "ID": 76,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "chariot"
+  },
+  {
+    "ID": 77,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "divider"
+  },
+  {
+    "ID": 78,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "golden hand"
+  },
+  {
+    "ID": 79,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "ambitious"
+  },
+  {
+    "ID": 80,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "wonder wand"
+  },
+  {
+    "ID": 81,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "rookie star"
+  },
+  {
+    "ID": 82,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "lord cactuar"
+  },
+  {
+    "ID": 83,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "transmuter"
+  },
+  {
+    "ID": 84,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "the nameless"
+  },
+  {
+    "ID": 85,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "ironside"
+  },
+  {
+    "ID": 86,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "hrunting"
+  },
+  {
+    "ID": 87,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "laevatein"
+  },
+  {
+    "ID": 88,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "buzzerbeater"
+  },
+  {
+    "ID": 89,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "space power"
+  },
+  {
+    "ID": 90,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "kain's lance"
+  },
+  {
+    "ID": 91,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "ogrekiller"
+  },
+  {
+    "ID": 92,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "battle freak"
+  },
+  {
+    "ID": 93,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "astral sword"
+  },
+  {
+    "ID": 94,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "astral rod"
+  },
+  {
+    "ID": 95,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "overtime"
+  },
+  {
+    "ID": 96,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "magical cactuar"
+  },
+  {
+    "ID": 97,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "astral spear"
+  },
+  {
+    "ID": 98,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "murasame"
+  },
+  {
+    "ID": 99,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "infinity"
+  },
+  {
+    "ID": 100,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "apocalypse"
+  },
+  {
+    "ID": 101,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "chaos rod"
+  },
+  {
+    "ID": 102,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "penalty master"
+  },
+  {
+    "ID": 103,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "chaotic cait sith"
+  },
+  {
+    "ID": 104,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "chaos lance"
+  },
+  {
+    "ID": 105,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "riot blade"
+  },
+  {
+    "ID": 106,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "tempest claw"
+  },
+  {
+    "ID": 107,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "master sword"
+  },
+  {
+    "ID": 108,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "power staff"
+  },
+  {
+    "ID": 109,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "ace striker"
+  },
+  {
+    "ID": 110,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "space warrior"
+  },
+  {
+    "ID": 111,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "giant spear"
+  },
+  {
+    "ID": 112,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "master ogre"
+  },
+  {
+    "ID": 113,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "spartan"
+  },
+  {
+    "ID": 114,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "runemaster"
+  },
+  {
+    "ID": 115,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "shining staff"
+  },
+  {
+    "ID": 116,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "ace wizard"
+  },
+  {
+    "ID": 117,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "space mage"
+  },
+  {
+    "ID": 118,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "titan lance"
+  },
+  {
+    "ID": 119,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "master djinn"
+  },
+  {
+    "ID": 120,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "brunhilde"
+  },
+  {
+    "ID": 121,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "warlock"
+  },
+  {
+    "ID": 122,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "faerie staff"
+  },
+  {
+    "ID": 123,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "over the top"
+  },
+  {
+    "ID": 124,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "mana mog"
+  },
+  {
+    "ID": 125,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "eldritch lance"
+  },
+  {
+    "ID": 126,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "matoya's blade"
+  },
+  {
+    "ID": 127,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "valkyrie"
+  },
+  {
+    "ID": 128,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "arc sword"
+  },
+  {
+    "ID": 129,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "magistral rod"
+  },
+  {
+    "ID": 130,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "halftime"
+  },
+  {
+    "ID": 131,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "cactuar wizard"
+  },
+  {
+    "ID": 132,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "shamanic spear"
+  },
+  {
+    "ID": 133,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "inducer"
+  },
+  {
+    "ID": 134,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "magical rave"
+  },
+  {
+    "ID": 135,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "gilventure"
+  },
+  {
+    "ID": 136,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "el dorado"
+  },
+  {
+    "ID": 137,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "free agent"
+  },
+  {
+    "ID": 138,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "space bandit"
+  },
+  {
+    "ID": 139,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "prospector"
+  },
+  {
+    "ID": 140,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "gilmonger"
+  },
+  {
+    "ID": 141,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "stickyfingers"
+  },
+  {
+    "ID": 142,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "tri-steel"
+  },
+  {
+    "ID": 143,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "tri-rod"
+  },
+  {
+    "ID": 144,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "tricolor"
+  },
+  {
+    "ID": 145,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "moomba trio"
+  },
+  {
+    "ID": 146,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "trident"
+  },
+  {
+    "ID": 147,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "ichimonji"
+  },
+  {
+    "ID": 148,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "rising sun"
+  },
+  {
+    "ID": 149,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "helter-skelter"
+  },
+  {
+    "ID": 150,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "wicked hand"
+  },
+  {
+    "ID": 151,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "triple penalty"
+  },
+  {
+    "ID": 152,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "abaddon cait sith"
+  },
+  {
+    "ID": 153,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "vicious lance"
+  },
+  {
+    "ID": 154,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "corrupter"
+  },
+  {
+    "ID": 155,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "typhon claw"
+  },
+  {
+    "ID": 156,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "vendetta"
+  },
+  {
+    "ID": 157,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "nemesis rod"
+  },
+  {
+    "ID": 158,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "turnover"
+  },
+  {
+    "ID": 159,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "vengeful cactuar"
+  },
+  {
+    "ID": 160,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "dragoon lance"
+  },
+  {
+    "ID": 161,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "ashura"
+  },
+  {
+    "ID": 162,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "untouchable"
+  },
+  {
+    "ID": 163,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "avenger"
+  },
+  {
+    "ID": 164,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "defender"
+  },
+  {
+    "ID": 165,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "rematch"
+  },
+  {
+    "ID": 166,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "raging cactuar"
+  },
+  {
+    "ID": 167,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "rebel lance"
+  },
+  {
+    "ID": 168,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "kotetsu"
+  },
+  {
+    "ID": 169,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "tit-for-tat"
+  },
+  {
+    "ID": 170,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "prism steel"
+  },
+  {
+    "ID": 171,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "prism rod"
+  },
+  {
+    "ID": 172,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "prism ball"
+  },
+  {
+    "ID": 173,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "prism cactuar"
+  },
+  {
+    "ID": 174,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "prism spear"
+  },
+  {
+    "ID": 175,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "prism blade"
+  },
+  {
+    "ID": 176,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "prism claw"
+  },
+  {
+    "ID": 177,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "mirage sword"
+  },
+  {
+    "ID": 178,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "mirage rod"
+  },
+  {
+    "ID": 179,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "mirage ball"
+  },
+  {
+    "ID": 180,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "booster cactuar"
+  },
+  {
+    "ID": 181,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "mirage lance"
+  },
+  {
+    "ID": 182,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "mirage blade"
+  },
+  {
+    "ID": 183,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "mirage claw"
+  },
+  {
+    "ID": 184,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "lifesaver"
+  },
+  {
+    "ID": 185,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "healing rod"
+  },
+  {
+    "ID": 186,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "comeback"
+  },
+  {
+    "ID": 187,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "medical mog"
+  },
+  {
+    "ID": 188,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "healer spear"
+  },
+  {
+    "ID": 189,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "lifegiver"
+  },
+  {
+    "ID": 190,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "survivor"
+  },
+  {
+    "ID": 191,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "sonic steel"
+  },
+  {
+    "ID": 192,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "wind rod"
+  },
+  {
+    "ID": 193,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "breakaway"
+  },
+  {
+    "ID": 194,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "swift cactuar"
+  },
+  {
+    "ID": 195,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "sonic lance"
+  },
+  {
+    "ID": 196,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "sonic blade"
+  },
+  {
+    "ID": 197,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "vanguard"
+  },
+  {
+    "ID": 198,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "vigilante"
+  },
+  {
+    "ID": 199,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "conductor"
+  },
+  {
+    "ID": 200,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "first goal"
+  },
+  {
+    "ID": 201,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "cactuar spy"
+  },
+  {
+    "ID": 202,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "detector"
+  },
+  {
+    "ID": 203,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "sentry"
+  },
+  {
+    "ID": 204,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "sonar"
+  },
+  {
+    "ID": 205,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "danse macabre"
+  },
+  {
+    "ID": 206,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "punisher"
+  },
+  {
+    "ID": 207,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "sudden death"
+  },
+  {
+    "ID": 208,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "wicked cait sith"
+  },
+  {
+    "ID": 209,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "thanatos lance"
+  },
+  {
+    "ID": 210,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "assassin blade"
+  },
+  {
+    "ID": 211,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "executioner"
+  },
+  {
+    "ID": 212,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "largamente"
+  },
+  {
+    "ID": 213,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "impasse"
+  },
+  {
+    "ID": 214,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "timeout"
+  },
+  {
+    "ID": 215,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "chronos cait sith"
+  },
+  {
+    "ID": 216,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "net spear"
+  },
+  {
+    "ID": 217,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "blockade"
+  },
+  {
+    "ID": 218,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "clockwork"
+  },
+  {
+    "ID": 219,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "gravestone"
+  },
+  {
+    "ID": 220,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "calcite staff"
+  },
+  {
+    "ID": 221,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "stone cold"
+  },
+  {
+    "ID": 222,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "stone cait sith"
+  },
+  {
+    "ID": 223,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "rock buster"
+  },
+  {
+    "ID": 224,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "still blade"
+  },
+  {
+    "ID": 225,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "colossus"
+  },
+  {
+    "ID": 226,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "sidewinder"
+  },
+  {
+    "ID": 227,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "bizarre staff"
+  },
+  {
+    "ID": 228,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "violation"
+  },
+  {
+    "ID": 229,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "toxic cait sith"
+  },
+  {
+    "ID": 230,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "venom spike"
+  },
+  {
+    "ID": 231,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "venomous blade"
+  },
+  {
+    "ID": 232,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "manticore claw"
+  },
+  {
+    "ID": 233,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "nightmare"
+  },
+  {
+    "ID": 234,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "staff of thorns"
+  },
+  {
+    "ID": 235,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "sleeper"
+  },
+  {
+    "ID": 236,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "dreamy cait sith"
+  },
+  {
+    "ID": 237,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "hypno spear"
+  },
+  {
+    "ID": 238,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "dozing blade"
+  },
+  {
+    "ID": 239,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "lights out"
+  },
+  {
+    "ID": 240,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "mage masher"
+  },
+  {
+    "ID": 241,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "reticent staff"
+  },
+  {
+    "ID": 242,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "muffler"
+  },
+  {
+    "ID": 243,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "mute cait sith"
+  },
+  {
+    "ID": 244,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "mage hunter"
+  },
+  {
+    "ID": 245,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "tacit blade"
+  },
+  {
+    "ID": 246,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "mage husher"
+  },
+  {
+    "ID": 247,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "nightbringer"
+  },
+  {
+    "ID": 248,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "darkness staff"
+  },
+  {
+    "ID": 249,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "blackout"
+  },
+  {
+    "ID": 250,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "dark cait sith"
+  },
+  {
+    "ID": 251,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "darkbringer"
+  },
+  {
+    "ID": 252,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "dark blade"
+  },
+  {
+    "ID": 253,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "jammer"
+  },
+  {
+    "ID": 254,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "knight sword"
+  },
+  {
+    "ID": 255,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "monk staff"
+  },
+  {
+    "ID": 256,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "power play"
+  },
+  {
+    "ID": 257,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "power mog"
+  },
+  {
+    "ID": 258,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "knight lance"
+  },
+  {
+    "ID": 259,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "ogre blade"
+  },
+  {
+    "ID": 260,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "iron claw"
+  },
+  {
+    "ID": 261,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "wizard sword"
+  },
+  {
+    "ID": 262,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "mage's staff"
+  },
+  {
+    "ID": 263,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "virtuoso"
+  },
+  {
+    "ID": 264,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "magician mog"
+  },
+  {
+    "ID": 265,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "wizard lance"
+  },
+  {
+    "ID": 266,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "djinn blade"
+  },
+  {
+    "ID": 267,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "the ogre"
+  },
+  {
+    "ID": 268,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "double-edge"
+  },
+  {
+    "ID": 269,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "dual rod"
+  },
+  {
+    "ID": 270,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "double header"
+  },
+  {
+    "ID": 271,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "moomba duo"
+  },
+  {
+    "ID": 272,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "twin lance"
+  },
+  {
+    "ID": 273,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "dual blade"
+  },
+  {
+    "ID": 274,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "dual claw"
+  },
+  {
+    "ID": 275,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "razzmatazz"
+  },
+  {
+    "ID": 276,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "ominous rod"
+  },
+  {
+    "ID": 277,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "double penalty"
+  },
+  {
+    "ID": 278,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "ominous cait sith"
+  },
+  {
+    "ID": 279,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "calamity spear"
+  },
+  {
+    "ID": 280,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "chaos blade"
+  },
+  {
+    "ID": 281,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "hurricane claw"
+  },
+  {
+    "ID": 282,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "deathbringer"
+  },
+  {
+    "ID": 283,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "death wand"
+  },
+  {
+    "ID": 284,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "rough play"
+  },
+  {
+    "ID": 285,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "fatal cait sith"
+  },
+  {
+    "ID": 286,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "matador spear"
+  },
+  {
+    "ID": 287,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "critical blade"
+  },
+  {
+    "ID": 288,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "ninja claw"
+  },
+  {
+    "ID": 289,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "stunning steel"
+  },
+  {
+    "ID": 290,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "entangling rod"
+  },
+  {
+    "ID": 291,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "delay of game"
+  },
+  {
+    "ID": 292,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "late cait sith"
+  },
+  {
+    "ID": 293,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "web lance"
+  },
+  {
+    "ID": 294,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "stunner"
+  },
+  {
+    "ID": 295,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "clock hand"
+  },
+  {
+    "ID": 296,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "basilisk steel"
+  },
+  {
+    "ID": 297,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "break rod"
+  },
+  {
+    "ID": 298,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "t.k.o."
+  },
+  {
+    "ID": 299,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "fossil cait sith"
+  },
+  {
+    "ID": 300,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "break lance"
+  },
+  {
+    "ID": 301,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "gorgon gaze"
+  },
+  {
+    "ID": 302,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "break knuckles"
+  },
+  {
+    "ID": 303,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "poison steel"
+  },
+  {
+    "ID": 304,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "belladonna wand"
+  },
+  {
+    "ID": 305,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "rulebreaker"
+  },
+  {
+    "ID": 306,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "noxious cait sith"
+  },
+  {
+    "ID": 307,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "snakehead"
+  },
+  {
+    "ID": 308,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "spider's kiss"
+  },
+  {
+    "ID": 309,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "poison claw"
+  },
+  {
+    "ID": 310,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "lullaby steel"
+  },
+  {
+    "ID": 311,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "lullaby rod"
+  },
+  {
+    "ID": 312,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "dream team"
+  },
+  {
+    "ID": 313,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "sleepy cait sith"
+  },
+  {
+    "ID": 314,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "dream lance"
+  },
+  {
+    "ID": 315,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "peaceful slumber"
+  },
+  {
+    "ID": 316,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "daydreamer"
+  },
+  {
+    "ID": 317,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "muted steel"
+  },
+  {
+    "ID": 318,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rod of silence"
+  },
+  {
+    "ID": 319,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "noisebreaker"
+  },
+  {
+    "ID": 320,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "quiet cait sith"
+  },
+  {
+    "ID": 321,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "silent spear"
+  },
+  {
+    "ID": 322,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "soundless scream"
+  },
+  {
+    "ID": 323,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "tongue holder"
+  },
+  {
+    "ID": 324,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "twilight steel"
+  },
+  {
+    "ID": 325,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rod of darkness"
+  },
+  {
+    "ID": 326,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "blind pass"
+  },
+  {
+    "ID": 327,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "blinding cait sith"
+  },
+  {
+    "ID": 328,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "dusk lance"
+  },
+  {
+    "ID": 329,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "blurry moon"
+  },
+  {
+    "ID": 330,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "eye poker"
+  },
+  {
+    "ID": 331,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "hunter's sword"
+  },
+  {
+    "ID": 332,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rod of wisdom"
+  },
+  {
+    "ID": 333,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "scout"
+  },
+  {
+    "ID": 334,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "cactuar scope"
+  },
+  {
+    "ID": 335,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "hunter's spear"
+  },
+  {
+    "ID": 336,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "hunter's blade"
+  },
+  {
+    "ID": 337,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "hawkeye"
+  },
+  {
+    "ID": 338,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "flametongue"
+  },
+  {
+    "ID": 339,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rod of flame"
+  },
+  {
+    "ID": 340,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "fire ball"
+  },
+  {
+    "ID": 341,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "fire moomba"
+  },
+  {
+    "ID": 342,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "heat lance"
+  },
+  {
+    "ID": 343,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "fire blade"
+  },
+  {
+    "ID": 344,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "hot knuckles"
+  },
+  {
+    "ID": 345,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "ice brand"
+  },
+  {
+    "ID": 346,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rod of ice"
+  },
+  {
+    "ID": 347,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "ice ball"
+  },
+  {
+    "ID": 348,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "ice moomba"
+  },
+  {
+    "ID": 349,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "ice lance"
+  },
+  {
+    "ID": 350,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "frost blade"
+  },
+  {
+    "ID": 351,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "ice claw"
+  },
+  {
+    "ID": 352,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "lightning steel"
+  },
+  {
+    "ID": 353,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rod of thunder"
+  },
+  {
+    "ID": 354,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "thunder ball"
+  },
+  {
+    "ID": 355,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "thunder moomba"
+  },
+  {
+    "ID": 356,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "thunder spear"
+  },
+  {
+    "ID": 357,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "thunder blade"
+  },
+  {
+    "ID": 358,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "shocking fist"
+  },
+  {
+    "ID": 359,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "liquid steel"
+  },
+  {
+    "ID": 360,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rod of water"
+  },
+  {
+    "ID": 361,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "water ball"
+  },
+  {
+    "ID": 362,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "water moomba"
+  },
+  {
+    "ID": 363,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "tidal spear"
+  },
+  {
+    "ID": 364,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "water blade"
+  },
+  {
+    "ID": 365,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "tidal knuckles"
+  },
+  {
+    "ID": 366,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "p-steel"
+  },
+  {
+    "ID": 367,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "p-staff"
+  },
+  {
+    "ID": 368,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "p-ball"
+  },
+  {
+    "ID": 369,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "p-mog"
+  },
+  {
+    "ID": 370,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "p-lance"
+  },
+  {
+    "ID": 371,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "p-blade"
+  },
+  {
+    "ID": 372,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "p-claw"
+  },
+  {
+    "ID": 373,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "m-steel"
+  },
+  {
+    "ID": 374,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "m-staff"
+  },
+  {
+    "ID": 375,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "m-ball"
+  },
+  {
+    "ID": 376,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "m-mog"
+  },
+  {
+    "ID": 377,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "m-lance"
+  },
+  {
+    "ID": 378,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "m-blade"
+  },
+  {
+    "ID": 379,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "m-claw"
+  },
+  {
+    "ID": 380,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "s-steel"
+  },
+  {
+    "ID": 381,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "s-staff"
+  },
+  {
+    "ID": 382,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "s-ball"
+  },
+  {
+    "ID": 383,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "s-mog"
+  },
+  {
+    "ID": 384,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "s-lance"
+  },
+  {
+    "ID": 385,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "s-blade"
+  },
+  {
+    "ID": 386,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "s-claw"
+  },
+  {
+    "ID": 387,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "a-steel"
+  },
+  {
+    "ID": 388,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "a-staff"
+  },
+  {
+    "ID": 389,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "a-ball"
+  },
+  {
+    "ID": 390,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "a-mog"
+  },
+  {
+    "ID": 391,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "a-lance"
+  },
+  {
+    "ID": 392,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "a-blade"
+  },
+  {
+    "ID": 393,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "a-claw"
+  },
+  {
+    "ID": 394,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "variable steel"
+  },
+  {
+    "ID": 395,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "malleable staff"
+  },
+  {
+    "ID": 396,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "all-rounder"
+  },
+  {
+    "ID": 397,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "morphing mog"
+  },
+  {
+    "ID": 398,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "shapeshifter"
+  },
+  {
+    "ID": 399,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "shiranui"
+  },
+  {
+    "ID": 400,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "flexible arm"
+  },
+  {
+    "ID": 401,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "force saber"
+  },
+  {
+    "ID": 402,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "force rod"
+  },
+  {
+    "ID": 403,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "ovation"
+  },
+  {
+    "ID": 404,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "moomba force"
+  },
+  {
+    "ID": 405,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "force lance"
+  },
+  {
+    "ID": 406,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "basara blade"
+  },
+  {
+    "ID": 407,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "force knuckles"
+  },
+  {
+    "ID": 408,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "baroque sword"
+  },
+  {
+    "ID": 409,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "ductile rod"
+  },
+  {
+    "ID": 410,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "switch hitter"
+  },
+  {
+    "ID": 411,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "variable mog"
+  },
+  {
+    "ID": 412,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "halberd"
+  },
+  {
+    "ID": 413,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "shimmering blade"
+  },
+  {
+    "ID": 414,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "devastator"
+  },
+  {
+    "ID": 415,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "sorcery sword"
+  },
+  {
+    "ID": 416,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "socery rod"
+  },
+  {
+    "ID": 417,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "trickster"
+  },
+  {
+    "ID": 418,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "moomba mage"
+  },
+  {
+    "ID": 419,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "magic lance"
+  },
+  {
+    "ID": 420,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "spiritual blade"
+  },
+  {
+    "ID": 421,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "magic knuckles"
+  },
+  {
+    "ID": 422,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "soldier's saber"
+  },
+  {
+    "ID": 423,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "full metal rod"
+  },
+  {
+    "ID": 424,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "striker"
+  },
+  {
+    "ID": 425,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "moomba warrior"
+  },
+  {
+    "ID": 426,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "full metal spear"
+  },
+  {
+    "ID": 427,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "nodachi"
+  },
+  {
+    "ID": 428,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "buster knuckles"
+  },
+  {
+    "ID": 429,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "rune steel"
+  },
+  {
+    "ID": 430,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rune rod"
+  },
+  {
+    "ID": 431,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "rune ball"
+  },
+  {
+    "ID": 432,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "rune mog"
+  },
+  {
+    "ID": 433,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "rune lance"
+  },
+  {
+    "ID": 434,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "rune blade"
+  },
+  {
+    "ID": 435,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "magic claw"
+  },
+  {
+    "ID": 436,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "enchanted sword"
+  },
+  {
+    "ID": 437,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "enchanted rod"
+  },
+  {
+    "ID": 438,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "magic ball"
+  },
+  {
+    "ID": 439,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "magical mog"
+  },
+  {
+    "ID": 440,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "enchanted lance"
+  },
+  {
+    "ID": 441,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "magic blade"
+  },
+  {
+    "ID": 442,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "magic glove"
+  },
+  {
+    "ID": 443,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "fencing saber"
+  },
+  {
+    "ID": 444,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rod of striking"
+  },
+  {
+    "ID": 445,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "hyper ball"
+  },
+  {
+    "ID": 446,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "buster mog"
+  },
+  {
+    "ID": 447,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "striking spear"
+  },
+  {
+    "ID": 448,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "war blade"
+  },
+  {
+    "ID": 449,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "buster claw"
+  },
+  {
+    "ID": 450,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "warrior's sword"
+  },
+  {
+    "ID": 451,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rod of beating"
+  },
+  {
+    "ID": 452,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "power ball"
+  },
+  {
+    "ID": 453,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "attack mog"
+  },
+  {
+    "ID": 454,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "heavy spear"
+  },
+  {
+    "ID": 455,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "knight blade"
+  },
+  {
+    "ID": 456,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "buster glove"
+  },
+  {
+    "ID": 457,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "slasher"
+  },
+  {
+    "ID": 458,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "spiked rod"
+  },
+  {
+    "ID": 459,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "center forward"
+  },
+  {
+    "ID": 460,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "stinger mog"
+  },
+  {
+    "ID": 461,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "harpoon"
+  },
+  {
+    "ID": 462,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "katana"
+  },
+  {
+    "ID": 463,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "barbed knuckles"
+  },
+  {
+    "ID": 464,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "longsword"
+  },
+  {
+    "ID": 465,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "staff"
+  },
+  {
+    "ID": 466,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "official ball"
+  },
+  {
+    "ID": 467,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "moogle"
+  },
+  {
+    "ID": 468,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "spear"
+  },
+  {
+    "ID": 469,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "dull blade"
+  },
+  {
+    "ID": 470,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "claw"
+  },
+  {
+    "ID": 471,
+    "CharacterID": 8,
+    "character": "seymour",
+    "name": "seymour staff"
+  },
+  {
+    "ID": 472,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "endless road"
+  },
+  {
+    "ID": 473,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "solomon ring"
+  },
+  {
+    "ID": 474,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "indomitable"
+  },
+  {
+    "ID": 475,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "samantha soul"
+  },
+  {
+    "ID": 476,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "pride of the ronso"
+  },
+  {
+    "ID": 477,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "overlord"
+  },
+  {
+    "ID": 478,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "dreadnought"
+  },
+  {
+    "ID": 479,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "sanctuary"
+  },
+  {
+    "ID": 480,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "holy ring"
+  },
+  {
+    "ID": 481,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "shutout"
+  },
+  {
+    "ID": 482,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "eternity"
+  },
+  {
+    "ID": 483,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "acropolis"
+  },
+  {
+    "ID": 484,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "solidity"
+  },
+  {
+    "ID": 485,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "impervious"
+  },
+  {
+    "ID": 486,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "genji shield"
+  },
+  {
+    "ID": 487,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "arcane ring"
+  },
+  {
+    "ID": 488,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "super goalie"
+  },
+  {
+    "ID": 489,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "minerva bangle"
+  },
+  {
+    "ID": 490,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "genji armlet"
+  },
+  {
+    "ID": 491,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "genji bracer"
+  },
+  {
+    "ID": 492,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "atlas"
+  },
+  {
+    "ID": 493,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "emblem"
+  },
+  {
+    "ID": 494,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "mythical ring"
+  },
+  {
+    "ID": 495,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "high spirits"
+  },
+  {
+    "ID": 496,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "mythical badge"
+  },
+  {
+    "ID": 497,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "shaman armlet"
+  },
+  {
+    "ID": 498,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "dragon lord"
+  },
+  {
+    "ID": 499,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "celestial"
+  },
+  {
+    "ID": 500,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "crystal shield"
+  },
+  {
+    "ID": 501,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "sophia ring"
+  },
+  {
+    "ID": 502,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "final four"
+  },
+  {
+    "ID": 503,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "draupnir"
+  },
+  {
+    "ID": 504,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "crystal armlet"
+  },
+  {
+    "ID": 505,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "glutton"
+  },
+  {
+    "ID": 506,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "invincible"
+  },
+  {
+    "ID": 507,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "aegis shield"
+  },
+  {
+    "ID": 508,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "aegis ring"
+  },
+  {
+    "ID": 509,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "great four"
+  },
+  {
+    "ID": 510,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "aegis bangle"
+  },
+  {
+    "ID": 511,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "aegis armlet"
+  },
+  {
+    "ID": 512,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "resistant"
+  },
+  {
+    "ID": 513,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "armada"
+  },
+  {
+    "ID": 514,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "golem shield"
+  },
+  {
+    "ID": 515,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "blessed ring"
+  },
+  {
+    "ID": 516,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "keeper"
+  },
+  {
+    "ID": 517,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "precious bangle"
+  },
+  {
+    "ID": 518,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "adamantite"
+  },
+  {
+    "ID": 519,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "warder"
+  },
+  {
+    "ID": 520,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "triumph"
+  },
+  {
+    "ID": 521,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "revive shield"
+  },
+  {
+    "ID": 522,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "savior ring"
+  },
+  {
+    "ID": 523,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "automatic"
+  },
+  {
+    "ID": 524,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "imperial bangle"
+  },
+  {
+    "ID": 525,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "orichalcum"
+  },
+  {
+    "ID": 526,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "immortal"
+  },
+  {
+    "ID": 527,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "intrepid"
+  },
+  {
+    "ID": 528,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "rescue shield"
+  },
+  {
+    "ID": 529,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "healing ring"
+  },
+  {
+    "ID": 530,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "first aid"
+  },
+  {
+    "ID": 531,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "auto bangle"
+  },
+  {
+    "ID": 532,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "safe passage"
+  },
+  {
+    "ID": 533,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "healer"
+  },
+  {
+    "ID": 534,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "goliath"
+  },
+  {
+    "ID": 535,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "paladin shield"
+  },
+  {
+    "ID": 536,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "forbidding ring"
+  },
+  {
+    "ID": 537,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "black ribbon"
+  },
+  {
+    "ID": 538,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "ronso armlet"
+  },
+  {
+    "ID": 539,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "undefeated"
+  },
+  {
+    "ID": 540,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "argonaut"
+  },
+  {
+    "ID": 541,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "diamond shield"
+  },
+  {
+    "ID": 542,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "diamond ring"
+  },
+  {
+    "ID": 543,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "power armguard"
+  },
+  {
+    "ID": 544,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "diamond bangle"
+  },
+  {
+    "ID": 545,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "diamond armlet"
+  },
+  {
+    "ID": 546,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "diamond bracer"
+  },
+  {
+    "ID": 547,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "diamond targe"
+  },
+  {
+    "ID": 548,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "ruby shield"
+  },
+  {
+    "ID": 549,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "ruby ring"
+  },
+  {
+    "ID": 550,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "magic armguard"
+  },
+  {
+    "ID": 551,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "ruby bangle"
+  },
+  {
+    "ID": 552,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "ruby armlet"
+  },
+  {
+    "ID": 553,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "ruby bracer"
+  },
+  {
+    "ID": 554,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "ruby targe"
+  },
+  {
+    "ID": 555,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "dynasty shield"
+  },
+  {
+    "ID": 556,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "fortification ring"
+  },
+  {
+    "ID": 557,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "power ace"
+  },
+  {
+    "ID": 558,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "queen's bangle"
+  },
+  {
+    "ID": 559,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "enhanced armlet"
+  },
+  {
+    "ID": 560,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "battle bracer"
+  },
+  {
+    "ID": 561,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "warlord"
+  },
+  {
+    "ID": 562,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "magister shield"
+  },
+  {
+    "ID": 563,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "magical ring"
+  },
+  {
+    "ID": 564,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "magic ace"
+  },
+  {
+    "ID": 565,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "magister bangle"
+  },
+  {
+    "ID": 566,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "magical armlet"
+  },
+  {
+    "ID": 567,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "magical bracer"
+  },
+  {
+    "ID": 568,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "dominator"
+  },
+  {
+    "ID": 569,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "collector's shield"
+  },
+  {
+    "ID": 570,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "collector ring"
+  },
+  {
+    "ID": 571,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "best play"
+  },
+  {
+    "ID": 572,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "collector bangle"
+  },
+  {
+    "ID": 573,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "collector armlet"
+  },
+  {
+    "ID": 574,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "collector bracer"
+  },
+  {
+    "ID": 575,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "bucaneer"
+  },
+  {
+    "ID": 576,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "treasure shield"
+  },
+  {
+    "ID": 577,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "treasure ring"
+  },
+  {
+    "ID": 578,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "great play"
+  },
+  {
+    "ID": 579,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "treasure bangle"
+  },
+  {
+    "ID": 580,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "treasure armlet"
+  },
+  {
+    "ID": 581,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "treasure bracer"
+  },
+  {
+    "ID": 582,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "corsair"
+  },
+  {
+    "ID": 583,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "shield of hope"
+  },
+  {
+    "ID": 584,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "ring of hope"
+  },
+  {
+    "ID": 585,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "benchwarmer"
+  },
+  {
+    "ID": 586,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "bangle of hope"
+  },
+  {
+    "ID": 587,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "armlet of hope"
+  },
+  {
+    "ID": 588,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "bracer of hope"
+  },
+  {
+    "ID": 589,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "targe of hope"
+  },
+  {
+    "ID": 590,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "assault shield"
+  },
+  {
+    "ID": 591,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "assault ring"
+  },
+  {
+    "ID": 592,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "triple guard"
+  },
+  {
+    "ID": 593,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "assault bangle"
+  },
+  {
+    "ID": 594,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "assault armlet"
+  },
+  {
+    "ID": 595,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "assault bracer"
+  },
+  {
+    "ID": 596,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "assault targe"
+  },
+  {
+    "ID": 597,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "phantom shield"
+  },
+  {
+    "ID": 598,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "phantom ring"
+  },
+  {
+    "ID": 599,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "element save"
+  },
+  {
+    "ID": 600,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "phantom bangle"
+  },
+  {
+    "ID": 601,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "phantom armlet"
+  },
+  {
+    "ID": 602,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "phantom bracer"
+  },
+  {
+    "ID": 603,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "phantom targe"
+  },
+  {
+    "ID": 604,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "recovery shield"
+  },
+  {
+    "ID": 605,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "recovery ring"
+  },
+  {
+    "ID": 606,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "recovery armguard"
+  },
+  {
+    "ID": 607,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "recovery bangle"
+  },
+  {
+    "ID": 608,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "recovery armlet"
+  },
+  {
+    "ID": 609,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "recovery bracer"
+  },
+  {
+    "ID": 610,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "recovery targe"
+  },
+  {
+    "ID": 611,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "spiritual shield"
+  },
+  {
+    "ID": 612,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "spiritual ring"
+  },
+  {
+    "ID": 613,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "spiritual armguard"
+  },
+  {
+    "ID": 614,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "spiritual bangle"
+  },
+  {
+    "ID": 615,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "spiritual armlet"
+  },
+  {
+    "ID": 616,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "spiritual bracer"
+  },
+  {
+    "ID": 617,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "spiritual targe"
+  },
+  {
+    "ID": 618,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "phoenix shield"
+  },
+  {
+    "ID": 619,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "phoenix ring"
+  },
+  {
+    "ID": 620,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "phoenix armguard"
+  },
+  {
+    "ID": 621,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "phoenix bangle"
+  },
+  {
+    "ID": 622,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "phoenix armlet"
+  },
+  {
+    "ID": 623,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "phoenix bracer"
+  },
+  {
+    "ID": 624,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "phoenix targe"
+  },
+  {
+    "ID": 625,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "curative shield"
+  },
+  {
+    "ID": 626,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "curative ring"
+  },
+  {
+    "ID": 627,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "top shape"
+  },
+  {
+    "ID": 628,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "curative bangle"
+  },
+  {
+    "ID": 629,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "curative armlet"
+  },
+  {
+    "ID": 630,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "curative bracer"
+  },
+  {
+    "ID": 631,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "curative targe"
+  },
+  {
+    "ID": 632,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "rainbow shield"
+  },
+  {
+    "ID": 633,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "rainbow ring"
+  },
+  {
+    "ID": 634,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "miracle save"
+  },
+  {
+    "ID": 635,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "rainbow bangle"
+  },
+  {
+    "ID": 636,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "rainbow armlet"
+  },
+  {
+    "ID": 637,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "rainbow bracer"
+  },
+  {
+    "ID": 638,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "phalanx"
+  },
+  {
+    "ID": 639,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "shining shield"
+  },
+  {
+    "ID": 640,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "shining ring"
+  },
+  {
+    "ID": 641,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "last-ditch"
+  },
+  {
+    "ID": 642,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "shining bangle"
+  },
+  {
+    "ID": 643,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "shining armlet"
+  },
+  {
+    "ID": 644,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "shining bracer"
+  },
+  {
+    "ID": 645,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "tercio"
+  },
+  {
+    "ID": 646,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "faerie shield"
+  },
+  {
+    "ID": 647,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "faerie ring"
+  },
+  {
+    "ID": 648,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "faerie bangle"
+  },
+  {
+    "ID": 649,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "faerie armlet"
+  },
+  {
+    "ID": 650,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "faerie bracer"
+  },
+  {
+    "ID": 651,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "talisman"
+  },
+  {
+    "ID": 652,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "peaceful shield"
+  },
+  {
+    "ID": 653,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "peaceful ring"
+  },
+  {
+    "ID": 654,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "off season"
+  },
+  {
+    "ID": 655,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "peaceful bangle"
+  },
+  {
+    "ID": 656,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "peaceful armlet"
+  },
+  {
+    "ID": 657,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "peaceful bracer"
+  },
+  {
+    "ID": 658,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "peaceful targe"
+  },
+  {
+    "ID": 659,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "shaman shield"
+  },
+  {
+    "ID": 660,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "shaman ring"
+  },
+  {
+    "ID": 661,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "shaman armguard"
+  },
+  {
+    "ID": 662,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "shaman bangle"
+  },
+  {
+    "ID": 663,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "shaman bracer"
+  },
+  {
+    "ID": 664,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "shaman targe"
+  },
+  {
+    "ID": 665,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "barrier shield"
+  },
+  {
+    "ID": 666,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "barrier ring"
+  },
+  {
+    "ID": 667,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "hat trick"
+  },
+  {
+    "ID": 668,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "barrier bangle"
+  },
+  {
+    "ID": 669,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "barrier armlet"
+  },
+  {
+    "ID": 670,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "barrier bracer"
+  },
+  {
+    "ID": 671,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "victorious"
+  },
+  {
+    "ID": 672,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "star shield"
+  },
+  {
+    "ID": 673,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "star ring"
+  },
+  {
+    "ID": 674,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "pep talk"
+  },
+  {
+    "ID": 675,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "star bangle"
+  },
+  {
+    "ID": 676,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "star armlet"
+  },
+  {
+    "ID": 677,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "star bracer"
+  },
+  {
+    "ID": 678,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "star targe"
+  },
+  {
+    "ID": 679,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "marching shield"
+  },
+  {
+    "ID": 680,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "marching ring"
+  },
+  {
+    "ID": 681,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "auto armguard"
+  },
+  {
+    "ID": 682,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "marching bangle"
+  },
+  {
+    "ID": 683,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "marching armlet"
+  },
+  {
+    "ID": 684,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "marching bracer"
+  },
+  {
+    "ID": 685,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "marching targe"
+  },
+  {
+    "ID": 686,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "moon shield"
+  },
+  {
+    "ID": 687,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "moon ring"
+  },
+  {
+    "ID": 688,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "danger armguard"
+  },
+  {
+    "ID": 689,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "moon bangle"
+  },
+  {
+    "ID": 690,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "moon armlet"
+  },
+  {
+    "ID": 691,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "moon bracer"
+  },
+  {
+    "ID": 692,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "moon targe"
+  },
+  {
+    "ID": 693,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "regen shield"
+  },
+  {
+    "ID": 694,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "regen ring"
+  },
+  {
+    "ID": 695,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "second wind"
+  },
+  {
+    "ID": 696,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "regen bangle"
+  },
+  {
+    "ID": 697,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "regen armlet"
+  },
+  {
+    "ID": 698,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "regen bracer"
+  },
+  {
+    "ID": 699,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "regen targe"
+  },
+  {
+    "ID": 700,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "haste shield"
+  },
+  {
+    "ID": 701,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "haste ring"
+  },
+  {
+    "ID": 702,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "fast break"
+  },
+  {
+    "ID": 703,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "haste bangle"
+  },
+  {
+    "ID": 704,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "haste armlet"
+  },
+  {
+    "ID": 705,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "haste bracer"
+  },
+  {
+    "ID": 706,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "haste targe"
+  },
+  {
+    "ID": 707,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "reflect shield"
+  },
+  {
+    "ID": 708,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "reflect ring"
+  },
+  {
+    "ID": 709,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "reflect armguard"
+  },
+  {
+    "ID": 710,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "reflect bangle"
+  },
+  {
+    "ID": 711,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "reflect armlet"
+  },
+  {
+    "ID": 712,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "reflect bracer"
+  },
+  {
+    "ID": 713,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "reflect targe"
+  },
+  {
+    "ID": 714,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "shell shield"
+  },
+  {
+    "ID": 715,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "shell ring"
+  },
+  {
+    "ID": 716,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "shell armguard"
+  },
+  {
+    "ID": 717,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "shell bangle"
+  },
+  {
+    "ID": 718,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "shell armlet"
+  },
+  {
+    "ID": 719,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "shell bracer"
+  },
+  {
+    "ID": 720,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "shell targe"
+  },
+  {
+    "ID": 721,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "protect shield"
+  },
+  {
+    "ID": 722,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "protect ring"
+  },
+  {
+    "ID": 723,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "protect armguard"
+  },
+  {
+    "ID": 724,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "protect bangle"
+  },
+  {
+    "ID": 725,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "protect armlet"
+  },
+  {
+    "ID": 726,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "protect bracer"
+  },
+  {
+    "ID": 727,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "protect targe"
+  },
+  {
+    "ID": 728,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "platinum shield"
+  },
+  {
+    "ID": 729,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "platinum ring"
+  },
+  {
+    "ID": 730,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "platinum armguard"
+  },
+  {
+    "ID": 731,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "platinum bangle"
+  },
+  {
+    "ID": 732,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "platinum armlet"
+  },
+  {
+    "ID": 733,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "platinum bracer"
+  },
+  {
+    "ID": 734,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "centurion"
+  },
+  {
+    "ID": 735,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "sapphire shield"
+  },
+  {
+    "ID": 736,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "sapphire ring"
+  },
+  {
+    "ID": 737,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "sapphire armguard"
+  },
+  {
+    "ID": 738,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "sapphire bangle"
+  },
+  {
+    "ID": 739,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "sapphire armlet"
+  },
+  {
+    "ID": 740,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "sapphire bracer"
+  },
+  {
+    "ID": 741,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "echelon"
+  },
+  {
+    "ID": 742,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "knight's shield"
+  },
+  {
+    "ID": 743,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "guardian ring"
+  },
+  {
+    "ID": 744,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "power bangle"
+  },
+  {
+    "ID": 745,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "warrior's armlet"
+  },
+  {
+    "ID": 746,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "warrior's bracer"
+  },
+  {
+    "ID": 747,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "knight's targe"
+  },
+  {
+    "ID": 748,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "wizard shield"
+  },
+  {
+    "ID": 749,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "wizard ring"
+  },
+  {
+    "ID": 750,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "enemy armguard"
+  },
+  {
+    "ID": 751,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "wizard bangle"
+  },
+  {
+    "ID": 752,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "wizard armlet"
+  },
+  {
+    "ID": 753,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "wizard bracer"
+  },
+  {
+    "ID": 754,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "wizard targe"
+  },
+  {
+    "ID": 755,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "elemental shield"
+  },
+  {
+    "ID": 756,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "elemental ring"
+  },
+  {
+    "ID": 757,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "elemental armguard"
+  },
+  {
+    "ID": 758,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "elemental bangle"
+  },
+  {
+    "ID": 759,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "elemental armlet"
+  },
+  {
+    "ID": 760,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "elemental bracer"
+  },
+  {
+    "ID": 761,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "elemental targe"
+  },
+  {
+    "ID": 762,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "savior shield"
+  },
+  {
+    "ID": 763,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "defending ring"
+  },
+  {
+    "ID": 764,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "low risk"
+  },
+  {
+    "ID": 765,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "savior bangle"
+  },
+  {
+    "ID": 766,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "defending armlet"
+  },
+  {
+    "ID": 767,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "defending bracer"
+  },
+  {
+    "ID": 768,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "reliant"
+  },
+  {
+    "ID": 769,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "crimson shield"
+  },
+  {
+    "ID": 770,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "crimson ring"
+  },
+  {
+    "ID": 771,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "crimson armguard"
+  },
+  {
+    "ID": 772,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "crimson bangle"
+  },
+  {
+    "ID": 773,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "crimson armlet"
+  },
+  {
+    "ID": 774,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "crimson bracer"
+  },
+  {
+    "ID": 775,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "crimson targe"
+  },
+  {
+    "ID": 776,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "snow shield"
+  },
+  {
+    "ID": 777,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "snow ring"
+  },
+  {
+    "ID": 778,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "snow armguard"
+  },
+  {
+    "ID": 779,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "snow bangle"
+  },
+  {
+    "ID": 780,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "snow armlet"
+  },
+  {
+    "ID": 781,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "snow bracer"
+  },
+  {
+    "ID": 782,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "snow targe"
+  },
+  {
+    "ID": 783,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "ochre shield"
+  },
+  {
+    "ID": 784,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "ochre ring"
+  },
+  {
+    "ID": 785,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "ochre armguard"
+  },
+  {
+    "ID": 786,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "ochre bangle"
+  },
+  {
+    "ID": 787,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "ochre armlet"
+  },
+  {
+    "ID": 788,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "ochre bracer"
+  },
+  {
+    "ID": 789,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "ochre targe"
+  },
+  {
+    "ID": 790,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "cerulean shield"
+  },
+  {
+    "ID": 791,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "cerulean ring"
+  },
+  {
+    "ID": 792,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "cerulean armguard"
+  },
+  {
+    "ID": 793,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "cerulean bangle"
+  },
+  {
+    "ID": 794,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "cerulean armlet"
+  },
+  {
+    "ID": 795,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "cerulean bracer"
+  },
+  {
+    "ID": 796,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "cerulean targe"
+  },
+  {
+    "ID": 797,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "medical shield"
+  },
+  {
+    "ID": 798,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "medical ring"
+  },
+  {
+    "ID": 799,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "medical armguard"
+  },
+  {
+    "ID": 800,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "medical bangle"
+  },
+  {
+    "ID": 801,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "medical armlet"
+  },
+  {
+    "ID": 802,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "medical bracer"
+  },
+  {
+    "ID": 803,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "medical targe"
+  },
+  {
+    "ID": 804,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "lucid shield"
+  },
+  {
+    "ID": 805,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "lucid ring"
+  },
+  {
+    "ID": 806,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "lucid armguard"
+  },
+  {
+    "ID": 807,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "lucid bangle"
+  },
+  {
+    "ID": 808,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "lucid armlet"
+  },
+  {
+    "ID": 809,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "lucid bracer"
+  },
+  {
+    "ID": 810,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "lucid targe"
+  },
+  {
+    "ID": 811,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "serene shield"
+  },
+  {
+    "ID": 812,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "serene ring"
+  },
+  {
+    "ID": 813,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "serene armguard"
+  },
+  {
+    "ID": 814,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "serene bangle"
+  },
+  {
+    "ID": 815,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "serene armlet"
+  },
+  {
+    "ID": 816,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "serene bracer"
+  },
+  {
+    "ID": 817,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "dauntless"
+  },
+  {
+    "ID": 818,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "light shield"
+  },
+  {
+    "ID": 819,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "light ring"
+  },
+  {
+    "ID": 820,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "light armguard"
+  },
+  {
+    "ID": 821,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "light bangle"
+  },
+  {
+    "ID": 822,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "light armlet"
+  },
+  {
+    "ID": 823,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "light bracer"
+  },
+  {
+    "ID": 824,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "light targe"
+  },
+  {
+    "ID": 825,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "soul shield"
+  },
+  {
+    "ID": 826,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "soul ring"
+  },
+  {
+    "ID": 827,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "soul armguard"
+  },
+  {
+    "ID": 828,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "soul bangle"
+  },
+  {
+    "ID": 829,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "soul armlet"
+  },
+  {
+    "ID": 830,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "soul bracer"
+  },
+  {
+    "ID": 831,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "soul targe"
+  },
+  {
+    "ID": 832,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "blessed shield"
+  },
+  {
+    "ID": 833,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "blessed armguard"
+  },
+  {
+    "ID": 834,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "blessed bangle"
+  },
+  {
+    "ID": 835,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "blessed armlet"
+  },
+  {
+    "ID": 836,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "blessed bracer"
+  },
+  {
+    "ID": 837,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "blessed targe"
+  },
+  {
+    "ID": 838,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "soft shield"
+  },
+  {
+    "ID": 839,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "soft ring"
+  },
+  {
+    "ID": 840,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "soft armguard"
+  },
+  {
+    "ID": 841,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "soft bangle"
+  },
+  {
+    "ID": 842,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "soft armlet"
+  },
+  {
+    "ID": 843,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "soft bracer"
+  },
+  {
+    "ID": 844,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "soft targe"
+  },
+  {
+    "ID": 845,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "serum shield"
+  },
+  {
+    "ID": 846,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "serum ring"
+  },
+  {
+    "ID": 847,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "serum armguard"
+  },
+  {
+    "ID": 848,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "serum bangle"
+  },
+  {
+    "ID": 849,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "serum armlet"
+  },
+  {
+    "ID": 850,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "serum bracer"
+  },
+  {
+    "ID": 851,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "serum targe"
+  },
+  {
+    "ID": 852,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "alert shield"
+  },
+  {
+    "ID": 853,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "alert ring"
+  },
+  {
+    "ID": 854,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "alert armguard"
+  },
+  {
+    "ID": 855,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "alert bangle"
+  },
+  {
+    "ID": 856,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "alert armlet"
+  },
+  {
+    "ID": 857,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "alert bracer"
+  },
+  {
+    "ID": 858,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "alert targe"
+  },
+  {
+    "ID": 859,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "echo shield"
+  },
+  {
+    "ID": 860,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "echo ring"
+  },
+  {
+    "ID": 861,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "echo armguard"
+  },
+  {
+    "ID": 862,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "echo bangle"
+  },
+  {
+    "ID": 863,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "echo armlet"
+  },
+  {
+    "ID": 864,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "echo bracer"
+  },
+  {
+    "ID": 865,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "echo targe"
+  },
+  {
+    "ID": 866,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "bright shield"
+  },
+  {
+    "ID": 867,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "bright ring"
+  },
+  {
+    "ID": 868,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "bright armguard"
+  },
+  {
+    "ID": 869,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "bright bangle"
+  },
+  {
+    "ID": 870,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "bright armlet"
+  },
+  {
+    "ID": 871,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "bright bracer"
+  },
+  {
+    "ID": 872,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "bright targe"
+  },
+  {
+    "ID": 873,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "red shield"
+  },
+  {
+    "ID": 874,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "red ring"
+  },
+  {
+    "ID": 875,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "red armguard"
+  },
+  {
+    "ID": 876,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "red bangle"
+  },
+  {
+    "ID": 877,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "red armlet"
+  },
+  {
+    "ID": 878,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "red bracer"
+  },
+  {
+    "ID": 879,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "red targe"
+  },
+  {
+    "ID": 880,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "white shield"
+  },
+  {
+    "ID": 881,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "white ring"
+  },
+  {
+    "ID": 882,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "white armguard"
+  },
+  {
+    "ID": 883,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "white bangle"
+  },
+  {
+    "ID": 884,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "white armlet"
+  },
+  {
+    "ID": 885,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "white bracer"
+  },
+  {
+    "ID": 886,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "white targe"
+  },
+  {
+    "ID": 887,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "yellow shield"
+  },
+  {
+    "ID": 888,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "yellow ring"
+  },
+  {
+    "ID": 889,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "yellow armguard"
+  },
+  {
+    "ID": 890,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "yellow bangle"
+  },
+  {
+    "ID": 891,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "yellow armlet"
+  },
+  {
+    "ID": 892,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "yellow bracer"
+  },
+  {
+    "ID": 893,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "yellow targe"
+  },
+  {
+    "ID": 894,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "blue shield"
+  },
+  {
+    "ID": 895,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "blue ring"
+  },
+  {
+    "ID": 896,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "blue armguard"
+  },
+  {
+    "ID": 897,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "blue bangle"
+  },
+  {
+    "ID": 898,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "blue armlet"
+  },
+  {
+    "ID": 899,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "blue bracer"
+  },
+  {
+    "ID": 900,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "blue targe"
+  },
+  {
+    "ID": 901,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "nultide shield"
+  },
+  {
+    "ID": 902,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "nultide ring"
+  },
+  {
+    "ID": 903,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "nultide armguard"
+  },
+  {
+    "ID": 904,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "nultide bangle"
+  },
+  {
+    "ID": 905,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "nultide armlet"
+  },
+  {
+    "ID": 906,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "nultide bracer"
+  },
+  {
+    "ID": 907,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "nultide targe"
+  },
+  {
+    "ID": 908,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "nulblaze shield"
+  },
+  {
+    "ID": 909,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "nulblaze ring"
+  },
+  {
+    "ID": 910,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "nulblaze armguard"
+  },
+  {
+    "ID": 911,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "nulblaze bangle"
+  },
+  {
+    "ID": 912,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "nulblaze armlet"
+  },
+  {
+    "ID": 913,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "nulblaze bracer"
+  },
+  {
+    "ID": 914,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "nulblaze targe"
+  },
+  {
+    "ID": 915,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "nulshock shield"
+  },
+  {
+    "ID": 916,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "nulshock ring"
+  },
+  {
+    "ID": 917,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "nulshock armguard"
+  },
+  {
+    "ID": 918,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "nulshock bangle"
+  },
+  {
+    "ID": 919,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "nulshock armlet"
+  },
+  {
+    "ID": 920,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "nulshock bracer"
+  },
+  {
+    "ID": 921,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "nulshock targe"
+  },
+  {
+    "ID": 922,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "nulfrost shield"
+  },
+  {
+    "ID": 923,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "nulfrost ring"
+  },
+  {
+    "ID": 924,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "nulfrost armguard"
+  },
+  {
+    "ID": 925,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "nulfrost bangle"
+  },
+  {
+    "ID": 926,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "nulfrost armlet"
+  },
+  {
+    "ID": 927,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "nulfrost bracer"
+  },
+  {
+    "ID": 928,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "nulfrost targe"
+  },
+  {
+    "ID": 929,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "adept's shield"
+  },
+  {
+    "ID": 930,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "adept's ring"
+  },
+  {
+    "ID": 931,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "adept's armguard"
+  },
+  {
+    "ID": 932,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "adept's bangle"
+  },
+  {
+    "ID": 933,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "adept's armlet"
+  },
+  {
+    "ID": 934,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "adept's bracer"
+  },
+  {
+    "ID": 935,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "adept's targe"
+  },
+  {
+    "ID": 936,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "tetra shield"
+  },
+  {
+    "ID": 937,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "tetra ring"
+  },
+  {
+    "ID": 938,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "tetra armguard"
+  },
+  {
+    "ID": 939,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "tetra bangle"
+  },
+  {
+    "ID": 940,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "tetra armlet"
+  },
+  {
+    "ID": 941,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "tetra bracer"
+  },
+  {
+    "ID": 942,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "tetra targe"
+  },
+  {
+    "ID": 943,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "mythril shield"
+  },
+  {
+    "ID": 944,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "mythril ring"
+  },
+  {
+    "ID": 945,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "mythril armguard"
+  },
+  {
+    "ID": 946,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "mythril bangle"
+  },
+  {
+    "ID": 947,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "mythril armlet"
+  },
+  {
+    "ID": 948,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "mythril bracer"
+  },
+  {
+    "ID": 949,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "mythril targe"
+  },
+  {
+    "ID": 950,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "gold shield"
+  },
+  {
+    "ID": 951,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "gold ring"
+  },
+  {
+    "ID": 952,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "gold armguard"
+  },
+  {
+    "ID": 953,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "gold bangle"
+  },
+  {
+    "ID": 954,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "gold armlet"
+  },
+  {
+    "ID": 955,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "gold bracer"
+  },
+  {
+    "ID": 956,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "gold targe"
+  },
+  {
+    "ID": 957,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "emerald shield"
+  },
+  {
+    "ID": 958,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "emerald ring"
+  },
+  {
+    "ID": 959,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "emerald armguard"
+  },
+  {
+    "ID": 960,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "emerald bangle"
+  },
+  {
+    "ID": 961,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "emerald armlet"
+  },
+  {
+    "ID": 962,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "emerald bracer"
+  },
+  {
+    "ID": 963,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "emerald targe"
+  },
+  {
+    "ID": 964,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "soldier's shield"
+  },
+  {
+    "ID": 965,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "soldier's ring"
+  },
+  {
+    "ID": 966,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "soldier's armguard"
+  },
+  {
+    "ID": 967,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "vita bangle"
+  },
+  {
+    "ID": 968,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "soldier's armlet"
+  },
+  {
+    "ID": 969,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "soldier's bracer"
+  },
+  {
+    "ID": 970,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "soldier's targe"
+  },
+  {
+    "ID": 971,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "mage's shield"
+  },
+  {
+    "ID": 972,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "mage's ring"
+  },
+  {
+    "ID": 973,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "mage's armguard"
+  },
+  {
+    "ID": 974,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "mage's bangle"
+  },
+  {
+    "ID": 975,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "mage's armlet"
+  },
+  {
+    "ID": 976,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "mage's bracer"
+  },
+  {
+    "ID": 977,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "mage's targe"
+  },
+  {
+    "ID": 978,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "silver shield"
+  },
+  {
+    "ID": 979,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "silver ring"
+  },
+  {
+    "ID": 980,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "silver armguard"
+  },
+  {
+    "ID": 981,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "silver bangle"
+  },
+  {
+    "ID": 982,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "silver armlet"
+  },
+  {
+    "ID": 983,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "silver bracer"
+  },
+  {
+    "ID": 984,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "silver targe"
+  },
+  {
+    "ID": 985,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "onyx shield"
+  },
+  {
+    "ID": 986,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "onyx ring"
+  },
+  {
+    "ID": 987,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "onyx armguard"
+  },
+  {
+    "ID": 988,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "onyx bangle"
+  },
+  {
+    "ID": 989,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "onyx armlet"
+  },
+  {
+    "ID": 990,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "onyx bracer"
+  },
+  {
+    "ID": 991,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "onyx targe"
+  },
+  {
+    "ID": 992,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "sorcery shield"
+  },
+  {
+    "ID": 993,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "sorcery ring"
+  },
+  {
+    "ID": 994,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "sorcery armguard"
+  },
+  {
+    "ID": 995,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "sorcery bangle"
+  },
+  {
+    "ID": 996,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "sorcery armlet"
+  },
+  {
+    "ID": 997,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "sorcery bracer"
+  },
+  {
+    "ID": 998,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "sorcery targe"
+  },
+  {
+    "ID": 999,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "warrior's shield"
+  },
+  {
+    "ID": 1000,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "sheltering ring"
+  },
+  {
+    "ID": 1001,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "warrior's armguard"
+  },
+  {
+    "ID": 1002,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "tough bangle"
+  },
+  {
+    "ID": 1003,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "warrior's targe"
+  },
+  {
+    "ID": 1004,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "glorious shield"
+  },
+  {
+    "ID": 1005,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "glorious ring"
+  },
+  {
+    "ID": 1006,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "glorious armguard"
+  },
+  {
+    "ID": 1007,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "glorious bangle"
+  },
+  {
+    "ID": 1008,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "glorious armlet"
+  },
+  {
+    "ID": 1009,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "glorious bracer"
+  },
+  {
+    "ID": 1010,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "glorious targe"
+  },
+  {
+    "ID": 1011,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "metal shield"
+  },
+  {
+    "ID": 1012,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "metal ring"
+  },
+  {
+    "ID": 1013,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "metal armguard"
+  },
+  {
+    "ID": 1014,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "metal bangle"
+  },
+  {
+    "ID": 1015,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "metal armlet"
+  },
+  {
+    "ID": 1016,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "metal bracer"
+  },
+  {
+    "ID": 1017,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "metal targe"
+  },
+  {
+    "ID": 1018,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "pearl shield"
+  },
+  {
+    "ID": 1019,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "pearl ring"
+  },
+  {
+    "ID": 1020,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "pearl armguard"
+  },
+  {
+    "ID": 1021,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "pearl bangle"
+  },
+  {
+    "ID": 1022,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "pearl armlet"
+  },
+  {
+    "ID": 1023,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "pearl bracer"
+  },
+  {
+    "ID": 1024,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "pearl targe"
+  },
+  {
+    "ID": 1025,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "magic shield"
+  },
+  {
+    "ID": 1026,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "magic ring"
+  },
+  {
+    "ID": 1027,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "magic bangle"
+  },
+  {
+    "ID": 1028,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "magic armlet"
+  },
+  {
+    "ID": 1029,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "magic bracer"
+  },
+  {
+    "ID": 1030,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "magic targe"
+  },
+  {
+    "ID": 1031,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "seeker's shield"
+  },
+  {
+    "ID": 1032,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "seeker's ring"
+  },
+  {
+    "ID": 1033,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "seeker's armguard"
+  },
+  {
+    "ID": 1034,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "seeker's bangle"
+  },
+  {
+    "ID": 1035,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "seeker's armlet"
+  },
+  {
+    "ID": 1036,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "seeker's bracer"
+  },
+  {
+    "ID": 1037,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "seeker's targe"
+  },
+  {
+    "ID": 1038,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "shield"
+  },
+  {
+    "ID": 1039,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "wide ring"
+  },
+  {
+    "ID": 1040,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "guardian armguard"
+  },
+  {
+    "ID": 1041,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "guardian bangle"
+  },
+  {
+    "ID": 1042,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "guardian armlet"
+  },
+  {
+    "ID": 1043,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "guardian bracer"
+  },
+  {
+    "ID": 1044,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "guardian targe"
+  },
+  {
+    "ID": 1045,
+    "CharacterID": 1,
+    "character": "tidus",
+    "name": "buckler"
+  },
+  {
+    "ID": 1046,
+    "CharacterID": 2,
+    "character": "yuna",
+    "name": "ring"
+  },
+  {
+    "ID": 1047,
+    "CharacterID": 3,
+    "character": "wakka",
+    "name": "armguard"
+  },
+  {
+    "ID": 1048,
+    "CharacterID": 4,
+    "character": "lulu",
+    "name": "bangle"
+  },
+  {
+    "ID": 1049,
+    "CharacterID": 5,
+    "character": "kimahri",
+    "name": "armlet"
+  },
+  {
+    "ID": 1050,
+    "CharacterID": 6,
+    "character": "auron",
+    "name": "bracer"
+  },
+  {
+    "ID": 1051,
+    "CharacterID": 7,
+    "character": "rikku",
+    "name": "targe"
+  },
+  {
+    "ID": 1052,
+    "CharacterID": 8,
+    "character": "seymour",
+    "name": "seymour armor"
+  }
+]

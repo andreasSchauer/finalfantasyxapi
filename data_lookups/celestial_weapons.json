@@ -1,0 +1,72 @@
+[
+  {
+    "ID": 1,
+    "name": "caladbolg",
+    "character": "tidus",
+    "CharacterID": 1,
+    "key_item_base": "sun",
+    "aeon": null,
+    "AeonID": null,
+    "formula": "hp-high"
+  },
+  {
+    "ID": 2,
+    "name": "nirvana",
+    "character": "yuna",
+    "CharacterID": 2,
+    "key_item_base": "moon",
+    "aeon": "valefor",
+    "AeonID": 1,
+    "formula": "mp-high"
+  },
+  {
+    "ID": 3,
+    "name": "world champion",
+    "character": "wakka",
+    "CharacterID": 3,
+    "key_item_base": "jupiter",
+    "aeon": "ifrit",
+    "AeonID": 2,
+    "formula": "hp-high"
+  },
+  {
+    "ID": 4,
+    "name": "onion knight",
+    "character": "lulu",
+    "CharacterID": 4,
+    "key_item_base": "venus",
+    "aeon": "shiva",
+    "AeonID": 4,
+    "formula": "mp-high"
+  },
+  {
+    "ID": 5,
+    "name": "spirit lance",
+    "character": "kimahri",
+    "CharacterID": 5,
+    "key_item_base": "saturn",
+    "aeon": "ixion",
+    "AeonID": 3,
+    "formula": "hp-high"
+  },
+  {
+    "ID": 6,
+    "name": "masamune",
+    "character": "auron",
+    "CharacterID": 6,
+    "key_item_base": "mars",
+    "aeon": "yojimbo",
+    "AeonID": 7,
+    "formula": "hp-low"
+  },
+  {
+    "ID": 7,
+    "name": "godhand",
+    "character": "rikku",
+    "CharacterID": 7,
+    "key_item_base": "mercury",
+    "aeon": null,
+    "AeonID": null,
+    "formula": "hp-high"
+  }
+]

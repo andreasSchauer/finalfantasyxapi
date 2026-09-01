@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"fmt"
+	"time"
 )
 
 type AaActivationCondition string
@@ -3420,6 +3421,12 @@ type Damage struct {
 	IsPiercing      bool
 	BreakDmgLimit   NullBreakDmgLmtType
 	ElementID       sql.NullInt32
+}
+
+type DbState struct {
+	ID        int32
+	DataHash  string
+	UpdatedAt time.Time
 }
 
 type Element struct {

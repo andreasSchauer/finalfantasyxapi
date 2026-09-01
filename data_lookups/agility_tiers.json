@@ -1,0 +1,750 @@
+[
+  {
+    "ID": 1,
+    "min_agility": 0,
+    "max_agility": 0,
+    "tick_speed": 28,
+    "monster_min_icv": null,
+    "monster_max_icv": null,
+    "character_max_icv": null,
+    "character_min_icvs": [
+      {
+        "ID": 1,
+        "AgilityTierID": 1,
+        "subtier_min_agility": 0,
+        "subtier_max_agility": 0,
+        "character_min_icv": null
+      }
+    ]
+  },
+  {
+    "ID": 2,
+    "min_agility": 1,
+    "max_agility": 1,
+    "tick_speed": 26,
+    "monster_min_icv": 84,
+    "monster_max_icv": 93,
+    "character_max_icv": 84,
+    "character_min_icvs": [
+      {
+        "ID": 2,
+        "AgilityTierID": 2,
+        "subtier_min_agility": 1,
+        "subtier_max_agility": 1,
+        "character_min_icv": 83
+      }
+    ]
+  },
+  {
+    "ID": 3,
+    "min_agility": 2,
+    "max_agility": 2,
+    "tick_speed": 24,
+    "monster_min_icv": 78,
+    "monster_max_icv": 86,
+    "character_max_icv": 78,
+    "character_min_icvs": [
+      {
+        "ID": 3,
+        "AgilityTierID": 3,
+        "subtier_min_agility": 2,
+        "subtier_max_agility": 2,
+        "character_min_icv": 77
+      }
+    ]
+  },
+  {
+    "ID": 4,
+    "min_agility": 3,
+    "max_agility": 3,
+    "tick_speed": 22,
+    "monster_min_icv": 72,
+    "monster_max_icv": 80,
+    "character_max_icv": 72,
+    "character_min_icvs": [
+      {
+        "ID": 4,
+        "AgilityTierID": 4,
+        "subtier_min_agility": 3,
+        "subtier_max_agility": 3,
+        "character_min_icv": 71
+      }
+    ]
+  },
+  {
+    "ID": 5,
+    "min_agility": 4,
+    "max_agility": 4,
+    "tick_speed": 20,
+    "monster_min_icv": 60,
+    "monster_max_icv": 66,
+    "character_max_icv": 60,
+    "character_min_icvs": [
+      {
+        "ID": 5,
+        "AgilityTierID": 5,
+        "subtier_min_agility": 4,
+        "subtier_max_agility": 4,
+        "character_min_icv": 59
+      }
+    ]
+  },
+  {
+    "ID": 6,
+    "min_agility": 5,
+    "max_agility": 6,
+    "tick_speed": 16,
+    "monster_min_icv": 48,
+    "monster_max_icv": 53,
+    "character_max_icv": 48,
+    "character_min_icvs": [
+      {
+        "ID": 6,
+        "AgilityTierID": 6,
+        "subtier_min_agility": 5,
+        "subtier_max_agility": 5,
+        "character_min_icv": 47
+      },
+      {
+        "ID": 7,
+        "AgilityTierID": 6,
+        "subtier_min_agility": 6,
+        "subtier_max_agility": 6,
+        "character_min_icv": 46
+      }
+    ]
+  },
+  {
+    "ID": 7,
+    "min_agility": 7,
+    "max_agility": 9,
+    "tick_speed": 15,
+    "monster_min_icv": 45,
+    "monster_max_icv": 50,
+    "character_max_icv": 45,
+    "character_min_icvs": [
+      {
+        "ID": 8,
+        "AgilityTierID": 7,
+        "subtier_min_agility": 7,
+        "subtier_max_agility": 7,
+        "character_min_icv": 44
+      },
+      {
+        "ID": 9,
+        "AgilityTierID": 7,
+        "subtier_min_agility": 8,
+        "subtier_max_agility": 8,
+        "character_min_icv": 43
+      },
+      {
+        "ID": 10,
+        "AgilityTierID": 7,
+        "subtier_min_agility": 9,
+        "subtier_max_agility": 9,
+        "character_min_icv": 42
+      }
+    ]
+  },
+  {
+    "ID": 8,
+    "min_agility": 10,
+    "max_agility": 11,
+    "tick_speed": 14,
+    "monster_min_icv": 42,
+    "monster_max_icv": 46,
+    "character_max_icv": 42,
+    "character_min_icvs": [
+      {
+        "ID": 11,
+        "AgilityTierID": 8,
+        "subtier_min_agility": 10,
+        "subtier_max_agility": 10,
+        "character_min_icv": 41
+      },
+      {
+        "ID": 12,
+        "AgilityTierID": 8,
+        "subtier_min_agility": 11,
+        "subtier_max_agility": 11,
+        "character_min_icv": 40
+      }
+    ]
+  },
+  {
+    "ID": 9,
+    "min_agility": 12,
+    "max_agility": 14,
+    "tick_speed": 13,
+    "monster_min_icv": 39,
+    "monster_max_icv": 43,
+    "character_max_icv": 39,
+    "character_min_icvs": [
+      {
+        "ID": 13,
+        "AgilityTierID": 9,
+        "subtier_min_agility": 12,
+        "subtier_max_agility": 12,
+        "character_min_icv": 38
+      },
+      {
+        "ID": 14,
+        "AgilityTierID": 9,
+        "subtier_min_agility": 13,
+        "subtier_max_agility": 13,
+        "character_min_icv": 37
+      },
+      {
+        "ID": 15,
+        "AgilityTierID": 9,
+        "subtier_min_agility": 14,
+        "subtier_max_agility": 14,
+        "character_min_icv": 36
+      }
+    ]
+  },
+  {
+    "ID": 10,
+    "min_agility": 15,
+    "max_agility": 16,
+    "tick_speed": 12,
+    "monster_min_icv": 36,
+    "monster_max_icv": 40,
+    "character_max_icv": 36,
+    "character_min_icvs": [
+      {
+        "ID": 16,
+        "AgilityTierID": 10,
+        "subtier_min_agility": 15,
+        "subtier_max_agility": 15,
+        "character_min_icv": 35
+      },
+      {
+        "ID": 17,
+        "AgilityTierID": 10,
+        "subtier_min_agility": 16,
+        "subtier_max_agility": 16,
+        "character_min_icv": 34
+      }
+    ]
+  },
+  {
+    "ID": 11,
+    "min_agility": 17,
+    "max_agility": 18,
+    "tick_speed": 11,
+    "monster_min_icv": 33,
+    "monster_max_icv": 36,
+    "character_max_icv": 33,
+    "character_min_icvs": [
+      {
+        "ID": 18,
+        "AgilityTierID": 11,
+        "subtier_min_agility": 17,
+        "subtier_max_agility": 17,
+        "character_min_icv": 32
+      },
+      {
+        "ID": 19,
+        "AgilityTierID": 11,
+        "subtier_min_agility": 18,
+        "subtier_max_agility": 18,
+        "character_min_icv": 31
+      }
+    ]
+  },
+  {
+    "ID": 12,
+    "min_agility": 19,
+    "max_agility": 22,
+    "tick_speed": 10,
+    "monster_min_icv": 30,
+    "monster_max_icv": 33,
+    "character_max_icv": 30,
+    "character_min_icvs": [
+      {
+        "ID": 20,
+        "AgilityTierID": 12,
+        "subtier_min_agility": 19,
+        "subtier_max_agility": 19,
+        "character_min_icv": 29
+      },
+      {
+        "ID": 21,
+        "AgilityTierID": 12,
+        "subtier_min_agility": 20,
+        "subtier_max_agility": 20,
+        "character_min_icv": 28
+      },
+      {
+        "ID": 22,
+        "AgilityTierID": 12,
+        "subtier_min_agility": 21,
+        "subtier_max_agility": 21,
+        "character_min_icv": 27
+      },
+      {
+        "ID": 23,
+        "AgilityTierID": 12,
+        "subtier_min_agility": 22,
+        "subtier_max_agility": 22,
+        "character_min_icv": 26
+      }
+    ]
+  },
+  {
+    "ID": 13,
+    "min_agility": 23,
+    "max_agility": 28,
+    "tick_speed": 9,
+    "monster_min_icv": 27,
+    "monster_max_icv": 30,
+    "character_max_icv": 27,
+    "character_min_icvs": [
+      {
+        "ID": 24,
+        "AgilityTierID": 13,
+        "subtier_min_agility": 23,
+        "subtier_max_agility": 23,
+        "character_min_icv": 26
+      },
+      {
+        "ID": 25,
+        "AgilityTierID": 13,
+        "subtier_min_agility": 24,
+        "subtier_max_agility": 24,
+        "character_min_icv": 25
+      },
+      {
+        "ID": 26,
+        "AgilityTierID": 13,
+        "subtier_min_agility": 25,
+        "subtier_max_agility": 25,
+        "character_min_icv": 24
+      },
+      {
+        "ID": 27,
+        "AgilityTierID": 13,
+        "subtier_min_agility": 26,
+        "subtier_max_agility": 26,
+        "character_min_icv": 23
+      },
+      {
+        "ID": 28,
+        "AgilityTierID": 13,
+        "subtier_min_agility": 27,
+        "subtier_max_agility": 27,
+        "character_min_icv": 22
+      },
+      {
+        "ID": 29,
+        "AgilityTierID": 13,
+        "subtier_min_agility": 28,
+        "subtier_max_agility": 28,
+        "character_min_icv": 21
+      }
+    ]
+  },
+  {
+    "ID": 14,
+    "min_agility": 29,
+    "max_agility": 34,
+    "tick_speed": 8,
+    "monster_min_icv": 24,
+    "monster_max_icv": 26,
+    "character_max_icv": 24,
+    "character_min_icvs": [
+      {
+        "ID": 30,
+        "AgilityTierID": 14,
+        "subtier_min_agility": 29,
+        "subtier_max_agility": 29,
+        "character_min_icv": 23
+      },
+      {
+        "ID": 31,
+        "AgilityTierID": 14,
+        "subtier_min_agility": 30,
+        "subtier_max_agility": 30,
+        "character_min_icv": 22
+      },
+      {
+        "ID": 32,
+        "AgilityTierID": 14,
+        "subtier_min_agility": 31,
+        "subtier_max_agility": 31,
+        "character_min_icv": 21
+      },
+      {
+        "ID": 33,
+        "AgilityTierID": 14,
+        "subtier_min_agility": 32,
+        "subtier_max_agility": 32,
+        "character_min_icv": 20
+      },
+      {
+        "ID": 34,
+        "AgilityTierID": 14,
+        "subtier_min_agility": 33,
+        "subtier_max_agility": 33,
+        "character_min_icv": 19
+      },
+      {
+        "ID": 35,
+        "AgilityTierID": 14,
+        "subtier_min_agility": 34,
+        "subtier_max_agility": 34,
+        "character_min_icv": 18
+      }
+    ]
+  },
+  {
+    "ID": 15,
+    "min_agility": 35,
+    "max_agility": 43,
+    "tick_speed": 7,
+    "monster_min_icv": 21,
+    "monster_max_icv": 23,
+    "character_max_icv": 21,
+    "character_min_icvs": [
+      {
+        "ID": 36,
+        "AgilityTierID": 15,
+        "subtier_min_agility": 35,
+        "subtier_max_agility": 35,
+        "character_min_icv": 20
+      },
+      {
+        "ID": 37,
+        "AgilityTierID": 15,
+        "subtier_min_agility": 36,
+        "subtier_max_agility": 36,
+        "character_min_icv": 19
+      },
+      {
+        "ID": 38,
+        "AgilityTierID": 15,
+        "subtier_min_agility": 37,
+        "subtier_max_agility": 37,
+        "character_min_icv": 18
+      },
+      {
+        "ID": 39,
+        "AgilityTierID": 15,
+        "subtier_min_agility": 38,
+        "subtier_max_agility": 38,
+        "character_min_icv": 17
+      },
+      {
+        "ID": 40,
+        "AgilityTierID": 15,
+        "subtier_min_agility": 39,
+        "subtier_max_agility": 39,
+        "character_min_icv": 16
+      },
+      {
+        "ID": 41,
+        "AgilityTierID": 15,
+        "subtier_min_agility": 40,
+        "subtier_max_agility": 40,
+        "character_min_icv": 15
+      },
+      {
+        "ID": 42,
+        "AgilityTierID": 15,
+        "subtier_min_agility": 41,
+        "subtier_max_agility": 41,
+        "character_min_icv": 14
+      },
+      {
+        "ID": 43,
+        "AgilityTierID": 15,
+        "subtier_min_agility": 42,
+        "subtier_max_agility": 42,
+        "character_min_icv": 13
+      },
+      {
+        "ID": 44,
+        "AgilityTierID": 15,
+        "subtier_min_agility": 43,
+        "subtier_max_agility": 43,
+        "character_min_icv": 12
+      }
+    ]
+  },
+  {
+    "ID": 16,
+    "min_agility": 44,
+    "max_agility": 61,
+    "tick_speed": 6,
+    "monster_min_icv": 18,
+    "monster_max_icv": 20,
+    "character_max_icv": 18,
+    "character_min_icvs": [
+      {
+        "ID": 45,
+        "AgilityTierID": 16,
+        "subtier_min_agility": 44,
+        "subtier_max_agility": 45,
+        "character_min_icv": 17
+      },
+      {
+        "ID": 46,
+        "AgilityTierID": 16,
+        "subtier_min_agility": 46,
+        "subtier_max_agility": 47,
+        "character_min_icv": 16
+      },
+      {
+        "ID": 47,
+        "AgilityTierID": 16,
+        "subtier_min_agility": 48,
+        "subtier_max_agility": 49,
+        "character_min_icv": 15
+      },
+      {
+        "ID": 48,
+        "AgilityTierID": 16,
+        "subtier_min_agility": 50,
+        "subtier_max_agility": 51,
+        "character_min_icv": 14
+      },
+      {
+        "ID": 49,
+        "AgilityTierID": 16,
+        "subtier_min_agility": 52,
+        "subtier_max_agility": 53,
+        "character_min_icv": 13
+      },
+      {
+        "ID": 50,
+        "AgilityTierID": 16,
+        "subtier_min_agility": 54,
+        "subtier_max_agility": 55,
+        "character_min_icv": 12
+      },
+      {
+        "ID": 51,
+        "AgilityTierID": 16,
+        "subtier_min_agility": 56,
+        "subtier_max_agility": 57,
+        "character_min_icv": 11
+      },
+      {
+        "ID": 52,
+        "AgilityTierID": 16,
+        "subtier_min_agility": 58,
+        "subtier_max_agility": 59,
+        "character_min_icv": 10
+      },
+      {
+        "ID": 53,
+        "AgilityTierID": 16,
+        "subtier_min_agility": 60,
+        "subtier_max_agility": 61,
+        "character_min_icv": 9
+      }
+    ]
+  },
+  {
+    "ID": 17,
+    "min_agility": 62,
+    "max_agility": 97,
+    "tick_speed": 5,
+    "monster_min_icv": 15,
+    "monster_max_icv": 16,
+    "character_max_icv": 15,
+    "character_min_icvs": [
+      {
+        "ID": 54,
+        "AgilityTierID": 17,
+        "subtier_min_agility": 62,
+        "subtier_max_agility": 65,
+        "character_min_icv": 14
+      },
+      {
+        "ID": 55,
+        "AgilityTierID": 17,
+        "subtier_min_agility": 66,
+        "subtier_max_agility": 69,
+        "character_min_icv": 13
+      },
+      {
+        "ID": 56,
+        "AgilityTierID": 17,
+        "subtier_min_agility": 70,
+        "subtier_max_agility": 73,
+        "character_min_icv": 12
+      },
+      {
+        "ID": 57,
+        "AgilityTierID": 17,
+        "subtier_min_agility": 74,
+        "subtier_max_agility": 77,
+        "character_min_icv": 11
+      },
+      {
+        "ID": 58,
+        "AgilityTierID": 17,
+        "subtier_min_agility": 78,
+        "subtier_max_agility": 81,
+        "character_min_icv": 10
+      },
+      {
+        "ID": 59,
+        "AgilityTierID": 17,
+        "subtier_min_agility": 82,
+        "subtier_max_agility": 85,
+        "character_min_icv": 9
+      },
+      {
+        "ID": 60,
+        "AgilityTierID": 17,
+        "subtier_min_agility": 86,
+        "subtier_max_agility": 89,
+        "character_min_icv": 8
+      },
+      {
+        "ID": 61,
+        "AgilityTierID": 17,
+        "subtier_min_agility": 90,
+        "subtier_max_agility": 93,
+        "character_min_icv": 7
+      },
+      {
+        "ID": 62,
+        "AgilityTierID": 17,
+        "subtier_min_agility": 94,
+        "subtier_max_agility": 97,
+        "character_min_icv": 6
+      }
+    ]
+  },
+  {
+    "ID": 18,
+    "min_agility": 98,
+    "max_agility": 169,
+    "tick_speed": 4,
+    "monster_min_icv": 12,
+    "monster_max_icv": 13,
+    "character_max_icv": 12,
+    "character_min_icvs": [
+      {
+        "ID": 63,
+        "AgilityTierID": 18,
+        "subtier_min_agility": 98,
+        "subtier_max_agility": 105,
+        "character_min_icv": 11
+      },
+      {
+        "ID": 64,
+        "AgilityTierID": 18,
+        "subtier_min_agility": 106,
+        "subtier_max_agility": 113,
+        "character_min_icv": 10
+      },
+      {
+        "ID": 65,
+        "AgilityTierID": 18,
+        "subtier_min_agility": 114,
+        "subtier_max_agility": 121,
+        "character_min_icv": 9
+      },
+      {
+        "ID": 66,
+        "AgilityTierID": 18,
+        "subtier_min_agility": 122,
+        "subtier_max_agility": 129,
+        "character_min_icv": 8
+      },
+      {
+        "ID": 67,
+        "AgilityTierID": 18,
+        "subtier_min_agility": 130,
+        "subtier_max_agility": 137,
+        "character_min_icv": 7
+      },
+      {
+        "ID": 68,
+        "AgilityTierID": 18,
+        "subtier_min_agility": 138,
+        "subtier_max_agility": 145,
+        "character_min_icv": 6
+      },
+      {
+        "ID": 69,
+        "AgilityTierID": 18,
+        "subtier_min_agility": 146,
+        "subtier_max_agility": 153,
+        "character_min_icv": 5
+      },
+      {
+        "ID": 70,
+        "AgilityTierID": 18,
+        "subtier_min_agility": 154,
+        "subtier_max_agility": 161,
+        "character_min_icv": 4
+      },
+      {
+        "ID": 71,
+        "AgilityTierID": 18,
+        "subtier_min_agility": 162,
+        "subtier_max_agility": 169,
+        "character_min_icv": 3
+      }
+    ]
+  },
+  {
+    "ID": 19,
+    "min_agility": 170,
+    "max_agility": 255,
+    "tick_speed": 3,
+    "monster_min_icv": 9,
+    "monster_max_icv": 10,
+    "character_max_icv": 9,
+    "character_min_icvs": [
+      {
+        "ID": 72,
+        "AgilityTierID": 19,
+        "subtier_min_agility": 170,
+        "subtier_max_agility": 185,
+        "character_min_icv": 8
+      },
+      {
+        "ID": 73,
+        "AgilityTierID": 19,
+        "subtier_min_agility": 186,
+        "subtier_max_agility": 201,
+        "character_min_icv": 7
+      },
+      {
+        "ID": 74,
+        "AgilityTierID": 19,
+        "subtier_min_agility": 202,
+        "subtier_max_agility": 217,
+        "character_min_icv": 6
+      },
+      {
+        "ID": 75,
+        "AgilityTierID": 19,
+        "subtier_min_agility": 218,
+        "subtier_max_agility": 233,
+        "character_min_icv": 5
+      },
+      {
+        "ID": 76,
+        "AgilityTierID": 19,
+        "subtier_min_agility": 234,
+        "subtier_max_agility": 249,
+        "character_min_icv": 4
+      },
+      {
+        "ID": 77,
+        "AgilityTierID": 19,
+        "subtier_min_agility": 250,
+        "subtier_max_agility": 255,
+        "character_min_icv": 3
+      }
+    ]
+  }
+]

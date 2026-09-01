@@ -114,7 +114,7 @@ func getAreaConnectedAreas(cfg *Config, area seeding.Area) ([]AreaConnection, er
 }
 
 func getAreaDisplayName(area seeding.Area) string {
-	sublocName := area.Sublocation.Name
+	sublocName := area.Sublocation
 
 	if sublocName == area.Name {
 		return area.Name

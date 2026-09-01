@@ -1,0 +1,32 @@
+[
+  {
+    "ID": 1,
+    "name": "fire",
+    "opposite_element": "ice",
+    "OppositeElementID": null
+  },
+  {
+    "ID": 2,
+    "name": "lightning",
+    "opposite_element": "water",
+    "OppositeElementID": null
+  },
+  {
+    "ID": 3,
+    "name": "water",
+    "opposite_element": "lightning",
+    "OppositeElementID": null
+  },
+  {
+    "ID": 4,
+    "name": "ice",
+    "opposite_element": "fire",
+    "OppositeElementID": null
+  },
+  {
+    "ID": 5,
+    "name": "holy",
+    "opposite_element": null,
+    "OppositeElementID": null
+  }
+]

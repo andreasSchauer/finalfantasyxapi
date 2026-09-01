@@ -1,0 +1,2958 @@
+[
+  {
+    "ID": 1,
+    "name": "monster arena",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 1,
+      "QuestID": 1,
+      "condition": "Catch every fiend 10 times and defeat every monster arena creation.",
+      "areas": [
+        {
+          "CompletionID": 1,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 120,
+        "Type": "key-item",
+        "name": "mark of conquest",
+        "amount": 1
+      }
+    },
+    "Type": "sidequest"
+  },
+  {
+    "ID": 2,
+    "name": "remiem temple",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 38,
+      "QuestID": 2,
+      "condition": "Collect every aeon, win every aeon battle against Belgemine, and send her.",
+      "areas": [
+        {
+          "CompletionID": 38,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 126,
+        "Type": "key-item",
+        "name": "moon sigil",
+        "amount": 1
+      }
+    },
+    "Type": "sidequest"
+  },
+  {
+    "ID": 3,
+    "name": "chocobo races",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": null,
+    "Type": "sidequest"
+  },
+  {
+    "ID": 4,
+    "name": "chocobo training",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": null,
+    "Type": "sidequest"
+  },
+  {
+    "ID": 5,
+    "name": "valley of the cactuars",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 70,
+      "QuestID": 5,
+      "condition": "Find and talk to every guardian.",
+      "areas": [
+        {
+          "CompletionID": 70,
+          "AreaID": 172,
+          "location_area": {
+            "location": "bikanel",
+            "sublocation": "sanubia desert",
+            "area": "west",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 136,
+        "Type": "key-item",
+        "name": "mercury sigil",
+        "amount": 1
+      }
+    },
+    "Type": "sidequest"
+  },
+  {
+    "ID": 6,
+    "name": "butterfly hunt",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": null,
+    "Type": "sidequest"
+  },
+  {
+    "ID": 7,
+    "name": "lightning strikes",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": null,
+    "Type": "sidequest"
+  },
+  {
+    "ID": 8,
+    "name": "blitzball",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": null,
+    "Type": "sidequest"
+  },
+  {
+    "ID": 9,
+    "name": "al bhed primers",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 92,
+      "QuestID": 9,
+      "condition": "Collect every Al Bhed primer and talk to Rin.",
+      "areas": [
+        {
+          "CompletionID": 92,
+          "AreaID": 185,
+          "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 4
+          },
+          "notes": "After the events at the Al Bhed Home. Only possible when using a compilation sphere."
+        },
+        {
+          "CompletionID": 92,
+          "AreaID": 182,
+          "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 1
+          },
+          "notes": "After the events at the Zanarkand Ruins."
+        }
+      ],
+      "reward": {
+        "ID": 111,
+        "Type": "item",
+        "name": "underdog's secret",
+        "amount": 99
+      }
+    },
+    "Type": "sidequest"
+  },
+  {
+    "ID": 10,
+    "name": "lost family members",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 93,
+      "QuestID": 10,
+      "condition": "With the Cloudy Mirror, find the father in Macalania Woods - South and then look for the son on the crystal path in Macalania Woods - Center.",
+      "areas": [
+        {
+          "CompletionID": 93,
+          "AreaID": 147,
+          "location_area": {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "central",
+            "version": 2
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 116,
+        "Type": "key-item",
+        "name": "celestial mirror",
+        "amount": 1
+      }
+    },
+    "Type": "sidequest"
+  },
+  {
+    "ID": 11,
+    "name": "stratoavis",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 2,
+      "QuestID": 11,
+      "condition": "Capture every fiend in Besaid.",
+      "areas": [
+        {
+          "CompletionID": 2,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 66,
+        "Type": "item",
+        "name": "stamina tonic",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 12,
+    "name": "malboro menace",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 3,
+      "QuestID": 12,
+      "condition": "Capture every fiend in Kilika.",
+      "areas": [
+        {
+          "CompletionID": 3,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 46,
+        "Type": "item",
+        "name": "poison fang",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 13,
+    "name": "kottos",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 4,
+      "QuestID": 13,
+      "condition": "Capture every fiend on Mi'ihen Highroad.",
+      "areas": [
+        {
+          "CompletionID": 4,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 62,
+        "Type": "item",
+        "name": "soul spring",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 14,
+    "name": "coeurlregina",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 5,
+      "QuestID": 14,
+      "condition": "Capture every fiend on Mushroom Rock Road.",
+      "areas": [
+        {
+          "CompletionID": 5,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 49,
+        "Type": "item",
+        "name": "candle of life",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 15,
+    "name": "jormungand",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 6,
+      "QuestID": 15,
+      "condition": "Capture every fiend on Djose Highroad and Moonflow.",
+      "areas": [
+        {
+          "CompletionID": 6,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 50,
+        "Type": "item",
+        "name": "petrify grenade",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 16,
+    "name": "cactuar king",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 7,
+      "QuestID": 16,
+      "condition": "Capture every fiend in the Thunder Plains.",
+      "areas": [
+        {
+          "CompletionID": 7,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 55,
+        "Type": "item",
+        "name": "chocobo wing",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 17,
+    "name": "espada",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 8,
+      "QuestID": 17,
+      "condition": "Capture every fiend in Macalania.",
+      "areas": [
+        {
+          "CompletionID": 8,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 43,
+        "Type": "item",
+        "name": "shining gem",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 18,
+    "name": "abyss worm",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 9,
+      "QuestID": 18,
+      "condition": "Capture every fiend on Bikanel.",
+      "areas": [
+        {
+          "CompletionID": 9,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 42,
+        "Type": "item",
+        "name": "shadow gem",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 19,
+    "name": "chimerageist",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 10,
+      "QuestID": 19,
+      "condition": "Capture every fiend in the Calm Lands.",
+      "areas": [
+        {
+          "CompletionID": 10,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 52,
+        "Type": "item",
+        "name": "farplane wind",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 20,
+    "name": "don tonberry",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 11,
+      "QuestID": 20,
+      "condition": "Capture every fiend in the Cavern of the Stolen Fayth.",
+      "areas": [
+        {
+          "CompletionID": 11,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 47,
+        "Type": "item",
+        "name": "silver hourglass",
+        "amount": 40
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 21,
+    "name": "catoblepas",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 12,
+      "QuestID": 21,
+      "condition": "Capture every fiend at Mount Gagazet.",
+      "areas": [
+        {
+          "CompletionID": 12,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 121,
+        "Type": "key-item",
+        "name": "blossom crown",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 22,
+    "name": "abaddon",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 13,
+      "QuestID": 22,
+      "condition": "Capture every fiend inside Sin.",
+      "areas": [
+        {
+          "CompletionID": 13,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 56,
+        "Type": "item",
+        "name": "lunar curtain",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 23,
+    "name": "vorban",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 14,
+      "QuestID": 23,
+      "condition": "Capture every fiend in the Omega Ruins.",
+      "areas": [
+        {
+          "CompletionID": 14,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 107,
+        "Type": "item",
+        "name": "designer wallet",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 24,
+    "name": "fenrir",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 15,
+      "QuestID": 24,
+      "condition": "Capture 3 of every wolf.",
+      "areas": [
+        {
+          "CompletionID": 15,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 54,
+        "Type": "item",
+        "name": "chocobo feather",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 25,
+    "name": "ornitholestes",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 16,
+      "QuestID": 25,
+      "condition": "Capture 3 of every reptile.",
+      "areas": [
+        {
+          "CompletionID": 16,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 61,
+        "Type": "item",
+        "name": "stamina spring",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 26,
+    "name": "pteryx",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 17,
+      "QuestID": 26,
+      "condition": "Capture 4 of every bird.",
+      "areas": [
+        {
+          "CompletionID": 17,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 10,
+        "Type": "item",
+        "name": "mega phoenix",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 27,
+    "name": "hornet",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 18,
+      "QuestID": 27,
+      "condition": "Capture 4 of every wasp.",
+      "areas": [
+        {
+          "CompletionID": 18,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 67,
+        "Type": "item",
+        "name": "mana tonic",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 28,
+    "name": "vidatu",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 19,
+      "QuestID": 28,
+      "condition": "Capture 4 of every imp.",
+      "areas": [
+        {
+          "CompletionID": 19,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 60,
+        "Type": "item",
+        "name": "mana spring",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 29,
+    "name": "one-eye",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 20,
+      "QuestID": 29,
+      "condition": "Capture 4 of every evil eye.",
+      "areas": [
+        {
+          "CompletionID": 20,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 64,
+        "Type": "item",
+        "name": "stamina tablet",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 30,
+    "name": "jumbo flan",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 21,
+      "QuestID": 30,
+      "condition": "Capture 3 of every flan.",
+      "areas": [
+        {
+          "CompletionID": 21,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 68,
+        "Type": "item",
+        "name": "twin stars",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 31,
+    "name": "nega elemental",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 22,
+      "QuestID": 31,
+      "condition": "Capture 3 of every elemental.",
+      "areas": [
+        {
+          "CompletionID": 22,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 58,
+        "Type": "item",
+        "name": "star curtain",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 32,
+    "name": "tanket",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 23,
+      "QuestID": 32,
+      "condition": "Capture 3 of every helm.",
+      "areas": [
+        {
+          "CompletionID": 23,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 48,
+        "Type": "item",
+        "name": "gold hourglass",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 33,
+    "name": "fafnir",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 24,
+      "QuestID": 33,
+      "condition": "Capture 4 of every drake.",
+      "areas": [
+        {
+          "CompletionID": 24,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 63,
+        "Type": "item",
+        "name": "purifying salt",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 34,
+    "name": "sleep sprout",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 25,
+      "QuestID": 34,
+      "condition": "Capture 5 of every fungus.",
+      "areas": [
+        {
+          "CompletionID": 25,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 59,
+        "Type": "item",
+        "name": "healing spring",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 35,
+    "name": "bomb king",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 26,
+      "QuestID": 35,
+      "condition": "Capture 5 of every bomb.",
+      "areas": [
+        {
+          "CompletionID": 26,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 6,
+        "Type": "item",
+        "name": "turbo ether",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 36,
+    "name": "juggernaut",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 27,
+      "QuestID": 36,
+      "condition": "Capture 5 of every ruminant.",
+      "areas": [
+        {
+          "CompletionID": 27,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 57,
+        "Type": "item",
+        "name": "light curtain",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 37,
+    "name": "ironclad",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 28,
+      "QuestID": 37,
+      "condition": "Capture 10 of every iron giant.",
+      "areas": [
+        {
+          "CompletionID": 28,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 65,
+        "Type": "item",
+        "name": "mana tablet",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 38,
+    "name": "earth eater",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 29,
+      "QuestID": 38,
+      "condition": "Breed 2 fiends in Area Conquest.",
+      "areas": [
+        {
+          "CompletionID": 29,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 69,
+        "Type": "item",
+        "name": "three stars",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 39,
+    "name": "greater sphere",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 30,
+      "QuestID": 39,
+      "condition": "Breed 2 fiends in Species Conquest",
+      "areas": [
+        {
+          "CompletionID": 30,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 45,
+        "Type": "item",
+        "name": "supreme gem",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 40,
+    "name": "catastrophe",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 31,
+      "QuestID": 40,
+      "condition": "Breed 6 fiends in Area Conquest.",
+      "areas": [
+        {
+          "CompletionID": 31,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 108,
+        "Type": "item",
+        "name": "door to tomorrow",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 41,
+    "name": "th'uban",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 32,
+      "QuestID": 41,
+      "condition": "Breed 6 fiends in Species Conquest",
+      "areas": [
+        {
+          "CompletionID": 32,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 110,
+        "Type": "item",
+        "name": "gambler's spirit",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 42,
+    "name": "neslug",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 33,
+      "QuestID": 42,
+      "condition": "Capture every fiend once.",
+      "areas": [
+        {
+          "CompletionID": 33,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 112,
+        "Type": "item",
+        "name": "winning formula",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 43,
+    "name": "ultima buster",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 34,
+      "QuestID": 43,
+      "condition": "Capture 5 of every fiend.",
+      "areas": [
+        {
+          "CompletionID": 34,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 53,
+        "Type": "item",
+        "name": "dark matter",
+        "amount": 99
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 44,
+    "name": "shinryu",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 35,
+      "QuestID": 44,
+      "condition": "Capture 2 of every underwater fiend at Mount Gagazet.",
+      "areas": [
+        {
+          "CompletionID": 35,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 8,
+        "Type": "item",
+        "name": "megalixir",
+        "amount": 30
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 45,
+    "name": "nemesis",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 36,
+      "QuestID": 45,
+      "condition": "Capture 10 of every fiend and defeat every other Monster Arena Creation.",
+      "areas": [
+        {
+          "CompletionID": 36,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 80,
+        "Type": "item",
+        "name": "master sphere",
+        "amount": 10
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 46,
+    "name": "mars sigil",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 37,
+      "QuestID": 46,
+      "condition": "Breed 10 fiends in Area and/or Species Conquest.",
+      "areas": [
+        {
+          "CompletionID": 37,
+          "AreaID": 205,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 128,
+        "Type": "key-item",
+        "name": "mars sigil",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 47,
+    "name": "valefor - first win",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 39,
+      "QuestID": 47,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 39,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 29,
+        "Type": "item",
+        "name": "lightning gem",
+        "amount": 4
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 48,
+    "name": "valefor - recurring win",
+    "availability": "always",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 40,
+      "QuestID": 48,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 40,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 70,
+        "Type": "item",
+        "name": "power sphere",
+        "amount": 4
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 49,
+    "name": "ifrit - first win",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 41,
+      "QuestID": 49,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 41,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 3,
+        "Type": "item",
+        "name": "x-potion",
+        "amount": 30
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 50,
+    "name": "ifrit - recurring win",
+    "availability": "always",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 42,
+      "QuestID": 50,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 42,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 71,
+        "Type": "item",
+        "name": "mana sphere",
+        "amount": 6
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 51,
+    "name": "ixion - first win",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 43,
+      "QuestID": 51,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 43,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 54,
+        "Type": "item",
+        "name": "chocobo feather",
+        "amount": 10
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 52,
+    "name": "ixion - recurring win",
+    "availability": "always",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 44,
+      "QuestID": 52,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 44,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 70,
+        "Type": "item",
+        "name": "power sphere",
+        "amount": 8
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 53,
+    "name": "shiva - first win",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 45,
+      "QuestID": 53,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 45,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 54,
+    "name": "shiva - recurring win",
+    "availability": "always",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 46,
+      "QuestID": 54,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 46,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 58,
+        "Type": "item",
+        "name": "star curtain",
+        "amount": 6
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 55,
+    "name": "bahamut - first win",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 47,
+      "QuestID": 55,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 47,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 122,
+        "Type": "key-item",
+        "name": "flower sceptre",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 56,
+    "name": "bahamut - recurring win",
+    "availability": "always",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 48,
+      "QuestID": 56,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 48,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 71,
+        "Type": "item",
+        "name": "mana sphere",
+        "amount": 8
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 57,
+    "name": "anima - first win",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 49,
+      "QuestID": 57,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 49,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 61,
+        "Type": "item",
+        "name": "stamina spring",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 58,
+    "name": "anima - recurring win",
+    "availability": "post",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 50,
+      "QuestID": 58,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 50,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 71,
+        "Type": "item",
+        "name": "mana sphere",
+        "amount": 10
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 59,
+    "name": "yojimbo - first win",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 51,
+      "QuestID": 59,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 51,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 42,
+        "Type": "item",
+        "name": "shadow gem",
+        "amount": 8
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 60,
+    "name": "yojimbo - recurring win",
+    "availability": "always",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 52,
+      "QuestID": 60,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 52,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 70,
+        "Type": "item",
+        "name": "power sphere",
+        "amount": 10
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 61,
+    "name": "magus sisters - first win",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 53,
+      "QuestID": 61,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 53,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 43,
+        "Type": "item",
+        "name": "shining gem",
+        "amount": 40
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 62,
+    "name": "magus sisters - recurring win",
+    "availability": "post",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 54,
+      "QuestID": 62,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 54,
+          "AreaID": 209,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 70,
+        "Type": "item",
+        "name": "power sphere",
+        "amount": 12
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 63,
+    "name": "initial win",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 55,
+      "QuestID": 63,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 55,
+          "AreaID": 208,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "remiem temple",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 115,
+        "Type": "key-item",
+        "name": "cloudy mirror",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 64,
+    "name": "1 opened chest",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 56,
+      "QuestID": 64,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 56,
+          "AreaID": 208,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "remiem temple",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 65,
+    "name": "2 opened chests",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 57,
+      "QuestID": 65,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 57,
+          "AreaID": 208,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "remiem temple",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 8,
+        "Type": "item",
+        "name": "megalixir",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 66,
+    "name": "3 opened chests",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 58,
+      "QuestID": 66,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 58,
+          "AreaID": 208,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "remiem temple",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 109,
+        "Type": "item",
+        "name": "wings to discovery",
+        "amount": 30
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 67,
+    "name": "4 opened chests",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 59,
+      "QuestID": 67,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 59,
+          "AreaID": 208,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "remiem temple",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 105,
+        "Type": "item",
+        "name": "pendulum",
+        "amount": 30
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 68,
+    "name": "5 opened chests",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 60,
+      "QuestID": 68,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 60,
+          "AreaID": 208,
+          "location_area": {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "remiem temple",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 69,
+        "Type": "item",
+        "name": "three stars",
+        "amount": 60
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 69,
+    "name": "wobbly chocobo - initial win",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 61,
+      "QuestID": 69,
+      "condition": "Beat the target time of 12.8 seconds.",
+      "areas": [
+        {
+          "CompletionID": 61,
+          "AreaID": 203,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "central",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 70,
+    "name": "wobbly chocobo - recurring win",
+    "availability": "always",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 62,
+      "QuestID": 70,
+      "condition": "Improve your record.",
+      "areas": [
+        {
+          "CompletionID": 62,
+          "AreaID": 203,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "central",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 3,
+        "Type": "item",
+        "name": "x-potion",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 71,
+    "name": "dodger chocobo - initial win",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 63,
+      "QuestID": 71,
+      "condition": "Beat the target time of 16.8 seconds.",
+      "areas": [
+        {
+          "CompletionID": 63,
+          "AreaID": 203,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "central",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 81,
+        "Type": "item",
+        "name": "lv. 1 key sphere",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 72,
+    "name": "dodger chocobo - recurring win",
+    "availability": "always",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 64,
+      "QuestID": 72,
+      "condition": "Improve your record.",
+      "areas": [
+        {
+          "CompletionID": 64,
+          "AreaID": 203,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "central",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 73,
+    "name": "hyper dodger chocobo - initial win",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 65,
+      "QuestID": 73,
+      "condition": "Beat the target time of 18.5 seconds.",
+      "areas": [
+        {
+          "CompletionID": 65,
+          "AreaID": 203,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "central",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 82,
+        "Type": "item",
+        "name": "lv. 2 key sphere",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 74,
+    "name": "hyper dodger chocobo - recurring win",
+    "availability": "always",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 66,
+      "QuestID": 74,
+      "condition": "Improve your record.",
+      "areas": [
+        {
+          "CompletionID": 66,
+          "AreaID": 203,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "central",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 75,
+    "name": "catcher chocobo - initial win",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 67,
+      "QuestID": 75,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 67,
+          "AreaID": 203,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "central",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 83,
+        "Type": "item",
+        "name": "lv. 3 key sphere",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 76,
+    "name": "catcher chocobo - recurring win",
+    "availability": "always",
+    "is_repeatable": true,
+    "completion": {
+      "ID": 68,
+      "QuestID": 76,
+      "condition": "Improve your record.",
+      "areas": [
+        {
+          "CompletionID": 68,
+          "AreaID": 203,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "central",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 6,
+        "Type": "item",
+        "name": "turbo ether",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 77,
+    "name": "catcher chocobo - sun sigil",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 69,
+      "QuestID": 77,
+      "condition": "Get a time below 0 seconds.",
+      "areas": [
+        {
+          "CompletionID": 69,
+          "AreaID": 203,
+          "location_area": {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "central",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 124,
+        "Type": "key-item",
+        "name": "sun sigil",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 78,
+    "name": "1 or 2 guardian spheres",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 71,
+      "QuestID": 78,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 71,
+          "AreaID": 172,
+          "location_area": {
+            "location": "bikanel",
+            "sublocation": "sanubia desert",
+            "area": "west",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 1,
+        "Type": "item",
+        "name": "potion",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 79,
+    "name": "3 to 5 guardian spheres",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 72,
+      "QuestID": 79,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 72,
+          "AreaID": 172,
+          "location_area": {
+            "location": "bikanel",
+            "sublocation": "sanubia desert",
+            "area": "west",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 80,
+    "name": "6 or 7 guardian spheres",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 73,
+      "QuestID": 80,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 73,
+          "AreaID": 172,
+          "location_area": {
+            "location": "bikanel",
+            "sublocation": "sanubia desert",
+            "area": "west",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 8,
+        "Type": "item",
+        "name": "megalixir",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 81,
+    "name": "8 or 9 guardian spheres",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 74,
+      "QuestID": 81,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 74,
+          "AreaID": 172,
+          "location_area": {
+            "location": "bikanel",
+            "sublocation": "sanubia desert",
+            "area": "west",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 97,
+        "Type": "item",
+        "name": "friend sphere",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 82,
+    "name": "central - before defeating spherimorph",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 75,
+      "QuestID": 82,
+      "condition": "Catch all butterflies within 40 seconds.",
+      "areas": [
+        {
+          "CompletionID": 75,
+          "AreaID": 144,
+          "location_area": {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "central",
+            "version": 1
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 86,
+        "Type": "item",
+        "name": "mp sphere",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 83,
+    "name": "north - before defeating spherimorph",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 76,
+      "QuestID": 83,
+      "condition": "Catch all butterflies within 40 seconds.",
+      "areas": [
+        {
+          "CompletionID": 76,
+          "AreaID": 145,
+          "location_area": {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "north",
+            "version": 1
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 84,
+    "name": "central - after defeating spherimorph",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 77,
+      "QuestID": 84,
+      "condition": "Catch all butterflies within 30 seconds.",
+      "areas": [
+        {
+          "CompletionID": 77,
+          "AreaID": 144,
+          "location_area": {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "central",
+            "version": 1
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 8,
+        "Type": "item",
+        "name": "megalixir",
+        "amount": 2
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 85,
+    "name": "north - after defeating spherimorph",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 78,
+      "QuestID": 85,
+      "condition": "Catch all butterflies within 30 seconds.",
+      "areas": [
+        {
+          "CompletionID": 78,
+          "AreaID": 145,
+          "location_area": {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "north",
+            "version": 1
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 2
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 86,
+    "name": "first hunt after acquiring the airship",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 79,
+      "QuestID": 86,
+      "condition": "Catch all butterflies within 30 seconds.",
+      "areas": [
+        {
+          "CompletionID": 79,
+          "AreaID": 144,
+          "location_area": {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "central",
+            "version": 1
+          },
+          "notes": "if the central hunt was completed first."
+        },
+        {
+          "CompletionID": 79,
+          "AreaID": 145,
+          "location_area": {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "north",
+            "version": 1
+          },
+          "notes": "if the northern hunt was completed first."
+        }
+      ],
+      "reward": {
+        "ID": 98,
+        "Type": "item",
+        "name": "teleport sphere",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 87,
+    "name": "second hunt after acquiring the airship",
+    "availability": "post",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 80,
+      "QuestID": 87,
+      "condition": "Catch all butterflies within 30 seconds. Both hunts completed.",
+      "areas": [
+        {
+          "CompletionID": 80,
+          "AreaID": 144,
+          "location_area": {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "central",
+            "version": 1
+          },
+          "notes": "if the central hunt was completed second."
+        },
+        {
+          "CompletionID": 80,
+          "AreaID": 145,
+          "location_area": {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "north",
+            "version": 1
+          },
+          "notes": "if the northern hunt was completed second."
+        }
+      ],
+      "reward": {
+        "ID": 130,
+        "Type": "key-item",
+        "name": "saturn sigil",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 88,
+    "name": "5 lightning dodges in a row",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 81,
+      "QuestID": 88,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 81,
+          "AreaID": 140,
+          "location_area": {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "agency front",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 3,
+        "Type": "item",
+        "name": "x-potion",
+        "amount": 2
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 89,
+    "name": "10 lightning dodges in a row",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 82,
+      "QuestID": 89,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 82,
+          "AreaID": 140,
+          "location_area": {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "agency front",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 4,
+        "Type": "item",
+        "name": "mega-potion",
+        "amount": 2
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 90,
+    "name": "20 lightning dodges in a row",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 83,
+      "QuestID": 90,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 83,
+          "AreaID": 140,
+          "location_area": {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "agency front",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 86,
+        "Type": "item",
+        "name": "mp sphere",
+        "amount": 2
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 91,
+    "name": "50 lightning dodges in a row",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 84,
+      "QuestID": 91,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 84,
+          "AreaID": 140,
+          "location_area": {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "agency front",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 87,
+        "Type": "item",
+        "name": "strength sphere",
+        "amount": 3
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 92,
+    "name": "100 lightning dodges in a row",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 85,
+      "QuestID": 92,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 85,
+          "AreaID": 140,
+          "location_area": {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "agency front",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 85,
+        "Type": "item",
+        "name": "hp sphere",
+        "amount": 3
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 93,
+    "name": "150 lightning dodges in a row",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 86,
+      "QuestID": 93,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 86,
+          "AreaID": 140,
+          "location_area": {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "agency front",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 8,
+        "Type": "item",
+        "name": "megalixir",
+        "amount": 4
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 94,
+    "name": "200 lightning dodges in a row",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 87,
+      "QuestID": 94,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 87,
+          "AreaID": 140,
+          "location_area": {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "agency front",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 134,
+        "Type": "key-item",
+        "name": "venus sigil",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 95,
+    "name": "30 cumulative lightning bolts (dodged or struck)",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 88,
+      "QuestID": 95,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 88,
+          "AreaID": 140,
+          "location_area": {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "agency front",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 5,
+        "Type": "item",
+        "name": "ether",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 96,
+    "name": "80 cumulative lightning bolts (dodged or struck)",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 89,
+      "QuestID": 96,
+      "condition": null,
+      "areas": [
+        {
+          "CompletionID": 89,
+          "AreaID": 140,
+          "location_area": {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "agency front",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 7,
+        "Type": "item",
+        "name": "elixir",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 97,
+    "name": "luca goers game",
+    "availability": "pre-story",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 90,
+      "QuestID": 97,
+      "condition": "Win the story-based game against the Luca Goers.",
+      "areas": [
+        {
+          "CompletionID": 90,
+          "AreaID": 75,
+          "location_area": {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "blitzball",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 87,
+        "Type": "item",
+        "name": "strength sphere",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  },
+  {
+    "ID": 98,
+    "name": "jupiter sigil",
+    "availability": "always",
+    "is_repeatable": false,
+    "completion": {
+      "ID": 91,
+      "QuestID": 98,
+      "condition": "Have Aurochs Reels obtained and win the League Season that offers the Jupiter Sigil as a prize.",
+      "areas": [
+        {
+          "CompletionID": 91,
+          "AreaID": 75,
+          "location_area": {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "blitzball",
+            "version": null
+          },
+          "notes": null
+        }
+      ],
+      "reward": {
+        "ID": 132,
+        "Type": "key-item",
+        "name": "jupiter sigil",
+        "amount": 1
+      }
+    },
+    "Type": "subquest"
+  }
+]

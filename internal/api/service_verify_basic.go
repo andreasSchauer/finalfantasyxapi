@@ -9,6 +9,17 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+func vfExistingFields(valueMap map[FieldName]any, valTree ValidationTree) error {
+	for fieldName := range valueMap {
+		_, exists := valTree[fieldName]
+		if !exists {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid field: '%s'",fieldName), nil)
+		}
+	}
+
+	return nil
+}
+
 // need to do an id check
 // if there is an id param and if there is an allowed ids slice, check if the slice contains the used id
 func basicFieldChecks[T any](val T, fieldName FieldName, valueMap map[FieldName]any, valTree ValidationTree) (T, error) {
@@ -31,7 +42,7 @@ func basicFieldChecks[T any](val T, fieldName FieldName, valueMap map[FieldName]
 		return zero, err
 	}
 
-	err = vfAllowedIDs(fieldName, doc, valueMap)
+	err = vfAllowedIDs(val, fieldName, doc, valIsPresent, valueMap)
 	if err != nil {
 		return zero, err
 	}
@@ -83,16 +94,16 @@ func vfRequiredOr(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap
 	return nil
 }
 
-func vfAllowedIDs(fieldName FieldName, doc FieldDoc, valueMap map[FieldName]any) error {
+func vfAllowedIDs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap map[FieldName]any) error {
+	if !valIsPresent || len(doc.AllowedIDs) == 0 || valIsPointer(val) {
+		return nil
+	}
+
 	idRaw, ok := valueMap[pfnID]
 	if !ok {
 		return nil
 	}
 	id := int32(idRaw.(float64))
-
-	if len(doc.AllowedIDs) == 0 {
-		return nil
-	}
 
 	if !slices.Contains(doc.AllowedIDs, id) {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following ids: %s", fieldName, h.FormatIntSlice(doc.AllowedIDs)), nil)
@@ -145,4 +156,9 @@ func hasVal(val any) bool {
 	}
 
 	return false
+}
+
+func valIsPointer(val any) bool {
+	return reflect.ValueOf(val).Kind() == reflect.Pointer
+
 }

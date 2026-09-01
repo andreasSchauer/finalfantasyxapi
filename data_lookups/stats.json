@@ -1,0 +1,102 @@
+[
+  {
+    "ID": 1,
+    "name": "hp",
+    "effect": "Determines a unit's health.",
+    "min_val": 1,
+    "max_val": 9999,
+    "max_val_2": 99999,
+    "SphereID": 1,
+    "activation_sphere": "power sphere"
+  },
+  {
+    "ID": 2,
+    "name": "mp",
+    "effect": "Determines the amount of spells and skills a unit can cast/use.",
+    "min_val": 1,
+    "max_val": 999,
+    "max_val_2": 9999,
+    "SphereID": 2,
+    "activation_sphere": "mana sphere"
+  },
+  {
+    "ID": 3,
+    "name": "strength",
+    "effect": "Determines the power of physical attacks.",
+    "min_val": 1,
+    "max_val": 255,
+    "max_val_2": null,
+    "SphereID": 1,
+    "activation_sphere": "power sphere"
+  },
+  {
+    "ID": 4,
+    "name": "defense",
+    "effect": "Determines the reduction of physical damage taken.",
+    "min_val": 1,
+    "max_val": 255,
+    "max_val_2": null,
+    "SphereID": 1,
+    "activation_sphere": "power sphere"
+  },
+  {
+    "ID": 5,
+    "name": "magic",
+    "effect": "Determines the power of magical attacks.",
+    "min_val": 1,
+    "max_val": 255,
+    "max_val_2": null,
+    "SphereID": 2,
+    "activation_sphere": "mana sphere"
+  },
+  {
+    "ID": 6,
+    "name": "magic defense",
+    "effect": "Determines the reduction of magical damage taken.",
+    "min_val": 1,
+    "max_val": 255,
+    "max_val_2": null,
+    "SphereID": 2,
+    "activation_sphere": "mana sphere"
+  },
+  {
+    "ID": 7,
+    "name": "agility",
+    "effect": "Determines how often a unit gets a turn.",
+    "min_val": 1,
+    "max_val": 255,
+    "max_val_2": null,
+    "SphereID": 3,
+    "activation_sphere": "speed sphere"
+  },
+  {
+    "ID": 8,
+    "name": "luck",
+    "effect": "Determines the chance of landing and evading a physical attack, as well as the chance of landing a critical hit.",
+    "min_val": 1,
+    "max_val": 255,
+    "max_val_2": null,
+    "SphereID": 5,
+    "activation_sphere": "fortune sphere"
+  },
+  {
+    "ID": 9,
+    "name": "evasion",
+    "effect": "Determines the chance of evading a physical attack.",
+    "min_val": 0,
+    "max_val": 255,
+    "max_val_2": null,
+    "SphereID": 3,
+    "activation_sphere": "speed sphere"
+  },
+  {
+    "ID": 10,
+    "name": "accuracy",
+    "effect": "Determines the chance of landing a physical attack.",
+    "min_val": 1,
+    "max_val": 255,
+    "max_val_2": null,
+    "SphereID": 3,
+    "activation_sphere": "speed sphere"
+  }
+]

@@ -17,13 +17,16 @@ type Area struct {
 	HasCompilationSphere bool             `json:"has_compilation_sphere"`
 	CanRideChocobo       bool             `json:"can_ride_chocobo"`
 	ConnectedAreas       []AreaConnection `json:"connected_areas"`
-	Sublocation          Sublocation
+	LocationID			 int32			  `json:"location_id"`
+	SublocationID		 int32			  `json:"sublocation_id"`
+	Location          	 string			  `json:"location_name"`
+	Sublocation          string			  `json:"sublocation_name"`
 }
 
 func (a Area) ToHashFields() []any {
 	return []any{
 		fmt.Sprintf("%T", a),
-		a.Sublocation.ID,
+		a.SublocationID,
 		a.Name,
 		h.DerefOrNil(a.Version),
 		h.DerefOrNil(a.Specification),
@@ -53,8 +56,8 @@ func (a Area) Error() string {
 
 func (a Area) GetLocationArea() LocationArea {
 	return LocationArea{
-		Location:    a.Sublocation.Location.Name,
-		Sublocation: a.Sublocation.Name,
+		Location:    a.Location,
+		Sublocation: a.Sublocation,
 		Area:        a.Name,
 		Version:     a.Version,
 	}
@@ -63,8 +66,8 @@ func (a Area) GetLocationArea() LocationArea {
 func (a Area) GetResParamsLocation() ResParamsLocation {
 	return ResParamsLocation{
 		AreaID:        a.ID,
-		Location:      a.Sublocation.Location.Name,
-		Sublocation:   a.Sublocation.Name,
+		Location:      a.Location,
+		Sublocation:   a.Sublocation,
 		Area:          a.Name,
 		Version:       a.Version,
 		Specification: a.Specification,

@@ -21,7 +21,7 @@ type LookupableKey interface {
 
 func Key(l LookupableKey) string {
 	fields := l.ToKeyFields()
-	return combineFields(fields)
+	return CombineFields(fields)
 }
 
 type Hashable interface {

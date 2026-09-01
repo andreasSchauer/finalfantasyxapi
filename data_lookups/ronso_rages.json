@@ -1,0 +1,326 @@
+[
+  {
+    "ID": 1,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "jump",
+    "version": null,
+    "specification": null,
+    "rank": 3,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Damages an enemy.",
+    "effect": "Deals strength-based special damage to an enemy.",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": null,
+    "countdown_in_sec": null,
+    "cursor": "single-enemy",
+    "overdrive_abilities": [
+      {
+        "name": "jump",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  },
+  {
+    "ID": 2,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "fire breath",
+    "version": null,
+    "specification": null,
+    "rank": 3,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Deals fire damage to all enemies.",
+    "effect": "Deals magic-based fire-elemental special damage to all enemies.",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": "Use Lancet on Dual Horn, Valaha, Grendel, or Yenke Ronso.",
+    "countdown_in_sec": null,
+    "cursor": "all-enemies",
+    "overdrive_abilities": [
+      {
+        "name": "fire breath",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  },
+  {
+    "ID": 3,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "seed cannon",
+    "version": null,
+    "specification": null,
+    "rank": 3,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Damages an enemy.",
+    "effect": "Deals strength-based special damage to an enemy.",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": "Use Lancet on Ragora (tutorial).",
+    "countdown_in_sec": null,
+    "cursor": "single-enemy",
+    "overdrive_abilities": [
+      {
+        "name": "seed cannon",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  },
+  {
+    "ID": 4,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "self destruct",
+    "version": null,
+    "specification": null,
+    "rank": 3,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Sacrifice life to heavily damage an enemy.",
+    "effect": "Ejects Kimahri from the battle and deals a fixed amount of special damage to an enemy. The amount of damage dealt is Kimahri's max HP times 3.",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": "Use Lancet on Bomb, Grenade, Puroboros, or Biran Ronso.",
+    "countdown_in_sec": null,
+    "cursor": "single-enemy",
+    "overdrive_abilities": [
+      {
+        "name": "self destruct",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  },
+  {
+    "ID": 5,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "thrust kick",
+    "version": null,
+    "specification": null,
+    "rank": 3,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Deals damage and ejects enemy from battle.",
+    "effect": "Deals strength-based special damage to an enemy and ejects it from the battle, if possible.",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": "Use Lancet on YKT-63, YKT-11, or Biran Ronso.",
+    "countdown_in_sec": null,
+    "cursor": "single-enemy",
+    "overdrive_abilities": [
+      {
+        "name": "thrust kick",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  },
+  {
+    "ID": 6,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "stone breath",
+    "version": null,
+    "specification": null,
+    "rank": 3,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Petrifies all enemies.",
+    "effect": "Petrifies all enemies.",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": "Use Lancet on Basilisk, Anacondaur, or Yenke Ronso.",
+    "countdown_in_sec": null,
+    "cursor": "all-enemies",
+    "overdrive_abilities": [
+      {
+        "name": "stone breath",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  },
+  {
+    "ID": 7,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "aqua breath",
+    "version": null,
+    "specification": null,
+    "rank": 3,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Deals water damage to all enemies.",
+    "effect": "Deals magic-based water-elemental special damage to all enemies.",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": "Use Lancet on Chimera, Chimera Brain, or Yenke Ronso.",
+    "countdown_in_sec": null,
+    "cursor": "all-enemies",
+    "overdrive_abilities": [
+      {
+        "name": "aqua breath",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  },
+  {
+    "ID": 8,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "doom",
+    "version": null,
+    "specification": null,
+    "rank": 3,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Counts down to an enemy's doom.",
+    "effect": "Inflicts Doom on an enemy.",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": "Use Lancet on Ghost, Wraith, or Biran Ronso.",
+    "countdown_in_sec": null,
+    "cursor": "single-enemy",
+    "overdrive_abilities": [
+      {
+        "name": "doom",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  },
+  {
+    "ID": 9,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "white wind",
+    "version": null,
+    "specification": null,
+    "rank": 3,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Restores party’s HP.",
+    "effect": "Restores HP of party (magic-based; ignores Shell).",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": "Use Lancet on Dark Flan, Spirit, or Yenke Ronso (after he used it).",
+    "countdown_in_sec": null,
+    "cursor": "all-allies",
+    "overdrive_abilities": [
+      {
+        "name": "white wind",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  },
+  {
+    "ID": 10,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "bad breath",
+    "version": null,
+    "specification": null,
+    "rank": 4,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Inflicts status ailments on all enemies.",
+    "effect": "Inflicts Sleep, Silence, Darkness (10 turns each), and Poison on all enemies.",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": "Use Lancet on Malboro, or Great Malboro.",
+    "countdown_in_sec": null,
+    "cursor": "all-enemies",
+    "overdrive_abilities": [
+      {
+        "name": "bad breath",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  },
+  {
+    "ID": 11,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "mighty guard",
+    "version": null,
+    "specification": null,
+    "rank": 4,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Cast defensive spells on party.",
+    "effect": "Casts NulAll, Shell, and Protect on party.",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": "Use Lancet on Behemoth, Behemoth King, or Biran Ronso (after he used it).",
+    "countdown_in_sec": null,
+    "cursor": "all-allies",
+    "overdrive_abilities": [
+      {
+        "name": "mighty guard",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  },
+  {
+    "ID": 12,
+    "ODCommandID": 5,
+    "CharClassID": 9,
+    "TopmenuID": null,
+    "name": "nova",
+    "version": null,
+    "specification": null,
+    "rank": 7,
+    "appears_in_help_bar": true,
+    "can_copycat": false,
+    "description": "Damages all enemies.",
+    "effect": "Deals magic-based non-elemental special damage to all enemies.",
+    "topmenu": null,
+    "overdrive_command": "ronso rage",
+    "user": "kimahri",
+    "unlock_condition": "Use Lancet on Omega Weapon, or Nemesis.",
+    "countdown_in_sec": null,
+    "cursor": "all-enemies",
+    "overdrive_abilities": [
+      {
+        "name": "nova",
+        "version": null,
+        "ability_type": "overdrive-ability"
+      }
+    ]
+  }
+]

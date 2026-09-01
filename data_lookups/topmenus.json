@@ -1,0 +1,18 @@
+[
+  {
+    "ID": 1,
+    "name": "main"
+  },
+  {
+    "ID": 2,
+    "name": "right"
+  },
+  {
+    "ID": 3,
+    "name": "left"
+  },
+  {
+    "ID": 4,
+    "name": "hidden"
+  }
+]

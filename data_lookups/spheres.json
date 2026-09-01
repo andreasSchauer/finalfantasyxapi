@@ -1,0 +1,554 @@
+[
+  {
+    "ID": 1,
+    "ItemID": 70,
+    "name": "power sphere",
+    "sphere_grid_description": "Activates Strength, Defense, or HP node.",
+    "sphere_color": "red",
+    "sphere_effect": "activation",
+    "target_node_position": "neighboring",
+    "target_node_state": "inactive",
+    "targetable_nodes": [
+      "hp",
+      "strength",
+      "defense"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 2,
+    "ItemID": 71,
+    "name": "mana sphere",
+    "sphere_grid_description": "Activates Magic, Magic Defense, or MP node.",
+    "sphere_color": "red",
+    "sphere_effect": "activation",
+    "target_node_position": "neighboring",
+    "target_node_state": "inactive",
+    "targetable_nodes": [
+      "mp",
+      "magic",
+      "magic-defense"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 3,
+    "ItemID": 72,
+    "name": "speed sphere",
+    "sphere_grid_description": "Activates Agility, Accuracy, or Evasion node.",
+    "sphere_color": "red",
+    "sphere_effect": "activation",
+    "target_node_position": "neighboring",
+    "target_node_state": "inactive",
+    "targetable_nodes": [
+      "agility",
+      "evasion",
+      "accuracy"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 4,
+    "ItemID": 73,
+    "name": "ability sphere",
+    "sphere_grid_description": "Activates Ability node.",
+    "sphere_color": "red",
+    "sphere_effect": "activation",
+    "target_node_position": "neighboring",
+    "target_node_state": "inactive",
+    "targetable_nodes": [
+      "skill",
+      "special",
+      "wht-magic",
+      "blk-magic"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 5,
+    "ItemID": 74,
+    "name": "fortune sphere",
+    "sphere_grid_description": "Activates Luck node.",
+    "sphere_color": "red",
+    "sphere_effect": "activation",
+    "target_node_position": "neighboring",
+    "target_node_state": "inactive",
+    "targetable_nodes": [
+      "luck"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 6,
+    "ItemID": 75,
+    "name": "attribute sphere",
+    "sphere_grid_description": "Activates Attribute node already used by ally.",
+    "sphere_color": "yellow",
+    "sphere_effect": "activation",
+    "target_node_position": "any",
+    "target_node_state": "active-ally",
+    "targetable_nodes": [
+      "hp",
+      "mp",
+      "strength",
+      "defense",
+      "magic",
+      "magic-defense",
+      "agility",
+      "luck",
+      "evasion",
+      "accuracy"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 7,
+    "ItemID": 76,
+    "name": "special sphere",
+    "sphere_grid_description": "Activates Special node already used by ally.",
+    "sphere_color": "yellow",
+    "sphere_effect": "activation",
+    "target_node_position": "any",
+    "target_node_state": "active-ally",
+    "targetable_nodes": [
+      "special"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 8,
+    "ItemID": 77,
+    "name": "skill sphere",
+    "sphere_grid_description": "Activates Skill node already used by ally.",
+    "sphere_color": "yellow",
+    "sphere_effect": "activation",
+    "target_node_position": "any",
+    "target_node_state": "active-ally",
+    "targetable_nodes": [
+      "skill"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 9,
+    "ItemID": 78,
+    "name": "wht magic sphere",
+    "sphere_grid_description": "Activates White Magic node already used by ally.",
+    "sphere_color": "yellow",
+    "sphere_effect": "activation",
+    "target_node_position": "any",
+    "target_node_state": "active-ally",
+    "targetable_nodes": [
+      "wht-magic"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 10,
+    "ItemID": 79,
+    "name": "blk magic sphere",
+    "sphere_grid_description": "Activates Black Magic node already used by ally.",
+    "sphere_color": "yellow",
+    "sphere_effect": "activation",
+    "target_node_position": "any",
+    "target_node_state": "active-ally",
+    "targetable_nodes": [
+      "blk-magic"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 11,
+    "ItemID": 80,
+    "name": "master sphere",
+    "sphere_grid_description": "Activates any Ability or Attribute node.",
+    "sphere_color": "yellow",
+    "sphere_effect": "activation",
+    "target_node_position": "any",
+    "target_node_state": "any",
+    "targetable_nodes": [
+      "hp",
+      "mp",
+      "strength",
+      "defense",
+      "magic",
+      "magic-defense",
+      "agility",
+      "luck",
+      "evasion",
+      "accuracy",
+      "skill",
+      "special",
+      "wht-magic",
+      "blk-magic"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 12,
+    "ItemID": 81,
+    "name": "lv. 1 key sphere",
+    "sphere_grid_description": "Opens Lv. 1 Lock.",
+    "sphere_color": "black",
+    "sphere_effect": "removal",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "lv-1-lock"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 13,
+    "ItemID": 82,
+    "name": "lv. 2 key sphere",
+    "sphere_grid_description": "Opens Lv. 2 Lock.",
+    "sphere_color": "black",
+    "sphere_effect": "removal",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "lv-2-lock"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 14,
+    "ItemID": 83,
+    "name": "lv. 3 key sphere",
+    "sphere_grid_description": "Opens Lv. 3 Lock.",
+    "sphere_color": "black",
+    "sphere_effect": "removal",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "lv-3-lock"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 15,
+    "ItemID": 84,
+    "name": "lv. 4 key sphere",
+    "sphere_grid_description": "Opens Lv. 4 Lock.",
+    "sphere_color": "black",
+    "sphere_effect": "removal",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "lv-4-lock"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 16,
+    "ItemID": 85,
+    "name": "hp sphere",
+    "sphere_grid_description": "Changes empty node into HP node.",
+    "sphere_color": "purple",
+    "sphere_effect": "creation",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "empty"
+    ],
+    "created_node": {
+      "ID": 1,
+      "node": "hp",
+      "value": 300
+    }
+  },
+  {
+    "ID": 17,
+    "ItemID": 86,
+    "name": "mp sphere",
+    "sphere_grid_description": "Changes empty node into MP node.",
+    "sphere_color": "purple",
+    "sphere_effect": "creation",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "empty"
+    ],
+    "created_node": {
+      "ID": 2,
+      "node": "mp",
+      "value": 40
+    }
+  },
+  {
+    "ID": 18,
+    "ItemID": 87,
+    "name": "strength sphere",
+    "sphere_grid_description": "Changes empty node into Strength node.",
+    "sphere_color": "purple",
+    "sphere_effect": "creation",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "empty"
+    ],
+    "created_node": {
+      "ID": 3,
+      "node": "strength",
+      "value": 4
+    }
+  },
+  {
+    "ID": 19,
+    "ItemID": 88,
+    "name": "defense sphere",
+    "sphere_grid_description": "Changes empty node into Defense node.",
+    "sphere_color": "purple",
+    "sphere_effect": "creation",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "empty"
+    ],
+    "created_node": {
+      "ID": 4,
+      "node": "defense",
+      "value": 4
+    }
+  },
+  {
+    "ID": 20,
+    "ItemID": 89,
+    "name": "magic sphere",
+    "sphere_grid_description": "Changes empty node into Magic node.",
+    "sphere_color": "purple",
+    "sphere_effect": "creation",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "empty"
+    ],
+    "created_node": {
+      "ID": 5,
+      "node": "magic",
+      "value": 4
+    }
+  },
+  {
+    "ID": 21,
+    "ItemID": 90,
+    "name": "magic def sphere",
+    "sphere_grid_description": "Changes empty node into Magic Def node.",
+    "sphere_color": "purple",
+    "sphere_effect": "creation",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "empty"
+    ],
+    "created_node": {
+      "ID": 6,
+      "node": "magic-defense",
+      "value": 4
+    }
+  },
+  {
+    "ID": 22,
+    "ItemID": 91,
+    "name": "agility sphere",
+    "sphere_grid_description": "Changes empty node into Agility node.",
+    "sphere_color": "purple",
+    "sphere_effect": "creation",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "empty"
+    ],
+    "created_node": {
+      "ID": 7,
+      "node": "agility",
+      "value": 4
+    }
+  },
+  {
+    "ID": 23,
+    "ItemID": 92,
+    "name": "evasion sphere",
+    "sphere_grid_description": "Changes empty node into Evasion node.",
+    "sphere_color": "purple",
+    "sphere_effect": "creation",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "empty"
+    ],
+    "created_node": {
+      "ID": 8,
+      "node": "evasion",
+      "value": 4
+    }
+  },
+  {
+    "ID": 24,
+    "ItemID": 93,
+    "name": "accuracy sphere",
+    "sphere_grid_description": "Changes empty node into Accuracy node.",
+    "sphere_color": "purple",
+    "sphere_effect": "creation",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "empty"
+    ],
+    "created_node": {
+      "ID": 9,
+      "node": "accuracy",
+      "value": 4
+    }
+  },
+  {
+    "ID": 25,
+    "ItemID": 94,
+    "name": "luck sphere",
+    "sphere_grid_description": "Changes empty node into Luck node.",
+    "sphere_color": "purple",
+    "sphere_effect": "creation",
+    "target_node_position": "neighboring",
+    "target_node_state": null,
+    "targetable_nodes": [
+      "empty"
+    ],
+    "created_node": {
+      "ID": 10,
+      "node": "luck",
+      "value": 4
+    }
+  },
+  {
+    "ID": 26,
+    "ItemID": 95,
+    "name": "clear sphere",
+    "sphere_grid_description": "Clears node from Grid.",
+    "sphere_color": "blue",
+    "sphere_effect": "removal",
+    "target_node_position": "neighboring",
+    "target_node_state": "any",
+    "targetable_nodes": [
+      "hp",
+      "mp",
+      "strength",
+      "defense",
+      "magic",
+      "magic-defense",
+      "agility",
+      "luck",
+      "evasion",
+      "accuracy"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 27,
+    "ItemID": 96,
+    "name": "return sphere",
+    "sphere_grid_description": "Return to any previously activated node.",
+    "sphere_color": "white",
+    "sphere_effect": "teleportation",
+    "target_node_position": "any",
+    "target_node_state": "active-self",
+    "targetable_nodes": [
+      "hp",
+      "mp",
+      "strength",
+      "defense",
+      "magic",
+      "magic-defense",
+      "agility",
+      "luck",
+      "evasion",
+      "accuracy",
+      "skill",
+      "special",
+      "wht-magic",
+      "blk-magic"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 28,
+    "ItemID": 97,
+    "name": "friend sphere",
+    "sphere_grid_description": "Move to any ally's location.",
+    "sphere_color": "white",
+    "sphere_effect": "teleportation",
+    "target_node_position": "ally-position",
+    "target_node_state": "any",
+    "targetable_nodes": [
+      "hp",
+      "mp",
+      "strength",
+      "defense",
+      "magic",
+      "magic-defense",
+      "agility",
+      "luck",
+      "evasion",
+      "accuracy",
+      "skill",
+      "special",
+      "wht-magic",
+      "blk-magic"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 29,
+    "ItemID": 98,
+    "name": "teleport sphere",
+    "sphere_grid_description": "Move to any node activated by ally.",
+    "sphere_color": "white",
+    "sphere_effect": "teleportation",
+    "target_node_position": "any",
+    "target_node_state": "active-any",
+    "targetable_nodes": [
+      "hp",
+      "mp",
+      "strength",
+      "defense",
+      "magic",
+      "magic-defense",
+      "agility",
+      "luck",
+      "evasion",
+      "accuracy",
+      "skill",
+      "special",
+      "wht-magic",
+      "blk-magic"
+    ],
+    "created_node": null
+  },
+  {
+    "ID": 30,
+    "ItemID": 99,
+    "name": "warp sphere",
+    "sphere_grid_description": "Move to any node.",
+    "sphere_color": "white",
+    "sphere_effect": "teleportation",
+    "target_node_position": "any",
+    "target_node_state": "any",
+    "targetable_nodes": [
+      "hp",
+      "mp",
+      "strength",
+      "defense",
+      "magic",
+      "magic-defense",
+      "agility",
+      "luck",
+      "evasion",
+      "accuracy",
+      "skill",
+      "special",
+      "wht-magic",
+      "blk-magic"
+    ],
+    "created_node": null
+  }
+]

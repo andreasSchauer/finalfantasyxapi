@@ -1,0 +1,6362 @@
+[
+  {
+    "ID": 1,
+    "name": "listen to my story",
+    "streaming_name": null,
+    "in_game_name": null,
+    "ost_name": "listen to my story",
+    "translation": null,
+    "streaming_track_number": null,
+    "music_sphere_id": null,
+    "ost_disc": 1,
+    "ost_track_number": 1,
+    "credits": {
+      "ID": 1,
+      "composer": null,
+      "arranger": null,
+      "performer": "masakazu morita",
+      "lyricist": null
+    },
+    "duration_in_seconds": 6,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 1,
+        "SongID": 1,
+        "TriggerAreaID": null,
+        "scene_description": "Intro sequence",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 2,
+    "name": "zanarkand",
+    "streaming_name": "zanarkand",
+    "in_game_name": "zanarkand",
+    "ost_name": "zanarkand",
+    "translation": null,
+    "streaming_track_number": 1,
+    "music_sphere_id": 1,
+    "ost_disc": 1,
+    "ost_track_number": 2,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 184,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 2,
+        "SongID": 2,
+        "TriggerAreaID": null,
+        "scene_description": "Intro sequence",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 3,
+        "SongID": 2,
+        "TriggerAreaID": 176,
+        "scene_description": "Home: Rikku tells the party about the Summoner's Sanctum.",
+        "trigger_location_area": {
+          "location": "home",
+          "sublocation": "home",
+          "area": "main corridor",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": "until-zone-change",
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 4,
+        "SongID": 2,
+        "TriggerAreaID": 221,
+        "scene_description": "Zanarkand Ruins: Replay of the intro sequence.",
+        "trigger_location_area": {
+          "location": "zanarkand ruins",
+          "sublocation": "zanarkand ruins",
+          "area": "zanarkand ruins",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 3,
+    "name": "prelude",
+    "streaming_name": "prelude",
+    "in_game_name": "prelude",
+    "ost_name": "prelude",
+    "translation": null,
+    "streaming_track_number": 2,
+    "music_sphere_id": 2,
+    "ost_disc": 1,
+    "ost_track_number": 3,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 223,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "zanarkand",
+            "sublocation": "zanarkand",
+            "area": "tidus's home",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 4,
+    "name": "tidus's theme",
+    "streaming_name": "tidus's theme",
+    "in_game_name": "tidus's theme",
+    "ost_name": "tidus's theme",
+    "translation": null,
+    "streaming_track_number": 3,
+    "music_sphere_id": 3,
+    "ost_disc": 1,
+    "ost_track_number": 4,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 213,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "zanarkand",
+            "sublocation": "zanarkand",
+            "area": "overpass",
+            "version": 1
+          },
+          {
+            "location": "ss winno",
+            "sublocation": "ss winno",
+            "area": "deck",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 5,
+        "SongID": 4,
+        "TriggerAreaID": 150,
+        "scene_description": "Macalania: Auron tells Tidus that Jecht loved him.",
+        "trigger_location_area": {
+          "location": "macalania",
+          "sublocation": "macalania woods",
+          "area": "spring",
+          "version": 1
+        },
+        "included_areas": [
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "spring",
+            "version": 1
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until talking to Auron again.",
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 6,
+        "SongID": 4,
+        "TriggerAreaID": null,
+        "scene_description": "Ending: Everyone in Besaid Village is celebrating.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 7,
+        "SongID": 4,
+        "TriggerAreaID": null,
+        "scene_description": "Eternal Calm: After watching the sphere.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 5,
+    "name": "otherworld",
+    "streaming_name": "otherworld",
+    "in_game_name": null,
+    "ost_name": "otherworld",
+    "translation": null,
+    "streaming_track_number": 4,
+    "music_sphere_id": null,
+    "ost_disc": 1,
+    "ost_track_number": 5,
+    "credits": {
+      "ID": 3,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": "bill muir",
+      "lyricist": "alexander o. smith"
+    },
+    "duration_in_seconds": 195,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 6,
+    "name": "run!!",
+    "streaming_name": "run!!",
+    "in_game_name": "run!!",
+    "ost_name": "run!!",
+    "translation": null,
+    "streaming_track_number": 5,
+    "music_sphere_id": 4,
+    "ost_disc": 1,
+    "ost_track_number": 6,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 160,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 2,
+        "condition": null,
+        "replaces_encounter_music": true,
+        "location_areas": [
+          {
+            "location": "zanarkand",
+            "sublocation": "zanarkand",
+            "area": "stadium entrance",
+            "version": 2
+          },
+          {
+            "location": "zanarkand",
+            "sublocation": "zanarkand",
+            "area": "overpass",
+            "version": 2
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 8,
+        "SongID": 6,
+        "TriggerAreaID": 193,
+        "scene_description": "Bevelle: Rikku throws a flash grenade.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "bevelle",
+          "area": "tower of light",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 9,
+        "SongID": 6,
+        "TriggerAreaID": 201,
+        "scene_description": "Bevelle: The party runs away from Seymour Natus.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "highbridge",
+          "area": "highbridge",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "bevelle",
+            "sublocation": "highbridge",
+            "area": "highbridge",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until fighting Seymour Natus.",
+        "replaces_encounter_music": true
+      },
+      {
+        "ID": 10,
+        "SongID": 6,
+        "TriggerAreaID": 211,
+        "scene_description": "Cavern of the Stolen Fayth: Dark Yojimbo Fight.",
+        "trigger_location_area": {
+          "location": "cavern of the stolen fayth",
+          "sublocation": "cavern of the stolen fayth",
+          "area": "cavern of the stolen fayth",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "cavern of the stolen fayth",
+            "sublocation": "cavern of the stolen fayth",
+            "area": "cavern of the stolen fayth",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until Dark Yojimbo is defeated or the party flees via teleporting.",
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 7,
+    "name": "this is your story",
+    "streaming_name": "this is your story",
+    "in_game_name": null,
+    "ost_name": "this is your story",
+    "translation": null,
+    "streaming_track_number": 6,
+    "music_sphere_id": null,
+    "ost_disc": 1,
+    "ost_track_number": 7,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 140,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 8,
+    "name": "creep",
+    "streaming_name": "creep",
+    "in_game_name": "creep",
+    "ost_name": "creep",
+    "translation": null,
+    "streaming_track_number": 7,
+    "music_sphere_id": 5,
+    "ost_disc": 1,
+    "ost_track_number": 8,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 168,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "baaj temple",
+            "sublocation": "submerged ruins",
+            "area": "submerged ruins",
+            "version": null
+          },
+          {
+            "location": "baaj temple",
+            "sublocation": "ruins",
+            "area": "underwater hall",
+            "version": null
+          },
+          {
+            "location": "baaj temple",
+            "sublocation": "ruins",
+            "area": "antechamber",
+            "version": null
+          },
+          {
+            "location": "baaj temple",
+            "sublocation": "ruins",
+            "area": "fayth",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 9,
+    "name": "battle theme",
+    "streaming_name": "battle theme",
+    "in_game_name": "battle theme",
+    "ost_name": "battle theme",
+    "translation": null,
+    "streaming_track_number": 8,
+    "music_sphere_id": 6,
+    "ost_disc": 1,
+    "ost_track_number": 9,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 201,
+    "can_loop": true,
+    "special_use_case": "random-encounter-default",
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 11,
+        "SongID": 9,
+        "TriggerAreaID": 7,
+        "scene_description": "Baaj Temple: Before fighting the Sahagins.",
+        "trigger_location_area": {
+          "location": "baaj temple",
+          "sublocation": "ruins",
+          "area": "underwater hall",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 10,
+    "name": "victory fanfare",
+    "streaming_name": "victory fanfare",
+    "in_game_name": "victory fanfare",
+    "ost_name": "victory fanfare",
+    "translation": null,
+    "streaming_track_number": 9,
+    "music_sphere_id": 10,
+    "ost_disc": 1,
+    "ost_track_number": 10,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 95,
+    "can_loop": true,
+    "special_use_case": "victory",
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 12,
+        "SongID": 10,
+        "TriggerAreaID": 79,
+        "scene_description": "Luca: After defeating Oblitzerator.",
+        "trigger_location_area": {
+          "location": "luca",
+          "sublocation": "luca",
+          "area": "number 4 dock",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 11,
+    "name": "game over",
+    "streaming_name": "game over",
+    "in_game_name": "game over",
+    "ost_name": "game over",
+    "translation": null,
+    "streaming_track_number": 10,
+    "music_sphere_id": 8,
+    "ost_disc": 1,
+    "ost_track_number": 11,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 34,
+    "can_loop": false,
+    "special_use_case": "game-over",
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 12,
+    "name": "out of the frying pan",
+    "streaming_name": "out of the frying pan",
+    "in_game_name": "out of the frying pan",
+    "ost_name": "out of the frying pan",
+    "translation": null,
+    "streaming_track_number": 11,
+    "music_sphere_id": 9,
+    "ost_disc": 1,
+    "ost_track_number": 12,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 186,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "baaj temple",
+            "sublocation": "ruins",
+            "area": "corridor",
+            "version": null
+          },
+          {
+            "location": "baaj temple",
+            "sublocation": "ruins",
+            "area": "hall",
+            "version": 1
+          },
+          {
+            "location": "baaj temple",
+            "sublocation": "ruins",
+            "area": "small room",
+            "version": null
+          },
+          {
+            "location": "baaj temple",
+            "sublocation": "ruins",
+            "area": "stairs",
+            "version": null
+          },
+          {
+            "location": "baaj temple",
+            "sublocation": "ruins",
+            "area": "hall",
+            "version": 2
+          }
+        ]
+      },
+      {
+        "ID": 3,
+        "condition": "Underwater Ruins: After fighting Tros.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "underwater ruins",
+            "sublocation": "underwater ruins",
+            "area": "underwater ruins",
+            "version": 1
+          },
+          {
+            "location": "underwater ruins",
+            "sublocation": "underwater ruins",
+            "area": "underwater ruins",
+            "version": 2
+          }
+        ]
+      },
+      {
+        "ID": 4,
+        "condition": "Macalania Temple: Once Jyscal's sphere is found.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "hall",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "monk's chamber",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "nun's chamber",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "trials",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 13,
+    "name": "leap in the dark",
+    "streaming_name": "leap in the dark",
+    "in_game_name": "leap in the dark",
+    "ost_name": "leap in the dark",
+    "translation": null,
+    "streaming_track_number": 12,
+    "music_sphere_id": 11,
+    "ost_disc": 1,
+    "ost_track_number": 13,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 87,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 13,
+        "SongID": 13,
+        "TriggerAreaID": 9,
+        "scene_description": "Baaj Temple: Cutscene after fighting Klikk.",
+        "trigger_location_area": {
+          "location": "baaj temple",
+          "sublocation": "ruins",
+          "area": "hall",
+          "version": 1
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 14,
+        "SongID": 13,
+        "TriggerAreaID": 86,
+        "scene_description": "Luca: The party notices that Yuna has been kidnapped.",
+        "trigger_location_area": {
+          "location": "luca",
+          "sublocation": "luca",
+          "area": "cafe",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 15,
+        "SongID": 13,
+        "TriggerAreaID": 92,
+        "scene_description": "Mi'ihen Highroad: When being attacked by Chocobo Eater.",
+        "trigger_location_area": {
+          "location": "mi'ihen highroad",
+          "sublocation": "highroad",
+          "area": "agency",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "agency",
+            "version": null
+          },
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "agency front",
+            "version": 1
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until triggering the Chocobo Eater fight.",
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 16,
+        "SongID": 13,
+        "TriggerAreaID": 142,
+        "scene_description": "Thunder Plains: After talking to the warrior monk.",
+        "trigger_location_area": {
+          "location": "thunder plains",
+          "sublocation": "thunder plains",
+          "area": "north",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "north",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until defeating Dark Ixion.",
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 17,
+        "SongID": 13,
+        "TriggerAreaID": 181,
+        "scene_description": "Airship: Rin tells everyone that monsters have snuck on board.",
+        "trigger_location_area": {
+          "location": "airship",
+          "sublocation": "airship",
+          "area": "bridge",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "bridge",
+            "version": null
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 1
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 2
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 3
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 4
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 5
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 6
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 7
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 1
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 2
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 3
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until fighting Evrae.",
+        "replaces_encounter_music": true
+      }
+    ]
+  },
+  {
+    "ID": 14,
+    "name": "underwater ruins",
+    "streaming_name": "underwater ruins",
+    "in_game_name": "underwater ruins",
+    "ost_name": "underwater ruins",
+    "translation": null,
+    "streaming_track_number": 13,
+    "music_sphere_id": 12,
+    "ost_disc": 1,
+    "ost_track_number": 14,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 256,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "underwater ruins",
+            "sublocation": "underwater ruins",
+            "area": "underwater ruins",
+            "version": 1
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 18,
+        "SongID": 14,
+        "TriggerAreaID": 121,
+        "scene_description": "Moonflow: Wakka talking about ancient machina cities on the Shoopuf.",
+        "trigger_location_area": {
+          "location": "moonflow",
+          "sublocation": "moonflow",
+          "area": "south wharf",
+          "version": 2
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 15,
+    "name": "oui are al bhed",
+    "streaming_name": "oui are al bhed",
+    "in_game_name": "oui are al bhed",
+    "ost_name": "oui are al bhed",
+    "translation": "you are al bhed",
+    "streaming_track_number": 14,
+    "music_sphere_id": 41,
+    "ost_disc": 1,
+    "ost_track_number": 15,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 204,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 19,
+        "SongID": 15,
+        "TriggerAreaID": 15,
+        "scene_description": "Salvage Ship: Tidus gets something to eat.",
+        "trigger_location_area": {
+          "location": "underwater ruins",
+          "sublocation": "salvage ship",
+          "area": "deck",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 16,
+    "name": "enemy attack",
+    "streaming_name": "enemy attack",
+    "in_game_name": "enemy attack",
+    "ost_name": "enemy attack",
+    "translation": null,
+    "streaming_track_number": 15,
+    "music_sphere_id": 7,
+    "ost_disc": 1,
+    "ost_track_number": 16,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 161,
+    "can_loop": true,
+    "special_use_case": "boss-battle-default",
+    "background_music": [
+      {
+        "ID": 2,
+        "condition": null,
+        "replaces_encounter_music": true,
+        "location_areas": [
+          {
+            "location": "bevelle",
+            "sublocation": "bevelle",
+            "area": "via purifico",
+            "version": 2
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 20,
+        "SongID": 16,
+        "TriggerAreaID": 15,
+        "scene_description": "Salvage Ship: Sin attacks the ship.",
+        "trigger_location_area": {
+          "location": "underwater ruins",
+          "sublocation": "salvage ship",
+          "area": "deck",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 21,
+        "SongID": 16,
+        "TriggerAreaID": 74,
+        "scene_description": "Luca: During the fight sequence after the Blitzball game.",
+        "trigger_location_area": {
+          "location": "luca",
+          "sublocation": "stadium",
+          "area": "blitzball field",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": "until-zone-change",
+        "end_trigger": null,
+        "replaces_encounter_music": true
+      },
+      {
+        "ID": 22,
+        "SongID": 16,
+        "TriggerAreaID": 97,
+        "scene_description": "Mi'ihen Highroad: During Jecht Sphere cutsccene.",
+        "trigger_location_area": {
+          "location": "mi'ihen highroad",
+          "sublocation": "highroad",
+          "area": "oldroad south",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 23,
+        "SongID": 16,
+        "TriggerAreaID": 161,
+        "scene_description": "Macalania: Escape after defeating Dark Shiva.",
+        "trigger_location_area": {
+          "location": "macalania",
+          "sublocation": "macalania",
+          "area": "road",
+          "version": 1
+        },
+        "included_areas": [],
+        "replaces_bg_music": "until-zone-change",
+        "end_trigger": null,
+        "replaces_encounter_music": true
+      }
+    ]
+  },
+  {
+    "ID": 17,
+    "name": "the blitzers",
+    "streaming_name": "the blitzers",
+    "in_game_name": "the blitzers",
+    "ost_name": "the blitzers",
+    "translation": null,
+    "streaming_track_number": 16,
+    "music_sphere_id": 13,
+    "ost_disc": 1,
+    "ost_track_number": 17,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 233,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 5,
+        "condition": "Luca: During final against Luca Goers with Wakka.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "blitzball",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 24,
+        "SongID": 17,
+        "TriggerAreaID": 20,
+        "scene_description": "Besaid: Tidus meets the Besaid Aurochs.",
+        "trigger_location_area": {
+          "location": "besaid",
+          "sublocation": "besaid",
+          "area": "beach",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "beach",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until talking to Wakka.",
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 18,
+    "name": "besaid",
+    "streaming_name": "besaid",
+    "in_game_name": "besaid",
+    "ost_name": "besaid",
+    "translation": null,
+    "streaming_track_number": 17,
+    "music_sphere_id": 15,
+    "ost_disc": 1,
+    "ost_track_number": 18,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 284,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "crossroads",
+            "version": null
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "valley",
+            "version": null
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "waterfall way",
+            "version": 1
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "ancient road",
+            "version": 1
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "promontory",
+            "version": null
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "village slope",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 25,
+        "SongID": 18,
+        "TriggerAreaID": null,
+        "scene_description": "Eternal Calm: Scene at the Besaid waterfall.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 19,
+    "name": "spira unplugged",
+    "streaming_name": "spira unplugged",
+    "in_game_name": "spira unplugged",
+    "ost_name": "spira unplugged",
+    "translation": null,
+    "streaming_track_number": 18,
+    "music_sphere_id": 16,
+    "ost_disc": 1,
+    "ost_track_number": 19,
+    "credits": {
+      "ID": 6,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 169,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "besaid",
+            "sublocation": "besaid village",
+            "area": "besaid village",
+            "version": null
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid village",
+            "area": "house",
+            "version": 1
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid village",
+            "area": "house",
+            "version": 2
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid village",
+            "area": "house",
+            "version": 3
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid village",
+            "area": "shop",
+            "version": null
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid village",
+            "area": "crusaders lodge",
+            "version": null
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika port",
+            "area": "dock",
+            "version": null
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika port",
+            "area": "tavern",
+            "version": null
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika port",
+            "area": "ruined square",
+            "version": null
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika port",
+            "area": "residential area",
+            "version": null
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika port",
+            "area": "inn",
+            "version": null
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika port",
+            "area": "house",
+            "version": null
+          },
+          {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "agency",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 20,
+    "name": "hymn of the fayth",
+    "streaming_name": "hum of the fayth",
+    "in_game_name": null,
+    "ost_name": "hymn of the fayth",
+    "translation": null,
+    "streaming_track_number": 19,
+    "music_sphere_id": 69,
+    "ost_disc": 1,
+    "ost_track_number": 20,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 43,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "great hall",
+            "version": null
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "monk's chamber",
+            "version": null
+          },
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "nun's chamber",
+            "version": null
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika",
+            "area": "temple",
+            "version": null
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika",
+            "area": "monk's chamber",
+            "version": 1
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika",
+            "area": "monk's chamber",
+            "version": 2
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika",
+            "area": "great hall",
+            "version": null
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika",
+            "area": "lift",
+            "version": null
+          },
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "great hall",
+            "version": null
+          },
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "nun's chamber",
+            "version": null
+          },
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "monk's chamber",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "hall",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "monk's chamber",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "nun's chamber",
+            "version": null
+          },
+          {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "fayth",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 26,
+        "SongID": 20,
+        "TriggerAreaID": 104,
+        "scene_description": "Mushroom Rock Road: When Tidus wakes up at the beach.",
+        "trigger_location_area": {
+          "location": "mushroom rock road",
+          "sublocation": "mushroom rock",
+          "area": "beach",
+          "version": 1
+        },
+        "included_areas": [
+          {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "beach",
+            "version": 1
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until talking to Luzzu/Gatta.",
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 27,
+        "SongID": 20,
+        "TriggerAreaID": null,
+        "scene_description": "Ending: The Fayth are turning to stone.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 21,
+    "name": "phantoms",
+    "streaming_name": "phantoms",
+    "in_game_name": "phantoms",
+    "ost_name": "phantoms",
+    "translation": null,
+    "streaming_track_number": 20,
+    "music_sphere_id": 17,
+    "ost_disc": 1,
+    "ost_track_number": 21,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 226,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "macalania",
+            "sublocation": "lake macalania",
+            "area": "agency front",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "lake macalania",
+            "area": "lake macalania",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "lake macalania",
+            "area": "crevasse",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "road",
+            "version": 1
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 28,
+        "SongID": 21,
+        "TriggerAreaID": 38,
+        "scene_description": "Besaid: Tidus dreams about Jecht missing.",
+        "trigger_location_area": {
+          "location": "besaid",
+          "sublocation": "besaid village",
+          "area": "house",
+          "version": 2
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 22,
+    "name": "the trials",
+    "streaming_name": "the trials",
+    "in_game_name": "the trials",
+    "ost_name": "the trials",
+    "translation": null,
+    "streaming_track_number": 21,
+    "music_sphere_id": 18,
+    "ost_disc": 1,
+    "ost_track_number": 22,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 213,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "trials",
+            "version": null
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika",
+            "area": "trials",
+            "version": null
+          },
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "trials",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "trials",
+            "version": null
+          },
+          {
+            "location": "bevelle",
+            "sublocation": "bevelle",
+            "area": "trials",
+            "version": null
+          },
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "trials",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 23,
+    "name": "hymn - valefor",
+    "streaming_name": "hymn - valefor",
+    "in_game_name": null,
+    "ost_name": "hymn of the fayth - valefor",
+    "translation": null,
+    "streaming_track_number": 22,
+    "music_sphere_id": null,
+    "ost_disc": 1,
+    "ost_track_number": 23,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 42,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "fayth",
+            "version": null
+          }
+        ]
+      },
+      {
+        "ID": 6,
+        "condition": "Besaid Temple: First visit.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "antechamber",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 24,
+    "name": "the summoning",
+    "streaming_name": "the summoning",
+    "in_game_name": "the summoning",
+    "ost_name": "the summoning",
+    "translation": null,
+    "streaming_track_number": 23,
+    "music_sphere_id": 19,
+    "ost_disc": 1,
+    "ost_track_number": 24,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 38,
+    "can_loop": true,
+    "special_use_case": "main-menu",
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 29,
+        "SongID": 24,
+        "TriggerAreaID": 36,
+        "scene_description": "Besaid: Yuna summoning Valefor.",
+        "trigger_location_area": {
+          "location": "besaid",
+          "sublocation": "besaid village",
+          "area": "besaid village",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 25,
+    "name": "braska's daughter",
+    "streaming_name": "braska's daughter",
+    "in_game_name": "braska's daughter",
+    "ost_name": "braska's daughter",
+    "translation": null,
+    "streaming_track_number": 24,
+    "music_sphere_id": 20,
+    "ost_disc": 1,
+    "ost_track_number": 25,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 225,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 30,
+        "SongID": 25,
+        "TriggerAreaID": 36,
+        "scene_description": "Besaid: Tidus and Yuna talking for the first time.",
+        "trigger_location_area": {
+          "location": "besaid",
+          "sublocation": "besaid village",
+          "area": "besaid village",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 31,
+        "SongID": 25,
+        "TriggerAreaID": 192,
+        "scene_description": "Airship: Tidus talking to Yuna about Yu Yevon.",
+        "trigger_location_area": {
+          "location": "airship",
+          "sublocation": "airship",
+          "area": "deck",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 32,
+        "SongID": 25,
+        "TriggerAreaID": 214,
+        "scene_description": "Mount Gagazet: Braska's Sphere.",
+        "trigger_location_area": {
+          "location": "mount gagazet",
+          "sublocation": "gagazet",
+          "area": "mountain trail",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 33,
+        "SongID": 25,
+        "TriggerAreaID": null,
+        "scene_description": "Eternal Calm: Temple scene.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 26,
+    "name": "good night",
+    "streaming_name": "good night",
+    "in_game_name": "good night",
+    "ost_name": "good night",
+    "translation": null,
+    "streaming_track_number": 25,
+    "music_sphere_id": 22,
+    "ost_disc": 1,
+    "ost_track_number": 26,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 8,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 34,
+        "SongID": 26,
+        "TriggerAreaID": 36,
+        "scene_description": "Besaid: Tidus sleeping at night.",
+        "trigger_location_area": {
+          "location": "besaid",
+          "sublocation": "besaid village",
+          "area": "besaid village",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 35,
+        "SongID": 26,
+        "TriggerAreaID": 50,
+        "scene_description": "Kilika: Tidus sleeping after the Sending.",
+        "trigger_location_area": {
+          "location": "kilika",
+          "sublocation": "kilika port",
+          "area": "ruined square",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 36,
+        "SongID": 26,
+        "TriggerAreaID": 64,
+        "scene_description": "SS Winno: Tidus sleeping after the events on the ship.",
+        "trigger_location_area": {
+          "location": "ss winno",
+          "sublocation": "ss winno",
+          "area": "deck",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 37,
+        "SongID": 26,
+        "TriggerAreaID": 92,
+        "scene_description": "Mi'ihen Highroad: Tidus sleeping after arriving at the agency.",
+        "trigger_location_area": {
+          "location": "mi'ihen highroad",
+          "sublocation": "highroad",
+          "area": "agency",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 38,
+        "SongID": 26,
+        "TriggerAreaID": 92,
+        "scene_description": "Mi'ihen Highroad: Tidus sleeping after talking to Yuna at sunset.",
+        "trigger_location_area": {
+          "location": "mi'ihen highroad",
+          "sublocation": "highroad",
+          "area": "agency",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 39,
+        "SongID": 26,
+        "TriggerAreaID": 116,
+        "scene_description": "Djose: Tidus sleeping after the Trials.",
+        "trigger_location_area": {
+          "location": "djose",
+          "sublocation": "djose",
+          "area": "antechamber",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 40,
+        "SongID": 26,
+        "TriggerAreaID": 141,
+        "scene_description": "Thunder Plains: Tidus sleeping at the agency.",
+        "trigger_location_area": {
+          "location": "thunder plains",
+          "sublocation": "thunder plains",
+          "area": "agency",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 27,
+    "name": "yuna's theme",
+    "streaming_name": "yuna's theme",
+    "in_game_name": "yuna's theme",
+    "ost_name": "yuna's theme",
+    "translation": null,
+    "streaming_track_number": 26,
+    "music_sphere_id": 21,
+    "ost_disc": 2,
+    "ost_track_number": 1,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 210,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "beach",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 41,
+        "SongID": 27,
+        "TriggerAreaID": 36,
+        "scene_description": "Besaid: Before the party leaves the village to start the pilgrimage.",
+        "trigger_location_area": {
+          "location": "besaid",
+          "sublocation": "besaid village",
+          "area": "besaid village",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 42,
+        "SongID": 27,
+        "TriggerAreaID": 87,
+        "scene_description": "Luca: Laughing scene.",
+        "trigger_location_area": {
+          "location": "luca",
+          "sublocation": "luca",
+          "area": "city limits",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 43,
+        "SongID": 27,
+        "TriggerAreaID": 110,
+        "scene_description": "Djose: The party making fun of Yuna's bed hair.",
+        "trigger_location_area": {
+          "location": "djose",
+          "sublocation": "djose",
+          "area": "temple",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "temple",
+            "version": null
+          },
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "inn",
+            "version": null
+          },
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "pilgrimage road",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until leaving Djose Temple.",
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 44,
+        "SongID": 27,
+        "TriggerAreaID": 154,
+        "scene_description": "Macalania: Tidus and Yuna talking at the spring.",
+        "trigger_location_area": {
+          "location": "macalania",
+          "sublocation": "macalania woods",
+          "area": "spring",
+          "version": 2
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 45,
+        "SongID": 27,
+        "TriggerAreaID": 179,
+        "scene_description": "Home: Flashback to the laughing scene.",
+        "trigger_location_area": {
+          "location": "home",
+          "sublocation": "home",
+          "area": "environment controls",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 46,
+        "SongID": 27,
+        "TriggerAreaID": 213,
+        "scene_description": "Mount Gagazet: Yuna tells Kelk what she is fighting for.",
+        "trigger_location_area": {
+          "location": "mount gagazet",
+          "sublocation": "gagazet",
+          "area": "mountain gate",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 47,
+        "SongID": 27,
+        "TriggerAreaID": 220,
+        "scene_description": "Mount Gagazet: Rikku is trying to stop Yuna from going to Zanarkand.",
+        "trigger_location_area": {
+          "location": "mount gagazet",
+          "sublocation": "gagazet",
+          "area": "road to zanarkand ruins",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 48,
+        "SongID": 27,
+        "TriggerAreaID": null,
+        "scene_description": "Eternal Calm: Besaid beach scene.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 49,
+        "SongID": 27,
+        "TriggerAreaID": null,
+        "scene_description": "Eternal Calm: Yuna and Rikku are talking about their dreams.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 28,
+    "name": "movement in green",
+    "streaming_name": "movement in green",
+    "in_game_name": "movement in green",
+    "ost_name": "movement in green",
+    "translation": null,
+    "streaming_track_number": 27,
+    "music_sphere_id": 24,
+    "ost_disc": 2,
+    "ost_track_number": 2,
+    "credits": {
+      "ID": 8,
+      "composer": "nobuo uematsu",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 196,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "ss liki",
+            "sublocation": "ss liki",
+            "area": "deck",
+            "version": null
+          },
+          {
+            "location": "djose",
+            "sublocation": "djose highroad",
+            "area": "djose highroad",
+            "version": null
+          },
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "pilgrimage road",
+            "version": null
+          },
+          {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "south bank road",
+            "version": null
+          },
+          {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "south bank",
+            "version": null
+          },
+          {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "north bank",
+            "version": null
+          },
+          {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "north bank road",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 29,
+    "name": "the sending",
+    "streaming_name": "the sending",
+    "in_game_name": null,
+    "ost_name": "the sending",
+    "translation": null,
+    "streaming_track_number": 28,
+    "music_sphere_id": null,
+    "ost_disc": 2,
+    "ost_track_number": 3,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 93,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 30,
+    "name": "calm before the storm",
+    "streaming_name": "calm before the storm",
+    "in_game_name": "calm before the storm",
+    "ost_name": "calm before the storm",
+    "translation": null,
+    "streaming_track_number": 29,
+    "music_sphere_id": 26,
+    "ost_disc": 2,
+    "ost_track_number": 4,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 190,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "kilika",
+            "sublocation": "kilika woods",
+            "area": "kilika woods",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "south",
+            "version": 1
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "central",
+            "version": 1
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "north",
+            "version": 1
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "south",
+            "version": 2
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "central",
+            "version": 2
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "north",
+            "version": 2
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "lake road",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "spring",
+            "version": 1
+          },
+          {
+            "location": "cavern of the stolen fayth",
+            "sublocation": "cavern of the stolen fayth",
+            "area": "cavern of the stolen fayth",
+            "version": null
+          },
+          {
+            "location": "mount gagazet",
+            "sublocation": "gagazet",
+            "area": "mountain cave",
+            "version": null
+          },
+          {
+            "location": "mount gagazet",
+            "sublocation": "gagazet",
+            "area": "submerged passage",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 31,
+    "name": "hymn - ifrit",
+    "streaming_name": "hymn - ifrit",
+    "in_game_name": null,
+    "ost_name": "hymn of the fayth - ifrit",
+    "translation": null,
+    "streaming_track_number": 30,
+    "music_sphere_id": null,
+    "ost_disc": 2,
+    "ost_track_number": 5,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 41,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "kilika",
+            "sublocation": "kilika",
+            "area": "antechamber",
+            "version": null
+          },
+          {
+            "location": "kilika",
+            "sublocation": "kilika",
+            "area": "fayth",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 32,
+    "name": "luca",
+    "streaming_name": "luca",
+    "in_game_name": "luca",
+    "ost_name": "luca",
+    "translation": null,
+    "streaming_track_number": 31,
+    "music_sphere_id": 29,
+    "ost_disc": 2,
+    "ost_track_number": 6,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 221,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "main gate",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "stands",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "basement a",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "locker room",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "basement b",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 1 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 2 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 3 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 4 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 5 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "bridge",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "theatre - entrance",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "theatre - reception",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "theatre - main hall",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "square",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "cafe",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "city limits",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 33,
+    "name": "grand maester mika",
+    "streaming_name": "grand maester mika",
+    "in_game_name": "grand maester mika",
+    "ost_name": "grand maester mika",
+    "translation": null,
+    "streaming_track_number": 32,
+    "music_sphere_id": 28,
+    "ost_disc": 2,
+    "ost_track_number": 7,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 76,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 50,
+        "SongID": 33,
+        "TriggerAreaID": 78,
+        "scene_description": "Luca: Mika and Seymour introduction.",
+        "trigger_location_area": {
+          "location": "luca",
+          "sublocation": "luca",
+          "area": "number 3 dock",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 34,
+    "name": "decision on the dock",
+    "streaming_name": "decision on the dock",
+    "in_game_name": "decision on the dock",
+    "ost_name": "decision on the dock",
+    "translation": null,
+    "streaming_track_number": 33,
+    "music_sphere_id": 23,
+    "ost_disc": 2,
+    "ost_track_number": 8,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 72,
+    "can_loop": true,
+    "special_use_case": "blitzball-menu",
+    "background_music": [
+      {
+        "ID": 7,
+        "condition": "Luca: While Yuna is kidnapped.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "main gate",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "stands",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "basement a",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "locker room",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "basement b",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 1 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 2 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 3 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 4 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 5 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "bridge",
+            "version": null
+          }
+        ]
+      },
+      {
+        "ID": 8,
+        "condition": "Mushroom Rock Road: First visit.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "mushroom rock",
+            "version": null
+          },
+          {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "valley",
+            "version": 1
+          },
+          {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "precipice",
+            "version": null
+          },
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "trials",
+            "version": null
+          }
+        ]
+      },
+      {
+        "ID": 2,
+        "condition": null,
+        "replaces_encounter_music": true,
+        "location_areas": [
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "dome",
+            "version": 1
+          },
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "dome",
+            "version": 2
+          },
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "interior",
+            "version": null
+          },
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "corridor",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 35,
+    "name": "the splendid performance",
+    "streaming_name": "the splendid performance",
+    "in_game_name": "the splendid performance",
+    "ost_name": "the splendid performance",
+    "translation": null,
+    "streaming_track_number": 34,
+    "music_sphere_id": 30,
+    "ost_disc": 2,
+    "ost_track_number": 9,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 212,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 51,
+        "SongID": 35,
+        "TriggerAreaID": 80,
+        "scene_description": "Luca: The Aurochs win against the Psyches.",
+        "trigger_location_area": {
+          "location": "luca",
+          "sublocation": "luca",
+          "area": "number 5 dock",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "main gate",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "stands",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "basement a",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "locker room",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "basement b",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 1 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 2 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 3 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 4 dock",
+            "version": null
+          },
+          {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 5 dock",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until talking to Wakka to start the Blitzball match.",
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 36,
+    "name": "face off",
+    "streaming_name": "face off",
+    "in_game_name": "face off",
+    "ost_name": "face-off",
+    "translation": null,
+    "streaming_track_number": 35,
+    "music_sphere_id": 27,
+    "ost_disc": 2,
+    "ost_track_number": 10,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 127,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 52,
+        "SongID": 36,
+        "TriggerAreaID": 56,
+        "scene_description": "Kilika: Meeting the Luca Goers.",
+        "trigger_location_area": {
+          "location": "kilika",
+          "sublocation": "kilika",
+          "area": "temple",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 53,
+        "SongID": 36,
+        "TriggerAreaID": 75,
+        "scene_description": "Luca: Cutscene before the match against the Luca Goers.",
+        "trigger_location_area": {
+          "location": "luca",
+          "sublocation": "stadium",
+          "area": "blitzball",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 37,
+    "name": "blitz off!",
+    "streaming_name": "blitz off!",
+    "in_game_name": "blitz off!",
+    "ost_name": "blitz off",
+    "translation": null,
+    "streaming_track_number": 36,
+    "music_sphere_id": 32,
+    "ost_disc": 2,
+    "ost_track_number": 11,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 212,
+    "can_loop": true,
+    "special_use_case": "blitzball-game",
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 38,
+    "name": "auron's theme",
+    "streaming_name": "auron's theme",
+    "in_game_name": "auron's theme",
+    "ost_name": "auron's theme",
+    "translation": null,
+    "streaming_track_number": 37,
+    "music_sphere_id": 31,
+    "ost_disc": 2,
+    "ost_track_number": 12,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 164,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 54,
+        "SongID": 38,
+        "TriggerAreaID": 80,
+        "scene_description": "Luca: Auron tells Tidus that he defeated Sin with Braska and Jecht.",
+        "trigger_location_area": {
+          "location": "luca",
+          "sublocation": "luca",
+          "area": "number 5 dock",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 55,
+        "SongID": 38,
+        "TriggerAreaID": 87,
+        "scene_description": "Luca: Auron asking Yuna to become her guardian.",
+        "trigger_location_area": {
+          "location": "luca",
+          "sublocation": "luca",
+          "area": "city limits",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 56,
+        "SongID": 38,
+        "TriggerAreaID": 101,
+        "scene_description": "Mushroom Rock Road: Auron's Sphere cutscene.",
+        "trigger_location_area": {
+          "location": "mushroom rock road",
+          "sublocation": "mushroom rock",
+          "area": "precipice",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 57,
+        "SongID": 38,
+        "TriggerAreaID": 229,
+        "scene_description": "Zanarkand Ruins: Auron reveals his past to Tidus.",
+        "trigger_location_area": {
+          "location": "zanarkand ruins",
+          "sublocation": "dome",
+          "area": "great hall",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 58,
+        "SongID": 38,
+        "TriggerAreaID": null,
+        "scene_description": "Ending: Auron says goodbye to the party.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 39,
+    "name": "mi'ihen highroad",
+    "streaming_name": "mi'ihen highroad",
+    "in_game_name": "mi'ihen highroad",
+    "ost_name": "mi'ihen highroad",
+    "translation": null,
+    "streaming_track_number": 38,
+    "music_sphere_id": 33,
+    "ost_disc": 2,
+    "ost_track_number": 13,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 203,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "south end",
+            "version": null
+          },
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "south",
+            "version": null
+          },
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "central",
+            "version": null
+          },
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "agency front",
+            "version": 1
+          },
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "newroad south",
+            "version": null
+          },
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "newroad north",
+            "version": null
+          },
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "north end",
+            "version": null
+          },
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "oldroad north",
+            "version": null
+          },
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "oldroad south",
+            "version": null
+          },
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "agency front",
+            "version": 2
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 40,
+    "name": "chocobo jam",
+    "streaming_name": "chocobo jam",
+    "in_game_name": "chocobo jam",
+    "ost_name": "chocobo jam",
+    "translation": null,
+    "streaming_track_number": 39,
+    "music_sphere_id": 34,
+    "ost_disc": 2,
+    "ost_track_number": 14,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 172,
+    "can_loop": true,
+    "special_use_case": "chocobo",
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 41,
+    "name": "the travel agency",
+    "streaming_name": "the travel agency",
+    "in_game_name": "the travel agency",
+    "ost_name": "the travel agency",
+    "translation": null,
+    "streaming_track_number": 40,
+    "music_sphere_id": 35,
+    "ost_disc": 2,
+    "ost_track_number": 15,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 185,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "mi'ihen highroad",
+            "sublocation": "highroad",
+            "area": "agency",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "lake macalania",
+            "area": "agency",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 42,
+    "name": "they may pass",
+    "streaming_name": "they may pass",
+    "in_game_name": null,
+    "ost_name": "they may pass",
+    "translation": null,
+    "streaming_track_number": 41,
+    "music_sphere_id": null,
+    "ost_disc": 2,
+    "ost_track_number": 16,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 70,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 59,
+        "SongID": 42,
+        "TriggerAreaID": 95,
+        "scene_description": "Mi'ihen Highroad: Seymour letting the party through.",
+        "trigger_location_area": {
+          "location": "mi'ihen highroad",
+          "sublocation": "highroad",
+          "area": "north end",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 43,
+    "name": "seymour's theme",
+    "streaming_name": "seymour's theme",
+    "in_game_name": "seymour's theme",
+    "ost_name": "seymour's theme",
+    "translation": null,
+    "streaming_track_number": 42,
+    "music_sphere_id": 36,
+    "ost_disc": 2,
+    "ost_track_number": 17,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 186,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "guadosalam",
+            "sublocation": "guadosalam",
+            "area": "mansion - entrance",
+            "version": null
+          },
+          {
+            "location": "guadosalam",
+            "sublocation": "guadosalam",
+            "area": "mansion - great hall",
+            "version": null
+          }
+        ]
+      },
+      {
+        "ID": 9,
+        "condition": "Macalania Temple: After fighting Seymour.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "trials",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 60,
+        "SongID": 43,
+        "TriggerAreaID": 99,
+        "scene_description": "Mushroom Rock Road: Wakka confronting Seymour.",
+        "trigger_location_area": {
+          "location": "mushroom rock road",
+          "sublocation": "mushroom rock",
+          "area": "mushroom rock",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 61,
+        "SongID": 43,
+        "TriggerAreaID": 166,
+        "scene_description": "Macalania: After fighting Seymour.",
+        "trigger_location_area": {
+          "location": "macalania",
+          "sublocation": "macalania",
+          "area": "antechamber",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 62,
+        "SongID": 43,
+        "TriggerAreaID": 201,
+        "scene_description": "Bevelle: Seymour transforms into Seymour Natus.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "highbridge",
+          "area": "highbridge",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 44,
+    "name": "twilight",
+    "streaming_name": "twilight",
+    "in_game_name": null,
+    "ost_name": "twilight",
+    "translation": null,
+    "streaming_track_number": 43,
+    "music_sphere_id": null,
+    "ost_disc": 2,
+    "ost_track_number": 18,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 280,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "sin",
+            "sublocation": "sin",
+            "area": "city of dying dreams",
+            "version": null
+          },
+          {
+            "location": "sin",
+            "sublocation": "sin",
+            "area": "tower of the dead",
+            "version": null
+          },
+          {
+            "location": "sin",
+            "sublocation": "sin",
+            "area": "the nucleus",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 63,
+        "SongID": 44,
+        "TriggerAreaID": 104,
+        "scene_description": "Mushroom Rock Road: Tidus coming into contact with Sin and seeing the Nucleus.",
+        "trigger_location_area": {
+          "location": "mushroom rock road",
+          "sublocation": "mushroom rock",
+          "area": "beach",
+          "version": 1
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 64,
+        "SongID": 44,
+        "TriggerAreaID": 160,
+        "scene_description": "Macalania: Tidus comes into contact with Sin again.",
+        "trigger_location_area": {
+          "location": "macalania",
+          "sublocation": "lake macalania",
+          "area": "lake bottom",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 65,
+        "SongID": 44,
+        "TriggerAreaID": 216,
+        "scene_description": "Mount Gagazet: Tidus learns about the dream of the Fayth.",
+        "trigger_location_area": {
+          "location": "mount gagazet",
+          "sublocation": "gagazet",
+          "area": "fayth cluster",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "mount gagazet",
+            "sublocation": "gagazet",
+            "area": "fayth cluster",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until the end of the sequence.",
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 45,
+    "name": "djose temple",
+    "streaming_name": "djose temple",
+    "in_game_name": "djose temple",
+    "ost_name": "djose temple",
+    "translation": null,
+    "streaming_track_number": 44,
+    "music_sphere_id": 38,
+    "ost_disc": 2,
+    "ost_track_number": 19,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 198,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "temple",
+            "version": null
+          },
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "inn",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 46,
+    "name": "hymn - ixion",
+    "streaming_name": "hymn - ixion",
+    "in_game_name": null,
+    "ost_name": "hymn of the fayth - ixion",
+    "translation": null,
+    "streaming_track_number": 45,
+    "music_sphere_id": null,
+    "ost_disc": 2,
+    "ost_track_number": 20,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 40,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "fayth",
+            "version": null
+          }
+        ]
+      },
+      {
+        "ID": 10,
+        "condition": "Djose Temple: First visit.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "antechamber",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 47,
+    "name": "ridess the shoopuf?",
+    "streaming_name": "ridess the shoopuf?",
+    "in_game_name": "ride ze shoopuf?",
+    "ost_name": "ridess the shoopuf?",
+    "translation": null,
+    "streaming_track_number": 46,
+    "music_sphere_id": 39,
+    "ost_disc": 2,
+    "ost_track_number": 21,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 252,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "south wharf",
+            "version": 1
+          },
+          {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "south wharf",
+            "version": 2
+          },
+          {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "south wharf",
+            "version": 3
+          },
+          {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "north wharf",
+            "version": 1
+          },
+          {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "north wharf",
+            "version": 2
+          },
+          {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "north wharf",
+            "version": 3
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 48,
+    "name": "rikku's theme",
+    "streaming_name": "rikku's theme",
+    "in_game_name": "rikku's theme",
+    "ost_name": "rikku's theme",
+    "translation": null,
+    "streaming_track_number": 47,
+    "music_sphere_id": 40,
+    "ost_disc": 2,
+    "ost_track_number": 22,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 242,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 66,
+        "SongID": 48,
+        "TriggerAreaID": 127,
+        "scene_description": "Moonflow: Tidus meeting Rikku.",
+        "trigger_location_area": {
+          "location": "moonflow",
+          "sublocation": "moonflow",
+          "area": "north bank",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 67,
+        "SongID": 48,
+        "TriggerAreaID": null,
+        "scene_description": "Eternal Calm: Rikku's reintroduction on the ship.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 49,
+    "name": "guadosalam",
+    "streaming_name": "guadosalam",
+    "in_game_name": "guadosalam",
+    "ost_name": "guadosalam",
+    "translation": null,
+    "streaming_track_number": 48,
+    "music_sphere_id": 42,
+    "ost_disc": 2,
+    "ost_track_number": 23,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 203,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "guadosalam",
+            "sublocation": "guadosalam",
+            "area": "guadosalam",
+            "version": null
+          },
+          {
+            "location": "guadosalam",
+            "sublocation": "guadosalam",
+            "area": "inn",
+            "version": null
+          },
+          {
+            "location": "guadosalam",
+            "sublocation": "guadosalam",
+            "area": "shop",
+            "version": null
+          },
+          {
+            "location": "guadosalam",
+            "sublocation": "guadosalam",
+            "area": "house",
+            "version": 1
+          },
+          {
+            "location": "guadosalam",
+            "sublocation": "guadosalam",
+            "area": "house",
+            "version": 2
+          },
+          {
+            "location": "guadosalam",
+            "sublocation": "road to farplane",
+            "area": "road to farplane",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 50,
+    "name": "thunder plains",
+    "streaming_name": "thunder plains",
+    "in_game_name": "thunder plains",
+    "ost_name": "thunder plains",
+    "translation": null,
+    "streaming_track_number": 49,
+    "music_sphere_id": 43,
+    "ost_disc": 3,
+    "ost_track_number": 1,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 224,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "south",
+            "version": null
+          },
+          {
+            "location": "thunder plains",
+            "sublocation": "thunder plains",
+            "area": "north",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 51,
+    "name": "jecht's theme",
+    "streaming_name": "jecht's theme",
+    "in_game_name": "jecht's theme",
+    "ost_name": "jecht's theme",
+    "translation": null,
+    "streaming_track_number": 50,
+    "music_sphere_id": 44,
+    "ost_disc": 3,
+    "ost_track_number": 2,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 153,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 68,
+        "SongID": 51,
+        "TriggerAreaID": 42,
+        "scene_description": "SS Liki: Jecht Sphere cutscene.",
+        "trigger_location_area": {
+          "location": "ss liki",
+          "sublocation": "ss liki",
+          "area": "deck",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 69,
+        "SongID": 51,
+        "TriggerAreaID": 150,
+        "scene_description": "Macalania: Jecht Sphere cutscene.",
+        "trigger_location_area": {
+          "location": "macalania",
+          "sublocation": "macalania woods",
+          "area": "spring",
+          "version": 1
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 70,
+        "SongID": 51,
+        "TriggerAreaID": 143,
+        "scene_description": "Macalania: Jecht Sphere cutscene.",
+        "trigger_location_area": {
+          "location": "macalania",
+          "sublocation": "macalania woods",
+          "area": "south",
+          "version": 1
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 52,
+    "name": "macalania woods",
+    "streaming_name": "macalania woods",
+    "in_game_name": "macalania woods",
+    "ost_name": "macalania woods",
+    "translation": null,
+    "streaming_track_number": 51,
+    "music_sphere_id": 51,
+    "ost_disc": 3,
+    "ost_track_number": 3,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 200,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "to bevelle",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "to thunder plains",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "campsite",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "spring",
+            "version": 2
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 71,
+        "SongID": 52,
+        "TriggerAreaID": 119,
+        "scene_description": "Moonflow: The party reaching the pond.",
+        "trigger_location_area": {
+          "location": "moonflow",
+          "sublocation": "moonflow",
+          "area": "south bank",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 53,
+    "name": "the void",
+    "streaming_name": "the void",
+    "in_game_name": "the void",
+    "ost_name": "the void",
+    "translation": null,
+    "streaming_track_number": 52,
+    "music_sphere_id": 63,
+    "ost_disc": 3,
+    "ost_track_number": 4,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 139,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 72,
+        "SongID": 53,
+        "TriggerAreaID": 158,
+        "scene_description": "Macalania: Wakka learns that Rikku is an Al Bhed.",
+        "trigger_location_area": {
+          "location": "macalania",
+          "sublocation": "lake macalania",
+          "area": "lake macalania",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 54,
+    "name": "the temple players",
+    "streaming_name": "the temple players",
+    "in_game_name": "the temple players",
+    "ost_name": "the temple players",
+    "translation": null,
+    "streaming_track_number": 53,
+    "music_sphere_id": 68,
+    "ost_disc": 3,
+    "ost_track_number": 5,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 142,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 11,
+        "condition": "Macalania Temple: First visit.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "hall",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 55,
+    "name": "seymour's ambition",
+    "streaming_name": "seymour's ambition",
+    "in_game_name": "seymour's ambition",
+    "ost_name": "seymour's ambition",
+    "translation": null,
+    "streaming_track_number": 54,
+    "music_sphere_id": 55,
+    "ost_disc": 3,
+    "ost_track_number": 6,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 134,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 12,
+        "condition": "Macalania Temple: Before fighting Seymour.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "antechamber",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 73,
+        "SongID": 55,
+        "TriggerAreaID": 215,
+        "scene_description": "Mount Gagazet: The party runs into Seymour.",
+        "trigger_location_area": {
+          "location": "mount gagazet",
+          "sublocation": "gagazet",
+          "area": "prominence",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 56,
+    "name": "hymn - shiva",
+    "streaming_name": "hymn - shiva",
+    "in_game_name": null,
+    "ost_name": "hymn of the fayth - shiva",
+    "translation": null,
+    "streaming_track_number": 55,
+    "music_sphere_id": null,
+    "ost_disc": 3,
+    "ost_track_number": 7,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 41,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "macalania",
+            "sublocation": "lake macalania",
+            "area": "lake bottom",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "road",
+            "version": 2
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "fayth",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 57,
+    "name": "pursuit",
+    "streaming_name": "pursuit",
+    "in_game_name": "pursuit",
+    "ost_name": "pursuit",
+    "translation": null,
+    "streaming_track_number": 56,
+    "music_sphere_id": 65,
+    "ost_disc": 3,
+    "ost_track_number": 8,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 130,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "sin",
+            "sublocation": "sin",
+            "area": "near airship",
+            "version": null
+          },
+          {
+            "location": "sin",
+            "sublocation": "sin",
+            "area": "sea of sorrow",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 74,
+        "SongID": 57,
+        "TriggerAreaID": 26,
+        "scene_description": "Besaid: Before and after Dark Valefor fight.",
+        "trigger_location_area": {
+          "location": "besaid",
+          "sublocation": "besaid",
+          "area": "village slope",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 75,
+        "SongID": 57,
+        "TriggerAreaID": 162,
+        "scene_description": "Macalania: Escape after defeating Seymour.",
+        "trigger_location_area": {
+          "location": "macalania",
+          "sublocation": "macalania",
+          "area": "hall",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "hall",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "macalania",
+            "area": "road",
+            "version": 1
+          },
+          {
+            "location": "macalania",
+            "sublocation": "lake macalania",
+            "area": "crevasse",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "lake macalania",
+            "area": "lake macalania",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until defeating Wendigo.",
+        "replaces_encounter_music": true
+      }
+    ]
+  },
+  {
+    "ID": 58,
+    "name": "the burning sands",
+    "streaming_name": "the burning sands",
+    "in_game_name": "the burning sands",
+    "ost_name": "the burning sands",
+    "translation": null,
+    "streaming_track_number": 57,
+    "music_sphere_id": 45,
+    "ost_disc": 3,
+    "ost_track_number": 9,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 226,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "bikanel",
+            "sublocation": "oasis",
+            "area": "oasis",
+            "version": null
+          },
+          {
+            "location": "bikanel",
+            "sublocation": "sanubia desert",
+            "area": "east",
+            "version": null
+          },
+          {
+            "location": "bikanel",
+            "sublocation": "sanubia desert",
+            "area": "central",
+            "version": 1
+          },
+          {
+            "location": "bikanel",
+            "sublocation": "sanubia desert",
+            "area": "west",
+            "version": null
+          },
+          {
+            "location": "bikanel",
+            "sublocation": "sanubia desert",
+            "area": "central",
+            "version": 2
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 59,
+    "name": "peril",
+    "streaming_name": "peril",
+    "in_game_name": "peril",
+    "ost_name": "peril",
+    "translation": null,
+    "streaming_track_number": 58,
+    "music_sphere_id": 59,
+    "ost_disc": 3,
+    "ost_track_number": 10,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 243,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 2,
+        "condition": null,
+        "replaces_encounter_music": true,
+        "location_areas": [
+          {
+            "location": "home",
+            "sublocation": "home",
+            "area": "home",
+            "version": null
+          },
+          {
+            "location": "home",
+            "sublocation": "home",
+            "area": "entrance",
+            "version": null
+          },
+          {
+            "location": "home",
+            "sublocation": "home",
+            "area": "main corridor",
+            "version": null
+          },
+          {
+            "location": "home",
+            "sublocation": "home",
+            "area": "living quarters",
+            "version": 1
+          },
+          {
+            "location": "home",
+            "sublocation": "home",
+            "area": "living quarters",
+            "version": 2
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 76,
+        "SongID": 59,
+        "TriggerAreaID": 99,
+        "scene_description": "Mushroom Rock Road: Dark Magus Sisters escape sequence.",
+        "trigger_location_area": {
+          "location": "mushroom rock road",
+          "sublocation": "mushroom rock",
+          "area": "mushroom rock",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "mushroom rock",
+            "version": null
+          },
+          {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "valley",
+            "version": 1
+          },
+          {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "precipice",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until all Dark Magus Sisters are defeated.",
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 77,
+        "SongID": 59,
+        "TriggerAreaID": 156,
+        "scene_description": "Macalania: Yuna is attacked by Al Bhed.",
+        "trigger_location_area": {
+          "location": "macalania",
+          "sublocation": "lake macalania",
+          "area": "agency front",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "macalania",
+            "sublocation": "lake macalania",
+            "area": "agency front",
+            "version": null
+          },
+          {
+            "location": "macalania",
+            "sublocation": "lake macalania",
+            "area": "lake macalania",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until fighting Crawler.",
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 78,
+        "SongID": 59,
+        "TriggerAreaID": 192,
+        "scene_description": "Airship: Sin performing Terra Graviton.",
+        "trigger_location_area": {
+          "location": "airship",
+          "sublocation": "airship",
+          "area": "deck",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 60,
+    "name": "the truth revealed",
+    "streaming_name": "the truth revealed",
+    "in_game_name": "the truth revealed",
+    "ost_name": "the truth revealed",
+    "translation": null,
+    "streaming_track_number": 59,
+    "music_sphere_id": 64,
+    "ost_disc": 3,
+    "ost_track_number": 11,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 246,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 79,
+        "SongID": 60,
+        "TriggerAreaID": 179,
+        "scene_description": "Home: Rikku is telling Tidus that Yuna will die.",
+        "trigger_location_area": {
+          "location": "home",
+          "sublocation": "home",
+          "area": "environment controls",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 80,
+        "SongID": 60,
+        "TriggerAreaID": 229,
+        "scene_description": "Zanarkand Ruins: The party learns the truth about the Final Summoning.",
+        "trigger_location_area": {
+          "location": "zanarkand ruins",
+          "sublocation": "dome",
+          "area": "great hall",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 81,
+        "SongID": 60,
+        "TriggerAreaID": 230,
+        "scene_description": "Zanarkand Ruins: Yuna rejects the Final Summoning.",
+        "trigger_location_area": {
+          "location": "zanarkand ruins",
+          "sublocation": "dome",
+          "area": "the beyond",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 82,
+        "SongID": 60,
+        "TriggerAreaID": 237,
+        "scene_description": "Inside Sin: Tidus and Jecht talk to each other.",
+        "trigger_location_area": {
+          "location": "sin",
+          "sublocation": "sin",
+          "area": "dream's end",
+          "version": 1
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 61,
+    "name": "launch",
+    "streaming_name": "launch",
+    "in_game_name": "launch",
+    "ost_name": "launch",
+    "translation": null,
+    "streaming_track_number": 60,
+    "music_sphere_id": 60,
+    "ost_disc": 3,
+    "ost_track_number": 12,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 209,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "bridge",
+            "version": null
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 1
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 2
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 3
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 4
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 5
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 6
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 7
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 1
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 2
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 3
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 62,
+    "name": "the wedding",
+    "streaming_name": "the wedding",
+    "in_game_name": "the wedding",
+    "ost_name": "the wedding",
+    "translation": null,
+    "streaming_track_number": 61,
+    "music_sphere_id": 46,
+    "ost_disc": 3,
+    "ost_track_number": 13,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 72,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 63,
+    "name": "assault",
+    "streaming_name": "assault",
+    "in_game_name": "assault",
+    "ost_name": "assault",
+    "translation": null,
+    "streaming_track_number": 62,
+    "music_sphere_id": 47,
+    "ost_disc": 3,
+    "ost_track_number": 14,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 246,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 2,
+        "condition": null,
+        "replaces_encounter_music": true,
+        "location_areas": [
+          {
+            "location": "bevelle",
+            "sublocation": "bevelle",
+            "area": "tower of light",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 64,
+    "name": "tragedy",
+    "streaming_name": "tragedy",
+    "in_game_name": "tragedy",
+    "ost_name": "tragedy",
+    "translation": null,
+    "streaming_track_number": 63,
+    "music_sphere_id": 48,
+    "ost_disc": 3,
+    "ost_track_number": 15,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 243,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 83,
+        "SongID": 64,
+        "TriggerAreaID": 193,
+        "scene_description": "Bevelle: The party is surrounded by warrior monks.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "bevelle",
+          "area": "tower of light",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 65,
+    "name": "believe",
+    "streaming_name": "believe",
+    "in_game_name": "believe",
+    "ost_name": "believe",
+    "translation": null,
+    "streaming_track_number": 64,
+    "music_sphere_id": 49,
+    "ost_disc": 3,
+    "ost_track_number": 16,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 87,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 84,
+        "SongID": 65,
+        "TriggerAreaID": 193,
+        "scene_description": "Bevelle: Yuna is threatening to jump off the tower.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "bevelle",
+          "area": "tower of light",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 66,
+    "name": "via purifico",
+    "streaming_name": "via purifico",
+    "in_game_name": "via purifico",
+    "ost_name": "via purifico",
+    "translation": null,
+    "streaming_track_number": 65,
+    "music_sphere_id": 52,
+    "ost_disc": 3,
+    "ost_track_number": 17,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 149,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "bevelle",
+            "sublocation": "bevelle",
+            "area": "via purifico",
+            "version": 1
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 67,
+    "name": "hymn - bahamut",
+    "streaming_name": "hymn - bahamut",
+    "in_game_name": null,
+    "ost_name": "hymn of the fayth - bahamut",
+    "translation": null,
+    "streaming_track_number": 66,
+    "music_sphere_id": null,
+    "ost_disc": 3,
+    "ost_track_number": 18,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 41,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 85,
+        "SongID": 67,
+        "TriggerAreaID": 198,
+        "scene_description": "Bevelle: Tidus and Auron find Yuna in the chamber of the Fayth.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "bevelle",
+          "area": "trials",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 86,
+        "SongID": 67,
+        "TriggerAreaID": 201,
+        "scene_description": "Bevelle: Tidus and Yuna visit Bahamut in his chamber.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "highbridge",
+          "area": "highbridge",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 68,
+    "name": "moment of truth",
+    "streaming_name": "moment of truth",
+    "in_game_name": "moment of truth",
+    "ost_name": "moment of truth",
+    "translation": null,
+    "streaming_track_number": 67,
+    "music_sphere_id": 37,
+    "ost_disc": 3,
+    "ost_track_number": 19,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 219,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "ridge",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 87,
+        "SongID": 68,
+        "TriggerAreaID": 198,
+        "scene_description": "Bevelle: Yuna has to stand trial in front of the four maesters.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "bevelle",
+          "area": "trials",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 88,
+        "SongID": 68,
+        "TriggerAreaID": 201,
+        "scene_description": "Bevelle: The party revisits the highbridge to talk to Mika.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "highbridge",
+          "area": "highbridge",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 89,
+        "SongID": 68,
+        "TriggerAreaID": 201,
+        "scene_description": "Bevelle: Mika is talking about Yu Yevon and sends himself to the Farplane.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "highbridge",
+          "area": "highbridge",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 69,
+    "name": "patricide",
+    "streaming_name": "patricide",
+    "in_game_name": "patricide",
+    "ost_name": "patricide",
+    "translation": null,
+    "streaming_track_number": 68,
+    "music_sphere_id": 67,
+    "ost_disc": 3,
+    "ost_track_number": 20,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 162,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 90,
+        "SongID": 69,
+        "TriggerAreaID": 198,
+        "scene_description": "Bevelle: Seymour, Mika, and Kinoc talking to each other.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "bevelle",
+          "area": "trials",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 70,
+    "name": "suteki da ne",
+    "streaming_name": "suteki da ne",
+    "in_game_name": null,
+    "ost_name": "suteki da ne",
+    "translation": "isn't it wonderful?",
+    "streaming_track_number": 69,
+    "music_sphere_id": null,
+    "ost_disc": 3,
+    "ost_track_number": 21,
+    "credits": {
+      "ID": 9,
+      "composer": "nobuo uematsu",
+      "arranger": "shiro hamaguchi",
+      "performer": "rikki",
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 334,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 71,
+    "name": "yuna's decision",
+    "streaming_name": "yuna's decision",
+    "in_game_name": "yuna's decision",
+    "ost_name": "yuna's decision",
+    "translation": null,
+    "streaming_track_number": 70,
+    "music_sphere_id": 57,
+    "ost_disc": 4,
+    "ost_track_number": 1,
+    "credits": {
+      "ID": 8,
+      "composer": "nobuo uematsu",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 222,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "south",
+            "version": null
+          },
+          {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "central",
+            "version": null
+          },
+          {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "north",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 91,
+        "SongID": 71,
+        "TriggerAreaID": 220,
+        "scene_description": "Mount Gagazet: Tidus is listening to Yuna's sphere.",
+        "trigger_location_area": {
+          "location": "mount gagazet",
+          "sublocation": "gagazet",
+          "area": "road to zanarkand ruins",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 72,
+    "name": "lulu's theme",
+    "streaming_name": "lulu's theme",
+    "in_game_name": "lulu's theme",
+    "ost_name": "lulu's theme",
+    "translation": null,
+    "streaming_track_number": 71,
+    "music_sphere_id": 70,
+    "ost_disc": 4,
+    "ost_track_number": 2,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 232,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 73,
+    "name": "bravely forward",
+    "streaming_name": "bravely forward",
+    "in_game_name": "bravely forward",
+    "ost_name": "bravely forward",
+    "translation": null,
+    "streaming_track_number": 72,
+    "music_sphere_id": 53,
+    "ost_disc": 4,
+    "ost_track_number": 3,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 205,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "calm lands",
+            "sublocation": "calm lands",
+            "area": "arena",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 74,
+    "name": "hymn - yojimbo",
+    "streaming_name": "hymn - yojimbo",
+    "in_game_name": null,
+    "ost_name": "hymn of the fayth - yojimbo",
+    "translation": null,
+    "streaming_track_number": 73,
+    "music_sphere_id": null,
+    "ost_disc": 4,
+    "ost_track_number": 4,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 42,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "cavern of the stolen fayth",
+            "sublocation": "cavern of the stolen fayth",
+            "area": "fayth",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 75,
+    "name": "servants of the mountain",
+    "streaming_name": "servants of the mountain",
+    "in_game_name": "servants of the mountain",
+    "ost_name": "servants of the mountain",
+    "translation": null,
+    "streaming_track_number": 74,
+    "music_sphere_id": 50,
+    "ost_disc": 4,
+    "ost_track_number": 5,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 282,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "mount gagazet",
+            "sublocation": "gagazet",
+            "area": "mountain gate",
+            "version": null
+          },
+          {
+            "location": "mount gagazet",
+            "sublocation": "gagazet",
+            "area": "mountain trail",
+            "version": null
+          },
+          {
+            "location": "mount gagazet",
+            "sublocation": "gagazet",
+            "area": "prominence",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 92,
+        "SongID": 75,
+        "TriggerAreaID": 86,
+        "scene_description": "Luca: Scene with Biran and Yenke.",
+        "trigger_location_area": {
+          "location": "luca",
+          "sublocation": "luca",
+          "area": "cafe",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 93,
+        "SongID": 75,
+        "TriggerAreaID": 118,
+        "scene_description": "Moonflow: Scene with Biran and Yenke.",
+        "trigger_location_area": {
+          "location": "moonflow",
+          "sublocation": "moonflow",
+          "area": "south bank road",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 76,
+    "name": "hymn - the ronso",
+    "streaming_name": "hymn - the ronso",
+    "in_game_name": null,
+    "ost_name": "hymn of the fayth - the ronso",
+    "translation": null,
+    "streaming_track_number": 75,
+    "music_sphere_id": null,
+    "ost_disc": 4,
+    "ost_track_number": 6,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 42,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 94,
+        "SongID": 76,
+        "TriggerAreaID": 214,
+        "scene_description": "Mount Gagazet: The Ronso are singing for Yuna.",
+        "trigger_location_area": {
+          "location": "mount gagazet",
+          "sublocation": "gagazet",
+          "area": "mountain trail",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 77,
+    "name": "wandering",
+    "streaming_name": "wandering",
+    "in_game_name": "wandering",
+    "ost_name": "wandering",
+    "translation": null,
+    "streaming_track_number": 76,
+    "music_sphere_id": 14,
+    "ost_disc": 4,
+    "ost_track_number": 7,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 281,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 13,
+        "condition": "Djose: First visit.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "aftermath",
+            "version": null
+          },
+          {
+            "location": "djose",
+            "sublocation": "djose highroad",
+            "area": "djose highroad",
+            "version": null
+          },
+          {
+            "location": "djose",
+            "sublocation": "djose",
+            "area": "pilgrimage road",
+            "version": null
+          }
+        ]
+      },
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "guadosalam",
+            "sublocation": "the farplane",
+            "area": "the farplane",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 95,
+        "SongID": 77,
+        "TriggerAreaID": 20,
+        "scene_description": "Besaid: Wakka tells Tidus about ancient machina cities.",
+        "trigger_location_area": {
+          "location": "besaid",
+          "sublocation": "besaid",
+          "area": "beach",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 96,
+        "SongID": 77,
+        "TriggerAreaID": 42,
+        "scene_description": "SS Liki: Yuna vows to defeat Sin.",
+        "trigger_location_area": {
+          "location": "ss liki",
+          "sublocation": "ss liki",
+          "area": "deck",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 97,
+        "SongID": 77,
+        "TriggerAreaID": 48,
+        "scene_description": "Kilika: The party arrives at Kilika.",
+        "trigger_location_area": {
+          "location": "kilika",
+          "sublocation": "kilika port",
+          "area": "dock",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 98,
+        "SongID": 77,
+        "TriggerAreaID": 80,
+        "scene_description": "Luca: Auron talking to Tidus about Sin, Jecht, and Spira.",
+        "trigger_location_area": {
+          "location": "luca",
+          "sublocation": "luca",
+          "area": "number 5 dock",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": "until-zone-change",
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 99,
+        "SongID": 77,
+        "TriggerAreaID": 219,
+        "scene_description": "Mount Gagazet: Auron tells Tidus and Wakka about his failures.",
+        "trigger_location_area": {
+          "location": "mount gagazet",
+          "sublocation": "gagazet",
+          "area": "summit region",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": "until-zone-change",
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 78,
+    "name": "a fleeting dream",
+    "streaming_name": "a fleeting dream",
+    "in_game_name": "a fleeting dream",
+    "ost_name": "a fleeting dream",
+    "translation": null,
+    "streaming_track_number": 77,
+    "music_sphere_id": 25,
+    "ost_disc": 4,
+    "ost_track_number": 8,
+    "credits": {
+      "ID": 6,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 264,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 2,
+        "condition": null,
+        "replaces_encounter_music": true,
+        "location_areas": [
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "zanarkand ruins",
+            "area": "zanarkand ruins",
+            "version": null
+          },
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "zanarkand ruins",
+            "area": "overpass",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 100,
+        "SongID": 78,
+        "TriggerAreaID": 42,
+        "scene_description": "SS Liki: Tidus and Yuna talking about Jecht.",
+        "trigger_location_area": {
+          "location": "ss liki",
+          "sublocation": "ss liki",
+          "area": "deck",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 101,
+        "SongID": 78,
+        "TriggerAreaID": 104,
+        "scene_description": "Mushroom Rock Road: Tidus chasing Sin.",
+        "trigger_location_area": {
+          "location": "mushroom rock road",
+          "sublocation": "mushroom rock",
+          "area": "beach",
+          "version": 1
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 102,
+        "SongID": 78,
+        "TriggerAreaID": 189,
+        "scene_description": "Airship: Yuna says she has no clue on how to defeat Sin.",
+        "trigger_location_area": {
+          "location": "airship",
+          "sublocation": "airship",
+          "area": "cabin",
+          "version": 1
+        },
+        "included_areas": [
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "bridge",
+            "version": null
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 1
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 2
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 3
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 4
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 5
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 6
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 7
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 1
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 2
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 3
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until talking to the party at the bridge.",
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 103,
+        "SongID": 78,
+        "TriggerAreaID": 204,
+        "scene_description": "Calm Lands: An NPC tells the party about Gandolf and 'The Scar'.",
+        "trigger_location_area": {
+          "location": "calm lands",
+          "sublocation": "calm lands",
+          "area": "north",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 104,
+        "SongID": 78,
+        "TriggerAreaID": 237,
+        "scene_description": "Inside Sin: Jecht is being held by Tidus after the fight.",
+        "trigger_location_area": {
+          "location": "sin",
+          "sublocation": "sin",
+          "area": "dream's end",
+          "version": 1
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 105,
+        "SongID": 78,
+        "TriggerAreaID": null,
+        "scene_description": "Eternal Calm: Yuna decides to search for Tidus.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 79,
+    "name": "hymn - yunalesca",
+    "streaming_name": "hymn - yunalesca",
+    "in_game_name": null,
+    "ost_name": "hymn of the fayth - yunalesca",
+    "translation": null,
+    "streaming_track_number": 78,
+    "music_sphere_id": null,
+    "ost_disc": 4,
+    "ost_track_number": 9,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 43,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 14,
+        "condition": "Zanarkand Ruins: After defeating Spectral Keeper, before defeating Yunalesca.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "trials",
+            "version": null
+          }
+        ]
+      },
+      {
+        "ID": 15,
+        "condition": "Zanarkand Ruins: Before leaving the zone after defeating Yunalesca.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "fayth",
+            "version": null
+          },
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "great hall",
+            "version": null
+          },
+          {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "the beyond",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 106,
+        "SongID": 79,
+        "TriggerAreaID": 238,
+        "scene_description": "Inside Sin: Before fighting against the Aeons.",
+        "trigger_location_area": {
+          "location": "sin",
+          "sublocation": "sin",
+          "area": "dream's end",
+          "version": 2
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 80,
+    "name": "challenge",
+    "streaming_name": "challenge",
+    "in_game_name": "challenge",
+    "ost_name": "challenge",
+    "translation": null,
+    "streaming_track_number": 79,
+    "music_sphere_id": 61,
+    "ost_disc": 4,
+    "ost_track_number": 10,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 258,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 81,
+    "name": "beyond the darkness",
+    "streaming_name": "beyond the darkness",
+    "in_game_name": "beyond the darkness",
+    "ost_name": "beyond the darkness",
+    "translation": null,
+    "streaming_track_number": 80,
+    "music_sphere_id": 62,
+    "ost_disc": 4,
+    "ost_track_number": 11,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 278,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 16,
+        "condition": "Airship: Cid meeting Yuna after the party gets picked up at Zanarkand.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "bridge",
+            "version": null
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 1
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 2
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 3
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 4
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 5
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 6
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 7
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 1
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 2
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 3
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+          }
+        ]
+      },
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "omega ruins",
+            "sublocation": "omega ruins",
+            "area": "omega ruins",
+            "version": 1
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 107,
+        "SongID": 81,
+        "TriggerAreaID": 181,
+        "scene_description": "Airship: The party reacts to the Al Bhed destroying their home.",
+        "trigger_location_area": {
+          "location": "airship",
+          "sublocation": "airship",
+          "area": "bridge",
+          "version": null
+        },
+        "included_areas": [
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "bridge",
+            "version": null
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 1
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 2
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 3
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 4
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 5
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 6
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "corridor",
+            "version": 7
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 1
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 2
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "cabin",
+            "version": 3
+          },
+          {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+          }
+        ],
+        "replaces_bg_music": "until-trigger",
+        "end_trigger": "Until finding Yuna.",
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 82,
+    "name": "gloom",
+    "streaming_name": "gloom",
+    "in_game_name": "gloom",
+    "ost_name": "gloom",
+    "translation": null,
+    "streaming_track_number": 81,
+    "music_sphere_id": 66,
+    "ost_disc": 4,
+    "ost_track_number": 12,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 268,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 1,
+        "condition": null,
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "remiem temple",
+            "sublocation": "remiem temple",
+            "area": "great hall",
+            "version": null
+          }
+        ]
+      },
+      {
+        "ID": 2,
+        "condition": null,
+        "replaces_encounter_music": true,
+        "location_areas": [
+          {
+            "location": "omega ruins",
+            "sublocation": "omega ruins",
+            "area": "omega ruins",
+            "version": 2
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "ID": 108,
+        "SongID": 82,
+        "TriggerAreaID": 198,
+        "scene_description": "Bevelle: Kinoc arrests the party in front of the chamber of the Fayth.",
+        "trigger_location_area": {
+          "location": "bevelle",
+          "sublocation": "bevelle",
+          "area": "trials",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 83,
+    "name": "hymn - spira",
+    "streaming_name": "hymn - spira",
+    "in_game_name": null,
+    "ost_name": "hymn of the fayth - spira",
+    "translation": null,
+    "streaming_track_number": 82,
+    "music_sphere_id": null,
+    "ost_disc": 4,
+    "ost_track_number": 13,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 43,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 109,
+        "SongID": 83,
+        "TriggerAreaID": 181,
+        "scene_description": "Airship: The airship plays the Hymn of the Fayth.",
+        "trigger_location_area": {
+          "location": "airship",
+          "sublocation": "airship",
+          "area": "bridge",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      },
+      {
+        "ID": 110,
+        "SongID": 83,
+        "TriggerAreaID": 192,
+        "scene_description": "Airship: The party is on the deck hearing Spira's citizens join in on the Hymn.",
+        "trigger_location_area": {
+          "location": "airship",
+          "sublocation": "airship",
+          "area": "deck",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 84,
+    "name": "the unsent laugh",
+    "streaming_name": "the unsent laugh",
+    "in_game_name": "the unsent laugh",
+    "ost_name": "the unsent laugh",
+    "translation": null,
+    "streaming_track_number": 83,
+    "music_sphere_id": 54,
+    "ost_disc": 4,
+    "ost_track_number": 14,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 213,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [
+      {
+        "ID": 17,
+        "condition": "Inside Sin: Before fighting Seymour Omnis.",
+        "replaces_encounter_music": false,
+        "location_areas": [
+          {
+            "location": "sin",
+            "sublocation": "sin",
+            "area": "garden of pain",
+            "version": null
+          }
+        ]
+      }
+    ],
+    "cues": []
+  },
+  {
+    "ID": 85,
+    "name": "fight with seymour",
+    "streaming_name": "fight with seymour",
+    "in_game_name": null,
+    "ost_name": "fight with seymour",
+    "translation": null,
+    "streaming_track_number": 84,
+    "music_sphere_id": null,
+    "ost_disc": 4,
+    "ost_track_number": 15,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 346,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 86,
+    "name": "hymn - anima",
+    "streaming_name": "hymn - anima",
+    "in_game_name": null,
+    "ost_name": "hymn of the fayth - anima",
+    "translation": null,
+    "streaming_track_number": 85,
+    "music_sphere_id": null,
+    "ost_disc": 4,
+    "ost_track_number": 16,
+    "credits": {
+      "ID": 7,
+      "composer": "nobuo uematsu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 42,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 111,
+        "SongID": 86,
+        "TriggerAreaID": 14,
+        "scene_description": "Baaj Temple: When talking to Seymour's mother.",
+        "trigger_location_area": {
+          "location": "baaj temple",
+          "sublocation": "ruins",
+          "area": "fayth",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 87,
+    "name": "a contest of aeons",
+    "streaming_name": "a contest of aeons",
+    "in_game_name": null,
+    "ost_name": "a contest of aeons",
+    "translation": null,
+    "streaming_track_number": 86,
+    "music_sphere_id": null,
+    "ost_disc": 4,
+    "ost_track_number": 17,
+    "credits": {
+      "ID": 4,
+      "composer": "junya nakano",
+      "arranger": "junya nakano",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 356,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 88,
+    "name": "final battle",
+    "streaming_name": "final battle",
+    "in_game_name": null,
+    "ost_name": "final battle",
+    "translation": null,
+    "streaming_track_number": 87,
+    "music_sphere_id": null,
+    "ost_disc": 4,
+    "ost_track_number": 18,
+    "credits": {
+      "ID": 5,
+      "composer": "masashi hamauzu",
+      "arranger": "masashi hamauzu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 350,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 89,
+    "name": "ending theme",
+    "streaming_name": "ending theme",
+    "in_game_name": null,
+    "ost_name": "ending theme",
+    "translation": null,
+    "streaming_track_number": 88,
+    "music_sphere_id": null,
+    "ost_disc": 4,
+    "ost_track_number": 19,
+    "credits": {
+      "ID": 10,
+      "composer": "nobuo uematsu",
+      "arranger": "shiro hamaguchi",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 330,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 90,
+    "name": "never forget them",
+    "streaming_name": null,
+    "in_game_name": null,
+    "ost_name": "never forget them",
+    "translation": null,
+    "streaming_track_number": null,
+    "music_sphere_id": null,
+    "ost_disc": 4,
+    "ost_track_number": 20,
+    "credits": {
+      "ID": 11,
+      "composer": null,
+      "arranger": null,
+      "performer": "mayuko aoki",
+      "lyricist": null
+    },
+    "duration_in_seconds": 12,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 112,
+        "SongID": 90,
+        "TriggerAreaID": null,
+        "scene_description": "Ending sequence.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 91,
+    "name": "suteki da ne - orchestra version",
+    "streaming_name": "suteki da ne - orchestra version",
+    "in_game_name": null,
+    "ost_name": "suteki da ne - orchestra version",
+    "translation": "isn't it wonderful? - orchestra version",
+    "streaming_track_number": 89,
+    "music_sphere_id": null,
+    "ost_disc": 4,
+    "ost_track_number": 21,
+    "credits": {
+      "ID": 9,
+      "composer": "nobuo uematsu",
+      "arranger": "shiro hamaguchi",
+      "performer": "rikki",
+      "lyricist": "kazushige nojima"
+    },
+    "duration_in_seconds": 379,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 113,
+        "SongID": 91,
+        "TriggerAreaID": null,
+        "scene_description": "During the credits.",
+        "trigger_location_area": null,
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 92,
+    "name": "illusion",
+    "streaming_name": null,
+    "in_game_name": "illusion",
+    "ost_name": null,
+    "translation": null,
+    "streaming_track_number": null,
+    "music_sphere_id": 56,
+    "ost_disc": null,
+    "ost_track_number": null,
+    "credits": null,
+    "duration_in_seconds": 156,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 93,
+    "name": "nostalgia",
+    "streaming_name": null,
+    "in_game_name": "nostalgia",
+    "ost_name": null,
+    "translation": null,
+    "streaming_track_number": null,
+    "music_sphere_id": 58,
+    "ost_disc": null,
+    "ost_track_number": null,
+    "credits": null,
+    "duration_in_seconds": 82,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  },
+  {
+    "ID": 94,
+    "name": "hum of the fayth",
+    "streaming_name": null,
+    "in_game_name": "hum of the fayth",
+    "ost_name": null,
+    "translation": null,
+    "streaming_track_number": null,
+    "music_sphere_id": 69,
+    "ost_disc": null,
+    "ost_track_number": 0,
+    "credits": {
+      "ID": 12,
+      "composer": "nobuo uematsu",
+      "arranger": null,
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 24,
+    "can_loop": false,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": [
+      {
+        "ID": 114,
+        "SongID": 94,
+        "TriggerAreaID": 160,
+        "scene_description": "Macalania: Tidus humming the hymn.",
+        "trigger_location_area": {
+          "location": "macalania",
+          "sublocation": "lake macalania",
+          "area": "lake bottom",
+          "version": null
+        },
+        "included_areas": [],
+        "replaces_bg_music": null,
+        "end_trigger": null,
+        "replaces_encounter_music": false
+      }
+    ]
+  },
+  {
+    "ID": 95,
+    "name": "wakka's theme",
+    "streaming_name": null,
+    "in_game_name": "wakka's theme",
+    "ost_name": null,
+    "translation": null,
+    "streaming_track_number": null,
+    "music_sphere_id": 71,
+    "ost_disc": null,
+    "ost_track_number": 0,
+    "credits": {
+      "ID": 2,
+      "composer": "nobuo uematsu",
+      "arranger": "nobuo uematsu",
+      "performer": null,
+      "lyricist": null
+    },
+    "duration_in_seconds": 270,
+    "can_loop": true,
+    "special_use_case": null,
+    "background_music": [],
+    "cues": []
+  }
+]
