@@ -24,7 +24,7 @@ const updateDbState = `-- name: UpdateDbState :exec
 UPDATE db_state
 SET data_hash = $1,
     updated_at = NOW()
-WHERE id = $1
+WHERE id = 1
 `
 
 func (q *Queries) UpdateDbState(ctx context.Context, dataHash string) error {

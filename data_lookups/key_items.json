@@ -1,480 +1,540 @@
 [
   {
     "ID": 1,
+    "master_item_id": 113,
     "name": "withered bouquet",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "story",
     "description": "Someone put heart and soul into making this.",
     "effect": "Combined with Flint to make fire."
   },
   {
     "ID": 2,
+    "master_item_id": 114,
     "name": "flint",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "story",
     "description": "Used to start fires.",
     "effect": "Combined with Withered Bouquet to make fire."
   },
   {
     "ID": 3,
+    "master_item_id": 115,
     "name": "cloudy mirror",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "The surface is dark and clouded.",
     "effect": "Can be upgraded into the Celestial Mirror."
   },
   {
     "ID": 4,
+    "master_item_id": 116,
     "name": "celestial mirror",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "The surface is shiny and bright.",
     "effect": "Used in order to upgrade Celestial Weapons."
   },
   {
     "ID": 5,
+    "master_item_id": 117,
     "name": "summoner's soul",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "story",
     "description": "Allows the aeons to learn abilities.",
     "effect": "Used in order to teach aeons abilities."
   },
   {
     "ID": 6,
+    "master_item_id": 118,
     "name": "aeon's soul",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "story",
     "description": "Allows you to raise aeon's attributes.",
     "effect": "Used in order to increase an aeon's stats."
   },
   {
     "ID": 7,
+    "master_item_id": 119,
     "name": "rusty sword",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "An old, rusty sword.",
     "effect": "Required to obtain Masamune."
   },
   {
     "ID": 8,
+    "master_item_id": 120,
     "name": "mark of conquest",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "other",
     "description": "Distinguish a powerful fighter.",
     "effect": "Proof that the player has defeated Nemesis."
   },
   {
     "ID": 9,
+    "master_item_id": 121,
     "name": "blossom crown",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "other",
     "description": "Seems to have a connection with a hidden aeon...",
     "effect": "Breaks part of the seal to the Chamber of the Fayth at Remiem Temple."
   },
   {
     "ID": 10,
+    "master_item_id": 122,
     "name": "flower sceptre",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "other",
     "description": "Seems to have a connection with a hidden aeon...",
     "effect": "Breaks part of the seal to the Chamber of the Fayth at Remiem Temple."
   },
   {
     "ID": 11,
+    "master_item_id": 123,
     "name": "sun crest",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of the Sun.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Caladbolg."
   },
   {
     "ID": 12,
+    "master_item_id": 124,
     "name": "sun sigil",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of the Sun.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Caladbolg."
   },
   {
     "ID": 13,
+    "master_item_id": 125,
     "name": "moon crest",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of the Moon.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Nirvana."
   },
   {
     "ID": 14,
+    "master_item_id": 126,
     "name": "moon sigil",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of the Moon.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Nirvana."
   },
   {
     "ID": 15,
+    "master_item_id": 127,
     "name": "mars crest",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of Mars.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Masamune."
   },
   {
     "ID": 16,
+    "master_item_id": 128,
     "name": "mars sigil",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of Mars.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Masamune."
   },
   {
     "ID": 17,
+    "master_item_id": 129,
     "name": "saturn crest",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of Saturn.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Spirit Lance."
   },
   {
     "ID": 18,
+    "master_item_id": 130,
     "name": "saturn sigil",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of Saturn.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Spirit Lance."
   },
   {
     "ID": 19,
+    "master_item_id": 131,
     "name": "jupiter crest",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of Jupiter.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the World Champion."
   },
   {
     "ID": 20,
+    "master_item_id": 132,
     "name": "jupiter sigil",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of Jupiter.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the World Champion."
   },
   {
     "ID": 21,
+    "master_item_id": 133,
     "name": "venus crest",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of Venus.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Onion Knight."
   },
   {
     "ID": 22,
+    "master_item_id": 134,
     "name": "venus sigil",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of Venus.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Onion Knight."
   },
   {
     "ID": 23,
+    "master_item_id": 135,
     "name": "mercury crest",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of Mercury.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Godhand."
   },
   {
     "ID": 24,
+    "master_item_id": 136,
     "name": "mercury sigil",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "celestial",
     "description": "A celestial token, fashioned in the shape of Mercury.",
     "effect": "Used in conjunction with the Celestial Mirror to upgrade the Godhand."
   },
   {
     "ID": 25,
+    "master_item_id": 137,
     "name": "jecht sphere 1",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "jecht-sphere",
     "description": "A sphere recorded by Jecht ten years ago.",
     "effect": "Contains recordings of Jecht, Braska and Auron. Allows Auron to learn new Overdrives."
   },
   {
     "ID": 26,
+    "master_item_id": 138,
     "name": "jecht sphere 2",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "jecht-sphere",
     "description": "A sphere recorded by Jecht ten years ago.",
     "effect": "Contains recordings of Jecht, Braska and Auron. Allows Auron to learn new Overdrives."
   },
   {
     "ID": 27,
+    "master_item_id": 139,
     "name": "jecht sphere 3",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "jecht-sphere",
     "description": "A sphere recorded by Jecht ten years ago.",
     "effect": "Contains recordings of Jecht, Braska and Auron. Allows Auron to learn new Overdrives."
   },
   {
     "ID": 28,
+    "master_item_id": 140,
     "name": "jecht sphere 4",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "jecht-sphere",
     "description": "A sphere recorded by Jecht ten years ago.",
     "effect": "Contains recordings of Jecht, Braska and Auron. Allows Auron to learn new Overdrives."
   },
   {
     "ID": 29,
+    "master_item_id": 141,
     "name": "jecht sphere 5",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "jecht-sphere",
     "description": "A sphere recorded by Jecht ten years ago.",
     "effect": "Contains recordings of Jecht, Braska and Auron. Allows Auron to learn new Overdrives."
   },
   {
     "ID": 30,
+    "master_item_id": 142,
     "name": "jecht sphere 6",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "jecht-sphere",
     "description": "A sphere recorded by Jecht ten years ago.",
     "effect": "Contains recordings of Jecht, Braska and Auron. Allows Auron to learn new Overdrives."
   },
   {
     "ID": 31,
+    "master_item_id": 143,
     "name": "jecht sphere 7",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "jecht-sphere",
     "description": "A sphere recorded by Jecht ten years ago.",
     "effect": "Contains recordings of Jecht, Braska and Auron. Allows Auron to learn new Overdrives."
   },
   {
     "ID": 32,
+    "master_item_id": 144,
     "name": "jecht sphere 8",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "jecht-sphere",
     "description": "A sphere recorded by Jecht ten years ago.",
     "effect": "Contains recordings of Jecht, Braska and Auron. Allows Auron to learn new Overdrives."
   },
   {
     "ID": 33,
+    "master_item_id": 145,
     "name": "braska's sphere",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "jecht-sphere",
     "description": "A sphere recorded by Jecht ten years ago.",
     "effect": "Contains recordings of Jecht, Braska and Auron. Allows Auron to learn new Overdrives."
   },
   {
     "ID": 34,
+    "master_item_id": 146,
     "name": "auron's sphere",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "jecht-sphere",
     "description": "A sphere recorded by Jecht ten years ago.",
     "effect": "Contains recordings of Jecht, Braska and Auron. Allows Auron to learn new Overdrives."
   },
   {
     "ID": 35,
+    "master_item_id": 147,
     "name": "al bhed primer i",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'A' in Al Bhed.",
     "effect": "The Al Bhed letter 'A' is replaced with the English letter 'E' in Al Bhed subtitles and text."
   },
   {
     "ID": 36,
+    "master_item_id": 148,
     "name": "al bhed primer ii",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'B' in Al Bhed.",
     "effect": "The Al Bhed letter 'B' is replaced with the English letter 'P' in Al Bhed subtitles and text."
   },
   {
     "ID": 37,
+    "master_item_id": 149,
     "name": "al bhed primer iii",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'C' in Al Bhed.",
     "effect": "The Al Bhed letter 'C' is replaced with the English letter 'S' in Al Bhed subtitles and text."
   },
   {
     "ID": 38,
+    "master_item_id": 150,
     "name": "al bhed primer iv",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'D' in Al Bhed.",
     "effect": "The Al Bhed letter 'D' is replaced with the English letter 'T' in Al Bhed subtitles and text."
   },
   {
     "ID": 39,
+    "master_item_id": 151,
     "name": "al bhed primer v",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'E' in Al Bhed.",
     "effect": "The Al Bhed letter 'E' is replaced with the English letter 'I' in Al Bhed subtitles and text."
   },
   {
     "ID": 40,
+    "master_item_id": 152,
     "name": "al bhed primer vi",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'F' in Al Bhed.",
     "effect": "The Al Bhed letter 'F' is replaced with the English letter 'W' in Al Bhed subtitles and text."
   },
   {
     "ID": 41,
+    "master_item_id": 153,
     "name": "al bhed primer vii",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'G' in Al Bhed.",
     "effect": "The Al Bhed letter 'G' is replaced with the English letter 'K' in Al Bhed subtitles and text."
   },
   {
     "ID": 42,
+    "master_item_id": 154,
     "name": "al bhed primer viii",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'H' in Al Bhed.",
     "effect": "The Al Bhed letter 'H' is replaced with the English letter 'N' in Al Bhed subtitles and text."
   },
   {
     "ID": 43,
+    "master_item_id": 155,
     "name": "al bhed primer ix",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'I' in Al Bhed.",
     "effect": "The Al Bhed letter 'I' is replaced with the English letter 'U' in Al Bhed subtitles and text."
   },
   {
     "ID": 44,
+    "master_item_id": 156,
     "name": "al bhed primer x",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'J' in Al Bhed.",
     "effect": "The Al Bhed letter 'J' is replaced with the English letter 'V' in Al Bhed subtitles and text."
   },
   {
     "ID": 45,
+    "master_item_id": 157,
     "name": "al bhed primer xi",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'K' in Al Bhed.",
     "effect": "The Al Bhed letter 'K' is replaced with the English letter 'G' in Al Bhed subtitles and text."
   },
   {
     "ID": 46,
+    "master_item_id": 158,
     "name": "al bhed primer xii",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'L' in Al Bhed.",
     "effect": "The Al Bhed letter 'L' is replaced with the English letter 'C' in Al Bhed subtitles and text."
   },
   {
     "ID": 47,
+    "master_item_id": 159,
     "name": "al bhed primer xiii",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'M' in Al Bhed.",
     "effect": "The Al Bhed letter 'M' is replaced with the English letter 'L' in Al Bhed subtitles and text."
   },
   {
     "ID": 48,
+    "master_item_id": 160,
     "name": "al bhed primer xiv",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'N' in Al Bhed.",
     "effect": "The Al Bhed letter 'N' is replaced with the English letter 'R' in Al Bhed subtitles and text."
   },
   {
     "ID": 49,
+    "master_item_id": 161,
     "name": "al bhed primer xv",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'O' in Al Bhed.",
     "effect": "The Al Bhed letter 'O' is replaced with the English letter 'Y' in Al Bhed subtitles and text."
   },
   {
     "ID": 50,
+    "master_item_id": 162,
     "name": "al bhed primer xvi",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'P' in Al Bhed.",
     "effect": "The Al Bhed letter 'P' is replaced with the English letter 'B' in Al Bhed subtitles and text."
   },
   {
     "ID": 51,
+    "master_item_id": 163,
     "name": "al bhed primer xvii",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'Q' in Al Bhed.",
     "effect": "The Al Bhed letter 'Q' is replaced with the English letter 'X' in Al Bhed subtitles and text."
   },
   {
     "ID": 52,
+    "master_item_id": 164,
     "name": "al bhed primer xviii",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'R' in Al Bhed.",
     "effect": "The Al Bhed letter 'R' is replaced with the English letter 'H' in Al Bhed subtitles and text."
   },
   {
     "ID": 53,
+    "master_item_id": 165,
     "name": "al bhed primer xix",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'S' in Al Bhed.",
     "effect": "The Al Bhed letter 'S' is replaced with the English letter 'M' in Al Bhed subtitles and text."
   },
   {
     "ID": 54,
+    "master_item_id": 166,
     "name": "al bhed primer xx",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'T' in Al Bhed.",
     "effect": "The Al Bhed letter 'T' is replaced with the English letter 'D' in Al Bhed subtitles and text."
   },
   {
     "ID": 55,
+    "master_item_id": 167,
     "name": "al bhed primer xxi",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'U' in Al Bhed.",
     "effect": "The Al Bhed letter 'U' is replaced with the English letter 'O' in Al Bhed subtitles and text."
   },
   {
     "ID": 56,
+    "master_item_id": 168,
     "name": "al bhed primer xxii",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'V' in Al Bhed.",
     "effect": "The Al Bhed letter 'V' is replaced with the English letter 'F' in Al Bhed subtitles and text."
   },
   {
     "ID": 57,
+    "master_item_id": 169,
     "name": "al bhed primer xxiii",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'W' in Al Bhed.",
     "effect": "The Al Bhed letter 'W' is replaced with the English letter 'Z' in Al Bhed subtitles and text."
   },
   {
     "ID": 58,
+    "master_item_id": 170,
     "name": "al bhed primer xxiv",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'X' in Al Bhed.",
     "effect": "The Al Bhed letter 'X' is replaced with the English letter 'Q' in Al Bhed subtitles and text."
   },
   {
     "ID": 59,
+    "master_item_id": 171,
     "name": "al bhed primer xxv",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'Y' in Al Bhed.",
     "effect": "The Al Bhed letter 'Y' is replaced with the English letter 'A' in Al Bhed subtitles and text."
   },
   {
     "ID": 60,
+    "master_item_id": 172,
     "name": "al bhed primer xxvi",
-    "Type": "key-item",
+    "type": "key-item",
     "category": "primer",
     "description": "Teaches the letter 'Z' in Al Bhed.",
     "effect": "The Al Bhed letter 'Z' is replaced with the English letter 'J' in Al Bhed subtitles and text."

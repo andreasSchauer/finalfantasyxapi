@@ -5,7 +5,7 @@ import (
 )
 
 type KeyItem struct {
-	ID int32
+	ID 			int32  `json:"id"`
 	MasterItem
 	Category    string `json:"category"`
 	Description string `json:"description"`

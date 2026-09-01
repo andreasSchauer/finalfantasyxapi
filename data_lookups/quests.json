@@ -22,8 +22,8 @@
         }
       ],
       "reward": {
-        "ID": 120,
-        "Type": "key-item",
+        "master_item_id": 120,
+        "type": "key-item",
         "name": "mark of conquest",
         "amount": 1
       }
@@ -53,8 +53,8 @@
         }
       ],
       "reward": {
-        "ID": 126,
-        "Type": "key-item",
+        "master_item_id": 126,
+        "type": "key-item",
         "name": "moon sigil",
         "amount": 1
       }
@@ -100,8 +100,8 @@
         }
       ],
       "reward": {
-        "ID": 136,
-        "Type": "key-item",
+        "master_item_id": 136,
+        "type": "key-item",
         "name": "mercury sigil",
         "amount": 1
       }
@@ -166,8 +166,8 @@
         }
       ],
       "reward": {
-        "ID": 111,
-        "Type": "item",
+        "master_item_id": 111,
+        "type": "item",
         "name": "underdog's secret",
         "amount": 99
       }
@@ -197,8 +197,8 @@
         }
       ],
       "reward": {
-        "ID": 116,
-        "Type": "key-item",
+        "master_item_id": 116,
+        "type": "key-item",
         "name": "celestial mirror",
         "amount": 1
       }
@@ -228,8 +228,8 @@
         }
       ],
       "reward": {
-        "ID": 66,
-        "Type": "item",
+        "master_item_id": 66,
+        "type": "item",
         "name": "stamina tonic",
         "amount": 99
       }
@@ -259,8 +259,8 @@
         }
       ],
       "reward": {
-        "ID": 46,
-        "Type": "item",
+        "master_item_id": 46,
+        "type": "item",
         "name": "poison fang",
         "amount": 99
       }
@@ -290,8 +290,8 @@
         }
       ],
       "reward": {
-        "ID": 62,
-        "Type": "item",
+        "master_item_id": 62,
+        "type": "item",
         "name": "soul spring",
         "amount": 99
       }
@@ -321,8 +321,8 @@
         }
       ],
       "reward": {
-        "ID": 49,
-        "Type": "item",
+        "master_item_id": 49,
+        "type": "item",
         "name": "candle of life",
         "amount": 99
       }
@@ -352,8 +352,8 @@
         }
       ],
       "reward": {
-        "ID": 50,
-        "Type": "item",
+        "master_item_id": 50,
+        "type": "item",
         "name": "petrify grenade",
         "amount": 99
       }
@@ -383,8 +383,8 @@
         }
       ],
       "reward": {
-        "ID": 55,
-        "Type": "item",
+        "master_item_id": 55,
+        "type": "item",
         "name": "chocobo wing",
         "amount": 99
       }
@@ -414,8 +414,8 @@
         }
       ],
       "reward": {
-        "ID": 43,
-        "Type": "item",
+        "master_item_id": 43,
+        "type": "item",
         "name": "shining gem",
         "amount": 60
       }
@@ -445,8 +445,8 @@
         }
       ],
       "reward": {
-        "ID": 42,
-        "Type": "item",
+        "master_item_id": 42,
+        "type": "item",
         "name": "shadow gem",
         "amount": 99
       }
@@ -476,8 +476,8 @@
         }
       ],
       "reward": {
-        "ID": 52,
-        "Type": "item",
+        "master_item_id": 52,
+        "type": "item",
         "name": "farplane wind",
         "amount": 60
       }
@@ -507,8 +507,8 @@
         }
       ],
       "reward": {
-        "ID": 47,
-        "Type": "item",
+        "master_item_id": 47,
+        "type": "item",
         "name": "silver hourglass",
         "amount": 40
       }
@@ -538,8 +538,8 @@
         }
       ],
       "reward": {
-        "ID": 121,
-        "Type": "key-item",
+        "master_item_id": 121,
+        "type": "key-item",
         "name": "blossom crown",
         "amount": 1
       }
@@ -569,8 +569,8 @@
         }
       ],
       "reward": {
-        "ID": 56,
-        "Type": "item",
+        "master_item_id": 56,
+        "type": "item",
         "name": "lunar curtain",
         "amount": 99
       }
@@ -600,8 +600,8 @@
         }
       ],
       "reward": {
-        "ID": 107,
-        "Type": "item",
+        "master_item_id": 107,
+        "type": "item",
         "name": "designer wallet",
         "amount": 60
       }
@@ -631,8 +631,8 @@
         }
       ],
       "reward": {
-        "ID": 54,
-        "Type": "item",
+        "master_item_id": 54,
+        "type": "item",
         "name": "chocobo feather",
         "amount": 99
       }
@@ -662,8 +662,8 @@
         }
       ],
       "reward": {
-        "ID": 61,
-        "Type": "item",
+        "master_item_id": 61,
+        "type": "item",
         "name": "stamina spring",
         "amount": 99
       }
@@ -693,8 +693,8 @@
         }
       ],
       "reward": {
-        "ID": 10,
-        "Type": "item",
+        "master_item_id": 10,
+        "type": "item",
         "name": "mega phoenix",
         "amount": 99
       }
@@ -724,8 +724,8 @@
         }
       ],
       "reward": {
-        "ID": 67,
-        "Type": "item",
+        "master_item_id": 67,
+        "type": "item",
         "name": "mana tonic",
         "amount": 60
       }
@@ -755,8 +755,8 @@
         }
       ],
       "reward": {
-        "ID": 60,
-        "Type": "item",
+        "master_item_id": 60,
+        "type": "item",
         "name": "mana spring",
         "amount": 99
       }
@@ -786,8 +786,8 @@
         }
       ],
       "reward": {
-        "ID": 64,
-        "Type": "item",
+        "master_item_id": 64,
+        "type": "item",
         "name": "stamina tablet",
         "amount": 60
       }
@@ -817,8 +817,8 @@
         }
       ],
       "reward": {
-        "ID": 68,
-        "Type": "item",
+        "master_item_id": 68,
+        "type": "item",
         "name": "twin stars",
         "amount": 60
       }
@@ -848,8 +848,8 @@
         }
       ],
       "reward": {
-        "ID": 58,
-        "Type": "item",
+        "master_item_id": 58,
+        "type": "item",
         "name": "star curtain",
         "amount": 60
       }
@@ -879,8 +879,8 @@
         }
       ],
       "reward": {
-        "ID": 48,
-        "Type": "item",
+        "master_item_id": 48,
+        "type": "item",
         "name": "gold hourglass",
         "amount": 99
       }
@@ -910,8 +910,8 @@
         }
       ],
       "reward": {
-        "ID": 63,
-        "Type": "item",
+        "master_item_id": 63,
+        "type": "item",
         "name": "purifying salt",
         "amount": 99
       }
@@ -941,8 +941,8 @@
         }
       ],
       "reward": {
-        "ID": 59,
-        "Type": "item",
+        "master_item_id": 59,
+        "type": "item",
         "name": "healing spring",
         "amount": 99
       }
@@ -972,8 +972,8 @@
         }
       ],
       "reward": {
-        "ID": 6,
-        "Type": "item",
+        "master_item_id": 6,
+        "type": "item",
         "name": "turbo ether",
         "amount": 60
       }
@@ -1003,8 +1003,8 @@
         }
       ],
       "reward": {
-        "ID": 57,
-        "Type": "item",
+        "master_item_id": 57,
+        "type": "item",
         "name": "light curtain",
         "amount": 99
       }
@@ -1034,8 +1034,8 @@
         }
       ],
       "reward": {
-        "ID": 65,
-        "Type": "item",
+        "master_item_id": 65,
+        "type": "item",
         "name": "mana tablet",
         "amount": 60
       }
@@ -1065,8 +1065,8 @@
         }
       ],
       "reward": {
-        "ID": 69,
-        "Type": "item",
+        "master_item_id": 69,
+        "type": "item",
         "name": "three stars",
         "amount": 60
       }
@@ -1096,8 +1096,8 @@
         }
       ],
       "reward": {
-        "ID": 45,
-        "Type": "item",
+        "master_item_id": 45,
+        "type": "item",
         "name": "supreme gem",
         "amount": 60
       }
@@ -1127,8 +1127,8 @@
         }
       ],
       "reward": {
-        "ID": 108,
-        "Type": "item",
+        "master_item_id": 108,
+        "type": "item",
         "name": "door to tomorrow",
         "amount": 99
       }
@@ -1158,8 +1158,8 @@
         }
       ],
       "reward": {
-        "ID": 110,
-        "Type": "item",
+        "master_item_id": 110,
+        "type": "item",
         "name": "gambler's spirit",
         "amount": 99
       }
@@ -1189,8 +1189,8 @@
         }
       ],
       "reward": {
-        "ID": 112,
-        "Type": "item",
+        "master_item_id": 112,
+        "type": "item",
         "name": "winning formula",
         "amount": 99
       }
@@ -1220,8 +1220,8 @@
         }
       ],
       "reward": {
-        "ID": 53,
-        "Type": "item",
+        "master_item_id": 53,
+        "type": "item",
         "name": "dark matter",
         "amount": 99
       }
@@ -1251,8 +1251,8 @@
         }
       ],
       "reward": {
-        "ID": 8,
-        "Type": "item",
+        "master_item_id": 8,
+        "type": "item",
         "name": "megalixir",
         "amount": 30
       }
@@ -1282,8 +1282,8 @@
         }
       ],
       "reward": {
-        "ID": 80,
-        "Type": "item",
+        "master_item_id": 80,
+        "type": "item",
         "name": "master sphere",
         "amount": 10
       }
@@ -1313,8 +1313,8 @@
         }
       ],
       "reward": {
-        "ID": 128,
-        "Type": "key-item",
+        "master_item_id": 128,
+        "type": "key-item",
         "name": "mars sigil",
         "amount": 1
       }
@@ -1344,8 +1344,8 @@
         }
       ],
       "reward": {
-        "ID": 29,
-        "Type": "item",
+        "master_item_id": 29,
+        "type": "item",
         "name": "lightning gem",
         "amount": 4
       }
@@ -1375,8 +1375,8 @@
         }
       ],
       "reward": {
-        "ID": 70,
-        "Type": "item",
+        "master_item_id": 70,
+        "type": "item",
         "name": "power sphere",
         "amount": 4
       }
@@ -1406,8 +1406,8 @@
         }
       ],
       "reward": {
-        "ID": 3,
-        "Type": "item",
+        "master_item_id": 3,
+        "type": "item",
         "name": "x-potion",
         "amount": 30
       }
@@ -1437,8 +1437,8 @@
         }
       ],
       "reward": {
-        "ID": 71,
-        "Type": "item",
+        "master_item_id": 71,
+        "type": "item",
         "name": "mana sphere",
         "amount": 6
       }
@@ -1468,8 +1468,8 @@
         }
       ],
       "reward": {
-        "ID": 54,
-        "Type": "item",
+        "master_item_id": 54,
+        "type": "item",
         "name": "chocobo feather",
         "amount": 10
       }
@@ -1499,8 +1499,8 @@
         }
       ],
       "reward": {
-        "ID": 70,
-        "Type": "item",
+        "master_item_id": 70,
+        "type": "item",
         "name": "power sphere",
         "amount": 8
       }
@@ -1530,8 +1530,8 @@
         }
       ],
       "reward": {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 60
       }
@@ -1561,8 +1561,8 @@
         }
       ],
       "reward": {
-        "ID": 58,
-        "Type": "item",
+        "master_item_id": 58,
+        "type": "item",
         "name": "star curtain",
         "amount": 6
       }
@@ -1592,8 +1592,8 @@
         }
       ],
       "reward": {
-        "ID": 122,
-        "Type": "key-item",
+        "master_item_id": 122,
+        "type": "key-item",
         "name": "flower sceptre",
         "amount": 1
       }
@@ -1623,8 +1623,8 @@
         }
       ],
       "reward": {
-        "ID": 71,
-        "Type": "item",
+        "master_item_id": 71,
+        "type": "item",
         "name": "mana sphere",
         "amount": 8
       }
@@ -1654,8 +1654,8 @@
         }
       ],
       "reward": {
-        "ID": 61,
-        "Type": "item",
+        "master_item_id": 61,
+        "type": "item",
         "name": "stamina spring",
         "amount": 60
       }
@@ -1685,8 +1685,8 @@
         }
       ],
       "reward": {
-        "ID": 71,
-        "Type": "item",
+        "master_item_id": 71,
+        "type": "item",
         "name": "mana sphere",
         "amount": 10
       }
@@ -1716,8 +1716,8 @@
         }
       ],
       "reward": {
-        "ID": 42,
-        "Type": "item",
+        "master_item_id": 42,
+        "type": "item",
         "name": "shadow gem",
         "amount": 8
       }
@@ -1747,8 +1747,8 @@
         }
       ],
       "reward": {
-        "ID": 70,
-        "Type": "item",
+        "master_item_id": 70,
+        "type": "item",
         "name": "power sphere",
         "amount": 10
       }
@@ -1778,8 +1778,8 @@
         }
       ],
       "reward": {
-        "ID": 43,
-        "Type": "item",
+        "master_item_id": 43,
+        "type": "item",
         "name": "shining gem",
         "amount": 40
       }
@@ -1809,8 +1809,8 @@
         }
       ],
       "reward": {
-        "ID": 70,
-        "Type": "item",
+        "master_item_id": 70,
+        "type": "item",
         "name": "power sphere",
         "amount": 12
       }
@@ -1840,8 +1840,8 @@
         }
       ],
       "reward": {
-        "ID": 115,
-        "Type": "key-item",
+        "master_item_id": 115,
+        "type": "key-item",
         "name": "cloudy mirror",
         "amount": 1
       }
@@ -1871,8 +1871,8 @@
         }
       ],
       "reward": {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       }
@@ -1902,8 +1902,8 @@
         }
       ],
       "reward": {
-        "ID": 8,
-        "Type": "item",
+        "master_item_id": 8,
+        "type": "item",
         "name": "megalixir",
         "amount": 1
       }
@@ -1933,8 +1933,8 @@
         }
       ],
       "reward": {
-        "ID": 109,
-        "Type": "item",
+        "master_item_id": 109,
+        "type": "item",
         "name": "wings to discovery",
         "amount": 30
       }
@@ -1964,8 +1964,8 @@
         }
       ],
       "reward": {
-        "ID": 105,
-        "Type": "item",
+        "master_item_id": 105,
+        "type": "item",
         "name": "pendulum",
         "amount": 30
       }
@@ -1995,8 +1995,8 @@
         }
       ],
       "reward": {
-        "ID": 69,
-        "Type": "item",
+        "master_item_id": 69,
+        "type": "item",
         "name": "three stars",
         "amount": 60
       }
@@ -2026,8 +2026,8 @@
         }
       ],
       "reward": {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       }
@@ -2057,8 +2057,8 @@
         }
       ],
       "reward": {
-        "ID": 3,
-        "Type": "item",
+        "master_item_id": 3,
+        "type": "item",
         "name": "x-potion",
         "amount": 1
       }
@@ -2088,8 +2088,8 @@
         }
       ],
       "reward": {
-        "ID": 81,
-        "Type": "item",
+        "master_item_id": 81,
+        "type": "item",
         "name": "lv. 1 key sphere",
         "amount": 1
       }
@@ -2119,8 +2119,8 @@
         }
       ],
       "reward": {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 1
       }
@@ -2150,8 +2150,8 @@
         }
       ],
       "reward": {
-        "ID": 82,
-        "Type": "item",
+        "master_item_id": 82,
+        "type": "item",
         "name": "lv. 2 key sphere",
         "amount": 1
       }
@@ -2181,8 +2181,8 @@
         }
       ],
       "reward": {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -2212,8 +2212,8 @@
         }
       ],
       "reward": {
-        "ID": 83,
-        "Type": "item",
+        "master_item_id": 83,
+        "type": "item",
         "name": "lv. 3 key sphere",
         "amount": 1
       }
@@ -2243,8 +2243,8 @@
         }
       ],
       "reward": {
-        "ID": 6,
-        "Type": "item",
+        "master_item_id": 6,
+        "type": "item",
         "name": "turbo ether",
         "amount": 1
       }
@@ -2274,8 +2274,8 @@
         }
       ],
       "reward": {
-        "ID": 124,
-        "Type": "key-item",
+        "master_item_id": 124,
+        "type": "key-item",
         "name": "sun sigil",
         "amount": 1
       }
@@ -2305,8 +2305,8 @@
         }
       ],
       "reward": {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 1
       }
@@ -2336,8 +2336,8 @@
         }
       ],
       "reward": {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       }
@@ -2367,8 +2367,8 @@
         }
       ],
       "reward": {
-        "ID": 8,
-        "Type": "item",
+        "master_item_id": 8,
+        "type": "item",
         "name": "megalixir",
         "amount": 1
       }
@@ -2398,8 +2398,8 @@
         }
       ],
       "reward": {
-        "ID": 97,
-        "Type": "item",
+        "master_item_id": 97,
+        "type": "item",
         "name": "friend sphere",
         "amount": 1
       }
@@ -2429,8 +2429,8 @@
         }
       ],
       "reward": {
-        "ID": 86,
-        "Type": "item",
+        "master_item_id": 86,
+        "type": "item",
         "name": "mp sphere",
         "amount": 1
       }
@@ -2460,8 +2460,8 @@
         }
       ],
       "reward": {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -2491,8 +2491,8 @@
         }
       ],
       "reward": {
-        "ID": 8,
-        "Type": "item",
+        "master_item_id": 8,
+        "type": "item",
         "name": "megalixir",
         "amount": 2
       }
@@ -2522,8 +2522,8 @@
         }
       ],
       "reward": {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 2
       }
@@ -2564,8 +2564,8 @@
         }
       ],
       "reward": {
-        "ID": 98,
-        "Type": "item",
+        "master_item_id": 98,
+        "type": "item",
         "name": "teleport sphere",
         "amount": 1
       }
@@ -2606,8 +2606,8 @@
         }
       ],
       "reward": {
-        "ID": 130,
-        "Type": "key-item",
+        "master_item_id": 130,
+        "type": "key-item",
         "name": "saturn sigil",
         "amount": 1
       }
@@ -2637,8 +2637,8 @@
         }
       ],
       "reward": {
-        "ID": 3,
-        "Type": "item",
+        "master_item_id": 3,
+        "type": "item",
         "name": "x-potion",
         "amount": 2
       }
@@ -2668,8 +2668,8 @@
         }
       ],
       "reward": {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 2
       }
@@ -2699,8 +2699,8 @@
         }
       ],
       "reward": {
-        "ID": 86,
-        "Type": "item",
+        "master_item_id": 86,
+        "type": "item",
         "name": "mp sphere",
         "amount": 2
       }
@@ -2730,8 +2730,8 @@
         }
       ],
       "reward": {
-        "ID": 87,
-        "Type": "item",
+        "master_item_id": 87,
+        "type": "item",
         "name": "strength sphere",
         "amount": 3
       }
@@ -2761,8 +2761,8 @@
         }
       ],
       "reward": {
-        "ID": 85,
-        "Type": "item",
+        "master_item_id": 85,
+        "type": "item",
         "name": "hp sphere",
         "amount": 3
       }
@@ -2792,8 +2792,8 @@
         }
       ],
       "reward": {
-        "ID": 8,
-        "Type": "item",
+        "master_item_id": 8,
+        "type": "item",
         "name": "megalixir",
         "amount": 4
       }
@@ -2823,8 +2823,8 @@
         }
       ],
       "reward": {
-        "ID": 134,
-        "Type": "key-item",
+        "master_item_id": 134,
+        "type": "key-item",
         "name": "venus sigil",
         "amount": 1
       }
@@ -2854,8 +2854,8 @@
         }
       ],
       "reward": {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -2885,8 +2885,8 @@
         }
       ],
       "reward": {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       }
@@ -2916,8 +2916,8 @@
         }
       ],
       "reward": {
-        "ID": 87,
-        "Type": "item",
+        "master_item_id": 87,
+        "type": "item",
         "name": "strength sphere",
         "amount": 1
       }
@@ -2947,8 +2947,8 @@
         }
       ],
       "reward": {
-        "ID": 132,
-        "Type": "key-item",
+        "master_item_id": 132,
+        "type": "key-item",
         "name": "jupiter sigil",
         "amount": 1
       }

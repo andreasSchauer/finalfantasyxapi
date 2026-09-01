@@ -14,8 +14,8 @@
     "related_stats": [],
     "ability_value": 200,
     "required_item": {
-      "ID": 73,
-      "Type": "item",
+      "master_item_id": 73,
+      "type": "item",
       "name": "ability sphere",
       "amount": 2
     },
@@ -50,8 +50,8 @@
     "related_stats": [],
     "ability_value": 0,
     "required_item": {
-      "ID": 82,
-      "Type": "item",
+      "master_item_id": 82,
+      "type": "item",
       "name": "lv. 2 key sphere",
       "amount": 1
     },
@@ -88,8 +88,8 @@
     ],
     "ability_value": 6000,
     "required_item": {
-      "ID": 96,
-      "Type": "item",
+      "master_item_id": 96,
+      "type": "item",
       "name": "return sphere",
       "amount": 1
     },
@@ -132,8 +132,8 @@
     "related_stats": [],
     "ability_value": 6000,
     "required_item": {
-      "ID": 54,
-      "Type": "item",
+      "master_item_id": 54,
+      "type": "item",
       "name": "chocobo feather",
       "amount": 6
     },
@@ -183,8 +183,8 @@
     "related_stats": [],
     "ability_value": 700,
     "required_item": {
-      "ID": 24,
-      "Type": "item",
+      "master_item_id": 24,
+      "type": "item",
       "name": "bomb fragment",
       "amount": 4
     },
@@ -219,8 +219,8 @@
     "related_stats": [],
     "ability_value": 700,
     "required_item": {
-      "ID": 27,
-      "Type": "item",
+      "master_item_id": 27,
+      "type": "item",
       "name": "electro marble",
       "amount": 4
     },
@@ -255,8 +255,8 @@
     "related_stats": [],
     "ability_value": 700,
     "required_item": {
-      "ID": 30,
-      "Type": "item",
+      "master_item_id": 30,
+      "type": "item",
       "name": "fish scale",
       "amount": 4
     },
@@ -291,8 +291,8 @@
     "related_stats": [],
     "ability_value": 700,
     "required_item": {
-      "ID": 33,
-      "Type": "item",
+      "master_item_id": 33,
+      "type": "item",
       "name": "antarctic wind",
       "amount": 4
     },
@@ -327,8 +327,8 @@
     "related_stats": [],
     "ability_value": 2000,
     "required_item": {
-      "ID": 13,
-      "Type": "item",
+      "master_item_id": 13,
+      "type": "item",
       "name": "eye drops",
       "amount": 60
     },
@@ -370,8 +370,8 @@
     "related_stats": [],
     "ability_value": 4000,
     "required_item": {
-      "ID": 41,
-      "Type": "item",
+      "master_item_id": 41,
+      "type": "item",
       "name": "smoke bomb",
       "amount": 20
     },
@@ -415,8 +415,8 @@
     "related_stats": [],
     "ability_value": 3000,
     "required_item": {
-      "ID": 14,
-      "Type": "item",
+      "master_item_id": 14,
+      "type": "item",
       "name": "echo screen",
       "amount": 60
     },
@@ -458,8 +458,8 @@
     "related_stats": [],
     "ability_value": 8000,
     "required_item": {
-      "ID": 40,
-      "Type": "item",
+      "master_item_id": 40,
+      "type": "item",
       "name": "silence grenade",
       "amount": 20
     },
@@ -503,8 +503,8 @@
     "related_stats": [],
     "ability_value": 1000,
     "required_item": {
-      "ID": 38,
-      "Type": "item",
+      "master_item_id": 38,
+      "type": "item",
       "name": "sleeping powder",
       "amount": 10
     },
@@ -546,8 +546,8 @@
     "related_stats": [],
     "ability_value": 8000,
     "required_item": {
-      "ID": 39,
-      "Type": "item",
+      "master_item_id": 39,
+      "type": "item",
       "name": "dream powder",
       "amount": 16
     },
@@ -591,8 +591,8 @@
     "related_stats": [],
     "ability_value": 1500,
     "required_item": {
-      "ID": 11,
-      "Type": "item",
+      "master_item_id": 11,
+      "type": "item",
       "name": "antidote",
       "amount": 99
     },
@@ -634,8 +634,8 @@
     "related_stats": [],
     "ability_value": 10000,
     "required_item": {
-      "ID": 46,
-      "Type": "item",
+      "master_item_id": 46,
+      "type": "item",
       "name": "poison fang",
       "amount": 24
     },
@@ -679,8 +679,8 @@
     "related_stats": [],
     "ability_value": 5000,
     "required_item": {
-      "ID": 50,
-      "Type": "item",
+      "master_item_id": 50,
+      "type": "item",
       "name": "petrify grenade",
       "amount": 10
     },
@@ -722,8 +722,8 @@
     "related_stats": [],
     "ability_value": 12000,
     "required_item": {
-      "ID": 50,
-      "Type": "item",
+      "master_item_id": 50,
+      "type": "item",
       "name": "petrify grenade",
       "amount": 60
     },
@@ -767,8 +767,8 @@
     "related_stats": [],
     "ability_value": 8000,
     "required_item": {
-      "ID": 51,
-      "Type": "item",
+      "master_item_id": 51,
+      "type": "item",
       "name": "farplane shadow",
       "amount": 30
     },
@@ -810,8 +810,8 @@
     "related_stats": [],
     "ability_value": 20000,
     "required_item": {
-      "ID": 52,
-      "Type": "item",
+      "master_item_id": 52,
+      "type": "item",
       "name": "farplane wind",
       "amount": 60
     },
@@ -855,8 +855,8 @@
     "related_stats": [],
     "ability_value": 8000,
     "required_item": {
-      "ID": 15,
-      "Type": "item",
+      "master_item_id": 15,
+      "type": "item",
       "name": "holy water",
       "amount": 70
     },
@@ -898,8 +898,8 @@
     "related_stats": [],
     "ability_value": 12000,
     "required_item": {
-      "ID": 49,
-      "Type": "item",
+      "master_item_id": 49,
+      "type": "item",
       "name": "candle of life",
       "amount": 30
     },
@@ -943,8 +943,8 @@
     "related_stats": [],
     "ability_value": 3000,
     "required_item": {
-      "ID": 47,
-      "Type": "item",
+      "master_item_id": 47,
+      "type": "item",
       "name": "silver hourglass",
       "amount": 16
     },
@@ -986,8 +986,8 @@
     "related_stats": [],
     "ability_value": 7000,
     "required_item": {
-      "ID": 48,
-      "Type": "item",
+      "master_item_id": 48,
+      "type": "item",
       "name": "gold hourglass",
       "amount": 30
     },
@@ -1031,8 +1031,8 @@
     "related_stats": [],
     "ability_value": 10,
     "required_item": {
-      "ID": 70,
-      "Type": "item",
+      "master_item_id": 70,
+      "type": "item",
       "name": "power sphere",
       "amount": 2
     },
@@ -1074,8 +1074,8 @@
     "related_stats": [],
     "ability_value": 10,
     "required_item": {
-      "ID": 71,
-      "Type": "item",
+      "master_item_id": 71,
+      "type": "item",
       "name": "mana sphere",
       "amount": 2
     },
@@ -1117,8 +1117,8 @@
     "related_stats": [],
     "ability_value": 10,
     "required_item": {
-      "ID": 72,
-      "Type": "item",
+      "master_item_id": 72,
+      "type": "item",
       "name": "speed sphere",
       "amount": 2
     },
@@ -1160,8 +1160,8 @@
     "related_stats": [],
     "ability_value": 10,
     "required_item": {
-      "ID": 73,
-      "Type": "item",
+      "master_item_id": 73,
+      "type": "item",
       "name": "ability sphere",
       "amount": 2
     },
@@ -1205,8 +1205,8 @@
     ],
     "ability_value": 100,
     "required_item": {
-      "ID": 70,
-      "Type": "item",
+      "master_item_id": 70,
+      "type": "item",
       "name": "power sphere",
       "amount": 3
     },
@@ -1251,8 +1251,8 @@
     ],
     "ability_value": 500,
     "required_item": {
-      "ID": 61,
-      "Type": "item",
+      "master_item_id": 61,
+      "type": "item",
       "name": "stamina spring",
       "amount": 2
     },
@@ -1297,8 +1297,8 @@
     ],
     "ability_value": 5000,
     "required_item": {
-      "ID": 77,
-      "Type": "item",
+      "master_item_id": 77,
+      "type": "item",
       "name": "skill sphere",
       "amount": 1
     },
@@ -1343,8 +1343,8 @@
     ],
     "ability_value": 10000,
     "required_item": {
-      "ID": 45,
-      "Type": "item",
+      "master_item_id": 45,
+      "type": "item",
       "name": "supreme gem",
       "amount": 4
     },
@@ -1389,8 +1389,8 @@
     ],
     "ability_value": 100,
     "required_item": {
-      "ID": 71,
-      "Type": "item",
+      "master_item_id": 71,
+      "type": "item",
       "name": "mana sphere",
       "amount": 3
     },
@@ -1435,8 +1435,8 @@
     ],
     "ability_value": 500,
     "required_item": {
-      "ID": 60,
-      "Type": "item",
+      "master_item_id": 60,
+      "type": "item",
       "name": "mana spring",
       "amount": 2
     },
@@ -1481,8 +1481,8 @@
     ],
     "ability_value": 5000,
     "required_item": {
-      "ID": 79,
-      "Type": "item",
+      "master_item_id": 79,
+      "type": "item",
       "name": "blk magic sphere",
       "amount": 1
     },
@@ -1527,8 +1527,8 @@
     ],
     "ability_value": 10000,
     "required_item": {
-      "ID": 45,
-      "Type": "item",
+      "master_item_id": 45,
+      "type": "item",
       "name": "supreme gem",
       "amount": 4
     },
@@ -1571,8 +1571,8 @@
     "related_stats": [],
     "ability_value": 4000,
     "required_item": {
-      "ID": 97,
-      "Type": "item",
+      "master_item_id": 97,
+      "type": "item",
       "name": "friend sphere",
       "amount": 1
     },
@@ -1607,8 +1607,8 @@
     "related_stats": [],
     "ability_value": 22000,
     "required_item": {
-      "ID": 98,
-      "Type": "item",
+      "master_item_id": 98,
+      "type": "item",
       "name": "teleport sphere",
       "amount": 1
     },
@@ -1645,8 +1645,8 @@
     "related_stats": [],
     "ability_value": 25000,
     "required_item": {
-      "ID": 43,
-      "Type": "item",
+      "master_item_id": 43,
+      "type": "item",
       "name": "shining gem",
       "amount": 16
     },
@@ -1683,8 +1683,8 @@
     ],
     "ability_value": 17000,
     "required_item": {
-      "ID": 6,
-      "Type": "item",
+      "master_item_id": 6,
+      "type": "item",
       "name": "turbo ether",
       "amount": 30
     },
@@ -1734,8 +1734,8 @@
     "related_stats": [],
     "ability_value": 8000,
     "required_item": {
-      "ID": 22,
-      "Type": "item",
+      "master_item_id": 22,
+      "type": "item",
       "name": "healing water",
       "amount": 4
     },
@@ -1780,8 +1780,8 @@
     ],
     "ability_value": 20000,
     "required_item": {
-      "ID": 68,
-      "Type": "item",
+      "master_item_id": 68,
+      "type": "item",
       "name": "twin stars",
       "amount": 20
     },
@@ -1826,8 +1826,8 @@
     ],
     "ability_value": 30000,
     "required_item": {
-      "ID": 69,
-      "Type": "item",
+      "master_item_id": 69,
+      "type": "item",
       "name": "three stars",
       "amount": 20
     },
@@ -1872,8 +1872,8 @@
     "related_stats": [],
     "ability_value": 40000,
     "required_item": {
-      "ID": 8,
-      "Type": "item",
+      "master_item_id": 8,
+      "type": "item",
       "name": "megalixir",
       "amount": 20
     },
@@ -1916,8 +1916,8 @@
     "related_stats": [],
     "ability_value": 60000,
     "required_item": {
-      "ID": 109,
-      "Type": "item",
+      "master_item_id": 109,
+      "type": "item",
       "name": "wings to discovery",
       "amount": 50
     },
@@ -1962,8 +1962,8 @@
     "related_stats": [],
     "ability_value": 25000,
     "required_item": {
-      "ID": 108,
-      "Type": "item",
+      "master_item_id": 108,
+      "type": "item",
       "name": "door to tomorrow",
       "amount": 10
     },
@@ -1998,8 +1998,8 @@
     "related_stats": [],
     "ability_value": 20000,
     "required_item": {
-      "ID": 110,
-      "Type": "item",
+      "master_item_id": 110,
+      "type": "item",
       "name": "gambler's spirit",
       "amount": 20
     },
@@ -2042,8 +2042,8 @@
     "related_stats": [],
     "ability_value": 30000,
     "required_item": {
-      "ID": 111,
-      "Type": "item",
+      "master_item_id": 111,
+      "type": "item",
       "name": "underdog's secret",
       "amount": 30
     },
@@ -2088,8 +2088,8 @@
     "related_stats": [],
     "ability_value": 40000,
     "required_item": {
-      "ID": 112,
-      "Type": "item",
+      "master_item_id": 112,
+      "type": "item",
       "name": "winning formula",
       "amount": 30
     },
@@ -2135,8 +2135,8 @@
     "related_stats": [],
     "ability_value": 0,
     "required_item": {
-      "ID": 107,
-      "Type": "item",
+      "master_item_id": 107,
+      "type": "item",
       "name": "designer wallet",
       "amount": 30
     },
@@ -2182,8 +2182,8 @@
     ],
     "ability_value": 0,
     "required_item": {
-      "ID": 53,
-      "Type": "item",
+      "master_item_id": 53,
+      "type": "item",
       "name": "dark matter",
       "amount": 60
     },
@@ -2490,8 +2490,8 @@
     "related_stats": [],
     "ability_value": 1500,
     "required_item": {
-      "ID": 24,
-      "Type": "item",
+      "master_item_id": 24,
+      "type": "item",
       "name": "bomb fragment",
       "amount": 4
     },
@@ -2531,8 +2531,8 @@
     "related_stats": [],
     "ability_value": 3000,
     "required_item": {
-      "ID": 25,
-      "Type": "item",
+      "master_item_id": 25,
+      "type": "item",
       "name": "bomb core",
       "amount": 8
     },
@@ -2574,8 +2574,8 @@
     "related_stats": [],
     "ability_value": 10000,
     "required_item": {
-      "ID": 26,
-      "Type": "item",
+      "master_item_id": 26,
+      "type": "item",
       "name": "fire gem",
       "amount": 20
     },
@@ -2618,8 +2618,8 @@
     "related_stats": [],
     "ability_value": 1500,
     "required_item": {
-      "ID": 27,
-      "Type": "item",
+      "master_item_id": 27,
+      "type": "item",
       "name": "electro marble",
       "amount": 4
     },
@@ -2659,8 +2659,8 @@
     "related_stats": [],
     "ability_value": 3000,
     "required_item": {
-      "ID": 28,
-      "Type": "item",
+      "master_item_id": 28,
+      "type": "item",
       "name": "lightning marble",
       "amount": 8
     },
@@ -2702,8 +2702,8 @@
     "related_stats": [],
     "ability_value": 10000,
     "required_item": {
-      "ID": 29,
-      "Type": "item",
+      "master_item_id": 29,
+      "type": "item",
       "name": "lightning gem",
       "amount": 20
     },
@@ -2746,8 +2746,8 @@
     "related_stats": [],
     "ability_value": 1500,
     "required_item": {
-      "ID": 30,
-      "Type": "item",
+      "master_item_id": 30,
+      "type": "item",
       "name": "fish scale",
       "amount": 4
     },
@@ -2787,8 +2787,8 @@
     "related_stats": [],
     "ability_value": 3000,
     "required_item": {
-      "ID": 31,
-      "Type": "item",
+      "master_item_id": 31,
+      "type": "item",
       "name": "dragon scale",
       "amount": 8
     },
@@ -2830,8 +2830,8 @@
     "related_stats": [],
     "ability_value": 10000,
     "required_item": {
-      "ID": 32,
-      "Type": "item",
+      "master_item_id": 32,
+      "type": "item",
       "name": "water gem",
       "amount": 20
     },
@@ -2874,8 +2874,8 @@
     "related_stats": [],
     "ability_value": 1500,
     "required_item": {
-      "ID": 33,
-      "Type": "item",
+      "master_item_id": 33,
+      "type": "item",
       "name": "antarctic wind",
       "amount": 4
     },
@@ -2915,8 +2915,8 @@
     "related_stats": [],
     "ability_value": 3000,
     "required_item": {
-      "ID": 34,
-      "Type": "item",
+      "master_item_id": 34,
+      "type": "item",
       "name": "arctic wind",
       "amount": 8
     },
@@ -2958,8 +2958,8 @@
     "related_stats": [],
     "ability_value": 10000,
     "required_item": {
-      "ID": 35,
-      "Type": "item",
+      "master_item_id": 35,
+      "type": "item",
       "name": "ice gem",
       "amount": 20
     },
@@ -3002,8 +3002,8 @@
     "related_stats": [],
     "ability_value": 500,
     "required_item": {
-      "ID": 13,
-      "Type": "item",
+      "master_item_id": 13,
+      "type": "item",
       "name": "eye drops",
       "amount": 40
     },
@@ -3045,8 +3045,8 @@
     "related_stats": [],
     "ability_value": 2000,
     "required_item": {
-      "ID": 41,
-      "Type": "item",
+      "master_item_id": 41,
+      "type": "item",
       "name": "smoke bomb",
       "amount": 10
     },
@@ -3090,8 +3090,8 @@
     "related_stats": [],
     "ability_value": 500,
     "required_item": {
-      "ID": 14,
-      "Type": "item",
+      "master_item_id": 14,
+      "type": "item",
       "name": "echo screen",
       "amount": 30
     },
@@ -3133,8 +3133,8 @@
     "related_stats": [],
     "ability_value": 3000,
     "required_item": {
-      "ID": 40,
-      "Type": "item",
+      "master_item_id": 40,
+      "type": "item",
       "name": "silence grenade",
       "amount": 10
     },
@@ -3178,8 +3178,8 @@
     "related_stats": [],
     "ability_value": 200,
     "required_item": {
-      "ID": 38,
-      "Type": "item",
+      "master_item_id": 38,
+      "type": "item",
       "name": "sleeping powder",
       "amount": 6
     },
@@ -3221,8 +3221,8 @@
     "related_stats": [],
     "ability_value": 800,
     "required_item": {
-      "ID": 39,
-      "Type": "item",
+      "master_item_id": 39,
+      "type": "item",
       "name": "dream powder",
       "amount": 8
     },
@@ -3266,8 +3266,8 @@
     "related_stats": [],
     "ability_value": 400,
     "required_item": {
-      "ID": 11,
-      "Type": "item",
+      "master_item_id": 11,
+      "type": "item",
       "name": "antidote",
       "amount": 40
     },
@@ -3309,8 +3309,8 @@
     "related_stats": [],
     "ability_value": 1500,
     "required_item": {
-      "ID": 46,
-      "Type": "item",
+      "master_item_id": 46,
+      "type": "item",
       "name": "poison fang",
       "amount": 12
     },
@@ -3354,8 +3354,8 @@
     "related_stats": [],
     "ability_value": 1200,
     "required_item": {
-      "ID": 12,
-      "Type": "item",
+      "master_item_id": 12,
+      "type": "item",
       "name": "soft",
       "amount": 30
     },
@@ -3397,8 +3397,8 @@
     "related_stats": [],
     "ability_value": 2500,
     "required_item": {
-      "ID": 50,
-      "Type": "item",
+      "master_item_id": 50,
+      "type": "item",
       "name": "petrify grenade",
       "amount": 20
     },
@@ -3442,8 +3442,8 @@
     "related_stats": [],
     "ability_value": 2000,
     "required_item": {
-      "ID": 51,
-      "Type": "item",
+      "master_item_id": 51,
+      "type": "item",
       "name": "farplane shadow",
       "amount": 15
     },
@@ -3485,8 +3485,8 @@
     "related_stats": [],
     "ability_value": 4000,
     "required_item": {
-      "ID": 52,
-      "Type": "item",
+      "master_item_id": 52,
+      "type": "item",
       "name": "farplane wind",
       "amount": 60
     },
@@ -3530,8 +3530,8 @@
     "related_stats": [],
     "ability_value": 2000,
     "required_item": {
-      "ID": 15,
-      "Type": "item",
+      "master_item_id": 15,
+      "type": "item",
       "name": "holy water",
       "amount": 30
     },
@@ -3573,8 +3573,8 @@
     "related_stats": [],
     "ability_value": 4000,
     "required_item": {
-      "ID": 49,
-      "Type": "item",
+      "master_item_id": 49,
+      "type": "item",
       "name": "candle of life",
       "amount": 10
     },
@@ -3618,8 +3618,8 @@
     "related_stats": [],
     "ability_value": 1000,
     "required_item": {
-      "ID": 47,
-      "Type": "item",
+      "master_item_id": 47,
+      "type": "item",
       "name": "silver hourglass",
       "amount": 10
     },
@@ -3661,8 +3661,8 @@
     "related_stats": [],
     "ability_value": 3000,
     "required_item": {
-      "ID": 48,
-      "Type": "item",
+      "master_item_id": 48,
+      "type": "item",
       "name": "gold hourglass",
       "amount": 20
     },
@@ -3706,8 +3706,8 @@
     "related_stats": [],
     "ability_value": 1000,
     "required_item": {
-      "ID": 102,
-      "Type": "item",
+      "master_item_id": 102,
+      "type": "item",
       "name": "musk",
       "amount": 16
     },
@@ -3749,8 +3749,8 @@
     "related_stats": [],
     "ability_value": 4000,
     "required_item": {
-      "ID": 102,
-      "Type": "item",
+      "master_item_id": 102,
+      "type": "item",
       "name": "musk",
       "amount": 48
     },
@@ -3794,8 +3794,8 @@
     "related_stats": [],
     "ability_value": 1000,
     "required_item": {
-      "ID": 103,
-      "Type": "item",
+      "master_item_id": 103,
+      "type": "item",
       "name": "hypello potion",
       "amount": 8
     },
@@ -3837,8 +3837,8 @@
     "related_stats": [],
     "ability_value": 6000,
     "required_item": {
-      "ID": 103,
-      "Type": "item",
+      "master_item_id": 103,
+      "type": "item",
       "name": "hypello potion",
       "amount": 32
     },
@@ -3920,8 +3920,8 @@
     "related_stats": [],
     "ability_value": 8000,
     "required_item": {
-      "ID": 23,
-      "Type": "item",
+      "master_item_id": 23,
+      "type": "item",
       "name": "tetra elemental",
       "amount": 12
     },
@@ -3963,8 +3963,8 @@
     "related_stats": [],
     "ability_value": 500,
     "required_item": {
-      "ID": 25,
-      "Type": "item",
+      "master_item_id": 25,
+      "type": "item",
       "name": "bomb core",
       "amount": 1
     },
@@ -4001,8 +4001,8 @@
     "related_stats": [],
     "ability_value": 500,
     "required_item": {
-      "ID": 28,
-      "Type": "item",
+      "master_item_id": 28,
+      "type": "item",
       "name": "lightning marble",
       "amount": 1
     },
@@ -4039,8 +4039,8 @@
     "related_stats": [],
     "ability_value": 500,
     "required_item": {
-      "ID": 31,
-      "Type": "item",
+      "master_item_id": 31,
+      "type": "item",
       "name": "dragon scale",
       "amount": 1
     },
@@ -4077,8 +4077,8 @@
     "related_stats": [],
     "ability_value": 500,
     "required_item": {
-      "ID": 34,
-      "Type": "item",
+      "master_item_id": 34,
+      "type": "item",
       "name": "arctic wind",
       "amount": 1
     },
@@ -4115,8 +4115,8 @@
     "related_stats": [],
     "ability_value": 4000,
     "required_item": {
-      "ID": 56,
-      "Type": "item",
+      "master_item_id": 56,
+      "type": "item",
       "name": "lunar curtain",
       "amount": 8
     },
@@ -4153,8 +4153,8 @@
     "related_stats": [],
     "ability_value": 4000,
     "required_item": {
-      "ID": 57,
-      "Type": "item",
+      "master_item_id": 57,
+      "type": "item",
       "name": "light curtain",
       "amount": 8
     },
@@ -4191,8 +4191,8 @@
     "related_stats": [],
     "ability_value": 1000,
     "required_item": {
-      "ID": 58,
-      "Type": "item",
+      "master_item_id": 58,
+      "type": "item",
       "name": "star curtain",
       "amount": 8
     },
@@ -4229,8 +4229,8 @@
     "related_stats": [],
     "ability_value": 20000,
     "required_item": {
-      "ID": 54,
-      "Type": "item",
+      "master_item_id": 54,
+      "type": "item",
       "name": "chocobo feather",
       "amount": 20
     },
@@ -4267,8 +4267,8 @@
     "related_stats": [],
     "ability_value": 20000,
     "required_item": {
-      "ID": 59,
-      "Type": "item",
+      "master_item_id": 59,
+      "type": "item",
       "name": "healing spring",
       "amount": 12
     },
@@ -4305,8 +4305,8 @@
     "related_stats": [],
     "ability_value": 22000,
     "required_item": {
-      "ID": 56,
-      "Type": "item",
+      "master_item_id": 56,
+      "type": "item",
       "name": "lunar curtain",
       "amount": 80
     },
@@ -4345,8 +4345,8 @@
     "related_stats": [],
     "ability_value": 22000,
     "required_item": {
-      "ID": 57,
-      "Type": "item",
+      "master_item_id": 57,
+      "type": "item",
       "name": "light curtain",
       "amount": 70
     },
@@ -4385,8 +4385,8 @@
     "related_stats": [],
     "ability_value": 14000,
     "required_item": {
-      "ID": 58,
-      "Type": "item",
+      "master_item_id": 58,
+      "type": "item",
       "name": "star curtain",
       "amount": 40
     },
@@ -4425,8 +4425,8 @@
     "related_stats": [],
     "ability_value": 50000,
     "required_item": {
-      "ID": 55,
-      "Type": "item",
+      "master_item_id": 55,
+      "type": "item",
       "name": "chocobo wing",
       "amount": 80
     },
@@ -4465,8 +4465,8 @@
     "related_stats": [],
     "ability_value": 60000,
     "required_item": {
-      "ID": 59,
-      "Type": "item",
+      "master_item_id": 59,
+      "type": "item",
       "name": "healing spring",
       "amount": 80
     },
@@ -4507,8 +4507,8 @@
     ],
     "ability_value": 200,
     "required_item": {
-      "ID": 70,
-      "Type": "item",
+      "master_item_id": 70,
+      "type": "item",
       "name": "power sphere",
       "amount": 3
     },
@@ -4553,8 +4553,8 @@
     ],
     "ability_value": 500,
     "required_item": {
-      "ID": 61,
-      "Type": "item",
+      "master_item_id": 61,
+      "type": "item",
       "name": "stamina spring",
       "amount": 2
     },
@@ -4599,8 +4599,8 @@
     ],
     "ability_value": 5000,
     "required_item": {
-      "ID": 76,
-      "Type": "item",
+      "master_item_id": 76,
+      "type": "item",
       "name": "special sphere",
       "amount": 1
     },
@@ -4645,8 +4645,8 @@
     ],
     "ability_value": 10000,
     "required_item": {
-      "ID": 44,
-      "Type": "item",
+      "master_item_id": 44,
+      "type": "item",
       "name": "blessed gem",
       "amount": 4
     },
@@ -4691,8 +4691,8 @@
     ],
     "ability_value": 200,
     "required_item": {
-      "ID": 71,
-      "Type": "item",
+      "master_item_id": 71,
+      "type": "item",
       "name": "mana sphere",
       "amount": 3
     },
@@ -4737,8 +4737,8 @@
     ],
     "ability_value": 500,
     "required_item": {
-      "ID": 60,
-      "Type": "item",
+      "master_item_id": 60,
+      "type": "item",
       "name": "mana spring",
       "amount": 2
     },
@@ -4783,8 +4783,8 @@
     ],
     "ability_value": 5000,
     "required_item": {
-      "ID": 78,
-      "Type": "item",
+      "master_item_id": 78,
+      "type": "item",
       "name": "wht magic sphere",
       "amount": 1
     },
@@ -4829,8 +4829,8 @@
     ],
     "ability_value": 10000,
     "required_item": {
-      "ID": 44,
-      "Type": "item",
+      "master_item_id": 44,
+      "type": "item",
       "name": "blessed gem",
       "amount": 4
     },
@@ -4875,8 +4875,8 @@
     ],
     "ability_value": 100,
     "required_item": {
-      "ID": 3,
-      "Type": "item",
+      "master_item_id": 3,
+      "type": "item",
       "name": "x-potion",
       "amount": 1
     },
@@ -4921,8 +4921,8 @@
     ],
     "ability_value": 1000,
     "required_item": {
-      "ID": 62,
-      "Type": "item",
+      "master_item_id": 62,
+      "type": "item",
       "name": "soul spring",
       "amount": 3
     },
@@ -4967,8 +4967,8 @@
     ],
     "ability_value": 6000,
     "required_item": {
-      "ID": 7,
-      "Type": "item",
+      "master_item_id": 7,
+      "type": "item",
       "name": "elixir",
       "amount": 5
     },
@@ -5013,8 +5013,8 @@
     ],
     "ability_value": 15000,
     "required_item": {
-      "ID": 66,
-      "Type": "item",
+      "master_item_id": 66,
+      "type": "item",
       "name": "stamina tonic",
       "amount": 1
     },
@@ -5059,8 +5059,8 @@
     ],
     "ability_value": 1200,
     "required_item": {
-      "ID": 5,
-      "Type": "item",
+      "master_item_id": 5,
+      "type": "item",
       "name": "ether",
       "amount": 1
     },
@@ -5105,8 +5105,8 @@
     ],
     "ability_value": 6000,
     "required_item": {
-      "ID": 62,
-      "Type": "item",
+      "master_item_id": 62,
+      "type": "item",
       "name": "soul spring",
       "amount": 3
     },
@@ -5151,8 +5151,8 @@
     ],
     "ability_value": 8000,
     "required_item": {
-      "ID": 7,
-      "Type": "item",
+      "master_item_id": 7,
+      "type": "item",
       "name": "elixir",
       "amount": 5
     },
@@ -5197,8 +5197,8 @@
     ],
     "ability_value": 18000,
     "required_item": {
-      "ID": 67,
-      "Type": "item",
+      "master_item_id": 67,
+      "type": "item",
       "name": "mana tonic",
       "amount": 1
     },
@@ -5241,8 +5241,8 @@
     "related_stats": [],
     "ability_value": 12000,
     "required_item": {
-      "ID": 64,
-      "Type": "item",
+      "master_item_id": 64,
+      "type": "item",
       "name": "stamina tablet",
       "amount": 4
     },
@@ -5281,8 +5281,8 @@
     "related_stats": [],
     "ability_value": 10000,
     "required_item": {
-      "ID": 16,
-      "Type": "item",
+      "master_item_id": 16,
+      "type": "item",
       "name": "remedy",
       "amount": 20
     },
@@ -5323,8 +5323,8 @@
     "related_stats": [],
     "ability_value": 20000,
     "required_item": {
-      "ID": 10,
-      "Type": "item",
+      "master_item_id": 10,
+      "type": "item",
       "name": "mega phoenix",
       "amount": 20
     },
@@ -5361,8 +5361,8 @@
     "related_stats": [],
     "ability_value": 40000,
     "required_item": {
-      "ID": 106,
-      "Type": "item",
+      "master_item_id": 106,
+      "type": "item",
       "name": "amulet",
       "amount": 30
     },
@@ -5412,8 +5412,8 @@
     "related_stats": [],
     "ability_value": 60000,
     "required_item": {
-      "ID": 105,
-      "Type": "item",
+      "master_item_id": 105,
+      "type": "item",
       "name": "pendulum",
       "amount": 30
     },
@@ -5467,8 +5467,8 @@
     ],
     "ability_value": 6000,
     "required_item": {
-      "ID": 64,
-      "Type": "item",
+      "master_item_id": 64,
+      "type": "item",
       "name": "stamina tablet",
       "amount": 2
     },
@@ -5505,8 +5505,8 @@
     ],
     "ability_value": 6000,
     "required_item": {
-      "ID": 65,
-      "Type": "item",
+      "master_item_id": 65,
+      "type": "item",
       "name": "mana tablet",
       "amount": 2
     },
@@ -5541,8 +5541,8 @@
     "related_stats": [],
     "ability_value": 6500,
     "required_item": {
-      "ID": 63,
-      "Type": "item",
+      "master_item_id": 63,
+      "type": "item",
       "name": "purifying salt",
       "amount": 30
     },
@@ -5587,8 +5587,8 @@
     ],
     "ability_value": 0,
     "required_item": {
-      "ID": 69,
-      "Type": "item",
+      "master_item_id": 69,
+      "type": "item",
       "name": "three stars",
       "amount": 30
     },
@@ -5633,8 +5633,8 @@
     ],
     "ability_value": 0,
     "required_item": {
-      "ID": 109,
-      "Type": "item",
+      "master_item_id": 109,
+      "type": "item",
       "name": "wings to discovery",
       "amount": 30
     },
@@ -5677,8 +5677,8 @@
     "related_stats": [],
     "ability_value": 5000,
     "required_item": {
-      "ID": 53,
-      "Type": "item",
+      "master_item_id": 53,
+      "type": "item",
       "name": "dark matter",
       "amount": 99
     },

@@ -84,8 +84,8 @@
     "expert_grid_pos": "wakka",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 38,
-      "Type": "item",
+      "master_item_id": 38,
+      "type": "item",
       "name": "sleeping powder",
       "amount": 3
     },
@@ -177,8 +177,8 @@
     "expert_grid_pos": "wakka",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 40,
-      "Type": "item",
+      "master_item_id": 40,
+      "type": "item",
       "name": "silence grenade",
       "amount": 3
     },
@@ -270,8 +270,8 @@
     "expert_grid_pos": "wakka",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 41,
-      "Type": "item",
+      "master_item_id": 41,
+      "type": "item",
       "name": "smoke bomb",
       "amount": 6
     },
@@ -363,8 +363,8 @@
     "expert_grid_pos": "wakka",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 38,
-      "Type": "item",
+      "master_item_id": 38,
+      "type": "item",
       "name": "sleeping powder",
       "amount": 10
     },
@@ -456,8 +456,8 @@
     "expert_grid_pos": "wakka",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 40,
-      "Type": "item",
+      "master_item_id": 40,
+      "type": "item",
       "name": "silence grenade",
       "amount": 10
     },
@@ -549,8 +549,8 @@
     "expert_grid_pos": "wakka",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 41,
-      "Type": "item",
+      "master_item_id": 41,
+      "type": "item",
       "name": "smoke bomb",
       "amount": 12
     },
@@ -642,8 +642,8 @@
     "expert_grid_pos": "wakka",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 15,
-      "Type": "item",
+      "master_item_id": 15,
+      "type": "item",
       "name": "holy water",
       "amount": 99
     },
@@ -751,8 +751,8 @@
     "expert_grid_pos": "wakka",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 77,
-      "Type": "item",
+      "master_item_id": 77,
+      "type": "item",
       "name": "skill sphere",
       "amount": 4
     },
@@ -841,8 +841,8 @@
     "expert_grid_pos": "tidus",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 47,
-      "Type": "item",
+      "master_item_id": 47,
+      "type": "item",
       "name": "silver hourglass",
       "amount": 20
     },
@@ -931,8 +931,8 @@
     "expert_grid_pos": "tidus",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 48,
-      "Type": "item",
+      "master_item_id": 48,
+      "type": "item",
       "name": "gold hourglass",
       "amount": 30
     },
@@ -1028,8 +1028,8 @@
     "expert_grid_pos": "auron",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 70,
-      "Type": "item",
+      "master_item_id": 70,
+      "type": "item",
       "name": "power sphere",
       "amount": 20
     },
@@ -1125,8 +1125,8 @@
     "expert_grid_pos": "kimahri",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 71,
-      "Type": "item",
+      "master_item_id": 71,
+      "type": "item",
       "name": "mana sphere",
       "amount": 20
     },
@@ -1222,8 +1222,8 @@
     "expert_grid_pos": "tidus",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 72,
-      "Type": "item",
+      "master_item_id": 72,
+      "type": "item",
       "name": "speed sphere",
       "amount": 20
     },
@@ -1315,8 +1315,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 73,
-      "Type": "item",
+      "master_item_id": 73,
+      "type": "item",
       "name": "ability sphere",
       "amount": 20
     },
@@ -1408,8 +1408,8 @@
     "expert_grid_pos": "auron",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 61,
-      "Type": "item",
+      "master_item_id": 61,
+      "type": "item",
       "name": "stamina spring",
       "amount": 8
     },
@@ -1501,8 +1501,8 @@
     "expert_grid_pos": "auron",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 60,
-      "Type": "item",
+      "master_item_id": 60,
+      "type": "item",
       "name": "mana spring",
       "amount": 4
     },
@@ -1594,8 +1594,8 @@
     "expert_grid_pos": "auron",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 82,
-      "Type": "item",
+      "master_item_id": 82,
+      "type": "item",
       "name": "lv. 2 key sphere",
       "amount": 2
     },
@@ -1687,8 +1687,8 @@
     "expert_grid_pos": "auron",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 104,
-      "Type": "item",
+      "master_item_id": 104,
+      "type": "item",
       "name": "shining thorn",
       "amount": 4
     },
@@ -1804,8 +1804,8 @@
     "expert_grid_pos": "auron",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 53,
-      "Type": "item",
+      "master_item_id": 53,
+      "type": "item",
       "name": "dark matter",
       "amount": 2
     },
@@ -2274,8 +2274,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 22,
-      "Type": "item",
+      "master_item_id": 22,
+      "type": "item",
       "name": "healing water",
       "amount": 5
     },
@@ -2355,8 +2355,8 @@
     "expert_grid_pos": "tidus",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 70,
-      "Type": "item",
+      "master_item_id": 70,
+      "type": "item",
       "name": "power sphere",
       "amount": 5
     },
@@ -2427,8 +2427,8 @@
     "expert_grid_pos": "wakka",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 72,
-      "Type": "item",
+      "master_item_id": 72,
+      "type": "item",
       "name": "speed sphere",
       "amount": 5
     },
@@ -2508,8 +2508,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 71,
-      "Type": "item",
+      "master_item_id": 71,
+      "type": "item",
       "name": "mana sphere",
       "amount": 5
     },
@@ -2580,8 +2580,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 72,
-      "Type": "item",
+      "master_item_id": 72,
+      "type": "item",
       "name": "speed sphere",
       "amount": 10
     },
@@ -2660,8 +2660,8 @@
     "expert_grid_pos": "rikku",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 74,
-      "Type": "item",
+      "master_item_id": 74,
+      "type": "item",
       "name": "fortune sphere",
       "amount": 2
     },
@@ -2740,8 +2740,8 @@
     "expert_grid_pos": "kimahri",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 74,
-      "Type": "item",
+      "master_item_id": 74,
+      "type": "item",
       "name": "fortune sphere",
       "amount": 2
     },
@@ -2833,8 +2833,8 @@
     "expert_grid_pos": "kimahri",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 62,
-      "Type": "item",
+      "master_item_id": 62,
+      "type": "item",
       "name": "soul spring",
       "amount": 20
     },
@@ -3408,8 +3408,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 69,
-      "Type": "item",
+      "master_item_id": 69,
+      "type": "item",
       "name": "three stars",
       "amount": 5
     },
@@ -3552,8 +3552,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": true,
     "aeon_learn_item": {
-      "ID": 2,
-      "Type": "item",
+      "master_item_id": 2,
+      "type": "item",
       "name": "hi-potion",
       "amount": 99
     },
@@ -3640,8 +3640,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": true,
     "aeon_learn_item": {
-      "ID": 3,
-      "Type": "item",
+      "master_item_id": 3,
+      "type": "item",
       "name": "x-potion",
       "amount": 30
     },
@@ -3727,8 +3727,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": true,
     "aeon_learn_item": {
-      "ID": 4,
-      "Type": "item",
+      "master_item_id": 4,
+      "type": "item",
       "name": "mega-potion",
       "amount": 60
     },
@@ -3802,8 +3802,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 24,
-      "Type": "item",
+      "master_item_id": 24,
+      "type": "item",
       "name": "bomb fragment",
       "amount": 2
     },
@@ -3877,8 +3877,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 27,
-      "Type": "item",
+      "master_item_id": 27,
+      "type": "item",
       "name": "electro marble",
       "amount": 2
     },
@@ -3952,8 +3952,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 30,
-      "Type": "item",
+      "master_item_id": 30,
+      "type": "item",
       "name": "fish scale",
       "amount": 2
     },
@@ -4027,8 +4027,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 33,
-      "Type": "item",
+      "master_item_id": 33,
+      "type": "item",
       "name": "antarctic wind",
       "amount": 2
     },
@@ -4110,8 +4110,8 @@
     "expert_grid_pos": "kimahri",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 73,
-      "Type": "item",
+      "master_item_id": 73,
+      "type": "item",
       "name": "ability sphere",
       "amount": 10
     },
@@ -4274,8 +4274,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 7,
-      "Type": "item",
+      "master_item_id": 7,
+      "type": "item",
       "name": "elixir",
       "amount": 8
     },
@@ -4369,8 +4369,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 8,
-      "Type": "item",
+      "master_item_id": 8,
+      "type": "item",
       "name": "megalixir",
       "amount": 1
     },
@@ -4444,8 +4444,8 @@
     "expert_grid_pos": "tidus",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 54,
-      "Type": "item",
+      "master_item_id": 54,
+      "type": "item",
       "name": "chocobo feather",
       "amount": 10
     },
@@ -4518,8 +4518,8 @@
     "expert_grid_pos": "tidus",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 55,
-      "Type": "item",
+      "master_item_id": 55,
+      "type": "item",
       "name": "chocobo wing",
       "amount": 16
     },
@@ -4592,8 +4592,8 @@
     "expert_grid_pos": "tidus",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 47,
-      "Type": "item",
+      "master_item_id": 47,
+      "type": "item",
       "name": "silver hourglass",
       "amount": 4
     },
@@ -4666,8 +4666,8 @@
     "expert_grid_pos": "tidus",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 48,
-      "Type": "item",
+      "master_item_id": 48,
+      "type": "item",
       "name": "gold hourglass",
       "amount": 8
     },
@@ -4741,8 +4741,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 56,
-      "Type": "item",
+      "master_item_id": 56,
+      "type": "item",
       "name": "lunar curtain",
       "amount": 4
     },
@@ -4816,8 +4816,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 57,
-      "Type": "item",
+      "master_item_id": 57,
+      "type": "item",
       "name": "light curtain",
       "amount": 6
     },
@@ -4891,8 +4891,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 58,
-      "Type": "item",
+      "master_item_id": 58,
+      "type": "item",
       "name": "star curtain",
       "amount": 3
     },
@@ -4971,8 +4971,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 63,
-      "Type": "item",
+      "master_item_id": 63,
+      "type": "item",
       "name": "purifying salt",
       "amount": 3
     },
@@ -5045,8 +5045,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 59,
-      "Type": "item",
+      "master_item_id": 59,
+      "type": "item",
       "name": "healing spring",
       "amount": 50
     },
@@ -5130,8 +5130,8 @@
     "expert_grid_pos": "yuna",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 44,
-      "Type": "item",
+      "master_item_id": 44,
+      "type": "item",
       "name": "blessed gem",
       "amount": 60
     },
@@ -5458,8 +5458,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 24,
-      "Type": "item",
+      "master_item_id": 24,
+      "type": "item",
       "name": "bomb fragment",
       "amount": 1
     },
@@ -5544,8 +5544,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 27,
-      "Type": "item",
+      "master_item_id": 27,
+      "type": "item",
       "name": "electro marble",
       "amount": 1
     },
@@ -5630,8 +5630,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 30,
-      "Type": "item",
+      "master_item_id": 30,
+      "type": "item",
       "name": "fish scale",
       "amount": 1
     },
@@ -5716,8 +5716,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 33,
-      "Type": "item",
+      "master_item_id": 33,
+      "type": "item",
       "name": "antarctic wind",
       "amount": 1
     },
@@ -5803,8 +5803,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 25,
-      "Type": "item",
+      "master_item_id": 25,
+      "type": "item",
       "name": "bomb core",
       "amount": 2
     },
@@ -5890,8 +5890,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 28,
-      "Type": "item",
+      "master_item_id": 28,
+      "type": "item",
       "name": "lightning marble",
       "amount": 2
     },
@@ -5977,8 +5977,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 31,
-      "Type": "item",
+      "master_item_id": 31,
+      "type": "item",
       "name": "dragon scale",
       "amount": 2
     },
@@ -6064,8 +6064,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 34,
-      "Type": "item",
+      "master_item_id": 34,
+      "type": "item",
       "name": "arctic wind",
       "amount": 2
     },
@@ -6151,8 +6151,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 26,
-      "Type": "item",
+      "master_item_id": 26,
+      "type": "item",
       "name": "fire gem",
       "amount": 4
     },
@@ -6238,8 +6238,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 29,
-      "Type": "item",
+      "master_item_id": 29,
+      "type": "item",
       "name": "lightning gem",
       "amount": 4
     },
@@ -6325,8 +6325,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 32,
-      "Type": "item",
+      "master_item_id": 32,
+      "type": "item",
       "name": "water gem",
       "amount": 4
     },
@@ -6412,8 +6412,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 35,
-      "Type": "item",
+      "master_item_id": 35,
+      "type": "item",
       "name": "ice gem",
       "amount": 4
     },
@@ -6487,8 +6487,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 46,
-      "Type": "item",
+      "master_item_id": 46,
+      "type": "item",
       "name": "poison fang",
       "amount": 8
     },
@@ -6571,8 +6571,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 42,
-      "Type": "item",
+      "master_item_id": 42,
+      "type": "item",
       "name": "shadow gem",
       "amount": 8
     },
@@ -6646,8 +6646,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 51,
-      "Type": "item",
+      "master_item_id": 51,
+      "type": "item",
       "name": "farplane shadow",
       "amount": 30
     },
@@ -6733,8 +6733,8 @@
     "expert_grid_pos": "wakka",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 61,
-      "Type": "item",
+      "master_item_id": 61,
+      "type": "item",
       "name": "stamina spring",
       "amount": 60
     },
@@ -6820,8 +6820,8 @@
     "expert_grid_pos": "wakka",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 60,
-      "Type": "item",
+      "master_item_id": 60,
+      "type": "item",
       "name": "mana spring",
       "amount": 10
     },
@@ -6907,8 +6907,8 @@
     "expert_grid_pos": "rikku",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 43,
-      "Type": "item",
+      "master_item_id": 43,
+      "type": "item",
       "name": "shining gem",
       "amount": 60
     },
@@ -6992,8 +6992,8 @@
     "expert_grid_pos": "lulu",
     "can_use_outside_battle": false,
     "aeon_learn_item": {
-      "ID": 45,
-      "Type": "item",
+      "master_item_id": 45,
+      "type": "item",
       "name": "supreme gem",
       "amount": 99
     },

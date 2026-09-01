@@ -8,8 +8,8 @@
         "ID": 1,
         "PositionID": 1,
         "item": {
-          "ID": 8,
-          "Type": "item",
+          "master_item_id": 8,
+          "type": "item",
           "name": "megalixir",
           "amount": 1
         },
@@ -19,8 +19,8 @@
         "ID": 2,
         "PositionID": 1,
         "item": {
-          "ID": 69,
-          "Type": "item",
+          "master_item_id": 69,
+          "type": "item",
           "name": "three stars",
           "amount": 1
         },
@@ -30,8 +30,8 @@
         "ID": 3,
         "PositionID": 1,
         "item": {
-          "ID": 74,
-          "Type": "item",
+          "master_item_id": 74,
+          "type": "item",
           "name": "fortune sphere",
           "amount": 1
         },
@@ -41,8 +41,8 @@
         "ID": 4,
         "PositionID": 1,
         "item": {
-          "ID": 111,
-          "Type": "item",
+          "master_item_id": 111,
+          "type": "item",
           "name": "underdog's secret",
           "amount": 1
         },
@@ -52,8 +52,8 @@
         "ID": 5,
         "PositionID": 1,
         "item": {
-          "ID": 53,
-          "Type": "item",
+          "master_item_id": 53,
+          "type": "item",
           "name": "dark matter",
           "amount": 1
         },
@@ -63,8 +63,8 @@
         "ID": 6,
         "PositionID": 1,
         "item": {
-          "ID": 81,
-          "Type": "item",
+          "master_item_id": 81,
+          "type": "item",
           "name": "lv. 1 key sphere",
           "amount": 1
         },
@@ -74,8 +74,8 @@
         "ID": 7,
         "PositionID": 1,
         "item": {
-          "ID": 96,
-          "Type": "item",
+          "master_item_id": 96,
+          "type": "item",
           "name": "return sphere",
           "amount": 1
         },
@@ -85,8 +85,8 @@
         "ID": 8,
         "PositionID": 1,
         "item": {
-          "ID": 98,
-          "Type": "item",
+          "master_item_id": 98,
+          "type": "item",
           "name": "teleport sphere",
           "amount": 1
         },
@@ -103,8 +103,8 @@
         "ID": 9,
         "PositionID": 2,
         "item": {
-          "ID": 3,
-          "Type": "item",
+          "master_item_id": 3,
+          "type": "item",
           "name": "x-potion",
           "amount": 1
         },
@@ -114,8 +114,8 @@
         "ID": 10,
         "PositionID": 2,
         "item": {
-          "ID": 4,
-          "Type": "item",
+          "master_item_id": 4,
+          "type": "item",
           "name": "mega-potion",
           "amount": 1
         },
@@ -125,8 +125,8 @@
         "ID": 11,
         "PositionID": 2,
         "item": {
-          "ID": 7,
-          "Type": "item",
+          "master_item_id": 7,
+          "type": "item",
           "name": "elixir",
           "amount": 1
         },
@@ -136,8 +136,8 @@
         "ID": 12,
         "PositionID": 2,
         "item": {
-          "ID": 10,
-          "Type": "item",
+          "master_item_id": 10,
+          "type": "item",
           "name": "mega phoenix",
           "amount": 1
         },
@@ -147,8 +147,8 @@
         "ID": 13,
         "PositionID": 2,
         "item": {
-          "ID": 2,
-          "Type": "item",
+          "master_item_id": 2,
+          "type": "item",
           "name": "hi-potion",
           "amount": 2
         },
@@ -158,8 +158,8 @@
         "ID": 14,
         "PositionID": 2,
         "item": {
-          "ID": 5,
-          "Type": "item",
+          "master_item_id": 5,
+          "type": "item",
           "name": "ether",
           "amount": 1
         },
@@ -169,8 +169,8 @@
         "ID": 15,
         "PositionID": 2,
         "item": {
-          "ID": 9,
-          "Type": "item",
+          "master_item_id": 9,
+          "type": "item",
           "name": "phoenix down",
           "amount": 2
         },
@@ -180,8 +180,8 @@
         "ID": 16,
         "PositionID": 2,
         "item": {
-          "ID": 16,
-          "Type": "item",
+          "master_item_id": 16,
+          "type": "item",
           "name": "remedy",
           "amount": 2
         },
@@ -198,8 +198,8 @@
         "ID": 17,
         "PositionID": 3,
         "item": {
-          "ID": 70,
-          "Type": "item",
+          "master_item_id": 70,
+          "type": "item",
           "name": "power sphere",
           "amount": 1
         },
@@ -209,8 +209,8 @@
         "ID": 18,
         "PositionID": 3,
         "item": {
-          "ID": 71,
-          "Type": "item",
+          "master_item_id": 71,
+          "type": "item",
           "name": "mana sphere",
           "amount": 1
         },
@@ -220,8 +220,8 @@
         "ID": 19,
         "PositionID": 3,
         "item": {
-          "ID": 72,
-          "Type": "item",
+          "master_item_id": 72,
+          "type": "item",
           "name": "speed sphere",
           "amount": 1
         },
@@ -231,8 +231,8 @@
         "ID": 20,
         "PositionID": 3,
         "item": {
-          "ID": 73,
-          "Type": "item",
+          "master_item_id": 73,
+          "type": "item",
           "name": "ability sphere",
           "amount": 1
         },
@@ -242,8 +242,8 @@
         "ID": 21,
         "PositionID": 3,
         "item": {
-          "ID": 11,
-          "Type": "item",
+          "master_item_id": 11,
+          "type": "item",
           "name": "antidote",
           "amount": 1
         },
@@ -253,8 +253,8 @@
         "ID": 22,
         "PositionID": 3,
         "item": {
-          "ID": 14,
-          "Type": "item",
+          "master_item_id": 14,
+          "type": "item",
           "name": "echo screen",
           "amount": 1
         },
@@ -264,8 +264,8 @@
         "ID": 23,
         "PositionID": 3,
         "item": {
-          "ID": 13,
-          "Type": "item",
+          "master_item_id": 13,
+          "type": "item",
           "name": "eye drops",
           "amount": 1
         },
@@ -282,8 +282,8 @@
         "ID": 24,
         "PositionID": 4,
         "item": {
-          "ID": 5,
-          "Type": "item",
+          "master_item_id": 5,
+          "type": "item",
           "name": "ether",
           "amount": 1
         },
@@ -293,8 +293,8 @@
         "ID": 25,
         "PositionID": 4,
         "item": {
-          "ID": 96,
-          "Type": "item",
+          "master_item_id": 96,
+          "type": "item",
           "name": "return sphere",
           "amount": 1
         },
@@ -304,8 +304,8 @@
         "ID": 26,
         "PositionID": 4,
         "item": {
-          "ID": 101,
-          "Type": "item",
+          "master_item_id": 101,
+          "type": "item",
           "name": "rename card",
           "amount": 1
         },
@@ -315,8 +315,8 @@
         "ID": 27,
         "PositionID": 4,
         "item": {
-          "ID": 3,
-          "Type": "item",
+          "master_item_id": 3,
+          "type": "item",
           "name": "x-potion",
           "amount": 1
         },
@@ -326,8 +326,8 @@
         "ID": 28,
         "PositionID": 4,
         "item": {
-          "ID": 4,
-          "Type": "item",
+          "master_item_id": 4,
+          "type": "item",
           "name": "mega-potion",
           "amount": 1
         },
@@ -337,8 +337,8 @@
         "ID": 29,
         "PositionID": 4,
         "item": {
-          "ID": 16,
-          "Type": "item",
+          "master_item_id": 16,
+          "type": "item",
           "name": "remedy",
           "amount": 2
         },
@@ -355,8 +355,8 @@
         "ID": 30,
         "PositionID": 5,
         "item": {
-          "ID": 3,
-          "Type": "item",
+          "master_item_id": 3,
+          "type": "item",
           "name": "x-potion",
           "amount": 1
         },
@@ -366,8 +366,8 @@
         "ID": 31,
         "PositionID": 5,
         "item": {
-          "ID": 7,
-          "Type": "item",
+          "master_item_id": 7,
+          "type": "item",
           "name": "elixir",
           "amount": 1
         },
@@ -377,8 +377,8 @@
         "ID": 32,
         "PositionID": 5,
         "item": {
-          "ID": 2,
-          "Type": "item",
+          "master_item_id": 2,
+          "type": "item",
           "name": "hi-potion",
           "amount": 1
         },
@@ -388,8 +388,8 @@
         "ID": 33,
         "PositionID": 5,
         "item": {
-          "ID": 16,
-          "Type": "item",
+          "master_item_id": 16,
+          "type": "item",
           "name": "remedy",
           "amount": 1
         },
@@ -406,8 +406,8 @@
         "ID": 34,
         "PositionID": 6,
         "item": {
-          "ID": 11,
-          "Type": "item",
+          "master_item_id": 11,
+          "type": "item",
           "name": "antidote",
           "amount": 4
         },
@@ -417,8 +417,8 @@
         "ID": 35,
         "PositionID": 6,
         "item": {
-          "ID": 12,
-          "Type": "item",
+          "master_item_id": 12,
+          "type": "item",
           "name": "soft",
           "amount": 4
         },
@@ -428,8 +428,8 @@
         "ID": 36,
         "PositionID": 6,
         "item": {
-          "ID": 13,
-          "Type": "item",
+          "master_item_id": 13,
+          "type": "item",
           "name": "eye drops",
           "amount": 4
         },
@@ -439,8 +439,8 @@
         "ID": 37,
         "PositionID": 6,
         "item": {
-          "ID": 14,
-          "Type": "item",
+          "master_item_id": 14,
+          "type": "item",
           "name": "echo screen",
           "amount": 4
         },
@@ -457,8 +457,8 @@
         "ID": 38,
         "PositionID": 7,
         "item": {
-          "ID": 1,
-          "Type": "item",
+          "master_item_id": 1,
+          "type": "item",
           "name": "potion",
           "amount": 2
         },
@@ -468,8 +468,8 @@
         "ID": 39,
         "PositionID": 7,
         "item": {
-          "ID": 9,
-          "Type": "item",
+          "master_item_id": 9,
+          "type": "item",
           "name": "phoenix down",
           "amount": 2
         },
@@ -486,8 +486,8 @@
         "ID": 40,
         "PositionID": 8,
         "item": {
-          "ID": 5,
-          "Type": "item",
+          "master_item_id": 5,
+          "type": "item",
           "name": "ether",
           "amount": 1
         },
@@ -497,8 +497,8 @@
         "ID": 41,
         "PositionID": 8,
         "item": {
-          "ID": 96,
-          "Type": "item",
+          "master_item_id": 96,
+          "type": "item",
           "name": "return sphere",
           "amount": 1
         },
@@ -508,8 +508,8 @@
         "ID": 42,
         "PositionID": 8,
         "item": {
-          "ID": 101,
-          "Type": "item",
+          "master_item_id": 101,
+          "type": "item",
           "name": "rename card",
           "amount": 1
         },

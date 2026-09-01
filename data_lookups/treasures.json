@@ -11,8 +11,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 2
       }
@@ -44,8 +44,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 2
       }
@@ -64,8 +64,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -106,8 +106,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 3,
-        "Type": "item",
+        "master_item_id": 3,
+        "type": "item",
         "name": "x-potion",
         "amount": 1
       }
@@ -126,8 +126,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 114,
-        "Type": "key-item",
+        "master_item_id": 114,
+        "type": "key-item",
         "name": "flint",
         "amount": 1
       }
@@ -146,8 +146,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -166,8 +166,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 113,
-        "Type": "key-item",
+        "master_item_id": 113,
+        "type": "key-item",
         "name": "withered bouquet",
         "amount": 1
       }
@@ -186,8 +186,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -206,8 +206,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 10,
-        "Type": "item",
+        "master_item_id": 10,
+        "type": "item",
         "name": "mega phoenix",
         "amount": 4
       }
@@ -226,8 +226,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 8,
-        "Type": "item",
+        "master_item_id": 8,
+        "type": "item",
         "name": "megalixir",
         "amount": 1
       }
@@ -246,8 +246,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 147,
-        "Type": "key-item",
+        "master_item_id": 147,
+        "type": "key-item",
         "name": "al bhed primer i",
         "amount": 1
       }
@@ -266,8 +266,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 3
       }
@@ -286,8 +286,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 11,
-        "Type": "item",
+        "master_item_id": 11,
+        "type": "item",
         "name": "antidote",
         "amount": 2
       }
@@ -306,8 +306,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 125,
-        "Type": "key-item",
+        "master_item_id": 125,
+        "type": "key-item",
         "name": "moon crest",
         "amount": 1
       }
@@ -339,8 +339,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -359,8 +359,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 3
       }
@@ -379,8 +379,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 2
       }
@@ -434,8 +434,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 9,
-        "Type": "item",
+        "master_item_id": 9,
+        "type": "item",
         "name": "phoenix down",
         "amount": 3
       }
@@ -454,8 +454,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -474,8 +474,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 16,
-        "Type": "item",
+        "master_item_id": 16,
+        "type": "item",
         "name": "remedy",
         "amount": 1
       }
@@ -494,8 +494,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 9,
-        "Type": "item",
+        "master_item_id": 9,
+        "type": "item",
         "name": "phoenix down",
         "amount": 1
       }
@@ -514,8 +514,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -534,8 +534,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 11,
-        "Type": "item",
+        "master_item_id": 11,
+        "type": "item",
         "name": "antidote",
         "amount": 2
       }
@@ -624,8 +624,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 9,
-        "Type": "item",
+        "master_item_id": 9,
+        "type": "item",
         "name": "phoenix down",
         "amount": 1
       }
@@ -644,8 +644,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -677,8 +677,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 2
       }
@@ -719,8 +719,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 138,
-        "Type": "key-item",
+        "master_item_id": 138,
+        "type": "key-item",
         "name": "jecht sphere 2",
         "amount": 1
       }
@@ -739,8 +739,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 148,
-        "Type": "key-item",
+        "master_item_id": 148,
+        "type": "key-item",
         "name": "al bhed primer ii",
         "amount": 1
       }
@@ -783,8 +783,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 92,
-        "Type": "item",
+        "master_item_id": 92,
+        "type": "item",
         "name": "evasion sphere",
         "amount": 1
       }
@@ -803,8 +803,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 2
       }
@@ -823,8 +823,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       }
@@ -843,8 +843,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 78,
-        "Type": "item",
+        "master_item_id": 78,
+        "type": "item",
         "name": "wht magic sphere",
         "amount": 1
       }
@@ -863,8 +863,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -883,8 +883,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 97,
-        "Type": "item",
+        "master_item_id": 97,
+        "type": "item",
         "name": "friend sphere",
         "amount": 1
       }
@@ -903,8 +903,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 139,
-        "Type": "key-item",
+        "master_item_id": 139,
+        "type": "key-item",
         "name": "jecht sphere 3",
         "amount": 1
       }
@@ -923,8 +923,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 16,
-        "Type": "item",
+        "master_item_id": 16,
+        "type": "item",
         "name": "remedy",
         "amount": 1
       }
@@ -943,8 +943,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 1
       }
@@ -963,8 +963,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 149,
-        "Type": "key-item",
+        "master_item_id": 149,
+        "type": "key-item",
         "name": "al bhed primer iii",
         "amount": 1
       }
@@ -983,8 +983,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 150,
-        "Type": "key-item",
+        "master_item_id": 150,
+        "type": "key-item",
         "name": "al bhed primer iv",
         "amount": 1
       }
@@ -1003,8 +1003,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -1023,8 +1023,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 3
       }
@@ -1043,8 +1043,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 71,
-        "Type": "item",
+        "master_item_id": 71,
+        "type": "item",
         "name": "mana sphere",
         "amount": 2
       }
@@ -1086,8 +1086,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 16,
-        "Type": "item",
+        "master_item_id": 16,
+        "type": "item",
         "name": "remedy",
         "amount": 1
       }
@@ -1106,8 +1106,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -1126,8 +1126,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 94,
-        "Type": "item",
+        "master_item_id": 94,
+        "type": "item",
         "name": "luck sphere",
         "amount": 1
       }
@@ -1146,8 +1146,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 9,
-        "Type": "item",
+        "master_item_id": 9,
+        "type": "item",
         "name": "phoenix down",
         "amount": 3
       }
@@ -1166,8 +1166,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 11,
-        "Type": "item",
+        "master_item_id": 11,
+        "type": "item",
         "name": "antidote",
         "amount": 4
       }
@@ -1186,8 +1186,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       }
@@ -1252,8 +1252,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 94,
-        "Type": "item",
+        "master_item_id": 94,
+        "type": "item",
         "name": "luck sphere",
         "amount": 1
       }
@@ -1272,8 +1272,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 88,
-        "Type": "item",
+        "master_item_id": 88,
+        "type": "item",
         "name": "defense sphere",
         "amount": 1
       }
@@ -1292,8 +1292,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 91,
-        "Type": "item",
+        "master_item_id": 91,
+        "type": "item",
         "name": "agility sphere",
         "amount": 1
       }
@@ -1312,8 +1312,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 93,
-        "Type": "item",
+        "master_item_id": 93,
+        "type": "item",
         "name": "accuracy sphere",
         "amount": 1
       }
@@ -1357,8 +1357,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 151,
-        "Type": "key-item",
+        "master_item_id": 151,
+        "type": "key-item",
         "name": "al bhed primer v",
         "amount": 1
       }
@@ -1377,8 +1377,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -1397,8 +1397,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 140,
-        "Type": "key-item",
+        "master_item_id": 140,
+        "type": "key-item",
         "name": "jecht sphere 4",
         "amount": 1
       }
@@ -1417,8 +1417,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 131,
-        "Type": "key-item",
+        "master_item_id": 131,
+        "type": "key-item",
         "name": "jupiter crest",
         "amount": 1
       }
@@ -1437,8 +1437,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 152,
-        "Type": "key-item",
+        "master_item_id": 152,
+        "type": "key-item",
         "name": "al bhed primer vi",
         "amount": 1
       }
@@ -1457,8 +1457,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 2
       }
@@ -1477,8 +1477,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 87,
-        "Type": "item",
+        "master_item_id": 87,
+        "type": "item",
         "name": "strength sphere",
         "amount": 1
       }
@@ -1533,8 +1533,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 9,
-        "Type": "item",
+        "master_item_id": 9,
+        "type": "item",
         "name": "phoenix down",
         "amount": 2
       }
@@ -1553,8 +1553,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 85,
-        "Type": "item",
+        "master_item_id": 85,
+        "type": "item",
         "name": "hp sphere",
         "amount": 1
       }
@@ -1573,8 +1573,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 89,
-        "Type": "item",
+        "master_item_id": 89,
+        "type": "item",
         "name": "magic sphere",
         "amount": 1
       }
@@ -1593,8 +1593,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 153,
-        "Type": "key-item",
+        "master_item_id": 153,
+        "type": "key-item",
         "name": "al bhed primer vii",
         "amount": 1
       }
@@ -1648,8 +1648,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -1692,8 +1692,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 11,
-        "Type": "item",
+        "master_item_id": 11,
+        "type": "item",
         "name": "antidote",
         "amount": 2
       }
@@ -1802,8 +1802,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 16,
-        "Type": "item",
+        "master_item_id": 16,
+        "type": "item",
         "name": "remedy",
         "amount": 1
       }
@@ -1822,8 +1822,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 12,
-        "Type": "item",
+        "master_item_id": 12,
+        "type": "item",
         "name": "soft",
         "amount": 3
       }
@@ -1842,8 +1842,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 81,
-        "Type": "item",
+        "master_item_id": 81,
+        "type": "item",
         "name": "lv. 1 key sphere",
         "amount": 1
       }
@@ -1862,8 +1862,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 11,
-        "Type": "item",
+        "master_item_id": 11,
+        "type": "item",
         "name": "antidote",
         "amount": 4
       }
@@ -1908,8 +1908,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -1928,8 +1928,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -1948,8 +1948,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 13,
-        "Type": "item",
+        "master_item_id": 13,
+        "type": "item",
         "name": "eye drops",
         "amount": 3
       }
@@ -1968,8 +1968,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 81,
-        "Type": "item",
+        "master_item_id": 81,
+        "type": "item",
         "name": "lv. 1 key sphere",
         "amount": 1
       }
@@ -1988,14 +1988,14 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 154,
-        "Type": "key-item",
+        "master_item_id": 154,
+        "type": "key-item",
         "name": "al bhed primer viii",
         "amount": 1
       },
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 2
       }
@@ -2037,8 +2037,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 155,
-        "Type": "key-item",
+        "master_item_id": 155,
+        "type": "key-item",
         "name": "al bhed primer ix",
         "amount": 1
       }
@@ -2057,8 +2057,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 2
       }
@@ -2123,8 +2123,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 74,
-        "Type": "item",
+        "master_item_id": 74,
+        "type": "item",
         "name": "fortune sphere",
         "amount": 1
       }
@@ -2143,8 +2143,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 127,
-        "Type": "key-item",
+        "master_item_id": 127,
+        "type": "key-item",
         "name": "mars crest",
         "amount": 1
       }
@@ -2163,8 +2163,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 141,
-        "Type": "key-item",
+        "master_item_id": 141,
+        "type": "key-item",
         "name": "jecht sphere 5",
         "amount": 1
       }
@@ -2228,8 +2228,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 16,
-        "Type": "item",
+        "master_item_id": 16,
+        "type": "item",
         "name": "remedy",
         "amount": 1
       }
@@ -2248,8 +2248,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -2268,8 +2268,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -2288,8 +2288,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 9,
-        "Type": "item",
+        "master_item_id": 9,
+        "type": "item",
         "name": "phoenix down",
         "amount": 2
       }
@@ -2330,8 +2330,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 12,
-        "Type": "item",
+        "master_item_id": 12,
+        "type": "item",
         "name": "soft",
         "amount": 4
       }
@@ -2350,8 +2350,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -2383,8 +2383,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 10
       }
@@ -2403,8 +2403,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 16,
-        "Type": "item",
+        "master_item_id": 16,
+        "type": "item",
         "name": "remedy",
         "amount": 1
       }
@@ -2423,8 +2423,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -2443,8 +2443,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 3,
-        "Type": "item",
+        "master_item_id": 3,
+        "type": "item",
         "name": "x-potion",
         "amount": 1
       }
@@ -2486,8 +2486,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 156,
-        "Type": "key-item",
+        "master_item_id": 156,
+        "type": "key-item",
         "name": "al bhed primer x",
         "amount": 1
       }
@@ -2519,8 +2519,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 1
       }
@@ -2539,8 +2539,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 146,
-        "Type": "key-item",
+        "master_item_id": 146,
+        "type": "key-item",
         "name": "auron's sphere",
         "amount": 1
       }
@@ -2582,8 +2582,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 1
       }
@@ -2602,8 +2602,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -2712,8 +2712,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 1
       }
@@ -2732,8 +2732,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 9,
-        "Type": "item",
+        "master_item_id": 9,
+        "type": "item",
         "name": "phoenix down",
         "amount": 2
       }
@@ -2752,8 +2752,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 157,
-        "Type": "key-item",
+        "master_item_id": 157,
+        "type": "key-item",
         "name": "al bhed primer xi",
         "amount": 1
       }
@@ -2794,8 +2794,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       }
@@ -2814,8 +2814,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -2856,8 +2856,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 2
       }
@@ -2876,8 +2876,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 10
       }
@@ -2909,8 +2909,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 73,
-        "Type": "item",
+        "master_item_id": 73,
+        "type": "item",
         "name": "ability sphere",
         "amount": 4
       }
@@ -2952,8 +2952,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -2972,8 +2972,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 16,
-        "Type": "item",
+        "master_item_id": 16,
+        "type": "item",
         "name": "remedy",
         "amount": 1
       }
@@ -2992,8 +2992,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 10,
-        "Type": "item",
+        "master_item_id": 10,
+        "type": "item",
         "name": "mega phoenix",
         "amount": 1
       }
@@ -3012,8 +3012,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 89,
-        "Type": "item",
+        "master_item_id": 89,
+        "type": "item",
         "name": "magic sphere",
         "amount": 1
       }
@@ -3032,8 +3032,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 94,
-        "Type": "item",
+        "master_item_id": 94,
+        "type": "item",
         "name": "luck sphere",
         "amount": 1
       }
@@ -3052,8 +3052,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 91,
-        "Type": "item",
+        "master_item_id": 91,
+        "type": "item",
         "name": "agility sphere",
         "amount": 1
       }
@@ -3072,8 +3072,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 90,
-        "Type": "item",
+        "master_item_id": 90,
+        "type": "item",
         "name": "magic def sphere",
         "amount": 1
       }
@@ -3092,8 +3092,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 81,
-        "Type": "item",
+        "master_item_id": 81,
+        "type": "item",
         "name": "lv. 1 key sphere",
         "amount": 3
       }
@@ -3112,8 +3112,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 3,
-        "Type": "item",
+        "master_item_id": 3,
+        "type": "item",
         "name": "x-potion",
         "amount": 1
       }
@@ -3132,8 +3132,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 81,
-        "Type": "item",
+        "master_item_id": 81,
+        "type": "item",
         "name": "lv. 1 key sphere",
         "amount": 3
       }
@@ -3152,8 +3152,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 90,
-        "Type": "item",
+        "master_item_id": 90,
+        "type": "item",
         "name": "magic def sphere",
         "amount": 1
       }
@@ -3172,14 +3172,14 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 117,
-        "Type": "key-item",
+        "master_item_id": 117,
+        "type": "key-item",
         "name": "summoner's soul",
         "amount": 1
       },
       {
-        "ID": 41,
-        "Type": "item",
+        "master_item_id": 41,
+        "type": "item",
         "name": "smoke bomb",
         "amount": 6
       }
@@ -3198,14 +3198,14 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 117,
-        "Type": "key-item",
+        "master_item_id": 117,
+        "type": "key-item",
         "name": "summoner's soul",
         "amount": 1
       },
       {
-        "ID": 31,
-        "Type": "item",
+        "master_item_id": 31,
+        "type": "item",
         "name": "dragon scale",
         "amount": 2
       }
@@ -3224,8 +3224,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 9,
-        "Type": "item",
+        "master_item_id": 9,
+        "type": "item",
         "name": "phoenix down",
         "amount": 2
       }
@@ -3257,8 +3257,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 142,
-        "Type": "key-item",
+        "master_item_id": 142,
+        "type": "key-item",
         "name": "jecht sphere 6",
         "amount": 1
       }
@@ -3277,8 +3277,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 158,
-        "Type": "key-item",
+        "master_item_id": 158,
+        "type": "key-item",
         "name": "al bhed primer xii",
         "amount": 1
       }
@@ -3297,8 +3297,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -3317,8 +3317,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 11,
-        "Type": "item",
+        "master_item_id": 11,
+        "type": "item",
         "name": "antidote",
         "amount": 4
       }
@@ -3337,8 +3337,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 1
       }
@@ -3357,8 +3357,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       }
@@ -3377,8 +3377,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 1
       }
@@ -3397,8 +3397,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 159,
-        "Type": "key-item",
+        "master_item_id": 159,
+        "type": "key-item",
         "name": "al bhed primer xiii",
         "amount": 1
       }
@@ -3430,8 +3430,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 2
       }
@@ -3450,8 +3450,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 28,
-        "Type": "item",
+        "master_item_id": 28,
+        "type": "item",
         "name": "lightning marble",
         "amount": 8
       }
@@ -3470,8 +3470,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 133,
-        "Type": "key-item",
+        "master_item_id": 133,
+        "type": "key-item",
         "name": "venus crest",
         "amount": 1
       }
@@ -3515,8 +3515,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 9,
-        "Type": "item",
+        "master_item_id": 9,
+        "type": "item",
         "name": "phoenix down",
         "amount": 2
       }
@@ -3535,8 +3535,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 2
       }
@@ -3590,8 +3590,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 143,
-        "Type": "key-item",
+        "master_item_id": 143,
+        "type": "key-item",
         "name": "jecht sphere 7",
         "amount": 1
       }
@@ -3654,8 +3654,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 160,
-        "Type": "key-item",
+        "master_item_id": 160,
+        "type": "key-item",
         "name": "al bhed primer xiv",
         "amount": 1
       }
@@ -3674,8 +3674,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 3,
-        "Type": "item",
+        "master_item_id": 3,
+        "type": "item",
         "name": "x-potion",
         "amount": 1
       }
@@ -3694,8 +3694,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -3727,8 +3727,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 16,
-        "Type": "item",
+        "master_item_id": 16,
+        "type": "item",
         "name": "remedy",
         "amount": 1
       }
@@ -3782,8 +3782,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 144,
-        "Type": "key-item",
+        "master_item_id": 144,
+        "type": "key-item",
         "name": "jecht sphere 8",
         "amount": 1
       }
@@ -3802,8 +3802,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 9,
-        "Type": "item",
+        "master_item_id": 9,
+        "type": "item",
         "name": "phoenix down",
         "amount": 3
       }
@@ -3822,8 +3822,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 16,
-        "Type": "item",
+        "master_item_id": 16,
+        "type": "item",
         "name": "remedy",
         "amount": 1
       }
@@ -3842,8 +3842,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 161,
-        "Type": "key-item",
+        "master_item_id": 161,
+        "type": "key-item",
         "name": "al bhed primer xv",
         "amount": 1
       }
@@ -3862,8 +3862,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 137,
-        "Type": "key-item",
+        "master_item_id": 137,
+        "type": "key-item",
         "name": "jecht sphere 1",
         "amount": 1
       }
@@ -3918,8 +3918,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 162,
-        "Type": "key-item",
+        "master_item_id": 162,
+        "type": "key-item",
         "name": "al bhed primer xvi",
         "amount": 1
       }
@@ -3938,8 +3938,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 81,
-        "Type": "item",
+        "master_item_id": 81,
+        "type": "item",
         "name": "lv. 1 key sphere",
         "amount": 1
       }
@@ -3958,8 +3958,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 1
       }
@@ -3978,8 +3978,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 82,
-        "Type": "item",
+        "master_item_id": 82,
+        "type": "item",
         "name": "lv. 2 key sphere",
         "amount": 1
       }
@@ -4068,8 +4068,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 3,
-        "Type": "item",
+        "master_item_id": 3,
+        "type": "item",
         "name": "x-potion",
         "amount": 2
       }
@@ -4088,8 +4088,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       }
@@ -4108,8 +4108,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 1
       }
@@ -4128,8 +4128,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 9,
-        "Type": "item",
+        "master_item_id": 9,
+        "type": "item",
         "name": "phoenix down",
         "amount": 3
       }
@@ -4148,8 +4148,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 2
       }
@@ -4168,8 +4168,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 16,
-        "Type": "item",
+        "master_item_id": 16,
+        "type": "item",
         "name": "remedy",
         "amount": 2
       }
@@ -4188,8 +4188,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 94,
-        "Type": "item",
+        "master_item_id": 94,
+        "type": "item",
         "name": "luck sphere",
         "amount": 1
       }
@@ -4208,8 +4208,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 89,
-        "Type": "item",
+        "master_item_id": 89,
+        "type": "item",
         "name": "magic sphere",
         "amount": 1
       }
@@ -4228,8 +4228,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 93,
-        "Type": "item",
+        "master_item_id": 93,
+        "type": "item",
         "name": "accuracy sphere",
         "amount": 1
       }
@@ -4248,8 +4248,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 90,
-        "Type": "item",
+        "master_item_id": 90,
+        "type": "item",
         "name": "magic def sphere",
         "amount": 1
       }
@@ -4268,8 +4268,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 21,
-        "Type": "item",
+        "master_item_id": 21,
+        "type": "item",
         "name": "al bhed potion",
         "amount": 8
       }
@@ -4288,8 +4288,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 147,
-        "Type": "key-item",
+        "master_item_id": 147,
+        "type": "key-item",
         "name": "al bhed primer i",
         "amount": 1
       }
@@ -4308,8 +4308,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 149,
-        "Type": "key-item",
+        "master_item_id": 149,
+        "type": "key-item",
         "name": "al bhed primer iii",
         "amount": 1
       }
@@ -4328,8 +4328,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 21,
-        "Type": "item",
+        "master_item_id": 21,
+        "type": "item",
         "name": "al bhed potion",
         "amount": 8
       }
@@ -4348,8 +4348,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 5,
-        "Type": "item",
+        "master_item_id": 5,
+        "type": "item",
         "name": "ether",
         "amount": 2
       }
@@ -4368,8 +4368,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 4
       }
@@ -4388,8 +4388,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 151,
-        "Type": "key-item",
+        "master_item_id": 151,
+        "type": "key-item",
         "name": "al bhed primer v",
         "amount": 1
       }
@@ -4408,8 +4408,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 160,
-        "Type": "key-item",
+        "master_item_id": 160,
+        "type": "key-item",
         "name": "al bhed primer xiv",
         "amount": 1
       }
@@ -4428,8 +4428,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 3,
-        "Type": "item",
+        "master_item_id": 3,
+        "type": "item",
         "name": "x-potion",
         "amount": 2
       }
@@ -4448,8 +4448,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 2
       }
@@ -4468,8 +4468,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 4
       }
@@ -4488,8 +4488,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 21,
-        "Type": "item",
+        "master_item_id": 21,
+        "type": "item",
         "name": "al bhed potion",
         "amount": 8
       }
@@ -4508,8 +4508,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       }
@@ -4541,8 +4541,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 82,
-        "Type": "item",
+        "master_item_id": 82,
+        "type": "item",
         "name": "lv. 2 key sphere",
         "amount": 1
       }
@@ -4561,8 +4561,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 163,
-        "Type": "key-item",
+        "master_item_id": 163,
+        "type": "key-item",
         "name": "al bhed primer xvii",
         "amount": 1
       }
@@ -4581,8 +4581,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 164,
-        "Type": "key-item",
+        "master_item_id": 164,
+        "type": "key-item",
         "name": "al bhed primer xviii",
         "amount": 1
       }
@@ -4601,8 +4601,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 135,
-        "Type": "key-item",
+        "master_item_id": 135,
+        "type": "key-item",
         "name": "mercury crest",
         "amount": 1
       }
@@ -4621,8 +4621,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 8
       }
@@ -4641,8 +4641,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 3
       }
@@ -4661,8 +4661,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 3,
-        "Type": "item",
+        "master_item_id": 3,
+        "type": "item",
         "name": "x-potion",
         "amount": 2
       }
@@ -4681,8 +4681,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 8,
-        "Type": "item",
+        "master_item_id": 8,
+        "type": "item",
         "name": "megalixir",
         "amount": 3
       }
@@ -4701,8 +4701,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 98,
-        "Type": "item",
+        "master_item_id": 98,
+        "type": "item",
         "name": "teleport sphere",
         "amount": 2
       }
@@ -4743,8 +4743,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 165,
-        "Type": "key-item",
+        "master_item_id": 165,
+        "type": "key-item",
         "name": "al bhed primer xix",
         "amount": 1
       }
@@ -4763,8 +4763,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 2
       }
@@ -4783,8 +4783,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 21,
-        "Type": "item",
+        "master_item_id": 21,
+        "type": "item",
         "name": "al bhed potion",
         "amount": 4
       }
@@ -4803,8 +4803,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 21,
-        "Type": "item",
+        "master_item_id": 21,
+        "type": "item",
         "name": "al bhed potion",
         "amount": 6
       }
@@ -4823,8 +4823,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 167,
-        "Type": "key-item",
+        "master_item_id": 167,
+        "type": "key-item",
         "name": "al bhed primer xxi",
         "amount": 1
       }
@@ -4843,8 +4843,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 82,
-        "Type": "item",
+        "master_item_id": 82,
+        "type": "item",
         "name": "lv. 2 key sphere",
         "amount": 1
       }
@@ -4863,8 +4863,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 84,
-        "Type": "item",
+        "master_item_id": 84,
+        "type": "item",
         "name": "lv. 4 key sphere",
         "amount": 1
       }
@@ -4883,8 +4883,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 166,
-        "Type": "key-item",
+        "master_item_id": 166,
+        "type": "key-item",
         "name": "al bhed primer xx",
         "amount": 1
       }
@@ -4903,8 +4903,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 97,
-        "Type": "item",
+        "master_item_id": 97,
+        "type": "item",
         "name": "friend sphere",
         "amount": 1
       }
@@ -4923,38 +4923,38 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       },
       {
-        "ID": 2,
-        "Type": "item",
+        "master_item_id": 2,
+        "type": "item",
         "name": "hi-potion",
         "amount": 1
       },
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 1
       },
       {
-        "ID": 12,
-        "Type": "item",
+        "master_item_id": 12,
+        "type": "item",
         "name": "soft",
         "amount": 1
       },
       {
-        "ID": 1,
-        "Type": "item",
+        "master_item_id": 1,
+        "type": "item",
         "name": "potion",
         "amount": 1
       },
       {
-        "ID": 16,
-        "Type": "item",
+        "master_item_id": 16,
+        "type": "item",
         "name": "remedy",
         "amount": 1
       }
@@ -4973,8 +4973,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 76,
-        "Type": "item",
+        "master_item_id": 76,
+        "type": "item",
         "name": "special sphere",
         "amount": 1
       }
@@ -4993,8 +4993,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 77,
-        "Type": "item",
+        "master_item_id": 77,
+        "type": "item",
         "name": "skill sphere",
         "amount": 1
       }
@@ -5026,8 +5026,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 21,
-        "Type": "item",
+        "master_item_id": 21,
+        "type": "item",
         "name": "al bhed potion",
         "amount": 4
       }
@@ -5046,8 +5046,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 168,
-        "Type": "key-item",
+        "master_item_id": 168,
+        "type": "key-item",
         "name": "al bhed primer xxii",
         "amount": 1
       }
@@ -5066,8 +5066,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 85,
-        "Type": "item",
+        "master_item_id": 85,
+        "type": "item",
         "name": "hp sphere",
         "amount": 1
       }
@@ -5110,8 +5110,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 79,
-        "Type": "item",
+        "master_item_id": 79,
+        "type": "item",
         "name": "blk magic sphere",
         "amount": 1
       }
@@ -5130,8 +5130,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 1
       }
@@ -5150,8 +5150,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 78,
-        "Type": "item",
+        "master_item_id": 78,
+        "type": "item",
         "name": "wht magic sphere",
         "amount": 1
       }
@@ -5170,8 +5170,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       }
@@ -5203,8 +5203,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 77,
-        "Type": "item",
+        "master_item_id": 77,
+        "type": "item",
         "name": "skill sphere",
         "amount": 1
       }
@@ -5317,14 +5317,14 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 118,
-        "Type": "key-item",
+        "master_item_id": 118,
+        "type": "key-item",
         "name": "aeon's soul",
         "amount": 1
       },
       {
-        "ID": 72,
-        "Type": "item",
+        "master_item_id": 72,
+        "type": "item",
         "name": "speed sphere",
         "amount": 30
       }
@@ -5343,14 +5343,14 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 118,
-        "Type": "key-item",
+        "master_item_id": 118,
+        "type": "key-item",
         "name": "aeon's soul",
         "amount": 1
       },
       {
-        "ID": 70,
-        "Type": "item",
+        "master_item_id": 70,
+        "type": "item",
         "name": "power sphere",
         "amount": 30
       }
@@ -5369,8 +5369,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 82,
-        "Type": "item",
+        "master_item_id": 82,
+        "type": "item",
         "name": "lv. 2 key sphere",
         "amount": 1
       }
@@ -5389,8 +5389,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 169,
-        "Type": "key-item",
+        "master_item_id": 169,
+        "type": "key-item",
         "name": "al bhed primer xxiii",
         "amount": 1
       }
@@ -5453,8 +5453,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 119,
-        "Type": "key-item",
+        "master_item_id": 119,
+        "type": "key-item",
         "name": "rusty sword",
         "amount": 1
       }
@@ -5473,8 +5473,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 170,
-        "Type": "key-item",
+        "master_item_id": 170,
+        "type": "key-item",
         "name": "al bhed primer xxiv",
         "amount": 1
       }
@@ -5493,8 +5493,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 88,
-        "Type": "item",
+        "master_item_id": 88,
+        "type": "item",
         "name": "defense sphere",
         "amount": 1
       }
@@ -5513,8 +5513,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 8,
-        "Type": "item",
+        "master_item_id": 8,
+        "type": "item",
         "name": "megalixir",
         "amount": 1
       }
@@ -5533,8 +5533,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 82,
-        "Type": "item",
+        "master_item_id": 82,
+        "type": "item",
         "name": "lv. 2 key sphere",
         "amount": 1
       }
@@ -5553,8 +5553,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 74,
-        "Type": "item",
+        "master_item_id": 74,
+        "type": "item",
         "name": "fortune sphere",
         "amount": 1
       }
@@ -5573,8 +5573,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 171,
-        "Type": "key-item",
+        "master_item_id": 171,
+        "type": "key-item",
         "name": "al bhed primer xxv",
         "amount": 1
       }
@@ -5593,8 +5593,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 2
       }
@@ -5633,8 +5633,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 3,
-        "Type": "item",
+        "master_item_id": 3,
+        "type": "item",
         "name": "x-potion",
         "amount": 2
       }
@@ -5653,8 +5653,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 86,
-        "Type": "item",
+        "master_item_id": 86,
+        "type": "item",
         "name": "mp sphere",
         "amount": 1
       }
@@ -5673,8 +5673,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 87,
-        "Type": "item",
+        "master_item_id": 87,
+        "type": "item",
         "name": "strength sphere",
         "amount": 1
       }
@@ -5706,8 +5706,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 4,
-        "Type": "item",
+        "master_item_id": 4,
+        "type": "item",
         "name": "mega-potion",
         "amount": 2
       }
@@ -5726,8 +5726,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 145,
-        "Type": "key-item",
+        "master_item_id": 145,
+        "type": "key-item",
         "name": "braska's sphere",
         "amount": 1
       }
@@ -5769,8 +5769,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 85,
-        "Type": "item",
+        "master_item_id": 85,
+        "type": "item",
         "name": "hp sphere",
         "amount": 1
       }
@@ -5789,8 +5789,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 84,
-        "Type": "item",
+        "master_item_id": 84,
+        "type": "item",
         "name": "lv. 4 key sphere",
         "amount": 1
       }
@@ -5809,8 +5809,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 129,
-        "Type": "key-item",
+        "master_item_id": 129,
+        "type": "key-item",
         "name": "saturn crest",
         "amount": 1
       }
@@ -5853,8 +5853,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 81,
-        "Type": "item",
+        "master_item_id": 81,
+        "type": "item",
         "name": "lv. 1 key sphere",
         "amount": 1
       }
@@ -5873,8 +5873,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 74,
-        "Type": "item",
+        "master_item_id": 74,
+        "type": "item",
         "name": "fortune sphere",
         "amount": 1
       }
@@ -5893,8 +5893,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 96,
-        "Type": "item",
+        "master_item_id": 96,
+        "type": "item",
         "name": "return sphere",
         "amount": 1
       }
@@ -5935,8 +5935,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 74,
-        "Type": "item",
+        "master_item_id": 74,
+        "type": "item",
         "name": "fortune sphere",
         "amount": 1
       }
@@ -5990,8 +5990,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 97,
-        "Type": "item",
+        "master_item_id": 97,
+        "type": "item",
         "name": "friend sphere",
         "amount": 1
       }
@@ -6010,8 +6010,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 83,
-        "Type": "item",
+        "master_item_id": 83,
+        "type": "item",
         "name": "lv. 3 key sphere",
         "amount": 1
       }
@@ -6030,8 +6030,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 94,
-        "Type": "item",
+        "master_item_id": 94,
+        "type": "item",
         "name": "luck sphere",
         "amount": 1
       }
@@ -6072,8 +6072,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 123,
-        "Type": "key-item",
+        "master_item_id": 123,
+        "type": "key-item",
         "name": "sun crest",
         "amount": 1
       }
@@ -6092,8 +6092,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 76,
-        "Type": "item",
+        "master_item_id": 76,
+        "type": "item",
         "name": "special sphere",
         "amount": 1
       }
@@ -6160,8 +6160,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 7,
-        "Type": "item",
+        "master_item_id": 7,
+        "type": "item",
         "name": "elixir",
         "amount": 1
       }
@@ -6180,8 +6180,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 83,
-        "Type": "item",
+        "master_item_id": 83,
+        "type": "item",
         "name": "lv. 3 key sphere",
         "amount": 1
       }
@@ -6200,8 +6200,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 84,
-        "Type": "item",
+        "master_item_id": 84,
+        "type": "item",
         "name": "lv. 4 key sphere",
         "amount": 1
       }
@@ -6281,8 +6281,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 85,
-        "Type": "item",
+        "master_item_id": 85,
+        "type": "item",
         "name": "hp sphere",
         "amount": 1
       }
@@ -6301,8 +6301,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 88,
-        "Type": "item",
+        "master_item_id": 88,
+        "type": "item",
         "name": "defense sphere",
         "amount": 1
       }
@@ -6321,8 +6321,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 8,
-        "Type": "item",
+        "master_item_id": 8,
+        "type": "item",
         "name": "megalixir",
         "amount": 1
       }
@@ -6523,8 +6523,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 75,
-        "Type": "item",
+        "master_item_id": 75,
+        "type": "item",
         "name": "attribute sphere",
         "amount": 1
       }
@@ -6543,8 +6543,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 77,
-        "Type": "item",
+        "master_item_id": 77,
+        "type": "item",
         "name": "skill sphere",
         "amount": 1
       }
@@ -6563,8 +6563,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 78,
-        "Type": "item",
+        "master_item_id": 78,
+        "type": "item",
         "name": "wht magic sphere",
         "amount": 1
       }
@@ -6583,8 +6583,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 172,
-        "Type": "key-item",
+        "master_item_id": 172,
+        "type": "key-item",
         "name": "al bhed primer xxvi",
         "amount": 1
       }
@@ -6603,8 +6603,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 98,
-        "Type": "item",
+        "master_item_id": 98,
+        "type": "item",
         "name": "teleport sphere",
         "amount": 1
       }
@@ -6623,8 +6623,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 84,
-        "Type": "item",
+        "master_item_id": 84,
+        "type": "item",
         "name": "lv. 4 key sphere",
         "amount": 1
       }
@@ -6689,8 +6689,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 83,
-        "Type": "item",
+        "master_item_id": 83,
+        "type": "item",
         "name": "lv. 3 key sphere",
         "amount": 2
       }
@@ -6732,8 +6732,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 97,
-        "Type": "item",
+        "master_item_id": 97,
+        "type": "item",
         "name": "friend sphere",
         "amount": 2
       }
@@ -6752,8 +6752,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 84,
-        "Type": "item",
+        "master_item_id": 84,
+        "type": "item",
         "name": "lv. 4 key sphere",
         "amount": 1
       }
@@ -6841,8 +6841,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 98,
-        "Type": "item",
+        "master_item_id": 98,
+        "type": "item",
         "name": "teleport sphere",
         "amount": 2
       }
@@ -6861,8 +6861,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 99,
-        "Type": "item",
+        "master_item_id": 99,
+        "type": "item",
         "name": "warp sphere",
         "amount": 99
       }
@@ -6881,8 +6881,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 97,
-        "Type": "item",
+        "master_item_id": 97,
+        "type": "item",
         "name": "friend sphere",
         "amount": 3
       }
@@ -6901,8 +6901,8 @@
     "gil_amount": null,
     "items": [
       {
-        "ID": 89,
-        "Type": "item",
+        "master_item_id": 89,
+        "type": "item",
         "name": "magic sphere",
         "amount": 3
       }

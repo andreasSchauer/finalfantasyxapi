@@ -104,6 +104,90 @@ func writeLookupFile[T Lookupable](fileName string, lookup map[int32]T) error {
 	return nil
 }
 
+func (l *Lookup) assignLookups() error {
+	var err error
+
+	checkErr := func(e error) {
+		if err != nil {
+			return
+		}
+
+		err = e
+	}
+
+	checkErr(assignLookup("abilities.json", &l.Abilities, &l.AbilitiesID))
+	checkErr(assignLookup("misc_abilities.json", &l.MiscAbilities, &l.MiscAbilitiesID))
+	checkErr(assignLookup("enemy_abilities.json", &l.EnemyAbilities, &l.EnemyAbilitiesID))
+	checkErr(assignLookup("item_abilities.json", &l.ItemAbilities, &l.ItemAbilitiesID))
+	checkErr(assignLookup("overdrive_abilities.json", &l.OverdriveAbilities, &l.OverdriveAbilitiesID))
+	checkErr(assignLookup("player_abilities.json", &l.PlayerAbilities, &l.PlayerAbilitiesID))
+	checkErr(assignLookup("trigger_commands.json", &l.TriggerCommands, &l.TriggerCommandsID))
+	checkErr(assignLookup("player_units.json", &l.PlayerUnits, &l.PlayerUnitsID))
+	checkErr(assignLookup("aeon_stats.json", &l.Aeons, &l.AeonsID))
+	checkErr(assignLookup("aeon_commands.json", &l.AeonCommands, &l.AeonCommandsID))
+	checkErr(assignLookup("agility_tiers.json", nil, &l.AgilityTiersID))
+	checkErr(assignLookup("monster_arena_creations.json", &l.ArenaCreations, &l.ArenaCreationsID))
+	checkErr(assignLookup("locations.json", &l.Locations, &l.LocationsID))
+	checkErr(assignLookup("sublocations.json", &l.Sublocations, &l.SublocationsID))
+	checkErr(assignLookup("areas.json", &l.Areas, &l.AreasID))
+	checkErr(assignLookup("auto_abilities.json", &l.AutoAbilities, &l.AutoAbilitiesID))
+	checkErr(assignLookup("celestial_weapons.json", &l.CelestialWeapons, &l.CelestialWeaponsID))
+	checkErr(assignLookup("characters.json", &l.Characters, &l.CharactersID))
+	checkErr(assignLookup("character_classes.json", &l.CharClasses, &l.CharClassesID))
+	checkErr(assignLookup("elements.json", &l.Elements, &l.ElementsID))
+	checkErr(assignLookup("elemental_resists.json", &l.ElementalResists, &l.ElementalResistsID))
+	checkErr(assignLookup("equipment_names.json", &l.EquipmentNames, &l.EquipmentNamesID))
+	checkErr(assignLookup("equipment_tables.json", &l.EquipmentTables, &l.EquipmentTablesID))
+	checkErr(assignLookup("encounter_areas.json", &l.EncounterAreas, &l.EncounterAreasID))
+	checkErr(assignLookup("fmvs.json", &l.FMVs, &l.FMVsID))
+	checkErr(assignLookup("items.json", &l.Items, &l.ItemsID))
+	checkErr(assignLookup("key_items.json", &l.KeyItems, &l.KeyItemsID))
+	checkErr(assignLookup("master_items.json", &l.MasterItems, &l.MasterItemsID))
+	checkErr(assignLookup("mixes.json", &l.Mixes, &l.MixesID))
+	checkErr(assignLookup("modifiers.json", &l.Modifiers, &l.ModifiersID))
+	checkErr(assignLookup("monsters.json", &l.Monsters, &l.MonstersID))
+	checkErr(assignLookup("monster_formations.json", &l.MonsterFormations, &l.MonsterFormationsID))
+	checkErr(assignLookup("overdrive_modes.json", &l.OverdriveModes, &l.OverdriveModesID))
+	checkErr(assignLookup("overdrive_commands.json", &l.OverdriveCommands, &l.OverdriveCommandsID))
+	checkErr(assignLookup("overdrives.json", &l.Overdrives, &l.OverdrivesID))
+	checkErr(assignLookup("blitzball_positions.json", &l.Positions, &l.PositionsID))
+	checkErr(assignLookup("primers.json", &l.Primers, &l.PrimersID))
+	checkErr(assignLookup("properties.json", &l.Properties, &l.PropertiesID))
+	checkErr(assignLookup("quests.json", &l.Quests, &l.QuestsID))
+	checkErr(assignLookup("ronso_rages.json", &l.RonsoRages, &l.RonsoRagesID))
+	checkErr(assignLookup("sidequests.json", &l.Sidequests, &l.SidequestsID))
+	checkErr(assignLookup("subquests.json", &l.Subquests, &l.SubquestsID))
+	checkErr(assignLookup("shops.json", &l.Shops, &l.ShopsID))
+	checkErr(assignLookup("songs.json", &l.Songs, &l.SongsID))
+	checkErr(assignLookup("spheres.json", &l.Spheres, &l.SpheresID))
+	checkErr(assignLookup("stats.json", &l.Stats, &l.StatsID))
+	checkErr(assignLookup("status_conditions.json", &l.StatusConditions, &l.StatusConditionsID))
+	checkErr(assignLookup("submenus.json", &l.Submenus, &l.SubmenusID))
+	checkErr(assignLookup("topmenus.json", &l.Topmenus, &l.TopmenusID))
+	checkErr(assignLookup("treasures.json", &l.Treasures, &l.TreasuresID))
+
+	return err
+}
+
+func assignLookup[T Lookupable](fileName string, keyLookup *map[string]T, idLookup *map[int32]T) error {
+	lookupPath := filepath.Join("data_lookups", fileName)
+
+	var dataSlice []T
+	err := loadJsonFile(lookupPath, &dataSlice)
+	if err != nil {
+		return err
+	}
+
+	if keyLookup != nil {
+		*keyLookup = sliceToKeyLookup(dataSlice)
+	}
+
+	if idLookup != nil {
+		*idLookup = sliceToIdLookup(dataSlice)
+	}
+
+	return nil
+}
 
 
 func lookupToSlice[T Lookupable](lookup map[int32]T) []T {

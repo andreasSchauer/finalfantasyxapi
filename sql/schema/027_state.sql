@@ -6,7 +6,7 @@ CREATE TABLE db_state (
     CONSTRAINT single_row_check CHECK (id = 1)
 );
 
-INSERT INTO db_state(id, data_hash) VALUES (1, 'initial_hash')
+INSERT INTO db_state(id, data_hash) VALUES (1, 'initial_hash');
 
 
 -- +goose Down

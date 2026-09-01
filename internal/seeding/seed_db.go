@@ -20,62 +20,81 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 
-	// extract a hash from the raw json data here (with getRawDataHash())
-	// if it matches the hash in the db, skip the seeding
-
-	// seeding start
-	const migrationsDir = "sql/schema/"
-	fullPath, err := h.GetAbsoluteFilepath(migrationsDir)
+	dataHash, err := getRawDataHash()
 	if err != nil {
 		return nil, err
 	}
 
-	err = setupDB(dbConn, fullPath)
+	dbHash, err := db.GetDbState(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("couldn't setup database: %v", err)
+		return nil, fmt.Errorf("couldn't get database state: %v", err)
 	}
 
-	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		defer h.MeasureTime("initial database seeding")()
-		fmt.Println("initial database seeding...")
+	if dataHash == dbHash {
+		err = l.assignLookups()
+		if err != nil {
+			return nil, fmt.Errorf("couldn't assign lookups: %v", err)
+		}
 
-		return l.seedLoop(qtx, ctx, []seedFunc{
-			l.seedLoop1,
-			l.seedLoop2,
-			l.seedLoop3,
-			l.seedLoop4,
-			l.seedLoop5,
-			l.seedLoop6,
-			l.seedLoop7,
+		err = l.saveCompletedLookups()
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		const migrationsDir = "sql/schema/"
+		fullPath, err := h.GetAbsoluteFilepath(migrationsDir)
+		if err != nil {
+			return nil, err
+		}
+		
+		err = setupDB(dbConn, fullPath)
+		if err != nil {
+			return nil, fmt.Errorf("couldn't setup database: %v", err)
+		}
+		
+		err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+			defer h.MeasureTime("initial database seeding")()
+			fmt.Println("initial database seeding...")
+			
+			return l.seedLoop(qtx, ctx, []seedFunc{
+				l.seedLoop1,
+				l.seedLoop2,
+				l.seedLoop3,
+				l.seedLoop4,
+				l.seedLoop5,
+				l.seedLoop6,
+				l.seedLoop7,
+			})
 		})
-	})
-	if err != nil {
-		return nil, err
+		if err != nil {
+			return nil, err
+		}
+		
+		err = l.completeLookups()
+		if err != nil {
+			return nil, err
+		}
+		
+		err = l.saveCompletedLookups()
+		if err != nil {
+			return nil, err
+		}
+		
+		err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+			defer h.MeasureTime("seeding junctions")()
+			return l.seedJunctions(qtx, ctx)
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+			return db.UpdateDbState(ctx, dataHash)
+		})
+		if err != nil {
+			return nil, fmt.Errorf("couldn't update dbState hash: %v", err)
+		}
 	}
-
-	err = l.completeLookups()
-	if err != nil {
-		return nil, err
-	}
-
-	err = l.saveCompletedLookups()
-	if err != nil {
-		return nil, err
-	}
-
-	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-		defer h.MeasureTime("seeding junctions")()
-		return l.seedJunctions(qtx, ctx)
-	})
-	if err != nil {
-		return nil, err
-	}
-	// seeding end
-
-	// update the hash here
-	// if the seeding was skipped, assign the lookups here
-
-
 
 	err = refreshViews(db, ctx)
 	if err != nil {
