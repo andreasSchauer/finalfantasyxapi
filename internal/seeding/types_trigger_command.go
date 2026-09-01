@@ -8,9 +8,9 @@ import (
 )
 
 type TriggerCommand struct {
-	ID int32
+	ID 				   int32			   `json:"id"`
 	Ability
-	TopmenuID          *int32
+	TopmenuID          *int32			   `json:"topmenu_id"`
 	Description        string              `json:"description"`
 	Effect             string              `json:"effect"`
 	Topmenu            *string             `json:"topmenu"`

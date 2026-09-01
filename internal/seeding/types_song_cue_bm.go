@@ -7,7 +7,7 @@ import (
 )
 
 type BackgroundMusic struct {
-	ID                     int32
+	ID                     int32		  `json:"id"`
 	Condition              *string        `json:"condition"`
 	ReplacesEncounterMusic bool           `json:"replaces_encounter_music"`
 	LocationAreas          []LocationArea `json:"location_areas"`
@@ -34,9 +34,9 @@ func (bm BackgroundMusic) Error() string {
 }
 
 type Cue struct {
-	ID                     int32
-	SongID                 int32
-	TriggerAreaID          *int32
+	ID                     int32		  `json:"id"`
+	SongID                 int32		  `json:"song_id"`
+	TriggerAreaID          *int32		  `json:"trigger_area_id"`
 	SceneDescription       string         `json:"scene_description"`
 	TriggerLocationArea    *LocationArea  `json:"trigger_location_area"`
 	IncludedAreas          []LocationArea `json:"included_areas"`

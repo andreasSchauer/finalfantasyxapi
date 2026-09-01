@@ -5,14 +5,14 @@ import (
 )
 
 type CelestialWeapon struct {
-	ID          int32
-	Name        string `json:"name"`
-	Character   string `json:"character"`
-	CharacterID *int32
+	ID          int32	`json:"id"`
+	Name        string 	`json:"name"`
+	Character   string 	`json:"character"`
+	CharacterID *int32	`json:"character_id"`
 	KeyItemBase string  `json:"key_item_base"`
 	Aeon        *string `json:"aeon"`
-	AeonID      *int32
-	Formula     string `json:"formula"`
+	AeonID      *int32	`json:"aeon_id"`
+	Formula     string 	`json:"formula"`
 }
 
 func (cw CelestialWeapon) ToHashFields() []any {

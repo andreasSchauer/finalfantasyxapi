@@ -1,110 +1,110 @@
 [
-  {
-    "ID": 1,
-    "name": "armored",
-    "effect": "Damage taken from physical attacks is reduced to a third.",
-    "related_stats": [
-      "defense"
-    ],
-    "nullify_armored": null,
-    "modifier_change": {
-      "ID": 60,
-      "ModifierID": 20,
-      "name": "physical-damage-taken",
-      "calculation_type": "multiply",
-      "value": 0.33
+    {
+        "id": 1,
+        "name": "armored",
+        "effect": "Damage taken from physical attacks is reduced to a third.",
+        "related_stats": [
+            "defense"
+        ],
+        "nullify_armored": null,
+        "modifier_change": {
+            "id": 60,
+            "modifier_id": 20,
+            "name": "physical-damage-taken",
+            "calculation_type": "multiply",
+            "value": 0.33
+        }
+    },
+    {
+        "id": 2,
+        "name": "tough",
+        "effect": "Prevents enemy from getting pushed back by Delay attack or Delay Buster.",
+        "related_stats": [],
+        "nullify_armored": null,
+        "modifier_change": null
+    },
+    {
+        "id": 3,
+        "name": "heavy",
+        "effect": "Prevents enemy from getting lifted off the ground by Energy Rain and Tornado.",
+        "related_stats": [],
+        "nullify_armored": null,
+        "modifier_change": null
+    },
+    {
+        "id": 4,
+        "name": "piercing",
+        "effect": "Attacks and skills ignore enemy's Armored status.",
+        "related_stats": [
+            "defense"
+        ],
+        "nullify_armored": "target",
+        "modifier_change": null
+    },
+    {
+        "id": 5,
+        "name": "capture",
+        "effect": "Attacks and skills capture a monster with the killing blow, if it can be captured and less than 10 of that monster have been captured.",
+        "related_stats": [],
+        "nullify_armored": null,
+        "modifier_change": null
+    },
+    {
+        "id": 6,
+        "name": "nul-physical",
+        "effect": "The bearer is immune to physical damage.",
+        "related_stats": [],
+        "nullify_armored": null,
+        "modifier_change": null
+    },
+    {
+        "id": 7,
+        "name": "nul-magical",
+        "effect": "The bearer is immune to magical damage.",
+        "related_stats": [],
+        "nullify_armored": null,
+        "modifier_change": null
+    },
+    {
+        "id": 8,
+        "name": "nul-percentage",
+        "effect": "The bearer is immune to percentage damage.",
+        "related_stats": [],
+        "nullify_armored": null,
+        "modifier_change": null
+    },
+    {
+        "id": 9,
+        "name": "invincible",
+        "effect": "The bearer is immune to any kind of damage.",
+        "related_stats": [],
+        "nullify_armored": null,
+        "modifier_change": null
+    },
+    {
+        "id": 10,
+        "name": "no-damage",
+        "effect": "The bearer's HP aren't reduced after damage calculation.",
+        "related_stats": [],
+        "nullify_armored": null,
+        "modifier_change": null
+    },
+    {
+        "id": 11,
+        "name": "auto-evade",
+        "effect": "The bearer evades any evadable physical attack.",
+        "related_stats": [
+            "evasion"
+        ],
+        "nullify_armored": null,
+        "modifier_change": null
+    },
+    {
+        "id": 12,
+        "name": "auto-sensor",
+        "effect": "The bearer's applies 'sensor' to any currently selected target.",
+        "related_stats": [],
+        "nullify_armored": null,
+        "modifier_change": null
     }
-  },
-  {
-    "ID": 2,
-    "name": "tough",
-    "effect": "Prevents enemy from getting pushed back by Delay attack or Delay Buster.",
-    "related_stats": [],
-    "nullify_armored": null,
-    "modifier_change": null
-  },
-  {
-    "ID": 3,
-    "name": "heavy",
-    "effect": "Prevents enemy from getting lifted off the ground by Energy Rain and Tornado.",
-    "related_stats": [],
-    "nullify_armored": null,
-    "modifier_change": null
-  },
-  {
-    "ID": 4,
-    "name": "piercing",
-    "effect": "Attacks and skills ignore enemy's Armored status.",
-    "related_stats": [
-      "defense"
-    ],
-    "nullify_armored": "target",
-    "modifier_change": null
-  },
-  {
-    "ID": 5,
-    "name": "capture",
-    "effect": "Attacks and skills capture a monster with the killing blow, if it can be captured and less than 10 of that monster have been captured.",
-    "related_stats": [],
-    "nullify_armored": null,
-    "modifier_change": null
-  },
-  {
-    "ID": 6,
-    "name": "nul-physical",
-    "effect": "The bearer is immune to physical damage.",
-    "related_stats": [],
-    "nullify_armored": null,
-    "modifier_change": null
-  },
-  {
-    "ID": 7,
-    "name": "nul-magical",
-    "effect": "The bearer is immune to magical damage.",
-    "related_stats": [],
-    "nullify_armored": null,
-    "modifier_change": null
-  },
-  {
-    "ID": 8,
-    "name": "nul-percentage",
-    "effect": "The bearer is immune to percentage damage.",
-    "related_stats": [],
-    "nullify_armored": null,
-    "modifier_change": null
-  },
-  {
-    "ID": 9,
-    "name": "invincible",
-    "effect": "The bearer is immune to any kind of damage.",
-    "related_stats": [],
-    "nullify_armored": null,
-    "modifier_change": null
-  },
-  {
-    "ID": 10,
-    "name": "no-damage",
-    "effect": "The bearer's HP aren't reduced after damage calculation.",
-    "related_stats": [],
-    "nullify_armored": null,
-    "modifier_change": null
-  },
-  {
-    "ID": 11,
-    "name": "auto-evade",
-    "effect": "The bearer evades any evadable physical attack.",
-    "related_stats": [
-      "evasion"
-    ],
-    "nullify_armored": null,
-    "modifier_change": null
-  },
-  {
-    "ID": 12,
-    "name": "auto-sensor",
-    "effect": "The bearer's applies 'sensor' to any currently selected target.",
-    "related_stats": [],
-    "nullify_armored": null,
-    "modifier_change": null
-  }
 ]

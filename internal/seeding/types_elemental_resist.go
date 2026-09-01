@@ -3,8 +3,8 @@ package seeding
 import "fmt"
 
 type ElementalResist struct {
-	ID        int32
-	ElementID int32
+	ID        int32	 `json:"elemental_resist_id"`
+	ElementID int32  `json:"element_id"`
 	Element   string `json:"name"`
 	Affinity  string `json:"affinity"`
 }

@@ -5,7 +5,7 @@ import (
 )
 
 type RonsoRage struct {
-	ID int32
+	ID 			int32	`json:"id"`
 	Overdrive
 }
 

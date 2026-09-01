@@ -7,7 +7,7 @@ import (
 )
 
 type Modifier struct {
-	ID           int32
+	ID           int32	  `json:"id"`
 	Name         string   `json:"name"`
 	Effect       string   `json:"effect"`
 	Category     string   `json:"type"`

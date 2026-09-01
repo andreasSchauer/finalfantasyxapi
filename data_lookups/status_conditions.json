@@ -1,1069 +1,1069 @@
 [
-  {
-    "ID": 1,
-    "name": "berserk",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Causes the unit to use 'attack' uncontrollably and boosts damage by 50%. Can be removed by 'Threaten'.",
-    "visualization": "The unit is glowing in a red hue.",
-    "related_stats": [
-      "strength",
-      "magic"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 61,
-        "ModifierID": 19,
-        "name": "physical-damage-dealt",
-        "calculation_type": "multiply",
-        "value": 1.5
-      },
-      {
-        "ID": 33,
-        "ModifierID": 21,
-        "name": "magical-damage-dealt",
-        "calculation_type": "multiply",
-        "value": 1.5
-      }
-    ]
-  },
-  {
-    "ID": 2,
-    "name": "confusion",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Causes the unit to use 'attack' uncontrollably, targeting themselves or their allies.",
-    "visualization": "Two stars circle around the unit's head.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 3,
-    "name": "curse",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Prevents the character's or aeon's overdrive from filling and overdrive commands can't be used. Only prevents the Magus Sister's gauges from filling when they're targeted by an attack.",
-    "visualization": "The character is glowing in a dark hue and their head smokes.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 62,
-        "ModifierID": 17,
-        "name": "overdrive-charge",
-        "calculation_type": "multiply",
-        "value": 0
-      }
-    ]
-  },
-  {
-    "ID": 4,
-    "name": "darkness",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Reduces the unit's chance of landing an evadable physical attack to 10% (before luck).",
-    "visualization": "Black smoke is in front of the unit's eyes.",
-    "related_stats": [
-      "accuracy"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 63,
-        "ModifierID": 5,
-        "name": "accuracy-percentage",
-        "calculation_type": "set-value",
-        "value": 10
-      }
-    ]
-  },
-  {
-    "ID": 5,
-    "name": "death",
-    "category": "negative",
-    "is_permanent": false,
-    "effect": "The unit's HP are reduced to 0.",
-    "visualization": null,
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 64,
-        "ModifierID": 14,
-        "name": "current-hp",
-        "calculation_type": "set-value",
-        "value": 0
-      }
-    ]
-  },
-  {
-    "ID": 6,
-    "name": "delay",
-    "category": "negative",
-    "is_permanent": false,
-    "effect": "Adds to the unit's ticks to their next turn, delaying it.",
-    "visualization": null,
-    "related_stats": [
-      "agility"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 7,
-    "name": "doom",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Gives the unit a turn counter and the unit is KO'd when it hits 0, ignoring immunity.",
-    "visualization": "A red number hovers above the unit.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 8,
-    "name": "eject",
-    "category": "negative",
-    "is_permanent": false,
-    "effect": "Removes the unit from battle, making their slot irreplacable, and flagging them as 'dead'.",
-    "visualization": null,
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 9,
-    "name": "ko",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "The unit is unable to act and flagged as 'dead'. Inflicted by attacks that inflict death, or if the unit's HP drop to 0.",
-    "visualization": "Characters lie on the ground motionless. The death animation of aeons and monsters is played.",
-    "related_stats": [],
-    "removed_status_conditions": [
-      "power break",
-      "magic break",
-      "armor break",
-      "mental break",
-      "berserk",
-      "confusion",
-      "curse",
-      "darkness",
-      "doom",
-      "poison",
-      "silence",
-      "sleep",
-      "slow",
-      "zombie",
-      "auto-life",
-      "haste",
-      "shell",
-      "protect",
-      "reflect",
-      "regen",
-      "nulblaze",
-      "nulshock",
-      "nultide",
-      "nulfrost",
-      "guard",
-      "sentinel",
-      "shield",
-      "boost"
-    ],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 10,
-    "name": "petrification",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "The unit is unable to act and flagged as 'dead'. Petrified units can shatter, ejecting them from battle. Enemies always shatter instantly, as well as characters when they're underwater. Characters on land might shatter when they're hit by attacks (based on the attack's shatter rate).",
-    "visualization": "The unit is given a grey stone texture and is motionless.",
-    "related_stats": [],
-    "removed_status_conditions": [
-      "power break",
-      "magic break",
-      "armor break",
-      "mental break",
-      "berserk",
-      "confusion",
-      "curse",
-      "darkness",
-      "doom",
-      "poison",
-      "silence",
-      "sleep",
-      "slow",
-      "zombie",
-      "auto-life",
-      "haste",
-      "shell",
-      "protect",
-      "reflect",
-      "regen",
-      "nulblaze",
-      "nulshock",
-      "nultide",
-      "nulfrost",
-      "guard",
-      "sentinel",
-      "shield",
-      "boost"
-    ],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 65,
-        "ModifierID": 20,
-        "name": "physical-damage-taken",
-        "calculation_type": "multiply",
-        "value": 0
-      },
-      {
-        "ID": 66,
-        "ModifierID": 22,
-        "name": "magical-damage-taken",
-        "calculation_type": "multiply",
-        "value": 0
-      },
-      {
-        "ID": 67,
-        "ModifierID": 24,
-        "name": "special-damage-taken",
-        "calculation_type": "multiply",
-        "value": 0
-      }
-    ]
-  },
-  {
-    "ID": 11,
-    "name": "poison",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Deals damage proportional to the unit's max HP every time they take a turn. The rate is 25% for characters and varies for enemies.",
-    "visualization": "Green bubbles hover over the unit.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 12,
-    "name": "provoke",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Forces the afflicted monster to use one, or sometimes a few certain abilities. If an ability used this way is single-target, it will always target the provoking character. Removed instantly when the provoking character is switched out, KO, or petrified.",
-    "visualization": null,
-    "related_stats": [],
-    "removed_status_conditions": [
-      "berserk"
-    ],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 13,
-    "name": "silence",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "The inflicted unit can not use magical abilities. Overdrives are not affected.",
-    "visualization": "A speech bubble with three dots in it hovers over the unit.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 14,
-    "name": "sleep",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Forces the unit to skip their turns. The unit can't evade physical attacks while sleeping. Removed instantly when the unit is hit by a physical attack.",
-    "visualization": "Two Z's hover next to the unit and its sleep animation is played.",
-    "related_stats": [
-      "evasion"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [
-      {
-        "ID": 17,
-        "StatID": 9,
-        "name": "evasion",
-        "calculation_type": "set-value",
-        "value": 0
-      }
-    ],
-    "modifier_changes": []
-  },
-  {
-    "ID": 15,
-    "name": "slow",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Doubles the unit's tick speed, causing the unit to take twice the normal amount of time to get turns. Overwrites, but also removed by Haste.",
-    "visualization": "The unit's animations are performed at half speed.",
-    "related_stats": [
-      "agility"
-    ],
-    "removed_status_conditions": [
-      "haste"
-    ],
-    "added_elem_resist": null,
-    "ctb_on_infliction": {
-      "ID": 5,
-      "condition": null,
-      "ctb_attack_type": "attack",
-      "delay_type": "ctb-based",
-      "damage_constant": 16
+    {
+        "id": 1,
+        "name": "berserk",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Causes the unit to use 'attack' uncontrollably and boosts damage by 50%. Can be removed by 'Threaten'.",
+        "visualization": "The unit is glowing in a red hue.",
+        "related_stats": [
+            "strength",
+            "magic"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 61,
+                "modifier_id": 19,
+                "name": "physical-damage-dealt",
+                "calculation_type": "multiply",
+                "value": 1.5
+            },
+            {
+                "id": 33,
+                "modifier_id": 21,
+                "name": "magical-damage-dealt",
+                "calculation_type": "multiply",
+                "value": 1.5
+            }
+        ]
     },
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 68,
-        "ModifierID": 31,
-        "name": "tick-speed",
-        "calculation_type": "multiply",
-        "value": 2
-      }
-    ]
-  },
-  {
-    "ID": 16,
-    "name": "threaten",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Causes the afflicted monster to be frozen in time and thus unable to evade or act until the user's next turn. CTB altering actions like Haste, Slow, or Delay will fail on the threatening user until their next turn.",
-    "visualization": "The unit is completely motionless.",
-    "related_stats": [],
-    "removed_status_conditions": [
-      "berserk"
-    ],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 17,
-    "name": "zombie",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Restorative items and magic damage the unit. Grants immunity to instant death effects, as long as they don't ignore immunity. Items and magic that inflict Life will reduce the unit's HP to 0, if it is not immune to Life.",
-    "visualization": "The unit turns green and has purple smoke in front of the head.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 18,
-    "name": "power break",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Reduces the unit's physical damage dealt by 50%.",
-    "visualization": null,
-    "related_stats": [
-      "strength"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 69,
-        "ModifierID": 19,
-        "name": "physical-damage-dealt",
-        "calculation_type": "multiply",
-        "value": 0.5
-      }
-    ]
-  },
-  {
-    "ID": 19,
-    "name": "magic break",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Reduces the unit's magical damage dealt by 50%.",
-    "visualization": null,
-    "related_stats": [
-      "magic"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 70,
-        "ModifierID": 21,
-        "name": "magical-damage-dealt",
-        "calculation_type": "multiply",
-        "value": 0.5
-      }
-    ]
-  },
-  {
-    "ID": 20,
-    "name": "armor break",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Reduces the unit's Defense to 1 and nullifies 'armored'.",
-    "visualization": null,
-    "related_stats": [
-      "defense"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": "bearer",
-    "stat_changes": [
-      {
-        "ID": 18,
-        "StatID": 4,
-        "name": "defense",
-        "calculation_type": "set-value",
-        "value": 1
-      }
-    ],
-    "modifier_changes": []
-  },
-  {
-    "ID": 21,
-    "name": "mental break",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "Reduces the unit's Magic Defense to 1.",
-    "visualization": null,
-    "related_stats": [
-      "magic defense"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [
-      {
-        "ID": 19,
-        "StatID": 6,
-        "name": "magic defense",
-        "calculation_type": "set-value",
-        "value": 1
-      }
-    ],
-    "modifier_changes": []
-  },
-  {
-    "ID": 22,
-    "name": "haste",
-    "category": "positive",
-    "is_permanent": true,
-    "effect": "Halves the unit's tickspeed, causing the unit to take half the normal amount of time to get turns. Overwrites, but also removed by Slow. If the unit has Auto-Haste, its ICV is also halved at the start of a battle.",
-    "visualization": "The unit's animations are performed at double speed.",
-    "related_stats": [
-      "agility"
-    ],
-    "removed_status_conditions": [
-      "slow"
-    ],
-    "added_elem_resist": null,
-    "ctb_on_infliction": {
-      "ID": 6,
-      "condition": null,
-      "ctb_attack_type": "heal",
-      "delay_type": "ctb-based",
-      "damage_constant": 8
+    {
+        "id": 2,
+        "name": "confusion",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Causes the unit to use 'attack' uncontrollably, targeting themselves or their allies.",
+        "visualization": "Two stars circle around the unit's head.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
     },
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 71,
-        "ModifierID": 30,
-        "name": "initial-counter-value",
-        "calculation_type": "multiply",
-        "value": 0.5
-      },
-      {
-        "ID": 72,
-        "ModifierID": 31,
-        "name": "tick-speed",
-        "calculation_type": "multiply",
-        "value": 0.5
-      }
-    ]
-  },
-  {
-    "ID": 23,
-    "name": "nulblaze",
-    "category": "positive",
-    "is_permanent": true,
-    "effect": "Grants immunity to the next fire-elemental attack targeting the unit.",
-    "visualization": "An orange orb circles around the unit.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": {
-      "ID": 2,
-      "ElementID": 1,
-      "name": "fire",
-      "affinity": "immune"
+    {
+        "id": 3,
+        "name": "curse",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Prevents the character's or aeon's overdrive from filling and overdrive commands can't be used. Only prevents the Magus Sister's gauges from filling when they're targeted by an attack.",
+        "visualization": "The character is glowing in a dark hue and their head smokes.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 62,
+                "modifier_id": 17,
+                "name": "overdrive-charge",
+                "calculation_type": "multiply",
+                "value": 0
+            }
+        ]
     },
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 24,
-    "name": "nulshock",
-    "category": "positive",
-    "is_permanent": true,
-    "effect": "Grants immunity to the next lightning-elemental attack targeting the unit.",
-    "visualization": "A yellow orb circles around the unit.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": {
-      "ID": 5,
-      "ElementID": 2,
-      "name": "lightning",
-      "affinity": "immune"
+    {
+        "id": 4,
+        "name": "darkness",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Reduces the unit's chance of landing an evadable physical attack to 10% (before luck).",
+        "visualization": "Black smoke is in front of the unit's eyes.",
+        "related_stats": [
+            "accuracy"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 63,
+                "modifier_id": 5,
+                "name": "accuracy-percentage",
+                "calculation_type": "set-value",
+                "value": 10
+            }
+        ]
     },
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 25,
-    "name": "nultide",
-    "category": "positive",
-    "is_permanent": true,
-    "effect": "Grants immunity to the next water-elemental attack targeting the unit.",
-    "visualization": "A cyan orb circles around the unit.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": {
-      "ID": 8,
-      "ElementID": 3,
-      "name": "water",
-      "affinity": "immune"
+    {
+        "id": 5,
+        "name": "death",
+        "category": "negative",
+        "is_permanent": false,
+        "effect": "The unit's HP are reduced to 0.",
+        "visualization": null,
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 64,
+                "modifier_id": 14,
+                "name": "current-hp",
+                "calculation_type": "set-value",
+                "value": 0
+            }
+        ]
     },
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 26,
-    "name": "nulfrost",
-    "category": "positive",
-    "is_permanent": true,
-    "effect": "Grants immunity to the next ice-elemental attack targeting the unit.",
-    "visualization": "A light blue orb circles around the unit.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": {
-      "ID": 11,
-      "ElementID": 4,
-      "name": "ice",
-      "affinity": "immune"
+    {
+        "id": 6,
+        "name": "delay",
+        "category": "negative",
+        "is_permanent": false,
+        "effect": "Adds to the unit's ticks to their next turn, delaying it.",
+        "visualization": null,
+        "related_stats": [
+            "agility"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
     },
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 27,
-    "name": "protect",
-    "category": "positive",
-    "is_permanent": true,
-    "effect": "Halves the unit's damage/healing taken from physical actions.",
-    "visualization": "If hit by a physical action, a light blue shield made out of hexagons appears in front of the unit.",
-    "related_stats": [
-      "defense"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 73,
-        "ModifierID": 20,
-        "name": "physical-damage-taken",
-        "calculation_type": "multiply",
-        "value": 0.5
-      }
-    ]
-  },
-  {
-    "ID": 28,
-    "name": "reflect",
-    "category": "positive",
-    "is_permanent": true,
-    "effect": "Bounces reflectable spells towards the opposite party of the target.",
-    "visualization": "If hit by a reflectable attack a light blue wall appears in front of the unit.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 29,
-    "name": "regen",
-    "category": "positive",
-    "is_permanent": true,
-    "effect": "Restores a small amount of HP at the start of a turn from any unit in battle. The amount of HP restored is between 100 and a tenth of the unit's maximum HP.",
-    "visualization": "Purple sparkles are floating around the unit.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 30,
-    "name": "shell",
-    "category": "positive",
-    "is_permanent": true,
-    "effect": "Halves the unit's damage/healing taken from magical actions.",
-    "visualization": "If hit by a magical action, a red wireframe sphere appears on top of the character.",
-    "related_stats": [
-      "magic defense"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 74,
-        "ModifierID": 22,
-        "name": "magical-damage-taken",
-        "calculation_type": "multiply",
-        "value": 0.5
-      }
-    ]
-  },
-  {
-    "ID": 31,
-    "name": "auto-life",
-    "category": "positive",
-    "is_permanent": true,
-    "effect": "Instantly revives a character that is KO'd with 25% of their max HP.",
-    "visualization": "A halo hovers over the character's head.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 32,
-    "name": "boost",
-    "category": "other",
-    "is_permanent": true,
-    "effect": "Causes the Aeon to take 50% more damage but its Overdrive gauge charges 50% faster.",
-    "visualization": null,
-    "related_stats": [
-      "defense",
-      "magic defense"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 19,
-        "ModifierID": 20,
-        "name": "physical-damage-taken",
-        "calculation_type": "multiply",
-        "value": 1.5
-      },
-      {
-        "ID": 20,
-        "ModifierID": 22,
-        "name": "magical-damage-taken",
-        "calculation_type": "multiply",
-        "value": 1.5
-      },
-      {
-        "ID": 21,
-        "ModifierID": 24,
-        "name": "special-damage-taken",
-        "calculation_type": "multiply",
-        "value": 1.5
-      },
-      {
-        "ID": 16,
-        "ModifierID": 17,
-        "name": "overdrive-charge",
-        "calculation_type": "multiply",
-        "value": 1.5
-      }
-    ]
-  },
-  {
-    "ID": 33,
-    "name": "bribe",
-    "category": "other",
-    "is_permanent": false,
-    "effect": "A successfully bribed monster leaves the battle and will drop its bribe item.",
-    "visualization": "The monster leaves the battle.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 34,
-    "name": "defend",
-    "category": "other",
-    "is_permanent": true,
-    "effect": "Halves all physical damage taken by the user.",
-    "visualization": "The character is in defensive stance.",
-    "related_stats": [
-      "defense"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 73,
-        "ModifierID": 20,
-        "name": "physical-damage-taken",
-        "calculation_type": "multiply",
-        "value": 0.5
-      }
-    ]
-  },
-  {
-    "ID": 35,
-    "name": "power distiller",
-    "category": "other",
-    "is_permanent": true,
-    "effect": "Causes a monster to drop Power Spheres. The number of dropped Spheres is equal to the number of items the monster would have dropped normally.",
-    "visualization": null,
-    "related_stats": [
-      "hp",
-      "strength",
-      "defense"
-    ],
-    "removed_status_conditions": [
-      "mana distiller",
-      "speed distiller",
-      "ability distiller"
-    ],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 36,
-    "name": "mana distiller",
-    "category": "other",
-    "is_permanent": true,
-    "effect": "Causes a monster to drop Mana Spheres. The number of dropped Spheres is equal to the number of items the monster would have dropped normally.",
-    "visualization": null,
-    "related_stats": [
-      "mp",
-      "magic",
-      "magic defense"
-    ],
-    "removed_status_conditions": [
-      "power distiller",
-      "speed distiller",
-      "ability distiller"
-    ],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 37,
-    "name": "speed distiller",
-    "category": "other",
-    "is_permanent": true,
-    "effect": "Causes a monster to drop Speed Spheres. The number of dropped Spheres is equal to the number of items the monster would have dropped normally.",
-    "visualization": null,
-    "related_stats": [
-      "agility",
-      "evasion",
-      "accuracy"
-    ],
-    "removed_status_conditions": [
-      "power distiller",
-      "mana distiller",
-      "ability distiller"
-    ],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 38,
-    "name": "ability distiller",
-    "category": "other",
-    "is_permanent": true,
-    "effect": "Causes a monster to drop Ability Spheres. The number of dropped Spheres is equal to the number of items the monster would have dropped normally.",
-    "visualization": null,
-    "related_stats": [],
-    "removed_status_conditions": [
-      "power distiller",
-      "mana distiller",
-      "speed distiller"
-    ],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 39,
-    "name": "guard",
-    "category": "other",
-    "is_permanent": true,
-    "effect": "Causes the user to intercept all single-target physical attacks directed towards the party.",
-    "visualization": null,
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 40,
-    "name": "hp critical",
-    "category": "negative",
-    "is_permanent": true,
-    "effect": "The character or Aeon alters their stance. Inflicted when their HP is below 50% (yellow). Activates SOS-Auto-Abilities.",
-    "visualization": "The character's HP value is yellow.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 41,
-    "name": "life",
-    "category": "positive",
-    "is_permanent": false,
-    "effect": "Revives a KO'd character. Has the opposite effect on zombified units.",
-    "visualization": null,
-    "related_stats": [],
-    "removed_status_conditions": [
-      "ko"
-    ],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 42,
-    "name": "scan",
-    "category": "other",
-    "is_permanent": true,
-    "effect": "Shows a monster's HP, elemental resistances, status immunities and a verbose description.",
-    "visualization": "A window with monster info and the monster model appears.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 43,
-    "name": "sensor",
-    "category": "other",
-    "is_permanent": true,
-    "effect": "Shows a monster's HP, elemental resistances, active statuses, and a brief description when selecting it.",
-    "visualization": "Sensor data appears when hovering the cursor over the monster.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  },
-  {
-    "ID": 44,
-    "name": "sentinel",
-    "category": "other",
-    "is_permanent": true,
-    "effect": "Halves all damage taken from physical attacks and causes the user to intercept all single-target physical attacks directed towards the party.",
-    "visualization": "The character is in defensive stance.",
-    "related_stats": [
-      "defense"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 73,
-        "ModifierID": 20,
-        "name": "physical-damage-taken",
-        "calculation_type": "multiply",
-        "value": 0.5
-      }
-    ]
-  },
-  {
-    "ID": 45,
-    "name": "shield",
-    "category": "other",
-    "is_permanent": true,
-    "effect": "Causes the Aeon to take 75% less damage but its Overdrive gauge won't charge.",
-    "visualization": "The aeon is in defensive stance.",
-    "related_stats": [
-      "defense",
-      "magic defense"
-    ],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": [
-      {
-        "ID": 75,
-        "ModifierID": 20,
-        "name": "physical-damage-taken",
-        "calculation_type": "multiply",
-        "value": 0.25
-      },
-      {
-        "ID": 76,
-        "ModifierID": 22,
-        "name": "magical-damage-taken",
-        "calculation_type": "multiply",
-        "value": 0.25
-      },
-      {
-        "ID": 77,
-        "ModifierID": 24,
-        "name": "special-damage-taken",
-        "calculation_type": "multiply",
-        "value": 0.25
-      },
-      {
-        "ID": 62,
-        "ModifierID": 17,
-        "name": "overdrive-charge",
-        "calculation_type": "multiply",
-        "value": 0
-      }
-    ]
-  },
-  {
-    "ID": 46,
-    "name": "slice",
-    "category": "other",
-    "is_permanent": false,
-    "effect": "The unit is sliced in half when Zanmato is used on it.",
-    "visualization": "The unit is sliced in half.",
-    "related_stats": [],
-    "removed_status_conditions": [],
-    "added_elem_resist": null,
-    "ctb_on_infliction": null,
-    "nullify_armored": null,
-    "stat_changes": [],
-    "modifier_changes": []
-  }
+    {
+        "id": 7,
+        "name": "doom",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Gives the unit a turn counter and the unit is KO'd when it hits 0, ignoring immunity.",
+        "visualization": "A red number hovers above the unit.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 8,
+        "name": "eject",
+        "category": "negative",
+        "is_permanent": false,
+        "effect": "Removes the unit from battle, making their slot irreplacable, and flagging them as 'dead'.",
+        "visualization": null,
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 9,
+        "name": "ko",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "The unit is unable to act and flagged as 'dead'. Inflicted by attacks that inflict death, or if the unit's HP drop to 0.",
+        "visualization": "Characters lie on the ground motionless. The death animation of aeons and monsters is played.",
+        "related_stats": [],
+        "removed_status_conditions": [
+            "power break",
+            "magic break",
+            "armor break",
+            "mental break",
+            "berserk",
+            "confusion",
+            "curse",
+            "darkness",
+            "doom",
+            "poison",
+            "silence",
+            "sleep",
+            "slow",
+            "zombie",
+            "auto-life",
+            "haste",
+            "shell",
+            "protect",
+            "reflect",
+            "regen",
+            "nulblaze",
+            "nulshock",
+            "nultide",
+            "nulfrost",
+            "guard",
+            "sentinel",
+            "shield",
+            "boost"
+        ],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 10,
+        "name": "petrification",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "The unit is unable to act and flagged as 'dead'. Petrified units can shatter, ejecting them from battle. Enemies always shatter instantly, as well as characters when they're underwater. Characters on land might shatter when they're hit by attacks (based on the attack's shatter rate).",
+        "visualization": "The unit is given a grey stone texture and is motionless.",
+        "related_stats": [],
+        "removed_status_conditions": [
+            "power break",
+            "magic break",
+            "armor break",
+            "mental break",
+            "berserk",
+            "confusion",
+            "curse",
+            "darkness",
+            "doom",
+            "poison",
+            "silence",
+            "sleep",
+            "slow",
+            "zombie",
+            "auto-life",
+            "haste",
+            "shell",
+            "protect",
+            "reflect",
+            "regen",
+            "nulblaze",
+            "nulshock",
+            "nultide",
+            "nulfrost",
+            "guard",
+            "sentinel",
+            "shield",
+            "boost"
+        ],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 65,
+                "modifier_id": 20,
+                "name": "physical-damage-taken",
+                "calculation_type": "multiply",
+                "value": 0
+            },
+            {
+                "id": 66,
+                "modifier_id": 22,
+                "name": "magical-damage-taken",
+                "calculation_type": "multiply",
+                "value": 0
+            },
+            {
+                "id": 67,
+                "modifier_id": 24,
+                "name": "special-damage-taken",
+                "calculation_type": "multiply",
+                "value": 0
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "name": "poison",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Deals damage proportional to the unit's max HP every time they take a turn. The rate is 25% for characters and varies for enemies.",
+        "visualization": "Green bubbles hover over the unit.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 12,
+        "name": "provoke",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Forces the afflicted monster to use one, or sometimes a few certain abilities. If an ability used this way is single-target, it will always target the provoking character. Removed instantly when the provoking character is switched out, KO, or petrified.",
+        "visualization": null,
+        "related_stats": [],
+        "removed_status_conditions": [
+            "berserk"
+        ],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 13,
+        "name": "silence",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "The inflicted unit can not use magical abilities. Overdrives are not affected.",
+        "visualization": "A speech bubble with three dots in it hovers over the unit.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 14,
+        "name": "sleep",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Forces the unit to skip their turns. The unit can't evade physical attacks while sleeping. Removed instantly when the unit is hit by a physical attack.",
+        "visualization": "Two Z's hover next to the unit and its sleep animation is played.",
+        "related_stats": [
+            "evasion"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [
+            {
+                "id": 17,
+                "stat_id": 9,
+                "name": "evasion",
+                "calculation_type": "set-value",
+                "value": 0
+            }
+        ],
+        "modifier_changes": []
+    },
+    {
+        "id": 15,
+        "name": "slow",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Doubles the unit's tick speed, causing the unit to take twice the normal amount of time to get turns. Overwrites, but also removed by Haste.",
+        "visualization": "The unit's animations are performed at half speed.",
+        "related_stats": [
+            "agility"
+        ],
+        "removed_status_conditions": [
+            "haste"
+        ],
+        "added_elem_resist": null,
+        "ctb_on_infliction": {
+            "inflicted_delay_id": 5,
+            "condition": null,
+            "ctb_attack_type": "attack",
+            "delay_type": "ctb-based",
+            "damage_constant": 16
+        },
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 68,
+                "modifier_id": 31,
+                "name": "tick-speed",
+                "calculation_type": "multiply",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "name": "threaten",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Causes the afflicted monster to be frozen in time and thus unable to evade or act until the user's next turn. CTB altering actions like Haste, Slow, or Delay will fail on the threatening user until their next turn.",
+        "visualization": "The unit is completely motionless.",
+        "related_stats": [],
+        "removed_status_conditions": [
+            "berserk"
+        ],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 17,
+        "name": "zombie",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Restorative items and magic damage the unit. Grants immunity to instant death effects, as long as they don't ignore immunity. Items and magic that inflict Life will reduce the unit's HP to 0, if it is not immune to Life.",
+        "visualization": "The unit turns green and has purple smoke in front of the head.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 18,
+        "name": "power break",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Reduces the unit's physical damage dealt by 50%.",
+        "visualization": null,
+        "related_stats": [
+            "strength"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 69,
+                "modifier_id": 19,
+                "name": "physical-damage-dealt",
+                "calculation_type": "multiply",
+                "value": 0.5
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "name": "magic break",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Reduces the unit's magical damage dealt by 50%.",
+        "visualization": null,
+        "related_stats": [
+            "magic"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 70,
+                "modifier_id": 21,
+                "name": "magical-damage-dealt",
+                "calculation_type": "multiply",
+                "value": 0.5
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "name": "armor break",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Reduces the unit's Defense to 1 and nullifies 'armored'.",
+        "visualization": null,
+        "related_stats": [
+            "defense"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": "bearer",
+        "stat_changes": [
+            {
+                "id": 18,
+                "stat_id": 4,
+                "name": "defense",
+                "calculation_type": "set-value",
+                "value": 1
+            }
+        ],
+        "modifier_changes": []
+    },
+    {
+        "id": 21,
+        "name": "mental break",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "Reduces the unit's Magic Defense to 1.",
+        "visualization": null,
+        "related_stats": [
+            "magic defense"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [
+            {
+                "id": 19,
+                "stat_id": 6,
+                "name": "magic defense",
+                "calculation_type": "set-value",
+                "value": 1
+            }
+        ],
+        "modifier_changes": []
+    },
+    {
+        "id": 22,
+        "name": "haste",
+        "category": "positive",
+        "is_permanent": true,
+        "effect": "Halves the unit's tickspeed, causing the unit to take half the normal amount of time to get turns. Overwrites, but also removed by Slow. If the unit has Auto-Haste, its ICV is also halved at the start of a battle.",
+        "visualization": "The unit's animations are performed at double speed.",
+        "related_stats": [
+            "agility"
+        ],
+        "removed_status_conditions": [
+            "slow"
+        ],
+        "added_elem_resist": null,
+        "ctb_on_infliction": {
+            "inflicted_delay_id": 6,
+            "condition": null,
+            "ctb_attack_type": "heal",
+            "delay_type": "ctb-based",
+            "damage_constant": 8
+        },
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 71,
+                "modifier_id": 30,
+                "name": "initial-counter-value",
+                "calculation_type": "multiply",
+                "value": 0.5
+            },
+            {
+                "id": 72,
+                "modifier_id": 31,
+                "name": "tick-speed",
+                "calculation_type": "multiply",
+                "value": 0.5
+            }
+        ]
+    },
+    {
+        "id": 23,
+        "name": "nulblaze",
+        "category": "positive",
+        "is_permanent": true,
+        "effect": "Grants immunity to the next fire-elemental attack targeting the unit.",
+        "visualization": "An orange orb circles around the unit.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": {
+            "elemental_resist_id": 2,
+            "element_id": 1,
+            "name": "fire",
+            "affinity": "immune"
+        },
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 24,
+        "name": "nulshock",
+        "category": "positive",
+        "is_permanent": true,
+        "effect": "Grants immunity to the next lightning-elemental attack targeting the unit.",
+        "visualization": "A yellow orb circles around the unit.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": {
+            "elemental_resist_id": 5,
+            "element_id": 2,
+            "name": "lightning",
+            "affinity": "immune"
+        },
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 25,
+        "name": "nultide",
+        "category": "positive",
+        "is_permanent": true,
+        "effect": "Grants immunity to the next water-elemental attack targeting the unit.",
+        "visualization": "A cyan orb circles around the unit.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": {
+            "elemental_resist_id": 8,
+            "element_id": 3,
+            "name": "water",
+            "affinity": "immune"
+        },
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 26,
+        "name": "nulfrost",
+        "category": "positive",
+        "is_permanent": true,
+        "effect": "Grants immunity to the next ice-elemental attack targeting the unit.",
+        "visualization": "A light blue orb circles around the unit.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": {
+            "elemental_resist_id": 11,
+            "element_id": 4,
+            "name": "ice",
+            "affinity": "immune"
+        },
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 27,
+        "name": "protect",
+        "category": "positive",
+        "is_permanent": true,
+        "effect": "Halves the unit's damage/healing taken from physical actions.",
+        "visualization": "If hit by a physical action, a light blue shield made out of hexagons appears in front of the unit.",
+        "related_stats": [
+            "defense"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 73,
+                "modifier_id": 20,
+                "name": "physical-damage-taken",
+                "calculation_type": "multiply",
+                "value": 0.5
+            }
+        ]
+    },
+    {
+        "id": 28,
+        "name": "reflect",
+        "category": "positive",
+        "is_permanent": true,
+        "effect": "Bounces reflectable spells towards the opposite party of the target.",
+        "visualization": "If hit by a reflectable attack a light blue wall appears in front of the unit.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 29,
+        "name": "regen",
+        "category": "positive",
+        "is_permanent": true,
+        "effect": "Restores a small amount of HP at the start of a turn from any unit in battle. The amount of HP restored is between 100 and a tenth of the unit's maximum HP.",
+        "visualization": "Purple sparkles are floating around the unit.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 30,
+        "name": "shell",
+        "category": "positive",
+        "is_permanent": true,
+        "effect": "Halves the unit's damage/healing taken from magical actions.",
+        "visualization": "If hit by a magical action, a red wireframe sphere appears on top of the character.",
+        "related_stats": [
+            "magic defense"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 74,
+                "modifier_id": 22,
+                "name": "magical-damage-taken",
+                "calculation_type": "multiply",
+                "value": 0.5
+            }
+        ]
+    },
+    {
+        "id": 31,
+        "name": "auto-life",
+        "category": "positive",
+        "is_permanent": true,
+        "effect": "Instantly revives a character that is KO'd with 25% of their max HP.",
+        "visualization": "A halo hovers over the character's head.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 32,
+        "name": "boost",
+        "category": "other",
+        "is_permanent": true,
+        "effect": "Causes the Aeon to take 50% more damage but its Overdrive gauge charges 50% faster.",
+        "visualization": null,
+        "related_stats": [
+            "defense",
+            "magic defense"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 19,
+                "modifier_id": 20,
+                "name": "physical-damage-taken",
+                "calculation_type": "multiply",
+                "value": 1.5
+            },
+            {
+                "id": 20,
+                "modifier_id": 22,
+                "name": "magical-damage-taken",
+                "calculation_type": "multiply",
+                "value": 1.5
+            },
+            {
+                "id": 21,
+                "modifier_id": 24,
+                "name": "special-damage-taken",
+                "calculation_type": "multiply",
+                "value": 1.5
+            },
+            {
+                "id": 16,
+                "modifier_id": 17,
+                "name": "overdrive-charge",
+                "calculation_type": "multiply",
+                "value": 1.5
+            }
+        ]
+    },
+    {
+        "id": 33,
+        "name": "bribe",
+        "category": "other",
+        "is_permanent": false,
+        "effect": "A successfully bribed monster leaves the battle and will drop its bribe item.",
+        "visualization": "The monster leaves the battle.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 34,
+        "name": "defend",
+        "category": "other",
+        "is_permanent": true,
+        "effect": "Halves all physical damage taken by the user.",
+        "visualization": "The character is in defensive stance.",
+        "related_stats": [
+            "defense"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 73,
+                "modifier_id": 20,
+                "name": "physical-damage-taken",
+                "calculation_type": "multiply",
+                "value": 0.5
+            }
+        ]
+    },
+    {
+        "id": 35,
+        "name": "power distiller",
+        "category": "other",
+        "is_permanent": true,
+        "effect": "Causes a monster to drop Power Spheres. The number of dropped Spheres is equal to the number of items the monster would have dropped normally.",
+        "visualization": null,
+        "related_stats": [
+            "hp",
+            "strength",
+            "defense"
+        ],
+        "removed_status_conditions": [
+            "mana distiller",
+            "speed distiller",
+            "ability distiller"
+        ],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 36,
+        "name": "mana distiller",
+        "category": "other",
+        "is_permanent": true,
+        "effect": "Causes a monster to drop Mana Spheres. The number of dropped Spheres is equal to the number of items the monster would have dropped normally.",
+        "visualization": null,
+        "related_stats": [
+            "mp",
+            "magic",
+            "magic defense"
+        ],
+        "removed_status_conditions": [
+            "power distiller",
+            "speed distiller",
+            "ability distiller"
+        ],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 37,
+        "name": "speed distiller",
+        "category": "other",
+        "is_permanent": true,
+        "effect": "Causes a monster to drop Speed Spheres. The number of dropped Spheres is equal to the number of items the monster would have dropped normally.",
+        "visualization": null,
+        "related_stats": [
+            "agility",
+            "evasion",
+            "accuracy"
+        ],
+        "removed_status_conditions": [
+            "power distiller",
+            "mana distiller",
+            "ability distiller"
+        ],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 38,
+        "name": "ability distiller",
+        "category": "other",
+        "is_permanent": true,
+        "effect": "Causes a monster to drop Ability Spheres. The number of dropped Spheres is equal to the number of items the monster would have dropped normally.",
+        "visualization": null,
+        "related_stats": [],
+        "removed_status_conditions": [
+            "power distiller",
+            "mana distiller",
+            "speed distiller"
+        ],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 39,
+        "name": "guard",
+        "category": "other",
+        "is_permanent": true,
+        "effect": "Causes the user to intercept all single-target physical attacks directed towards the party.",
+        "visualization": null,
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 40,
+        "name": "hp critical",
+        "category": "negative",
+        "is_permanent": true,
+        "effect": "The character or Aeon alters their stance. Inflicted when their HP is below 50% (yellow). Activates SOS-Auto-Abilities.",
+        "visualization": "The character's HP value is yellow.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 41,
+        "name": "life",
+        "category": "positive",
+        "is_permanent": false,
+        "effect": "Revives a KO'd character. Has the opposite effect on zombified units.",
+        "visualization": null,
+        "related_stats": [],
+        "removed_status_conditions": [
+            "ko"
+        ],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 42,
+        "name": "scan",
+        "category": "other",
+        "is_permanent": true,
+        "effect": "Shows a monster's HP, elemental resistances, status immunities and a verbose description.",
+        "visualization": "A window with monster info and the monster model appears.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 43,
+        "name": "sensor",
+        "category": "other",
+        "is_permanent": true,
+        "effect": "Shows a monster's HP, elemental resistances, active statuses, and a brief description when selecting it.",
+        "visualization": "Sensor data appears when hovering the cursor over the monster.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    },
+    {
+        "id": 44,
+        "name": "sentinel",
+        "category": "other",
+        "is_permanent": true,
+        "effect": "Halves all damage taken from physical attacks and causes the user to intercept all single-target physical attacks directed towards the party.",
+        "visualization": "The character is in defensive stance.",
+        "related_stats": [
+            "defense"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 73,
+                "modifier_id": 20,
+                "name": "physical-damage-taken",
+                "calculation_type": "multiply",
+                "value": 0.5
+            }
+        ]
+    },
+    {
+        "id": 45,
+        "name": "shield",
+        "category": "other",
+        "is_permanent": true,
+        "effect": "Causes the Aeon to take 75% less damage but its Overdrive gauge won't charge.",
+        "visualization": "The aeon is in defensive stance.",
+        "related_stats": [
+            "defense",
+            "magic defense"
+        ],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": [
+            {
+                "id": 75,
+                "modifier_id": 20,
+                "name": "physical-damage-taken",
+                "calculation_type": "multiply",
+                "value": 0.25
+            },
+            {
+                "id": 76,
+                "modifier_id": 22,
+                "name": "magical-damage-taken",
+                "calculation_type": "multiply",
+                "value": 0.25
+            },
+            {
+                "id": 77,
+                "modifier_id": 24,
+                "name": "special-damage-taken",
+                "calculation_type": "multiply",
+                "value": 0.25
+            },
+            {
+                "id": 62,
+                "modifier_id": 17,
+                "name": "overdrive-charge",
+                "calculation_type": "multiply",
+                "value": 0
+            }
+        ]
+    },
+    {
+        "id": 46,
+        "name": "slice",
+        "category": "other",
+        "is_permanent": false,
+        "effect": "The unit is sliced in half when Zanmato is used on it.",
+        "visualization": "The unit is sliced in half.",
+        "related_stats": [],
+        "removed_status_conditions": [],
+        "added_elem_resist": null,
+        "ctb_on_infliction": null,
+        "nullify_armored": null,
+        "stat_changes": [],
+        "modifier_changes": []
+    }
 ]

@@ -7,11 +7,11 @@ import (
 )
 
 type Aeon struct {
-	ID int32
+	ID int32							`json:"id"`
 	PlayerUnit
-	UnlockCondition     string       `json:"unlock_condition"`
-	LocationArea        LocationArea `json:"location_area"`
-	AreaID              *int32
+	UnlockCondition     string       	`json:"unlock_condition"`
+	LocationArea        LocationArea 	`json:"location_area"`
+	AreaID              *int32			`json:"area_id"`
 	Category            *string         `json:"category"`
 	IsOptional          bool            `json:"is_optional"`
 	BattlesToRegenerate int32           `json:"num_battles_to_regenerate"`

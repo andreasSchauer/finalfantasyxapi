@@ -31,16 +31,17 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	}
 
 	if dataHash == dbHash {
+		fmt.Println("database is up to date")
+		fmt.Println()
+
 		err = l.assignLookups()
 		if err != nil {
 			return nil, fmt.Errorf("couldn't assign lookups: %v", err)
 		}
-
-		err = l.saveCompletedLookups()
-		if err != nil {
-			return nil, err
-		}
 	} else {
+		fmt.Println("updating database...")
+		fmt.Println()
+
 		const migrationsDir = "sql/schema/"
 		fullPath, err := h.GetAbsoluteFilepath(migrationsDir)
 		if err != nil {

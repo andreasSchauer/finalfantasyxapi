@@ -1,902 +1,910 @@
 [
-  {
-    "ID": 1,
-    "name": "tidus",
-    "Type": "character",
-    "location_area": {
-      "location": "zanarkand",
-      "sublocation": "zanarkand",
-      "area": "tidus's home",
-      "version": null
+    {
+        "id": 1,
+        "player_unit_id": 1,
+        "name": "tidus",
+        "type": "character",
+        "location_area": {
+            "location": "zanarkand",
+            "sublocation": "zanarkand",
+            "area": "tidus's home",
+            "version": null
+        },
+        "area_id": 1,
+        "is_story_based": false,
+        "weapon_type": "sword",
+        "armor_type": "shield",
+        "physical_attack_range": 1,
+        "can_fight_underwater": true,
+        "base_stats": [
+            {
+                "id": 1,
+                "stat_id": 1,
+                "name": "hp",
+                "value": 520
+            },
+            {
+                "id": 2,
+                "stat_id": 2,
+                "name": "mp",
+                "value": 12
+            },
+            {
+                "id": 3,
+                "stat_id": 3,
+                "name": "strength",
+                "value": 15
+            },
+            {
+                "id": 4,
+                "stat_id": 4,
+                "name": "defense",
+                "value": 10
+            },
+            {
+                "id": 5,
+                "stat_id": 5,
+                "name": "magic",
+                "value": 5
+            },
+            {
+                "id": 6,
+                "stat_id": 6,
+                "name": "magic defense",
+                "value": 5
+            },
+            {
+                "id": 7,
+                "stat_id": 7,
+                "name": "agility",
+                "value": 10
+            },
+            {
+                "id": 8,
+                "stat_id": 8,
+                "name": "luck",
+                "value": 18
+            },
+            {
+                "id": 9,
+                "stat_id": 9,
+                "name": "evasion",
+                "value": 10
+            },
+            {
+                "id": 10,
+                "stat_id": 10,
+                "name": "accuracy",
+                "value": 10
+            }
+        ],
+        "std_sphere_grid": {
+            "id": 1,
+            "type": "standard",
+            "hp": 2600,
+            "mp": 140,
+            "strength": 39,
+            "defense": 24,
+            "magic": 6,
+            "magic_defense": 2,
+            "agility": 34,
+            "luck": 1,
+            "evasion": 19,
+            "accuracy": 19,
+            "lv_1_locks": 2,
+            "lv_2_locks": 2,
+            "lv_3_locks": 4,
+            "lv_4_locks": 0,
+            "empty_nodes": 33
+        },
+        "exp_sphere_grid": {
+            "id": 2,
+            "type": "expert",
+            "hp": 2200,
+            "mp": 190,
+            "strength": 31,
+            "defense": 21,
+            "magic": 9,
+            "magic_defense": 3,
+            "agility": 30,
+            "luck": 3,
+            "evasion": 19,
+            "accuracy": 18,
+            "lv_1_locks": 5,
+            "lv_2_locks": 1,
+            "lv_3_locks": 2,
+            "lv_4_locks": 0,
+            "empty_nodes": 34
+        }
     },
-    "AreaID": 1,
-    "is_story_based": false,
-    "weapon_type": "sword",
-    "armor_type": "shield",
-    "physical_attack_range": 1,
-    "can_fight_underwater": true,
-    "base_stats": [
-      {
-        "ID": 1,
-        "StatID": 1,
-        "name": "hp",
-        "value": 520
-      },
-      {
-        "ID": 2,
-        "StatID": 2,
-        "name": "mp",
-        "value": 12
-      },
-      {
-        "ID": 3,
-        "StatID": 3,
-        "name": "strength",
-        "value": 15
-      },
-      {
-        "ID": 4,
-        "StatID": 4,
-        "name": "defense",
-        "value": 10
-      },
-      {
-        "ID": 5,
-        "StatID": 5,
-        "name": "magic",
-        "value": 5
-      },
-      {
-        "ID": 6,
-        "StatID": 6,
-        "name": "magic defense",
-        "value": 5
-      },
-      {
-        "ID": 7,
-        "StatID": 7,
-        "name": "agility",
-        "value": 10
-      },
-      {
-        "ID": 8,
-        "StatID": 8,
-        "name": "luck",
-        "value": 18
-      },
-      {
-        "ID": 9,
-        "StatID": 9,
-        "name": "evasion",
-        "value": 10
-      },
-      {
-        "ID": 10,
-        "StatID": 10,
-        "name": "accuracy",
-        "value": 10
-      }
-    ],
-    "std_sphere_grid": {
-      "ID": 1,
-      "Type": "standard",
-      "hp": 2600,
-      "mp": 140,
-      "strength": 39,
-      "defense": 24,
-      "magic": 6,
-      "magic_defense": 2,
-      "agility": 34,
-      "luck": 1,
-      "evasion": 19,
-      "accuracy": 19,
-      "lv_1_locks": 2,
-      "lv_2_locks": 2,
-      "lv_3_locks": 4,
-      "lv_4_locks": 0,
-      "empty_nodes": 33
+    {
+        "id": 2,
+        "player_unit_id": 2,
+        "name": "yuna",
+        "type": "character",
+        "location_area": {
+            "location": "besaid",
+            "sublocation": "besaid village",
+            "area": "besaid village",
+            "version": null
+        },
+        "area_id": 36,
+        "is_story_based": false,
+        "weapon_type": "staff",
+        "armor_type": "ring",
+        "physical_attack_range": 1,
+        "can_fight_underwater": false,
+        "base_stats": [
+            {
+                "id": 11,
+                "stat_id": 1,
+                "name": "hp",
+                "value": 475
+            },
+            {
+                "id": 12,
+                "stat_id": 2,
+                "name": "mp",
+                "value": 84
+            },
+            {
+                "id": 13,
+                "stat_id": 3,
+                "name": "strength",
+                "value": 5
+            },
+            {
+                "id": 14,
+                "stat_id": 4,
+                "name": "defense",
+                "value": 5
+            },
+            {
+                "id": 15,
+                "stat_id": 5,
+                "name": "magic",
+                "value": 20
+            },
+            {
+                "id": 16,
+                "stat_id": 6,
+                "name": "magic defense",
+                "value": 20
+            },
+            {
+                "id": 7,
+                "stat_id": 7,
+                "name": "agility",
+                "value": 10
+            },
+            {
+                "id": 17,
+                "stat_id": 8,
+                "name": "luck",
+                "value": 17
+            },
+            {
+                "id": 18,
+                "stat_id": 9,
+                "name": "evasion",
+                "value": 30
+            },
+            {
+                "id": 19,
+                "stat_id": 10,
+                "name": "accuracy",
+                "value": 3
+            }
+        ],
+        "std_sphere_grid": {
+            "id": 3,
+            "type": "standard",
+            "hp": 2600,
+            "mp": 240,
+            "strength": 10,
+            "defense": 10,
+            "magic": 41,
+            "magic_defense": 36,
+            "agility": 36,
+            "luck": 10,
+            "evasion": 38,
+            "accuracy": 4,
+            "lv_1_locks": 1,
+            "lv_2_locks": 2,
+            "lv_3_locks": 4,
+            "lv_4_locks": 10,
+            "empty_nodes": 36
+        },
+        "exp_sphere_grid": {
+            "id": 4,
+            "type": "expert",
+            "hp": 1800,
+            "mp": 220,
+            "strength": 20,
+            "defense": 23,
+            "magic": 41,
+            "magic_defense": 33,
+            "agility": 27,
+            "luck": 0,
+            "evasion": 28,
+            "accuracy": 0,
+            "lv_1_locks": 1,
+            "lv_2_locks": 3,
+            "lv_3_locks": 3,
+            "lv_4_locks": 1,
+            "empty_nodes": 43
+        }
     },
-    "exp_sphere_grid": {
-      "ID": 2,
-      "Type": "expert",
-      "hp": 2200,
-      "mp": 190,
-      "strength": 31,
-      "defense": 21,
-      "magic": 9,
-      "magic_defense": 3,
-      "agility": 30,
-      "luck": 3,
-      "evasion": 19,
-      "accuracy": 18,
-      "lv_1_locks": 5,
-      "lv_2_locks": 1,
-      "lv_3_locks": 2,
-      "lv_4_locks": 0,
-      "empty_nodes": 34
+    {
+        "id": 3,
+        "player_unit_id": 3,
+        "name": "wakka",
+        "type": "character",
+        "location_area": {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "beach",
+            "version": null
+        },
+        "area_id": 20,
+        "is_story_based": false,
+        "weapon_type": "blitzball",
+        "armor_type": "armguard",
+        "physical_attack_range": 4,
+        "can_fight_underwater": true,
+        "base_stats": [
+            {
+                "id": 20,
+                "stat_id": 1,
+                "name": "hp",
+                "value": 618
+            },
+            {
+                "id": 21,
+                "stat_id": 2,
+                "name": "mp",
+                "value": 10
+            },
+            {
+                "id": 22,
+                "stat_id": 3,
+                "name": "strength",
+                "value": 14
+            },
+            {
+                "id": 4,
+                "stat_id": 4,
+                "name": "defense",
+                "value": 10
+            },
+            {
+                "id": 23,
+                "stat_id": 5,
+                "name": "magic",
+                "value": 10
+            },
+            {
+                "id": 6,
+                "stat_id": 6,
+                "name": "magic defense",
+                "value": 5
+            },
+            {
+                "id": 24,
+                "stat_id": 7,
+                "name": "agility",
+                "value": 7
+            },
+            {
+                "id": 25,
+                "stat_id": 8,
+                "name": "luck",
+                "value": 19
+            },
+            {
+                "id": 26,
+                "stat_id": 9,
+                "name": "evasion",
+                "value": 5
+            },
+            {
+                "id": 27,
+                "stat_id": 10,
+                "name": "accuracy",
+                "value": 25
+            }
+        ],
+        "std_sphere_grid": {
+            "id": 5,
+            "type": "standard",
+            "hp": 3800,
+            "mp": 180,
+            "strength": 40,
+            "defense": 20,
+            "magic": 27,
+            "magic_defense": 0,
+            "agility": 29,
+            "luck": 1,
+            "evasion": 13,
+            "accuracy": 25,
+            "lv_1_locks": 2,
+            "lv_2_locks": 2,
+            "lv_3_locks": 2,
+            "lv_4_locks": 3,
+            "empty_nodes": 32
+        },
+        "exp_sphere_grid": {
+            "id": 6,
+            "type": "expert",
+            "hp": 3400,
+            "mp": 120,
+            "strength": 31,
+            "defense": 21,
+            "magic": 27,
+            "magic_defense": 0,
+            "agility": 16,
+            "luck": 2,
+            "evasion": 10,
+            "accuracy": 26,
+            "lv_1_locks": 2,
+            "lv_2_locks": 0,
+            "lv_3_locks": 2,
+            "lv_4_locks": 0,
+            "empty_nodes": 26
+        }
+    },
+    {
+        "id": 4,
+        "player_unit_id": 4,
+        "name": "lulu",
+        "type": "character",
+        "location_area": {
+            "location": "besaid",
+            "sublocation": "besaid village",
+            "area": "besaid village",
+            "version": null
+        },
+        "area_id": 36,
+        "is_story_based": false,
+        "weapon_type": "doll",
+        "armor_type": "bangle",
+        "physical_attack_range": 1,
+        "can_fight_underwater": false,
+        "base_stats": [
+            {
+                "id": 28,
+                "stat_id": 1,
+                "name": "hp",
+                "value": 380
+            },
+            {
+                "id": 29,
+                "stat_id": 2,
+                "name": "mp",
+                "value": 92
+            },
+            {
+                "id": 13,
+                "stat_id": 3,
+                "name": "strength",
+                "value": 5
+            },
+            {
+                "id": 30,
+                "stat_id": 4,
+                "name": "defense",
+                "value": 8
+            },
+            {
+                "id": 15,
+                "stat_id": 5,
+                "name": "magic",
+                "value": 20
+            },
+            {
+                "id": 31,
+                "stat_id": 6,
+                "name": "magic defense",
+                "value": 30
+            },
+            {
+                "id": 32,
+                "stat_id": 7,
+                "name": "agility",
+                "value": 5
+            },
+            {
+                "id": 17,
+                "stat_id": 8,
+                "name": "luck",
+                "value": 17
+            },
+            {
+                "id": 33,
+                "stat_id": 9,
+                "name": "evasion",
+                "value": 40
+            },
+            {
+                "id": 19,
+                "stat_id": 10,
+                "name": "accuracy",
+                "value": 3
+            }
+        ],
+        "std_sphere_grid": {
+            "id": 7,
+            "type": "standard",
+            "hp": 2200,
+            "mp": 340,
+            "strength": 11,
+            "defense": 48,
+            "magic": 36,
+            "magic_defense": 60,
+            "agility": 16,
+            "luck": 4,
+            "evasion": 44,
+            "accuracy": 2,
+            "lv_1_locks": 1,
+            "lv_2_locks": 5,
+            "lv_3_locks": 5,
+            "lv_4_locks": 6,
+            "empty_nodes": 20
+        },
+        "exp_sphere_grid": {
+            "id": 8,
+            "type": "expert",
+            "hp": 2200,
+            "mp": 240,
+            "strength": 10,
+            "defense": 30,
+            "magic": 34,
+            "magic_defense": 48,
+            "agility": 17,
+            "luck": 0,
+            "evasion": 43,
+            "accuracy": 10,
+            "lv_1_locks": 1,
+            "lv_2_locks": 3,
+            "lv_3_locks": 3,
+            "lv_4_locks": 4,
+            "empty_nodes": 32
+        }
+    },
+    {
+        "id": 5,
+        "player_unit_id": 5,
+        "name": "kimahri",
+        "type": "character",
+        "location_area": {
+            "location": "ss liki",
+            "sublocation": "ss liki",
+            "area": "deck",
+            "version": null
+        },
+        "area_id": 42,
+        "is_story_based": false,
+        "weapon_type": "spear",
+        "armor_type": "armlet",
+        "physical_attack_range": 1,
+        "can_fight_underwater": false,
+        "base_stats": [
+            {
+                "id": 34,
+                "stat_id": 1,
+                "name": "hp",
+                "value": 644
+            },
+            {
+                "id": 35,
+                "stat_id": 2,
+                "name": "mp",
+                "value": 78
+            },
+            {
+                "id": 36,
+                "stat_id": 3,
+                "name": "strength",
+                "value": 16
+            },
+            {
+                "id": 37,
+                "stat_id": 4,
+                "name": "defense",
+                "value": 15
+            },
+            {
+                "id": 38,
+                "stat_id": 5,
+                "name": "magic",
+                "value": 17
+            },
+            {
+                "id": 6,
+                "stat_id": 6,
+                "name": "magic defense",
+                "value": 5
+            },
+            {
+                "id": 39,
+                "stat_id": 7,
+                "name": "agility",
+                "value": 6
+            },
+            {
+                "id": 8,
+                "stat_id": 8,
+                "name": "luck",
+                "value": 18
+            },
+            {
+                "id": 26,
+                "stat_id": 9,
+                "name": "evasion",
+                "value": 5
+            },
+            {
+                "id": 40,
+                "stat_id": 10,
+                "name": "accuracy",
+                "value": 5
+            }
+        ],
+        "std_sphere_grid": {
+            "id": 9,
+            "type": "standard",
+            "hp": 1400,
+            "mp": 100,
+            "strength": 11,
+            "defense": 9,
+            "magic": 6,
+            "magic_defense": 2,
+            "agility": 7,
+            "luck": 0,
+            "evasion": 0,
+            "accuracy": 6,
+            "lv_1_locks": 3,
+            "lv_2_locks": 1,
+            "lv_3_locks": 0,
+            "lv_4_locks": 4,
+            "empty_nodes": 11
+        },
+        "exp_sphere_grid": {
+            "id": 10,
+            "type": "expert",
+            "hp": 200,
+            "mp": 0,
+            "strength": 2,
+            "defense": 2,
+            "magic": 2,
+            "magic_defense": 0,
+            "agility": 0,
+            "luck": 0,
+            "evasion": 0,
+            "accuracy": 0,
+            "lv_1_locks": 1,
+            "lv_2_locks": 0,
+            "lv_3_locks": 0,
+            "lv_4_locks": 0,
+            "empty_nodes": 7
+        }
+    },
+    {
+        "id": 6,
+        "player_unit_id": 6,
+        "name": "auron",
+        "type": "character",
+        "location_area": {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "blitzball field",
+            "version": null
+        },
+        "area_id": 74,
+        "is_story_based": false,
+        "weapon_type": "blade",
+        "armor_type": "bracer",
+        "physical_attack_range": 1,
+        "can_fight_underwater": false,
+        "base_stats": [
+            {
+                "id": 41,
+                "stat_id": 1,
+                "name": "hp",
+                "value": 1030
+            },
+            {
+                "id": 42,
+                "stat_id": 2,
+                "name": "mp",
+                "value": 33
+            },
+            {
+                "id": 43,
+                "stat_id": 3,
+                "name": "strength",
+                "value": 20
+            },
+            {
+                "id": 37,
+                "stat_id": 4,
+                "name": "defense",
+                "value": 15
+            },
+            {
+                "id": 5,
+                "stat_id": 5,
+                "name": "magic",
+                "value": 5
+            },
+            {
+                "id": 6,
+                "stat_id": 6,
+                "name": "magic defense",
+                "value": 5
+            },
+            {
+                "id": 32,
+                "stat_id": 7,
+                "name": "agility",
+                "value": 5
+            },
+            {
+                "id": 17,
+                "stat_id": 8,
+                "name": "luck",
+                "value": 17
+            },
+            {
+                "id": 26,
+                "stat_id": 9,
+                "name": "evasion",
+                "value": 5
+            },
+            {
+                "id": 19,
+                "stat_id": 10,
+                "name": "accuracy",
+                "value": 3
+            }
+        ],
+        "std_sphere_grid": {
+            "id": 11,
+            "type": "standard",
+            "hp": 3600,
+            "mp": 120,
+            "strength": 36,
+            "defense": 22,
+            "magic": 6,
+            "magic_defense": 8,
+            "agility": 12,
+            "luck": 1,
+            "evasion": 10,
+            "accuracy": 1,
+            "lv_1_locks": 1,
+            "lv_2_locks": 1,
+            "lv_3_locks": 4,
+            "lv_4_locks": 3,
+            "empty_nodes": 37
+        },
+        "exp_sphere_grid": {
+            "id": 12,
+            "type": "expert",
+            "hp": 3400,
+            "mp": 40,
+            "strength": 43,
+            "defense": 23,
+            "magic": 6,
+            "magic_defense": 22,
+            "agility": 11,
+            "luck": 0,
+            "evasion": 8,
+            "accuracy": 1,
+            "lv_1_locks": 2,
+            "lv_2_locks": 2,
+            "lv_3_locks": 2,
+            "lv_4_locks": 2,
+            "empty_nodes": 34
+        }
+    },
+    {
+        "id": 7,
+        "player_unit_id": 7,
+        "name": "rikku",
+        "type": "character",
+        "location_area": {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "north bank",
+            "version": null
+        },
+        "area_id": 127,
+        "is_story_based": false,
+        "weapon_type": "claw",
+        "armor_type": "targe",
+        "physical_attack_range": 1,
+        "can_fight_underwater": true,
+        "base_stats": [
+            {
+                "id": 44,
+                "stat_id": 1,
+                "name": "hp",
+                "value": 360
+            },
+            {
+                "id": 45,
+                "stat_id": 2,
+                "name": "mp",
+                "value": 85
+            },
+            {
+                "id": 46,
+                "stat_id": 3,
+                "name": "strength",
+                "value": 10
+            },
+            {
+                "id": 30,
+                "stat_id": 4,
+                "name": "defense",
+                "value": 8
+            },
+            {
+                "id": 23,
+                "stat_id": 5,
+                "name": "magic",
+                "value": 10
+            },
+            {
+                "id": 47,
+                "stat_id": 6,
+                "name": "magic defense",
+                "value": 8
+            },
+            {
+                "id": 48,
+                "stat_id": 7,
+                "name": "agility",
+                "value": 16
+            },
+            {
+                "id": 8,
+                "stat_id": 8,
+                "name": "luck",
+                "value": 18
+            },
+            {
+                "id": 26,
+                "stat_id": 9,
+                "name": "evasion",
+                "value": 5
+            },
+            {
+                "id": 40,
+                "stat_id": 10,
+                "name": "accuracy",
+                "value": 5
+            }
+        ],
+        "std_sphere_grid": {
+            "id": 13,
+            "type": "standard",
+            "hp": 3200,
+            "mp": 120,
+            "strength": 25,
+            "defense": 15,
+            "magic": 18,
+            "magic_defense": 14,
+            "agility": 44,
+            "luck": 1,
+            "evasion": 0,
+            "accuracy": 12,
+            "lv_1_locks": 2,
+            "lv_2_locks": 1,
+            "lv_3_locks": 4,
+            "lv_4_locks": 7,
+            "empty_nodes": 22
+        },
+        "exp_sphere_grid": {
+            "id": 14,
+            "type": "expert",
+            "hp": 3200,
+            "mp": 240,
+            "strength": 19,
+            "defense": 11,
+            "magic": 19,
+            "magic_defense": 11,
+            "agility": 42,
+            "luck": 9,
+            "evasion": 4,
+            "accuracy": 11,
+            "lv_1_locks": 1,
+            "lv_2_locks": 4,
+            "lv_3_locks": 8,
+            "lv_4_locks": 5,
+            "empty_nodes": 50
+        }
+    },
+    {
+        "id": 8,
+        "player_unit_id": 8,
+        "name": "seymour",
+        "type": "character",
+        "location_area": {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "ridge",
+            "version": null
+        },
+        "area_id": 103,
+        "is_story_based": true,
+        "weapon_type": "seymour-staff",
+        "armor_type": "seymour-armor",
+        "physical_attack_range": 1,
+        "can_fight_underwater": false,
+        "base_stats": [
+            {
+                "id": 49,
+                "stat_id": 1,
+                "name": "hp",
+                "value": 1200
+            },
+            {
+                "id": 50,
+                "stat_id": 2,
+                "name": "mp",
+                "value": 999
+            },
+            {
+                "id": 43,
+                "stat_id": 3,
+                "name": "strength",
+                "value": 20
+            },
+            {
+                "id": 51,
+                "stat_id": 4,
+                "name": "defense",
+                "value": 25
+            },
+            {
+                "id": 52,
+                "stat_id": 5,
+                "name": "magic",
+                "value": 35
+            },
+            {
+                "id": 53,
+                "stat_id": 6,
+                "name": "magic defense",
+                "value": 100
+            },
+            {
+                "id": 54,
+                "stat_id": 7,
+                "name": "agility",
+                "value": 20
+            },
+            {
+                "id": 8,
+                "stat_id": 8,
+                "name": "luck",
+                "value": 18
+            },
+            {
+                "id": 9,
+                "stat_id": 9,
+                "name": "evasion",
+                "value": 10
+            },
+            {
+                "id": 10,
+                "stat_id": 10,
+                "name": "accuracy",
+                "value": 10
+            }
+        ],
+        "std_sphere_grid": null,
+        "exp_sphere_grid": null
     }
-  },
-  {
-    "ID": 2,
-    "name": "yuna",
-    "Type": "character",
-    "location_area": {
-      "location": "besaid",
-      "sublocation": "besaid village",
-      "area": "besaid village",
-      "version": null
-    },
-    "AreaID": 36,
-    "is_story_based": false,
-    "weapon_type": "staff",
-    "armor_type": "ring",
-    "physical_attack_range": 1,
-    "can_fight_underwater": false,
-    "base_stats": [
-      {
-        "ID": 11,
-        "StatID": 1,
-        "name": "hp",
-        "value": 475
-      },
-      {
-        "ID": 12,
-        "StatID": 2,
-        "name": "mp",
-        "value": 84
-      },
-      {
-        "ID": 13,
-        "StatID": 3,
-        "name": "strength",
-        "value": 5
-      },
-      {
-        "ID": 14,
-        "StatID": 4,
-        "name": "defense",
-        "value": 5
-      },
-      {
-        "ID": 15,
-        "StatID": 5,
-        "name": "magic",
-        "value": 20
-      },
-      {
-        "ID": 16,
-        "StatID": 6,
-        "name": "magic defense",
-        "value": 20
-      },
-      {
-        "ID": 7,
-        "StatID": 7,
-        "name": "agility",
-        "value": 10
-      },
-      {
-        "ID": 17,
-        "StatID": 8,
-        "name": "luck",
-        "value": 17
-      },
-      {
-        "ID": 18,
-        "StatID": 9,
-        "name": "evasion",
-        "value": 30
-      },
-      {
-        "ID": 19,
-        "StatID": 10,
-        "name": "accuracy",
-        "value": 3
-      }
-    ],
-    "std_sphere_grid": {
-      "ID": 3,
-      "Type": "standard",
-      "hp": 2600,
-      "mp": 240,
-      "strength": 10,
-      "defense": 10,
-      "magic": 41,
-      "magic_defense": 36,
-      "agility": 36,
-      "luck": 10,
-      "evasion": 38,
-      "accuracy": 4,
-      "lv_1_locks": 1,
-      "lv_2_locks": 2,
-      "lv_3_locks": 4,
-      "lv_4_locks": 10,
-      "empty_nodes": 36
-    },
-    "exp_sphere_grid": {
-      "ID": 4,
-      "Type": "expert",
-      "hp": 1800,
-      "mp": 220,
-      "strength": 20,
-      "defense": 23,
-      "magic": 41,
-      "magic_defense": 33,
-      "agility": 27,
-      "luck": 0,
-      "evasion": 28,
-      "accuracy": 0,
-      "lv_1_locks": 1,
-      "lv_2_locks": 3,
-      "lv_3_locks": 3,
-      "lv_4_locks": 1,
-      "empty_nodes": 43
-    }
-  },
-  {
-    "ID": 3,
-    "name": "wakka",
-    "Type": "character",
-    "location_area": {
-      "location": "besaid",
-      "sublocation": "besaid",
-      "area": "beach",
-      "version": null
-    },
-    "AreaID": 20,
-    "is_story_based": false,
-    "weapon_type": "blitzball",
-    "armor_type": "armguard",
-    "physical_attack_range": 4,
-    "can_fight_underwater": true,
-    "base_stats": [
-      {
-        "ID": 20,
-        "StatID": 1,
-        "name": "hp",
-        "value": 618
-      },
-      {
-        "ID": 21,
-        "StatID": 2,
-        "name": "mp",
-        "value": 10
-      },
-      {
-        "ID": 22,
-        "StatID": 3,
-        "name": "strength",
-        "value": 14
-      },
-      {
-        "ID": 4,
-        "StatID": 4,
-        "name": "defense",
-        "value": 10
-      },
-      {
-        "ID": 23,
-        "StatID": 5,
-        "name": "magic",
-        "value": 10
-      },
-      {
-        "ID": 6,
-        "StatID": 6,
-        "name": "magic defense",
-        "value": 5
-      },
-      {
-        "ID": 24,
-        "StatID": 7,
-        "name": "agility",
-        "value": 7
-      },
-      {
-        "ID": 25,
-        "StatID": 8,
-        "name": "luck",
-        "value": 19
-      },
-      {
-        "ID": 26,
-        "StatID": 9,
-        "name": "evasion",
-        "value": 5
-      },
-      {
-        "ID": 27,
-        "StatID": 10,
-        "name": "accuracy",
-        "value": 25
-      }
-    ],
-    "std_sphere_grid": {
-      "ID": 5,
-      "Type": "standard",
-      "hp": 3800,
-      "mp": 180,
-      "strength": 40,
-      "defense": 20,
-      "magic": 27,
-      "magic_defense": 0,
-      "agility": 29,
-      "luck": 1,
-      "evasion": 13,
-      "accuracy": 25,
-      "lv_1_locks": 2,
-      "lv_2_locks": 2,
-      "lv_3_locks": 2,
-      "lv_4_locks": 3,
-      "empty_nodes": 32
-    },
-    "exp_sphere_grid": {
-      "ID": 6,
-      "Type": "expert",
-      "hp": 3400,
-      "mp": 120,
-      "strength": 31,
-      "defense": 21,
-      "magic": 27,
-      "magic_defense": 0,
-      "agility": 16,
-      "luck": 2,
-      "evasion": 10,
-      "accuracy": 26,
-      "lv_1_locks": 2,
-      "lv_2_locks": 0,
-      "lv_3_locks": 2,
-      "lv_4_locks": 0,
-      "empty_nodes": 26
-    }
-  },
-  {
-    "ID": 4,
-    "name": "lulu",
-    "Type": "character",
-    "location_area": {
-      "location": "besaid",
-      "sublocation": "besaid village",
-      "area": "besaid village",
-      "version": null
-    },
-    "AreaID": 36,
-    "is_story_based": false,
-    "weapon_type": "doll",
-    "armor_type": "bangle",
-    "physical_attack_range": 1,
-    "can_fight_underwater": false,
-    "base_stats": [
-      {
-        "ID": 28,
-        "StatID": 1,
-        "name": "hp",
-        "value": 380
-      },
-      {
-        "ID": 29,
-        "StatID": 2,
-        "name": "mp",
-        "value": 92
-      },
-      {
-        "ID": 13,
-        "StatID": 3,
-        "name": "strength",
-        "value": 5
-      },
-      {
-        "ID": 30,
-        "StatID": 4,
-        "name": "defense",
-        "value": 8
-      },
-      {
-        "ID": 15,
-        "StatID": 5,
-        "name": "magic",
-        "value": 20
-      },
-      {
-        "ID": 31,
-        "StatID": 6,
-        "name": "magic defense",
-        "value": 30
-      },
-      {
-        "ID": 32,
-        "StatID": 7,
-        "name": "agility",
-        "value": 5
-      },
-      {
-        "ID": 17,
-        "StatID": 8,
-        "name": "luck",
-        "value": 17
-      },
-      {
-        "ID": 33,
-        "StatID": 9,
-        "name": "evasion",
-        "value": 40
-      },
-      {
-        "ID": 19,
-        "StatID": 10,
-        "name": "accuracy",
-        "value": 3
-      }
-    ],
-    "std_sphere_grid": {
-      "ID": 7,
-      "Type": "standard",
-      "hp": 2200,
-      "mp": 340,
-      "strength": 11,
-      "defense": 48,
-      "magic": 36,
-      "magic_defense": 60,
-      "agility": 16,
-      "luck": 4,
-      "evasion": 44,
-      "accuracy": 2,
-      "lv_1_locks": 1,
-      "lv_2_locks": 5,
-      "lv_3_locks": 5,
-      "lv_4_locks": 6,
-      "empty_nodes": 20
-    },
-    "exp_sphere_grid": {
-      "ID": 8,
-      "Type": "expert",
-      "hp": 2200,
-      "mp": 240,
-      "strength": 10,
-      "defense": 30,
-      "magic": 34,
-      "magic_defense": 48,
-      "agility": 17,
-      "luck": 0,
-      "evasion": 43,
-      "accuracy": 10,
-      "lv_1_locks": 1,
-      "lv_2_locks": 3,
-      "lv_3_locks": 3,
-      "lv_4_locks": 4,
-      "empty_nodes": 32
-    }
-  },
-  {
-    "ID": 5,
-    "name": "kimahri",
-    "Type": "character",
-    "location_area": {
-      "location": "ss liki",
-      "sublocation": "ss liki",
-      "area": "deck",
-      "version": null
-    },
-    "AreaID": 42,
-    "is_story_based": false,
-    "weapon_type": "spear",
-    "armor_type": "armlet",
-    "physical_attack_range": 1,
-    "can_fight_underwater": false,
-    "base_stats": [
-      {
-        "ID": 34,
-        "StatID": 1,
-        "name": "hp",
-        "value": 644
-      },
-      {
-        "ID": 35,
-        "StatID": 2,
-        "name": "mp",
-        "value": 78
-      },
-      {
-        "ID": 36,
-        "StatID": 3,
-        "name": "strength",
-        "value": 16
-      },
-      {
-        "ID": 37,
-        "StatID": 4,
-        "name": "defense",
-        "value": 15
-      },
-      {
-        "ID": 38,
-        "StatID": 5,
-        "name": "magic",
-        "value": 17
-      },
-      {
-        "ID": 6,
-        "StatID": 6,
-        "name": "magic defense",
-        "value": 5
-      },
-      {
-        "ID": 39,
-        "StatID": 7,
-        "name": "agility",
-        "value": 6
-      },
-      {
-        "ID": 8,
-        "StatID": 8,
-        "name": "luck",
-        "value": 18
-      },
-      {
-        "ID": 26,
-        "StatID": 9,
-        "name": "evasion",
-        "value": 5
-      },
-      {
-        "ID": 40,
-        "StatID": 10,
-        "name": "accuracy",
-        "value": 5
-      }
-    ],
-    "std_sphere_grid": {
-      "ID": 9,
-      "Type": "standard",
-      "hp": 1400,
-      "mp": 100,
-      "strength": 11,
-      "defense": 9,
-      "magic": 6,
-      "magic_defense": 2,
-      "agility": 7,
-      "luck": 0,
-      "evasion": 0,
-      "accuracy": 6,
-      "lv_1_locks": 3,
-      "lv_2_locks": 1,
-      "lv_3_locks": 0,
-      "lv_4_locks": 4,
-      "empty_nodes": 11
-    },
-    "exp_sphere_grid": {
-      "ID": 10,
-      "Type": "expert",
-      "hp": 200,
-      "mp": 0,
-      "strength": 2,
-      "defense": 2,
-      "magic": 2,
-      "magic_defense": 0,
-      "agility": 0,
-      "luck": 0,
-      "evasion": 0,
-      "accuracy": 0,
-      "lv_1_locks": 1,
-      "lv_2_locks": 0,
-      "lv_3_locks": 0,
-      "lv_4_locks": 0,
-      "empty_nodes": 7
-    }
-  },
-  {
-    "ID": 6,
-    "name": "auron",
-    "Type": "character",
-    "location_area": {
-      "location": "luca",
-      "sublocation": "stadium",
-      "area": "blitzball field",
-      "version": null
-    },
-    "AreaID": 74,
-    "is_story_based": false,
-    "weapon_type": "blade",
-    "armor_type": "bracer",
-    "physical_attack_range": 1,
-    "can_fight_underwater": false,
-    "base_stats": [
-      {
-        "ID": 41,
-        "StatID": 1,
-        "name": "hp",
-        "value": 1030
-      },
-      {
-        "ID": 42,
-        "StatID": 2,
-        "name": "mp",
-        "value": 33
-      },
-      {
-        "ID": 43,
-        "StatID": 3,
-        "name": "strength",
-        "value": 20
-      },
-      {
-        "ID": 37,
-        "StatID": 4,
-        "name": "defense",
-        "value": 15
-      },
-      {
-        "ID": 5,
-        "StatID": 5,
-        "name": "magic",
-        "value": 5
-      },
-      {
-        "ID": 6,
-        "StatID": 6,
-        "name": "magic defense",
-        "value": 5
-      },
-      {
-        "ID": 32,
-        "StatID": 7,
-        "name": "agility",
-        "value": 5
-      },
-      {
-        "ID": 17,
-        "StatID": 8,
-        "name": "luck",
-        "value": 17
-      },
-      {
-        "ID": 26,
-        "StatID": 9,
-        "name": "evasion",
-        "value": 5
-      },
-      {
-        "ID": 19,
-        "StatID": 10,
-        "name": "accuracy",
-        "value": 3
-      }
-    ],
-    "std_sphere_grid": {
-      "ID": 11,
-      "Type": "standard",
-      "hp": 3600,
-      "mp": 120,
-      "strength": 36,
-      "defense": 22,
-      "magic": 6,
-      "magic_defense": 8,
-      "agility": 12,
-      "luck": 1,
-      "evasion": 10,
-      "accuracy": 1,
-      "lv_1_locks": 1,
-      "lv_2_locks": 1,
-      "lv_3_locks": 4,
-      "lv_4_locks": 3,
-      "empty_nodes": 37
-    },
-    "exp_sphere_grid": {
-      "ID": 12,
-      "Type": "expert",
-      "hp": 3400,
-      "mp": 40,
-      "strength": 43,
-      "defense": 23,
-      "magic": 6,
-      "magic_defense": 22,
-      "agility": 11,
-      "luck": 0,
-      "evasion": 8,
-      "accuracy": 1,
-      "lv_1_locks": 2,
-      "lv_2_locks": 2,
-      "lv_3_locks": 2,
-      "lv_4_locks": 2,
-      "empty_nodes": 34
-    }
-  },
-  {
-    "ID": 7,
-    "name": "rikku",
-    "Type": "character",
-    "location_area": {
-      "location": "moonflow",
-      "sublocation": "moonflow",
-      "area": "north bank",
-      "version": null
-    },
-    "AreaID": 127,
-    "is_story_based": false,
-    "weapon_type": "claw",
-    "armor_type": "targe",
-    "physical_attack_range": 1,
-    "can_fight_underwater": true,
-    "base_stats": [
-      {
-        "ID": 44,
-        "StatID": 1,
-        "name": "hp",
-        "value": 360
-      },
-      {
-        "ID": 45,
-        "StatID": 2,
-        "name": "mp",
-        "value": 85
-      },
-      {
-        "ID": 46,
-        "StatID": 3,
-        "name": "strength",
-        "value": 10
-      },
-      {
-        "ID": 30,
-        "StatID": 4,
-        "name": "defense",
-        "value": 8
-      },
-      {
-        "ID": 23,
-        "StatID": 5,
-        "name": "magic",
-        "value": 10
-      },
-      {
-        "ID": 47,
-        "StatID": 6,
-        "name": "magic defense",
-        "value": 8
-      },
-      {
-        "ID": 48,
-        "StatID": 7,
-        "name": "agility",
-        "value": 16
-      },
-      {
-        "ID": 8,
-        "StatID": 8,
-        "name": "luck",
-        "value": 18
-      },
-      {
-        "ID": 26,
-        "StatID": 9,
-        "name": "evasion",
-        "value": 5
-      },
-      {
-        "ID": 40,
-        "StatID": 10,
-        "name": "accuracy",
-        "value": 5
-      }
-    ],
-    "std_sphere_grid": {
-      "ID": 13,
-      "Type": "standard",
-      "hp": 3200,
-      "mp": 120,
-      "strength": 25,
-      "defense": 15,
-      "magic": 18,
-      "magic_defense": 14,
-      "agility": 44,
-      "luck": 1,
-      "evasion": 0,
-      "accuracy": 12,
-      "lv_1_locks": 2,
-      "lv_2_locks": 1,
-      "lv_3_locks": 4,
-      "lv_4_locks": 7,
-      "empty_nodes": 22
-    },
-    "exp_sphere_grid": {
-      "ID": 14,
-      "Type": "expert",
-      "hp": 3200,
-      "mp": 240,
-      "strength": 19,
-      "defense": 11,
-      "magic": 19,
-      "magic_defense": 11,
-      "agility": 42,
-      "luck": 9,
-      "evasion": 4,
-      "accuracy": 11,
-      "lv_1_locks": 1,
-      "lv_2_locks": 4,
-      "lv_3_locks": 8,
-      "lv_4_locks": 5,
-      "empty_nodes": 50
-    }
-  },
-  {
-    "ID": 8,
-    "name": "seymour",
-    "Type": "character",
-    "location_area": {
-      "location": "mushroom rock road",
-      "sublocation": "mushroom rock",
-      "area": "ridge",
-      "version": null
-    },
-    "AreaID": 103,
-    "is_story_based": true,
-    "weapon_type": "seymour-staff",
-    "armor_type": "seymour-armor",
-    "physical_attack_range": 1,
-    "can_fight_underwater": false,
-    "base_stats": [
-      {
-        "ID": 49,
-        "StatID": 1,
-        "name": "hp",
-        "value": 1200
-      },
-      {
-        "ID": 50,
-        "StatID": 2,
-        "name": "mp",
-        "value": 999
-      },
-      {
-        "ID": 43,
-        "StatID": 3,
-        "name": "strength",
-        "value": 20
-      },
-      {
-        "ID": 51,
-        "StatID": 4,
-        "name": "defense",
-        "value": 25
-      },
-      {
-        "ID": 52,
-        "StatID": 5,
-        "name": "magic",
-        "value": 35
-      },
-      {
-        "ID": 53,
-        "StatID": 6,
-        "name": "magic defense",
-        "value": 100
-      },
-      {
-        "ID": 54,
-        "StatID": 7,
-        "name": "agility",
-        "value": 20
-      },
-      {
-        "ID": 8,
-        "StatID": 8,
-        "name": "luck",
-        "value": 18
-      },
-      {
-        "ID": 9,
-        "StatID": 9,
-        "name": "evasion",
-        "value": 10
-      },
-      {
-        "ID": 10,
-        "StatID": 10,
-        "name": "accuracy",
-        "value": 10
-      }
-    ],
-    "std_sphere_grid": null,
-    "exp_sphere_grid": null
-  }
 ]

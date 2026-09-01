@@ -7,10 +7,10 @@ import (
 )
 
 type ShopItem struct {
-	ID     int32
-	ItemID int32
-	Name   string `json:"name"`
-	Price  int32  `json:"price"`
+	ID     int32	`json:"id"`
+	ItemID int32	`json:"item_id"`
+	Name   string 	`json:"name"`
+	Price  int32  	`json:"price"`
 }
 
 func (s ShopItem) ToHashFields() []any {
@@ -41,11 +41,11 @@ func (s ShopItem) Error() string {
 }
 
 type ShopEquipment struct {
-	ID       int32
-	ShopID   int32
-	ShopType database.ShopType
+	ID       int32				`json:"id"`
+	ShopID   int32				`json:"shop_id"`
+	ShopType database.ShopType	`json:"type"`
 	TreasureEquipment
-	Price int32 `json:"price"`
+	Price int32 				`json:"price"`
 }
 
 func (s ShopEquipment) ToHashFields() []any {

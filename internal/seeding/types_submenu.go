@@ -7,12 +7,12 @@ import (
 )
 
 type Submenu struct {
-	ID          int32
-	Name        string  `json:"name"`
-	Description *string `json:"description"`
-	Effect      string  `json:"effect"`
-	Topmenu     *string `json:"topmenu"`
-	TopmenuID   *int32
+	ID          int32	 `json:"id"`
+	Name        string   `json:"name"`
+	Description *string  `json:"description"`
+	Effect      string   `json:"effect"`
+	Topmenu     *string  `json:"topmenu"`
+	TopmenuID   *int32	 `json:"topmenu_id"`
 	Users       []string `json:"users"`
 }
 

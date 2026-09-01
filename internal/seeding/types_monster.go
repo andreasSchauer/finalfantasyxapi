@@ -7,7 +7,7 @@ import (
 )
 
 type Monster struct {
-	ID                   int32
+	ID                   int32			   `json:"id"`
 	Name                 string            `json:"name"`
 	Version              *int32            `json:"version"`
 	Specification        *string           `json:"specification"`

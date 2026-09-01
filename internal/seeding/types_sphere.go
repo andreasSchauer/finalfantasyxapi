@@ -7,8 +7,8 @@ import (
 )
 
 type Sphere struct {
-	ID                 int32
-	ItemID             int32
+	ID                 int32		`json:"id"`
+	ItemID             int32		`json:"item_id"`
 	Name               string       `json:"name"`
 	SgDescription      string       `json:"sphere_grid_description"`
 	SphereColor        string       `json:"sphere_color"`
@@ -54,7 +54,7 @@ func (s Sphere) GetResParamsNamed() ResParamsNamed {
 }
 
 type CreatedNode struct {
-	ID    int32
+	ID    int32	 `json:"created_node_id"`
 	Node  string `json:"node"`
 	Value int32  `json:"value"`
 }
@@ -76,8 +76,8 @@ func (n CreatedNode) Error() string {
 }
 
 type TargetableNode struct {
-	SphereID int32
-	Node     string
+	SphereID int32	`json:"sphere_id"`
+	Node     string	`json:"node"`
 }
 
 func (n TargetableNode) ToHashFields() []any {

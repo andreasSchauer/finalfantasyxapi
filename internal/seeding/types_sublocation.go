@@ -5,7 +5,7 @@ import (
 )
 
 type Sublocation struct {
-	ID   			int32
+	ID   			int32	`json:"id"`
 	Name 			string 	`json:"sublocation"`
 	Availability 	string	`json:"availability"`
 	Areas    		[]Area 	`json:"areas"`

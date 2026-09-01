@@ -16,9 +16,9 @@ func (tl TreasureList) Error() string {
 }
 
 type Treasure struct {
-	ID              int32
-	Version         int32
-	AreaID          int32
+	ID              int32			   `json:"id"`
+	Version         int32			   `json:"version"`
+	AreaID          int32			   `json:"area_id"`
 	TreasureType    string             `json:"treasure_type"`
 	LootType        string             `json:"loot_type"`
 	Availability    string             `json:"availability"`

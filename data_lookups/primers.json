@@ -1,184 +1,184 @@
 [
-  {
-    "ID": 1,
-    "name": "al bhed primer i",
-    "al_bhed_letter": "a",
-    "english_letter": "e",
-    "KeyItemID": 35
-  },
-  {
-    "ID": 2,
-    "name": "al bhed primer ii",
-    "al_bhed_letter": "b",
-    "english_letter": "p",
-    "KeyItemID": 36
-  },
-  {
-    "ID": 3,
-    "name": "al bhed primer iii",
-    "al_bhed_letter": "c",
-    "english_letter": "s",
-    "KeyItemID": 37
-  },
-  {
-    "ID": 4,
-    "name": "al bhed primer iv",
-    "al_bhed_letter": "d",
-    "english_letter": "t",
-    "KeyItemID": 38
-  },
-  {
-    "ID": 5,
-    "name": "al bhed primer v",
-    "al_bhed_letter": "e",
-    "english_letter": "i",
-    "KeyItemID": 39
-  },
-  {
-    "ID": 6,
-    "name": "al bhed primer vi",
-    "al_bhed_letter": "f",
-    "english_letter": "w",
-    "KeyItemID": 40
-  },
-  {
-    "ID": 7,
-    "name": "al bhed primer vii",
-    "al_bhed_letter": "g",
-    "english_letter": "k",
-    "KeyItemID": 41
-  },
-  {
-    "ID": 8,
-    "name": "al bhed primer viii",
-    "al_bhed_letter": "h",
-    "english_letter": "n",
-    "KeyItemID": 42
-  },
-  {
-    "ID": 9,
-    "name": "al bhed primer ix",
-    "al_bhed_letter": "i",
-    "english_letter": "u",
-    "KeyItemID": 43
-  },
-  {
-    "ID": 10,
-    "name": "al bhed primer x",
-    "al_bhed_letter": "j",
-    "english_letter": "v",
-    "KeyItemID": 44
-  },
-  {
-    "ID": 11,
-    "name": "al bhed primer xi",
-    "al_bhed_letter": "k",
-    "english_letter": "g",
-    "KeyItemID": 45
-  },
-  {
-    "ID": 12,
-    "name": "al bhed primer xii",
-    "al_bhed_letter": "l",
-    "english_letter": "c",
-    "KeyItemID": 46
-  },
-  {
-    "ID": 13,
-    "name": "al bhed primer xiii",
-    "al_bhed_letter": "m",
-    "english_letter": "l",
-    "KeyItemID": 47
-  },
-  {
-    "ID": 14,
-    "name": "al bhed primer xiv",
-    "al_bhed_letter": "n",
-    "english_letter": "r",
-    "KeyItemID": 48
-  },
-  {
-    "ID": 15,
-    "name": "al bhed primer xv",
-    "al_bhed_letter": "o",
-    "english_letter": "y",
-    "KeyItemID": 49
-  },
-  {
-    "ID": 16,
-    "name": "al bhed primer xvi",
-    "al_bhed_letter": "p",
-    "english_letter": "b",
-    "KeyItemID": 50
-  },
-  {
-    "ID": 17,
-    "name": "al bhed primer xvii",
-    "al_bhed_letter": "q",
-    "english_letter": "x",
-    "KeyItemID": 51
-  },
-  {
-    "ID": 18,
-    "name": "al bhed primer xviii",
-    "al_bhed_letter": "r",
-    "english_letter": "h",
-    "KeyItemID": 52
-  },
-  {
-    "ID": 19,
-    "name": "al bhed primer xix",
-    "al_bhed_letter": "s",
-    "english_letter": "m",
-    "KeyItemID": 53
-  },
-  {
-    "ID": 20,
-    "name": "al bhed primer xx",
-    "al_bhed_letter": "t",
-    "english_letter": "d",
-    "KeyItemID": 54
-  },
-  {
-    "ID": 21,
-    "name": "al bhed primer xxi",
-    "al_bhed_letter": "u",
-    "english_letter": "o",
-    "KeyItemID": 55
-  },
-  {
-    "ID": 22,
-    "name": "al bhed primer xxii",
-    "al_bhed_letter": "v",
-    "english_letter": "f",
-    "KeyItemID": 56
-  },
-  {
-    "ID": 23,
-    "name": "al bhed primer xxiii",
-    "al_bhed_letter": "w",
-    "english_letter": "z",
-    "KeyItemID": 57
-  },
-  {
-    "ID": 24,
-    "name": "al bhed primer xxiv",
-    "al_bhed_letter": "x",
-    "english_letter": "q",
-    "KeyItemID": 58
-  },
-  {
-    "ID": 25,
-    "name": "al bhed primer xxv",
-    "al_bhed_letter": "y",
-    "english_letter": "a",
-    "KeyItemID": 59
-  },
-  {
-    "ID": 26,
-    "name": "al bhed primer xxvi",
-    "al_bhed_letter": "z",
-    "english_letter": "j",
-    "KeyItemID": 60
-  }
+    {
+        "id": 1,
+        "name": "al bhed primer i",
+        "al_bhed_letter": "a",
+        "english_letter": "e",
+        "key_item_id": 35
+    },
+    {
+        "id": 2,
+        "name": "al bhed primer ii",
+        "al_bhed_letter": "b",
+        "english_letter": "p",
+        "key_item_id": 36
+    },
+    {
+        "id": 3,
+        "name": "al bhed primer iii",
+        "al_bhed_letter": "c",
+        "english_letter": "s",
+        "key_item_id": 37
+    },
+    {
+        "id": 4,
+        "name": "al bhed primer iv",
+        "al_bhed_letter": "d",
+        "english_letter": "t",
+        "key_item_id": 38
+    },
+    {
+        "id": 5,
+        "name": "al bhed primer v",
+        "al_bhed_letter": "e",
+        "english_letter": "i",
+        "key_item_id": 39
+    },
+    {
+        "id": 6,
+        "name": "al bhed primer vi",
+        "al_bhed_letter": "f",
+        "english_letter": "w",
+        "key_item_id": 40
+    },
+    {
+        "id": 7,
+        "name": "al bhed primer vii",
+        "al_bhed_letter": "g",
+        "english_letter": "k",
+        "key_item_id": 41
+    },
+    {
+        "id": 8,
+        "name": "al bhed primer viii",
+        "al_bhed_letter": "h",
+        "english_letter": "n",
+        "key_item_id": 42
+    },
+    {
+        "id": 9,
+        "name": "al bhed primer ix",
+        "al_bhed_letter": "i",
+        "english_letter": "u",
+        "key_item_id": 43
+    },
+    {
+        "id": 10,
+        "name": "al bhed primer x",
+        "al_bhed_letter": "j",
+        "english_letter": "v",
+        "key_item_id": 44
+    },
+    {
+        "id": 11,
+        "name": "al bhed primer xi",
+        "al_bhed_letter": "k",
+        "english_letter": "g",
+        "key_item_id": 45
+    },
+    {
+        "id": 12,
+        "name": "al bhed primer xii",
+        "al_bhed_letter": "l",
+        "english_letter": "c",
+        "key_item_id": 46
+    },
+    {
+        "id": 13,
+        "name": "al bhed primer xiii",
+        "al_bhed_letter": "m",
+        "english_letter": "l",
+        "key_item_id": 47
+    },
+    {
+        "id": 14,
+        "name": "al bhed primer xiv",
+        "al_bhed_letter": "n",
+        "english_letter": "r",
+        "key_item_id": 48
+    },
+    {
+        "id": 15,
+        "name": "al bhed primer xv",
+        "al_bhed_letter": "o",
+        "english_letter": "y",
+        "key_item_id": 49
+    },
+    {
+        "id": 16,
+        "name": "al bhed primer xvi",
+        "al_bhed_letter": "p",
+        "english_letter": "b",
+        "key_item_id": 50
+    },
+    {
+        "id": 17,
+        "name": "al bhed primer xvii",
+        "al_bhed_letter": "q",
+        "english_letter": "x",
+        "key_item_id": 51
+    },
+    {
+        "id": 18,
+        "name": "al bhed primer xviii",
+        "al_bhed_letter": "r",
+        "english_letter": "h",
+        "key_item_id": 52
+    },
+    {
+        "id": 19,
+        "name": "al bhed primer xix",
+        "al_bhed_letter": "s",
+        "english_letter": "m",
+        "key_item_id": 53
+    },
+    {
+        "id": 20,
+        "name": "al bhed primer xx",
+        "al_bhed_letter": "t",
+        "english_letter": "d",
+        "key_item_id": 54
+    },
+    {
+        "id": 21,
+        "name": "al bhed primer xxi",
+        "al_bhed_letter": "u",
+        "english_letter": "o",
+        "key_item_id": 55
+    },
+    {
+        "id": 22,
+        "name": "al bhed primer xxii",
+        "al_bhed_letter": "v",
+        "english_letter": "f",
+        "key_item_id": 56
+    },
+    {
+        "id": 23,
+        "name": "al bhed primer xxiii",
+        "al_bhed_letter": "w",
+        "english_letter": "z",
+        "key_item_id": 57
+    },
+    {
+        "id": 24,
+        "name": "al bhed primer xxiv",
+        "al_bhed_letter": "x",
+        "english_letter": "q",
+        "key_item_id": 58
+    },
+    {
+        "id": 25,
+        "name": "al bhed primer xxv",
+        "al_bhed_letter": "y",
+        "english_letter": "a",
+        "key_item_id": 59
+    },
+    {
+        "id": 26,
+        "name": "al bhed primer xxvi",
+        "al_bhed_letter": "z",
+        "english_letter": "j",
+        "key_item_id": 60
+    }
 ]

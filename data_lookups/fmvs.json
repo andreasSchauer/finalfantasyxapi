@@ -1,782 +1,782 @@
 [
-  {
-    "ID": 1,
-    "name": "zanarkand",
-    "translation": null,
-    "cutscene_description": "Dream Zanarkand: The blitzball game and Sin's Attack.",
-    "music": "otherworld",
-    "location_area": {
-      "location": "zanarkand",
-      "sublocation": "zanarkand",
-      "area": "stadium entrance",
-      "version": 1
+    {
+        "id": 1,
+        "name": "zanarkand",
+        "translation": null,
+        "cutscene_description": "Dream Zanarkand: The blitzball game and Sin's Attack.",
+        "music": "otherworld",
+        "location_area": {
+            "location": "zanarkand",
+            "sublocation": "zanarkand",
+            "area": "stadium entrance",
+            "version": 1
+        },
+        "song_id": 5,
+        "area_id": 3
     },
-    "SongID": 5,
-    "AreaID": 3
-  },
-  {
-    "ID": 2,
-    "name": "we called it 'sin'",
-    "translation": null,
-    "cutscene_description": "Dream Zanarkand: Tidus and Auron look at Sin.",
-    "music": "run!!",
-    "location_area": {
-      "location": "zanarkand",
-      "sublocation": "zanarkand",
-      "area": "overpass",
-      "version": 2
+    {
+        "id": 2,
+        "name": "we called it 'sin'",
+        "translation": null,
+        "cutscene_description": "Dream Zanarkand: Tidus and Auron look at Sin.",
+        "music": "run!!",
+        "location_area": {
+            "location": "zanarkand",
+            "sublocation": "zanarkand",
+            "area": "overpass",
+            "version": 2
+        },
+        "song_id": 6,
+        "area_id": 5
     },
-    "SongID": 6,
-    "AreaID": 5
-  },
-  {
-    "ID": 3,
-    "name": "sinspawn",
-    "translation": null,
-    "cutscene_description": "Dream Zanarkand: Sin dispatches its spawns and scales.",
-    "music": "run!!",
-    "location_area": {
-      "location": "zanarkand",
-      "sublocation": "zanarkand",
-      "area": "overpass",
-      "version": 2
+    {
+        "id": 3,
+        "name": "sinspawn",
+        "translation": null,
+        "cutscene_description": "Dream Zanarkand: Sin dispatches its spawns and scales.",
+        "music": "run!!",
+        "location_area": {
+            "location": "zanarkand",
+            "sublocation": "zanarkand",
+            "area": "overpass",
+            "version": 2
+        },
+        "song_id": 6,
+        "area_id": 5
     },
-    "SongID": 6,
-    "AreaID": 5
-  },
-  {
-    "ID": 4,
-    "name": "this is it!",
-    "translation": null,
-    "cutscene_description": "Dream Zanarkand: Tidus and Auron get absorbed by Sin.",
-    "music": "this is your story",
-    "location_area": {
-      "location": "zanarkand",
-      "sublocation": "zanarkand",
-      "area": "overpass",
-      "version": 2
+    {
+        "id": 4,
+        "name": "this is it!",
+        "translation": null,
+        "cutscene_description": "Dream Zanarkand: Tidus and Auron get absorbed by Sin.",
+        "music": "this is your story",
+        "location_area": {
+            "location": "zanarkand",
+            "sublocation": "zanarkand",
+            "area": "overpass",
+            "version": 2
+        },
+        "song_id": 7,
+        "area_id": 5
     },
-    "SongID": 7,
-    "AreaID": 5
-  },
-  {
-    "ID": 5,
-    "name": "blitzball!",
-    "translation": null,
-    "cutscene_description": "Besaid: Tidus shoots the Blitzball after waking up on the beach.",
-    "music": "the blitzers",
-    "location_area": {
-      "location": "besaid",
-      "sublocation": "besaid",
-      "area": "beach",
-      "version": null
+    {
+        "id": 5,
+        "name": "blitzball!",
+        "translation": null,
+        "cutscene_description": "Besaid: Tidus shoots the Blitzball after waking up on the beach.",
+        "music": "the blitzers",
+        "location_area": {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "beach",
+            "version": null
+        },
+        "song_id": 17,
+        "area_id": 20
     },
-    "SongID": 17,
-    "AreaID": 20
-  },
-  {
-    "ID": 6,
-    "name": "a summoner is born",
-    "translation": null,
-    "cutscene_description": "Besaid: Yuna exits the Chamber of the Fayth.",
-    "music": "hymn - valefor",
-    "location_area": {
-      "location": "besaid",
-      "sublocation": "besaid",
-      "area": "antechamber",
-      "version": null
+    {
+        "id": 6,
+        "name": "a summoner is born",
+        "translation": null,
+        "cutscene_description": "Besaid: Yuna exits the Chamber of the Fayth.",
+        "music": "hymn - valefor",
+        "location_area": {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "antechamber",
+            "version": null
+        },
+        "song_id": 23,
+        "area_id": 34
     },
-    "SongID": 23,
-    "AreaID": 34
-  },
-  {
-    "ID": 7,
-    "name": "lulu's contempt",
-    "translation": null,
-    "cutscene_description": "Besaid: Lulu is scolding Wakka about Tidus at night.",
-    "music": null,
-    "location_area": {
-      "location": "besaid",
-      "sublocation": "besaid village",
-      "area": "crusaders lodge",
-      "version": null
+    {
+        "id": 7,
+        "name": "lulu's contempt",
+        "translation": null,
+        "cutscene_description": "Besaid: Lulu is scolding Wakka about Tidus at night.",
+        "music": null,
+        "location_area": {
+            "location": "besaid",
+            "sublocation": "besaid village",
+            "area": "crusaders lodge",
+            "version": null
+        },
+        "song_id": null,
+        "area_id": 41
     },
-    "SongID": null,
-    "AreaID": 41
-  },
-  {
-    "ID": 8,
-    "name": "kimahri's challenge",
-    "translation": null,
-    "cutscene_description": "Besaid: Kimahri confronts Tidus on their way to the S.S. Liki.",
-    "music": "decision on the dock",
-    "location_area": {
-      "location": "besaid",
-      "sublocation": "besaid",
-      "area": "ancient road",
-      "version": 1
+    {
+        "id": 8,
+        "name": "kimahri's challenge",
+        "translation": null,
+        "cutscene_description": "Besaid: Kimahri confronts Tidus on their way to the S.S. Liki.",
+        "music": "decision on the dock",
+        "location_area": {
+            "location": "besaid",
+            "sublocation": "besaid",
+            "area": "ancient road",
+            "version": 1
+        },
+        "song_id": 34,
+        "area_id": 24
     },
-    "SongID": 34,
-    "AreaID": 24
-  },
-  {
-    "ID": 9,
-    "name": "fear on the sea",
-    "translation": null,
-    "cutscene_description": "S.S. Liki: Sin appears near the S.S. Liki.",
-    "music": "enemy attack",
-    "location_area": {
-      "location": "ss liki",
-      "sublocation": "ss liki",
-      "area": "deck",
-      "version": null
+    {
+        "id": 9,
+        "name": "fear on the sea",
+        "translation": null,
+        "cutscene_description": "S.S. Liki: Sin appears near the S.S. Liki.",
+        "music": "enemy attack",
+        "location_area": {
+            "location": "ss liki",
+            "sublocation": "ss liki",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 16,
+        "area_id": 42
     },
-    "SongID": 16,
-    "AreaID": 42
-  },
-  {
-    "ID": 10,
-    "name": "sin arises",
-    "translation": null,
-    "cutscene_description": "S.S. Liki: Sin's Fin emerges from underwater.",
-    "music": "enemy attack",
-    "location_area": {
-      "location": "ss liki",
-      "sublocation": "ss liki",
-      "area": "deck",
-      "version": null
+    {
+        "id": 10,
+        "name": "sin arises",
+        "translation": null,
+        "cutscene_description": "S.S. Liki: Sin's Fin emerges from underwater.",
+        "music": "enemy attack",
+        "location_area": {
+            "location": "ss liki",
+            "sublocation": "ss liki",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 16,
+        "area_id": 42
     },
-    "SongID": 16,
-    "AreaID": 42
-  },
-  {
-    "ID": 11,
-    "name": "sin's threat",
-    "translation": null,
-    "cutscene_description": "S.S. Liki: The boat crew shoots harpoons to latch on to Sin's Fin.",
-    "music": "enemy attack",
-    "location_area": {
-      "location": "ss liki",
-      "sublocation": "ss liki",
-      "area": "deck",
-      "version": null
+    {
+        "id": 11,
+        "name": "sin's threat",
+        "translation": null,
+        "cutscene_description": "S.S. Liki: The boat crew shoots harpoons to latch on to Sin's Fin.",
+        "music": "enemy attack",
+        "location_area": {
+            "location": "ss liki",
+            "sublocation": "ss liki",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 16,
+        "area_id": 42
     },
-    "SongID": 16,
-    "AreaID": 42
-  },
-  {
-    "ID": 12,
-    "name": "futile resistance",
-    "translation": null,
-    "cutscene_description": "S.S. Liki: Sin drags the boat with it and dispatches its scales.",
-    "music": "enemy attack",
-    "location_area": {
-      "location": "ss liki",
-      "sublocation": "ss liki",
-      "area": "deck",
-      "version": null
+    {
+        "id": 12,
+        "name": "futile resistance",
+        "translation": null,
+        "cutscene_description": "S.S. Liki: Sin drags the boat with it and dispatches its scales.",
+        "music": "enemy attack",
+        "location_area": {
+            "location": "ss liki",
+            "sublocation": "ss liki",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 16,
+        "area_id": 42
     },
-    "SongID": 16,
-    "AreaID": 42
-  },
-  {
-    "ID": 13,
-    "name": "failure",
-    "translation": null,
-    "cutscene_description": "S.S. Liki: Sin escapes from the S.S. Liki.",
-    "music": "enemy attack",
-    "location_area": {
-      "location": "ss liki",
-      "sublocation": "ss liki",
-      "area": "deck",
-      "version": null
+    {
+        "id": 13,
+        "name": "failure",
+        "translation": null,
+        "cutscene_description": "S.S. Liki: Sin escapes from the S.S. Liki.",
+        "music": "enemy attack",
+        "location_area": {
+            "location": "ss liki",
+            "sublocation": "ss liki",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 16,
+        "area_id": 42
     },
-    "SongID": 16,
-    "AreaID": 42
-  },
-  {
-    "ID": 14,
-    "name": "kilika dusk",
-    "translation": null,
-    "cutscene_description": "Kilika: Sin emerges before Kilika and destroys the town.",
-    "music": null,
-    "location_area": {
-      "location": "ss liki",
-      "sublocation": "ss liki",
-      "area": "ss liki",
-      "version": null
+    {
+        "id": 14,
+        "name": "kilika dusk",
+        "translation": null,
+        "cutscene_description": "Kilika: Sin emerges before Kilika and destroys the town.",
+        "music": null,
+        "location_area": {
+            "location": "ss liki",
+            "sublocation": "ss liki",
+            "area": "ss liki",
+            "version": null
+        },
+        "song_id": null,
+        "area_id": 47
     },
-    "SongID": null,
-    "AreaID": 47
-  },
-  {
-    "ID": 15,
-    "name": "the dance",
-    "translation": null,
-    "cutscene_description": "Kilika: Yuna performs the sending.",
-    "music": "the sending",
-    "location_area": {
-      "location": "kilika",
-      "sublocation": "kilika port",
-      "area": "ruined square",
-      "version": null
+    {
+        "id": 15,
+        "name": "the dance",
+        "translation": null,
+        "cutscene_description": "Kilika: Yuna performs the sending.",
+        "music": "the sending",
+        "location_area": {
+            "location": "kilika",
+            "sublocation": "kilika port",
+            "area": "ruined square",
+            "version": null
+        },
+        "song_id": 29,
+        "area_id": 50
     },
-    "SongID": 29,
-    "AreaID": 50
-  },
-  {
-    "ID": 16,
-    "name": "luca harbor",
-    "translation": null,
-    "cutscene_description": "Luca: The S.S. Winno arrives at Luca.",
-    "music": "the blitzers",
-    "location_area": {
-      "location": "luca",
-      "sublocation": "luca",
-      "area": "number 2 dock",
-      "version": null
+    {
+        "id": 16,
+        "name": "luca harbor",
+        "translation": null,
+        "cutscene_description": "Luca: The S.S. Winno arrives at Luca.",
+        "music": "the blitzers",
+        "location_area": {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "number 2 dock",
+            "version": null
+        },
+        "song_id": 17,
+        "area_id": 77
     },
-    "SongID": 17,
-    "AreaID": 77
-  },
-  {
-    "ID": 17,
-    "name": "let the games begin!",
-    "translation": null,
-    "cutscene_description": "Luca: The blitzball stadium is getting filled with water.",
-    "music": "the blitzers",
-    "location_area": {
-      "location": "luca",
-      "sublocation": "luca",
-      "area": "cafe",
-      "version": null
+    {
+        "id": 17,
+        "name": "let the games begin!",
+        "translation": null,
+        "cutscene_description": "Luca: The blitzball stadium is getting filled with water.",
+        "music": "the blitzers",
+        "location_area": {
+            "location": "luca",
+            "sublocation": "luca",
+            "area": "cafe",
+            "version": null
+        },
+        "song_id": 17,
+        "area_id": 86
     },
-    "SongID": 17,
-    "AreaID": 86
-  },
-  {
-    "ID": 18,
-    "name": "the legend lives",
-    "translation": null,
-    "cutscene_description": "Luca: Auron is preparing to fight a Vouivre.",
-    "music": "enemy attack",
-    "location_area": {
-      "location": "luca",
-      "sublocation": "stadium",
-      "area": "blitzball field",
-      "version": null
+    {
+        "id": 18,
+        "name": "the legend lives",
+        "translation": null,
+        "cutscene_description": "Luca: Auron is preparing to fight a Vouivre.",
+        "music": "enemy attack",
+        "location_area": {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "blitzball field",
+            "version": null
+        },
+        "song_id": 16,
+        "area_id": 74
     },
-    "SongID": 16,
-    "AreaID": 74
-  },
-  {
-    "ID": 19,
-    "name": "the dark aeon",
-    "translation": null,
-    "cutscene_description": "Luca: Anima defeats all the fiends.",
-    "music": "hymn of the fayth",
-    "location_area": {
-      "location": "luca",
-      "sublocation": "stadium",
-      "area": "blitzball field",
-      "version": null
+    {
+        "id": 19,
+        "name": "the dark aeon",
+        "translation": null,
+        "cutscene_description": "Luca: Anima defeats all the fiends.",
+        "music": "hymn of the fayth",
+        "location_area": {
+            "location": "luca",
+            "sublocation": "stadium",
+            "area": "blitzball field",
+            "version": null
+        },
+        "song_id": 20,
+        "area_id": 74
     },
-    "SongID": 20,
-    "AreaID": 74
-  },
-  {
-    "ID": 20,
-    "name": "no better plan",
-    "translation": null,
-    "cutscene_description": "Mushroom Rock Road: Sin emerges from the sea after fighting Sinspawn Gui.",
-    "music": "peril",
-    "location_area": {
-      "location": "mushroom rock road",
-      "sublocation": "mushroom rock",
-      "area": "ridge",
-      "version": null
+    {
+        "id": 20,
+        "name": "no better plan",
+        "translation": null,
+        "cutscene_description": "Mushroom Rock Road: Sin emerges from the sea after fighting Sinspawn Gui.",
+        "music": "peril",
+        "location_area": {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "ridge",
+            "version": null
+        },
+        "song_id": 59,
+        "area_id": 103
     },
-    "SongID": 59,
-    "AreaID": 103
-  },
-  {
-    "ID": 21,
-    "name": "judgment",
-    "translation": null,
-    "cutscene_description": "Mushroom Rock Road: Sin releases its shield and defeats the Crusaders.",
-    "music": "peril",
-    "location_area": {
-      "location": "mushroom rock road",
-      "sublocation": "mushroom rock",
-      "area": "ridge",
-      "version": null
+    {
+        "id": 21,
+        "name": "judgment",
+        "translation": null,
+        "cutscene_description": "Mushroom Rock Road: Sin releases its shield and defeats the Crusaders.",
+        "music": "peril",
+        "location_area": {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "ridge",
+            "version": null
+        },
+        "song_id": 59,
+        "area_id": 103
     },
-    "SongID": 59,
-    "AreaID": 103
-  },
-  {
-    "ID": 22,
-    "name": "ex machina",
-    "translation": null,
-    "cutscene_description": "Mushroom Rock Road: After a short power struggle, the machina cannon is overwhelmed by Sin.",
-    "music": "challenge",
-    "location_area": {
-      "location": "mushroom rock road",
-      "sublocation": "mushroom rock",
-      "area": "ridge",
-      "version": null
+    {
+        "id": 22,
+        "name": "ex machina",
+        "translation": null,
+        "cutscene_description": "Mushroom Rock Road: After a short power struggle, the machina cannon is overwhelmed by Sin.",
+        "music": "challenge",
+        "location_area": {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "ridge",
+            "version": null
+        },
+        "song_id": 80,
+        "area_id": 103
     },
-    "SongID": 80,
-    "AreaID": 103
-  },
-  {
-    "ID": 23,
-    "name": "sin's wake",
-    "translation": null,
-    "cutscene_description": "Mushroom Rock Road: Sin swims away from the battle scene.",
-    "music": null,
-    "location_area": {
-      "location": "mushroom rock road",
-      "sublocation": "mushroom rock",
-      "area": "beach",
-      "version": 1
+    {
+        "id": 23,
+        "name": "sin's wake",
+        "translation": null,
+        "cutscene_description": "Mushroom Rock Road: Sin swims away from the battle scene.",
+        "music": null,
+        "location_area": {
+            "location": "mushroom rock road",
+            "sublocation": "mushroom rock",
+            "area": "beach",
+            "version": 1
+        },
+        "song_id": null,
+        "area_id": 104
     },
-    "SongID": null,
-    "AreaID": 104
-  },
-  {
-    "ID": 24,
-    "name": "reunion",
-    "translation": null,
-    "cutscene_description": "Moonflow: Rikku takes off her suit when meeting her again.",
-    "music": null,
-    "location_area": {
-      "location": "moonflow",
-      "sublocation": "moonflow",
-      "area": "north bank",
-      "version": null
+    {
+        "id": 24,
+        "name": "reunion",
+        "translation": null,
+        "cutscene_description": "Moonflow: Rikku takes off her suit when meeting her again.",
+        "music": null,
+        "location_area": {
+            "location": "moonflow",
+            "sublocation": "moonflow",
+            "area": "north bank",
+            "version": null
+        },
+        "song_id": null,
+        "area_id": 127
     },
-    "SongID": null,
-    "AreaID": 127
-  },
-  {
-    "ID": 25,
-    "name": "metropolis",
-    "translation": null,
-    "cutscene_description": "Guadosalam: Seymour shows the party a sphere of Dream Zanarkand during the party's stay at his mansion.",
-    "music": "hymn of the fayth",
-    "location_area": {
-      "location": "guadosalam",
-      "sublocation": "guadosalam",
-      "area": "mansion - great hall",
-      "version": null
+    {
+        "id": 25,
+        "name": "metropolis",
+        "translation": null,
+        "cutscene_description": "Guadosalam: Seymour shows the party a sphere of Dream Zanarkand during the party's stay at his mansion.",
+        "music": "hymn of the fayth",
+        "location_area": {
+            "location": "guadosalam",
+            "sublocation": "guadosalam",
+            "area": "mansion - great hall",
+            "version": null
+        },
+        "song_id": 20,
+        "area_id": 135
     },
-    "SongID": 20,
-    "AreaID": 135
-  },
-  {
-    "ID": 26,
-    "name": "otherworld",
-    "translation": null,
-    "cutscene_description": "Guadosalam: A zoom out shot of the Farplane.",
-    "music": null,
-    "location_area": {
-      "location": "guadosalam",
-      "sublocation": "the farplane",
-      "area": "the farplane",
-      "version": null
+    {
+        "id": 26,
+        "name": "otherworld",
+        "translation": null,
+        "cutscene_description": "Guadosalam: A zoom out shot of the Farplane.",
+        "music": null,
+        "location_area": {
+            "location": "guadosalam",
+            "sublocation": "the farplane",
+            "area": "the farplane",
+            "version": null
+        },
+        "song_id": null,
+        "area_id": 138
     },
-    "SongID": null,
-    "AreaID": 138
-  },
-  {
-    "ID": 27,
-    "name": "sin sleeps",
-    "translation": null,
-    "cutscene_description": "Macalania: Sin is depicted in a calm manner below Lake Macalania.",
-    "music": null,
-    "location_area": {
-      "location": "macalania",
-      "sublocation": "lake macalania",
-      "area": "lake bottom",
-      "version": null
+    {
+        "id": 27,
+        "name": "sin sleeps",
+        "translation": null,
+        "cutscene_description": "Macalania: Sin is depicted in a calm manner below Lake Macalania.",
+        "music": null,
+        "location_area": {
+            "location": "macalania",
+            "sublocation": "lake macalania",
+            "area": "lake bottom",
+            "version": null
+        },
+        "song_id": null,
+        "area_id": 160
     },
-    "SongID": null,
-    "AreaID": 160
-  },
-  {
-    "ID": 28,
-    "name": "homecoming",
-    "translation": null,
-    "cutscene_description": "Home: The party arrives at the Al Bhed Home which is being attacked by monsters.",
-    "music": "peril",
-    "location_area": {
-      "location": "bikanel",
-      "sublocation": "sanubia desert",
-      "area": "west",
-      "version": null
+    {
+        "id": 28,
+        "name": "homecoming",
+        "translation": null,
+        "cutscene_description": "Home: The party arrives at the Al Bhed Home which is being attacked by monsters.",
+        "music": "peril",
+        "location_area": {
+            "location": "bikanel",
+            "sublocation": "sanubia desert",
+            "area": "west",
+            "version": null
+        },
+        "song_id": 59,
+        "area_id": 172
     },
-    "SongID": 59,
-    "AreaID": 172
-  },
-  {
-    "ID": 29,
-    "name": "dry dock",
-    "translation": null,
-    "cutscene_description": "Home: The airship arises from below the earth.",
-    "music": "launch",
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "bridge",
-      "version": null
+    {
+        "id": 29,
+        "name": "dry dock",
+        "translation": null,
+        "cutscene_description": "Home: The airship arises from below the earth.",
+        "music": "launch",
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "bridge",
+            "version": null
+        },
+        "song_id": 61,
+        "area_id": 181
     },
-    "SongID": 61,
-    "AreaID": 181
-  },
-  {
-    "ID": 30,
-    "name": "nayto du ku!",
-    "translation": "ready to go!",
-    "cutscene_description": "Home: The airship flies away from Home.",
-    "music": "launch",
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "bridge",
-      "version": null
+    {
+        "id": 30,
+        "name": "nayto du ku!",
+        "translation": "ready to go!",
+        "cutscene_description": "Home: The airship flies away from Home.",
+        "music": "launch",
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "bridge",
+            "version": null
+        },
+        "song_id": 61,
+        "area_id": 181
     },
-    "SongID": 61,
-    "AreaID": 181
-  },
-  {
-    "ID": 31,
-    "name": "leaving home",
-    "translation": null,
-    "cutscene_description": "Home: The airship destroys Home.",
-    "music": "run!!",
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "bridge",
-      "version": null
+    {
+        "id": 31,
+        "name": "leaving home",
+        "translation": null,
+        "cutscene_description": "Home: The airship destroys Home.",
+        "music": "run!!",
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "bridge",
+            "version": null
+        },
+        "song_id": 6,
+        "area_id": 181
     },
-    "SongID": 6,
-    "AreaID": 181
-  },
-  {
-    "ID": 32,
-    "name": "the glory of yevon",
-    "translation": null,
-    "cutscene_description": "Bevelle: The party approaches Bevelle as Yuna and Seymour walk to the altar.",
-    "music": "the wedding",
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "deck",
-      "version": null
+    {
+        "id": 32,
+        "name": "the glory of yevon",
+        "translation": null,
+        "cutscene_description": "Bevelle: The party approaches Bevelle as Yuna and Seymour walk to the altar.",
+        "music": "the wedding",
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 62,
+        "area_id": 192
     },
-    "SongID": 62,
-    "AreaID": 192
-  },
-  {
-    "ID": 33,
-    "name": "the red carpet",
-    "translation": null,
-    "cutscene_description": "Bevelle: The party crashes the wedding.",
-    "music": "assault",
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "deck",
-      "version": null
+    {
+        "id": 33,
+        "name": "the red carpet",
+        "translation": null,
+        "cutscene_description": "Bevelle: The party crashes the wedding.",
+        "music": "assault",
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 63,
+        "area_id": 192
     },
-    "SongID": 63,
-    "AreaID": 192
-  },
-  {
-    "ID": 34,
-    "name": "false vows",
-    "translation": null,
-    "cutscene_description": "Bevelle: Yuna and Seymour share a kiss.",
-    "music": "tragedy",
-    "location_area": {
-      "location": "bevelle",
-      "sublocation": "bevelle",
-      "area": "tower of light",
-      "version": null
+    {
+        "id": 34,
+        "name": "false vows",
+        "translation": null,
+        "cutscene_description": "Bevelle: Yuna and Seymour share a kiss.",
+        "music": "tragedy",
+        "location_area": {
+            "location": "bevelle",
+            "sublocation": "bevelle",
+            "area": "tower of light",
+            "version": null
+        },
+        "song_id": 64,
+        "area_id": 193
     },
-    "SongID": 64,
-    "AreaID": 193
-  },
-  {
-    "ID": 35,
-    "name": "believe",
-    "translation": null,
-    "cutscene_description": "Bevelle: Yuna throws herself down the tower and summons Valefor.",
-    "music": "believe",
-    "location_area": {
-      "location": "bevelle",
-      "sublocation": "bevelle",
-      "area": "tower of light",
-      "version": null
+    {
+        "id": 35,
+        "name": "believe",
+        "translation": null,
+        "cutscene_description": "Bevelle: Yuna throws herself down the tower and summons Valefor.",
+        "music": "believe",
+        "location_area": {
+            "location": "bevelle",
+            "sublocation": "bevelle",
+            "area": "tower of light",
+            "version": null
+        },
+        "song_id": 65,
+        "area_id": 193
     },
-    "SongID": 65,
-    "AreaID": 193
-  },
-  {
-    "ID": 36,
-    "name": "the spring",
-    "translation": null,
-    "cutscene_description": "Macalania: Tidus and Yunas kiss each other in the springs.",
-    "music": "suteki da ne",
-    "location_area": {
-      "location": "macalania",
-      "sublocation": "macalania woods",
-      "area": "spring",
-      "version": 2
+    {
+        "id": 36,
+        "name": "the spring",
+        "translation": null,
+        "cutscene_description": "Macalania: Tidus and Yunas kiss each other in the springs.",
+        "music": "suteki da ne",
+        "location_area": {
+            "location": "macalania",
+            "sublocation": "macalania woods",
+            "area": "spring",
+            "version": 2
+        },
+        "song_id": 70,
+        "area_id": 154
     },
-    "SongID": 70,
-    "AreaID": 154
-  },
-  {
-    "ID": 37,
-    "name": "the summit",
-    "translation": null,
-    "cutscene_description": "Mount Gagazet: The party reaches the fayth cluster.",
-    "music": null,
-    "location_area": {
-      "location": "mount gagazet",
-      "sublocation": "gagazet",
-      "area": "fayth cluster",
-      "version": null
+    {
+        "id": 37,
+        "name": "the summit",
+        "translation": null,
+        "cutscene_description": "Mount Gagazet: The party reaches the fayth cluster.",
+        "music": null,
+        "location_area": {
+            "location": "mount gagazet",
+            "sublocation": "gagazet",
+            "area": "fayth cluster",
+            "version": null
+        },
+        "song_id": null,
+        "area_id": 216
     },
-    "SongID": null,
-    "AreaID": 216
-  },
-  {
-    "ID": 38,
-    "name": "the last chapter",
-    "translation": null,
-    "cutscene_description": "Mount Gagazet: The party reaches the summit of Mount Gagazet and look upon the Zanarkand Ruins.",
-    "music": "wandering",
-    "location_area": {
-      "location": "mount gagazet",
-      "sublocation": "gagazet",
-      "area": "road to zanarkand ruins",
-      "version": null
+    {
+        "id": 38,
+        "name": "the last chapter",
+        "translation": null,
+        "cutscene_description": "Mount Gagazet: The party reaches the summit of Mount Gagazet and look upon the Zanarkand Ruins.",
+        "music": "wandering",
+        "location_area": {
+            "location": "mount gagazet",
+            "sublocation": "gagazet",
+            "area": "road to zanarkand ruins",
+            "version": null
+        },
+        "song_id": 77,
+        "area_id": 220
     },
-    "SongID": 77,
-    "AreaID": 220
-  },
-  {
-    "ID": 39,
-    "name": "sinrise",
-    "translation": null,
-    "cutscene_description": "Zanarkand Ruins: Sin observes Tidus at the Zanarkand Dome.",
-    "music": null,
-    "location_area": {
-      "location": "zanarkand ruins",
-      "sublocation": "dome",
-      "area": "dome",
-      "version": 1
+    {
+        "id": 39,
+        "name": "sinrise",
+        "translation": null,
+        "cutscene_description": "Zanarkand Ruins: Sin observes Tidus at the Zanarkand Dome.",
+        "music": null,
+        "location_area": {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "dome",
+            "version": 1
+        },
+        "song_id": null,
+        "area_id": 223
     },
-    "SongID": null,
-    "AreaID": 223
-  },
-  {
-    "ID": 40,
-    "name": "departure",
-    "translation": null,
-    "cutscene_description": "Zanarkand Ruins: Sin flies away from Tidus and crosses paths with the Airship.",
-    "music": null,
-    "location_area": {
-      "location": "zanarkand ruins",
-      "sublocation": "dome",
-      "area": "dome",
-      "version": 1
+    {
+        "id": 40,
+        "name": "departure",
+        "translation": null,
+        "cutscene_description": "Zanarkand Ruins: Sin flies away from Tidus and crosses paths with the Airship.",
+        "music": null,
+        "location_area": {
+            "location": "zanarkand ruins",
+            "sublocation": "dome",
+            "area": "dome",
+            "version": 1
+        },
+        "song_id": null,
+        "area_id": 223
     },
-    "SongID": null,
-    "AreaID": 223
-  },
-  {
-    "ID": 41,
-    "name": "the approach",
-    "translation": null,
-    "cutscene_description": "Airship: Sin appears on the airship's radar.",
-    "music": null,
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "bridge",
-      "version": null
+    {
+        "id": 41,
+        "name": "the approach",
+        "translation": null,
+        "cutscene_description": "Airship: Sin appears on the airship's radar.",
+        "music": null,
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "bridge",
+            "version": null
+        },
+        "song_id": null,
+        "area_id": 181
     },
-    "SongID": null,
-    "AreaID": 181
-  },
-  {
-    "ID": 42,
-    "name": "terra graviton",
-    "translation": null,
-    "cutscene_description": "Sin charges up its Terra Graviton.",
-    "music": "peril",
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "deck",
-      "version": null
+    {
+        "id": 42,
+        "name": "terra graviton",
+        "translation": null,
+        "cutscene_description": "Sin charges up its Terra Graviton.",
+        "music": "peril",
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 59,
+        "area_id": 192
     },
-    "SongID": 59,
-    "AreaID": 192
-  },
-  {
-    "ID": 43,
-    "name": "gravity sucks",
-    "translation": null,
-    "cutscene_description": "Sin unleashes its Terra Graviton.",
-    "music": "peril",
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "deck",
-      "version": null
+    {
+        "id": 43,
+        "name": "gravity sucks",
+        "translation": null,
+        "cutscene_description": "Sin unleashes its Terra Graviton.",
+        "music": "peril",
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 59,
+        "area_id": 192
     },
-    "SongID": 59,
-    "AreaID": 192
-  },
-  {
-    "ID": 44,
-    "name": "heaven's fall",
-    "translation": null,
-    "cutscene_description": "The consequences of Sin's Terra Graviton are shown.",
-    "music": "peril",
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "deck",
-      "version": null
+    {
+        "id": 44,
+        "name": "heaven's fall",
+        "translation": null,
+        "cutscene_description": "The consequences of Sin's Terra Graviton are shown.",
+        "music": "peril",
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 59,
+        "area_id": 192
     },
-    "SongID": 59,
-    "AreaID": 192
-  },
-  {
-    "ID": 45,
-    "name": "vena!",
-    "translation": "fire!",
-    "cutscene_description": "The airship shoots off Sin's left fin.",
-    "music": "assault",
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "deck",
-      "version": null
+    {
+        "id": 45,
+        "name": "vena!",
+        "translation": "fire!",
+        "cutscene_description": "The airship shoots off Sin's left fin.",
+        "music": "assault",
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 63,
+        "area_id": 192
     },
-    "SongID": 63,
-    "AreaID": 192
-  },
-  {
-    "ID": 46,
-    "name": "machina redux",
-    "translation": null,
-    "cutscene_description": "The airship shoots off Sin's right fin.",
-    "music": "assault",
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "deck",
-      "version": null
+    {
+        "id": 46,
+        "name": "machina redux",
+        "translation": null,
+        "cutscene_description": "The airship shoots off Sin's right fin.",
+        "music": "assault",
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": 63,
+        "area_id": 192
     },
-    "SongID": 63,
-    "AreaID": 192
-  },
-  {
-    "ID": 47,
-    "name": "sinfall",
-    "translation": null,
-    "cutscene_description": "Sin falls onto Bevelle.",
-    "music": null,
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "deck",
-      "version": null
+    {
+        "id": 47,
+        "name": "sinfall",
+        "translation": null,
+        "cutscene_description": "Sin falls onto Bevelle.",
+        "music": null,
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": null,
+        "area_id": 192
     },
-    "SongID": null,
-    "AreaID": 192
-  },
-  {
-    "ID": 48,
-    "name": "evenfall",
-    "translation": null,
-    "cutscene_description": "Sin gets back up and approaches the airship again.",
-    "music": null,
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "deck",
-      "version": null
+    {
+        "id": 48,
+        "name": "evenfall",
+        "translation": null,
+        "cutscene_description": "Sin gets back up and approaches the airship again.",
+        "music": null,
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": null,
+        "area_id": 192
     },
-    "SongID": null,
-    "AreaID": 192
-  },
-  {
-    "ID": 49,
-    "name": "face off",
-    "translation": null,
-    "cutscene_description": "Sin and the airship are approaching each other.",
-    "music": null,
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "deck",
-      "version": null
+    {
+        "id": 49,
+        "name": "face off",
+        "translation": null,
+        "cutscene_description": "Sin and the airship are approaching each other.",
+        "music": null,
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": null,
+        "area_id": 192
     },
-    "SongID": null,
-    "AreaID": 192
-  },
-  {
-    "ID": 50,
-    "name": "breaking through",
-    "translation": null,
-    "cutscene_description": "The party enters Sin's body through its mouth.",
-    "music": null,
-    "location_area": {
-      "location": "airship",
-      "sublocation": "airship",
-      "area": "deck",
-      "version": null
+    {
+        "id": 50,
+        "name": "breaking through",
+        "translation": null,
+        "cutscene_description": "The party enters Sin's body through its mouth.",
+        "music": null,
+        "location_area": {
+            "location": "airship",
+            "sublocation": "airship",
+            "area": "deck",
+            "version": null
+        },
+        "song_id": null,
+        "area_id": 192
     },
-    "SongID": null,
-    "AreaID": 192
-  },
-  {
-    "ID": 51,
-    "name": "i hate you",
-    "translation": null,
-    "cutscene_description": "Inside Sin: Tidus says Jecht that he hates him while crying.",
-    "music": "a fleeting dream",
-    "location_area": {
-      "location": "sin",
-      "sublocation": "sin",
-      "area": "dream's end",
-      "version": 1
+    {
+        "id": 51,
+        "name": "i hate you",
+        "translation": null,
+        "cutscene_description": "Inside Sin: Tidus says Jecht that he hates him while crying.",
+        "music": "a fleeting dream",
+        "location_area": {
+            "location": "sin",
+            "sublocation": "sin",
+            "area": "dream's end",
+            "version": 1
+        },
+        "song_id": 78,
+        "area_id": 237
     },
-    "SongID": 78,
-    "AreaID": 237
-  },
-  {
-    "ID": 52,
-    "name": "end",
-    "translation": null,
-    "cutscene_description": "The ending cutscene of the game.",
-    "music": "ending theme",
-    "location_area": {
-      "location": "sin",
-      "sublocation": "sin",
-      "area": "dream's end",
-      "version": 2
-    },
-    "SongID": 89,
-    "AreaID": 238
-  }
+    {
+        "id": 52,
+        "name": "end",
+        "translation": null,
+        "cutscene_description": "The ending cutscene of the game.",
+        "music": "ending theme",
+        "location_area": {
+            "location": "sin",
+            "sublocation": "sin",
+            "area": "dream's end",
+            "version": 2
+        },
+        "song_id": 89,
+        "area_id": 238
+    }
 ]

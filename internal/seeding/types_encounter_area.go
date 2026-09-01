@@ -7,9 +7,9 @@ import (
 )
 
 type EncounterArea struct {
-	ID            int32
+	ID            int32			`json:"id"`
 	LocationArea  LocationArea  `json:"location_area"`
-	AreaID        int32
+	AreaID        int32			`json:"area_id"`
 	Specification *string 		`json:"specification"`
 	Availability  string		`json:"availability"`
 }

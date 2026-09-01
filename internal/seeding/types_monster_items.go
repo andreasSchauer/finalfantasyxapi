@@ -7,8 +7,8 @@ import (
 )
 
 type MonsterItems struct {
-	ID                  int32
-	MonsterID           int32
+	ID                  int32		   `json:"id"`
+	MonsterID           int32		   `json:"monster_id"`
 	DropChance          int32          `json:"drop_chance"`
 	DropCondition       *string        `json:"drop_condition"`
 	OtherItemsCondition *string        `json:"other_items_condition"`

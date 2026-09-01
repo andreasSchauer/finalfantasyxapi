@@ -5,8 +5,8 @@ import (
 )
 
 type Mix struct {
-	ID                   int32
-	OverdriveID          int32
+	ID                   int32			  `json:"id"`
+	OverdriveID          int32			  `json:"overdrive_id"`
 	Name                 string           `json:"name"`
 	Category             string           `json:"category"`
 	BestCombinations     []MixCombination `json:"best_combinations"`
@@ -43,13 +43,13 @@ func (m Mix) GetResParamsNamed() ResParamsNamed {
 }
 
 type MixCombination struct {
-	ID           int32
-	MixID        int32
+	ID           int32	`json:"mix_combination_id"`
+	MixID        int32	`json:"mix_id"`
 	FirstItem    string `json:"first_item"`
 	SecondItem   string `json:"second_item"`
-	FirstItemID  int32
-	SecondItemID int32
-	IsBestCombo  bool
+	FirstItemID  int32	`json:"first_item_id"`
+	SecondItemID int32	`json:"second_item_id"`
+	IsBestCombo  bool	`json:"is_best_combo"`
 }
 
 func (m MixCombination) ToHashFields() []any {

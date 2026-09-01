@@ -7,7 +7,7 @@ import (
 )
 
 type OverdriveMode struct {
-	ID             int32
+	ID             int32		   `json:"id"`
 	Name           string          `json:"name"`
 	Description    string          `json:"description"`
 	Effect         string          `json:"effect"`
@@ -49,8 +49,8 @@ func (o OverdriveMode) Error() string {
 }
 
 type ActionToLearn struct {
-	ID     int32
-	UserID int32
+	ID     int32  `json:"id"`
+	UserID int32  `json:"user_id"`
 	User   string `json:"user"`
 	Amount int32  `json:"amount"`
 }

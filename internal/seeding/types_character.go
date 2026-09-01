@@ -8,10 +8,10 @@ import (
 )
 
 type Character struct {
-	ID int32
+	ID int32						`json:"id"`
 	PlayerUnit
 	LocationArea       LocationArea `json:"location_area"`
-	AreaID             *int32
+	AreaID             *int32		`json:"area_id"`
 	IsStoryBased       bool       	`json:"is_story_based"`
 	WeaponType         string     	`json:"weapon_type"`
 	ArmorType          string     	`json:"armor_type"`
@@ -59,14 +59,14 @@ func (c Character) Error() string {
 }
 
 type SphereGrid struct {
-	ID			 int32
-	Type		 database.SphereGridType
+	ID			 int32						`json:"id"`
+	Type		 database.SphereGridType	`json:"type"`
 	StatTable
-	Lv1Locks	 int32	`json:"lv_1_locks"`
-	Lv2Locks	 int32	`json:"lv_2_locks"`
-	Lv3Locks	 int32	`json:"lv_3_locks"`
-	Lv4Locks	 int32	`json:"lv_4_locks"`
-	EmptyNodes	 int32	`json:"empty_nodes"`
+	Lv1Locks	 int32						`json:"lv_1_locks"`
+	Lv2Locks	 int32						`json:"lv_2_locks"`
+	Lv3Locks	 int32						`json:"lv_3_locks"`
+	Lv4Locks	 int32						`json:"lv_4_locks"`
+	EmptyNodes	 int32						`json:"empty_nodes"`
 }
 
 func (s SphereGrid) ToHashFields() []any {

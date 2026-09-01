@@ -5,7 +5,7 @@ import (
 )
 
 type PossibleItem struct {
-	ID         int32
+	ID         int32	  `json:"possible_item_id"`
 	ItemAmount ItemAmount `json:"item"`
 	Chance     int32      `json:"chance"`
 }

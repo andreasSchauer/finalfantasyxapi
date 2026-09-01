@@ -7,12 +7,12 @@ import (
 )
 
 type Property struct {
-	ID             int32
+	ID             int32			`json:"id"`
 	Name           string           `json:"name"`
 	Effect         string           `json:"effect"`
 	RelatedStats   []string         `json:"related_stats"`
 	NullifyArmored *string          `json:"nullify_armored"`
-	ModifierChange *ModifierChange `json:"modifier_change"`
+	ModifierChange *ModifierChange  `json:"modifier_change"`
 }
 
 func (p Property) ToHashFields() []any {

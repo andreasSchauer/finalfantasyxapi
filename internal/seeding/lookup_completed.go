@@ -72,6 +72,7 @@ func (l *Lookup) saveCompletedLookups() error {
 	checkErr(writeLookupFile("submenus.json", l.SubmenusID))
 	checkErr(writeLookupFile("topmenus.json", l.TopmenusID))
 	checkErr(writeLookupFile("treasures.json", l.TreasuresID))
+	checkErr(l.saveHashMap())
 
 	return err
 }
@@ -89,7 +90,7 @@ func writeLookupFile[T Lookupable](fileName string, lookup map[int32]T) error {
 
 	slice := lookupToSlice(lookup)
 
-	jsonBytes, err := json.MarshalIndent(slice, "", "  ")
+	jsonBytes, err := json.MarshalIndent(slice, "", "    ")
 	if err != nil {
 		return err
 	}
@@ -105,6 +106,7 @@ func writeLookupFile[T Lookupable](fileName string, lookup map[int32]T) error {
 }
 
 func (l *Lookup) assignLookups() error {
+	defer h.MeasureTime("assigning lookups")()
 	var err error
 
 	checkErr := func(e error) {
@@ -165,6 +167,7 @@ func (l *Lookup) assignLookups() error {
 	checkErr(assignLookup("submenus.json", &l.Submenus, &l.SubmenusID))
 	checkErr(assignLookup("topmenus.json", &l.Topmenus, &l.TopmenusID))
 	checkErr(assignLookup("treasures.json", &l.Treasures, &l.TreasuresID))
+	checkErr(l.assignHashes())
 
 	return err
 }

@@ -9,8 +9,8 @@ import (
 )
 
 type MonsterFormation struct {
-	ID      int32  `json:"-"`
-	Version *int32 `json:"version"`
+	ID      int32  							  `json:"id"`
+	Version *int32 							  `json:"version"`
 	MonsterSelection
 	FormationData   FormationData             `json:"formation_data"`
 	TriggerCommands []FormationTriggerCommand `json:"trigger_commands"`
@@ -49,7 +49,7 @@ func (mf MonsterFormation) GetResParamsUnnamed() ResParamsUnnamed {
 }
 
 type MonsterSelection struct {
-	ID       int32           `json:"-"`
+	ID       int32           `json:"monster_selection_id"`
 	Monsters []MonsterAmount `json:"monsters"`
 }
 

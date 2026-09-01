@@ -8,9 +8,9 @@ import (
 )
 
 type EnemyAbility struct {
-	ID int32
+	ID 			int32		`json:"id"`
 	Ability
-	Effect             *string             `json:"effect"`
+	Effect      *string     `json:"effect"`
 }
 
 func (e EnemyAbility) ToHashFields() []any {

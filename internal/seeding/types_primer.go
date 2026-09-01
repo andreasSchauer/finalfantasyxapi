@@ -5,11 +5,11 @@ import (
 )
 
 type Primer struct {
-	ID            int32
+	ID            int32  `json:"id"`
 	Name          string `json:"name"`
 	AlBhedLetter  string `json:"al_bhed_letter"`
 	EnglishLetter string `json:"english_letter"`
-	KeyItemID     int32
+	KeyItemID     int32  `json:"key_item_id"`
 }
 
 func (p Primer) ToHashFields() []any {

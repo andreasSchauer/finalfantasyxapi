@@ -3,8 +3,8 @@ package seeding
 import "fmt"
 
 type ModifierChange struct {
-	ID              int32
-	ModifierID      int32
+	ID              int32	`json:"id"`
+	ModifierID      int32	`json:"modifier_id"`
 	ModifierName    string  `json:"name"`
 	CalculationType string  `json:"calculation_type"`
 	Value           float32 `json:"value"`

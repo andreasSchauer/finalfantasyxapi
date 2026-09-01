@@ -7,7 +7,7 @@ import (
 )
 
 type Area struct {
-	ID                   int32
+	ID                   int32			  `json:"id"`
 	Name                 string           `json:"area"`
 	Version              *int32           `json:"version"`
 	Specification        *string          `json:"specification"`
@@ -19,8 +19,8 @@ type Area struct {
 	ConnectedAreas       []AreaConnection `json:"connected_areas"`
 	LocationID			 int32			  `json:"location_id"`
 	SublocationID		 int32			  `json:"sublocation_id"`
-	Location          	 string			  `json:"location_name"`
-	Sublocation          string			  `json:"sublocation_name"`
+	Location          	 string			  `json:"location"`
+	Sublocation          string			  `json:"sublocation"`
 }
 
 func (a Area) ToHashFields() []any {
@@ -75,8 +75,8 @@ func (a Area) GetResParamsLocation() ResParamsLocation {
 }
 
 type AreaConnection struct {
-	ID             int32
-	AreaID         int32
+	ID             int32		`json:"area_connection_id"`
+	AreaID         int32		`json:"area_id"`
 	LocationArea   LocationArea `json:"location_area"`
 	ConnectionType string       `json:"connection_type"`
 	IsStoryBased   bool         `json:"is_story_based"`

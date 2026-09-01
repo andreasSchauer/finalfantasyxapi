@@ -5,7 +5,7 @@ import (
 )
 
 type Location struct {
-	ID           int32
+	ID           int32			`json:"id"`
 	Name         string        	`json:"location"`
 	Availability string			`json:"availability"`
 	Sublocations []Sublocation 	`json:"sublocations"`

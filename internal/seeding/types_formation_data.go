@@ -7,7 +7,7 @@ import (
 )
 
 type FormationData struct {
-	ID             int32              `json:"-"`
+	ID             int32              `json:"formation_data_id"`
 	Category       string             `json:"category"`
 	Availability   string             `json:"availability"`
 	IsForcedAmbush bool               `json:"is_forced_ambush"`
@@ -37,8 +37,8 @@ func (fd FormationData) Error() string {
 }
 
 type FormationBossSong struct {
-	ID               int32  `json:"-"`
-	SongID           int32  `json:"-"`
+	ID               int32  `json:"formation_boss_song_id"`
+	SongID           int32  `json:"song_id"`
 	Song             string `json:"music"`
 	CelebrateVictory bool   `json:"celebrate_victory"`
 }

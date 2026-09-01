@@ -5,9 +5,9 @@ import (
 )
 
 type Sidequest struct {
-	ID int32
+	ID 			int32		`json:"id"`
 	Quest
-	Subquests []Subquest `json:"subquests"`
+	Subquests []Subquest 	`json:"subquests"`
 }
 
 func (s Sidequest) ToHashFields() []any {
@@ -41,9 +41,9 @@ func (s Sidequest) GetResParamsQuest() ResParamsQuest {
 }
 
 type Subquest struct {
-	ID int32
+	ID 			int32	`json:"id"`
 	Quest
-	SidequestID int32
+	SidequestID int32	`json:"sidequest_id"`
 }
 
 func (s Subquest) ToHashFields() []any {

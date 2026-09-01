@@ -7,7 +7,7 @@ import (
 )
 
 type Song struct {
-	ID                   int32
+	ID                   int32			   `json:"id"`
 	Name                 string            `json:"name"`
 	StreamingName        *string           `json:"streaming_name"`
 	InGameName           *string           `json:"in_game_name"`
@@ -66,7 +66,7 @@ func (s Song) GetResParamsNamed() ResParamsNamed {
 }
 
 type SongCredits struct {
-	ID        int32
+	ID        int32	  `json:"id"`
 	Composer  *string `json:"composer"`
 	Arranger  *string `json:"arranger"`
 	Performer *string `json:"performer"`

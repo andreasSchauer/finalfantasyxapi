@@ -7,12 +7,12 @@ import (
 )
 
 type Quest struct {
-	ID           int32
-	Name         string           `json:"name"`
-	Availability string           `json:"availability"`
-	IsRepeatable bool             `json:"is_repeatable"`
-	Completion   *QuestCompletion `json:"completion"`
-	Type         database.QuestType
+	ID           int32			  	`json:"quest_id"`
+	Name         string           	`json:"name"`
+	Availability string           	`json:"availability"`
+	IsRepeatable bool             	`json:"is_repeatable"`
+	Completion   *QuestCompletion 	`json:"completion"`
+	Type         database.QuestType	`json:"type"`
 }
 
 func (q Quest) ToHashFields() []any {

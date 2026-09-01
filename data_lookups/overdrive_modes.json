@@ -1,843 +1,843 @@
 [
-  {
-    "ID": 1,
-    "name": "stoic",
-    "description": "Charges when character takes damage.",
-    "effect": "The gauge fills when the character takes damage from an enemy.",
-    "type": "formula",
-    "fill_rate": null,
-    "actions_to_learn": []
-  },
-  {
-    "ID": 2,
-    "name": "warrior",
-    "description": "Charges when character damages an enemy.",
-    "effect": "The gauge fills when the character damages an enemy (excluding items and overdrives).",
-    "type": "formula",
-    "fill_rate": null,
-    "actions_to_learn": [
-      {
-        "ID": 1,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 150
-      },
-      {
-        "ID": 2,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 200
-      },
-      {
-        "ID": 3,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 160
-      },
-      {
-        "ID": 4,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 300
-      },
-      {
-        "ID": 5,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 120
-      },
-      {
-        "ID": 6,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 100
-      },
-      {
-        "ID": 7,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 140
-      }
-    ]
-  },
-  {
-    "ID": 3,
-    "name": "comrade",
-    "description": "Charges when allies take damage.",
-    "effect": "The gauge fills when an ally takes damage.",
-    "type": "formula",
-    "fill_rate": null,
-    "actions_to_learn": [
-      {
-        "ID": 8,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 300
-      },
-      {
-        "ID": 9,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 240
-      },
-      {
-        "ID": 10,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 100
-      },
-      {
-        "ID": 11,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 100
-      },
-      {
-        "ID": 12,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 100
-      },
-      {
-        "ID": 13,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 220
-      },
-      {
-        "ID": 14,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 100
-      }
-    ]
-  },
-  {
-    "ID": 4,
-    "name": "healer",
-    "description": "Charges when character heals allies.",
-    "effect": "The gauge fills when healing an ally, even with full HP.",
-    "type": "formula",
-    "fill_rate": null,
-    "actions_to_learn": [
-      {
-        "ID": 15,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 80
-      },
-      {
-        "ID": 16,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 60
-      },
-      {
-        "ID": 17,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 110
-      },
-      {
-        "ID": 18,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 170
-      },
-      {
-        "ID": 12,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 100
-      },
-      {
-        "ID": 19,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 200
-      },
-      {
-        "ID": 20,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 70
-      }
-    ]
-  },
-  {
-    "ID": 5,
-    "name": "tactician",
-    "description": "Charges when status attacks succeeds.",
-    "effect": "The gauge fills when the character inflicts status ailments onto an enemy.",
-    "type": "per-action",
-    "fill_rate": 0.16,
-    "actions_to_learn": [
-      {
-        "ID": 21,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 75
-      },
-      {
-        "ID": 22,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 100
-      },
-      {
-        "ID": 23,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 80
-      },
-      {
-        "ID": 24,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 75
-      },
-      {
-        "ID": 25,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 60
-      },
-      {
-        "ID": 26,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 110
-      },
-      {
-        "ID": 27,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 90
-      }
-    ]
-  },
-  {
-    "ID": 6,
-    "name": "victim",
-    "description": "Charges when character hit with status attack.",
-    "effect": "The gauge fills when an enemy inflicts status ailments onto the character.",
-    "type": "per-action",
-    "fill_rate": 0.16,
-    "actions_to_learn": [
-      {
-        "ID": 28,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 120
-      },
-      {
-        "ID": 22,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 100
-      },
-      {
-        "ID": 17,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 110
-      },
-      {
-        "ID": 29,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 130
-      },
-      {
-        "ID": 12,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 100
-      },
-      {
-        "ID": 30,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 160
-      },
-      {
-        "ID": 31,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 125
-      }
-    ]
-  },
-  {
-    "ID": 7,
-    "name": "dancer",
-    "description": "Charges when character evades attack.",
-    "effect": "The gauge fills when the character evades an enemy attack.",
-    "type": "per-action",
-    "fill_rate": 0.16,
-    "actions_to_learn": [
-      {
-        "ID": 32,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 250
-      },
-      {
-        "ID": 2,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 200
-      },
-      {
-        "ID": 33,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 200
-      },
-      {
-        "ID": 4,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 300
-      },
-      {
-        "ID": 34,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 130
-      },
-      {
-        "ID": 19,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 200
-      },
-      {
-        "ID": 35,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 200
-      }
-    ]
-  },
-  {
-    "ID": 8,
-    "name": "avenger",
-    "description": "Charges when ally gets KO'd.",
-    "effect": "The gauge fills when an enemy KO's an ally.",
-    "type": "per-action",
-    "fill_rate": 0.3,
-    "actions_to_learn": [
-      {
-        "ID": 36,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 100
-      },
-      {
-        "ID": 37,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 80
-      },
-      {
-        "ID": 10,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 100
-      },
-      {
-        "ID": 38,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 150
-      },
-      {
-        "ID": 12,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 100
-      },
-      {
-        "ID": 39,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 120
-      },
-      {
-        "ID": 27,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 90
-      }
-    ]
-  },
-  {
-    "ID": 9,
-    "name": "slayer",
-    "description": "Charges when character defeats an enemy.",
-    "effect": "The gauge fills when the character kills an enemy, including via stealing from Machina enemies and treasure chests. Weapons of Warrior Monks, Fallen Monks, Kimahri and Yojimbo (boss battles) also count.",
-    "type": "per-action",
-    "fill_rate": 0.2,
-    "actions_to_learn": [
-      {
-        "ID": 36,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 100
-      },
-      {
-        "ID": 40,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 110
-      },
-      {
-        "ID": 41,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 90
-      },
-      {
-        "ID": 29,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 130
-      },
-      {
-        "ID": 5,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 120
-      },
-      {
-        "ID": 42,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 80
-      },
-      {
-        "ID": 14,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 100
-      }
-    ]
-  },
-  {
-    "ID": 10,
-    "name": "hero",
-    "description": "Charges when character defeats a powerful enemy.",
-    "effect": "The gauge fills when the character kills an enemy with at least 10,000 HP, or at least 20x more HP than the estimated damage. For learning this mode, the amount is only 3x more HP. Estimated damage is damage dealt by the character's 'Attack' command, regardless of enemy Defense.",
-    "type": "per-action",
-    "fill_rate": 0.2,
-    "actions_to_learn": [
-      {
-        "ID": 43,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 50
-      },
-      {
-        "ID": 44,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 50
-      },
-      {
-        "ID": 45,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 50
-      },
-      {
-        "ID": 46,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 70
-      },
-      {
-        "ID": 47,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 45
-      },
-      {
-        "ID": 48,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 40
-      },
-      {
-        "ID": 49,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 50
-      }
-    ]
-  },
-  {
-    "ID": 11,
-    "name": "rook",
-    "description": "Charge when character magically blocks attacks.",
-    "effect": "The gauge fills when the character reduces or nullifies the damage inflicted by an enemy with Nulspells, Protect, Shell, and Reflect",
-    "type": "per-action",
-    "fill_rate": 0.1,
-    "actions_to_learn": [
-      {
-        "ID": 28,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 120
-      },
-      {
-        "ID": 40,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 110
-      },
-      {
-        "ID": 50,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 120
-      },
-      {
-        "ID": 51,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 120
-      },
-      {
-        "ID": 5,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 120
-      },
-      {
-        "ID": 39,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 120
-      },
-      {
-        "ID": 52,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 120
-      }
-    ]
-  },
-  {
-    "ID": 12,
-    "name": "victor",
-    "description": "Charges when party wins a battle.",
-    "effect": "The gauge fills when winning a battle while being an active fighter.",
-    "type": "per-action",
-    "fill_rate": 0.2,
-    "actions_to_learn": [
-      {
-        "ID": 28,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 120
-      },
-      {
-        "ID": 53,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 150
-      },
-      {
-        "ID": 3,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 160
-      },
-      {
-        "ID": 54,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 200
-      },
-      {
-        "ID": 5,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 120
-      },
-      {
-        "ID": 19,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 200
-      },
-      {
-        "ID": 7,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 140
-      }
-    ]
-  },
-  {
-    "ID": 13,
-    "name": "coward",
-    "description": "Charges when character flees from battle.",
-    "effect": "The gauge fills when the character escapes from battle. Using 'Flee' is also counted, regardless of who uses it.",
-    "type": "per-action",
-    "fill_rate": 0.1,
-    "actions_to_learn": [
-      {
-        "ID": 55,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 600
-      },
-      {
-        "ID": 56,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 900
-      },
-      {
-        "ID": 57,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 400
-      },
-      {
-        "ID": 58,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 980
-      },
-      {
-        "ID": 59,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 700
-      },
-      {
-        "ID": 60,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 1000
-      },
-      {
-        "ID": 61,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 450
-      }
-    ]
-  },
-  {
-    "ID": 14,
-    "name": "ally",
-    "description": "Charges on character's turn.",
-    "effect": "The gauge fills at the start of the character's turn.",
-    "type": "per-action",
-    "fill_rate": 0.03,
-    "actions_to_learn": [
-      {
-        "ID": 55,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 600
-      },
-      {
-        "ID": 62,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 500
-      },
-      {
-        "ID": 63,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 350
-      },
-      {
-        "ID": 64,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 480
-      },
-      {
-        "ID": 65,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 300
-      },
-      {
-        "ID": 66,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 450
-      },
-      {
-        "ID": 67,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 320
-      }
-    ]
-  },
-  {
-    "ID": 15,
-    "name": "sufferer",
-    "description": "Charges while character suffers status ailments.",
-    "effect": "The gauge fills at the start of the character's turn while afflicted with a status ailment.",
-    "type": "per-action",
-    "fill_rate": 0.16,
-    "actions_to_learn": [
-      {
-        "ID": 36,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 100
-      },
-      {
-        "ID": 37,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 80
-      },
-      {
-        "ID": 10,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 100
-      },
-      {
-        "ID": 68,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 110
-      },
-      {
-        "ID": 34,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 130
-      },
-      {
-        "ID": 39,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 120
-      },
-      {
-        "ID": 27,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 90
-      }
-    ]
-  },
-  {
-    "ID": 16,
-    "name": "daredevil",
-    "description": "Charges while character fights with low HP.",
-    "effect": "The gauge fills at the start of the character's turn while in 'HP Critical' status.",
-    "type": "per-action",
-    "fill_rate": 0.05,
-    "actions_to_learn": [
-      {
-        "ID": 69,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 170
-      },
-      {
-        "ID": 70,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 90
-      },
-      {
-        "ID": 71,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 140
-      },
-      {
-        "ID": 38,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 150
-      },
-      {
-        "ID": 72,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 200
-      },
-      {
-        "ID": 73,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 260
-      },
-      {
-        "ID": 74,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 110
-      }
-    ]
-  },
-  {
-    "ID": 17,
-    "name": "loner",
-    "description": "Charges when character fights alone.",
-    "effect": "The gauge fills at the start of the character's turn while fighting alone.",
-    "type": "per-action",
-    "fill_rate": 0.16,
-    "actions_to_learn": [
-      {
-        "ID": 75,
-        "UserID": 1,
-        "user": "tidus",
-        "amount": 60
-      },
-      {
-        "ID": 76,
-        "UserID": 2,
-        "user": "yuna",
-        "amount": 180
-      },
-      {
-        "ID": 17,
-        "UserID": 3,
-        "user": "wakka",
-        "amount": 110
-      },
-      {
-        "ID": 77,
-        "UserID": 4,
-        "user": "lulu",
-        "amount": 45
-      },
-      {
-        "ID": 78,
-        "UserID": 5,
-        "user": "kimahri",
-        "amount": 90
-      },
-      {
-        "ID": 79,
-        "UserID": 6,
-        "user": "auron",
-        "amount": 35
-      },
-      {
-        "ID": 80,
-        "UserID": 7,
-        "user": "rikku",
-        "amount": 170
-      }
-    ]
-  }
+    {
+        "id": 1,
+        "name": "stoic",
+        "description": "Charges when character takes damage.",
+        "effect": "The gauge fills when the character takes damage from an enemy.",
+        "type": "formula",
+        "fill_rate": null,
+        "actions_to_learn": []
+    },
+    {
+        "id": 2,
+        "name": "warrior",
+        "description": "Charges when character damages an enemy.",
+        "effect": "The gauge fills when the character damages an enemy (excluding items and overdrives).",
+        "type": "formula",
+        "fill_rate": null,
+        "actions_to_learn": [
+            {
+                "id": 1,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 150
+            },
+            {
+                "id": 2,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 200
+            },
+            {
+                "id": 3,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 160
+            },
+            {
+                "id": 4,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 300
+            },
+            {
+                "id": 5,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 120
+            },
+            {
+                "id": 6,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 100
+            },
+            {
+                "id": 7,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 140
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "comrade",
+        "description": "Charges when allies take damage.",
+        "effect": "The gauge fills when an ally takes damage.",
+        "type": "formula",
+        "fill_rate": null,
+        "actions_to_learn": [
+            {
+                "id": 8,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 300
+            },
+            {
+                "id": 9,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 240
+            },
+            {
+                "id": 10,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 100
+            },
+            {
+                "id": 11,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 100
+            },
+            {
+                "id": 12,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 100
+            },
+            {
+                "id": 13,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 220
+            },
+            {
+                "id": 14,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 100
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "name": "healer",
+        "description": "Charges when character heals allies.",
+        "effect": "The gauge fills when healing an ally, even with full HP.",
+        "type": "formula",
+        "fill_rate": null,
+        "actions_to_learn": [
+            {
+                "id": 15,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 80
+            },
+            {
+                "id": 16,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 60
+            },
+            {
+                "id": 17,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 110
+            },
+            {
+                "id": 18,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 170
+            },
+            {
+                "id": 12,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 100
+            },
+            {
+                "id": 19,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 200
+            },
+            {
+                "id": 20,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 70
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "name": "tactician",
+        "description": "Charges when status attacks succeeds.",
+        "effect": "The gauge fills when the character inflicts status ailments onto an enemy.",
+        "type": "per-action",
+        "fill_rate": 0.16,
+        "actions_to_learn": [
+            {
+                "id": 21,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 75
+            },
+            {
+                "id": 22,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 100
+            },
+            {
+                "id": 23,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 80
+            },
+            {
+                "id": 24,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 75
+            },
+            {
+                "id": 25,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 60
+            },
+            {
+                "id": 26,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 110
+            },
+            {
+                "id": 27,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 90
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "name": "victim",
+        "description": "Charges when character hit with status attack.",
+        "effect": "The gauge fills when an enemy inflicts status ailments onto the character.",
+        "type": "per-action",
+        "fill_rate": 0.16,
+        "actions_to_learn": [
+            {
+                "id": 28,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 120
+            },
+            {
+                "id": 22,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 100
+            },
+            {
+                "id": 17,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 110
+            },
+            {
+                "id": 29,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 130
+            },
+            {
+                "id": 12,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 100
+            },
+            {
+                "id": 30,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 160
+            },
+            {
+                "id": 31,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 125
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "name": "dancer",
+        "description": "Charges when character evades attack.",
+        "effect": "The gauge fills when the character evades an enemy attack.",
+        "type": "per-action",
+        "fill_rate": 0.16,
+        "actions_to_learn": [
+            {
+                "id": 32,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 250
+            },
+            {
+                "id": 2,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 200
+            },
+            {
+                "id": 33,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 200
+            },
+            {
+                "id": 4,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 300
+            },
+            {
+                "id": 34,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 130
+            },
+            {
+                "id": 19,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 200
+            },
+            {
+                "id": 35,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 200
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "name": "avenger",
+        "description": "Charges when ally gets KO'd.",
+        "effect": "The gauge fills when an enemy KO's an ally.",
+        "type": "per-action",
+        "fill_rate": 0.3,
+        "actions_to_learn": [
+            {
+                "id": 36,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 100
+            },
+            {
+                "id": 37,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 80
+            },
+            {
+                "id": 10,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 100
+            },
+            {
+                "id": 38,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 150
+            },
+            {
+                "id": 12,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 100
+            },
+            {
+                "id": 39,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 120
+            },
+            {
+                "id": 27,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 90
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "name": "slayer",
+        "description": "Charges when character defeats an enemy.",
+        "effect": "The gauge fills when the character kills an enemy, including via stealing from Machina enemies and treasure chests. Weapons of Warrior Monks, Fallen Monks, Kimahri and Yojimbo (boss battles) also count.",
+        "type": "per-action",
+        "fill_rate": 0.2,
+        "actions_to_learn": [
+            {
+                "id": 36,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 100
+            },
+            {
+                "id": 40,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 110
+            },
+            {
+                "id": 41,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 90
+            },
+            {
+                "id": 29,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 130
+            },
+            {
+                "id": 5,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 120
+            },
+            {
+                "id": 42,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 80
+            },
+            {
+                "id": 14,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 100
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "name": "hero",
+        "description": "Charges when character defeats a powerful enemy.",
+        "effect": "The gauge fills when the character kills an enemy with at least 10,000 HP, or at least 20x more HP than the estimated damage. For learning this mode, the amount is only 3x more HP. Estimated damage is damage dealt by the character's 'Attack' command, regardless of enemy Defense.",
+        "type": "per-action",
+        "fill_rate": 0.2,
+        "actions_to_learn": [
+            {
+                "id": 43,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 50
+            },
+            {
+                "id": 44,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 50
+            },
+            {
+                "id": 45,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 50
+            },
+            {
+                "id": 46,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 70
+            },
+            {
+                "id": 47,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 45
+            },
+            {
+                "id": 48,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 40
+            },
+            {
+                "id": 49,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 50
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "name": "rook",
+        "description": "Charge when character magically blocks attacks.",
+        "effect": "The gauge fills when the character reduces or nullifies the damage inflicted by an enemy with Nulspells, Protect, Shell, and Reflect",
+        "type": "per-action",
+        "fill_rate": 0.1,
+        "actions_to_learn": [
+            {
+                "id": 28,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 120
+            },
+            {
+                "id": 40,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 110
+            },
+            {
+                "id": 50,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 120
+            },
+            {
+                "id": 51,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 120
+            },
+            {
+                "id": 5,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 120
+            },
+            {
+                "id": 39,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 120
+            },
+            {
+                "id": 52,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 120
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "name": "victor",
+        "description": "Charges when party wins a battle.",
+        "effect": "The gauge fills when winning a battle while being an active fighter.",
+        "type": "per-action",
+        "fill_rate": 0.2,
+        "actions_to_learn": [
+            {
+                "id": 28,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 120
+            },
+            {
+                "id": 53,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 150
+            },
+            {
+                "id": 3,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 160
+            },
+            {
+                "id": 54,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 200
+            },
+            {
+                "id": 5,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 120
+            },
+            {
+                "id": 19,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 200
+            },
+            {
+                "id": 7,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 140
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "name": "coward",
+        "description": "Charges when character flees from battle.",
+        "effect": "The gauge fills when the character escapes from battle. Using 'Flee' is also counted, regardless of who uses it.",
+        "type": "per-action",
+        "fill_rate": 0.1,
+        "actions_to_learn": [
+            {
+                "id": 55,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 600
+            },
+            {
+                "id": 56,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 900
+            },
+            {
+                "id": 57,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 400
+            },
+            {
+                "id": 58,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 980
+            },
+            {
+                "id": 59,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 700
+            },
+            {
+                "id": 60,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 1000
+            },
+            {
+                "id": 61,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 450
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "name": "ally",
+        "description": "Charges on character's turn.",
+        "effect": "The gauge fills at the start of the character's turn.",
+        "type": "per-action",
+        "fill_rate": 0.03,
+        "actions_to_learn": [
+            {
+                "id": 55,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 600
+            },
+            {
+                "id": 62,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 500
+            },
+            {
+                "id": 63,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 350
+            },
+            {
+                "id": 64,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 480
+            },
+            {
+                "id": 65,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 300
+            },
+            {
+                "id": 66,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 450
+            },
+            {
+                "id": 67,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 320
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "name": "sufferer",
+        "description": "Charges while character suffers status ailments.",
+        "effect": "The gauge fills at the start of the character's turn while afflicted with a status ailment.",
+        "type": "per-action",
+        "fill_rate": 0.16,
+        "actions_to_learn": [
+            {
+                "id": 36,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 100
+            },
+            {
+                "id": 37,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 80
+            },
+            {
+                "id": 10,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 100
+            },
+            {
+                "id": 68,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 110
+            },
+            {
+                "id": 34,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 130
+            },
+            {
+                "id": 39,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 120
+            },
+            {
+                "id": 27,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 90
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "name": "daredevil",
+        "description": "Charges while character fights with low HP.",
+        "effect": "The gauge fills at the start of the character's turn while in 'HP Critical' status.",
+        "type": "per-action",
+        "fill_rate": 0.05,
+        "actions_to_learn": [
+            {
+                "id": 69,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 170
+            },
+            {
+                "id": 70,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 90
+            },
+            {
+                "id": 71,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 140
+            },
+            {
+                "id": 38,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 150
+            },
+            {
+                "id": 72,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 200
+            },
+            {
+                "id": 73,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 260
+            },
+            {
+                "id": 74,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 110
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "name": "loner",
+        "description": "Charges when character fights alone.",
+        "effect": "The gauge fills at the start of the character's turn while fighting alone.",
+        "type": "per-action",
+        "fill_rate": 0.16,
+        "actions_to_learn": [
+            {
+                "id": 75,
+                "user_id": 1,
+                "user": "tidus",
+                "amount": 60
+            },
+            {
+                "id": 76,
+                "user_id": 2,
+                "user": "yuna",
+                "amount": 180
+            },
+            {
+                "id": 17,
+                "user_id": 3,
+                "user": "wakka",
+                "amount": 110
+            },
+            {
+                "id": 77,
+                "user_id": 4,
+                "user": "lulu",
+                "amount": 45
+            },
+            {
+                "id": 78,
+                "user_id": 5,
+                "user": "kimahri",
+                "amount": 90
+            },
+            {
+                "id": 79,
+                "user_id": 6,
+                "user": "auron",
+                "amount": 35
+            },
+            {
+                "id": 80,
+                "user_id": 7,
+                "user": "rikku",
+                "amount": 170
+            }
+        ]
+    }
 ]

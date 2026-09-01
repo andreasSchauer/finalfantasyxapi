@@ -7,8 +7,8 @@ import (
 )
 
 type QuestCompletion struct {
-	ID        int32
-	QuestID	  int32
+	ID        int32			   `json:"id"`
+	QuestID	  int32			   `json:"quest_id"`
 	Condition *string          `json:"condition"`
 	Areas     []CompletionArea `json:"areas"`
 	Reward    ItemAmount       `json:"reward"`
@@ -32,8 +32,8 @@ func (qc QuestCompletion) Error() string {
 }
 
 type CompletionArea struct {
-	CompletionID int32
-	AreaID       int32
+	CompletionID int32		  `json:"completion_id"`
+	AreaID       int32		  `json:"area_id"`
 	LocationArea LocationArea `json:"location_area"`
 	Notes        *string      `json:"notes"`
 }

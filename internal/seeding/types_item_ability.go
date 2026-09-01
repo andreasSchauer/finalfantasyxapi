@@ -7,10 +7,10 @@ import (
 )
 
 type ItemAbility struct {
-	ID int32
+	ID 			int32		`json:"item_ability_id"`
 	Ability
-	ItemID             int32
-	Cursor             string              `json:"cursor"`
+	ItemID      int32		`json:"item_id"`
+	Cursor      string      `json:"cursor"`
 }
 
 func (a ItemAbility) ToHashFields() []any {

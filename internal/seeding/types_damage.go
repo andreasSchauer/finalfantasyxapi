@@ -7,14 +7,14 @@ import (
 )
 
 type Damage struct {
-	ID              int32
+	ID              int32			`json:"damage_id"`
 	DamageCalc      []AbilityDamage `json:"damage_calc"`
 	Critical        *string         `json:"critical"`
 	CriticalPlusVal *int32          `json:"critical_plus_val"`
 	IsPiercing      bool            `json:"is_piercing"`
 	BreakDmgLimit   *string         `json:"break_dmg_lmt"`
-	ElementID       *int32
-	Element         *string `json:"element"`
+	ElementID       *int32			`json:"element_id"`
+	Element         *string 		`json:"element"`
 }
 
 func (d Damage) ToHashFields() []any {
@@ -41,14 +41,14 @@ func (d Damage) Error() string {
 }
 
 type AbilityDamage struct {
-	ID             int32
-	Condition      *string `json:"condition"`
-	AttackType     string  `json:"attack_type"`
-	StatID         int32
-	TargetStat     string `json:"target_stat"`
-	DamageType     string `json:"damage_type"`
-	DamageFormula  string `json:"damage_formula"`
-	DamageConstant int32  `json:"damage_constant"`
+	ID             int32	`json:"id"`
+	Condition      *string 	`json:"condition"`
+	AttackType     string  	`json:"attack_type"`
+	StatID         int32	`json:"stat_id"`
+	TargetStat     string 	`json:"target_stat"`
+	DamageType     string 	`json:"damage_type"`
+	DamageFormula  string 	`json:"damage_formula"`
+	DamageConstant int32  	`json:"damage_constant"`
 }
 
 func (ad AbilityDamage) ToHashFields() []any {

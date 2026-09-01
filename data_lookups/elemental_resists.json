@@ -1,176 +1,176 @@
 [
-  {
-    "ID": 1,
-    "ElementID": 1,
-    "name": "fire",
-    "affinity": "halved"
-  },
-  {
-    "ID": 2,
-    "ElementID": 1,
-    "name": "fire",
-    "affinity": "immune"
-  },
-  {
-    "ID": 3,
-    "ElementID": 1,
-    "name": "fire",
-    "affinity": "absorb"
-  },
-  {
-    "ID": 4,
-    "ElementID": 2,
-    "name": "lightning",
-    "affinity": "halved"
-  },
-  {
-    "ID": 5,
-    "ElementID": 2,
-    "name": "lightning",
-    "affinity": "immune"
-  },
-  {
-    "ID": 6,
-    "ElementID": 2,
-    "name": "lightning",
-    "affinity": "absorb"
-  },
-  {
-    "ID": 7,
-    "ElementID": 3,
-    "name": "water",
-    "affinity": "halved"
-  },
-  {
-    "ID": 8,
-    "ElementID": 3,
-    "name": "water",
-    "affinity": "immune"
-  },
-  {
-    "ID": 9,
-    "ElementID": 3,
-    "name": "water",
-    "affinity": "absorb"
-  },
-  {
-    "ID": 10,
-    "ElementID": 4,
-    "name": "ice",
-    "affinity": "halved"
-  },
-  {
-    "ID": 11,
-    "ElementID": 4,
-    "name": "ice",
-    "affinity": "immune"
-  },
-  {
-    "ID": 12,
-    "ElementID": 4,
-    "name": "ice",
-    "affinity": "absorb"
-  },
-  {
-    "ID": 13,
-    "ElementID": 1,
-    "name": "fire",
-    "affinity": "neutral"
-  },
-  {
-    "ID": 14,
-    "ElementID": 2,
-    "name": "lightning",
-    "affinity": "neutral"
-  },
-  {
-    "ID": 15,
-    "ElementID": 3,
-    "name": "water",
-    "affinity": "neutral"
-  },
-  {
-    "ID": 16,
-    "ElementID": 4,
-    "name": "ice",
-    "affinity": "neutral"
-  },
-  {
-    "ID": 17,
-    "ElementID": 5,
-    "name": "holy",
-    "affinity": "neutral"
-  },
-  {
-    "ID": 18,
-    "ElementID": 2,
-    "name": "lightning",
-    "affinity": "weak"
-  },
-  {
-    "ID": 19,
-    "ElementID": 1,
-    "name": "fire",
-    "affinity": "weak"
-  },
-  {
-    "ID": 20,
-    "ElementID": 3,
-    "name": "water",
-    "affinity": "weak"
-  },
-  {
-    "ID": 21,
-    "ElementID": 4,
-    "name": "ice",
-    "affinity": "weak"
-  },
-  {
-    "ID": 22,
-    "ElementID": 5,
-    "name": "holy",
-    "affinity": "weak"
-  },
-  {
-    "ID": 23,
-    "ElementID": 5,
-    "name": "holy",
-    "affinity": "halved"
-  },
-  {
-    "ID": 24,
-    "ElementID": 5,
-    "name": "holy",
-    "affinity": "immune"
-  },
-  {
-    "ID": 25,
-    "ElementID": 1,
-    "name": "fire",
-    "affinity": "varies"
-  },
-  {
-    "ID": 26,
-    "ElementID": 2,
-    "name": "lightning",
-    "affinity": "varies"
-  },
-  {
-    "ID": 27,
-    "ElementID": 3,
-    "name": "water",
-    "affinity": "varies"
-  },
-  {
-    "ID": 28,
-    "ElementID": 4,
-    "name": "ice",
-    "affinity": "varies"
-  },
-  {
-    "ID": 29,
-    "ElementID": 5,
-    "name": "holy",
-    "affinity": "absorb"
-  }
+    {
+        "elemental_resist_id": 1,
+        "element_id": 1,
+        "name": "fire",
+        "affinity": "halved"
+    },
+    {
+        "elemental_resist_id": 2,
+        "element_id": 1,
+        "name": "fire",
+        "affinity": "immune"
+    },
+    {
+        "elemental_resist_id": 3,
+        "element_id": 1,
+        "name": "fire",
+        "affinity": "absorb"
+    },
+    {
+        "elemental_resist_id": 4,
+        "element_id": 2,
+        "name": "lightning",
+        "affinity": "halved"
+    },
+    {
+        "elemental_resist_id": 5,
+        "element_id": 2,
+        "name": "lightning",
+        "affinity": "immune"
+    },
+    {
+        "elemental_resist_id": 6,
+        "element_id": 2,
+        "name": "lightning",
+        "affinity": "absorb"
+    },
+    {
+        "elemental_resist_id": 7,
+        "element_id": 3,
+        "name": "water",
+        "affinity": "halved"
+    },
+    {
+        "elemental_resist_id": 8,
+        "element_id": 3,
+        "name": "water",
+        "affinity": "immune"
+    },
+    {
+        "elemental_resist_id": 9,
+        "element_id": 3,
+        "name": "water",
+        "affinity": "absorb"
+    },
+    {
+        "elemental_resist_id": 10,
+        "element_id": 4,
+        "name": "ice",
+        "affinity": "halved"
+    },
+    {
+        "elemental_resist_id": 11,
+        "element_id": 4,
+        "name": "ice",
+        "affinity": "immune"
+    },
+    {
+        "elemental_resist_id": 12,
+        "element_id": 4,
+        "name": "ice",
+        "affinity": "absorb"
+    },
+    {
+        "elemental_resist_id": 13,
+        "element_id": 1,
+        "name": "fire",
+        "affinity": "neutral"
+    },
+    {
+        "elemental_resist_id": 14,
+        "element_id": 2,
+        "name": "lightning",
+        "affinity": "neutral"
+    },
+    {
+        "elemental_resist_id": 15,
+        "element_id": 3,
+        "name": "water",
+        "affinity": "neutral"
+    },
+    {
+        "elemental_resist_id": 16,
+        "element_id": 4,
+        "name": "ice",
+        "affinity": "neutral"
+    },
+    {
+        "elemental_resist_id": 17,
+        "element_id": 5,
+        "name": "holy",
+        "affinity": "neutral"
+    },
+    {
+        "elemental_resist_id": 18,
+        "element_id": 2,
+        "name": "lightning",
+        "affinity": "weak"
+    },
+    {
+        "elemental_resist_id": 19,
+        "element_id": 1,
+        "name": "fire",
+        "affinity": "weak"
+    },
+    {
+        "elemental_resist_id": 20,
+        "element_id": 3,
+        "name": "water",
+        "affinity": "weak"
+    },
+    {
+        "elemental_resist_id": 21,
+        "element_id": 4,
+        "name": "ice",
+        "affinity": "weak"
+    },
+    {
+        "elemental_resist_id": 22,
+        "element_id": 5,
+        "name": "holy",
+        "affinity": "weak"
+    },
+    {
+        "elemental_resist_id": 23,
+        "element_id": 5,
+        "name": "holy",
+        "affinity": "halved"
+    },
+    {
+        "elemental_resist_id": 24,
+        "element_id": 5,
+        "name": "holy",
+        "affinity": "immune"
+    },
+    {
+        "elemental_resist_id": 25,
+        "element_id": 1,
+        "name": "fire",
+        "affinity": "varies"
+    },
+    {
+        "elemental_resist_id": 26,
+        "element_id": 2,
+        "name": "lightning",
+        "affinity": "varies"
+    },
+    {
+        "elemental_resist_id": 27,
+        "element_id": 3,
+        "name": "water",
+        "affinity": "varies"
+    },
+    {
+        "elemental_resist_id": 28,
+        "element_id": 4,
+        "name": "ice",
+        "affinity": "varies"
+    },
+    {
+        "elemental_resist_id": 29,
+        "element_id": 5,
+        "name": "holy",
+        "affinity": "absorb"
+    }
 ]

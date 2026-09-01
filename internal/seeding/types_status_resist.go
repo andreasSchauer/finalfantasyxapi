@@ -3,8 +3,8 @@ package seeding
 import "fmt"
 
 type StatusResist struct {
-	ID                int32
-	StatusConditionID int32
+	ID                int32	 `json:"id"`
+	StatusConditionID int32	 `json:"status_condition_id"`
 	StatusCondition   string `json:"name"`
 	Resistance        int32  `json:"resistance"`
 }

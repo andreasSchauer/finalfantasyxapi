@@ -8,13 +8,13 @@ import (
 )
 
 type PlayerAbility struct {
-	ID int32
+	ID 					int32				`json:"id"`
 	Ability
-	TopmenuID           *int32
-	SubmenuID           *int32
-	OpenSubmenuID       *int32
-	StandardGridCharID  *int32
-	ExpertGridCharID    *int32
+	TopmenuID           *int32				`json:"topmenu_id"`
+	SubmenuID           *int32				`json:"submenu_id"`
+	OpenSubmenuID       *int32				`json:"open_submenu_id"`
+	StandardGridCharID  *int32				`json:"std_grid_char_id"`
+	ExpertGridCharID    *int32				`json:"expert_grid_char_id"`
 	Description         *string             `json:"description"`
 	Effect              string              `json:"effect"`
 	RelatedStats        []string            `json:"related_stats"`

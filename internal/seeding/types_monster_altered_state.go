@@ -7,11 +7,11 @@ import (
 )
 
 type AlteredState struct {
-	ID          int32
-	MonsterID   int32
-	Condition   string `json:"condition"`
-	IsTemporary bool   `json:"is_temporary"`
-	Changes     []Alt  `json:"changes"`
+	ID          int32	`json:"id"`
+	MonsterID   int32	`json:"monster_id"`
+	Condition   string 	`json:"condition"`
+	IsTemporary bool   	`json:"is_temporary"`
+	Changes     []Alt  	`json:"changes"`
 }
 
 func (a AlteredState) ToHashFields() []any {
@@ -36,8 +36,8 @@ func (a AlteredState) Error() string {
 }
 
 type Alt struct {
-	ID               int32
-	AlteredStateID   int32
+	ID               int32			   `json:"id"`
+	AlteredStateID   int32			   `json:"altered_state_id"`
 	AlterationType   string            `json:"alteration_type"`
 	Distance         *int32            `json:"distance"`
 	Properties       []string          `json:"properties"`

@@ -8,7 +8,7 @@ import (
 )
 
 type OverdriveAbility struct {
-	ID int32
+	ID 				   int32			   `json:"id"`
 	Ability
 	Overdrive          LookupObject        `json:"overdrive"` // not meant for seeding (still needed?)
 	RelatedStats       []string            `json:"related_stats"`

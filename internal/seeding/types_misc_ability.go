@@ -8,11 +8,11 @@ import (
 )
 
 type MiscAbility struct {
-	ID 				   int32
+	ID 				   int32			   `json:"id"`
 	Ability
-	TopmenuID          *int32
-	SubmenuID          *int32
-	OpenSubmenuID      *int32
+	TopmenuID          *int32			   `json:"topmenu_id"`
+	SubmenuID          *int32			   `json:"submenu_id"`
+	OpenSubmenuID      *int32			   `json:"open_submenu_id"`
 	Description        string              `json:"description"`
 	Effect             string              `json:"effect"`
 	RelatedStats       []string            `json:"related_stats"`

@@ -7,7 +7,7 @@ import (
 )
 
 type Accuracy struct {
-	ID          int32
+	ID          int32	 `json:"accuracy_id"`
 	AccSource   string   `json:"acc_source"`
 	HitChance   *int32   `json:"hit_chance"`
 	AccModifier *float32 `json:"acc_modifier"`

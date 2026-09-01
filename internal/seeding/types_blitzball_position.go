@@ -5,7 +5,7 @@ import (
 )
 
 type BlitzballPosition struct {
-	ID       int32
+	ID       int32			 `json:"id"`
 	Category string          `json:"category"`
 	Slot     string          `json:"slot"`
 	Items    []BlitzballItem `json:"items"`

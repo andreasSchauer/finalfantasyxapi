@@ -7,7 +7,7 @@ import (
 )
 
 type BattleInteraction struct {
-	ID                        int32
+	ID                        int32				`json:"id"`
 	Target                    string            `json:"target"`
 	BasedOnUserAttack         bool              `json:"based_on_user_attack"`
 	Range                     *int32            `json:"range"`

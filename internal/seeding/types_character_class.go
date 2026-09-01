@@ -5,10 +5,10 @@ import (
 )
 
 type CharacterClass struct {
-	ID       int32
-	Name     string   `json:"name"`
-	Category string   `json:"category"`
-	Members  []string `json:"members"`
+	ID       int32		`json:"id"`
+	Name     string   	`json:"name"`
+	Category string   	`json:"category"`
+	Members  []string 	`json:"members"`
 }
 
 func (c CharacterClass) ToHashFields() []any {

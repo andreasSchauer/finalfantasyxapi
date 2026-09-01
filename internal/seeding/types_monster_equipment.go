@@ -8,8 +8,8 @@ import (
 )
 
 type MonsterEquipment struct {
-	ID                int32
-	MonsterID         int32
+	ID                int32					`json:"id"`
+	MonsterID         int32					`json:"monster_id"`
 	DropChance        int32                 `json:"drop_chance"`
 	Power             int32                 `json:"power"`
 	CriticalPlus      int32                 `json:"critical_plus"`
@@ -42,12 +42,12 @@ func (m MonsterEquipment) Error() string {
 }
 
 type MonsterEquipmentSlots struct {
-	ID                 int32
-	MonsterEquipmentID int32
-	MinAmount          int32                  `json:"min_amount"`
-	MaxAmount          int32                  `json:"max_amount"`
-	Chances            []EquipmentSlotsChance `json:"chances"`
-	Type               database.EquipmentSlotsType
+	ID                 int32				  		`json:"id"`
+	MonsterEquipmentID int32				  		`json:"monster_equipment_id"`
+	MinAmount          int32                  		`json:"min_amount"`
+	MaxAmount          int32                  		`json:"max_amount"`
+	Chances            []EquipmentSlotsChance 		`json:"chances"`
+	Type               database.EquipmentSlotsType	`json:"type"`
 }
 
 func (m MonsterEquipmentSlots) ToHashFields() []any {
@@ -73,7 +73,7 @@ func (m MonsterEquipmentSlots) Error() string {
 }
 
 type EquipmentSlotsChance struct {
-	ID     int32
+	ID     int32 `json:"id"`
 	Amount int32 `json:"amount"`
 	Chance int32 `json:"chance"`
 }
@@ -99,13 +99,13 @@ func (e EquipmentSlotsChance) Error() string {
 }
 
 type EquipmentDrop struct {
-	ID            int32
-	AutoAbilityID int32
-	Ability       string   `json:"ability"`
-	Characters    []string `json:"characters"`
-	IsForced      bool     `json:"is_forced"`
-	Probability   *int32   `json:"probability"`
-	Type          database.EquipType
+	ID            int32					`json:"id"`
+	AutoAbilityID int32					`json:"auto_ability_id"`
+	Ability       string   				`json:"ability"`
+	Characters    []string 				`json:"characters"`
+	IsForced      bool     				`json:"is_forced"`
+	Probability   *int32   				`json:"probability"`
+	Type          database.EquipType	`json:"type"`
 }
 
 func (e EquipmentDrop) ToHashFields() []any {

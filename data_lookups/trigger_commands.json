@@ -1,508 +1,532 @@
 [
-  {
-    "ID": 1,
-    "name": "stand by",
-    "version": null,
-    "specification": null,
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [
-      {
-        "ID": 11,
-        "target": "self",
-        "based_on_user_attack": false,
-        "range": null,
-        "damage": {
-          "ID": 22,
-          "damage_calc": [
+    {
+        "id": 1,
+        "ability_id": 362,
+        "name": "stand by",
+        "version": null,
+        "specification": null,
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [
             {
-              "ID": 105,
-              "condition": null,
-              "attack_type": "heal",
-              "StatID": 1,
-              "target_stat": "hp",
-              "damage_type": "special",
-              "damage_formula": "special-no-var",
-              "damage_constant": 1
+                "id": 11,
+                "target": "self",
+                "based_on_user_attack": false,
+                "range": null,
+                "damage": {
+                    "damage_id": 22,
+                    "damage_calc": [
+                        {
+                            "id": 105,
+                            "condition": null,
+                            "attack_type": "heal",
+                            "stat_id": 1,
+                            "target_stat": "hp",
+                            "damage_type": "special",
+                            "damage_formula": "special-no-var",
+                            "damage_constant": 1
+                        }
+                    ],
+                    "critical": null,
+                    "critical_plus_val": null,
+                    "is_piercing": false,
+                    "break_dmg_lmt": null,
+                    "element_id": null,
+                    "element": null
+                },
+                "shatter_rate": 0,
+                "accuracy": {
+                    "accuracy_id": 1,
+                    "acc_source": "rate",
+                    "hit_chance": 255,
+                    "acc_modifier": null
+                },
+                "affected_by": [],
+                "hit_amount": 1,
+                "special_action": null,
+                "inflicted_delay": null,
+                "inflicted_status_conditions": [],
+                "removed_status_conditions": [],
+                "copied_status_conditions": [],
+                "stat_changes": [],
+                "modifier_changes": []
             }
-          ],
-          "critical": null,
-          "critical_plus_val": null,
-          "is_piercing": false,
-          "break_dmg_lmt": null,
-          "ElementID": null,
-          "element": null
-        },
-        "shatter_rate": 0,
-        "accuracy": {
-          "ID": 1,
-          "acc_source": "rate",
-          "hit_chance": 255,
-          "acc_modifier": null
-        },
-        "affected_by": [],
-        "hit_amount": 1,
-        "special_action": null,
-        "inflicted_delay": null,
-        "inflicted_status_conditions": [],
-        "removed_status_conditions": [],
-        "copied_status_conditions": [],
-        "stat_changes": [],
-        "modifier_changes": []
-      }
-    ],
-    "TopmenuID": 3,
-    "description": "Wait while recovering HP.",
-    "effect": "Wait while recovering 50 HP.",
-    "topmenu": "left",
-    "related_stats": [],
-    "cursor": "self"
-  },
-  {
-    "ID": 2,
-    "name": "pincer attack",
-    "version": null,
-    "specification": null,
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [],
-    "TopmenuID": 3,
-    "description": "Attack enemy from both sides.",
-    "effect": "Attack Tros from both sides to cancel its Nautilus Charge.",
-    "topmenu": "left",
-    "related_stats": [],
-    "cursor": "single-enemy"
-  },
-  {
-    "ID": 3,
-    "name": "use crane",
-    "version": null,
-    "specification": null,
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [
-      {
-        "ID": 78,
-        "target": "single-enemy",
-        "based_on_user_attack": false,
-        "range": 3,
-        "damage": {
-          "ID": 22,
-          "damage_calc": [
-            {
-              "ID": 106,
-              "condition": null,
-              "attack_type": "attack",
-              "StatID": 1,
-              "target_stat": "hp",
-              "damage_type": "physical",
-              "damage_formula": "percentage-current",
-              "damage_constant": 15
-            }
-          ],
-          "critical": null,
-          "critical_plus_val": null,
-          "is_piercing": false,
-          "break_dmg_lmt": null,
-          "ElementID": null,
-          "element": null
-        },
-        "shatter_rate": 0,
-        "accuracy": {
-          "ID": 1,
-          "acc_source": "rate",
-          "hit_chance": 255,
-          "acc_modifier": null
-        },
-        "affected_by": [],
-        "hit_amount": 1,
-        "special_action": null,
-        "inflicted_delay": null,
-        "inflicted_status_conditions": [],
-        "removed_status_conditions": [],
-        "copied_status_conditions": [],
-        "stat_changes": [],
-        "modifier_changes": []
-      }
-    ],
-    "TopmenuID": 3,
-    "description": "Activate crane.",
-    "effect": "Use the crane to reduce Oblitzerator's current HP by 15/16.",
-    "topmenu": "left",
-    "related_stats": [],
-    "cursor": "single-enemy"
-  },
-  {
-    "ID": 4,
-    "name": "talk",
-    "version": 1,
-    "specification": "strength",
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [
-      {
-        "ID": 11,
-        "target": "self",
-        "based_on_user_attack": false,
-        "range": null,
-        "damage": null,
-        "shatter_rate": 0,
-        "accuracy": {
-          "ID": 1,
-          "acc_source": "rate",
-          "hit_chance": 255,
-          "acc_modifier": null
-        },
-        "affected_by": [],
-        "hit_amount": 1,
-        "special_action": null,
-        "inflicted_delay": null,
-        "inflicted_status_conditions": [],
-        "removed_status_conditions": [],
-        "copied_status_conditions": [],
-        "stat_changes": [
-          {
-            "ID": 7,
-            "StatID": 3,
-            "name": "strength",
-            "calculation_type": "added-value",
-            "value": 10
-          }
         ],
-        "modifier_changes": []
-      }
-    ],
-    "TopmenuID": 3,
-    "description": "Talk to enemy.",
-    "effect": "Increases strength stat of the user by 10.",
-    "topmenu": "left",
-    "related_stats": [
-      "strength"
-    ],
-    "cursor": "single-enemy"
-  },
-  {
-    "ID": 5,
-    "name": "talk",
-    "version": 2,
-    "specification": "magic defense",
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [
-      {
-        "ID": 11,
-        "target": "self",
-        "based_on_user_attack": false,
-        "range": null,
-        "damage": null,
-        "shatter_rate": 0,
-        "accuracy": {
-          "ID": 1,
-          "acc_source": "rate",
-          "hit_chance": 255,
-          "acc_modifier": null
-        },
-        "affected_by": [],
-        "hit_amount": 1,
-        "special_action": null,
-        "inflicted_delay": null,
-        "inflicted_status_conditions": [],
-        "removed_status_conditions": [],
-        "copied_status_conditions": [],
-        "stat_changes": [
-          {
-            "ID": 8,
-            "StatID": 6,
-            "name": "magic defense",
-            "calculation_type": "added-value",
-            "value": 10
-          }
-        ],
-        "modifier_changes": []
-      }
-    ],
-    "TopmenuID": 3,
-    "description": "Talk to enemy.",
-    "effect": "Increases magic defense stat of the user by 10.",
-    "topmenu": "left",
-    "related_stats": [
-      "magic defense"
-    ],
-    "cursor": "single-enemy"
-  },
-  {
-    "ID": 6,
-    "name": "talk",
-    "version": 3,
-    "specification": "braska's final aeon",
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [
-      {
-        "ID": 13,
-        "target": "single-enemy",
-        "based_on_user_attack": false,
-        "range": null,
-        "damage": null,
-        "shatter_rate": 0,
-        "accuracy": {
-          "ID": 1,
-          "acc_source": "rate",
-          "hit_chance": 255,
-          "acc_modifier": null
-        },
-        "affected_by": [],
-        "hit_amount": 1,
-        "special_action": null,
-        "inflicted_delay": null,
-        "inflicted_status_conditions": [],
-        "removed_status_conditions": [],
-        "copied_status_conditions": [],
-        "stat_changes": [],
-        "modifier_changes": [
-          {
-            "ID": 18,
-            "ModifierID": 18,
-            "name": "overdrive-gauge",
-            "calculation_type": "set-value",
-            "value": 1
-          }
-        ]
-      }
-    ],
-    "TopmenuID": 3,
-    "description": "Talk to enemy.",
-    "effect": "Reduces Braska's Final Aeon's Overdrive gauge to 1% and it will skip its next turn. Only works twice.",
-    "topmenu": "left",
-    "related_stats": [],
-    "cursor": "single-enemy"
-  },
-  {
-    "ID": 7,
-    "name": "move in",
-    "version": null,
-    "specification": null,
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [],
-    "TopmenuID": 3,
-    "description": "Ask Cid to close in on the enemy.",
-    "effect": "If the Airship is far away from the enemy, it will move in to close range.",
-    "topmenu": "left",
-    "related_stats": [],
-    "cursor": "single-enemy"
-  },
-  {
-    "ID": 8,
-    "name": "pull back",
-    "version": null,
-    "specification": null,
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [],
-    "TopmenuID": 3,
-    "description": "Ask Cid to move away from the enemy.",
-    "effect": "If the Airship is in close range of the enemy, it will pull back to very far range.",
-    "topmenu": "left",
-    "related_stats": [],
-    "cursor": "single-enemy"
-  },
-  {
-    "ID": 9,
-    "name": "cancel",
-    "version": null,
-    "specification": null,
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [],
-    "TopmenuID": 3,
-    "description": "Cancel movement.",
-    "effect": "The command you gave Cid is cancelled.",
-    "topmenu": "left",
-    "related_stats": [],
-    "cursor": "single-enemy"
-  },
-  {
-    "ID": 10,
-    "name": "open lock",
-    "version": null,
-    "specification": null,
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [
-      {
-        "ID": 78,
-        "target": "single-enemy",
-        "based_on_user_attack": false,
-        "range": 3,
-        "damage": {
-          "ID": 22,
-          "damage_calc": [
+        "topmenu_id": 3,
+        "description": "Wait while recovering HP.",
+        "effect": "Wait while recovering 50 HP.",
+        "topmenu": "left",
+        "related_stats": [],
+        "cursor": "self"
+    },
+    {
+        "id": 2,
+        "ability_id": 363,
+        "name": "pincer attack",
+        "version": null,
+        "specification": null,
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [],
+        "topmenu_id": 3,
+        "description": "Attack enemy from both sides.",
+        "effect": "Attack Tros from both sides to cancel its Nautilus Charge.",
+        "topmenu": "left",
+        "related_stats": [],
+        "cursor": "single-enemy"
+    },
+    {
+        "id": 3,
+        "ability_id": 364,
+        "name": "use crane",
+        "version": null,
+        "specification": null,
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [
             {
-              "ID": 107,
-              "condition": null,
-              "attack_type": "attack",
-              "StatID": 1,
-              "target_stat": "hp",
-              "damage_type": "special",
-              "damage_formula": "special-no-var",
-              "damage_constant": 1
+                "id": 78,
+                "target": "single-enemy",
+                "based_on_user_attack": false,
+                "range": 3,
+                "damage": {
+                    "damage_id": 22,
+                    "damage_calc": [
+                        {
+                            "id": 106,
+                            "condition": null,
+                            "attack_type": "attack",
+                            "stat_id": 1,
+                            "target_stat": "hp",
+                            "damage_type": "physical",
+                            "damage_formula": "percentage-current",
+                            "damage_constant": 15
+                        }
+                    ],
+                    "critical": null,
+                    "critical_plus_val": null,
+                    "is_piercing": false,
+                    "break_dmg_lmt": null,
+                    "element_id": null,
+                    "element": null
+                },
+                "shatter_rate": 0,
+                "accuracy": {
+                    "accuracy_id": 1,
+                    "acc_source": "rate",
+                    "hit_chance": 255,
+                    "acc_modifier": null
+                },
+                "affected_by": [],
+                "hit_amount": 1,
+                "special_action": null,
+                "inflicted_delay": null,
+                "inflicted_status_conditions": [],
+                "removed_status_conditions": [],
+                "copied_status_conditions": [],
+                "stat_changes": [],
+                "modifier_changes": []
             }
-          ],
-          "critical": null,
-          "critical_plus_val": null,
-          "is_piercing": false,
-          "break_dmg_lmt": null,
-          "ElementID": null,
-          "element": null
-        },
-        "shatter_rate": 0,
-        "accuracy": {
-          "ID": 1,
-          "acc_source": "rate",
-          "hit_chance": 255,
-          "acc_modifier": null
-        },
-        "affected_by": [],
-        "hit_amount": 1,
-        "special_action": null,
-        "inflicted_delay": null,
-        "inflicted_status_conditions": [],
-        "removed_status_conditions": [],
-        "copied_status_conditions": [],
-        "stat_changes": [],
-        "modifier_changes": []
-      }
-    ],
-    "TopmenuID": 3,
-    "description": "Open gate lock.",
-    "effect": "Open's a gate lock in the fight against Evrae Altana. Must be used on left and right side to open the gate.",
-    "topmenu": "left",
-    "related_stats": [],
-    "cursor": "single-enemy"
-  },
-  {
-    "ID": 11,
-    "name": "move",
-    "version": null,
-    "specification": null,
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [
-      {
-        "ID": 91,
-        "target": "single-enemy",
-        "based_on_user_attack": false,
-        "range": 1,
-        "damage": null,
-        "shatter_rate": 0,
-        "accuracy": {
-          "ID": 1,
-          "acc_source": "rate",
-          "hit_chance": 255,
-          "acc_modifier": null
-        },
-        "affected_by": [],
-        "hit_amount": 1,
-        "special_action": null,
-        "inflicted_delay": null,
-        "inflicted_status_conditions": [],
-        "removed_status_conditions": [],
-        "copied_status_conditions": [],
-        "stat_changes": [],
-        "modifier_changes": []
-      }
-    ],
-    "TopmenuID": 3,
-    "description": "Move to an empty spot.",
-    "effect": "User switches position to another Circle in the fight against Spectral Keeper.",
-    "topmenu": "left",
-    "related_stats": [],
-    "cursor": "single-enemy"
-  },
-  {
-    "ID": 12,
-    "name": "struggle",
-    "version": null,
-    "specification": null,
-    "Type": "trigger-command",
-    "rank": 3,
-    "appears_in_help_bar": true,
-    "can_copycat": false,
-    "battle_interactions": [
-      {
-        "ID": 92,
-        "target": "single-enemy",
-        "based_on_user_attack": true,
-        "range": 1,
-        "damage": {
-          "ID": 10,
-          "damage_calc": [
-            {
-              "ID": 1,
-              "condition": null,
-              "attack_type": "attack",
-              "StatID": 1,
-              "target_stat": "hp",
-              "damage_type": "physical",
-              "damage_formula": "str-vs-def",
-              "damage_constant": 16
-            }
-          ],
-          "critical": "crit+weapon%",
-          "critical_plus_val": null,
-          "is_piercing": true,
-          "break_dmg_lmt": "auto-ability",
-          "ElementID": null,
-          "element": null
-        },
-        "shatter_rate": 0,
-        "accuracy": {
-          "ID": 1,
-          "acc_source": "rate",
-          "hit_chance": 255,
-          "acc_modifier": null
-        },
-        "affected_by": [
-          "darkness"
         ],
-        "hit_amount": 1,
-        "special_action": null,
-        "inflicted_delay": null,
-        "inflicted_status_conditions": [],
-        "removed_status_conditions": [],
-        "copied_status_conditions": [],
-        "stat_changes": [],
-        "modifier_changes": []
-      }
-    ],
-    "TopmenuID": 3,
-    "description": "Attack enemy from inside.",
-    "effect": "User attacks Geosgaeno from the inside while swallowed by it.",
-    "topmenu": "left",
-    "related_stats": [],
-    "cursor": "single-enemy"
-  }
+        "topmenu_id": 3,
+        "description": "Activate crane.",
+        "effect": "Use the crane to reduce Oblitzerator's current HP by 15/16.",
+        "topmenu": "left",
+        "related_stats": [],
+        "cursor": "single-enemy"
+    },
+    {
+        "id": 4,
+        "ability_id": 365,
+        "name": "talk",
+        "version": 1,
+        "specification": "strength",
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [
+            {
+                "id": 11,
+                "target": "self",
+                "based_on_user_attack": false,
+                "range": null,
+                "damage": null,
+                "shatter_rate": 0,
+                "accuracy": {
+                    "accuracy_id": 1,
+                    "acc_source": "rate",
+                    "hit_chance": 255,
+                    "acc_modifier": null
+                },
+                "affected_by": [],
+                "hit_amount": 1,
+                "special_action": null,
+                "inflicted_delay": null,
+                "inflicted_status_conditions": [],
+                "removed_status_conditions": [],
+                "copied_status_conditions": [],
+                "stat_changes": [
+                    {
+                        "id": 7,
+                        "stat_id": 3,
+                        "name": "strength",
+                        "calculation_type": "added-value",
+                        "value": 10
+                    }
+                ],
+                "modifier_changes": []
+            }
+        ],
+        "topmenu_id": 3,
+        "description": "Talk to enemy.",
+        "effect": "Increases strength stat of the user by 10.",
+        "topmenu": "left",
+        "related_stats": [
+            "strength"
+        ],
+        "cursor": "single-enemy"
+    },
+    {
+        "id": 5,
+        "ability_id": 366,
+        "name": "talk",
+        "version": 2,
+        "specification": "magic defense",
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [
+            {
+                "id": 11,
+                "target": "self",
+                "based_on_user_attack": false,
+                "range": null,
+                "damage": null,
+                "shatter_rate": 0,
+                "accuracy": {
+                    "accuracy_id": 1,
+                    "acc_source": "rate",
+                    "hit_chance": 255,
+                    "acc_modifier": null
+                },
+                "affected_by": [],
+                "hit_amount": 1,
+                "special_action": null,
+                "inflicted_delay": null,
+                "inflicted_status_conditions": [],
+                "removed_status_conditions": [],
+                "copied_status_conditions": [],
+                "stat_changes": [
+                    {
+                        "id": 8,
+                        "stat_id": 6,
+                        "name": "magic defense",
+                        "calculation_type": "added-value",
+                        "value": 10
+                    }
+                ],
+                "modifier_changes": []
+            }
+        ],
+        "topmenu_id": 3,
+        "description": "Talk to enemy.",
+        "effect": "Increases magic defense stat of the user by 10.",
+        "topmenu": "left",
+        "related_stats": [
+            "magic defense"
+        ],
+        "cursor": "single-enemy"
+    },
+    {
+        "id": 6,
+        "ability_id": 367,
+        "name": "talk",
+        "version": 3,
+        "specification": "braska's final aeon",
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [
+            {
+                "id": 13,
+                "target": "single-enemy",
+                "based_on_user_attack": false,
+                "range": null,
+                "damage": null,
+                "shatter_rate": 0,
+                "accuracy": {
+                    "accuracy_id": 1,
+                    "acc_source": "rate",
+                    "hit_chance": 255,
+                    "acc_modifier": null
+                },
+                "affected_by": [],
+                "hit_amount": 1,
+                "special_action": null,
+                "inflicted_delay": null,
+                "inflicted_status_conditions": [],
+                "removed_status_conditions": [],
+                "copied_status_conditions": [],
+                "stat_changes": [],
+                "modifier_changes": [
+                    {
+                        "id": 18,
+                        "modifier_id": 18,
+                        "name": "overdrive-gauge",
+                        "calculation_type": "set-value",
+                        "value": 1
+                    }
+                ]
+            }
+        ],
+        "topmenu_id": 3,
+        "description": "Talk to enemy.",
+        "effect": "Reduces Braska's Final Aeon's Overdrive gauge to 1% and it will skip its next turn. Only works twice.",
+        "topmenu": "left",
+        "related_stats": [],
+        "cursor": "single-enemy"
+    },
+    {
+        "id": 7,
+        "ability_id": 368,
+        "name": "move in",
+        "version": null,
+        "specification": null,
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [],
+        "topmenu_id": 3,
+        "description": "Ask Cid to close in on the enemy.",
+        "effect": "If the Airship is far away from the enemy, it will move in to close range.",
+        "topmenu": "left",
+        "related_stats": [],
+        "cursor": "single-enemy"
+    },
+    {
+        "id": 8,
+        "ability_id": 369,
+        "name": "pull back",
+        "version": null,
+        "specification": null,
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [],
+        "topmenu_id": 3,
+        "description": "Ask Cid to move away from the enemy.",
+        "effect": "If the Airship is in close range of the enemy, it will pull back to very far range.",
+        "topmenu": "left",
+        "related_stats": [],
+        "cursor": "single-enemy"
+    },
+    {
+        "id": 9,
+        "ability_id": 370,
+        "name": "cancel",
+        "version": null,
+        "specification": null,
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [],
+        "topmenu_id": 3,
+        "description": "Cancel movement.",
+        "effect": "The command you gave Cid is cancelled.",
+        "topmenu": "left",
+        "related_stats": [],
+        "cursor": "single-enemy"
+    },
+    {
+        "id": 10,
+        "ability_id": 371,
+        "name": "open lock",
+        "version": null,
+        "specification": null,
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [
+            {
+                "id": 78,
+                "target": "single-enemy",
+                "based_on_user_attack": false,
+                "range": 3,
+                "damage": {
+                    "damage_id": 22,
+                    "damage_calc": [
+                        {
+                            "id": 107,
+                            "condition": null,
+                            "attack_type": "attack",
+                            "stat_id": 1,
+                            "target_stat": "hp",
+                            "damage_type": "special",
+                            "damage_formula": "special-no-var",
+                            "damage_constant": 1
+                        }
+                    ],
+                    "critical": null,
+                    "critical_plus_val": null,
+                    "is_piercing": false,
+                    "break_dmg_lmt": null,
+                    "element_id": null,
+                    "element": null
+                },
+                "shatter_rate": 0,
+                "accuracy": {
+                    "accuracy_id": 1,
+                    "acc_source": "rate",
+                    "hit_chance": 255,
+                    "acc_modifier": null
+                },
+                "affected_by": [],
+                "hit_amount": 1,
+                "special_action": null,
+                "inflicted_delay": null,
+                "inflicted_status_conditions": [],
+                "removed_status_conditions": [],
+                "copied_status_conditions": [],
+                "stat_changes": [],
+                "modifier_changes": []
+            }
+        ],
+        "topmenu_id": 3,
+        "description": "Open gate lock.",
+        "effect": "Open's a gate lock in the fight against Evrae Altana. Must be used on left and right side to open the gate.",
+        "topmenu": "left",
+        "related_stats": [],
+        "cursor": "single-enemy"
+    },
+    {
+        "id": 11,
+        "ability_id": 372,
+        "name": "move",
+        "version": null,
+        "specification": null,
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [
+            {
+                "id": 91,
+                "target": "single-enemy",
+                "based_on_user_attack": false,
+                "range": 1,
+                "damage": null,
+                "shatter_rate": 0,
+                "accuracy": {
+                    "accuracy_id": 1,
+                    "acc_source": "rate",
+                    "hit_chance": 255,
+                    "acc_modifier": null
+                },
+                "affected_by": [],
+                "hit_amount": 1,
+                "special_action": null,
+                "inflicted_delay": null,
+                "inflicted_status_conditions": [],
+                "removed_status_conditions": [],
+                "copied_status_conditions": [],
+                "stat_changes": [],
+                "modifier_changes": []
+            }
+        ],
+        "topmenu_id": 3,
+        "description": "Move to an empty spot.",
+        "effect": "User switches position to another Circle in the fight against Spectral Keeper.",
+        "topmenu": "left",
+        "related_stats": [],
+        "cursor": "single-enemy"
+    },
+    {
+        "id": 12,
+        "ability_id": 373,
+        "name": "struggle",
+        "version": null,
+        "specification": null,
+        "type": "trigger-command",
+        "attributes_id": 1,
+        "rank": 3,
+        "appears_in_help_bar": true,
+        "can_copycat": false,
+        "battle_interactions": [
+            {
+                "id": 92,
+                "target": "single-enemy",
+                "based_on_user_attack": true,
+                "range": 1,
+                "damage": {
+                    "damage_id": 10,
+                    "damage_calc": [
+                        {
+                            "id": 1,
+                            "condition": null,
+                            "attack_type": "attack",
+                            "stat_id": 1,
+                            "target_stat": "hp",
+                            "damage_type": "physical",
+                            "damage_formula": "str-vs-def",
+                            "damage_constant": 16
+                        }
+                    ],
+                    "critical": "crit+weapon%",
+                    "critical_plus_val": null,
+                    "is_piercing": true,
+                    "break_dmg_lmt": "auto-ability",
+                    "element_id": null,
+                    "element": null
+                },
+                "shatter_rate": 0,
+                "accuracy": {
+                    "accuracy_id": 1,
+                    "acc_source": "rate",
+                    "hit_chance": 255,
+                    "acc_modifier": null
+                },
+                "affected_by": [
+                    "darkness"
+                ],
+                "hit_amount": 1,
+                "special_action": null,
+                "inflicted_delay": null,
+                "inflicted_status_conditions": [],
+                "removed_status_conditions": [],
+                "copied_status_conditions": [],
+                "stat_changes": [],
+                "modifier_changes": []
+            }
+        ],
+        "topmenu_id": 3,
+        "description": "Attack enemy from inside.",
+        "effect": "User attacks Geosgaeno from the inside while swallowed by it.",
+        "topmenu": "left",
+        "related_stats": [],
+        "cursor": "single-enemy"
+    }
 ]

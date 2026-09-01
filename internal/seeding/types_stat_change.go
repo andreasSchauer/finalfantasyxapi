@@ -3,8 +3,8 @@ package seeding
 import "fmt"
 
 type StatChange struct {
-	ID              int32
-	StatID          int32
+	ID              int32	`json:"id"`
+	StatID          int32	`json:"stat_id"`
 	StatName        string  `json:"name"`
 	CalculationType string  `json:"calculation_type"`
 	Value           float32 `json:"value"`

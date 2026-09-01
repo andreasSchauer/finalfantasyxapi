@@ -7,9 +7,9 @@ import (
 )
 
 type FormationTriggerCommand struct {
-	ID int32
+	ID 				 int32	  `json:"id"`
 	AbilityReference
-	TriggerCommandID int32
+	TriggerCommandID int32	  `json:"trigger_command_id"`
 	Condition        *string  `json:"condition"`
 	UseAmount        *int32   `json:"use_amount"`
 	Users            []string `json:"users"`

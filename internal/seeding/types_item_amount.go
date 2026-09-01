@@ -3,10 +3,10 @@ package seeding
 import "fmt"
 
 type ItemAmount struct {
-	ID int32 `json:"-"`
+	ID 			int32 	`json:"item_amount_id"`
 	MasterItem
-	ItemName string `json:"name"`
-	Amount   int32  `json:"amount"`
+	ItemName 	string 	`json:"name"`
+	Amount   	int32  	`json:"amount"`
 }
 
 func (ia ItemAmount) ToHashFields() []any {

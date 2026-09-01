@@ -1,178 +1,178 @@
 [
-  {
-    "ID": 1,
-    "name": "summon",
-    "description": "Summon an aeon.",
-    "effect": "Opens the Summon menu.",
-    "topmenu": "main",
-    "TopmenuID": 1,
-    "users": [
-      "yuna"
-    ]
-  },
-  {
-    "ID": 2,
-    "name": "skill",
-    "description": "Use Skills.",
-    "effect": "Opens the Skill menu.",
-    "topmenu": "main",
-    "TopmenuID": 1,
-    "users": [
-      "characters",
-      "standard-aeons"
-    ]
-  },
-  {
-    "ID": 3,
-    "name": "special",
-    "description": "Use Special Abilities.",
-    "effect": "Opens the Special abilities menu.",
-    "topmenu": "main",
-    "TopmenuID": 1,
-    "users": [
-      "characters",
-      "standard-aeons"
-    ]
-  },
-  {
-    "ID": 4,
-    "name": "wht magic",
-    "description": "Cast white magic spells.",
-    "effect": "Opens the White Magic menu.",
-    "topmenu": "main",
-    "TopmenuID": 1,
-    "users": [
-      "characters",
-      "seymour",
-      "standard-aeons"
-    ]
-  },
-  {
-    "ID": 5,
-    "name": "blk magic",
-    "description": "Cast black magic spells.",
-    "effect": "Opens the Black Magic menu.",
-    "topmenu": "main",
-    "TopmenuID": 1,
-    "users": [
-      "characters",
-      "seymour",
-      "standard-aeons"
-    ]
-  },
-  {
-    "ID": 6,
-    "name": "item",
-    "description": "Use an item.",
-    "effect": "Opens the Item menu.",
-    "topmenu": "main",
-    "TopmenuID": 1,
-    "users": [
-      "characters",
-      "seymour"
-    ]
-  },
-  {
-    "ID": 7,
-    "name": "weapon",
-    "description": "Change equipped weapon.",
-    "effect": "Opens the Weapon menu.",
-    "topmenu": "right",
-    "TopmenuID": 2,
-    "users": [
-      "characters"
-    ]
-  },
-  {
-    "ID": 8,
-    "name": "armor",
-    "description": "Change equipped armor.",
-    "effect": "Opens the Armor menu.",
-    "topmenu": "right",
-    "TopmenuID": 2,
-    "users": [
-      "characters"
-    ]
-  },
-  {
-    "ID": 9,
-    "name": "use",
-    "description": "Use special items.",
-    "effect": "Opens the Use-Item menu.",
-    "topmenu": null,
-    "TopmenuID": null,
-    "users": [
-      "characters"
-    ]
-  },
-  {
-    "ID": 10,
-    "name": "mix",
-    "description": "Combine items for various effects!",
-    "effect": "Opens a menu that includes all items for the execution of the Mix overdrive.",
-    "topmenu": null,
-    "TopmenuID": null,
-    "users": [
-      "rikku"
-    ]
-  },
-  {
-    "ID": 11,
-    "name": "gil",
-    "description": null,
-    "effect": "Opens a menu from where the amount of gil to be payed for Bribe and Spare Change can be set.",
-    "topmenu": null,
-    "TopmenuID": null,
-    "users": [
-      "characters"
-    ]
-  },
-  {
-    "ID": 12,
-    "name": "gil yojimbo",
-    "description": null,
-    "effect": "Opens a menu from where the amount of gil to be payed to Yojimbo can be set.",
-    "topmenu": "main",
-    "TopmenuID": 1,
-    "users": [
-      "yojimbo"
-    ]
-  },
-  {
-    "ID": 13,
-    "name": "switch characters",
-    "description": "Switch party members in and out of battle.",
-    "effect": "Opens a menu from where an inactive party member to swap places with the current party member can be selected.",
-    "topmenu": "hidden",
-    "TopmenuID": 4,
-    "users": [
-      "characters"
-    ]
-  },
-  {
-    "ID": 14,
-    "name": "overdrives",
-    "description": null,
-    "effect": "Opens a menu from where a character can select their available Overdrives.",
-    "topmenu": null,
-    "TopmenuID": null,
-    "users": [
-      "tidus",
-      "wakka",
-      "lulu",
-      "kimahri",
-      "auron"
-    ]
-  },
-  {
-    "ID": 15,
-    "name": "spheres",
-    "description": "Use sphere.",
-    "effect": "Opens the Sphere menu in the Sphere Grid.",
-    "topmenu": null,
-    "TopmenuID": null,
-    "users": [
-      "characters"
-    ]
-  }
+    {
+        "id": 1,
+        "name": "summon",
+        "description": "Summon an aeon.",
+        "effect": "Opens the Summon menu.",
+        "topmenu": "main",
+        "topmenu_id": 1,
+        "users": [
+            "yuna"
+        ]
+    },
+    {
+        "id": 2,
+        "name": "skill",
+        "description": "Use Skills.",
+        "effect": "Opens the Skill menu.",
+        "topmenu": "main",
+        "topmenu_id": 1,
+        "users": [
+            "characters",
+            "standard-aeons"
+        ]
+    },
+    {
+        "id": 3,
+        "name": "special",
+        "description": "Use Special Abilities.",
+        "effect": "Opens the Special abilities menu.",
+        "topmenu": "main",
+        "topmenu_id": 1,
+        "users": [
+            "characters",
+            "standard-aeons"
+        ]
+    },
+    {
+        "id": 4,
+        "name": "wht magic",
+        "description": "Cast white magic spells.",
+        "effect": "Opens the White Magic menu.",
+        "topmenu": "main",
+        "topmenu_id": 1,
+        "users": [
+            "characters",
+            "seymour",
+            "standard-aeons"
+        ]
+    },
+    {
+        "id": 5,
+        "name": "blk magic",
+        "description": "Cast black magic spells.",
+        "effect": "Opens the Black Magic menu.",
+        "topmenu": "main",
+        "topmenu_id": 1,
+        "users": [
+            "characters",
+            "seymour",
+            "standard-aeons"
+        ]
+    },
+    {
+        "id": 6,
+        "name": "item",
+        "description": "Use an item.",
+        "effect": "Opens the Item menu.",
+        "topmenu": "main",
+        "topmenu_id": 1,
+        "users": [
+            "characters",
+            "seymour"
+        ]
+    },
+    {
+        "id": 7,
+        "name": "weapon",
+        "description": "Change equipped weapon.",
+        "effect": "Opens the Weapon menu.",
+        "topmenu": "right",
+        "topmenu_id": 2,
+        "users": [
+            "characters"
+        ]
+    },
+    {
+        "id": 8,
+        "name": "armor",
+        "description": "Change equipped armor.",
+        "effect": "Opens the Armor menu.",
+        "topmenu": "right",
+        "topmenu_id": 2,
+        "users": [
+            "characters"
+        ]
+    },
+    {
+        "id": 9,
+        "name": "use",
+        "description": "Use special items.",
+        "effect": "Opens the Use-Item menu.",
+        "topmenu": null,
+        "topmenu_id": null,
+        "users": [
+            "characters"
+        ]
+    },
+    {
+        "id": 10,
+        "name": "mix",
+        "description": "Combine items for various effects!",
+        "effect": "Opens a menu that includes all items for the execution of the Mix overdrive.",
+        "topmenu": null,
+        "topmenu_id": null,
+        "users": [
+            "rikku"
+        ]
+    },
+    {
+        "id": 11,
+        "name": "gil",
+        "description": null,
+        "effect": "Opens a menu from where the amount of gil to be payed for Bribe and Spare Change can be set.",
+        "topmenu": null,
+        "topmenu_id": null,
+        "users": [
+            "characters"
+        ]
+    },
+    {
+        "id": 12,
+        "name": "gil yojimbo",
+        "description": null,
+        "effect": "Opens a menu from where the amount of gil to be payed to Yojimbo can be set.",
+        "topmenu": "main",
+        "topmenu_id": 1,
+        "users": [
+            "yojimbo"
+        ]
+    },
+    {
+        "id": 13,
+        "name": "switch characters",
+        "description": "Switch party members in and out of battle.",
+        "effect": "Opens a menu from where an inactive party member to swap places with the current party member can be selected.",
+        "topmenu": "hidden",
+        "topmenu_id": 4,
+        "users": [
+            "characters"
+        ]
+    },
+    {
+        "id": 14,
+        "name": "overdrives",
+        "description": null,
+        "effect": "Opens a menu from where a character can select their available Overdrives.",
+        "topmenu": null,
+        "topmenu_id": null,
+        "users": [
+            "tidus",
+            "wakka",
+            "lulu",
+            "kimahri",
+            "auron"
+        ]
+    },
+    {
+        "id": 15,
+        "name": "spheres",
+        "description": "Use sphere.",
+        "effect": "Opens the Sphere menu in the Sphere Grid.",
+        "topmenu": null,
+        "topmenu_id": null,
+        "users": [
+            "characters"
+        ]
+    }
 ]

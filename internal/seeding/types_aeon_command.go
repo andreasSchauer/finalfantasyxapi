@@ -7,9 +7,9 @@ import (
 )
 
 type AeonCommand struct {
-	ID                int32
-	TopmenuID         *int32
-	SubmenuID         *int32
+	ID                int32					`json:"id"`
+	TopmenuID         *int32				`json:"topmenu_id"`
+	SubmenuID         *int32				`json:"submenu_id"`
 	Name              string                `json:"name"`
 	Description       string                `json:"description"`
 	Effect            string                `json:"effect"`

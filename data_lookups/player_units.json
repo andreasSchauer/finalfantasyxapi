@@ -1,92 +1,92 @@
 [
-  {
-    "ID": 1,
-    "name": "tidus",
-    "Type": "character"
-  },
-  {
-    "ID": 2,
-    "name": "yuna",
-    "Type": "character"
-  },
-  {
-    "ID": 3,
-    "name": "wakka",
-    "Type": "character"
-  },
-  {
-    "ID": 4,
-    "name": "lulu",
-    "Type": "character"
-  },
-  {
-    "ID": 5,
-    "name": "kimahri",
-    "Type": "character"
-  },
-  {
-    "ID": 6,
-    "name": "auron",
-    "Type": "character"
-  },
-  {
-    "ID": 7,
-    "name": "rikku",
-    "Type": "character"
-  },
-  {
-    "ID": 8,
-    "name": "seymour",
-    "Type": "character"
-  },
-  {
-    "ID": 9,
-    "name": "valefor",
-    "Type": "aeon"
-  },
-  {
-    "ID": 10,
-    "name": "ifrit",
-    "Type": "aeon"
-  },
-  {
-    "ID": 11,
-    "name": "ixion",
-    "Type": "aeon"
-  },
-  {
-    "ID": 12,
-    "name": "shiva",
-    "Type": "aeon"
-  },
-  {
-    "ID": 13,
-    "name": "bahamut",
-    "Type": "aeon"
-  },
-  {
-    "ID": 14,
-    "name": "anima",
-    "Type": "aeon"
-  },
-  {
-    "ID": 15,
-    "name": "yojimbo",
-    "Type": "aeon"
-  },
-  {
-    "ID": 16,
-    "name": "cindy",
-    "Type": "aeon"
-  },
-  {
-    "ID": 17,
-    "name": "sandy",
-    "Type": "aeon"
-  },
-  {
-    "ID": 18,
-    "name": "mindy",
-    "Type": "aeon"
-  }
+    {
+        "player_unit_id": 1,
+        "name": "tidus",
+        "type": "character"
+    },
+    {
+        "player_unit_id": 2,
+        "name": "yuna",
+        "type": "character"
+    },
+    {
+        "player_unit_id": 3,
+        "name": "wakka",
+        "type": "character"
+    },
+    {
+        "player_unit_id": 4,
+        "name": "lulu",
+        "type": "character"
+    },
+    {
+        "player_unit_id": 5,
+        "name": "kimahri",
+        "type": "character"
+    },
+    {
+        "player_unit_id": 6,
+        "name": "auron",
+        "type": "character"
+    },
+    {
+        "player_unit_id": 7,
+        "name": "rikku",
+        "type": "character"
+    },
+    {
+        "player_unit_id": 8,
+        "name": "seymour",
+        "type": "character"
+    },
+    {
+        "player_unit_id": 9,
+        "name": "valefor",
+        "type": "aeon"
+    },
+    {
+        "player_unit_id": 10,
+        "name": "ifrit",
+        "type": "aeon"
+    },
+    {
+        "player_unit_id": 11,
+        "name": "ixion",
+        "type": "aeon"
+    },
+    {
+        "player_unit_id": 12,
+        "name": "shiva",
+        "type": "aeon"
+    },
+    {
+        "player_unit_id": 13,
+        "name": "bahamut",
+        "type": "aeon"
+    },
+    {
+        "player_unit_id": 14,
+        "name": "anima",
+        "type": "aeon"
+    },
+    {
+        "player_unit_id": 15,
+        "name": "yojimbo",
+        "type": "aeon"
+    },
+    {
+        "player_unit_id": 16,
+        "name": "cindy",
+        "type": "aeon"
+    },
+    {
+        "player_unit_id": 17,
+        "name": "sandy",
+        "type": "aeon"
+    },
+    {
+        "player_unit_id": 18,
+        "name": "mindy",
+        "type": "aeon"
+    }
 ]

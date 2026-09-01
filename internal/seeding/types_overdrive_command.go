@@ -7,10 +7,10 @@ import (
 )
 
 type OverdriveCommand struct {
-	ID          int32
-	CharClassID *int32
-	TopmenuID   *int32
-	SubmenuID   *int32
+	ID          int32	`json:"id"`
+	CharClassID *int32	`json:"char_class_id"`
+	TopmenuID   *int32	`json:"topmenu_id"`
+	SubmenuID   *int32	`json:"submenu_id"`
 	Name        string  `json:"name"`
 	Description string  `json:"description"`
 	User        string  `json:"user"`

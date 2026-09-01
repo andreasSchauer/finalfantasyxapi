@@ -7,7 +7,7 @@ import (
 )
 
 type StatusCondition struct {
-	ID                      int32
+	ID                      int32			 `json:"id"`
 	Name                    string           `json:"name"`
 	Category                string           `json:"category"`
 	IsPermanent             bool             `json:"is_permanent"`

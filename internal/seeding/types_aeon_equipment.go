@@ -3,11 +3,11 @@ package seeding
 import "fmt"
 
 type AeonEquipment struct {
-	ID              int32
-	AutoAbilityID   int32
-	AutoAbility     string `json:"ability"`
-	CelestialWeapon bool   `json:"celestial_wpn"`
-	EquipType       string
+	ID              int32	`json:"id"`
+	AutoAbilityID   int32	`json:"auto_ability_id"`
+	AutoAbility     string 	`json:"ability"`
+	CelestialWeapon bool   	`json:"celestial_wpn"`
+	EquipType       string	`json:"equip_type"`
 }
 
 func (a AeonEquipment) ToHashFields() []any {

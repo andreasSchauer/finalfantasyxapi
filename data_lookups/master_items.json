@@ -1,862 +1,862 @@
 [
-  {
-    "master_item_id": 1,
-    "name": "potion",
-    "type": "item"
-  },
-  {
-    "master_item_id": 2,
-    "name": "hi-potion",
-    "type": "item"
-  },
-  {
-    "master_item_id": 3,
-    "name": "x-potion",
-    "type": "item"
-  },
-  {
-    "master_item_id": 4,
-    "name": "mega-potion",
-    "type": "item"
-  },
-  {
-    "master_item_id": 5,
-    "name": "ether",
-    "type": "item"
-  },
-  {
-    "master_item_id": 6,
-    "name": "turbo ether",
-    "type": "item"
-  },
-  {
-    "master_item_id": 7,
-    "name": "elixir",
-    "type": "item"
-  },
-  {
-    "master_item_id": 8,
-    "name": "megalixir",
-    "type": "item"
-  },
-  {
-    "master_item_id": 9,
-    "name": "phoenix down",
-    "type": "item"
-  },
-  {
-    "master_item_id": 10,
-    "name": "mega phoenix",
-    "type": "item"
-  },
-  {
-    "master_item_id": 11,
-    "name": "antidote",
-    "type": "item"
-  },
-  {
-    "master_item_id": 12,
-    "name": "soft",
-    "type": "item"
-  },
-  {
-    "master_item_id": 13,
-    "name": "eye drops",
-    "type": "item"
-  },
-  {
-    "master_item_id": 14,
-    "name": "echo screen",
-    "type": "item"
-  },
-  {
-    "master_item_id": 15,
-    "name": "holy water",
-    "type": "item"
-  },
-  {
-    "master_item_id": 16,
-    "name": "remedy",
-    "type": "item"
-  },
-  {
-    "master_item_id": 17,
-    "name": "power distiller",
-    "type": "item"
-  },
-  {
-    "master_item_id": 18,
-    "name": "mana distiller",
-    "type": "item"
-  },
-  {
-    "master_item_id": 19,
-    "name": "speed distiller",
-    "type": "item"
-  },
-  {
-    "master_item_id": 20,
-    "name": "ability distiller",
-    "type": "item"
-  },
-  {
-    "master_item_id": 21,
-    "name": "al bhed potion",
-    "type": "item"
-  },
-  {
-    "master_item_id": 22,
-    "name": "healing water",
-    "type": "item"
-  },
-  {
-    "master_item_id": 23,
-    "name": "tetra elemental",
-    "type": "item"
-  },
-  {
-    "master_item_id": 24,
-    "name": "bomb fragment",
-    "type": "item"
-  },
-  {
-    "master_item_id": 25,
-    "name": "bomb core",
-    "type": "item"
-  },
-  {
-    "master_item_id": 26,
-    "name": "fire gem",
-    "type": "item"
-  },
-  {
-    "master_item_id": 27,
-    "name": "electro marble",
-    "type": "item"
-  },
-  {
-    "master_item_id": 28,
-    "name": "lightning marble",
-    "type": "item"
-  },
-  {
-    "master_item_id": 29,
-    "name": "lightning gem",
-    "type": "item"
-  },
-  {
-    "master_item_id": 30,
-    "name": "fish scale",
-    "type": "item"
-  },
-  {
-    "master_item_id": 31,
-    "name": "dragon scale",
-    "type": "item"
-  },
-  {
-    "master_item_id": 32,
-    "name": "water gem",
-    "type": "item"
-  },
-  {
-    "master_item_id": 33,
-    "name": "antarctic wind",
-    "type": "item"
-  },
-  {
-    "master_item_id": 34,
-    "name": "arctic wind",
-    "type": "item"
-  },
-  {
-    "master_item_id": 35,
-    "name": "ice gem",
-    "type": "item"
-  },
-  {
-    "master_item_id": 36,
-    "name": "grenade",
-    "type": "item"
-  },
-  {
-    "master_item_id": 37,
-    "name": "frag grenade",
-    "type": "item"
-  },
-  {
-    "master_item_id": 38,
-    "name": "sleeping powder",
-    "type": "item"
-  },
-  {
-    "master_item_id": 39,
-    "name": "dream powder",
-    "type": "item"
-  },
-  {
-    "master_item_id": 40,
-    "name": "silence grenade",
-    "type": "item"
-  },
-  {
-    "master_item_id": 41,
-    "name": "smoke bomb",
-    "type": "item"
-  },
-  {
-    "master_item_id": 42,
-    "name": "shadow gem",
-    "type": "item"
-  },
-  {
-    "master_item_id": 43,
-    "name": "shining gem",
-    "type": "item"
-  },
-  {
-    "master_item_id": 44,
-    "name": "blessed gem",
-    "type": "item"
-  },
-  {
-    "master_item_id": 45,
-    "name": "supreme gem",
-    "type": "item"
-  },
-  {
-    "master_item_id": 46,
-    "name": "poison fang",
-    "type": "item"
-  },
-  {
-    "master_item_id": 47,
-    "name": "silver hourglass",
-    "type": "item"
-  },
-  {
-    "master_item_id": 48,
-    "name": "gold hourglass",
-    "type": "item"
-  },
-  {
-    "master_item_id": 49,
-    "name": "candle of life",
-    "type": "item"
-  },
-  {
-    "master_item_id": 50,
-    "name": "petrify grenade",
-    "type": "item"
-  },
-  {
-    "master_item_id": 51,
-    "name": "farplane shadow",
-    "type": "item"
-  },
-  {
-    "master_item_id": 52,
-    "name": "farplane wind",
-    "type": "item"
-  },
-  {
-    "master_item_id": 53,
-    "name": "dark matter",
-    "type": "item"
-  },
-  {
-    "master_item_id": 54,
-    "name": "chocobo feather",
-    "type": "item"
-  },
-  {
-    "master_item_id": 55,
-    "name": "chocobo wing",
-    "type": "item"
-  },
-  {
-    "master_item_id": 56,
-    "name": "lunar curtain",
-    "type": "item"
-  },
-  {
-    "master_item_id": 57,
-    "name": "light curtain",
-    "type": "item"
-  },
-  {
-    "master_item_id": 58,
-    "name": "star curtain",
-    "type": "item"
-  },
-  {
-    "master_item_id": 59,
-    "name": "healing spring",
-    "type": "item"
-  },
-  {
-    "master_item_id": 60,
-    "name": "mana spring",
-    "type": "item"
-  },
-  {
-    "master_item_id": 61,
-    "name": "stamina spring",
-    "type": "item"
-  },
-  {
-    "master_item_id": 62,
-    "name": "soul spring",
-    "type": "item"
-  },
-  {
-    "master_item_id": 63,
-    "name": "purifying salt",
-    "type": "item"
-  },
-  {
-    "master_item_id": 64,
-    "name": "stamina tablet",
-    "type": "item"
-  },
-  {
-    "master_item_id": 65,
-    "name": "mana tablet",
-    "type": "item"
-  },
-  {
-    "master_item_id": 66,
-    "name": "stamina tonic",
-    "type": "item"
-  },
-  {
-    "master_item_id": 67,
-    "name": "mana tonic",
-    "type": "item"
-  },
-  {
-    "master_item_id": 68,
-    "name": "twin stars",
-    "type": "item"
-  },
-  {
-    "master_item_id": 69,
-    "name": "three stars",
-    "type": "item"
-  },
-  {
-    "master_item_id": 70,
-    "name": "power sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 71,
-    "name": "mana sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 72,
-    "name": "speed sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 73,
-    "name": "ability sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 74,
-    "name": "fortune sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 75,
-    "name": "attribute sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 76,
-    "name": "special sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 77,
-    "name": "skill sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 78,
-    "name": "wht magic sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 79,
-    "name": "blk magic sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 80,
-    "name": "master sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 81,
-    "name": "lv. 1 key sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 82,
-    "name": "lv. 2 key sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 83,
-    "name": "lv. 3 key sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 84,
-    "name": "lv. 4 key sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 85,
-    "name": "hp sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 86,
-    "name": "mp sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 87,
-    "name": "strength sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 88,
-    "name": "defense sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 89,
-    "name": "magic sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 90,
-    "name": "magic def sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 91,
-    "name": "agility sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 92,
-    "name": "evasion sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 93,
-    "name": "accuracy sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 94,
-    "name": "luck sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 95,
-    "name": "clear sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 96,
-    "name": "return sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 97,
-    "name": "friend sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 98,
-    "name": "teleport sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 99,
-    "name": "warp sphere",
-    "type": "item"
-  },
-  {
-    "master_item_id": 100,
-    "name": "map",
-    "type": "item"
-  },
-  {
-    "master_item_id": 101,
-    "name": "rename card",
-    "type": "item"
-  },
-  {
-    "master_item_id": 102,
-    "name": "musk",
-    "type": "item"
-  },
-  {
-    "master_item_id": 103,
-    "name": "hypello potion",
-    "type": "item"
-  },
-  {
-    "master_item_id": 104,
-    "name": "shining thorn",
-    "type": "item"
-  },
-  {
-    "master_item_id": 105,
-    "name": "pendulum",
-    "type": "item"
-  },
-  {
-    "master_item_id": 106,
-    "name": "amulet",
-    "type": "item"
-  },
-  {
-    "master_item_id": 107,
-    "name": "designer wallet",
-    "type": "item"
-  },
-  {
-    "master_item_id": 108,
-    "name": "door to tomorrow",
-    "type": "item"
-  },
-  {
-    "master_item_id": 109,
-    "name": "wings to discovery",
-    "type": "item"
-  },
-  {
-    "master_item_id": 110,
-    "name": "gambler's spirit",
-    "type": "item"
-  },
-  {
-    "master_item_id": 111,
-    "name": "underdog's secret",
-    "type": "item"
-  },
-  {
-    "master_item_id": 112,
-    "name": "winning formula",
-    "type": "item"
-  },
-  {
-    "master_item_id": 113,
-    "name": "withered bouquet",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 114,
-    "name": "flint",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 115,
-    "name": "cloudy mirror",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 116,
-    "name": "celestial mirror",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 117,
-    "name": "summoner's soul",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 118,
-    "name": "aeon's soul",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 119,
-    "name": "rusty sword",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 120,
-    "name": "mark of conquest",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 121,
-    "name": "blossom crown",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 122,
-    "name": "flower sceptre",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 123,
-    "name": "sun crest",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 124,
-    "name": "sun sigil",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 125,
-    "name": "moon crest",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 126,
-    "name": "moon sigil",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 127,
-    "name": "mars crest",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 128,
-    "name": "mars sigil",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 129,
-    "name": "saturn crest",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 130,
-    "name": "saturn sigil",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 131,
-    "name": "jupiter crest",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 132,
-    "name": "jupiter sigil",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 133,
-    "name": "venus crest",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 134,
-    "name": "venus sigil",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 135,
-    "name": "mercury crest",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 136,
-    "name": "mercury sigil",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 137,
-    "name": "jecht sphere 1",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 138,
-    "name": "jecht sphere 2",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 139,
-    "name": "jecht sphere 3",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 140,
-    "name": "jecht sphere 4",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 141,
-    "name": "jecht sphere 5",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 142,
-    "name": "jecht sphere 6",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 143,
-    "name": "jecht sphere 7",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 144,
-    "name": "jecht sphere 8",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 145,
-    "name": "braska's sphere",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 146,
-    "name": "auron's sphere",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 147,
-    "name": "al bhed primer i",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 148,
-    "name": "al bhed primer ii",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 149,
-    "name": "al bhed primer iii",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 150,
-    "name": "al bhed primer iv",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 151,
-    "name": "al bhed primer v",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 152,
-    "name": "al bhed primer vi",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 153,
-    "name": "al bhed primer vii",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 154,
-    "name": "al bhed primer viii",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 155,
-    "name": "al bhed primer ix",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 156,
-    "name": "al bhed primer x",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 157,
-    "name": "al bhed primer xi",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 158,
-    "name": "al bhed primer xii",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 159,
-    "name": "al bhed primer xiii",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 160,
-    "name": "al bhed primer xiv",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 161,
-    "name": "al bhed primer xv",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 162,
-    "name": "al bhed primer xvi",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 163,
-    "name": "al bhed primer xvii",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 164,
-    "name": "al bhed primer xviii",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 165,
-    "name": "al bhed primer xix",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 166,
-    "name": "al bhed primer xx",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 167,
-    "name": "al bhed primer xxi",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 168,
-    "name": "al bhed primer xxii",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 169,
-    "name": "al bhed primer xxiii",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 170,
-    "name": "al bhed primer xxiv",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 171,
-    "name": "al bhed primer xxv",
-    "type": "key-item"
-  },
-  {
-    "master_item_id": 172,
-    "name": "al bhed primer xxvi",
-    "type": "key-item"
-  }
+    {
+        "master_item_id": 1,
+        "name": "potion",
+        "type": "item"
+    },
+    {
+        "master_item_id": 2,
+        "name": "hi-potion",
+        "type": "item"
+    },
+    {
+        "master_item_id": 3,
+        "name": "x-potion",
+        "type": "item"
+    },
+    {
+        "master_item_id": 4,
+        "name": "mega-potion",
+        "type": "item"
+    },
+    {
+        "master_item_id": 5,
+        "name": "ether",
+        "type": "item"
+    },
+    {
+        "master_item_id": 6,
+        "name": "turbo ether",
+        "type": "item"
+    },
+    {
+        "master_item_id": 7,
+        "name": "elixir",
+        "type": "item"
+    },
+    {
+        "master_item_id": 8,
+        "name": "megalixir",
+        "type": "item"
+    },
+    {
+        "master_item_id": 9,
+        "name": "phoenix down",
+        "type": "item"
+    },
+    {
+        "master_item_id": 10,
+        "name": "mega phoenix",
+        "type": "item"
+    },
+    {
+        "master_item_id": 11,
+        "name": "antidote",
+        "type": "item"
+    },
+    {
+        "master_item_id": 12,
+        "name": "soft",
+        "type": "item"
+    },
+    {
+        "master_item_id": 13,
+        "name": "eye drops",
+        "type": "item"
+    },
+    {
+        "master_item_id": 14,
+        "name": "echo screen",
+        "type": "item"
+    },
+    {
+        "master_item_id": 15,
+        "name": "holy water",
+        "type": "item"
+    },
+    {
+        "master_item_id": 16,
+        "name": "remedy",
+        "type": "item"
+    },
+    {
+        "master_item_id": 17,
+        "name": "power distiller",
+        "type": "item"
+    },
+    {
+        "master_item_id": 18,
+        "name": "mana distiller",
+        "type": "item"
+    },
+    {
+        "master_item_id": 19,
+        "name": "speed distiller",
+        "type": "item"
+    },
+    {
+        "master_item_id": 20,
+        "name": "ability distiller",
+        "type": "item"
+    },
+    {
+        "master_item_id": 21,
+        "name": "al bhed potion",
+        "type": "item"
+    },
+    {
+        "master_item_id": 22,
+        "name": "healing water",
+        "type": "item"
+    },
+    {
+        "master_item_id": 23,
+        "name": "tetra elemental",
+        "type": "item"
+    },
+    {
+        "master_item_id": 24,
+        "name": "bomb fragment",
+        "type": "item"
+    },
+    {
+        "master_item_id": 25,
+        "name": "bomb core",
+        "type": "item"
+    },
+    {
+        "master_item_id": 26,
+        "name": "fire gem",
+        "type": "item"
+    },
+    {
+        "master_item_id": 27,
+        "name": "electro marble",
+        "type": "item"
+    },
+    {
+        "master_item_id": 28,
+        "name": "lightning marble",
+        "type": "item"
+    },
+    {
+        "master_item_id": 29,
+        "name": "lightning gem",
+        "type": "item"
+    },
+    {
+        "master_item_id": 30,
+        "name": "fish scale",
+        "type": "item"
+    },
+    {
+        "master_item_id": 31,
+        "name": "dragon scale",
+        "type": "item"
+    },
+    {
+        "master_item_id": 32,
+        "name": "water gem",
+        "type": "item"
+    },
+    {
+        "master_item_id": 33,
+        "name": "antarctic wind",
+        "type": "item"
+    },
+    {
+        "master_item_id": 34,
+        "name": "arctic wind",
+        "type": "item"
+    },
+    {
+        "master_item_id": 35,
+        "name": "ice gem",
+        "type": "item"
+    },
+    {
+        "master_item_id": 36,
+        "name": "grenade",
+        "type": "item"
+    },
+    {
+        "master_item_id": 37,
+        "name": "frag grenade",
+        "type": "item"
+    },
+    {
+        "master_item_id": 38,
+        "name": "sleeping powder",
+        "type": "item"
+    },
+    {
+        "master_item_id": 39,
+        "name": "dream powder",
+        "type": "item"
+    },
+    {
+        "master_item_id": 40,
+        "name": "silence grenade",
+        "type": "item"
+    },
+    {
+        "master_item_id": 41,
+        "name": "smoke bomb",
+        "type": "item"
+    },
+    {
+        "master_item_id": 42,
+        "name": "shadow gem",
+        "type": "item"
+    },
+    {
+        "master_item_id": 43,
+        "name": "shining gem",
+        "type": "item"
+    },
+    {
+        "master_item_id": 44,
+        "name": "blessed gem",
+        "type": "item"
+    },
+    {
+        "master_item_id": 45,
+        "name": "supreme gem",
+        "type": "item"
+    },
+    {
+        "master_item_id": 46,
+        "name": "poison fang",
+        "type": "item"
+    },
+    {
+        "master_item_id": 47,
+        "name": "silver hourglass",
+        "type": "item"
+    },
+    {
+        "master_item_id": 48,
+        "name": "gold hourglass",
+        "type": "item"
+    },
+    {
+        "master_item_id": 49,
+        "name": "candle of life",
+        "type": "item"
+    },
+    {
+        "master_item_id": 50,
+        "name": "petrify grenade",
+        "type": "item"
+    },
+    {
+        "master_item_id": 51,
+        "name": "farplane shadow",
+        "type": "item"
+    },
+    {
+        "master_item_id": 52,
+        "name": "farplane wind",
+        "type": "item"
+    },
+    {
+        "master_item_id": 53,
+        "name": "dark matter",
+        "type": "item"
+    },
+    {
+        "master_item_id": 54,
+        "name": "chocobo feather",
+        "type": "item"
+    },
+    {
+        "master_item_id": 55,
+        "name": "chocobo wing",
+        "type": "item"
+    },
+    {
+        "master_item_id": 56,
+        "name": "lunar curtain",
+        "type": "item"
+    },
+    {
+        "master_item_id": 57,
+        "name": "light curtain",
+        "type": "item"
+    },
+    {
+        "master_item_id": 58,
+        "name": "star curtain",
+        "type": "item"
+    },
+    {
+        "master_item_id": 59,
+        "name": "healing spring",
+        "type": "item"
+    },
+    {
+        "master_item_id": 60,
+        "name": "mana spring",
+        "type": "item"
+    },
+    {
+        "master_item_id": 61,
+        "name": "stamina spring",
+        "type": "item"
+    },
+    {
+        "master_item_id": 62,
+        "name": "soul spring",
+        "type": "item"
+    },
+    {
+        "master_item_id": 63,
+        "name": "purifying salt",
+        "type": "item"
+    },
+    {
+        "master_item_id": 64,
+        "name": "stamina tablet",
+        "type": "item"
+    },
+    {
+        "master_item_id": 65,
+        "name": "mana tablet",
+        "type": "item"
+    },
+    {
+        "master_item_id": 66,
+        "name": "stamina tonic",
+        "type": "item"
+    },
+    {
+        "master_item_id": 67,
+        "name": "mana tonic",
+        "type": "item"
+    },
+    {
+        "master_item_id": 68,
+        "name": "twin stars",
+        "type": "item"
+    },
+    {
+        "master_item_id": 69,
+        "name": "three stars",
+        "type": "item"
+    },
+    {
+        "master_item_id": 70,
+        "name": "power sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 71,
+        "name": "mana sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 72,
+        "name": "speed sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 73,
+        "name": "ability sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 74,
+        "name": "fortune sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 75,
+        "name": "attribute sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 76,
+        "name": "special sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 77,
+        "name": "skill sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 78,
+        "name": "wht magic sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 79,
+        "name": "blk magic sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 80,
+        "name": "master sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 81,
+        "name": "lv. 1 key sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 82,
+        "name": "lv. 2 key sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 83,
+        "name": "lv. 3 key sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 84,
+        "name": "lv. 4 key sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 85,
+        "name": "hp sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 86,
+        "name": "mp sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 87,
+        "name": "strength sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 88,
+        "name": "defense sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 89,
+        "name": "magic sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 90,
+        "name": "magic def sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 91,
+        "name": "agility sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 92,
+        "name": "evasion sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 93,
+        "name": "accuracy sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 94,
+        "name": "luck sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 95,
+        "name": "clear sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 96,
+        "name": "return sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 97,
+        "name": "friend sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 98,
+        "name": "teleport sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 99,
+        "name": "warp sphere",
+        "type": "item"
+    },
+    {
+        "master_item_id": 100,
+        "name": "map",
+        "type": "item"
+    },
+    {
+        "master_item_id": 101,
+        "name": "rename card",
+        "type": "item"
+    },
+    {
+        "master_item_id": 102,
+        "name": "musk",
+        "type": "item"
+    },
+    {
+        "master_item_id": 103,
+        "name": "hypello potion",
+        "type": "item"
+    },
+    {
+        "master_item_id": 104,
+        "name": "shining thorn",
+        "type": "item"
+    },
+    {
+        "master_item_id": 105,
+        "name": "pendulum",
+        "type": "item"
+    },
+    {
+        "master_item_id": 106,
+        "name": "amulet",
+        "type": "item"
+    },
+    {
+        "master_item_id": 107,
+        "name": "designer wallet",
+        "type": "item"
+    },
+    {
+        "master_item_id": 108,
+        "name": "door to tomorrow",
+        "type": "item"
+    },
+    {
+        "master_item_id": 109,
+        "name": "wings to discovery",
+        "type": "item"
+    },
+    {
+        "master_item_id": 110,
+        "name": "gambler's spirit",
+        "type": "item"
+    },
+    {
+        "master_item_id": 111,
+        "name": "underdog's secret",
+        "type": "item"
+    },
+    {
+        "master_item_id": 112,
+        "name": "winning formula",
+        "type": "item"
+    },
+    {
+        "master_item_id": 113,
+        "name": "withered bouquet",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 114,
+        "name": "flint",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 115,
+        "name": "cloudy mirror",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 116,
+        "name": "celestial mirror",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 117,
+        "name": "summoner's soul",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 118,
+        "name": "aeon's soul",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 119,
+        "name": "rusty sword",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 120,
+        "name": "mark of conquest",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 121,
+        "name": "blossom crown",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 122,
+        "name": "flower sceptre",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 123,
+        "name": "sun crest",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 124,
+        "name": "sun sigil",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 125,
+        "name": "moon crest",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 126,
+        "name": "moon sigil",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 127,
+        "name": "mars crest",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 128,
+        "name": "mars sigil",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 129,
+        "name": "saturn crest",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 130,
+        "name": "saturn sigil",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 131,
+        "name": "jupiter crest",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 132,
+        "name": "jupiter sigil",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 133,
+        "name": "venus crest",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 134,
+        "name": "venus sigil",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 135,
+        "name": "mercury crest",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 136,
+        "name": "mercury sigil",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 137,
+        "name": "jecht sphere 1",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 138,
+        "name": "jecht sphere 2",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 139,
+        "name": "jecht sphere 3",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 140,
+        "name": "jecht sphere 4",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 141,
+        "name": "jecht sphere 5",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 142,
+        "name": "jecht sphere 6",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 143,
+        "name": "jecht sphere 7",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 144,
+        "name": "jecht sphere 8",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 145,
+        "name": "braska's sphere",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 146,
+        "name": "auron's sphere",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 147,
+        "name": "al bhed primer i",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 148,
+        "name": "al bhed primer ii",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 149,
+        "name": "al bhed primer iii",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 150,
+        "name": "al bhed primer iv",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 151,
+        "name": "al bhed primer v",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 152,
+        "name": "al bhed primer vi",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 153,
+        "name": "al bhed primer vii",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 154,
+        "name": "al bhed primer viii",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 155,
+        "name": "al bhed primer ix",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 156,
+        "name": "al bhed primer x",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 157,
+        "name": "al bhed primer xi",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 158,
+        "name": "al bhed primer xii",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 159,
+        "name": "al bhed primer xiii",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 160,
+        "name": "al bhed primer xiv",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 161,
+        "name": "al bhed primer xv",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 162,
+        "name": "al bhed primer xvi",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 163,
+        "name": "al bhed primer xvii",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 164,
+        "name": "al bhed primer xviii",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 165,
+        "name": "al bhed primer xix",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 166,
+        "name": "al bhed primer xx",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 167,
+        "name": "al bhed primer xxi",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 168,
+        "name": "al bhed primer xxii",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 169,
+        "name": "al bhed primer xxiii",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 170,
+        "name": "al bhed primer xxiv",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 171,
+        "name": "al bhed primer xxv",
+        "type": "key-item"
+    },
+    {
+        "master_item_id": 172,
+        "name": "al bhed primer xxvi",
+        "type": "key-item"
+    }
 ]

@@ -8,13 +8,13 @@ import (
 )
 
 type Ability struct {
-	ID            int32
-	Name          string `json:"name"`
-	Version       *int32 `json:"version"`
-	Specification *string `json:"specification"`
-	Type          database.AbilityType
+	ID            int32						`json:"ability_id"`
+	Name          string 					`json:"name"`
+	Version       *int32 					`json:"version"`
+	Specification *string 					`json:"specification"`
+	Type          database.AbilityType		`json:"type"`
 	Attributes
-	BattleInteractions []BattleInteraction `json:"battle_interactions"`
+	BattleInteractions []BattleInteraction 	`json:"battle_interactions"`
 }
 
 func (a Ability) ToHashFields() []any {
@@ -63,7 +63,7 @@ func (a Ability) GetResParamsTyped() ResParamsTyped {
 }
 
 type Attributes struct {
-	ID               int32
+	ID               int32	`json:"attributes_id"`
 	Rank             *int32 `json:"rank"`
 	AppearsInHelpBar bool   `json:"appears_in_help_bar"`
 	CanCopycat       bool   `json:"can_copycat"`

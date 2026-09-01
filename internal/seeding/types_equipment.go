@@ -7,10 +7,10 @@ import (
 )
 
 type EquipmentTable struct {
-	ID                      int32
-	Type                    string `json:"type"`
-	Classification          string `json:"classification"`
-	SpecificCharacterID     *int32
+	ID                      int32			`json:"id"`
+	Type                    string 			`json:"type"`
+	Classification          string 			`json:"classification"`
+	SpecificCharacterID     *int32			`json:"specific_character_id"`
 	SpecificCharacter       *string         `json:"specific_character"`
 	Version                 *int32          `json:"version"`
 	Priority                *int32          `json:"priority"`
@@ -57,11 +57,11 @@ func (e EquipmentTable) GetResParamsUnnamed() ResParamsUnnamed {
 }
 
 type AbilityPool struct {
-	ID               int32
-	EquipmentTableID int32
-	PoolIdx          int32
-	AutoAbilities    []string `json:"auto_abilities"`
-	ReqAmount        int32    `json:"req_amount"`
+	ID               int32		`json:"ability_pool_id"`
+	EquipmentTableID int32		`json:"equipment_table_id"`
+	PoolIdx          int32		`json:"pool_idx"`
+	AutoAbilities    []string 	`json:"auto_abilities"`
+	ReqAmount        int32    	`json:"req_amount"`
 }
 
 func (p AbilityPool) ToHashFields() []any {
@@ -86,8 +86,8 @@ func (p AbilityPool) Error() string {
 }
 
 type EquipmentName struct {
-	ID            int32
-	CharacterID   int32
+	ID            int32	 `json:"id"`
+	CharacterID   int32	 `json:"character_id"`
 	CharacterName string `json:"character"`
 	Name          string `json:"name"`
 }
