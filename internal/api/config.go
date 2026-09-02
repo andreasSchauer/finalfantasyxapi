@@ -63,7 +63,7 @@ func ConfigInit() (*Config, error) {
 		fetchLimit:  fetchLimit,
 	}
 
-	apiCfg.l, err = seeding.SeedDatabase(apiCfg.db, apiCfg.dbConn)
+	apiCfg.l, err = seeding.LoadDatabase(apiCfg.db, apiCfg.dbConn)
 	if err != nil {
 		return nil, err
 	}

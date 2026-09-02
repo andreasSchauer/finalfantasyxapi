@@ -53,15 +53,17 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			return nil, err
 		}
 
-		id, err := cfg.l.GetHashID(seeding.ElementalResist{
+		elemResist := seeding.ElementalResist{
 			ElementID: elementID,
 			Affinity:  affinity.Name,
-		})
+		}
+
+		erLookup, err := seeding.GetResource(seeding.Key(elemResist), cfg.l.ElementalResists)
 		if err != nil {
 			return nil, nil
 		}
 
-		ids = append(ids, id)
+		ids = append(ids, erLookup.ID)
 	}
 
 	return ids, nil

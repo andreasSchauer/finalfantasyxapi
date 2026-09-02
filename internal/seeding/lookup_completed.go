@@ -72,7 +72,6 @@ func (l *Lookup) saveCompletedLookups() error {
 	checkErr(writeLookupFile("submenus.json", l.SubmenusID))
 	checkErr(writeLookupFile("topmenus.json", l.TopmenusID))
 	checkErr(writeLookupFile("treasures.json", l.TreasuresID))
-	checkErr(l.saveHashMap())
 
 	return err
 }
@@ -167,7 +166,6 @@ func (l *Lookup) assignLookups() error {
 	checkErr(assignLookup("submenus.json", &l.Submenus, &l.SubmenusID))
 	checkErr(assignLookup("topmenus.json", &l.Topmenus, &l.TopmenusID))
 	checkErr(assignLookup("treasures.json", &l.Treasures, &l.TreasuresID))
-	checkErr(l.assignHashes())
 
 	return err
 }

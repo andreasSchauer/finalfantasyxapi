@@ -10,7 +10,7 @@ import (
 	"github.com/pressly/goose/v3"
 )
 
-func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
+func LoadDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	defer fmt.Println()
 	defer h.MeasureTime("database seeding")()
 	ctx := context.Background()
@@ -31,82 +31,108 @@ func SeedDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 	}
 
 	if dataHash == dbHash {
-		fmt.Println("database is up to date")
-		fmt.Println()
-
-		err = l.assignLookups()
-		if err != nil {
-			return nil, fmt.Errorf("couldn't assign lookups: %v", err)
-		}
-	} else {
-		fmt.Println("updating database...")
-		fmt.Println()
-
-		const migrationsDir = "sql/schema/"
-		fullPath, err := h.GetAbsoluteFilepath(migrationsDir)
-		if err != nil {
-			return nil, err
-		}
-		
-		err = setupDB(dbConn, fullPath)
-		if err != nil {
-			return nil, fmt.Errorf("couldn't setup database: %v", err)
-		}
-		
-		err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-			defer h.MeasureTime("initial database seeding")()
-			fmt.Println("initial database seeding...")
-			
-			return l.seedLoop(qtx, ctx, []seedFunc{
-				l.seedLoop1,
-				l.seedLoop2,
-				l.seedLoop3,
-				l.seedLoop4,
-				l.seedLoop5,
-				l.seedLoop6,
-				l.seedLoop7,
-			})
-		})
-		if err != nil {
-			return nil, err
-		}
-		
-		err = l.completeLookups()
-		if err != nil {
-			return nil, err
-		}
-		
-		err = l.saveCompletedLookups()
-		if err != nil {
-			return nil, err
-		}
-		
-		err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-			defer h.MeasureTime("seeding junctions")()
-			return l.seedJunctions(qtx, ctx)
-		})
+		err = l.skipSeeding(db, ctx)
 		if err != nil {
 			return nil, err
 		}
 
-		err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
-			return db.UpdateDbState(ctx, dataHash)
-		})
-		if err != nil {
-			return nil, fmt.Errorf("couldn't update dbState hash: %v", err)
-		}
+		return l, nil
 	}
 
-	err = refreshViews(db, ctx)
+	err = seedDatabase(db, dbConn, ctx, l, dataHash)
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Println()
-
 	return l, nil
 }
 
+func (l *Lookup) skipSeeding(db *database.Queries, ctx context.Context) error {
+	fmt.Println("database is up to date")
+	fmt.Println()
+
+	err := l.assignLookups()
+	if err != nil {
+		return fmt.Errorf("couldn't assign lookups: %v", err)
+	}
+
+	err = refreshViews(db, ctx)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println()
+
+	return nil
+}
+
+func seedDatabase(db *database.Queries, dbConn *sql.DB, ctx context.Context, l *Lookup, dataHash string) error {
+	fmt.Println("updating database...")
+	fmt.Println()
+
+	const migrationsDir = "sql/schema/"
+	fullPath, err := h.GetAbsoluteFilepath(migrationsDir)
+	if err != nil {
+		return err
+	}
+
+	err = setupDB(dbConn, fullPath)
+	if err != nil {
+		return fmt.Errorf("couldn't setup database: %v", err)
+	}
+
+	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		defer h.MeasureTime("initial database seeding")()
+		fmt.Println("initial database seeding...")
+
+		return l.seedLoop(qtx, ctx, []seedFunc{
+			l.seedLoop1,
+			l.seedLoop2,
+			l.seedLoop3,
+			l.seedLoop4,
+			l.seedLoop5,
+			l.seedLoop6,
+			l.seedLoop7,
+		})
+	})
+	if err != nil {
+		return err
+	}
+
+	err = l.completeLookups()
+	if err != nil {
+		return err
+	}
+
+	err = l.saveCompletedLookups()
+	if err != nil {
+		return err
+	}
+
+	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		defer h.MeasureTime("seeding junctions")()
+		return l.seedJunctions(qtx, ctx)
+	})
+	if err != nil {
+		return err
+	}
+
+	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
+		return db.UpdateDbState(ctx, dataHash)
+	})
+	if err != nil {
+		return fmt.Errorf("couldn't update dbState hash: %v", err)
+	}
+
+	err = refreshViews(db, ctx)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println()
+
+	return nil
+}
 
 func setupDB(dbConn *sql.DB, migrationsDir string) error {
 	defer h.MeasureTime("\ndatabase setup")()
@@ -186,10 +212,9 @@ func dedupeRows[T Hashable](rows []T, hashes map[string]int32) []T {
 	return new
 }
 
-
 func refreshViews(db *database.Queries, ctx context.Context) error {
 	defer h.MeasureTime("refreshing views")()
-	
+
 	fns := []func(context.Context) error{
 		db.RefreshGeographyView,
 		db.RefreshGeographyGraphView,
