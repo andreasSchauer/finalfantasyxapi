@@ -19,7 +19,7 @@ func (as AppliedState) IsZero() bool {
 	return as.Condition == ""
 }
 
-func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) (Monster, error) {
+func applyAlteredStateFromQuery(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) (Monster, error) {
 	altStateID, err := getAltStateID(cfg, r, mon, queryName)
 	if queryIsEmpty(err) {
 		return mon, nil
@@ -28,6 +28,25 @@ func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName Quer
 		return Monster{}, err
 	}
 
+	return applyAlteredState(cfg, mon, altStateID), nil
+}
+
+func applyAlteredStateFromJson(cfg *Config, mon Monster, altStatePtr *int32) (Monster, error) {
+	if altStatePtr == nil {
+		return mon, nil
+	}
+
+	altStateID := int(*altStatePtr)
+
+	err := vpAltStateID(mon, altStateID)
+	if err != nil {
+		return Monster{}, err
+	}
+
+	return applyAlteredState(cfg, mon, altStateID), nil
+}
+
+func applyAlteredState(cfg *Config, mon Monster, altStateID int) Monster {
 	altState := mon.AlteredStates[altStateID-1]
 	appliedState := AppliedState{
 		Condition:   altState.Condition,
@@ -60,7 +79,7 @@ func applyAlteredState(cfg *Config, r *http.Request, mon Monster, queryName Quer
 
 	mon.AlteredStates = replaceAltState(mon.AlteredStates, defaultState, altStateID)
 
-	return mon, nil
+	return mon
 }
 
 func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) (int, error) {
@@ -80,6 +99,21 @@ func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName QueryPar
 	}
 
 	return int(id), nil
+}
+
+
+func vpAltStateID(mon Monster, altStateID int) error {
+	altStateAmt := len(mon.AlteredStates)
+
+	if altStateAmt == 0 {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states.", mon.Error()), nil)
+	}
+
+	if altStateID > altStateAmt || altStateID <= 0 {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided alt state id '%d' used for %s is out of range. max id: %d.", altStateID, mon.Error(), altStateAmt), nil)
+	}
+
+	return nil
 }
 
 func applyAltChange(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {

@@ -54,11 +54,17 @@ func getMonsterAlteredStates(cfg *Config, r *http.Request, mon seeding.Monster) 
 	alteredStates := []AlteredState{}
 
 	for i, altState := range mon.AlteredStates {
-		q := r.URL.Query()
-		q.Set(string(qpnAlteredState), strconv.Itoa(i+1))
+		var url string
+
+		// if this function is triggered via a jsonParam
+		if r != nil {
+			q := r.URL.Query()
+			q.Set(string(qpnAlteredState), strconv.Itoa(i+1))
+			url = createResourceURLQuery(cfg, cfg.e.monsters.endpoint, mon.ID, q)
+		}
 
 		alteredState := AlteredState{
-			URL:         createResourceURLQuery(cfg, cfg.e.monsters.endpoint, mon.ID, q),
+			URL:         url,
 			Condition:   altState.Condition,
 			IsTemporary: altState.IsTemporary,
 			Alts:        getAlts(cfg, altState),

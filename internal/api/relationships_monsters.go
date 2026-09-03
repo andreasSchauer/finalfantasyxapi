@@ -37,7 +37,7 @@ func getMonsterRelationships(cfg *Config, r *http.Request, monster seeding.Monst
 }
 
 func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster, error) {
-	mon, err := applyAlteredState(cfg, r, mon, qpnAlteredState)
+	mon, err := applyAlteredStateFromQuery(cfg, r, mon, qpnAlteredState)
 	if err != nil {
 		return Monster{}, err
 	}
