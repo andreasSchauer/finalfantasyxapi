@@ -23,19 +23,15 @@ func (p TurnOrderParams) GetDoc(cfg *Config) ParamsDoc {
 	return cfg.getTurnOrderParamsDoc()
 }
 
-type participantInput interface {
-	getParticipantKey() string
-}
-
 type turnOrderParty struct {
-	ID		int32	`json:"id"`
-	Agl    	int32   `json:"agl"`
-	FS     	bool    `json:"fs,omitempty"`
-	Status 	*string `json:"status,omitempty"`
-	Offset	int32	`json:"offset,omitempty"`
+	ID     int32   `json:"id"`
+	Agl    int32   `json:"agl"`
+	FS     bool    `json:"fs,omitempty"`
+	Status *string `json:"status,omitempty"`
+	Offset int32   `json:"offset,omitempty"`
 }
 
-func (p turnOrderParty) getParticipantKey() string {
+func (p turnOrderParty) getDuplicateKey() string {
 	return seeding.CombineFields([]any{
 		fmt.Sprintf("%T", p),
 		p.ID,
@@ -43,14 +39,14 @@ func (p turnOrderParty) getParticipantKey() string {
 }
 
 type turnOrderMon struct {
-	ID       	int32   `json:"id"`
-	AglOverride *int32	`json:"agl_override,omitempty"`
-	AltState 	*int32  `json:"alt_state,omitempty"`
-	Status   	*string `json:"status,omitempty"`
-	Offset		int32	`json:"offset,omitempty"`
+	ID          int32   `json:"id"`
+	AglOverride *int32  `json:"agl_override,omitempty"`
+	AltState    *int32  `json:"alt_state,omitempty"`
+	Status      *string `json:"status,omitempty"`
+	Offset      int32   `json:"offset,omitempty"`
 }
 
-func (p turnOrderMon) getParticipantKey() string {
+func (p turnOrderMon) getDuplicateKey() string {
 	return seeding.CombineFields([]any{
 		fmt.Sprintf("%T", p),
 		p.ID,
@@ -62,14 +58,14 @@ func (p turnOrderMon) getParticipantKey() string {
 }
 
 type turnOrderMonCustom struct {
-	Name   	string  `json:"name,omitempty"`
-	Agl    	int32   `json:"agl"`
-	FS     	bool    `json:"fs,omitempty"`
-	Status 	*string `json:"status,omitempty"`
-	Offset	int32	`json:"offset,omitempty"`
+	Name   string  `json:"name,omitempty"`
+	Agl    int32   `json:"agl"`
+	FS     bool    `json:"fs,omitempty"`
+	Status *string `json:"status,omitempty"`
+	Offset int32   `json:"offset,omitempty"`
 }
 
-func (p turnOrderMonCustom) getParticipantKey() string {
+func (p turnOrderMonCustom) getDuplicateKey() string {
 	return seeding.CombineFields([]any{
 		fmt.Sprintf("%T", p),
 		p.Name,
@@ -149,7 +145,6 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 		},
 	}
 }
-
 
 func (cfg *Config) getFieldDocTurnOrderParty() []FieldDoc {
 	return []FieldDoc{

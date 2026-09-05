@@ -4,15 +4,15 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
-
-// import "slices"
 
 type TurnOrderResponse struct {
 	URL           string        `json:"url"`
 	Next          string        `json:"next"`
 	IgnFirstTurn  bool          `json:"ign_first_turn"`
 	BattleStart   string        `json:"battle_start"`
+	RNG           string        `json:"rng"`
 	PlayerParty   []Participant `json:"player_party"`
 	OpponentParty []Participant `json:"opponent_party"`
 	TurnOrder     []BattleTurn  `json:"turn_order"`
@@ -24,18 +24,19 @@ func (r TurnOrderResponse) GetURL() string {
 
 type TurnParams struct {
 	Name          string
-	PriorityKey   string
 	Party         BattleParty
-	Agility		  int32
+	PriorityKey   string
+	Agility       int32
 	TickSpeed     int32
 	TicksNextTurn int32
 }
 
 type BattleTurn struct {
-	Turn			int32		`json:"turn"`
-	CurrentTick 	int32       `json:"total_ticks_passed"`
-	Name            string      `json:"name"`
-	Party           BattleParty `json:"party"`
+	Turn        int32       `json:"turn"`
+	CurrentTick int32       `json:"current_tick"`
+	Name        string      `json:"name"`
+	Party       BattleParty `json:"party"`
+	PriorityKey string      `json:"-"`
 }
 
 func handleTurnOrder(cfg *Config, params TurnOrderParams, url string) (TurnOrderResponse, error) {
@@ -45,6 +46,7 @@ func handleTurnOrder(cfg *Config, params TurnOrderParams, url string) (TurnOrder
 		URL:          url,
 		IgnFirstTurn: params.IgnFirstTurn,
 		BattleStart:  params.BattleStart,
+		RNG:          params.RNG,
 	}
 
 	response.PlayerParty, response.OpponentParty, err = getParticipants(cfg, params)
@@ -55,9 +57,10 @@ func handleTurnOrder(cfg *Config, params TurnOrderParams, url string) (TurnOrder
 
 	response.TurnOrder = calcTurnOrder(params, participants)
 
+	response = completeTurnOrderResponse(response, len(participants), params.TurnsAmt)
+
 	return response, nil
 }
-
 
 func calcTurnOrder(params TurnOrderParams, participants []Participant) []BattleTurn {
 	priorities := getPriorityMap()
@@ -74,62 +77,46 @@ func calcTurnOrder(params TurnOrderParams, participants []Participant) []BattleT
 		currentTurn := &turnQueue[0]
 		turnsTotal++
 		ticksPassed := currentTurn.TicksNextTurn
-		ticksTotal += getTicksToCount(ticksPassed)
+
+		if ticksPassed > 0 {
+			ticksTotal += ticksPassed
+		}
 
 		for i := range turnQueue {
-			turn := &turnQueue[i]
-
-			if ticksPassed < 0 {
-				if turn.TicksNextTurn == 0 {
-					continue
-				}
-				
-				if turn.TicksNextTurn == -1 {
-					turn.TicksNextTurn = 0
-					continue
-				}
-
-				turn.TicksNextTurn -= 1
-				continue
+			if ticksPassed <= 0 {
+				break
 			}
 
+			turn := &turnQueue[i]
 			turn.TicksNextTurn -= ticksPassed
 		}
-		
-		battleTurn := BattleTurn{
-			Turn: 			turnsTotal,
-			CurrentTick: 	ticksTotal,
-			Name: 			currentTurn.Name,
-			Party: 			currentTurn.Party,
 
+		battleTurn := BattleTurn{
+			Turn:        turnsTotal,
+			CurrentTick: ticksTotal,
+			Name:        currentTurn.Name,
+			Party:       currentTurn.Party,
+			PriorityKey: currentTurn.PriorityKey,
 		}
 		turns = append(turns, battleTurn)
-		
 
 		currentTurn.TicksNextTurn = currentTurn.TickSpeed * 3
 		turnQueue = sortTurnQueue(turnQueue, priorities)
-
-		if ticksTotal == 0 && ticksPassed == -1 {
-			ticksTotal += 1
-		}
 	}
 
 	return turns
 }
 
-func getTicksToCount(ticks int32) int32 {
-	if ticks < 0 {
-		ticks = 0
+func getPriorityMap() map[string]int {
+	prioritySlice := []string{"tidus", "yuna", "auron", "kimahri", "wakka", "lulu", "rikku", "valefor", "ifrit", "ixion", "shiva", "bahamut", "anima", "yojimbo", "cindy", "sandy", "mindy"}
+	priorityMap := make(map[string]int, len(prioritySlice))
+
+	for i, name := range prioritySlice {
+		priorityMap[name] = i
 	}
 
-	return ticks
+	return priorityMap
 }
-
-/*
-	- metadata
-		- create a map to count TurnsReceived (map[PriorityKey]int)
-		- TurnsPercentage can only be calculated at the end
-*/
 
 func readyTurnQueue(participants []Participant, priorities map[string]int, rng string) []TurnParams {
 	var turnQueue []TurnParams
@@ -141,9 +128,9 @@ func readyTurnQueue(participants []Participant, priorities map[string]int, rng s
 
 		params := TurnParams{
 			Name:        participant.Name,
-			PriorityKey: participant.getPriorityKey(),
+			PriorityKey: participant.getKey(),
 			Party:       participant.Party,
-			Agility: 	 participant.Agility,
+			Agility:     participant.Agility,
 			TickSpeed:   participant.TickSpeed,
 		}
 
@@ -176,17 +163,6 @@ func readyTurnQueue(participants []Participant, priorities map[string]int, rng s
 	return sortTurnQueue(turnQueue, priorities)
 }
 
-func getPriorityMap() map[string]int {
-	prioritySlice := []string{"tidus", "yuna", "auron", "kimahri", "wakka", "lulu", "rikku", "valefor", "ifrit", "ixion", "shiva", "bahamut", "anima", "yojimbo", "cindy", "sandy", "mindy"}
-	priorityMap := make(map[string]int, len(prioritySlice))
-
-	for i, name := range prioritySlice {
-		priorityMap[name] = i
-	}
-
-	return priorityMap
-}
-
 func sortTurnQueue(turnQueue []TurnParams, priorities map[string]int) []TurnParams {
 	slices.SortStableFunc(turnQueue, func(a, b TurnParams) int {
 		if a.TicksNextTurn < b.TicksNextTurn {
@@ -203,13 +179,12 @@ func sortTurnQueue(turnQueue []TurnParams, priorities map[string]int) []TurnPara
 	return turnQueue
 }
 
-
 func sortTurnQueueAgility(a, b TurnParams, priorities map[string]int) int {
-	if a.Agility < b.Agility {
+	if a.Agility > b.Agility {
 		return -1
 	}
 
-	if a.Agility > b.Agility {
+	if a.Agility < b.Agility {
 		return 1
 	}
 
@@ -235,4 +210,32 @@ func sortTurnQueuePriority(a, b TurnParams, priorities map[string]int) int {
 	}
 
 	return 0
+}
+
+func completeTurnOrderResponse(response TurnOrderResponse, participantsAmt int, turnsAmt int32) TurnOrderResponse {
+	turnCounter := make(map[string]int32, participantsAmt)
+
+	for _, turn := range response.TurnOrder {
+		turnCounter[turn.PriorityKey]++
+	}
+
+	for i, player := range response.PlayerParty {
+		response.PlayerParty[i] = calcParticipantTurns(player, turnCounter, turnsAmt)
+	}
+
+	for i, mon := range response.OpponentParty {
+		response.OpponentParty[i] = calcParticipantTurns(mon, turnCounter, turnsAmt)
+	}
+
+	return response
+}
+
+func calcParticipantTurns(participant Participant, turnCounter map[string]int32, totalTurns int32) Participant {
+	turnsReceived := turnCounter[participant.getKey()]
+	participant.TurnsReceived = turnsReceived
+
+	turnsPercentage := float64(turnsReceived) / float64(totalTurns)
+	participant.TurnsPercentage = h.FloatRound(turnsPercentage, 2)
+
+	return participant
 }

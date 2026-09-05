@@ -69,6 +69,7 @@ type QueryLookup struct {
 	endpoints map[QueryParamName]QueryParam
 
 	alBhed			map[QueryParamName]QueryParam
+	turnOrder		map[QueryParamName]QueryParam
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -168,4 +169,5 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.e.endpoints.queryLookup = cfg.q.endpoints
 
 	cfg.initAlBhedParams()
+	cfg.initTurnOrderParams()
 }

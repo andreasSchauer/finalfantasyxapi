@@ -10,20 +10,19 @@ import (
 )
 
 type Participant struct {
-	Name			string		`json:"name"`
-	Party			BattleParty	`json:"-"`
-	Agility			int32		`json:"agility"`
+	Name    string      `json:"name"`
+	Party   BattleParty `json:"-"`
+	Agility int32       `json:"agility"`
 	AgilityVals
-	FirstStrike		bool		`json:"first_strike"`
-	Status			*string		`json:"status"`
-	AltState		*int32		`json:"alt_state,omitempty"`
-	Offset			int32		`json:"starting_tick"`
-	TurnsReceived	int32		`json:"turns_received"`
-	TurnsPercentage	float64		`json:"turns_percentage"`
+	FirstStrike     bool    `json:"first_strike"`
+	Status          *string `json:"status"`
+	AltState        *int32  `json:"alt_state,omitempty"`
+	Offset          int32   `json:"starting_tick"`
+	TurnsReceived   int32   `json:"turns_received"`
+	TurnsPercentage float64 `json:"turns_percentage"`
 }
 
-
-func (p Participant) getPriorityKey() string {
+func (p Participant) getKey() string {
 	if p.Party == battlePartyPlayer {
 		return p.Name
 	}
@@ -34,23 +33,21 @@ func (p Participant) getPriorityKey() string {
 type BattleParty string
 
 const (
-	battlePartyPlayer		BattleParty = "player"
-	battlePartyOpponent		BattleParty = "opponent"
+	battlePartyPlayer   BattleParty = "player"
+	battlePartyOpponent BattleParty = "opponent"
 )
 
-
 type participantMaps struct {
-	duplicates		map[string]bool
-	namesTotal 		map[string]int
-	namesCurrent	map[string]int
+	duplicates   map[string]bool
+	namesTotal   map[string]int
+	namesCurrent map[string]int
 }
-
 
 func getParticipants(cfg *Config, params TurnOrderParams) ([]Participant, []Participant, error) {
 	maps := &participantMaps{
-		namesTotal: make(map[string]int),
+		namesTotal:   make(map[string]int),
 		namesCurrent: make(map[string]int),
-		duplicates: make(map[string]bool),
+		duplicates:   make(map[string]bool),
 	}
 	params = fetchFormationMons(cfg, params)
 
@@ -79,20 +76,20 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 	var playerParty []Participant
 
 	for _, partyMember := range params.Party {
-		_, isDupe := maps.duplicates[partyMember.getParticipantKey()]
+		_, isDupe := maps.duplicates[partyMember.getDuplicateKey()]
 		if isDupe {
 			return nil, newHTTPError(http.StatusBadRequest, "each party member can only appear once.", nil)
 		}
-		
+
 		unit, _ := seeding.GetResourceByID(partyMember.ID, cfg.l.PlayerUnitsID)
 
 		participant := Participant{
-			Name: unit.Name,
-			Party: battlePartyPlayer,
-			Agility: partyMember.Agl,
+			Name:        unit.Name,
+			Party:       battlePartyPlayer,
+			Agility:     partyMember.Agl,
 			FirstStrike: partyMember.FS,
-			Status: partyMember.Status,
-			Offset: partyMember.Offset,
+			Status:      partyMember.Status,
+			Offset:      partyMember.Offset,
 		}
 		participant.AgilityVals = extractAglTierChar(cfg, participant, params)
 
@@ -102,8 +99,8 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 		}
 
 		playerParty = append(playerParty, participant)
-		maps.duplicates[partyMember.getParticipantKey()] = true
-		maps.namesTotal[participant.getPriorityKey()]++
+		maps.duplicates[partyMember.getDuplicateKey()] = true
+		maps.namesTotal[participant.getKey()]++
 	}
 
 	return playerParty, nil
@@ -115,7 +112,7 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 	var monParty []Participant
 
 	for _, mon := range params.Mons {
-		_, isDupe := maps.duplicates[mon.getParticipantKey()]
+		_, isDupe := maps.duplicates[mon.getDuplicateKey()]
 		if isDupe {
 			return nil, TurnOrderParams{}, newHTTPError(http.StatusBadRequest, "exact duplicate mons are not allowed", nil)
 		}
@@ -134,14 +131,14 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 		}
 
 		agility = handleMonEdgeCases(mon, agility)
-		
+
 		participant := Participant{
-			Name: h.NameToString(monster.Name, monster.Version, nil),
-			Party: battlePartyOpponent,
-			Agility: agility,
+			Name:        h.NameToString(monster.Name, monster.Version, nil),
+			Party:       battlePartyOpponent,
+			Agility:     agility,
 			FirstStrike: firstStrike,
-			AltState: mon.AltState,
-			Offset: mon.Offset,
+			AltState:    mon.AltState,
+			Offset:      mon.Offset,
 		}
 		participant.Status, err = fetchMonsterStatus(monster, mon.Status)
 		if err != nil {
@@ -155,10 +152,9 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 			*participant.MaxICV = 21
 		}
 
-
 		monParty = append(monParty, participant)
-		maps.duplicates[mon.getParticipantKey()] = true
-		maps.namesTotal[participant.getPriorityKey()]++
+		maps.duplicates[mon.getDuplicateKey()] = true
+		maps.namesTotal[participant.getKey()]++
 	}
 
 	return monParty, params, nil
@@ -168,24 +164,24 @@ func getParticipantsMonsCustom(cfg *Config, params TurnOrderParams, maps *partic
 	var monParty []Participant
 
 	for _, mon := range params.MonsCustom {
-		_, isDupe := maps.duplicates[mon.getParticipantKey()]
+		_, isDupe := maps.duplicates[mon.getDuplicateKey()]
 		if isDupe {
 			return nil, newHTTPError(http.StatusBadRequest, "exact duplicate mons are not allowed", nil)
 		}
 
 		participant := Participant{
-			Name: mon.Name,
-			Party: battlePartyOpponent,
-			Agility: mon.Agl,
+			Name:        mon.Name,
+			Party:       battlePartyOpponent,
+			Agility:     mon.Agl,
 			FirstStrike: mon.FS,
-			Status: mon.Status,
-			Offset: mon.Offset,
+			Status:      mon.Status,
+			Offset:      mon.Offset,
 		}
 		participant.AgilityVals = extractAglTierMon(cfg, participant, params)
 
 		monParty = append(monParty, participant)
-		maps.duplicates[mon.getParticipantKey()] = true
-		maps.namesTotal[participant.getPriorityKey()]++
+		maps.duplicates[mon.getDuplicateKey()] = true
+		maps.namesTotal[participant.getKey()]++
 	}
 
 	return monParty, nil
@@ -194,7 +190,7 @@ func getParticipantsMonsCustom(cfg *Config, params TurnOrderParams, maps *partic
 func createDuplicateNames(party []Participant, maps *participantMaps) []Participant {
 	for i := range party {
 		mon := &party[i]
-		key := mon.getPriorityKey()
+		key := mon.getKey()
 		maps.namesCurrent[key]++
 
 		if maps.namesTotal[key] <= 1 {

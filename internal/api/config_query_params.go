@@ -2865,3 +2865,10 @@ func (cfg *Config) initAlBhedParams() {
 	cfg.q.alBhed = paramsMap
 	cfg.e.alBhed.queryLookup = paramsMap
 }
+
+func (cfg *Config) initTurnOrderParams() {
+	exampleUses := []string{}
+	paramsMap := cfg.initComputeEndpointQueryParams(epTurnOrder, exampleUses)
+	cfg.q.turnOrder = paramsMap
+	cfg.e.turnOrder.queryLookup = paramsMap
+}
