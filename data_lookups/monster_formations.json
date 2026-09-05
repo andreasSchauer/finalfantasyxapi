@@ -13954,7 +13954,7 @@
                 "music": "enemy attack",
                 "celebrate_victory": false
             },
-            "notes": "All characters start with an ICV of 0."
+            "notes": "All characters start with an ICV of 0. Spectral Keeper always starts with an ICV of 21. When Glyph Mines are activated, Circle's ICV becomes 45 (tick speed 15)."
         },
         "trigger_commands": [
             {

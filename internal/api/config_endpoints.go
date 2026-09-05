@@ -59,7 +59,7 @@ type endpoints struct {
 	enums              handlerInputEnums
 	endpoints          handlerInputEndpoints
 	alBhed             handlerInputService[AlBhedParams, AlBhedResponse]
-	turnOrder		   handlerInputService[TurnOrderParams, TurnOrderResponse]
+	turnOrder          handlerInputService[TurnOrderParams, TurnOrderResponse]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -1032,7 +1032,7 @@ func (cfg *Config) EndpointsInit() {
 
 	e.alBhed = handlerInputService[AlBhedParams, AlBhedResponse]{
 		endpoint:  epAlBhed,
-		usage:     []string{"/api/al-bhed?state={json_string}"},	// can I not put this in the error message?
+		usage:     []string{"/api/al-bhed?state={json_string}"}, // can I not put this in the error message?
 		paramsDoc: cfg.getAlBhedParamsDoc(),
 		verifyFn:  verifyAlBhedParams,
 		executeFn: translateAlBhed,
@@ -1043,7 +1043,7 @@ func (cfg *Config) EndpointsInit() {
 		usage:     []string{"/api/turn-order?state={json_string}"},
 		paramsDoc: cfg.getTurnOrderParamsDoc(),
 		verifyFn:  verifyTurnOrderParams,
-		executeFn: calcTurnOrder,
+		executeFn: handleTurnOrder,
 	}
 
 	cfg.e = &e

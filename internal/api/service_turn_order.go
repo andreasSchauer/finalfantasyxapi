@@ -1,266 +1,179 @@
 package api
 
 import (
-	"fmt"
-	"net/http"
+	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
+// import "slices"
 
 type TurnOrderResponse struct {
-	URL            	string 			`json:"url"`
-	Next			string			`json:"next"`
-	IgnFirstTurn	bool			`json:"ign_first_turn"`
-	BattleStart		string			`json:"battle_start"`
-	PlayerParty		[]Participant	`json:"player_party"`
-	OpponentParty	[]Participant	`json:"opponent_party"`
-	TurnOrder		[]BattleTurn	`json:"turn_order"`
+	URL           string        `json:"url"`
+	Next          string        `json:"next"`
+	IgnFirstTurn  bool          `json:"ign_first_turn"`
+	BattleStart   string        `json:"battle_start"`
+	PlayerParty   []Participant `json:"player_party"`
+	OpponentParty []Participant `json:"opponent_party"`
+	TurnOrder     []BattleTurn  `json:"turn_order"`
 }
 
 func (r TurnOrderResponse) GetURL() string {
 	return r.URL
 }
 
-type Participant struct {
-	Name			string		`json:"name"`
-	Party			BattleParty	`json:"-"`
-	Agility			int32		`json:"agility"`
-	TickSpeed		int32		`json:"tick_speed"`
-	FirstStrike		bool		`json:"first_strike"`
-	Status			*string		`json:"status"`
-	AltState		*int32		`json:"alt_state,omitempty"`
-	TurnsReceived	int32		`json:"turns_received"`
-	TurnsPercentage	float64		`json:"turns_percentage"`
-	Offset			int32		`json:"starting_tick"`
-	MinICV			*int32		`json:"min_icv"`
-	MaxICV			*int32		`json:"max_icv"`
+type TurnParams struct {
+	Name          string
+	PriorityKey   string
+	Party         BattleParty
+	Agility		  int32
+	TickSpeed     int32
+	TicksNextTurn int32
 }
-
-func (p Participant) getPriorityKey() string {
-	if p.Party == battlePartyPlayer {
-		return p.Name
-	}
-
-	return fmt.Sprintf("mon|%s", p.Name)
-}
-
-type BattleParty string
-
-const (
-	battlePartyPlayer		BattleParty = "player"
-	battlePartyOpponent		BattleParty = "opponent"
-)
 
 type BattleTurn struct {
-	Name				string		`json:"name"`
-	Party				BattleParty	`json:"party"`
-	TicksNextTurn		int			`json:"ticks_next_turn"`
-	TotalTicksPassed	int			`json:"total_ticks_passed"`
+	Turn			int32		`json:"turn"`
+	CurrentTick 	int32       `json:"total_ticks_passed"`
+	Name            string      `json:"name"`
+	Party           BattleParty `json:"party"`
 }
 
-func calcTurnOrder(cfg *Config, params TurnOrderParams, url string) (TurnOrderResponse, error) {
+func handleTurnOrder(cfg *Config, params TurnOrderParams, url string) (TurnOrderResponse, error) {
+	var err error
+
 	response := TurnOrderResponse{
-		URL: url,
+		URL:          url,
 		IgnFirstTurn: params.IgnFirstTurn,
-		BattleStart: params.BattleStart,
+		BattleStart:  params.BattleStart,
 	}
 
-	//priorities := getPriorityMap()
-	duplicates := make(map[string]bool)
-
-	for _, partyMember := range params.Party {
-		_, isDupe := duplicates[partyMember.getParticipantKey()]
-		if isDupe {
-			return TurnOrderResponse{}, newHTTPError(http.StatusBadRequest, "each party member can only appear once.", nil)
-		}
-		
-		unit, _ := seeding.GetResourceByID(partyMember.ID, cfg.l.PlayerUnitsID)
-
-		participant := Participant{
-			Name: unit.Name,
-			Party: battlePartyPlayer,
-			Agility: partyMember.Agl,
-			FirstStrike: partyMember.FS,
-			Status: partyMember.Status,
-			Offset: partyMember.Offset,
-		}
-		participant.TickSpeed, participant.MinICV, participant.MaxICV = extractAglTierChar(cfg, partyMember, params.IgnFirstTurn)
-
-		response.PlayerParty = append(response.PlayerParty, participant)
-		duplicates[partyMember.getParticipantKey()] = true
+	response.PlayerParty, response.OpponentParty, err = getParticipants(cfg, params)
+	if err != nil {
+		return TurnOrderResponse{}, err
 	}
+	participants := slices.Concat(response.PlayerParty, response.OpponentParty)
 
-	params.Mons = fetchFormationMons(cfg, params.Formation, params.Mons)
-
-	for _, mon := range params.Mons {
-		_, isDupe := duplicates[mon.getParticipantKey()]
-		if isDupe {
-			return TurnOrderResponse{}, newHTTPError(http.StatusBadRequest, "exact duplicate mons are not allowed", nil)
-		}
-
-		monster, err := getMonsterFromJson(cfg, mon)
-		if err != nil {
-			return TurnOrderResponse{}, err
-		}
-
-		agilityBS := getBaseStat(cfg, "agility", monster.BaseStats)
-		agility := agilityBS.Value
-		firstStrike := monHasFirstStrike(monster)
-
-		if mon.AglOverride != nil {
-			agility = *mon.AglOverride
-		}
-		
-		participant := Participant{
-			Name: h.NameToString(monster.Name, monster.Version, nil),
-			Party: battlePartyOpponent,
-			Agility: agility,
-			FirstStrike: firstStrike,
-			AltState: mon.AltState,
-			Offset: mon.Offset,
-		}
-		participant.TickSpeed, participant.MinICV, participant.MaxICV = extractAglTierMon(cfg, mon, agility, firstStrike, params.IgnFirstTurn)
-
-		participant.Status, err = fetchMonsterStatus(monster, mon.Status)
-		if err != nil {
-			return TurnOrderResponse{}, err
-		}
-
-		response.OpponentParty = append(response.OpponentParty, participant)
-		duplicates[mon.getParticipantKey()] = true
-	}
-
-	for _, mon := range params.MonsCustom {
-		_, isDupe := duplicates[mon.getParticipantKey()]
-		if isDupe {
-			return TurnOrderResponse{}, newHTTPError(http.StatusBadRequest, "exact duplicate mons are not allowed", nil)
-		}
-
-		participant := Participant{
-			Name: mon.Name,
-			Party: battlePartyOpponent,
-			Agility: mon.Agl,
-			FirstStrike: mon.FS,
-			Status: mon.Status,
-			Offset: mon.Offset,
-		}
-		participant.TickSpeed, participant.MinICV, participant.MaxICV = extractAglTierMonCustom(cfg, mon, params.IgnFirstTurn)
-
-		response.OpponentParty = append(response.OpponentParty, participant)
-		duplicates[mon.getParticipantKey()] = true
-	}
-
-	
+	response.TurnOrder = calcTurnOrder(params, participants)
 
 	return response, nil
 }
 
-func fetchFormationMons(cfg *Config, formationPtr *int32, mons []turnOrderMon) []turnOrderMon {
-	if formationPtr == nil {
-		return mons
-	}
 
-	formation, _ := seeding.GetResourceByID(*formationPtr, cfg.l.MonsterFormationsID)
+func calcTurnOrder(params TurnOrderParams, participants []Participant) []BattleTurn {
+	priorities := getPriorityMap()
+	turnQueue := readyTurnQueue(participants, priorities, params.RNG)
+	var turns []BattleTurn
+	var ticksTotal int32
+	var turnsTotal int32
 
-	mons = []turnOrderMon{}
-
-	for _, monAmt := range formation.Monsters {
-		monID := monAmt.MonsterID
-
-		mon := turnOrderMon{
-			ID: monID,
+	for {
+		if len(turns) == int(params.TurnsAmt) {
+			break
 		}
 
-		mons = append(mons, mon)
-	}
+		currentTurn := &turnQueue[0]
+		turnsTotal++
+		ticksPassed := currentTurn.TicksNextTurn
+		ticksTotal += getTicksToCount(ticksPassed)
 
-	return mons
-}
+		for i := range turnQueue {
+			turn := &turnQueue[i]
 
-func monHasFirstStrike(mon Monster) bool {
-	for _, aa := range mon.AutoAbilities {
-		if aa.Name == "first strike" {
-			return true
+			if ticksPassed < 0 {
+				if turn.TicksNextTurn == 0 {
+					continue
+				}
+				
+				if turn.TicksNextTurn == -1 {
+					turn.TicksNextTurn = 0
+					continue
+				}
+
+				turn.TicksNextTurn -= 1
+				continue
+			}
+
+			turn.TicksNextTurn -= ticksPassed
 		}
-	}
-
-	return false
-}
-
-
-// I feel like the conditions especially in the start, can be written a bit cleaner
-func fetchMonsterStatus(mon Monster, statusPtr *string) (*string, error) {
-	const statusHaste = string(database.HasteStatusHaste)
-	const statusAutoHaste = string(database.HasteStatusAutoHaste)
-	immuneToHaste := monImmuneToHaste(mon)
-	hasAppliedStatus := monHasAppliedStatus(mon)
-
-	if statusPtr == nil && !hasAppliedStatus {
-		return nil, nil
-	}
-
-	if hasAppliedStatus {
-		monStatus := mon.AppliedState.AppliedStatus.StatusCondition.Name
 		
-		if monStatus == statusHaste {
-			return &monStatus, nil
+		battleTurn := BattleTurn{
+			Turn: 			turnsTotal,
+			CurrentTick: 	ticksTotal,
+			Name: 			currentTurn.Name,
+			Party: 			currentTurn.Party,
+
+		}
+		turns = append(turns, battleTurn)
+		
+
+		currentTurn.TicksNextTurn = currentTurn.TickSpeed * 3
+		turnQueue = sortTurnQueue(turnQueue, priorities)
+
+		if ticksTotal == 0 && ticksPassed == -1 {
+			ticksTotal += 1
 		}
 	}
 
-	status := *statusPtr
+	return turns
+}
 
-	if immuneToHaste && (status == statusHaste || status == statusAutoHaste) {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to 'haste'", h.NameToString(mon.Name, mon.Version, nil)), nil)
+func getTicksToCount(ticks int32) int32 {
+	if ticks < 0 {
+		ticks = 0
 	}
 
-	return &status, nil
+	return ticks
 }
 
-func monHasAppliedStatus(mon Monster) bool {
-	return mon.AppliedState != nil && mon.AppliedState.AppliedStatus != nil
-}
+/*
+	- metadata
+		- create a map to count TurnsReceived (map[PriorityKey]int)
+		- TurnsPercentage can only be calculated at the end
+*/
 
-func monImmuneToHaste(mon Monster) bool {
-	for _, condition := range mon.StatusImmunities {
-		if condition.Name == string(database.HasteStatusHaste) {
-			return true
+func readyTurnQueue(participants []Participant, priorities map[string]int, rng string) []TurnParams {
+	var turnQueue []TurnParams
+
+	for _, participant := range participants {
+		if participant.TickSpeed == 0 || participant.MinICV == nil || participant.MaxICV == nil {
+			continue
 		}
+
+		params := TurnParams{
+			Name:        participant.Name,
+			PriorityKey: participant.getPriorityKey(),
+			Party:       participant.Party,
+			Agility: 	 participant.Agility,
+			TickSpeed:   participant.TickSpeed,
+		}
+
+		switch rng {
+		case string(database.TurnOrderRngBest):
+			switch participant.Party {
+			case battlePartyPlayer:
+				params.TicksNextTurn = *participant.MinICV
+
+			case battlePartyOpponent:
+				params.TicksNextTurn = *participant.MaxICV
+			}
+
+		case string(database.TurnOrderRngWorst):
+			switch participant.Party {
+			case battlePartyPlayer:
+				params.TicksNextTurn = *participant.MaxICV
+
+			case battlePartyOpponent:
+				params.TicksNextTurn = *participant.MinICV
+			}
+
+		case string(database.TurnOrderRngMedian):
+			params.TicksNextTurn = (*participant.MinICV + *participant.MaxICV) / 2
+		}
+
+		turnQueue = append(turnQueue, params)
 	}
 
-	return false
-}
-
-func getMonsterFromJson(cfg *Config, mon turnOrderMon) (Monster, error) {
-	monsterLookup, _ := seeding.GetResourceByID(mon.ID, cfg.l.MonstersID)
-
-	monster := Monster{
-		ID:                   monsterLookup.ID,
-		Name:                 monsterLookup.Name,
-		Version:              monsterLookup.Version,
-		Specification:        monsterLookup.Specification,
-		HasOverdrive:         monsterLookup.HasOverdrive,
-		IsUnderwater:         monsterLookup.IsUnderwater,
-		IsZombie:             monsterLookup.IsZombie,
-		Distance:             monsterLookup.Distance,
-		Properties:           namesToNamedAPIResources(cfg, cfg.e.properties, monsterLookup.Properties),
-		AutoAbilities:        namesToNamedAPIResources(cfg, cfg.e.autoAbilities, monsterLookup.AutoAbilities),
-		StealGil:             monsterLookup.StealGil,
-		DoomCountdown:        monsterLookup.DoomCountdown,
-		PoisonRate:           monsterLookup.PoisonRate,
-		ThreatenChance:       monsterLookup.ThreatenChance,
-		ZanmatoLevel:         monsterLookup.ZanmatoLevel,
-		BaseStats:            toResAmtType(cfg, cfg.e.stats, monsterLookup.BaseStats, newBaseStat),
-		ElemResists:          getMonsterElemResists(cfg, monsterLookup.ElemResists),
-		StatusImmunities:     namesToNamedAPIResources(cfg, cfg.e.statusConditions, monsterLookup.StatusImmunities),
-		StatusResists:        toResAmtType(cfg, cfg.e.statusConditions, monsterLookup.StatusResists, newStatusResist),
-		Abilities:            convertObjSlice(cfg, monsterLookup.Abilities, convertMonsterAbility),
-		AlteredStates: 		  getMonsterAlteredStates(cfg, nil, monsterLookup),
-	}
-
-	return applyAlteredStateFromJson(cfg, monster, mon.AltState)
+	return sortTurnQueue(turnQueue, priorities)
 }
 
 func getPriorityMap() map[string]int {
@@ -274,137 +187,52 @@ func getPriorityMap() map[string]int {
 	return priorityMap
 }
 
-
-func getAllAgilityTiers(cfg *Config) []seeding.AgilityTier {
-	tiers := make([]seeding.AgilityTier, len(cfg.l.AgilityTiersID))
-
-	for _, tier := range cfg.l.AgilityTiersID {
-		tiers = append(tiers, tier)
-	}
-
-	return tiers
-}
-
-func getAgilityTier(cfg *Config, agility int32) seeding.AgilityTier {
-	tiers := getAllAgilityTiers(cfg)
-	var agilityTier seeding.AgilityTier
-
-	for _, tier := range tiers {
-		if agility >= tier.MinAgility && agility <= tier.MaxAgility {
-			agilityTier = tier
-			break
+func sortTurnQueue(turnQueue []TurnParams, priorities map[string]int) []TurnParams {
+	slices.SortStableFunc(turnQueue, func(a, b TurnParams) int {
+		if a.TicksNextTurn < b.TicksNextTurn {
+			return -1
 		}
-	}
 
-	return agilityTier
-}
-
-// both these functions need to account for first strike and status
-// they should probably also take the respective type as input, instead of just the agility
-// ignFirstTurn also plays a role. it sets both ICVs to the offset value
-func extractAglTierChar(cfg *Config, params turnOrderParty, ignFirstTurn bool) (int32, *int32, *int32) {
-	agilityTier := getAgilityTier(cfg, params.Agl)
-	
-	tickSpeed := agilityTier.TickSpeed
-	var minICV *int32
-	maxICV := agilityTier.CharacterMaxICV
-
-	for _, subtier := range agilityTier.CharacterMinICVs {
-		if params.Agl >= subtier.MinAgility && params.Agl <= subtier.MaxAgility {
-			minICV = subtier.CharacterMinICV
-			break
+		if a.TicksNextTurn > b.TicksNextTurn {
+			return 1
 		}
-	}
 
-	return calcAgilityVals(minICV, maxICV, tickSpeed, params.Offset, params.FS, ignFirstTurn, params.Status, battlePartyPlayer)
+		return sortTurnQueueAgility(a, b, priorities)
+	})
+
+	return turnQueue
 }
 
 
-func extractAglTierMon(cfg *Config, params turnOrderMon, agility int32, firstStrike, ignFirstTurn bool) (int32, *int32, *int32) {
-	agilityTier := getAgilityTier(cfg, agility)
-	
-	tickSpeed := agilityTier.TickSpeed
-	minICV := agilityTier.MonsterMinICV
-	maxICV := agilityTier.MonsterMaxICV
+func sortTurnQueueAgility(a, b TurnParams, priorities map[string]int) int {
+	if a.Agility < b.Agility {
+		return -1
+	}
 
-	return calcAgilityVals(minICV, maxICV, tickSpeed, params.Offset, firstStrike, ignFirstTurn, params.Status, battlePartyOpponent)
+	if a.Agility > b.Agility {
+		return 1
+	}
+
+	return sortTurnQueuePriority(a, b, priorities)
 }
 
-func extractAglTierMonCustom(cfg *Config, params turnOrderMonCustom,ignFirstTurn bool) (int32, *int32, *int32) {
-	agilityTier := getAgilityTier(cfg, params.Agl)
-	
-	tickSpeed := agilityTier.TickSpeed
-	minICV := agilityTier.MonsterMinICV
-	maxICV := agilityTier.MonsterMaxICV
-
-	return calcAgilityVals(minICV, maxICV, tickSpeed, params.Offset, params.FS, ignFirstTurn, params.Status, battlePartyOpponent)
-}
-
-func calcAgilityVals(minICV, maxICV *int32, tickSpeed, offset int32, firstStrike, ignFirstTurn bool, status *string, partyType BattleParty) (int32, *int32, *int32) {
-	tickSpeed = calcTickSpeed(tickSpeed, status)
-	minICV, maxICV = calcIcvVals(minICV, maxICV, firstStrike, ignFirstTurn, status, offset, partyType)
-
-	return tickSpeed, minICV, maxICV
-}
-
-
-func calcTickSpeed(tickSpeed int32, statusPtr *string) int32 {
-	if statusPtr == nil {
-		return tickSpeed
+func sortTurnQueuePriority(a, b TurnParams, priorities map[string]int) int {
+	aVal, ok := priorities[a.PriorityKey]
+	if !ok {
+		aVal = 99
 	}
-	status := *statusPtr
-
-	switch status {
-	case string(database.HasteStatusAutoHaste), string(database.HasteStatusHaste):
-		return tickSpeed /2
-
-	case string(database.HasteStatusSlow):
-		return tickSpeed * 2
-
-	default:
-		return tickSpeed
-	}
-}
-
-func calcIcvVals(minPtr, maxPtr *int32, firstStrike, ignFirstTurn bool, status *string, offset int32, partyType BattleParty) (*int32, *int32) {
-	if minPtr == nil && maxPtr == nil {
-		return nil, nil
+	bVal, ok := priorities[b.PriorityKey]
+	if !ok {
+		bVal = 100
 	}
 
-	var minICV int32
-	var maxICV int32
-	
-	if ignFirstTurn {
-		minICV = offset
-		maxICV = offset
-		return &minICV, &maxICV
+	if aVal < bVal {
+		return -1
 	}
 
-	if firstStrike {
-		switch partyType {
-		case battlePartyPlayer:
-			minICV = 0
-			maxICV = 0
-			return &minICV, &maxICV
-
-		case battlePartyOpponent:
-			minICV = -1
-			maxICV = -1
-			return &minICV, &maxICV
-		} 
+	if aVal > bVal {
+		return 1
 	}
 
-	minICV = *minPtr
-	maxICV = *maxPtr
-	
-	if status == nil {
-		return &minICV, &maxICV
-	}
-
-	if *status == string(database.HasteStatusAutoHaste) {
-		minICV /= 2
-		maxICV /= 2
-	}
-
-	return &minICV, &maxICV
+	return 0
 }
