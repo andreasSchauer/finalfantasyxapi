@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func handleMonEdgeCases(mon turnOrderMon, agility int32) int32 {
+func handleNoTurnMons(mon turnOrderMon, agility int32) int32 {
 	noTurnIDs := []int32{33, 166, 194, 212, 228, 300}
 
 	if slices.Contains(noTurnIDs, mon.ID) {
@@ -54,7 +54,6 @@ func monHasFirstStrike(mon Monster) bool {
 	return false
 }
 
-
 // I feel like the conditions especially in the start, can be written a bit cleaner
 func fetchMonsterStatus(mon Monster, statusPtr *string) (*string, error) {
 	const statusHaste = string(database.HasteStatusHaste)
@@ -68,7 +67,7 @@ func fetchMonsterStatus(mon Monster, statusPtr *string) (*string, error) {
 
 	if hasAppliedStatus {
 		monStatus := mon.AppliedState.AppliedStatus.StatusCondition.Name
-		
+
 		if monStatus == statusHaste {
 			return &monStatus, nil
 		}
@@ -97,32 +96,67 @@ func monImmuneToHaste(mon Monster) bool {
 	return false
 }
 
-func getMonsterFromJson(cfg *Config, mon turnOrderMon) (Monster, error) {
-	monsterLookup, _ := seeding.GetResourceByID(mon.ID, cfg.l.MonstersID)
+func getConvertedMon(cfg *Config, monID int32) Monster {
+	monsterLookup, _ := seeding.GetResourceByID(monID, cfg.l.MonstersID)
 
-	monster := Monster{
-		ID:                   monsterLookup.ID,
-		Name:                 monsterLookup.Name,
-		Version:              monsterLookup.Version,
-		Specification:        monsterLookup.Specification,
-		HasOverdrive:         monsterLookup.HasOverdrive,
-		IsUnderwater:         monsterLookup.IsUnderwater,
-		IsZombie:             monsterLookup.IsZombie,
-		Distance:             monsterLookup.Distance,
-		Properties:           namesToNamedAPIResources(cfg, cfg.e.properties, monsterLookup.Properties),
-		AutoAbilities:        namesToNamedAPIResources(cfg, cfg.e.autoAbilities, monsterLookup.AutoAbilities),
-		StealGil:             monsterLookup.StealGil,
-		DoomCountdown:        monsterLookup.DoomCountdown,
-		PoisonRate:           monsterLookup.PoisonRate,
-		ThreatenChance:       monsterLookup.ThreatenChance,
-		ZanmatoLevel:         monsterLookup.ZanmatoLevel,
-		BaseStats:            toResAmtType(cfg, cfg.e.stats, monsterLookup.BaseStats, newBaseStat),
-		ElemResists:          getMonsterElemResists(cfg, monsterLookup.ElemResists),
-		StatusImmunities:     namesToNamedAPIResources(cfg, cfg.e.statusConditions, monsterLookup.StatusImmunities),
-		StatusResists:        toResAmtType(cfg, cfg.e.statusConditions, monsterLookup.StatusResists, newStatusResist),
-		Abilities:            convertObjSlice(cfg, monsterLookup.Abilities, convertMonsterAbility),
-		AlteredStates: 		  getMonsterAlteredStates(cfg, nil, monsterLookup),
+	return Monster{
+		ID:               monsterLookup.ID,
+		Name:             monsterLookup.Name,
+		Version:          monsterLookup.Version,
+		Specification:    monsterLookup.Specification,
+		HasOverdrive:     monsterLookup.HasOverdrive,
+		IsUnderwater:     monsterLookup.IsUnderwater,
+		IsZombie:         monsterLookup.IsZombie,
+		Distance:         monsterLookup.Distance,
+		Properties:       namesToNamedAPIResources(cfg, cfg.e.properties, monsterLookup.Properties),
+		AutoAbilities:    namesToNamedAPIResources(cfg, cfg.e.autoAbilities, monsterLookup.AutoAbilities),
+		StealGil:         monsterLookup.StealGil,
+		DoomCountdown:    monsterLookup.DoomCountdown,
+		PoisonRate:       monsterLookup.PoisonRate,
+		ThreatenChance:   monsterLookup.ThreatenChance,
+		ZanmatoLevel:     monsterLookup.ZanmatoLevel,
+		BaseStats:        toResAmtType(cfg, cfg.e.stats, monsterLookup.BaseStats, newBaseStat),
+		ElemResists:      getMonsterElemResists(cfg, monsterLookup.ElemResists),
+		StatusImmunities: namesToNamedAPIResources(cfg, cfg.e.statusConditions, monsterLookup.StatusImmunities),
+		StatusResists:    toResAmtType(cfg, cfg.e.statusConditions, monsterLookup.StatusResists, newStatusResist),
+		Abilities:        convertObjSlice(cfg, monsterLookup.Abilities, convertMonsterAbility),
+		AlteredStates:    getMonsterAlteredStates(cfg, nil, monsterLookup),
+	}
+}
+
+func getTurnOrderMonFromJson(cfg *Config, mon turnOrderMon) (Monster, *seeding.AgilityTier, error) {
+	penanceArmIDs := []int32{306, 307}
+	firstTurnAglIDs := []int32{167, 168, 215, 306, 307}
+	var firstTurnAglTier *seeding.AgilityTier
+	monster := getConvertedMon(cfg, mon.ID)
+
+	if slices.Contains(penanceArmIDs, mon.ID) {
+		mon.AltState = h.GetInt32Ptr(2)
 	}
 
-	return applyAlteredStateFromJson(cfg, monster, mon.AltState)
+	if slices.Contains(firstTurnAglIDs, mon.ID) {
+		firstTurnAglTier = getAltStateAglTier(cfg, monster)
+	}
+
+	monster, err := applyAlteredStateFromJson(cfg, monster, mon.AltState)
+	if err != nil {
+		return Monster{}, nil, err
+	}
+
+	return monster, firstTurnAglTier, nil
+}
+
+func getAltStateAglTier(cfg *Config, mon Monster) *seeding.AgilityTier {
+	altState := mon.AlteredStates[0]
+
+	if len(altState.Alts) == 0 {
+		return nil
+	}
+
+	baseStats := altState.Alts[0].BaseStats
+
+	aglBS := getBaseStat(cfg, "agility", baseStats)
+	tier := getAgilityTier(cfg, aglBS.Value)
+
+	return &tier
 }

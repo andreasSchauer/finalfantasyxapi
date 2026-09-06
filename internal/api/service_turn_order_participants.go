@@ -92,8 +92,7 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 		participant.AgilityVals = extractAglTierChar(cfg, participant, params)
 
 		if params.Formation != nil && *params.Formation == idFormationSpectral {
-			*participant.MinICV = 0
-			*participant.MaxICV = 0
+			participant.MinICV, participant.MaxICV = getEqualICVs(0)
 		}
 
 		playerParty = append(playerParty, participant)
@@ -115,26 +114,16 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 			return nil, TurnOrderParams{}, newHTTPError(http.StatusBadRequest, "exact duplicate mons are not allowed", nil)
 		}
 
-		monster, err := getMonsterFromJson(cfg, mon)
+		monster, firstTurnAglTier, err := getTurnOrderMonFromJson(cfg, mon)
 		if err != nil {
 			return nil, TurnOrderParams{}, err
 		}
 
-		agilityBS := getBaseStat(cfg, "agility", monster.BaseStats)
-		agility := agilityBS.Value
-		firstStrike := monHasFirstStrike(monster)
-
-		if mon.AglOverride != nil {
-			agility = *mon.AglOverride
-		}
-
-		agility = handleMonEdgeCases(mon, agility)
-
 		participant := Participant{
 			Name:        h.NameToString(monster.Name, monster.Version, nil),
 			Party:       battlePartyOpponent,
-			Agility:     agility,
-			FirstStrike: firstStrike,
+			Agility:     getTurnOrderMonAgility(cfg, mon, monster),
+			FirstStrike: monHasFirstStrike(monster),
 			AltState:    mon.AltState,
 		}
 		participant.Status, err = fetchMonsterStatus(monster, mon.Status)
@@ -142,11 +131,10 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 			return nil, TurnOrderParams{}, err
 		}
 
-		participant.AgilityVals = extractAglTierMon(cfg, participant, params)
+		participant.AgilityVals = extractAglTierMon(cfg, participant, params, firstTurnAglTier)
 
 		if params.Formation != nil && *params.Formation == idFormationSpectral && mon.ID == idSpectralKeeper {
-			*participant.MinICV = 21
-			*participant.MaxICV = 21
+			participant.MinICV, participant.MaxICV = getEqualICVs(21)
 		}
 
 		monParty = append(monParty, participant)
@@ -155,6 +143,17 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 	}
 
 	return monParty, params, nil
+}
+
+func getTurnOrderMonAgility(cfg *Config, mon turnOrderMon, monster Monster) int32 {
+	agilityBS := getBaseStat(cfg, "agility", monster.BaseStats)
+	agility := agilityBS.Value
+
+	if mon.AglOverride != nil {
+		agility = *mon.AglOverride
+	}
+
+	return handleNoTurnMons(mon, agility)
 }
 
 func getParticipantsMonsCustom(cfg *Config, params TurnOrderParams, maps *participantMaps) ([]Participant, error) {
@@ -173,7 +172,7 @@ func getParticipantsMonsCustom(cfg *Config, params TurnOrderParams, maps *partic
 			FirstStrike: mon.FS,
 			Status:      mon.Status,
 		}
-		participant.AgilityVals = extractAglTierMon(cfg, participant, params)
+		participant.AgilityVals = extractAglTierMon(cfg, participant, params, nil)
 
 		monParty = append(monParty, participant)
 		maps.duplicates[mon.getDuplicateKey()] = true

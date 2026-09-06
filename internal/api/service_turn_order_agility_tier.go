@@ -49,11 +49,11 @@ func extractAglTierChar(cfg *Config, participant Participant, params TurnOrderPa
 		}
 	}
 
-	return calcAgilityVals(aglVals, participant, params)
+	return calcAgilityVals(aglVals, participant, params, nil)
 }
 
 
-func extractAglTierMon(cfg *Config, participant Participant, params TurnOrderParams) AgilityVals {
+func extractAglTierMon(cfg *Config, participant Participant, params TurnOrderParams, monFirstTurnTier *seeding.AgilityTier) AgilityVals {
 	agilityTier := getAgilityTier(cfg, participant.Agility)
 	aglVals := AgilityVals{
 		TickSpeed: 	agilityTier.TickSpeed,
@@ -61,13 +61,13 @@ func extractAglTierMon(cfg *Config, participant Participant, params TurnOrderPar
 		MaxICV: 	agilityTier.MonsterMaxICV,
 	}
 
-	return calcAgilityVals(aglVals, participant, params)
+	return calcAgilityVals(aglVals, participant, params, monFirstTurnTier)
 }
 
 
-func calcAgilityVals(aglVals AgilityVals, participant Participant, params TurnOrderParams) AgilityVals {
+func calcAgilityVals(aglVals AgilityVals, participant Participant, params TurnOrderParams, monFirstTurnTier *seeding.AgilityTier) AgilityVals {
 	aglVals.TickSpeed = calcTickSpeed(aglVals.TickSpeed, participant.Status)
-	aglVals.MinICV, aglVals.MaxICV = calcICVs(aglVals.MinICV, aglVals.MaxICV, participant, params)
+	aglVals.MinICV, aglVals.MaxICV = calcICVs(aglVals.MinICV, aglVals.MaxICV, participant, params, monFirstTurnTier)
 
 	return aglVals
 }
@@ -91,7 +91,12 @@ func calcTickSpeed(tickSpeed int32, statusPtr *string) int32 {
 	}
 }
 
-func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderParams) (*int32, *int32) {
+func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderParams, monFirstTurnTier *seeding.AgilityTier) (*int32, *int32) {
+	if monFirstTurnTier != nil {
+		minPtr = monFirstTurnTier.MonsterMinICV
+		maxPtr = monFirstTurnTier.MonsterMaxICV
+	}
+
 	if minPtr == nil || maxPtr == nil {
 		return nil, nil
 	}
@@ -135,6 +140,7 @@ func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderPa
 
 	minICV = *minPtr
 	maxICV = *maxPtr
+
 	
 	if participant.Status == nil {
 		return &minICV, &maxICV
