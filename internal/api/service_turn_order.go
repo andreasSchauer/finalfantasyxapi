@@ -9,7 +9,6 @@ import (
 
 type TurnOrderResponse struct {
 	URL           string        `json:"url"`
-	Next          string        `json:"next"`
 	IgnFirstTurn  bool          `json:"ign_first_turn"`
 	BattleStart   string        `json:"battle_start"`
 	RNG           string        `json:"rng"`
@@ -63,8 +62,7 @@ func handleTurnOrder(cfg *Config, params TurnOrderParams, url string) (TurnOrder
 }
 
 func calcTurnOrder(params TurnOrderParams, participants []Participant) []BattleTurn {
-	priorities := getPriorityMap()
-	turnQueue := readyTurnQueue(participants, priorities, params.RNG)
+	turnQueue := readyTurnQueue(participants, params.RNG)
 	var turns []BattleTurn
 	var ticksTotal int32
 	var turnsTotal int32
@@ -87,8 +85,7 @@ func calcTurnOrder(params TurnOrderParams, participants []Participant) []BattleT
 				break
 			}
 
-			turn := &turnQueue[i]
-			turn.TicksNextTurn -= ticksPassed
+			turnQueue[i].TicksNextTurn -= ticksPassed
 		}
 
 		battleTurn := BattleTurn{
@@ -101,24 +98,13 @@ func calcTurnOrder(params TurnOrderParams, participants []Participant) []BattleT
 		turns = append(turns, battleTurn)
 
 		currentTurn.TicksNextTurn = currentTurn.TickSpeed * 3
-		turnQueue = sortTurnQueue(turnQueue, priorities)
+		turnQueue = sortTurnQueue(turnQueue)
 	}
 
 	return turns
 }
 
-func getPriorityMap() map[string]int {
-	prioritySlice := []string{"tidus", "yuna", "auron", "kimahri", "wakka", "lulu", "rikku", "valefor", "ifrit", "ixion", "shiva", "bahamut", "anima", "yojimbo", "cindy", "sandy", "mindy"}
-	priorityMap := make(map[string]int, len(prioritySlice))
-
-	for i, name := range prioritySlice {
-		priorityMap[name] = i
-	}
-
-	return priorityMap
-}
-
-func readyTurnQueue(participants []Participant, priorities map[string]int, rng string) []TurnParams {
+func readyTurnQueue(participants []Participant, rng string) []TurnParams {
 	var turnQueue []TurnParams
 
 	for _, participant := range participants {
@@ -160,26 +146,28 @@ func readyTurnQueue(participants []Participant, priorities map[string]int, rng s
 		turnQueue = append(turnQueue, params)
 	}
 
-	return sortTurnQueue(turnQueue, priorities)
+	return sortTurnQueue(turnQueue)
 }
 
-func sortTurnQueue(turnQueue []TurnParams, priorities map[string]int) []TurnParams {
-	slices.SortStableFunc(turnQueue, func(a, b TurnParams) int {
-		if a.TicksNextTurn < b.TicksNextTurn {
-			return -1
-		}
-
-		if a.TicksNextTurn > b.TicksNextTurn {
-			return 1
-		}
-
-		return sortTurnQueueAgility(a, b, priorities)
-	})
+func sortTurnQueue(turnQueue []TurnParams) []TurnParams {
+	slices.SortStableFunc(turnQueue, sortTurnQueueTicks)
 
 	return turnQueue
 }
 
-func sortTurnQueueAgility(a, b TurnParams, priorities map[string]int) int {
+func sortTurnQueueTicks(a, b TurnParams) int {
+	if a.TicksNextTurn < b.TicksNextTurn {
+		return -1
+	}
+
+	if a.TicksNextTurn > b.TicksNextTurn {
+		return 1
+	}
+
+	return sortTurnQueueAgility(a, b)
+}
+
+func sortTurnQueueAgility(a, b TurnParams) int {
 	if a.Agility > b.Agility {
 		return -1
 	}
@@ -188,10 +176,12 @@ func sortTurnQueueAgility(a, b TurnParams, priorities map[string]int) int {
 		return 1
 	}
 
-	return sortTurnQueuePriority(a, b, priorities)
+	return sortTurnQueuePriority(a, b)
 }
 
-func sortTurnQueuePriority(a, b TurnParams, priorities map[string]int) int {
+func sortTurnQueuePriority(a, b TurnParams) int {
+	priorities := getPriorityMap()
+	
 	aVal, ok := priorities[a.PriorityKey]
 	if !ok {
 		aVal = 99
@@ -211,6 +201,19 @@ func sortTurnQueuePriority(a, b TurnParams, priorities map[string]int) int {
 
 	return 0
 }
+
+
+func getPriorityMap() map[string]int {
+	prioritySlice := []string{"tidus", "yuna", "auron", "kimahri", "wakka", "lulu", "rikku", "valefor", "ifrit", "ixion", "shiva", "bahamut", "anima", "yojimbo", "cindy", "sandy", "mindy"}
+	priorityMap := make(map[string]int, len(prioritySlice))
+
+	for i, name := range prioritySlice {
+		priorityMap[name] = i
+	}
+
+	return priorityMap
+}
+
 
 func completeTurnOrderResponse(response TurnOrderResponse, participantsAmt int, turnsAmt int32) TurnOrderResponse {
 	turnCounter := make(map[string]int32, participantsAmt)

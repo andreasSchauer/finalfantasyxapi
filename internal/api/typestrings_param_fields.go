@@ -21,7 +21,6 @@ const (
 	pfnMons			FieldName = "mons"
 	pfnMonsCustom	FieldName = "mons_custom"
 	pfnName			FieldName = "name"
-	pfnOffset		FieldName = "offset"
 	pfnParty		FieldName = "party"
 	pfnRNG			FieldName = "rng"
 	pfnStatus		FieldName = "status"

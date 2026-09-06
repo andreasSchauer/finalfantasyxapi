@@ -28,7 +28,6 @@ type turnOrderParty struct {
 	Agl    int32   `json:"agl"`
 	FS     bool    `json:"fs,omitempty"`
 	Status *string `json:"status,omitempty"`
-	Offset int32   `json:"offset,omitempty"`
 }
 
 func (p turnOrderParty) getDuplicateKey() string {
@@ -43,7 +42,6 @@ type turnOrderMon struct {
 	AglOverride *int32  `json:"agl_override,omitempty"`
 	AltState    *int32  `json:"alt_state,omitempty"`
 	Status      *string `json:"status,omitempty"`
-	Offset      int32   `json:"offset,omitempty"`
 }
 
 func (p turnOrderMon) getDuplicateKey() string {
@@ -53,7 +51,6 @@ func (p turnOrderMon) getDuplicateKey() string {
 		h.DerefOrNil(p.AglOverride),
 		h.DerefOrNil(p.AltState),
 		h.DerefOrNil(p.Status),
-		p.Offset,
 	})
 }
 
@@ -62,7 +59,6 @@ type turnOrderMonCustom struct {
 	Agl    int32   `json:"agl"`
 	FS     bool    `json:"fs,omitempty"`
 	Status *string `json:"status,omitempty"`
-	Offset int32   `json:"offset,omitempty"`
 }
 
 func (p turnOrderMonCustom) getDuplicateKey() string {
@@ -72,7 +68,6 @@ func (p turnOrderMonCustom) getDuplicateKey() string {
 		p.Agl,
 		p.FS,
 		h.DerefOrNil(p.Status),
-		p.Offset,
 	})
 }
 
@@ -91,7 +86,7 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 			{
 				Field:       pfnIgnFirstTurn,
 				Type:        "bool",
-				Description: "If this field is true, the ICV calculation for the start of the battle is skipped and each participant in the battle starts with an ICV of 0. This allows for more direct speed comparisons between participants.",
+				Description: "If this field is true, the ICV calculation for the start of the battle is skipped and each participant in the battle starts with an ICV of 0. This allows for more direct speed comparisons between participants. This means that the values within 'rng', 'battle_start', and a participant's 'first-strike' are also ignored.",
 			},
 			{
 				Field:       pfnRNG,
@@ -114,7 +109,7 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 				ConflictsWith: []FieldName{pfnMons, pfnMonsCustom},
 				MinVal:        h.GetInt32Ptr(1),
 				MaxVal:        h.GetInt32Ptr(int32(len(cfg.l.MonsterFormations))),
-				Description:   "Instead of manually selecting monsters, you can look up a monster-formation via id. The monster(s) it contains will automatically get added as participants.",
+				Description:   "Instead of manually selecting monsters, you can look up a monster-formation via id. The monster(s) it contains will automatically get added as participants, along with their agility and first-strike values.",
 			},
 			{
 				Field:       pfnParty,
@@ -158,7 +153,6 @@ func (cfg *Config) getFieldDocTurnOrderParty() []FieldDoc {
 		cfg.getFieldDocAgl(),
 		cfg.getFieldDocFS(),
 		cfg.getFieldDocStatus(),
-		cfg.getFieldDocOffset(),
 	}
 }
 
@@ -186,7 +180,6 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 			Description: "If a monster has altered states, they can be applied, but will only have an effect, if they change its agility stat, or apply 'haste'. If a monster has a different agility stat, only on its first turn, this logic is applied automatically, except when 'ign_first_turn' is true. Specifying that specific altered state will have no effect, but will not result in an error. The same is true for penance's arms who get 'haste' status only during their own turns.",
 		},
 		cfg.getFieldDocStatus(),
-		cfg.getFieldDocOffset(),
 	}
 }
 
@@ -196,7 +189,6 @@ func (cfg *Config) getFieldDocTurnOrderMonCustom() []FieldDoc {
 		cfg.getFieldDocAgl(),
 		cfg.getFieldDocFS(),
 		cfg.getFieldDocStatus(),
-		cfg.getFieldDocOffset(),
 	}
 }
 
@@ -234,14 +226,5 @@ func (cfg *Config) getFieldDocStatus() FieldDoc {
 		Type:        "string (enum: hasteStatus)",
 		EnumValues:  createEnumStringSlice(cfg.t.HasteStatus.lookup),
 		Description: "Specify, whether a participant carries the 'haste' or 'slow' status. If 'haste' or 'slow' are selected, it is assumed, that the participant gets this status on the first turn, so ICV calculation is unaffected. The ctb alterations that come from applying 'haste' or 'slow' are ignored. If 'auto-haste' is selected, the participant starts this battle with 'haste' (due to 'auto-haste', or 'sos-haste') which will affect ICV calculation.",
-	}
-}
-
-func (cfg *Config) getFieldDocOffset() FieldDoc {
-	return FieldDoc{
-		Field:       pfnOffset,
-		Type:        "int",
-		DefaultVal:  0,
-		Description: "If 'ign_first_turn' is set to true, this field specifies the starting tick of the participant.",
 	}
 }

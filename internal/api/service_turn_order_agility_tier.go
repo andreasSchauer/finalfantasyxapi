@@ -100,22 +100,16 @@ func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderPa
 	var maxICV int32
 	
 	if params.IgnFirstTurn {
-		minICV = participant.Offset
-		maxICV = participant.Offset
-		return &minICV, &maxICV
+		return getEqualICVs(0)
 	}
 
 	if participant.FirstStrike {
 		switch participant.Party {
 		case battlePartyPlayer:
-			minICV = 0
-			maxICV = 0
-			return &minICV, &maxICV
+			return getEqualICVs(0)
 
 		case battlePartyOpponent:
-			minICV = -1
-			maxICV = -1
-			return &minICV, &maxICV
+			return getEqualICVs(-1)
 		} 
 	}
 
@@ -126,17 +120,13 @@ func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderPa
 			return calcICVsStartFavorable(*minPtr, participant.Status)
 
 		case battlePartyOpponent:
-			minICV = 0
-			maxICV = 0
-			return &minICV, &maxICV
+			return getEqualICVs(0)
 		}
 
 	case string(database.BattleStartPreemptive):
 		switch participant.Party {
 		case battlePartyPlayer:
-			minICV = 0
-			maxICV = 0
-			return &minICV, &maxICV
+			return getEqualICVs(0)
 			
 		case battlePartyOpponent:
 			return calcICVsStartFavorable(*minPtr, participant.Status)
@@ -158,17 +148,22 @@ func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderPa
 	return &minICV, &maxICV
 }
 
-func calcICVsStartFavorable(minVal int32, status *string) (*int32, *int32) {
-	val := minVal * 3
+func getEqualICVs(val int32) (*int32, *int32) {
 	minICV := val
 	maxICV := val
 
+	return &minICV, &maxICV
+}
+
+func calcICVsStartFavorable(minVal int32, status *string) (*int32, *int32) {
+	minPtr, maxPtr := getEqualICVs(minVal * 3)
+
 	if status == nil || *status != string(database.HasteStatusAutoHaste) {
-		return &minICV, &maxICV
+		return minPtr, maxPtr
 	}
 	
-	minICV /= 2
-	maxICV /= 2
+	*minPtr /= 2
+	*maxPtr /= 2
 
-	return &minICV, &maxICV
+	return minPtr, maxPtr
 }

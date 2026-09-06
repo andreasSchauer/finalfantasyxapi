@@ -17,7 +17,6 @@ type Participant struct {
 	FirstStrike     bool    `json:"first_strike"`
 	Status          *string `json:"status"`
 	AltState        *int32  `json:"alt_state,omitempty"`
-	Offset          int32   `json:"starting_tick"`
 	TurnsReceived   int32   `json:"turns_received"`
 	TurnsPercentage float64 `json:"turns_percentage"`
 }
@@ -89,7 +88,6 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 			Agility:     partyMember.Agl,
 			FirstStrike: partyMember.FS,
 			Status:      partyMember.Status,
-			Offset:      partyMember.Offset,
 		}
 		participant.AgilityVals = extractAglTierChar(cfg, participant, params)
 
@@ -138,7 +136,6 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 			Agility:     agility,
 			FirstStrike: firstStrike,
 			AltState:    mon.AltState,
-			Offset:      mon.Offset,
 		}
 		participant.Status, err = fetchMonsterStatus(monster, mon.Status)
 		if err != nil {
@@ -175,7 +172,6 @@ func getParticipantsMonsCustom(cfg *Config, params TurnOrderParams, maps *partic
 			Agility:     mon.Agl,
 			FirstStrike: mon.FS,
 			Status:      mon.Status,
-			Offset:      mon.Offset,
 		}
 		participant.AgilityVals = extractAglTierMon(cfg, participant, params)
 

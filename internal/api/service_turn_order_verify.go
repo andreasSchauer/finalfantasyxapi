@@ -93,11 +93,6 @@ func vfTurnOrderParty(cfg *Config, item turnOrderParty, _ FieldName, valueMap ma
 		return turnOrderParty{}, err
 	}
 
-	item.Offset, err = verifyParamField(cfg, item.Offset, pfnOffset, valueMap, valTree, vfIntId)
-	if err != nil {
-		return turnOrderParty{}, err
-	}
-
 	return item, nil
 }
 
@@ -142,11 +137,6 @@ func vfTurnOrderMon(cfg *Config, item turnOrderMon, _ FieldName, valueMap map[Fi
 		return turnOrderMon{}, err
 	}
 
-	item.Offset, err = verifyParamField(cfg, item.Offset, pfnOffset, valueMap, valTree, vfIntId)
-	if err != nil {
-		return turnOrderMon{}, err
-	}
-
 	return item, nil
 }
 
@@ -174,11 +164,6 @@ func vfTurnOrderMonCustom(cfg *Config, item turnOrderMonCustom, _ FieldName, val
 	}
 
 	item.Status, err = verifyParamFieldPtr(cfg, item.Status, pfnStatus, valueMap, valTree, vfEnum)
-	if err != nil {
-		return turnOrderMonCustom{}, err
-	}
-
-	item.Offset, err = verifyParamField(cfg, item.Offset, pfnOffset, valueMap, valTree, vfIntId)
 	if err != nil {
 		return turnOrderMonCustom{}, err
 	}
