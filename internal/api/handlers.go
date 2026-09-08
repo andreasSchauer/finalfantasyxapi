@@ -217,3 +217,11 @@ func (cfg *Config) HandleTurnOrderGet(w http.ResponseWriter, r *http.Request) {
 func (cfg *Config) HandleTurnOrderPost(w http.ResponseWriter, r *http.Request) {
 	routerServicePost(cfg, w, r, cfg.e.turnOrder)
 }
+
+func (cfg *Config) HandleDropChanceGet(w http.ResponseWriter, r *http.Request) {
+	routerServiceGet(cfg, w, r, cfg.e.dropChance)
+}
+
+func (cfg *Config) HandleDropChancePost(w http.ResponseWriter, r *http.Request) {
+	routerServicePost(cfg, w, r, cfg.e.dropChance)
+}

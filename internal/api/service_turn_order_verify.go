@@ -8,11 +8,10 @@ import (
 )
 
 func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, valueMap map[FieldName]any) (TurnOrderParams, error) {
-	var err error
 	valTree := compileValidationTree(cfg.getTurnOrderParamsDoc().Fields)
 	const monLimit int = 10
 
-	err = vfExistingFields(valueMap, valTree)
+	err := vfExistingFields(valueMap, valTree)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}

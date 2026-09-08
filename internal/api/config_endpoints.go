@@ -60,6 +60,7 @@ type endpoints struct {
 	endpoints          handlerInputEndpoints
 	alBhed             handlerInputService[AlBhedParams, AlBhedResponse]
 	turnOrder          handlerInputService[TurnOrderParams, TurnOrderResponse]
+	dropChance         handlerInputService[DropChanceParams, DropChanceResponse]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -1046,6 +1047,14 @@ func (cfg *Config) EndpointsInit() {
 		executeFn: handleTurnOrder,
 	}
 
+	e.dropChance = handlerInputService[DropChanceParams, DropChanceResponse]{
+		endpoint:  epDropChance,
+		usage:     []string{"/api/drop-chance?state={json_string}"},
+		paramsDoc: cfg.getDropChanceParamsDoc(),
+		verifyFn:  verifyDropChanceParams,
+		executeFn: calcDropChance,
+	}
+
 	cfg.e = &e
 	e.endpoints.slice = e.initializeEndpointSlice()
 
@@ -1105,6 +1114,7 @@ func (e endpoints) initializeEndpointSlice() []EndpointName {
 		e.endpoints.endpoint,
 		e.alBhed.endpoint,
 		e.turnOrder.endpoint,
+		e.dropChance.endpoint,
 	}
 
 	slices.Sort(endpoints)

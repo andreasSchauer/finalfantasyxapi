@@ -146,6 +146,7 @@ func (cfg *Config) getFieldDocTurnOrderParty() []FieldDoc {
 		{
 			Field:       pfnID,
 			Type:        "int (id: playerUnit)",
+			Required: 	 true,
 			MinVal:      h.GetInt32Ptr(1),
 			MaxVal:      h.GetInt32Ptr(int32(len(cfg.l.PlayerUnits))),
 			Description: "Specifies the id of the party member to be looked up.",
@@ -161,6 +162,7 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 		{
 			Field:       pfnID,
 			Type:        "int (id: monster)",
+			Required: 	 true,
 			MinVal:      h.GetInt32Ptr(1),
 			MaxVal:      h.GetInt32Ptr(int32(len(cfg.l.Monsters))),
 			Description: "Specifies the id of the monster to be looked up.",

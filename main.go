@@ -94,6 +94,11 @@ func main() {
 	mux.HandleFunc("POST /api/turn-order", apiCfg.HandleTurnOrderPost)
 	mux.HandleFunc("POST /api/turn-order/", apiCfg.HandleTurnOrderPost)
 
+	mux.HandleFunc("GET /api/drop-chance", apiCfg.HandleDropChanceGet)
+	mux.HandleFunc("GET /api/drop-chance/", apiCfg.HandleDropChanceGet)
+	mux.HandleFunc("POST /api/drop-chance", apiCfg.HandleDropChancePost)
+	mux.HandleFunc("POST /api/drop-chance/", apiCfg.HandleDropChancePost)
+
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: mux,

@@ -12,6 +12,7 @@ type FieldDoc struct {
 	ExampleUses   []string    `json:"example_uses,omitempty"`
 	Required      bool        `json:"required"`
 	RequiredOr    []FieldName `json:"required_or,omitempty"`
+	// ReqFields	  []FieldName `json:"required_fields,omitempty"`
 	ConflictsWith []FieldName `json:"conflicts_with,omitempty"`
 	DefaultVal    any         `json:"default_val,omitempty"`
 	MinVal        *int32      `json:"min_val,omitempty"`
@@ -21,4 +22,6 @@ type FieldDoc struct {
 	EnumValues    []string    `json:"enum_values,omitempty"`
 	Description   string      `json:"description"`
 	ChildProps    []FieldDoc  `json:"child_properties,omitempty"`
+	ChildMinVal	  *int32	  `json:"child_min_val,omitempty"`
+	ChildMaxVal	  *int32	  `json:"child_max_val,omitempty"`
 }

@@ -55,6 +55,7 @@ const (
 	epEndpoints				   EndpointName = "endpoints"
 	epAlBhed				   EndpointName = "al-bhed"
 	epTurnOrder				   EndpointName = "turn-order"
+	epDropChance			   EndpointName = "drop-chance"
 )
 
 type ResTypeSingle string

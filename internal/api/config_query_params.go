@@ -2872,3 +2872,10 @@ func (cfg *Config) initTurnOrderParams() {
 	cfg.q.turnOrder = paramsMap
 	cfg.e.turnOrder.queryLookup = paramsMap
 }
+
+func (cfg *Config) initDropChanceParams() {
+	exampleUses := []string{}
+	paramsMap := cfg.initComputeEndpointQueryParams(epDropChance, exampleUses)
+	cfg.q.dropChance = paramsMap
+	cfg.e.dropChance.queryLookup = paramsMap
+}

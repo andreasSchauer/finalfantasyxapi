@@ -88,3 +88,28 @@ func verifyParamFieldArr[T any](cfg *Config, arr []T, fieldName FieldName, value
 
 	return arr, nil
 }
+
+func verifyParamFieldIntIdArr(cfg *Config, arr []int32, fieldName FieldName, valueMap map[FieldName]any, valTree ValidationTree) ([]int32, error) {	
+	arr, err := basicFieldChecks(arr, fieldName, valueMap, valTree)
+	if err != nil {
+		return nil, err
+	}
+
+	if arr == nil {
+		return arr, nil
+	}
+
+	arr, err = vfArray(cfg, arr, fieldName, valueMap, valTree)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, val := range arr {
+		arr[i], err = vfArrayIntId(nil, val, fieldName, nil, valTree)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return arr, nil
+}

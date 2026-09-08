@@ -70,6 +70,7 @@ type QueryLookup struct {
 
 	alBhed			map[QueryParamName]QueryParam
 	turnOrder		map[QueryParamName]QueryParam
+	dropChance		map[QueryParamName]QueryParam
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -170,4 +171,5 @@ func (cfg *Config) QueryLookupInit() {
 
 	cfg.initAlBhedParams()
 	cfg.initTurnOrderParams()
+	cfg.initDropChanceParams()
 }

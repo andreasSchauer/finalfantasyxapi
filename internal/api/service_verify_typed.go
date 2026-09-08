@@ -9,9 +9,18 @@ import (
 func vfIntId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (int32, error) {
 	doc := valTree[fieldName].Doc
 
-	if (doc.MinVal != nil && val < *doc.MinVal) ||
-		(doc.MaxVal != nil && val > *doc.MaxVal) {
+	if (doc.MinVal != nil && val < *doc.MinVal) || (doc.MaxVal != nil && val > *doc.MaxVal) {
 		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("value '%d' of field '%s' is out of range. allowed range: %d to %d.", val, fieldName, *doc.MinVal, *doc.MaxVal), nil)
+	}
+
+	return val, nil
+}
+
+func vfArrayIntId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (int32, error) {
+	doc := valTree[fieldName].Doc
+	
+	if (doc.ChildMinVal != nil && val < *doc.ChildMinVal) || (doc.ChildMaxVal != nil && val > *doc.ChildMaxVal) {
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("id '%d' inside array of field '%s' is out of range. allowed range: %d to %d.", val, fieldName, *doc.ChildMinVal, *doc.ChildMaxVal), nil)
 	}
 
 	return val, nil
