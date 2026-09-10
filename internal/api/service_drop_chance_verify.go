@@ -1,5 +1,9 @@
 package api
 
+import (
+	"net/http"
+)
+
 func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[FieldName]any) (DropChanceParams, error) {
 	valTree := compileValidationTree(cfg.getDropChanceParamsDoc().Fields)
 
@@ -43,5 +47,40 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[F
 		return DropChanceParams{}, err
 	}
 
+	err = vfRequiredSlotAmount(params)
+	if err != nil {
+		return DropChanceParams{}, err
+	} 
+
 	return params, nil
+}
+
+
+func vfRequiredSlotAmount(params DropChanceParams) error {
+	requiredSlots := getRequiredSlots(params)
+	var totalSlots int32 = 4
+	
+	if params.TotalSlots != nil {
+		totalSlots = *params.TotalSlots
+	}
+
+	if requiredSlots > totalSlots {
+		if params.TotalSlots == nil {
+			return newHTTPError(http.StatusBadRequest, "the amount of auto-abilities and empty slots combined can't exceed 4.", nil)
+		}
+
+		return newHTTPError(http.StatusBadRequest, "the amount of auto-abilities and empty slots combined can't exceed the total amount of slots.", nil)
+	}
+
+	return nil
+}
+
+func getRequiredSlots(params DropChanceParams) int32 {
+	var minEmptySlots int32 = 0
+
+	if params.MinEmptySlots != nil {
+		minEmptySlots = *params.MinEmptySlots
+	}
+
+	return int32(len(params.AutoAbilities)) + minEmptySlots
 }

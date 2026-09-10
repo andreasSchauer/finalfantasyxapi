@@ -19,3 +19,20 @@ func FloatRound(num float64, digits int32) float64 {
 
 	return math.Round(num * denominator) / denominator
 }
+
+func FloatPtrRound(ptr *float64, digits int32) *float64 {
+	if ptr == nil {
+		return nil
+	}
+
+	rounded := FloatRound(*ptr, digits)
+	return &rounded
+}
+
+func FloatLen[T any](arr []T) float64 {
+	return float64(len(arr))
+}
+
+func Len32[T any](arr []T) int32 {
+	return int32(len(arr))
+}
