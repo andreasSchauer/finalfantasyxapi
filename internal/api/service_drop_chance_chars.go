@@ -6,7 +6,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
-
+// test
 type CharacterChances struct {
 	EligibleChars    int32    `json:"eligible_chars"`
 	AnyCharFinBlow   float64  `json:"any_char_fin_blow"`
