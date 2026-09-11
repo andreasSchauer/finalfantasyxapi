@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"slices"
 )
 
 func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[FieldName]any) (DropChanceParams, error) {
@@ -50,7 +51,12 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[F
 	err = vfRequiredSlotAmount(params)
 	if err != nil {
 		return DropChanceParams{}, err
-	} 
+	}
+	
+	err = vfCharInParty(params)
+	if err != nil {
+		return DropChanceParams{}, err
+	}
 
 	return params, nil
 }
@@ -75,12 +81,14 @@ func vfRequiredSlotAmount(params DropChanceParams) error {
 	return nil
 }
 
-func getRequiredSlots(params DropChanceParams) int32 {
-	var minEmptySlots int32 = 0
-
-	if params.MinEmptySlots != nil {
-		minEmptySlots = *params.MinEmptySlots
+func vfCharInParty(params DropChanceParams) error {
+	if params.Character == nil {
+		return nil
 	}
 
-	return int32(len(params.AutoAbilities)) + minEmptySlots
+	if !slices.Contains(params.PartyMembers, *params.Character) {
+		return newHTTPError(http.StatusBadRequest, "character must be in the party to be eligible for receiving equipment.", nil)
+	}
+
+	return nil
 }

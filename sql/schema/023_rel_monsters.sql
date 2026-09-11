@@ -60,7 +60,11 @@ CREATE TABLE equipment_drops (
     auto_ability_id INTEGER NOT NULL REFERENCES auto_abilities(id),
     is_forced BOOLEAN NOT NULL,
     probability auto_ability_probability,
-    type equip_type NOT NULL
+    type equip_type NOT NULL,
+    CONSTRAINT chk_forced_vs_probability CHECK (
+        (is_forced = TRUE AND probability IS NULL) OR
+        (is_forced = FALSE AND probability IS NOT NULL)
+    )
 );
 
 

@@ -2,13 +2,28 @@ package helpers
 
 import "math"
 
+func PercentageToDecimal(n int32) float64 {
+	return float64(n) / 100
+}
+
+func DecimalToPercent(n float64) float64 {
+	return FloatRound(n*100, 2)
+}
+
+func DecimalPtrToPercent(ptr *float64) *float64 {
+	if ptr == nil {
+		return nil
+	}
+
+	percentage := DecimalToPercent(*ptr)
+	return &percentage
+}
+
 func PowInt(x, y int32) int32 {
-	var i int32 = 1
 	var result int32 = 1
 
-	for i <= y {
+	for range y {
 		result *= x
-		i++
 	}
 
 	return result
@@ -17,7 +32,7 @@ func PowInt(x, y int32) int32 {
 func FloatRound(num float64, digits int32) float64 {
 	denominator := float64(PowInt(10, digits))
 
-	return math.Round(num * denominator) / denominator
+	return math.Round(num*denominator) / denominator
 }
 
 func FloatPtrRound(ptr *float64, digits int32) *float64 {
