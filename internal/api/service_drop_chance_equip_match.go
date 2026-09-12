@@ -1,6 +1,9 @@
 package api
 
 import (
+	"runtime"
+	"sync/atomic"
+
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
@@ -116,17 +119,44 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 	}
 
 	totalCombinations := h.PowInt(7, p.ShotAmt)
-	var matchingRows int32
+	numWorkers := int32(runtime.NumCPU())
+	chunkSize := totalCombinations / numWorkers
+	
+	var globalMatchingRows int32
+	workerGate := numWorkers
 
-	for i := range totalCombinations {
-		equipment, eqLen := assembleEquipment(clashes, baseEquipment, p.ShotAmt, p.EquipmentSlots, baseEqLen, i)
+	for workerID := int32(0); workerID < numWorkers; workerID++ {
+		startIdx := workerID * chunkSize
+		endIdx := startIdx + chunkSize
 
-		if isMatch(wantedIndeces, &equipment, p.MinEmptySlots, p.EquipmentSlots, wantedLen, eqLen, p.LenientAbilities) {
-			matchingRows++
+		if workerID == numWorkers - 1 {
+			endIdx = totalCombinations
 		}
+
+		go func(start, end int32) {
+			var localMatches int32
+
+			for i := start; i < end; i++ {
+				equipment, eqLen := assembleEquipment(clashes, baseEquipment, p.ShotAmt, p.EquipmentSlots, baseEqLen, i)
+		
+				if isMatch(wantedIndeces, &equipment, p.MinEmptySlots, p.EquipmentSlots, wantedLen, eqLen, p.LenientAbilities) {
+					localMatches++
+				}
+			}
+
+			if localMatches > 0 {
+				atomic.AddInt32(&globalMatchingRows, localMatches)
+			}
+
+			atomic.AddInt32(&workerGate, -1)
+		}(startIdx, endIdx)
 	}
 
-	return float64(matchingRows) / float64(totalCombinations)
+	for atomic.LoadInt32(&workerGate) > 0 {
+		runtime.Gosched()
+	}
+
+	return float64(atomic.LoadInt32(&globalMatchingRows)) / float64(totalCombinations)
 }
 
 func assembleEquipment(clashes [8][8]bool, equipment [4]int32, shotAmt, equipmentSlots, eqLen, idx int32) ([4]int32, int32) {
