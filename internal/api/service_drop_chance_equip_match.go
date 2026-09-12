@@ -162,34 +162,24 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 func assembleEquipment(clashes [8][8]bool, equipment [4]int32, shotAmt, equipmentSlots, eqLen, idx int32) ([4]int32, int32) {
 	for range shotAmt {
 		if eqLen == equipmentSlots {
-			break
-		}
+            break
+        }
 
-		rolledSlot := idx & 7
-		idx >>= 3
-		rolledIdx := int32(rolledSlot)
+        rolledSlot := idx % 7
+        idx /= 7
+        rolledIdx := int32(rolledSlot)
 
 		if rolledIdx == 7 {
 			return equipment, -1
 		}
 
-		var lockedOut bool
-		for i := range eqLen {
-			if clashes[equipment[i]][rolledIdx] {
-				lockedOut = true
-				break
-			}
+		if isLockedOut(&clashes, &equipment, eqLen, rolledIdx) {
+			continue
 		}
-		if lockedOut { continue }
 
-		var duplicateAbility bool
-		for i := range eqLen {
-			if equipment[i] == rolledIdx {
-				duplicateAbility = true
-				break
-			}
+		if isDuplicateAbility(&equipment, eqLen, rolledIdx) {
+			continue
 		}
-		if duplicateAbility { continue }
 		
 		equipment[eqLen] = rolledIdx
 		eqLen++
@@ -210,36 +200,78 @@ func initEquipment(p EquipmentMatchParams) ([4]int32, int32) {
 	return equipment, eqLen
 }
 
+func isLockedOut(clashes *[8][8]bool, equipment *[4]int32, eqLen, rolledIdx int32) bool {
+    for i := range eqLen {
+        if clashes[equipment[i]][rolledIdx] {
+            return true
+        }
+    }
+    return false
+}
+
+func isDuplicateAbility(equipment *[4]int32, eqLen, rolledIdx int32) bool {
+    for i := range eqLen {
+        if equipment[i] == rolledIdx {
+            return true
+        }
+    }
+    return false
+}
+
 
 func isMatch(wantedIndices []int32, equipment *[4]int32, minEmptySlots *int32, equipmentSlots, wantedLen, eqLen int32, lenientAbilities bool) bool {
-	// all abilities are present
-	for _, wantedIdx := range wantedIndices {
-		var found bool
+    if !allAbilitiesPresent(wantedIndices, equipment, eqLen) {
+        return false
+    }
 
-		for i := range eqLen {
-			if equipment[i] == wantedIdx {
-				found = true
-				break
-			}
-		}
+    if !strictAbilitiesMatch(lenientAbilities, wantedLen, eqLen) {
+        return false
+    }
 
-		if !found { return false }
-	}
+    if !emptySlotsPossible(minEmptySlots, equipmentSlots, eqLen) {
+        return false
+    }
 
-	// strict abilities match
-	if !lenientAbilities && wantedLen != eqLen {
-		return false
-	}
+    return true
+}
 
-	// empty slots amount is possible to get
-	actualEmptySlots := equipmentSlots - eqLen
+func allAbilitiesPresent(wantedIndices []int32, equipment *[4]int32, eqLen int32) bool {
+    for _, wantedIdx := range wantedIndices {
+        var found bool
 
-	if actualEmptySlots < 0 {
-		return false
-	}
-	if minEmptySlots != nil && actualEmptySlots < *minEmptySlots {
-		return false
-	}
+        for i := range eqLen {
+            if equipment[i] == wantedIdx {
+                found = true
+                break
+            }
+        }
 
-	return true
+        if !found {
+            return false
+        }
+    }
+
+    return true
+}
+
+func strictAbilitiesMatch(lenientAbilities bool, wantedLen, eqLen int32) bool {
+    if !lenientAbilities && wantedLen != eqLen {
+        return false
+    }
+
+    return true
+}
+
+func emptySlotsPossible(minEmptySlots *int32, equipmentSlots, eqLen int32) bool {
+    actualEmptySlots := equipmentSlots - eqLen
+
+    if actualEmptySlots < 0 {
+        return false
+    }
+    
+    if minEmptySlots != nil && actualEmptySlots < *minEmptySlots {
+        return false
+    }
+
+    return true
 }
