@@ -13,6 +13,44 @@ type AbilityWheel struct {
 	Characters			[]seeding.Character
 	PrioritySlot		*string
 	Abilities			[7]string
+	Clashes				[8][8]bool
+	IndexedNames		[8]string
+}
+
+func (w *AbilityWheel) compileClashes(cfg *Config) {
+	copy(w.IndexedNames[:7], w.Abilities[:])
+
+	if w.PrioritySlot != nil {
+		w.IndexedNames[7] = *w.PrioritySlot
+	}
+
+	for sourceIdx := range 8 {
+		abilityName := w.IndexedNames[sourceIdx]
+		if abilityName == "" {
+			continue
+		}
+
+		ability, _ := seeding.GetResource(abilityName, cfg.l.AutoAbilities)
+
+		for _, lockedOutName := range ability.LockedOutAbilities {
+			targetIdx := getTargetIdx(lockedOutName, w.IndexedNames)
+
+			if targetIdx != -1 {
+				w.Clashes[sourceIdx][targetIdx] = true
+				w.Clashes[targetIdx][sourceIdx] = true
+			}
+		}
+	}
+}
+
+func getTargetIdx (targetName string, indexedNames [8]string) int32 {
+	for targetIdx := range 8 {
+		if indexedNames[targetIdx] == targetName {
+			return int32(targetIdx)
+		}
+	}
+
+	return -1
 }
 
 func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params DropChanceParams) []AbilityWheel {
@@ -21,7 +59,7 @@ func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params 
 
 	if params.Character != nil {
 		char, _ := seeding.GetResourceByID(*params.Character, cfg.l.CharactersID)
-		wheel := createAbilityWheel(abilities, char)
+		wheel := createAbilityWheel(cfg, abilities, char)
 		wheel.Characters = []seeding.Character{char}
 		wheels = append(wheels, wheel)
 		return wheels
@@ -29,7 +67,7 @@ func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params 
 
 	for _, chars := range uniqueKeys {
 		char := chars[0]
-		wheel := createAbilityWheel(abilities, char)
+		wheel := createAbilityWheel(cfg, abilities, char)
 		wheel.Characters = chars
 		wheels = append(wheels, wheel)
 	}
@@ -40,7 +78,7 @@ func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params 
 }
 
 
-func createAbilityWheel(abilities []seeding.EquipmentDrop, char seeding.Character) AbilityWheel {
+func createAbilityWheel(cfg *Config, abilities []seeding.EquipmentDrop, char seeding.Character) AbilityWheel {
 	var wheel AbilityWheel
 
 	idx := 0
@@ -63,6 +101,7 @@ func createAbilityWheel(abilities []seeding.EquipmentDrop, char seeding.Characte
 		}
 	}
 
+	wheel.compileClashes(cfg)
 	return wheel
 }
 

@@ -24,6 +24,14 @@ func (r DropChanceResponse) Percent() DropChanceResponse {
 	return r
 }
 
+func (r DropChanceResponse) Round(n int32) DropChanceResponse {
+	r.TotalDropChances = r.TotalDropChances.Round(n)
+	r.EquipmentChances = r.EquipmentChances.Round(n)
+	r.CharacterChances = r.CharacterChances.Round(n)
+
+	return r
+}
+
 type TotalDropChances struct {
 	WithFinBlow float64 `json:"with_fin_blow"`
 	NoFinBlow   float64 `json:"no_fin_blow"`
@@ -36,16 +44,31 @@ func (c TotalDropChances) Percent() TotalDropChances {
 	return c
 }
 
+func (c TotalDropChances) Round(n int32) TotalDropChances {
+	c.WithFinBlow = h.FloatRound(c.WithFinBlow, n)
+	c.NoFinBlow = h.FloatRound(c.NoFinBlow, n)
+
+	return c
+}
+
 type EquipmentChances struct {
-	MonsterDrop    float64 `json:"monster_drop"`
-	MatchFinBlow   float64 `json:"match_fin_blow"`
-	MatchNoFinBlow float64 `json:"match_no_fin_blow"`
+	MonsterDrop    	float64 `json:"monster_drop"`
+	MatchFinBlow   	float64 `json:"match_fin_blow"`
+	MatchNoFinBlow 	float64 `json:"match_no_fin_blow"`
 }
 
 func (c EquipmentChances) Percent() EquipmentChances {
 	c.MonsterDrop = h.DecimalToPercent(c.MonsterDrop)
 	c.MatchFinBlow = h.DecimalToPercent(c.MatchFinBlow)
 	c.MatchNoFinBlow = h.DecimalToPercent(c.MatchNoFinBlow)
+
+	return c
+}
+
+func (c EquipmentChances) Round(n int32) EquipmentChances {
+	c.MonsterDrop = h.FloatRound(c.MonsterDrop, n)
+	c.MatchFinBlow = h.FloatRound(c.MatchFinBlow, n)
+	c.MatchNoFinBlow = h.FloatRound(c.MatchNoFinBlow, n)
 
 	return c
 }
@@ -66,23 +89,22 @@ func calcDropChance(cfg *Config, params DropChanceParams, url string) (DropChanc
 	response := DropChanceResponse{
 		URL: url,
 		TotalDropChances: TotalDropChances{
-			WithFinBlow: calcTotalChance(monDropChance, matchFinBlow),
-			NoFinBlow:   calcTotalChance(monDropChance, matchNoFinBlow),
+			WithFinBlow: monDropChance * matchFinBlow,
+			NoFinBlow:   monDropChance * matchNoFinBlow,
 		},
 		EquipmentChances: EquipmentChances{
-			MonsterDrop:    monDropChance,
-			MatchFinBlow:   matchFinBlow,
-			MatchNoFinBlow: matchNoFinBlow,
+			MonsterDrop:    	monDropChance,
+			MatchFinBlow:   	matchFinBlow,
+			MatchNoFinBlow: 	matchNoFinBlow,
 		},
 		CharacterChances: characterChances,
 	}
 
-	return response.Percent(), nil
-}
+	if params.Decimals {
+		return response.Round(4), nil
+	}
 
-func calcTotalChance(monDropChance, matchChance float64) float64 {
-	equipTypeChance := 0.5
-	return monDropChance * equipTypeChance * matchChance
+	return response.Percent(), nil
 }
 
 func calcMonDropChance(mon seeding.Monster) float64 {

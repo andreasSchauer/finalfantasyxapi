@@ -15,6 +15,7 @@ const (
 	pfnBattles			FieldName = "battles"
 	pfnBattleStart		FieldName = "battle_start"
 	pfnCharacter		FieldName = "character"
+	pfnDecimals 		FieldName = "decimals"
 	pfnDirection 		FieldName = "direction"
 	pfnFormation		FieldName = "formation"
 	pfnFS				FieldName = "fs"

@@ -12,6 +12,7 @@ type DropChanceParams struct {
 	LenientAbilities	bool		`json:"lenient_abilities"`
 	MinEmptySlots		*int32		`json:"min_empty_slots"`
 	TotalSlots			*int32		`json:"total_slots"`
+	Decimals			bool		`json:"decimals"`
 }
 
 func (p DropChanceParams) GetDoc(cfg *Config) ParamsDoc {
@@ -71,6 +72,11 @@ func (cfg *Config) getDropChanceParamsDoc() ParamsDoc {
 				MinVal:     	h.GetInt32Ptr(0),
 				MaxVal:     	h.GetInt32Ptr(4),
 				Description: 	"The amount of total slots the equipment should have. If this field is null, any equipment that matches the auto-ability requirements and has at least N empty slots, will be a match. If empty_slots is also null, the amount of slots has no effect on the calculation. Throws an error, if the given amount of total_slots is lower than the amount of auto-abilities and the number of empty slots combined.",
+			},
+			{
+				Field: 			pfnDecimals,
+				Type: 			"bool",
+				Description: 	"If this field is set to true, the chances in the response are returned as decimals instead of percentages.",
 			},
 		},
 	}

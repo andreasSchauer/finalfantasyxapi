@@ -3,6 +3,8 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"slices"
+	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -69,11 +71,33 @@ func vfAutoAbilitiesDropped(autoAbilities []seeding.AutoAbility, monsterAbilitie
 		}
 
 		if !isPresent {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s'", mon, ability.Name), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s'. it only drops the following auto-abilities: %s.", mon, ability.Name, formatMonAutoAbilities(mon)), nil)
 		}
 	}
 
 	return nil
+}
+
+func formatMonAutoAbilities(mon seeding.Monster) string {
+	if mon.Equipment == nil {
+		return ""
+	}
+
+	weaponAbilities := mon.Equipment.WeaponAbilities
+	armorAbilities := mon.Equipment.ArmorAbilities
+	allAbilities := slices.Concat(weaponAbilities, armorAbilities)
+
+	return formatEquipmentDrops(allAbilities)
+}
+
+func formatEquipmentDrops(monsterAbilities []seeding.EquipmentDrop) string {
+	var names []string
+	for _, ability := range monsterAbilities {
+		name := fmt.Sprintf("'%s' (%d)", ability.Ability, ability.AutoAbilityID)
+		names = append(names, name)
+	}
+
+	return strings.Join(names, ", ")
 }
 
 func vfCharGetsAbility(ability seeding.EquipmentDrop, charPtr *seeding.Character, mon seeding.Monster) error {

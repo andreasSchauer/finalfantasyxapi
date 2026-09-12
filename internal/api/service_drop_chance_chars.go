@@ -24,6 +24,15 @@ func (c CharacterChances) Percent() CharacterChances {
 	return c
 }
 
+func (c CharacterChances) Round(n int32) CharacterChances {
+	c.AnyCharFinBlow = h.FloatRound(c.AnyCharFinBlow, n)
+	c.AnyCharNoFinBlow = h.FloatRound(c.AnyCharNoFinBlow, n)
+	c.CharFinBlow = h.FloatPtrRound(c.CharFinBlow, n)
+	c.CharNoFinBlow = h.FloatPtrRound(c.CharNoFinBlow, n)
+
+	return c
+}
+
 func calcCharRandomChances(cfg *Config, params DropChanceParams, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) CharacterChances {
 	var eligibleChars int32
 	baseRandomChance := 0.75 / h.FloatLen(params.PartyMembers)
@@ -52,6 +61,11 @@ func calcCharRandomChances(cfg *Config, params DropChanceParams, wantedAbilities
 
 	if eligibleChars > 0 {
 		chances.AnyCharFinBlow = chances.AnyCharNoFinBlow + 0.25
+	}
+
+	if eligibleChars == 7 {
+		chances.AnyCharFinBlow = 1
+		chances.AnyCharNoFinBlow = 1
 	}
 
 	return chances

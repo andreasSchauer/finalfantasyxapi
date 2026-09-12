@@ -48,6 +48,11 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[F
 		return DropChanceParams{}, err
 	}
 
+	params.Decimals, err = verifyParamField(cfg, params.Decimals, pfnDecimals, valueMap, valTree, nil)
+	if err != nil {
+		return DropChanceParams{}, err
+	}
+
 	err = vfRequiredSlotAmount(params)
 	if err != nil {
 		return DropChanceParams{}, err

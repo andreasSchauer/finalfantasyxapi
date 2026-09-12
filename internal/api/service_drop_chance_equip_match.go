@@ -7,6 +7,7 @@ import (
 
 type EquipmentMatchParams struct {
 	WantedAbilities  []seeding.AutoAbility
+	WantedIndeces 	 []int32
 	LenientAbilities bool
 	MinEmptySlots    *int32
 	EquipmentSlots   int32
@@ -15,6 +16,7 @@ type EquipmentMatchParams struct {
 }
 
 func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, cc CharacterChances) (float64, float64) {
+	equipTypeChance := 0.5
 	slotsTable := extractAbilitySlots(params, mon)
 	shotsTable := mon.Equipment.AttachedAbilities.Chances
 	wheels := createAbilityWheels(cfg, monAbilities, params)
@@ -24,6 +26,7 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 
 	for _, wheel := range wheels {
 		wheelWeightFinBlow, wheelWeightNoFinBlow := getWheelWeights(params, wheel, cc)
+		wantedIndeces := getWantedIndeces(wantedAbilities, wheel)
 
 		for _, slots := range slotsTable {
 			slotWeight := h.PercentageToDecimal(slots.Chance)
@@ -33,6 +36,7 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 
 				matchParams := EquipmentMatchParams{
 					WantedAbilities:  wantedAbilities,
+					WantedIndeces:	  wantedIndeces,
 					LenientAbilities: params.LenientAbilities,
 					MinEmptySlots:    params.MinEmptySlots,
 					EquipmentSlots:   slots.Amount,
@@ -48,9 +52,22 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 		}
 	}
 
+	chanceFinBlow *= equipTypeChance
+	chanceNoFinBlow *= equipTypeChance
+
 	return chanceFinBlow, chanceNoFinBlow
 }
 
+func getWantedIndeces(wantedAbilities []seeding.AutoAbility, wheel AbilityWheel) []int32 {
+	indeces := make([]int32, 0, len(wantedAbilities))
+
+	for _, ability := range wantedAbilities {
+		idx := getTargetIdx(ability.Name, wheel.IndexedNames)
+		indeces = append(indeces, idx)
+	}
+
+	return indeces
+}
 
 func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding.EquipmentSlotsChance {
 	var minSlots int32 = getRequiredSlots(params)
@@ -74,7 +91,7 @@ func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding
 
 func getWheelWeights(params DropChanceParams, wheel AbilityWheel, cc CharacterChances) (float64, float64) {
 	if params.Character != nil {
-		return *cc.CharNoFinBlow, *cc.CharFinBlow
+		return *cc.CharFinBlow, *cc.CharNoFinBlow
 	}
 
 	charRatio := h.FloatLen(wheel.Characters) / float64(cc.EligibleChars)
@@ -85,10 +102,13 @@ func getWheelWeights(params DropChanceParams, wheel AbilityWheel, cc CharacterCh
 }
 
 func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
+	baseEquipment, baseEqLen := initEquipment(p)
+	clashes := p.AbilityWheel.Clashes
+	wantedIndeces := p.WantedIndeces
+	wantedLen := h.Len32(p.WantedAbilities)
+	
 	if p.ShotAmt == 0 {
-		equipment := initEquipment(p)
-
-		if isMatch(p, equipment) {
+		if isMatch(wantedIndeces, &baseEquipment, p.MinEmptySlots, p.EquipmentSlots, wantedLen, baseEqLen, p.LenientAbilities) {
 			return 1
 		}
 
@@ -96,12 +116,12 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 	}
 
 	totalCombinations := h.PowInt(7, p.ShotAmt)
-	var matchingRows int32 = 0
+	var matchingRows int32
 
 	for i := range totalCombinations {
-		equipment := assembleEquipment(p, i)
+		equipment, eqLen := assembleEquipment(clashes, baseEquipment, p.ShotAmt, p.EquipmentSlots, baseEqLen, i)
 
-		if isMatch(p, equipment) {
+		if isMatch(wantedIndeces, &equipment, p.MinEmptySlots, p.EquipmentSlots, wantedLen, eqLen, p.LenientAbilities) {
 			matchingRows++
 		}
 	}
@@ -109,76 +129,85 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 	return float64(matchingRows) / float64(totalCombinations)
 }
 
-func assembleEquipment(p EquipmentMatchParams, idx int32) map[string]bool {
-	equipment := initEquipment(p)
-
-	for range p.ShotAmt {
-		if len(equipment) == int(p.EquipmentSlots) {
+func assembleEquipment(clashes [8][8]bool, equipment [4]int32, shotAmt, equipmentSlots, eqLen, idx int32) ([4]int32, int32) {
+	for range shotAmt {
+		if eqLen == equipmentSlots {
 			break
 		}
 
-		rolledSlot := idx % 7
-		idx /= 7
+		rolledSlot := idx & 7
+		idx >>= 3
+		rolledIdx := int32(rolledSlot)
 
-		rolledAbility := p.AbilityWheel.Abilities[rolledSlot]
-		equipment[rolledAbility] = true
+		if rolledIdx == 7 {
+			return equipment, -1
+		}
+
+		var lockedOut bool
+		for i := range eqLen {
+			if clashes[equipment[i]][rolledIdx] {
+				lockedOut = true
+				break
+			}
+		}
+		if lockedOut { continue }
+
+		var duplicateAbility bool
+		for i := range eqLen {
+			if equipment[i] == rolledIdx {
+				duplicateAbility = true
+				break
+			}
+		}
+		if duplicateAbility { continue }
+		
+		equipment[eqLen] = rolledIdx
+		eqLen++
 	}
 
-	return equipment
+	return equipment, eqLen
 }
 
-func initEquipment(p EquipmentMatchParams) map[string]bool {
-	equipment := make(map[string]bool)
+func initEquipment(p EquipmentMatchParams) ([4]int32, int32) {
+	var equipment [4]int32
+	var eqLen int32
 
 	if p.AbilityWheel.PrioritySlot != nil {
-		equipment[*p.AbilityWheel.PrioritySlot] = true
+		equipment[0] = 7
+		eqLen++
 	}
 
-	return equipment
+	return equipment, eqLen
 }
 
-func isMatch(p EquipmentMatchParams, equipment map[string]bool) bool {
-	if !allAbilitiesPresent(p, equipment) {
-		return false
-	}
 
-	if !strictAbilitiesMatch(p, equipment) {
-		return false
-	}
+func isMatch(wantedIndices []int32, equipment *[4]int32, minEmptySlots *int32, equipmentSlots, wantedLen, eqLen int32, lenientAbilities bool) bool {
+	// all abilities are present
+	for _, wantedIdx := range wantedIndices {
+		var found bool
 
-	if !emptySlotsPossible(p, equipment) {
-		return false
-	}
-
-	return true
-}
-
-func allAbilitiesPresent(p EquipmentMatchParams, equipment map[string]bool) bool {
-	for _, ability := range p.WantedAbilities {
-		if !equipment[ability.Name] {
-			return false
+		for i := range eqLen {
+			if equipment[i] == wantedIdx {
+				found = true
+				break
+			}
 		}
+
+		if !found { return false }
 	}
 
-	return true
-}
-
-func strictAbilitiesMatch(p EquipmentMatchParams, equipment map[string]bool) bool {
-	if !p.LenientAbilities && len(p.WantedAbilities) != len(equipment) {
+	// strict abilities match
+	if !lenientAbilities && wantedLen != eqLen {
 		return false
 	}
 
-	return true
-}
-
-func emptySlotsPossible(p EquipmentMatchParams, equipment map[string]bool) bool {
-	actualEmptySlots := p.EquipmentSlots - int32(len(equipment))
+	// empty slots amount is possible to get
+	actualEmptySlots := equipmentSlots - eqLen
 
 	if actualEmptySlots < 0 {
 		return false
 	}
-
-	if p.MinEmptySlots != nil && actualEmptySlots < *p.MinEmptySlots {
+	if minEmptySlots != nil && actualEmptySlots < *minEmptySlots {
 		return false
 	}
 
