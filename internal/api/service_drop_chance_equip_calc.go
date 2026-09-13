@@ -19,105 +19,6 @@ type EquipmentMatchParams struct {
 	AbilityWheel     AbilityWheel
 }
 
-func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, cc CharacterChances) (float64, float64) {
-	equipTypeChance := 0.5
-	slotsTable := extractAbilitySlots(params, mon)
-	shotsTable := mon.Equipment.AttachedAbilities.Chances
-	wheels := createAbilityWheels(cfg, monAbilities, params)
-
-	var chanceFinBlow float64
-	var chanceNoFinBlow float64
-
-	for _, wheel := range wheels {
-		wantedIndices, err := getWantedIndices(wantedAbilities, wheel)
-		if err != nil {
-			continue
-		}
-		
-		wheelWeightFinBlow, wheelWeightNoFinBlow := getWheelWeights(params, wheel, cc)
-
-		for _, slots := range slotsTable {
-			slotWeight := h.PercentageToDecimal(slots.Chance)
-
-			for _, shots := range shotsTable {
-				shotWeight := h.PercentageToDecimal(shots.Chance)
-
-				matchParams := EquipmentMatchParams{
-					WantedAbilities:  wantedAbilities,
-					WantedIndices:	  wantedIndices,
-					LenientAbilities: params.LenientAbilities,
-					MinEmptySlots:    params.MinEmptySlots,
-					EquipmentSlots:   slots.Amount,
-					ShotAmt:          shots.Amount,
-					AbilityWheel:     wheel,
-				}
-
-				matchChance := calcEquipmentMatchChance(matchParams)
-
-				chanceFinBlow += matchChance * wheelWeightFinBlow * slotWeight * shotWeight
-				chanceNoFinBlow += matchChance * wheelWeightNoFinBlow * slotWeight * shotWeight
-			}
-		}
-	}
-
-	chanceFinBlow *= equipTypeChance
-	chanceNoFinBlow *= equipTypeChance
-
-	return chanceFinBlow, chanceNoFinBlow
-}
-
-func getWantedIndices(wantedAbilities []seeding.AutoAbility, wheel AbilityWheel) ([][]int32, error) {
-	var indices [][]int32
-
-	for _, ability := range wantedAbilities {
-		var group []int32
-		for i, name := range wheel.IndexedNames {
-			if ability.Name == name {
-				group = append(group, int32(i))
-			}
-		}
-
-		if len(group) == 0 {
-			return nil, errInvalidWheel
-		}
-
-		indices = append(indices, group)
-	}
-
-	return indices, nil
-}
-
-func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding.EquipmentSlotsChance {
-	var minSlots int32 = getRequiredSlots(params)
-	var maxSlots int32 = 4
-	abilitySlotChances := mon.Equipment.AbilitySlots.Chances
-	var chances []seeding.EquipmentSlotsChance
-
-	if params.TotalSlots != nil {
-		minSlots = *params.TotalSlots
-		maxSlots = *params.TotalSlots
-	}
-
-	for _, chance := range abilitySlotChances {
-		if chance.Amount >= minSlots && chance.Amount <= maxSlots {
-			chances = append(chances, chance)
-		}
-	}
-
-	return chances
-}
-
-func getWheelWeights(params DropChanceParams, wheel AbilityWheel, cc CharacterChances) (float64, float64) {
-	if params.Character != nil {
-		return *cc.CharFinBlow, *cc.CharNoFinBlow
-	}
-
-	charRatio := h.FloatLen(wheel.Characters) / float64(cc.EligibleChars)
-	wheelWeightFinBlow := charRatio * cc.AnyCharFinBlow
-	wheelWeightNoFinBlow := charRatio * cc.AnyCharNoFinBlow
-
-	return wheelWeightFinBlow, wheelWeightNoFinBlow
-}
 
 func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 	baseEquipment, baseEqLen := initEquipment(p)
@@ -134,10 +35,10 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 	}
 
 	totalCombinations := h.PowInt(7, p.ShotAmt)
+	var globalMatchingRows atomic.Int32
+	
 	numWorkers := int32(runtime.NumCPU())
 	chunkSize := totalCombinations / numWorkers
-	
-	var globalMatchingRows atomic.Int32
 	workerGate := numWorkers
 
 	for workerID := range numWorkers {
@@ -174,30 +75,6 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 	return float64(globalMatchingRows.Load()) / float64(totalCombinations)
 }
 
-func assembleEquipment(clashes [8][8]bool, equipment [4]int32, shotAmt, equipmentSlots, eqLen, idx int32) ([4]int32, int32) {
-	for range shotAmt {
-		if eqLen == equipmentSlots {
-            break
-        }
-
-        rolledIdx := int32(idx % 7)
-        idx /= 7
-
-		if isLockedOut(&clashes, &equipment, eqLen, rolledIdx) {
-			continue
-		}
-
-		if isDuplicateAbility(&equipment, eqLen, rolledIdx) {
-			continue
-		}
-		
-		equipment[eqLen] = rolledIdx
-		eqLen++
-	}
-
-	return equipment, eqLen
-}
-
 func initEquipment(p EquipmentMatchParams) ([4]int32, int32) {
 	equipment := [4]int32{-1, -1, -1, -1}
 	var eqLen int32
@@ -210,7 +87,31 @@ func initEquipment(p EquipmentMatchParams) ([4]int32, int32) {
 	return equipment, eqLen
 }
 
-func isLockedOut(clashes *[8][8]bool, equipment *[4]int32, eqLen, rolledIdx int32) bool {
+func assembleEquipment(clashes [8][8]bool, equipment [4]int32, shotAmt, equipmentSlots, eqLen, idx int32) ([4]int32, int32) {
+	for range shotAmt {
+		if eqLen == equipmentSlots {
+            break
+        }
+
+        rolledIdx := int32(idx % 7)
+        idx /= 7
+
+		if autoAbilityLockedOut(&clashes, &equipment, eqLen, rolledIdx) {
+			continue
+		}
+
+		if duplicateAutoAbility(&equipment, eqLen, rolledIdx) {
+			continue
+		}
+		
+		equipment[eqLen] = rolledIdx
+		eqLen++
+	}
+
+	return equipment, eqLen
+}
+
+func autoAbilityLockedOut(clashes *[8][8]bool, equipment *[4]int32, eqLen, rolledIdx int32) bool {
     for i := range eqLen {
         if clashes[equipment[i]][rolledIdx] {
             return true
@@ -219,7 +120,7 @@ func isLockedOut(clashes *[8][8]bool, equipment *[4]int32, eqLen, rolledIdx int3
     return false
 }
 
-func isDuplicateAbility(equipment *[4]int32, eqLen, rolledIdx int32) bool {
+func duplicateAutoAbility(equipment *[4]int32, eqLen, rolledIdx int32) bool {
     for i := range eqLen {
         if equipment[i] == rolledIdx {
             return true

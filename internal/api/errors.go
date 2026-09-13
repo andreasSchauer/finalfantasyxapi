@@ -10,7 +10,7 @@ import (
 
 var errNotAnID = errors.New("not an id.")
 var errIdNotFound = errors.New("id doesn't exit.")
-var errContinue = errors.New("loop should be continued.")
+var errContinue = errors.New("loop that called the function should be continued.")
 var errNoResource = errors.New("no resources found.")
 var errEmptyQuery = errors.New("query parameter is empty.")
 var errQueryNone = errors.New("'none' input in query.")
@@ -19,8 +19,7 @@ var errNoDefaultVal = errors.New("query parameter doesn't have a default value, 
 var errNoSpecialInput = errors.New("query parameter doesn't have special inputs, or no special input was found.")
 var errNoIntRange = errors.New("query parameter doesn't have integer range.")
 var errCorrect = errors.New("test got the expected error.")
-var errIgnoredField = errors.New("this field of the test struct is ignored")
-var errInvalidWheel = errors.New("ability wheel can't produce wanted equipment.")
+var errIgnoredField = errors.New("this field of the test-struct is ignored.")
 
 func errExceptEmptyQuery(err error) bool {
 	return err != nil && !queryIsEmpty(err)

@@ -43,7 +43,6 @@ func (w *AbilityWheel) compileClashes(cfg *Config) {
 	}
 }
 
-// I think this needs to be an entire group?
 func getTargetIdx (targetName string, indexedNames [8]string) []int32 {
 	var group []int32
 	for targetIdx := range 8 {
