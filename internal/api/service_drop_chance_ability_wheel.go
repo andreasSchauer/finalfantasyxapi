@@ -33,9 +33,9 @@ func (w *AbilityWheel) compileClashes(cfg *Config) {
 		ability, _ := seeding.GetResource(abilityName, cfg.l.AutoAbilities)
 
 		for _, lockedOutName := range ability.LockedOutAbilities {
-			targetIdx := getTargetIdx(lockedOutName, w.IndexedNames)
+			targetGroup := getTargetIdx(lockedOutName, w.IndexedNames)
 
-			if targetIdx != -1 {
+			for _, targetIdx := range targetGroup {
 				w.Clashes[sourceIdx][targetIdx] = true
 				w.Clashes[targetIdx][sourceIdx] = true
 			}
@@ -43,14 +43,16 @@ func (w *AbilityWheel) compileClashes(cfg *Config) {
 	}
 }
 
-func getTargetIdx (targetName string, indexedNames [8]string) int32 {
+// I think this needs to be an entire group?
+func getTargetIdx (targetName string, indexedNames [8]string) []int32 {
+	var group []int32
 	for targetIdx := range 8 {
 		if indexedNames[targetIdx] == targetName {
-			return int32(targetIdx)
+			group = append(group, int32(targetIdx))
 		}
 	}
 
-	return -1
+	return group
 }
 
 func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params DropChanceParams) []AbilityWheel {

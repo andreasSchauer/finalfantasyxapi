@@ -20,6 +20,7 @@ var errNoSpecialInput = errors.New("query parameter doesn't have special inputs,
 var errNoIntRange = errors.New("query parameter doesn't have integer range.")
 var errCorrect = errors.New("test got the expected error.")
 var errIgnoredField = errors.New("this field of the test struct is ignored")
+var errInvalidWheel = errors.New("ability wheel can't produce wanted equipment.")
 
 func errExceptEmptyQuery(err error) bool {
 	return err != nil && !queryIsEmpty(err)

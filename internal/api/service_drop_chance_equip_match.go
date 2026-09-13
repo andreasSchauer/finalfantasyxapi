@@ -2,6 +2,7 @@ package api
 
 import (
 	"runtime"
+	"slices"
 	"sync/atomic"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -10,7 +11,7 @@ import (
 
 type EquipmentMatchParams struct {
 	WantedAbilities  []seeding.AutoAbility
-	WantedIndeces 	 []int32
+	WantedIndices 	 [][]int32
 	LenientAbilities bool
 	MinEmptySlots    *int32
 	EquipmentSlots   int32
@@ -28,8 +29,12 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 	var chanceNoFinBlow float64
 
 	for _, wheel := range wheels {
+		wantedIndices, err := getWantedIndices(wantedAbilities, wheel)
+		if err != nil {
+			continue
+		}
+		
 		wheelWeightFinBlow, wheelWeightNoFinBlow := getWheelWeights(params, wheel, cc)
-		wantedIndeces := getWantedIndeces(wantedAbilities, wheel)
 
 		for _, slots := range slotsTable {
 			slotWeight := h.PercentageToDecimal(slots.Chance)
@@ -39,7 +44,7 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 
 				matchParams := EquipmentMatchParams{
 					WantedAbilities:  wantedAbilities,
-					WantedIndeces:	  wantedIndeces,
+					WantedIndices:	  wantedIndices,
 					LenientAbilities: params.LenientAbilities,
 					MinEmptySlots:    params.MinEmptySlots,
 					EquipmentSlots:   slots.Amount,
@@ -61,15 +66,25 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 	return chanceFinBlow, chanceNoFinBlow
 }
 
-func getWantedIndeces(wantedAbilities []seeding.AutoAbility, wheel AbilityWheel) []int32 {
-	indeces := make([]int32, 0, len(wantedAbilities))
+func getWantedIndices(wantedAbilities []seeding.AutoAbility, wheel AbilityWheel) ([][]int32, error) {
+	var indices [][]int32
 
 	for _, ability := range wantedAbilities {
-		idx := getTargetIdx(ability.Name, wheel.IndexedNames)
-		indeces = append(indeces, idx)
+		var group []int32
+		for i, name := range wheel.IndexedNames {
+			if ability.Name == name {
+				group = append(group, int32(i))
+			}
+		}
+
+		if len(group) == 0 {
+			return nil, errInvalidWheel
+		}
+
+		indices = append(indices, group)
 	}
 
-	return indeces
+	return indices, nil
 }
 
 func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding.EquipmentSlotsChance {
@@ -107,11 +122,11 @@ func getWheelWeights(params DropChanceParams, wheel AbilityWheel, cc CharacterCh
 func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 	baseEquipment, baseEqLen := initEquipment(p)
 	clashes := p.AbilityWheel.Clashes
-	wantedIndeces := p.WantedIndeces
+	wantedIndices := p.WantedIndices
 	wantedLen := h.Len32(p.WantedAbilities)
 	
 	if p.ShotAmt == 0 {
-		if isMatch(wantedIndeces, &baseEquipment, p.MinEmptySlots, p.EquipmentSlots, wantedLen, baseEqLen, p.LenientAbilities) {
+		if isMatch(wantedIndices, &baseEquipment, p.MinEmptySlots, p.EquipmentSlots, wantedLen, baseEqLen, p.LenientAbilities) {
 			return 1
 		}
 
@@ -139,7 +154,7 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 			for i := start; i < end; i++ {
 				equipment, eqLen := assembleEquipment(clashes, baseEquipment, p.ShotAmt, p.EquipmentSlots, baseEqLen, i)
 		
-				if isMatch(wantedIndeces, &equipment, p.MinEmptySlots, p.EquipmentSlots, wantedLen, eqLen, p.LenientAbilities) {
+				if isMatch(wantedIndices, &equipment, p.MinEmptySlots, p.EquipmentSlots, wantedLen, eqLen, p.LenientAbilities) {
 					localMatches++
 				}
 			}
@@ -165,13 +180,8 @@ func assembleEquipment(clashes [8][8]bool, equipment [4]int32, shotAmt, equipmen
             break
         }
 
-        rolledSlot := idx % 7
+        rolledIdx := int32(idx % 7)
         idx /= 7
-        rolledIdx := int32(rolledSlot)
-
-		if rolledIdx == 7 {
-			return equipment, -1
-		}
 
 		if isLockedOut(&clashes, &equipment, eqLen, rolledIdx) {
 			continue
@@ -219,7 +229,7 @@ func isDuplicateAbility(equipment *[4]int32, eqLen, rolledIdx int32) bool {
 }
 
 
-func isMatch(wantedIndices []int32, equipment *[4]int32, minEmptySlots *int32, equipmentSlots, wantedLen, eqLen int32, lenientAbilities bool) bool {
+func isMatch(wantedIndices [][]int32, equipment *[4]int32, minEmptySlots *int32, equipmentSlots, wantedLen, eqLen int32, lenientAbilities bool) bool {
     if !allAbilitiesPresent(wantedIndices, equipment, eqLen) {
         return false
     }
@@ -235,12 +245,12 @@ func isMatch(wantedIndices []int32, equipment *[4]int32, minEmptySlots *int32, e
     return true
 }
 
-func allAbilitiesPresent(wantedIndices []int32, equipment *[4]int32, eqLen int32) bool {
-    for _, wantedIdx := range wantedIndices {
+func allAbilitiesPresent(wantedIndices [][]int32, equipment *[4]int32, eqLen int32) bool {
+    for _, abilityGroup := range wantedIndices {
         var found bool
 
         for i := range eqLen {
-            if equipment[i] == wantedIdx {
+            if slices.Contains(abilityGroup, equipment[i]) {
                 found = true
                 break
             }
