@@ -101,7 +101,7 @@ func calcDropChance(cfg *Config, params DropChanceParams, url string) (DropChanc
 	}
 
 	if params.Decimals {
-		return response.Round(4), nil
+		return response.Round(6), nil
 	}
 
 	return response.Percent(), nil

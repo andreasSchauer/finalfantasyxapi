@@ -122,10 +122,10 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 	numWorkers := int32(runtime.NumCPU())
 	chunkSize := totalCombinations / numWorkers
 	
-	var globalMatchingRows int32
+	var globalMatchingRows atomic.Int32
 	workerGate := numWorkers
 
-	for workerID := int32(0); workerID < numWorkers; workerID++ {
+	for workerID := range numWorkers {
 		startIdx := workerID * chunkSize
 		endIdx := startIdx + chunkSize
 
@@ -145,7 +145,7 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 			}
 
 			if localMatches > 0 {
-				atomic.AddInt32(&globalMatchingRows, localMatches)
+				globalMatchingRows.Add(localMatches)
 			}
 
 			atomic.AddInt32(&workerGate, -1)
@@ -156,7 +156,7 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 		runtime.Gosched()
 	}
 
-	return float64(atomic.LoadInt32(&globalMatchingRows)) / float64(totalCombinations)
+	return float64(globalMatchingRows.Load()) / float64(totalCombinations)
 }
 
 func assembleEquipment(clashes [8][8]bool, equipment [4]int32, shotAmt, equipmentSlots, eqLen, idx int32) ([4]int32, int32) {
@@ -189,7 +189,7 @@ func assembleEquipment(clashes [8][8]bool, equipment [4]int32, shotAmt, equipmen
 }
 
 func initEquipment(p EquipmentMatchParams) ([4]int32, int32) {
-	var equipment [4]int32
+	equipment := [4]int32{-1, -1, -1, -1}
 	var eqLen int32
 
 	if p.AbilityWheel.PrioritySlot != nil {

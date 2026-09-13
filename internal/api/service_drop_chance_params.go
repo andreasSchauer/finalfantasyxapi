@@ -6,13 +6,14 @@ import (
 
 type DropChanceParams struct {
 	Monster				int32		`json:"monster"`
-	Character			*int32		`json:"character"`
-	PartyMembers		[]int32		`json:"party_members"`
-	AutoAbilities		[]int32		`json:"auto_abilities"`
-	LenientAbilities	bool		`json:"lenient_abilities"`
-	MinEmptySlots		*int32		`json:"min_empty_slots"`
-	TotalSlots			*int32		`json:"total_slots"`
-	Decimals			bool		`json:"decimals"`
+	Character			*int32		`json:"character,omitempty"`
+	PartyMembers		[]int32		`json:"party_members,omitempty"`
+	AutoAbilities		[]int32		`json:"auto_abilities,omitempty"`
+	LenientAbilities	bool		`json:"lenient_abilities,omitempty"`
+	EquipType			*string		`json:"equip_type,omitempty"`
+	MinEmptySlots		*int32		`json:"min_empty_slots,omitempty"`
+	TotalSlots			*int32		`json:"total_slots,omitempty"`
+	Decimals			bool		`json:"decimals,omitempty"`
 }
 
 func (p DropChanceParams) GetDoc(cfg *Config) ParamsDoc {
@@ -58,6 +59,12 @@ func (cfg *Config) getDropChanceParamsDoc() ParamsDoc {
 				Field: 			pfnLenientAbilities,
 				Type: 			"bool",
 				Description: 	"If this field is set to true, the calculator treats any equipment that contains the given auto-abilities as a match, no matter what other auto-abilities are on the equipment as well. Example: 'auto_abilities' = [sensor, piercing] => if lenient_abilities is true, an equipment with [sensor, piercing, darkstrike] will be a match, if the field is false, it won't, because it's not an exact match. If auto-abilities is null, this field will have no effect on the calculation.",
+			},
+			{
+				Field:       pfnEquipType,
+				Type:        "string (enum: equipType)",
+				EnumValues:  createEnumStringSlice(cfg.t.EquipType.lookup),
+				Description: "The type of the desired equipment. Will be assigned automatically by looking at the first auto-ability's type, if left empty. If a value is given, all given auto-abilities need to be of the same type. If 'auto_abilities' is null or an empty array, this field is required.",
 			},
 			{
 				Field: 			pfnMinEmptySlots,

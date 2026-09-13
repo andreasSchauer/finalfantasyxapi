@@ -12,10 +12,15 @@ import (
 
 func vfAutoAbilities(cfg *Config, params DropChanceParams, charPtr *seeding.Character, mon seeding.Monster) ([]seeding.AutoAbility, []seeding.EquipmentDrop, error) {
 	if mon.Equipment == nil {
-		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop equipment.", mon), nil)
+		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' doesn't drop equipment.", mon), nil)
 	}
 
-	autoAbilities, monsterAbilities, err := vfMonsterAutoAbilities(cfg, params, mon)
+	params, autoAbilities, err := vfWantedAutoAbilities(cfg, params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	monsterAbilities, err := getMonAutoAbilities(params, mon)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -28,31 +33,41 @@ func vfAutoAbilities(cfg *Config, params DropChanceParams, charPtr *seeding.Char
 	return autoAbilities, monsterAbilities, nil
 }
 
-func vfMonsterAutoAbilities(cfg *Config, params DropChanceParams, mon seeding.Monster) ([]seeding.AutoAbility, []seeding.EquipmentDrop, error) {
+func vfWantedAutoAbilities(cfg *Config, params DropChanceParams) (DropChanceParams, []seeding.AutoAbility, error) {
 	var autoAbilities []seeding.AutoAbility
-	var monsterAbilities []seeding.EquipmentDrop
-	equipTypes := make(map[string]bool)
-
+	
 	for _, id := range params.AutoAbilities {
 		ability, _ := seeding.GetResourceByID(id, cfg.l.AutoAbilitiesID)
-		equipTypes[ability.Type] = true
-
-		if len(equipTypes) > 1 {
-			return nil, nil, newHTTPError(http.StatusBadRequest, "weapon- and armor-abilities can't be combined.", nil)
+		
+		if params.EquipType == nil {
+			params.EquipType = &ability.Type
 		}
-
-		switch ability.Type {
-		case string(database.EquipTypeWeapon):
-			monsterAbilities = mon.Equipment.WeaponAbilities
-
-		case string(database.EquipTypeArmor):
-			monsterAbilities = mon.Equipment.ArmorAbilities
+		
+		if *params.EquipType != ability.Type {
+			return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, "weapon- and armor-abilities can't be combined.", nil)
 		}
-
+		
 		autoAbilities = append(autoAbilities, ability)
 	}
 
-	return autoAbilities, monsterAbilities, nil
+	if params.EquipType == nil {
+		return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, "can't discern equipment's type.", nil)
+	}
+
+	return params, autoAbilities, nil
+}
+
+func getMonAutoAbilities(params DropChanceParams, mon seeding.Monster) ([]seeding.EquipmentDrop, error) {
+	switch *params.EquipType {
+	case string(database.EquipTypeWeapon):
+		return mon.Equipment.WeaponAbilities, nil
+
+	case string(database.EquipTypeArmor):
+		return mon.Equipment.ArmorAbilities, nil
+
+	default:
+		return nil, newHTTPError(http.StatusBadRequest, "equip type must be set.", nil)
+	}
 }
 
 func vfAutoAbilitiesDropped(autoAbilities []seeding.AutoAbility, monsterAbilities []seeding.EquipmentDrop, mon seeding.Monster, charPtr *seeding.Character) error {
@@ -73,6 +88,18 @@ func vfAutoAbilitiesDropped(autoAbilities []seeding.AutoAbility, monsterAbilitie
 		if !isPresent {
 			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s'. it only drops the following auto-abilities: %s.", mon, ability.Name, formatMonAutoAbilities(mon)), nil)
 		}
+	}
+
+	return nil
+}
+
+func vfCharGetsAbility(ability seeding.EquipmentDrop, charPtr *seeding.Character, mon seeding.Monster) error {
+	if charPtr == nil {
+		return nil
+	}
+	
+	if !charGetsAbility(ability, charPtr) {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s' for %s", mon, ability.Ability, charPtr.Name), nil)
 	}
 
 	return nil
@@ -99,18 +126,3 @@ func formatEquipmentDrops(monsterAbilities []seeding.EquipmentDrop) string {
 
 	return strings.Join(names, ", ")
 }
-
-func vfCharGetsAbility(ability seeding.EquipmentDrop, charPtr *seeding.Character, mon seeding.Monster) error {
-	if charPtr == nil {
-		return nil
-	}
-	
-	if !charGetsAbility(ability, charPtr) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s' for %s", mon, ability.Ability, charPtr.Name), nil)
-	}
-
-	return nil
-}
-
-
-

@@ -7,7 +7,7 @@ func PercentageToDecimal(n int32) float64 {
 }
 
 func DecimalToPercent(n float64) float64 {
-	return FloatRound(n*100, 2)
+	return FloatRound(n*100, 4)
 }
 
 func DecimalPtrToPercent(ptr *float64) *float64 {

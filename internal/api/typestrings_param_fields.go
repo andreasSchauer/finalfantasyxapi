@@ -17,6 +17,7 @@ const (
 	pfnCharacter		FieldName = "character"
 	pfnDecimals 		FieldName = "decimals"
 	pfnDirection 		FieldName = "direction"
+	pfnEquipType		FieldName = "equip_type"
 	pfnFormation		FieldName = "formation"
 	pfnFS				FieldName = "fs"
 	pfnID				FieldName = "id"

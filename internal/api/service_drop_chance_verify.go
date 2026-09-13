@@ -38,6 +38,11 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[F
 		return DropChanceParams{}, err
 	}
 
+	params.EquipType, err = verifyParamFieldPtr(cfg, params.EquipType, pfnEquipType, valueMap, valTree, vfEnum)
+	if err != nil {
+		return DropChanceParams{}, err
+	}
+
 	params.MinEmptySlots, err = verifyParamFieldPtr(cfg, params.MinEmptySlots, pfnMinEmptySlots, valueMap, valTree, vfIntId)
 	if err != nil {
 		return DropChanceParams{}, err
@@ -65,7 +70,6 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[F
 
 	return params, nil
 }
-
 
 func vfRequiredSlotAmount(params DropChanceParams) error {
 	requiredSlots := getRequiredSlots(params)
