@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 	"net/http"
-	"slices"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
@@ -14,11 +13,11 @@ type Participant struct {
 	Party   BattleParty `json:"-"`
 	Agility int32       `json:"agility"`
 	AgilityVals
-	FirstStrike     bool    `json:"first_strike"`
-	Status          *string `json:"status"`
-	AltState        *int32  `json:"alt_state,omitempty"`
-	TurnsReceived   int32   `json:"turns_received"`
-	TurnsPercentage float64 `json:"turns_percentage"`
+	FirstStrike   bool    `json:"first_strike"`
+	Status        *string `json:"status"`
+	AltState      *int32  `json:"alt_state,omitempty"`
+	TurnsReceived int32   `json:"turns_received"`
+	TurnsPercent  float64 `json:"turns_percent"`
 }
 
 func (p Participant) getKey() string {
@@ -55,17 +54,12 @@ func getParticipants(cfg *Config, params TurnOrderParams) ([]Participant, []Part
 		return nil, nil, err
 	}
 
-	mons, params, err := getParticipantsMons(cfg, params, maps)
+	mons, err := getParticipantsMons(cfg, params, maps)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	monsCustom, err := getParticipantsMonsCustom(cfg, params, maps)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	opponentParty := createDuplicateNames(slices.Concat(mons, monsCustom), maps)
+	opponentParty := createDuplicateNames(mons, maps)
 
 	return playerParty, opponentParty, nil
 }
@@ -85,7 +79,7 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 		participant := Participant{
 			Name:        unit.Name,
 			Party:       battlePartyPlayer,
-			Agility:     partyMember.Agl,
+			Agility:     partyMember.Agility,
 			FirstStrike: partyMember.FS,
 			Status:      partyMember.Status,
 		}
@@ -103,76 +97,25 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 	return playerParty, nil
 }
 
-func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantMaps) ([]Participant, TurnOrderParams, error) {
-	const idSpectralKeeper int32 = 193
-	const idFormationSpectral int32 = 253
+func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantMaps) ([]Participant, error) {
 	var monParty []Participant
+	var firstTurnAglTier *seeding.AgilityTier
 
 	for _, mon := range params.Mons {
-		_, isDupe := maps.duplicates[mon.getDuplicateKey()]
-		if isDupe {
-			return nil, TurnOrderParams{}, newHTTPError(http.StatusBadRequest, "exact duplicate mons are not allowed", nil)
-		}
-
-		monster, firstTurnAglTier, err := getTurnOrderMonFromJson(cfg, mon)
-		if err != nil {
-			return nil, TurnOrderParams{}, err
-		}
-
-		participant := Participant{
-			Name:        h.NameToString(monster.Name, monster.Version, nil),
-			Party:       battlePartyOpponent,
-			Agility:     getTurnOrderMonAgility(cfg, mon, monster),
-			FirstStrike: monHasFirstStrike(monster),
-			AltState:    mon.AltState,
-		}
-		participant.Status, err = fetchMonsterStatus(monster, mon.Status)
-		if err != nil {
-			return nil, TurnOrderParams{}, err
-		}
-
-		participant.AgilityVals = extractAglTierMon(cfg, participant, params, firstTurnAglTier)
-
-		if params.Formation != nil && *params.Formation == idFormationSpectral && mon.ID == idSpectralKeeper {
-			participant.MinICV, participant.MaxICV = getEqualICVs(21)
-		}
-
-		monParty = append(monParty, participant)
-		maps.duplicates[mon.getDuplicateKey()] = true
-		maps.namesTotal[participant.getKey()]++
-	}
-
-	return monParty, params, nil
-}
-
-func getTurnOrderMonAgility(cfg *Config, mon turnOrderMon, monster Monster) int32 {
-	agilityBS := getBaseStat(cfg, "agility", monster.BaseStats)
-	agility := agilityBS.Value
-
-	if mon.AglOverride != nil {
-		agility = *mon.AglOverride
-	}
-
-	return handleNoTurnMons(mon, agility)
-}
-
-func getParticipantsMonsCustom(cfg *Config, params TurnOrderParams, maps *participantMaps) ([]Participant, error) {
-	var monParty []Participant
-
-	for _, mon := range params.MonsCustom {
 		_, isDupe := maps.duplicates[mon.getDuplicateKey()]
 		if isDupe {
 			return nil, newHTTPError(http.StatusBadRequest, "exact duplicate mons are not allowed", nil)
 		}
 
-		participant := Participant{
-			Name:        mon.Name,
-			Party:       battlePartyOpponent,
-			Agility:     mon.Agl,
-			FirstStrike: mon.FS,
-			Status:      mon.Status,
+		var participant Participant
+		var err error
+
+		participant, firstTurnAglTier, err = fetchTurnOrderMonster(cfg, params, mon)
+		if err != nil {
+			return nil, err
 		}
-		participant.AgilityVals = extractAglTierMon(cfg, participant, params, nil)
+
+		participant = populateParticipantMon(cfg, params, participant, mon, firstTurnAglTier)
 
 		monParty = append(monParty, participant)
 		maps.duplicates[mon.getDuplicateKey()] = true
@@ -180,6 +123,63 @@ func getParticipantsMonsCustom(cfg *Config, params TurnOrderParams, maps *partic
 	}
 
 	return monParty, nil
+}
+
+func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon) (Participant, *seeding.AgilityTier, error) {
+	if mon.ID == nil {
+		return Participant{}, nil, nil
+	}
+
+	monster, firstTurnAglTier, err := getTurnOrderMonFromJson(cfg, *mon.ID, mon.AltState)
+	if err != nil {
+		return Participant{}, nil, err
+	}
+
+	participant := Participant{
+		Name:        h.NameToString(monster.Name, monster.Version, nil),
+		Agility:     getTurnOrderMonAgilityNew(cfg, *mon.ID, monster),
+		FirstStrike: monsterHasFirstStrike(monster),
+		AltState:    mon.AltState,
+	}
+	participant.Status, err = fetchMonsterStatus(params, monster, mon.Status)
+	if err != nil {
+		return Participant{}, nil, err
+	}
+
+	return participant, firstTurnAglTier, nil
+}
+
+func populateParticipantMon(cfg *Config, params TurnOrderParams, participant Participant, mon turnOrderMon, firstTurnAglTier *seeding.AgilityTier) Participant {
+	if mon.Name != nil {
+		participant.Name = *mon.Name
+	}
+
+	if mon.Agility != nil {
+		participant.Agility = *mon.Agility
+	}
+
+	if mon.FirstStrike != nil {
+		participant.FirstStrike = *mon.FirstStrike
+	}
+
+	if mon.Status != nil {
+		participant.Status = mon.Status
+	}
+
+	participant.Party = battlePartyOpponent
+	participant.AgilityVals = extractAglTierMon(cfg, participant, params, firstTurnAglTier)
+
+	if isSpectralKeeperInStoryFight(*mon.ID, params.Formation) {
+		participant.MinICV, participant.MaxICV = getEqualICVs(21)
+	}
+
+	return participant
+}
+
+func isSpectralKeeperInStoryFight(monID int32, formationPtr *int32) bool {
+	const idSpectralKeeper int32 = 193
+	const idFormationSpectral int32 = 253
+	return formationPtr != nil && *formationPtr == idFormationSpectral && monID == idSpectralKeeper
 }
 
 func createDuplicateNames(party []Participant, maps *participantMaps) []Participant {

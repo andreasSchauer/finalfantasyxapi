@@ -14,11 +14,6 @@ type AlBhedResponse struct {
 	Direction      string `json:"direction"`
 }
 
-func (r AlBhedResponse) GetURL() string {
-	return ""
-}
-
-
 func translateAlBhed(cfg *Config, params AlBhedParams) (AlBhedResponse, error) {
 	response := AlBhedResponse{
 		OriginalText: params.Text,

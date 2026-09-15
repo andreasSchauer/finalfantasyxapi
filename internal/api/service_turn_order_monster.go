@@ -10,10 +10,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func handleNoTurnMons(mon turnOrderMon, agility int32) int32 {
+// there's some stuff that is more generic than /turn-order, or can be made more generic with some time
+
+
+func handleNoTurnMons(monID, agility int32) int32 {
 	noTurnIDs := []int32{33, 166, 194, 212, 228, 300}
 
-	if slices.Contains(noTurnIDs, mon.ID) {
+	if slices.Contains(noTurnIDs, monID) {
 		return 0
 	}
 
@@ -35,7 +38,7 @@ func fetchFormationMons(cfg *Config, params TurnOrderParams) TurnOrderParams {
 		monID := monAmt.MonsterID
 
 		mon := turnOrderMon{
-			ID: monID,
+			ID: &monID,
 		}
 
 		params.Mons = append(params.Mons, mon)
@@ -44,7 +47,15 @@ func fetchFormationMons(cfg *Config, params TurnOrderParams) TurnOrderParams {
 	return params
 }
 
-func monHasFirstStrike(mon Monster) bool {
+func getTurnOrderMonAgilityNew(cfg *Config, monID int32, monster Monster) int32 {
+	agilityBS := getBaseStat(cfg, "agility", monster.BaseStats)
+	agility := agilityBS.Value
+
+	return handleNoTurnMons(monID, agility)
+}
+
+
+func monsterHasFirstStrike(mon Monster) bool {
 	for _, aa := range mon.AutoAbilities {
 		if aa.Name == "first strike" {
 			return true
@@ -54,29 +65,34 @@ func monHasFirstStrike(mon Monster) bool {
 	return false
 }
 
-// I feel like the conditions especially in the start, can be written a bit cleaner
-func fetchMonsterStatus(mon Monster, statusPtr *string) (*string, error) {
+
+func fetchMonsterStatus(params TurnOrderParams, mon Monster, statusPtr *string) (*string, error) {
+	const statusSlow = string(database.HasteStatusSlow)
 	const statusHaste = string(database.HasteStatusHaste)
 	const statusAutoHaste = string(database.HasteStatusAutoHaste)
-	immuneToHaste := monImmuneToHaste(mon)
-	hasAppliedStatus := monHasAppliedStatus(mon)
 
-	if statusPtr == nil && !hasAppliedStatus {
-		return nil, nil
-	}
-
-	if hasAppliedStatus {
+	if monHasAppliedStatus(mon) {
 		monStatus := mon.AppliedState.AppliedStatus.StatusCondition.Name
 
-		if monStatus == statusHaste {
-			return &monStatus, nil
+		if statusPtr == nil && (monStatus == statusHaste || monStatus == statusSlow) {
+			statusPtr = &monStatus
 		}
+	}
+
+	if statusPtr == nil {
+		return nil, nil
 	}
 
 	status := *statusPtr
 
-	if immuneToHaste && (status == statusHaste || status == statusAutoHaste) {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to 'haste'", h.NameToString(mon.Name, mon.Version, nil)), nil)
+	if !params.IgnImmunities {
+		if monImmuneToSlow(mon) && status == statusSlow {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to 'slow'", h.NameToString(mon.Name, mon.Version, nil)), nil)
+		}
+		
+		if monImmuneToHaste(mon) && (status == statusHaste || status == statusAutoHaste) {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to 'haste'", h.NameToString(mon.Name, mon.Version, nil)), nil)
+		}
 	}
 
 	return &status, nil
@@ -96,49 +112,32 @@ func monImmuneToHaste(mon Monster) bool {
 	return false
 }
 
-func getConvertedMon(cfg *Config, monID int32) Monster {
-	monsterLookup, _ := seeding.GetResourceByID(monID, cfg.l.MonstersID)
-
-	return Monster{
-		ID:               monsterLookup.ID,
-		Name:             monsterLookup.Name,
-		Version:          monsterLookup.Version,
-		Specification:    monsterLookup.Specification,
-		HasOverdrive:     monsterLookup.HasOverdrive,
-		IsUnderwater:     monsterLookup.IsUnderwater,
-		IsZombie:         monsterLookup.IsZombie,
-		Distance:         monsterLookup.Distance,
-		Properties:       namesToNamedAPIResources(cfg, cfg.e.properties, monsterLookup.Properties),
-		AutoAbilities:    namesToNamedAPIResources(cfg, cfg.e.autoAbilities, monsterLookup.AutoAbilities),
-		StealGil:         monsterLookup.StealGil,
-		DoomCountdown:    monsterLookup.DoomCountdown,
-		PoisonRate:       monsterLookup.PoisonRate,
-		ThreatenChance:   monsterLookup.ThreatenChance,
-		ZanmatoLevel:     monsterLookup.ZanmatoLevel,
-		BaseStats:        toResAmtType(cfg, cfg.e.stats, monsterLookup.BaseStats, newBaseStat),
-		ElemResists:      getMonsterElemResists(cfg, monsterLookup.ElemResists),
-		StatusImmunities: namesToNamedAPIResources(cfg, cfg.e.statusConditions, monsterLookup.StatusImmunities),
-		StatusResists:    toResAmtType(cfg, cfg.e.statusConditions, monsterLookup.StatusResists, newStatusResist),
-		Abilities:        convertObjSlice(cfg, monsterLookup.Abilities, convertMonsterAbility),
-		AlteredStates:    getMonsterAlteredStates(cfg, nil, monsterLookup),
+func monImmuneToSlow(mon Monster) bool {
+	for _, condition := range mon.StatusImmunities {
+		if condition.Name == string(database.HasteStatusSlow) {
+			return true
+		}
 	}
+
+	return false
 }
 
-func getTurnOrderMonFromJson(cfg *Config, mon turnOrderMon) (Monster, *seeding.AgilityTier, error) {
+
+func getTurnOrderMonFromJson(cfg *Config, monID int32, altState *int32) (Monster, *seeding.AgilityTier, error) {
 	penanceArmIDs := []int32{306, 307}
 	firstTurnAglIDs := []int32{167, 168, 215, 306, 307}
 	var firstTurnAglTier *seeding.AgilityTier
-	monster := getConvertedMon(cfg, mon.ID)
+	monster := getConvertedMon(cfg, monID)
 
-	if slices.Contains(penanceArmIDs, mon.ID) {
-		mon.AltState = h.GetInt32Ptr(2)
+	if slices.Contains(penanceArmIDs, monID) {
+		altState = h.GetInt32Ptr(2)
 	}
 
-	if slices.Contains(firstTurnAglIDs, mon.ID) {
+	if slices.Contains(firstTurnAglIDs, monID) {
 		firstTurnAglTier = getAltStateAglTier(cfg, monster)
 	}
 
-	monster, err := applyAlteredStateFromJson(cfg, monster, mon.AltState)
+	monster, err := applyAlteredStateFromJson(cfg, monster, altState)
 	if err != nil {
 		return Monster{}, nil, err
 	}

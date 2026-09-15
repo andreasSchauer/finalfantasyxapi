@@ -13,15 +13,13 @@ func vfExistingFields(valueMap map[FieldName]any, valTree ValidationTree) error 
 	for fieldName := range valueMap {
 		_, exists := valTree[fieldName]
 		if !exists {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid field: '%s'",fieldName), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid field: '%s'", fieldName), nil)
 		}
 	}
 
 	return nil
 }
 
-// need to do an id check
-// if there is an id param and if there is an allowed ids slice, check if the slice contains the used id
 func basicFieldChecks[T any](val T, fieldName FieldName, valueMap map[FieldName]any, valTree ValidationTree) (T, error) {
 	var zero T
 	doc := valTree[fieldName].Doc
@@ -38,6 +36,16 @@ func basicFieldChecks[T any](val T, fieldName FieldName, valueMap map[FieldName]
 	}
 
 	err = vfRequiredOr(fieldName, doc, valIsPresent, valueMap)
+	if err != nil {
+		return zero, err
+	}
+
+	err = vfRequiresAll(fieldName, doc, valIsPresent, valueMap)
+	if err != nil {
+		return zero, err
+	}
+
+	err = vfRequiresOne(fieldName, doc, valIsPresent, valueMap)
 	if err != nil {
 		return zero, err
 	}
@@ -77,21 +85,43 @@ func vfRequiredOr(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap
 		return nil
 	}
 
-	var onePresent bool
-
 	for _, option := range doc.RequiredOr {
 		if hasVal(valueMap[option]) {
-			onePresent = true
-			break
+			return nil
 		}
 	}
 
-	if !onePresent {
-		requiredFields := append(doc.RequiredOr, fieldName)
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: %s.", formatPfnSlice(requiredFields)), nil)
+	requiredFields := append(doc.RequiredOr, fieldName)
+
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: %s.", formatPfnSlice(requiredFields)), nil)
+}
+
+func vfRequiresAll(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap map[FieldName]any) error {
+	if doc.RequiresAll == nil || !valIsPresent {
+		return nil
+	}
+
+	for _, field := range doc.RequiresAll {
+		if !hasVal(valueMap[field]) {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires the following fields to have a value: %s", fieldName, formatPfnSlice(doc.RequiresAll)), nil)
+		}
 	}
 
 	return nil
+}
+
+func vfRequiresOne(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap map[FieldName]any) error {
+	if doc.RequiresOne == nil || !valIsPresent {
+		return nil
+	}
+
+	for _, field := range doc.RequiresOne {
+		if hasVal(valueMap[field]) {
+			return nil
+		}
+	}
+
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires one of the following fields to have a value: %s", fieldName, formatPfnSlice(doc.RequiresOne)), nil)
 }
 
 func vfAllowedIDs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap map[FieldName]any) error {
@@ -137,6 +167,12 @@ func hasVal(val any) bool {
 		return t != ""
 
 	case int32:
+		return t != 0
+
+	case int:
+		return t != 0
+
+	case float64:
 		return t != 0
 
 	case bool:

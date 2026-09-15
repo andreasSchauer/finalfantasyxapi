@@ -5,23 +5,23 @@ type ParamsDoc struct {
 	Fields       []FieldDoc `json:"fields"`
 }
 
-
 type FieldDoc struct {
 	Field         FieldName   `json:"field"`
 	Type          string      `json:"type"`
 	ExampleUses   []string    `json:"example_uses,omitempty"`
 	Required      bool        `json:"required"`
 	RequiredOr    []FieldName `json:"required_or,omitempty"`
-	// ReqFields	  []FieldName `json:"required_fields,omitempty"`
+	RequiresAll   []FieldName `json:"requires_all,omitempty"`
+	RequiresOne   []FieldName `json:"requires_one,omitempty"`
 	ConflictsWith []FieldName `json:"conflicts_with,omitempty"`
 	DefaultVal    any         `json:"default_val,omitempty"`
 	MinVal        *int32      `json:"min_val,omitempty"`
 	MaxVal        *int32      `json:"max_val,omitempty"`
 	MaxArrayLen   *int        `json:"max_array_len,omitempty"`
-	AllowedIDs	  []int32	  `json:"allowed_ids,omitempty"`
+	AllowedIDs    []int32     `json:"allowed_ids,omitempty"`
 	EnumValues    []string    `json:"enum_values,omitempty"`
 	Description   string      `json:"description"`
 	ChildProps    []FieldDoc  `json:"child_properties,omitempty"`
-	ChildMinVal	  *int32	  `json:"child_min_val,omitempty"`
-	ChildMaxVal	  *int32	  `json:"child_max_val,omitempty"`
+	ChildMinVal   *int32      `json:"child_min_val,omitempty"`
+	ChildMaxVal   *int32      `json:"child_max_val,omitempty"`
 }

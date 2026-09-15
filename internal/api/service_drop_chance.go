@@ -11,10 +11,6 @@ type DropChanceResponse struct {
 	CharacterChances CharacterChances `json:"character_chances"`
 }
 
-func (r DropChanceResponse) GetURL() string {
-	return ""
-}
-
 func (r DropChanceResponse) Percent() DropChanceResponse {
 	r.TotalDropChances = r.TotalDropChances.Percent()
 	r.EquipmentChances = r.EquipmentChances.Percent()

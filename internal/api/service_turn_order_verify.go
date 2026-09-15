@@ -1,16 +1,8 @@
 package api
 
-import (
-	"fmt"
-	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
-)
-
 func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, valueMap map[FieldName]any) (TurnOrderParams, error) {
 	valTree := compileValidationTree(cfg.getTurnOrderParamsDoc().Fields)
-	const monLimit int = 10
-
+	
 	err := vfExistingFields(valueMap, valTree)
 	if err != nil {
 		return TurnOrderParams{}, err
@@ -22,6 +14,11 @@ func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, valueMap map[Fie
 	}
 
 	params.IgnFirstTurn, err = verifyParamField(cfg, params.IgnFirstTurn, pfnIgnFirstTurn, valueMap, valTree, nil)
+	if err != nil {
+		return TurnOrderParams{}, err
+	}
+
+	params.IgnImmunities, err = verifyParamField(cfg, params.IgnImmunities, pfnIgnImmunities, valueMap, valTree, nil)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
@@ -51,16 +48,6 @@ func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, valueMap map[Fie
 		return TurnOrderParams{}, err
 	}
 
-	params.MonsCustom, err = verifyParamFieldArr(cfg, params.MonsCustom, pfnMonsCustom, valueMap, valTree, vfTurnOrderMonCustom)
-	if err != nil {
-		return TurnOrderParams{}, err
-	}
-
-	totalMons := len(params.Mons) + len(params.MonsCustom)
-	if totalMons > monLimit {
-		return TurnOrderParams{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster limit exceeded. the total amount of monsters that can participate is %d. got: %d", monLimit, totalMons), nil)
-	}
-
 	return params, nil
 }
 
@@ -71,18 +58,18 @@ func vfTurnOrderParty(cfg *Config, item turnOrderParty, _ FieldName, valueMap ma
 	if err != nil {
 		return turnOrderParty{}, err
 	}
-	
+
 	item.ID, err = verifyParamField(cfg, item.ID, pfnID, valueMap, valTree, vfIntId)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
 
-	item.Agl, err = verifyParamField(cfg, item.Agl, pfnAgl, valueMap, valTree, vfIntId)
+	item.Agility, err = verifyParamField(cfg, item.Agility, pfnAgility, valueMap, valTree, vfIntId)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
 
-	item.FS, err = verifyParamField(cfg, item.FS, pfnFS, valueMap, valTree, nil)
+	item.FS, err = verifyParamField(cfg, item.FS, pfnFirstStrike, valueMap, valTree, nil)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
@@ -102,13 +89,8 @@ func vfTurnOrderMon(cfg *Config, item turnOrderMon, _ FieldName, valueMap map[Fi
 	if err != nil {
 		return turnOrderMon{}, err
 	}
-	
-	item.ID, err = verifyParamField(cfg, item.ID, pfnID, valueMap, valTree, vfIntId)
-	if err != nil {
-		return turnOrderMon{}, err
-	}
 
-	item.AglOverride, err = verifyParamFieldPtr(cfg, item.AglOverride, pfnAglOverride, valueMap, valTree, vfIntId)
+	item.ID, err = verifyParamFieldPtr(cfg, item.ID, pfnID, valueMap, valTree, vfIntId)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
@@ -118,53 +100,24 @@ func vfTurnOrderMon(cfg *Config, item turnOrderMon, _ FieldName, valueMap map[Fi
 		return turnOrderMon{}, err
 	}
 
-	if item.AltState != nil {
-		mon, _ := seeding.GetResourceByID(item.ID, cfg.l.MonstersID)
-		altStateAmt := int32(len(mon.AlteredStates))
+	item.Name, err = verifyParamFieldPtr(cfg, item.Name, pfnName, valueMap, valTree, nil)
+	if err != nil {
+		return turnOrderMon{}, err
+	}
 
-		if altStateAmt == 0 {
-			return turnOrderMon{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s (id: %d) has no altered states.", mon.Error(), item.ID), nil)
-		}
+	item.Agility, err = verifyParamFieldPtr(cfg, item.Agility, pfnAgility, valueMap, valTree, vfIntId)
+	if err != nil {
+		return turnOrderMon{}, err
+	}
 
-		if *item.AltState > altStateAmt {
-			return turnOrderMon{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value for field '%s'. %s (id: %d) only has %d altered states.", pfnAltState, mon.Error(), item.ID, altStateAmt), nil)
-		}
+	item.FirstStrike, err = verifyParamFieldPtr(cfg, item.FirstStrike, pfnFirstStrike, valueMap, valTree, nil)
+	if err != nil {
+		return turnOrderMon{}, err
 	}
 
 	item.Status, err = verifyParamFieldPtr(cfg, item.Status, pfnStatus, valueMap, valTree, vfEnum)
 	if err != nil {
 		return turnOrderMon{}, err
-	}
-
-	return item, nil
-}
-
-func vfTurnOrderMonCustom(cfg *Config, item turnOrderMonCustom, _ FieldName, valueMap map[FieldName]any, valTree ValidationTree) (turnOrderMonCustom, error) {
-	var err error
-
-	err = vfExistingFields(valueMap, valTree)
-	if err != nil {
-		return turnOrderMonCustom{}, err
-	}
-	
-	item.Name, err = verifyParamField(cfg, item.Name, pfnName, valueMap, valTree, nil)
-	if err != nil {
-		return turnOrderMonCustom{}, err
-	}
-
-	item.Agl, err = verifyParamField(cfg, item.Agl, pfnAgl, valueMap, valTree, vfIntId)
-	if err != nil {
-		return turnOrderMonCustom{}, err
-	}
-
-	item.FS, err = verifyParamField(cfg, item.FS, pfnFS, valueMap, valTree, nil)
-	if err != nil {
-		return turnOrderMonCustom{}, err
-	}
-
-	item.Status, err = verifyParamFieldPtr(cfg, item.Status, pfnStatus, valueMap, valTree, vfEnum)
-	if err != nil {
-		return turnOrderMonCustom{}, err
 	}
 
 	return item, nil

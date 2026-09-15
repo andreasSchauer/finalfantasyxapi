@@ -100,9 +100,6 @@ func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderPa
 	if minPtr == nil || maxPtr == nil {
 		return nil, nil
 	}
-
-	var minICV int32
-	var maxICV int32
 	
 	if params.IgnFirstTurn {
 		return getEqualICVs(0)
@@ -138,9 +135,8 @@ func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderPa
 		}
 	}
 
-	minICV = *minPtr
-	maxICV = *maxPtr
-
+	minICV := *minPtr
+	maxICV := *maxPtr
 	
 	if participant.Status == nil {
 		return &minICV, &maxICV
