@@ -113,25 +113,21 @@ func routerEndpoints(cfg *Config, w http.ResponseWriter, r *http.Request, i hand
 	}
 }
 
-func routerServiceGet[P ServiceParams, R ServiceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
+func routerServiceGet[P ServiceParams, R any](w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
 	segments := getPathSegments(r.URL.Path, i.endpoint)
 
 	switch len(segments) {
-	case 0:
-		handleEndpointServiceGet(cfg, w, r, i)
-		return
-
 	case 1:
-		handleServiceEndpointSections(cfg, w, r, i, segments)
+		handleEndpointServiceGet(w, r, i, segments)
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: /api/%s?state={json_string}", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: GET /api/%s/body, POST /api/%s", i.endpoint, i.endpoint), nil)
 		return
 	}
 }
 
-func routerServicePost[P ServiceParams, R ServiceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
+func routerServicePost[P ServiceParams, R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
 	segments := getPathSegments(r.URL.Path, i.endpoint)
 
 	switch len(segments) {

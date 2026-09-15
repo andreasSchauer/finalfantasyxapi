@@ -230,22 +230,25 @@ func handleEndpointsEndpointSections(cfg *Config, w http.ResponseWriter, r *http
 	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests.", nil)
 }
 
-func handleEndpointServiceGet[P ServiceParams, R ServiceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
-	err := verifyQueryParamsServiceGet(r, i.endpoint, i.queryLookup)
+
+func handleEndpointServiceGet[P ServiceParams, R any](w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
+	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	response, err := serviceGet(cfg, r, i)
-	if handleHTTPError(w, err) {
+	segment := segments[0]
+
+	if segment == string(snBody) {
+		handleBody(w, i.paramsDoc)
 		return
 	}
 
-	respondWithJSON(w, http.StatusOK, response)
+	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'.", i.endpoint), nil)
 }
 
-func handleEndpointServicePost[P ServiceParams, R ServiceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
-	err := verifyQueryParamsServicePost(r)
+func handleEndpointServicePost[P ServiceParams, R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
+	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -256,20 +259,4 @@ func handleEndpointServicePost[P ServiceParams, R ServiceResponse](cfg *Config, 
 	}
 
 	respondWithJSON(w, http.StatusOK, response)
-}
-
-func handleServiceEndpointSections[P ServiceParams, R ServiceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
-	segment := segments[0]
-
-	if segment == string(snParameters) {
-		handleParameters(cfg, w, r, i.endpoint, i.queryLookup)
-		return
-	}
-
-	if segment == string(snBody) {
-		handleBody(w, i.paramsDoc)
-		return
-	}
-
-	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. '/%s' doesn't support single-resource requests.", i.endpoint), nil)
 }

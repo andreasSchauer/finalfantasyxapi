@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -24,27 +23,10 @@ func verifyQueryParams[T any](r *http.Request, endpoint EndpointName, queryLooku
 	return nil
 }
 
-func verifyQueryParamsServiceGet(r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) error {
-	_, err := checkEmptyQuery(r, queryLookup[qpnState])
-	if errExceptEmptyQuery(err) {
-		return err
-	}
-	if queryIsEmpty(err) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' can't be empty", qpnState), nil)
-	}
-
-	err = verifyQueryParams[any](r, endpoint, queryLookup, nil, nil)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // verifies, if no query params are in use for an endpoint that receives a post request
-func verifyQueryParamsServicePost(r *http.Request) error {
+func verifyQueryParamsService(r *http.Request) error {
 	if len(r.URL.Query()) > 0 {
-		return newHTTPError(http.StatusBadRequest, "POST requests don't have any query parameters", nil)
+		return newHTTPError(http.StatusBadRequest, "computational endpoints don't have any query parameters", nil)
 	}
 
 	return nil

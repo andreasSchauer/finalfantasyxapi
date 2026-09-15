@@ -2,17 +2,7 @@ package api
 
 import "net/http"
 
-func serviceGet[P ServiceParams, R ServiceResponse](cfg *Config, r *http.Request, i handlerInputService[P, R]) (R, error) {
-	var zero R
-	params, valueMap, err := getParamsStateURL[P](r, i.queryLookup)
-	if err != nil {
-		return zero, err
-	}
-
-	return compute(cfg, i, params, valueMap)
-}
-
-func servicePost[P ServiceParams, R ServiceResponse](cfg *Config, r *http.Request, i handlerInputService[P, R]) (R, error) {
+func servicePost[P ServiceParams, R any](cfg *Config, r *http.Request, i handlerInputService[P, R]) (R, error) {
 	var zero R
 	params, valueMap, err := getParamsJsonBody[P](r)
 	if err != nil {
@@ -22,18 +12,13 @@ func servicePost[P ServiceParams, R ServiceResponse](cfg *Config, r *http.Reques
 	return compute(cfg, i, params, valueMap)
 }
 
-func compute[P ServiceParams, R ServiceResponse](cfg *Config, i handlerInputService[P, R], params P, valueMap map[FieldName]any) (R, error) {
+func compute[P ServiceParams, R any](cfg *Config, i handlerInputService[P, R], params P, valueMap map[FieldName]any) (R, error) {
 	var zero R
 
-	url, err := paramsToStateURL(cfg, i.endpoint, params)
+	params, err := i.verifyFn(cfg, params, valueMap)
 	if err != nil {
 		return zero, err
 	}
 
-	params, err = i.verifyFn(cfg, params, valueMap)
-	if err != nil {
-		return zero, err
-	}
-
-	return i.executeFn(cfg, params, url)
+	return i.executeFn(cfg, params)
 }

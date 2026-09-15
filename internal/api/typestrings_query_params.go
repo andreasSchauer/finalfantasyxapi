@@ -109,7 +109,6 @@ const (
 	qpnStatusResists    QueryParamName = "status_resists"
 	qpnStoryBased       QueryParamName = "story_based"
 	qpnSublocation      QueryParamName = "sublocation"
-	qpnState			QueryParamName = "state"
 	qpnStdSg            QueryParamName = "std_sg"
 	qpnTable            QueryParamName = "table"
 	qpnTargetType       QueryParamName = "target_type"

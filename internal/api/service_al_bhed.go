@@ -9,22 +9,20 @@ import (
 
 
 type AlBhedResponse struct {
-	URL            string `json:"url"`
 	TranslatedText string `json:"translated_text"`
 	OriginalText   string `json:"original_text"`
 	Direction      string `json:"direction"`
 }
 
 func (r AlBhedResponse) GetURL() string {
-	return r.URL
+	return ""
 }
 
 
-func translateAlBhed(cfg *Config, params AlBhedParams, url string) (AlBhedResponse, error) {
+func translateAlBhed(cfg *Config, params AlBhedParams) (AlBhedResponse, error) {
 	response := AlBhedResponse{
 		OriginalText: params.Text,
 		Direction:    params.Direction,
-		URL:          url,
 	}
 
 	charLookup := initCharLookup(cfg, params.Direction)

@@ -12,7 +12,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 27,
+                "id": 28,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -74,7 +74,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 27,
+                "id": 28,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -136,7 +136,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 33,
+                "id": 34,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -198,7 +198,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 34,
+                "id": 35,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -260,7 +260,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 35,
+                "id": 36,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -322,7 +322,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 35,
+                "id": 36,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -384,7 +384,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 36,
+                "id": 37,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -427,7 +427,7 @@
                 "modifier_changes": []
             },
             {
-                "id": 27,
+                "id": 28,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -489,7 +489,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 36,
+                "id": 37,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -695,7 +695,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 37,
+                "id": 38,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -757,7 +757,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 37,
+                "id": 38,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -819,7 +819,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 38,
+                "id": 39,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -881,7 +881,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 37,
+                "id": 38,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -943,7 +943,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 38,
+                "id": 39,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1005,7 +1005,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 37,
+                "id": 38,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1067,7 +1067,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 38,
+                "id": 39,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1129,7 +1129,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 37,
+                "id": 38,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1191,7 +1191,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 38,
+                "id": 39,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1253,7 +1253,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 39,
+                "id": 40,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1315,7 +1315,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 40,
+                "id": 41,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1377,7 +1377,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 41,
+                "id": 42,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1439,7 +1439,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 42,
+                "id": 43,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1501,7 +1501,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 43,
+                "id": 44,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1563,7 +1563,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 44,
+                "id": 45,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1625,7 +1625,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 37,
+                "id": 38,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1720,7 +1720,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 38,
+                "id": 39,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1815,7 +1815,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 37,
+                "id": 38,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -1910,7 +1910,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 38,
+                "id": 39,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -2005,7 +2005,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 45,
+                "id": 46,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -2090,7 +2090,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 46,
+                "id": 47,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -2175,7 +2175,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 37,
+                "id": 38,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -2237,7 +2237,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 38,
+                "id": 39,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -2299,7 +2299,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 47,
+                "id": 48,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -2361,7 +2361,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 48,
+                "id": 49,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -2423,7 +2423,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 49,
+                "id": 50,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -2485,7 +2485,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 47,
+                "id": 48,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -2547,7 +2547,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 48,
+                "id": 49,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -2609,7 +2609,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 49,
+                "id": 50,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -2671,7 +2671,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 47,
+                "id": 48,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -2733,7 +2733,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 48,
+                "id": 49,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -2795,7 +2795,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 49,
+                "id": 50,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -2857,7 +2857,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 47,
+                "id": 48,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -2919,7 +2919,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 48,
+                "id": 49,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -2981,7 +2981,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 49,
+                "id": 50,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3043,7 +3043,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 50,
+                "id": 51,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3105,7 +3105,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 51,
+                "id": 52,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3167,7 +3167,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 49,
+                "id": 50,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3229,7 +3229,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 50,
+                "id": 51,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3291,7 +3291,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 51,
+                "id": 52,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3353,7 +3353,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 49,
+                "id": 50,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3415,7 +3415,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 50,
+                "id": 51,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3477,7 +3477,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 51,
+                "id": 52,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3539,7 +3539,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 49,
+                "id": 50,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3601,7 +3601,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 50,
+                "id": 51,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3663,7 +3663,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 51,
+                "id": 52,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3725,7 +3725,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 49,
+                "id": 50,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3787,7 +3787,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 50,
+                "id": 51,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3849,7 +3849,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 51,
+                "id": 52,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3911,7 +3911,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 48,
+                "id": 49,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -3973,7 +3973,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 50,
+                "id": 51,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4035,7 +4035,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 51,
+                "id": 52,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4097,7 +4097,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 48,
+                "id": 49,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4159,7 +4159,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 50,
+                "id": 51,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4221,7 +4221,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 51,
+                "id": 52,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4283,7 +4283,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 48,
+                "id": 49,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4345,7 +4345,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 50,
+                "id": 51,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4407,7 +4407,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 51,
+                "id": 52,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4469,7 +4469,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 48,
+                "id": 49,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4531,7 +4531,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 52,
+                "id": 53,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4582,7 +4582,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 53,
+                "id": 54,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4633,7 +4633,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 54,
+                "id": 55,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4684,7 +4684,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 55,
+                "id": 56,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4746,7 +4746,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 56,
+                "id": 57,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4808,7 +4808,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 57,
+                "id": 58,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4870,7 +4870,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 52,
+                "id": 53,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4921,7 +4921,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 53,
+                "id": 54,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -4972,7 +4972,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 54,
+                "id": 55,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5023,7 +5023,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 50,
+                "id": 51,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5085,7 +5085,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 51,
+                "id": 52,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5147,7 +5147,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 49,
+                "id": 50,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5209,7 +5209,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 50,
+                "id": 51,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5271,7 +5271,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 51,
+                "id": 52,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5333,7 +5333,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 49,
+                "id": 50,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5395,7 +5395,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 58,
+                "id": 59,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5457,7 +5457,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 50,
+                "id": 51,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5519,7 +5519,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 47,
+                "id": 48,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5581,7 +5581,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 59,
+                "id": 60,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5643,7 +5643,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 60,
+                "id": 61,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -5705,7 +5705,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 61,
+                "id": 62,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 2,
@@ -5767,7 +5767,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 62,
+                "id": 63,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -5829,7 +5829,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 60,
+                "id": 61,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -5923,7 +5923,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 27,
+                "id": 28,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -5994,7 +5994,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 63,
+                "id": 64,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6045,7 +6045,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 64,
+                "id": 65,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6220,7 +6220,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 63,
+                "id": 64,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6386,7 +6386,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 35,
+                "id": 36,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6448,7 +6448,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 65,
+                "id": 66,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6516,7 +6516,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 35,
+                "id": 36,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6578,7 +6578,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 35,
+                "id": 36,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6640,7 +6640,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 27,
+                "id": 28,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6711,7 +6711,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 27,
+                "id": 28,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6773,7 +6773,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 27,
+                "id": 28,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6835,7 +6835,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 27,
+                "id": 28,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6930,7 +6930,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 27,
+                "id": 28,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -6992,7 +6992,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 27,
+                "id": 28,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -7054,7 +7054,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 35,
+                "id": 36,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -7097,7 +7097,7 @@
                 "modifier_changes": []
             },
             {
-                "id": 35,
+                "id": 36,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -7159,7 +7159,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 35,
+                "id": 36,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -7221,7 +7221,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 66,
+                "id": 67,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -7283,7 +7283,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 66,
+                "id": 67,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -7354,7 +7354,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 66,
+                "id": 67,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -7416,7 +7416,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 66,
+                "id": 67,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -7478,7 +7478,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 66,
+                "id": 67,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -7540,7 +7540,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 66,
+                "id": 67,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -7602,7 +7602,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 66,
+                "id": 67,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -7689,7 +7689,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 66,
+                "id": 67,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -7784,7 +7784,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 66,
+                "id": 67,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -7911,7 +7911,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 66,
+                "id": 67,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8046,7 +8046,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 67,
+                "id": 68,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8108,7 +8108,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 68,
+                "id": 69,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8170,7 +8170,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 69,
+                "id": 70,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8232,7 +8232,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 70,
+                "id": 71,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8327,7 +8327,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 70,
+                "id": 71,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8454,7 +8454,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 67,
+                "id": 68,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8516,7 +8516,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 68,
+                "id": 69,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8578,7 +8578,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 69,
+                "id": 70,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8640,7 +8640,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 70,
+                "id": 71,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8735,7 +8735,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 70,
+                "id": 71,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8862,7 +8862,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 67,
+                "id": 68,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8924,7 +8924,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 68,
+                "id": 69,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -8986,7 +8986,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 69,
+                "id": 70,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -9048,7 +9048,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 70,
+                "id": 71,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -9143,7 +9143,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 70,
+                "id": 71,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -9270,7 +9270,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 67,
+                "id": 68,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -9332,7 +9332,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 68,
+                "id": 69,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -9394,7 +9394,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 69,
+                "id": 70,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -9456,7 +9456,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 70,
+                "id": 71,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -9551,7 +9551,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 70,
+                "id": 71,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -9678,7 +9678,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 71,
+                "id": 72,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -9740,7 +9740,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 71,
+                "id": 72,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -9802,7 +9802,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 71,
+                "id": 72,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -10194,7 +10194,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 72,
+                "id": 73,
                 "target": "random-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -10513,7 +10513,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 72,
+                "id": 73,
                 "target": "random-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -11183,7 +11183,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 72,
+                "id": 73,
                 "target": "random-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -11356,7 +11356,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 72,
+                "id": 73,
                 "target": "random-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -11529,7 +11529,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 72,
+                "id": 73,
                 "target": "random-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -11633,7 +11633,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 72,
+                "id": 73,
                 "target": "random-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -11733,7 +11733,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 72,
+                "id": 73,
                 "target": "random-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -11937,7 +11937,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 73,
+                "id": 74,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -11955,7 +11955,7 @@
                             "damage_constant": 40
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": null,
@@ -11999,7 +11999,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 30,
+                "id": 31,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 2,
@@ -12061,7 +12061,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 30,
+                "id": 31,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 2,
@@ -12123,7 +12123,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 30,
+                "id": 31,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 2,
@@ -12185,7 +12185,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 30,
+                "id": 31,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 2,
@@ -12247,7 +12247,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 30,
+                "id": 31,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 2,
@@ -12309,7 +12309,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 30,
+                "id": 31,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 2,
@@ -12371,7 +12371,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 74,
+                "id": 75,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -12433,7 +12433,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 75,
+                "id": 76,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 2,
@@ -12451,7 +12451,7 @@
                             "damage_constant": 10
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",

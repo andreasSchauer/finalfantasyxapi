@@ -37,6 +37,7 @@ func (p turnOrderParty) getDuplicateKey() string {
 	})
 }
 
+// combine these two structs into one
 type turnOrderMon struct {
 	ID          int32   `json:"id"`
 	AglOverride *int32  `json:"agl_override,omitempty"`

@@ -2858,24 +2858,3 @@ func (cfg *Config) initAgilityTierParams() {
 	cfg.q.agilityTiers = paramsMap
 	cfg.e.agilityTiers.queryLookup = paramsMap
 }
-
-func (cfg *Config) initAlBhedParams() {
-	exampleUses := []string{}
-	paramsMap := cfg.initComputeEndpointQueryParams(epAlBhed, exampleUses)
-	cfg.q.alBhed = paramsMap
-	cfg.e.alBhed.queryLookup = paramsMap
-}
-
-func (cfg *Config) initTurnOrderParams() {
-	exampleUses := []string{}
-	paramsMap := cfg.initComputeEndpointQueryParams(epTurnOrder, exampleUses)
-	cfg.q.turnOrder = paramsMap
-	cfg.e.turnOrder.queryLookup = paramsMap
-}
-
-func (cfg *Config) initDropChanceParams() {
-	exampleUses := []string{}
-	paramsMap := cfg.initComputeEndpointQueryParams(epDropChance, exampleUses)
-	cfg.q.dropChance = paramsMap
-	cfg.e.dropChance.queryLookup = paramsMap
-}

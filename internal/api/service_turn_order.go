@@ -8,7 +8,6 @@ import (
 )
 
 type TurnOrderResponse struct {
-	URL           string        `json:"url"`
 	IgnFirstTurn  bool          `json:"ign_first_turn"`
 	BattleStart   string        `json:"battle_start"`
 	RNG           string        `json:"rng"`
@@ -18,7 +17,7 @@ type TurnOrderResponse struct {
 }
 
 func (r TurnOrderResponse) GetURL() string {
-	return r.URL
+	return ""
 }
 
 type TurnParams struct {
@@ -38,11 +37,10 @@ type BattleTurn struct {
 	PriorityKey string      `json:"-"`
 }
 
-func handleTurnOrder(cfg *Config, params TurnOrderParams, url string) (TurnOrderResponse, error) {
+func handleTurnOrder(cfg *Config, params TurnOrderParams) (TurnOrderResponse, error) {
 	var err error
 
 	response := TurnOrderResponse{
-		URL:          url,
 		IgnFirstTurn: params.IgnFirstTurn,
 		BattleStart:  params.BattleStart,
 		RNG:          params.RNG,

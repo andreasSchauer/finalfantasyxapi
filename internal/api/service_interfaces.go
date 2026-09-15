@@ -5,7 +5,3 @@ package api
 type ServiceParams interface {
 	GetDoc(*Config) ParamsDoc
 }
-
-type ServiceResponse interface {
-	HasURL
-}

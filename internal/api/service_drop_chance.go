@@ -6,14 +6,13 @@ import (
 )
 
 type DropChanceResponse struct {
-	URL              string           `json:"url"`
 	TotalDropChances TotalDropChances `json:"total_drop_chances"`
 	EquipmentChances EquipmentChances `json:"equipment_chances"`
 	CharacterChances CharacterChances `json:"character_chances"`
 }
 
 func (r DropChanceResponse) GetURL() string {
-	return r.URL
+	return ""
 }
 
 func (r DropChanceResponse) Percent() DropChanceResponse {
@@ -73,7 +72,7 @@ func (c EquipmentChances) Round(n int32) EquipmentChances {
 	return c
 }
 
-func calcDropChance(cfg *Config, params DropChanceParams, url string) (DropChanceResponse, error) {
+func calcDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse, error) {
 	mon, _ := seeding.GetResourceByID(params.Monster, cfg.l.MonstersID)
 	charPtr := getCharPtr(cfg, params)
 
@@ -87,7 +86,6 @@ func calcDropChance(cfg *Config, params DropChanceParams, url string) (DropChanc
 	matchFinBlow, matchNoFinBlow := calcEquipmentMatchChances(cfg, params, mon, wantedAbilities, monAbilities, characterChances)
 
 	response := DropChanceResponse{
-		URL: url,
 		TotalDropChances: TotalDropChances{
 			WithFinBlow: monDropChance * matchFinBlow,
 			NoFinBlow:   monDropChance * matchNoFinBlow,

@@ -193,14 +193,14 @@
         "name": "common-steal-rate",
         "effect": "Modifies a character's chance of stealing the common item.",
         "type": "percentage",
-        "default_value": 75
+        "default_value": 87.5
     },
     {
         "id": 29,
         "name": "rare-steal-rate",
         "effect": "Modifies a character's chance of stealing the rare item.",
         "type": "percentage",
-        "default_value": 25
+        "default_value": 12.5
     },
     {
         "id": 30,

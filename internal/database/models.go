@@ -981,8 +981,8 @@ type CriticalType string
 
 const (
 	CriticalTypeCrit        CriticalType = "crit"
-	CriticalTypeCritability CriticalType = "crit+ability%"
-	CriticalTypeCritweapon  CriticalType = "crit+weapon%"
+	CriticalTypeCritEquip   CriticalType = "crit-equip"
+	CriticalTypeCritAbility CriticalType = "crit-ability"
 )
 
 func (e *CriticalType) Scan(src interface{}) error {

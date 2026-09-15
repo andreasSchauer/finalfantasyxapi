@@ -30,7 +30,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -126,7 +126,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -222,7 +222,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -318,7 +318,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -414,7 +414,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -510,7 +510,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -606,7 +606,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -702,7 +702,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -814,7 +814,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -907,7 +907,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -1000,7 +1000,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -1100,7 +1100,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -1200,7 +1200,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -1300,7 +1300,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -1396,7 +1396,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -1492,7 +1492,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -1588,7 +1588,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -1684,7 +1684,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -1780,7 +1780,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -1900,7 +1900,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -1980,7 +1980,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -2060,7 +2060,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -5399,8 +5399,8 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 18,
-                "target": "single-target",
+                "id": 22,
+                "target": "self",
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
@@ -5577,7 +5577,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5666,7 +5666,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5755,7 +5755,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5844,7 +5844,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -5933,7 +5933,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -6023,7 +6023,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -6113,7 +6113,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -6203,7 +6203,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -6293,7 +6293,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -6383,7 +6383,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -6473,7 +6473,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -6563,7 +6563,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -6731,7 +6731,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 23,
+                "id": 24,
                 "target": "target-party",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -6896,7 +6896,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -6986,7 +6986,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -7076,7 +7076,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 22,
+                "id": 23,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -7166,7 +7166,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 23,
+                "id": 24,
                 "target": "target-party",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -7254,7 +7254,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 24,
+                "id": 25,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -7272,7 +7272,7 @@
                             "damage_constant": 8
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
@@ -7338,7 +7338,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 25,
+                "id": 26,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -7356,7 +7356,7 @@
                             "damage_constant": 17
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
@@ -7416,7 +7416,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 25,
+                "id": 26,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -7434,7 +7434,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
@@ -7504,7 +7504,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 25,
+                "id": 26,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -7522,7 +7522,7 @@
                             "damage_constant": 17
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
@@ -7591,7 +7591,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 26,
+                "id": 27,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -7609,7 +7609,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
@@ -7669,7 +7669,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 25,
+                "id": 26,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -7756,7 +7756,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 27,
+                "id": 28,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -7774,7 +7774,7 @@
                             "damage_constant": 10
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
@@ -7834,7 +7834,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 28,
+                "id": 29,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -7852,7 +7852,7 @@
                             "damage_constant": 13
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
@@ -7912,7 +7912,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 28,
+                "id": 29,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -7930,7 +7930,7 @@
                             "damage_constant": 18
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
@@ -7990,7 +7990,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 29,
+                "id": 30,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -8008,7 +8008,7 @@
                             "damage_constant": 18
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
@@ -8068,7 +8068,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 30,
+                "id": 31,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 2,
@@ -8143,7 +8143,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 31,
+                "id": 32,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -8161,7 +8161,7 @@
                             "damage_constant": 21
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
@@ -8221,7 +8221,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 31,
+                "id": 32,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -8239,7 +8239,7 @@
                             "damage_constant": 21
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
@@ -8299,7 +8299,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 32,
+                "id": 33,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -8317,7 +8317,7 @@
                             "damage_constant": 2
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",

@@ -2,23 +2,10 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 )
 
-
-func getParamsStateURL[P any](r *http.Request, queryLookup map[QueryParamName]QueryParam) (P, map[FieldName]any, error) {
-	var zero P
-	var params P
-
-	state, err := checkEmptyQuery(r, queryLookup[qpnState])
-	if err != nil {
-		return zero, nil, err
-	}
-
-	return readJsonRequest([]byte(state), params, fmt.Sprintf("invalid or corrupt payload for parameter '%s'", qpnState))
-}
 
 func getParamsJsonBody[P any](r *http.Request) (P, map[FieldName]any, error) {
 	var zero P

@@ -30,7 +30,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
@@ -85,7 +85,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 93,
+                "id": 94,
                 "target": "single-target",
                 "based_on_user_attack": true,
                 "range": 1,
@@ -103,7 +103,7 @@
                             "damage_constant": 16
                         }
                     ],
-                    "critical": "crit+weapon%",
+                    "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",

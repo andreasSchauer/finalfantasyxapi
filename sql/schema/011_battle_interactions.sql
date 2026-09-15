@@ -3,7 +3,7 @@ CREATE TYPE special_action_type AS ENUM ('bribe', 'steal-gil', 'steal-item', 'tr
 CREATE DOMAIN null_special_action_type AS special_action_type;
 
 
-CREATE TYPE critical_type AS ENUM ('crit', 'crit+ability%', 'crit+weapon%');
+CREATE TYPE critical_type AS ENUM ('crit', 'crit-equip', 'crit-ability');
 CREATE DOMAIN null_critical_type AS critical_type;
 
 

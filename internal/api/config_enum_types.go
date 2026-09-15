@@ -2109,15 +2109,15 @@ func (t *Enums) initCriticalType() {
 	typeSlice := []EnumVal{
 		{
 			Name:        string(database.CriticalTypeCrit),
-			Description: "The ability uses the normal critical hit formula.",
+			Description: "The ability can crit, but doesn't get any further bonusses.",
 		},
 		{
-			Name:        string(database.CriticalTypeCritweapon),
-			Description: "The critical plus values of the user's equipment are added toward the critical hit chance.",
+			Name:        string(database.CriticalTypeCritEquip),
+			Description: "The ability can crit and the critical plus values of the user's equipment are added toward the critical hit chance.",
 		},
 		{
-			Name:        string(database.CriticalTypeCritability),
-			Description: "The critical plus value of the used ability is added toward the critical hit chance.",
+			Name:        string(database.CriticalTypeCritAbility),
+			Description: "The ability can crit and the critical plus value of the used ability is added toward the critical hit chance.",
 		},
 	}
 
