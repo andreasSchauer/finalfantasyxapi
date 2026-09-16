@@ -1,15 +1,14 @@
 package api
 
-
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-func getConvertedMon(cfg *Config, monID int32) Monster {
+func quickAssembleMon(cfg *Config, monID int32, altStatePtr *int32) (Monster, error) {
 	monsterLookup, _ := seeding.GetResourceByID(monID, cfg.l.MonstersID)
 
-	return Monster{
+	monster := Monster{
 		ID:               monsterLookup.ID,
 		Name:             monsterLookup.Name,
 		Version:          monsterLookup.Version,
@@ -32,4 +31,45 @@ func getConvertedMon(cfg *Config, monID int32) Monster {
 		Abilities:        convertObjSlice(cfg, monsterLookup.Abilities, convertMonsterAbility),
 		AlteredStates:    getMonsterAlteredStates(cfg, nil, monsterLookup),
 	}
+
+	monster, err := applyAlteredStateFromJson(cfg, monster, altStatePtr)
+	if err != nil {
+		return Monster{}, err
+	}
+
+	return monster, nil
+}
+
+func monsterHasFirstStrike(mon Monster) bool {
+	for _, aa := range mon.AutoAbilities {
+		if aa.Name == "first strike" {
+			return true
+		}
+	}
+
+	return false
+}
+
+func monHasAppliedStatus(mon Monster) bool {
+	return mon.AppliedState != nil && mon.AppliedState.AppliedStatus != nil
+}
+
+func monImmuneToHaste(mon Monster) bool {
+	for _, condition := range mon.StatusImmunities {
+		if condition.Name == string(database.HasteStatusHaste) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func monImmuneToSlow(mon Monster) bool {
+	for _, condition := range mon.StatusImmunities {
+		if condition.Name == string(database.HasteStatusSlow) {
+			return true
+		}
+	}
+
+	return false
 }

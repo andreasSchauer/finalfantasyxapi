@@ -130,18 +130,18 @@ func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon
 		return Participant{}, nil, nil
 	}
 
-	monster, firstTurnAglTier, err := getTurnOrderMonFromJson(cfg, *mon.ID, mon.AltState)
+	monster, firstTurnAglTier, err := assembleMonTurnOrder(cfg, *mon.ID, mon.AltState)
 	if err != nil {
 		return Participant{}, nil, err
 	}
 
 	participant := Participant{
 		Name:        h.NameToString(monster.Name, monster.Version, nil),
-		Agility:     getTurnOrderMonAgilityNew(cfg, *mon.ID, monster),
+		Agility:     getTurnOrderMonAgility(cfg, *mon.ID, monster),
 		FirstStrike: monsterHasFirstStrike(monster),
 		AltState:    mon.AltState,
 	}
-	participant.Status, err = fetchMonsterStatus(params, monster, mon.Status)
+	participant.Status, err = fetchMonsterHasteStatus(params, monster, mon.Status)
 	if err != nil {
 		return Participant{}, nil, err
 	}
