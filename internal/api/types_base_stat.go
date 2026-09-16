@@ -47,6 +47,11 @@ func getBaseStat(cfg *Config, stat string, baseStats []BaseStat) BaseStat {
 	return statMap[statLookup.ID]
 }
 
+func getBaseStatVal(cfg *Config, stat string, baseStats []BaseStat) int32 {
+	bs := getBaseStat(cfg, stat, baseStats)
+	return bs.Value
+}
+
 func replaceBaseStats(baseStats []BaseStat, statMap map[string]int32) []BaseStat {
 	for i, baseStat := range baseStats {
 		newVal, ok := statMap[baseStat.Stat.Name]

@@ -80,15 +80,13 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 		p.ExampleUses = []string{s + "true", s + "false"}
 
 	case qptEnum:
-		enums := createEnumValSlice(p.EnumLookup)
-		e := enums[0].Name
+		e := p.EnumVals[0].Name
 		p.Usage = s + "{value|id}"
 		p.ExampleUses = []string{s + "1", s + e}
 
 	case qptEnumList:
-		enums := createEnumValSlice(p.EnumLookup)
-		e1 := enums[0].Name
-		e2 := enums[1].Name
+		e1 := p.EnumVals[0].Name
+		e2 := p.EnumVals[1].Name
 		p.Usage = s + "{value|id},..."
 		p.ExampleUses = []string{s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2)}
 

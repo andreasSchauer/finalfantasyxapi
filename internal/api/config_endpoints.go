@@ -61,6 +61,7 @@ type endpoints struct {
 	alBhed             handlerInputService[AlBhedParams, AlBhedResponse]
 	turnOrder          handlerInputService[TurnOrderParams, TurnOrderResponse]
 	dropChance         handlerInputService[DropChanceParams, DropChanceResponse]
+	delay			   handlerInputService[DelayParams, DelayResponse]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -1033,15 +1034,13 @@ func (cfg *Config) EndpointsInit() {
 
 	e.alBhed = handlerInputService[AlBhedParams, AlBhedResponse]{
 		endpoint:  epAlBhed,
-		usage:     []string{"/api/al-bhed?state={json_string}"}, // can I not put this in the error message?
 		paramsDoc: cfg.getAlBhedParamsDoc(),
 		verifyFn:  verifyAlBhedParams,
-		executeFn: translateAlBhed,
+		executeFn: handleAlBhed,
 	}
 
 	e.turnOrder = handlerInputService[TurnOrderParams, TurnOrderResponse]{
 		endpoint:  epTurnOrder,
-		usage:     []string{"/api/turn-order?state={json_string}"},
 		paramsDoc: cfg.getTurnOrderParamsDoc(),
 		verifyFn:  verifyTurnOrderParams,
 		executeFn: handleTurnOrder,
@@ -1049,10 +1048,16 @@ func (cfg *Config) EndpointsInit() {
 
 	e.dropChance = handlerInputService[DropChanceParams, DropChanceResponse]{
 		endpoint:  epDropChance,
-		usage:     []string{"/api/drop-chance?state={json_string}"},
 		paramsDoc: cfg.getDropChanceParamsDoc(),
 		verifyFn:  verifyDropChanceParams,
-		executeFn: calcDropChance,
+		executeFn: handleDropChance,
+	}
+
+	e.delay = handlerInputService[DelayParams, DelayResponse]{
+		endpoint:  epDelay,
+		paramsDoc: cfg.getDelayParamsDoc(),
+		verifyFn:  verifyDelayParams,
+		executeFn: handleDelay,
 	}
 
 	cfg.e = &e
@@ -1115,6 +1120,7 @@ func (e endpoints) initializeEndpointSlice() []EndpointName {
 		e.alBhed.endpoint,
 		e.turnOrder.endpoint,
 		e.dropChance.endpoint,
+		e.delay.endpoint,
 	}
 
 	slices.Sort(endpoints)

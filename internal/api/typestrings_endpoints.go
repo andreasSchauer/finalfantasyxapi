@@ -54,8 +54,9 @@ const (
 	epEnums					   EndpointName = "enums"
 	epEndpoints				   EndpointName = "endpoints"
 	epAlBhed				   EndpointName = "al-bhed"
-	epTurnOrder				   EndpointName = "turn-order"
+	epDelay				 	   EndpointName = "delay"
 	epDropChance			   EndpointName = "drop-chance"
+	epTurnOrder				   EndpointName = "turn-order"
 )
 
 type ResTypeSingle string

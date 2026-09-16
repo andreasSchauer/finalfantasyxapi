@@ -3,8 +3,10 @@ package api
 import (
 	"fmt"
 	"slices"
+	"strconv"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 type EnumType[E, N any] struct {
@@ -15,6 +17,59 @@ type EnumType[E, N any] struct {
 	getNullEnum  func(*E) N
 	aliasses     map[string][]E
 }
+
+// Verifies an EnumVal based on its value or an idString (mostly from query params)
+func (e EnumType[E, N]) CheckVal(key string) (EnumVal, error) {
+	id, err := strconv.Atoi(key)
+	if err == nil {
+		if id > len(e.lookup) || id <= 0 {
+			return EnumVal{}, errIdNotFound
+		}
+
+		for _, res := range e.lookup {
+			if int32(id) == res.ID {
+				return res, nil
+			}
+		}
+	}
+
+	res, found := e.lookup[key]
+	if found {
+		return res, nil
+	}
+
+	keyWithSpaces := h.GetNameWithSpaces(key, "-")
+	res, found = e.lookup[keyWithSpaces]
+	if found {
+		return res, nil
+	}
+	
+	return EnumVal{}, errNoResource
+}
+
+func (e EnumType[E, N]) Vals() []EnumVal {
+	vals := []EnumVal{}
+
+	for _, val := range e.lookup {
+		vals = append(vals, val)
+	}
+
+	slices.SortStableFunc(vals, h.SortOnId)
+
+	return vals
+}
+
+func (e EnumType[E, N]) Strings() []string {
+	enumVals := e.Vals()
+	strings := []string{}
+
+	for _, val := range enumVals {
+		strings = append(strings, val.Name)
+	}
+
+	return strings
+}
+
 
 type EnumResponse struct {
 	Name               EnumName       `json:"name"`
@@ -2508,6 +2563,34 @@ func (t *Enums) initBattleStart() {
 		Name:               enumNameBattleStart,
 		Description:        enumDescription,
 		UsedByEndpointsInt: []EndpointName{epTurnOrder},
+		Values:             getEnumValIDs(typeSlice),
+	}
+}
+
+func (t *Enums) initDelayStrength() {
+	enumDescription := fmt.Sprintf("Determines for the /%s endpoint.", epDelay)
+
+	typeSlice := []EnumVal{
+		{
+			Name:        string(database.DelayStrengthWeak),
+			Description: "",
+		},
+		{
+			Name:        string(database.DelayStrengthStrong),
+			Description: "",
+		},
+	}
+
+	t.DelayStrength = EnumType[database.DelayStrength, any]{
+		name:     enumNameDelayStrength,
+		lookup:   enumSliceToMap(typeSlice),
+		convFunc: func(s string) database.DelayStrength { return database.DelayStrength(s) },
+	}
+
+	t.Lookup[getEnumKey(enumNameDelayStrength)] = EnumResponse{
+		Name:               enumNameDelayStrength,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{epDelay},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }

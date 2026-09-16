@@ -1,13 +1,5 @@
 package api
 
-import (
-	"slices"
-	"strconv"
-
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-)
-
-
 type EnumVal struct {
 	ID          int32  `json:"id"`
 	Name        string `json:"name"`
@@ -22,58 +14,6 @@ func (e EnumVal) GetID() int32 {
 	return e.ID
 }
 
-
-// Verifies an EnumVal based on its value or an idString (mostly from query params)
-func CheckEnumVal[E, N any](key string, et EnumType[E, N]) (EnumVal, error) {
-	id, err := strconv.Atoi(key)
-	if err == nil {
-		if id > len(et.lookup) || id <= 0 {
-			return EnumVal{}, errIdNotFound
-		}
-		for _, res := range et.lookup {
-			if int32(id) == res.ID {
-				return res, nil
-			}
-		}
-	}
-
-	res, found := et.lookup[key]
-	if found {
-		return res, nil
-	}
-
-	keyWithSpaces := h.GetNameWithSpaces(key, "-")
-	res, found = et.lookup[keyWithSpaces]
-	if found {
-		return res, nil
-	}
-	
-	return EnumVal{}, errNoResource
-}
-
-
-func createEnumValSlice(lookup map[string]EnumVal) []EnumVal {
-	vals := []EnumVal{}
-
-	for _, val := range lookup {
-		vals = append(vals, val)
-	}
-
-	slices.SortStableFunc(vals, h.SortOnId)
-
-	return vals
-}
-
-func createEnumStringSlice(lookup map[string]EnumVal) []string {
-	enumVals := createEnumValSlice(lookup)
-	strings := []string{}
-
-	for _, val := range enumVals {
-		strings = append(strings, val.Name)
-	}
-
-	return strings
-}
 
 func enumSliceToMap(enumVals []EnumVal) map[string]EnumVal {
 	typeMap := make(map[string]EnumVal)

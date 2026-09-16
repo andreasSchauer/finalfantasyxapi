@@ -24,7 +24,7 @@ type QueryParam struct {
 	IsExclusive        bool                `json:"only_use_alone,omitempty"`
 	ParamUse           ParamUseType        `json:"param_use_type"`
 	ForSegment         *SectionName        `json:"for_segment,omitempty"`
-	EnumLookup         map[string]EnumVal  `json:"-"`
+	EnumVals           []EnumVal  `json:"-"`
 	RequiredParams     []QueryParamName    `json:"required_params,omitempty"`
 	UsableWith         []QueryParamName    `json:"usable_with,omitempty"`
 	ReplacedBy         []QueryParamName    `json:"replaced_by,omitempty"`
@@ -54,7 +54,7 @@ func (cfg *Config) initLocationsParams() {
 			Description:        "Only displays a location's related resources with the given availabilities. This affects shops, treasures, quests, monsters, and monster-formations.",
 			Type:               qptEnumList,
 			ParamUse:           puSingle,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -68,7 +68,7 @@ func (cfg *Config) initLocationsParams() {
 			Description:        "Searches for locations with the given availabilities. Can be combined with other parameters that filter locations by resource/resource-type. In that case, this parameter searches for locations where all the requested resources/resource-types are present with the given availabilities. If a resource (like an item or a monster) has multiple availabilities in the same location, because there are multiple ways of receiving/encountering it, this filter defines the most accessible version of it as its actual availability. In that case, the area won't show up for the other availability types, even if the resource technically can have that availability, since it can be received/encountered easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -192,7 +192,7 @@ func (cfg *Config) initSublocationsParams() {
 			Description:        "Only displays a sublocation's related resources with the given availabilities. This affects shops, treasures, quests, monsters, and monster-formations.",
 			Type:               qptEnumList,
 			ParamUse:           puSingle,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -213,7 +213,7 @@ func (cfg *Config) initSublocationsParams() {
 			Description:        "Searches for sublocations with the given availabilities. Can be combined with other parameters that filter sublocations by resource/resource-type. In that case, this parameter searches for sublocations where all the requested resources/resource-types are present with the given availabilities. If a resource (like an item or a monster) has multiple availabilities in the same sublocation, because there are multiple ways of receiving/encountering it, this filter defines the most accessible version of it as its actual availability. In that case, the sublocation won't show up for the other availability types, even if the resource technically can have that availability, since it can be received/encountered easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -337,7 +337,7 @@ func (cfg *Config) initAreasParams() {
 			Description:        "Only displays an area's related resources with the given availabilities. This affects shops, treasures, quests, monsters, and monster-formations.",
 			Type:               qptEnumList,
 			ParamUse:           puSingle,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -366,7 +366,7 @@ func (cfg *Config) initAreasParams() {
 			Description:        "Searches for areas with the given availabilities. Can be combined with other parameters that filter areas by resource/resource-type. In that case, this parameter searches for areas where all the requested resources/resource-types are present with the given availabilities. If a resource (like an item or a monster) has multiple availabilities in the same area, because there are multiple ways of receiving/encountering it, this filter defines the most accessible version of it as its actual availability. In that case, the area won't show up for the other availability types, even if the resource technically can have that availability, since it can be received/encountered easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -521,7 +521,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			Description:        "Searches for monster-formations with the specified monster-formation-categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.MonsterFormationCategory.lookup,
+			EnumVals:           cfg.t.MonsterFormationCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameMonsterFormationCategory},
 		},
 		{
@@ -529,7 +529,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 			Description:        "Searches for monster-formations with the given availabilities. If combined with the 'area' parameter, the availability of the monster-formation in this specific area is used. If a monster-formation has multiple availabilities, because there are multiple ways of encountering it (like via always-accessible random encounter and via scripted story-fight), this filter defines the most accessible version of it as its actual availability. In that case, the monster-formation won't show up for the other availability types, even if it technically can have that availability, since it can be encountered easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -595,7 +595,7 @@ func (cfg *Config) initShopsParams() {
 			Description:        "Searches for shops with the specified shop categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.ShopCategory.lookup,
+			EnumVals:           cfg.t.ShopCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameShopCategory},
 		},
 		{
@@ -603,7 +603,7 @@ func (cfg *Config) initShopsParams() {
 			Description:        "Searches for shops with the given availabilities. By default, this parameter checks, if a shop simply is available at the given availability. If combined with a filter that refers to the shop's inventory, it takes the availability directly from there ('pre-story' for the inventory before acquiring the airship, and 'post' after). In that case, this filter looks, if the requested resources are available in a shop at that point in the game.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -732,7 +732,7 @@ func (cfg *Config) initTreasuresParams() {
 			Description:        "Searches for treasures with the specified loot type.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.LootType.lookup,
+			EnumVals:           cfg.t.LootType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameLootType},
 		},
 		{
@@ -740,7 +740,7 @@ func (cfg *Config) initTreasuresParams() {
 			Description:        "Searches for treasures with the specified treasure type.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.TreasureType.lookup,
+			EnumVals:           cfg.t.TreasureType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameTreasureType},
 		},
 		{
@@ -754,7 +754,7 @@ func (cfg *Config) initTreasuresParams() {
 			Description:        "Searches for treasures with the given availabilities.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 	}
@@ -771,7 +771,7 @@ func (cfg *Config) initQuestsParams() {
 			Description:        "Searches for quests that are of the specified quest type.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.QuestType.lookup,
+			EnumVals:           cfg.t.QuestType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameQuestType},
 		},
 		{
@@ -779,7 +779,7 @@ func (cfg *Config) initQuestsParams() {
 			Description:        "Searches for quests with the given availabilities.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -802,7 +802,7 @@ func (cfg *Config) initSidequestsParams() {
 			Description:        "Searches for sidequests with the given availabilities.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 	}
@@ -819,7 +819,7 @@ func (cfg *Config) initSubquestsParams() {
 			Description:        "Searches for subquests with the given availabilities.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -842,7 +842,7 @@ func (cfg *Config) initArenaCreationsParams() {
 			Description:        "Searches for monster-formations with the specified arena-creation-categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.ArenaCreationCategory.lookup,
+			EnumVals:           cfg.t.ArenaCreationCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameArenaCreationCategory},
 		},
 	}
@@ -859,7 +859,7 @@ func (cfg *Config) initBlitzballPrizesParams() {
 			Description:        "Searches for blitzball prize tables with the specified blitzball-tournament-category.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.BlitzballTournamentCategory.lookup,
+			EnumVals:           cfg.t.BlitzballTournamentCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameBlitzballTournamentCategory},
 		},
 	}
@@ -911,7 +911,7 @@ func (cfg *Config) initSongsParams() {
 			Description:        "Searches for songs that were composed by the stated composer.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.Composer.lookup,
+			EnumVals:           cfg.t.Composer.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameComposer},
 		},
 		{
@@ -919,7 +919,7 @@ func (cfg *Config) initSongsParams() {
 			Description:        "Searches for songs that were arranged by the stated arranger.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.Arranger.lookup,
+			EnumVals:           cfg.t.Arranger.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameArranger},
 		},
 	}
@@ -952,7 +952,7 @@ func (cfg *Config) initPlayerUnitsParams() {
 			Description:        "Searches for player units that are of the specified unit type.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.UnitType.lookup,
+			EnumVals:           cfg.t.UnitType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameUnitType},
 		},
 	}
@@ -969,7 +969,7 @@ func (cfg *Config) initCharactersParams() {
 			Description:        "Adds all stat gains within the character's stated sphere grid to their base stats. This includes stat nodes behind sphere locks.",
 			Type:               qptEnum,
 			ParamUse:           puSingle,
-			EnumLookup:         cfg.t.SphereGridType.lookup,
+			EnumVals:           cfg.t.SphereGridType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameSphereGridType},
 		},
 		{
@@ -1028,7 +1028,7 @@ func (cfg *Config) initCharacterClassesParams() {
 			Description:        "Searches for character classes with the specified categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.CharacterClassCategory.lookup,
+			EnumVals:           cfg.t.CharacterClassCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameCharacterClassCategory},
 		},
 	}
@@ -1045,7 +1045,7 @@ func (cfg *Config) initMonstersParams() {
 			Description:        "Only displays a monster's related resources with the given availabilities. This affects areas and monster-formations.",
 			Type:               qptEnumList,
 			ParamUse:           puSingle,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -1166,7 +1166,7 @@ func (cfg *Config) initMonstersParams() {
 			Description:        "Searches for monsters with the given availabilities. If combined with a geographical filter, it takes the availability directly from the monster-formations that occur in the specified location, sublocation, or area. If a monster has multiple availabilities, because there are multiple ways of encountering it (like via always-accessible random encounter and via scripted story-fight), this filter defines the most accessible version of it as its actual availability. In that case, the monster won't show up for the other availability types, even if it technically can have that availability, since it can be encountered easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -1242,7 +1242,7 @@ func (cfg *Config) initMonstersParams() {
 			Description:        "Searches for monsters of the specified species.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.MonsterSpecies.lookup,
+			EnumVals:           cfg.t.MonsterSpecies.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameMonsterSpecies},
 		},
 		{
@@ -1250,7 +1250,7 @@ func (cfg *Config) initMonstersParams() {
 			Description:        "Searches for monsters that need to be captured in the specified area to create its area creation.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.CreationArea.lookup,
+			EnumVals:           cfg.t.CreationArea.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameCreationArea},
 		},
 		{
@@ -1258,7 +1258,7 @@ func (cfg *Config) initMonstersParams() {
 			Description:        "Searches for monsters that are of the specified monster-categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.MonsterCategory.lookup,
+			EnumVals:           cfg.t.MonsterCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameMonsterCategory},
 		},
 	}
@@ -1275,7 +1275,7 @@ func (cfg *Config) initAbilitiesParams() {
 			Description:        "Searches for abilities that are of the specified ability types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AbilityType.lookup,
+			EnumVals:           cfg.t.AbilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAbilityType},
 		},
 		{
@@ -1308,7 +1308,7 @@ func (cfg *Config) initAbilitiesParams() {
 			Description:        "Searches for abilities with the specified target types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.TargetType.lookup,
+			EnumVals:           cfg.t.TargetType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameTargetType},
 		},
 		{
@@ -1340,7 +1340,7 @@ func (cfg *Config) initAbilitiesParams() {
 			Description:        "Searches for abilities with battle interactions of the specified attack types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AttackType.lookup,
+			EnumVals:           cfg.t.AttackType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAttackType},
 		},
 		{
@@ -1348,7 +1348,7 @@ func (cfg *Config) initAbilitiesParams() {
 			Description:        "Searches for abilities that deal the specified types of damage.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.DamageType.lookup,
+			EnumVals:           cfg.t.DamageType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameDamageType},
 		},
 		{
@@ -1356,7 +1356,7 @@ func (cfg *Config) initAbilitiesParams() {
 			Description:        "Searches for abilities that use the specified formula to calculate their damage.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.DamageFormula.lookup,
+			EnumVals:           cfg.t.DamageFormula.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameDamageFormula},
 		},
 		{
@@ -1465,7 +1465,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Description:        "Searches for player abilities that are of the specified player ability categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.PlayerAbilityCategory.lookup,
+			EnumVals:           cfg.t.PlayerAbilityCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNamePlayerAbilityCategory},
 		},
 		{
@@ -1536,7 +1536,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Description:        "Searches for player abilities with the specified target types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.TargetType.lookup,
+			EnumVals:           cfg.t.TargetType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameTargetType},
 		},
 		{
@@ -1568,7 +1568,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Description:        "Searches for player abilities with battle interactions of the specified attack types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AttackType.lookup,
+			EnumVals:           cfg.t.AttackType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAttackType},
 		},
 		{
@@ -1576,7 +1576,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Description:        "Searches for player abilities that deal the specified types of damage.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.DamageType.lookup,
+			EnumVals:           cfg.t.DamageType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameDamageType},
 		},
 		{
@@ -1584,7 +1584,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			Description:        "Searches for player abilities that use the specified formula to calculate their damage.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.DamageFormula.lookup,
+			EnumVals:           cfg.t.DamageFormula.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameDamageFormula},
 		},
 		{
@@ -1663,7 +1663,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			Description:        "Searches for overdrive abilities with the specified target types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.TargetType.lookup,
+			EnumVals:           cfg.t.TargetType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameTargetType},
 		},
 		{
@@ -1671,7 +1671,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			Description:        "Searches for overdrive abilities with battle interactions of the specified attack types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AttackType.lookup,
+			EnumVals:           cfg.t.AttackType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAttackType},
 		},
 		{
@@ -1679,7 +1679,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 			Description:        "Searches for overdrive abilities that use the specified formula to calculate their damage.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.DamageFormula.lookup,
+			EnumVals:           cfg.t.DamageFormula.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameDamageFormula},
 		},
 		{
@@ -1742,7 +1742,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Description:        "Searches for item abilities that are of the specified item categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.ItemCategory.lookup,
+			EnumVals:           cfg.t.ItemCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameItemCategory},
 		},
 		{
@@ -1764,7 +1764,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Description:        "Searches for item abilities with the specified target types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.TargetType.lookup,
+			EnumVals:           cfg.t.TargetType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameTargetType},
 		},
 		{
@@ -1772,7 +1772,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Description:        "Searches for item abilities with battle interactions of the specified attack types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AttackType.lookup,
+			EnumVals:           cfg.t.AttackType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAttackType},
 		},
 		{
@@ -1780,7 +1780,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 			Description:        "Searches for item abilities that use the specified formula to calculate their damage.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.DamageFormula.lookup,
+			EnumVals:           cfg.t.DamageFormula.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameDamageFormula},
 		},
 		{
@@ -1966,7 +1966,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Description:        "Searches for enemy abilities with the specified target types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.TargetType.lookup,
+			EnumVals:           cfg.t.TargetType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameTargetType},
 		},
 		{
@@ -1992,7 +1992,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Description:        "Searches for enemy abilities with battle interactions of the specified attack types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AttackType.lookup,
+			EnumVals:           cfg.t.AttackType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAttackType},
 		},
 		{
@@ -2000,7 +2000,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Description:        "Searches for enemy abilities that deal the specified types of damage.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.DamageType.lookup,
+			EnumVals:           cfg.t.DamageType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameDamageType},
 		},
 		{
@@ -2008,7 +2008,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 			Description:        "Searches for enemy abilities that use the specified formula to calculate their damage.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.DamageFormula.lookup,
+			EnumVals:           cfg.t.DamageFormula.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameDamageFormula},
 		},
 		{
@@ -2105,7 +2105,7 @@ func (cfg *Config) initAllItemsParams() {
 			Description:        "Only considers an item's related resources with the given availabilities when calculating the boolean fields. This affects monsters, treasures, shops, quests, and blitzball prizes.",
 			Type:               qptEnumList,
 			ParamUse:           puSingle,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -2119,7 +2119,7 @@ func (cfg *Config) initAllItemsParams() {
 			Description:        "Searches for items that are of the specified item-types.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.ItemType.lookup,
+			EnumVals:           cfg.t.ItemType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameItemType},
 		},
 		{
@@ -2127,7 +2127,7 @@ func (cfg *Config) initAllItemsParams() {
 			Description:        "Searches for items with the given availabilities. The availability of an item is always taken from its sources. The most accessible availability among those sources is the one that is assigned to the item. The item won't show up for the other availability types, even if it technically can have that availability, since it can be received easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -2189,7 +2189,7 @@ func (cfg *Config) initItemsParams() {
 			Description:        "Only displays an item's related resources with the given availabilities. This affects monsters, treasures, shops, quests, and blitzball prizes.",
 			Type:               qptEnumList,
 			ParamUse:           puSingle,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -2217,7 +2217,7 @@ func (cfg *Config) initItemsParams() {
 			Description:        "Searches for items that are from one of the specified item categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.ItemCategory.lookup,
+			EnumVals:           cfg.t.ItemCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameItemCategory},
 		},
 		{
@@ -2225,7 +2225,7 @@ func (cfg *Config) initItemsParams() {
 			Description:        "Searches for items with the given availabilities. The availability of an item is always taken from its sources. The most accessible availability among those sources is the one that is assigned to the item. The item won't show up for the other availability types, even if it technically can have that availability, since it can be received easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -2287,7 +2287,7 @@ func (cfg *Config) initKeyItemsParams() {
 			Description:        "Only displays a key-item's related resources with the given availabilities. This affects areas, treasures and quests.",
 			Type:               qptEnumList,
 			ParamUse:           puSingle,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -2295,7 +2295,7 @@ func (cfg *Config) initKeyItemsParams() {
 			Description:        "Searches for key-items with the given availabilities. The availability of a key-item is always taken from its sources. The most accessible availability among those sources is the one that is assigned to the key-item. The key-item won't show up for the other availability types, even if it technically can have that availability, since it can be received easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -2303,7 +2303,7 @@ func (cfg *Config) initKeyItemsParams() {
 			Description:        "Searches for key-items that are of the specified key-item categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.KeyItemCategory.lookup,
+			EnumVals:           cfg.t.KeyItemCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameKeyItemCategory},
 		},
 		{
@@ -2352,7 +2352,7 @@ func (cfg *Config) initSpheresParams() {
 			Description:        "Only displays a sphere's related resources with the given availabilities. This affects monsters, treasures, shops, quests, and blitzball prizes.",
 			Type:               qptEnumList,
 			ParamUse:           puSingle,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -2366,7 +2366,7 @@ func (cfg *Config) initSpheresParams() {
 			Description:        "Searches for spheres with any of the given colors.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.SphereColor.lookup,
+			EnumVals:           cfg.t.SphereColor.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameSphereColor},
 		},
 		{
@@ -2374,7 +2374,7 @@ func (cfg *Config) initSpheresParams() {
 			Description:        "Searches for spheres with the given availabilities. The availability of a sphere is always taken from its sources. The most accessible availability among those sources is the one that is assigned to the sphere. The sphere won't show up for the other availability types, even if it technically can have that availability, since it can be received easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -2436,7 +2436,7 @@ func (cfg *Config) initPrimersParams() {
 			Description:        "Searches for primers with the given availabilities. The availability of a primer is always taken from its sources. The most accessible availability among those sources is the one that is assigned to the primer. The primer won't show up for the other availability types, even if it technically can have that availability, since it can be received easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 	}
@@ -2469,7 +2469,7 @@ func (cfg *Config) initMixesParams() {
 			Description:        "Searches for mixes that are of the specified mix categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.MixCategory.lookup,
+			EnumVals:           cfg.t.MixCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameMixCategory},
 		},
 		{
@@ -2503,7 +2503,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Description:        "Only displays an auto-ability's related resources with the given availabilities. This affects shops, treasures, and monsters.",
 			Type:               qptEnumList,
 			ParamUse:           puSingle,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -2517,7 +2517,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Description:        "Searches for auto-abilities with the given availabilities. The availability of an auto-ability is always taken from its sources. The most accessible availability among those sources is the one that is assigned to the auto-ability. The auto-ability won't show up for the other availability types, even if it technically can have that availability, since it can be received easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -2538,7 +2538,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Description:        "Searches for auto-abilities that are of the specified auto-ability categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.AutoAbilityCategory.lookup,
+			EnumVals:           cfg.t.AutoAbilityCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAutoAbilityCategory},
 		},
 		{
@@ -2546,7 +2546,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Description:        "Searches for auto-abilities that are of the specified equip type.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.EquipType.lookup,
+			EnumVals:           cfg.t.EquipType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameEquipType},
 		},
 		{
@@ -2640,7 +2640,7 @@ func (cfg *Config) initEquipmentTablesParams() {
 			Description:        "Searches for equipment tables that are of the specified equip type.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.EquipType.lookup,
+			EnumVals:           cfg.t.EquipType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameEquipType},
 		},
 		{
@@ -2671,7 +2671,7 @@ func (cfg *Config) initEquipmentParams() {
 			Description:        "Only displays an equipment's related resources with the given availabilities. This affects treasures and shops.",
 			Type:               qptEnumList,
 			ParamUse:           puSingle,
-			EnumLookup:         cfg.t.AvailabilityType.lookup,
+			EnumVals:           cfg.t.AvailabilityType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
@@ -2694,7 +2694,7 @@ func (cfg *Config) initEquipmentParams() {
 			Description:        "Searches for equipment that is of the specified equip type.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.EquipType.lookup,
+			EnumVals:           cfg.t.EquipType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameEquipType},
 		},
 		{
@@ -2717,7 +2717,7 @@ func (cfg *Config) initCelestialWeaponsParams() {
 			Description:        "Searches for celestial-weapons that are of the specified celestial formula.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.CelestialFormula.lookup,
+			EnumVals:           cfg.t.CelestialFormula.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameCelestialFormula},
 		},
 	}
@@ -2749,7 +2749,7 @@ func (cfg *Config) initOverdriveModesParams() {
 			Description:        "Searches for overdrive modes that are of the specified overdrive-mode-type.",
 			Type:               qptEnum,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.OverdriveModeType.lookup,
+			EnumVals:           cfg.t.OverdriveModeType.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameOverdriveModeType},
 		},
 	}
@@ -2816,7 +2816,7 @@ func (cfg *Config) initStatusConditionsParams() {
 			Description:        "Searches for status conditions that are of the specified status condition categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.StatusConditionCategory.lookup,
+			EnumVals:           cfg.t.StatusConditionCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameStatusConditionCategory},
 		},
 	}
@@ -2833,7 +2833,7 @@ func (cfg *Config) initModifiersParams() {
 			Description:        "Searches for modifiers that are of the specified modifier categories.",
 			Type:               qptEnumList,
 			ParamUse:           puList,
-			EnumLookup:         cfg.t.ModifierCategory.lookup,
+			EnumVals:           cfg.t.ModifierCategory.Vals(),
 			ReferencesEnumsInt: []EnumName{enumNameModifierCategory},
 		},
 	}

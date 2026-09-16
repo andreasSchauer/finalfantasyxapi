@@ -63,7 +63,7 @@ func (cfg *Config) getDropChanceParamsDoc() ParamsDoc {
 			{
 				Field:       pfnEquipType,
 				Type:        "string (enum: equipType)",
-				EnumValues:  createEnumStringSlice(cfg.t.EquipType.lookup),
+				EnumValues:  cfg.t.EquipType.Strings(),
 				Description: "The type of the desired equipment. Will be assigned automatically by looking at the first auto-ability's type, if left empty. If a value is given, all given auto-abilities need to be of the same type. If 'auto_abilities' is null or an empty array, this field is required.",
 			},
 			{

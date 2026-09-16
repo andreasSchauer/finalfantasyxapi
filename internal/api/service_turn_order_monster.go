@@ -1,8 +1,6 @@
 package api
 
 import (
-	"fmt"
-	"net/http"
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -71,8 +69,7 @@ func getAltStateAglTier(cfg *Config, mon Monster) *seeding.AgilityTier {
 }
 
 func getTurnOrderMonAgility(cfg *Config, monID int32, monster Monster) int32 {
-	agilityBS := getBaseStat(cfg, "agility", monster.BaseStats)
-	agility := agilityBS.Value
+	agility := getBaseStatVal(cfg, "agility", monster.BaseStats)
 
 	return handleNoTurnMons(monID, agility)
 }
@@ -87,7 +84,7 @@ func handleNoTurnMons(monID, agility int32) int32 {
 	return agility
 }
 
-func fetchMonsterHasteStatus(params TurnOrderParams, mon Monster, statusPtr *string) (*string, error) {
+func fetchMonsterHasteStatus(mon Monster, statusPtr *string, ignImmunities bool) (*string, error) {
 	const statusSlow = string(database.HasteStatusSlow)
 	const statusHaste = string(database.HasteStatusHaste)
 	const statusAutoHaste = string(database.HasteStatusAutoHaste)
@@ -106,14 +103,13 @@ func fetchMonsterHasteStatus(params TurnOrderParams, mon Monster, statusPtr *str
 
 	status := *statusPtr
 
-	if !params.IgnImmunities {
-		if monImmuneToSlow(mon) && status == statusSlow {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to 'slow'", h.NameToString(mon.Name, mon.Version, nil)), nil)
-		}
+	if status == statusAutoHaste {
+		status = statusHaste
+	}
 
-		if monImmuneToHaste(mon) && (status == statusHaste || status == statusAutoHaste) {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to 'haste'", h.NameToString(mon.Name, mon.Version, nil)), nil)
-		}
+	err := enforceMonImmunity(status, mon, ignImmunities)
+	if err != nil {
+		return nil, err
 	}
 
 	return &status, nil

@@ -27,7 +27,7 @@ func (cfg *Config) getAlBhedParamsDoc() ParamsDoc {
 				Field:       pfnDirection,
 				Type:        "string (enum: translationDirection)",
 				DefaultVal:  string(database.TranslationDirectionToAlBhed),
-				EnumValues:  createEnumStringSlice(cfg.t.TranslationDirection.lookup),
+				EnumValues:  cfg.t.TranslationDirection.Strings(),
 				Description: "The translation direction.",
 			},
 		},

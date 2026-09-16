@@ -1,7 +1,10 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"fmt"
+	"net/http"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -54,19 +57,17 @@ func monHasAppliedStatus(mon Monster) bool {
 	return mon.AppliedState != nil && mon.AppliedState.AppliedStatus != nil
 }
 
-func monImmuneToHaste(mon Monster) bool {
-	for _, condition := range mon.StatusImmunities {
-		if condition.Name == string(database.HasteStatusHaste) {
-			return true
-		}
+func enforceMonImmunity(status string, mon Monster, ignImmunities bool) error {
+	if !ignImmunities && monImmuneToStatus(status, mon) {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to '%s'.", h.NameToString(mon.Name, mon.Version, nil), status), nil)
 	}
 
-	return false
+	return nil
 }
 
-func monImmuneToSlow(mon Monster) bool {
+func monImmuneToStatus(status string, mon Monster) bool {
 	for _, condition := range mon.StatusImmunities {
-		if condition.Name == string(database.HasteStatusSlow) {
+		if condition.Name == status {
 			return true
 		}
 	}

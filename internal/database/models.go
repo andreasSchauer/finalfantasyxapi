@@ -1210,6 +1210,48 @@ func (ns NullDamageType) Value() (driver.Value, error) {
 	return string(ns.DamageType), nil
 }
 
+type DelayStrength string
+
+const (
+	DelayStrengthWeak   DelayStrength = "weak"
+	DelayStrengthStrong DelayStrength = "strong"
+)
+
+func (e *DelayStrength) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = DelayStrength(s)
+	case string:
+		*e = DelayStrength(s)
+	default:
+		return fmt.Errorf("unsupported scan type for DelayStrength: %T", src)
+	}
+	return nil
+}
+
+type NullDelayStrength struct {
+	DelayStrength DelayStrength
+	Valid         bool // Valid is true if DelayStrength is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullDelayStrength) Scan(value interface{}) error {
+	if value == nil {
+		ns.DelayStrength, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.DelayStrength.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullDelayStrength) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.DelayStrength), nil
+}
+
 type DelayType string
 
 const (

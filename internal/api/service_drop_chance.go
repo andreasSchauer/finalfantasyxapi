@@ -47,9 +47,9 @@ func (c TotalDropChances) Round(n int32) TotalDropChances {
 }
 
 type EquipmentChances struct {
-	MonsterDrop    	float64 `json:"monster_drop"`
-	MatchFinBlow   	float64 `json:"match_fin_blow"`
-	MatchNoFinBlow 	float64 `json:"match_no_fin_blow"`
+	MonsterDrop    float64 `json:"monster_drop"`
+	MatchFinBlow   float64 `json:"match_fin_blow"`
+	MatchNoFinBlow float64 `json:"match_no_fin_blow"`
 }
 
 func (c EquipmentChances) Percent() EquipmentChances {
@@ -68,7 +68,7 @@ func (c EquipmentChances) Round(n int32) EquipmentChances {
 	return c
 }
 
-func calcDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse, error) {
+func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse, error) {
 	mon, _ := seeding.GetResourceByID(params.Monster, cfg.l.MonstersID)
 	charPtr := getCharPtr(cfg, params)
 
@@ -87,9 +87,9 @@ func calcDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse, e
 			NoFinBlow:   monDropChance * matchNoFinBlow,
 		},
 		EquipmentChances: EquipmentChances{
-			MonsterDrop:    	monDropChance,
-			MatchFinBlow:   	matchFinBlow,
-			MatchNoFinBlow: 	matchNoFinBlow,
+			MonsterDrop:    monDropChance,
+			MatchFinBlow:   matchFinBlow,
+			MatchNoFinBlow: matchNoFinBlow,
 		},
 		CharacterChances: characterChances,
 	}

@@ -84,14 +84,14 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 				Field:       pfnRNG,
 				Type:        "string (enum: turnOrderRNG)",
 				DefaultVal:  string(database.TurnOrderRngMedian),
-				EnumValues:  createEnumStringSlice(cfg.t.TurnOrderRNG.lookup),
+				EnumValues:  cfg.t.TurnOrderRNG.Strings(),
 				Description: "Specify the rng at the start of the battle, which is used for ICV calculation. This field will have no effect, if 'ign_first_turn' is set to 'true'.",
 			},
 			{
 				Field:       pfnBattleStart,
 				Type:        "string (enum: battleStart)",
 				DefaultVal:  string(database.BattleStartNormal),
-				EnumValues:  createEnumStringSlice(cfg.t.BattleStart.lookup),
+				EnumValues:  cfg.t.BattleStart.Strings(),
 				Description: "Specify, if the battle starts normally, or if it starts as an ambush or preemptive strike. This field will have no effect, if 'ign_first_turn' is set to 'true'.",
 			},
 			{
@@ -150,8 +150,8 @@ func (cfg *Config) getFieldDocTurnOrderParty() []FieldDoc {
 		{
 			Field:       pfnStatus,
 			Type:        "string (enum: hasteStatus)",
-			EnumValues:  createEnumStringSlice(cfg.t.HasteStatus.lookup),
-			Description: "Specify, whether a party member carries the 'haste' or 'slow' status. If 'haste' or 'slow' are selected, it is assumed, that the party member gets this status on the first turn, so ICV calculation is unaffected. The ctb alterations that come from applying 'haste' or 'slow' are ignored. If 'auto-haste' is selected, the party member starts this battle with 'haste' (due to 'auto-haste', or 'sos-haste') which will affect ICV calculation.",
+			EnumValues:  cfg.t.HasteStatus.Strings(),
+			Description: "Specify, whether a party member carries the 'haste' or 'slow' status. If 'haste' or 'slow' are selected, it is assumed, that the party member gets this status on the first turn, so ICV calculation is unaffected. The ctb alterations that come from applying 'haste' or 'slow' are ignored. If 'auto-haste' is selected, the party member starts this battle with 'haste' (due to 'auto-haste', or 'sos-haste') which will affect ICV calculation. 'Haste' halves the bearer's tick speed, while 'slow' doubles it.",
 		},
 	}
 }
@@ -169,10 +169,10 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 		},
 		{
 			Field:       pfnAltState,
-			Type:        "int (id: monster altered states)",
+			Type:        "int (idx +1: monster altered states)",
 			RequiresAll: []FieldName{pfnID},
 			MinVal:      h.GetInt32Ptr(1),
-			Description: "If the looked up monster has altered states, they can be applied, but will only have an effect, if they change its agility stat, or apply 'haste'. If a monster has a different agility stat on only its first turn, this altered state is applied automatically, except when 'ign_first_turn' is true. Specifying that specific altered state won't have any effect, nor will it result in an error. The same is true for Penance's arms who get the 'haste' status only during their own turns.",
+			Description: "If the looked up monster has altered states, they can be applied, but will only have an effect, if they change its agility stat, or apply 'haste'. If a monster has a different agility stat on only its first turn, this altered state is applied automatically, except when 'ign_first_turn' is true. Specifying that specific altered state won't have any effect, nor will it result in an error. The same is true for Penance's arms who get the 'haste' status only during their own turns. Returns an error, if the monster doesn't have as many altered states as given. The maxVal of this field is always the total amount of the monster's altered states.",
 		},
 		{
 			Field:         pfnName,
@@ -197,8 +197,8 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 		{
 			Field:       pfnStatus,
 			Type:        "string (enum: hasteStatus)",
-			EnumValues:  createEnumStringSlice(cfg.t.HasteStatus.lookup),
-			Description: "Specify, whether the monster carries the 'haste' or 'slow' status. If 'haste' or 'slow' are selected, it is assumed, that the monster gets this status on the first turn, so ICV calculation is unaffected. The ctb alterations that come from applying 'haste' or 'slow' are ignored. If 'auto-haste' is selected, the monster starts this battle with 'haste' (due to 'auto-haste', or 'sos-haste') which will affect ICV calculation. If a monster was looked up, and this field is active, this value will override the monster's original haste status, though in practice, this will only affect Penance's arms (IDs 306/307).",
+			EnumValues:  cfg.t.HasteStatus.Strings(),
+			Description: "Specify, whether the monster carries the 'haste' or 'slow' status. If 'haste' or 'slow' are selected, it is assumed, that the monster gets this status on its first turn, so ICV calculation is unaffected. The ctb alterations that come from applying 'haste' or 'slow' are ignored. If 'auto-haste' is selected, the monster starts this battle with 'haste' (due to 'auto-haste', or 'sos-haste') which will affect ICV calculation. If a monster was looked up, and this field is active, this value will override the monster's original haste status, though in practice, this will only affect Penance's arms (IDs 306/307). 'Haste' halves the bearer's tick speed, while 'slow' doubles it.",
 		},
 	}
 }

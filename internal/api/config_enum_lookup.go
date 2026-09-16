@@ -70,6 +70,7 @@ type Enums struct {
 	SpecialActionType           EnumType[database.SpecialActionType, database.NullSpecialActionType]
 	TargetType                  EnumType[database.TargetType, database.NullTargetType]
 	BattleStart					EnumType[database.BattleStart, any]
+	DelayStrength				EnumType[database.DelayStrength, any]
 	HasteStatus					EnumType[database.HasteStatus, any]
 	TranslationDirection        EnumType[database.TranslationDirection, any]
 	TurnOrderRNG        		EnumType[database.TurnOrderRng, any]
@@ -149,6 +150,7 @@ func (cfg *Config) EnumLookupInit() {
 	cfg.t.initTargetType()
 
 	cfg.t.initBattleStart()
+	cfg.t.initDelayStrength()
 	cfg.t.initHasteStatus()
 	cfg.t.initTranslationDirection()
 	cfg.t.initTurnOrderRNG()

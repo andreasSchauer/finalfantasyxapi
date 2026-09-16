@@ -48,7 +48,7 @@ func createQueryParamRefResURLs(cfg *Config, params []QueryParam) []QueryParam {
 				param.References[j] = createEnumURL(cfg, ref)
 				continue
 			}
-			
+
 			ref := param.ReferencesInt[j]
 			param.References[j] = createListURL(cfg, ref)
 		}
@@ -72,13 +72,7 @@ func getAllowedResources(cfg *Config, endpoint EndpointName, params []QueryParam
 
 func getAllowedValuesFromTypes(params []QueryParam) []QueryParam {
 	for idx, param := range params {
-		if param.EnumLookup == nil {
-			continue
-		}
-
-		types := createEnumValSlice(param.EnumLookup)
-
-		for _, typeRes := range types {
+		for _, typeRes := range param.EnumVals {
 			param.AllowedValues = append(param.AllowedValues, QueryValue(typeRes.Name))
 		}
 		params[idx] = param

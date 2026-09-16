@@ -81,7 +81,7 @@ func calcTickSpeed(tickSpeed int32, statusPtr *string) int32 {
 
 	switch status {
 	case string(database.HasteStatusAutoHaste), string(database.HasteStatusHaste):
-		return tickSpeed /2
+		return tickSpeed / 2
 
 	case string(database.HasteStatusSlow):
 		return tickSpeed * 2

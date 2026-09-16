@@ -99,18 +99,14 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 
 func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantMaps) ([]Participant, error) {
 	var monParty []Participant
-	var firstTurnAglTier *seeding.AgilityTier
-
+	
 	for _, mon := range params.Mons {
 		_, isDupe := maps.duplicates[mon.getDuplicateKey()]
 		if isDupe {
 			return nil, newHTTPError(http.StatusBadRequest, "exact duplicate mons are not allowed", nil)
 		}
-
-		var participant Participant
-		var err error
-
-		participant, firstTurnAglTier, err = fetchTurnOrderMonster(cfg, params, mon)
+		
+		participant, firstTurnAglTier, err := fetchTurnOrderMonster(cfg, params, mon)
 		if err != nil {
 			return nil, err
 		}
@@ -141,7 +137,7 @@ func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon
 		FirstStrike: monsterHasFirstStrike(monster),
 		AltState:    mon.AltState,
 	}
-	participant.Status, err = fetchMonsterHasteStatus(params, monster, mon.Status)
+	participant.Status, err = fetchMonsterHasteStatus(monster, mon.Status, params.IgnImmunities)
 	if err != nil {
 		return Participant{}, nil, err
 	}
