@@ -10,10 +10,10 @@ import (
 
 
 type DelayResponse struct {
-	DelayTicks		int32		`json:"delay_ticks"`
-	DelayTurns		float64		`json:"delay_turns"`
 	TickSpeed		int32		`json:"tick_speed"`
 	RemainingTicks	*int32		`json:"remaining_ticks,omitempty"`
+	DelayTicks		int32		`json:"delay_ticks"`
+	DelayTurns		float64		`json:"delay_turns"`
 }
 
 type Delay struct {
