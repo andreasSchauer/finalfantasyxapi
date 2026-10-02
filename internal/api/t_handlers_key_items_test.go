@@ -34,7 +34,7 @@ func TestGetKeyItem(t *testing.T) {
 			category:        database.KeyItemCategoryPrimer,
 			celestialWeapon: nil,
 			primer:          h.GetInt32Ptr(5),
-			areas:           []int32{65, 170},
+			areas:           []int32{64, 168},
 			treasures:       []int32{68, 220},
 			quests:          []int32{},
 		},
@@ -54,7 +54,7 @@ func TestGetKeyItem(t *testing.T) {
 			category:        database.KeyItemCategoryCelestial,
 			celestialWeapon: h.GetInt32Ptr(7),
 			primer:          nil,
-			areas:           []int32{172},
+			areas:           []int32{170},
 			treasures:       []int32{231},
 			quests:          []int32{},
 		},
@@ -74,7 +74,7 @@ func TestGetKeyItem(t *testing.T) {
 			category:        database.KeyItemCategoryOther,
 			celestialWeapon: nil,
 			primer:          nil,
-			areas:           []int32{205},
+			areas:           []int32{203},
 			treasures:       []int32{},
 			quests:          []int32{1},
 		},
@@ -94,7 +94,7 @@ func TestGetKeyItem(t *testing.T) {
 			category:        database.KeyItemCategoryPrimer,
 			celestialWeapon: nil,
 			primer:          h.GetInt32Ptr(5),
-			areas:           []int32{65, 170},
+			areas:           []int32{64, 168},
 			treasures:       []int32{68, 220},
 			quests:          []int32{},
 		},
@@ -167,7 +167,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/key-items?sublocation=13",
+				requestURL:     "/api/key-items?sublocation=14", // stadium (luca)
 				expectedStatus: http.StatusOK,
 			},
 			count:   4,
@@ -175,7 +175,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/key-items?area=239",
+				requestURL:     "/api/key-items?area=236", // omega ruins bottom
 				expectedStatus: http.StatusOK,
 			},
 			count:   1,
@@ -215,7 +215,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/key-items?availability=always&sublocation=25",
+				requestURL:     "/api/key-items?availability=always&sublocation=26", // macalania woods
 				expectedStatus: http.StatusOK,
 			},
 			count:   4,
@@ -223,7 +223,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/key-items?availability=pre-airship&area=203",
+				requestURL:     "/api/key-items?availability=pre-airship&area=201", // calm lands - central
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,

@@ -54,7 +54,7 @@ func TestGetTreasure(t *testing.T) {
 				expLengths:     map[string]int{},
 			},
 			expIdOnly:       newExpIdOnly(199),
-			area:            160,
+			area:            158,
 			availability:    database.AvailabilityTypePreStory,
 			isAnimaTreasure: false,
 			treasureType:    database.TreasureTypeChest,
@@ -92,7 +92,7 @@ func TestGetTreasure(t *testing.T) {
 				expLengths:     map[string]int{},
 			},
 			expIdOnly:       newExpIdOnly(62),
-			area:            61,
+			area:            60,
 			availability:    database.AvailabilityTypeAlways,
 			isAnimaTreasure: true,
 			treasureType:    database.TreasureTypeChest,
@@ -113,7 +113,7 @@ func TestGetTreasure(t *testing.T) {
 				expLengths:     map[string]int{},
 			},
 			expIdOnly:       newExpIdOnly(284),
-			area:            214,
+			area:            212,
 			availability:    database.AvailabilityTypeAlways,
 			isAnimaTreasure: false,
 			treasureType:    database.TreasureTypeChest,
@@ -167,7 +167,7 @@ func TestRetrieveTreasures(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?sublocation=41&treasure_type=chest",
+				requestURL:     "/api/treasures?sublocation=43&treasure_type=chest", // omega ruins
 				expectedStatus: http.StatusOK,
 			},
 			count:   15,
@@ -175,7 +175,7 @@ func TestRetrieveTreasures(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?area=214",
+				requestURL:     "/api/treasures?area=212", // gagazet - mountain trail
 				expectedStatus: http.StatusOK,
 			},
 			count:   6,
@@ -249,22 +249,22 @@ func TestSubsectionTreasures(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/20/treasures",
+				requestURL:     "/api/sublocations/21/treasures",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleSublocations,
 			},
 			count:          5,
-			parentResource: h.GetStrPtr("/sublocations/20"),
+			parentResource: h.GetStrPtr("/sublocations/21"),
 			results:        []int32{167, 168, 169, 170, 171},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/225/treasures",
+				requestURL:     "/api/areas/223/treasures",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleAreas,
 			},
 			count:          3,
-			parentResource: h.GetStrPtr("/areas/225"),
+			parentResource: h.GetStrPtr("/areas/223"),
 			results:        []int32{298, 299, 300},
 		},
 	}

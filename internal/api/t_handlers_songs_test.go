@@ -52,28 +52,28 @@ func TestGetSong(t *testing.T) {
 				{
 					index:                  0,
 					replacesEncounterMusic: false,
-					areas:                  []int32{234, 235, 236},
+					areas:                  []int32{232, 233, 234},
 				},
 			},
 			cues: []testCue{
 				{
 					index:                  0,
-					triggerArea:            h.GetInt32Ptr(104),
+					triggerArea:            h.GetInt32Ptr(103),
 					includedAreas:          []int32{},
 					replacesEncounterMusic: false,
 					replacesBGMusic:        nil,
 				},
 				{
 					index:                  1,
-					triggerArea:            h.GetInt32Ptr(160),
+					triggerArea:            h.GetInt32Ptr(158),
 					includedAreas:          []int32{},
 					replacesEncounterMusic: false,
 					replacesBGMusic:        nil,
 				},
 				{
 					index:                  2,
-					triggerArea:            h.GetInt32Ptr(216),
-					includedAreas:          []int32{216},
+					triggerArea:            h.GetInt32Ptr(214),
+					includedAreas:          []int32{214},
 					replacesEncounterMusic: false,
 					replacesBGMusic:        h.GetStrPtr("until-trigger"),
 				},
@@ -102,7 +102,7 @@ func TestGetSong(t *testing.T) {
 				{
 					index:                  0,
 					replacesEncounterMusic: true,
-					areas:                  []int32{221, 222},
+					areas:                  []int32{219, 220},
 				},
 			},
 			cues: []testCue{
@@ -115,8 +115,8 @@ func TestGetSong(t *testing.T) {
 				},
 				{
 					index:                  2,
-					triggerArea:            h.GetInt32Ptr(189),
-					includedAreas:          []int32{181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192},
+					triggerArea:            h.GetInt32Ptr(187),
+					includedAreas:          []int32{179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190},
 					replacesEncounterMusic: false,
 					replacesBGMusic:        h.GetStrPtr("until-trigger"),
 				},
@@ -180,7 +180,7 @@ func TestRetrieveSongs(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/songs?sublocation=14",
+				requestURL:     "/api/songs?sublocation=15", // luca
 				expectedStatus: http.StatusOK,
 			},
 			count:   12,
@@ -188,7 +188,7 @@ func TestRetrieveSongs(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/songs?area=213",
+				requestURL:     "/api/songs?area=211", // gagazet - mountain gate
 				expectedStatus: http.StatusOK,
 			},
 			count:   3,
@@ -246,22 +246,22 @@ func TestSubsectionSongs(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/30/songs",
+				requestURL:     "/api/sublocations/31/songs",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleSublocations,
 			},
 			count:          4,
-			parentResource: h.GetStrPtr("/sublocations/30"),
+			parentResource: h.GetStrPtr("/sublocations/31"),
 			results:        []int32{2, 27, 59, 60},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/150/songs",
+				requestURL:     "/api/areas/148/songs",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleAreas,
 			},
 			count:          4,
-			parentResource: h.GetStrPtr("/areas/150"),
+			parentResource: h.GetStrPtr("/areas/148"),
 			results:        []int32{4, 16, 30, 51},
 		},
 	}

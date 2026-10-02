@@ -7,7 +7,7 @@
         "location_area": {
             "location": "zanarkand",
             "sublocation": "zanarkand",
-            "area": "tidus's home",
+            "area": "harbor",
             "version": null
         },
         "area_id": 1,
@@ -600,7 +600,7 @@
             "area": "blitzball field",
             "version": null
         },
-        "area_id": 74,
+        "area_id": 73,
         "is_story_based": false,
         "weapon_type": "blade",
         "armor_type": "bracer",
@@ -718,7 +718,7 @@
             "area": "north bank",
             "version": null
         },
-        "area_id": 127,
+        "area_id": 125,
         "is_story_based": false,
         "weapon_type": "claw",
         "armor_type": "targe",
@@ -836,7 +836,7 @@
             "area": "ridge",
             "version": null
         },
-        "area_id": 103,
+        "area_id": 102,
         "is_story_based": true,
         "weapon_type": "seymour-staff",
         "armor_type": "seymour-armor",

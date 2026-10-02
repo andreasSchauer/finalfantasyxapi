@@ -567,7 +567,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=pre-story&character=5&area=215",
+				requestURL:     "/api/auto-abilities?availability=pre-story&character=5&area=213", // gagazet - prominence
 				expectedStatus: http.StatusOK,
 			},
 			count:   3,
@@ -575,7 +575,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=always&sublocation=25&character=2&methods=treasure",
+				requestURL:     "/api/auto-abilities?availability=always&sublocation=26&character=2&methods=treasure", // macalania woods
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,
@@ -591,7 +591,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=post&area=239&repeatable=false",
+				requestURL:     "/api/auto-abilities?availability=post&area=236&repeatable=false", // omega ruins bottom
 				expectedStatus: http.StatusOK,
 			},
 			count:   9,

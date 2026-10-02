@@ -46,7 +46,7 @@ func TestGetFMV(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			expUnique: newExpUnique(38, "the last chapter"),
-			area:      220,
+			area:      218,
 			song:      h.GetInt32Ptr(77),
 		},
 	}

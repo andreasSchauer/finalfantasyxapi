@@ -45,7 +45,7 @@ func TestGetShop(t *testing.T) {
 				},
 			},
 			expIdOnly: newExpIdOnly(2),
-			area:      48,
+			area:      47,
 			category:  database.ShopCategoryStandard,
 			preAirship: &testSubShop{
 				items: []testShopItem{},
@@ -125,7 +125,7 @@ func TestGetShop(t *testing.T) {
 				},
 			},
 			expIdOnly: newExpIdOnly(16),
-			area:      122,
+			area:      121,
 			category:  database.ShopCategoryStandard,
 			preAirship: &testSubShop{
 				items: []testShopItem{
@@ -196,7 +196,7 @@ func TestGetShop(t *testing.T) {
 				},
 			},
 			expIdOnly: newExpIdOnly(31),
-			area:      202,
+			area:      200,
 			category:  database.ShopCategoryTravelAgency,
 			preAirship: &testSubShop{
 				items: []testShopItem{
@@ -285,7 +285,7 @@ func TestRetrieveShops(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/shops?sublocation=25",
+				requestURL:     "/api/shops?sublocation=26", // macalania woods
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,
@@ -325,7 +325,7 @@ func TestRetrieveShops(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/shops?availability=pre-airship&sublocation=15",
+				requestURL:     "/api/shops?availability=pre-airship&sublocation=16", // highroad (mi'ihen)
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,
@@ -383,12 +383,12 @@ func TestSubsectionShops(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/25/shops/",
+				requestURL:     "/api/sublocations/26/shops/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleSublocations,
 			},
 			count:          2,
-			parentResource: h.GetStrPtr("/sublocations/25"),
+			parentResource: h.GetStrPtr("/sublocations/26"),
 			results:        []int32{22, 36},
 		},
 	}

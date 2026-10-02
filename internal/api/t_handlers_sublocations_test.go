@@ -14,14 +14,14 @@ func TestGetSublocation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/0",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sublocation with provided id '0' doesn't exist. max id: 41.",
+				expectedErr:    "sublocation with provided id '0' doesn't exist. max id: 43.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/42",
+				requestURL:     "/api/sublocations/44",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sublocation with provided id '42' doesn't exist. max id: 41.",
+				expectedErr:    "sublocation with provided id '44' doesn't exist. max id: 43.",
 			},
 		},
 		{
@@ -33,7 +33,7 @@ func TestGetSublocation(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/34/",
+				requestURL:     "/api/sublocations/35/",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"characters": true,
@@ -59,10 +59,10 @@ func TestGetSublocation(t *testing.T) {
 					"fmvs":                   0,
 				},
 			},
-			expUnique:             newExpUnique(34, "calm lands"),
+			expUnique:             newExpUnique(35, "calm lands"),
 			parentLocation:        20,
-			connectedSublocations: []int32{25, 35, 36, 37},
-			areas:                 []int32{202, 203, 204, 205, 206, 207},
+			connectedSublocations: []int32{26, 36, 38, 39},
+			areas:                 []int32{200, 201, 202, 203, 204, 205},
 			expLocRel: expLocRel{
 				shops:      []int32{31, 32, 33},
 				treasures:  []int32{265, 268, 270, 272},
@@ -77,7 +77,7 @@ func TestGetSublocation(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/25?rel_availability=pre-story",
+				requestURL:     "/api/sublocations/26?rel_availability=pre-story",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{
 					"music": true,
@@ -95,10 +95,10 @@ func TestGetSublocation(t *testing.T) {
 					"quests":	              0,
 				},
 			},
-			expUnique:             newExpUnique(25, "macalania woods"),
+			expUnique:             newExpUnique(26, "macalania woods"),
 			parentLocation:        15,
-			connectedSublocations: []int32{24, 26, 33, 34},
-			areas:                 []int32{143, 145, 148, 151, 155},
+			connectedSublocations: []int32{25, 27, 34, 35},
+			areas:                 []int32{141, 143, 146, 149, 153},
 			expLocRel: expLocRel{
 				characters: []int32{},
 				aeons:      []int32{},
@@ -111,7 +111,7 @@ func TestGetSublocation(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/25?rel_availability=always&rel_repeatable=true",
+				requestURL:     "/api/sublocations/26?rel_availability=always&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{
 					"music": true,
@@ -129,10 +129,10 @@ func TestGetSublocation(t *testing.T) {
 					"quests":	              0,
 				},
 			},
-			expUnique:             newExpUnique(25, "macalania woods"),
+			expUnique:             newExpUnique(26, "macalania woods"),
 			parentLocation:        15,
-			connectedSublocations: []int32{24, 26, 33, 34},
-			areas:                 []int32{143, 145, 148, 151, 155},
+			connectedSublocations: []int32{25, 27, 34, 35},
+			areas:                 []int32{141, 143, 146, 149, 153},
 			expLocRel: expLocRel{
 				characters: []int32{},
 				aeons:      []int32{},
@@ -145,7 +145,7 @@ func TestGetSublocation(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/25?rel_availability=always&rel_repeatable=false",
+				requestURL:     "/api/sublocations/26?rel_availability=always&rel_repeatable=false",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{
 					"music": true,
@@ -163,10 +163,10 @@ func TestGetSublocation(t *testing.T) {
 					"quests":	              5,
 				},
 			},
-			expUnique:             newExpUnique(25, "macalania woods"),
+			expUnique:             newExpUnique(26, "macalania woods"),
 			parentLocation:        15,
-			connectedSublocations: []int32{24, 26, 33, 34},
-			areas:                 []int32{143, 145, 148, 151, 155},
+			connectedSublocations: []int32{25, 27, 34, 35},
+			areas:                 []int32{141, 143, 146, 149, 153},
 			expLocRel: expLocRel{
 				characters: []int32{},
 				aeons:      []int32{},
@@ -179,7 +179,7 @@ func TestGetSublocation(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/13/",
+				requestURL:     "/api/sublocations/14/",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -199,10 +199,10 @@ func TestGetSublocation(t *testing.T) {
 					"fmvs":                   2,
 				},
 			},
-			expUnique:             newExpUnique(13, "stadium"),
+			expUnique:             newExpUnique(14, "stadium"),
 			parentLocation:        8,
-			connectedSublocations: []int32{14},
-			areas:                 []int32{69, 70, 71, 72, 73, 74, 75},
+			connectedSublocations: []int32{15},
+			areas:                 []int32{68, 69, 70, 71, 72, 73, 74},
 			expLocRel: expLocRel{
 				characters: []int32{6},
 				aeons:      []int32{},
@@ -245,9 +245,9 @@ func TestGetSublocation(t *testing.T) {
 					"fmvs":                   3,
 				},
 			},
-			expUnique:             newExpUnique(6, "besaid"),
+			expUnique:             newExpUnique(7, "besaid"),
 			parentLocation:        4,
-			connectedSublocations: []int32{7, 8},
+			connectedSublocations: []int32{8, 9},
 			areas:                 []int32{20, 24, 29, 31, 35},
 			expLocRel: expLocRel{
 				characters: []int32{3},
@@ -278,16 +278,16 @@ func TestRetrieveSublocations(t *testing.T) {
 				requestURL:     "/api/sublocations?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   41,
-			results: []int32{1, 25, 41},
+			count:   43,
+			results: []int32{1, 25, 43},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?monsters=false",
 				expectedStatus: http.StatusOK,
 			},
-			count:   9,
-			results: []int32{2, 9, 18, 21, 23},
+			count:   11,
+			results: []int32{2, 3, 8, 19, 23, 24, 36},
 		},
 		{
 			testGeneral: testGeneral{
@@ -295,7 +295,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   7,
-			results: []int32{1, 6, 7, 8, 13, 16, 19},
+			results: []int32{1, 7, 8, 9, 14, 17, 20},
 		},
 		{
 			testGeneral: testGeneral{
@@ -303,7 +303,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   8,
-			results: []int32{3, 6, 11, 18, 27, 32, 35, 36},
+			results: []int32{4, 7, 12, 19, 28, 33, 37, 38},
 		},
 		{
 			testGeneral: testGeneral{
@@ -311,7 +311,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   1,
-			results: []int32{7},
+			results: []int32{8},
 		},
 		{
 			testGeneral: testGeneral{
@@ -319,7 +319,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,
-			results: []int32{13, 14},
+			results: []int32{14, 15},
 		},
 		{
 			testGeneral: testGeneral{
@@ -327,7 +327,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   4,
-			results: []int32{1, 6, 8, 16},
+			results: []int32{1, 7, 9, 17},
 		},
 		{
 			testGeneral: testGeneral{
@@ -335,7 +335,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   3,
-			results: []int32{13, 25, 31},
+			results: []int32{14, 26, 32},
 		},
 		{
 			testGeneral: testGeneral{
@@ -343,7 +343,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   5,
-			results: []int32{24, 26, 34, 36, 39},
+			results: []int32{25, 27, 35, 38, 41},
 		},
 		{
 			testGeneral: testGeneral{
@@ -351,7 +351,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   5,
-			results: []int32{24, 34, 36, 39, 41},
+			results: []int32{25, 35, 38, 41, 43},
 		},
 		{
 			testGeneral: testGeneral{
@@ -359,7 +359,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   1,
-			results: []int32{24},
+			results: []int32{25},
 		},
 		{
 			testGeneral: testGeneral{
@@ -367,7 +367,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,
-			results: []int32{31, 37},
+			results: []int32{32, 39},
 		},
 		{
 			testGeneral: testGeneral{
@@ -375,7 +375,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   1,
-			results: []int32{14},
+			results: []int32{15},
 		},
 		{
 			testGeneral: testGeneral{
@@ -383,15 +383,15 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   1,
-			results: []int32{27},
+			results: []int32{28},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=pre-story",
 				expectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{1, 4, 5, 30, 32},
+			count:   6,
+			results: []int32{1, 2, 5, 6, 31, 33},
 		},
 		{
 			testGeneral: testGeneral{
@@ -399,7 +399,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   3,
-			results: []int32{29, 31, 34},
+			results: []int32{30, 32, 35},
 		},
 		{
 			testGeneral: testGeneral{
@@ -407,15 +407,15 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   11,
-			results: []int32{3, 16, 29, 35, 39, 41},
+			results: []int32{4, 17, 30, 37, 41, 43},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=post&monsters=false&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   30,
-			results: []int32{1, 5, 14, 21, 24, 28, 30, 38},
+			count:   32,
+			results: []int32{1, 2, 5, 14, 21, 24, 28, 31, 40},
 		},
 		{
 			testGeneral: testGeneral{
@@ -423,7 +423,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   3,
-			results: []int32{16, 17, 19},
+			results: []int32{17, 18, 20},
 		},
 		{
 			testGeneral: testGeneral{
@@ -431,7 +431,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   14,
-			results: []int32{12, 20, 27, 31, 33, 37},
+			results: []int32{13, 21, 28, 32, 34, 39},
 		},
 		{
 			testGeneral: testGeneral{
@@ -439,7 +439,7 @@ func TestRetrieveSublocations(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   1,
-			results: []int32{29},
+			results: []int32{30},
 		},
 	}
 
@@ -451,43 +451,43 @@ func TestSubsectionSublocations(t *testing.T) {
 	tests := []expListIDs{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/4/connected/",
+				requestURL:     "/api/sublocations/5/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleSublocations,
 			},
 			count:          2,
-			parentResource: h.GetStrPtr("/sublocations/4"),
-			results:        []int32{5, 6},
+			parentResource: h.GetStrPtr("/sublocations/5"),
+			results:        []int32{6, 7},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/11/connected/",
+				requestURL:     "/api/sublocations/12/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleSublocations,
 			},
 			count:          1,
-			parentResource: h.GetStrPtr("/sublocations/11"),
-			results:        []int32{10},
+			parentResource: h.GetStrPtr("/sublocations/12"),
+			results:        []int32{11},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/26/connected/",
+				requestURL:     "/api/sublocations/27/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleSublocations,
 			},
 			count:          3,
-			parentResource: h.GetStrPtr("/sublocations/26"),
-			results:        []int32{25, 27, 28},
+			parentResource: h.GetStrPtr("/sublocations/27"),
+			results:        []int32{26, 28, 29},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/34/connected/",
+				requestURL:     "/api/sublocations/35/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleSublocations,
 			},
 			count:          4,
-			parentResource: h.GetStrPtr("/sublocations/34"),
-			results:        []int32{25, 35, 36, 37},
+			parentResource: h.GetStrPtr("/sublocations/35"),
+			results:        []int32{26, 36, 38, 39},
 		},
 		{
 			testGeneral: testGeneral{
@@ -498,8 +498,8 @@ func TestSubsectionSublocations(t *testing.T) {
 					"parent resource": true,
 				},
 			},
-			count:   5,
-			results: []int32{1, 4, 5, 30, 32},
+			count:   6,
+			results: []int32{1, 2, 5, 6, 31, 33},
 		},
 		{
 			testGeneral: testGeneral{
@@ -511,7 +511,7 @@ func TestSubsectionSublocations(t *testing.T) {
 				},
 			},
 			count:   3,
-			results: []int32{29, 31, 34},
+			results: []int32{30, 32, 35},
 		},
 		{
 			testGeneral: testGeneral{
@@ -521,7 +521,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			},
 			count:          3,
 			parentResource: h.GetStrPtr("/locations/15"),
-			results:        []int32{25, 26, 27},
+			results:        []int32{26, 27, 28},
 		},
 		{
 			testGeneral: testGeneral{
@@ -531,7 +531,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			},
 			count:          2,
 			parentResource: h.GetStrPtr("/locations/8"),
-			results:        []int32{13, 14},
+			results:        []int32{14, 15},
 		},
 	}
 

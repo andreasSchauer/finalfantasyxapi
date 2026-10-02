@@ -14,14 +14,14 @@ func TestGetArea(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/0",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "area with provided id '0' doesn't exist. max id: 240.",
+				expectedErr:    "area with provided id '0' doesn't exist. max id: 237.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/241",
+				requestURL:     "/api/areas/238",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "area with provided id '241' doesn't exist. max id: 240.",
+				expectedErr:    "area with provided id '238' doesn't exist. max id: 237.",
 			},
 		},
 		{
@@ -33,7 +33,7 @@ func TestGetArea(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/145/",
+				requestURL:     "/api/areas/143/",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"characters": true,
@@ -60,11 +60,11 @@ func TestGetArea(t *testing.T) {
 					"fmvs":            0,
 				},
 			},
-			expNameVer:        newExpNameVer(145, "north", 1),
+			expNameVer:        newExpNameVer(143, "north", 1),
 			displayName:       "macalania woods - north",
 			parentLocation:    15,
-			parentSublocation: 25,
-			connectedAreas:    []int32{144, 149},
+			parentSublocation: 26,
+			connectedAreas:    []int32{142, 147},
 			expLocRel: expLocRel{
 				treasures:  []int32{191},
 				monsters:   []int32{81, 84, 85},
@@ -108,7 +108,7 @@ func TestGetArea(t *testing.T) {
 			expNameVer:        newExpNameVer(36, "besaid village", 0),
 			displayName:       "besaid village",
 			parentLocation:    4,
-			parentSublocation: 7,
+			parentSublocation: 8,
 			connectedAreas:    []int32{26, 37, 41},
 			expLocRel: expLocRel{
 				characters: []int32{2, 4},
@@ -120,7 +120,7 @@ func TestGetArea(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/161?rel_availability=pre-story&rel_repeatable=true",
+				requestURL:     "/api/areas/159?rel_availability=pre-story&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"parent location": 	  true,
@@ -139,10 +139,10 @@ func TestGetArea(t *testing.T) {
 					"quests":	       0,
 				},
 			},
-			expNameVer:        newExpNameVer(161, "road", 1),
+			expNameVer:        newExpNameVer(159, "road", 1),
 			displayName:       "macalania - road",
 			parentLocation: 	15,
-			parentSublocation: 	27,
+			parentSublocation: 	28,
 			expLocRel: expLocRel{
 				shops: 		[]int32{},
 				treasures:  []int32{},
@@ -153,7 +153,7 @@ func TestGetArea(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/161?rel_availability=always&rel_repeatable=false",
+				requestURL:     "/api/areas/159?rel_availability=always&rel_repeatable=false",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"parent location": 	  true,
@@ -172,10 +172,10 @@ func TestGetArea(t *testing.T) {
 					"quests":	       0,
 				},
 			},
-			expNameVer:        newExpNameVer(161, "road", 1),
+			expNameVer:        newExpNameVer(159, "road", 1),
 			displayName:       "macalania - road",
 			parentLocation: 	15,
-			parentSublocation: 	27,
+			parentSublocation: 	28,
 			expLocRel: expLocRel{
 				shops: 		[]int32{},
 				treasures:  []int32{},
@@ -186,7 +186,7 @@ func TestGetArea(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/205?rel_availability=post",
+				requestURL:     "/api/areas/203?rel_availability=post",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"parent location": 	  true,
@@ -205,10 +205,10 @@ func TestGetArea(t *testing.T) {
 					"quests":	       30,
 				},
 			},
-			expNameVer:        newExpNameVer(205, "arena", 0),
+			expNameVer:        newExpNameVer(203, "arena", 0),
 			displayName:       "calm lands - arena",
 			parentLocation: 	20,
-			parentSublocation: 	34,
+			parentSublocation: 	35,
 			expLocRel: expLocRel{
 				shops: 		[]int32{},
 				treasures:  []int32{},
@@ -219,7 +219,7 @@ func TestGetArea(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/205?rel_availability=always&rel_repeatable=true",
+				requestURL:     "/api/areas/203?rel_availability=always&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"parent location": 	  true,
@@ -238,10 +238,10 @@ func TestGetArea(t *testing.T) {
 					"quests":	       0,
 				},
 			},
-			expNameVer:        newExpNameVer(205, "arena", 0),
+			expNameVer:        newExpNameVer(203, "arena", 0),
 			displayName:       "calm lands - arena",
 			parentLocation: 	20,
-			parentSublocation: 	34,
+			parentSublocation: 	35,
 			expLocRel: expLocRel{
 				shops: 		[]int32{},
 				treasures:  []int32{},
@@ -252,7 +252,7 @@ func TestGetArea(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/205?rel_availability=always&rel_repeatable=false",
+				requestURL:     "/api/areas/203?rel_availability=always&rel_repeatable=false",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"parent location": 	  true,
@@ -271,10 +271,10 @@ func TestGetArea(t *testing.T) {
 					"quests":	       7,
 				},
 			},
-			expNameVer:        newExpNameVer(205, "arena", 0),
+			expNameVer:        newExpNameVer(203, "arena", 0),
 			displayName:       "calm lands - arena",
 			parentLocation: 	20,
-			parentSublocation: 	34,
+			parentSublocation: 	35,
 			expLocRel: expLocRel{
 				shops: 		[]int32{33},
 				treasures:  []int32{271},
@@ -285,7 +285,7 @@ func TestGetArea(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/69",
+				requestURL:     "/api/areas/68",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"connected areas": true,
@@ -315,10 +315,10 @@ func TestGetArea(t *testing.T) {
 					"fmvs":            0,
 				},
 			},
-			expNameVer:        newExpNameVer(69, "main gate", 0),
+			expNameVer:        newExpNameVer(68, "main gate", 0),
 			displayName:       "stadium - main gate",
 			parentLocation:    8,
-			parentSublocation: 13,
+			parentSublocation: 14,
 			expLocRel: expLocRel{
 				shops: []int32{5},
 				music: &testLocMusic{
@@ -329,7 +329,7 @@ func TestGetArea(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/140",
+				requestURL:     "/api/areas/138",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"connected areas": true,
@@ -346,10 +346,10 @@ func TestGetArea(t *testing.T) {
 					"quests": 9,
 				},
 			},
-			expNameVer:        newExpNameVer(140, "agency front", 0),
+			expNameVer:        newExpNameVer(138, "agency front", 0),
 			displayName:       "thunder plains - agency front",
 			parentLocation:    14,
-			parentSublocation: 24,
+			parentSublocation: 25,
 			expLocRel: expLocRel{
 				quests: []int32{88, 89, 90, 91, 92, 93, 94, 95, 96},
 			},
@@ -369,26 +369,26 @@ func TestGetArea(t *testing.T) {
 					"aeons":      0,
 					"shops":      0,
 					"treasures":  1,
-					"formations": 1,
-					"monsters":   2,
+					"formations": 2,
+					"monsters":   4,
 					"quests":	  0,
 					"bg music":   1,
 					"cues music": 3,
 					"fmvs music": 1,
 					"boss music": 1,
-					"fmvs":       5,
+					"fmvs":       6,
 				},
 			},
 			expNameVer:        newExpNameVer(42, "deck", 0),
 			displayName:       "ss liki - deck",
 			parentLocation:    5,
-			parentSublocation: 8,
+			parentSublocation: 9,
 			expLocRel: expLocRel{
 				characters: []int32{5},
 				treasures:  []int32{45},
-				monsters:   []int32{19, 20},
-				formations: []int32{26},
-				fmvs:       []int32{9, 12, 13},
+				monsters:   []int32{19, 20, 21, 22},
+				formations: []int32{26, 27},
+				fmvs:       []int32{9, 12, 13, 14},
 				music: &testLocMusic{
 					bgMusic:   []int32{28},
 					cuesMusic: []int32{},
@@ -438,7 +438,7 @@ func TestRetrieveAreas(t *testing.T) {
 				requestURL:     "/api/areas/",
 				expectedStatus: http.StatusOK,
 			},
-			count:   240,
+			count:   237,
 			next:    h.GetStrPtr("/areas?limit=20&offset=20"),
 			results: []int32{1, 5, 20},
 		},
@@ -447,15 +447,15 @@ func TestRetrieveAreas(t *testing.T) {
 				requestURL:     "/api/areas?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   240,
-			results: []int32{1, 50, 240},
+			count:   237,
+			results: []int32{1, 50, 237},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?offset=50&limit=30",
 				expectedStatus: http.StatusOK,
 			},
-			count:    240,
+			count:    237,
 			previous: h.GetStrPtr("/areas?limit=30&offset=20"),
 			next:     h.GetStrPtr("/areas?limit=30&offset=80"),
 			results:  []int32{51, 80},
@@ -466,7 +466,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   3,
-			results: []int32{88, 97, 203},
+			results: []int32{87, 96, 201},
 		},
 		{
 			testGeneral: testGeneral{
@@ -474,7 +474,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   5,
-			results: []int32{35, 75, 129, 140, 208},
+			results: []int32{35, 75, 127, 138, 206},
 		},
 		{
 			testGeneral: testGeneral{
@@ -482,7 +482,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   17,
-			results: []int32{26, 79, 140, 161, 176, 192, 209},
+			results: []int32{26, 77, 138, 159, 174, 190, 207},
 		},
 		{
 			testGeneral: testGeneral{
@@ -490,7 +490,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   7,
-			results: []int32{1, 20, 103},
+			results: []int32{1, 20, 102},
 		},
 		{
 			testGeneral: testGeneral{
@@ -498,7 +498,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   12,
-			results: []int32{75, 140, 144, 145, 147, 182, 185, 203},
+			results: []int32{74, 138, 142, 143, 145, 180, 183, 201},
 		},
 		{
 			testGeneral: testGeneral{
@@ -506,7 +506,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,
-			results: []int32{46, 169},
+			results: []int32{46, 167},
 		},
 		{
 			testGeneral: testGeneral{
@@ -514,7 +514,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   22,
-			results: []int32{13, 28, 106, 210, 235, 240},
+			results: []int32{13, 27, 105, 208, 233, 237},
 		},
 		{
 			testGeneral: testGeneral{
@@ -522,7 +522,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   5,
-			results: []int32{129, 132, 134, 136, 138},
+			results: []int32{127, 130, 132, 134, 136},
 		},
 		{
 			testGeneral: testGeneral{
@@ -530,15 +530,15 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   10,
-			results: []int32{48, 69, 92, 141, 201, 213},
+			results: []int32{47, 68, 91, 139, 199, 211},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas?sublocation=26&boss_fights=true",
+				requestURL:     "/api/areas?sublocation=27&boss_fights=true", // lake macalania
 				expectedStatus: http.StatusOK,
 			},
 			count:   1,
-			results: []int32{158},
+			results: []int32{156},
 		},
 		{
 			testGeneral: testGeneral{
@@ -546,15 +546,15 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   5,
-			results: []int32{6, 92, 157, 178, 184},
+			results: []int32{6, 91, 155, 176, 182},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?fmvs=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   28,
-			results: []int32{3, 34, 50, 127, 181, 237},
+			count:   26,
+			results: []int32{3, 34, 49, 125, 179, 235},
 		},
 		{
 			testGeneral: testGeneral{
@@ -562,7 +562,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   6,
-			results: []int32{139, 142, 158, 206, 211, 225},
+			results: []int32{137, 140, 156, 204, 209, 223},
 		},
 		{
 			testGeneral: testGeneral{
@@ -570,7 +570,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   7,
-			results: []int32{139, 142, 205, 211, 225, 239, 240},
+			results: []int32{137, 140, 203, 209, 223, 236, 237},
 		},
 		{
 			testGeneral: testGeneral{
@@ -578,7 +578,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,
-			results: []int32{139, 142},
+			results: []int32{137, 140},
 		},
 		{
 			testGeneral: testGeneral{
@@ -586,7 +586,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   7,
-			results: []int32{26, 100, 101, 172, 192, 213, 230},
+			results: []int32{26, 99, 100, 170, 190, 211, 228},
 		},
 		{
 			testGeneral: testGeneral{
@@ -594,7 +594,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   3,
-			results: []int32{77, 78, 79},
+			results: []int32{76, 77, 78},
 		},
 		{
 			testGeneral: testGeneral{
@@ -602,15 +602,15 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   1,
-			results: []int32{161},
+			results: []int32{159},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?availability=post-story",
 				expectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{236, 237, 238},
+			count:   2,
+			results: []int32{234, 235},
 		},
 		{
 			testGeneral: testGeneral{
@@ -618,7 +618,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,
-			results: []int32{172, 205},
+			results: []int32{170, 203},
 		},
 		{
 			testGeneral: testGeneral{
@@ -626,15 +626,15 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   18,
-			results: []int32{7, 26, 107, 172, 209, 232, 240},
+			results: []int32{7, 26, 106, 170, 207, 230, 237},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?availability=post&monsters=false&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   222,
-			results: []int32{1, 18, 63, 74, 110, 136, 153, 180, 229, 238},
+			count:   219,
+			results: []int32{1, 18, 63, 74, 110, 136, 153, 180, 229, 235},
 		},
 		{
 			testGeneral: testGeneral{
@@ -642,7 +642,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   5,
-			results: []int32{100, 101, 105, 108, 118},
+			results: []int32{99, 100, 104, 107, 117},
 		},
 		{
 			testGeneral: testGeneral{
@@ -650,7 +650,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   18,
-			results: []int32{66, 97, 125, 149, 185, 202, 214},
+			results: []int32{65, 96, 123, 147, 183, 200, 212},
 		},
 		{
 			testGeneral: testGeneral{
@@ -658,7 +658,7 @@ func TestRetrieveAreas(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   1,
-			results: []int32{172},
+			results: []int32{170},
 		},
 	}
 
@@ -680,13 +680,13 @@ func TestSubsectionAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/211/connected/",
+				requestURL:     "/api/areas/209/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleAreas,
 			},
 			count:          2,
-			parentResource: h.GetStrPtr("/areas/211"),
-			results:        []int32{207, 212},
+			parentResource: h.GetStrPtr("/areas/209"),
+			results:        []int32{205, 210},
 		},
 		{
 			testGeneral: testGeneral{
@@ -700,23 +700,23 @@ func TestSubsectionAreas(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/238/connected/",
+				requestURL:     "/api/areas/235/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleAreas,
 			},
 			count:          0,
-			parentResource: h.GetStrPtr("/areas/238"),
+			parentResource: h.GetStrPtr("/areas/235"),
 			results:        []int32{},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/151/connected/",
+				requestURL:     "/api/areas/149/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleAreas,
 			},
 			count:          3,
-			parentResource: h.GetStrPtr("/areas/151"),
-			results:        []int32{143, 152, 201},
+			parentResource: h.GetStrPtr("/areas/149"),
+			results:        []int32{141, 150, 199},
 		},
 		{
 			testGeneral: testGeneral{
@@ -726,7 +726,7 @@ func TestSubsectionAreas(t *testing.T) {
 			},
 			count:          5,
 			parentResource: h.GetStrPtr("/monsters/45"),
-			results:        []int32{88, 89, 90, 93, 94},
+			results:        []int32{87, 88, 89, 92, 93},
 		},
 		{
 			testGeneral: testGeneral{
@@ -736,7 +736,7 @@ func TestSubsectionAreas(t *testing.T) {
 			},
 			count:          4,
 			parentResource: h.GetStrPtr("/monsters/140"),
-			results:        []int32{202, 203, 204, 211},
+			results:        []int32{200, 201, 202, 209},
 		},
 		{
 			testGeneral: testGeneral{
@@ -746,17 +746,17 @@ func TestSubsectionAreas(t *testing.T) {
 			},
 			count:          1,
 			parentResource: h.GetStrPtr("/monsters/66"),
-			results:        []int32{127},
+			results:        []int32{125},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/40/areas/",
+				requestURL:     "/api/sublocations/42/areas/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleSublocations,
 			},
-			count:          8,
-			parentResource: h.GetStrPtr("/sublocations/40"),
-			results:        []int32{231, 232, 233, 234, 235, 236, 237, 238},
+			count:          7,
+			parentResource: h.GetStrPtr("/sublocations/42"),
+			results:        []int32{229, 230, 231, 232, 233, 234, 235},
 		},
 		{
 			testGeneral: testGeneral{
@@ -766,7 +766,7 @@ func TestSubsectionAreas(t *testing.T) {
 			},
 			count:          9,
 			parentResource: h.GetStrPtr("/locations/10"),
-			results:        []int32{99, 100, 101, 104, 107},
+			results:        []int32{98, 99, 100, 103, 106},
 		},
 	}
 

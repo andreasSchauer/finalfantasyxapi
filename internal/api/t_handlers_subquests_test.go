@@ -44,7 +44,7 @@ func TestGetSubquest(t *testing.T) {
 			untypedQuest:    15,
 			parentSidequest: 1,
 			completion: testQuestCompletion{
-				areas:  []int32{205},
+				areas:  []int32{203},
 				reward: newTestResAmount[TypedAPIResource](50, 99),
 			},
 			arenaCreation: h.GetInt32Ptr(5),
@@ -62,7 +62,7 @@ func TestGetSubquest(t *testing.T) {
 			untypedQuest:    49,
 			parentSidequest: 2,
 			completion: testQuestCompletion{
-				areas:  []int32{209},
+				areas:  []int32{207},
 				reward: newTestResAmount[TypedAPIResource](3, 30),
 			},
 			arenaCreation: nil,
@@ -80,7 +80,7 @@ func TestGetSubquest(t *testing.T) {
 			untypedQuest:    86,
 			parentSidequest: 6,
 			completion: testQuestCompletion{
-				areas:  []int32{144, 145},
+				areas:  []int32{142, 143},
 				reward: newTestResAmount[TypedAPIResource](98, 1),
 			},
 			arenaCreation: nil,

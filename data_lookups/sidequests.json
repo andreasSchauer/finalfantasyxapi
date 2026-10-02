@@ -12,7 +12,7 @@
             "areas": [
                 {
                     "completion_id": 1,
-                    "area_id": 205,
+                    "area_id": 203,
                     "location_area": {
                         "location": "calm lands",
                         "sublocation": "calm lands",
@@ -45,7 +45,7 @@
                     "areas": [
                         {
                             "completion_id": 2,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -79,7 +79,7 @@
                     "areas": [
                         {
                             "completion_id": 3,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -113,7 +113,7 @@
                     "areas": [
                         {
                             "completion_id": 4,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -147,7 +147,7 @@
                     "areas": [
                         {
                             "completion_id": 5,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -181,7 +181,7 @@
                     "areas": [
                         {
                             "completion_id": 6,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -215,7 +215,7 @@
                     "areas": [
                         {
                             "completion_id": 7,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -249,7 +249,7 @@
                     "areas": [
                         {
                             "completion_id": 8,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -283,7 +283,7 @@
                     "areas": [
                         {
                             "completion_id": 9,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -317,7 +317,7 @@
                     "areas": [
                         {
                             "completion_id": 10,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -351,7 +351,7 @@
                     "areas": [
                         {
                             "completion_id": 11,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -385,7 +385,7 @@
                     "areas": [
                         {
                             "completion_id": 12,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -419,7 +419,7 @@
                     "areas": [
                         {
                             "completion_id": 13,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -453,7 +453,7 @@
                     "areas": [
                         {
                             "completion_id": 14,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -487,7 +487,7 @@
                     "areas": [
                         {
                             "completion_id": 15,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -521,7 +521,7 @@
                     "areas": [
                         {
                             "completion_id": 16,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -555,7 +555,7 @@
                     "areas": [
                         {
                             "completion_id": 17,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -589,7 +589,7 @@
                     "areas": [
                         {
                             "completion_id": 18,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -623,7 +623,7 @@
                     "areas": [
                         {
                             "completion_id": 19,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -657,7 +657,7 @@
                     "areas": [
                         {
                             "completion_id": 20,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -691,7 +691,7 @@
                     "areas": [
                         {
                             "completion_id": 21,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -725,7 +725,7 @@
                     "areas": [
                         {
                             "completion_id": 22,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -759,7 +759,7 @@
                     "areas": [
                         {
                             "completion_id": 23,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -793,7 +793,7 @@
                     "areas": [
                         {
                             "completion_id": 24,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -827,7 +827,7 @@
                     "areas": [
                         {
                             "completion_id": 25,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -861,7 +861,7 @@
                     "areas": [
                         {
                             "completion_id": 26,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -895,7 +895,7 @@
                     "areas": [
                         {
                             "completion_id": 27,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -929,7 +929,7 @@
                     "areas": [
                         {
                             "completion_id": 28,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -963,7 +963,7 @@
                     "areas": [
                         {
                             "completion_id": 29,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -997,7 +997,7 @@
                     "areas": [
                         {
                             "completion_id": 30,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -1031,7 +1031,7 @@
                     "areas": [
                         {
                             "completion_id": 31,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -1065,7 +1065,7 @@
                     "areas": [
                         {
                             "completion_id": 32,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -1099,7 +1099,7 @@
                     "areas": [
                         {
                             "completion_id": 33,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -1133,7 +1133,7 @@
                     "areas": [
                         {
                             "completion_id": 34,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -1167,7 +1167,7 @@
                     "areas": [
                         {
                             "completion_id": 35,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -1201,7 +1201,7 @@
                     "areas": [
                         {
                             "completion_id": 36,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -1235,7 +1235,7 @@
                     "areas": [
                         {
                             "completion_id": 37,
-                            "area_id": 205,
+                            "area_id": 203,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -1271,10 +1271,10 @@
             "areas": [
                 {
                     "completion_id": 38,
-                    "area_id": 209,
+                    "area_id": 207,
                     "location_area": {
                         "location": "remiem temple",
-                        "sublocation": "remiem temple",
+                        "sublocation": "remiem",
                         "area": "great hall",
                         "version": null
                     },
@@ -1304,10 +1304,10 @@
                     "areas": [
                         {
                             "completion_id": 39,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1338,10 +1338,10 @@
                     "areas": [
                         {
                             "completion_id": 40,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1372,10 +1372,10 @@
                     "areas": [
                         {
                             "completion_id": 41,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1406,10 +1406,10 @@
                     "areas": [
                         {
                             "completion_id": 42,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1440,10 +1440,10 @@
                     "areas": [
                         {
                             "completion_id": 43,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1474,10 +1474,10 @@
                     "areas": [
                         {
                             "completion_id": 44,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1508,10 +1508,10 @@
                     "areas": [
                         {
                             "completion_id": 45,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1542,10 +1542,10 @@
                     "areas": [
                         {
                             "completion_id": 46,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1576,10 +1576,10 @@
                     "areas": [
                         {
                             "completion_id": 47,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1610,10 +1610,10 @@
                     "areas": [
                         {
                             "completion_id": 48,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1644,10 +1644,10 @@
                     "areas": [
                         {
                             "completion_id": 49,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1678,10 +1678,10 @@
                     "areas": [
                         {
                             "completion_id": 50,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1712,10 +1712,10 @@
                     "areas": [
                         {
                             "completion_id": 51,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1746,10 +1746,10 @@
                     "areas": [
                         {
                             "completion_id": 52,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1780,10 +1780,10 @@
                     "areas": [
                         {
                             "completion_id": 53,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1814,10 +1814,10 @@
                     "areas": [
                         {
                             "completion_id": 54,
-                            "area_id": 209,
+                            "area_id": 207,
                             "location_area": {
                                 "location": "remiem temple",
-                                "sublocation": "remiem temple",
+                                "sublocation": "remiem",
                                 "area": "great hall",
                                 "version": null
                             },
@@ -1859,7 +1859,7 @@
                     "areas": [
                         {
                             "completion_id": 55,
-                            "area_id": 208,
+                            "area_id": 206,
                             "location_area": {
                                 "location": "remiem temple",
                                 "sublocation": "remiem temple",
@@ -1893,7 +1893,7 @@
                     "areas": [
                         {
                             "completion_id": 56,
-                            "area_id": 208,
+                            "area_id": 206,
                             "location_area": {
                                 "location": "remiem temple",
                                 "sublocation": "remiem temple",
@@ -1927,7 +1927,7 @@
                     "areas": [
                         {
                             "completion_id": 57,
-                            "area_id": 208,
+                            "area_id": 206,
                             "location_area": {
                                 "location": "remiem temple",
                                 "sublocation": "remiem temple",
@@ -1961,7 +1961,7 @@
                     "areas": [
                         {
                             "completion_id": 58,
-                            "area_id": 208,
+                            "area_id": 206,
                             "location_area": {
                                 "location": "remiem temple",
                                 "sublocation": "remiem temple",
@@ -1995,7 +1995,7 @@
                     "areas": [
                         {
                             "completion_id": 59,
-                            "area_id": 208,
+                            "area_id": 206,
                             "location_area": {
                                 "location": "remiem temple",
                                 "sublocation": "remiem temple",
@@ -2029,7 +2029,7 @@
                     "areas": [
                         {
                             "completion_id": 60,
-                            "area_id": 208,
+                            "area_id": 206,
                             "location_area": {
                                 "location": "remiem temple",
                                 "sublocation": "remiem temple",
@@ -2074,7 +2074,7 @@
                     "areas": [
                         {
                             "completion_id": 61,
-                            "area_id": 203,
+                            "area_id": 201,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -2108,7 +2108,7 @@
                     "areas": [
                         {
                             "completion_id": 62,
-                            "area_id": 203,
+                            "area_id": 201,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -2142,7 +2142,7 @@
                     "areas": [
                         {
                             "completion_id": 63,
-                            "area_id": 203,
+                            "area_id": 201,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -2176,7 +2176,7 @@
                     "areas": [
                         {
                             "completion_id": 64,
-                            "area_id": 203,
+                            "area_id": 201,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -2210,7 +2210,7 @@
                     "areas": [
                         {
                             "completion_id": 65,
-                            "area_id": 203,
+                            "area_id": 201,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -2244,7 +2244,7 @@
                     "areas": [
                         {
                             "completion_id": 66,
-                            "area_id": 203,
+                            "area_id": 201,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -2278,7 +2278,7 @@
                     "areas": [
                         {
                             "completion_id": 67,
-                            "area_id": 203,
+                            "area_id": 201,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -2312,7 +2312,7 @@
                     "areas": [
                         {
                             "completion_id": 68,
-                            "area_id": 203,
+                            "area_id": 201,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -2346,7 +2346,7 @@
                     "areas": [
                         {
                             "completion_id": 69,
-                            "area_id": 203,
+                            "area_id": 201,
                             "location_area": {
                                 "location": "calm lands",
                                 "sublocation": "calm lands",
@@ -2382,7 +2382,7 @@
             "areas": [
                 {
                     "completion_id": 70,
-                    "area_id": 172,
+                    "area_id": 170,
                     "location_area": {
                         "location": "bikanel",
                         "sublocation": "sanubia desert",
@@ -2415,7 +2415,7 @@
                     "areas": [
                         {
                             "completion_id": 71,
-                            "area_id": 172,
+                            "area_id": 170,
                             "location_area": {
                                 "location": "bikanel",
                                 "sublocation": "sanubia desert",
@@ -2449,7 +2449,7 @@
                     "areas": [
                         {
                             "completion_id": 72,
-                            "area_id": 172,
+                            "area_id": 170,
                             "location_area": {
                                 "location": "bikanel",
                                 "sublocation": "sanubia desert",
@@ -2483,7 +2483,7 @@
                     "areas": [
                         {
                             "completion_id": 73,
-                            "area_id": 172,
+                            "area_id": 170,
                             "location_area": {
                                 "location": "bikanel",
                                 "sublocation": "sanubia desert",
@@ -2517,7 +2517,7 @@
                     "areas": [
                         {
                             "completion_id": 74,
-                            "area_id": 172,
+                            "area_id": 170,
                             "location_area": {
                                 "location": "bikanel",
                                 "sublocation": "sanubia desert",
@@ -2562,7 +2562,7 @@
                     "areas": [
                         {
                             "completion_id": 75,
-                            "area_id": 144,
+                            "area_id": 142,
                             "location_area": {
                                 "location": "macalania",
                                 "sublocation": "macalania woods",
@@ -2596,7 +2596,7 @@
                     "areas": [
                         {
                             "completion_id": 76,
-                            "area_id": 145,
+                            "area_id": 143,
                             "location_area": {
                                 "location": "macalania",
                                 "sublocation": "macalania woods",
@@ -2630,7 +2630,7 @@
                     "areas": [
                         {
                             "completion_id": 77,
-                            "area_id": 144,
+                            "area_id": 142,
                             "location_area": {
                                 "location": "macalania",
                                 "sublocation": "macalania woods",
@@ -2664,7 +2664,7 @@
                     "areas": [
                         {
                             "completion_id": 78,
-                            "area_id": 145,
+                            "area_id": 143,
                             "location_area": {
                                 "location": "macalania",
                                 "sublocation": "macalania woods",
@@ -2698,7 +2698,7 @@
                     "areas": [
                         {
                             "completion_id": 79,
-                            "area_id": 144,
+                            "area_id": 142,
                             "location_area": {
                                 "location": "macalania",
                                 "sublocation": "macalania woods",
@@ -2709,7 +2709,7 @@
                         },
                         {
                             "completion_id": 79,
-                            "area_id": 145,
+                            "area_id": 143,
                             "location_area": {
                                 "location": "macalania",
                                 "sublocation": "macalania woods",
@@ -2743,7 +2743,7 @@
                     "areas": [
                         {
                             "completion_id": 80,
-                            "area_id": 144,
+                            "area_id": 142,
                             "location_area": {
                                 "location": "macalania",
                                 "sublocation": "macalania woods",
@@ -2754,7 +2754,7 @@
                         },
                         {
                             "completion_id": 80,
-                            "area_id": 145,
+                            "area_id": 143,
                             "location_area": {
                                 "location": "macalania",
                                 "sublocation": "macalania woods",
@@ -2799,7 +2799,7 @@
                     "areas": [
                         {
                             "completion_id": 81,
-                            "area_id": 140,
+                            "area_id": 138,
                             "location_area": {
                                 "location": "thunder plains",
                                 "sublocation": "thunder plains",
@@ -2833,7 +2833,7 @@
                     "areas": [
                         {
                             "completion_id": 82,
-                            "area_id": 140,
+                            "area_id": 138,
                             "location_area": {
                                 "location": "thunder plains",
                                 "sublocation": "thunder plains",
@@ -2867,7 +2867,7 @@
                     "areas": [
                         {
                             "completion_id": 83,
-                            "area_id": 140,
+                            "area_id": 138,
                             "location_area": {
                                 "location": "thunder plains",
                                 "sublocation": "thunder plains",
@@ -2901,7 +2901,7 @@
                     "areas": [
                         {
                             "completion_id": 84,
-                            "area_id": 140,
+                            "area_id": 138,
                             "location_area": {
                                 "location": "thunder plains",
                                 "sublocation": "thunder plains",
@@ -2935,7 +2935,7 @@
                     "areas": [
                         {
                             "completion_id": 85,
-                            "area_id": 140,
+                            "area_id": 138,
                             "location_area": {
                                 "location": "thunder plains",
                                 "sublocation": "thunder plains",
@@ -2969,7 +2969,7 @@
                     "areas": [
                         {
                             "completion_id": 86,
-                            "area_id": 140,
+                            "area_id": 138,
                             "location_area": {
                                 "location": "thunder plains",
                                 "sublocation": "thunder plains",
@@ -3003,7 +3003,7 @@
                     "areas": [
                         {
                             "completion_id": 87,
-                            "area_id": 140,
+                            "area_id": 138,
                             "location_area": {
                                 "location": "thunder plains",
                                 "sublocation": "thunder plains",
@@ -3037,7 +3037,7 @@
                     "areas": [
                         {
                             "completion_id": 88,
-                            "area_id": 140,
+                            "area_id": 138,
                             "location_area": {
                                 "location": "thunder plains",
                                 "sublocation": "thunder plains",
@@ -3071,7 +3071,7 @@
                     "areas": [
                         {
                             "completion_id": 89,
-                            "area_id": 140,
+                            "area_id": 138,
                             "location_area": {
                                 "location": "thunder plains",
                                 "sublocation": "thunder plains",
@@ -3116,7 +3116,7 @@
                     "areas": [
                         {
                             "completion_id": 90,
-                            "area_id": 75,
+                            "area_id": 74,
                             "location_area": {
                                 "location": "luca",
                                 "sublocation": "stadium",
@@ -3150,7 +3150,7 @@
                     "areas": [
                         {
                             "completion_id": 91,
-                            "area_id": 75,
+                            "area_id": 74,
                             "location_area": {
                                 "location": "luca",
                                 "sublocation": "stadium",
@@ -3186,7 +3186,7 @@
             "areas": [
                 {
                     "completion_id": 92,
-                    "area_id": 185,
+                    "area_id": 183,
                     "location_area": {
                         "location": "airship",
                         "sublocation": "airship",
@@ -3197,7 +3197,7 @@
                 },
                 {
                     "completion_id": 92,
-                    "area_id": 182,
+                    "area_id": 180,
                     "location_area": {
                         "location": "airship",
                         "sublocation": "airship",
@@ -3231,7 +3231,7 @@
             "areas": [
                 {
                     "completion_id": 93,
-                    "area_id": 147,
+                    "area_id": 145,
                     "location_area": {
                         "location": "macalania",
                         "sublocation": "macalania woods",

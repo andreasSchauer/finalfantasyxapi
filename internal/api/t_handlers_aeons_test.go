@@ -36,7 +36,7 @@ func TestGetAeon(t *testing.T) {
 				name: "ixion",
 			},
 			untypedUnit:    11,
-			area:           115,
+			area:           114,
 			battlesToRegen: 20,
 			agility: testAgilityParams{
 				agilityTier: 7,
@@ -116,7 +116,7 @@ func TestGetAeon(t *testing.T) {
 				id:   9,
 				name: "sandy",
 			},
-			area:           210,
+			area:           208,
 			battlesToRegen: 30,
 			agility: testAgilityParams{
 				agilityTier: 12,

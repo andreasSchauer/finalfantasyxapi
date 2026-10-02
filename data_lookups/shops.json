@@ -400,7 +400,7 @@
             "area": "dock",
             "version": null
         },
-        "area_id": 48,
+        "area_id": 47,
         "notes": "Available after the party wakes up.",
         "category": "standard",
         "availability": "always",
@@ -770,7 +770,7 @@
             "area": "corridor",
             "version": null
         },
-        "area_id": 66,
+        "area_id": 65,
         "notes": null,
         "category": "oaka",
         "availability": "pre-story",
@@ -809,7 +809,7 @@
             "area": "number 1 dock",
             "version": null
         },
-        "area_id": 76,
+        "area_id": 75,
         "notes": null,
         "category": "oaka",
         "availability": "pre-story",
@@ -946,7 +946,7 @@
             "area": "main gate",
             "version": null
         },
-        "area_id": 69,
+        "area_id": 68,
         "notes": "Becomes available after Auron joins the party.",
         "category": "standard",
         "availability": "always",
@@ -1443,7 +1443,7 @@
             "area": "square",
             "version": null
         },
-        "area_id": 85,
+        "area_id": 84,
         "notes": "Becomes available after Auron joins the party.",
         "category": "standard",
         "availability": "always",
@@ -1906,7 +1906,7 @@
             "area": "agency",
             "version": null
         },
-        "area_id": 92,
+        "area_id": 91,
         "notes": null,
         "category": "travel-agency",
         "availability": "always",
@@ -2420,7 +2420,7 @@
             "area": "oldroad south",
             "version": null
         },
-        "area_id": 97,
+        "area_id": 96,
         "notes": null,
         "category": "oaka",
         "availability": "pre-story",
@@ -2471,7 +2471,7 @@
             "area": "mushroom rock",
             "version": null
         },
-        "area_id": 99,
+        "area_id": 98,
         "notes": "Prices will vary depending on how much money you gave O'aka. \u003c 100 Gil: base price x2; \u003e 100 Gil: base price x1.5; \u003e 1000 Gil: base price x1.2; \u003e 10000 Gil: base price x0.7. Listed are the base prices.",
         "category": "oaka",
         "availability": "pre-story",
@@ -2626,7 +2626,7 @@
             "area": "ridge",
             "version": null
         },
-        "area_id": 103,
+        "area_id": 102,
         "notes": "Prices will vary depending on how much money you gave O'aka. \u003c 100 Gil: base price x2; \u003e 100 Gil: base price x1.5; \u003e 1000 Gil: base price x1.2; \u003e 10000 Gil: base price x0.7. Listed are the base prices.",
         "category": "oaka",
         "availability": "pre-story",
@@ -2814,7 +2814,7 @@
             "area": "aftermath",
             "version": null
         },
-        "area_id": 105,
+        "area_id": 104,
         "notes": "Prices will vary depending on how much money you gave O'aka. \u003c 100 Gil: base price x2; \u003e 100 Gil: base price x1.5; \u003e 1000 Gil: base price x1.2; \u003e 10000 Gil: base price x0.7. Listed are the base prices.",
         "category": "oaka",
         "availability": "pre-story",
@@ -2871,7 +2871,7 @@
             "area": "inn",
             "version": null
         },
-        "area_id": 111,
+        "area_id": 110,
         "notes": null,
         "category": "standard",
         "availability": "always",
@@ -3372,7 +3372,7 @@
             "area": "south wharf",
             "version": 1
         },
-        "area_id": 120,
+        "area_id": 119,
         "notes": null,
         "category": "oaka",
         "availability": "pre-story",
@@ -3520,7 +3520,7 @@
             "area": "south wharf",
             "version": 2
         },
-        "area_id": 121,
+        "area_id": 120,
         "notes": "The woman by the stairs.",
         "category": "standard",
         "availability": "always",
@@ -3800,7 +3800,7 @@
             "area": "south wharf",
             "version": 2
         },
-        "area_id": 121,
+        "area_id": 120,
         "notes": "The man next to the shoopuf.",
         "category": "standard",
         "availability": "always",
@@ -4080,7 +4080,7 @@
             "area": "south wharf",
             "version": 3
         },
-        "area_id": 122,
+        "area_id": 121,
         "notes": "The man inside the tent.",
         "category": "standard",
         "availability": "always",
@@ -4332,7 +4332,7 @@
             "area": "south wharf",
             "version": 3
         },
-        "area_id": 122,
+        "area_id": 121,
         "notes": "The woman in front of the tent. Appears after the cutscene and re-entering the screen.",
         "category": "standard",
         "availability": "always",
@@ -4584,7 +4584,7 @@
             "area": "north wharf",
             "version": 2
         },
-        "area_id": 125,
+        "area_id": 123,
         "notes": null,
         "category": "oaka",
         "availability": "pre-story",
@@ -4641,7 +4641,7 @@
             "area": "shop",
             "version": null
         },
-        "area_id": 131,
+        "area_id": 129,
         "notes": null,
         "category": "oaka",
         "availability": "pre-story",
@@ -4885,7 +4885,7 @@
             "area": "shop",
             "version": null
         },
-        "area_id": 131,
+        "area_id": 129,
         "notes": null,
         "category": "standard",
         "availability": "always",
@@ -5416,7 +5416,7 @@
             "area": "agency",
             "version": null
         },
-        "area_id": 141,
+        "area_id": 139,
         "notes": null,
         "category": "travel-agency",
         "availability": "always",
@@ -5985,7 +5985,7 @@
             "area": "lake road",
             "version": null
         },
-        "area_id": 149,
+        "area_id": 147,
         "notes": "Talk to O'aka a second time and he will ask you if his prices are too expensive. 'Too pricey.' decreases his prices by 25%, 'Just right.' leaves the prices unchanged, and 'Too cheap.' increases his prices by 25%. Listed are the base prices.",
         "category": "oaka",
         "availability": "pre-story",
@@ -6153,7 +6153,7 @@
             "area": "agency front",
             "version": null
         },
-        "area_id": 156,
+        "area_id": 154,
         "notes": "These prices are affected by the answer you gave O'aka in Macalania Woods, regarding his prices: 'Too pricey.': -25%; 'Just right.': unchanged; 'Too cheap.': +25%. If you didn't speak to him a second time earlier, these prices will be at their most expensive by default. Listed are the base prices.",
         "category": "oaka",
         "availability": "pre-story",
@@ -6336,7 +6336,7 @@
             "area": "agency",
             "version": null
         },
-        "area_id": 157,
+        "area_id": 155,
         "notes": null,
         "category": "travel-agency",
         "availability": "always",
@@ -6909,7 +6909,7 @@
             "area": "hall",
             "version": null
         },
-        "area_id": 162,
+        "area_id": 160,
         "notes": "These prices are affected by the answer you gave O'aka in Macalania Woods, regarding his prices: 'Too pricey.': -25%; 'Just right.': unchanged; 'Too cheap.': +25%. If you didn't speak to him a second time earlier, these prices will be at their most expensive by default. Listed are the base prices.",
         "category": "oaka",
         "availability": "pre-story",
@@ -7092,7 +7092,7 @@
             "area": "road",
             "version": 1
         },
-        "area_id": 161,
+        "area_id": 159,
         "notes": "These prices are affected by the answer you gave O'aka in Macalania Woods, regarding his prices: 'Too pricey.': -25%; 'Just right.': unchanged; 'Too cheap.': +25%. If you didn't speak to him a second time earlier, these prices will be at their most expensive by default. Listed are the base prices.",
         "category": "oaka",
         "availability": "pre-story",
@@ -7155,7 +7155,7 @@
             "area": "corridor",
             "version": 1
         },
-        "area_id": 182,
+        "area_id": 180,
         "notes": null,
         "category": "travel-agency",
         "availability": "post",
@@ -7465,7 +7465,7 @@
             "area": "corridor",
             "version": 4
         },
-        "area_id": 185,
+        "area_id": 183,
         "notes": "Before you fight Evrae, Rin will move to the lift (cabin) with the exact same list.",
         "category": "travel-agency",
         "availability": "pre-story",
@@ -7763,7 +7763,7 @@
             "area": "via purifico",
             "version": 2
         },
-        "area_id": 200,
+        "area_id": 198,
         "notes": "This shop opens when you open the first treasure chest.",
         "category": "standard",
         "availability": "pre-story",
@@ -7850,7 +7850,7 @@
             "area": "highbridge",
             "version": null
         },
-        "area_id": 201,
+        "area_id": 199,
         "notes": null,
         "category": "oaka",
         "availability": "pre-story",
@@ -7937,7 +7937,7 @@
             "area": "south",
             "version": null
         },
-        "area_id": 202,
+        "area_id": 200,
         "notes": "This is a one-time-only shop. Once you leave the Calm Lands, or enter the Arena, this shop will disappear. The Buckler with Magic Counter is a one of a kind armor, as it holds a weapon ability.",
         "category": "travel-agency",
         "availability": "pre-story",
@@ -8132,7 +8132,7 @@
             "area": "central",
             "version": null
         },
-        "area_id": 203,
+        "area_id": 201,
         "notes": null,
         "category": "travel-agency",
         "availability": "always",
@@ -8718,7 +8718,7 @@
             "area": "arena",
             "version": null
         },
-        "area_id": 205,
+        "area_id": 203,
         "notes": "Clear Spheres become available once you have unlocked Ultima Buster.",
         "category": "standard",
         "availability": "always",
@@ -9092,7 +9092,7 @@
             "area": "mountain gate",
             "version": null
         },
-        "area_id": 213,
+        "area_id": 211,
         "notes": "After defeating Biran and Yenke.",
         "category": "standard",
         "availability": "always",
@@ -9672,7 +9672,7 @@
             "area": "mountain trail",
             "version": null
         },
-        "area_id": 214,
+        "area_id": 212,
         "notes": "If you don't speak to Wantz at Gagazet, he won't be in the Macalania Woods after obtaining the Airship.",
         "category": "wantz",
         "availability": "pre-story",
@@ -9978,7 +9978,7 @@
             "area": "south",
             "version": 1
         },
-        "area_id": 143,
+        "area_id": 141,
         "notes": "Wantz will only appear if you talked to him on Mount Gagazet and if you completed the Highbridge section after obtaining the airship.",
         "category": "wantz",
         "availability": "post",

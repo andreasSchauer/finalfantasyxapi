@@ -72,7 +72,7 @@
             {
                 "id": 3,
                 "song_id": 2,
-                "trigger_area_id": 176,
+                "trigger_area_id": 174,
                 "scene_description": "Home: Rikku tells the party about the Summoner's Sanctum.",
                 "trigger_location_area": {
                     "location": "home",
@@ -88,7 +88,7 @@
             {
                 "id": 4,
                 "song_id": 2,
-                "trigger_area_id": 221,
+                "trigger_area_id": 219,
                 "scene_description": "Zanarkand Ruins: Replay of the intro sequence.",
                 "trigger_location_area": {
                     "location": "zanarkand ruins",
@@ -133,7 +133,7 @@
                     {
                         "location": "zanarkand",
                         "sublocation": "zanarkand",
-                        "area": "tidus's home",
+                        "area": "harbor",
                         "version": null
                     }
                 ]
@@ -187,7 +187,7 @@
             {
                 "id": 5,
                 "song_id": 4,
-                "trigger_area_id": 150,
+                "trigger_area_id": 148,
                 "scene_description": "Macalania: Auron tells Tidus that Jecht loved him.",
                 "trigger_location_area": {
                     "location": "macalania",
@@ -284,8 +284,8 @@
                 "location_areas": [
                     {
                         "location": "zanarkand",
-                        "sublocation": "zanarkand",
-                        "area": "stadium entrance",
+                        "sublocation": "zanarkand stadium",
+                        "area": "zanarkand stadium",
                         "version": 2
                     },
                     {
@@ -301,7 +301,7 @@
             {
                 "id": 8,
                 "song_id": 6,
-                "trigger_area_id": 193,
+                "trigger_area_id": 191,
                 "scene_description": "Bevelle: Rikku throws a flash grenade.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -317,7 +317,7 @@
             {
                 "id": 9,
                 "song_id": 6,
-                "trigger_area_id": 201,
+                "trigger_area_id": 199,
                 "scene_description": "Bevelle: The party runs away from Seymour Natus.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -340,7 +340,7 @@
             {
                 "id": 10,
                 "song_id": 6,
-                "trigger_area_id": 211,
+                "trigger_area_id": 209,
                 "scene_description": "Cavern of the Stolen Fayth: Dark Yojimbo Fight.",
                 "trigger_location_area": {
                     "location": "cavern of the stolen fayth",
@@ -509,7 +509,7 @@
             {
                 "id": 12,
                 "song_id": 10,
-                "trigger_area_id": 79,
+                "trigger_area_id": 78,
                 "scene_description": "Luca: After defeating Oblitzerator.",
                 "trigger_location_area": {
                     "location": "luca",
@@ -702,7 +702,7 @@
             {
                 "id": 14,
                 "song_id": 13,
-                "trigger_area_id": 86,
+                "trigger_area_id": 85,
                 "scene_description": "Luca: The party notices that Yuna has been kidnapped.",
                 "trigger_location_area": {
                     "location": "luca",
@@ -718,7 +718,7 @@
             {
                 "id": 15,
                 "song_id": 13,
-                "trigger_area_id": 92,
+                "trigger_area_id": 91,
                 "scene_description": "Mi'ihen Highroad: When being attacked by Chocobo Eater.",
                 "trigger_location_area": {
                     "location": "mi'ihen highroad",
@@ -747,7 +747,7 @@
             {
                 "id": 16,
                 "song_id": 13,
-                "trigger_area_id": 142,
+                "trigger_area_id": 140,
                 "scene_description": "Thunder Plains: After talking to the warrior monk.",
                 "trigger_location_area": {
                     "location": "thunder plains",
@@ -770,7 +770,7 @@
             {
                 "id": 17,
                 "song_id": 13,
-                "trigger_area_id": 181,
+                "trigger_area_id": 179,
                 "scene_description": "Airship: Rin tells everyone that monsters have snuck on board.",
                 "trigger_location_area": {
                     "location": "airship",
@@ -892,7 +892,7 @@
             {
                 "id": 18,
                 "song_id": 14,
-                "trigger_area_id": 121,
+                "trigger_area_id": 120,
                 "scene_description": "Moonflow: Wakka talking about ancient machina cities on the Shoopuf.",
                 "trigger_location_area": {
                     "location": "moonflow",
@@ -1004,7 +1004,7 @@
             {
                 "id": 21,
                 "song_id": 16,
-                "trigger_area_id": 74,
+                "trigger_area_id": 73,
                 "scene_description": "Luca: During the fight sequence after the Blitzball game.",
                 "trigger_location_area": {
                     "location": "luca",
@@ -1020,7 +1020,7 @@
             {
                 "id": 22,
                 "song_id": 16,
-                "trigger_area_id": 97,
+                "trigger_area_id": 96,
                 "scene_description": "Mi'ihen Highroad: During Jecht Sphere cutsccene.",
                 "trigger_location_area": {
                     "location": "mi'ihen highroad",
@@ -1036,7 +1036,7 @@
             {
                 "id": 23,
                 "song_id": 16,
-                "trigger_area_id": 161,
+                "trigger_area_id": 159,
                 "scene_description": "Macalania: Escape after defeating Dark Shiva.",
                 "trigger_location_area": {
                     "location": "macalania",
@@ -1416,7 +1416,7 @@
                     },
                     {
                         "location": "remiem temple",
-                        "sublocation": "remiem temple",
+                        "sublocation": "remiem",
                         "area": "fayth",
                         "version": null
                     }
@@ -1427,7 +1427,7 @@
             {
                 "id": 26,
                 "song_id": 20,
-                "trigger_area_id": 104,
+                "trigger_area_id": 103,
                 "scene_description": "Mushroom Rock Road: When Tidus wakes up at the beach.",
                 "trigger_location_area": {
                     "location": "mushroom rock road",
@@ -1735,7 +1735,7 @@
             {
                 "id": 31,
                 "song_id": 25,
-                "trigger_area_id": 192,
+                "trigger_area_id": 190,
                 "scene_description": "Airship: Tidus talking to Yuna about Yu Yevon.",
                 "trigger_location_area": {
                     "location": "airship",
@@ -1751,7 +1751,7 @@
             {
                 "id": 32,
                 "song_id": 25,
-                "trigger_area_id": 214,
+                "trigger_area_id": 212,
                 "scene_description": "Mount Gagazet: Braska's Sphere.",
                 "trigger_location_area": {
                     "location": "mount gagazet",
@@ -1819,7 +1819,7 @@
             {
                 "id": 35,
                 "song_id": 26,
-                "trigger_area_id": 50,
+                "trigger_area_id": 49,
                 "scene_description": "Kilika: Tidus sleeping after the Sending.",
                 "trigger_location_area": {
                     "location": "kilika",
@@ -1835,7 +1835,7 @@
             {
                 "id": 36,
                 "song_id": 26,
-                "trigger_area_id": 64,
+                "trigger_area_id": 63,
                 "scene_description": "SS Winno: Tidus sleeping after the events on the ship.",
                 "trigger_location_area": {
                     "location": "ss winno",
@@ -1851,7 +1851,7 @@
             {
                 "id": 37,
                 "song_id": 26,
-                "trigger_area_id": 92,
+                "trigger_area_id": 91,
                 "scene_description": "Mi'ihen Highroad: Tidus sleeping after arriving at the agency.",
                 "trigger_location_area": {
                     "location": "mi'ihen highroad",
@@ -1867,7 +1867,7 @@
             {
                 "id": 38,
                 "song_id": 26,
-                "trigger_area_id": 92,
+                "trigger_area_id": 91,
                 "scene_description": "Mi'ihen Highroad: Tidus sleeping after talking to Yuna at sunset.",
                 "trigger_location_area": {
                     "location": "mi'ihen highroad",
@@ -1883,7 +1883,7 @@
             {
                 "id": 39,
                 "song_id": 26,
-                "trigger_area_id": 116,
+                "trigger_area_id": 115,
                 "scene_description": "Djose: Tidus sleeping after the Trials.",
                 "trigger_location_area": {
                     "location": "djose",
@@ -1899,7 +1899,7 @@
             {
                 "id": 40,
                 "song_id": 26,
-                "trigger_area_id": 141,
+                "trigger_area_id": 139,
                 "scene_description": "Thunder Plains: Tidus sleeping at the agency.",
                 "trigger_location_area": {
                     "location": "thunder plains",
@@ -1970,7 +1970,7 @@
             {
                 "id": 42,
                 "song_id": 27,
-                "trigger_area_id": 87,
+                "trigger_area_id": 86,
                 "scene_description": "Luca: Laughing scene.",
                 "trigger_location_area": {
                     "location": "luca",
@@ -1986,7 +1986,7 @@
             {
                 "id": 43,
                 "song_id": 27,
-                "trigger_area_id": 110,
+                "trigger_area_id": 109,
                 "scene_description": "Djose: The party making fun of Yuna's bed hair.",
                 "trigger_location_area": {
                     "location": "djose",
@@ -2021,7 +2021,7 @@
             {
                 "id": 44,
                 "song_id": 27,
-                "trigger_area_id": 154,
+                "trigger_area_id": 152,
                 "scene_description": "Macalania: Tidus and Yuna talking at the spring.",
                 "trigger_location_area": {
                     "location": "macalania",
@@ -2037,7 +2037,7 @@
             {
                 "id": 45,
                 "song_id": 27,
-                "trigger_area_id": 179,
+                "trigger_area_id": 177,
                 "scene_description": "Home: Flashback to the laughing scene.",
                 "trigger_location_area": {
                     "location": "home",
@@ -2053,7 +2053,7 @@
             {
                 "id": 46,
                 "song_id": 27,
-                "trigger_area_id": 213,
+                "trigger_area_id": 211,
                 "scene_description": "Mount Gagazet: Yuna tells Kelk what she is fighting for.",
                 "trigger_location_area": {
                     "location": "mount gagazet",
@@ -2069,7 +2069,7 @@
             {
                 "id": 47,
                 "song_id": 27,
-                "trigger_area_id": 220,
+                "trigger_area_id": 218,
                 "scene_description": "Mount Gagazet: Rikku is trying to stop Yuna from going to Zanarkand.",
                 "trigger_location_area": {
                     "location": "mount gagazet",
@@ -2512,7 +2512,7 @@
             {
                 "id": 50,
                 "song_id": 33,
-                "trigger_area_id": 78,
+                "trigger_area_id": 77,
                 "scene_description": "Luca: Mika and Seymour introduction.",
                 "trigger_location_area": {
                     "location": "luca",
@@ -2713,7 +2713,7 @@
             {
                 "id": 51,
                 "song_id": 35,
-                "trigger_area_id": 80,
+                "trigger_area_id": 79,
                 "scene_description": "Luca: The Aurochs win against the Psyches.",
                 "trigger_location_area": {
                     "location": "luca",
@@ -2815,7 +2815,7 @@
             {
                 "id": 52,
                 "song_id": 36,
-                "trigger_area_id": 56,
+                "trigger_area_id": 55,
                 "scene_description": "Kilika: Meeting the Luca Goers.",
                 "trigger_location_area": {
                     "location": "kilika",
@@ -2831,7 +2831,7 @@
             {
                 "id": 53,
                 "song_id": 36,
-                "trigger_area_id": 75,
+                "trigger_area_id": 74,
                 "scene_description": "Luca: Cutscene before the match against the Luca Goers.",
                 "trigger_location_area": {
                     "location": "luca",
@@ -2896,7 +2896,7 @@
             {
                 "id": 54,
                 "song_id": 38,
-                "trigger_area_id": 80,
+                "trigger_area_id": 79,
                 "scene_description": "Luca: Auron tells Tidus that he defeated Sin with Braska and Jecht.",
                 "trigger_location_area": {
                     "location": "luca",
@@ -2912,7 +2912,7 @@
             {
                 "id": 55,
                 "song_id": 38,
-                "trigger_area_id": 87,
+                "trigger_area_id": 86,
                 "scene_description": "Luca: Auron asking Yuna to become her guardian.",
                 "trigger_location_area": {
                     "location": "luca",
@@ -2928,7 +2928,7 @@
             {
                 "id": 56,
                 "song_id": 38,
-                "trigger_area_id": 101,
+                "trigger_area_id": 100,
                 "scene_description": "Mushroom Rock Road: Auron's Sphere cutscene.",
                 "trigger_location_area": {
                     "location": "mushroom rock road",
@@ -2944,7 +2944,7 @@
             {
                 "id": 57,
                 "song_id": 38,
-                "trigger_area_id": 229,
+                "trigger_area_id": 227,
                 "scene_description": "Zanarkand Ruins: Auron reveals his past to Tidus.",
                 "trigger_location_area": {
                     "location": "zanarkand ruins",
@@ -3156,7 +3156,7 @@
             {
                 "id": 59,
                 "song_id": 42,
-                "trigger_area_id": 95,
+                "trigger_area_id": 94,
                 "scene_description": "Mi'ihen Highroad: Seymour letting the party through.",
                 "trigger_location_area": {
                     "location": "mi'ihen highroad",
@@ -3230,7 +3230,7 @@
             {
                 "id": 60,
                 "song_id": 43,
-                "trigger_area_id": 99,
+                "trigger_area_id": 98,
                 "scene_description": "Mushroom Rock Road: Wakka confronting Seymour.",
                 "trigger_location_area": {
                     "location": "mushroom rock road",
@@ -3246,7 +3246,7 @@
             {
                 "id": 61,
                 "song_id": 43,
-                "trigger_area_id": 166,
+                "trigger_area_id": 164,
                 "scene_description": "Macalania: After fighting Seymour.",
                 "trigger_location_area": {
                     "location": "macalania",
@@ -3262,7 +3262,7 @@
             {
                 "id": 62,
                 "song_id": 43,
-                "trigger_area_id": 201,
+                "trigger_area_id": 199,
                 "scene_description": "Bevelle: Seymour transforms into Seymour Natus.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -3329,7 +3329,7 @@
             {
                 "id": 63,
                 "song_id": 44,
-                "trigger_area_id": 104,
+                "trigger_area_id": 103,
                 "scene_description": "Mushroom Rock Road: Tidus coming into contact with Sin and seeing the Nucleus.",
                 "trigger_location_area": {
                     "location": "mushroom rock road",
@@ -3345,7 +3345,7 @@
             {
                 "id": 64,
                 "song_id": 44,
-                "trigger_area_id": 160,
+                "trigger_area_id": 158,
                 "scene_description": "Macalania: Tidus comes into contact with Sin again.",
                 "trigger_location_area": {
                     "location": "macalania",
@@ -3361,7 +3361,7 @@
             {
                 "id": 65,
                 "song_id": 44,
-                "trigger_area_id": 216,
+                "trigger_area_id": 214,
                 "scene_description": "Mount Gagazet: Tidus learns about the dream of the Fayth.",
                 "trigger_location_area": {
                     "location": "mount gagazet",
@@ -3572,7 +3572,7 @@
             {
                 "id": 66,
                 "song_id": 48,
-                "trigger_area_id": 127,
+                "trigger_area_id": 125,
                 "scene_description": "Moonflow: Tidus meeting Rikku.",
                 "trigger_location_area": {
                     "location": "moonflow",
@@ -3752,7 +3752,7 @@
             {
                 "id": 69,
                 "song_id": 51,
-                "trigger_area_id": 150,
+                "trigger_area_id": 148,
                 "scene_description": "Macalania: Jecht Sphere cutscene.",
                 "trigger_location_area": {
                     "location": "macalania",
@@ -3768,7 +3768,7 @@
             {
                 "id": 70,
                 "song_id": 51,
-                "trigger_area_id": 143,
+                "trigger_area_id": 141,
                 "scene_description": "Macalania: Jecht Sphere cutscene.",
                 "trigger_location_area": {
                     "location": "macalania",
@@ -3841,7 +3841,7 @@
             {
                 "id": 71,
                 "song_id": 52,
-                "trigger_area_id": 119,
+                "trigger_area_id": 118,
                 "scene_description": "Moonflow: The party reaching the pond.",
                 "trigger_location_area": {
                     "location": "moonflow",
@@ -3882,7 +3882,7 @@
             {
                 "id": 72,
                 "song_id": 53,
-                "trigger_area_id": 158,
+                "trigger_area_id": 156,
                 "scene_description": "Macalania: Wakka learns that Rikku is an Al Bhed.",
                 "trigger_location_area": {
                     "location": "macalania",
@@ -3975,7 +3975,7 @@
             {
                 "id": 73,
                 "song_id": 55,
-                "trigger_area_id": 215,
+                "trigger_area_id": 213,
                 "scene_description": "Mount Gagazet: The party runs into Seymour.",
                 "trigger_location_area": {
                     "location": "mount gagazet",
@@ -4102,7 +4102,7 @@
             {
                 "id": 75,
                 "song_id": 57,
-                "trigger_area_id": 162,
+                "trigger_area_id": 160,
                 "scene_description": "Macalania: Escape after defeating Seymour.",
                 "trigger_location_area": {
                     "location": "macalania",
@@ -4268,7 +4268,7 @@
             {
                 "id": 76,
                 "song_id": 59,
-                "trigger_area_id": 99,
+                "trigger_area_id": 98,
                 "scene_description": "Mushroom Rock Road: Dark Magus Sisters escape sequence.",
                 "trigger_location_area": {
                     "location": "mushroom rock road",
@@ -4303,7 +4303,7 @@
             {
                 "id": 77,
                 "song_id": 59,
-                "trigger_area_id": 156,
+                "trigger_area_id": 154,
                 "scene_description": "Macalania: Yuna is attacked by Al Bhed.",
                 "trigger_location_area": {
                     "location": "macalania",
@@ -4332,7 +4332,7 @@
             {
                 "id": 78,
                 "song_id": 59,
-                "trigger_area_id": 192,
+                "trigger_area_id": 190,
                 "scene_description": "Airship: Sin performing Terra Graviton.",
                 "trigger_location_area": {
                     "location": "airship",
@@ -4373,7 +4373,7 @@
             {
                 "id": 79,
                 "song_id": 60,
-                "trigger_area_id": 179,
+                "trigger_area_id": 177,
                 "scene_description": "Home: Rikku is telling Tidus that Yuna will die.",
                 "trigger_location_area": {
                     "location": "home",
@@ -4389,7 +4389,7 @@
             {
                 "id": 80,
                 "song_id": 60,
-                "trigger_area_id": 229,
+                "trigger_area_id": 227,
                 "scene_description": "Zanarkand Ruins: The party learns the truth about the Final Summoning.",
                 "trigger_location_area": {
                     "location": "zanarkand ruins",
@@ -4405,7 +4405,7 @@
             {
                 "id": 81,
                 "song_id": 60,
-                "trigger_area_id": 230,
+                "trigger_area_id": 228,
                 "scene_description": "Zanarkand Ruins: Yuna rejects the Final Summoning.",
                 "trigger_location_area": {
                     "location": "zanarkand ruins",
@@ -4421,13 +4421,13 @@
             {
                 "id": 82,
                 "song_id": 60,
-                "trigger_area_id": 237,
+                "trigger_area_id": 235,
                 "scene_description": "Inside Sin: Tidus and Jecht talk to each other.",
                 "trigger_location_area": {
                     "location": "sin",
                     "sublocation": "sin",
                     "area": "dream's end",
-                    "version": 1
+                    "version": null
                 },
                 "included_areas": [],
                 "replaces_bg_music": null,
@@ -4628,7 +4628,7 @@
             {
                 "id": 83,
                 "song_id": 64,
-                "trigger_area_id": 193,
+                "trigger_area_id": 191,
                 "scene_description": "Bevelle: The party is surrounded by warrior monks.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -4669,7 +4669,7 @@
             {
                 "id": 84,
                 "song_id": 65,
-                "trigger_area_id": 193,
+                "trigger_area_id": 191,
                 "scene_description": "Bevelle: Yuna is threatening to jump off the tower.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -4748,7 +4748,7 @@
             {
                 "id": 85,
                 "song_id": 67,
-                "trigger_area_id": 198,
+                "trigger_area_id": 196,
                 "scene_description": "Bevelle: Tidus and Auron find Yuna in the chamber of the Fayth.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -4764,7 +4764,7 @@
             {
                 "id": 86,
                 "song_id": 67,
-                "trigger_area_id": 201,
+                "trigger_area_id": 199,
                 "scene_description": "Bevelle: Tidus and Yuna visit Bahamut in his chamber.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -4819,7 +4819,7 @@
             {
                 "id": 87,
                 "song_id": 68,
-                "trigger_area_id": 198,
+                "trigger_area_id": 196,
                 "scene_description": "Bevelle: Yuna has to stand trial in front of the four maesters.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -4835,7 +4835,7 @@
             {
                 "id": 88,
                 "song_id": 68,
-                "trigger_area_id": 201,
+                "trigger_area_id": 199,
                 "scene_description": "Bevelle: The party revisits the highbridge to talk to Mika.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -4851,7 +4851,7 @@
             {
                 "id": 89,
                 "song_id": 68,
-                "trigger_area_id": 201,
+                "trigger_area_id": 199,
                 "scene_description": "Bevelle: Mika is talking about Yu Yevon and sends himself to the Farplane.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -4892,7 +4892,7 @@
             {
                 "id": 90,
                 "song_id": 69,
-                "trigger_area_id": 198,
+                "trigger_area_id": 196,
                 "scene_description": "Bevelle: Seymour, Mika, and Kinoc talking to each other.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -4983,7 +4983,7 @@
             {
                 "id": 91,
                 "song_id": 71,
-                "trigger_area_id": 220,
+                "trigger_area_id": 218,
                 "scene_description": "Mount Gagazet: Tidus is listening to Yuna's sphere.",
                 "trigger_location_area": {
                     "location": "mount gagazet",
@@ -5150,7 +5150,7 @@
             {
                 "id": 92,
                 "song_id": 75,
-                "trigger_area_id": 86,
+                "trigger_area_id": 85,
                 "scene_description": "Luca: Scene with Biran and Yenke.",
                 "trigger_location_area": {
                     "location": "luca",
@@ -5166,7 +5166,7 @@
             {
                 "id": 93,
                 "song_id": 75,
-                "trigger_area_id": 118,
+                "trigger_area_id": 117,
                 "scene_description": "Moonflow: Scene with Biran and Yenke.",
                 "trigger_location_area": {
                     "location": "moonflow",
@@ -5207,7 +5207,7 @@
             {
                 "id": 94,
                 "song_id": 76,
-                "trigger_area_id": 214,
+                "trigger_area_id": 212,
                 "scene_description": "Mount Gagazet: The Ronso are singing for Yuna.",
                 "trigger_location_area": {
                     "location": "mount gagazet",
@@ -5319,7 +5319,7 @@
             {
                 "id": 97,
                 "song_id": 77,
-                "trigger_area_id": 48,
+                "trigger_area_id": 47,
                 "scene_description": "Kilika: The party arrives at Kilika.",
                 "trigger_location_area": {
                     "location": "kilika",
@@ -5335,7 +5335,7 @@
             {
                 "id": 98,
                 "song_id": 77,
-                "trigger_area_id": 80,
+                "trigger_area_id": 79,
                 "scene_description": "Luca: Auron talking to Tidus about Sin, Jecht, and Spira.",
                 "trigger_location_area": {
                     "location": "luca",
@@ -5351,7 +5351,7 @@
             {
                 "id": 99,
                 "song_id": 77,
-                "trigger_area_id": 219,
+                "trigger_area_id": 217,
                 "scene_description": "Mount Gagazet: Auron tells Tidus and Wakka about his failures.",
                 "trigger_location_area": {
                     "location": "mount gagazet",
@@ -5428,7 +5428,7 @@
             {
                 "id": 101,
                 "song_id": 78,
-                "trigger_area_id": 104,
+                "trigger_area_id": 103,
                 "scene_description": "Mushroom Rock Road: Tidus chasing Sin.",
                 "trigger_location_area": {
                     "location": "mushroom rock road",
@@ -5444,7 +5444,7 @@
             {
                 "id": 102,
                 "song_id": 78,
-                "trigger_area_id": 189,
+                "trigger_area_id": 187,
                 "scene_description": "Airship: Yuna says she has no clue on how to defeat Sin.",
                 "trigger_location_area": {
                     "location": "airship",
@@ -5533,7 +5533,7 @@
             {
                 "id": 103,
                 "song_id": 78,
-                "trigger_area_id": 204,
+                "trigger_area_id": 202,
                 "scene_description": "Calm Lands: An NPC tells the party about Gandolf and 'The Scar'.",
                 "trigger_location_area": {
                     "location": "calm lands",
@@ -5549,13 +5549,13 @@
             {
                 "id": 104,
                 "song_id": 78,
-                "trigger_area_id": 237,
+                "trigger_area_id": 235,
                 "scene_description": "Inside Sin: Jecht is being held by Tidus after the fight.",
                 "trigger_location_area": {
                     "location": "sin",
                     "sublocation": "sin",
                     "area": "dream's end",
-                    "version": 1
+                    "version": null
                 },
                 "included_areas": [],
                 "replaces_bg_music": null,
@@ -5640,13 +5640,13 @@
             {
                 "id": 106,
                 "song_id": 79,
-                "trigger_area_id": 238,
+                "trigger_area_id": 235,
                 "scene_description": "Inside Sin: Before fighting against the Aeons.",
                 "trigger_location_area": {
                     "location": "sin",
                     "sublocation": "sin",
                     "area": "dream's end",
-                    "version": 2
+                    "version": null
                 },
                 "included_areas": [],
                 "replaces_bg_music": null,
@@ -5798,7 +5798,7 @@
             {
                 "id": 107,
                 "song_id": 81,
-                "trigger_area_id": 181,
+                "trigger_area_id": 179,
                 "scene_description": "Airship: The party reacts to the Al Bhed destroying their home.",
                 "trigger_location_area": {
                     "location": "airship",
@@ -5915,7 +5915,7 @@
                 "location_areas": [
                     {
                         "location": "remiem temple",
-                        "sublocation": "remiem temple",
+                        "sublocation": "remiem",
                         "area": "great hall",
                         "version": null
                     }
@@ -5939,7 +5939,7 @@
             {
                 "id": 108,
                 "song_id": 82,
-                "trigger_area_id": 198,
+                "trigger_area_id": 196,
                 "scene_description": "Bevelle: Kinoc arrests the party in front of the chamber of the Fayth.",
                 "trigger_location_area": {
                     "location": "bevelle",
@@ -5980,7 +5980,7 @@
             {
                 "id": 109,
                 "song_id": 83,
-                "trigger_area_id": 181,
+                "trigger_area_id": 179,
                 "scene_description": "Airship: The airship plays the Hymn of the Fayth.",
                 "trigger_location_area": {
                     "location": "airship",
@@ -5996,7 +5996,7 @@
             {
                 "id": 110,
                 "song_id": 83,
-                "trigger_area_id": 192,
+                "trigger_area_id": 190,
                 "scene_description": "Airship: The party is on the deck hearing Spira's citizens join in on the Hymn.",
                 "trigger_location_area": {
                     "location": "airship",
@@ -6320,7 +6320,7 @@
             {
                 "id": 114,
                 "song_id": 94,
-                "trigger_area_id": 160,
+                "trigger_area_id": 158,
                 "scene_description": "Macalania: Tidus humming the hymn.",
                 "trigger_location_area": {
                     "location": "macalania",

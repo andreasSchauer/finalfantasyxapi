@@ -7,12 +7,12 @@
         "music": "otherworld",
         "location_area": {
             "location": "zanarkand",
-            "sublocation": "zanarkand",
-            "area": "stadium entrance",
+            "sublocation": "zanarkand stadium",
+            "area": "zanarkand stadium",
             "version": 1
         },
         "song_id": 5,
-        "area_id": 3
+        "area_id": 4
     },
     {
         "id": 2,
@@ -27,7 +27,7 @@
             "version": 2
         },
         "song_id": 6,
-        "area_id": 5
+        "area_id": 3
     },
     {
         "id": 3,
@@ -42,7 +42,7 @@
             "version": 2
         },
         "song_id": 6,
-        "area_id": 5
+        "area_id": 3
     },
     {
         "id": 4,
@@ -57,7 +57,7 @@
             "version": 2
         },
         "song_id": 7,
-        "area_id": 5
+        "area_id": 3
     },
     {
         "id": 5,
@@ -203,11 +203,11 @@
         "location_area": {
             "location": "ss liki",
             "sublocation": "ss liki",
-            "area": "ss liki",
+            "area": "deck",
             "version": null
         },
         "song_id": null,
-        "area_id": 47
+        "area_id": 42
     },
     {
         "id": 15,
@@ -222,7 +222,7 @@
             "version": null
         },
         "song_id": 29,
-        "area_id": 50
+        "area_id": 49
     },
     {
         "id": 16,
@@ -237,7 +237,7 @@
             "version": null
         },
         "song_id": 17,
-        "area_id": 77
+        "area_id": 76
     },
     {
         "id": 17,
@@ -252,7 +252,7 @@
             "version": null
         },
         "song_id": 17,
-        "area_id": 86
+        "area_id": 85
     },
     {
         "id": 18,
@@ -267,7 +267,7 @@
             "version": null
         },
         "song_id": 16,
-        "area_id": 74
+        "area_id": 73
     },
     {
         "id": 19,
@@ -282,7 +282,7 @@
             "version": null
         },
         "song_id": 20,
-        "area_id": 74
+        "area_id": 73
     },
     {
         "id": 20,
@@ -297,7 +297,7 @@
             "version": null
         },
         "song_id": 59,
-        "area_id": 103
+        "area_id": 102
     },
     {
         "id": 21,
@@ -312,7 +312,7 @@
             "version": null
         },
         "song_id": 59,
-        "area_id": 103
+        "area_id": 102
     },
     {
         "id": 22,
@@ -327,7 +327,7 @@
             "version": null
         },
         "song_id": 80,
-        "area_id": 103
+        "area_id": 102
     },
     {
         "id": 23,
@@ -342,7 +342,7 @@
             "version": 1
         },
         "song_id": null,
-        "area_id": 104
+        "area_id": 103
     },
     {
         "id": 24,
@@ -357,7 +357,7 @@
             "version": null
         },
         "song_id": null,
-        "area_id": 127
+        "area_id": 125
     },
     {
         "id": 25,
@@ -372,7 +372,7 @@
             "version": null
         },
         "song_id": 20,
-        "area_id": 135
+        "area_id": 133
     },
     {
         "id": 26,
@@ -387,7 +387,7 @@
             "version": null
         },
         "song_id": null,
-        "area_id": 138
+        "area_id": 136
     },
     {
         "id": 27,
@@ -402,7 +402,7 @@
             "version": null
         },
         "song_id": null,
-        "area_id": 160
+        "area_id": 158
     },
     {
         "id": 28,
@@ -417,7 +417,7 @@
             "version": null
         },
         "song_id": 59,
-        "area_id": 172
+        "area_id": 170
     },
     {
         "id": 29,
@@ -432,7 +432,7 @@
             "version": null
         },
         "song_id": 61,
-        "area_id": 181
+        "area_id": 179
     },
     {
         "id": 30,
@@ -447,7 +447,7 @@
             "version": null
         },
         "song_id": 61,
-        "area_id": 181
+        "area_id": 179
     },
     {
         "id": 31,
@@ -462,7 +462,7 @@
             "version": null
         },
         "song_id": 6,
-        "area_id": 181
+        "area_id": 179
     },
     {
         "id": 32,
@@ -477,7 +477,7 @@
             "version": null
         },
         "song_id": 62,
-        "area_id": 192
+        "area_id": 190
     },
     {
         "id": 33,
@@ -492,7 +492,7 @@
             "version": null
         },
         "song_id": 63,
-        "area_id": 192
+        "area_id": 190
     },
     {
         "id": 34,
@@ -507,7 +507,7 @@
             "version": null
         },
         "song_id": 64,
-        "area_id": 193
+        "area_id": 191
     },
     {
         "id": 35,
@@ -522,7 +522,7 @@
             "version": null
         },
         "song_id": 65,
-        "area_id": 193
+        "area_id": 191
     },
     {
         "id": 36,
@@ -537,7 +537,7 @@
             "version": 2
         },
         "song_id": 70,
-        "area_id": 154
+        "area_id": 152
     },
     {
         "id": 37,
@@ -552,7 +552,7 @@
             "version": null
         },
         "song_id": null,
-        "area_id": 216
+        "area_id": 214
     },
     {
         "id": 38,
@@ -567,7 +567,7 @@
             "version": null
         },
         "song_id": 77,
-        "area_id": 220
+        "area_id": 218
     },
     {
         "id": 39,
@@ -582,7 +582,7 @@
             "version": 1
         },
         "song_id": null,
-        "area_id": 223
+        "area_id": 221
     },
     {
         "id": 40,
@@ -597,7 +597,7 @@
             "version": 1
         },
         "song_id": null,
-        "area_id": 223
+        "area_id": 221
     },
     {
         "id": 41,
@@ -612,7 +612,7 @@
             "version": null
         },
         "song_id": null,
-        "area_id": 181
+        "area_id": 179
     },
     {
         "id": 42,
@@ -627,7 +627,7 @@
             "version": null
         },
         "song_id": 59,
-        "area_id": 192
+        "area_id": 190
     },
     {
         "id": 43,
@@ -642,7 +642,7 @@
             "version": null
         },
         "song_id": 59,
-        "area_id": 192
+        "area_id": 190
     },
     {
         "id": 44,
@@ -657,7 +657,7 @@
             "version": null
         },
         "song_id": 59,
-        "area_id": 192
+        "area_id": 190
     },
     {
         "id": 45,
@@ -672,7 +672,7 @@
             "version": null
         },
         "song_id": 63,
-        "area_id": 192
+        "area_id": 190
     },
     {
         "id": 46,
@@ -687,7 +687,7 @@
             "version": null
         },
         "song_id": 63,
-        "area_id": 192
+        "area_id": 190
     },
     {
         "id": 47,
@@ -702,7 +702,7 @@
             "version": null
         },
         "song_id": null,
-        "area_id": 192
+        "area_id": 190
     },
     {
         "id": 48,
@@ -717,7 +717,7 @@
             "version": null
         },
         "song_id": null,
-        "area_id": 192
+        "area_id": 190
     },
     {
         "id": 49,
@@ -732,7 +732,7 @@
             "version": null
         },
         "song_id": null,
-        "area_id": 192
+        "area_id": 190
     },
     {
         "id": 50,
@@ -747,7 +747,7 @@
             "version": null
         },
         "song_id": null,
-        "area_id": 192
+        "area_id": 190
     },
     {
         "id": 51,
@@ -759,10 +759,10 @@
             "location": "sin",
             "sublocation": "sin",
             "area": "dream's end",
-            "version": 1
+            "version": null
         },
         "song_id": 78,
-        "area_id": 237
+        "area_id": 235
     },
     {
         "id": 52,
@@ -774,9 +774,9 @@
             "location": "sin",
             "sublocation": "sin",
             "area": "dream's end",
-            "version": 2
+            "version": null
         },
         "song_id": 89,
-        "area_id": 238
+        "area_id": 235
     }
 ]

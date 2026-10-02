@@ -179,7 +179,7 @@ func TestGetCharacter(t *testing.T) {
 				name: "seymour",
 			},
 			untypedUnit:      8,
-			area:             103,
+			area:             102,
 			weaponType:       "seymour-staff",
 			celestialWeapon:  nil,
 			overdriveCommand: nil,

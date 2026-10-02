@@ -54,7 +54,7 @@ func TestGetLocation(t *testing.T) {
 			},
 			expUnique:          newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
-			sublocations:       []int32{25, 26, 27},
+			sublocations:       []int32{26, 27, 28},
 			expLocRel: expLocRel{
 				characters: []int32{},
 				aeons:      []int32{4},
@@ -95,7 +95,7 @@ func TestGetLocation(t *testing.T) {
 			},
 			expUnique:          newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
-			sublocations:       []int32{25, 26, 27},
+			sublocations:       []int32{26, 27, 28},
 			expLocRel: expLocRel{
 				characters: []int32{},
 				aeons:      []int32{4},
@@ -136,7 +136,7 @@ func TestGetLocation(t *testing.T) {
 			},
 			expUnique:          newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
-			sublocations:       []int32{25, 26, 27},
+			sublocations:       []int32{26, 27, 28},
 			expLocRel: expLocRel{
 				characters: []int32{},
 				aeons:      []int32{4},
@@ -177,7 +177,7 @@ func TestGetLocation(t *testing.T) {
 			},
 			expUnique:          newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
-			sublocations:       []int32{25, 26, 27},
+			sublocations:       []int32{26, 27, 28},
 			expLocRel: expLocRel{
 				characters: []int32{},
 				aeons:      []int32{4},
@@ -227,7 +227,7 @@ func TestGetLocation(t *testing.T) {
 				},
 			},
 			expUnique:    newExpUnique(26, "omega ruins"),
-			sublocations: []int32{41},
+			sublocations: []int32{43},
 			expLocRel: expLocRel{
 				treasures:  []int32{327, 332, 337, 342},
 				monsters:   []int32{190, 201, 210, 239, 245, 250, 255},

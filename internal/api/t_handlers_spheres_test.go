@@ -339,7 +339,7 @@ func TestRetrieveSpheres(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=story&sublocation=27",
+				requestURL:     "/api/spheres?availability=story&sublocation=28", // macalania
 				expectedStatus: http.StatusOK,
 			},
 			count:   3,
@@ -347,7 +347,7 @@ func TestRetrieveSpheres(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=story&repeatable=true&sublocation=27",
+				requestURL:     "/api/spheres?availability=story&repeatable=true&sublocation=28", // macalania
 				expectedStatus: http.StatusOK,
 			},
 			count:   0,
@@ -355,7 +355,7 @@ func TestRetrieveSpheres(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=post&repeatable=true&area=205",
+				requestURL:     "/api/spheres?availability=post&repeatable=true&area=203", // calm lands - arena
 				expectedStatus: http.StatusOK,
 			},
 			count:   17,

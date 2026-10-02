@@ -221,7 +221,7 @@ func TestRetrieveAllItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?sublocation=19&limit=max",
+				requestURL:     "/api/all-items?sublocation=20&limit=max", // moonflow
 				expectedStatus: http.StatusOK,
 			},
 			count:   33,
@@ -229,7 +229,7 @@ func TestRetrieveAllItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?area=36",
+				requestURL:     "/api/all-items?area=36", // besaid village
 				expectedStatus: http.StatusOK,
 			},
 			count:   4,
@@ -259,9 +259,10 @@ func TestRetrieveAllItems(t *testing.T) {
 			count:   17,
 			results: []int32{1, 2, 11, 12, 13, 16, 18, 20, 36, 95, 100},
 		},
+
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?repeatable=true&methods=monster&area=172",
+				requestURL:     "/api/all-items?repeatable=true&methods=monster&area=170", // sanubia desert - west
 				expectedStatus: http.StatusOK,
 			},
 			count:   20,

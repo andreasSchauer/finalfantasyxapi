@@ -639,7 +639,7 @@ func TestRetrieveItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/items?sublocation=12",
+				requestURL:     "/api/items?sublocation=13", // ss winno
 				expectedStatus: http.StatusOK,
 			},
 			count:   4,
@@ -647,7 +647,7 @@ func TestRetrieveItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/items?area=240&limit=max",
+				requestURL:     "/api/items?area=237&limit=max", // omega ruins top
 				expectedStatus: http.StatusOK,
 			},
 			count:   31,
@@ -719,7 +719,7 @@ func TestRetrieveItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=story&sublocation=25",
+				requestURL:     "/api/items?availability=story&sublocation=26", // macalania woods
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,
@@ -727,7 +727,7 @@ func TestRetrieveItems(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=post-game&area=23",
+				requestURL:     "/api/items?availability=post-game&area=23", // besaid - waterfall way (1)
 				expectedStatus: http.StatusOK,
 			},
 			count:   10,

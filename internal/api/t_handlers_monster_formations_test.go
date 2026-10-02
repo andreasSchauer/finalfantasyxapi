@@ -40,7 +40,7 @@ func TestGetMonsterFormation(t *testing.T) {
 				"sinspawn echuilles": 1,
 				"sinscale - 3":       4,
 			},
-			areas:           []int32{47},
+			areas:           []int32{42},
 			triggerCommands: []testFormationTC{},
 		},
 		{
@@ -66,7 +66,7 @@ func TestGetMonsterFormation(t *testing.T) {
 			monsters: map[string]int32{
 				"garuda - 3": 1,
 			},
-			areas: []int32{100, 101, 107},
+			areas: []int32{99, 100, 106},
 		},
 		{
 			testGeneral: testGeneral{
@@ -92,7 +92,7 @@ func TestGetMonsterFormation(t *testing.T) {
 				"anima - 1":          1,
 				"guado guardian - 1": 2,
 			},
-			areas: []int32{166},
+			areas: []int32{164},
 			triggerCommands: []testFormationTC{
 				{
 					Ability: 4,
@@ -125,7 +125,7 @@ func TestGetMonsterFormation(t *testing.T) {
 			monsters: map[string]int32{
 				"great malboro": 1,
 			},
-			areas:           []int32{236, 239, 240},
+			areas:           []int32{234, 236, 237},
 			triggerCommands: []testFormationTC{},
 		},
 	}
@@ -169,7 +169,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?sublocation=6",
+				requestURL:     "/api/monster-formations?sublocation=7", // besaid
 				expectedStatus: http.StatusOK,
 			},
 			count:   14,
@@ -177,7 +177,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?area=234",
+				requestURL:     "/api/monster-formations?area=232", // sin - city of dying dreams
 				expectedStatus: http.StatusOK,
 			},
 			count:   8,
@@ -249,7 +249,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?availability=pre-story&sublocation=33",
+				requestURL:     "/api/monster-formations?availability=pre-story&sublocation=34", // highbridge
 				expectedStatus: http.StatusOK,
 			},
 			count:   4,
@@ -257,7 +257,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?availability=story&area=236",
+				requestURL:     "/api/monster-formations?availability=story&area=234", // sin - the nucleus
 				expectedStatus: http.StatusOK,
 			},
 			count:   8,
@@ -309,22 +309,22 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/36/monster-formations",
+				requestURL:     "/api/sublocations/38/monster-formations",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleSublocations,
 			},
 			count:          14,
-			parentResource: h.GetStrPtr("/sublocations/36"),
+			parentResource: h.GetStrPtr("/sublocations/38"),
 			results:        []int32{198, 202, 216, 217, 221, 224, 227},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/17/monster-formations",
+				requestURL:     "/api/sublocations/18/monster-formations",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleSublocations,
 			},
 			count:          10,
-			parentResource: h.GetStrPtr("/sublocations/17"),
+			parentResource: h.GetStrPtr("/sublocations/18"),
 			results:        []int32{86, 89, 90, 93, 95},
 		},
 		{
@@ -339,12 +339,12 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/172/monster-formations",
+				requestURL:     "/api/areas/170/monster-formations",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleAreas,
 			},
 			count:          12,
-			parentResource: h.GetStrPtr("/areas/172"),
+			parentResource: h.GetStrPtr("/areas/170"),
 			results:        []int32{140, 144, 149, 150, 153, 155},
 		},
 		{

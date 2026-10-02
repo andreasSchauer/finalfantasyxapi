@@ -179,7 +179,7 @@ func TestGetMonster(t *testing.T) {
 			distance:      1,
 			properties:    []int32{2},
 			autoAbilities: []int32{},
-			areas:         []int32{54},
+			areas:         []int32{53},
 			formations:    []int32{30, 31, 32},
 			baseStats: map[string]int32{
 				"hp":      300,
@@ -335,7 +335,7 @@ func TestGetMonster(t *testing.T) {
 				isTemporary: false,
 			},
 			properties: []int32{1},
-			areas:      []int32{150},
+			areas:      []int32{148},
 			formations: []int32{126},
 			items: &testMonItems{
 				itemDropChance: 255,
@@ -946,7 +946,7 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			expNameVer: newExpNameVer(87, "evil eye", 1),
-			areas: 		[]int32{161},
+			areas: 		[]int32{159},
 			formations: []int32{134},
 		},
 		{
@@ -977,7 +977,7 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			expNameVer: newExpNameVer(87, "evil eye", 1),
-			areas: 		[]int32{161},
+			areas: 		[]int32{159},
 			formations: []int32{128, 132},
 		},
 		{
@@ -1008,7 +1008,7 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			expNameVer: newExpNameVer(87, "evil eye", 1),
-			areas: 		[]int32{156, 159},
+			areas: 		[]int32{154, 157},
 			formations: []int32{128, 132},
 		},
 		{
@@ -1313,7 +1313,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?sublocation=25",
+				requestURL:     "/api/monsters?sublocation=26", // macalania woods
 				expectedStatus: http.StatusOK,
 			},
 			count:   7,
@@ -1321,7 +1321,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?area=90",
+				requestURL:     "/api/monsters?area=89", // mi'ihen highroad - central
 				expectedStatus: http.StatusOK,
 			},
 			count:   6,
@@ -1409,7 +1409,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?availability=post-game&area=142",
+				requestURL:     "/api/monsters?availability=post-game&area=140", // thunder plains - north
 				expectedStatus: http.StatusOK,
 			},
 			count:   10,
@@ -1417,7 +1417,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?availability=story&sublocation=34",
+				requestURL:     "/api/monsters?availability=story&sublocation=35", // calm lands
 				expectedStatus: http.StatusOK,
 			},
 			count:   2,
@@ -1513,12 +1513,12 @@ func TestSubsectionMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/90/monsters/",
+				requestURL:     "/api/areas/89/monsters/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleAreas,
 			},
 			count:          6,
-			parentResource: h.GetStrPtr("/areas/90"),
+			parentResource: h.GetStrPtr("/areas/89"),
 			results:        []int32{38, 39, 40, 42, 43, 45},
 		},
 		{
@@ -1533,13 +1533,13 @@ func TestSubsectionMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/areas/239/monsters/",
+				requestURL:     "/api/areas/236/monsters/",
 				expectedStatus: http.StatusOK,
 				handler:        testCfg.HandleAreas,
 			},
 			count:          21,
 			next:           nil,
-			parentResource: h.GetStrPtr("/areas/239"),
+			parentResource: h.GetStrPtr("/areas/236"),
 			results:        []int32{190, 201, 210, 239, 245, 249, 253},
 		},
 		{

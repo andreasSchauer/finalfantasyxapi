@@ -1494,7 +1494,7 @@
             "area": "trials",
             "version": null
         },
-        "area_id": 61,
+        "area_id": 60,
         "category": "standard-aeons",
         "is_optional": false,
         "num_battles_to_regenerate": 12,
@@ -2991,7 +2991,7 @@
             "area": "trials",
             "version": null
         },
-        "area_id": 115,
+        "area_id": 114,
         "category": "standard-aeons",
         "is_optional": false,
         "num_battles_to_regenerate": 20,
@@ -4488,7 +4488,7 @@
             "area": "trials",
             "version": null
         },
-        "area_id": 165,
+        "area_id": 163,
         "category": "standard-aeons",
         "is_optional": false,
         "num_battles_to_regenerate": 20,
@@ -5985,7 +5985,7 @@
             "area": "trials",
             "version": null
         },
-        "area_id": 198,
+        "area_id": 196,
         "category": "standard-aeons",
         "is_optional": false,
         "num_battles_to_regenerate": 24,
@@ -8965,7 +8965,7 @@
             "area": "fayth",
             "version": null
         },
-        "area_id": 212,
+        "area_id": 210,
         "category": null,
         "is_optional": true,
         "num_battles_to_regenerate": 24,
@@ -10446,11 +10446,11 @@
         "unlock_condition": "Obtain every other Aeon. Then break the seal at Remiem Temple by using the Blossom Crown and the Flower Ceptre.",
         "location_area": {
             "location": "remiem temple",
-            "sublocation": "remiem temple",
+            "sublocation": "remiem",
             "area": "fayth",
             "version": null
         },
-        "area_id": 210,
+        "area_id": 208,
         "category": "magus-sisters",
         "is_optional": true,
         "num_battles_to_regenerate": 30,
@@ -11936,11 +11936,11 @@
         "unlock_condition": "Obtain every other Aeon. Then break the seal at Remiem Temple by using the Blossom Crown and the Flower Ceptre.",
         "location_area": {
             "location": "remiem temple",
-            "sublocation": "remiem temple",
+            "sublocation": "remiem",
             "area": "fayth",
             "version": null
         },
-        "area_id": 210,
+        "area_id": 208,
         "category": "magus-sisters",
         "is_optional": true,
         "num_battles_to_regenerate": 30,
@@ -13426,11 +13426,11 @@
         "unlock_condition": "Obtain every other Aeon. Then break the seal at Remiem Temple by using the Blossom Crown and the Flower Ceptre.",
         "location_area": {
             "location": "remiem temple",
-            "sublocation": "remiem temple",
+            "sublocation": "remiem",
             "area": "fayth",
             "version": null
         },
-        "area_id": 210,
+        "area_id": 208,
         "category": "magus-sisters",
         "is_optional": true,
         "num_battles_to_regenerate": 30,

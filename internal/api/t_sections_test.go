@@ -20,7 +20,7 @@ func TestAreaToLocAreaString(t *testing.T) {
 			exp:	"baaj temple - submerged ruins",
 		},
 		{
-			input: 	221,
+			input: 	219,
 			exp:	"zanarkand ruins",
 		},
 		{
@@ -28,7 +28,7 @@ func TestAreaToLocAreaString(t *testing.T) {
 			exp:	"besaid - besaid village - house - 1 (southern)",
 		},
 		{
-			input: 	48,
+			input: 	47,
 			exp:	"kilika - kilika port - dock",
 		},
 	}
