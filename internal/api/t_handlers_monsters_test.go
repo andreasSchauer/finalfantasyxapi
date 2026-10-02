@@ -254,7 +254,7 @@ func TestGetMonster(t *testing.T) {
 				{element: 4, affinity: database.ElementalAffinityHalved},
 				{element: 5, affinity: database.ElementalAffinityNeutral},
 			},
-			statusImmunities: []int32{1, 4, 14},
+			statusImmunities: []int32{1, 4, 13},
 			statusResists: map[string]int32{
 				"silence": 20,
 			},
@@ -386,7 +386,7 @@ func TestGetMonster(t *testing.T) {
 				{element: 4, affinity: database.ElementalAffinityWeak},
 				{element: 5, affinity: database.ElementalAffinityAbsorb},
 			},
-			statusImmunities: []int32{2, 8, 13, 15, 33, 43, 46},
+			statusImmunities: []int32{2, 7, 12, 14, 32, 42, 45},
 			statusResists: map[string]int32{
 				"poison": 90,
 			},
@@ -435,7 +435,7 @@ func TestGetMonster(t *testing.T) {
 				isTemporary: true,
 			},
 			bribeChances:     nil,
-			statusImmunities: []int32{1, 2, 5, 10, 14, 33},
+			statusImmunities: []int32{1, 2, 5, 9, 13, 32},
 			statusResists: map[string]int32{
 				"darkness":    50,
 				"power break": 50,
@@ -448,7 +448,7 @@ func TestGetMonster(t *testing.T) {
 					},
 				},
 				Loss: &testAltStateLoss{
-					StatusImmunities: []int32{14, 33},
+					StatusImmunities: []int32{13, 32},
 				},
 			},
 		},
@@ -607,7 +607,7 @@ func TestGetMonster(t *testing.T) {
 			appliedState: &testAppliedState{
 				condition:     "When HP falls below 9000000.",
 				isTemporary:   false,
-				appliedStatus: h.GetInt32Ptr(22),
+				appliedStatus: h.GetInt32Ptr(21),
 			},
 			defaultState: &testDefaultState{
 				IsTemporary: false,
@@ -615,7 +615,7 @@ func TestGetMonster(t *testing.T) {
 					AutoAbilities: []int32{99},
 				},
 				Loss: &testAltStateLoss{
-					Status: h.GetInt32Ptr(22),
+					Status: h.GetInt32Ptr(21),
 				},
 			},
 		},
@@ -1233,7 +1233,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?limit=max&status_resists=38",
+				requestURL:     "/api/monsters?limit=max&status_resists=37",
 				expectedStatus: http.StatusOK,
 			},
 			count:   43,
@@ -1241,7 +1241,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters?limit=max&status_resists=1,4,11&resistance=50",
+				requestURL:     "/api/monsters?limit=max&status_resists=1,4,10&resistance=50",
 				expectedStatus: http.StatusOK,
 			},
 			count:   150,

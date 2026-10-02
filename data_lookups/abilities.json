@@ -52,7 +52,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 6,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 100,
                         "duration_type": "turns",
@@ -119,7 +119,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 4,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 100,
                         "duration_type": "turns",
@@ -253,7 +253,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 24,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -320,7 +320,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 25,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -454,7 +454,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 14,
-                        "status_condition_id": 17,
+                        "status_condition_id": 16,
                         "name": "zombie",
                         "probability": 100,
                         "duration_type": "endless",
@@ -521,7 +521,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 6,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 100,
                         "duration_type": "turns",
@@ -529,7 +529,7 @@
                     },
                     {
                         "inflicted_status_id": 4,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 100,
                         "duration_type": "turns",
@@ -732,7 +732,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 17,
-                        "status_condition_id": 35,
+                        "status_condition_id": 34,
                         "name": "power distiller",
                         "probability": 100,
                         "duration_type": "endless",
@@ -799,7 +799,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 18,
-                        "status_condition_id": 36,
+                        "status_condition_id": 35,
                         "name": "mana distiller",
                         "probability": 100,
                         "duration_type": "endless",
@@ -866,7 +866,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 19,
-                        "status_condition_id": 37,
+                        "status_condition_id": 36,
                         "name": "speed distiller",
                         "probability": 100,
                         "duration_type": "endless",
@@ -933,7 +933,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 20,
-                        "status_condition_id": 38,
+                        "status_condition_id": 37,
                         "name": "ability distiller",
                         "probability": 100,
                         "duration_type": "endless",
@@ -1000,7 +1000,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 27,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -1067,7 +1067,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 28,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -1134,7 +1134,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 29,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -1201,7 +1201,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 30,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -1268,7 +1268,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 27,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -1276,7 +1276,7 @@
                     },
                     {
                         "inflicted_status_id": 28,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -1284,7 +1284,7 @@
                     },
                     {
                         "inflicted_status_id": 29,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -1292,7 +1292,7 @@
                     },
                     {
                         "inflicted_status_id": 30,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -1559,7 +1559,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 31,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -2020,7 +2020,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 32,
-                        "status_condition_id": 39,
+                        "status_condition_id": 38,
                         "name": "guard",
                         "probability": 100,
                         "duration_type": "turns",
@@ -2065,7 +2065,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 33,
-                        "status_condition_id": 44,
+                        "status_condition_id": 43,
                         "name": "sentinel",
                         "probability": 100,
                         "duration_type": "turns",
@@ -2166,7 +2166,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 34,
-                        "status_condition_id": 16,
+                        "status_condition_id": 15,
                         "name": "threaten",
                         "probability": 100,
                         "duration_type": "inflictor-next-turn",
@@ -2211,7 +2211,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 35,
-                        "status_condition_id": 12,
+                        "status_condition_id": 11,
                         "name": "provoke",
                         "probability": 100,
                         "duration_type": "endless",
@@ -2604,7 +2604,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 36,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -2652,7 +2652,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 37,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -2700,7 +2700,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 38,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -2748,7 +2748,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 39,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -2796,7 +2796,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 40,
-                        "status_condition_id": 42,
+                        "status_condition_id": 41,
                         "name": "scan",
                         "probability": 254,
                         "duration_type": "endless",
@@ -2804,7 +2804,7 @@
                     },
                     {
                         "inflicted_status_id": 41,
-                        "status_condition_id": 43,
+                        "status_condition_id": 42,
                         "name": "sensor",
                         "probability": 254,
                         "duration_type": "endless",
@@ -2921,7 +2921,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 42,
-                        "status_condition_id": 41,
+                        "status_condition_id": 40,
                         "name": "life",
                         "probability": 254,
                         "duration_type": "instant",
@@ -2989,7 +2989,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 42,
-                        "status_condition_id": 41,
+                        "status_condition_id": 40,
                         "name": "life",
                         "probability": 254,
                         "duration_type": "instant",
@@ -3037,7 +3037,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 43,
-                        "status_condition_id": 22,
+                        "status_condition_id": 21,
                         "name": "haste",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3085,7 +3085,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 43,
-                        "status_condition_id": 22,
+                        "status_condition_id": 21,
                         "name": "haste",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3133,7 +3133,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 16,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 100,
                         "duration_type": "endless",
@@ -3181,7 +3181,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 16,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 100,
                         "duration_type": "endless",
@@ -3229,7 +3229,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 44,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3277,7 +3277,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 45,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3325,7 +3325,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 46,
-                        "status_condition_id": 28,
+                        "status_condition_id": 27,
                         "name": "reflect",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3427,7 +3427,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 47,
-                        "status_condition_id": 29,
+                        "status_condition_id": 28,
                         "name": "regen",
                         "probability": 100,
                         "duration_type": "turns",
@@ -3533,7 +3533,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 48,
-                        "status_condition_id": 31,
+                        "status_condition_id": 30,
                         "name": "auto-life",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3598,7 +3598,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 42,
-                        "status_condition_id": 41,
+                        "status_condition_id": 40,
                         "name": "life",
                         "probability": 254,
                         "duration_type": "instant",
@@ -3645,7 +3645,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 36,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -3653,7 +3653,7 @@
                     },
                     {
                         "inflicted_status_id": 37,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -3661,7 +3661,7 @@
                     },
                     {
                         "inflicted_status_id": 38,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -3669,7 +3669,7 @@
                     },
                     {
                         "inflicted_status_id": 39,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -4425,7 +4425,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -5015,7 +5015,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 34,
-                        "status_condition_id": 16,
+                        "status_condition_id": 15,
                         "name": "threaten",
                         "probability": 100,
                         "duration_type": "inflictor-next-turn",
@@ -5413,7 +5413,7 @@
                     },
                     {
                         "inflicted_status_id": 52,
-                        "status_condition_id": 46,
+                        "status_condition_id": 45,
                         "name": "slice",
                         "probability": 254,
                         "duration_type": "instant",
@@ -7109,7 +7109,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 53,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -7117,7 +7117,7 @@
                     },
                     {
                         "inflicted_status_id": 54,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -7133,7 +7133,7 @@
                     },
                     {
                         "inflicted_status_id": 56,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -7198,7 +7198,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 53,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -7206,7 +7206,7 @@
                     },
                     {
                         "inflicted_status_id": 54,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -7222,7 +7222,7 @@
                     },
                     {
                         "inflicted_status_id": 56,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -7287,7 +7287,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 57,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -7295,7 +7295,7 @@
                     },
                     {
                         "inflicted_status_id": 58,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -7303,7 +7303,7 @@
                     },
                     {
                         "inflicted_status_id": 59,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -7311,7 +7311,7 @@
                     },
                     {
                         "inflicted_status_id": 60,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -7376,7 +7376,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 57,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -7384,7 +7384,7 @@
                     },
                     {
                         "inflicted_status_id": 58,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -7392,7 +7392,7 @@
                     },
                     {
                         "inflicted_status_id": 59,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -7400,7 +7400,7 @@
                     },
                     {
                         "inflicted_status_id": 60,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 100,
                         "duration_type": "endless",
@@ -7471,7 +7471,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 61,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 100,
                         "duration_type": "endless",
@@ -7479,7 +7479,7 @@
                     },
                     {
                         "inflicted_status_id": 62,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 100,
                         "duration_type": "turns",
@@ -7550,7 +7550,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 61,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 100,
                         "duration_type": "endless",
@@ -7558,7 +7558,7 @@
                     },
                     {
                         "inflicted_status_id": 62,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 100,
                         "duration_type": "turns",
@@ -9731,7 +9731,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 63,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 80,
                         "duration_type": "endless",
@@ -9776,7 +9776,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 63,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 80,
                         "duration_type": "endless",
@@ -9821,7 +9821,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 63,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 80,
                         "duration_type": "endless",
@@ -10940,7 +10940,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 64,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -11005,7 +11005,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 64,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -11050,7 +11050,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 65,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 254,
                         "duration_type": "endless",
@@ -11151,7 +11151,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 66,
-                        "status_condition_id": 7,
+                        "status_condition_id": 6,
                         "name": "doom",
                         "probability": 254,
                         "duration_type": "endless",
@@ -11252,7 +11252,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 67,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 100,
                         "duration_type": "turns",
@@ -11260,7 +11260,7 @@
                     },
                     {
                         "inflicted_status_id": 68,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 100,
                         "duration_type": "turns",
@@ -11276,7 +11276,7 @@
                     },
                     {
                         "inflicted_status_id": 70,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 100,
                         "duration_type": "endless",
@@ -11321,7 +11321,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 36,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -11329,7 +11329,7 @@
                     },
                     {
                         "inflicted_status_id": 37,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -11337,7 +11337,7 @@
                     },
                     {
                         "inflicted_status_id": 38,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -11345,7 +11345,7 @@
                     },
                     {
                         "inflicted_status_id": 39,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -11353,7 +11353,7 @@
                     },
                     {
                         "inflicted_status_id": 71,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 254,
                         "duration_type": "endless",
@@ -11361,7 +11361,7 @@
                     },
                     {
                         "inflicted_status_id": 72,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 254,
                         "duration_type": "endless",
@@ -11656,7 +11656,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 64,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -11833,7 +11833,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 73,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -11841,7 +11841,7 @@
                     },
                     {
                         "inflicted_status_id": 74,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -11849,7 +11849,7 @@
                     },
                     {
                         "inflicted_status_id": 75,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -11857,7 +11857,7 @@
                     },
                     {
                         "inflicted_status_id": 76,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -12245,7 +12245,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 75,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -12534,7 +12534,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 6,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 100,
                         "duration_type": "turns",
@@ -12542,7 +12542,7 @@
                     },
                     {
                         "inflicted_status_id": 77,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 150,
                         "duration_type": "turns",
@@ -12615,7 +12615,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 79,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 150,
                         "duration_type": "turns",
@@ -12623,7 +12623,7 @@
                     },
                     {
                         "inflicted_status_id": 80,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -12639,7 +12639,7 @@
                     },
                     {
                         "inflicted_status_id": 82,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 150,
                         "duration_type": "endless",
@@ -12704,7 +12704,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 83,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -12712,7 +12712,7 @@
                     },
                     {
                         "inflicted_status_id": 84,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -12728,7 +12728,7 @@
                     },
                     {
                         "inflicted_status_id": 56,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -12736,7 +12736,7 @@
                     },
                     {
                         "inflicted_status_id": 86,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -12744,7 +12744,7 @@
                     },
                     {
                         "inflicted_status_id": 87,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -12752,7 +12752,7 @@
                     },
                     {
                         "inflicted_status_id": 88,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -12760,7 +12760,7 @@
                     },
                     {
                         "inflicted_status_id": 89,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -12825,7 +12825,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 90,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 150,
                         "duration_type": "turns",
@@ -12833,7 +12833,7 @@
                     },
                     {
                         "inflicted_status_id": 91,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 150,
                         "duration_type": "turns",
@@ -12849,7 +12849,7 @@
                     },
                     {
                         "inflicted_status_id": 56,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -12857,7 +12857,7 @@
                     },
                     {
                         "inflicted_status_id": 93,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 150,
                         "duration_type": "endless",
@@ -12865,7 +12865,7 @@
                     },
                     {
                         "inflicted_status_id": 94,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 150,
                         "duration_type": "endless",
@@ -12873,7 +12873,7 @@
                     },
                     {
                         "inflicted_status_id": 95,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 150,
                         "duration_type": "endless",
@@ -12881,7 +12881,7 @@
                     },
                     {
                         "inflicted_status_id": 96,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 150,
                         "duration_type": "endless",
@@ -12889,7 +12889,7 @@
                     },
                     {
                         "inflicted_status_id": 97,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -13122,7 +13122,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 98,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 150,
                         "duration_type": "turns",
@@ -13130,7 +13130,7 @@
                     },
                     {
                         "inflicted_status_id": 54,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -13146,7 +13146,7 @@
                     },
                     {
                         "inflicted_status_id": 82,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 150,
                         "duration_type": "endless",
@@ -13211,7 +13211,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 99,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -13219,7 +13219,7 @@
                     },
                     {
                         "inflicted_status_id": 80,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -13235,7 +13235,7 @@
                     },
                     {
                         "inflicted_status_id": 56,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -13243,7 +13243,7 @@
                     },
                     {
                         "inflicted_status_id": 86,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -13251,7 +13251,7 @@
                     },
                     {
                         "inflicted_status_id": 87,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -13259,7 +13259,7 @@
                     },
                     {
                         "inflicted_status_id": 88,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -13267,7 +13267,7 @@
                     },
                     {
                         "inflicted_status_id": 89,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -13500,7 +13500,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 98,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 150,
                         "duration_type": "turns",
@@ -13508,7 +13508,7 @@
                     },
                     {
                         "inflicted_status_id": 54,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -13524,7 +13524,7 @@
                     },
                     {
                         "inflicted_status_id": 82,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 150,
                         "duration_type": "endless",
@@ -13589,7 +13589,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 99,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -13597,7 +13597,7 @@
                     },
                     {
                         "inflicted_status_id": 80,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -13613,7 +13613,7 @@
                     },
                     {
                         "inflicted_status_id": 56,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -13621,7 +13621,7 @@
                     },
                     {
                         "inflicted_status_id": 86,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -13629,7 +13629,7 @@
                     },
                     {
                         "inflicted_status_id": 87,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -13637,7 +13637,7 @@
                     },
                     {
                         "inflicted_status_id": 88,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -13645,7 +13645,7 @@
                     },
                     {
                         "inflicted_status_id": 89,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -13878,7 +13878,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 98,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 150,
                         "duration_type": "turns",
@@ -13886,7 +13886,7 @@
                     },
                     {
                         "inflicted_status_id": 54,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -13902,7 +13902,7 @@
                     },
                     {
                         "inflicted_status_id": 82,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 150,
                         "duration_type": "endless",
@@ -13967,7 +13967,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 99,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -13975,7 +13975,7 @@
                     },
                     {
                         "inflicted_status_id": 80,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -13991,7 +13991,7 @@
                     },
                     {
                         "inflicted_status_id": 56,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -13999,7 +13999,7 @@
                     },
                     {
                         "inflicted_status_id": 86,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -14007,7 +14007,7 @@
                     },
                     {
                         "inflicted_status_id": 87,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -14015,7 +14015,7 @@
                     },
                     {
                         "inflicted_status_id": 88,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -14023,7 +14023,7 @@
                     },
                     {
                         "inflicted_status_id": 89,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -14256,7 +14256,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 98,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 150,
                         "duration_type": "turns",
@@ -14264,7 +14264,7 @@
                     },
                     {
                         "inflicted_status_id": 54,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -14280,7 +14280,7 @@
                     },
                     {
                         "inflicted_status_id": 82,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 150,
                         "duration_type": "endless",
@@ -14345,7 +14345,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 99,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -14353,7 +14353,7 @@
                     },
                     {
                         "inflicted_status_id": 80,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -14369,7 +14369,7 @@
                     },
                     {
                         "inflicted_status_id": 56,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -14377,7 +14377,7 @@
                     },
                     {
                         "inflicted_status_id": 86,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -14385,7 +14385,7 @@
                     },
                     {
                         "inflicted_status_id": 87,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -14393,7 +14393,7 @@
                     },
                     {
                         "inflicted_status_id": 88,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -14401,7 +14401,7 @@
                     },
                     {
                         "inflicted_status_id": 89,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 50,
                         "duration_type": "endless",
@@ -14804,7 +14804,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 42,
-                        "status_condition_id": 41,
+                        "status_condition_id": 40,
                         "name": "life",
                         "probability": 254,
                         "duration_type": "instant",
@@ -14869,7 +14869,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 42,
-                        "status_condition_id": 41,
+                        "status_condition_id": 40,
                         "name": "life",
                         "probability": 254,
                         "duration_type": "instant",
@@ -15153,7 +15153,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 42,
-                        "status_condition_id": 41,
+                        "status_condition_id": 40,
                         "name": "life",
                         "probability": 254,
                         "duration_type": "instant",
@@ -15209,7 +15209,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 36,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15217,7 +15217,7 @@
                     },
                     {
                         "inflicted_status_id": 37,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15225,7 +15225,7 @@
                     },
                     {
                         "inflicted_status_id": 38,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15233,7 +15233,7 @@
                     },
                     {
                         "inflicted_status_id": 39,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15278,7 +15278,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 36,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15286,7 +15286,7 @@
                     },
                     {
                         "inflicted_status_id": 37,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15294,7 +15294,7 @@
                     },
                     {
                         "inflicted_status_id": 38,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15302,7 +15302,7 @@
                     },
                     {
                         "inflicted_status_id": 39,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15347,7 +15347,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 36,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15355,7 +15355,7 @@
                     },
                     {
                         "inflicted_status_id": 37,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15363,7 +15363,7 @@
                     },
                     {
                         "inflicted_status_id": 38,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15371,7 +15371,7 @@
                     },
                     {
                         "inflicted_status_id": 39,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15446,7 +15446,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 36,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15454,7 +15454,7 @@
                     },
                     {
                         "inflicted_status_id": 37,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15462,7 +15462,7 @@
                     },
                     {
                         "inflicted_status_id": 38,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15470,7 +15470,7 @@
                     },
                     {
                         "inflicted_status_id": 39,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -15559,7 +15559,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 72,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 254,
                         "duration_type": "endless",
@@ -15567,7 +15567,7 @@
                     },
                     {
                         "inflicted_status_id": 71,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 254,
                         "duration_type": "endless",
@@ -15612,7 +15612,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 72,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 254,
                         "duration_type": "endless",
@@ -15620,7 +15620,7 @@
                     },
                     {
                         "inflicted_status_id": 71,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 254,
                         "duration_type": "endless",
@@ -15628,7 +15628,7 @@
                     },
                     {
                         "inflicted_status_id": 100,
-                        "status_condition_id": 22,
+                        "status_condition_id": 21,
                         "name": "haste",
                         "probability": 254,
                         "duration_type": "endless",
@@ -15673,7 +15673,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 72,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 254,
                         "duration_type": "endless",
@@ -15681,7 +15681,7 @@
                     },
                     {
                         "inflicted_status_id": 71,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 254,
                         "duration_type": "endless",
@@ -15689,7 +15689,7 @@
                     },
                     {
                         "inflicted_status_id": 100,
-                        "status_condition_id": 22,
+                        "status_condition_id": 21,
                         "name": "haste",
                         "probability": 254,
                         "duration_type": "endless",
@@ -15697,7 +15697,7 @@
                     },
                     {
                         "inflicted_status_id": 101,
-                        "status_condition_id": 29,
+                        "status_condition_id": 28,
                         "name": "regen",
                         "probability": 254,
                         "duration_type": "turns",
@@ -15742,7 +15742,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 72,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 254,
                         "duration_type": "endless",
@@ -15750,7 +15750,7 @@
                     },
                     {
                         "inflicted_status_id": 71,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 254,
                         "duration_type": "endless",
@@ -15758,7 +15758,7 @@
                     },
                     {
                         "inflicted_status_id": 100,
-                        "status_condition_id": 22,
+                        "status_condition_id": 21,
                         "name": "haste",
                         "probability": 254,
                         "duration_type": "endless",
@@ -15766,7 +15766,7 @@
                     },
                     {
                         "inflicted_status_id": 101,
-                        "status_condition_id": 29,
+                        "status_condition_id": 28,
                         "name": "regen",
                         "probability": 254,
                         "duration_type": "turns",
@@ -15774,7 +15774,7 @@
                     },
                     {
                         "inflicted_status_id": 102,
-                        "status_condition_id": 31,
+                        "status_condition_id": 30,
                         "name": "auto-life",
                         "probability": 254,
                         "duration_type": "endless",
@@ -17457,7 +17457,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 42,
-                        "status_condition_id": 41,
+                        "status_condition_id": 40,
                         "name": "life",
                         "probability": 254,
                         "duration_type": "instant",
@@ -17522,7 +17522,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 42,
-                        "status_condition_id": 41,
+                        "status_condition_id": 40,
                         "name": "life",
                         "probability": 254,
                         "duration_type": "instant",
@@ -17804,7 +17804,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 103,
-                        "status_condition_id": 35,
+                        "status_condition_id": 34,
                         "name": "power distiller",
                         "probability": 254,
                         "duration_type": "endless",
@@ -17849,7 +17849,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 104,
-                        "status_condition_id": 36,
+                        "status_condition_id": 35,
                         "name": "mana distiller",
                         "probability": 254,
                         "duration_type": "endless",
@@ -17894,7 +17894,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 105,
-                        "status_condition_id": 37,
+                        "status_condition_id": 36,
                         "name": "speed distiller",
                         "probability": 254,
                         "duration_type": "endless",
@@ -17939,7 +17939,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 106,
-                        "status_condition_id": 38,
+                        "status_condition_id": 37,
                         "name": "ability distiller",
                         "probability": 254,
                         "duration_type": "endless",
@@ -18120,7 +18120,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 36,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -18128,7 +18128,7 @@
                     },
                     {
                         "inflicted_status_id": 37,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -18136,7 +18136,7 @@
                     },
                     {
                         "inflicted_status_id": 38,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -18144,7 +18144,7 @@
                     },
                     {
                         "inflicted_status_id": 39,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -18937,7 +18937,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -19002,7 +19002,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 108,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -19067,7 +19067,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 108,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -19132,7 +19132,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 109,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -19486,7 +19486,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -19537,7 +19537,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -19608,7 +19608,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -19653,7 +19653,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 112,
-                        "status_condition_id": 7,
+                        "status_condition_id": 6,
                         "name": "doom",
                         "probability": 254,
                         "duration_type": "endless",
@@ -19698,7 +19698,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 113,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 254,
                         "duration_type": "endless",
@@ -19889,7 +19889,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 43,
-                        "status_condition_id": 22,
+                        "status_condition_id": 21,
                         "name": "haste",
                         "probability": 254,
                         "duration_type": "endless",
@@ -19934,7 +19934,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 43,
-                        "status_condition_id": 22,
+                        "status_condition_id": 21,
                         "name": "haste",
                         "probability": 254,
                         "duration_type": "endless",
@@ -19979,7 +19979,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 44,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 254,
                         "duration_type": "endless",
@@ -20024,7 +20024,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 45,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 254,
                         "duration_type": "endless",
@@ -20069,7 +20069,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 46,
-                        "status_condition_id": 28,
+                        "status_condition_id": 27,
                         "name": "reflect",
                         "probability": 254,
                         "duration_type": "endless",
@@ -20114,7 +20114,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 115,
-                        "status_condition_id": 29,
+                        "status_condition_id": 28,
                         "name": "regen",
                         "probability": 254,
                         "duration_type": "turns",
@@ -21231,7 +21231,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 116,
-                        "status_condition_id": 34,
+                        "status_condition_id": 33,
                         "name": "defend",
                         "probability": 100,
                         "duration_type": "turns",
@@ -21300,7 +21300,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 117,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 75,
                         "duration_type": "endless",
@@ -21345,7 +21345,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 118,
-                        "status_condition_id": 45,
+                        "status_condition_id": 44,
                         "name": "shield",
                         "probability": 254,
                         "duration_type": "turns",
@@ -21390,7 +21390,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 119,
-                        "status_condition_id": 32,
+                        "status_condition_id": 31,
                         "name": "boost",
                         "probability": 254,
                         "duration_type": "turns",
@@ -22429,7 +22429,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 31,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -22747,7 +22747,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 121,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 10,
                         "duration_type": "turns",
@@ -22755,7 +22755,7 @@
                     },
                     {
                         "inflicted_status_id": 122,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 10,
                         "duration_type": "turns",
@@ -22822,7 +22822,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 121,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 10,
                         "duration_type": "turns",
@@ -22830,7 +22830,7 @@
                     },
                     {
                         "inflicted_status_id": 123,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 10,
                         "duration_type": "endless",
@@ -22964,7 +22964,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 125,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 10,
                         "duration_type": "turns",
@@ -23154,7 +23154,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 127,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 80,
                         "duration_type": "endless",
@@ -23337,7 +23337,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 128,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 30,
                         "duration_type": "turns",
@@ -23345,7 +23345,7 @@
                     },
                     {
                         "inflicted_status_id": 129,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 30,
                         "duration_type": "endless",
@@ -23410,7 +23410,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 130,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 100,
                         "duration_type": "turns",
@@ -23475,7 +23475,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 131,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 100,
                         "duration_type": "turns",
@@ -23721,7 +23721,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 133,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 30,
                         "duration_type": "turns",
@@ -23846,7 +23846,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -23913,7 +23913,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 134,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 30,
                         "duration_type": "turns",
@@ -23921,7 +23921,7 @@
                     },
                     {
                         "inflicted_status_id": 128,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 30,
                         "duration_type": "turns",
@@ -24046,7 +24046,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 127,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 80,
                         "duration_type": "endless",
@@ -24113,7 +24113,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 8,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 100,
                         "duration_type": "endless",
@@ -24605,7 +24605,7 @@
                     },
                     {
                         "inflicted_status_id": 137,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 80,
                         "duration_type": "turns",
@@ -24613,7 +24613,7 @@
                     },
                     {
                         "inflicted_status_id": 138,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 80,
                         "duration_type": "turns",
@@ -24871,7 +24871,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -24879,7 +24879,7 @@
                     },
                     {
                         "inflicted_status_id": 141,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -24887,7 +24887,7 @@
                     },
                     {
                         "inflicted_status_id": 142,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -24954,7 +24954,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -24962,7 +24962,7 @@
                     },
                     {
                         "inflicted_status_id": 141,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -25102,7 +25102,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 113,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 254,
                         "duration_type": "endless",
@@ -25110,7 +25110,7 @@
                     },
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -25118,7 +25118,7 @@
                     },
                     {
                         "inflicted_status_id": 144,
-                        "status_condition_id": 17,
+                        "status_condition_id": 16,
                         "name": "zombie",
                         "probability": 254,
                         "duration_type": "endless",
@@ -25258,7 +25258,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 113,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 254,
                         "duration_type": "endless",
@@ -25415,7 +25415,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 146,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 150,
                         "duration_type": "endless",
@@ -25439,7 +25439,7 @@
                     },
                     {
                         "inflicted_status_id": 149,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 130,
                         "duration_type": "turns",
@@ -25455,7 +25455,7 @@
                     },
                     {
                         "inflicted_status_id": 4,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 100,
                         "duration_type": "turns",
@@ -25503,7 +25503,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 31,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -25938,7 +25938,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 8,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 100,
                         "duration_type": "endless",
@@ -26300,7 +26300,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 152,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 180,
                         "duration_type": "endless",
@@ -26791,7 +26791,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 113,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27116,7 +27116,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 153,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 80,
                         "duration_type": "endless",
@@ -27303,7 +27303,7 @@
                     },
                     {
                         "inflicted_status_id": 155,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27311,7 +27311,7 @@
                     },
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27327,7 +27327,7 @@
                     },
                     {
                         "inflicted_status_id": 156,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27335,7 +27335,7 @@
                     },
                     {
                         "inflicted_status_id": 157,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27343,7 +27343,7 @@
                     },
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27351,7 +27351,7 @@
                     },
                     {
                         "inflicted_status_id": 141,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27546,7 +27546,7 @@
                     },
                     {
                         "inflicted_status_id": 112,
-                        "status_condition_id": 7,
+                        "status_condition_id": 6,
                         "name": "doom",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27713,7 +27713,7 @@
                     },
                     {
                         "inflicted_status_id": 158,
-                        "status_condition_id": 17,
+                        "status_condition_id": 16,
                         "name": "zombie",
                         "probability": 120,
                         "duration_type": "endless",
@@ -27778,7 +27778,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 113,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27964,7 +27964,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 156,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27972,7 +27972,7 @@
                     },
                     {
                         "inflicted_status_id": 157,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27980,7 +27980,7 @@
                     },
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -27988,7 +27988,7 @@
                     },
                     {
                         "inflicted_status_id": 141,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -28004,7 +28004,7 @@
                     },
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -28012,7 +28012,7 @@
                     },
                     {
                         "inflicted_status_id": 160,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 255,
                         "duration_type": "endless",
@@ -28020,7 +28020,7 @@
                     },
                     {
                         "inflicted_status_id": 161,
-                        "status_condition_id": 17,
+                        "status_condition_id": 16,
                         "name": "zombie",
                         "probability": 255,
                         "duration_type": "endless",
@@ -28514,7 +28514,7 @@
                     },
                     {
                         "inflicted_status_id": 4,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 100,
                         "duration_type": "turns",
@@ -28522,7 +28522,7 @@
                     },
                     {
                         "inflicted_status_id": 4,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 100,
                         "duration_type": "turns",
@@ -28530,7 +28530,7 @@
                     },
                     {
                         "inflicted_status_id": 8,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 100,
                         "duration_type": "endless",
@@ -28651,7 +28651,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 113,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 254,
                         "duration_type": "endless",
@@ -28659,7 +28659,7 @@
                     },
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -29360,7 +29360,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 112,
-                        "status_condition_id": 7,
+                        "status_condition_id": 6,
                         "name": "doom",
                         "probability": 254,
                         "duration_type": "endless",
@@ -29487,7 +29487,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 24,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -30454,7 +30454,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 163,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 255,
                         "duration_type": "endless",
@@ -31194,7 +31194,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 42,
-                        "status_condition_id": 41,
+                        "status_condition_id": 40,
                         "name": "life",
                         "probability": 254,
                         "duration_type": "instant",
@@ -31317,7 +31317,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 9,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 50,
                         "duration_type": "endless",
@@ -31624,7 +31624,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 129,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 30,
                         "duration_type": "endless",
@@ -31754,7 +31754,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 166,
-                        "status_condition_id": 17,
+                        "status_condition_id": 16,
                         "name": "zombie",
                         "probability": 30,
                         "duration_type": "endless",
@@ -31988,7 +31988,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 8,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 100,
                         "duration_type": "endless",
@@ -32061,7 +32061,7 @@
                     },
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -32069,7 +32069,7 @@
                     },
                     {
                         "inflicted_status_id": 156,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -32077,7 +32077,7 @@
                     },
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -32085,7 +32085,7 @@
                     },
                     {
                         "inflicted_status_id": 142,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -32533,7 +32533,7 @@
                     },
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -32766,7 +32766,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 34,
-                        "status_condition_id": 16,
+                        "status_condition_id": 15,
                         "name": "threaten",
                         "probability": 100,
                         "duration_type": "inflictor-next-turn",
@@ -33036,7 +33036,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 14,
-                        "status_condition_id": 17,
+                        "status_condition_id": 16,
                         "name": "zombie",
                         "probability": 100,
                         "duration_type": "endless",
@@ -33504,7 +33504,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -33512,7 +33512,7 @@
                     },
                     {
                         "inflicted_status_id": 141,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -33689,7 +33689,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 167,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 255,
                         "duration_type": "endless",
@@ -33697,7 +33697,7 @@
                     },
                     {
                         "inflicted_status_id": 113,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 254,
                         "duration_type": "endless",
@@ -33705,7 +33705,7 @@
                     },
                     {
                         "inflicted_status_id": 156,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -33713,7 +33713,7 @@
                     },
                     {
                         "inflicted_status_id": 157,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -33721,7 +33721,7 @@
                     },
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -33729,7 +33729,7 @@
                     },
                     {
                         "inflicted_status_id": 141,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -33806,7 +33806,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 10,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 100,
                         "duration_type": "endless",
@@ -34348,7 +34348,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 156,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -34356,7 +34356,7 @@
                     },
                     {
                         "inflicted_status_id": 157,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -34364,7 +34364,7 @@
                     },
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -34372,7 +34372,7 @@
                     },
                     {
                         "inflicted_status_id": 141,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -34380,7 +34380,7 @@
                     },
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -34445,7 +34445,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 14,
-                        "status_condition_id": 17,
+                        "status_condition_id": 16,
                         "name": "zombie",
                         "probability": 100,
                         "duration_type": "endless",
@@ -34622,7 +34622,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 53,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -34630,7 +34630,7 @@
                     },
                     {
                         "inflicted_status_id": 169,
-                        "status_condition_id": 29,
+                        "status_condition_id": 28,
                         "name": "regen",
                         "probability": 254,
                         "duration_type": "turns",
@@ -35174,7 +35174,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 156,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -35182,7 +35182,7 @@
                     },
                     {
                         "inflicted_status_id": 157,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -35190,7 +35190,7 @@
                     },
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -35198,7 +35198,7 @@
                     },
                     {
                         "inflicted_status_id": 141,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -35271,7 +35271,7 @@
                     },
                     {
                         "inflicted_status_id": 171,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -35279,7 +35279,7 @@
                     },
                     {
                         "inflicted_status_id": 142,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -35287,7 +35287,7 @@
                     },
                     {
                         "inflicted_status_id": 112,
-                        "status_condition_id": 7,
+                        "status_condition_id": 6,
                         "name": "doom",
                         "probability": 254,
                         "duration_type": "endless",
@@ -35295,7 +35295,7 @@
                     },
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -35780,7 +35780,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 172,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 255,
                         "duration_type": "endless",
@@ -35788,7 +35788,7 @@
                     },
                     {
                         "inflicted_status_id": 173,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 255,
                         "duration_type": "endless",
@@ -35796,7 +35796,7 @@
                     },
                     {
                         "inflicted_status_id": 174,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -35804,7 +35804,7 @@
                     },
                     {
                         "inflicted_status_id": 175,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -35812,7 +35812,7 @@
                     },
                     {
                         "inflicted_status_id": 176,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -35820,7 +35820,7 @@
                     },
                     {
                         "inflicted_status_id": 177,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -35865,7 +35865,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 178,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 255,
                         "duration_type": "auto",
@@ -35873,7 +35873,7 @@
                     },
                     {
                         "inflicted_status_id": 179,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 255,
                         "duration_type": "auto",
@@ -35918,7 +35918,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 180,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 255,
                         "duration_type": "turns",
@@ -35926,7 +35926,7 @@
                     },
                     {
                         "inflicted_status_id": 181,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 255,
                         "duration_type": "turns",
@@ -35934,7 +35934,7 @@
                     },
                     {
                         "inflicted_status_id": 174,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -35942,7 +35942,7 @@
                     },
                     {
                         "inflicted_status_id": 175,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -35950,7 +35950,7 @@
                     },
                     {
                         "inflicted_status_id": 176,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -35958,7 +35958,7 @@
                     },
                     {
                         "inflicted_status_id": 177,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -36003,7 +36003,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 172,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 255,
                         "duration_type": "endless",
@@ -36011,7 +36011,7 @@
                     },
                     {
                         "inflicted_status_id": 173,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 255,
                         "duration_type": "endless",
@@ -36019,7 +36019,7 @@
                     },
                     {
                         "inflicted_status_id": 182,
-                        "status_condition_id": 29,
+                        "status_condition_id": 28,
                         "name": "regen",
                         "probability": 255,
                         "duration_type": "endless",
@@ -36638,7 +36638,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 25,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -36937,7 +36937,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -37190,7 +37190,7 @@
                     },
                     {
                         "inflicted_status_id": 137,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 80,
                         "duration_type": "turns",
@@ -37206,7 +37206,7 @@
                     },
                     {
                         "inflicted_status_id": 185,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 20,
                         "duration_type": "turns",
@@ -37755,7 +37755,7 @@
                     },
                     {
                         "inflicted_status_id": 187,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 150,
                         "duration_type": "endless",
@@ -37763,7 +37763,7 @@
                     },
                     {
                         "inflicted_status_id": 188,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 130,
                         "duration_type": "endless",
@@ -37956,7 +37956,7 @@
                     },
                     {
                         "inflicted_status_id": 3,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 50,
                         "duration_type": "turns",
@@ -37964,7 +37964,7 @@
                     },
                     {
                         "inflicted_status_id": 5,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 50,
                         "duration_type": "turns",
@@ -38037,7 +38037,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 8,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 100,
                         "duration_type": "endless",
@@ -38102,7 +38102,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 8,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 100,
                         "duration_type": "endless",
@@ -38167,7 +38167,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 190,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 40,
                         "duration_type": "endless",
@@ -38232,7 +38232,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 188,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 130,
                         "duration_type": "endless",
@@ -38307,7 +38307,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -38352,7 +38352,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 191,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 80,
                         "duration_type": "turns",
@@ -38397,7 +38397,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 138,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 80,
                         "duration_type": "turns",
@@ -38450,7 +38450,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 137,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 80,
                         "duration_type": "turns",
@@ -38466,7 +38466,7 @@
                     },
                     {
                         "inflicted_status_id": 127,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 80,
                         "duration_type": "endless",
@@ -38807,7 +38807,7 @@
                     },
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -38815,7 +38815,7 @@
                     },
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -38831,7 +38831,7 @@
                     },
                     {
                         "inflicted_status_id": 109,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -38912,7 +38912,7 @@
                     },
                     {
                         "inflicted_status_id": 3,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 50,
                         "duration_type": "turns",
@@ -38920,7 +38920,7 @@
                     },
                     {
                         "inflicted_status_id": 5,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 50,
                         "duration_type": "turns",
@@ -39814,7 +39814,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 192,
-                        "status_condition_id": 17,
+                        "status_condition_id": 16,
                         "name": "zombie",
                         "probability": 80,
                         "duration_type": "endless",
@@ -40352,7 +40352,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 31,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -40440,7 +40440,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 31,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -40528,7 +40528,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 31,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -40616,7 +40616,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 31,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -40704,7 +40704,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 31,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -40792,7 +40792,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 31,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -41113,7 +41113,7 @@
                     },
                     {
                         "inflicted_status_id": 194,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -41121,7 +41121,7 @@
                     },
                     {
                         "inflicted_status_id": 195,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -41137,7 +41137,7 @@
                     },
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -41363,7 +41363,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 77,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 150,
                         "duration_type": "turns",
@@ -41411,7 +41411,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 4,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 100,
                         "duration_type": "turns",
@@ -41553,7 +41553,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 6,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 100,
                         "duration_type": "turns",
@@ -41618,7 +41618,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 196,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 255,
                         "duration_type": "endless",
@@ -41626,7 +41626,7 @@
                     },
                     {
                         "inflicted_status_id": 197,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 255,
                         "duration_type": "endless",
@@ -41634,7 +41634,7 @@
                     },
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -41650,7 +41650,7 @@
                     },
                     {
                         "inflicted_status_id": 198,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -41658,7 +41658,7 @@
                     },
                     {
                         "inflicted_status_id": 199,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "turns",
@@ -41705,7 +41705,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -41752,7 +41752,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -42429,7 +42429,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 9,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 50,
                         "duration_type": "endless",
@@ -42494,7 +42494,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 10,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 100,
                         "duration_type": "endless",
@@ -42502,7 +42502,7 @@
                     },
                     {
                         "inflicted_status_id": 167,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 255,
                         "duration_type": "endless",
@@ -42567,7 +42567,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 9,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 50,
                         "duration_type": "endless",
@@ -42575,7 +42575,7 @@
                     },
                     {
                         "inflicted_status_id": 200,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 50,
                         "duration_type": "turns",
@@ -42620,7 +42620,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 10,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 100,
                         "duration_type": "endless",
@@ -42687,7 +42687,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 9,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 50,
                         "duration_type": "endless",
@@ -42852,7 +42852,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 31,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -42917,7 +42917,7 @@
                     },
                     {
                         "inflicted_status_id": 202,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 255,
                         "duration_type": "turns",
@@ -42925,7 +42925,7 @@
                     },
                     {
                         "inflicted_status_id": 203,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 255,
                         "duration_type": "turns",
@@ -42933,7 +42933,7 @@
                     },
                     {
                         "inflicted_status_id": 161,
-                        "status_condition_id": 17,
+                        "status_condition_id": 16,
                         "name": "zombie",
                         "probability": 255,
                         "duration_type": "endless",
@@ -42941,7 +42941,7 @@
                     },
                     {
                         "inflicted_status_id": 160,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 255,
                         "duration_type": "endless",
@@ -42949,7 +42949,7 @@
                     },
                     {
                         "inflicted_status_id": 204,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 255,
                         "duration_type": "endless",
@@ -42957,7 +42957,7 @@
                     },
                     {
                         "inflicted_status_id": 205,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 255,
                         "duration_type": "endless",
@@ -42965,7 +42965,7 @@
                     },
                     {
                         "inflicted_status_id": 196,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 255,
                         "duration_type": "endless",
@@ -42973,7 +42973,7 @@
                     },
                     {
                         "inflicted_status_id": 197,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 255,
                         "duration_type": "endless",
@@ -42981,7 +42981,7 @@
                     },
                     {
                         "inflicted_status_id": 206,
-                        "status_condition_id": 22,
+                        "status_condition_id": 21,
                         "name": "haste",
                         "probability": 255,
                         "duration_type": "turns",
@@ -42989,7 +42989,7 @@
                     },
                     {
                         "inflicted_status_id": 207,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 255,
                         "duration_type": "turns",
@@ -42997,7 +42997,7 @@
                     },
                     {
                         "inflicted_status_id": 208,
-                        "status_condition_id": 28,
+                        "status_condition_id": 27,
                         "name": "reflect",
                         "probability": 255,
                         "duration_type": "turns",
@@ -43005,7 +43005,7 @@
                     },
                     {
                         "inflicted_status_id": 209,
-                        "status_condition_id": 29,
+                        "status_condition_id": 28,
                         "name": "regen",
                         "probability": 255,
                         "duration_type": "turns",
@@ -43013,7 +43013,7 @@
                     },
                     {
                         "inflicted_status_id": 210,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 255,
                         "duration_type": "turns",
@@ -43021,7 +43021,7 @@
                     },
                     {
                         "inflicted_status_id": 174,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -43029,7 +43029,7 @@
                     },
                     {
                         "inflicted_status_id": 175,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -43037,7 +43037,7 @@
                     },
                     {
                         "inflicted_status_id": 176,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -43045,7 +43045,7 @@
                     },
                     {
                         "inflicted_status_id": 177,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 255,
                         "duration_type": "blocks",
@@ -43480,7 +43480,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 156,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -43488,7 +43488,7 @@
                     },
                     {
                         "inflicted_status_id": 157,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -43496,7 +43496,7 @@
                     },
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -43504,7 +43504,7 @@
                     },
                     {
                         "inflicted_status_id": 141,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -43605,7 +43605,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 31,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 254,
                         "duration_type": "endless",
@@ -43931,7 +43931,7 @@
                     },
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -43996,7 +43996,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 156,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -44004,7 +44004,7 @@
                     },
                     {
                         "inflicted_status_id": 157,
-                        "status_condition_id": 19,
+                        "status_condition_id": 18,
                         "name": "magic break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -44012,7 +44012,7 @@
                     },
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -44020,7 +44020,7 @@
                     },
                     {
                         "inflicted_status_id": 141,
-                        "status_condition_id": 21,
+                        "status_condition_id": 20,
                         "name": "mental break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -44523,7 +44523,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 14,
-                        "status_condition_id": 17,
+                        "status_condition_id": 16,
                         "name": "zombie",
                         "probability": 100,
                         "duration_type": "endless",
@@ -44756,7 +44756,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -44772,7 +44772,7 @@
                     },
                     {
                         "inflicted_status_id": 156,
-                        "status_condition_id": 18,
+                        "status_condition_id": 17,
                         "name": "power break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -44780,7 +44780,7 @@
                     },
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -44901,7 +44901,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 8,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 100,
                         "duration_type": "endless",
@@ -44966,7 +44966,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 8,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 100,
                         "duration_type": "endless",
@@ -44974,7 +44974,7 @@
                     },
                     {
                         "inflicted_status_id": 62,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 100,
                         "duration_type": "turns",
@@ -45039,7 +45039,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 8,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 100,
                         "duration_type": "endless",
@@ -45104,7 +45104,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",

@@ -18,7 +18,7 @@ CREATE TABLE j_battle_interactions_affected_by (
     ability_id INTEGER NOT NULL REFERENCES abilities(id),
     battle_interaction_id INTEGER NOT NULL REFERENCES battle_interactions(id),
     status_condition_id INTEGER NOT NULL REFERENCES status_conditions(id),
-    CHECK (status_condition_id IN (4, 13, 28))
+    CHECK (status_condition_id IN (4, 12, 27))
 );
 
 

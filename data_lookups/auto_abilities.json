@@ -440,7 +440,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 3,
-            "status_condition_id": 13,
+            "status_condition_id": 12,
             "name": "silence",
             "probability": 50,
             "duration_type": "turns",
@@ -486,7 +486,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 4,
-            "status_condition_id": 13,
+            "status_condition_id": 12,
             "name": "silence",
             "probability": 100,
             "duration_type": "turns",
@@ -530,7 +530,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 5,
-            "status_condition_id": 14,
+            "status_condition_id": 13,
             "name": "sleep",
             "probability": 50,
             "duration_type": "turns",
@@ -576,7 +576,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 6,
-            "status_condition_id": 14,
+            "status_condition_id": 13,
             "name": "sleep",
             "probability": 100,
             "duration_type": "turns",
@@ -620,7 +620,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 7,
-            "status_condition_id": 11,
+            "status_condition_id": 10,
             "name": "poison",
             "probability": 50,
             "duration_type": "endless",
@@ -666,7 +666,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 8,
-            "status_condition_id": 11,
+            "status_condition_id": 10,
             "name": "poison",
             "probability": 100,
             "duration_type": "endless",
@@ -710,7 +710,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 9,
-            "status_condition_id": 10,
+            "status_condition_id": 9,
             "name": "petrification",
             "probability": 50,
             "duration_type": "endless",
@@ -756,7 +756,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 10,
-            "status_condition_id": 10,
+            "status_condition_id": 9,
             "name": "petrification",
             "probability": 100,
             "duration_type": "endless",
@@ -890,7 +890,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 13,
-            "status_condition_id": 17,
+            "status_condition_id": 16,
             "name": "zombie",
             "probability": 50,
             "duration_type": "endless",
@@ -936,7 +936,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 14,
-            "status_condition_id": 17,
+            "status_condition_id": 16,
             "name": "zombie",
             "probability": 100,
             "duration_type": "endless",
@@ -980,7 +980,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 15,
-            "status_condition_id": 15,
+            "status_condition_id": 14,
             "name": "slow",
             "probability": 50,
             "duration_type": "endless",
@@ -1026,7 +1026,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 16,
-            "status_condition_id": 15,
+            "status_condition_id": 14,
             "name": "slow",
             "probability": 100,
             "duration_type": "endless",
@@ -1070,7 +1070,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 17,
-            "status_condition_id": 35,
+            "status_condition_id": 34,
             "name": "power distiller",
             "probability": 100,
             "duration_type": "endless",
@@ -1114,7 +1114,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 18,
-            "status_condition_id": 36,
+            "status_condition_id": 35,
             "name": "mana distiller",
             "probability": 100,
             "duration_type": "endless",
@@ -1158,7 +1158,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 19,
-            "status_condition_id": 37,
+            "status_condition_id": 36,
             "name": "speed distiller",
             "probability": 100,
             "duration_type": "endless",
@@ -1202,7 +1202,7 @@
         "added_elem_resist": null,
         "on_hit_status": {
             "inflicted_status_id": 20,
-            "status_condition_id": 38,
+            "status_condition_id": 37,
             "name": "ability distiller",
             "probability": 100,
             "duration_type": "endless",
@@ -2358,25 +2358,25 @@
         "added_status_resists": [
             {
                 "id": 58,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 254
             },
             {
                 "id": 59,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 254
             },
             {
                 "id": 60,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 254
             },
             {
                 "id": 61,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 254
             },
@@ -2406,109 +2406,109 @@
             },
             {
                 "id": 66,
-                "status_condition_id": 7,
+                "status_condition_id": 6,
                 "name": "doom",
                 "resistance": 254
             },
             {
                 "id": 67,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 254
             },
             {
                 "id": 68,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 254
             },
             {
                 "id": 69,
-                "status_condition_id": 12,
+                "status_condition_id": 11,
                 "name": "provoke",
                 "resistance": 254
             },
             {
                 "id": 70,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 254
             },
             {
                 "id": 71,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 254
             },
             {
                 "id": 72,
-                "status_condition_id": 15,
+                "status_condition_id": 14,
                 "name": "slow",
                 "resistance": 254
             },
             {
                 "id": 73,
-                "status_condition_id": 16,
+                "status_condition_id": 15,
                 "name": "threaten",
                 "resistance": 254
             },
             {
                 "id": 74,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 254
             },
             {
                 "id": 75,
-                "status_condition_id": 35,
+                "status_condition_id": 34,
                 "name": "power distiller",
                 "resistance": 254
             },
             {
                 "id": 76,
-                "status_condition_id": 36,
+                "status_condition_id": 35,
                 "name": "mana distiller",
                 "resistance": 254
             },
             {
                 "id": 77,
-                "status_condition_id": 37,
+                "status_condition_id": 36,
                 "name": "speed distiller",
                 "resistance": 254
             },
             {
                 "id": 78,
-                "status_condition_id": 38,
+                "status_condition_id": 37,
                 "name": "ability distiller",
                 "resistance": 254
             },
             {
                 "id": 79,
-                "status_condition_id": 42,
+                "status_condition_id": 41,
                 "name": "scan",
                 "resistance": 254
             },
             {
                 "id": 80,
-                "status_condition_id": 43,
+                "status_condition_id": 42,
                 "name": "sensor",
                 "resistance": 254
             },
             {
                 "id": 81,
-                "status_condition_id": 34,
+                "status_condition_id": 33,
                 "name": "defend",
                 "resistance": 254
             },
             {
                 "id": 82,
-                "status_condition_id": 39,
+                "status_condition_id": 38,
                 "name": "guard",
                 "resistance": 254
             },
             {
                 "id": 83,
-                "status_condition_id": 44,
+                "status_condition_id": 43,
                 "name": "sentinel",
                 "resistance": 254
             }
@@ -3166,7 +3166,7 @@
         "added_status_resists": [
             {
                 "id": 32,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 50
             }
@@ -3212,7 +3212,7 @@
         "added_status_resists": [
             {
                 "id": 70,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 254
             }
@@ -3256,7 +3256,7 @@
         "added_status_resists": [
             {
                 "id": 13,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 50
             }
@@ -3302,7 +3302,7 @@
         "added_status_resists": [
             {
                 "id": 71,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 254
             }
@@ -3346,7 +3346,7 @@
         "added_status_resists": [
             {
                 "id": 24,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 50
             }
@@ -3392,7 +3392,7 @@
         "added_status_resists": [
             {
                 "id": 68,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 254
             }
@@ -3436,7 +3436,7 @@
         "added_status_resists": [
             {
                 "id": 27,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 50
             }
@@ -3482,7 +3482,7 @@
         "added_status_resists": [
             {
                 "id": 67,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 254
             }
@@ -3616,7 +3616,7 @@
         "added_status_resists": [
             {
                 "id": 41,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 50
             }
@@ -3662,7 +3662,7 @@
         "added_status_resists": [
             {
                 "id": 74,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 254
             }
@@ -3706,7 +3706,7 @@
         "added_status_resists": [
             {
                 "id": 21,
-                "status_condition_id": 15,
+                "status_condition_id": 14,
                 "name": "slow",
                 "resistance": 50
             }
@@ -3752,7 +3752,7 @@
         "added_status_resists": [
             {
                 "id": 72,
-                "status_condition_id": 15,
+                "status_condition_id": 14,
                 "name": "slow",
                 "resistance": 254
             }
@@ -5849,43 +5849,43 @@
             },
             {
                 "id": 66,
-                "status_condition_id": 7,
+                "status_condition_id": 6,
                 "name": "doom",
                 "resistance": 254
             },
             {
                 "id": 67,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 254
             },
             {
                 "id": 68,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 254
             },
             {
                 "id": 70,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 254
             },
             {
                 "id": 71,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 254
             },
             {
                 "id": 72,
-                "status_condition_id": 15,
+                "status_condition_id": 14,
                 "name": "slow",
                 "resistance": 254
             },
             {
                 "id": 74,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 254
             }

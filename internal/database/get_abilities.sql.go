@@ -571,7 +571,7 @@ func (q *Queries) GetAbilityIDsDealsDelay(ctx context.Context) ([]int32, error) 
 }
 
 const getAbilityIDsReflectable = `-- name: GetAbilityIDsReflectable :many
-SELECT DISTINCT ability_id FROM mv_abilities WHERE affected_status_id = 28 ORDER BY ability_id
+SELECT DISTINCT ability_id FROM mv_abilities WHERE affected_status_id = 27 ORDER BY ability_id
 `
 
 func (q *Queries) GetAbilityIDsReflectable(ctx context.Context) ([]int32, error) {
@@ -598,7 +598,7 @@ func (q *Queries) GetAbilityIDsReflectable(ctx context.Context) ([]int32, error)
 }
 
 const getAbilityIDsSilenceable = `-- name: GetAbilityIDsSilenceable :many
-SELECT DISTINCT ability_id FROM mv_abilities WHERE affected_status_id = 13 ORDER BY ability_id
+SELECT DISTINCT ability_id FROM mv_abilities WHERE affected_status_id = 12 ORDER BY ability_id
 `
 
 func (q *Queries) GetAbilityIDsSilenceable(ctx context.Context) ([]int32, error) {
@@ -2382,7 +2382,7 @@ func (q *Queries) GetTypedAbilityIDsDealsDelay(ctx context.Context, type_ Abilit
 const getTypedAbilityIDsReflectable = `-- name: GetTypedAbilityIDsReflectable :many
 SELECT DISTINCT typed_id
 FROM mv_abilities
-WHERE affected_status_id = 28
+WHERE affected_status_id = 27
 AND type = $1::ability_type
 ORDER BY typed_id
 `
@@ -2413,7 +2413,7 @@ func (q *Queries) GetTypedAbilityIDsReflectable(ctx context.Context, type_ Abili
 const getTypedAbilityIDsSilenceable = `-- name: GetTypedAbilityIDsSilenceable :many
 SELECT DISTINCT typed_id
 FROM mv_abilities
-WHERE affected_status_id = 13
+WHERE affected_status_id = 12
 AND type = $1::ability_type
 ORDER BY typed_id
 `

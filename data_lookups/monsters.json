@@ -843,7 +843,7 @@
         "status_resists": [
             {
                 "id": 1,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 95
             }
@@ -1242,7 +1242,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -1454,7 +1454,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -1666,7 +1666,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -2225,13 +2225,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -2569,13 +2569,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -2877,13 +2877,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -3429,7 +3429,7 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -3734,13 +3734,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -4072,13 +4072,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -4385,13 +4385,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -5683,13 +5683,13 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -6003,13 +6003,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -6341,13 +6341,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -6662,13 +6662,13 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -6959,7 +6959,7 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -10207,7 +10207,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -10535,7 +10535,7 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -10894,13 +10894,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -11214,13 +11214,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -11561,13 +11561,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -11901,13 +11901,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -12241,13 +12241,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -12565,7 +12565,7 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -13120,31 +13120,31 @@
         "status_resists": [
             {
                 "id": 5,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 40
             },
             {
                 "id": 6,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 50
             },
             {
                 "id": 7,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 50
             },
             {
                 "id": 8,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 50
             },
             {
                 "id": 9,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 50
             }
@@ -13557,13 +13557,13 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -13868,13 +13868,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -14178,7 +14178,7 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -14512,13 +14512,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -14850,13 +14850,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -15165,7 +15165,7 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -15463,13 +15463,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -15692,7 +15692,7 @@
                         "status_immunities": null,
                         "added_status": {
                             "inflicted_status_id": 21,
-                            "status_condition_id": 34,
+                            "status_condition_id": 33,
                             "name": "defend",
                             "probability": 254,
                             "duration_type": "instant",
@@ -16025,7 +16025,7 @@
                         "status_immunities": null,
                         "added_status": {
                             "inflicted_status_id": 21,
-                            "status_condition_id": 34,
+                            "status_condition_id": 33,
                             "name": "defend",
                             "probability": 254,
                             "duration_type": "instant",
@@ -17367,13 +17367,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -17710,13 +17710,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -18046,13 +18046,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -18398,13 +18398,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -18714,13 +18714,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -19032,13 +19032,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -19717,13 +19717,13 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             },
@@ -19922,13 +19922,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -20696,7 +20696,7 @@
         "status_resists": [
             {
                 "id": 11,
-                "status_condition_id": 12,
+                "status_condition_id": 11,
                 "name": "provoke",
                 "resistance": 50
             }
@@ -21115,13 +21115,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -21476,13 +21476,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -21785,7 +21785,7 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -22143,7 +22143,7 @@
             },
             {
                 "id": 13,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 50
             }
@@ -22491,13 +22491,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -23235,13 +23235,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -23583,19 +23583,19 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             }
@@ -23916,7 +23916,7 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -24251,7 +24251,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -24640,13 +24640,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -25028,13 +25028,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -25392,7 +25392,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -25754,13 +25754,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -26133,7 +26133,7 @@
         "status_resists": [
             {
                 "id": 19,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 90
             }
@@ -26759,13 +26759,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -27077,13 +27077,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -27413,13 +27413,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -27765,13 +27765,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -28750,13 +28750,13 @@
         "status_resists": [
             {
                 "id": 5,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 40
             },
             {
                 "id": 7,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 50
             }
@@ -29259,7 +29259,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -30049,13 +30049,13 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             }
@@ -30407,13 +30407,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -30782,13 +30782,13 @@
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -31137,13 +31137,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -31816,7 +31816,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -32192,7 +32192,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -32543,13 +32543,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -32925,13 +32925,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -33270,13 +33270,13 @@
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             },
             {
                 "id": 6,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 50
             }
@@ -33670,13 +33670,13 @@
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -34089,19 +34089,19 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             }
@@ -34614,7 +34614,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -34952,7 +34952,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -35289,7 +35289,7 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -35653,13 +35653,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -36028,19 +36028,19 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -36376,7 +36376,7 @@
             },
             {
                 "id": 21,
-                "status_condition_id": 15,
+                "status_condition_id": 14,
                 "name": "slow",
                 "resistance": 50
             }
@@ -36918,25 +36918,25 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 13,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 50
             },
             {
                 "id": 22,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 25
             }
@@ -37238,25 +37238,25 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 13,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 50
             },
             {
                 "id": 22,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 25
             }
@@ -38299,13 +38299,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -38648,13 +38648,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -38973,13 +38973,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -39299,7 +39299,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -39747,13 +39747,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -40092,13 +40092,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -41477,13 +41477,13 @@
         "status_resists": [
             {
                 "id": 23,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 95
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -42126,13 +42126,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -42422,7 +42422,7 @@
             },
             {
                 "id": 21,
-                "status_condition_id": 15,
+                "status_condition_id": 14,
                 "name": "slow",
                 "resistance": 50
             }
@@ -42928,7 +42928,7 @@
         "status_resists": [
             {
                 "id": 24,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 50
             }
@@ -43168,7 +43168,7 @@
         "status_resists": [
             {
                 "id": 8,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 50
             }
@@ -43632,19 +43632,19 @@
         "status_resists": [
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 25,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 95
             },
             {
                 "id": 22,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 25
             }
@@ -43976,25 +43976,25 @@
         "status_resists": [
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 23,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 95
             },
             {
                 "id": 22,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 25
             },
             {
                 "id": 26,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 25
             }
@@ -44449,31 +44449,31 @@
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 23,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 95
             },
             {
                 "id": 25,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 95
             },
             {
                 "id": 22,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 25
             },
             {
                 "id": 26,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 25
             }
@@ -44812,13 +44812,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -45533,7 +45533,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -45885,7 +45885,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -46213,13 +46213,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -46542,25 +46542,25 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 25,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 95
             },
             {
                 "id": 22,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 25
             }
@@ -46917,13 +46917,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -47269,13 +47269,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -48200,7 +48200,7 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -48914,7 +48914,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -49247,7 +49247,7 @@
         "status_resists": [
             {
                 "id": 23,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 95
             }
@@ -49569,13 +49569,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -50458,7 +50458,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -50783,13 +50783,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -51163,13 +51163,13 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 25,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 95
             }
@@ -51508,7 +51508,7 @@
         "status_resists": [
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -51837,19 +51837,19 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             }
@@ -52186,13 +52186,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -52731,13 +52731,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -53783,7 +53783,7 @@
         "status_resists": [
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -54147,13 +54147,13 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -54494,13 +54494,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -54840,25 +54840,25 @@
             },
             {
                 "id": 27,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 50
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             },
             {
                 "id": 22,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 25
             }
@@ -55557,25 +55557,25 @@
         "status_resists": [
             {
                 "id": 24,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 50
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             },
             {
                 "id": 22,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 25
             },
             {
                 "id": 28,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 80
             }
@@ -55920,13 +55920,13 @@
             },
             {
                 "id": 29,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 80
             },
             {
                 "id": 30,
-                "status_condition_id": 15,
+                "status_condition_id": 14,
                 "name": "slow",
                 "resistance": 95
             }
@@ -56303,25 +56303,25 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             }
@@ -56639,19 +56639,19 @@
             },
             {
                 "id": 27,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 50
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 23,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 95
             }
@@ -57001,25 +57001,25 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             },
             {
                 "id": 22,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 25
             }
@@ -57725,25 +57725,25 @@
             },
             {
                 "id": 15,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 25
             },
             {
                 "id": 16,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 25
             },
             {
                 "id": 23,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 95
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             }
@@ -58140,7 +58140,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -58492,7 +58492,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -58817,7 +58817,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -59151,7 +59151,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -59485,7 +59485,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -59801,13 +59801,13 @@
         "status_resists": [
             {
                 "id": 19,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 90
             },
             {
                 "id": 32,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 50
             }
@@ -60451,19 +60451,19 @@
             },
             {
                 "id": 19,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 90
             },
             {
                 "id": 6,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 50
             },
             {
                 "id": 7,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 50
             }
@@ -60909,19 +60909,19 @@
             },
             {
                 "id": 27,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 50
             },
             {
                 "id": 24,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 50
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             }
@@ -61231,19 +61231,19 @@
             },
             {
                 "id": 27,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 50
             },
             {
                 "id": 24,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 50
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             }
@@ -63132,7 +63132,7 @@
         "status_resists": [
             {
                 "id": 33,
-                "status_condition_id": 16,
+                "status_condition_id": 15,
                 "name": "threaten",
                 "resistance": 75
             }
@@ -64361,13 +64361,13 @@
         "status_resists": [
             {
                 "id": 34,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 100
             },
             {
                 "id": 35,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 80
             }
@@ -65548,25 +65548,25 @@
             },
             {
                 "id": 36,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 80
             },
             {
                 "id": 37,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 75
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -65868,13 +65868,13 @@
         "status_resists": [
             {
                 "id": 38,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 90
             },
             {
                 "id": 8,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 50
             }
@@ -66225,13 +66225,13 @@
         "status_resists": [
             {
                 "id": 28,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 80
             },
             {
                 "id": 39,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 80
             }
@@ -66625,13 +66625,13 @@
             },
             {
                 "id": 32,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 50
             },
             {
                 "id": 28,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 80
             }
@@ -66973,13 +66973,13 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -67310,19 +67310,19 @@
             },
             {
                 "id": 19,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 90
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             }
@@ -67673,19 +67673,19 @@
             },
             {
                 "id": 19,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 90
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             }
@@ -68074,25 +68074,25 @@
         "status_resists": [
             {
                 "id": 6,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 50
             },
             {
                 "id": 7,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 50
             },
             {
                 "id": 8,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 50
             },
             {
                 "id": 9,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 50
             }
@@ -68454,25 +68454,25 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             },
             {
                 "id": 6,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 50
             },
             {
                 "id": 7,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 50
             }
@@ -69712,19 +69712,19 @@
         "status_resists": [
             {
                 "id": 19,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 90
             },
             {
                 "id": 40,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 75
             },
             {
                 "id": 41,
-                "status_condition_id": 17,
+                "status_condition_id": 16,
                 "name": "zombie",
                 "resistance": 50
             }
@@ -70012,7 +70012,7 @@
         "status_resists": [
             {
                 "id": 21,
-                "status_condition_id": 15,
+                "status_condition_id": 14,
                 "name": "slow",
                 "resistance": 50
             }
@@ -70230,7 +70230,7 @@
         "status_resists": [
             {
                 "id": 21,
-                "status_condition_id": 15,
+                "status_condition_id": 14,
                 "name": "slow",
                 "resistance": 50
             }
@@ -72721,7 +72721,7 @@
         "status_resists": [
             {
                 "id": 1,
-                "status_condition_id": 11,
+                "status_condition_id": 10,
                 "name": "poison",
                 "resistance": 95
             }
@@ -72949,13 +72949,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -75559,7 +75559,7 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -75948,13 +75948,13 @@
         "status_resists": [
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -76305,13 +76305,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -76654,7 +76654,7 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -77034,13 +77034,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -77396,7 +77396,7 @@
         "status_resists": [
             {
                 "id": 42,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 99
             }
@@ -77728,13 +77728,13 @@
             },
             {
                 "id": 44,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 120
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             }
@@ -78433,7 +78433,7 @@
         "status_resists": [
             {
                 "id": 36,
-                "status_condition_id": 10,
+                "status_condition_id": 9,
                 "name": "petrification",
                 "resistance": 80
             }
@@ -78886,13 +78886,13 @@
             },
             {
                 "id": 3,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 20
             },
             {
                 "id": 4,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 20
             }
@@ -80097,7 +80097,7 @@
             },
             {
                 "id": 23,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 95
             }
@@ -80827,31 +80827,31 @@
         "status_resists": [
             {
                 "id": 45,
-                "status_condition_id": 15,
+                "status_condition_id": 14,
                 "name": "slow",
                 "resistance": 90
             },
             {
                 "id": 46,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 90
             },
             {
                 "id": 47,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 90
             },
             {
                 "id": 48,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 90
             },
             {
                 "id": 49,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 90
             }
@@ -82440,25 +82440,25 @@
         "status_resists": [
             {
                 "id": 46,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 90
             },
             {
                 "id": 47,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 90
             },
             {
                 "id": 48,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 90
             },
             {
                 "id": 49,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 90
             }
@@ -83156,7 +83156,7 @@
         "status_resists": [
             {
                 "id": 21,
-                "status_condition_id": 15,
+                "status_condition_id": 14,
                 "name": "slow",
                 "resistance": 50
             }
@@ -83503,7 +83503,7 @@
         "status_resists": [
             {
                 "id": 17,
-                "status_condition_id": 14,
+                "status_condition_id": 13,
                 "name": "sleep",
                 "resistance": 80
             }
@@ -83882,25 +83882,25 @@
         "status_resists": [
             {
                 "id": 6,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 50
             },
             {
                 "id": 7,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 50
             },
             {
                 "id": 8,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 50
             },
             {
                 "id": 9,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 50
             }
@@ -84765,25 +84765,25 @@
         "status_resists": [
             {
                 "id": 6,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 50
             },
             {
                 "id": 7,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 50
             },
             {
                 "id": 8,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 50
             },
             {
                 "id": 9,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 50
             }
@@ -85962,13 +85962,13 @@
         "status_resists": [
             {
                 "id": 50,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 99
             },
             {
                 "id": 51,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 99
             }
@@ -86630,25 +86630,25 @@
         "status_resists": [
             {
                 "id": 46,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 90
             },
             {
                 "id": 47,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 90
             },
             {
                 "id": 48,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 90
             },
             {
                 "id": 49,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 90
             }
@@ -86986,31 +86986,31 @@
         "status_resists": [
             {
                 "id": 23,
-                "status_condition_id": 13,
+                "status_condition_id": 12,
                 "name": "silence",
                 "resistance": 95
             },
             {
                 "id": 52,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 95
             },
             {
                 "id": 53,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 95
             },
             {
                 "id": 54,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 95
             },
             {
                 "id": 55,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 95
             }
@@ -87343,19 +87343,19 @@
         "status_resists": [
             {
                 "id": 50,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 99
             },
             {
                 "id": 56,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 80
             },
             {
                 "id": 57,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 80
             }
@@ -88779,13 +88779,13 @@
         "status_resists": [
             {
                 "id": 48,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 90
             },
             {
                 "id": 51,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 99
             }
@@ -89120,25 +89120,25 @@
         "status_resists": [
             {
                 "id": 52,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 95
             },
             {
                 "id": 53,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 95
             },
             {
                 "id": 54,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 95
             },
             {
                 "id": 55,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 95
             }
@@ -90349,25 +90349,25 @@
         "status_resists": [
             {
                 "id": 52,
-                "status_condition_id": 18,
+                "status_condition_id": 17,
                 "name": "power break",
                 "resistance": 95
             },
             {
                 "id": 53,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 95
             },
             {
                 "id": 54,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 95
             },
             {
                 "id": 55,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 95
             }
@@ -90726,19 +90726,19 @@
         "status_resists": [
             {
                 "id": 53,
-                "status_condition_id": 19,
+                "status_condition_id": 18,
                 "name": "magic break",
                 "resistance": 95
             },
             {
                 "id": 54,
-                "status_condition_id": 20,
+                "status_condition_id": 19,
                 "name": "armor break",
                 "resistance": 95
             },
             {
                 "id": 55,
-                "status_condition_id": 21,
+                "status_condition_id": 20,
                 "name": "mental break",
                 "resistance": 95
             }
@@ -93200,7 +93200,7 @@
                         "status_immunities": null,
                         "added_status": {
                             "inflicted_status_id": 21,
-                            "status_condition_id": 34,
+                            "status_condition_id": 33,
                             "name": "defend",
                             "probability": 254,
                             "duration_type": "instant",
@@ -98302,7 +98302,7 @@
                         "status_immunities": null,
                         "added_status": {
                             "inflicted_status_id": 22,
-                            "status_condition_id": 22,
+                            "status_condition_id": 21,
                             "name": "haste",
                             "probability": 254,
                             "duration_type": "turns",
@@ -98595,7 +98595,7 @@
                         "status_immunities": null,
                         "added_status": {
                             "inflicted_status_id": 23,
-                            "status_condition_id": 22,
+                            "status_condition_id": 21,
                             "name": "haste",
                             "probability": 254,
                             "duration_type": "instant",
@@ -98897,7 +98897,7 @@
                         "status_immunities": null,
                         "added_status": {
                             "inflicted_status_id": 23,
-                            "status_condition_id": 22,
+                            "status_condition_id": 21,
                             "name": "haste",
                             "probability": 254,
                             "duration_type": "instant",

@@ -62,7 +62,7 @@ func TestGetStat(t *testing.T) {
 			overdriveAbilities: []int32{162, 163, 170},
 			itemAbilities:      []int32{},
 			triggerCommands:    []int32{4},
-			statusConditions:   []int32{1, 18, 35},
+			statusConditions:   []int32{1, 17, 34},
 			properties:         []int32{},
 		},
 		{

@@ -657,7 +657,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 42,
-                        "status_condition_id": 41,
+                        "status_condition_id": 40,
                         "name": "life",
                         "probability": 254,
                         "duration_type": "instant",
@@ -739,7 +739,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 42,
-                        "status_condition_id": 41,
+                        "status_condition_id": 40,
                         "name": "life",
                         "probability": 254,
                         "duration_type": "instant",
@@ -1140,7 +1140,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 103,
-                        "status_condition_id": 35,
+                        "status_condition_id": 34,
                         "name": "power distiller",
                         "probability": 254,
                         "duration_type": "endless",
@@ -1202,7 +1202,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 104,
-                        "status_condition_id": 36,
+                        "status_condition_id": 35,
                         "name": "mana distiller",
                         "probability": 254,
                         "duration_type": "endless",
@@ -1264,7 +1264,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 105,
-                        "status_condition_id": 37,
+                        "status_condition_id": 36,
                         "name": "speed distiller",
                         "probability": 254,
                         "duration_type": "endless",
@@ -1326,7 +1326,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 106,
-                        "status_condition_id": 38,
+                        "status_condition_id": 37,
                         "name": "ability distiller",
                         "probability": 254,
                         "duration_type": "endless",
@@ -1558,7 +1558,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 36,
-                        "status_condition_id": 23,
+                        "status_condition_id": 22,
                         "name": "nulblaze",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -1566,7 +1566,7 @@
                     },
                     {
                         "inflicted_status_id": 37,
-                        "status_condition_id": 24,
+                        "status_condition_id": 23,
                         "name": "nulshock",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -1574,7 +1574,7 @@
                     },
                     {
                         "inflicted_status_id": 38,
-                        "status_condition_id": 25,
+                        "status_condition_id": 24,
                         "name": "nultide",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -1582,7 +1582,7 @@
                     },
                     {
                         "inflicted_status_id": 39,
-                        "status_condition_id": 26,
+                        "status_condition_id": 25,
                         "name": "nulfrost",
                         "probability": 254,
                         "duration_type": "blocks",
@@ -2613,7 +2613,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 107,
-                        "status_condition_id": 20,
+                        "status_condition_id": 19,
                         "name": "armor break",
                         "probability": 254,
                         "duration_type": "endless",
@@ -2695,7 +2695,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 108,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -2777,7 +2777,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 108,
-                        "status_condition_id": 14,
+                        "status_condition_id": 13,
                         "name": "sleep",
                         "probability": 254,
                         "duration_type": "turns",
@@ -2859,7 +2859,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 109,
-                        "status_condition_id": 13,
+                        "status_condition_id": 12,
                         "name": "silence",
                         "probability": 254,
                         "duration_type": "turns",
@@ -3315,7 +3315,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 49,
-                        "status_condition_id": 11,
+                        "status_condition_id": 10,
                         "name": "poison",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3383,7 +3383,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3471,7 +3471,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 111,
-                        "status_condition_id": 15,
+                        "status_condition_id": 14,
                         "name": "slow",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3533,7 +3533,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 112,
-                        "status_condition_id": 7,
+                        "status_condition_id": 6,
                         "name": "doom",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3595,7 +3595,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 113,
-                        "status_condition_id": 10,
+                        "status_condition_id": 9,
                         "name": "petrification",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3854,7 +3854,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 43,
-                        "status_condition_id": 22,
+                        "status_condition_id": 21,
                         "name": "haste",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3916,7 +3916,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 43,
-                        "status_condition_id": 22,
+                        "status_condition_id": 21,
                         "name": "haste",
                         "probability": 254,
                         "duration_type": "endless",
@@ -3978,7 +3978,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 44,
-                        "status_condition_id": 30,
+                        "status_condition_id": 29,
                         "name": "shell",
                         "probability": 254,
                         "duration_type": "endless",
@@ -4040,7 +4040,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 45,
-                        "status_condition_id": 27,
+                        "status_condition_id": 26,
                         "name": "protect",
                         "probability": 254,
                         "duration_type": "endless",
@@ -4102,7 +4102,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 46,
-                        "status_condition_id": 28,
+                        "status_condition_id": 27,
                         "name": "reflect",
                         "probability": 254,
                         "duration_type": "endless",
@@ -4164,7 +4164,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 115,
-                        "status_condition_id": 29,
+                        "status_condition_id": 28,
                         "name": "regen",
                         "probability": 254,
                         "duration_type": "turns",

@@ -47,11 +47,11 @@ SELECT DISTINCT ability_id FROM mv_abilities WHERE affected_status_id = 4 ORDER 
 
 
 -- name: GetAbilityIDsSilenceable :many
-SELECT DISTINCT ability_id FROM mv_abilities WHERE affected_status_id = 13 ORDER BY ability_id;
+SELECT DISTINCT ability_id FROM mv_abilities WHERE affected_status_id = 12 ORDER BY ability_id;
 
 
 -- name: GetAbilityIDsReflectable :many
-SELECT DISTINCT ability_id FROM mv_abilities WHERE affected_status_id = 28 ORDER BY ability_id;
+SELECT DISTINCT ability_id FROM mv_abilities WHERE affected_status_id = 27 ORDER BY ability_id;
 
 
 -- name: GetAbilityIDsDealsDelay :many
@@ -226,7 +226,7 @@ ORDER BY typed_id;
 -- name: GetTypedAbilityIDsSilenceable :many
 SELECT DISTINCT typed_id
 FROM mv_abilities
-WHERE affected_status_id = 13
+WHERE affected_status_id = 12
 AND type = sqlc.arg('type')::ability_type
 ORDER BY typed_id;
 
@@ -234,7 +234,7 @@ ORDER BY typed_id;
 -- name: GetTypedAbilityIDsReflectable :many
 SELECT DISTINCT typed_id
 FROM mv_abilities
-WHERE affected_status_id = 28
+WHERE affected_status_id = 27
 AND type = sqlc.arg('type')::ability_type
 ORDER BY typed_id;
 

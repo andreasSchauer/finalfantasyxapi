@@ -177,7 +177,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 116,
-                        "status_condition_id": 34,
+                        "status_condition_id": 33,
                         "name": "defend",
                         "probability": 100,
                         "duration_type": "turns",
@@ -289,7 +289,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 117,
-                        "status_condition_id": 8,
+                        "status_condition_id": 7,
                         "name": "eject",
                         "probability": 75,
                         "duration_type": "endless",
@@ -348,7 +348,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 118,
-                        "status_condition_id": 45,
+                        "status_condition_id": 44,
                         "name": "shield",
                         "probability": 254,
                         "duration_type": "turns",
@@ -407,7 +407,7 @@
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 119,
-                        "status_condition_id": 32,
+                        "status_condition_id": 31,
                         "name": "boost",
                         "probability": 254,
                         "duration_type": "turns",

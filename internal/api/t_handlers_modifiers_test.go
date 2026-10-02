@@ -116,7 +116,7 @@ func TestGetModifier(t *testing.T) {
 			itemAbilities:      []int32{},
 			triggerCommands:    []int32{},
 			enemyAbilities:     []int32{86},
-			statusConditions:   []int32{10, 27, 32, 34, 44},
+			statusConditions:   []int32{9, 26, 31, 33, 43},
 			properties:         []int32{1},
 		},
 	}

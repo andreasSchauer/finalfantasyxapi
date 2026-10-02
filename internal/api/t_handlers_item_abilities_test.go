@@ -130,7 +130,7 @@ func TestGetItemAbility(t *testing.T) {
 						damageConstant: 24,
 						delayStrength:  "weak",
 					},
-					inflictedStatusConditions: []int32{15},
+					inflictedStatusConditions: []int32{14},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
 					statChanges:               []expStatChange{},

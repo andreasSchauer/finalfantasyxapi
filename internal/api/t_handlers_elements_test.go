@@ -35,7 +35,7 @@ func TestGetElement(t *testing.T) {
 				},
 			},
 			expUnique:          newExpUnique(2, "lightning"),
-			statusProtection:   h.GetInt32Ptr(24),
+			statusProtection:   h.GetInt32Ptr(23),
 			autoAbilities:      []int32{6, 58, 59, 60},
 			playerAbilities:    []int32{70, 74, 78},
 			overdriveAbilities: []int32{20, 57, 69, 135, 186},

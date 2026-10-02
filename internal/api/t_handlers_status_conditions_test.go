@@ -10,9 +10,9 @@ func TestGetStatusCondition(t *testing.T) {
 	tests := []expStatusCondition{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions/47",
+				requestURL:     "/api/status-conditions/46",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "status condition with provided id '47' doesn't exist. max id: 46.",
+				expectedErr:    "status condition with provided id '46' doesn't exist. max id: 45.",
 			},
 		},
 		{
@@ -46,7 +46,7 @@ func TestGetStatusCondition(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions/10?inflict_max=60",
+				requestURL:     "/api/status-conditions/9?inflict_max=60",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -65,7 +65,7 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     0,
 				},
 			},
-			expUnique:          newExpUnique(10, "petrification"),
+			expUnique:          newExpUnique(9, "petrification"),
 			autoAbilities:      []int32{17, 18, 54, 75, 76, 129},
 			monstersResistance: []int32{2, 5, 55, 92, 129, 157, 189, 216, 237, 272, 295, 307},
 			inflictedBy: &testStatusInfliction{
@@ -86,7 +86,7 @@ func TestGetStatusCondition(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions/22?inflict_min=infinite&resistance=immune",
+				requestURL:     "/api/status-conditions/21?inflict_min=infinite&resistance=immune",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -105,7 +105,7 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     3,
 				},
 			},
-			expUnique:          newExpUnique(22, "haste"),
+			expUnique:          newExpUnique(21, "haste"),
 			autoAbilities:      []int32{96, 101},
 			monstersResistance: []int32{3, 33, 135, 156, 199, 252, 253},
 			inflictedBy: &testStatusInfliction{
@@ -121,12 +121,12 @@ func TestGetStatusCondition(t *testing.T) {
 				overdriveAbilities: []int32{},
 				itemAbilities:      []int32{63},
 				enemyAbilities:     []int32{6, 8, 135, 247, 397},
-				statusConditions:   []int32{9, 10, 15},
+				statusConditions:   []int32{8, 9, 14},
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions/32",
+				requestURL:     "/api/status-conditions/31",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -145,7 +145,7 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     2,
 				},
 			},
-			expUnique:          newExpUnique(32, "boost"),
+			expUnique:          newExpUnique(31, "boost"),
 			autoAbilities:      []int32{},
 			monstersResistance: []int32{3, 33, 69, 108, 135, 253},
 			inflictedBy: &testStatusInfliction{
@@ -161,7 +161,7 @@ func TestGetStatusCondition(t *testing.T) {
 				overdriveAbilities: []int32{},
 				itemAbilities:      []int32{},
 				enemyAbilities:     []int32{},
-				statusConditions:   []int32{9, 10},
+				statusConditions:   []int32{8, 9},
 			},
 		},
 	}
@@ -177,8 +177,8 @@ func TestRetrieveStatusConditions(t *testing.T) {
 				requestURL:     "/api/status-conditions?limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:   46,
-			results: []int32{1, 8, 14, 16, 22, 38, 46},
+			count:   45,
+			results: []int32{1, 8, 14, 16, 22, 38, 45},
 		},
 		{
 			testGeneral: testGeneral{
@@ -186,7 +186,7 @@ func TestRetrieveStatusConditions(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			count:   11,
-			results: []int32{22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 41},
+			results: []int32{21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 40},
 		},
 	}
 
