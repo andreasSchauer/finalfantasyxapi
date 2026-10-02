@@ -9,7 +9,7 @@ import (
 )
 
 
-// can reuse for other endpoints
+
 func getBattleInteraction(cfg *Config, abilityID int32, interactionPtr *int32) (seeding.BattleInteraction, error) {
 	ability, _ := seeding.GetResourceByID(abilityID, cfg.l.AbilitiesID)
 	interactionsAmt := h.Len32(ability.BattleInteractions)
@@ -30,7 +30,7 @@ func getBattleInteraction(cfg *Config, abilityID int32, interactionPtr *int32) (
 		return seeding.BattleInteraction{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided interaction id '%d' used for ability '%s' is out of range. max id: %d.", interactionID, abilityString, interactionsAmt), nil)
 	}
 
-	interactionIdx := interactionID-1
+	interactionIdx := interactionID - 1
 
 	return ability.BattleInteractions[interactionIdx], nil
 }

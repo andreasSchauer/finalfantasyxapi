@@ -60,7 +60,7 @@ func TestGetEnemyAbility(t *testing.T) {
 								damageConstant: 16,
 							},
 						},
-						critical:        h.GetStrPtr("crit+ability%"),
+						critical:        h.GetStrPtr("crit-ability"),
 						criticalPlusVal: h.GetInt32Ptr(25),
 						isPiercing:      false,
 						breakDmgLmt:     h.GetStrPtr("always"),

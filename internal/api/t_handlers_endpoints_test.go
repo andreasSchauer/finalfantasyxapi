@@ -27,7 +27,7 @@ func TestRetrieveEndpoints(t *testing.T) {
 				requestURL:     "/api/endpoints",
 				expectedStatus: http.StatusOK,
 			},
-			count:   52,
+			count:   len(testCfg.e.initializeEndpointSlice()),
 			results: []string{
 				"/areas",
 				"/equipment-tables",

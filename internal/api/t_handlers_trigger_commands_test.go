@@ -164,7 +164,7 @@ func TestGetTriggerCommand(t *testing.T) {
 								damageConstant: 16,
 							},
 						},
-						critical:        h.GetStrPtr("crit+weapon%"),
+						critical:        h.GetStrPtr("crit-equip"),
 						criticalPlusVal: nil,
 						isPiercing:      true,
 						breakDmgLmt:     h.GetStrPtr("auto-ability"),

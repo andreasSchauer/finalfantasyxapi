@@ -8,70 +8,52 @@ import (
 )
 
 
-
 type DelayResponse struct {
-	TickSpeed		int32		`json:"tick_speed"`
-	RemainingTicks	*int32		`json:"remaining_ticks,omitempty"`
-	DelayTicks		int32		`json:"delay_ticks"`
-	DelayTurns		float64		`json:"delay_turns"`
+	Delay			Delay			`json:"delay"`
+	Target			DelayTargetData	`json:"target"`
+	DelayTicks		int32			`json:"delay_ticks"`
+	DelayTurns		float64			`json:"delay_turns"`
 }
 
 type Delay struct {
-	DelayType 		string
-	AttackType		string
-	DelayConstant	int32
+	DelayType 		string	`json:"delay_type"`
+	AttackType		string	`json:"attack_type"`
+	DelayConstant	int32	`json:"delay_constant"`
 }
 
-/*
-	code is correct, but still ugly
-*/
+type DelayTargetData struct {
+	Monster			*string		`json:"monster,omitempty"`
+	Agility			int32		`json:"agility"`
+	TickSpeed		int32		`json:"tick_speed"`
+	RemainingTicks	*int32		`json:"remaining_ticks,omitempty"`
+	Status			*string		`json:"status,omitempty"`
+}
+
 
 func handleDelay(cfg *Config, params DelayParams) (DelayResponse, error) {
 	delay := assembleDelay(params)
 	
-	tickspeed, err := assembleDelayTarget(cfg, params)
+	target, err := delayGetTargetData(cfg, params)
 	if err != nil {
 		return DelayResponse{}, err
 	}
+	target.RemainingTicks = params.Target.RemainingTicks
 
-	if params.Delay.DelayType == string(database.DelayTypeCtbBased) && params.Target.RemainingTicks == nil {
+	if delay.DelayType == string(database.DelayTypeCtbBased) && target.RemainingTicks == nil {
 		return DelayResponse{}, newHTTPError(http.StatusBadRequest, "in order to calculate ctb-based delay, the target's remaining ticks need to be given.", nil)
 	}
+	
+	delayTicks, delayTurns := calcDelay(delay, target)
 
-	response := calcDelay(delay, tickspeed, params.Target.RemainingTicks)
+	response := DelayResponse{
+		Delay: 			delay,
+		Target: 		target,
+		DelayTicks: 	delayTicks,
+		DelayTurns: 	delayTurns,
+	}
 
 	return response, nil
 }
-
-func calcDelay(delay Delay, tickspeed int32, remainingTicks *int32) DelayResponse {
-	var attackType int32 = 1
-	
-	if delay.AttackType == string(database.CtbAttackTypeHeal) {
-		attackType = -1
-	}
-
-	var usedVal int32
-	
-	switch delay.DelayType {
-	case string(database.DelayTypeTickSpeedBased):
-		usedVal = tickspeed
-
-	case string(database.DelayTypeCtbBased):
-		usedVal = *remainingTicks
-	}
-
-	delayTicks := (usedVal * delay.DelayConstant) / 16
-	turnTicks := tickspeed * 3
-	delayTurns := float64(delayTicks) / float64(turnTicks)
-
-	return DelayResponse{
-		DelayTicks: 	delayTicks * attackType,
-		DelayTurns: 	h.FloatRound(delayTurns, 4),
-		TickSpeed: 		tickspeed,
-		RemainingTicks: remainingTicks,
-	}
-}
-
 
 func assembleDelay(params DelayParams) Delay {
 	d := params.Delay
@@ -108,50 +90,31 @@ func assembleDelay(params DelayParams) Delay {
 	return delay
 }
 
-func assembleDelayTarget(cfg *Config, params DelayParams) (int32, error) {
-	status, agility, err := fetchDelayMonster(cfg, params)
-	if err != nil {
-		return 0, err
-	}
+func calcDelay(delay Delay, target DelayTargetData) (int32, float64) {
+	attackType := getDelayAttackTypeFactor(delay)
+	usedVal := getDelayUsedVal(delay, target)
 
-	if params.Target.Agility != nil {
-		agility = *params.Target.Agility
-	}
+	delayTicks := (usedVal * delay.DelayConstant) / 16
+	ticksPerTurn := target.TickSpeed * 3
+	delayTurns := float64(delayTicks) / float64(ticksPerTurn)
 
-	if params.Target.Status != nil {
-		status = params.Target.Status
-	}
-
-	agilityTier := getAgilityTier(cfg, agility)
-	tickspeed := calcTickSpeed(agilityTier.TickSpeed, status)
-
-	return tickspeed, nil
+	return delayTicks * attackType, h.FloatRound(delayTurns, 4)
 }
 
-
-func fetchDelayMonster(cfg *Config, params DelayParams) (*string, int32, error) {
-	target := params.Target
+func getDelayAttackTypeFactor(delay Delay) int32 {
+	var attackType int32 = 1
 	
-	if target.MonsterID == nil {
-		return nil, 0, nil
+	if delay.AttackType == string(database.CtbAttackTypeHeal) {
+		attackType = -1
 	}
 
-	monster, err := quickAssembleMon(cfg, *target.MonsterID, target.AltState)
-	if err != nil {
-		return nil, 0, err
+	return attackType
+}
+
+func getDelayUsedVal(delay Delay, target DelayTargetData) int32 {
+	if delay.DelayType == string(database.DelayTypeTickSpeedBased) {
+		return target.TickSpeed
 	}
 
-	err = enforceMonImmunity("delay", monster, params.IgnImmunities)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	agility := getBaseStatVal(cfg, "agility", monster.BaseStats)
-
-	status, err := fetchMonsterHasteStatus(monster, target.Status, params.IgnImmunities)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	return status, agility, nil
+	return *target.RemainingTicks
 }
