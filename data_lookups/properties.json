@@ -91,6 +91,14 @@
     },
     {
         "id": 11,
+        "name": "delayproof",
+        "effect": "The bearer is unaffected by CTB-altering actions.",
+        "related_stats": [],
+        "nullify_armored": null,
+        "modifier_change": null
+    },
+    {
+        "id": 12,
         "name": "auto-evade",
         "effect": "The bearer evades any evadable physical attack.",
         "related_stats": [
@@ -100,7 +108,7 @@
         "modifier_change": null
     },
     {
-        "id": 12,
+        "id": 13,
         "name": "auto-sensor",
         "effect": "The bearer's applies 'sensor' to any currently selected target.",
         "related_stats": [],

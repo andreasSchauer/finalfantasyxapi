@@ -678,6 +678,7 @@
         "distance": 1,
         "properties": [
             "armored",
+            "delayproof",
             "nul-percentage"
         ],
         "auto_abilities": [],
@@ -821,7 +822,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -8672,7 +8672,8 @@
         "distance": 1,
         "properties": [
             "armored",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -8789,7 +8790,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -12601,7 +12601,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -12718,7 +12719,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -15506,7 +15506,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "heavy"
+            "heavy",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 400,
@@ -15649,7 +15650,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -15761,7 +15761,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "heavy"
+            "heavy",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -15989,7 +15990,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -16094,7 +16094,8 @@
         "distance": 2,
         "properties": [
             "tough",
-            "heavy"
+            "heavy",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 48,
@@ -16369,7 +16370,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -16425,7 +16425,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 2,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 48,
         "ap_overkill": 72,
@@ -16699,7 +16701,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -16757,7 +16758,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "heavy"
+            "heavy",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 37,
@@ -17032,7 +17034,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -20194,7 +20195,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -20311,7 +20313,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -23286,7 +23287,8 @@
         "distance": 1,
         "properties": [
             "armored",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 350,
@@ -23563,7 +23565,6 @@
             "berserk",
             "confusion",
             "darkness",
-            "delay",
             "silence",
             "zombie",
             "power break",
@@ -25829,7 +25830,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "armored"
+            "armored",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 3240,
@@ -26116,7 +26118,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "provoke",
@@ -28500,7 +28501,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 1,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [
             "first strike"
         ],
@@ -28734,7 +28737,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -29348,7 +29350,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "heavy"
+            "heavy",
+            "delayproof"
         ],
         "auto_abilities": [
             "first strike"
@@ -29624,7 +29627,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -31187,7 +31189,8 @@
         "distance": 1,
         "properties": [
             "armored",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -31443,7 +31446,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "petrification",
             "poison",
             "silence",
@@ -40320,7 +40322,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -40437,7 +40440,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -40519,7 +40521,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -40636,7 +40639,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -40719,7 +40721,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -40836,7 +40839,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -42476,7 +42478,8 @@
         "properties": [
             "nul-magical",
             "tough",
-            "heavy"
+            "heavy",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -42593,7 +42596,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -42652,7 +42654,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 6300,
@@ -42907,7 +42910,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -47327,7 +47329,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -47444,7 +47447,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -47519,7 +47521,8 @@
         "properties": [
             "armored",
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 6600,
@@ -47809,7 +47812,6 @@
         "status_immunities": [
             "confusion",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -49611,7 +49613,8 @@
         "properties": [
             "tough",
             "nul-percentage",
-            "no-damage"
+            "no-damage",
+            "delayproof"
         ],
         "auto_abilities": [
             "first strike"
@@ -49790,7 +49793,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -49875,7 +49877,8 @@
         "properties": [
             "tough",
             "nul-percentage",
-            "no-damage"
+            "no-damage",
+            "delayproof"
         ],
         "auto_abilities": [
             "first strike"
@@ -50064,7 +50067,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -51240,7 +51242,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 6500,
@@ -51488,7 +51491,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -52396,7 +52398,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -52513,7 +52516,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -52595,7 +52597,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -52708,7 +52711,6 @@
             }
         ],
         "status_immunities": [
-            "delay",
             "eject",
             "threaten",
             "bribe",
@@ -52797,7 +52799,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 1,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 4500,
         "ap_overkill": 6750,
@@ -53016,7 +53020,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -53153,7 +53156,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 1,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 4500,
         "ap_overkill": 6750,
@@ -53373,7 +53378,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -55634,7 +55638,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 3750,
@@ -55901,7 +55906,6 @@
             "berserk",
             "confusion",
             "death",
-            "delay",
             "petrification",
             "poison",
             "provoke",
@@ -56003,7 +56007,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 980,
@@ -56286,7 +56291,6 @@
         ],
         "status_immunities": [
             "darkness",
-            "delay",
             "slow",
             "zombie"
         ],
@@ -59545,7 +59549,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -59778,7 +59783,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -59886,7 +59890,8 @@
         "properties": [
             "armored",
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -60003,7 +60008,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -60200,7 +60204,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 11000,
@@ -60426,7 +60431,6 @@
         "status_immunities": [
             "confusion",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -60631,7 +60635,8 @@
         "is_zombie": true,
         "distance": 1,
         "properties": [
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 1200,
@@ -60886,7 +60891,6 @@
             "berserk",
             "confusion",
             "death",
-            "delay",
             "provoke",
             "silence",
             "slow",
@@ -60953,7 +60957,8 @@
         "is_zombie": true,
         "distance": 1,
         "properties": [
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 1200,
@@ -61208,7 +61213,6 @@
             "berserk",
             "confusion",
             "death",
-            "delay",
             "provoke",
             "silence",
             "slow",
@@ -61276,7 +61280,8 @@
         "distance": 1,
         "properties": [
             "armored",
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 6000,
@@ -61557,7 +61562,6 @@
         "status_immunities": [
             "confusion",
             "death",
-            "delay",
             "petrification",
             "poison",
             "silence",
@@ -61623,7 +61627,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 2,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 3200,
         "ap_overkill": 4800,
@@ -61911,7 +61917,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "petrification",
             "poison",
             "provoke",
@@ -61984,7 +61989,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 1,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 3200,
         "ap_overkill": 4800,
@@ -62273,7 +62280,6 @@
             "berserk",
             "confusion",
             "death",
-            "delay",
             "petrification",
             "poison",
             "silence",
@@ -62335,7 +62341,8 @@
         "properties": [
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 12000,
@@ -62622,7 +62629,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -62875,7 +62881,8 @@
         "properties": [
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 14000,
@@ -63108,7 +63115,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -63346,7 +63352,8 @@
             "armored",
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 16000,
@@ -63574,7 +63581,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -63729,7 +63735,8 @@
             "armored",
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 17000,
@@ -63957,7 +63964,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -64111,7 +64117,8 @@
         "properties": [
             "armored",
             "tough",
-            "heavy"
+            "heavy",
+            "delayproof"
         ],
         "auto_abilities": [
             "first strike"
@@ -64341,7 +64348,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -64505,7 +64511,8 @@
             "armored",
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 18000,
@@ -64733,7 +64740,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -64871,7 +64877,8 @@
             "armored",
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [
             "first strike"
@@ -65133,7 +65140,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -65271,7 +65277,8 @@
         "properties": [
             "armored",
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 12500,
@@ -65525,7 +65532,6 @@
         ],
         "status_immunities": [
             "death",
-            "delay",
             "slow",
             "threaten",
             "zombie",
@@ -65615,7 +65621,8 @@
         "distance": 1,
         "properties": [
             "armored",
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 17500,
@@ -65847,7 +65854,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "petrification",
             "poison",
             "silence",
@@ -65931,7 +65937,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 16800,
@@ -66204,7 +66211,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -67017,7 +67023,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 1,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 7800,
         "ap_overkill": 11700,
@@ -67286,7 +67294,6 @@
             "berserk",
             "confusion",
             "death",
-            "delay",
             "petrification",
             "slow",
             "threaten",
@@ -67379,7 +67386,8 @@
         "distance": 1,
         "properties": [
             "armored",
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 7800,
@@ -67649,7 +67657,6 @@
             "berserk",
             "confusion",
             "death",
-            "delay",
             "petrification",
             "slow",
             "threaten",
@@ -68935,7 +68942,8 @@
         "properties": [
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 24000,
@@ -69186,7 +69194,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -69375,7 +69382,8 @@
         "is_zombie": false,
         "distance": 3,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -69492,7 +69500,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -69545,7 +69552,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -69686,7 +69694,6 @@
         "status_immunities": [
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -72476,7 +72483,8 @@
         "distance": 1,
         "properties": [
             "armored",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 4200,
@@ -72692,7 +72700,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -73047,7 +73054,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -73164,7 +73172,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -73246,7 +73253,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -73363,7 +73371,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -73436,7 +73443,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -73553,7 +73561,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -73688,7 +73695,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -73805,7 +73813,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -73896,7 +73903,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -74013,7 +74021,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -74096,7 +74103,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -74213,7 +74221,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -74304,7 +74311,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -74421,7 +74429,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -74502,7 +74509,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 1,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 0,
         "ap_overkill": 0,
@@ -74618,7 +74627,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -74780,7 +74788,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 1,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 0,
         "ap_overkill": 0,
@@ -74896,7 +74906,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -74959,7 +74968,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 1,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 0,
         "ap_overkill": 0,
@@ -75075,7 +75086,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -77111,7 +77121,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 20000,
@@ -77368,7 +77379,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -78149,7 +78159,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [
             "first strike"
@@ -78408,7 +78419,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "poison",
             "provoke",
             "silence",
@@ -78935,7 +78945,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 1,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 0,
         "ap_overkill": 0,
@@ -79051,7 +79063,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "petrification",
             "poison",
             "provoke",
@@ -79104,7 +79115,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 1,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 0,
         "ap_overkill": 0,
@@ -79220,7 +79233,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "petrification",
             "poison",
             "provoke",
@@ -79273,7 +79285,9 @@
         "is_underwater": false,
         "is_zombie": false,
         "distance": 1,
-        "properties": [],
+        "properties": [
+            "delayproof"
+        ],
         "auto_abilities": [],
         "ap": 0,
         "ap_overkill": 0,
@@ -79389,7 +79403,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "petrification",
             "poison",
             "provoke",
@@ -79443,7 +79456,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "tough"
+            "tough",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -79560,7 +79574,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "petrification",
             "poison",
             "provoke",
@@ -79836,7 +79849,8 @@
         "properties": [
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 40000,
@@ -80057,7 +80071,6 @@
             "berserk",
             "confusion",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -80185,7 +80198,8 @@
         "properties": [
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 50000,
@@ -80403,7 +80417,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -80517,7 +80530,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -80797,7 +80811,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -80911,7 +80924,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -81258,7 +81272,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -81336,7 +81349,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [
             "first strike"
@@ -81613,7 +81627,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -81683,7 +81696,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -81976,7 +81990,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -82063,7 +82076,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -82410,7 +82424,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -82499,7 +82512,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -82774,7 +82788,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -82843,7 +82856,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [
             "auto-regen"
@@ -83125,7 +83139,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -83189,7 +83202,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -83469,7 +83483,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -83594,7 +83607,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -83851,7 +83865,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -83960,7 +83973,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -84307,7 +84321,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -84387,7 +84400,8 @@
         "properties": [
             "armored",
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -84734,7 +84748,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -84835,7 +84848,8 @@
         "properties": [
             "armored",
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [
             "auto-reflect",
@@ -85113,7 +85127,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -85238,7 +85251,8 @@
         "properties": [
             "armored",
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -85513,7 +85527,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -85582,7 +85595,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -85929,7 +85943,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -86009,7 +86022,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -86257,7 +86271,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -86317,7 +86330,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [
             "auto-regen"
@@ -86599,7 +86613,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -86680,7 +86693,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -86960,7 +86974,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -87060,7 +87073,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [
             "auto-nulall",
@@ -87311,7 +87325,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -87387,7 +87400,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [
             "auto-regen"
@@ -87637,7 +87651,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -87693,7 +87706,8 @@
         "properties": [
             "tough",
             "nul-physical",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [
             "auto-reflect"
@@ -87933,7 +87947,6 @@
             "berserk",
             "confusion",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -88063,7 +88076,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -88338,7 +88352,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -88471,7 +88484,8 @@
         "distance": 1,
         "properties": [
             "armored",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -88746,7 +88760,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -88818,7 +88831,8 @@
         "distance": 1,
         "properties": [
             "armored",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -89089,7 +89103,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -89189,7 +89202,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [
             "auto-regen"
@@ -89538,7 +89552,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -89642,7 +89655,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -89922,7 +89936,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -90038,7 +90051,8 @@
         "properties": [
             "armored",
             "nul-magical",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -90318,7 +90332,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -90419,7 +90432,8 @@
         "properties": [
             "armored",
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -90694,7 +90708,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -90781,7 +90794,8 @@
         "properties": [
             "armored",
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [
             "auto-reflect"
@@ -90999,7 +91013,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -91109,7 +91122,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 50000,
@@ -91330,7 +91344,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -91659,7 +91672,8 @@
         "distance": 1,
         "properties": [
             "armored",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 50000,
@@ -91983,7 +91997,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -92119,7 +92132,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 50000,
@@ -92376,7 +92390,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -92490,7 +92503,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 50000,
@@ -92750,7 +92764,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -92907,7 +92920,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 50000,
@@ -93146,7 +93160,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -93258,7 +93271,8 @@
             "armored",
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -93375,7 +93389,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "petrification",
             "poison",
             "provoke",
@@ -93428,7 +93441,8 @@
             "armored",
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 0,
@@ -93545,7 +93559,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "petrification",
             "poison",
             "provoke",
@@ -93585,7 +93598,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 50000,
@@ -93806,7 +93820,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -93877,7 +93890,8 @@
         "properties": [
             "armored",
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 55000,
@@ -94095,7 +94109,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -94182,7 +94195,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -94461,7 +94475,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -94545,7 +94558,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 20000,
@@ -94788,7 +94802,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -94863,7 +94876,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 20000,
@@ -95106,7 +95120,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -95181,7 +95194,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 20000,
@@ -95424,7 +95438,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -95499,7 +95512,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 20000,
@@ -95742,7 +95756,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -95818,7 +95831,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 30000,
@@ -96079,7 +96093,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -96155,7 +96168,8 @@
         "distance": 1,
         "properties": [
             "tough",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 8000,
@@ -96416,7 +96430,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -96653,7 +96666,8 @@
             "tough",
             "heavy",
             "nul-magical",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 30000,
@@ -96914,7 +96928,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -96998,7 +97011,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -97259,7 +97273,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -97343,7 +97356,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -97604,7 +97618,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -97679,7 +97692,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -97940,7 +97954,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -98017,7 +98030,8 @@
         "properties": [
             "tough",
             "heavy",
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [
             "auto-protect"
@@ -98230,7 +98244,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "doom",
             "eject",
             "petrification",
@@ -98356,7 +98369,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -98511,7 +98525,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",
@@ -98658,7 +98671,8 @@
         "is_zombie": false,
         "distance": 1,
         "properties": [
-            "nul-percentage"
+            "nul-percentage",
+            "delayproof"
         ],
         "auto_abilities": [],
         "ap": 10000,
@@ -98813,7 +98827,6 @@
             "confusion",
             "darkness",
             "death",
-            "delay",
             "eject",
             "petrification",
             "poison",

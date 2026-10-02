@@ -3,7 +3,7 @@
         "id": 1,
         "grad_recovery_stat_id": null,
         "on_hit_element_id": null,
-        "added_property_id": 12,
+        "added_property_id": 13,
         "cnvrsn_from_mod_id": null,
         "cnvrsn_to_mod_id": null,
         "name": "sensor",
@@ -1633,7 +1633,7 @@
         "id": 38,
         "grad_recovery_stat_id": null,
         "on_hit_element_id": null,
-        "added_property_id": 11,
+        "added_property_id": 12,
         "cnvrsn_from_mod_id": null,
         "cnvrsn_to_mod_id": null,
         "name": "evade \u0026 counter",
@@ -2336,7 +2336,7 @@
         "id": 54,
         "grad_recovery_stat_id": null,
         "on_hit_element_id": null,
-        "added_property_id": null,
+        "added_property_id": 11,
         "cnvrsn_from_mod_id": null,
         "cnvrsn_to_mod_id": null,
         "name": "-",
@@ -2400,127 +2400,121 @@
             },
             {
                 "id": 65,
-                "status_condition_id": 6,
-                "name": "delay",
-                "resistance": 254
-            },
-            {
-                "id": 66,
                 "status_condition_id": 5,
                 "name": "death",
                 "resistance": 254
             },
             {
-                "id": 67,
+                "id": 66,
                 "status_condition_id": 7,
                 "name": "doom",
                 "resistance": 254
             },
             {
-                "id": 68,
+                "id": 67,
                 "status_condition_id": 10,
                 "name": "petrification",
                 "resistance": 254
             },
             {
-                "id": 69,
+                "id": 68,
                 "status_condition_id": 11,
                 "name": "poison",
                 "resistance": 254
             },
             {
-                "id": 70,
+                "id": 69,
                 "status_condition_id": 12,
                 "name": "provoke",
                 "resistance": 254
             },
             {
-                "id": 71,
+                "id": 70,
                 "status_condition_id": 13,
                 "name": "silence",
                 "resistance": 254
             },
             {
-                "id": 72,
+                "id": 71,
                 "status_condition_id": 14,
                 "name": "sleep",
                 "resistance": 254
             },
             {
-                "id": 73,
+                "id": 72,
                 "status_condition_id": 15,
                 "name": "slow",
                 "resistance": 254
             },
             {
-                "id": 74,
+                "id": 73,
                 "status_condition_id": 16,
                 "name": "threaten",
                 "resistance": 254
             },
             {
-                "id": 75,
+                "id": 74,
                 "status_condition_id": 17,
                 "name": "zombie",
                 "resistance": 254
             },
             {
-                "id": 76,
+                "id": 75,
                 "status_condition_id": 35,
                 "name": "power distiller",
                 "resistance": 254
             },
             {
-                "id": 77,
+                "id": 76,
                 "status_condition_id": 36,
                 "name": "mana distiller",
                 "resistance": 254
             },
             {
-                "id": 78,
+                "id": 77,
                 "status_condition_id": 37,
                 "name": "speed distiller",
                 "resistance": 254
             },
             {
-                "id": 79,
+                "id": 78,
                 "status_condition_id": 38,
                 "name": "ability distiller",
                 "resistance": 254
             },
             {
-                "id": 80,
+                "id": 79,
                 "status_condition_id": 42,
                 "name": "scan",
                 "resistance": 254
             },
             {
-                "id": 81,
+                "id": 80,
                 "status_condition_id": 43,
                 "name": "sensor",
                 "resistance": 254
             },
             {
-                "id": 82,
+                "id": 81,
                 "status_condition_id": 34,
                 "name": "defend",
                 "resistance": 254
             },
             {
-                "id": 83,
+                "id": 82,
                 "status_condition_id": 39,
                 "name": "guard",
                 "resistance": 254
             },
             {
-                "id": 84,
+                "id": 83,
                 "status_condition_id": 44,
                 "name": "sentinel",
                 "resistance": 254
             }
         ],
         "added_statusses": [],
-        "added_property": null,
+        "added_property": "delayproof",
         "conversion_from": null,
         "conversion_to": null,
         "stat_changes": [],
@@ -3217,7 +3211,7 @@
         "on_hit_status": null,
         "added_status_resists": [
             {
-                "id": 71,
+                "id": 70,
                 "status_condition_id": 13,
                 "name": "silence",
                 "resistance": 254
@@ -3307,7 +3301,7 @@
         "on_hit_status": null,
         "added_status_resists": [
             {
-                "id": 72,
+                "id": 71,
                 "status_condition_id": 14,
                 "name": "sleep",
                 "resistance": 254
@@ -3397,7 +3391,7 @@
         "on_hit_status": null,
         "added_status_resists": [
             {
-                "id": 69,
+                "id": 68,
                 "status_condition_id": 11,
                 "name": "poison",
                 "resistance": 254
@@ -3487,7 +3481,7 @@
         "on_hit_status": null,
         "added_status_resists": [
             {
-                "id": 68,
+                "id": 67,
                 "status_condition_id": 10,
                 "name": "petrification",
                 "resistance": 254
@@ -3577,7 +3571,7 @@
         "on_hit_status": null,
         "added_status_resists": [
             {
-                "id": 66,
+                "id": 65,
                 "status_condition_id": 5,
                 "name": "death",
                 "resistance": 254
@@ -3667,7 +3661,7 @@
         "on_hit_status": null,
         "added_status_resists": [
             {
-                "id": 75,
+                "id": 74,
                 "status_condition_id": 17,
                 "name": "zombie",
                 "resistance": 254
@@ -3757,7 +3751,7 @@
         "on_hit_status": null,
         "added_status_resists": [
             {
-                "id": 73,
+                "id": 72,
                 "status_condition_id": 15,
                 "name": "slow",
                 "resistance": 254
@@ -3801,7 +3795,7 @@
         "on_hit_status": null,
         "added_status_resists": [
             {
-                "id": 85,
+                "id": 84,
                 "status_condition_id": 2,
                 "name": "confusion",
                 "resistance": 50
@@ -3891,7 +3885,7 @@
         "on_hit_status": null,
         "added_status_resists": [
             {
-                "id": 86,
+                "id": 85,
                 "status_condition_id": 1,
                 "name": "berserk",
                 "resistance": 50
@@ -3975,7 +3969,7 @@
         "on_hit_status": null,
         "added_status_resists": [
             {
-                "id": 87,
+                "id": 86,
                 "status_condition_id": 3,
                 "name": "curse",
                 "resistance": 254
@@ -4019,7 +4013,7 @@
         "on_hit_status": null,
         "added_status_resists": [
             {
-                "id": 87,
+                "id": 86,
                 "status_condition_id": 3,
                 "name": "curse",
                 "resistance": 254
@@ -5854,43 +5848,43 @@
                 "resistance": 254
             },
             {
-                "id": 67,
+                "id": 66,
                 "status_condition_id": 7,
                 "name": "doom",
                 "resistance": 254
             },
             {
-                "id": 68,
+                "id": 67,
                 "status_condition_id": 10,
                 "name": "petrification",
                 "resistance": 254
             },
             {
-                "id": 69,
+                "id": 68,
                 "status_condition_id": 11,
                 "name": "poison",
                 "resistance": 254
             },
             {
-                "id": 71,
+                "id": 70,
                 "status_condition_id": 13,
                 "name": "silence",
                 "resistance": 254
             },
             {
-                "id": 72,
+                "id": 71,
                 "status_condition_id": 14,
                 "name": "sleep",
                 "resistance": 254
             },
             {
-                "id": 73,
+                "id": 72,
                 "status_condition_id": 15,
                 "name": "slow",
                 "resistance": 254
             },
             {
-                "id": 75,
+                "id": 74,
                 "status_condition_id": 17,
                 "name": "zombie",
                 "resistance": 254

@@ -46,35 +46,6 @@ func TestGetStatusCondition(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions/6",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
-					"auto-abilities":                     1,
-					"monsters":                           123,
-					"inflicted by - player abilities":    3,
-					"inflicted by - overdrive abilities": 3,
-					"inflicted by - item abilities":      2,
-					"inflicted by - misc abilities":      0,
-					"inflicted by - enemy abilities":     26,
-					"inflicted by - status conditions":   1,
-				},
-			},
-			expUnique:          newExpUnique(6, "delay"),
-			autoAbilities:      []int32{54},
-			monstersResistance: []int32{5, 33, 70, 136, 193, 235, 262, 282, 307},
-			inflictedBy: &testStatusInfliction{
-				playerAbilities:    []int32{9, 10, 88},
-				overdriveAbilities: []int32{36, 37, 107},
-				itemAbilities:      []int32{47, 48},
-				miscAbilities:      []int32{},
-				enemyAbilities:     []int32{51, 65, 120, 207, 258, 313, 406},
-				statusConditions:   []int32{15},
-			},
-			removedBy: nil,
-		},
-		{
-			testGeneral: testGeneral{
 				requestURL:     "/api/status-conditions/10?inflict_max=60",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},

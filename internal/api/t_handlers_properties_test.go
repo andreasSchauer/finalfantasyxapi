@@ -10,9 +10,9 @@ func TestGetProperty(t *testing.T) {
 	tests := []expProperty{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/properties/13",
+				requestURL:     "/api/properties/14",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "property with provided id '13' doesn't exist. max id: 12.",
+				expectedErr:    "property with provided id '14' doesn't exist. max id: 13.",
 			},
 		},
 		{
@@ -43,6 +43,20 @@ func TestGetProperty(t *testing.T) {
 			autoAbilities: []int32{2},
 			monsters:      []int32{},
 		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/properties/11",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"auto-abilities": 1,
+					"monsters":       123,
+				},
+			},
+			expUnique:     newExpUnique(11, "delayproof"),
+			autoAbilities: []int32{54},
+			monsters:      []int32{5, 33, 70, 136, 193, 235, 262, 282, 307},
+		},
 	}
 
 	testSingleResources(t, tests, "GetProperty", testCfg.HandleProperties, compareProperties)
@@ -56,8 +70,8 @@ func TestRetrieveProperties(t *testing.T) {
 				requestURL:     "/api/properties",
 				expectedStatus: http.StatusOK,
 			},
-			count:   12,
-			results: []int32{1, 4, 5, 8, 9, 10, 12},
+			count:   13,
+			results: []int32{1, 4, 5, 8, 9, 10, 12, 13},
 		},
 	}
 
