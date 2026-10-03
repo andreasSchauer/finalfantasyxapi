@@ -157,17 +157,8 @@ SELECT j.ability_id
 FROM j_battle_interactions_inflicted_status_conditions j
 JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
 WHERE ist.status_condition_id = sqlc.arg(status_condition_id)::int
-  AND ist.probability BETWEEN
-        sqlc.arg('min_rate')::int
-    AND sqlc.arg('max_rate')::int
-
-UNION
-
-SELECT j.ability_id
-FROM j_abilities_battle_interactions j
-JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE sqlc.arg(status_condition_id)::int = 6 AND bi.inflicted_delay_id IS NOT NULL
-ORDER BY ability_id;
+  AND ist.probability BETWEEN sqlc.arg('min_rate')::int AND sqlc.arg('max_rate')::int
+ORDER BY j.ability_id;
 
 
 -- name: GetStatusConditionAbilityIDsRemoved :many

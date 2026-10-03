@@ -75,7 +75,7 @@ func TestGetMiscAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypePhysical,
 								damageFormula:  database.DamageFormulaClstlHpHigh,
 								damageConstant: 16,
@@ -132,7 +132,7 @@ func TestGetMiscAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypePhysical,
 								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 18,
@@ -189,7 +189,7 @@ func TestGetMiscAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypePhysical,
 								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 14,

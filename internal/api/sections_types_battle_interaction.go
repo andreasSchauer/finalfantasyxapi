@@ -61,7 +61,7 @@ func convertDamageSimple(cfg *Config, d seeding.Damage) DamageSimple {
 }
 
 func convertDamageCalcSimple(cfg *Config, dc seeding.AbilityDamage) string {
-	return fmt.Sprintf("%s %s (%s), formula: %s, power: %d", dc.AttackType, dc.TargetStat, dc.DamageType, dc.DamageFormula, dc.DamageConstant)
+	return fmt.Sprintf("%s %s (%s), formula: %s, power: %d", dc.AttackType, dc.TargetClass, dc.DamageType, dc.DamageFormula, dc.DamageConstant)
 }
 
 func convertBreakDmgLimitSimple(_ *Config, breakDmgLimit string) string {

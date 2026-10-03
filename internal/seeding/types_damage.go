@@ -7,14 +7,14 @@ import (
 )
 
 type Damage struct {
-	ID              int32			`json:"damage_id"`
+	ID              int32           `json:"damage_id"`
 	DamageCalc      []AbilityDamage `json:"damage_calc"`
 	Critical        *string         `json:"critical"`
 	CriticalPlusVal *int32          `json:"critical_plus_val"`
 	IsPiercing      bool            `json:"is_piercing"`
 	BreakDmgLimit   *string         `json:"break_dmg_lmt"`
-	ElementID       *int32			`json:"element_id"`
-	Element         *string 		`json:"element"`
+	ElementID       *int32          `json:"element_id"`
+	Element         *string         `json:"element"`
 }
 
 func (d Damage) ToHashFields() []any {
@@ -41,14 +41,13 @@ func (d Damage) Error() string {
 }
 
 type AbilityDamage struct {
-	ID             int32	`json:"id"`
-	Condition      *string 	`json:"condition"`
-	AttackType     string  	`json:"attack_type"`
-	StatID         int32	`json:"stat_id"`
-	TargetStat     string 	`json:"target_stat"`
-	DamageType     string 	`json:"damage_type"`
-	DamageFormula  string 	`json:"damage_formula"`
-	DamageConstant int32  	`json:"damage_constant"`
+	ID             int32   `json:"id"`
+	Condition      *string `json:"condition"`
+	AttackType     string  `json:"attack_type"`
+	TargetClass    string  `json:"target_class"`
+	DamageType     string  `json:"damage_type"`
+	DamageFormula  string  `json:"damage_formula"`
+	DamageConstant int32   `json:"damage_constant"`
 }
 
 func (ad AbilityDamage) ToHashFields() []any {
@@ -56,7 +55,7 @@ func (ad AbilityDamage) ToHashFields() []any {
 		fmt.Sprintf("%T", ad),
 		h.DerefOrNil(ad.Condition),
 		ad.AttackType,
-		ad.StatID,
+		ad.TargetClass,
 		ad.DamageType,
 		ad.DamageFormula,
 		ad.DamageConstant,
@@ -72,5 +71,5 @@ func (ad *AbilityDamage) SetID(id int32) {
 }
 
 func (ad AbilityDamage) Error() string {
-	return fmt.Sprintf("ability damage with attack type: %s, target stat: %s, damage type: %s, formula: %s, damage constant %d, condition: %v", ad.AttackType, ad.TargetStat, ad.DamageType, ad.DamageFormula, ad.DamageConstant, h.PtrToString(ad.Condition))
+	return fmt.Sprintf("ability damage with attack type: %s, target stat: %s, damage type: %s, formula: %s, damage constant %d, condition: %v", ad.AttackType, ad.TargetClass, ad.DamageType, ad.DamageFormula, ad.DamageConstant, h.PtrToString(ad.Condition))
 }

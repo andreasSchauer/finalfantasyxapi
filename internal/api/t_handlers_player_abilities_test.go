@@ -58,7 +58,7 @@ func TestGetPlayerAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypePhysical,
 								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 14,
@@ -124,7 +124,7 @@ func TestGetPlayerAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypePhysical,
 								damageFormula:  database.DamageFormulaClstlHpLow,
 								damageConstant: 16,
@@ -272,7 +272,7 @@ func TestGetPlayerAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeHeal,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypeMagical,
 								damageFormula:  database.DamageFormulaHealing,
 								damageConstant: 80,

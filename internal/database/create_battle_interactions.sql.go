@@ -64,12 +64,12 @@ func (q *Queries) CreateAbilityAccuracyBulk(ctx context.Context, arg CreateAbili
 }
 
 const createAbilityDamageBulk = `-- name: CreateAbilityDamageBulk :many
-INSERT INTO ability_damages (data_hash, condition, attack_type, stat_id, damage_type, damage_formula, damage_constant)
+INSERT INTO ability_damages (data_hash, condition, attack_type, target_class, damage_type, damage_formula, damage_constant)
 SELECT
     unnest($1::text[]),
     unnest($2::null_string[]),
     unnest($3::attack_type[]),
-    unnest($4::int[]),
+    unnest($4::target_class[]),
     unnest($5::damage_type[]),
     unnest($6::damage_formula[]),
     unnest($7::int[])
@@ -81,7 +81,7 @@ type CreateAbilityDamageBulkParams struct {
 	DataHash       []string
 	Condition      []sql.NullString
 	AttackType     []AttackType
-	StatID         []int32
+	TargetClass    []TargetClass
 	DamageType     []DamageType
 	DamageFormula  []DamageFormula
 	DamageConstant []int32
@@ -97,7 +97,7 @@ func (q *Queries) CreateAbilityDamageBulk(ctx context.Context, arg CreateAbility
 		pq.Array(arg.DataHash),
 		pq.Array(arg.Condition),
 		pq.Array(arg.AttackType),
-		pq.Array(arg.StatID),
+		pq.Array(arg.TargetClass),
 		pq.Array(arg.DamageType),
 		pq.Array(arg.DamageFormula),
 		pq.Array(arg.DamageConstant),

@@ -52,7 +52,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypeSpecial,
 								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 34,
@@ -109,14 +109,14 @@ func TestGetOverdriveAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeHeal,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypeSpecial,
 								damageFormula:  database.DamageFormulaPercentageMax,
 								damageConstant: 16,
 							},
 							{
 								attackType:     database.AttackTypeHeal,
-								targetStat:     2,
+								targetClass:    "mp",
 								damageType:     database.DamageTypeSpecial,
 								damageFormula:  database.DamageFormulaPercentageMax,
 								damageConstant: 16,
@@ -245,7 +245,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypeSpecial,
 								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 4,
@@ -282,7 +282,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypeSpecial,
 								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 24,

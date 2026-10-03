@@ -12,12 +12,12 @@ RETURNING id, data_hash;
 
 
 -- name: CreateAbilityDamageBulk :many
-INSERT INTO ability_damages (data_hash, condition, attack_type, stat_id, damage_type, damage_formula, damage_constant)
+INSERT INTO ability_damages (data_hash, condition, attack_type, target_class, damage_type, damage_formula, damage_constant)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('condition')::null_string[]),
     unnest(sqlc.arg('attack_type')::attack_type[]),
-    unnest(sqlc.arg('stat_id')::int[]),
+    unnest(sqlc.arg('target_class')::target_class[]),
     unnest(sqlc.arg('damage_type')::damage_type[]),
     unnest(sqlc.arg('damage_formula')::damage_formula[]),
     unnest(sqlc.arg('damage_constant')::int[])

@@ -23,8 +23,7 @@
                             "id": 1,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "physical",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 16
@@ -96,8 +95,7 @@
                             "id": 1,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "physical",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 16

@@ -2253,6 +2253,10 @@ func (t *Enums) initDamageFormula() {
 			Description: "",
 		},
 		{
+			Name:        string(database.DamageFormulaCtbCurrent),
+			Description: "",
+		},
+		{
 			Name:        string(database.DamageFormulaSpecialNoVar),
 			Description: "",
 		},

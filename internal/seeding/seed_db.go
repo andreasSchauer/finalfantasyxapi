@@ -25,10 +25,12 @@ func LoadDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 
-	dbHash, err := db.GetDbState(ctx)
+	dbHash, _ := db.GetDbState(ctx)
+	/*
 	if err != nil {
 		return nil, fmt.Errorf("couldn't get database state: %v", err)
 	}
+	*/
 
 	if dataHash == dbHash {
 		err = l.skipSeeding(db, ctx)

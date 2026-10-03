@@ -390,7 +390,7 @@ func TestGetMonster(t *testing.T) {
 			statusResists: map[string]int32{
 				"poison": 90,
 			},
-			abilities: []int32{69, 70, 71, 72, 415, 481, 548, 565, 706, 804, 831},
+			abilities: []int32{69, 70, 71, 72, 415, 481, 548, 565, 705, 804, 831},
 			defaultState: &testDefaultState{
 				IsTemporary: false,
 				Change: &testAltStateChange{

@@ -1334,17 +1334,8 @@ SELECT j.ability_id
 FROM j_battle_interactions_inflicted_status_conditions j
 JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
 WHERE ist.status_condition_id = $1::int
-  AND ist.probability BETWEEN
-        $2::int
-    AND $3::int
-
-UNION
-
-SELECT j.ability_id
-FROM j_abilities_battle_interactions j
-JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
-WHERE $1::int = 6 AND bi.inflicted_delay_id IS NOT NULL
-ORDER BY ability_id
+  AND ist.probability BETWEEN $2::int AND $3::int
+ORDER BY j.ability_id
 `
 
 type GetStatusConditionAbilityIDsInflictedParams struct {

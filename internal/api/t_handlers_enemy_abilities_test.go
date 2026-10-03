@@ -54,7 +54,7 @@ func TestGetEnemyAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypePhysical,
 								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 16,
@@ -110,7 +110,7 @@ func TestGetEnemyAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypeSpecial,
 								damageFormula:  database.DamageFormulaSpecialKills,
 								damageConstant: 100,
@@ -133,7 +133,7 @@ func TestGetEnemyAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities/394",
+				requestURL:     "/api/enemy-abilities/393",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -143,11 +143,11 @@ func TestGetEnemyAbility(t *testing.T) {
 					"battle interactions 0 copied status conditions":  18,
 				},
 			},
-			expNameVer:       newExpNameVer(394, "swallow", 2),
+			expNameVer:       newExpNameVer(393, "swallow", 2),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: false,
 			canCopyCat:       false,
-			untypedAbility:   791,
+			untypedAbility:   790,
 			monsters:         []int32{227},
 			battleInteractions: []expBattleInteraction{
 				{
@@ -218,17 +218,17 @@ func TestRetrieveEnemyAbilities(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities?target_type=single-target&rank=3&damage_type=magical",
+				requestURL:     "/api/enemy-abilities?target_type=single-target&rank=3&damage_type=magical&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:    20,
+			count:    21,
 			previous: nil,
 			next:     nil,
-			results:  []int32{12, 111, 150, 180, 258, 380, 435},
+			results:  []int32{12, 111, 150, 180, 257, 379, 435},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities?damage_formula=10",
+				requestURL:     "/api/enemy-abilities?damage_formula=11",
 				expectedStatus: http.StatusOK,
 			},
 			count:    16,
@@ -254,7 +254,7 @@ func TestRetrieveEnemyAbilities(t *testing.T) {
 			count:    101,
 			previous: nil,
 			next:     nil,
-			results:  []int32{2, 50, 69, 133, 196, 228, 278, 322, 406, 428, 443},
+			results:  []int32{2, 50, 69, 133, 196, 228, 277, 322, 406, 428, 443},
 		},
 	}
 

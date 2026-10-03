@@ -54,7 +54,7 @@ func TestGetItemAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeHeal,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypeSpecial,
 								damageFormula:  database.DamageFormulaSpecialNoVar,
 								damageConstant: 20,
@@ -112,7 +112,7 @@ func TestGetItemAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypeSpecial,
 								damageFormula:  database.DamageFormulaSpecialVar,
 								damageConstant: 20,
@@ -174,14 +174,14 @@ func TestGetItemAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAbsorb,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypeSpecial,
 								damageFormula:  database.DamageFormulaSpecialVar,
 								damageConstant: 30,
 							},
 							{
 								attackType:     database.AttackTypeAbsorb,
-								targetStat:     2,
+								targetClass:    "mp",
 								damageType:     database.DamageTypeSpecial,
 								damageFormula:  database.DamageFormulaSpecialVar,
 								damageConstant: 30,
@@ -333,10 +333,10 @@ func TestRetrieveItemAbilities(t *testing.T) {
 				requestURL:     "/api/item-abilities?attack_type=heal&outside_battle=false",
 				expectedStatus: http.StatusOK,
 			},
-			count:    5,
+			count:    7,
 			previous: nil,
 			next:     nil,
-			results:  []int32{9, 10, 21, 22, 23},
+			results:  []int32{9, 10, 21, 22, 23, 54, 55},
 		},
 		{
 			testGeneral: testGeneral{

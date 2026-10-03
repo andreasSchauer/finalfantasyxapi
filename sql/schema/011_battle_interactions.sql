@@ -20,7 +20,10 @@ CREATE TYPE attack_type AS ENUM ('attack', 'heal', 'absorb');
 CREATE TYPE damage_type AS ENUM ('physical', 'magical', 'special');
 
 
-CREATE TYPE damage_formula AS ENUM ('str-vs-def', 'str-ign-def', 'mag-vs-mdf', 'mag-ign-mdf', 'percentage-current', 'percentage-max', 'healing', 'special-no-var', 'special-var', 'special-magic', 'special-gil', 'special-kills', 'special-9999', 'fixed-9999', 'user-max-hp', 'swallowed-a', 'swallowed-b', 'clstl-hp-high', 'clstl-hp-low', 'clstl-mp-high');
+CREATE TYPE target_class AS ENUM ('hp', 'mp', 'ctb');
+
+
+CREATE TYPE damage_formula AS ENUM ('str-vs-def', 'str-ign-def', 'mag-vs-mdf', 'mag-ign-mdf', 'percentage-current', 'percentage-max', 'healing', 'ctb-current', 'special-no-var', 'special-var', 'special-magic', 'special-gil', 'special-kills', 'special-9999', 'fixed-9999', 'user-max-hp', 'swallowed-a', 'swallowed-b', 'clstl-hp-high', 'clstl-hp-low', 'clstl-mp-high');
 
 
 CREATE TYPE duration_type AS ENUM ('blocks', 'endless', 'instant', 'turns', 'inflictor-next-turn', 'auto');
@@ -53,11 +56,10 @@ CREATE TABLE ability_damages (
     data_hash TEXT UNIQUE NOT NULL,
     condition TEXT,
     attack_type attack_type NOT NULL,
-    stat_id INTEGER NOT NULL,
+    target_class target_class NOT NULL,
     damage_type damage_type NOT NULL,
     damage_formula damage_formula NOT NULL,
-    damage_constant uint8 NOT NULL,
-    CHECK(stat_id IN (1, 2))
+    damage_constant uint8 NOT NULL
 );
 
 
@@ -138,6 +140,7 @@ DROP TABLE IF EXISTS ability_accuracies;
 DROP TABLE IF EXISTS ability_damages;
 DROP TABLE IF EXISTS damages;
 DROP TYPE IF EXISTS calculation_type;
+DROP TYPE IF EXISTS target_class;
 DROP TYPE IF EXISTS delay_type;
 DROP TYPE IF EXISTS ctb_attack_type;
 DROP TYPE IF EXISTS duration_type;

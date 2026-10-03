@@ -75,7 +75,7 @@ func compareDamages(test test, fieldName string, exp expDamage, got Damage) {
 
 type expAbilityDamage struct {
 	attackType     database.AttackType
-	targetStat     int32
+	targetClass    database.TargetClass
 	damageType     database.DamageType
 	damageFormula  database.DamageFormula
 	damageConstant int32
@@ -83,7 +83,7 @@ type expAbilityDamage struct {
 
 func compareAbilityDamages(test test, fieldName string, exp expAbilityDamage, got AbilityDamage) {
 	compare(test, fieldName+" - ad attack type", string(exp.attackType), got.AttackType)
-	compIdApiResource(test, fieldName+" - ad target stat", test.cfg.e.stats.endpoint, exp.targetStat, got.TargetStat)
+	compare(test, fieldName+" - ad target class", string(exp.targetClass), got.TargetClass)
 	compare(test, fieldName+" - ad damage type", string(exp.damageType), got.DamageType)
 	compare(test, fieldName+" - ad damage formula", string(exp.damageFormula), got.DamageFormula)
 	compare(test, fieldName+" - ad damage constant", exp.damageConstant, got.DamageConstant)

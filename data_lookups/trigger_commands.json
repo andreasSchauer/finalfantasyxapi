@@ -20,11 +20,10 @@
                     "damage_id": 22,
                     "damage_calc": [
                         {
-                            "id": 105,
+                            "id": 110,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-no-var",
                             "damage_constant": 1
@@ -102,11 +101,10 @@
                     "damage_id": 22,
                     "damage_calc": [
                         {
-                            "id": 106,
+                            "id": 111,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "physical",
                             "damage_formula": "percentage-current",
                             "damage_constant": 15
@@ -379,11 +377,10 @@
                     "damage_id": 22,
                     "damage_calc": [
                         {
-                            "id": 107,
+                            "id": 112,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-no-var",
                             "damage_constant": 1
@@ -488,8 +485,7 @@
                             "id": 1,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "physical",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 16

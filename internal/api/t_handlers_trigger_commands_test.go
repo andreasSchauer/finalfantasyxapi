@@ -158,7 +158,7 @@ func TestGetTriggerCommand(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypePhysical,
 								damageFormula:  database.DamageFormulaStrVsDef,
 								damageConstant: 16,

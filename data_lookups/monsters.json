@@ -147,7 +147,7 @@
             },
             {
                 "id": 2,
-                "ability_id": 773,
+                "ability_id": 772,
                 "name": "spines",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -861,7 +861,7 @@
             },
             {
                 "id": 7,
-                "ability_id": 680,
+                "ability_id": 679,
                 "name": "one hp",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -1914,7 +1914,7 @@
             },
             {
                 "id": 11,
-                "ability_id": 795,
+                "ability_id": 794,
                 "name": "tentacles",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -1923,7 +1923,7 @@
             },
             {
                 "id": 12,
-                "ability_id": 671,
+                "ability_id": 670,
                 "name": "nautilus charge",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -3447,7 +3447,7 @@
             },
             {
                 "id": 19,
-                "ability_id": 765,
+                "ability_id": 764,
                 "name": "sonic boom",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -4715,7 +4715,7 @@
         "abilities": [
             {
                 "id": 20,
-                "ability_id": 664,
+                "ability_id": 663,
                 "name": "move",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -4910,7 +4910,7 @@
             },
             {
                 "id": 2,
-                "ability_id": 773,
+                "ability_id": 772,
                 "name": "spines",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -5698,7 +5698,7 @@
         "abilities": [
             {
                 "id": 24,
-                "ability_id": 736,
+                "ability_id": 735,
                 "name": "seed cannon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -6356,7 +6356,7 @@
         "abilities": [
             {
                 "id": 26,
-                "ability_id": 696,
+                "ability_id": 695,
                 "name": "poison dart",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -6677,7 +6677,7 @@
         "abilities": [
             {
                 "id": 24,
-                "ability_id": 736,
+                "ability_id": 735,
                 "name": "seed cannon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -7325,7 +7325,7 @@
         "abilities": [
             {
                 "id": 28,
-                "ability_id": 695,
+                "ability_id": 694,
                 "name": "poison claw",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -7683,7 +7683,7 @@
         "abilities": [
             {
                 "id": 33,
-                "ability_id": 752,
+                "ability_id": 751,
                 "name": "sigh",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -7701,7 +7701,7 @@
             },
             {
                 "id": 35,
-                "ability_id": 774,
+                "ability_id": 773,
                 "name": "staccato",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -7719,7 +7719,7 @@
             },
             {
                 "id": 36,
-                "ability_id": 796,
+                "ability_id": 795,
                 "name": "tentacles absorb magic",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -8635,7 +8635,7 @@
             },
             {
                 "id": 40,
-                "ability_id": 670,
+                "ability_id": 669,
                 "name": "mute ball",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -9604,7 +9604,7 @@
             },
             {
                 "id": 44,
-                "ability_id": 766,
+                "ability_id": 765,
                 "name": "sonic boom",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -10216,7 +10216,7 @@
         "abilities": [
             {
                 "id": 46,
-                "ability_id": 730,
+                "ability_id": 729,
                 "name": "rush",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -10234,7 +10234,7 @@
             },
             {
                 "id": 48,
-                "ability_id": 737,
+                "ability_id": 736,
                 "name": "self destruct",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -12764,7 +12764,7 @@
             },
             {
                 "id": 58,
-                "ability_id": 653,
+                "ability_id": 652,
                 "name": "meteor strike",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -13230,7 +13230,7 @@
             },
             {
                 "id": 64,
-                "ability_id": 750,
+                "ability_id": 749,
                 "name": "shove",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -13581,7 +13581,7 @@
             },
             {
                 "id": 67,
-                "ability_id": 699,
+                "ability_id": 698,
                 "name": "pollen",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -14196,7 +14196,7 @@
             },
             {
                 "id": 19,
-                "ability_id": 765,
+                "ability_id": 764,
                 "name": "sonic boom",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -17391,7 +17391,7 @@
             },
             {
                 "id": 72,
-                "ability_id": 775,
+                "ability_id": 774,
                 "name": "stone gaze",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -17725,7 +17725,7 @@
         "abilities": [
             {
                 "id": 26,
-                "ability_id": 696,
+                "ability_id": 695,
                 "name": "poison dart",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -19747,7 +19747,7 @@
             },
             {
                 "id": 75,
-                "ability_id": 679,
+                "ability_id": 678,
                 "name": "ochu dance",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -19937,7 +19937,7 @@
         "abilities": [
             {
                 "id": 76,
-                "ability_id": 681,
+                "ability_id": 680,
                 "name": "open",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -20168,7 +20168,7 @@
         "abilities": [
             {
                 "id": 76,
-                "ability_id": 681,
+                "ability_id": 680,
                 "name": "open",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -20805,7 +20805,7 @@
             },
             {
                 "id": 82,
-                "ability_id": 728,
+                "ability_id": 727,
                 "name": "rise",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -22170,7 +22170,7 @@
             },
             {
                 "id": 87,
-                "ability_id": 714,
+                "ability_id": 713,
                 "name": "reaper",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -23622,7 +23622,7 @@
             },
             {
                 "id": 91,
-                "ability_id": 729,
+                "ability_id": 728,
                 "name": "run away",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -24294,7 +24294,7 @@
         "abilities": [
             {
                 "id": 93,
-                "ability_id": 731,
+                "ability_id": 730,
                 "name": "rush",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -24312,7 +24312,7 @@
             },
             {
                 "id": 94,
-                "ability_id": 649,
+                "ability_id": 648,
                 "name": "megiddo flame",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -25803,7 +25803,7 @@
         "abilities": [
             {
                 "id": 26,
-                "ability_id": 696,
+                "ability_id": 695,
                 "name": "poison dart",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -26404,7 +26404,7 @@
             },
             {
                 "id": 103,
-                "ability_id": 706,
+                "ability_id": 705,
                 "name": "press",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -28829,7 +28829,7 @@
             },
             {
                 "id": 115,
-                "ability_id": 666,
+                "ability_id": 665,
                 "name": "multi-fira",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -28838,7 +28838,7 @@
             },
             {
                 "id": 116,
-                "ability_id": 667,
+                "ability_id": 666,
                 "name": "multi-thundara",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -28847,7 +28847,7 @@
             },
             {
                 "id": 117,
-                "ability_id": 668,
+                "ability_id": 667,
                 "name": "multi-watera",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -28856,7 +28856,7 @@
             },
             {
                 "id": 118,
-                "ability_id": 665,
+                "ability_id": 664,
                 "name": "multi-blizzara",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -28910,7 +28910,7 @@
             },
             {
                 "id": 124,
-                "ability_id": 789,
+                "ability_id": 788,
                 "name": "summon anima",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -29295,7 +29295,7 @@
             },
             {
                 "id": 126,
-                "ability_id": 751,
+                "ability_id": 750,
                 "name": "shremedy",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -29304,7 +29304,7 @@
             },
             {
                 "id": 127,
-                "ability_id": 724,
+                "ability_id": 723,
                 "name": "remedy",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -29650,7 +29650,7 @@
         "abilities": [
             {
                 "id": 130,
-                "ability_id": 685,
+                "ability_id": 684,
                 "name": "pain",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -29659,7 +29659,7 @@
             },
             {
                 "id": 131,
-                "ability_id": 676,
+                "ability_id": 675,
                 "name": "oblivion",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -29677,7 +29677,7 @@
             },
             {
                 "id": 133,
-                "ability_id": 744,
+                "ability_id": 743,
                 "name": "seymour dismisses anima",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -30100,7 +30100,7 @@
             },
             {
                 "id": 138,
-                "ability_id": 788,
+                "ability_id": 787,
                 "name": "summon",
                 "version": 9,
                 "ability_type": "enemy-ability",
@@ -30815,7 +30815,7 @@
             },
             {
                 "id": 146,
-                "ability_id": 767,
+                "ability_id": 766,
                 "name": "sonic boom",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -31482,7 +31482,7 @@
             },
             {
                 "id": 91,
-                "ability_id": 729,
+                "ability_id": 728,
                 "name": "run away",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -33336,7 +33336,7 @@
             },
             {
                 "id": 153,
-                "ability_id": 790,
+                "ability_id": 789,
                 "name": "swallow",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -33345,7 +33345,7 @@
             },
             {
                 "id": 154,
-                "ability_id": 717,
+                "ability_id": 716,
                 "name": "regurgitate",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -33354,7 +33354,7 @@
             },
             {
                 "id": 155,
-                "ability_id": 713,
+                "ability_id": 712,
                 "name": "readying quake",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -33726,7 +33726,7 @@
             },
             {
                 "id": 146,
-                "ability_id": 767,
+                "ability_id": 766,
                 "name": "sonic boom",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -34110,7 +34110,7 @@
         "abilities": [
             {
                 "id": 156,
-                "ability_id": 735,
+                "ability_id": 734,
                 "name": "seed burst",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -34330,7 +34330,7 @@
         "abilities": [
             {
                 "id": 76,
-                "ability_id": 681,
+                "ability_id": 680,
                 "name": "open",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -34623,7 +34623,7 @@
         "abilities": [
             {
                 "id": 46,
-                "ability_id": 730,
+                "ability_id": 729,
                 "name": "rush",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -34641,7 +34641,7 @@
             },
             {
                 "id": 157,
-                "ability_id": 738,
+                "ability_id": 737,
                 "name": "self destruct",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -34961,7 +34961,7 @@
         "abilities": [
             {
                 "id": 93,
-                "ability_id": 731,
+                "ability_id": 730,
                 "name": "rush",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -34988,7 +34988,7 @@
             },
             {
                 "id": 94,
-                "ability_id": 649,
+                "ability_id": 648,
                 "name": "megiddo flame",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -36094,7 +36094,7 @@
             },
             {
                 "id": 162,
-                "ability_id": 754,
+                "ability_id": 753,
                 "name": "silence",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -36415,7 +36415,7 @@
             },
             {
                 "id": 163,
-                "ability_id": 792,
+                "ability_id": 791,
                 "name": "swooping scythe",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -36424,7 +36424,7 @@
             },
             {
                 "id": 164,
-                "ability_id": 691,
+                "ability_id": 690,
                 "name": "photon spray",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -36433,7 +36433,7 @@
             },
             {
                 "id": 165,
-                "ability_id": 694,
+                "ability_id": 693,
                 "name": "poison breath",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -36442,7 +36442,7 @@
             },
             {
                 "id": 166,
-                "ability_id": 776,
+                "ability_id": 775,
                 "name": "stone gaze",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -36469,7 +36469,7 @@
             },
             {
                 "id": 168,
-                "ability_id": 683,
+                "ability_id": 682,
                 "name": "out of breath range",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -36945,7 +36945,7 @@
         "abilities": [
             {
                 "id": 171,
-                "ability_id": 726,
+                "ability_id": 725,
                 "name": "rifle",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -38004,7 +38004,7 @@
         "abilities": [
             {
                 "id": 175,
-                "ability_id": 759,
+                "ability_id": 758,
                 "name": "single",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -40277,7 +40277,7 @@
         "abilities": [
             {
                 "id": 178,
-                "ability_id": 780,
+                "ability_id": 779,
                 "name": "summon",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -40286,7 +40286,7 @@
             },
             {
                 "id": 179,
-                "ability_id": 781,
+                "ability_id": 780,
                 "name": "summon",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -40295,7 +40295,7 @@
             },
             {
                 "id": 180,
-                "ability_id": 784,
+                "ability_id": 783,
                 "name": "summon",
                 "version": 5,
                 "ability_type": "enemy-ability",
@@ -40684,7 +40684,7 @@
             },
             {
                 "id": 183,
-                "ability_id": 770,
+                "ability_id": 769,
                 "name": "sonic wings",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -41510,7 +41510,7 @@
             },
             {
                 "id": 188,
-                "ability_id": 769,
+                "ability_id": 768,
                 "name": "sonic wave",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -41807,7 +41807,7 @@
             },
             {
                 "id": 189,
-                "ability_id": 732,
+                "ability_id": 731,
                 "name": "rush",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -42440,7 +42440,7 @@
             },
             {
                 "id": 191,
-                "ability_id": 777,
+                "ability_id": 776,
                 "name": "stone gaze",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -42449,7 +42449,7 @@
             },
             {
                 "id": 192,
-                "ability_id": 692,
+                "ability_id": 691,
                 "name": "photon spray",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -42937,7 +42937,7 @@
         "abilities": [
             {
                 "id": 115,
-                "ability_id": 666,
+                "ability_id": 665,
                 "name": "multi-fira",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -42946,7 +42946,7 @@
             },
             {
                 "id": 116,
-                "ability_id": 667,
+                "ability_id": 666,
                 "name": "multi-thundara",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -42955,7 +42955,7 @@
             },
             {
                 "id": 117,
-                "ability_id": 668,
+                "ability_id": 667,
                 "name": "multi-watera",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -42964,7 +42964,7 @@
             },
             {
                 "id": 118,
-                "ability_id": 665,
+                "ability_id": 664,
                 "name": "multi-blizzara",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -43259,7 +43259,7 @@
         "abilities": [
             {
                 "id": 196,
-                "ability_id": 745,
+                "ability_id": 744,
                 "name": "shattering claw",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -43313,7 +43313,7 @@
             },
             {
                 "id": 198,
-                "ability_id": 663,
+                "ability_id": 662,
                 "name": "mortibsorption",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -43671,7 +43671,7 @@
             },
             {
                 "id": 72,
-                "ability_id": 775,
+                "ability_id": 774,
                 "name": "stone gaze",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -43680,7 +43680,7 @@
             },
             {
                 "id": 201,
-                "ability_id": 778,
+                "ability_id": 777,
                 "name": "stone gaze",
                 "version": 4,
                 "ability_type": "enemy-ability",
@@ -43689,7 +43689,7 @@
             },
             {
                 "id": 202,
-                "ability_id": 768,
+                "ability_id": 767,
                 "name": "sonic tail",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -44112,7 +44112,7 @@
             },
             {
                 "id": 94,
-                "ability_id": 649,
+                "ability_id": 648,
                 "name": "megiddo flame",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -44509,7 +44509,7 @@
             },
             {
                 "id": 162,
-                "ability_id": 754,
+                "ability_id": 753,
                 "name": "silence",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -46228,7 +46228,7 @@
         "abilities": [
             {
                 "id": 26,
-                "ability_id": 696,
+                "ability_id": 695,
                 "name": "poison dart",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -47862,7 +47862,7 @@
             },
             {
                 "id": 214,
-                "ability_id": 762,
+                "ability_id": 761,
                 "name": "slowga",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -47871,7 +47871,7 @@
             },
             {
                 "id": 215,
-                "ability_id": 656,
+                "ability_id": 655,
                 "name": "mighty guard",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -49848,7 +49848,7 @@
             },
             {
                 "id": 224,
-                "ability_id": 739,
+                "ability_id": 738,
                 "name": "self destruct",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -51215,7 +51215,7 @@
             },
             {
                 "id": 226,
-                "ability_id": 700,
+                "ability_id": 699,
                 "name": "pollen",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -52371,7 +52371,7 @@
         "abilities": [
             {
                 "id": 232,
-                "ability_id": 786,
+                "ability_id": 785,
                 "name": "summon",
                 "version": 7,
                 "ability_type": "enemy-ability",
@@ -53130,7 +53130,7 @@
             },
             {
                 "id": 239,
-                "ability_id": 657,
+                "ability_id": 656,
                 "name": "mighty guard",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -53819,7 +53819,7 @@
             },
             {
                 "id": 188,
-                "ability_id": 769,
+                "ability_id": 768,
                 "name": "sonic wave",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -55225,7 +55225,7 @@
             },
             {
                 "id": 244,
-                "ability_id": 707,
+                "ability_id": 706,
                 "name": "psych up",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -56330,7 +56330,7 @@
         "abilities": [
             {
                 "id": 247,
-                "ability_id": 736,
+                "ability_id": 735,
                 "name": "seed cannon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -56339,7 +56339,7 @@
             },
             {
                 "id": 248,
-                "ability_id": 735,
+                "ability_id": 734,
                 "name": "seed burst",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -56660,7 +56660,7 @@
         "abilities": [
             {
                 "id": 46,
-                "ability_id": 730,
+                "ability_id": 729,
                 "name": "rush",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -56678,7 +56678,7 @@
             },
             {
                 "id": 48,
-                "ability_id": 737,
+                "ability_id": 736,
                 "name": "self destruct",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -57360,7 +57360,7 @@
             },
             {
                 "id": 189,
-                "ability_id": 732,
+                "ability_id": 731,
                 "name": "rush",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -57779,7 +57779,7 @@
             },
             {
                 "id": 75,
-                "ability_id": 679,
+                "ability_id": 678,
                 "name": "ochu dance",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -58853,7 +58853,7 @@
             },
             {
                 "id": 254,
-                "ability_id": 740,
+                "ability_id": 739,
                 "name": "self destruct",
                 "version": 4,
                 "ability_type": "enemy-ability",
@@ -59187,7 +59187,7 @@
             },
             {
                 "id": 254,
-                "ability_id": 740,
+                "ability_id": 739,
                 "name": "self destruct",
                 "version": 4,
                 "ability_type": "enemy-ability",
@@ -59521,7 +59521,7 @@
             },
             {
                 "id": 254,
-                "ability_id": 740,
+                "ability_id": 739,
                 "name": "self destruct",
                 "version": 4,
                 "ability_type": "enemy-ability",
@@ -60140,7 +60140,7 @@
             },
             {
                 "id": 260,
-                "ability_id": 763,
+                "ability_id": 762,
                 "name": "slowga",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -60149,7 +60149,7 @@
             },
             {
                 "id": 198,
-                "ability_id": 663,
+                "ability_id": 662,
                 "name": "mortibsorption",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -60158,7 +60158,7 @@
             },
             {
                 "id": 261,
-                "ability_id": 682,
+                "ability_id": 681,
                 "name": "osmose",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -60536,7 +60536,7 @@
             },
             {
                 "id": 263,
-                "ability_id": 794,
+                "ability_id": 793,
                 "name": "tail sweep",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -60554,7 +60554,7 @@
             },
             {
                 "id": 265,
-                "ability_id": 693,
+                "ability_id": 692,
                 "name": "photon wings",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -60930,7 +60930,7 @@
         "abilities": [
             {
                 "id": 269,
-                "ability_id": 727,
+                "ability_id": 726,
                 "name": "rifle",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -61954,7 +61954,7 @@
         "abilities": [
             {
                 "id": 175,
-                "ability_id": 759,
+                "ability_id": 758,
                 "name": "single",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -63214,7 +63214,7 @@
             },
             {
                 "id": 279,
-                "ability_id": 660,
+                "ability_id": 659,
                 "name": "mind blast",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -63223,7 +63223,7 @@
             },
             {
                 "id": 280,
-                "ability_id": 661,
+                "ability_id": 660,
                 "name": "mind blast",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -63241,7 +63241,7 @@
             },
             {
                 "id": 282,
-                "ability_id": 682,
+                "ability_id": 681,
                 "name": "osmose",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -63268,7 +63268,7 @@
             },
             {
                 "id": 285,
-                "ability_id": 755,
+                "ability_id": 754,
                 "name": "silence",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -63277,7 +63277,7 @@
             },
             {
                 "id": 286,
-                "ability_id": 760,
+                "ability_id": 759,
                 "name": "sleep",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -63286,7 +63286,7 @@
             },
             {
                 "id": 287,
-                "ability_id": 650,
+                "ability_id": 649,
                 "name": "metamorphosis",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -63295,7 +63295,7 @@
             },
             {
                 "id": 288,
-                "ability_id": 651,
+                "ability_id": 650,
                 "name": "metamorphosis",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -63624,7 +63624,7 @@
         "abilities": [
             {
                 "id": 289,
-                "ability_id": 764,
+                "ability_id": 763,
                 "name": "smack",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -63633,7 +63633,7 @@
             },
             {
                 "id": 290,
-                "ability_id": 710,
+                "ability_id": 709,
                 "name": "ram",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -63660,7 +63660,7 @@
             },
             {
                 "id": 293,
-                "ability_id": 672,
+                "ability_id": 671,
                 "name": "negation",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -63669,7 +63669,7 @@
             },
             {
                 "id": 294,
-                "ability_id": 673,
+                "ability_id": 672,
                 "name": "negation",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -63687,7 +63687,7 @@
             },
             {
                 "id": 296,
-                "ability_id": 758,
+                "ability_id": 757,
                 "name": "sin remains motionless",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -63696,7 +63696,7 @@
             },
             {
                 "id": 297,
-                "ability_id": 756,
+                "ability_id": 755,
                 "name": "sin draws back",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -63705,7 +63705,7 @@
             },
             {
                 "id": 298,
-                "ability_id": 757,
+                "ability_id": 756,
                 "name": "sin draws closer",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -64007,7 +64007,7 @@
         "abilities": [
             {
                 "id": 289,
-                "ability_id": 764,
+                "ability_id": 763,
                 "name": "smack",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -64016,7 +64016,7 @@
             },
             {
                 "id": 290,
-                "ability_id": 710,
+                "ability_id": 709,
                 "name": "ram",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -64043,7 +64043,7 @@
             },
             {
                 "id": 293,
-                "ability_id": 672,
+                "ability_id": 671,
                 "name": "negation",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -64052,7 +64052,7 @@
             },
             {
                 "id": 294,
-                "ability_id": 673,
+                "ability_id": 672,
                 "name": "negation",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -64070,7 +64070,7 @@
             },
             {
                 "id": 296,
-                "ability_id": 758,
+                "ability_id": 757,
                 "name": "sin remains motionless",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -64079,7 +64079,7 @@
             },
             {
                 "id": 297,
-                "ability_id": 756,
+                "ability_id": 755,
                 "name": "sin draws back",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -64088,7 +64088,7 @@
             },
             {
                 "id": 298,
-                "ability_id": 757,
+                "ability_id": 756,
                 "name": "sin draws closer",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -64436,7 +64436,7 @@
             },
             {
                 "id": 302,
-                "ability_id": 753,
+                "ability_id": 752,
                 "name": "sigh",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -64829,7 +64829,7 @@
             },
             {
                 "id": 294,
-                "ability_id": 673,
+                "ability_id": 672,
                 "name": "negation",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -65910,7 +65910,7 @@
             },
             {
                 "id": 316,
-                "ability_id": 662,
+                "ability_id": 661,
                 "name": "mortar",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -66267,7 +66267,7 @@
             },
             {
                 "id": 317,
-                "ability_id": 793,
+                "ability_id": 792,
                 "name": "tail",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -66276,7 +66276,7 @@
             },
             {
                 "id": 318,
-                "ability_id": 652,
+                "ability_id": 651,
                 "name": "meteor",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -66285,7 +66285,7 @@
             },
             {
                 "id": 215,
-                "ability_id": 656,
+                "ability_id": 655,
                 "name": "mighty guard",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -66667,7 +66667,7 @@
             },
             {
                 "id": 321,
-                "ability_id": 690,
+                "ability_id": 689,
                 "name": "pharaohs curse",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -66988,7 +66988,7 @@
         "abilities": [
             {
                 "id": 322,
-                "ability_id": 701,
+                "ability_id": 700,
                 "name": "pollen",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -67349,7 +67349,7 @@
             },
             {
                 "id": 87,
-                "ability_id": 714,
+                "ability_id": 713,
                 "name": "reaper",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -67712,7 +67712,7 @@
             },
             {
                 "id": 87,
-                "ability_id": 714,
+                "ability_id": 713,
                 "name": "reaper",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -68110,7 +68110,7 @@
             },
             {
                 "id": 325,
-                "ability_id": 669,
+                "ability_id": 668,
                 "name": "munch",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -68532,7 +68532,7 @@
             },
             {
                 "id": 153,
-                "ability_id": 790,
+                "ability_id": 789,
                 "name": "swallow",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -68541,7 +68541,7 @@
             },
             {
                 "id": 154,
-                "ability_id": 717,
+                "ability_id": 716,
                 "name": "regurgitate",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -68550,7 +68550,7 @@
             },
             {
                 "id": 155,
-                "ability_id": 713,
+                "ability_id": 712,
                 "name": "readying quake",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -70030,7 +70030,7 @@
             },
             {
                 "id": 339,
-                "ability_id": 704,
+                "ability_id": 703,
                 "name": "power wave",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -70039,7 +70039,7 @@
             },
             {
                 "id": 340,
-                "ability_id": 705,
+                "ability_id": 704,
                 "name": "power wave",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -70048,7 +70048,7 @@
             },
             {
                 "id": 282,
-                "ability_id": 682,
+                "ability_id": 681,
                 "name": "osmose",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -70057,7 +70057,7 @@
             },
             {
                 "id": 341,
-                "ability_id": 715,
+                "ability_id": 714,
                 "name": "regeneration",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -70276,7 +70276,7 @@
             },
             {
                 "id": 339,
-                "ability_id": 704,
+                "ability_id": 703,
                 "name": "power wave",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -70285,7 +70285,7 @@
             },
             {
                 "id": 340,
-                "ability_id": 705,
+                "ability_id": 704,
                 "name": "power wave",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -70294,7 +70294,7 @@
             },
             {
                 "id": 282,
-                "ability_id": 682,
+                "ability_id": 681,
                 "name": "osmose",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -70303,7 +70303,7 @@
             },
             {
                 "id": 341,
-                "ability_id": 715,
+                "ability_id": 714,
                 "name": "regeneration",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -70479,7 +70479,7 @@
             },
             {
                 "id": 342,
-                "ability_id": 771,
+                "ability_id": 770,
                 "name": "sonic wings",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -70506,7 +70506,7 @@
             },
             {
                 "id": 345,
-                "ability_id": 703,
+                "ability_id": 702,
                 "name": "possessed by yu yevon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -70682,7 +70682,7 @@
             },
             {
                 "id": 346,
-                "ability_id": 654,
+                "ability_id": 653,
                 "name": "meteor strike",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -70700,7 +70700,7 @@
             },
             {
                 "id": 345,
-                "ability_id": 703,
+                "ability_id": 702,
                 "name": "possessed by yu yevon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -70894,7 +70894,7 @@
             },
             {
                 "id": 345,
-                "ability_id": 703,
+                "ability_id": 702,
                 "name": "possessed by yu yevon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -71088,7 +71088,7 @@
             },
             {
                 "id": 345,
-                "ability_id": 703,
+                "ability_id": 702,
                 "name": "possessed by yu yevon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -71284,7 +71284,7 @@
             },
             {
                 "id": 345,
-                "ability_id": 703,
+                "ability_id": 702,
                 "name": "possessed by yu yevon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -71454,7 +71454,7 @@
         "abilities": [
             {
                 "id": 130,
-                "ability_id": 685,
+                "ability_id": 684,
                 "name": "pain",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -71463,7 +71463,7 @@
             },
             {
                 "id": 131,
-                "ability_id": 676,
+                "ability_id": 675,
                 "name": "oblivion",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -71472,7 +71472,7 @@
             },
             {
                 "id": 345,
-                "ability_id": 703,
+                "ability_id": 702,
                 "name": "possessed by yu yevon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -71668,7 +71668,7 @@
             },
             {
                 "id": 345,
-                "ability_id": 703,
+                "ability_id": 702,
                 "name": "possessed by yu yevon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -71871,7 +71871,7 @@
             },
             {
                 "id": 345,
-                "ability_id": 703,
+                "ability_id": 702,
                 "name": "possessed by yu yevon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -72074,7 +72074,7 @@
             },
             {
                 "id": 345,
-                "ability_id": 703,
+                "ability_id": 702,
                 "name": "possessed by yu yevon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -72083,7 +72083,7 @@
             },
             {
                 "id": 361,
-                "ability_id": 711,
+                "ability_id": 710,
                 "name": "razzia",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -72250,7 +72250,7 @@
         "abilities": [
             {
                 "id": 362,
-                "ability_id": 688,
+                "ability_id": 687,
                 "name": "passado",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -72268,7 +72268,7 @@
             },
             {
                 "id": 345,
-                "ability_id": 703,
+                "ability_id": 702,
                 "name": "possessed by yu yevon",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -72428,7 +72428,7 @@
         "abilities": [
             {
                 "id": 282,
-                "ability_id": 682,
+                "ability_id": 681,
                 "name": "osmose",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -72730,7 +72730,7 @@
         "abilities": [
             {
                 "id": 365,
-                "ability_id": 779,
+                "ability_id": 778,
                 "name": "stone punch",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -72748,7 +72748,7 @@
             },
             {
                 "id": 367,
-                "ability_id": 791,
+                "ability_id": 790,
                 "name": "swallow",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -72757,7 +72757,7 @@
             },
             {
                 "id": 368,
-                "ability_id": 718,
+                "ability_id": 717,
                 "name": "regurgitate",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -72766,7 +72766,7 @@
             },
             {
                 "id": 369,
-                "ability_id": 719,
+                "ability_id": 718,
                 "name": "regurgitate",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -72775,7 +72775,7 @@
             },
             {
                 "id": 370,
-                "ability_id": 720,
+                "ability_id": 719,
                 "name": "regurgitate",
                 "version": 4,
                 "ability_type": "enemy-ability",
@@ -72784,7 +72784,7 @@
             },
             {
                 "id": 371,
-                "ability_id": 721,
+                "ability_id": 720,
                 "name": "regurgitate",
                 "version": 5,
                 "ability_type": "enemy-ability",
@@ -72793,7 +72793,7 @@
             },
             {
                 "id": 372,
-                "ability_id": 722,
+                "ability_id": 721,
                 "name": "regurgitate",
                 "version": 6,
                 "ability_type": "enemy-ability",
@@ -72964,7 +72964,7 @@
         "abilities": [
             {
                 "id": 178,
-                "ability_id": 780,
+                "ability_id": 779,
                 "name": "summon",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -72973,7 +72973,7 @@
             },
             {
                 "id": 179,
-                "ability_id": 781,
+                "ability_id": 780,
                 "name": "summon",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -72982,7 +72982,7 @@
             },
             {
                 "id": 373,
-                "ability_id": 782,
+                "ability_id": 781,
                 "name": "summon",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -72991,7 +72991,7 @@
             },
             {
                 "id": 374,
-                "ability_id": 783,
+                "ability_id": 782,
                 "name": "summon",
                 "version": 4,
                 "ability_type": "enemy-ability",
@@ -73000,7 +73000,7 @@
             },
             {
                 "id": 180,
-                "ability_id": 784,
+                "ability_id": 783,
                 "name": "summon",
                 "version": 5,
                 "ability_type": "enemy-ability",
@@ -73009,7 +73009,7 @@
             },
             {
                 "id": 375,
-                "ability_id": 785,
+                "ability_id": 784,
                 "name": "summon",
                 "version": 6,
                 "ability_type": "enemy-ability",
@@ -73018,7 +73018,7 @@
             },
             {
                 "id": 232,
-                "ability_id": 786,
+                "ability_id": 785,
                 "name": "summon",
                 "version": 7,
                 "ability_type": "enemy-ability",
@@ -73027,7 +73027,7 @@
             },
             {
                 "id": 376,
-                "ability_id": 787,
+                "ability_id": 786,
                 "name": "summon",
                 "version": 8,
                 "ability_type": "enemy-ability",
@@ -73208,7 +73208,7 @@
             },
             {
                 "id": 183,
-                "ability_id": 770,
+                "ability_id": 769,
                 "name": "sonic wings",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -73407,7 +73407,7 @@
             },
             {
                 "id": 58,
-                "ability_id": 653,
+                "ability_id": 652,
                 "name": "meteor strike",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -74257,7 +74257,7 @@
             },
             {
                 "id": 382,
-                "ability_id": 686,
+                "ability_id": 685,
                 "name": "pain",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -74266,7 +74266,7 @@
             },
             {
                 "id": 383,
-                "ability_id": 677,
+                "ability_id": 676,
                 "name": "oblivion",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -74672,7 +74672,7 @@
             },
             {
                 "id": 387,
-                "ability_id": 658,
+                "ability_id": 657,
                 "name": "mighty guard",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -74942,7 +74942,7 @@
             },
             {
                 "id": 389,
-                "ability_id": 711,
+                "ability_id": 710,
                 "name": "razzia",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -75113,7 +75113,7 @@
         "abilities": [
             {
                 "id": 362,
-                "ability_id": 688,
+                "ability_id": 687,
                 "name": "passado",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -77049,7 +77049,7 @@
         "abilities": [
             {
                 "id": 162,
-                "ability_id": 754,
+                "ability_id": 753,
                 "name": "silence",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -77743,7 +77743,7 @@
         "abilities": [
             {
                 "id": 46,
-                "ability_id": 730,
+                "ability_id": 729,
                 "name": "rush",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -77761,7 +77761,7 @@
             },
             {
                 "id": 392,
-                "ability_id": 741,
+                "ability_id": 740,
                 "name": "self destruct",
                 "version": 5,
                 "ability_type": "enemy-ability",
@@ -78078,7 +78078,7 @@
         "abilities": [
             {
                 "id": 393,
-                "ability_id": 697,
+                "ability_id": 696,
                 "name": "poison mist",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -78465,7 +78465,7 @@
         "abilities": [
             {
                 "id": 162,
-                "ability_id": 754,
+                "ability_id": 753,
                 "name": "silence",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -78474,7 +78474,7 @@
             },
             {
                 "id": 321,
-                "ability_id": 690,
+                "ability_id": 689,
                 "name": "pharaohs curse",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -79820,7 +79820,7 @@
         "abilities": [
             {
                 "id": 76,
-                "ability_id": 681,
+                "ability_id": 680,
                 "name": "open",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -80115,7 +80115,7 @@
             },
             {
                 "id": 399,
-                "ability_id": 746,
+                "ability_id": 745,
                 "name": "shimmering rain",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -80151,7 +80151,7 @@
             },
             {
                 "id": 285,
-                "ability_id": 755,
+                "ability_id": 754,
                 "name": "silence",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -80160,7 +80160,7 @@
             },
             {
                 "id": 286,
-                "ability_id": 760,
+                "ability_id": 759,
                 "name": "sleep",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -80449,7 +80449,7 @@
             },
             {
                 "id": 399,
-                "ability_id": 746,
+                "ability_id": 745,
                 "name": "shimmering rain",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -80485,7 +80485,7 @@
             },
             {
                 "id": 401,
-                "ability_id": 674,
+                "ability_id": 673,
                 "name": "nova",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -80896,7 +80896,7 @@
             },
             {
                 "id": 403,
-                "ability_id": 684,
+                "ability_id": 683,
                 "name": "paean of the heavens",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -81322,7 +81322,7 @@
             },
             {
                 "id": 407,
-                "ability_id": 708,
+                "ability_id": 707,
                 "name": "putrid breath",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -82485,7 +82485,7 @@
             },
             {
                 "id": 413,
-                "ability_id": 772,
+                "ability_id": 771,
                 "name": "space time vorpal",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -82829,7 +82829,7 @@
             },
             {
                 "id": 91,
-                "ability_id": 729,
+                "ability_id": 728,
                 "name": "run away",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -83562,7 +83562,7 @@
             },
             {
                 "id": 418,
-                "ability_id": 723,
+                "ability_id": 722,
                 "name": "regurgitate",
                 "version": 7,
                 "ability_type": "enemy-ability",
@@ -83571,7 +83571,7 @@
             },
             {
                 "id": 153,
-                "ability_id": 790,
+                "ability_id": 789,
                 "name": "swallow",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -83580,7 +83580,7 @@
             },
             {
                 "id": 155,
-                "ability_id": 713,
+                "ability_id": 712,
                 "name": "readying quake",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -83918,7 +83918,7 @@
             },
             {
                 "id": 94,
-                "ability_id": 649,
+                "ability_id": 648,
                 "name": "megiddo flame",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -84801,7 +84801,7 @@
             },
             {
                 "id": 421,
-                "ability_id": 702,
+                "ability_id": 701,
                 "name": "pop fly",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -85150,7 +85150,7 @@
         "abilities": [
             {
                 "id": 321,
-                "ability_id": 690,
+                "ability_id": 689,
                 "name": "pharaohs curse",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -85568,7 +85568,7 @@
             },
             {
                 "id": 316,
-                "ability_id": 662,
+                "ability_id": 661,
                 "name": "mortar",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -86303,7 +86303,7 @@
             },
             {
                 "id": 427,
-                "ability_id": 698,
+                "ability_id": 697,
                 "name": "poison touch",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -87677,7 +87677,7 @@
             },
             {
                 "id": 434,
-                "ability_id": 749,
+                "ability_id": 748,
                 "name": "shockwave",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -88803,7 +88803,7 @@
             },
             {
                 "id": 436,
-                "ability_id": 733,
+                "ability_id": 732,
                 "name": "rush attack",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -89995,7 +89995,7 @@
             },
             {
                 "id": 443,
-                "ability_id": 742,
+                "ability_id": 741,
                 "name": "self destruct",
                 "version": 6,
                 "ability_type": "enemy-ability",
@@ -90394,7 +90394,7 @@
             },
             {
                 "id": 446,
-                "ability_id": 734,
+                "ability_id": 733,
                 "name": "salvo",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -90747,7 +90747,7 @@
         "abilities": [
             {
                 "id": 447,
-                "ability_id": 748,
+                "ability_id": 747,
                 "name": "shinryudan",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -90765,7 +90765,7 @@
             },
             {
                 "id": 449,
-                "ability_id": 725,
+                "ability_id": 724,
                 "name": "reppageki",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -91068,7 +91068,7 @@
             },
             {
                 "id": 450,
-                "ability_id": 648,
+                "ability_id": 647,
                 "name": "megaton punch",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -92431,7 +92431,7 @@
             },
             {
                 "id": 456,
-                "ability_id": 709,
+                "ability_id": 708,
                 "name": "rainbow",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -92848,7 +92848,7 @@
             },
             {
                 "id": 458,
-                "ability_id": 647,
+                "ability_id": 646,
                 "name": "megaton",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -92857,7 +92857,7 @@
             },
             {
                 "id": 459,
-                "ability_id": 761,
+                "ability_id": 760,
                 "name": "slime",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -93852,7 +93852,7 @@
             },
             {
                 "id": 464,
-                "ability_id": 747,
+                "ability_id": 746,
                 "name": "shining",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -94513,7 +94513,7 @@
             },
             {
                 "id": 183,
-                "ability_id": 770,
+                "ability_id": 769,
                 "name": "sonic wings",
                 "version": 1,
                 "ability_type": "enemy-ability",
@@ -94840,7 +94840,7 @@
             },
             {
                 "id": 470,
-                "ability_id": 655,
+                "ability_id": 654,
                 "name": "meteor strike",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -96966,7 +96966,7 @@
             },
             {
                 "id": 488,
-                "ability_id": 646,
+                "ability_id": 796,
                 "name": "tera graviton",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -96975,7 +96975,7 @@
             },
             {
                 "id": 489,
-                "ability_id": 687,
+                "ability_id": 686,
                 "name": "pain",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -96984,7 +96984,7 @@
             },
             {
                 "id": 490,
-                "ability_id": 678,
+                "ability_id": 677,
                 "name": "oblivion",
                 "version": 3,
                 "ability_type": "enemy-ability",
@@ -97320,7 +97320,7 @@
             },
             {
                 "id": 488,
-                "ability_id": 646,
+                "ability_id": 796,
                 "name": "tera graviton",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -97656,7 +97656,7 @@
             },
             {
                 "id": 495,
-                "ability_id": 712,
+                "ability_id": 711,
                 "name": "razzia",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -97665,7 +97665,7 @@
             },
             {
                 "id": 488,
-                "ability_id": 646,
+                "ability_id": 796,
                 "name": "tera graviton",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -97983,7 +97983,7 @@
         "abilities": [
             {
                 "id": 496,
-                "ability_id": 689,
+                "ability_id": 688,
                 "name": "passado",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -98001,7 +98001,7 @@
             },
             {
                 "id": 488,
-                "ability_id": 646,
+                "ability_id": 796,
                 "name": "tera graviton",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -98315,7 +98315,7 @@
         "abilities": [
             {
                 "id": 498,
-                "ability_id": 675,
+                "ability_id": 674,
                 "name": "obliteration",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -98333,7 +98333,7 @@
             },
             {
                 "id": 500,
-                "ability_id": 743,
+                "ability_id": 742,
                 "name": "separation",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -98617,7 +98617,7 @@
             },
             {
                 "id": 488,
-                "ability_id": 646,
+                "ability_id": 796,
                 "name": "tera graviton",
                 "version": null,
                 "ability_type": "enemy-ability",
@@ -98635,7 +98635,7 @@
             },
             {
                 "id": 503,
-                "ability_id": 716,
+                "ability_id": 715,
                 "name": "regeneration",
                 "version": 2,
                 "ability_type": "enemy-ability",
@@ -98928,7 +98928,7 @@
             },
             {
                 "id": 505,
-                "ability_id": 659,
+                "ability_id": 658,
                 "name": "mighty guard",
                 "version": 4,
                 "ability_type": "enemy-ability",
@@ -98946,7 +98946,7 @@
             },
             {
                 "id": 503,
-                "ability_id": 716,
+                "ability_id": 715,
                 "name": "regeneration",
                 "version": 2,
                 "ability_type": "enemy-ability",

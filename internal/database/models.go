@@ -1117,6 +1117,7 @@ const (
 	DamageFormulaPercentageCurrent DamageFormula = "percentage-current"
 	DamageFormulaPercentageMax     DamageFormula = "percentage-max"
 	DamageFormulaHealing           DamageFormula = "healing"
+	DamageFormulaCtbCurrent        DamageFormula = "ctb-current"
 	DamageFormulaSpecialNoVar      DamageFormula = "special-no-var"
 	DamageFormulaSpecialVar        DamageFormula = "special-var"
 	DamageFormulaSpecialMagic      DamageFormula = "special-magic"
@@ -2926,6 +2927,49 @@ func (ns NullStatusConditionCategory) Value() (driver.Value, error) {
 	return string(ns.StatusConditionCategory), nil
 }
 
+type TargetClass string
+
+const (
+	TargetClassHp  TargetClass = "hp"
+	TargetClassMp  TargetClass = "mp"
+	TargetClassCtb TargetClass = "ctb"
+)
+
+func (e *TargetClass) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = TargetClass(s)
+	case string:
+		*e = TargetClass(s)
+	default:
+		return fmt.Errorf("unsupported scan type for TargetClass: %T", src)
+	}
+	return nil
+}
+
+type NullTargetClass struct {
+	TargetClass TargetClass
+	Valid       bool // Valid is true if TargetClass is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullTargetClass) Scan(value interface{}) error {
+	if value == nil {
+		ns.TargetClass, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.TargetClass.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullTargetClass) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.TargetClass), nil
+}
+
 type TargetType string
 
 const (
@@ -3228,7 +3272,7 @@ type AbilityDamage struct {
 	DataHash       string
 	Condition      sql.NullString
 	AttackType     AttackType
-	StatID         int32
+	TargetClass    TargetClass
 	DamageType     DamageType
 	DamageFormula  DamageFormula
 	DamageConstant interface{}
@@ -4321,7 +4365,7 @@ type MvAbility struct {
 	BreakDmgLimit     NullBreakDmgLmtType
 	ElementID         sql.NullInt32
 	AttackType        NullAttackType
-	StatID            sql.NullInt32
+	TargetClass       NullTargetClass
 	DamageType        NullDamageType
 	DamageFormula     NullDamageFormula
 	DamageConstant    interface{}

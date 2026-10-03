@@ -20,7 +20,7 @@ func TestGetAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/abilities/737",
+				requestURL:     "/api/abilities/736",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
@@ -29,12 +29,12 @@ func TestGetAbility(t *testing.T) {
 					"battle interactions 1 inflicted status conditions": 1,
 				},
 			},
-			expNameVer:       newExpNameVer(737, "self destruct", 1),
+			expNameVer:       newExpNameVer(736, "self destruct", 1),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: true,
 			canCopyCat:       false,
 			abilityType:      database.AbilityTypeEnemyAbility,
-			typedAbility:     "/enemy-abilities/340",
+			typedAbility:     "/enemy-abilities/339",
 			monsters:         []int32{38, 176},
 			battleInteractions: []expBattleInteraction{
 				{
@@ -55,7 +55,7 @@ func TestGetAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypePhysical,
 								damageFormula:  database.DamageFormulaSpecialNoVar,
 								damageConstant: 12,
@@ -130,7 +130,21 @@ func TestGetAbility(t *testing.T) {
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage:                    nil,
+					damage: &expDamage{
+						damageCalc: []expAbilityDamage{
+							{
+								attackType:     database.AttackTypeHeal,
+								targetClass:    "ctb",
+								damageType:     database.DamageTypeSpecial,
+								damageFormula:  database.DamageFormulaCtbCurrent,
+								damageConstant: 8,
+							},
+						},
+						critical:    nil,
+						isPiercing:  true,
+						breakDmgLmt: nil,
+						element:     nil,
+					},
 					inflictedDelay:            nil,
 					inflictedStatusConditions: []int32{29, 26, 21, 28, 30},
 					removedStatusConditions:   []int32{},
@@ -176,7 +190,7 @@ func TestGetAbility(t *testing.T) {
 						damageCalc: []expAbilityDamage{
 							{
 								attackType:     database.AttackTypeAttack,
-								targetStat:     1,
+								targetClass:    "hp",
 								damageType:     database.DamageTypeMagical,
 								damageFormula:  database.DamageFormulaMagVsMdf,
 								damageConstant: 12,
@@ -236,7 +250,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			count:    11,
 			previous: nil,
 			next:     nil,
-			results:  []int32{69, 70, 71, 72, 415, 481, 548, 565, 706, 804, 831},
+			results:  []int32{69, 70, 71, 72, 415, 481, 548, 565, 705, 804, 831},
 		},
 		{
 			testGeneral: testGeneral{
@@ -266,7 +280,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			count:    34,
 			previous: nil,
 			next:     nil,
-			results:  []int32{9, 10, 88, 138, 340, 546, 710, 803},
+			results:  []int32{9, 10, 88, 138, 340, 546, 709, 803},
 		},
 		{
 			testGeneral: testGeneral{
@@ -276,7 +290,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			count:    39,
 			previous: nil,
 			next:     nil,
-			results:  []int32{3, 6, 8, 134, 226, 333, 422, 709, 753},
+			results:  []int32{3, 6, 8, 134, 226, 333, 422, 708, 752},
 		},
 		{
 			testGeneral: testGeneral{
@@ -293,48 +307,48 @@ func TestRetrieveAbilities(t *testing.T) {
 				requestURL:     "/api/abilities?copycat=true&target_type=single-enemy&user_atk=true",
 				expectedStatus: http.StatusOK,
 			},
-			count:    2,
-			results:  []int32{20, 21},
+			count:   2,
+			results: []int32{20, 21},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/abilities?darkable=true&attack_type=absorb",
 				expectedStatus: http.StatusOK,
 			},
-			count:    2,
-			results:  []int32{538, 539},
+			count:   2,
+			results: []int32{538, 539},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/abilities?silenceable=true&reflectable=true&damage_type=magical&element=1",
 				expectedStatus: http.StatusOK,
 			},
-			count:    5,
-			results:  []int32{69, 73, 77, 565, 666},
+			count:   5,
+			results: []int32{69, 73, 77, 565, 665},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/abilities?damage_formula=special-var&can_crit=true",
 				expectedStatus: http.StatusOK,
 			},
-			count:    12,
-			results:  []int32{220, 225, 229, 328, 329},
+			count:   12,
+			results: []int32{220, 225, 229, 328, 329},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/abilities?status_remove=4",
 				expectedStatus: http.StatusOK,
 			},
-			count:    12,
-			results:  []int32{53, 254, 260, 308, 673, 791},
+			count:   12,
+			results: []int32{53, 254, 260, 308, 672, 790},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/abilities?stat_changes=true&mod_changes=true",
 				expectedStatus: http.StatusOK,
 			},
-			count:    6,
-			results:  []int32{27, 29, 264, 265, 272, 275},
+			count:   6,
+			results: []int32{27, 29, 264, 265, 272, 275},
 		},
 	}
 

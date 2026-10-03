@@ -283,15 +283,6 @@ JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
 CROSS JOIN w
 WHERE ist.status_condition_id = w.status_id
   AND w.status_id IS NOT NULL 
-  AND w.status_id != 6
-
-UNION
-
-SELECT a.ability_id
-FROM mv_abilities a
-CROSS JOIN w
-WHERE a.inflicted_delay_id IS NOT NULL
-  AND w.status_id = 6
 
 UNION
 
@@ -2070,16 +2061,6 @@ JOIN inflicted_statusses ist ON j.inflicted_status_id = ist.id
 CROSS JOIN w
 WHERE ist.status_condition_id = w.status_id
   AND w.status_id IS NOT NULL 
-  AND w.status_id != 6
-  AND a.type = w.ability_type
-
-UNION
-
-SELECT a.typed_id
-FROM mv_abilities a
-CROSS JOIN w
-WHERE a.inflicted_delay_id IS NOT NULL
-  AND w.status_id = 6
   AND a.type = w.ability_type
 
 UNION

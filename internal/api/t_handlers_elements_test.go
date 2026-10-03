@@ -40,7 +40,7 @@ func TestGetElement(t *testing.T) {
 			playerAbilities:    []int32{70, 74, 78},
 			overdriveAbilities: []int32{20, 57, 69, 135, 186},
 			itemAbilities:      []int32{27, 28, 29},
-			enemyAbilities:     []int32{90, 270, 401, 416},
+			enemyAbilities:     []int32{90, 269, 401, 416},
 			monstersWeak:       []int32{4, 18, 102, 132, 180, 227},
 			monstersHalved:     []int32{30, 65, 140, 163, 247, 293},
 			monstersImmune:     []int32{243, 274, 294, 297},

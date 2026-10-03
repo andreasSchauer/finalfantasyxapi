@@ -20,11 +20,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 30,
+                            "id": 32,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 32
@@ -82,11 +81,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 31,
+                            "id": 33,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 24
@@ -144,11 +142,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 32,
+                            "id": 34,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 6
@@ -206,11 +203,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 33,
+                            "id": 35,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 8
@@ -268,11 +264,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 34,
+                            "id": 36,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 26
@@ -330,11 +325,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 35,
+                            "id": 37,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 20
@@ -392,11 +386,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 36,
+                            "id": 38,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 4
@@ -435,11 +428,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 31,
+                            "id": 33,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 24
@@ -497,11 +489,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 36,
+                            "id": 38,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 4
@@ -703,11 +694,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 30,
+                            "id": 32,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 32
@@ -765,11 +755,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -827,11 +816,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -889,11 +877,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -951,11 +938,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -1013,11 +999,10 @@
                     "damage_id": 8,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -1075,11 +1060,10 @@
                     "damage_id": 8,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -1137,11 +1121,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -1199,11 +1182,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -1261,11 +1243,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 38,
+                            "id": 40,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 10
@@ -1323,11 +1304,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 38,
+                            "id": 40,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 10
@@ -1385,11 +1365,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 38,
+                            "id": 40,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 10
@@ -1447,11 +1426,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 38,
+                            "id": 40,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 10
@@ -1509,11 +1487,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 38,
+                            "id": 40,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 10
@@ -1571,11 +1548,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 38,
+                            "id": 40,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 10
@@ -1633,11 +1609,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -1728,11 +1703,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -1823,11 +1797,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -1918,11 +1891,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
@@ -2013,14 +1985,22 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
+                        },
+                        {
+                            "id": 41,
+                            "condition": "If 'slow' was successfully inflicted.",
+                            "attack_type": "attack",
+                            "target_class": "ctb",
+                            "damage_type": "special",
+                            "damage_formula": "ctb-current",
+                            "damage_constant": 16
                         }
                     ],
                     "critical": null,
@@ -2098,14 +2078,22 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 37,
+                            "id": 39,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 34
+                        },
+                        {
+                            "id": 41,
+                            "condition": "If 'slow' was successfully inflicted.",
+                            "attack_type": "attack",
+                            "target_class": "ctb",
+                            "damage_type": "special",
+                            "damage_formula": "ctb-current",
+                            "damage_constant": 16
                         }
                     ],
                     "critical": null,
@@ -2183,11 +2171,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 39,
+                            "id": 42,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 72
@@ -2245,11 +2232,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 39,
+                            "id": 42,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 72
@@ -2307,11 +2293,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -2369,11 +2354,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -2431,11 +2415,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -2493,11 +2476,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -2555,11 +2537,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -2617,11 +2598,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -2679,11 +2659,10 @@
                     "damage_id": 8,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -2741,11 +2720,10 @@
                     "damage_id": 8,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -2803,11 +2781,10 @@
                     "damage_id": 8,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -2865,11 +2842,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -2927,11 +2903,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -2989,11 +2964,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 40,
+                            "id": 43,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 5
@@ -3051,11 +3025,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3113,11 +3086,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3175,11 +3147,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3237,11 +3208,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3299,11 +3269,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3361,11 +3330,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3423,11 +3391,10 @@
                     "damage_id": 8,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3485,11 +3452,10 @@
                     "damage_id": 8,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3547,11 +3513,10 @@
                     "damage_id": 8,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3609,11 +3574,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3671,11 +3635,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3733,11 +3696,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 41,
+                            "id": 44,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 10
@@ -3795,11 +3757,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -3857,11 +3818,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -3919,11 +3879,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -3981,11 +3940,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -4043,11 +4001,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -4105,11 +4062,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -4167,11 +4123,10 @@
                     "damage_id": 8,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -4229,11 +4184,10 @@
                     "damage_id": 8,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -4291,11 +4245,10 @@
                     "damage_id": 8,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -4353,11 +4306,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -4415,11 +4367,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -4477,11 +4428,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 42,
+                            "id": 45,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 18
@@ -4692,11 +4642,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 43,
+                            "id": 46,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-current",
                             "damage_constant": 2
@@ -4754,11 +4703,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 43,
+                            "id": 46,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-current",
                             "damage_constant": 2
@@ -4816,11 +4764,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 43,
+                            "id": 46,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-current",
                             "damage_constant": 2
@@ -5031,11 +4978,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 44,
+                            "id": 47,
                             "condition": null,
                             "attack_type": "absorb",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 9
@@ -5093,11 +5039,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 44,
+                            "id": 47,
                             "condition": null,
                             "attack_type": "absorb",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 9
@@ -5155,11 +5100,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 44,
+                            "id": 47,
                             "condition": null,
                             "attack_type": "absorb",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 9
@@ -5217,11 +5161,10 @@
                     "damage_id": 4,
                     "damage_calc": [
                         {
-                            "id": 45,
+                            "id": 48,
                             "condition": null,
                             "attack_type": "absorb",
-                            "stat_id": 2,
-                            "target_stat": "mp",
+                            "target_class": "mp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 4
@@ -5279,11 +5222,10 @@
                     "damage_id": 4,
                     "damage_calc": [
                         {
-                            "id": 45,
+                            "id": 48,
                             "condition": null,
                             "attack_type": "absorb",
-                            "stat_id": 2,
-                            "target_stat": "mp",
+                            "target_class": "mp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 4
@@ -5341,11 +5283,10 @@
                     "damage_id": 4,
                     "damage_calc": [
                         {
-                            "id": 45,
+                            "id": 48,
                             "condition": null,
                             "attack_type": "absorb",
-                            "stat_id": 2,
-                            "target_stat": "mp",
+                            "target_class": "mp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 4
@@ -5403,11 +5344,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 46,
+                            "id": 49,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 22
@@ -5465,11 +5405,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 46,
+                            "id": 49,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 22
@@ -5527,11 +5466,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 46,
+                            "id": 49,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 22
@@ -5589,11 +5527,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 47,
+                            "id": 50,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 28
@@ -5651,11 +5588,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 30,
+                            "id": 32,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 32
@@ -5713,11 +5649,10 @@
                     "damage_id": 12,
                     "damage_calc": [
                         {
-                            "id": 48,
+                            "id": 51,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-magic",
                             "damage_constant": 24
@@ -5775,11 +5710,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 49,
+                            "id": 52,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 33
@@ -5837,11 +5771,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 50,
+                            "id": 53,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "user-max-hp",
                             "damage_constant": 30
@@ -5931,11 +5864,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 49,
+                            "id": 52,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 33
@@ -6053,11 +5985,10 @@
                     "damage_id": 13,
                     "damage_calc": [
                         {
-                            "id": 51,
+                            "id": 54,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-magic",
                             "damage_constant": 26
@@ -6166,11 +6097,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 52,
+                            "id": 55,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "healing",
                             "damage_constant": 40
@@ -6394,11 +6324,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 53,
+                            "id": 56,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-magic",
                             "damage_constant": 70
@@ -6456,11 +6385,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 22,
+                            "id": 24,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 17
@@ -6524,11 +6452,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 54,
+                            "id": 57,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 19
@@ -6586,11 +6513,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 55,
+                            "id": 58,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 16
@@ -6648,11 +6574,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 31,
+                            "id": 33,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 24
@@ -6719,11 +6644,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 56,
+                            "id": 59,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 27
@@ -6781,11 +6705,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 31,
+                            "id": 33,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 24
@@ -6843,11 +6766,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 57,
+                            "id": 60,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 28
@@ -6938,11 +6860,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 58,
+                            "id": 61,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 30
@@ -7000,11 +6921,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 57,
+                            "id": 60,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 28
@@ -7062,11 +6982,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 59,
+                            "id": 62,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 15
@@ -7105,11 +7024,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 35,
+                            "id": 37,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 20
@@ -7167,11 +7085,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 59,
+                            "id": 62,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 15
@@ -7229,11 +7146,10 @@
                     "damage_id": 14,
                     "damage_calc": [
                         {
-                            "id": 60,
+                            "id": 63,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 7
@@ -7291,11 +7207,10 @@
                     "damage_id": 14,
                     "damage_calc": [
                         {
-                            "id": 61,
+                            "id": 64,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 16
@@ -7362,11 +7277,10 @@
                     "damage_id": 14,
                     "damage_calc": [
                         {
-                            "id": 62,
+                            "id": 65,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 27
@@ -7424,11 +7338,10 @@
                     "damage_id": 14,
                     "damage_calc": [
                         {
-                            "id": 63,
+                            "id": 66,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 54
@@ -7486,11 +7399,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 64,
+                            "id": 67,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 100
@@ -7548,11 +7460,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 65,
+                            "id": 68,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 180
@@ -7610,11 +7521,10 @@
                     "damage_id": 14,
                     "damage_calc": [
                         {
-                            "id": 66,
+                            "id": 69,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 22
@@ -7697,11 +7607,10 @@
                     "damage_id": 14,
                     "damage_calc": [
                         {
-                            "id": 67,
+                            "id": 70,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 45
@@ -7792,11 +7701,10 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 68,
+                            "id": 71,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 72
@@ -7919,14 +7827,22 @@
                     "damage_id": 11,
                     "damage_calc": [
                         {
-                            "id": 69,
+                            "id": 72,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 146
+                        },
+                        {
+                            "id": 41,
+                            "condition": "If 'slow' was successfully inflicted.",
+                            "attack_type": "attack",
+                            "target_class": "ctb",
+                            "damage_type": "special",
+                            "damage_formula": "ctb-current",
+                            "damage_constant": 16
                         }
                     ],
                     "critical": "crit",
@@ -8054,11 +7970,10 @@
                     "damage_id": 15,
                     "damage_calc": [
                         {
-                            "id": 70,
+                            "id": 73,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 8
@@ -8116,11 +8031,10 @@
                     "damage_id": 15,
                     "damage_calc": [
                         {
-                            "id": 71,
+                            "id": 74,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 14
@@ -8178,11 +8092,10 @@
                     "damage_id": 15,
                     "damage_calc": [
                         {
-                            "id": 72,
+                            "id": 75,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 18
@@ -8240,11 +8153,10 @@
                     "damage_id": 15,
                     "damage_calc": [
                         {
-                            "id": 70,
+                            "id": 73,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 8
@@ -8335,11 +8247,10 @@
                     "damage_id": 15,
                     "damage_calc": [
                         {
-                            "id": 72,
+                            "id": 75,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 18
@@ -8462,11 +8373,10 @@
                     "damage_id": 16,
                     "damage_calc": [
                         {
-                            "id": 70,
+                            "id": 73,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 8
@@ -8524,11 +8434,10 @@
                     "damage_id": 16,
                     "damage_calc": [
                         {
-                            "id": 71,
+                            "id": 74,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 14
@@ -8586,11 +8495,10 @@
                     "damage_id": 16,
                     "damage_calc": [
                         {
-                            "id": 72,
+                            "id": 75,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 18
@@ -8648,11 +8556,10 @@
                     "damage_id": 16,
                     "damage_calc": [
                         {
-                            "id": 70,
+                            "id": 73,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 8
@@ -8743,11 +8650,10 @@
                     "damage_id": 16,
                     "damage_calc": [
                         {
-                            "id": 72,
+                            "id": 75,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 18
@@ -8870,11 +8776,10 @@
                     "damage_id": 17,
                     "damage_calc": [
                         {
-                            "id": 70,
+                            "id": 73,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 8
@@ -8932,11 +8837,10 @@
                     "damage_id": 17,
                     "damage_calc": [
                         {
-                            "id": 71,
+                            "id": 74,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 14
@@ -8994,11 +8898,10 @@
                     "damage_id": 17,
                     "damage_calc": [
                         {
-                            "id": 72,
+                            "id": 75,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 18
@@ -9056,11 +8959,10 @@
                     "damage_id": 17,
                     "damage_calc": [
                         {
-                            "id": 70,
+                            "id": 73,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 8
@@ -9151,11 +9053,10 @@
                     "damage_id": 17,
                     "damage_calc": [
                         {
-                            "id": 72,
+                            "id": 75,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 18
@@ -9278,11 +9179,10 @@
                     "damage_id": 18,
                     "damage_calc": [
                         {
-                            "id": 70,
+                            "id": 73,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 8
@@ -9340,11 +9240,10 @@
                     "damage_id": 18,
                     "damage_calc": [
                         {
-                            "id": 71,
+                            "id": 74,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 14
@@ -9402,11 +9301,10 @@
                     "damage_id": 18,
                     "damage_calc": [
                         {
-                            "id": 72,
+                            "id": 75,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 18
@@ -9464,11 +9362,10 @@
                     "damage_id": 18,
                     "damage_calc": [
                         {
-                            "id": 70,
+                            "id": 73,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 8
@@ -9559,11 +9456,10 @@
                     "damage_id": 18,
                     "damage_calc": [
                         {
-                            "id": 72,
+                            "id": 75,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-var",
                             "damage_constant": 18
@@ -9686,11 +9582,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 73,
+                            "id": 76,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-current",
                             "damage_constant": 12
@@ -9748,11 +9643,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 74,
+                            "id": 77,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-current",
                             "damage_constant": 15
@@ -9810,11 +9704,10 @@
                     "damage_id": 19,
                     "damage_calc": [
                         {
-                            "id": 75,
+                            "id": 78,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "fixed-9999",
                             "damage_constant": 2
@@ -9872,11 +9765,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 76,
+                            "id": 79,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 16
@@ -9987,11 +9879,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 77,
+                            "id": 80,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 8
@@ -10060,11 +9951,10 @@
                     "damage_id": 4,
                     "damage_calc": [
                         {
-                            "id": 78,
+                            "id": 81,
                             "condition": "Only KO'd characters and zombies.",
                             "attack_type": "heal",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 16
@@ -10131,11 +10021,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 76,
+                            "id": 79,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 16
@@ -10202,21 +10091,19 @@
                     "damage_id": 4,
                     "damage_calc": [
                         {
-                            "id": 76,
+                            "id": 79,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 16
                         },
                         {
-                            "id": 79,
+                            "id": 82,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 2,
-                            "target_stat": "mp",
+                            "target_class": "mp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 16
@@ -10274,21 +10161,19 @@
                     "damage_id": 4,
                     "damage_calc": [
                         {
-                            "id": 76,
+                            "id": 79,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 16
                         },
                         {
-                            "id": 79,
+                            "id": 82,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 2,
-                            "target_stat": "mp",
+                            "target_class": "mp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 16
@@ -10346,21 +10231,19 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 76,
+                            "id": 79,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 16
                         },
                         {
-                            "id": 79,
+                            "id": 82,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 2,
-                            "target_stat": "mp",
+                            "target_class": "mp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 16
@@ -10429,21 +10312,19 @@
                     "damage_id": 19,
                     "damage_calc": [
                         {
-                            "id": 76,
+                            "id": 79,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 16
                         },
                         {
-                            "id": 79,
+                            "id": 82,
                             "condition": null,
                             "attack_type": "heal",
-                            "stat_id": 2,
-                            "target_stat": "mp",
+                            "target_class": "mp",
                             "damage_type": "special",
                             "damage_formula": "percentage-max",
                             "damage_constant": 16
@@ -10962,7 +10843,26 @@
                 "target": "all-allies",
                 "based_on_user_attack": false,
                 "range": null,
-                "damage": null,
+                "damage": {
+                    "damage_id": 4,
+                    "damage_calc": [
+                        {
+                            "id": 83,
+                            "condition": "If 'haste' was successfully inflicted.",
+                            "attack_type": "heal",
+                            "target_class": "ctb",
+                            "damage_type": "special",
+                            "damage_formula": "ctb-current",
+                            "damage_constant": 8
+                        }
+                    ],
+                    "critical": null,
+                    "critical_plus_val": null,
+                    "is_piercing": true,
+                    "break_dmg_lmt": null,
+                    "element_id": null,
+                    "element": null
+                },
                 "shatter_rate": 0,
                 "accuracy": {
                     "accuracy_id": 1,
@@ -11029,7 +10929,26 @@
                 "target": "all-allies",
                 "based_on_user_attack": false,
                 "range": null,
-                "damage": null,
+                "damage": {
+                    "damage_id": 4,
+                    "damage_calc": [
+                        {
+                            "id": 83,
+                            "condition": "If 'haste' was successfully inflicted.",
+                            "attack_type": "heal",
+                            "target_class": "ctb",
+                            "damage_type": "special",
+                            "damage_formula": "ctb-current",
+                            "damage_constant": 8
+                        }
+                    ],
+                    "critical": null,
+                    "critical_plus_val": null,
+                    "is_piercing": true,
+                    "break_dmg_lmt": null,
+                    "element_id": null,
+                    "element": null
+                },
                 "shatter_rate": 0,
                 "accuracy": {
                     "accuracy_id": 1,
@@ -11104,7 +11023,26 @@
                 "target": "all-allies",
                 "based_on_user_attack": false,
                 "range": null,
-                "damage": null,
+                "damage": {
+                    "damage_id": 4,
+                    "damage_calc": [
+                        {
+                            "id": 83,
+                            "condition": "If 'haste' was successfully inflicted.",
+                            "attack_type": "heal",
+                            "target_class": "ctb",
+                            "damage_type": "special",
+                            "damage_formula": "ctb-current",
+                            "damage_constant": 8
+                        }
+                    ],
+                    "critical": null,
+                    "critical_plus_val": null,
+                    "is_piercing": true,
+                    "break_dmg_lmt": null,
+                    "element_id": null,
+                    "element": null
+                },
                 "shatter_rate": 0,
                 "accuracy": {
                     "accuracy_id": 1,
@@ -11945,11 +11883,10 @@
                     "damage_id": 20,
                     "damage_calc": [
                         {
-                            "id": 80,
+                            "id": 84,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "magical",
                             "damage_formula": "mag-vs-mdf",
                             "damage_constant": 40
@@ -12007,11 +11944,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 81,
+                            "id": 85,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-magic",
                             "damage_constant": 55
@@ -12069,11 +12005,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 82,
+                            "id": 86,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-magic",
                             "damage_constant": 75
@@ -12131,11 +12066,10 @@
                     "damage_id": 6,
                     "damage_calc": [
                         {
-                            "id": 83,
+                            "id": 87,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-magic",
                             "damage_constant": 58
@@ -12193,11 +12127,10 @@
                     "damage_id": 7,
                     "damage_calc": [
                         {
-                            "id": 84,
+                            "id": 88,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-magic",
                             "damage_constant": 60
@@ -12255,11 +12188,10 @@
                     "damage_id": 9,
                     "damage_calc": [
                         {
-                            "id": 84,
+                            "id": 88,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-magic",
                             "damage_constant": 60
@@ -12317,11 +12249,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 85,
+                            "id": 89,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "special-magic",
                             "damage_constant": 72
@@ -12379,11 +12310,10 @@
                     "damage_id": 3,
                     "damage_calc": [
                         {
-                            "id": 36,
+                            "id": 38,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 4
@@ -12441,11 +12371,10 @@
                     "damage_id": 10,
                     "damage_calc": [
                         {
-                            "id": 38,
+                            "id": 40,
                             "condition": null,
                             "attack_type": "attack",
-                            "stat_id": 1,
-                            "target_stat": "hp",
+                            "target_class": "hp",
                             "damage_type": "special",
                             "damage_formula": "str-vs-def",
                             "damage_constant": 10
