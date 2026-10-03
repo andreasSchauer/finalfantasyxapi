@@ -2192,34 +2192,6 @@ func (t *Enums) initCriticalType() {
 	}
 }
 
-func (t *Enums) initCtbAttackType() {
-	enumDescription := "Defines the type of effect an action will have on the targets' CTB. A negative effect is better known as 'Delay'."
-
-	typeSlice := []EnumVal{
-		{
-			Name:        string(database.CtbAttackTypeAttack),
-			Description: "The action inflicts delay and makes the target's next turn come later.",
-		},
-		{
-			Name:        string(database.CtbAttackTypeHeal),
-			Description: "The action makes the target's next turn come earlier.",
-		},
-	}
-
-	t.CtbAttackType = EnumType[database.CtbAttackType, any]{
-		name:     enumNameCtbAttackType,
-		lookup:   enumSliceToMap(typeSlice),
-		convFunc: func(s string) database.CtbAttackType { return database.CtbAttackType(s) },
-	}
-
-	t.Lookup[getEnumKey(enumNameCtbAttackType)] = EnumResponse{
-		Name:               enumNameCtbAttackType,
-		Description:        enumDescription,
-		UsedByEndpointsInt: []EndpointName{epAbilities, epPlayerAbilities, epOverdriveAbilities, epItemAbilities, epTriggerCommands, epMiscAbilities, epEnemyAbilities, epStatusConditions},
-		Values:             getEnumValIDs(typeSlice),
-	}
-}
-
 func (t *Enums) initDamageFormula() {
 	enumDescription := "Determines the damage formula an action uses."
 
@@ -2352,34 +2324,6 @@ func (t *Enums) initDamageType() {
 		Name:               enumNameDamageType,
 		Description:        enumDescription,
 		UsedByEndpointsInt: []EndpointName{epAbilities, epPlayerAbilities, epOverdriveAbilities, epItemAbilities, epTriggerCommands, epMiscAbilities, epEnemyAbilities},
-		Values:             getEnumValIDs(typeSlice),
-	}
-}
-
-func (t *Enums) initDelayType() {
-	enumDescription := "Determines the type of delay an action deals."
-
-	typeSlice := []EnumVal{
-		{
-			Name:        string(database.DelayTypeCtbBased),
-			Description: "Delay is based on current ticks. CTB damage/heal is only applied, if 'Slow'/'Haste' is succcessful or if the status was successfully removed.",
-		},
-		{
-			Name:        string(database.DelayTypeTickSpeedBased),
-			Description: "Delay is based on tick speed. CTB damage is applied via an attack. Example: 'Delay Attack'.",
-		},
-	}
-
-	t.DelayType = EnumType[database.DelayType, any]{
-		name:     enumNameDelayType,
-		lookup:   enumSliceToMap(typeSlice),
-		convFunc: func(s string) database.DelayType { return database.DelayType(s) },
-	}
-
-	t.Lookup[getEnumKey(enumNameDelayType)] = EnumResponse{
-		Name:               enumNameDelayType,
-		Description:        enumDescription,
-		UsedByEndpointsInt: []EndpointName{epAbilities, epPlayerAbilities, epOverdriveAbilities, epItemAbilities, epTriggerCommands, epMiscAbilities, epEnemyAbilities, epStatusConditions},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }

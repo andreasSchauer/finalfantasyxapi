@@ -28,7 +28,6 @@ type testStatusInfliction struct {
 	itemAbilities      []int32
 	miscAbilities      []int32
 	enemyAbilities     []int32
-	statusConditions   []int32
 }
 
 func compareStatusInflictions(test test, fieldName string, exp testStatusInfliction, got StatusInfliction) {
@@ -38,7 +37,6 @@ func compareStatusInflictions(test test, fieldName string, exp testStatusInflict
 	checkResIDsInSlice(test, fieldName+" - item abilities", test.cfg.e.itemAbilities.endpoint, exp.itemAbilities, got.ItemAbilities)
 	checkResIDsInSlice(test, fieldName+" - misc abilities", test.cfg.e.miscAbilities.endpoint, exp.miscAbilities, got.MiscAbilities)
 	checkResIDsInSlice(test, fieldName+" - enemy abilities", test.cfg.e.enemyAbilities.endpoint, exp.enemyAbilities, got.EnemyAbilities)
-	checkResIDsInSlice(test, fieldName+" - status conditions", test.cfg.e.statusConditions.endpoint, exp.statusConditions, got.StatusConditions)
 }
 
 type testStatusRemoval struct {

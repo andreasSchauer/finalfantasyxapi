@@ -24,7 +24,6 @@ func (l *Lookup) loop3SeedStatusConditions(qtx *database.Queries, ctx context.Co
 		Visualization:     make([]sql.NullString, len(statusses)),
 		NullifyArmored:    make([]database.NullNullifyArmored, len(statusses)),
 		AddedElemResistID: make([]sql.NullInt32, len(statusses)),
-		InflictedDelayID:  make([]sql.NullInt32, len(statusses)),
 	}
 
 	for i, s := range statusses {
@@ -36,7 +35,6 @@ func (l *Lookup) loop3SeedStatusConditions(qtx *database.Queries, ctx context.Co
 		params.Visualization[i] = h.GetNullString(s.Visualization)
 		params.NullifyArmored[i] = database.ToNullNullifyArmored(s.NullifyArmored)
 		params.AddedElemResistID[i] = h.ObjPtrToNullInt32ID(s.AddedElemResist)
-		params.InflictedDelayID[i] = h.ObjPtrToNullInt32ID(s.CtbOnInfliction)
 	}
 
 	dbRows, err := qtx.CreateStatusConditionBulk(ctx, params)
@@ -64,13 +62,6 @@ func (l *Lookup) extractStatusConditions() ([]StatusCondition, error) {
 
 		if status.AddedElemResist != nil {
 			status.AddedElemResist.ID, err = l.GetHashID(status.AddedElemResist)
-			if err != nil {
-				return nil, err
-			}
-		}
-
-		if status.CtbOnInfliction != nil {
-			status.CtbOnInfliction.ID, err = l.GetHashID(status.CtbOnInfliction)
 			if err != nil {
 				return nil, err
 			}

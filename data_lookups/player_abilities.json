@@ -827,9 +827,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -919,9 +917,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -7317,9 +7313,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],

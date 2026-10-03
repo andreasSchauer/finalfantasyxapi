@@ -9,7 +9,6 @@ type StatusCondition struct {
 	Effect                  string             `json:"effect"`
 	NullifyArmored          *string            `json:"nullify_armored,omitempty"`
 	AddedElemResist         *ElementalResist   `json:"added_elem_resist,omitempty"`
-	CtbOnInfliction         *InflictedDelay    `json:"ctb_on_infliction,omitempty"`
 	RelatedStats            []NamedAPIResource `json:"related_stats"`
 	RemovedStatusConditions []NamedAPIResource `json:"removed_status_conditions"`
 	StatChanges             []StatChange       `json:"stat_changes"`

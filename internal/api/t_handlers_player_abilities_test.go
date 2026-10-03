@@ -71,9 +71,6 @@ func TestGetPlayerAbility(t *testing.T) {
 						element:         nil,
 					},
 					inflictedDelay: &expInflictedDelay{
-						ctbAttackType:  "attack",
-						delayType:      "tick-speed-based",
-						damageConstant: 48,
 						delayStrength:  "strong",
 					},
 					inflictedStatusConditions: []int32{},
@@ -137,9 +134,6 @@ func TestGetPlayerAbility(t *testing.T) {
 						element:         nil,
 					},
 					inflictedDelay: &expInflictedDelay{
-						ctbAttackType:  "attack",
-						delayType:      "tick-speed-based",
-						damageConstant: 48,
 						delayStrength:  "strong",
 					},
 					inflictedStatusConditions: []int32{},

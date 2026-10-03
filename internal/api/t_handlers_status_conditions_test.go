@@ -40,7 +40,6 @@ func TestGetStatusCondition(t *testing.T) {
 				itemAbilities:      []int32{},
 				miscAbilities:      []int32{},
 				enemyAbilities:     []int32{43, 79, 166, 187, 217, 289},
-				statusConditions:   []int32{},
 			},
 			removedBy: nil,
 		},
@@ -74,7 +73,6 @@ func TestGetStatusCondition(t *testing.T) {
 				itemAbilities:      []int32{},
 				miscAbilities:      []int32{},
 				enemyAbilities:     []int32{21, 29, 178, 183, 377, 379, 381},
-				statusConditions:   []int32{},
 			},
 			removedBy: &testStatusRemoval{
 				playerAbilities:    []int32{53},
@@ -114,7 +112,6 @@ func TestGetStatusCondition(t *testing.T) {
 				itemAbilities:      []int32{54, 55},
 				miscAbilities:      []int32{},
 				enemyAbilities:     []int32{},
-				statusConditions:   []int32{},
 			},
 			removedBy: &testStatusRemoval{
 				playerAbilities:    []int32{63, 90},
@@ -154,7 +151,6 @@ func TestGetStatusCondition(t *testing.T) {
 				itemAbilities:      []int32{},
 				miscAbilities:      []int32{8},
 				enemyAbilities:     []int32{},
-				statusConditions:   []int32{},
 			},
 			removedBy: &testStatusRemoval{
 				playerAbilities:    []int32{},

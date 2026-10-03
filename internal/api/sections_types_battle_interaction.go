@@ -92,29 +92,7 @@ func convertAccuracySimple(_ *Config, acc seeding.Accuracy) string {
 }
 
 func convertInflictedDelaySimple(_ *Config, id seeding.InflictedDelay) string {
-	var delayStr string
-
-	switch id.DelayType {
-	case string(database.DelayTypeCtbBased):
-		if id.DamageConstant == 8 {
-			delayStr = "weak"
-		}
-
-		if id.DamageConstant == 16 {
-			delayStr = "strong"
-		}
-
-	case string(database.DelayTypeTickSpeedBased):
-		if id.DamageConstant == 24 {
-			delayStr = "weak"
-		}
-
-		if id.DamageConstant == 48 {
-			delayStr = "strong"
-		}
-	}
-
-	return delayStr
+	return id.DelayStrength
 }
 
 func convertInflictedStatusSimple(_ *Config, is seeding.InflictedStatus) string {

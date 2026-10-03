@@ -8,8 +8,7 @@ ADD COLUMN opposite_element_id INTEGER REFERENCES elements(id);
 
 
 ALTER TABLE status_conditions
-ADD COLUMN added_elem_resist_id INTEGER REFERENCES elemental_resists(id),
-ADD COLUMN inflicted_delay_id INTEGER REFERENCES inflicted_delays(id);
+ADD COLUMN added_elem_resist_id INTEGER REFERENCES elemental_resists(id);
 
 
 ALTER TABLE properties
@@ -88,7 +87,6 @@ DROP COLUMN IF EXISTS modifier_change_id;
 
 
 ALTER TABLE status_conditions
-DROP COLUMN IF EXISTS inflicted_delay_id,
 DROP COLUMN IF EXISTS added_elem_resist_id;
 
 

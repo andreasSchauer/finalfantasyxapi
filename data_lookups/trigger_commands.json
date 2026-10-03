@@ -431,7 +431,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 92,
+                "id": 91,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -474,7 +474,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 93,
+                "id": 92,
                 "target": "single-enemy",
                 "based_on_user_attack": true,
                 "range": 1,

@@ -3320,7 +3320,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 87,
+                "id": 78,
                 "target": "target-party",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -3354,13 +3354,7 @@
                 "affected_by": [],
                 "hit_amount": 1,
                 "special_action": null,
-                "inflicted_delay": {
-                    "inflicted_delay_id": 3,
-                    "condition": "If slow was successfully inflicted.",
-                    "ctb_attack_type": "attack",
-                    "delay_type": "ctb-based",
-                    "damage_constant": 8
-                },
+                "inflicted_delay": null,
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 111,
@@ -3407,7 +3401,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 88,
+                "id": 87,
                 "target": "target-party",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -3444,9 +3438,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [
                     {
@@ -3742,7 +3734,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 89,
+                "id": 88,
                 "target": "target-party",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -4224,7 +4216,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -4296,7 +4288,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -4368,7 +4360,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -4449,7 +4441,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -4537,7 +4529,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 91,
+                "id": 90,
                 "target": "single-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -4600,7 +4592,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 91,
+                "id": 90,
                 "target": "single-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -4789,7 +4781,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 91,
+                "id": 90,
                 "target": "single-ally",
                 "based_on_user_attack": false,
                 "range": 3,

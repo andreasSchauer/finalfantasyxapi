@@ -535,7 +535,7 @@ func (q *Queries) GetAbilityIDsDarkable(ctx context.Context) ([]int32, error) {
 }
 
 const getAbilityIDsDealsDelay = `-- name: GetAbilityIDsDealsDelay :many
-SELECT DISTINCT ability_id FROM mv_abilities WHERE ctb_attack_type = 'attack' ORDER BY ability_id
+SELECT DISTINCT ability_id FROM mv_abilities WHERE inflicted_delay_id IS NOT NULL ORDER BY ability_id
 `
 
 func (q *Queries) GetAbilityIDsDealsDelay(ctx context.Context) ([]int32, error) {
@@ -2332,8 +2332,8 @@ func (q *Queries) GetTypedAbilityIDsDarkable(ctx context.Context, type_ AbilityT
 const getTypedAbilityIDsDealsDelay = `-- name: GetTypedAbilityIDsDealsDelay :many
 SELECT DISTINCT typed_id
 FROM mv_abilities
-WHERE ctb_attack_type = 'attack'
-AND type = $1::ability_type
+WHERE type = $1::ability_type
+  AND inflicted_delay_id IS NOT NULL
 ORDER BY typed_id
 `
 

@@ -62,10 +62,8 @@ type Enums struct {
 	BreakDmgLimitType           EnumType[database.BreakDmgLmtType, database.NullBreakDmgLmtType]
 	CalculationType             EnumType[database.CalculationType, any]
 	CriticalType                EnumType[database.CriticalType, database.NullCriticalType]
-	CtbAttackType               EnumType[database.CtbAttackType, any]
 	DamageFormula               EnumType[database.DamageFormula, any]
 	DamageType                  EnumType[database.DamageType, any]
-	DelayType                   EnumType[database.DelayType, any]
 	DurationType                EnumType[database.DurationType, any]
 	SpecialActionType           EnumType[database.SpecialActionType, database.NullSpecialActionType]
 	TargetType                  EnumType[database.TargetType, database.NullTargetType]
@@ -142,15 +140,13 @@ func (cfg *Config) EnumLookupInit() {
 	cfg.t.initBreakDmgLimitType()
 	cfg.t.initCalculationType()
 	cfg.t.initCriticalType()
-	cfg.t.initCtbAttackType()
 	cfg.t.initDamageFormula()
 	cfg.t.initDamageType()
-	cfg.t.initDelayType()
+	cfg.t.initDelayStrength()
 	cfg.t.initDurationType()
 	cfg.t.initTargetType()
 
 	cfg.t.initBattleStart()
-	cfg.t.initDelayStrength()
 	cfg.t.initHasteStatus()
 	cfg.t.initTranslationDirection()
 	cfg.t.initTurnOrderRNG()

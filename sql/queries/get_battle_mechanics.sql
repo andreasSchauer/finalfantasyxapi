@@ -168,16 +168,6 @@ WHERE status_condition_id = $1
 ORDER BY ability_id;
 
 
--- name: GetStatusConditionInflictedDelayConditionIDs :many
-SELECT DISTINCT sc.id
-FROM status_conditions sc
-JOIN inflicted_delays idl ON sc.inflicted_delay_id = idl.id
-WHERE sqlc.arg(status_id)::int = 6
-  AND sc.inflicted_delay_id IS NOT NULL
-  AND idl.ctb_attack_type = 'attack'
-ORDER BY sc.id;
-
-
 -- name: GetStatusConditionRemovedConditionIDs :many
 SELECT parent_condition_id
 FROM j_status_conditions_removed_status_conditions

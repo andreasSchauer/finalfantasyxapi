@@ -13,7 +13,6 @@ type StatusInfliction struct {
 	ItemAbilities      []NamedAPIResource `json:"item_abilities"`
 	MiscAbilities      []NamedAPIResource `json:"misc_abilities"`
 	EnemyAbilities     []NamedAPIResource `json:"enemy_abilities"`
-	StatusConditions   []NamedAPIResource `json:"status_conditions"`
 }
 
 func (s StatusInfliction) IsZero() bool {
@@ -21,8 +20,7 @@ func (s StatusInfliction) IsZero() bool {
 		len(s.OverdriveAbilities) == 0 &&
 		len(s.ItemAbilities) == 0 &&
 		len(s.MiscAbilities) == 0 &&
-		len(s.EnemyAbilities) == 0 &&
-		len(s.StatusConditions) == 0
+		len(s.EnemyAbilities) == 0
 }
 
 type StatusRemoval struct {
@@ -54,11 +52,6 @@ func getStatusInfliction(cfg *Config, ctx context.Context, status seeding.Status
 		return nil, err
 	}
 	statusInfliction = populateStatusInfliction(cfg, abilities)
-
-	statusInfliction.StatusConditions, err = getResourcesDbItem(cfg, ctx, cfg.e.statusConditions, status, queries.StatusConditions)
-	if err != nil {
-		return nil, err
-	}
 
 	if statusInfliction.IsZero() {
 		return nil, nil

@@ -7,20 +7,16 @@ import (
 )
 
 type InflictedDelay struct {
-	ID             int32   `json:"inflicted_delay_id"`
-	Condition      *string `json:"condition"`
-	CTBAttackType  string  `json:"ctb_attack_type"`
-	DelayType      string  `json:"delay_type"`
-	DamageConstant int32   `json:"damage_constant"`
+	ID            int32   `json:"inflicted_delay_id"`
+	Condition     *string `json:"condition"`
+	DelayStrength string  `json:"delay_strength"`
 }
 
 func (id InflictedDelay) ToHashFields() []any {
 	return []any{
 		fmt.Sprintf("%T", id),
 		h.DerefOrNil(id.Condition),
-		id.CTBAttackType,
-		id.DelayType,
-		id.DamageConstant,
+		id.DelayStrength,
 	}
 }
 
@@ -29,5 +25,5 @@ func (id InflictedDelay) GetID() int32 {
 }
 
 func (id InflictedDelay) Error() string {
-	return fmt.Sprintf("inflicted delay with ctb attack type: %s, delay type: %s, constant: %d, condition: %v", id.CTBAttackType, id.DelayType, id.DamageConstant, h.PtrToString(id.Condition))
+	return fmt.Sprintf("inflicted delay with delay strength: %s, condition: %v", id.DelayStrength, h.PtrToString(id.Condition))
 }

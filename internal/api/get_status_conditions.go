@@ -28,7 +28,6 @@ func (cfg *Config) getStatusCondition(r *http.Request, i handlerInput[seeding.St
 		RelatedStats:            namesToNamedAPIResources(cfg, cfg.e.stats, status.RelatedStats),
 		RemovedStatusConditions: namesToNamedAPIResources(cfg, cfg.e.statusConditions, status.RemovedStatusConditions),
 		AddedElemResist:         convertObjPtr(cfg, status.AddedElemResist, convertElemResist),
-		CtbOnInfliction:         convertObjPtr(cfg, status.CtbOnInfliction, convertInflictedDelay),
 		StatChanges:             convertObjSlice(cfg, status.StatChanges, convertStatChange),
 		ModifierChanges:         convertObjSlice(cfg, status.ModifierChanges, convertModifierChange),
 		AutoAbilities:           rel.AutoAbilities,

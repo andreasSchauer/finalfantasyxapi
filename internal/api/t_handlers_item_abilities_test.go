@@ -125,9 +125,6 @@ func TestGetItemAbility(t *testing.T) {
 						element:         nil,
 					},
 					inflictedDelay: &expInflictedDelay{
-						ctbAttackType:  "attack",
-						delayType:      "tick-speed-based",
-						damageConstant: 24,
 						delayStrength:  "weak",
 					},
 					inflictedStatusConditions: []int32{14},

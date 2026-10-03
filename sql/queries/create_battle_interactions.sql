@@ -49,13 +49,11 @@ RETURNING id, data_hash;
 
 
 -- name: CreateInflictedDelayBulk :many
-INSERT INTO inflicted_delays (data_hash, condition, ctb_attack_type, delay_type, damage_constant)
+INSERT INTO inflicted_delays (data_hash, condition, delay_strength)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('condition')::null_string[]),
-    unnest(sqlc.arg('ctb_attack_type')::ctb_attack_type[]),
-    unnest(sqlc.arg('delay_type')::delay_type[]),
-    unnest(sqlc.arg('damage_constant')::int[])
+    unnest(sqlc.arg('delay_strength')::delay_strength[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = inflicted_delays.data_hash
 RETURNING id, data_hash;
 

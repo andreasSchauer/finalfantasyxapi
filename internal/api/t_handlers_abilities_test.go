@@ -277,7 +277,7 @@ func TestRetrieveAbilities(t *testing.T) {
 				requestURL:     "/api/abilities?delay=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
-			count:    34,
+			count:    33,
 			previous: nil,
 			next:     nil,
 			results:  []int32{9, 10, 88, 138, 340, 546, 709, 803},

@@ -594,9 +594,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -657,9 +655,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -4855,9 +4851,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -7455,11 +7449,9 @@
                 "hit_amount": 1,
                 "special_action": null,
                 "inflicted_delay": {
-                    "inflicted_delay_id": 4,
+                    "inflicted_delay_id": 3,
                     "condition": "Only applies to non-hasted enemies. If the enemy is hasted and haste was successfully removed via the infliction of slow, this delay won't apply and the standard infliction delay of slow is applied instead.",
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [
                     {
@@ -7542,11 +7534,9 @@
                 "hit_amount": 1,
                 "special_action": null,
                 "inflicted_delay": {
-                    "inflicted_delay_id": 4,
+                    "inflicted_delay_id": 3,
                     "condition": "Only applies to non-hasted enemies. If the enemy is hasted and haste was successfully removed via the infliction of slow, this delay won't apply and the standard infliction delay of slow is applied instead.",
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [
                     {
@@ -11422,9 +11412,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -19416,7 +19404,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 87,
+                "id": 78,
                 "target": "target-party",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -19450,13 +19438,7 @@
                 "affected_by": [],
                 "hit_amount": 1,
                 "special_action": null,
-                "inflicted_delay": {
-                    "inflicted_delay_id": 3,
-                    "condition": "If slow was successfully inflicted.",
-                    "ctb_attack_type": "attack",
-                    "delay_type": "ctb-based",
-                    "damage_constant": 8
-                },
+                "inflicted_delay": null,
                 "inflicted_status_conditions": [
                     {
                         "inflicted_status_id": 111,
@@ -19486,7 +19468,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 88,
+                "id": 87,
                 "target": "target-party",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -19523,9 +19505,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [
                     {
@@ -19736,7 +19716,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 89,
+                "id": 88,
                 "target": "target-party",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -20099,7 +20079,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -20154,7 +20134,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -20209,7 +20189,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -20273,7 +20253,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -20344,7 +20324,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 91,
+                "id": 90,
                 "target": "single-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -20388,7 +20368,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 91,
+                "id": 90,
                 "target": "single-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -20520,7 +20500,7 @@
         "can_copycat": true,
         "battle_interactions": [
             {
-                "id": 91,
+                "id": 90,
                 "target": "single-ally",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -20953,7 +20933,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 92,
+                "id": 91,
                 "target": "single-enemy",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -20989,7 +20969,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 93,
+                "id": 92,
                 "target": "single-enemy",
                 "based_on_user_attack": true,
                 "range": 1,
@@ -21103,7 +21083,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 94,
+                "id": 93,
                 "target": "single-target",
                 "based_on_user_attack": true,
                 "range": 1,
@@ -22389,7 +22369,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 95,
+                "id": 94,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -22456,7 +22436,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 96,
+                "id": 95,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -22513,7 +22493,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 97,
+                "id": 96,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -22570,7 +22550,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 97,
+                "id": 96,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -22636,7 +22616,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 97,
+                "id": 96,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -22710,7 +22690,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 96,
+                "id": 95,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -22784,7 +22764,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 97,
+                "id": 96,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -22850,7 +22830,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 97,
+                "id": 96,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -22925,7 +22905,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -22980,7 +22960,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 98,
+                "id": 97,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23046,7 +23026,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 99,
+                "id": 98,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23112,7 +23092,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 100,
+                "id": 99,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -23169,7 +23149,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 98,
+                "id": 97,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23226,7 +23206,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 99,
+                "id": 98,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23300,7 +23280,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 101,
+                "id": 100,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23364,7 +23344,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 101,
+                "id": 100,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23428,7 +23408,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 101,
+                "id": 100,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23492,7 +23472,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 102,
+                "id": 101,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23547,7 +23527,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 103,
+                "id": 102,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23604,7 +23584,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 98,
+                "id": 97,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23679,7 +23659,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 104,
+                "id": 103,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -23736,7 +23716,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 97,
+                "id": 96,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23811,7 +23791,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 98,
+                "id": 97,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23885,7 +23865,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 105,
+                "id": 104,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -23942,7 +23922,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 100,
+                "id": 99,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -24008,7 +23988,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 97,
+                "id": 96,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24074,7 +24054,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 106,
+                "id": 105,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -24207,7 +24187,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 107,
+                "id": 106,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -24262,7 +24242,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24317,7 +24297,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 103,
+                "id": 102,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24374,7 +24354,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24429,7 +24409,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 109,
+                "id": 108,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24486,7 +24466,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24574,7 +24554,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 110,
+                "id": 109,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24611,9 +24591,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [
                     {
@@ -24644,7 +24622,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24699,7 +24677,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24754,7 +24732,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 111,
+                "id": 110,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24836,7 +24814,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 111,
+                "id": 110,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24918,7 +24896,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 101,
+                "id": 100,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -24984,7 +24962,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -25072,7 +25050,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -25138,7 +25116,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -25202,7 +25180,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 112,
+                "id": 111,
                 "target": "n-targets",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -25519,7 +25497,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 110,
+                "id": 109,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -25556,9 +25534,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -25580,7 +25556,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -25753,7 +25729,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -25969,7 +25945,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 113,
+                "id": 112,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -26008,9 +25984,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -26087,7 +26061,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 114,
+                "id": 113,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -26144,7 +26118,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 115,
+                "id": 114,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -26181,9 +26155,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -26462,7 +26434,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 116,
+                "id": 115,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -27068,7 +27040,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 101,
+                "id": 100,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -27571,7 +27543,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 117,
+                "id": 116,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -27709,7 +27681,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 118,
+                "id": 117,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -27746,9 +27718,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [
@@ -28128,7 +28098,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 119,
+                "id": 118,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -28183,7 +28153,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 120,
+                "id": 119,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -28240,7 +28210,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 121,
+                "id": 120,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -28277,9 +28247,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -28461,7 +28429,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -28636,7 +28604,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 122,
+                "id": 121,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -28691,7 +28659,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 122,
+                "id": 121,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -28746,7 +28714,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 122,
+                "id": 121,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -28987,7 +28955,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 123,
+                "id": 122,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -29097,7 +29065,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 123,
+                "id": 122,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -29280,7 +29248,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 124,
+                "id": 123,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -29317,9 +29285,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -29405,7 +29371,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 120,
+                "id": 119,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -29462,7 +29428,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -29598,7 +29564,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 125,
+                "id": 124,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -29653,7 +29619,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 126,
+                "id": 125,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -29690,9 +29656,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -29714,7 +29678,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 126,
+                "id": 125,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -29751,9 +29715,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -29775,7 +29737,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 121,
+                "id": 120,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -29812,9 +29774,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -30436,7 +30396,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -30500,7 +30460,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 127,
+                "id": 126,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -30564,7 +30524,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -30732,7 +30692,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -31085,7 +31045,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 128,
+                "id": 127,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -31206,7 +31166,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 129,
+                "id": 128,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -31712,7 +31672,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 130,
+                "id": 129,
                 "target": "n-targets",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -31963,7 +31923,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 131,
+                "id": 130,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -32020,7 +31980,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 132,
+                "id": 131,
                 "target": "everyone-else",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -32087,7 +32047,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 123,
+                "id": 122,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -32142,7 +32102,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 133,
+                "id": 132,
                 "target": "self-all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -32275,7 +32235,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 134,
+                "id": 133,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -32330,7 +32290,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 135,
+                "id": 134,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -32459,7 +32419,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 136,
+                "id": 135,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -32633,7 +32593,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 137,
+                "id": 136,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -32670,9 +32630,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -32694,7 +32652,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 115,
+                "id": 114,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -32731,9 +32689,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -33286,7 +33242,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -33950,7 +33906,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 106,
+                "id": 105,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -34315,7 +34271,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 107,
+                "id": 106,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -34372,7 +34328,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 138,
+                "id": 137,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -34409,9 +34365,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -34887,7 +34841,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 121,
+                "id": 120,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -34924,9 +34878,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [
@@ -34958,7 +34910,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 139,
+                "id": 138,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -35418,7 +35370,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 137,
+                "id": 136,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -35455,9 +35407,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -36021,7 +35971,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 130,
+                "id": 129,
                 "target": "n-targets",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -36079,7 +36029,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 130,
+                "id": 129,
                 "target": "n-targets",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -36137,7 +36087,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 130,
+                "id": 129,
                 "target": "n-targets",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -36195,7 +36145,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 130,
+                "id": 129,
                 "target": "n-targets",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -36488,7 +36438,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 140,
+                "id": 139,
                 "target": "everyone",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -36677,7 +36627,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 141,
+                "id": 140,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -36732,7 +36682,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 142,
+                "id": 141,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -36769,9 +36719,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -36793,7 +36741,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 143,
+                "id": 142,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -36839,9 +36787,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [
@@ -37323,7 +37269,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 144,
+                "id": 143,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -37378,7 +37324,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 145,
+                "id": 144,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -37511,7 +37457,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 146,
+                "id": 145,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -37566,7 +37512,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 146,
+                "id": 145,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -37781,7 +37727,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 120,
+                "id": 119,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -37845,7 +37791,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 147,
+                "id": 146,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -37981,7 +37927,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -38206,7 +38152,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 148,
+                "id": 147,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -38243,9 +38189,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -38671,7 +38615,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 121,
+                "id": 120,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -38708,9 +38652,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -38987,7 +38929,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 137,
+                "id": 136,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -39005,9 +38947,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -39261,7 +39201,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 137,
+                "id": 136,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -39298,9 +39238,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -39367,7 +39305,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 149,
+                "id": 148,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -39422,7 +39360,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 95,
+                "id": 94,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -39479,7 +39417,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 150,
+                "id": 149,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -39569,7 +39507,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 95,
+                "id": 94,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -39626,7 +39564,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 95,
+                "id": 94,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -39683,7 +39621,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 151,
+                "id": 150,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -39740,7 +39678,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 110,
+                "id": 109,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -39777,9 +39715,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [
                     {
@@ -39865,7 +39801,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 152,
+                "id": 151,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -39931,7 +39867,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 151,
+                "id": 150,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -40534,7 +40470,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 153,
+                "id": 152,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -40644,7 +40580,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 154,
+                "id": 153,
                 "target": "random-enemy",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -41167,7 +41103,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 95,
+                "id": 94,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -41517,7 +41453,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 123,
+                "id": 122,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -41572,7 +41508,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 155,
+                "id": 154,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -41629,7 +41565,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 155,
+                "id": 154,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -41851,7 +41787,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 115,
+                "id": 114,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -41888,9 +41824,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -41912,7 +41846,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 156,
+                "id": 155,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -41949,9 +41883,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 2,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 24
+                    "delay_strength": "weak"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -42028,7 +41960,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -42381,7 +42313,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 106,
+                "id": 105,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -42803,7 +42735,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 157,
+                "id": 156,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 4,
@@ -42858,7 +42790,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 158,
+                "id": 157,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -42915,7 +42847,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 159,
+                "id": 158,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -42954,9 +42886,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [
@@ -42980,7 +42910,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 90,
+                "id": 89,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -43462,7 +43392,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 137,
+                "id": 136,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -43499,9 +43429,7 @@
                 "inflicted_delay": {
                     "inflicted_delay_id": 1,
                     "condition": null,
-                    "ctb_attack_type": "attack",
-                    "delay_type": "tick-speed-based",
-                    "damage_constant": 48
+                    "delay_strength": "strong"
                 },
                 "inflicted_status_conditions": [],
                 "removed_status_conditions": [],
@@ -43581,7 +43509,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 160,
+                "id": 159,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -43648,7 +43576,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 161,
+                "id": 160,
                 "target": "all-enemies",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -43883,7 +43811,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -43967,7 +43895,7 @@
                 "modifier_changes": []
             },
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -44022,7 +43950,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -44106,7 +44034,7 @@
                 "modifier_changes": []
             },
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -44161,7 +44089,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -44245,7 +44173,7 @@
                 "modifier_changes": []
             },
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -44300,7 +44228,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 162,
+                "id": 161,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -44364,7 +44292,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 162,
+                "id": 161,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,
@@ -44890,7 +44818,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 108,
+                "id": 107,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 1,
@@ -45354,7 +45282,7 @@
         "can_copycat": false,
         "battle_interactions": [
             {
-                "id": 106,
+                "id": 105,
                 "target": "single-target",
                 "based_on_user_attack": false,
                 "range": 3,

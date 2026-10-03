@@ -15,17 +15,13 @@ func (l *Lookup) loop1SeedInflictedDelays(qtx *database.Queries, ctx context.Con
 	params := database.CreateInflictedDelayBulkParams{
 		DataHash:       make([]string, len(delays)),
 		Condition:      make([]sql.NullString, len(delays)),
-		CtbAttackType:  make([]database.CtbAttackType, len(delays)),
-		DelayType:      make([]database.DelayType, len(delays)),
-		DamageConstant: make([]int32, len(delays)),
+		DelayStrength:  make([]database.DelayStrength, len(delays)),
 	}
 
 	for i, d := range delays {
 		params.DataHash[i] = generateDataHash(d)
 		params.Condition[i] = h.GetNullString(d.Condition)
-		params.CtbAttackType[i] = database.CtbAttackType(d.CTBAttackType)
-		params.DelayType[i] = database.DelayType(d.DelayType)
-		params.DamageConstant[i] = d.DamageConstant
+		params.DelayStrength[i] = database.DelayStrength(d.DelayStrength)
 	}
 
 	dbRows, err := qtx.CreateInflictedDelayBulk(ctx, params)
@@ -88,12 +84,6 @@ func (l *Lookup) extractInflictedDelays() []InflictedDelay {
 			if bi.InflictedDelay != nil {
 				delays = append(delays, *bi.InflictedDelay)
 			}
-		}
-	}
-
-	for _, status := range l.json.statusConditions {
-		if status.CtbOnInfliction != nil {
-			delays = append(delays, *status.CtbOnInfliction)
 		}
 	}
 

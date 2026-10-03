@@ -1496,39 +1496,6 @@ func (q *Queries) GetStatusConditionIDsByCategory(ctx context.Context, category 
 	return items, nil
 }
 
-const getStatusConditionInflictedDelayConditionIDs = `-- name: GetStatusConditionInflictedDelayConditionIDs :many
-SELECT DISTINCT sc.id
-FROM status_conditions sc
-JOIN inflicted_delays idl ON sc.inflicted_delay_id = idl.id
-WHERE $1::int = 6
-  AND sc.inflicted_delay_id IS NOT NULL
-  AND idl.ctb_attack_type = 'attack'
-ORDER BY sc.id
-`
-
-func (q *Queries) GetStatusConditionInflictedDelayConditionIDs(ctx context.Context, statusID int32) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getStatusConditionInflictedDelayConditionIDs, statusID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []int32
-	for rows.Next() {
-		var id int32
-		if err := rows.Scan(&id); err != nil {
-			return nil, err
-		}
-		items = append(items, id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getStatusConditionRemovedConditionIDs = `-- name: GetStatusConditionRemovedConditionIDs :many
 SELECT parent_condition_id
 FROM j_status_conditions_removed_status_conditions

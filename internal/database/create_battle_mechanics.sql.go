@@ -566,7 +566,7 @@ func (q *Queries) CreateStatBulk(ctx context.Context, arg CreateStatBulkParams) 
 }
 
 const createStatusConditionBulk = `-- name: CreateStatusConditionBulk :many
-INSERT INTO status_conditions (data_hash, name, category, is_permanent, effect, visualization, nullify_armored, added_elem_resist_id, inflicted_delay_id)
+INSERT INTO status_conditions (data_hash, name, category, is_permanent, effect, visualization, nullify_armored, added_elem_resist_id)
 SELECT
     unnest($1::text[]),
     unnest($2::text[]),
@@ -575,8 +575,7 @@ SELECT
     unnest($5::text[]),
     unnest($6::null_string[]),
     unnest($7::null_nullify_armored[]),
-    unnest($8::null_int[]),
-    unnest($9::null_int[])
+    unnest($8::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = EXCLUDED.data_hash
 RETURNING id, data_hash
 `
@@ -590,7 +589,6 @@ type CreateStatusConditionBulkParams struct {
 	Visualization     []sql.NullString
 	NullifyArmored    []NullNullifyArmored
 	AddedElemResistID []sql.NullInt32
-	InflictedDelayID  []sql.NullInt32
 }
 
 type CreateStatusConditionBulkRow struct {
@@ -608,7 +606,6 @@ func (q *Queries) CreateStatusConditionBulk(ctx context.Context, arg CreateStatu
 		pq.Array(arg.Visualization),
 		pq.Array(arg.NullifyArmored),
 		pq.Array(arg.AddedElemResistID),
-		pq.Array(arg.InflictedDelayID),
 	)
 	if err != nil {
 		return nil, err

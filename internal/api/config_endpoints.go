@@ -61,7 +61,6 @@ type endpoints struct {
 	alBhed             handlerInputService[AlBhedParams, AlBhedResponse]
 	turnOrder          handlerInputService[TurnOrderParams, TurnOrderResponse]
 	dropChance         handlerInputService[DropChanceParams, DropChanceResponse]
-	delay			   handlerInputService[DelayParams, DelayResponse]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -1053,13 +1052,6 @@ func (cfg *Config) EndpointsInit() {
 		executeFn: handleDropChance,
 	}
 
-	e.delay = handlerInputService[DelayParams, DelayResponse]{
-		endpoint:  epDelay,
-		paramsDoc: cfg.getDelayParamsDoc(),
-		verifyFn:  verifyDelayParams,
-		executeFn: handleDelay,
-	}
-
 	cfg.e = &e
 	e.endpoints.slice = e.initializeEndpointSlice()
 
@@ -1120,7 +1112,6 @@ func (e endpoints) initializeEndpointSlice() []EndpointName {
 		e.alBhed.endpoint,
 		e.turnOrder.endpoint,
 		e.dropChance.endpoint,
-		e.delay.endpoint,
 	}
 
 	slices.Sort(endpoints)

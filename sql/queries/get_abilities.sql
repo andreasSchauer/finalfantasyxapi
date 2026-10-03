@@ -55,7 +55,7 @@ SELECT DISTINCT ability_id FROM mv_abilities WHERE affected_status_id = 27 ORDER
 
 
 -- name: GetAbilityIDsDealsDelay :many
-SELECT DISTINCT ability_id FROM mv_abilities WHERE ctb_attack_type = 'attack' ORDER BY ability_id;
+SELECT DISTINCT ability_id FROM mv_abilities WHERE inflicted_delay_id IS NOT NULL ORDER BY ability_id;
 
 
 -- name: GetAbilityIDsByInflictedStatus :many
@@ -233,8 +233,8 @@ ORDER BY typed_id;
 -- name: GetTypedAbilityIDsDealsDelay :many
 SELECT DISTINCT typed_id
 FROM mv_abilities
-WHERE ctb_attack_type = 'attack'
-AND type = sqlc.arg('type')::ability_type
+WHERE type = sqlc.arg('type')::ability_type
+  AND inflicted_delay_id IS NOT NULL
 ORDER BY typed_id;
 
 

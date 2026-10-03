@@ -1,7 +1,6 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -80,12 +79,12 @@ func convertDamage(cfg *Config, d seeding.Damage) Damage {
 }
 
 type AbilityDamage struct {
-	Condition      *string          `json:"condition,omitempty"`
-	AttackType     string           `json:"attack_type"`
-	TargetClass    string 			`json:"target_class"`
-	DamageType     string           `json:"damage_type"`
-	DamageFormula  string           `json:"damage_formula"`
-	DamageConstant int32            `json:"damage_constant"`
+	Condition      *string `json:"condition,omitempty"`
+	AttackType     string  `json:"attack_type"`
+	TargetClass    string  `json:"target_class"`
+	DamageType     string  `json:"damage_type"`
+	DamageFormula  string  `json:"damage_formula"`
+	DamageConstant int32   `json:"damage_constant"`
 }
 
 func convertAbilityDamage(cfg *Config, ad seeding.AbilityDamage) AbilityDamage {
@@ -115,44 +114,14 @@ func convertAccuracy(_ *Config, a seeding.Accuracy) Accuracy {
 
 type InflictedDelay struct {
 	Condition      *string `json:"condition,omitempty"`
-	CTBAttackType  string  `json:"ctb_attack_type"`
-	DelayType      string  `json:"delay_type"`
-	DamageConstant int32   `json:"damage_constant"`
 	DelayStrength  string  `json:"delay_strength"`
 }
 
 func convertInflictedDelay(_ *Config, id seeding.InflictedDelay) InflictedDelay {
 	return InflictedDelay{
 		Condition:      id.Condition,
-		CTBAttackType:  id.CTBAttackType,
-		DelayType:      id.DelayType,
-		DamageConstant: id.DamageConstant,
-		DelayStrength:  getDelayStrength(id),
+		DelayStrength: 	id.DelayStrength,
 	}
-}
-
-func getDelayStrength(id seeding.InflictedDelay) string {
-	switch id.DelayType {
-	case string(database.DelayTypeCtbBased):
-		if id.DamageConstant == 16 {
-			return "strong"
-		}
-
-		if id.DamageConstant == 8 {
-			return "weak"
-		}
-
-	case string(database.DelayTypeTickSpeedBased):
-		if id.DamageConstant == 48 {
-			return "strong"
-		}
-
-		if id.DamageConstant == 24 {
-			return "weak"
-		}
-	}
-
-	return ""
 }
 
 type InflictedStatus struct {

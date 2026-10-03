@@ -90,16 +90,10 @@ func compareAbilityDamages(test test, fieldName string, exp expAbilityDamage, go
 }
 
 type expInflictedDelay struct {
-	ctbAttackType  string
-	delayType      string
-	damageConstant int32
 	delayStrength  string
 }
 
 func compareInflictedDelays(test test, fieldName string, exp expInflictedDelay, got InflictedDelay) {
-	compare(test, fieldName+" ctb attack type", exp.ctbAttackType, got.CTBAttackType)
-	compare(test, fieldName+" value", exp.delayType, got.DelayType)
-	compare(test, fieldName+" delay damage constant", exp.damageConstant, got.DamageConstant)
 	compare(test, fieldName+" delay strength", exp.delayStrength, got.DelayStrength)
 }
 

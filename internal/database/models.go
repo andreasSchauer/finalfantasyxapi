@@ -1020,48 +1020,6 @@ func (ns NullCriticalType) Value() (driver.Value, error) {
 	return string(ns.CriticalType), nil
 }
 
-type CtbAttackType string
-
-const (
-	CtbAttackTypeAttack CtbAttackType = "attack"
-	CtbAttackTypeHeal   CtbAttackType = "heal"
-)
-
-func (e *CtbAttackType) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = CtbAttackType(s)
-	case string:
-		*e = CtbAttackType(s)
-	default:
-		return fmt.Errorf("unsupported scan type for CtbAttackType: %T", src)
-	}
-	return nil
-}
-
-type NullCtbAttackType struct {
-	CtbAttackType CtbAttackType
-	Valid         bool // Valid is true if CtbAttackType is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullCtbAttackType) Scan(value interface{}) error {
-	if value == nil {
-		ns.CtbAttackType, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.CtbAttackType.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullCtbAttackType) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.CtbAttackType), nil
-}
-
 type CtbIconType string
 
 const (
@@ -1251,48 +1209,6 @@ func (ns NullDelayStrength) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return string(ns.DelayStrength), nil
-}
-
-type DelayType string
-
-const (
-	DelayTypeCtbBased       DelayType = "ctb-based"
-	DelayTypeTickSpeedBased DelayType = "tick-speed-based"
-)
-
-func (e *DelayType) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = DelayType(s)
-	case string:
-		*e = DelayType(s)
-	default:
-		return fmt.Errorf("unsupported scan type for DelayType: %T", src)
-	}
-	return nil
-}
-
-type NullDelayType struct {
-	DelayType DelayType
-	Valid     bool // Valid is true if DelayType is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullDelayType) Scan(value interface{}) error {
-	if value == nil {
-		ns.DelayType, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.DelayType.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullDelayType) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.DelayType), nil
 }
 
 type DurationType string
@@ -3615,12 +3531,10 @@ type FormationTriggerCommand struct {
 }
 
 type InflictedDelay struct {
-	ID             int32
-	DataHash       string
-	Condition      sql.NullString
-	CtbAttackType  CtbAttackType
-	DelayType      DelayType
-	DamageConstant interface{}
+	ID            int32
+	DataHash      string
+	Condition     sql.NullString
+	DelayStrength DelayStrength
 }
 
 type InflictedStatuss struct {
@@ -4369,7 +4283,8 @@ type MvAbility struct {
 	DamageType        NullDamageType
 	DamageFormula     NullDamageFormula
 	DamageConstant    interface{}
-	CtbAttackType     NullCtbAttackType
+	DelayCondition    sql.NullString
+	DelayStrength     NullDelayStrength
 	AffectedStatusID  sql.NullInt32
 	InflictedStatusID sql.NullInt32
 	RemovedStatusID   sql.NullInt32
@@ -4808,7 +4723,6 @@ type StatusCondition struct {
 	Visualization     sql.NullString
 	NullifyArmored    NullNullifyArmored
 	AddedElemResistID sql.NullInt32
-	InflictedDelayID  sql.NullInt32
 }
 
 type StatusResist struct {

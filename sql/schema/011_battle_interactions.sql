@@ -29,10 +29,7 @@ CREATE TYPE damage_formula AS ENUM ('str-vs-def', 'str-ign-def', 'mag-vs-mdf', '
 CREATE TYPE duration_type AS ENUM ('blocks', 'endless', 'instant', 'turns', 'inflictor-next-turn', 'auto');
 
 
-CREATE TYPE ctb_attack_type AS ENUM ('attack', 'heal');
-
-
-CREATE TYPE delay_type AS ENUM ('ctb-based', 'tick-speed-based');
+CREATE TYPE delay_strength AS ENUM ('weak', 'strong');
 
 
 CREATE TYPE calculation_type AS ENUM ('added-percentage', 'added-value', 'multiply', 'multiply-highest', 'set-value');
@@ -78,9 +75,7 @@ CREATE TABLE inflicted_delays (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
     condition TEXT,
-    ctb_attack_type ctb_attack_type NOT NULL,
-    delay_type delay_type NOT NULL,
-    damage_constant uint8 NOT NULL
+    delay_strength delay_strength NOT NULL
 );
 
 
@@ -141,8 +136,7 @@ DROP TABLE IF EXISTS ability_damages;
 DROP TABLE IF EXISTS damages;
 DROP TYPE IF EXISTS calculation_type;
 DROP TYPE IF EXISTS target_class;
-DROP TYPE IF EXISTS delay_type;
-DROP TYPE IF EXISTS ctb_attack_type;
+DROP TYPE IF EXISTS delay_strength;
 DROP TYPE IF EXISTS duration_type;
 DROP TYPE IF EXISTS damage_formula;
 DROP TYPE IF EXISTS damage_type;

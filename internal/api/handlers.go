@@ -225,11 +225,3 @@ func (cfg *Config) HandleDropChanceGet(w http.ResponseWriter, r *http.Request) {
 func (cfg *Config) HandleDropChancePost(w http.ResponseWriter, r *http.Request) {
 	routerServicePost(cfg, w, r, cfg.e.dropChance)
 }
-
-func (cfg *Config) HandleDelayGet(w http.ResponseWriter, r *http.Request) {
-	routerServiceGet(w, r, cfg.e.delay)
-}
-
-func (cfg *Config) HandleDelayPost(w http.ResponseWriter, r *http.Request) {
-	routerServicePost(cfg, w, r, cfg.e.delay)
-}

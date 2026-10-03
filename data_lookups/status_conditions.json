@@ -12,7 +12,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -42,7 +41,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -57,7 +55,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -82,7 +79,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -105,7 +101,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -128,7 +123,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -143,7 +137,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -187,7 +180,6 @@
             "boost"
         ],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -231,7 +223,6 @@
             "boost"
         ],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -268,7 +259,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -285,7 +275,6 @@
             "berserk"
         ],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -300,7 +289,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -317,7 +305,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [
             {
@@ -344,13 +331,6 @@
             "haste"
         ],
         "added_elem_resist": null,
-        "ctb_on_infliction": {
-            "inflicted_delay_id": 5,
-            "condition": null,
-            "ctb_attack_type": "attack",
-            "delay_type": "ctb-based",
-            "damage_constant": 16
-        },
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -375,7 +355,6 @@
             "berserk"
         ],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -390,7 +369,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -407,7 +385,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -432,7 +409,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -457,7 +433,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": "bearer",
         "stat_changes": [
             {
@@ -482,7 +457,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [
             {
@@ -509,13 +483,6 @@
             "slow"
         ],
         "added_elem_resist": null,
-        "ctb_on_infliction": {
-            "inflicted_delay_id": 6,
-            "condition": null,
-            "ctb_attack_type": "heal",
-            "delay_type": "ctb-based",
-            "damage_constant": 8
-        },
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -550,7 +517,6 @@
             "name": "fire",
             "affinity": "immune"
         },
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -570,7 +536,6 @@
             "name": "lightning",
             "affinity": "immune"
         },
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -590,7 +555,6 @@
             "name": "water",
             "affinity": "immune"
         },
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -610,7 +574,6 @@
             "name": "ice",
             "affinity": "immune"
         },
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -627,7 +590,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -650,7 +612,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -665,7 +626,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -682,7 +642,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -705,7 +664,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -723,7 +681,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -767,7 +724,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -784,7 +740,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -815,7 +770,6 @@
             "ability distiller"
         ],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -838,7 +792,6 @@
             "ability distiller"
         ],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -861,7 +814,6 @@
             "ability distiller"
         ],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -880,7 +832,6 @@
             "speed distiller"
         ],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -895,7 +846,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -910,7 +860,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -927,7 +876,6 @@
             "ko"
         ],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -942,7 +890,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -957,7 +904,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []
@@ -974,7 +920,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -1000,7 +945,6 @@
         ],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": [
@@ -1044,7 +988,6 @@
         "related_stats": [],
         "removed_status_conditions": [],
         "added_elem_resist": null,
-        "ctb_on_infliction": null,
         "nullify_armored": null,
         "stat_changes": [],
         "modifier_changes": []

@@ -466,23 +466,19 @@ func (q *Queries) CreateDamagesDamageCalcJunctionBulk(ctx context.Context, arg C
 }
 
 const createInflictedDelayBulk = `-- name: CreateInflictedDelayBulk :many
-INSERT INTO inflicted_delays (data_hash, condition, ctb_attack_type, delay_type, damage_constant)
+INSERT INTO inflicted_delays (data_hash, condition, delay_strength)
 SELECT
     unnest($1::text[]),
     unnest($2::null_string[]),
-    unnest($3::ctb_attack_type[]),
-    unnest($4::delay_type[]),
-    unnest($5::int[])
+    unnest($3::delay_strength[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = inflicted_delays.data_hash
 RETURNING id, data_hash
 `
 
 type CreateInflictedDelayBulkParams struct {
-	DataHash       []string
-	Condition      []sql.NullString
-	CtbAttackType  []CtbAttackType
-	DelayType      []DelayType
-	DamageConstant []int32
+	DataHash      []string
+	Condition     []sql.NullString
+	DelayStrength []DelayStrength
 }
 
 type CreateInflictedDelayBulkRow struct {
@@ -491,13 +487,7 @@ type CreateInflictedDelayBulkRow struct {
 }
 
 func (q *Queries) CreateInflictedDelayBulk(ctx context.Context, arg CreateInflictedDelayBulkParams) ([]CreateInflictedDelayBulkRow, error) {
-	rows, err := q.db.QueryContext(ctx, createInflictedDelayBulk,
-		pq.Array(arg.DataHash),
-		pq.Array(arg.Condition),
-		pq.Array(arg.CtbAttackType),
-		pq.Array(arg.DelayType),
-		pq.Array(arg.DamageConstant),
-	)
+	rows, err := q.db.QueryContext(ctx, createInflictedDelayBulk, pq.Array(arg.DataHash), pq.Array(arg.Condition), pq.Array(arg.DelayStrength))
 	if err != nil {
 		return nil, err
 	}

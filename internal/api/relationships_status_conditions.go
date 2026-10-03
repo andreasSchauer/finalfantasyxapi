@@ -33,7 +33,6 @@ func getStatusConditionRelationships(cfg *Config, r *http.Request, status seedin
 		var err error
 		rel.InflictedBy, err = getStatusInfliction(cfg, ctx, status, StatusInteractionQueries{
 			Abilities:        convGetStatusConditionAbilityIDsInflicted(cfg, res.MinRate, res.MaxRate),
-			StatusConditions: cfg.db.GetStatusConditionInflictedDelayConditionIDs,
 		})
 		return err
 	})
