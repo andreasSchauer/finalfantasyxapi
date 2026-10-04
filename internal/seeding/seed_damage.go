@@ -17,6 +17,11 @@ func (l *Lookup) loop2SeedDamages(qtx *database.Queries, ctx context.Context) er
 
 	params := database.CreateDamageBulkParams{
 		DataHash:        make([]string, len(damages)),
+		AttackType: 	 make([]database.AttackType, len(damages)),
+		DamageType: 	 make([]database.DamageType, len(damages)),
+		HpClassID: 		 make([]sql.NullInt32, len(damages)),
+		MpClassID: 		 make([]sql.NullInt32, len(damages)),
+		CtbClassID: 	 make([]sql.NullInt32, len(damages)),
 		Critical:        make([]database.NullCriticalType, len(damages)),
 		CriticalPlusVal: make([]sql.NullInt32, len(damages)),
 		IsPiercing:      make([]bool, len(damages)),
@@ -26,6 +31,11 @@ func (l *Lookup) loop2SeedDamages(qtx *database.Queries, ctx context.Context) er
 
 	for i, d := range damages {
 		params.DataHash[i] = generateDataHash(d)
+		params.AttackType[i] = database.AttackType(d.AttackType)
+		params.DamageType[i] = database.DamageType(d.DamageType)
+		params.HpClassID[i] = h.ObjPtrToNullInt32ID(d.HP)
+		params.MpClassID[i] = h.ObjPtrToNullInt32ID(d.MP)
+		params.CtbClassID[i] = h.ObjPtrToNullInt32ID(d.CTB)
 		params.Critical[i] = database.ToNullCriticalType(d.Critical)
 		params.CriticalPlusVal[i] = h.GetNullInt32(d.CriticalPlusVal)
 		params.IsPiercing[i] = d.IsPiercing
@@ -125,6 +135,26 @@ func (l *Lookup) prepareDamages(battleInteractions []BattleInteraction) ([]Damag
 		bi := &battleInteractions[i]
 
 		if bi.Damage != nil {
+			if bi.Damage.HP != nil {
+				bi.Damage.HP.ID, err = l.GetHashID(bi.Damage.HP)
+				if err != nil {
+					return nil, err
+				}
+			}
+
+			if bi.Damage.MP != nil {
+				bi.Damage.MP.ID, err = l.GetHashID(bi.Damage.MP)
+				if err != nil {
+					return nil, err
+				}
+			}
+			if bi.Damage.CTB != nil {
+				bi.Damage.CTB.ID, err = l.GetHashID(bi.Damage.CTB)
+				if err != nil {
+					return nil, err
+				}
+			}
+
 			bi.Damage.ElementID, err = assignFKPtr(bi.Damage.Element, l.Elements)
 			if err != nil {
 				return nil, err
@@ -147,51 +177,5 @@ func (l *Lookup) completeDamage(damage *Damage) error {
 		return err
 	}
 
-	err = assignIDs(l, damage.DamageCalc)
-	if err != nil {
-		return err
-	}
-
 	return nil
-}
-
-func (l *Lookup) seedJuncDamagesDamageCalc(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "damages + damage calc"
-	params := database.CreateDamagesDamageCalcJunctionBulkParams{
-		DataHash:            make([]string, 0),
-		AbilityID:           make([]int32, 0),
-		BattleInteractionID: make([]int32, 0),
-		DamageID:            make([]int32, 0),
-		AbilityDamageID:     make([]int32, 0),
-	}
-
-	for _, ability := range l.getAbilities() {
-		bis, err := l.getAbilityBattleInteractions(ability)
-		if err != nil {
-			return err
-		}
-
-		for _, bi := range bis {
-			if bi.Damage == nil {
-				continue
-			}
-
-			for _, ad := range bi.Damage.DamageCalc {
-				j := FourWayJunction{}
-				j.GreatGrandparentID = ability.ID
-				j.GrandparentID = bi.ID
-				j.ParentID = bi.Damage.ID
-				j.ChildID = ad.ID
-				dataHash := generateJunctionHash(j, desc)
-
-				params.DataHash = append(params.DataHash, dataHash)
-				params.AbilityID = append(params.AbilityID, ability.ID)
-				params.BattleInteractionID = append(params.BattleInteractionID, bi.ID)
-				params.DamageID = append(params.DamageID, bi.Damage.ID)
-				params.AbilityDamageID = append(params.AbilityDamageID, ad.ID)
-			}
-		}
-	}
-
-	return qtx.CreateDamagesDamageCalcJunctionBulk(ctx, params)
 }

@@ -51,14 +51,11 @@ func TestGetItemAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeHeal,
-								targetClass:    "hp",
-								damageType:     database.DamageTypeSpecial,
-								damageFormula:  database.DamageFormulaSpecialNoVar,
-								damageConstant: 20,
-							},
+						attackType: database.AttackTypeHeal,
+						damageType: database.DamageTypeSpecial,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaSpecialNoVar,
+							damageConstant: 20,
 						},
 						critical:        nil,
 						criticalPlusVal: nil,
@@ -109,14 +106,11 @@ func TestGetItemAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypeSpecial,
-								damageFormula:  database.DamageFormulaSpecialVar,
-								damageConstant: 20,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypeSpecial,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaSpecialVar,
+							damageConstant: 20,
 						},
 						critical:        nil,
 						criticalPlusVal: nil,
@@ -125,7 +119,7 @@ func TestGetItemAbility(t *testing.T) {
 						element:         nil,
 					},
 					inflictedDelay: &expInflictedDelay{
-						delayStrength:  "weak",
+						delayStrength: "weak",
 					},
 					inflictedStatusConditions: []int32{14},
 					removedStatusConditions:   []int32{},
@@ -168,21 +162,15 @@ func TestGetItemAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAbsorb,
-								targetClass:    "hp",
-								damageType:     database.DamageTypeSpecial,
-								damageFormula:  database.DamageFormulaSpecialVar,
-								damageConstant: 30,
-							},
-							{
-								attackType:     database.AttackTypeAbsorb,
-								targetClass:    "mp",
-								damageType:     database.DamageTypeSpecial,
-								damageFormula:  database.DamageFormulaSpecialVar,
-								damageConstant: 30,
-							},
+						attackType: database.AttackTypeAbsorb,
+						damageType: database.DamageTypeSpecial,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaSpecialVar,
+							damageConstant: 30,
+						},
+						mp: &expClassDamage{
+							damageFormula:  database.DamageFormulaSpecialVar,
+							damageConstant: 30,
 						},
 						critical:        nil,
 						criticalPlusVal: nil,

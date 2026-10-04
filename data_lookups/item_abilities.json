@@ -17,23 +17,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 90,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-no-var",
-                            "damage_constant": 4
-                        }
-                    ],
+                    "damage_id": 128,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 79,
+                        "condition": null,
+                        "damage_formula": "special-no-var",
+                        "damage_constant": 4
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -75,23 +73,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 91,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-no-var",
-                            "damage_constant": 20
-                        }
-                    ],
+                    "damage_id": 129,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 80,
+                        "condition": null,
+                        "damage_formula": "special-no-var",
+                        "damage_constant": 20
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -133,23 +129,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 79,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 130,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 71,
+                        "condition": null,
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -191,23 +185,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 92,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-no-var",
-                            "damage_constant": 40
-                        }
-                    ],
+                    "damage_id": 131,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 81,
+                        "condition": null,
+                        "damage_formula": "special-no-var",
+                        "damage_constant": 40
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -249,23 +241,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 93,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "mp",
-                            "damage_type": "special",
-                            "damage_formula": "special-no-var",
-                            "damage_constant": 2
-                        }
-                    ],
+                    "damage_id": 132,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": null,
+                    "mp": {
+                        "class_damage_id": 82,
+                        "condition": null,
+                        "damage_formula": "special-no-var",
+                        "damage_constant": 2
+                    },
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -307,23 +297,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 94,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "mp",
-                            "damage_type": "special",
-                            "damage_formula": "special-no-var",
-                            "damage_constant": 10
-                        }
-                    ],
+                    "damage_id": 133,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": null,
+                    "mp": {
+                        "class_damage_id": 83,
+                        "condition": null,
+                        "damage_formula": "special-no-var",
+                        "damage_constant": 10
+                    },
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -365,32 +353,26 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 79,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 16
-                        },
-                        {
-                            "id": 82,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "mp",
-                            "damage_type": "special",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 115,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 71,
+                        "condition": null,
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 16
+                    },
+                    "mp": {
+                        "class_damage_id": 71,
+                        "condition": null,
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 16
+                    },
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -432,32 +414,26 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 79,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 16
-                        },
-                        {
-                            "id": 82,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "mp",
-                            "damage_type": "special",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 115,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 71,
+                        "condition": null,
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 16
+                    },
+                    "mp": {
+                        "class_damage_id": 71,
+                        "condition": null,
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 16
+                    },
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -499,23 +475,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 95,
-                            "condition": "Only KO'd characters and zombies.",
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 8
-                        }
-                    ],
+                    "damage_id": 134,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 8,
+                        "condition": "Only KO'd characters and zombies.",
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 8
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -566,23 +540,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 81,
-                            "condition": "Only KO'd characters and zombies.",
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 114,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 9,
+                        "condition": "Only KO'd characters and zombies.",
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -1080,23 +1052,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 91,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-no-var",
-                            "damage_constant": 20
-                        }
-                    ],
+                    "damage_id": 129,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 80,
+                        "condition": null,
+                        "damage_formula": "special-no-var",
+                        "damage_constant": 20
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -1142,23 +1112,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 79,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 130,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 71,
+                        "condition": null,
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -1200,23 +1168,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 79,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 130,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 71,
+                        "condition": null,
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -1291,18 +1257,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 15,
-                    "damage_calc": [
-                        {
-                            "id": 96,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 135,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 84,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1349,18 +1314,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 15,
-                    "damage_calc": [
-                        {
-                            "id": 97,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 20
-                        }
-                    ],
+                    "damage_id": 136,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 85,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 20
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1407,18 +1371,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 15,
-                    "damage_calc": [
-                        {
-                            "id": 96,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 135,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 84,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1465,18 +1428,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 16,
-                    "damage_calc": [
-                        {
-                            "id": 96,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 137,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 84,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1523,18 +1485,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 16,
-                    "damage_calc": [
-                        {
-                            "id": 97,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 20
-                        }
-                    ],
+                    "damage_id": 138,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 85,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 20
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1581,18 +1542,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 16,
-                    "damage_calc": [
-                        {
-                            "id": 96,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 137,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 84,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1639,18 +1599,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 17,
-                    "damage_calc": [
-                        {
-                            "id": 96,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 139,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 84,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1697,18 +1656,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 17,
-                    "damage_calc": [
-                        {
-                            "id": 97,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 20
-                        }
-                    ],
+                    "damage_id": 140,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 85,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 20
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1755,18 +1713,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 17,
-                    "damage_calc": [
-                        {
-                            "id": 96,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 139,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 84,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1813,18 +1770,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 18,
-                    "damage_calc": [
-                        {
-                            "id": 96,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 141,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 84,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1871,18 +1827,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 18,
-                    "damage_calc": [
-                        {
-                            "id": 97,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 20
-                        }
-                    ],
+                    "damage_id": 142,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 85,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 20
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1929,18 +1884,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 18,
-                    "damage_calc": [
-                        {
-                            "id": 96,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 141,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 84,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -1987,23 +1941,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 14,
-                    "damage_calc": [
-                        {
-                            "id": 63,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 7
-                        }
-                    ],
+                    "damage_id": 87,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 55,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 7
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 50,
@@ -2045,23 +1997,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 14,
-                    "damage_calc": [
-                        {
-                            "id": 64,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 88,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 56,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 50,
@@ -2112,23 +2062,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 98,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 15
-                        }
-                    ],
+                    "damage_id": 143,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 86,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 15
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -2179,23 +2127,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 97,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 20
-                        }
-                    ],
+                    "damage_id": 144,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 85,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 20
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -2246,23 +2192,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 98,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 15
-                        }
-                    ],
+                    "damage_id": 143,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 86,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 15
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -2313,23 +2257,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 98,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 15
-                        }
-                    ],
+                    "damage_id": 143,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 86,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 15
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -2380,23 +2322,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 99,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "percentage-current",
-                            "damage_constant": 8
-                        }
-                    ],
+                    "damage_id": 145,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 87,
+                        "condition": null,
+                        "damage_formula": "percentage-current",
+                        "damage_constant": 8
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 50,
@@ -2438,23 +2378,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 100,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 120
-                        }
-                    ],
+                    "damage_id": 146,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 88,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 120
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 100,
@@ -2496,18 +2434,17 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 21,
-                    "damage_calc": [
-                        {
-                            "id": 101,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 160
-                        }
-                    ],
+                    "damage_id": 147,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 89,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 160
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -2554,23 +2491,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 102,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 200
-                        }
-                    ],
+                    "damage_id": 148,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 90,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 200
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 100,
@@ -2612,23 +2547,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 103,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 40
-                        }
-                    ],
+                    "damage_id": 149,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 91,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 40
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 60,
@@ -2679,23 +2612,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 104,
-                            "condition": "If 'slow' was successfully inflicted.",
-                            "attack_type": "attack",
-                            "target_class": "ctb",
-                            "damage_type": "special",
-                            "damage_formula": "ctb-current",
-                            "damage_constant": 8
-                        }
-                    ],
+                    "damage_id": 150,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": null,
+                    "mp": null,
+                    "ctb": {
+                        "class_damage_id": 92,
+                        "condition": "If 'slow' was successfully inflicted.",
+                        "damage_formula": "ctb-current",
+                        "damage_constant": 8
+                    },
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -2746,23 +2677,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 97,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 20
-                        }
-                    ],
+                    "damage_id": 144,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 85,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 20
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 70,
@@ -3009,23 +2938,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 19,
-                    "damage_calc": [
-                        {
-                            "id": 105,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 255
-                        }
-                    ],
+                    "damage_id": 151,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 93,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 255
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "always",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 100,
@@ -3067,23 +2994,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 83,
-                            "condition": "If 'haste' was successfully inflicted.",
-                            "attack_type": "heal",
-                            "target_class": "ctb",
-                            "damage_type": "special",
-                            "damage_formula": "ctb-current",
-                            "damage_constant": 8
-                        }
-                    ],
+                    "damage_id": 118,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": null,
+                    "mp": null,
+                    "ctb": {
+                        "class_damage_id": 10,
+                        "condition": "If 'haste' was successfully inflicted.",
+                        "damage_formula": "ctb-current",
+                        "damage_constant": 8
+                    },
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -3134,23 +3059,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 83,
-                            "condition": "If 'haste' was successfully inflicted.",
-                            "attack_type": "heal",
-                            "target_class": "ctb",
-                            "damage_type": "special",
-                            "damage_formula": "ctb-current",
-                            "damage_constant": 8
-                        }
-                    ],
+                    "damage_id": 118,
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": null,
+                    "mp": null,
+                    "ctb": {
+                        "class_damage_id": 10,
+                        "condition": "If 'haste' was successfully inflicted.",
+                        "damage_formula": "ctb-current",
+                        "damage_constant": 8
+                    },
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -3393,23 +3316,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 106,
-                            "condition": null,
-                            "attack_type": "absorb",
-                            "target_class": "mp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 20
-                        }
-                    ],
+                    "damage_id": 152,
+                    "attack_type": "absorb",
+                    "damage_type": "special",
+                    "hp": null,
+                    "mp": {
+                        "class_damage_id": 85,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 20
+                    },
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 10,
@@ -3451,23 +3372,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 107,
-                            "condition": null,
-                            "attack_type": "absorb",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 8
-                        }
-                    ],
+                    "damage_id": 153,
+                    "attack_type": "absorb",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 65,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 8
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 10,
@@ -3509,32 +3428,26 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 108,
-                            "condition": null,
-                            "attack_type": "absorb",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 30
-                        },
-                        {
-                            "id": 109,
-                            "condition": null,
-                            "attack_type": "absorb",
-                            "target_class": "mp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 30
-                        }
-                    ],
+                    "damage_id": 154,
+                    "attack_type": "absorb",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 94,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 30
+                    },
+                    "mp": {
+                        "class_damage_id": 94,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 30
+                    },
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 10,
@@ -3576,23 +3489,21 @@
                 "based_on_user_attack": false,
                 "range": 3,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 69,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-var",
-                            "damage_constant": 22
-                        }
-                    ],
+                    "damage_id": 155,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 61,
+                        "condition": null,
+                        "damage_formula": "special-var",
+                        "damage_constant": 22
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 10,

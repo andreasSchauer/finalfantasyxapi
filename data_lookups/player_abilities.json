@@ -18,22 +18,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -65,9 +63,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 3,
         "expert_grid_char_id": 3,
         "description": "Puts an enemy to sleep for 3 turns.",
@@ -113,22 +109,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -160,9 +154,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 3,
         "expert_grid_char_id": 3,
         "description": "Silences an enemy for 3 turns.",
@@ -208,22 +200,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -255,9 +245,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 3,
         "expert_grid_char_id": 3,
         "description": "Inflicts darkness on an enemy for 3 turns.",
@@ -303,22 +291,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -350,9 +336,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 3,
         "expert_grid_char_id": 3,
         "description": "Almost always puts an enemy to sleep for 1 turn.",
@@ -398,22 +382,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -445,9 +427,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 3,
         "expert_grid_char_id": 3,
         "description": "Almost always silences an enemy for 1 turn.",
@@ -493,22 +473,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -540,9 +518,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 3,
         "expert_grid_char_id": 3,
         "description": "Almost always inflicts darkness on an enemy for 1 turn.",
@@ -588,22 +564,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -635,9 +609,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 6,
         "expert_grid_char_id": 3,
         "description": "Inflicts an enemy with zombie status.",
@@ -683,22 +655,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -746,9 +716,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 3,
         "expert_grid_char_id": 3,
         "description": "Sleep, silence, and darkness on an enemy for 3 turns.",
@@ -794,22 +762,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -836,9 +802,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 1,
         "expert_grid_char_id": 1,
         "description": "Delays action of an enemy.",
@@ -884,22 +848,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -926,9 +888,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 1,
         "expert_grid_char_id": 1,
         "description": "Greatly delays action of an enemy.",
@@ -974,22 +934,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -1021,9 +979,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 6,
         "expert_grid_char_id": 6,
         "description": "Makes one enemy drop Power Spheres.",
@@ -1073,22 +1029,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -1120,9 +1074,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 5,
         "expert_grid_char_id": 5,
         "description": "Makes one enemy drop Mana Spheres.",
@@ -1172,22 +1124,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -1219,9 +1169,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 1,
         "expert_grid_char_id": 1,
         "description": "Makes one enemy drop Speed Spheres.",
@@ -1271,22 +1219,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -1318,9 +1264,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 3,
         "expert_grid_char_id": 2,
         "description": "Makes one enemy drop Ability Spheres.",
@@ -1366,22 +1310,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -1413,9 +1355,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 6,
         "expert_grid_char_id": 6,
         "description": "Lowers an enemy's Strength.",
@@ -1461,22 +1401,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -1508,9 +1446,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 6,
         "expert_grid_char_id": 6,
         "description": "Lowers an enemy's Magic.",
@@ -1556,22 +1492,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -1603,9 +1537,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 6,
         "expert_grid_char_id": 6,
         "description": "Lowers an enemy's Defense and nullifies armored.",
@@ -1651,22 +1583,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -1698,9 +1628,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 6,
         "expert_grid_char_id": 6,
         "description": "Lowers an enemy's Magic Defense.",
@@ -1746,22 +1674,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 100,
@@ -1817,9 +1743,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 6,
         "expert_grid_char_id": 6,
         "description": "Inflicts Power, Magic, Armor, and Mental Break.",
@@ -1865,22 +1789,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -1903,9 +1825,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 7,
         "expert_grid_char_id": 7,
         "description": "Steals items and damages one enemy.",
@@ -1944,22 +1864,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -1982,9 +1900,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 7,
         "description": "Attack and steal gil at the same time.",
@@ -2023,22 +1939,20 @@
                 "range": 1,
                 "damage": {
                     "damage_id": 1,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -2061,9 +1975,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 2,
-        "open_submenu_id": null,
         "std_grid_char_id": 1,
         "expert_grid_char_id": 1,
         "description": "Strike quickly with reduced recovery time.",
@@ -2119,9 +2031,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 7,
         "expert_grid_char_id": 7,
         "description": "Steal items from enemy.",
@@ -2152,8 +2062,6 @@
         "rank": 2,
         "appears_in_help_bar": false,
         "can_copycat": true,
-        "battle_interactions": [],
-        "topmenu_id": null,
         "submenu_id": 3,
         "open_submenu_id": 9,
         "std_grid_char_id": 7,
@@ -2220,9 +2128,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 1,
         "expert_grid_char_id": 1,
         "description": "Aid party's escape from battle.",
@@ -2261,22 +2167,20 @@
                 "range": null,
                 "damage": {
                     "damage_id": 2,
-                    "damage_calc": [
-                        {
-                            "id": 2,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "healing",
-                            "damage_constant": 8
-                        }
-                    ],
+                    "attack_type": "heal",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 2,
+                        "condition": null,
+                        "damage_formula": "healing",
+                        "damage_constant": 8
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": false,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -2297,9 +2201,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Restores some HP to all allies.",
@@ -2379,9 +2281,7 @@
                 ]
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 1,
         "expert_grid_char_id": 1,
         "description": "Raises party's Strength and Defense.",
@@ -2455,9 +2355,7 @@
                 ]
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 3,
         "expert_grid_char_id": 3,
         "description": "Raises party's Accuracy.",
@@ -2538,9 +2436,7 @@
                 ]
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Raises party's Magic and Magic Defense.",
@@ -2614,9 +2510,7 @@
                 ]
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Raises party's Evasion.",
@@ -2696,9 +2590,7 @@
                 ]
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 7,
         "expert_grid_char_id": 7,
         "description": "Raises party's Luck.",
@@ -2779,9 +2671,7 @@
                 ]
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 5,
         "expert_grid_char_id": 5,
         "description": "Lowers all enemies' Luck.",
@@ -2830,31 +2720,25 @@
                 "range": 4,
                 "damage": {
                     "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 3,
-                            "condition": null,
-                            "attack_type": "absorb",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 6
-                        },
-                        {
-                            "id": 4,
-                            "condition": null,
-                            "attack_type": "absorb",
-                            "target_class": "mp",
-                            "damage_type": "special",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 6
-                        }
-                    ],
+                    "attack_type": "absorb",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 3,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 6
+                    },
+                    "mp": {
+                        "class_damage_id": 3,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 6
+                    },
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -2875,12 +2759,10 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 5,
         "expert_grid_char_id": 5,
-        "description": "Absorb HP \u0026 MP from an enemy.",
+        "description": "Absorb HP & MP from an enemy.",
         "effect": "Absorbs a small amount of HP and MP from one enemy and gives it to the user (effect is reversed if the enemy is a Zombie). If used by Kimahri, he will also learn an enemy's Ronso Rage, and if he does so, gets a full Overdrive Gauge.",
         "related_stats": [],
         "category": "special",
@@ -2950,9 +2832,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 6,
         "expert_grid_char_id": 6,
         "description": "Take damage for an ally.",
@@ -3017,9 +2897,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 6,
         "expert_grid_char_id": 6,
         "description": "Guard allies while in defensive stance.",
@@ -3058,22 +2936,20 @@
                 "range": 2,
                 "damage": {
                     "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 5,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "special-gil",
-                            "damage_constant": 1
-                        }
-                    ],
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 4,
+                        "condition": null,
+                        "damage_formula": "special-gil",
+                        "damage_constant": 1
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 100,
@@ -3094,7 +2970,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
         "open_submenu_id": 11,
         "std_grid_char_id": 7,
@@ -3161,9 +3036,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 6,
         "expert_grid_char_id": 6,
         "description": "Immobilize an enemy with fear.",
@@ -3228,9 +3101,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 1,
         "expert_grid_char_id": 1,
         "description": "Draw an enemy's attacks towards you.",
@@ -3286,9 +3157,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 6,
         "expert_grid_char_id": 6,
         "description": "Contribute your Overdrive charge to an ally's gauge.",
@@ -3344,9 +3213,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 7,
         "expert_grid_char_id": 7,
         "description": "Mimic an ally's previous action.",
@@ -3402,9 +3269,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
-        "open_submenu_id": null,
         "std_grid_char_id": 7,
         "expert_grid_char_id": 7,
         "description": "Steal gil from an enemy.",
@@ -3435,8 +3300,6 @@
         "rank": 1,
         "appears_in_help_bar": false,
         "can_copycat": true,
-        "battle_interactions": [],
-        "topmenu_id": null,
         "submenu_id": 3,
         "open_submenu_id": 6,
         "std_grid_char_id": 2,
@@ -3469,8 +3332,6 @@
         "rank": 3,
         "appears_in_help_bar": false,
         "can_copycat": true,
-        "battle_interactions": [],
-        "topmenu_id": null,
         "submenu_id": 3,
         "open_submenu_id": 5,
         "std_grid_char_id": 4,
@@ -3536,7 +3397,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 3,
         "open_submenu_id": 11,
         "std_grid_char_id": 7,
@@ -3576,23 +3436,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 6,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "healing",
-                            "damage_constant": 24
-                        }
-                    ],
+                    "damage_id": 5,
+                    "attack_type": "heal",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 5,
+                        "condition": null,
+                        "damage_formula": "healing",
+                        "damage_constant": 24
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -3616,9 +3474,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Restores some HP.",
@@ -3666,23 +3522,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 7,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "healing",
-                            "damage_constant": 40
-                        }
-                    ],
+                    "damage_id": 6,
+                    "attack_type": "heal",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 6,
+                        "condition": null,
+                        "damage_formula": "healing",
+                        "damage_constant": 40
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -3706,9 +3560,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Restores a lot of HP.",
@@ -3756,23 +3608,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 8,
-                            "condition": null,
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "healing",
-                            "damage_constant": 80
-                        }
-                    ],
+                    "damage_id": 7,
+                    "attack_type": "heal",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 7,
+                        "condition": null,
+                        "damage_formula": "healing",
+                        "damage_constant": 80
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -3796,9 +3646,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Restores a massive amount of HP.",
@@ -3875,9 +3723,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Nullifies one fire attack on party.",
@@ -3953,9 +3799,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Nullifies one lightning attack on party.",
@@ -4031,9 +3875,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Nullifies one water attack on party.",
@@ -4109,9 +3951,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Nullifies one ice attack on party.",
@@ -4195,9 +4035,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 5,
         "expert_grid_char_id": 5,
         "description": "View an enemy's data.",
@@ -4274,9 +4112,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Cures a character's status ailments.",
@@ -4314,23 +4150,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 9,
-                            "condition": "Only KO'd characters and zombies.",
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 8
-                        }
-                    ],
+                    "damage_id": 8,
+                    "attack_type": "heal",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 8,
+                        "condition": "Only KO'd characters and zombies.",
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 8
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -4363,9 +4197,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Revives a KO'd character.",
@@ -4411,23 +4243,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 10,
-                            "condition": "Only KO'd characters and zombies.",
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 9,
+                    "attack_type": "heal",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 9,
+                        "condition": "Only KO'd characters and zombies.",
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -4460,9 +4290,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 7,
         "expert_grid_char_id": 2,
         "description": "Revives a KO'd character and fully restores HP.",
@@ -4508,23 +4336,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 11,
-                            "condition": "If 'haste' was successfully inflicted.",
-                            "attack_type": "heal",
-                            "target_class": "ctb",
-                            "damage_type": "magical",
-                            "damage_formula": "ctb-current",
-                            "damage_constant": 8
-                        }
-                    ],
+                    "damage_id": 10,
+                    "attack_type": "heal",
+                    "damage_type": "magical",
+                    "hp": null,
+                    "mp": null,
+                    "ctb": {
+                        "class_damage_id": 10,
+                        "condition": "If 'haste' was successfully inflicted.",
+                        "damage_formula": "ctb-current",
+                        "damage_constant": 8
+                    },
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -4557,9 +4383,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 1,
         "expert_grid_char_id": 1,
         "description": "Speeds up one character.",
@@ -4605,23 +4429,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 11,
-                            "condition": "If 'haste' was successfully inflicted.",
-                            "attack_type": "heal",
-                            "target_class": "ctb",
-                            "damage_type": "magical",
-                            "damage_formula": "ctb-current",
-                            "damage_constant": 8
-                        }
-                    ],
+                    "damage_id": 10,
+                    "attack_type": "heal",
+                    "damage_type": "magical",
+                    "hp": null,
+                    "mp": null,
+                    "ctb": {
+                        "class_damage_id": 10,
+                        "condition": "If 'haste' was successfully inflicted.",
+                        "damage_formula": "ctb-current",
+                        "damage_constant": 8
+                    },
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -4654,9 +4476,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 1,
         "expert_grid_char_id": 1,
         "description": "Speeds up party.",
@@ -4701,23 +4521,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 12,
-                            "condition": "If 'slow' was successfully inflicted.",
-                            "attack_type": "attack",
-                            "target_class": "ctb",
-                            "damage_type": "magical",
-                            "damage_formula": "ctb-current",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 11,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": null,
+                    "mp": null,
+                    "ctb": {
+                        "class_damage_id": 11,
+                        "condition": "If 'slow' was successfully inflicted.",
+                        "damage_formula": "ctb-current",
+                        "damage_constant": 16
+                    },
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -4750,9 +4568,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 1,
         "expert_grid_char_id": 1,
         "description": "Slows an enemy down.",
@@ -4797,23 +4613,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 12,
-                            "condition": "If 'slow' was successfully inflicted.",
-                            "attack_type": "attack",
-                            "target_class": "ctb",
-                            "damage_type": "magical",
-                            "damage_formula": "ctb-current",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 11,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": null,
+                    "mp": null,
+                    "ctb": {
+                        "class_damage_id": 11,
+                        "condition": "If 'slow' was successfully inflicted.",
+                        "damage_formula": "ctb-current",
+                        "damage_constant": 16
+                    },
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -4846,9 +4660,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 1,
         "expert_grid_char_id": 1,
         "description": "Slows all enemies down.",
@@ -4923,9 +4735,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Raises a character's Magic Defense.",
@@ -5001,9 +4811,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Raises a character's Defense.",
@@ -5079,9 +4887,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Target reflects spells towards enemy.",
@@ -5163,9 +4969,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Negates all spell effects on an enemy.",
@@ -5240,9 +5044,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Target gradually recovers HP for a time.",
@@ -5287,18 +5089,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 5,
-                    "damage_calc": [
-                        {
-                            "id": 13,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 100
-                        }
-                    ],
+                    "damage_id": 12,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 12,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 100
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -5327,9 +5128,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 2,
         "description": "Deals holy damage to an enemy.",
@@ -5403,9 +5202,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 4,
-        "open_submenu_id": null,
         "std_grid_char_id": 2,
         "expert_grid_char_id": 7,
         "description": "Target is automatically revived once when KO'd.",
@@ -5444,23 +5241,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 14,
-                            "condition": "When character with auto-life status is KO'd.",
-                            "attack_type": "heal",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "percentage-max",
-                            "damage_constant": 4
-                        }
-                    ],
+                    "damage_id": 13,
+                    "attack_type": "heal",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 13,
+                        "condition": "When character with auto-life status is KO'd.",
+                        "damage_formula": "percentage-max",
+                        "damage_constant": 4
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 0,
@@ -5492,11 +5287,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": null,
         "effect": "Revives a KO'd character with a quarter of their max HP.",
         "related_stats": [],
@@ -5581,11 +5371,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": null,
         "effect": "Grants NulBlaze, NulShock, NulTide, and NulFrost to party.",
         "related_stats": [],
@@ -5621,18 +5406,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 6,
-                    "damage_calc": [
-                        {
-                            "id": 15,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 14,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 14,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -5661,9 +5445,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals fire damage to an enemy.",
@@ -5709,18 +5491,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 7,
-                    "damage_calc": [
-                        {
-                            "id": 15,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 15,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 14,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -5749,9 +5530,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals lightning damage to an enemy.",
@@ -5797,18 +5576,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 8,
-                    "damage_calc": [
-                        {
-                            "id": 15,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 16,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 14,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -5837,9 +5615,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals water damage to an enemy.",
@@ -5885,18 +5661,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 9,
-                    "damage_calc": [
-                        {
-                            "id": 15,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 12
-                        }
-                    ],
+                    "damage_id": 17,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 14,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 12
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -5925,9 +5700,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals ice damage to an enemy.",
@@ -5973,18 +5746,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 6,
-                    "damage_calc": [
-                        {
-                            "id": 16,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 24
-                        }
-                    ],
+                    "damage_id": 18,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 15,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 24
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -6013,9 +5785,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals fire damage to an enemy.",
@@ -6062,18 +5832,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 7,
-                    "damage_calc": [
-                        {
-                            "id": 16,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 24
-                        }
-                    ],
+                    "damage_id": 19,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 15,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 24
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -6102,9 +5871,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals lightning damage to an enemy.",
@@ -6151,18 +5918,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 8,
-                    "damage_calc": [
-                        {
-                            "id": 16,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 24
-                        }
-                    ],
+                    "damage_id": 20,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 15,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 24
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -6191,9 +5957,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals water damage to an enemy.",
@@ -6240,18 +6004,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 9,
-                    "damage_calc": [
-                        {
-                            "id": 16,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 24
-                        }
-                    ],
+                    "damage_id": 21,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 15,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 24
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -6280,9 +6043,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals ice damage to an enemy.",
@@ -6329,18 +6090,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 6,
-                    "damage_calc": [
-                        {
-                            "id": 17,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 42
-                        }
-                    ],
+                    "damage_id": 22,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 16,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 42
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -6369,9 +6129,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals fire damage to an enemy.",
@@ -6418,18 +6176,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 7,
-                    "damage_calc": [
-                        {
-                            "id": 17,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 42
-                        }
-                    ],
+                    "damage_id": 23,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 16,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 42
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -6458,9 +6215,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals lightning damage to an enemy.",
@@ -6507,18 +6262,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 8,
-                    "damage_calc": [
-                        {
-                            "id": 17,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 42
-                        }
-                    ],
+                    "damage_id": 24,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 16,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 42
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -6547,9 +6301,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals water damage to an enemy.",
@@ -6596,18 +6348,17 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 9,
-                    "damage_calc": [
-                        {
-                            "id": 17,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 42
-                        }
-                    ],
+                    "damage_id": 25,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 16,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 42
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
@@ -6636,9 +6387,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Deals ice damage to an enemy.",
@@ -6715,9 +6464,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Poisons an enemy.",
@@ -6763,23 +6510,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 18,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "percentage-current",
-                            "damage_constant": 4
-                        }
-                    ],
+                    "damage_id": 26,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 17,
+                        "condition": null,
+                        "damage_formula": "percentage-current",
+                        "damage_constant": 4
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 10,
@@ -6802,9 +6547,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Reduces HP of all enemies by 1/4.",
@@ -6879,9 +6622,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 4,
         "description": "Can instantly KO an enemy.",
@@ -6927,23 +6668,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 19,
-                            "condition": null,
-                            "attack_type": "absorb",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 20
-                        }
-                    ],
+                    "damage_id": 27,
+                    "attack_type": "absorb",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 18,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 20
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 10,
@@ -6967,9 +6706,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 3,
         "expert_grid_char_id": 3,
         "description": "Absorb HP from an enemy.",
@@ -7016,23 +6753,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 4,
-                    "damage_calc": [
-                        {
-                            "id": 20,
-                            "condition": null,
-                            "attack_type": "absorb",
-                            "target_class": "mp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 10
-                        }
-                    ],
+                    "damage_id": 28,
+                    "attack_type": "absorb",
+                    "damage_type": "magical",
+                    "hp": null,
+                    "mp": {
+                        "class_damage_id": 19,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 10
+                    },
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": null,
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 10,
@@ -7056,9 +6791,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 3,
         "expert_grid_char_id": 3,
         "description": "Absorb MP from an enemy.",
@@ -7105,23 +6838,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 21,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 60
-                        }
-                    ],
+                    "damage_id": 29,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 20,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 60
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 10,
@@ -7145,9 +6876,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 4,
         "expert_grid_char_id": 7,
         "description": "Deals non-elemental damage to an enemy.",
@@ -7194,23 +6923,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 22,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "mag-vs-mdf",
-                            "damage_constant": 70
-                        }
-                    ],
+                    "damage_id": 30,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 21,
+                        "condition": null,
+                        "damage_formula": "mag-vs-mdf",
+                        "damage_constant": 70
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 10,
@@ -7233,9 +6960,7 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
         "submenu_id": 5,
-        "open_submenu_id": null,
         "std_grid_char_id": 5,
         "expert_grid_char_id": 4,
         "description": "Deals non-elemental damage to an enemy.",
@@ -7281,23 +7006,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 23,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 8
-                        }
-                    ],
+                    "damage_id": 31,
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 22,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 8
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -7323,10 +7046,6 @@
             }
         ],
         "topmenu_id": 1,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": "Damages an enemy and delays its turn.",
         "effect": "Deals unblockable ranged physical damage and weak Delay to one enemy.",
         "related_stats": [],
@@ -7362,23 +7081,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 24,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "special",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 17
-                        }
-                    ],
+                    "damage_id": 32,
+                    "attack_type": "attack",
+                    "damage_type": "special",
+                    "hp": {
+                        "class_damage_id": 23,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 17
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -7400,10 +7117,6 @@
             }
         ],
         "topmenu_id": 1,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": "Damages an enemy.",
         "effect": "Deals unblockable ranged special damage to one enemy.",
         "related_stats": [],
@@ -7439,23 +7152,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 33,
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -7487,10 +7198,6 @@
             }
         ],
         "topmenu_id": 1,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": "Damages an enemy and negates all spell effects.",
         "effect": "Deals unblockable ranged physical damage to one enemy and removes all positive status effects from it.",
         "related_stats": [],
@@ -7526,23 +7233,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 25,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 17
-                        }
-                    ],
+                    "damage_id": 34,
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 23,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 17
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -7573,10 +7278,6 @@
             }
         ],
         "topmenu_id": 1,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": "Deals unblockable ranged physical damage to one enemy and inflicts Threaten.",
         "effect": "Damages an enemy and delays its movement.",
         "related_stats": [],
@@ -7612,23 +7313,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 1,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 16
-                        }
-                    ],
+                    "damage_id": 33,
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 1,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 16
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 50,
@@ -7650,10 +7349,6 @@
             }
         ],
         "topmenu_id": 1,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": "Damages all enemies.",
         "effect": "Deals unblockable ranged physical damage to all enemies.",
         "related_stats": [],
@@ -7689,23 +7384,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 3,
-                    "damage_calc": [
-                        {
-                            "id": 26,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "magical",
-                            "damage_formula": "special-magic",
-                            "damage_constant": 20
-                        }
-                    ],
+                    "damage_id": 35,
+                    "attack_type": "attack",
+                    "damage_type": "magical",
+                    "hp": {
+                        "class_damage_id": 24,
+                        "condition": null,
+                        "damage_formula": "special-magic",
+                        "damage_constant": 20
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": null,
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -7736,10 +7429,6 @@
             }
         ],
         "topmenu_id": 1,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": "Deals damage and Death to an enemy.",
         "effect": "Deals magical damage to one enemy and always inflicts Death on it unless it is immune.",
         "related_stats": [],
@@ -7775,23 +7464,21 @@
                 "based_on_user_attack": false,
                 "range": 1,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 27,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 10
-                        }
-                    ],
+                    "damage_id": 36,
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 25,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 10
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 100,
@@ -7812,11 +7499,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": null,
         "effect": "Deals physical damage to one enemy.",
         "related_stats": [],
@@ -7852,23 +7534,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 28,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 13
-                        }
-                    ],
+                    "damage_id": 37,
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 26,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 13
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 100,
@@ -7889,11 +7569,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": null,
         "effect": "Deals physical damage to one enemy.",
         "related_stats": [],
@@ -7929,23 +7604,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 29,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 18
-                        }
-                    ],
+                    "damage_id": 38,
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 27,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 18
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 100,
@@ -7966,11 +7639,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": null,
         "effect": "Deals physical damage to one enemy.",
         "related_stats": [],
@@ -8006,23 +7674,21 @@
                 "based_on_user_attack": false,
                 "range": 4,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 29,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 18
-                        }
-                    ],
+                    "damage_id": 38,
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 27,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 18
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 100,
@@ -8043,11 +7709,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": null,
         "effect": "Deals physical damage to all enemies.",
         "related_stats": [],
@@ -8118,11 +7779,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": null,
         "effect": "Inflicts Death on all enemies, ignoring immunities.",
         "related_stats": [],
@@ -8158,23 +7814,21 @@
                 "based_on_user_attack": false,
                 "range": 1,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 30,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 21
-                        }
-                    ],
+                    "damage_id": 39,
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 28,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 21
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -8195,11 +7849,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": null,
         "effect": "Deals physical damage to one enemy.",
         "related_stats": [],
@@ -8235,23 +7884,21 @@
                 "based_on_user_attack": false,
                 "range": 1,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 30,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 21
-                        }
-                    ],
+                    "damage_id": 39,
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 28,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 21
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -8272,11 +7919,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": null,
         "effect": "Deals physical damage to one enemy.",
         "related_stats": [],
@@ -8312,23 +7954,21 @@
                 "based_on_user_attack": false,
                 "range": 1,
                 "damage": {
-                    "damage_id": 10,
-                    "damage_calc": [
-                        {
-                            "id": 31,
-                            "condition": null,
-                            "attack_type": "attack",
-                            "target_class": "hp",
-                            "damage_type": "physical",
-                            "damage_formula": "str-vs-def",
-                            "damage_constant": 2
-                        }
-                    ],
+                    "damage_id": 40,
+                    "attack_type": "attack",
+                    "damage_type": "physical",
+                    "hp": {
+                        "class_damage_id": 29,
+                        "condition": null,
+                        "damage_formula": "str-vs-def",
+                        "damage_constant": 2
+                    },
+                    "mp": null,
+                    "ctb": null,
                     "critical": "crit-equip",
                     "critical_plus_val": null,
                     "is_piercing": true,
                     "break_dmg_lmt": "auto-ability",
-                    "element_id": null,
                     "element": null
                 },
                 "shatter_rate": 30,
@@ -8349,11 +7989,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": null,
         "effect": "Deals 15 hits of physical damage to one enemy.",
         "related_stats": [],
@@ -8407,11 +8042,6 @@
                 "modifier_changes": []
             }
         ],
-        "topmenu_id": null,
-        "submenu_id": null,
-        "open_submenu_id": null,
-        "std_grid_char_id": null,
-        "expert_grid_char_id": null,
         "description": null,
         "effect": "The user does nothing, essentially skipping their turn.",
         "related_stats": [],

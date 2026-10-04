@@ -56,7 +56,11 @@ func compareAccuracies(test test, fieldName string, exp expAccuracy, got Accurac
 }
 
 type expDamage struct {
-	damageCalc      []expAbilityDamage
+	attackType      database.AttackType
+	damageType      database.DamageType
+	hp              *expClassDamage
+	mp              *expClassDamage
+	ctb             *expClassDamage
 	critical        *string
 	criticalPlusVal *int32
 	isPiercing      bool
@@ -65,7 +69,11 @@ type expDamage struct {
 }
 
 func compareDamages(test test, fieldName string, exp expDamage, got Damage) {
-	compTestStructSlices(test, "damage calc", exp.damageCalc, got.DamageCalc, compareAbilityDamages)
+	compare(test, fieldName+" attack type", string(exp.attackType), got.AttackType)
+	compare(test, fieldName+" damage type", string(exp.damageType), got.DamageType)
+	compTestStructPtrs(test, fieldName+" hp", exp.hp, got.HP, compareClassDamages)
+	compTestStructPtrs(test, fieldName+" mp", exp.mp, got.MP, compareClassDamages)
+	compTestStructPtrs(test, fieldName+" ctb", exp.ctb, got.CTB, compareClassDamages)
 	compare(test, fieldName+" critical", exp.critical, got.Critical)
 	compare(test, fieldName+" criticalPlusVal", exp.criticalPlusVal, got.CriticalPlusVal)
 	compare(test, fieldName+" is piercing", exp.isPiercing, got.IsPiercing)
@@ -73,24 +81,18 @@ func compareDamages(test test, fieldName string, exp expDamage, got Damage) {
 	compIdApiResourcePtrs(test, fieldName+" element", test.cfg.e.elements.endpoint, exp.element, got.Element)
 }
 
-type expAbilityDamage struct {
-	attackType     database.AttackType
-	targetClass    database.TargetClass
-	damageType     database.DamageType
+type expClassDamage struct {
 	damageFormula  database.DamageFormula
 	damageConstant int32
 }
 
-func compareAbilityDamages(test test, fieldName string, exp expAbilityDamage, got AbilityDamage) {
-	compare(test, fieldName+" - ad attack type", string(exp.attackType), got.AttackType)
-	compare(test, fieldName+" - ad target class", string(exp.targetClass), got.TargetClass)
-	compare(test, fieldName+" - ad damage type", string(exp.damageType), got.DamageType)
-	compare(test, fieldName+" - ad damage formula", string(exp.damageFormula), got.DamageFormula)
-	compare(test, fieldName+" - ad damage constant", exp.damageConstant, got.DamageConstant)
+func compareClassDamages(test test, fieldName string, exp expClassDamage, got ClassDamage) {
+	compare(test, fieldName+" - damage formula", string(exp.damageFormula), got.DamageFormula)
+	compare(test, fieldName+" - damage constant", exp.damageConstant, got.DamageConstant)
 }
 
 type expInflictedDelay struct {
-	delayStrength  string
+	delayStrength string
 }
 
 func compareInflictedDelays(test test, fieldName string, exp expInflictedDelay, got InflictedDelay) {

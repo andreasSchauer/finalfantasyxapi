@@ -81535,7 +81535,7 @@
                 {
                     "id": 314,
                     "auto_ability_id": 38,
-                    "ability": "evade \u0026 counter",
+                    "ability": "evade & counter",
                     "characters": [],
                     "is_forced": false,
                     "probability": 3,
@@ -93104,7 +93104,7 @@
                 {
                     "id": 348,
                     "auto_ability_id": 46,
-                    "ability": "overdrive -\u003e ap",
+                    "ability": "overdrive -> ap",
                     "characters": [],
                     "is_forced": false,
                     "probability": 2,
@@ -96338,7 +96338,7 @@
                 {
                     "id": 365,
                     "auto_ability_id": 46,
-                    "ability": "overdrive -\u003e ap",
+                    "ability": "overdrive -> ap",
                     "characters": [],
                     "is_forced": false,
                     "probability": 1,
@@ -97535,7 +97535,7 @@
                 {
                     "id": 374,
                     "auto_ability_id": 38,
-                    "ability": "evade \u0026 counter",
+                    "ability": "evade & counter",
                     "characters": [],
                     "is_forced": false,
                     "probability": 2,

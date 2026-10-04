@@ -583,7 +583,7 @@
             "name": "dragoon lance",
             "abilities": [
                 "magic counter",
-                "evade \u0026 counter"
+                "evade & counter"
             ],
             "empty_slots_amount": 2
         }
@@ -5455,7 +5455,7 @@
             "equipment_name_id": 165,
             "name": "rematch",
             "abilities": [
-                "evade \u0026 counter"
+                "evade & counter"
             ],
             "empty_slots_amount": 0
         }

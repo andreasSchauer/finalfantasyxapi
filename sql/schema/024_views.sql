@@ -988,11 +988,14 @@ SELECT DISTINCT
     d.critical,
     d.break_dmg_limit,
     d.element_id,
-    ad.attack_type,
-    ad.target_class,
-    ad.damage_type,
-    ad.damage_formula,
-    ad.damage_constant,
+    d.attack_type,
+    d.damage_type,
+    hpd.damage_formula AS hp_damage_formula,
+    hpd.damage_constant AS hp_damage_constant,
+    mpd.damage_formula AS mp_damage_formula,
+    mpd.damage_constant AS mp_damage_constant,
+    ctbd.damage_formula AS ctb_damage_formula,
+    ctbd.damage_constant AS ctb_damage_constant,
     idl.condition AS delay_condition,
     idl.delay_strength,
     jab.status_condition_id AS affected_status_id,
@@ -1007,8 +1010,9 @@ LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
 LEFT JOIN damages d ON jd.damage_id = d.id
-LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
-LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN class_damages hpd ON d.hp_class_id = hpd.id
+LEFT JOIN class_damages mpd ON d.mp_class_id = mpd.id
+LEFT JOIN class_damages ctbd ON d.ctb_class_id = ctbd.id
 LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id
@@ -1035,11 +1039,14 @@ SELECT DISTINCT
     d.critical,
     d.break_dmg_limit,
     d.element_id,
-    ad.attack_type,
-    ad.target_class,
-    ad.damage_type,
-    ad.damage_formula,
-    ad.damage_constant,
+    d.attack_type,
+    d.damage_type,
+    hpd.damage_formula AS hp_damage_formula,
+    hpd.damage_constant AS hp_damage_constant,
+    mpd.damage_formula AS mp_damage_formula,
+    mpd.damage_constant AS mp_damage_constant,
+    ctbd.damage_formula AS ctb_damage_formula,
+    ctbd.damage_constant AS ctb_damage_constant,
     idl.condition AS delay_condition,
     idl.delay_strength,
     jab.status_condition_id AS affected_status_id,
@@ -1054,8 +1061,9 @@ LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
 LEFT JOIN damages d ON jd.damage_id = d.id
-LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
-LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN class_damages hpd ON d.hp_class_id = hpd.id
+LEFT JOIN class_damages mpd ON d.mp_class_id = mpd.id
+LEFT JOIN class_damages ctbd ON d.ctb_class_id = ctbd.id
 LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id
@@ -1082,11 +1090,14 @@ SELECT DISTINCT
     d.critical,
     d.break_dmg_limit,
     d.element_id,
-    ad.attack_type,
-    ad.target_class,
-    ad.damage_type,
-    ad.damage_formula,
-    ad.damage_constant,
+    d.attack_type,
+    d.damage_type,
+    hpd.damage_formula AS hp_damage_formula,
+    hpd.damage_constant AS hp_damage_constant,
+    mpd.damage_formula AS mp_damage_formula,
+    mpd.damage_constant AS mp_damage_constant,
+    ctbd.damage_formula AS ctb_damage_formula,
+    ctbd.damage_constant AS ctb_damage_constant,
     idl.condition AS delay_condition,
     idl.delay_strength,
     jab.status_condition_id AS affected_status_id,
@@ -1101,8 +1112,9 @@ LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
 LEFT JOIN damages d ON jd.damage_id = d.id
-LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
-LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN class_damages hpd ON d.hp_class_id = hpd.id
+LEFT JOIN class_damages mpd ON d.mp_class_id = mpd.id
+LEFT JOIN class_damages ctbd ON d.ctb_class_id = ctbd.id
 LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id
@@ -1129,11 +1141,14 @@ SELECT DISTINCT
     d.critical,
     d.break_dmg_limit,
     d.element_id,
-    ad.attack_type,
-    ad.target_class,
-    ad.damage_type,
-    ad.damage_formula,
-    ad.damage_constant,
+    d.attack_type,
+    d.damage_type,
+    hpd.damage_formula AS hp_damage_formula,
+    hpd.damage_constant AS hp_damage_constant,
+    mpd.damage_formula AS mp_damage_formula,
+    mpd.damage_constant AS mp_damage_constant,
+    ctbd.damage_formula AS ctb_damage_formula,
+    ctbd.damage_constant AS ctb_damage_constant,
     idl.condition AS delay_condition,
     idl.delay_strength,
     jab.status_condition_id AS affected_status_id,
@@ -1148,8 +1163,9 @@ LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
 LEFT JOIN damages d ON jd.damage_id = d.id
-LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
-LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN class_damages hpd ON d.hp_class_id = hpd.id
+LEFT JOIN class_damages mpd ON d.mp_class_id = mpd.id
+LEFT JOIN class_damages ctbd ON d.ctb_class_id = ctbd.id
 LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id
@@ -1176,11 +1192,14 @@ SELECT DISTINCT
     d.critical,
     d.break_dmg_limit,
     d.element_id,
-    ad.attack_type,
-    ad.target_class,
-    ad.damage_type,
-    ad.damage_formula,
-    ad.damage_constant,
+    d.attack_type,
+    d.damage_type,
+    hpd.damage_formula AS hp_damage_formula,
+    hpd.damage_constant AS hp_damage_constant,
+    mpd.damage_formula AS mp_damage_formula,
+    mpd.damage_constant AS mp_damage_constant,
+    ctbd.damage_formula AS ctb_damage_formula,
+    ctbd.damage_constant AS ctb_damage_constant,
     idl.condition AS delay_condition,
     idl.delay_strength,
     jab.status_condition_id AS affected_status_id,
@@ -1195,8 +1214,9 @@ LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
 LEFT JOIN damages d ON jd.damage_id = d.id
-LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
-LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN class_damages hpd ON d.hp_class_id = hpd.id
+LEFT JOIN class_damages mpd ON d.mp_class_id = mpd.id
+LEFT JOIN class_damages ctbd ON d.ctb_class_id = ctbd.id
 LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id
@@ -1223,11 +1243,14 @@ SELECT DISTINCT
     d.critical,
     d.break_dmg_limit,
     d.element_id,
-    ad.attack_type,
-    ad.target_class,
-    ad.damage_type,
-    ad.damage_formula,
-    ad.damage_constant,
+    d.attack_type,
+    d.damage_type,
+    hpd.damage_formula AS hp_damage_formula,
+    hpd.damage_constant AS hp_damage_constant,
+    mpd.damage_formula AS mp_damage_formula,
+    mpd.damage_constant AS mp_damage_constant,
+    ctbd.damage_formula AS ctb_damage_formula,
+    ctbd.damage_constant AS ctb_damage_constant,
     idl.condition AS delay_condition,
     idl.delay_strength,
     jab.status_condition_id AS affected_status_id,
@@ -1242,8 +1265,9 @@ LEFT JOIN j_abilities_battle_interactions j ON j.ability_id = a.id
 LEFT JOIN battle_interactions bi ON j.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_damage jd ON jd.ability_id = a.id AND jd.battle_interaction_id = bi.id
 LEFT JOIN damages d ON jd.damage_id = d.id
-LEFT JOIN j_damages_damage_calc jdc ON jdc.ability_id = a.id AND jdc.battle_interaction_id = bi.id AND jdc.damage_id = d.id
-LEFT JOIN ability_damages ad ON jdc.ability_damage_id = ad.id
+LEFT JOIN class_damages hpd ON d.hp_class_id = hpd.id
+LEFT JOIN class_damages mpd ON d.mp_class_id = mpd.id
+LEFT JOIN class_damages ctbd ON d.ctb_class_id = ctbd.id
 LEFT JOIN inflicted_delays idl ON bi.inflicted_delay_id = idl.id
 LEFT JOIN j_battle_interactions_affected_by jab ON jab.ability_id = a.id AND jab.battle_interaction_id = bi.id
 LEFT JOIN j_battle_interactions_inflicted_status_conditions jis ON jis.ability_id = a.id AND jis.battle_interaction_id = bi.id

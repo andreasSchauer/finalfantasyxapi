@@ -2843,49 +2843,6 @@ func (ns NullStatusConditionCategory) Value() (driver.Value, error) {
 	return string(ns.StatusConditionCategory), nil
 }
 
-type TargetClass string
-
-const (
-	TargetClassHp  TargetClass = "hp"
-	TargetClassMp  TargetClass = "mp"
-	TargetClassCtb TargetClass = "ctb"
-)
-
-func (e *TargetClass) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = TargetClass(s)
-	case string:
-		*e = TargetClass(s)
-	default:
-		return fmt.Errorf("unsupported scan type for TargetClass: %T", src)
-	}
-	return nil
-}
-
-type NullTargetClass struct {
-	TargetClass TargetClass
-	Valid       bool // Valid is true if TargetClass is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullTargetClass) Scan(value interface{}) error {
-	if value == nil {
-		ns.TargetClass, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.TargetClass.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullTargetClass) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.TargetClass), nil
-}
-
 type TargetType string
 
 const (
@@ -3183,17 +3140,6 @@ type AbilityAttribute struct {
 	CanCopycat       bool
 }
 
-type AbilityDamage struct {
-	ID             int32
-	DataHash       string
-	Condition      sql.NullString
-	AttackType     AttackType
-	TargetClass    TargetClass
-	DamageType     DamageType
-	DamageFormula  DamageFormula
-	DamageConstant interface{}
-}
-
 type AbilityPool struct {
 	ID               int32
 	DataHash         string
@@ -3389,6 +3335,14 @@ type CharacterClass struct {
 	Category CharacterClassCategory
 }
 
+type ClassDamage struct {
+	ID             int32
+	DataHash       string
+	Condition      sql.NullString
+	DamageFormula  DamageFormula
+	DamageConstant interface{}
+}
+
 type CompletionArea struct {
 	ID           int32
 	DataHash     string
@@ -3418,6 +3372,11 @@ type Cue struct {
 type Damage struct {
 	ID              int32
 	DataHash        string
+	AttackType      AttackType
+	DamageType      DamageType
+	HpClassID       sql.NullInt32
+	MpClassID       sql.NullInt32
+	CtbClassID      sql.NullInt32
 	Critical        NullCriticalType
 	CriticalPlusVal sql.NullInt32
 	IsPiercing      bool
@@ -3790,15 +3749,6 @@ type JCuesArea struct {
 	DataHash       string
 	CueID          int32
 	IncludedAreaID int32
-}
-
-type JDamagesDamageCalc struct {
-	ID                  int32
-	DataHash            string
-	AbilityID           int32
-	BattleInteractionID int32
-	DamageID            int32
-	AbilityDamageID     int32
 }
 
 type JDefaultAbility struct {
@@ -4279,10 +4229,13 @@ type MvAbility struct {
 	BreakDmgLimit     NullBreakDmgLmtType
 	ElementID         sql.NullInt32
 	AttackType        NullAttackType
-	TargetClass       NullTargetClass
 	DamageType        NullDamageType
-	DamageFormula     NullDamageFormula
-	DamageConstant    interface{}
+	HpDamageFormula   NullDamageFormula
+	HpDamageConstant  interface{}
+	MpDamageFormula   NullDamageFormula
+	MpDamageConstant  interface{}
+	CtbDamageFormula  NullDamageFormula
+	CtbDamageConstant interface{}
 	DelayCondition    sql.NullString
 	DelayStrength     NullDelayStrength
 	AffectedStatusID  sql.NullInt32

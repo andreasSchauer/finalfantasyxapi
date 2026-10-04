@@ -1,7 +1,12 @@
 -- name: CreateDamageBulk :many
-INSERT INTO damages (data_hash, critical, critical_plus_val, is_piercing, break_dmg_limit, element_id)
+INSERT INTO damages (data_hash, attack_type, damage_type, hp_class_id, mp_class_id, ctb_class_id, critical, critical_plus_val, is_piercing, break_dmg_limit, element_id)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
+    unnest(sqlc.arg('attack_type')::attack_type[]),
+    unnest(sqlc.arg('damage_type')::damage_type[]),
+    unnest(sqlc.arg('hp_class_id')::null_int[]),
+    unnest(sqlc.arg('mp_class_id')::null_int[]),
+    unnest(sqlc.arg('ctb_class_id')::null_int[]),
     unnest(sqlc.arg('critical')::null_critical_type[]),
     unnest(sqlc.arg('critical_plus_val')::null_int[]),
     unnest(sqlc.arg('is_piercing')::boolean[]),
@@ -11,17 +16,14 @@ ON CONFLICT(data_hash) DO UPDATE SET data_hash = damages.data_hash
 RETURNING id, data_hash;
 
 
--- name: CreateAbilityDamageBulk :many
-INSERT INTO ability_damages (data_hash, condition, attack_type, target_class, damage_type, damage_formula, damage_constant)
+-- name: CreateClassDamageBulk :many
+INSERT INTO class_damages (data_hash, condition, damage_formula, damage_constant)
 SELECT
     unnest(sqlc.arg('data_hash')::text[]),
     unnest(sqlc.arg('condition')::null_string[]),
-    unnest(sqlc.arg('attack_type')::attack_type[]),
-    unnest(sqlc.arg('target_class')::target_class[]),
-    unnest(sqlc.arg('damage_type')::damage_type[]),
     unnest(sqlc.arg('damage_formula')::damage_formula[]),
     unnest(sqlc.arg('damage_constant')::int[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = ability_damages.data_hash
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = class_damages.data_hash
 RETURNING id, data_hash;
 
 
@@ -98,18 +100,6 @@ RETURNING id, data_hash;
 
 
 
-
-
-
--- name: CreateDamagesDamageCalcJunctionBulk :exec
-INSERT INTO j_damages_damage_calc (data_hash, ability_id, battle_interaction_id, damage_id, ability_damage_id)
-SELECT
-    unnest(sqlc.arg('data_hash')::text[]),
-    unnest(sqlc.arg('ability_id')::int[]),
-    unnest(sqlc.arg('battle_interaction_id')::int[]),
-    unnest(sqlc.arg('damage_id')::int[]),
-    unnest(sqlc.arg('ability_damage_id')::int[])
-ON CONFLICT(data_hash) DO NOTHING;
 
 
 -- name: CreateBattleIntDamageJunctionBulk :exec

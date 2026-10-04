@@ -154,7 +154,7 @@ SELECT DISTINCT ability_id FROM mv_abilities WHERE attack_type = ANY(sqlc.narg('
 
 
 -- name: GetAbilityIDsByDamageFormula :many
-SELECT DISTINCT ability_id FROM mv_abilities WHERE damage_formula = sqlc.arg('damage_formula')::damage_formula ORDER BY ability_id;
+SELECT DISTINCT ability_id FROM mv_abilities WHERE sqlc.arg('damage_formula')::damage_formula IN (hp_damage_formula, mp_damage_formula, ctb_damage_formula) ORDER BY ability_id;
 
 
 
@@ -373,7 +373,7 @@ ORDER BY typed_id;
 -- name: GetTypedAbilityIDsByDamageFormula :many
 SELECT DISTINCT typed_id
 FROM mv_abilities
-WHERE damage_formula = sqlc.arg('damage_formula')::damage_formula
+WHERE sqlc.arg('damage_formula')::damage_formula IN (hp_damage_formula, mp_damage_formula, ctb_damage_formula)
 AND type = sqlc.arg('type')::ability_type
 ORDER BY typed_id;
 

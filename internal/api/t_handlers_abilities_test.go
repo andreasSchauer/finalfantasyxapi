@@ -52,14 +52,11 @@ func TestGetAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypePhysical,
-								damageFormula:  database.DamageFormulaSpecialNoVar,
-								damageConstant: 12,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaSpecialNoVar,
+							damageConstant: 12,
 						},
 						critical:    nil,
 						isPiercing:  true,
@@ -131,14 +128,11 @@ func TestGetAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeHeal,
-								targetClass:    "ctb",
-								damageType:     database.DamageTypeSpecial,
-								damageFormula:  database.DamageFormulaCtbCurrent,
-								damageConstant: 8,
-							},
+						attackType: database.AttackTypeHeal,
+						damageType: database.DamageTypeSpecial,
+						ctb: &expClassDamage{
+							damageFormula:  database.DamageFormulaCtbCurrent,
+							damageConstant: 8,
 						},
 						critical:    nil,
 						isPiercing:  true,
@@ -187,14 +181,11 @@ func TestGetAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypeMagical,
-								damageFormula:  database.DamageFormulaMagVsMdf,
-								damageConstant: 12,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypeMagical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaMagVsMdf,
+							damageConstant: 12,
 						},
 						critical:    nil,
 						isPiercing:  true,

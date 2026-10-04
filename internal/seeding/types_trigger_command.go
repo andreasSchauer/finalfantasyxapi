@@ -7,10 +7,11 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
+
 type TriggerCommand struct {
-	ID 				   int32			   `json:"id"`
+	ID 				   int32			   `json:"id,omitempty"`
 	Ability
-	TopmenuID          *int32			   `json:"topmenu_id"`
+	TopmenuID          *int32			   `json:"topmenu_id,omitempty"`
 	Description        string              `json:"description"`
 	Effect             string              `json:"effect"`
 	Topmenu            *string             `json:"topmenu"`

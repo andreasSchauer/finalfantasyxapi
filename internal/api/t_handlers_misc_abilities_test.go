@@ -72,14 +72,11 @@ func TestGetMiscAbility(t *testing.T) {
 						accModifier: h.GetFloat32Ptr(1),
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypePhysical,
-								damageFormula:  database.DamageFormulaClstlHpHigh,
-								damageConstant: 16,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaClstlHpHigh,
+							damageConstant: 16,
 						},
 						critical:        h.GetStrPtr("crit-equip"),
 						criticalPlusVal: nil,
@@ -129,14 +126,11 @@ func TestGetMiscAbility(t *testing.T) {
 						accModifier: h.GetFloat32Ptr(1),
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypePhysical,
-								damageFormula:  database.DamageFormulaStrVsDef,
-								damageConstant: 18,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaStrVsDef,
+							damageConstant: 18,
 						},
 						critical:        h.GetStrPtr("crit-equip"),
 						criticalPlusVal: nil,
@@ -186,14 +180,11 @@ func TestGetMiscAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypePhysical,
-								damageFormula:  database.DamageFormulaStrVsDef,
-								damageConstant: 14,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaStrVsDef,
+							damageConstant: 14,
 						},
 						critical:        h.GetStrPtr("crit-equip"),
 						criticalPlusVal: nil,

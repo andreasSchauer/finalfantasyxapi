@@ -1,15 +1,11 @@
 package seeding
 
 import (
-	"encoding/json"
-	"os"
 	"path/filepath"
 	"slices"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
-
-
 
 func (l *Lookup) saveCompletedLookups() error {
 	var err error
@@ -77,31 +73,29 @@ func (l *Lookup) saveCompletedLookups() error {
 }
 
 func writeLookupFile[T Lookupable](fileName string, lookup map[int32]T) error {
-	lookupDir, err := h.GetAbsoluteFilepath("data_lookups")
-	if err != nil {
-		return err
+	return h.WriteFile("data_lookups", fileName, lookupToSlice(lookup))
+}
+
+func lookupToSlice[T Lookupable](lookup map[int32]T) []T {
+	var s []T
+
+	for _, obj := range lookup {
+		s = append(s, obj)
 	}
 
-	err = os.MkdirAll(lookupDir, 0755)
-	if err != nil {
-		return err
-	}
+	slices.SortStableFunc(s, func(a, b T) int {
+		if a.GetID() < b.GetID() {
+			return -1
+		}
 
-	slice := lookupToSlice(lookup)
+		if a.GetID() > b.GetID() {
+			return 1
+		}
 
-	jsonBytes, err := json.MarshalIndent(slice, "", "    ")
-	if err != nil {
-		return err
-	}
+		return 0
+	})
 
-	destPath := filepath.Join(lookupDir, fileName)
-
-	err = os.WriteFile(destPath, jsonBytes, 0644)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return s
 }
 
 func (l *Lookup) assignLookups() error {
@@ -190,29 +184,6 @@ func assignLookup[T Lookupable](fileName string, keyLookup *map[string]T, idLook
 	return nil
 }
 
-
-func lookupToSlice[T Lookupable](lookup map[int32]T) []T {
-	var s []T
-
-	for _, obj := range lookup {
-		s = append(s, obj)
-	}
-
-	slices.SortStableFunc(s, func(a, b T) int {
-		if a.GetID() < b.GetID() {
-			return -1
-		}
-
-		if a.GetID() > b.GetID() {
-			return 1
-		}
-
-		return 0
-	})
-
-	return s
-}
-
 func sliceToKeyLookup[T Lookupable](slice []T) map[string]T {
 	lookup := make(map[string]T, len(slice))
 
@@ -222,7 +193,6 @@ func sliceToKeyLookup[T Lookupable](slice []T) map[string]T {
 
 	return lookup
 }
-
 
 func sliceToIdLookup[T Lookupable](slice []T) map[int32]T {
 	lookup := make(map[int32]T, len(slice))

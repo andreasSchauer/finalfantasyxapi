@@ -7,8 +7,8 @@ import (
 )
 
 type LookupObject struct {
-	Name    string
-	Version *int32
+	Name    string	`json:"name"`
+	Version *int32	`json:"version"`
 }
 
 func (l LookupObject) ToKeyFields() []any {

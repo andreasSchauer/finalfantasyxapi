@@ -137,6 +137,9 @@ func (l *Lookup) prepareBattleInteractions(bis []BattleInteraction) ([]BattleInt
 
 		if bi.InflictedDelay != nil {
 			bi.InflictedDelay.ID, err = l.GetHashID(bi.InflictedDelay)
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		bisNew = append(bisNew, *bi)

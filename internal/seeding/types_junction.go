@@ -39,21 +39,3 @@ func (j ThreeWayJunction) ToHashFields() []any {
 func (j ThreeWayJunction) ToHashFieldsJ(name string) []any {
 	return slices.Concat([]any{name}, j.ToHashFields())
 }
-
-type FourWayJunction struct {
-	GreatGrandparentID int32
-	ThreeWayJunction
-}
-
-func (j FourWayJunction) ToHashFields() []any {
-	return []any{
-		j.GreatGrandparentID,
-		j.GrandparentID,
-		j.ParentID,
-		j.ChildID,
-	}
-}
-
-func (j FourWayJunction) ToHashFieldsJ(name string) []any {
-	return slices.Concat([]any{name}, j.ToHashFields())
-}

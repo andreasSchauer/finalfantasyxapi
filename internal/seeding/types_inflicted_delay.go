@@ -7,7 +7,7 @@ import (
 )
 
 type InflictedDelay struct {
-	ID            int32   `json:"inflicted_delay_id"`
+	ID            int32   `json:"inflicted_delay_id,omitempty"`
 	Condition     *string `json:"condition"`
 	DelayStrength string  `json:"delay_strength"`
 }

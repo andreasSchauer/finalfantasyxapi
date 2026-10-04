@@ -155,14 +155,11 @@ func TestGetTriggerCommand(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypePhysical,
-								damageFormula:  database.DamageFormulaStrVsDef,
-								damageConstant: 16,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaStrVsDef,
+							damageConstant: 16,
 						},
 						critical:        h.GetStrPtr("crit-equip"),
 						criticalPlusVal: nil,

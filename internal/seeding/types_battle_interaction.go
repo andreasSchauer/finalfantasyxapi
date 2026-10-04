@@ -7,11 +7,11 @@ import (
 )
 
 type BattleInteraction struct {
-	ID                        int32				`json:"id"`
+	ID                        int32             `json:"id,omitempty"`
 	Target                    string            `json:"target"`
 	BasedOnUserAttack         bool              `json:"based_on_user_attack"`
 	Range                     *int32            `json:"range"`
-	Damage                    *Damage           `json:"damage"`
+	Damage                    *Damage	        `json:"damage"`
 	ShatterRate               int32             `json:"shatter_rate"`
 	Accuracy                  Accuracy          `json:"accuracy"`
 	AffectedBy                []string          `json:"affected_by"`

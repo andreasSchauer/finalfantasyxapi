@@ -59,7 +59,11 @@ func convertBattleInteraction(cfg *Config, bi seeding.BattleInteraction) BattleI
 }
 
 type Damage struct {
-	DamageCalc      []AbilityDamage   `json:"damage_calc"`
+	AttackType      string            `json:"attack_type"`
+	DamageType      string            `json:"damage_type"`
+	HP              *ClassDamage      `json:"hp"`
+	MP              *ClassDamage      `json:"mp"`
+	CTB             *ClassDamage      `json:"ctb"`
 	Critical        *string           `json:"critical"`
 	CriticalPlusVal *int32            `json:"critical_plus_val,omitempty"`
 	IsPiercing      bool              `json:"is_piercing"`
@@ -69,7 +73,11 @@ type Damage struct {
 
 func convertDamage(cfg *Config, d seeding.Damage) Damage {
 	return Damage{
-		DamageCalc:      convertObjSlice(cfg, d.DamageCalc, convertAbilityDamage),
+		AttackType:      d.AttackType,
+		DamageType:      d.DamageType,
+		HP:              convertObjPtr(cfg, d.HP, convertClassDamage),
+		MP:              convertObjPtr(cfg, d.MP, convertClassDamage),
+		CTB:             convertObjPtr(cfg, d.CTB, convertClassDamage),
 		Critical:        d.Critical,
 		CriticalPlusVal: d.CriticalPlusVal,
 		IsPiercing:      d.IsPiercing,
@@ -78,21 +86,15 @@ func convertDamage(cfg *Config, d seeding.Damage) Damage {
 	}
 }
 
-type AbilityDamage struct {
+type ClassDamage struct {
 	Condition      *string `json:"condition,omitempty"`
-	AttackType     string  `json:"attack_type"`
-	TargetClass    string  `json:"target_class"`
-	DamageType     string  `json:"damage_type"`
 	DamageFormula  string  `json:"damage_formula"`
 	DamageConstant int32   `json:"damage_constant"`
 }
 
-func convertAbilityDamage(cfg *Config, ad seeding.AbilityDamage) AbilityDamage {
-	return AbilityDamage{
+func convertClassDamage(cfg *Config, ad seeding.ClassDamage) ClassDamage {
+	return ClassDamage{
 		Condition:      ad.Condition,
-		AttackType:     ad.AttackType,
-		TargetClass:    ad.TargetClass,
-		DamageType:     ad.DamageType,
 		DamageFormula:  ad.DamageFormula,
 		DamageConstant: ad.DamageConstant,
 	}
@@ -113,14 +115,14 @@ func convertAccuracy(_ *Config, a seeding.Accuracy) Accuracy {
 }
 
 type InflictedDelay struct {
-	Condition      *string `json:"condition,omitempty"`
-	DelayStrength  string  `json:"delay_strength"`
+	Condition     *string `json:"condition,omitempty"`
+	DelayStrength string  `json:"delay_strength"`
 }
 
 func convertInflictedDelay(_ *Config, id seeding.InflictedDelay) InflictedDelay {
 	return InflictedDelay{
-		Condition:      id.Condition,
-		DelayStrength: 	id.DelayStrength,
+		Condition:     id.Condition,
+		DelayStrength: id.DelayStrength,
 	}
 }
 

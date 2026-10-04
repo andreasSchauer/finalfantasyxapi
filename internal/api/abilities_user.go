@@ -164,11 +164,11 @@ func applyBiReplacement(battleInteractions []BattleInteraction, replVals biRepla
 		}
 
 		if replVals.DamageConstant != nil {
-			battleInteraction.Damage.DamageCalc[0].DamageConstant = *replVals.DamageConstant
+			battleInteraction.Damage.HP.DamageConstant = *replVals.DamageConstant
 		}
 
 		if replVals.DamageFormula != nil {
-			battleInteraction.Damage.DamageCalc[0].DamageFormula = *replVals.DamageFormula
+			battleInteraction.Damage.HP.DamageFormula = *replVals.DamageFormula
 		}
 
 		battleInteractions[i] = battleInteraction

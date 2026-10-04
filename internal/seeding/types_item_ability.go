@@ -7,9 +7,9 @@ import (
 )
 
 type ItemAbility struct {
-	ID 			int32		`json:"item_ability_id"`
+	ID 			int32		`json:"item_ability_id,omitempty"`
 	Ability
-	ItemID      int32		`json:"item_id"`
+	ItemID      int32		`json:"item_id,omitempty"`
 	Cursor      string      `json:"cursor"`
 }
 

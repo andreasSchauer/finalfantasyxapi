@@ -2472,7 +2472,7 @@
             "version": null
         },
         "area_id": 98,
-        "notes": "Prices will vary depending on how much money you gave O'aka. \u003c 100 Gil: base price x2; \u003e 100 Gil: base price x1.5; \u003e 1000 Gil: base price x1.2; \u003e 10000 Gil: base price x0.7. Listed are the base prices.",
+        "notes": "Prices will vary depending on how much money you gave O'aka. < 100 Gil: base price x2; > 100 Gil: base price x1.5; > 1000 Gil: base price x1.2; > 10000 Gil: base price x0.7. Listed are the base prices.",
         "category": "oaka",
         "availability": "pre-story",
         "pre_airship": {
@@ -2627,7 +2627,7 @@
             "version": null
         },
         "area_id": 102,
-        "notes": "Prices will vary depending on how much money you gave O'aka. \u003c 100 Gil: base price x2; \u003e 100 Gil: base price x1.5; \u003e 1000 Gil: base price x1.2; \u003e 10000 Gil: base price x0.7. Listed are the base prices.",
+        "notes": "Prices will vary depending on how much money you gave O'aka. < 100 Gil: base price x2; > 100 Gil: base price x1.5; > 1000 Gil: base price x1.2; > 10000 Gil: base price x0.7. Listed are the base prices.",
         "category": "oaka",
         "availability": "pre-story",
         "pre_airship": {
@@ -2815,7 +2815,7 @@
             "version": null
         },
         "area_id": 104,
-        "notes": "Prices will vary depending on how much money you gave O'aka. \u003c 100 Gil: base price x2; \u003e 100 Gil: base price x1.5; \u003e 1000 Gil: base price x1.2; \u003e 10000 Gil: base price x0.7. Listed are the base prices.",
+        "notes": "Prices will vary depending on how much money you gave O'aka. < 100 Gil: base price x2; > 100 Gil: base price x1.5; > 1000 Gil: base price x1.2; > 10000 Gil: base price x0.7. Listed are the base prices.",
         "category": "oaka",
         "availability": "pre-story",
         "pre_airship": {

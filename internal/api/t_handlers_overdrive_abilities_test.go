@@ -49,14 +49,11 @@ func TestGetOverdriveAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypeSpecial,
-								damageFormula:  database.DamageFormulaStrVsDef,
-								damageConstant: 34,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypeSpecial,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaStrVsDef,
+							damageConstant: 34,
 						},
 						critical:        nil,
 						criticalPlusVal: nil,
@@ -106,21 +103,15 @@ func TestGetOverdriveAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeHeal,
-								targetClass:    "hp",
-								damageType:     database.DamageTypeSpecial,
-								damageFormula:  database.DamageFormulaPercentageMax,
-								damageConstant: 16,
-							},
-							{
-								attackType:     database.AttackTypeHeal,
-								targetClass:    "mp",
-								damageType:     database.DamageTypeSpecial,
-								damageFormula:  database.DamageFormulaPercentageMax,
-								damageConstant: 16,
-							},
+						attackType: database.AttackTypeHeal,
+						damageType: database.DamageTypeSpecial,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaPercentageMax,
+							damageConstant: 16,
+						},
+						mp: &expClassDamage{
+							damageFormula:  database.DamageFormulaPercentageMax,
+							damageConstant: 16,
 						},
 						critical:        nil,
 						criticalPlusVal: nil,
@@ -242,14 +233,11 @@ func TestGetOverdriveAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypeSpecial,
-								damageFormula:  database.DamageFormulaStrVsDef,
-								damageConstant: 4,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypeSpecial,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaStrVsDef,
+							damageConstant: 4,
 						},
 						critical:        h.GetStrPtr("crit"),
 						criticalPlusVal: nil,
@@ -279,14 +267,11 @@ func TestGetOverdriveAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypeSpecial,
-								damageFormula:  database.DamageFormulaStrVsDef,
-								damageConstant: 24,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypeSpecial,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaStrVsDef,
+							damageConstant: 24,
 						},
 						critical:        h.GetStrPtr("crit"),
 						criticalPlusVal: nil,

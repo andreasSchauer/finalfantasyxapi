@@ -9,18 +9,15 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func (l *Lookup) loop5SeedAbilityDamages(qtx *database.Queries, ctx context.Context) error {
-	damages, err := l.extractAbilityDamages()
+func (l *Lookup) loop1SeedClassDamages(qtx *database.Queries, ctx context.Context) error {
+	damages, err := l.extractClassDamages()
 	if err != nil {
 		return err
 	}
 
-	params := database.CreateAbilityDamageBulkParams{
+	params := database.CreateClassDamageBulkParams{
 		DataHash:       make([]string, len(damages)),
 		Condition:      make([]sql.NullString, len(damages)),
-		AttackType:     make([]database.AttackType, len(damages)),
-		TargetClass:    make([]database.TargetClass, len(damages)),
-		DamageType:     make([]database.DamageType, len(damages)),
 		DamageFormula:  make([]database.DamageFormula, len(damages)),
 		DamageConstant: make([]int32, len(damages)),
 	}
@@ -28,14 +25,11 @@ func (l *Lookup) loop5SeedAbilityDamages(qtx *database.Queries, ctx context.Cont
 	for i, d := range damages {
 		params.DataHash[i] = generateDataHash(d)
 		params.Condition[i] = h.GetNullString(d.Condition)
-		params.AttackType[i] = database.AttackType(d.AttackType)
-		params.TargetClass[i] = database.TargetClass(d.TargetClass)
-		params.DamageType[i] = database.DamageType(d.DamageType)
 		params.DamageFormula[i] = database.DamageFormula(d.DamageFormula)
 		params.DamageConstant[i] = d.DamageConstant
 	}
 
-	dbRows, err := qtx.CreateAbilityDamageBulk(ctx, params)
+	dbRows, err := qtx.CreateClassDamageBulk(ctx, params)
 	if err != nil {
 		return fmt.Errorf("couldn't create ability damages: %v", err)
 	}
@@ -47,13 +41,13 @@ func (l *Lookup) loop5SeedAbilityDamages(qtx *database.Queries, ctx context.Cont
 	return nil
 }
 
-func (l *Lookup) extractAbilityDamages() ([]AbilityDamage, error) {
-	damages := []AbilityDamage{}
+func (l *Lookup) extractClassDamages() ([]ClassDamage, error) {
+	damages := []ClassDamage{}
 
 	for i := range l.json.playerAbilities {
 		ability := &l.json.playerAbilities[i]
 
-		newDamages, err := l.getAbilityDamages(ability.BattleInteractions)
+		newDamages, err := l.getClassDamages(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -63,7 +57,7 @@ func (l *Lookup) extractAbilityDamages() ([]AbilityDamage, error) {
 	for i := range l.json.overdriveAbilities {
 		ability := &l.json.overdriveAbilities[i]
 
-		newDamages, err := l.getAbilityDamages(ability.BattleInteractions)
+		newDamages, err := l.getClassDamages(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -74,7 +68,7 @@ func (l *Lookup) extractAbilityDamages() ([]AbilityDamage, error) {
 	for i := range l.json.items {
 		item := &l.json.items[i]
 
-		newDamages, err := l.getAbilityDamages(item.BattleInteractions)
+		newDamages, err := l.getClassDamages(item.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -85,7 +79,7 @@ func (l *Lookup) extractAbilityDamages() ([]AbilityDamage, error) {
 	for i := range l.json.triggerCommands {
 		command := &l.json.triggerCommands[i]
 
-		newDamages, err := l.getAbilityDamages(command.BattleInteractions)
+		newDamages, err := l.getClassDamages(command.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -96,7 +90,7 @@ func (l *Lookup) extractAbilityDamages() ([]AbilityDamage, error) {
 	for i := range l.json.miscAbilities {
 		ability := &l.json.miscAbilities[i]
 
-		newDamages, err := l.getAbilityDamages(ability.BattleInteractions)
+		newDamages, err := l.getClassDamages(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -107,7 +101,7 @@ func (l *Lookup) extractAbilityDamages() ([]AbilityDamage, error) {
 	for i := range l.json.enemyAbilities {
 		ability := &l.json.enemyAbilities[i]
 
-		newDamages, err := l.getAbilityDamages(ability.BattleInteractions)
+		newDamages, err := l.getClassDamages(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -118,8 +112,8 @@ func (l *Lookup) extractAbilityDamages() ([]AbilityDamage, error) {
 	return dedupeRows(damages, l.Hashes), nil
 }
 
-func (l *Lookup) getAbilityDamages(battleInteractions []BattleInteraction) ([]AbilityDamage, error) {
-	damages := []AbilityDamage{}
+func (l *Lookup) getClassDamages(battleInteractions []BattleInteraction) ([]ClassDamage, error) {
+	damages := []ClassDamage{}
 
 	for j := range battleInteractions {
 		bi := &battleInteractions[j]
@@ -128,7 +122,17 @@ func (l *Lookup) getAbilityDamages(battleInteractions []BattleInteraction) ([]Ab
 			continue
 		}
 
-		damages = append(damages, bi.Damage.DamageCalc...)
+		if bi.Damage.HP != nil {
+			damages = append(damages, *bi.Damage.HP)
+		}
+
+		if bi.Damage.MP != nil {
+			damages = append(damages, *bi.Damage.MP)
+		}
+
+		if bi.Damage.CTB != nil {
+			damages = append(damages, *bi.Damage.CTB)
+		}
 	}
 
 	return damages, nil

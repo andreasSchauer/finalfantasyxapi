@@ -175,7 +175,7 @@ func (q *Queries) GetAbilityIDsByCanCopycat(ctx context.Context, canCopycat bool
 }
 
 const getAbilityIDsByDamageFormula = `-- name: GetAbilityIDsByDamageFormula :many
-SELECT DISTINCT ability_id FROM mv_abilities WHERE damage_formula = $1::damage_formula ORDER BY ability_id
+SELECT DISTINCT ability_id FROM mv_abilities WHERE $1::damage_formula IN (hp_damage_formula, mp_damage_formula, ctb_damage_formula) ORDER BY ability_id
 `
 
 func (q *Queries) GetAbilityIDsByDamageFormula(ctx context.Context, damageFormula DamageFormula) ([]int32, error) {
@@ -1926,7 +1926,7 @@ func (q *Queries) GetTypedAbilityIDsByCanCopycat(ctx context.Context, arg GetTyp
 const getTypedAbilityIDsByDamageFormula = `-- name: GetTypedAbilityIDsByDamageFormula :many
 SELECT DISTINCT typed_id
 FROM mv_abilities
-WHERE damage_formula = $1::damage_formula
+WHERE $1::damage_formula IN (hp_damage_formula, mp_damage_formula, ctb_damage_formula)
 AND type = $2::ability_type
 ORDER BY typed_id
 `

@@ -10,7 +10,7 @@
         "required_auto_abilities": [
             "break damage limit",
             "triple overdrive",
-            "evade \u0026 counter",
+            "evade & counter",
             "magic counter"
         ],
         "selectable_auto_abilities": [],
@@ -61,7 +61,7 @@
             "break damage limit",
             "triple overdrive",
             "double ap",
-            "evade \u0026 counter"
+            "evade & counter"
         ],
         "selectable_auto_abilities": [],
         "required_slots": null,
@@ -111,7 +111,7 @@
             "break damage limit",
             "triple overdrive",
             "double ap",
-            "evade \u0026 counter"
+            "evade & counter"
         ],
         "selectable_auto_abilities": [],
         "required_slots": null,
@@ -525,7 +525,7 @@
         "priority": 6,
         "required_auto_abilities": [
             "triple ap",
-            "overdrive -\u003e ap",
+            "overdrive -> ap",
             "triple overdrive"
         ],
         "selectable_auto_abilities": [],
@@ -585,7 +585,7 @@
         "priority": 7,
         "required_auto_abilities": [
             "triple overdrive",
-            "overdrive -\u003e ap"
+            "overdrive -> ap"
         ],
         "selectable_auto_abilities": [],
         "required_slots": null,
@@ -934,7 +934,7 @@
         "version": null,
         "priority": 13,
         "required_auto_abilities": [
-            "overdrive -\u003e ap"
+            "overdrive -> ap"
         ],
         "selectable_auto_abilities": [],
         "required_slots": null,
@@ -1637,7 +1637,7 @@
                 "pool_idx": 1,
                 "auto_abilities": [
                     "counterattack",
-                    "evade \u0026 counter"
+                    "evade & counter"
                 ],
                 "req_amount": 1
             }
@@ -1704,7 +1704,7 @@
                 "pool_idx": 1,
                 "auto_abilities": [
                     "counterattack",
-                    "evade \u0026 counter"
+                    "evade & counter"
                 ],
                 "req_amount": 1
             }

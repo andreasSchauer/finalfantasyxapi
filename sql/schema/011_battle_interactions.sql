@@ -20,9 +20,6 @@ CREATE TYPE attack_type AS ENUM ('attack', 'heal', 'absorb');
 CREATE TYPE damage_type AS ENUM ('physical', 'magical', 'special');
 
 
-CREATE TYPE target_class AS ENUM ('hp', 'mp', 'ctb');
-
-
 CREATE TYPE damage_formula AS ENUM ('str-vs-def', 'str-ign-def', 'mag-vs-mdf', 'mag-ign-mdf', 'percentage-current', 'percentage-max', 'healing', 'ctb-current', 'special-no-var', 'special-var', 'special-magic', 'special-gil', 'special-kills', 'special-9999', 'fixed-9999', 'user-max-hp', 'swallowed-a', 'swallowed-b', 'clstl-hp-high', 'clstl-hp-low', 'clstl-mp-high');
 
 
@@ -35,10 +32,25 @@ CREATE TYPE delay_strength AS ENUM ('weak', 'strong');
 CREATE TYPE calculation_type AS ENUM ('added-percentage', 'added-value', 'multiply', 'multiply-highest', 'set-value');
 
 
+-- 1
+CREATE TABLE class_damages (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    data_hash TEXT UNIQUE NOT NULL,
+    condition TEXT,
+    damage_formula damage_formula NOT NULL,
+    damage_constant uint8 NOT NULL
+);
+
+
 -- 2
 CREATE TABLE damages (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     data_hash TEXT UNIQUE NOT NULL,
+    attack_type attack_type NOT NULL,
+    damage_type damage_type NOT NULL,
+    hp_class_id INTEGER REFERENCES class_damages(id),
+    mp_class_id INTEGER REFERENCES class_damages(id),
+    ctb_class_id INTEGER REFERENCES class_damages(id),
     critical critical_type,
     critical_plus_val INTEGER,
     is_piercing BOOLEAN NOT NULL,
@@ -46,18 +58,6 @@ CREATE TABLE damages (
     element_id INTEGER REFERENCES elements(id)
 );
 
-
--- 5
-CREATE TABLE ability_damages (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    data_hash TEXT UNIQUE NOT NULL,
-    condition TEXT,
-    attack_type attack_type NOT NULL,
-    target_class target_class NOT NULL,
-    damage_type damage_type NOT NULL,
-    damage_formula damage_formula NOT NULL,
-    damage_constant uint8 NOT NULL
-);
 
 
 -- 1
@@ -132,10 +132,9 @@ DROP TABLE IF EXISTS inflicted_statusses;
 DROP TABLE IF EXISTS battle_interactions;
 DROP TABLE IF EXISTS inflicted_delays;
 DROP TABLE IF EXISTS ability_accuracies;
-DROP TABLE IF EXISTS ability_damages;
 DROP TABLE IF EXISTS damages;
+DROP TABLE IF EXISTS class_damages;
 DROP TYPE IF EXISTS calculation_type;
-DROP TYPE IF EXISTS target_class;
 DROP TYPE IF EXISTS delay_strength;
 DROP TYPE IF EXISTS duration_type;
 DROP TYPE IF EXISTS damage_formula;

@@ -7,8 +7,8 @@ import (
 )
 
 type InflictedStatus struct {
-	ID                int32	 `json:"inflicted_status_id"`
-	StatusConditionID int32	 `json:"status_condition_id"`
+	ID                int32	 `json:"inflicted_status_id,omitempty"`
+	StatusConditionID int32	 `json:"status_condition_id,omitempty"`
 	StatusCondition   string `json:"name"`
 	Probability       int32  `json:"probability"`
 	DurationType      string `json:"duration_type"`

@@ -7,7 +7,7 @@ import (
 )
 
 type Item struct {
-	ID 					  int32	   `json:"id"`
+	ID 					  int32	   `json:"id,omitempty"`
 	MasterItem
 	ItemAbility
 	Description           string   `json:"description"`

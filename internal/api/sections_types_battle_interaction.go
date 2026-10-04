@@ -45,23 +45,31 @@ func convertBattleInteractionSimple(cfg *Config, bi seeding.BattleInteraction) B
 }
 
 type DamageSimple struct {
-	CanCritical   bool     `json:"can_critical"`
-	BreakDmgLimit *string  `json:"break_dmg_limit,omitempty"`
-	Element       *string  `json:"element,omitempty"`
-	DamageCalc    []string `json:"damage_calc"`
+	AttackType      string   `json:"attack_type"`
+	DamageType      string   `json:"damage_type"`
+	HP				*string	 `json:"hp"`
+	MP				*string	 `json:"mp"`
+	CTB				*string	 `json:"ctb"`
+	CanCritical   	bool     `json:"can_critical"`
+	BreakDmgLimit 	*string  `json:"break_dmg_limit,omitempty"`
+	Element       	*string  `json:"element,omitempty"`
 }
 
 func convertDamageSimple(cfg *Config, d seeding.Damage) DamageSimple {
 	return DamageSimple{
-		CanCritical:   h.PtrIsNotNil(d.Critical),
-		BreakDmgLimit: convertObjPtr(cfg, d.BreakDmgLimit, convertBreakDmgLimitSimple),
-		Element:       d.Element,
-		DamageCalc:    convertObjSlice(cfg, d.DamageCalc, convertDamageCalcSimple),
+		AttackType: 	d.AttackType,
+		DamageType: 	d.DamageType,
+		HP: 			convertObjPtr(cfg, d.HP, convertClassDamageSimple),
+		MP: 			convertObjPtr(cfg, d.MP, convertClassDamageSimple),
+		CTB: 			convertObjPtr(cfg, d.CTB, convertClassDamageSimple),
+		CanCritical:   	h.PtrIsNotNil(d.Critical),
+		BreakDmgLimit: 	convertObjPtr(cfg, d.BreakDmgLimit, convertBreakDmgLimitSimple),
+		Element:       	d.Element,
 	}
 }
 
-func convertDamageCalcSimple(cfg *Config, dc seeding.AbilityDamage) string {
-	return fmt.Sprintf("%s %s (%s), formula: %s, power: %d", dc.AttackType, dc.TargetClass, dc.DamageType, dc.DamageFormula, dc.DamageConstant)
+func convertClassDamageSimple(cfg *Config, dc seeding.ClassDamage) string {
+	return fmt.Sprintf("formula: %s, power: %d", dc.DamageFormula, dc.DamageConstant)
 }
 
 func convertBreakDmgLimitSimple(_ *Config, breakDmgLimit string) string {

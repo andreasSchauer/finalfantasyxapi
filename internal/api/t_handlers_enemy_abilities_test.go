@@ -51,14 +51,11 @@ func TestGetEnemyAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypePhysical,
-								damageFormula:  database.DamageFormulaStrVsDef,
-								damageConstant: 16,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaStrVsDef,
+							damageConstant: 16,
 						},
 						critical:        h.GetStrPtr("crit-ability"),
 						criticalPlusVal: h.GetInt32Ptr(25),
@@ -107,14 +104,11 @@ func TestGetEnemyAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypeSpecial,
-								damageFormula:  database.DamageFormulaSpecialKills,
-								damageConstant: 100,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypeSpecial,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaSpecialKills,
+							damageConstant: 100,
 						},
 						critical:        nil,
 						criticalPlusVal: nil,

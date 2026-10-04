@@ -20,6 +20,8 @@ func LoadDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		return nil, err
 	}
 
+	// if schema needs to be converted to something else, do it here (use h.ConvertJsonData)
+
 	dataHash, err := getRawDataHash()
 	if err != nil {
 		return nil, err

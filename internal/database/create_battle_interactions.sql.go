@@ -63,66 +63,6 @@ func (q *Queries) CreateAbilityAccuracyBulk(ctx context.Context, arg CreateAbili
 	return items, nil
 }
 
-const createAbilityDamageBulk = `-- name: CreateAbilityDamageBulk :many
-INSERT INTO ability_damages (data_hash, condition, attack_type, target_class, damage_type, damage_formula, damage_constant)
-SELECT
-    unnest($1::text[]),
-    unnest($2::null_string[]),
-    unnest($3::attack_type[]),
-    unnest($4::target_class[]),
-    unnest($5::damage_type[]),
-    unnest($6::damage_formula[]),
-    unnest($7::int[])
-ON CONFLICT(data_hash) DO UPDATE SET data_hash = ability_damages.data_hash
-RETURNING id, data_hash
-`
-
-type CreateAbilityDamageBulkParams struct {
-	DataHash       []string
-	Condition      []sql.NullString
-	AttackType     []AttackType
-	TargetClass    []TargetClass
-	DamageType     []DamageType
-	DamageFormula  []DamageFormula
-	DamageConstant []int32
-}
-
-type CreateAbilityDamageBulkRow struct {
-	ID       int32
-	DataHash string
-}
-
-func (q *Queries) CreateAbilityDamageBulk(ctx context.Context, arg CreateAbilityDamageBulkParams) ([]CreateAbilityDamageBulkRow, error) {
-	rows, err := q.db.QueryContext(ctx, createAbilityDamageBulk,
-		pq.Array(arg.DataHash),
-		pq.Array(arg.Condition),
-		pq.Array(arg.AttackType),
-		pq.Array(arg.TargetClass),
-		pq.Array(arg.DamageType),
-		pq.Array(arg.DamageFormula),
-		pq.Array(arg.DamageConstant),
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []CreateAbilityDamageBulkRow
-	for rows.Next() {
-		var i CreateAbilityDamageBulkRow
-		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const createBattleIntAffectedByJunctionBulk = `-- name: CreateBattleIntAffectedByJunctionBulk :exec
 INSERT INTO j_battle_interactions_affected_by (data_hash, ability_id, battle_interaction_id, status_condition_id)
 SELECT
@@ -378,21 +318,82 @@ func (q *Queries) CreateBattleInteractionBulk(ctx context.Context, arg CreateBat
 	return items, nil
 }
 
-const createDamageBulk = `-- name: CreateDamageBulk :many
-INSERT INTO damages (data_hash, critical, critical_plus_val, is_piercing, break_dmg_limit, element_id)
+const createClassDamageBulk = `-- name: CreateClassDamageBulk :many
+INSERT INTO class_damages (data_hash, condition, damage_formula, damage_constant)
 SELECT
     unnest($1::text[]),
-    unnest($2::null_critical_type[]),
-    unnest($3::null_int[]),
-    unnest($4::boolean[]),
-    unnest($5::null_break_dmg_lmt_type[]),
-    unnest($6::null_int[])
+    unnest($2::null_string[]),
+    unnest($3::damage_formula[]),
+    unnest($4::int[])
+ON CONFLICT(data_hash) DO UPDATE SET data_hash = class_damages.data_hash
+RETURNING id, data_hash
+`
+
+type CreateClassDamageBulkParams struct {
+	DataHash       []string
+	Condition      []sql.NullString
+	DamageFormula  []DamageFormula
+	DamageConstant []int32
+}
+
+type CreateClassDamageBulkRow struct {
+	ID       int32
+	DataHash string
+}
+
+func (q *Queries) CreateClassDamageBulk(ctx context.Context, arg CreateClassDamageBulkParams) ([]CreateClassDamageBulkRow, error) {
+	rows, err := q.db.QueryContext(ctx, createClassDamageBulk,
+		pq.Array(arg.DataHash),
+		pq.Array(arg.Condition),
+		pq.Array(arg.DamageFormula),
+		pq.Array(arg.DamageConstant),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CreateClassDamageBulkRow
+	for rows.Next() {
+		var i CreateClassDamageBulkRow
+		if err := rows.Scan(&i.ID, &i.DataHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const createDamageBulk = `-- name: CreateDamageBulk :many
+INSERT INTO damages (data_hash, attack_type, damage_type, hp_class_id, mp_class_id, ctb_class_id, critical, critical_plus_val, is_piercing, break_dmg_limit, element_id)
+SELECT
+    unnest($1::text[]),
+    unnest($2::attack_type[]),
+    unnest($3::damage_type[]),
+    unnest($4::null_int[]),
+    unnest($5::null_int[]),
+    unnest($6::null_int[]),
+    unnest($7::null_critical_type[]),
+    unnest($8::null_int[]),
+    unnest($9::boolean[]),
+    unnest($10::null_break_dmg_lmt_type[]),
+    unnest($11::null_int[])
 ON CONFLICT(data_hash) DO UPDATE SET data_hash = damages.data_hash
 RETURNING id, data_hash
 `
 
 type CreateDamageBulkParams struct {
 	DataHash        []string
+	AttackType      []AttackType
+	DamageType      []DamageType
+	HpClassID       []sql.NullInt32
+	MpClassID       []sql.NullInt32
+	CtbClassID      []sql.NullInt32
 	Critical        []NullCriticalType
 	CriticalPlusVal []sql.NullInt32
 	IsPiercing      []bool
@@ -408,6 +409,11 @@ type CreateDamageBulkRow struct {
 func (q *Queries) CreateDamageBulk(ctx context.Context, arg CreateDamageBulkParams) ([]CreateDamageBulkRow, error) {
 	rows, err := q.db.QueryContext(ctx, createDamageBulk,
 		pq.Array(arg.DataHash),
+		pq.Array(arg.AttackType),
+		pq.Array(arg.DamageType),
+		pq.Array(arg.HpClassID),
+		pq.Array(arg.MpClassID),
+		pq.Array(arg.CtbClassID),
 		pq.Array(arg.Critical),
 		pq.Array(arg.CriticalPlusVal),
 		pq.Array(arg.IsPiercing),
@@ -433,36 +439,6 @@ func (q *Queries) CreateDamageBulk(ctx context.Context, arg CreateDamageBulkPara
 		return nil, err
 	}
 	return items, nil
-}
-
-const createDamagesDamageCalcJunctionBulk = `-- name: CreateDamagesDamageCalcJunctionBulk :exec
-INSERT INTO j_damages_damage_calc (data_hash, ability_id, battle_interaction_id, damage_id, ability_damage_id)
-SELECT
-    unnest($1::text[]),
-    unnest($2::int[]),
-    unnest($3::int[]),
-    unnest($4::int[]),
-    unnest($5::int[])
-ON CONFLICT(data_hash) DO NOTHING
-`
-
-type CreateDamagesDamageCalcJunctionBulkParams struct {
-	DataHash            []string
-	AbilityID           []int32
-	BattleInteractionID []int32
-	DamageID            []int32
-	AbilityDamageID     []int32
-}
-
-func (q *Queries) CreateDamagesDamageCalcJunctionBulk(ctx context.Context, arg CreateDamagesDamageCalcJunctionBulkParams) error {
-	_, err := q.db.ExecContext(ctx, createDamagesDamageCalcJunctionBulk,
-		pq.Array(arg.DataHash),
-		pq.Array(arg.AbilityID),
-		pq.Array(arg.BattleInteractionID),
-		pq.Array(arg.DamageID),
-		pq.Array(arg.AbilityDamageID),
-	)
-	return err
 }
 
 const createInflictedDelayBulk = `-- name: CreateInflictedDelayBulk :many

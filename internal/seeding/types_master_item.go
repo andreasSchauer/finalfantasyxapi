@@ -7,9 +7,9 @@ import (
 )
 
 type MasterItem struct {
-	ID   int32				`json:"master_item_id"`
+	ID   int32				`json:"master_item_id,omitempty"`
 	Name string 			`json:"name"`
-	Type database.ItemType	`json:"type"`
+	Type database.ItemType	`json:"type,omitempty"`
 }
 
 func (i MasterItem) ToHashFields() []any {

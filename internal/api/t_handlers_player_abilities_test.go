@@ -55,14 +55,11 @@ func TestGetPlayerAbility(t *testing.T) {
 						accModifier: h.GetFloat32Ptr(2.5),
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypePhysical,
-								damageFormula:  database.DamageFormulaStrVsDef,
-								damageConstant: 14,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaStrVsDef,
+							damageConstant: 14,
 						},
 						critical:        h.GetStrPtr("crit-equip"),
 						criticalPlusVal: nil,
@@ -71,7 +68,7 @@ func TestGetPlayerAbility(t *testing.T) {
 						element:         nil,
 					},
 					inflictedDelay: &expInflictedDelay{
-						delayStrength:  "strong",
+						delayStrength: "strong",
 					},
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
@@ -118,14 +115,11 @@ func TestGetPlayerAbility(t *testing.T) {
 						accModifier: h.GetFloat32Ptr(1),
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeAttack,
-								targetClass:    "hp",
-								damageType:     database.DamageTypePhysical,
-								damageFormula:  database.DamageFormulaClstlHpLow,
-								damageConstant: 16,
-							},
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaClstlHpLow,
+							damageConstant: 16,
 						},
 						critical:        h.GetStrPtr("crit-equip"),
 						criticalPlusVal: nil,
@@ -134,7 +128,7 @@ func TestGetPlayerAbility(t *testing.T) {
 						element:         nil,
 					},
 					inflictedDelay: &expInflictedDelay{
-						delayStrength:  "strong",
+						delayStrength: "strong",
 					},
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
@@ -263,14 +257,11 @@ func TestGetPlayerAbility(t *testing.T) {
 						accModifier: nil,
 					},
 					damage: &expDamage{
-						damageCalc: []expAbilityDamage{
-							{
-								attackType:     database.AttackTypeHeal,
-								targetClass:    "hp",
-								damageType:     database.DamageTypeMagical,
-								damageFormula:  database.DamageFormulaHealing,
-								damageConstant: 80,
-							},
+						attackType: database.AttackTypeHeal,
+						damageType: database.DamageTypeMagical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaHealing,
+							damageConstant: 80,
 						},
 						critical:        nil,
 						criticalPlusVal: nil,

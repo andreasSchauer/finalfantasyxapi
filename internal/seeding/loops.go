@@ -44,6 +44,7 @@ func (l *Lookup) seedLoop1(qtx *database.Queries, ctx context.Context) error {
 		l.loop1SeedEquipmentSlotsChances,
 		l.loop1SeedQuests,
 		l.loop1SeedSphereGrids,
+		l.loop1SeedClassDamages,
 	})
 }
 
@@ -131,7 +132,6 @@ func (l *Lookup) seedLoop5(qtx *database.Queries, ctx context.Context) error {
 		l.loop5SeedEquipmentTables,
 		l.loop5SeedEquipmentNames,
 		l.loop5SeedMonsterFormations,
-		l.loop5SeedAbilityDamages,
 		l.loop5SeedStatChanges,
 		l.loop5SeedAlts,
 	})
@@ -208,7 +208,6 @@ func (l *Lookup) seedJunctions(qtx *database.Queries, ctx context.Context) error
 		l.seedJuncBattleInteractionsModifierChanges,
 		l.seedJuncBattleInteractionsRemovedStatusConditions,
 		l.seedJuncBattleInteractionsStatChanges,
-		l.seedJuncDamagesDamageCalc,
 		l.seedJuncAltsAutoAbilities,
 		l.seedJuncAltsBaseStats,
 		l.seedJuncAltsElementalResists,
