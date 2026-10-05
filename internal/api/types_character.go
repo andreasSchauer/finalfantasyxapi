@@ -10,6 +10,7 @@ type Character struct {
 	IsStoryBased           bool                               `json:"is_story_based"`
 	CanFightUnderwater     bool                               `json:"can_fight_underwater"`
 	PhysAtkRange           int32                              `json:"physical_attack_range"`
+	AgilityParameters      AgilityParams      				  `json:"agility_parameters"`
 	WeaponType             string                             `json:"weapon_type"`
 	ArmorType              string                             `json:"armor_type"`
 	CelestialWeapon        *NamedAPIResource                  `json:"celestial_weapon"`

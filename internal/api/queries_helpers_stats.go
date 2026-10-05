@@ -10,7 +10,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryParam, baseStats []BaseStat, allowedStatIDs []int32) (map[string]int32, error) {
+func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryParam, allowedStatIDs []int32) (map[string]int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -28,8 +28,6 @@ func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryParam, baseSta
 		stat = h.GetNameWithSpaces(stat, "_")
 		statMap[stat] = int32(value)
 	}
-
-	statMap = getDefaultStats(statMap, baseStats)
 
 	return statMap, nil
 }
@@ -53,17 +51,11 @@ func parseStatPair(cfg *Config, pair string, queryParam QueryParam, allowedStatI
 	return stat, value, nil
 }
 
-func getDefaultStats(queryStatMap map[string]int32, baseStats []BaseStat) map[string]int32 {
-	statMap := make(map[string]int32)
-	for _, baseStat := range baseStats {
-		statName := baseStat.GetName()
-		statMap[statName] = max(queryStatMap[statName], baseStat.Value)
+func validateQueryStatName(cfg *Config, stat string, allowedStatIDs []int32, queryParam QueryParam) error {
+	if allowedStatIDs == nil {
+		allowedStatIDs = getNumSlice(1, int32(len(cfg.l.Stats)))
 	}
 
-	return statMap
-}
-
-func validateQueryStatName(cfg *Config, stat string, allowedStatIDs []int32, queryParam QueryParam) error {
 	parseResp, err := checkUniqueName(stat, cfg.l.Stats)
 	if err != nil {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat: '%s' in '%s'. stat doesn't exist. use '/api/stats' to see existing stats.", stat, queryParam.Name), err)
@@ -74,6 +66,16 @@ func validateQueryStatName(cfg *Config, stat string, allowedStatIDs []int32, que
 	}
 
 	return nil
+}
+
+func getNumSlice(min, max int32) []int32 {
+	var s []int32
+
+	for i := min; i <= max; i++ {
+		s = append(s, i)
+	}
+
+	return s
 }
 
 func validateQueryStatVal(statName string, valStr string, queryParam QueryParam) (int, error) {
@@ -110,4 +112,25 @@ func getAllowedStatString(cfg *Config, allowedStatIDs []int32) string {
 	}
 
 	return strings.Join(stats, ", ")
+}
+
+// parses the given stats and generates a complete stat map where each given stat is compared to the entity's given stats, usually the default stats. the higher value will be preferred, since lower than the default isn't possible. if no value for a stat was given, the default stat will be used. the result of this function is usually used to calculate the stats of another entity, not to replace any stats of the given entity.
+func getStatCalcMap(cfg *Config, r *http.Request, queryParam QueryParam, baseStats []BaseStat, allowedStatIDs []int32) (map[string]int32, error) {
+	statMap, err := parseStatQuery(cfg, r, queryParam, allowedStatIDs)
+	if err != nil {
+		return nil, err
+	}
+	statMap = fillStatMapWithDefaults(statMap, baseStats)
+
+	return statMap, nil
+}
+
+func fillStatMapWithDefaults(queryStatMap map[string]int32, baseStats []BaseStat) map[string]int32 {
+	statMap := make(map[string]int32)
+	for _, baseStat := range baseStats {
+		statName := baseStat.GetName()
+		statMap[statName] = max(queryStatMap[statName], baseStat.Value)
+	}
+
+	return statMap
 }

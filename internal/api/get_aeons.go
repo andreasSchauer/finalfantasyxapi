@@ -17,8 +17,6 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 		return Aeon{}, err
 	}
 
-	baseStats := aeon.BaseStats.XVals[0].BaseStats
-
 	response := Aeon{
 		ID:                     aeon.ID,
 		Name:                   aeon.Name,
@@ -33,7 +31,7 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 		PhysAtkAccuracy:        convertObjPtr(cfg, aeon.PhysAtkAccuracy, convertAccuracy),
 		CelestialWeapon:        rel.CelestialWeapon,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              toResAmtType(cfg, cfg.e.stats, baseStats, newBaseStat),
+		BaseStats:              getAeonBaseStats(cfg, aeon),
 		AeonCommands:           rel.AeonCommands,
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		Overdrives:             rel.Overdrives,
@@ -41,13 +39,24 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 		ArmorAbilities:         convertObjSlice(cfg, aeon.Armor, convertAeonEquipment),
 	}
 
-	response, err = applyAeonStats(cfg, r, response)
+	response, err = applyAeonStats(cfg, r, response, nil)
+	if err != nil {
+		return Aeon{}, err
+	}
+
+	response.BaseStats, err = applyStatsOverrideAeons(cfg, r, response, qpnStats)
+	if err != nil {
+		return Aeon{}, err
+	}
+
+	response.AgilityParameters, err = getUnitAgilityParams(cfg, r, response.BaseStats)
 	if err != nil {
 		return Aeon{}, err
 	}
 
 	return response, nil
 }
+
 
 func (cfg *Config) retrieveAeons(r *http.Request, i handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)

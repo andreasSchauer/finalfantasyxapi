@@ -7,6 +7,11 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+func getAeonBaseStats(cfg *Config, aeon seeding.Aeon) []BaseStat {
+	baseStats := aeon.BaseStats.XVals[0].BaseStats
+	return toResAmtType(cfg, cfg.e.stats, baseStats, newBaseStat)
+}
+
 func getAeonRelationships(cfg *Config, r *http.Request, aeon seeding.Aeon) (Aeon, error) {
 	var rel Aeon
 	g, ctx := errgroup.WithContext(r.Context())
@@ -49,7 +54,9 @@ func getAeonRelationships(cfg *Config, r *http.Request, aeon seeding.Aeon) (Aeon
 	return rel, nil
 }
 
-func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon) (Aeon, error) {
+// wrap the query in monsters around this
+// search the aeon, get this, replace all stats, except mp and luck
+func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon, allowedStatIDs []int32) (Aeon, error) {
 	var err error
 
 	aeon.BaseStats, err = applyAeonStatsBattles(cfg, r, aeon, qpnBattles)
@@ -57,12 +64,7 @@ func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon) (Aeon, error) {
 		return Aeon{}, err
 	}
 
-	aeon.BaseStats, err = applyYunaStats(cfg, r, aeon, qpnYunaStats)
-	if err != nil {
-		return Aeon{}, err
-	}
-
-	aeon.AgilityParameters, err = getAeonAgilityParams(cfg, r, aeon)
+	aeon.BaseStats, err = applyYunaStats(cfg, r, aeon, qpnYunaStats, allowedStatIDs)
 	if err != nil {
 		return Aeon{}, err
 	}
@@ -93,26 +95,24 @@ func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName Qu
 	return baseStats, nil
 }
 
-func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName QueryParamName) ([]BaseStat, error) {
-	allowedStatIDs := []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-	baseStats := aeon.BaseStats
+func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName QueryParamName, allowedStatIDs []int32) ([]BaseStat, error) {
 	queryParam := cfg.q.aeons[queryName]
 
 	yuna := cfg.l.Characters["yuna"]
 	yunaBS := toResAmtType(cfg, cfg.e.stats, yuna.BaseStats, newBaseStat)
 
-	yunaStatMapInt, err := parseStatQuery(cfg, r, queryParam, yunaBS, allowedStatIDs)
+	yunaStatCalcMap, err := getStatCalcMap(cfg, r, queryParam, yunaBS, allowedStatIDs)
 	if queryIsEmpty(err) {
-		return baseStats, nil
+		return aeon.BaseStats, nil
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	yunaStatMapInt["hp"] = min(yunaStatMapInt["hp"], 9999)
-	yunaStatMapInt["mp"] = min(yunaStatMapInt["mp"], 999)
+	yunaStatCalcMap["hp"] = min(yunaStatCalcMap["hp"], 9999)
+	yunaStatCalcMap["mp"] = min(yunaStatCalcMap["mp"], 999)
 
-	aeonStats := calcAeonStats(cfg, aeon, yunaStatMapInt)
+	aeonStats := calcAeonStats(cfg, aeon, yunaStatCalcMap)
 
 	return aeonStats, nil
 }
@@ -186,12 +186,12 @@ func yStatCalc(stat string, yParameter float64, aVals, bVals, yuna map[string]fl
 	}
 }
 
-func getAeonAgilityParams(cfg *Config, r *http.Request, aeon Aeon) (AgilityParams, error) {
-	agilityTier, err := getAgilityTierDB(cfg, r, aeon.BaseStats)
+func getUnitAgilityParams(cfg *Config, r *http.Request, baseStats []BaseStat) (AgilityParams, error) {
+	agilityTier, err := getAgilityTierDB(cfg, r, baseStats)
 	if err != nil {
 		return AgilityParams{}, err
 	}
-	agilityStat := getBaseStat(cfg, "agility", aeon.BaseStats)
+	agilityStat := getBaseStat(cfg, "agility", baseStats)
 	agility := agilityStat.Value
 
 	var minICV *int32

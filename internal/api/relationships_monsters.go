@@ -42,7 +42,7 @@ func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster
 		return Monster{}, err
 	}
 
-	mon.BaseStats, err = applyAeonStatsMonsters(cfg, r, mon, qpnAeonStats)
+	mon.BaseStats, err = applyAeonStatsMonsters(cfg, r, mon)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -123,9 +123,7 @@ func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*Agilit
 
 	fs := nameToNamedAPIResource(cfg, cfg.e.autoAbilities, "first strike", nil)
 	if resourcesContain(mon.AutoAbilities, fs) {
-		var fsICV int32 = -1
-		agilityParams.MinICV = &fsICV
-		agilityParams.MaxICV = &fsICV
+		agilityParams.MinICV, agilityParams.MaxICV = getEqualICVs(-1)
 	}
 
 	return &agilityParams, nil

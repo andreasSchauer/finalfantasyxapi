@@ -14,7 +14,7 @@ func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName QueryP
 	kimahri, _ := cfg.l.Characters["kimahri"]
 	kimahriBS := toResAmtType(cfg, cfg.e.stats, kimahri.BaseStats, newBaseStat)
 
-	kimahriStatMap, err := parseStatQuery(cfg, r, queryParam, kimahriBS, allowedStatIDs)
+	kimahriStatCalcMap, err := getStatCalcMap(cfg, r, queryParam, kimahriBS, allowedStatIDs)
 	if queryIsEmpty(err) {
 		return baseStats, nil
 	}
@@ -22,19 +22,19 @@ func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName QueryP
 		return nil, err
 	}
 
-	ronsoStats := getRonsoStats(mon, kimahriStatMap)
+	ronsoStats := replaceRonsoStats(mon, kimahriStatCalcMap)
 
 	return ronsoStats, nil
 }
 
-func getRonsoStats(mon Monster, kimahriStatMap map[string]int32) []BaseStat {
+func replaceRonsoStats(mon Monster, kimahriStatMap map[string]int32) []BaseStat {
 	ronsoStatMap := make(map[string]int32)
 	ronsoStatMap["hp"] = getRonsoHP(mon, kimahriStatMap)
 	ronsoStatMap["strength"] = getRonsoStrength(mon, kimahriStatMap)
 	ronsoStatMap["magic"] = getRonsoMagic(mon, kimahriStatMap)
 	ronsoStatMap["agility"] = getRonsoAgility(mon, kimahriStatMap)
 
-	return replaceBaseStats(mon.BaseStats, ronsoStatMap)
+	return replaceBaseStats(mon.BaseStats, ronsoStatMap, nil)
 }
 
 func getRonsoHP(mon Monster, kimahriStatMap map[string]int32) int32 {

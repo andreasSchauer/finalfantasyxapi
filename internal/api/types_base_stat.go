@@ -1,6 +1,8 @@
 package api
 
 import (
+	"slices"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
@@ -52,8 +54,11 @@ func getBaseStatVal(cfg *Config, stat string, baseStats []BaseStat) int32 {
 	return bs.Value
 }
 
-func replaceBaseStats(baseStats []BaseStat, statMap map[string]int32) []BaseStat {
+func replaceBaseStats(baseStats []BaseStat, statMap map[string]int32, allowedStatIDs []int32) []BaseStat {
 	for i, baseStat := range baseStats {
+		if !slices.Contains(allowedStatIDs, baseStat.Stat.ID) {
+			continue
+		}
 		newVal, ok := statMap[baseStat.Stat.Name]
 		if ok {
 			baseStats[i].Value = newVal
