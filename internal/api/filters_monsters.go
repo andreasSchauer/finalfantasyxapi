@@ -34,7 +34,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 	elemMap := make(map[int32]bool)
 
 	for _, pair := range eaPairs {
-		elementStr, affinityStr, found := strings.Cut(pair, "=")
+		elementStr, affinityStr, found := strings.Cut(pair, ":")
 		if !found {
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}

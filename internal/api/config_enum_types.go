@@ -2328,6 +2328,34 @@ func (t *Enums) initDamageType() {
 	}
 }
 
+func (t *Enums) initDelayStrength() {
+	enumDescription := "Defines the strength of tickspeed-based delay."
+
+	typeSlice := []EnumVal{
+		{
+			Name:        string(database.DelayStrengthStrong),
+			Description: "The target suffers delay equal to a regular turn (tickspeed x3).",
+		},
+		{
+			Name:        string(database.DelayStrengthWeak),
+			Description: "The target suffers delay equal to half a regular turn (tickspeed x1.5).",
+		},
+	}
+
+	t.DelayStrength = EnumType[database.DelayStrength, any]{
+		name:     enumNameDelayStrength,
+		lookup:   enumSliceToMap(typeSlice),
+		convFunc: func(s string) database.DelayStrength { return database.DelayStrength(s) },
+	}
+
+	t.Lookup[getEnumKey(enumNameDelayStrength)] = EnumResponse{
+		Name:               enumNameDelayStrength,
+		Description:        enumDescription,
+		UsedByEndpointsInt: []EndpointName{epAbilities, epPlayerAbilities, epOverdriveAbilities, epItemAbilities, epTriggerCommands, epMiscAbilities, epEnemyAbilities},
+		Values:             getEnumValIDs(typeSlice),
+	}
+}
+
 func (t *Enums) initDurationType() {
 	enumDescription := "Determines, how long an inflicted status-condition is active on the target unit."
 
@@ -2511,34 +2539,6 @@ func (t *Enums) initBattleStart() {
 		Name:               enumNameBattleStart,
 		Description:        enumDescription,
 		UsedByEndpointsInt: []EndpointName{epTurnOrder},
-		Values:             getEnumValIDs(typeSlice),
-	}
-}
-
-func (t *Enums) initDelayStrength() {
-	enumDescription := fmt.Sprintf("Determines for the /%s endpoint.", epDelay)
-
-	typeSlice := []EnumVal{
-		{
-			Name:        string(database.DelayStrengthWeak),
-			Description: "",
-		},
-		{
-			Name:        string(database.DelayStrengthStrong),
-			Description: "",
-		},
-	}
-
-	t.DelayStrength = EnumType[database.DelayStrength, any]{
-		name:     enumNameDelayStrength,
-		lookup:   enumSliceToMap(typeSlice),
-		convFunc: func(s string) database.DelayStrength { return database.DelayStrength(s) },
-	}
-
-	t.Lookup[getEnumKey(enumNameDelayStrength)] = EnumResponse{
-		Name:               enumNameDelayStrength,
-		Description:        enumDescription,
-		UsedByEndpointsInt: []EndpointName{epDelay},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }

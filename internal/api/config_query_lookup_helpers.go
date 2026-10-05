@@ -140,7 +140,7 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 		p.ExampleUses = []string{s + e1, s + fmt.Sprintf("%s,%s", e1, e2)}
 
 	case qptStat:
-		p.Usage = s + "{stat}={int},..."
+		p.Usage = s + "{stat}:{int},..."
 
 	default:
 		return p
@@ -155,4 +155,8 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 	}
 
 	return p
+}
+
+func exampleUse(queryName QueryParamName, value string) string {
+	return fmt.Sprintf("?%s=%s", queryName, value)
 }
