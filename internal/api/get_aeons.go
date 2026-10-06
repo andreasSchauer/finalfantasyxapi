@@ -44,10 +44,7 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 		return Aeon{}, err
 	}
 
-	response.BaseStats, err = applyStatsOverrideAeons(cfg, r, response, qpnStats)
-	if err != nil {
-		return Aeon{}, err
-	}
+	response.RegenAmounts = calcRegenAmounts(cfg, response.BaseStats)
 
 	response.AgilityParameters, err = getUnitAgilityParams(cfg, r, response.BaseStats)
 	if err != nil {

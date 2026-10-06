@@ -59,6 +59,7 @@ func replaceBaseStats(baseStats []BaseStat, statMap map[string]int32, allowedSta
 		if !slices.Contains(allowedStatIDs, baseStat.Stat.ID) {
 			continue
 		}
+		
 		newVal, ok := statMap[baseStat.Stat.Name]
 		if ok {
 			baseStats[i].Value = newVal

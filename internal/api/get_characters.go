@@ -42,10 +42,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 		return Character{}, err
 	}
 
-	response.BaseStats, err = applyStatsOverrideCharacters(cfg, r, response, qpnStats)
-	if err != nil {
-		return Character{}, err
-	}
+	response.RegenAmounts = calcRegenAmounts(cfg, response.BaseStats)
 
 	response.AgilityParameters, err = getUnitAgilityParams(cfg, r, response.BaseStats)
 	if err != nil {

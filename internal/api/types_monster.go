@@ -45,6 +45,7 @@ type Monster struct {
 	Areas                []AreaAPIResource    `json:"areas"`
 	Formations           []UnnamedAPIResource `json:"monster_formations"`
 	BaseStats            []BaseStat           `json:"base_stats"`
+	RegenAmounts		 []RegenAmount		  `json:"regen_amounts"`
 	Items                *MonsterItems        `json:"items"`
 	BribeChances         []BribeChance        `json:"bribe_chances,omitempty"`
 	Equipment            *MonsterEquipment    `json:"equipment"`

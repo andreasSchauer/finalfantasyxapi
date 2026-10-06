@@ -17,6 +17,7 @@ type Character struct {
 	OverdriveCommand       *NamedAPIResource                  `json:"overdrive_command"`
 	CharacterClasses       []NamedAPIResource                 `json:"character_classes"`
 	BaseStats              []BaseStat         				  `json:"base_stats"`
+	RegenAmounts		   []RegenAmount		  			  `json:"regen_amounts"`
 	DefaultPlayerAbilities []NamedAPIResource                 `json:"default_player_abilities"`
 	StdSphereGrid		   *SphereGrid						  `json:"std_sphere_grid"`
 	ExpSphereGrid		   *SphereGrid						  `json:"exp_sphere_grid"`

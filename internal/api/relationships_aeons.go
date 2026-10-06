@@ -7,11 +7,6 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getAeonBaseStats(cfg *Config, aeon seeding.Aeon) []BaseStat {
-	baseStats := aeon.BaseStats.XVals[0].BaseStats
-	return toResAmtType(cfg, cfg.e.stats, baseStats, newBaseStat)
-}
-
 func getAeonRelationships(cfg *Config, r *http.Request, aeon seeding.Aeon) (Aeon, error) {
 	var rel Aeon
 	g, ctx := errgroup.WithContext(r.Context())
@@ -54,8 +49,11 @@ func getAeonRelationships(cfg *Config, r *http.Request, aeon seeding.Aeon) (Aeon
 	return rel, nil
 }
 
-// wrap the query in monsters around this
-// search the aeon, get this, replace all stats, except mp and luck
+func getAeonBaseStats(cfg *Config, aeon seeding.Aeon) []BaseStat {
+	baseStats := aeon.BaseStats.XVals[0].BaseStats
+	return toResAmtType(cfg, cfg.e.stats, baseStats, newBaseStat)
+}
+
 func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon, allowedStatIDs []int32) (Aeon, error) {
 	var err error
 
@@ -144,17 +142,6 @@ func getAeonStatTables(cfg *Config, aeon Aeon) (map[string]float64, map[string]f
 	bVals := resAmtMapToFloat(bValsInt)
 
 	return aVals, bVals
-}
-
-func resAmtMapToFloat(intMap map[string]int32) map[string]float64 {
-	floatMap := make(map[string]float64)
-
-	for key := range intMap {
-		float := float64(intMap[key])
-		floatMap[key] = float
-	}
-
-	return floatMap
 }
 
 func yParamCalc(yuna map[string]int32) float64 {

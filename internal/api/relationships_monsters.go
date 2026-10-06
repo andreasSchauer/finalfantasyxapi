@@ -42,7 +42,7 @@ func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster
 		return Monster{}, err
 	}
 
-	mon.BaseStats, err = applyAeonStatsMonsters(cfg, r, mon)
+	mon.BaseStats, err = applyPossessedAeonStats(cfg, r, mon)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -51,6 +51,8 @@ func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster
 	if err != nil {
 		return Monster{}, err
 	}
+
+	mon.RegenAmounts = calcRegenAmountsMonster(cfg, mon)
 
 	mon.ElemResists, err = applyOmnisElements(cfg, r, mon, qpnOmnisElements)
 	if err != nil {
@@ -114,9 +116,15 @@ func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*Agilit
 		return nil, nil
 	}
 
+	tickspeed := agilityTier.TickSpeed
+
+	if appliedStateHaste(mon) {
+		tickspeed /= 2
+	}
+
 	agilityParams := AgilityParams{
 		AgilityTier: idToUnnamedAPIResource(cfg, cfg.e.agilityTiers, agilityTier.ID),
-		TickSpeed:   agilityTier.TickSpeed,
+		TickSpeed:   tickspeed,
 		MinICV:      agilityTier.MonsterMinICV,
 		MaxICV:      agilityTier.MonsterMaxICV,
 	}
@@ -127,6 +135,18 @@ func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*Agilit
 	}
 
 	return &agilityParams, nil
+}
+
+func appliedStateHaste(mon Monster) bool {
+	if mon.AppliedState == nil {
+		return false
+	}
+
+	if mon.AppliedState.AppliedStatus == nil {
+		return false
+	}
+
+	return mon.AppliedState.AppliedStatus.StatusCondition.NameIs("haste", nil)
 }
 
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%

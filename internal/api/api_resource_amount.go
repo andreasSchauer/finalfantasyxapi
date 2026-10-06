@@ -113,6 +113,17 @@ func resAmtTypesToStructs[T ResourceAmountType[A], A APIResource](items []T) []R
 	return resAmts
 }
 
+func resAmtMapToFloat(intMap map[string]int32) map[string]float64 {
+	floatMap := make(map[string]float64)
+
+	for key := range intMap {
+		float := float64(intMap[key])
+		floatMap[key] = float
+	}
+
+	return floatMap
+}
+
 // takes a slice of parent resources and for each of them, attaches the amount of the resource's seeding.ItemAmount field to the resource.
 func itemAmtsToChildResAmts[T seeding.HasItemAmount, R any, A APIResource, L APIResourceList](i handlerInput[T, R, A, L], resources []A) []ResourceAmount[A] {
 	resAmts := []ResourceAmount[A]{}

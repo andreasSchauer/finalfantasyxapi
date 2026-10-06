@@ -26,3 +26,14 @@ func Filter[T any](s []T, fn func(T) bool) []T {
 
 	return newSlice
 }
+
+
+func GetNumSlice(min, max int32) []int32 {
+	var s []int32
+
+	for i := min; i <= max; i++ {
+		s = append(s, i)
+	}
+
+	return s
+}

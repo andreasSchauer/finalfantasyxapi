@@ -54,6 +54,10 @@ func (r NamedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
+func (r NamedAPIResource) NameIs(name string, version *int32) bool {
+	return r.Name == name && h.PtrsEqual(r.Version, version, h.DerefInt32Ptr)
+}
+
 func idToNamedAPIResource[T seeding.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id int32) NamedAPIResource {
 	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
 	params := res.GetResParamsNamed()

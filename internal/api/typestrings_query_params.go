@@ -11,7 +11,6 @@ type QueryParamName NamedParam
 const (
 	qpnAbilityUser      QueryParamName = "ability_user"
 	qpnAeons            QueryParamName = "aeons"
-	qpnAeonStats        QueryParamName = "aeon_stats"
 	qpnAgility          QueryParamName = "agility"
 	qpnAirship          QueryParamName = "airship"
 	qpnAlteredState     QueryParamName = "altered_state"
