@@ -973,13 +973,6 @@ func (cfg *Config) initCharactersParams() {
 			ReferencesEnumsInt: []EnumName{enumNameSphereGridType},
 		},
 		{
-			Name:        qpnStats,
-			Description: "You can specify each stat value manually. This will override a character's stats, as well as the stat values calculated by 'osg_stats'.",
-			Type:        qptStat,
-			ExampleUses: []string{exampleUse(qpnStats, "hp:3000,strength:75,defense:50,magic:30,agility:20"), exampleUse(qpnStats, "accuracy:150,magic_defense:255")},
-			ParamUse:    puSingle,
-		},
-		{
 			Name:        qpnStoryBased,
 			Description: "Searches for characters that are only playable during certain sections of the story.",
 			Type:        qptBool,
@@ -1013,13 +1006,6 @@ func (cfg *Config) initAeonsParams() {
 			Description: "Calculate an aeon's stats based on Yuna's stats. If a stat is not given, Yuna's respective default stat is used for the calculation instead. Can be used in combination with the 'battles' parameter.",
 			Type:        qptStat,
 			ExampleUses: []string{exampleUse(qpnYunaStats, "hp:3000,strength:75,defense:50,magic:30,agility:20"), exampleUse(qpnYunaStats, "accuracy:150,magic_defense:255")},
-			ParamUse:    puSingle,
-		},
-		{
-			Name:        qpnStats,
-			Description: "You can specify each stat value manually. This will override an aeon's stats, as well as the stat values calculated by 'battles' and 'yuna_stats'.",
-			Type:        qptStat,
-			ExampleUses: []string{exampleUse(qpnStats, "hp:3000,strength:75,defense:50,magic:30,agility:20"), exampleUse(qpnStats, "accuracy:150,magic_defense:255")},
 			ParamUse:    puSingle,
 		},
 		{

@@ -43,6 +43,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 	}
 
 	response.RegenAmounts = calcRegenAmounts(cfg, response.BaseStats)
+	response.CelestialFormula = getCharacterClstlFormula(cfg, response)
 
 	response.AgilityParameters, err = getUnitAgilityParams(cfg, r, response.BaseStats)
 	if err != nil {

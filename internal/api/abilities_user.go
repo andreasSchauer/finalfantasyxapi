@@ -78,13 +78,13 @@ func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 	}
 
 	switch repl.unit.Type {
-	case "character":
+	case database.UnitTypeCharacter:
 		repl, err = populateReplCharacter(cfg, repl, queryParamUser)
 		if err != nil {
 			return unitRepl{}, err
 		}
 
-	case "aeon":
+	case database.UnitTypeAeon:
 		repl, err = populateReplAeon(cfg, repl, queryParamUser)
 		if err != nil {
 			return unitRepl{}, err
@@ -106,7 +106,6 @@ func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam
 		return unitRepl{}, err
 	}
 	character, _ := seeding.GetResourceByID(id, cfg.l.CharactersID)
-	clstlWpn, _ := seeding.GetResourceByID(id, cfg.l.CelestialWeaponsID)
 
 	repl.replVals.Range = &character.PhysAtkRange
 
@@ -115,6 +114,11 @@ func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam
 	}
 
 	if repl.isCelestial {
+		clstlWpn, err := seeding.GetResourceByID(id, cfg.l.CelestialWeaponsID)
+		if err != nil {
+			return unitRepl{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't have a celestial weapon", character), err)
+		}
+
 		formula := string(charFormulas[clstlWpn.Formula])
 		repl.replVals.DamageFormula = &formula
 	}
@@ -123,6 +127,10 @@ func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam
 }
 
 func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
+	if repl.isCelestial {
+		return unitRepl{}, newHTTPError(http.StatusBadRequest, "aeons don't have celestial weapons", nil)
+	}
+
 	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), queryParamUser, cfg.l.Aeons)
 	if err != nil {
 		return unitRepl{}, err

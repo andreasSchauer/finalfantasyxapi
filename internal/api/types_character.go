@@ -14,6 +14,7 @@ type Character struct {
 	WeaponType             string                             `json:"weapon_type"`
 	ArmorType              string                             `json:"armor_type"`
 	CelestialWeapon        *NamedAPIResource                  `json:"celestial_weapon"`
+	CelestialFormula       *string                  		  `json:"celestial_formula,omitempty"`
 	OverdriveCommand       *NamedAPIResource                  `json:"overdrive_command"`
 	CharacterClasses       []NamedAPIResource                 `json:"character_classes"`
 	BaseStats              []BaseStat         				  `json:"base_stats"`

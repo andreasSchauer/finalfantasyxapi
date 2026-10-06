@@ -63,6 +63,15 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 	return rel, nil
 }
 
+func getCharacterClstlFormula(cfg *Config, char Character) *string {
+	if char.CelestialWeapon == nil {
+		return nil
+	}
+
+	weapon, _ := seeding.GetResource(char.CelestialWeapon.Name, cfg.l.CelestialWeapons)
+	return &weapon.Formula
+}
+
 func getCharacterModeAmts(cfg *Config, char seeding.Character) []ResourceAmount[NamedAPIResource] {
 	resAmts := []ResourceAmount[NamedAPIResource]{}
 

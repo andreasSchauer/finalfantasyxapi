@@ -103,7 +103,6 @@ const (
 	qpnSpecialUse       QueryParamName = "special_use"
 	qpnSpecies          QueryParamName = "species"
 	qpnStatChanges      QueryParamName = "stat_changes"
-	qpnStats  		    QueryParamName = "stats"
 	qpnStatusInflict    QueryParamName = "status_inflict"
 	qpnStatusRemove     QueryParamName = "status_remove"
 	qpnStatusResists    QueryParamName = "status_resists"
