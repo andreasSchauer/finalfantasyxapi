@@ -72,15 +72,6 @@ func compare(test test, fieldName string, exp, got any) {
 	}
 }
 
-// can be used for any direct pointer comparisons
-func compPtr[T any](test test, fieldName string, exp, got *T, compFunc func(test, string, T, T)) {
-	test.t.Helper()
-	if !bothPtrsPresent(test, fieldName, exp, got) {
-		return
-	}
-	compFunc(test, fieldName, *exp, *got)
-}
-
 func compInt(test test, fieldName string, exp, got int) {
 	test.t.Helper()
 	if exp != got {
@@ -114,6 +105,15 @@ func compBool(test test, fieldName string, exp, got bool) {
 	if exp != got {
 		test.t.Errorf("expected %s %t, got %t\n\n", fieldName, exp, got)
 	}
+}
+
+// can be used for any direct pointer comparisons
+func compPtr[T any](test test, fieldName string, exp, got *T, compFunc func(test, string, T, T)) {
+	test.t.Helper()
+	if !bothPtrsPresent(test, fieldName, exp, got) {
+		return
+	}
+	compFunc(test, fieldName, *exp, *got)
 }
 
 func compInt32Ptr(test test, fieldName string, exp, got *int32) {

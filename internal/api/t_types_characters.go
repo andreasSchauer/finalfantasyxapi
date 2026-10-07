@@ -7,9 +7,12 @@ type expCharacter struct {
 	area                   int32
 	weaponType             string
 	celestialWeapon        *int32
+	celestialFormula	   *string
 	overdriveCommand       *int32
 	characterClasses       []int32
+	agility				   testAgilityParams
 	baseStats              map[string]int32
+	regenAmounts		   []testRegenAmount
 	defaultPlayerAbilities []int32
 	stdSphereGrid		   *expSphereGrid
 	expSphereGrid		   *expSphereGrid
@@ -27,9 +30,12 @@ func compareCharacters(test test, exp expCharacter, got Character) {
 	compIdApiResource(test, "area", test.cfg.e.areas.endpoint, exp.area, got.Area)
 	compare(test, "weapon type", exp.weaponType, got.WeaponType)
 	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.e.celestialWeapons.endpoint, exp.celestialWeapon, got.CelestialWeapon)
+	compare(test, "celestial formula", exp.celestialFormula, got.CelestialFormula)
 	compIdApiResourcePtrs(test, "overdrive command", test.cfg.e.overdriveCommands.endpoint, exp.overdriveCommand, got.OverdriveCommand)
 	checkResIDsInSlice(test, "character classes", test.cfg.e.characterClasses.endpoint, exp.characterClasses, got.CharacterClasses)
+	compareAgilityParams(test, "agility params", exp.agility, got.AgilityParameters)
 	checkResAmtTypes(test, "base stats", exp.baseStats, got.BaseStats)
+	checkTestStructsInSlice(test, "regen amounts", exp.regenAmounts, got.RegenAmounts, compareRegenAmounts)
 	checkResIDsInSlice(test, "default abilities", test.cfg.e.playerAbilities.endpoint, exp.defaultPlayerAbilities, got.DefaultPlayerAbilities)
 	compTestStructPtrs(test, "std sg", exp.stdSphereGrid, got.StdSphereGrid, compareSphereGrids)
 	compTestStructPtrs(test, "exp sg", exp.expSphereGrid, got.ExpSphereGrid, compareSphereGrids)

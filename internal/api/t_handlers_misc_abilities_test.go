@@ -41,6 +41,20 @@ func TestGetMiscAbility(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/1?ability_user=8&celestial_weapon=true",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "character seymour doesn't have a celestial weapon.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/1?ability_user=9&celestial_weapon=true",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "aeons don't use celestial weapons.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
 				requestURL:     "/api/misc-abilities/1?ability_user=wakka&celestial_weapon=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},

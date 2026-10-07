@@ -118,30 +118,23 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/1?aeon_stats=hp:200",
+				requestURL:     "/api/monsters/1?yuna_stats=hp:200",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id '1'. parameter 'aeon_stats' can only be used with ids: '216', '217', '218', '219', '220', '221', '222', '223', '224', '225'.",
+				expectedErr:    "invalid id '1'. parameter 'yuna_stats' can only be used with ids: '216', '217', '218', '219', '220', '221', '222', '223', '224', '225'.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/216?aeon_stats=mp:300",
+				requestURL:     "/api/monsters/216?yuna_stats=hp:999999",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid stat 'mp' in 'aeon_stats'. 'aeon_stats' only uses 'hp', 'strength', 'defense', 'magic', 'magic defense', 'agility', 'evasion', 'accuracy'.",
+				expectedErr:    "hp in 'yuna_stats' can't be higher than 99999.",
 			},
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/216?aeon_stats=hp:999999",
+				requestURL:     "/api/monsters/216?yuna_stats=evasion:999999",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "hp in 'aeon_stats' can't be higher than 99999.",
-			},
-		},
-		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/216?aeon_stats=evasion:999999",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "evasion in 'aeon_stats' can't be higher than 255.",
+				expectedErr:    "evasion in 'yuna_stats' can't be higher than 255.",
 			},
 		},
 		{
@@ -186,6 +179,28 @@ func TestGetMonster(t *testing.T) {
 				"defense": 120,
 				"magic":   18,
 				"evasion": 0,
+			},
+			regenAmounts: []testRegenAmount{
+				{
+					index: 		0,
+					ticks: 		0,
+					healedHP: 	100,
+				},
+				{
+					index: 		3,
+					ticks: 		3,
+					healedHP: 	103,
+				},
+				{
+					index: 		7,
+					ticks: 		15,
+					healedHP: 	117,
+				},
+				{
+					index: 		9,
+					ticks: 		30,
+					healedHP: 	135,
+				},
 			},
 			items: &testMonItems{
 				itemDropChance: 255,
@@ -283,6 +298,7 @@ func TestGetMonster(t *testing.T) {
 			},
 			expNameVer: newExpNameVer(156, "magic urn", 1),
 			agility:    nil,
+			regenAmounts: nil,
 			items: &testMonItems{
 				itemDropChance: 0,
 				items: map[string]*testResAmount[TypedAPIResource]{
@@ -301,6 +317,7 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/sphErimorph?altered_state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
+					"regen amounts":  true,
 					"species":        true,
 					"ctb icon type":  true,
 					"distance":       true,
@@ -409,6 +426,7 @@ func TestGetMonster(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"agility params":    true,
+					"regen amounts":  true,
 					"species":           true,
 					"ctb icon type":     true,
 					"distance":          true,
@@ -482,6 +500,28 @@ func TestGetMonster(t *testing.T) {
 				condition:   "While hidden in its shell.",
 				isTemporary: true,
 			},
+			regenAmounts: []testRegenAmount{
+				{
+					index: 		0,
+					ticks: 		0,
+					healedHP: 	100,
+				},
+				{
+					index: 		1,
+					ticks: 		1,
+					healedHP: 	15725,
+				},
+				{
+					index: 		2,
+					ticks: 		2,
+					healedHP: 	31350,
+				},
+				{
+					index: 		3,
+					ticks: 		3,
+					healedHP: 	46975,
+				},
+			},
 			properties:    []int32{6, 8},
 			autoAbilities: []int32{102},
 			defaultState: &testDefaultState{
@@ -497,6 +537,7 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/neslug?altered_state=2",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
+					"regen amounts":  	 true,
 					"species":           true,
 					"ctb icon type":     true,
 					"distance":          true,
@@ -547,6 +588,7 @@ func TestGetMonster(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"agility params":    true,
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"items":             true,
@@ -583,8 +625,8 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/penance?altered_state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"agility params":    true,
 					"species":           true,
+					"regen amounts":     true,
 					"ctb icon type":     true,
 					"distance":          true,
 					"items":             true,
@@ -609,6 +651,12 @@ func TestGetMonster(t *testing.T) {
 				isTemporary:   false,
 				appliedStatus: h.GetInt32Ptr(21),
 			},
+			agility: &testAgilityParams{
+				agilityTier: 19,
+				tickSpeed:   1,
+				minICV:      h.GetInt32Ptr(9),
+				maxICV:      h.GetInt32Ptr(10),
+			},
 			defaultState: &testDefaultState{
 				IsTemporary: false,
 				Gain: &testAltStateGain{
@@ -625,6 +673,7 @@ func TestGetMonster(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"agility params":    true,
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"distance":          true,
@@ -672,6 +721,7 @@ func TestGetMonster(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"agility params":    true,
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"distance":          true,
@@ -719,6 +769,7 @@ func TestGetMonster(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"agility params":    true,
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"distance":          true,
@@ -765,6 +816,7 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/biran_ronso?kimahri_stats=hP:1000,strEngth:255,mAgic:255,agIlity:255",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"distance":          true,
@@ -804,6 +856,7 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp:3500,strength:35,magic:45,agility:28",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"distance":          true,
@@ -843,6 +896,7 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp:1500",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"distance":          true,
@@ -877,9 +931,65 @@ func TestGetMonster(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/216?aeon_stats=hp:200,strength:235,agility:68,evasion:2,accuracy:150,defense:46,magic:188,magic_defense:2",
+				requestURL:     "/api/monsters/vidatu",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
+					"agility params":    true,
+					"base stats":		 true,
+					"regen amounts":     true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"other items":       true,
+					"equipment":         true,
+					"default state":     true,
+					"elemental resists": true,
+					"properties":        true,
+					"auto-abilities":    true,
+					"ronso rages":       true,
+					"areas":             true,
+					"formations":        true,
+					"status immunities": true,
+					"abilities":         true,
+				},
+				expLengths: map[string]int{},
+			},
+			expNameVer: newExpNameVer(273, "vidatu", 0),
+			regenAmounts: []testRegenAmount{
+				{
+					index: 		0,
+					ticks: 		0,
+					healedHP: 	100,
+				},
+				{
+					index: 		5,
+					ticks: 		5,
+					healedHP: 	1955,
+				},
+				{
+					index: 		6,
+					ticks: 		10,
+					healedHP: 	3810,
+				},
+				{
+					index: 		8,
+					ticks: 		20,
+					healedHP: 	7521,
+				},
+				{
+					index: 		10,
+					ticks: 		50,
+					healedHP: 	18654,
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/216?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"distance":          true,
@@ -900,22 +1010,110 @@ func TestGetMonster(t *testing.T) {
 			},
 			expNameVer: newExpNameVer(216, "valefor", 1),
 			agility: &testAgilityParams{
-				agilityTier: 17,
-				tickSpeed:   5,
+				agilityTier: 15,
+				tickSpeed:   7,
 				minICV:      h.GetInt32Ptr(-1),
 				maxICV:      h.GetInt32Ptr(-1),
 			},
 			baseStats: map[string]int32{
-				"hp":            725,
+				"hp":            2146,
 				"mp":            1,
-				"strength":      235,
-				"defense":       46,
-				"magic":         188,
-				"magic defense": 23,
-				"agility":       68,
+				"strength":      47,
+				"defense":       72,
+				"magic":         76,
+				"magic defense": 59,
+				"agility":       35,
 				"luck":          1,
-				"evasion":       19,
-				"accuracy":      150,
+				"evasion":       27,
+				"accuracy":      44,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/216?battles=600",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"regen amounts":     true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"other items":       true,
+					"equipment":         true,
+					"default state":     true,
+					"elemental resists": true,
+					"properties":        true,
+					"auto-abilities":    true,
+					"ronso rages":       true,
+					"areas":             true,
+					"formations":        true,
+					"status immunities": true,
+					"abilities":         true,
+				},
+				expLengths: map[string]int{},
+			},
+			expNameVer: newExpNameVer(216, "valefor", 1),
+			agility: &testAgilityParams{
+				agilityTier: 14,
+				tickSpeed:   8,
+				minICV:      h.GetInt32Ptr(-1),
+				maxICV:      h.GetInt32Ptr(-1),
+			},
+			baseStats: map[string]int32{
+				"hp":            2225,
+				"mp":            1,
+				"strength":      45,
+				"defense":       66,
+				"magic":         64,
+				"magic defense": 69,
+				"agility":       34,
+				"luck":          1,
+				"evasion":       42,
+				"accuracy":      20,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/216?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15&battles=600",
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"regen amounts":     true,
+					"species":           true,
+					"ctb icon type":     true,
+					"distance":          true,
+					"items":             true,
+					"other items":       true,
+					"equipment":         true,
+					"default state":     true,
+					"elemental resists": true,
+					"properties":        true,
+					"auto-abilities":    true,
+					"ronso rages":       true,
+					"areas":             true,
+					"formations":        true,
+					"status immunities": true,
+					"abilities":         true,
+				},
+				expLengths: map[string]int{},
+			},
+			expNameVer: newExpNameVer(216, "valefor", 1),
+			agility: &testAgilityParams{
+				agilityTier: 15,
+				tickSpeed:   7,
+				minICV:      h.GetInt32Ptr(-1),
+				maxICV:      h.GetInt32Ptr(-1),
+			},
+			baseStats: map[string]int32{
+				"hp":            2225,
+				"mp":            1,
+				"strength":      47,
+				"defense":       72,
+				"magic":         76,
+				"magic defense": 69,
+				"agility":       35,
+				"luck":          1,
+				"evasion":       42,
+				"accuracy":      44,
 			},
 		},
 		{
@@ -923,6 +1121,7 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/87?rel_availability=pre-story&rel_repeatable=false",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"bribe chances":	 true,
@@ -954,6 +1153,7 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/87?rel_availability=pre-story&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"bribe chances":	 true,
@@ -985,6 +1185,7 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/87?rel_availability=always&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"bribe chances":	 true,
@@ -1016,6 +1217,7 @@ func TestGetMonster(t *testing.T) {
 				requestURL:     "/api/monsters/seymour",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
+					"regen amounts":     true,
 					"species":           true,
 					"ctb icon type":     true,
 					"distance":          true,

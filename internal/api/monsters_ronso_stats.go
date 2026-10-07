@@ -22,19 +22,19 @@ func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName QueryP
 		return nil, err
 	}
 
-	ronsoStats := replaceRonsoStats(mon, kimahriStatCalcMap)
+	ronsoStats := replaceRonsoStats(mon, kimahriStatCalcMap, allowedStatIDs)
 
 	return ronsoStats, nil
 }
 
-func replaceRonsoStats(mon Monster, kimahriStatMap map[string]int32) []BaseStat {
+func replaceRonsoStats(mon Monster, kimahriStatMap map[string]int32, allowedStatIDs []int32) []BaseStat {
 	ronsoStatMap := make(map[string]int32)
 	ronsoStatMap["hp"] = getRonsoHP(mon, kimahriStatMap)
 	ronsoStatMap["strength"] = getRonsoStrength(mon, kimahriStatMap)
 	ronsoStatMap["magic"] = getRonsoMagic(mon, kimahriStatMap)
 	ronsoStatMap["agility"] = getRonsoAgility(mon, kimahriStatMap)
 
-	return replaceBaseStats(mon.BaseStats, ronsoStatMap, nil)
+	return replaceBaseStats(mon.BaseStats, ronsoStatMap, allowedStatIDs)
 }
 
 func getRonsoHP(mon Monster, kimahriStatMap map[string]int32) int32 {

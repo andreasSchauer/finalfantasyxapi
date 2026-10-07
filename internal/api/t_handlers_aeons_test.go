@@ -21,7 +21,9 @@ func TestGetAeon(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/3",
 				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+				dontCheck:      map[string]bool{
+					"regen amounts": true,
+				},
 				expLengths: map[string]int{
 					"character classes": 3,
 					"aeon commands":     0,
@@ -138,6 +140,28 @@ func TestGetAeon(t *testing.T) {
 				"evasion":       27,
 				"accuracy":      18,
 			},
+			regenAmounts: []testRegenAmount{
+				{
+					index: 		0,
+					ticks: 		0,
+					healedHP: 	100,
+				},
+				{
+					index: 		3,
+					ticks: 		3,
+					healedHP: 	153,
+				},
+				{
+					index: 		7,
+					ticks: 		15,
+					healedHP: 	368,
+				},
+				{
+					index: 		8,
+					ticks: 		20,
+					healedHP: 	458,
+				},
+			},
 			aeonCommands:           []int32{2, 3, 4, 7, 9},
 			defaultPlayerAbilities: []int32{45, 46, 47, 56, 60, 61, 62, 68, 100, 102},
 			overdrives:             []int32{124},
@@ -147,6 +171,7 @@ func TestGetAeon(t *testing.T) {
 				requestURL:     "/api/aeons/1?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
+					"regen amounts": true,
 					"weapon abilities": true,
 					"armor abilities":  true,
 				},
@@ -195,6 +220,7 @@ func TestGetAeon(t *testing.T) {
 				dontCheck: map[string]bool{
 					"area":                  true,
 					"battles to regenerate": true,
+					"regen amounts": true,
 					"celestial weapon":      true,
 					"character classes":     true,
 					"aeon commands":         true,

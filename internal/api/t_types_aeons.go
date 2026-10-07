@@ -10,6 +10,7 @@ type expAeon struct {
 	celestialWeapon        *int32
 	characterClasses       []int32
 	baseStats              map[string]int32
+	regenAmounts		   []testRegenAmount
 	aeonCommands           []int32
 	defaultPlayerAbilities []int32
 	overdrives             []int32

@@ -105,8 +105,8 @@ func TestParameters(t *testing.T) {
 				endpoint:       testCfg.e.monsters.endpoint,
 				handler:        testCfg.HandleMonsters,
 			},
-			count:   33,
-			results: qpnsToNamedParams([]QueryParamName{qpnKimahriStats, qpnAlteredState, qpnOmnisElements, qpnStatusResists, qpnAutoAbility, qpnArea, qpnDistance, qpnUnderwater, qpnSpecies, qpnIDs}),
+			count:   34,
+			results: qpnsToNamedParams([]QueryParamName{qpnKimahriStats, qpnAlteredState, qpnOmnisElements, qpnStatusResists, qpnAutoAbility, qpnArea, qpnDistance, qpnUnderwater, qpnSpecies, qpnIDs, qpnYunaStats}),
 		},
 		{
 			testGeneral: testGeneral{

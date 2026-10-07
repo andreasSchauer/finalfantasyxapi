@@ -116,7 +116,7 @@ func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam
 	if repl.isCelestial {
 		clstlWpn, err := seeding.GetResourceByID(id, cfg.l.CelestialWeaponsID)
 		if err != nil {
-			return unitRepl{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't have a celestial weapon", character), err)
+			return unitRepl{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't have a celestial weapon.", character), err)
 		}
 
 		formula := string(charFormulas[clstlWpn.Formula])
@@ -128,7 +128,7 @@ func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam
 
 func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
 	if repl.isCelestial {
-		return unitRepl{}, newHTTPError(http.StatusBadRequest, "aeons don't have celestial weapons", nil)
+		return unitRepl{}, newHTTPError(http.StatusBadRequest, "aeons don't use celestial weapons.", nil)
 	}
 
 	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), queryParamUser, cfg.l.Aeons)

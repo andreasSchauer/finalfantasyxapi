@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -23,10 +24,10 @@ func TestGetCharacter(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 				expLengths: map[string]int{
-					"character classes":     2,
-					"default abilities":     0,
-					"std sg abilities": 11,
-					"exp sg abilities":   11,
+					"character classes":    2,
+					"default abilities":    0,
+					"std sg abilities": 	11,
+					"exp sg abilities":   	11,
 				},
 			},
 			expUnique: expUnique{
@@ -35,8 +36,15 @@ func TestGetCharacter(t *testing.T) {
 			},
 			untypedUnit:      1,
 			area:             1,
+			agility: testAgilityParams{
+				agilityTier: 	16,
+				tickSpeed: 		6,
+				minICV: 		h.GetInt32Ptr(17),
+				maxICV: 		h.GetInt32Ptr(18),
+			},
 			weaponType:       "sword",
 			celestialWeapon:  h.GetInt32Ptr(1),
+			celestialFormula: h.GetStrPtr(string(database.CelestialFormulaHpHigh)),
 			overdriveCommand: h.GetInt32Ptr(1),
 			characterClasses: []int32{1, 5},
 			baseStats: map[string]int32{
@@ -50,6 +58,28 @@ func TestGetCharacter(t *testing.T) {
 				"luck":          19,
 				"evasion":       29,
 				"accuracy":      29,
+			},
+			regenAmounts: []testRegenAmount{
+				{
+					index: 		0,
+					ticks: 		0,
+					healedHP: 	100,
+				},
+				{
+					index: 		4,
+					ticks: 		4,
+					healedHP: 	148,
+				},
+				{
+					index: 		5,
+					ticks: 		5,
+					healedHP: 	160,
+				},
+				{
+					index: 		7,
+					ticks: 		15,
+					healedHP: 	282,
+				},
 			},
 			defaultPlayerAbilities: []int32{},
 			stdSphereGrid: &expSphereGrid{
@@ -84,8 +114,15 @@ func TestGetCharacter(t *testing.T) {
 			},
 			untypedUnit:      5,
 			area:             42,
+			agility: testAgilityParams{
+				agilityTier: 	6,
+				tickSpeed: 		16,
+				minICV: 		h.GetInt32Ptr(46),
+				maxICV: 		h.GetInt32Ptr(48),
+			},
 			weaponType:       "spear",
 			celestialWeapon:  h.GetInt32Ptr(5),
+			celestialFormula: h.GetStrPtr(string(database.CelestialFormulaHpHigh)),
 			overdriveCommand: h.GetInt32Ptr(5),
 			characterClasses: []int32{1, 9},
 			baseStats: map[string]int32{
@@ -99,6 +136,28 @@ func TestGetCharacter(t *testing.T) {
 				"luck":          18,
 				"evasion":       5,
 				"accuracy":      5,
+			},
+			regenAmounts: []testRegenAmount{
+				{
+					index: 		0,
+					ticks: 		0,
+					healedHP: 	100,
+				},
+				{
+					index: 		1,
+					ticks: 		1,
+					healedHP: 	102,
+				},
+				{
+					index: 		3,
+					ticks: 		3,
+					healedHP: 	107,
+				},
+				{
+					index: 		9,
+					ticks: 		30,
+					healedHP: 	175,
+				},
 			},
 			defaultPlayerAbilities: []int32{33},
 			stdSphereGrid: &expSphereGrid{
@@ -119,12 +178,14 @@ func TestGetCharacter(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/characters/4?osg_stats=expert",
 				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+				dontCheck:      map[string]bool{
+					"regen amounts": true,
+				},
 				expLengths: map[string]int{
-					"character classes":     2,
-					"default abilities":     4,
-					"std sg abilities": 20,
-					"exp sg abilities":   19,
+					"character classes":    2,
+					"default abilities":    4,
+					"std sg abilities": 	20,
+					"exp sg abilities":   	19,
 				},
 			},
 			expUnique: expUnique{
@@ -133,8 +194,15 @@ func TestGetCharacter(t *testing.T) {
 			},
 			untypedUnit:      4,
 			area:             36,
+			agility: testAgilityParams{
+				agilityTier: 	12,
+				tickSpeed: 		10,
+				minICV: 		h.GetInt32Ptr(26),
+				maxICV: 		h.GetInt32Ptr(30),
+			},
 			weaponType:       "doll",
 			celestialWeapon:  h.GetInt32Ptr(4),
+			celestialFormula: h.GetStrPtr(string(database.CelestialFormulaMpHigh)),
 			overdriveCommand: h.GetInt32Ptr(4),
 			characterClasses: []int32{1, 8},
 			baseStats: map[string]int32{
@@ -168,7 +236,9 @@ func TestGetCharacter(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/characters/8",
 				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+				dontCheck:      map[string]bool{
+					"regen amounts": true,
+				},
 				expLengths: map[string]int{
 					"character classes":     1,
 					"default abilities":     15,
@@ -180,8 +250,15 @@ func TestGetCharacter(t *testing.T) {
 			},
 			untypedUnit:      8,
 			area:             102,
+			agility: testAgilityParams{
+				agilityTier: 	12,
+				tickSpeed: 		10,
+				minICV: 		h.GetInt32Ptr(28),
+				maxICV: 		h.GetInt32Ptr(30),
+			},
 			weaponType:       "seymour-staff",
 			celestialWeapon:  nil,
+			celestialFormula: nil,
 			overdriveCommand: nil,
 			characterClasses: []int32{12},
 			baseStats: map[string]int32{
