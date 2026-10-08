@@ -47,13 +47,13 @@ func assembleMonTurnOrder(cfg *Config, monID int32, altState *int32) (Monster, *
 	}
 
 	if slices.Contains(firstTurnAglIDs, monID) {
-		firstTurnAglTier = getAltStateAglTier(cfg, monID)
+		firstTurnAglTier = getFirstTurnAglTier(cfg, monID)
 	}
 
 	return monster, firstTurnAglTier, nil
 }
 
-func getAltStateAglTier(cfg *Config, monID int32) *seeding.AgilityTier {
+func getFirstTurnAglTier(cfg *Config, monID int32) *seeding.AgilityTier {
 	mon, _ := quickAssembleMon(cfg, monID, nil)
 	altState := mon.AlteredStates[0]
 

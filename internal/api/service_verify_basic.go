@@ -23,7 +23,7 @@ func vfExistingFields(valueMap map[FieldName]any, valTree ValidationTree) error 
 func basicFieldChecks[T any](val T, fieldName FieldName, valueMap map[FieldName]any, valTree ValidationTree) (T, error) {
 	var zero T
 	doc := valTree[fieldName].Doc
-	valIsPresent := hasVal(val)
+	valIsPresent := hasVal(fieldName, valueMap)
 
 	err := vfRequired(fieldName, doc, valIsPresent)
 	if err != nil {
@@ -55,6 +55,11 @@ func basicFieldChecks[T any](val T, fieldName FieldName, valueMap map[FieldName]
 		return zero, err
 	}
 
+	err = vfIdAllowedValues(val, fieldName, doc, valIsPresent, valueMap)
+	if err != nil {
+		return zero, err
+	}
+
 	return assignDefaultVal(val, valIsPresent, doc), nil
 }
 
@@ -72,7 +77,7 @@ func vfConflictsWith(fieldName FieldName, doc FieldDoc, valIsPresent bool, value
 	}
 
 	for _, conflictingField := range doc.ConflictsWith {
-		if valIsPresent && hasVal(valueMap[conflictingField]) {
+		if valIsPresent && hasVal(conflictingField, valueMap) {
 			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be used in combination with field '%s'.", fieldName, valTree[conflictingField].Doc.Field), nil)
 		}
 	}
@@ -86,7 +91,7 @@ func vfRequiredOr(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap
 	}
 
 	for _, option := range doc.RequiredOr {
-		if hasVal(valueMap[option]) {
+		if hasVal(option, valueMap) {
 			return nil
 		}
 	}
@@ -102,7 +107,7 @@ func vfRequiresAll(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMa
 	}
 
 	for _, field := range doc.RequiresAll {
-		if !hasVal(valueMap[field]) {
+		if !hasVal(field, valueMap) {
 			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires the following fields to have a value: %s", fieldName, formatPfnSlice(doc.RequiresAll)), nil)
 		}
 	}
@@ -116,7 +121,7 @@ func vfRequiresOne(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMa
 	}
 
 	for _, field := range doc.RequiresOne {
-		if hasVal(valueMap[field]) {
+		if hasVal(field, valueMap) {
 			return nil
 		}
 	}
@@ -129,11 +134,10 @@ func vfAllowedIDs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool,
 		return nil
 	}
 
-	idRaw, ok := valueMap[pfnID]
-	if !ok {
+	id, err := getInt32FromValMap(pfnID, valueMap)
+	if err != nil {
 		return nil
 	}
-	id := int32(idRaw.(float64))
 
 	if !slices.Contains(doc.AllowedIDs, id) {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following ids: %s", fieldName, h.FormatIntSlice(doc.AllowedIDs)), nil)
@@ -142,10 +146,48 @@ func vfAllowedIDs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool,
 	return nil
 }
 
+func vfIdAllowedValues(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap map[FieldName]any) error {
+	if !valIsPresent || len(doc.IdAllowedValues) == 0 || valIsPointer(val) {
+		return nil
+	}
+
+	id, _ := getInt32FromValMap(pfnID, valueMap)
+	value, err := getInt32FromValMap(fieldName, valueMap)
+	if err != nil {
+		return nil
+	}
+
+	for _, entry := range doc.IdAllowedValues {
+		if id != entry.ID {
+			continue
+		}
+
+		if value > entry.MaxVal || value <= 0 {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is out of range for id '%d'. max val: %d. allowed vals: %s.", value, pfnAltState, id, entry.MaxVal, h.IntSliceToString(entry.Values)), nil)
+		}
+
+		if slices.Contains(entry.Values, value) {
+			return nil
+		}
+	}
+
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s.", pfnAltState, formatIdAllowedVals(doc.IdAllowedValues)), nil)
+}
+
+func getInt32FromValMap(fieldName FieldName, valueMap map[FieldName]any) (int32, error) {
+	raw, ok := valueMap[fieldName]
+	if !ok {
+		return 0, errNoVal
+	}
+	intVal := int32(raw.(float64))
+
+	return intVal, nil
+}
+
 // sideNote: a pointer is completely optional, so it will never have a default value.
 // otherwise it wouldn't be a pointer
 func assignDefaultVal[T any](val T, valIsPresent bool, doc FieldDoc) T {
-	if valIsPresent || !hasVal(doc.DefaultVal) {
+	if valIsPresent || !hasDefaultVal(doc) {
 		return val
 	}
 
@@ -157,9 +199,23 @@ func assignDefaultVal[T any](val T, valIsPresent bool, doc FieldDoc) T {
 	return val
 }
 
-func hasVal(val any) bool {
+func hasDefaultVal(doc FieldDoc) bool {
+	return doc.DefaultVal != nil
+}
+
+
+func hasVal(fieldName FieldName, valueMap map[FieldName]any) bool {
+	jsonVal, ok := valueMap[fieldName]
+	return ok && jsonVal != nil
+}
+
+func hasValOld(val any, doc FieldDoc) bool {
 	if val == nil {
 		return false
+	}
+
+	if doc.AllowZeroVal {
+		return true
 	}
 
 	switch t := val.(type) {
@@ -196,5 +252,4 @@ func hasVal(val any) bool {
 
 func valIsPointer(val any) bool {
 	return reflect.ValueOf(val).Kind() == reflect.Pointer
-
 }

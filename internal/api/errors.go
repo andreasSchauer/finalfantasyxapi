@@ -18,6 +18,7 @@ var errQueryRedirect = errors.New("query parameter is not empty, but will be dea
 var errNoDefaultVal = errors.New("query parameter doesn't have a default value, or default value is unused.")
 var errNoSpecialInput = errors.New("query parameter doesn't have special inputs, or no special input was found.")
 var errNoIntRange = errors.New("query parameter doesn't have integer range.")
+var errNoVal = errors.New("param has no value")
 var errCorrect = errors.New("test got the expected error.")
 var errIgnoredField = errors.New("this field of the test-struct is ignored.")
 

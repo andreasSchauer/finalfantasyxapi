@@ -87,15 +87,26 @@ func FormatStringSlice(items []string) string {
 	return strings.Join(formattedVals, ", ")
 }
 
-func FormatIntSlice(IDs []int32) string {
-	formattedIDs := []string{}
+func FormatIntSlice(ints []int32) string {
+	formattedInts := []string{}
 
-	for _, id := range IDs {
+	for _, id := range ints {
 		formatted := fmt.Sprintf("'%d'", id)
-		formattedIDs = append(formattedIDs, formatted)
+		formattedInts = append(formattedInts, formatted)
 	}
 
-	return strings.Join(formattedIDs, ", ")
+	return strings.Join(formattedInts, ", ")
+}
+
+func IntSliceToString(ints []int32) string {
+	intStrings := []string{}
+
+	for _, id := range ints {
+		formatted := fmt.Sprintf("%d", id)
+		intStrings = append(intStrings, formatted)
+	}
+
+	return strings.Join(intStrings, ", ")
 }
 
 

@@ -170,8 +170,40 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 		{
 			Field:       pfnAltState,
 			Type:        "int (idx +1: monster altered states)",
+			AllowZeroVal: true,
 			RequiresAll: []FieldName{pfnID},
-			MinVal:      h.GetInt32Ptr(1),
+			IdAllowedValues: []IdAllowedValues{
+				{
+					ID: 	32,
+					Values: []int32{2, 3},
+					MaxVal: getLenMonAltStates(cfg, 32),
+				},
+				{
+					ID: 	139,
+					Values: []int32{1, 2, 3},
+					MaxVal: getLenMonAltStates(cfg, 139),
+				},
+				{
+					ID: 	160,
+					Values: []int32{1},
+					MaxVal: getLenMonAltStates(cfg, 160),
+				},
+				{
+					ID: 	198,
+					Values: []int32{1},
+					MaxVal: getLenMonAltStates(cfg, 198),
+				},
+				{
+					ID: 	285,
+					Values: []int32{1},
+					MaxVal: getLenMonAltStates(cfg, 285),
+				},
+				{
+					ID: 	287,
+					Values: []int32{2},
+					MaxVal: getLenMonAltStates(cfg, 287),
+				},
+			},
 			Description: "If the looked up monster has altered states, they can be applied, but will only have an effect, if they change its agility stat, or apply 'haste'. If a monster has a different agility stat on only its first turn, this altered state is applied automatically, except when 'ign_first_turn' is true. Specifying that specific altered state won't have any effect, nor will it result in an error. The same is true for Penance's arms who get the 'haste' status only during their own turns. Returns an error, if the monster doesn't have as many altered states as given. The maxVal of this field is always the total amount of the monster's altered states.",
 		},
 		{
@@ -201,4 +233,9 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 			Description: "Specify, whether the monster carries the 'haste' or 'slow' status. If 'haste' or 'slow' are selected, it is assumed, that the monster gets this status on its first turn, so ICV calculation is unaffected. The ctb alterations that come from applying 'haste' or 'slow' are ignored. If 'auto-haste' is selected, the monster starts this battle with 'haste' (due to 'auto-haste', or 'sos-haste') which will affect ICV calculation. If a monster was looked up, and this field is active, this value will override the monster's original haste status, though in practice, this will only affect Penance's arms (IDs 306/307). 'Haste' halves the bearer's tick speed, while 'slow' doubles it.",
 		},
 	}
+}
+
+func getLenMonAltStates(cfg *Config, id int32) int32 {
+	mon, _ := seeding.GetResourceByID(id, cfg.l.MonstersID)
+	return h.Len32(mon.AlteredStates)
 }

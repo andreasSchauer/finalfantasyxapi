@@ -121,7 +121,8 @@ func verifyParamFieldArr[T any](cfg *Config, arr []T, fieldName FieldName, value
 			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("expected value map at index %d of field '%s'", i, fieldName), nil)
 		}
 
-		arr[i], err = verifyParamField(cfg, item, fieldName, childValMap, valTree[fieldName].Children, verifyFn)
+		// I think, just calling the verifyFn here should be enough
+		arr[i], err = verifyFn(cfg, item, fieldName, childValMap, valTree[fieldName].Children)
 		if err != nil {
 			return nil, err
 		}
