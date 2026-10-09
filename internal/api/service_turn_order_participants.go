@@ -9,15 +9,15 @@ import (
 )
 
 type Participant struct {
-	Name    string      `json:"name"`
-	Party   BattleParty `json:"-"`
-	Agility int32       `json:"agility"`
+	Name    	  string      	`json:"name"`
+	Party   	  BattleParty 	`json:"-"`
+	Agility 	  int32       	`json:"agility"`
 	AgilityVals
-	FirstStrike   bool    `json:"first_strike"`
-	Status        *string `json:"status"`
-	AltState      *int32  `json:"alt_state,omitempty"`
-	TurnsReceived int32   `json:"turns_received"`
-	TurnsPercent  float64 `json:"turns_percent"`
+	FirstStrike   bool    		`json:"first_strike"`
+	Status        *string 		`json:"status"`
+	AltState      *int32  		`json:"alt_state,omitempty"`
+	TurnsReceived int32   		`json:"turns_received"`
+	TurnsPercent  float64 		`json:"turns_percent"`
 }
 
 func (p Participant) getKey() string {

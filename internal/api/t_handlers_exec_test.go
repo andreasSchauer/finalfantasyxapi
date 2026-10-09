@@ -20,6 +20,14 @@ func getTestName(name, requestURL string, caseNum int) string {
 	return fmt.Sprintf("%s-%d: %s", name, caseNum, requestURL)
 }
 
+func getHandlerFunc(tc testGeneral, getHandler, postHandler func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
+	switch tc.method {
+		case http.MethodGet: return getHandler
+		case http.MethodPost: return postHandler
+		default: return getHandler
+	}
+}
+
 func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
 	t.Helper()
 
@@ -61,6 +69,26 @@ func testStatusses(t *testing.T, tests []testGeneral, testFuncName string, handl
 	}
 }
 
+func testServiceResponses[E testCase, G any](t *testing.T, tests []E, testFuncName string, getHandler, postHandler func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
+	t.Helper()
+
+	for i, exp := range tests {
+		tc := exp.GetTestGeneral()
+		name := getTestName(testFuncName, tc.requestURL, i+1)
+		handlerFunc := getHandlerFunc(tc, getHandler, postHandler)
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			testObj, got, err := setupTest[G](t, tc, name, handlerFunc)
+			if errors.Is(err, errCorrect) {
+				return
+			}
+
+			compFunc(testObj, exp, got)
+		})
+	}
+}
 
 // compareAPIResourceLists for normal API Resources
 // compareSimpleResourceLists for Subsections

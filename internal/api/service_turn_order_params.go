@@ -24,8 +24,8 @@ func (p TurnOrderParams) GetDoc(cfg *Config) ParamsDoc {
 }
 
 type turnOrderParty struct {
-	ID      int32   `json:"id"`
-	Agility int32   `json:"agility"`
+	ID      int32   `json:"id,omitempty"`
+	Agility int32   `json:"agility,omitempty"`
 	FS      bool    `json:"first_strike,omitempty"`
 	Status  *string `json:"status,omitempty"`
 }
@@ -38,10 +38,10 @@ func (p turnOrderParty) getDuplicateKey() string {
 }
 
 type turnOrderMon struct {
-	ID          *int32  `json:"id"`
+	ID          *int32  `json:"id,omitempty"`
 	AltState    *int32  `json:"alt_state,omitempty"`
 	Name        *string `json:"name,omitempty"`
-	Agility     *int32  `json:"agility"`
+	Agility     *int32  `json:"agility,omitempty"`
 	FirstStrike *bool   `json:"first_strike,omitempty"`
 	Status      *string `json:"status,omitempty"`
 }
@@ -168,38 +168,38 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 			Description:   "To define a monster, you can specify an ID and look up the corresponding monster. Its agility stat, first strike, as well as its innate 'haste' status will be applied automatically. These values can be overridden however, through the use of the other fields.",
 		},
 		{
-			Field:       pfnAltState,
-			Type:        "int (idx +1: monster altered states)",
+			Field:        pfnAltState,
+			Type:         "int (idx +1: monster altered states)",
 			AllowZeroVal: true,
-			RequiresAll: []FieldName{pfnID},
-			IdAllowedValues: []IdAllowedValues{
+			RequiresAll:  []FieldName{pfnID},
+			AllowedIdValPairs: []AllowedIdValPairs{
 				{
-					ID: 	32,
+					ID:     32,
 					Values: []int32{2, 3},
 					MaxVal: getLenMonAltStates(cfg, 32),
 				},
 				{
-					ID: 	139,
+					ID:     139,
 					Values: []int32{1, 2, 3},
 					MaxVal: getLenMonAltStates(cfg, 139),
 				},
 				{
-					ID: 	160,
+					ID:     160,
 					Values: []int32{1},
 					MaxVal: getLenMonAltStates(cfg, 160),
 				},
 				{
-					ID: 	198,
+					ID:     198,
 					Values: []int32{1},
 					MaxVal: getLenMonAltStates(cfg, 198),
 				},
 				{
-					ID: 	285,
+					ID:     285,
 					Values: []int32{1},
 					MaxVal: getLenMonAltStates(cfg, 285),
 				},
 				{
-					ID: 	287,
+					ID:     287,
 					Values: []int32{2},
 					MaxVal: getLenMonAltStates(cfg, 287),
 				},

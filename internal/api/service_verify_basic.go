@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 	"net/http"
-	"reflect"
 	"slices"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -13,7 +12,7 @@ func vfExistingFields(valueMap map[FieldName]any, valTree ValidationTree) error 
 	for fieldName := range valueMap {
 		_, exists := valTree[fieldName]
 		if !exists {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid field: '%s'", fieldName), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid field: '%s'.", fieldName), nil)
 		}
 	}
 
@@ -55,7 +54,7 @@ func basicFieldChecks[T any](val T, fieldName FieldName, valueMap map[FieldName]
 		return zero, err
 	}
 
-	err = vfIdAllowedValues(val, fieldName, doc, valIsPresent, valueMap)
+	err = vfAllowedIdValPairs(val, fieldName, doc, valIsPresent, valueMap)
 	if err != nil {
 		return zero, err
 	}
@@ -146,8 +145,8 @@ func vfAllowedIDs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool,
 	return nil
 }
 
-func vfIdAllowedValues(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap map[FieldName]any) error {
-	if !valIsPresent || len(doc.IdAllowedValues) == 0 || valIsPointer(val) {
+func vfAllowedIdValPairs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap map[FieldName]any) error {
+	if !valIsPresent || len(doc.AllowedIdValPairs) == 0 || valIsPointer(val) {
 		return nil
 	}
 
@@ -157,7 +156,7 @@ func vfIdAllowedValues(val any, fieldName FieldName, doc FieldDoc, valIsPresent 
 		return nil
 	}
 
-	for _, entry := range doc.IdAllowedValues {
+	for _, entry := range doc.AllowedIdValPairs {
 		if id != entry.ID {
 			continue
 		}
@@ -171,17 +170,7 @@ func vfIdAllowedValues(val any, fieldName FieldName, doc FieldDoc, valIsPresent 
 		}
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s.", pfnAltState, formatIdAllowedVals(doc.IdAllowedValues)), nil)
-}
-
-func getInt32FromValMap(fieldName FieldName, valueMap map[FieldName]any) (int32, error) {
-	raw, ok := valueMap[fieldName]
-	if !ok {
-		return 0, errNoVal
-	}
-	intVal := int32(raw.(float64))
-
-	return intVal, nil
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s.", pfnAltState, formatAllowedIdValPairs(doc.AllowedIdValPairs)), nil)
 }
 
 // sideNote: a pointer is completely optional, so it will never have a default value.
@@ -197,59 +186,4 @@ func assignDefaultVal[T any](val T, valIsPresent bool, doc FieldDoc) T {
 	}
 
 	return val
-}
-
-func hasDefaultVal(doc FieldDoc) bool {
-	return doc.DefaultVal != nil
-}
-
-
-func hasVal(fieldName FieldName, valueMap map[FieldName]any) bool {
-	jsonVal, ok := valueMap[fieldName]
-	return ok && jsonVal != nil
-}
-
-func hasValOld(val any, doc FieldDoc) bool {
-	if val == nil {
-		return false
-	}
-
-	if doc.AllowZeroVal {
-		return true
-	}
-
-	switch t := val.(type) {
-	case string:
-		return t != ""
-
-	case int32:
-		return t != 0
-
-	case int:
-		return t != 0
-
-	case float64:
-		return t != 0
-
-	case bool:
-		return t
-	}
-
-	v := reflect.ValueOf(val)
-	switch v.Kind() {
-	case reflect.Pointer:
-		return !v.IsNil()
-
-	case reflect.Slice:
-		return !(v.IsNil() || v.Len() == 0)
-
-	case reflect.Struct:
-		return !v.IsZero()
-	}
-
-	return false
-}
-
-func valIsPointer(val any) bool {
-	return reflect.ValueOf(val).Kind() == reflect.Pointer
 }

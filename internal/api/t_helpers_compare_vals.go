@@ -32,6 +32,13 @@ func compare(test test, fieldName string, exp, got any) {
 		}
 		compFloat32(test, fieldName, e, g)
 
+	case float64:
+		g, ok := got.(float64)
+		if !ok {
+			t.Errorf("%s type mismatch: expected float64, got %T\n\n", fieldName, got)
+		}
+		compFloat64(test, fieldName, e, g)
+		
 	case string:
 		g, ok := got.(string)
 		if !ok {
@@ -59,6 +66,13 @@ func compare(test test, fieldName string, exp, got any) {
 			t.Errorf("%s type mismatch: expected *float32, got %T\n\n", fieldName, got)
 		}
 		compFloat32Ptr(test, fieldName, e, g)
+		
+	case *float64:
+		g, ok := got.(*float64)
+		if !ok {
+			t.Errorf("%s type mismatch: expected *float64, got %T\n\n", fieldName, got)
+		}
+		compFloat64Ptr(test, fieldName, e, g)
 
 	case *string:
 		g, ok := got.(*string)
@@ -93,6 +107,13 @@ func compFloat32(test test, fieldName string, exp, got float32) {
 	}
 }
 
+func compFloat64(test test, fieldName string, exp, got float64) {
+	test.t.Helper()
+	if exp != got {
+		test.t.Errorf("expected %s %.4f, got %.4f\n\n", fieldName, exp, got)
+	}
+}
+
 func compString(test test, fieldName, exp, got string) {
 	test.t.Helper()
 	if exp != "" && exp != got {
@@ -124,6 +145,11 @@ func compInt32Ptr(test test, fieldName string, exp, got *int32) {
 func compFloat32Ptr(test test, fieldName string, exp, got *float32) {
 	test.t.Helper()
 	compPtr(test, fieldName, exp, got, compFloat32)
+}
+
+func compFloat64Ptr(test test, fieldName string, exp, got *float64) {
+	test.t.Helper()
+	compPtr(test, fieldName, exp, got, compFloat64)
 }
 
 func compStringPtr(test test, fieldName string, exp, got *string) {

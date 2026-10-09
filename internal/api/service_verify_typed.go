@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func vfIntId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (int32, error) {
@@ -38,7 +40,7 @@ func vfEnum(_ *Config, typedVal string, fieldName FieldName, _ map[FieldName]any
 	}
 
 	if !slices.Contains(doc.EnumValues, typedVal) {
-		return "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("value '%s' of field '%s' is not a valid enum value.", typedVal, fieldName), nil)
+		return "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("value '%s' of field '%s' is not a valid enum value. allowed values: %s.", typedVal, fieldName, h.FormatStringSlice(doc.EnumValues)), nil)
 	}
 
 	return typedVal, nil

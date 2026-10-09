@@ -5,7 +5,7 @@ import (
 )
 
 type DropChanceParams struct {
-	Monster				int32		`json:"monster"`
+	Monster				int32		`json:"monster,omitempty"`
 	Character			*int32		`json:"character,omitempty"`
 	PartyMembers		[]int32		`json:"party_members,omitempty"`
 	AutoAbilities		[]int32		`json:"auto_abilities,omitempty"`
