@@ -7,10 +7,12 @@ import (
 
 func TestAlBhed(t *testing.T) {
 	t.Parallel()
+	requestURL := "/api/al-bhed"
+	
 	tests := []expAlBhedResponse{
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid or corrupt payload in request body.",
@@ -19,7 +21,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "field 'text' can't be empty.",
@@ -30,7 +32,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "value 'bla' of field 'direction' is not a valid enum value. allowed values: 'to-al-bhed', 'to-english'.",
@@ -42,7 +44,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. all brackets must be closed.",
@@ -53,7 +55,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket.",
@@ -64,7 +66,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket.",
@@ -75,7 +77,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. all brackets must be closed.",
@@ -86,7 +88,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid field: 'monster'.",
@@ -97,7 +99,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
 				requestBody: AlBhedParams{
@@ -112,7 +114,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
 				requestBody: AlBhedParams{
@@ -127,7 +129,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
 				requestBody: AlBhedParams{
@@ -142,7 +144,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
 				requestBody: AlBhedParams{
@@ -157,7 +159,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
 				requestBody: AlBhedParams{
@@ -173,7 +175,7 @@ func TestAlBhed(t *testing.T) {
 		},
 		{
 			testGeneral: testGeneral{
-				requestURL:     "/api/al-bhed",
+				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
 				requestBody: AlBhedParams{

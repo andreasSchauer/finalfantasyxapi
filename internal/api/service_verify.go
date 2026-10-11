@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 )
@@ -95,11 +96,10 @@ func verifyParamFieldArr[T any](cfg *Config, arr []T, fieldName FieldName, value
 		return nil, err
 	}
 
-	if arr == nil {
+	arr, err = vfArray(cfg, arr, fieldName, valueMap, valTree)
+	if errors.Is(err, errNullArray) {
 		return arr, nil
 	}
-
-	arr, err = vfArray(cfg, arr, fieldName, valueMap, valTree)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +121,6 @@ func verifyParamFieldArr[T any](cfg *Config, arr []T, fieldName FieldName, value
 			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("expected value map at index %d of field '%s'", i, fieldName), nil)
 		}
 
-		// I think, just calling the verifyFn here should be enough
 		arr[i], err = verifyFn(cfg, item, fieldName, childValMap, valTree[fieldName].Children)
 		if err != nil {
 			return nil, err
@@ -131,26 +130,33 @@ func verifyParamFieldArr[T any](cfg *Config, arr []T, fieldName FieldName, value
 	return arr, nil
 }
 
-func verifyParamFieldIntIdArr(cfg *Config, arr []int32, fieldName FieldName, valueMap map[FieldName]any, valTree ValidationTree) ([]int32, error) {
+func verifyParamFieldIdArr(cfg *Config, arr []int32, fieldName FieldName, valueMap map[FieldName]any, valTree ValidationTree) ([]int32, error) {
 	arr, err := basicFieldChecks(arr, fieldName, valueMap, valTree)
 	if err != nil {
 		return nil, err
 	}
 
-	if arr == nil {
+	arr, err = vfArray(cfg, arr, fieldName, valueMap, valTree)
+	if errors.Is(err, errNullArray) {
 		return arr, nil
 	}
-
-	arr, err = vfArray(cfg, arr, fieldName, valueMap, valTree)
 	if err != nil {
 		return nil, err
 	}
 
+	isDupe := make(map[int32]bool)
+
 	for i, val := range arr {
-		arr[i], err = vfArrayId(nil, val, fieldName, nil, valTree)
+		if isDupe[val] {
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("array of field '%s' can't have duplicate ids.", fieldName), nil)
+		}
+
+		arr[i], err = vfArrayChildId(nil, val, fieldName, nil, valTree)
 		if err != nil {
 			return nil, err
 		}
+
+		isDupe[val] = true
 	}
 
 	return arr, nil

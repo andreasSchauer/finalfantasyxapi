@@ -65,6 +65,8 @@ func getMonAutoAbilities(params DropChanceParams, mon seeding.Monster) ([]seedin
 	case string(database.EquipTypeArmor):
 		return mon.Equipment.ArmorAbilities, nil
 
+	// just a fallback. won't ever be triggered.
+	// vfWantedAutoAbilities does the same check
 	default:
 		return nil, newHTTPError(http.StatusBadRequest, "equip type must be set.", nil)
 	}
@@ -86,7 +88,7 @@ func vfAutoAbilitiesDropped(autoAbilities []seeding.AutoAbility, monsterAbilitie
 		}
 
 		if !isPresent {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s'. it only drops the following auto-abilities: %s.", mon, ability.Name, formatMonAutoAbilities(mon)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s' (%d). it only drops the following auto-abilities: %s.", mon, ability.Name, ability.ID, formatMonAutoAbilities(mon)), nil)
 		}
 	}
 
@@ -99,7 +101,7 @@ func vfCharGetsAbility(ability seeding.EquipmentDrop, charPtr *seeding.Character
 	}
 	
 	if !charGetsAbility(ability, charPtr) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s' for %s", mon, ability.Ability, charPtr.Name), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s' (%d) for %s.", mon, ability.Ability, ability.AutoAbilityID, charPtr.Name), nil)
 	}
 
 	return nil

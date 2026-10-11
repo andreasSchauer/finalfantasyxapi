@@ -33,11 +33,16 @@ func hasValOld(val any, doc FieldDoc) bool {
 	}
 
 	switch t := val.(type) {
-		case string: return t != ""
-		case int32: return t != 0
-		case int: return t != 0
-		case float64: return t != 0
-		case bool: return t
+	case string:
+		return t != ""
+	case int32:
+		return t != 0
+	case int:
+		return t != 0
+	case float64:
+		return t != 0
+	case bool:
+		return t
 	}
 
 	v := reflect.ValueOf(val)

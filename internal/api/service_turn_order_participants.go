@@ -69,7 +69,7 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 	var playerParty []Participant
 
 	for _, partyMember := range params.Party {
-		_, isDupe := maps.duplicates[partyMember.getDuplicateKey()]
+		isDupe := maps.duplicates[partyMember.getDuplicateKey()]
 		if isDupe {
 			return nil, newHTTPError(http.StatusBadRequest, "each party member can only appear once.", nil)
 		}
@@ -101,9 +101,9 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 	var monParty []Participant
 	
 	for _, mon := range params.Mons {
-		_, isDupe := maps.duplicates[mon.getDuplicateKey()]
+		isDupe := maps.duplicates[mon.getDuplicateKey()]
 		if isDupe {
-			return nil, newHTTPError(http.StatusBadRequest, "exact duplicate mons are not allowed", nil)
+			return nil, newHTTPError(http.StatusBadRequest, "exact duplicate mons are not allowed.", nil)
 		}
 		
 		participant, firstTurnAglTier, err := fetchTurnOrderMonster(cfg, params, mon)

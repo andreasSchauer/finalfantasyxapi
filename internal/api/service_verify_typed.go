@@ -8,28 +8,52 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func vfIntId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (int32, error) {
+func vfId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (int32, error) {
 	doc := valTree[fieldName].Doc
 
-	if doc.MinVal != nil && val < *doc.MinVal {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("value '%d' of field '%s' is out of range. Expected minimum: %d.", val, fieldName, *doc.MinVal), nil)
+	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "id", false)
+}
+
+func vfInt(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (int32, error) {
+	doc := valTree[fieldName].Doc
+
+	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "value", false)
+}
+
+func vfArrayChildId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (int32, error) {
+	doc := valTree[fieldName].Doc
+
+	return vfIntRange(val, doc.ChildMinVal, doc.ChildMaxVal, fieldName, "id", true)
+}
+
+func vfIntRange(val int32, minVal, maxVal *int32, fieldName FieldName, intType string, isArray bool) (int32, error) {
+	errStart := getRangeErrStart(val, fieldName, intType, isArray)
+
+	if minVal != nil && maxVal != nil && (val < *minVal || val > *maxVal) {
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. allowed range: %d to %d.", errStart, *minVal, *maxVal), nil)
 	}
 
-	if doc.MaxVal != nil && val > *doc.MaxVal {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("value '%d' of field '%s' is out of range. Expected maximum: %d.", val, fieldName, *doc.MaxVal), nil)
+	if minVal != nil && val < *minVal {
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. lowest allowed value: %d.", errStart, *minVal), nil)
+	}
+
+	if maxVal != nil && val > *maxVal {
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. highest allowed value: %d.", errStart, *maxVal), nil)
 	}
 
 	return val, nil
 }
 
-func vfArrayId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (int32, error) {
-	doc := valTree[fieldName].Doc
+func getRangeErrStart(val int32, fieldName FieldName, intType string, isArray bool) string {
+	errStart := fmt.Sprintf("%s '%d'", intType, val)
 
-	if (doc.ChildMinVal != nil && val < *doc.ChildMinVal) || (doc.ChildMaxVal != nil && val > *doc.ChildMaxVal) {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("id '%d' inside array of field '%s' is out of range. allowed range: %d to %d.", val, fieldName, *doc.ChildMinVal, *doc.ChildMaxVal), nil)
+	if isArray {
+		errStart += " inside array"
 	}
 
-	return val, nil
+	errStart += fmt.Sprintf(" of field '%s' is out of range", fieldName)
+
+	return errStart
 }
 
 func vfEnum(_ *Config, typedVal string, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (string, error) {
@@ -47,14 +71,22 @@ func vfEnum(_ *Config, typedVal string, fieldName FieldName, _ map[FieldName]any
 }
 
 func vfArray[T any](_ *Config, arr []T, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) ([]T, error) {
+	if arr == nil {
+		return arr, errNullArray
+	}
+
 	doc := valTree[fieldName].Doc
+
+	if len(arr) == 0 {
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("empty array used for field '%s'. the use of empty arrays is not supported by this API. omit the field, or use null instead.", fieldName), nil)
+	}
 
 	if doc.MaxArrayLen == nil {
 		return arr, nil
 	}
 
 	if len(arr) > *doc.MaxArrayLen {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("too many items in '%s' array. got: %d, maximum allowed: %d", fieldName, len(arr), *doc.MaxArrayLen), nil)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("too many items in '%s' array. got: %d, maximum allowed: %d.", fieldName, len(arr), *doc.MaxArrayLen), nil)
 	}
 
 	return arr, nil

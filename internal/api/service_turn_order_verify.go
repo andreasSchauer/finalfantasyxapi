@@ -2,13 +2,13 @@ package api
 
 func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, valueMap map[FieldName]any) (TurnOrderParams, error) {
 	valTree := compileValidationTree(cfg.getTurnOrderParamsDoc().Fields)
-	
+
 	err := vfExistingFields(valueMap, valTree)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.TurnsAmt, err = verifyParamField(cfg, params.TurnsAmt, pfnTurnsAmt, valueMap, valTree, vfIntId)
+	params.TurnsAmt, err = verifyParamField(cfg, params.TurnsAmt, pfnTurnsAmt, valueMap, valTree, vfInt)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
@@ -33,7 +33,7 @@ func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, valueMap map[Fie
 		return TurnOrderParams{}, err
 	}
 
-	params.Formation, err = verifyParamFieldPtr(cfg, params.Formation, pfnFormation, valueMap, valTree, vfIntId)
+	params.Formation, err = verifyParamFieldPtr(cfg, params.Formation, pfnFormation, valueMap, valTree, vfId)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
@@ -59,12 +59,12 @@ func vfTurnOrderParty(cfg *Config, item turnOrderParty, _ FieldName, valueMap ma
 		return turnOrderParty{}, err
 	}
 
-	item.ID, err = verifyParamField(cfg, item.ID, pfnID, valueMap, valTree, vfIntId)
+	item.ID, err = verifyParamField(cfg, item.ID, pfnID, valueMap, valTree, vfId)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
 
-	item.Agility, err = verifyParamField(cfg, item.Agility, pfnAgility, valueMap, valTree, vfIntId)
+	item.Agility, err = verifyParamField(cfg, item.Agility, pfnAgility, valueMap, valTree, vfInt)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
@@ -90,12 +90,12 @@ func vfTurnOrderMon(cfg *Config, item turnOrderMon, _ FieldName, valueMap map[Fi
 		return turnOrderMon{}, err
 	}
 
-	item.ID, err = verifyParamFieldPtr(cfg, item.ID, pfnID, valueMap, valTree, vfIntId)
+	item.ID, err = verifyParamFieldPtr(cfg, item.ID, pfnID, valueMap, valTree, vfId)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
 
-	item.AltState, err = verifyParamFieldPtr(cfg, item.AltState, pfnAltState, valueMap, valTree, vfIntId)
+	item.AltState, err = verifyParamFieldPtr(cfg, item.AltState, pfnAltState, valueMap, valTree, vfInt)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
@@ -105,7 +105,7 @@ func vfTurnOrderMon(cfg *Config, item turnOrderMon, _ FieldName, valueMap map[Fi
 		return turnOrderMon{}, err
 	}
 
-	item.Agility, err = verifyParamFieldPtr(cfg, item.Agility, pfnAgility, valueMap, valTree, vfIntId)
+	item.Agility, err = verifyParamFieldPtr(cfg, item.Agility, pfnAgility, valueMap, valTree, vfInt)
 	if err != nil {
 		return turnOrderMon{}, err
 	}

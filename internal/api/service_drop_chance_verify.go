@@ -13,22 +13,22 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[F
 		return DropChanceParams{}, err
 	}
 
-	params.Monster, err = verifyParamField(cfg, params.Monster, pfnMonster, valueMap, valTree, vfIntId)
+	params.Monster, err = verifyParamField(cfg, params.Monster, pfnMonster, valueMap, valTree, vfId)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.Character, err = verifyParamFieldPtr(cfg, params.Character, pfnCharacter, valueMap, valTree, vfIntId)
+	params.Character, err = verifyParamFieldPtr(cfg, params.Character, pfnCharacter, valueMap, valTree, vfId)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
-	
-	params.PartyMembers, err = verifyParamFieldIntIdArr(cfg, params.PartyMembers, pfnPartyMembers, valueMap, valTree)
+
+	params.PartyMembers, err = verifyParamFieldIdArr(cfg, params.PartyMembers, pfnPartyMembers, valueMap, valTree)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
-	
-	params.AutoAbilities, err = verifyParamFieldIntIdArr(cfg, params.AutoAbilities, pfnAutoAbilities, valueMap, valTree)
+
+	params.AutoAbilities, err = verifyParamFieldIdArr(cfg, params.AutoAbilities, pfnAutoAbilities, valueMap, valTree)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
@@ -43,12 +43,12 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[F
 		return DropChanceParams{}, err
 	}
 
-	params.MinEmptySlots, err = verifyParamFieldPtr(cfg, params.MinEmptySlots, pfnMinEmptySlots, valueMap, valTree, vfIntId)
+	params.MinEmptySlots, err = verifyParamFieldPtr(cfg, params.MinEmptySlots, pfnMinEmptySlots, valueMap, valTree, vfInt)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.TotalSlots, err = verifyParamFieldPtr(cfg, params.TotalSlots, pfnTotalSlots, valueMap, valTree, vfIntId)
+	params.TotalSlots, err = verifyParamFieldPtr(cfg, params.TotalSlots, pfnTotalSlots, valueMap, valTree, vfInt)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
@@ -62,7 +62,7 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[F
 	if err != nil {
 		return DropChanceParams{}, err
 	}
-	
+
 	err = vfCharInParty(params)
 	if err != nil {
 		return DropChanceParams{}, err
@@ -74,7 +74,7 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[F
 func vfRequiredSlotAmount(params DropChanceParams) error {
 	requiredSlots := getRequiredSlots(params)
 	var totalSlots int32 = 4
-	
+
 	if params.TotalSlots != nil {
 		totalSlots = *params.TotalSlots
 	}
