@@ -27,6 +27,7 @@ type FieldDoc struct {
 	MaxVal            *int32              `json:"max_val,omitempty"`
 	MaxArrayLen       *int                `json:"max_array_len,omitempty"`
 	AllowedIDs        []int32             `json:"allowed_ids,omitempty"`
+	ParentIdField	  *FieldName		  `json:"parent_id_field,omitempty"`
 	AllowedIdValPairs []AllowedIdValPairs `json:"allowed_id_val_pairs"`
 	EnumValues        []string            `json:"enum_values,omitempty"`
 	Description       string              `json:"description"`
@@ -42,7 +43,7 @@ type AllowedIdValPairs struct {
 }
 
 func (e AllowedIdValPairs) format() string {
-	return fmt.Sprintf("%d - %s", e.ID, h.IntSliceToString(e.Values))
+	return fmt.Sprintf("id: %d, vals: %s", e.ID, h.IntSliceToString(e.Values))
 }
 
 func formatAllowedIdValPairs(entries []AllowedIdValPairs) string {

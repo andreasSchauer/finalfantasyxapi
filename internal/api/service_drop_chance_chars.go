@@ -38,8 +38,8 @@ func calcCharRandomChances(cfg *Config, params DropChanceParams, wantedAbilities
 	baseRandomChance := 0.75 / h.FloatLen(params.PartyMembers)
 	var chances CharacterChances
 
-	if params.Character != nil {
-		char, _ := seeding.GetResourceByID(*params.Character, cfg.l.CharactersID)
+	if params.CharacterID != nil {
+		char, _ := seeding.GetResourceByID(*params.CharacterID, cfg.l.CharactersID)
 
 		if charLearnsReqAbilities(char, wantedAbilities, monAbilities) {
 			finBlowChance := baseRandomChance + 0.25
@@ -98,10 +98,10 @@ func charGetsAbility(ability seeding.EquipmentDrop, charPtr *seeding.Character) 
 }
 
 func getCharPtr(cfg *Config, params DropChanceParams) *seeding.Character {
-	if params.Character == nil {
+	if params.CharacterID == nil {
 		return nil
 	}
 
-	char, _ := seeding.GetResourceByID(*params.Character, cfg.l.CharactersID)
+	char, _ := seeding.GetResourceByID(*params.CharacterID, cfg.l.CharactersID)
 	return &char
 }

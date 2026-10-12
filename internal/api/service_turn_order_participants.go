@@ -9,15 +9,15 @@ import (
 )
 
 type Participant struct {
-	Name    	  string      	`json:"name"`
-	Party   	  BattleParty 	`json:"-"`
-	Agility 	  int32       	`json:"agility"`
+	Name    string      `json:"name"`
+	Party   BattleParty `json:"-"`
+	Agility int32       `json:"agility"`
 	AgilityVals
-	FirstStrike   bool    		`json:"first_strike"`
-	Status        *string 		`json:"status"`
-	AltState      *int32  		`json:"alt_state,omitempty"`
-	TurnsReceived int32   		`json:"turns_received"`
-	TurnsPercent  float64 		`json:"turns_percent"`
+	FirstStrike   bool    `json:"first_strike"`
+	Status        *string `json:"status"`
+	AltState      *int32  `json:"alt_state,omitempty"`
+	TurnsReceived int32   `json:"turns_received"`
+	TurnsPercent  float64 `json:"turns_percent"`
 }
 
 func (p Participant) getKey() string {
@@ -68,13 +68,13 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 	const idFormationSpectral int32 = 253
 	var playerParty []Participant
 
-	for _, partyMember := range params.Party {
+	for i, partyMember := range params.Party {
 		isDupe := maps.duplicates[partyMember.getDuplicateKey()]
 		if isDupe {
-			return nil, newHTTPError(http.StatusBadRequest, "each party member can only appear once.", nil)
+			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(pfnParty, fmt.Sprintf("duplicate unit id found at index %d. each party member can only appear once.", i)), nil)
 		}
 
-		unit, _ := seeding.GetResourceByID(partyMember.ID, cfg.l.PlayerUnitsID)
+		unit, _ := seeding.GetResourceByID(partyMember.UnitID, cfg.l.PlayerUnitsID)
 
 		participant := Participant{
 			Name:        unit.Name,
@@ -85,7 +85,7 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 		}
 		participant.AgilityVals = extractAglTierChar(cfg, participant, params)
 
-		if params.Formation != nil && *params.Formation == idFormationSpectral {
+		if params.FormationID != nil && *params.FormationID == idFormationSpectral {
 			participant.MinICV, participant.MaxICV = getEqualICVs(0)
 		}
 
@@ -99,13 +99,13 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 
 func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantMaps) ([]Participant, error) {
 	var monParty []Participant
-	
-	for _, mon := range params.Mons {
+
+	for i, mon := range params.Mons {
 		isDupe := maps.duplicates[mon.getDuplicateKey()]
 		if isDupe {
-			return nil, newHTTPError(http.StatusBadRequest, "exact duplicate mons are not allowed.", nil)
+			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(pfnMons, fmt.Sprintf("duplicate monster found at index %d. exact duplicate monsters are not allowed.", i)), nil)
 		}
-		
+
 		participant, firstTurnAglTier, err := fetchTurnOrderMonster(cfg, params, mon)
 		if err != nil {
 			return nil, err
@@ -122,18 +122,18 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 }
 
 func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon) (Participant, *seeding.AgilityTier, error) {
-	if mon.ID == nil {
+	if mon.MonsterID == nil {
 		return Participant{}, nil, nil
 	}
 
-	monster, firstTurnAglTier, err := assembleMonTurnOrder(cfg, *mon.ID, mon.AltState)
+	monster, firstTurnAglTier, err := assembleMonTurnOrder(cfg, *mon.MonsterID, mon.AltState)
 	if err != nil {
 		return Participant{}, nil, err
 	}
 
 	participant := Participant{
 		Name:        h.NameToString(monster.Name, monster.Version, nil),
-		Agility:     getTurnOrderMonAgility(cfg, *mon.ID, monster),
+		Agility:     getTurnOrderMonAgility(cfg, *mon.MonsterID, monster),
 		FirstStrike: monsterHasFirstStrike(monster),
 		AltState:    mon.AltState,
 	}
@@ -165,7 +165,7 @@ func populateParticipantMon(cfg *Config, params TurnOrderParams, participant Par
 	participant.Party = battlePartyOpponent
 	participant.AgilityVals = extractAglTierMon(cfg, participant, params, firstTurnAglTier)
 
-	if isSpectralKeeperInStoryFight(*mon.ID, params.Formation) {
+	if isSpectralKeeperInStoryFight(*mon.MonsterID, params.FormationID) {
 		participant.MinICV, participant.MaxICV = getEqualICVs(21)
 	}
 

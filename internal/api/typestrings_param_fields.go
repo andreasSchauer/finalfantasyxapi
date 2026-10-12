@@ -12,27 +12,25 @@ const (
 	pfnAglOverride      FieldName = "agl_override"
 	pfnAltState         FieldName = "alt_state"
 	pfnAmt              FieldName = "amt"
-	pfnAttackType      	FieldName = "attack_type"
+	pfnAttackType       FieldName = "attack_type"
 	pfnAutoAbilities    FieldName = "auto_abilities"
 	pfnBattles          FieldName = "battles"
 	pfnBattleStart      FieldName = "battle_start"
-	pfnCharacter        FieldName = "character"
+	pfnCharacterID      FieldName = "character_id"
 	pfnDecimals         FieldName = "decimals"
-	pfnDelay         	FieldName = "delay"
+	pfnDelay            FieldName = "delay"
 	pfnDelayConstant    FieldName = "delay_constant"
-	pfnDelayType       	FieldName = "delay_type"
+	pfnDelayType        FieldName = "delay_type"
 	pfnDirection        FieldName = "direction"
 	pfnEquipType        FieldName = "equip_type"
 	pfnFirstStrike      FieldName = "first_strike"
-	pfnFormation        FieldName = "formation"
-	pfnID               FieldName = "id"
+	pfnFormationID      FieldName = "formation_id"
 	pfnIgnFirstTurn     FieldName = "ign_first_turn"
 	pfnIgnImmunities    FieldName = "ign_immunities"
-	pfnInteraction	    FieldName = "interaction"
+	pfnInteraction      FieldName = "interaction"
 	pfnLenientAbilities FieldName = "lenient_abilities"
 	pfnMinEmptySlots    FieldName = "min_empty_slots"
 	pfnMons             FieldName = "mons"
-	pfnMonster          FieldName = "monster"
 	pfnMonsterID        FieldName = "monster_id"
 	pfnName             FieldName = "name"
 	pfnParty            FieldName = "party"
@@ -45,6 +43,7 @@ const (
 	pfnText             FieldName = "text"
 	pfnTotalSlots       FieldName = "total_slots"
 	pfnTurnsAmt         FieldName = "turns_amt"
+	pfnUnitID           FieldName = "unit_id"
 )
 
 func formatPfnSlice(pfns []FieldName) string {
@@ -59,4 +58,8 @@ func formatPfnSlice(pfns []FieldName) string {
 	}
 
 	return h.FormatStringSlice(strings)
+}
+
+func pfnPtr(fieldName FieldName) *FieldName {
+	return &fieldName
 }

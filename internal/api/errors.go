@@ -81,11 +81,30 @@ func handleHTTPError(w http.ResponseWriter, err error) bool {
 		return false
 	}
 
-	if httpErr, ok := err.(httpError); ok {
+	httpErr, ok := err.(httpError)
+	if ok {
 		respondWithError(w, httpErr.code, httpErr.msg, httpErr.err)
 		return true
 	}
 
 	respondWithError(w, http.StatusInternalServerError, "an unexpected error occurred.", err)
 	return true
+}
+
+func editHTTPError(msg string, err error) error {
+	if err == nil {
+		return nil
+	}
+
+	httpErr, ok := err.(httpError)
+	if ok {
+		httpErr.msg = fmt.Sprintf("%s: %s", msg, httpErr.msg)
+		return httpErr
+	}
+
+	return nil
+}
+
+func fieldErrorMsg(fieldName FieldName, msg string) string {
+	return fmt.Sprintf("field '%s': %s", fieldName, msg)
 }

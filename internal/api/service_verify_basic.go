@@ -107,7 +107,7 @@ func vfRequiresAll(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMa
 
 	for _, field := range doc.RequiresAll {
 		if !hasVal(field, valueMap) {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires the following fields to have a value: %s", fieldName, formatPfnSlice(doc.RequiresAll)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires the following fields to have a value: %s.", fieldName, formatPfnSlice(doc.RequiresAll)), nil)
 		}
 	}
 
@@ -125,7 +125,7 @@ func vfRequiresOne(fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMa
 		}
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires one of the following fields to have a value: %s", fieldName, formatPfnSlice(doc.RequiresOne)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires one of the following fields to have a value: %s.", fieldName, formatPfnSlice(doc.RequiresOne)), nil)
 }
 
 func vfAllowedIDs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool, valueMap map[FieldName]any) error {
@@ -133,13 +133,13 @@ func vfAllowedIDs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool,
 		return nil
 	}
 
-	id, err := getInt32FromValMap(pfnID, valueMap)
+	id, err := getInt32FromValMap(pfnUnitID, valueMap)
 	if err != nil {
 		return nil
 	}
 
 	if !slices.Contains(doc.AllowedIDs, id) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following ids: %s", fieldName, h.FormatIntSlice(doc.AllowedIDs)), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following ids: %s.", fieldName, h.FormatIntSlice(doc.AllowedIDs)), nil)
 	}
 
 	return nil
@@ -150,7 +150,11 @@ func vfAllowedIdValPairs(val any, fieldName FieldName, doc FieldDoc, valIsPresen
 		return nil
 	}
 
-	id, _ := getInt32FromValMap(pfnID, valueMap)
+	if doc.ParentIdField == nil {
+		return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find parent id field for field '%s'", fieldName), nil)
+	}
+
+	id, _ := getInt32FromValMap(*doc.ParentIdField, valueMap)
 	value, err := getInt32FromValMap(fieldName, valueMap)
 	if err != nil {
 		return nil
@@ -162,15 +166,17 @@ func vfAllowedIdValPairs(val any, fieldName FieldName, doc FieldDoc, valIsPresen
 		}
 
 		if value > entry.MaxVal || value <= 0 {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is out of range for id '%d'. max val: %d. allowed vals: %s.", value, pfnAltState, id, entry.MaxVal, h.IntSliceToString(entry.Values)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is out of range for id '%d'. max val: %d. allowed vals: %s.", value, fieldName, id, entry.MaxVal, h.IntSliceToString(entry.Values)), nil)
 		}
 
-		if slices.Contains(entry.Values, value) {
-			return nil
+		if !slices.Contains(entry.Values, value) {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is not available for id '%d'. allowed vals: %s.", value, fieldName, id, h.IntSliceToString(entry.Values)), nil)
 		}
+
+		return nil
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s.", pfnAltState, formatAllowedIdValPairs(doc.AllowedIdValPairs)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s.", fieldName, formatAllowedIdValPairs(doc.AllowedIdValPairs)), nil)
 }
 
 // sideNote: a pointer is completely optional, so it will never have a default value.

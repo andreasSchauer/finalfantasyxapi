@@ -5,7 +5,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, cc CharacterChances) (float64, float64) {
 	equipTypeChance := 0.5
 	slotsTable := extractAbilitySlots(params, mon)
@@ -20,7 +19,7 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 		if err != nil {
 			continue
 		}
-		
+
 		wheelWeightFinBlow, wheelWeightNoFinBlow := getWheelWeights(params, wheel, cc)
 
 		for _, slots := range slotsTable {
@@ -31,7 +30,7 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 
 				matchParams := EquipmentMatchParams{
 					WantedAbilities:  wantedAbilities,
-					WantedIndices:	  wantedIndices,
+					WantedIndices:    wantedIndices,
 					LenientAbilities: params.LenientAbilities,
 					MinEmptySlots:    params.MinEmptySlots,
 					EquipmentSlots:   slots.Amount,
@@ -95,7 +94,7 @@ func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding
 }
 
 func getWheelWeights(params DropChanceParams, wheel AbilityWheel, cc CharacterChances) (float64, float64) {
-	if params.Character != nil {
+	if params.CharacterID != nil {
 		return *cc.CharFinBlow, *cc.CharNoFinBlow
 	}
 

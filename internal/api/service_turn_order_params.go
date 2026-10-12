@@ -8,13 +8,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
+// remove omitempty tags after testing functionality
 type TurnOrderParams struct {
 	TurnsAmt      int32            `json:"turns_amt,omitempty"`
 	IgnFirstTurn  bool             `json:"ign_first_turn,omitempty"`
 	IgnImmunities bool             `json:"ign_immunities,omitempty"`
 	RNG           string           `json:"rng,omitempty"`
 	BattleStart   string           `json:"battle_start,omitempty"`
-	Formation     *int32           `json:"formation,omitempty"`
+	FormationID   *int32           `json:"formation_id,omitempty"`
 	Party         []turnOrderParty `json:"party,omitempty"`
 	Mons          []turnOrderMon   `json:"mons,omitempty"`
 }
@@ -24,7 +25,7 @@ func (p TurnOrderParams) GetDoc(cfg *Config) ParamsDoc {
 }
 
 type turnOrderParty struct {
-	ID      int32   `json:"id,omitempty"`
+	UnitID  int32   `json:"unit_id,omitempty"`
 	Agility int32   `json:"agility,omitempty"`
 	FS      bool    `json:"first_strike,omitempty"`
 	Status  *string `json:"status,omitempty"`
@@ -33,12 +34,12 @@ type turnOrderParty struct {
 func (p turnOrderParty) getDuplicateKey() string {
 	return seeding.CombineFields([]any{
 		fmt.Sprintf("%T", p),
-		p.ID,
+		p.UnitID,
 	})
 }
 
 type turnOrderMon struct {
-	ID          *int32  `json:"id,omitempty"`
+	MonsterID   *int32  `json:"monster_id,omitempty"`
 	AltState    *int32  `json:"alt_state,omitempty"`
 	Name        *string `json:"name,omitempty"`
 	Agility     *int32  `json:"agility,omitempty"`
@@ -49,7 +50,7 @@ type turnOrderMon struct {
 func (p turnOrderMon) getDuplicateKey() string {
 	return seeding.CombineFields([]any{
 		fmt.Sprintf("%T", p),
-		h.DerefOrNil(p.ID),
+		h.DerefOrNil(p.MonsterID),
 		h.DerefOrNil(p.AltState),
 		h.DerefOrNil(p.Name),
 		h.DerefOrNil(p.Agility),
@@ -95,7 +96,7 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 				Description: "Specify, if the battle starts normally, or if it starts as an ambush or preemptive strike. This field will have no effect, if 'ign_first_turn' is set to 'true'.",
 			},
 			{
-				Field:         pfnFormation,
+				Field:         pfnFormationID,
 				Type:          "int (id: monster formation)",
 				RequiredOr:    []FieldName{pfnParty, pfnMons},
 				ConflictsWith: []FieldName{pfnMons},
@@ -106,7 +107,7 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 			{
 				Field:       pfnParty,
 				Type:        "array[turnOrderParty]",
-				RequiredOr:  []FieldName{pfnFormation, pfnMons},
+				RequiredOr:  []FieldName{pfnFormationID, pfnMons},
 				MaxArrayLen: h.GetIntPtr(3),
 				Description: "Defines the participants of the player party.",
 				ChildProps:  cfg.getFieldDocTurnOrderParty(),
@@ -114,8 +115,8 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 			{
 				Field:         pfnMons,
 				Type:          "array[turnOrderMon]",
-				RequiredOr:    []FieldName{pfnFormation, pfnParty},
-				ConflictsWith: []FieldName{pfnFormation},
+				RequiredOr:    []FieldName{pfnFormationID, pfnParty},
+				ConflictsWith: []FieldName{pfnFormationID},
 				MaxArrayLen:   h.GetIntPtr(10),
 				Description:   "Defines the participants of the opponent party by looking up monsters via id or defining custom monsters.",
 				ChildProps:    cfg.getFieldDocTurnOrderMon(),
@@ -127,7 +128,7 @@ func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
 func (cfg *Config) getFieldDocTurnOrderParty() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:       pfnID,
+			Field:       pfnUnitID,
 			Type:        "int (id: playerUnit)",
 			Required:    true,
 			MinVal:      h.GetInt32Ptr(1),
@@ -159,7 +160,7 @@ func (cfg *Config) getFieldDocTurnOrderParty() []FieldDoc {
 func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:         pfnID,
+			Field:         pfnMonsterID,
 			Type:          "int (id: monster)",
 			RequiredOr:    []FieldName{pfnName},
 			ConflictsWith: []FieldName{pfnName},
@@ -171,7 +172,8 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 			Field:        pfnAltState,
 			Type:         "int (idx +1: monster altered states)",
 			AllowZeroVal: true,
-			RequiresAll:  []FieldName{pfnID},
+			RequiresAll:  []FieldName{pfnMonsterID},
+			ParentIdField: pfnPtr(pfnMonsterID),
 			AllowedIdValPairs: []AllowedIdValPairs{
 				{
 					ID:     32,
@@ -209,8 +211,8 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 		{
 			Field:         pfnName,
 			Type:          "string",
-			RequiredOr:    []FieldName{pfnID},
-			ConflictsWith: []FieldName{pfnID},
+			RequiredOr:    []FieldName{pfnMonsterID},
+			ConflictsWith: []FieldName{pfnMonsterID},
 			RequiresAll:   []FieldName{pfnAgility},
 			Description:   "Use this field, if you want to define a custom monster. The given name will show up in the list to represent it. Multiple monsters with the same name will be numbered automatically.",
 		},

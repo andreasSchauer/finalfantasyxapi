@@ -9,11 +9,11 @@ import (
 )
 
 func fetchFormationMons(cfg *Config, params TurnOrderParams) TurnOrderParams {
-	if params.Formation == nil {
+	if params.FormationID == nil {
 		return params
 	}
 
-	formation, _ := seeding.GetResourceByID(*params.Formation, cfg.l.MonsterFormationsID)
+	formation, _ := seeding.GetResourceByID(*params.FormationID, cfg.l.MonsterFormationsID)
 
 	if formation.FormationData.IsForcedAmbush {
 		params.BattleStart = string(database.BattleStartAmbush)
@@ -23,7 +23,7 @@ func fetchFormationMons(cfg *Config, params TurnOrderParams) TurnOrderParams {
 		monID := monAmt.MonsterID
 
 		mon := turnOrderMon{
-			ID: &monID,
+			MonsterID: &monID,
 		}
 
 		params.Mons = append(params.Mons, mon)

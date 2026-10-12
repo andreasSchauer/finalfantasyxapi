@@ -25,8 +25,8 @@ func TestAlBhed(t *testing.T) {
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "field 'text' can't be empty.",
-				requestBody: AlBhedParams{
-					Direction: "to-english",
+				requestBody: map[FieldName]any{
+					pfnDirection: "to-english",
 				},
 			},
 		},
@@ -36,9 +36,9 @@ func TestAlBhed(t *testing.T) {
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "value 'bla' of field 'direction' is not a valid enum value. allowed values: 'to-al-bhed', 'to-english'.",
-				requestBody: AlBhedParams{
-					Text: "father",
-					Direction: "bla",
+				requestBody: map[FieldName]any{
+					pfnText: "father",
+					pfnDirection: "bla",
 				},
 			},
 		},
@@ -48,8 +48,8 @@ func TestAlBhed(t *testing.T) {
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. all brackets must be closed.",
-				requestBody: AlBhedParams{
-					Text: "v[ath",
+				requestBody: map[FieldName]any{
+					pfnText: "v[ath",
 				},
 			},
 		},
@@ -59,8 +59,8 @@ func TestAlBhed(t *testing.T) {
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket.",
-				requestBody: AlBhedParams{
-					Text: "v]ath",
+				requestBody: map[FieldName]any{
+					pfnText: "v]ath",
 				},
 			},
 		},
@@ -70,8 +70,8 @@ func TestAlBhed(t *testing.T) {
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket.",
-				requestBody: AlBhedParams{
-					Text: "v[a[th",
+				requestBody: map[FieldName]any{
+					pfnText: "v[a[th",
 				},
 			},
 		},
@@ -81,8 +81,8 @@ func TestAlBhed(t *testing.T) {
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. all brackets must be closed.",
-				requestBody: AlBhedParams{
-					Text: "v[ath",
+				requestBody: map[FieldName]any{
+					pfnText: "v[ath",
 				},
 			},
 		},
@@ -91,9 +91,9 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid field: 'monster'.",
-				requestBody: DropChanceParams{
-					Monster: 1,
+				expectedErr:    "invalid field: 'monster_id'.",
+				requestBody: map[FieldName]any{
+					pfnMonsterID: 1,
 				},
 			},
 		},
@@ -102,8 +102,8 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: AlBhedParams{
-					Text: "I am cool.",
+				requestBody: map[FieldName]any{
+					pfnText: "I am cool.",
 				},
 			},
 			AlBhedResponse: AlBhedResponse{
@@ -117,8 +117,8 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: AlBhedParams{
-					Text: "father",
+				requestBody: map[FieldName]any{
+					pfnText: "father",
 				},
 			},
 			AlBhedResponse: AlBhedResponse{
@@ -132,8 +132,8 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: AlBhedParams{
-					Text: "f[y]the[n]",
+				requestBody: map[FieldName]any{
+					pfnText: "f[y]the[n]",
 				},
 			},
 			AlBhedResponse: AlBhedResponse{
@@ -147,8 +147,8 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: AlBhedParams{
-					Text: "f[Ydr]er",
+				requestBody: map[FieldName]any{
+					pfnText: "f[Ydr]er",
 				},
 			},
 			AlBhedResponse: AlBhedResponse{
@@ -162,9 +162,9 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: AlBhedParams{
-					Text: "v[ath]an",
-					Direction: "to-english",
+				requestBody: map[FieldName]any{
+					pfnText: "v[ath]an",
+					pfnDirection: "to-english",
 				},
 			},
 			AlBhedResponse: AlBhedResponse{
@@ -178,8 +178,8 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: AlBhedParams{
-					Text: "!?,. 1234567890",
+				requestBody: map[FieldName]any{
+					pfnText: "!?,. 1234567890",
 				},
 			},
 			AlBhedResponse: AlBhedResponse{

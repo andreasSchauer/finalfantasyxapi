@@ -1,6 +1,5 @@
 package api
 
-
 import (
 	"fmt"
 	"slices"
@@ -10,11 +9,11 @@ import (
 )
 
 type AbilityWheel struct {
-	Characters			[]seeding.Character
-	PrioritySlot		*string
-	Abilities			[7]string
-	Clashes				[8][8]bool
-	IndexedNames		[8]string
+	Characters   []seeding.Character
+	PrioritySlot *string
+	Abilities    [7]string
+	Clashes      [8][8]bool
+	IndexedNames [8]string
 }
 
 func (w *AbilityWheel) compileClashes(cfg *Config) {
@@ -43,7 +42,7 @@ func (w *AbilityWheel) compileClashes(cfg *Config) {
 	}
 }
 
-func getTargetIdx (targetName string, indexedNames [8]string) []int32 {
+func getTargetIdx(targetName string, indexedNames [8]string) []int32 {
 	var group []int32
 	for targetIdx := range 8 {
 		if indexedNames[targetIdx] == targetName {
@@ -58,8 +57,8 @@ func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params 
 	uniqueKeys := getUniqueWheelKeys(cfg, abilities, params)
 	var wheels []AbilityWheel
 
-	if params.Character != nil {
-		char, _ := seeding.GetResourceByID(*params.Character, cfg.l.CharactersID)
+	if params.CharacterID != nil {
+		char, _ := seeding.GetResourceByID(*params.CharacterID, cfg.l.CharactersID)
 		wheel := createAbilityWheel(cfg, abilities, char)
 		wheel.Characters = []seeding.Character{char}
 		wheels = append(wheels, wheel)
@@ -77,7 +76,6 @@ func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params 
 
 	return wheels
 }
-
 
 func createAbilityWheel(cfg *Config, abilities []seeding.EquipmentDrop, char seeding.Character) AbilityWheel {
 	var wheel AbilityWheel
@@ -139,7 +137,6 @@ func getUniqueWheelKeys(cfg *Config, abilities []seeding.EquipmentDrop, params D
 
 	return uniqueKeys
 }
-
 
 func getAbilityWheelKey(abilities []seeding.EquipmentDrop, charPtr *seeding.Character) string {
 	var keys []string

@@ -13,12 +13,12 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, valueMap map[F
 		return DropChanceParams{}, err
 	}
 
-	params.Monster, err = verifyParamField(cfg, params.Monster, pfnMonster, valueMap, valTree, vfId)
+	params.Monster, err = verifyParamField(cfg, params.Monster, pfnMonsterID, valueMap, valTree, vfId)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.Character, err = verifyParamFieldPtr(cfg, params.Character, pfnCharacter, valueMap, valTree, vfId)
+	params.CharacterID, err = verifyParamFieldPtr(cfg, params.CharacterID, pfnCharacterID, valueMap, valTree, vfId)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
@@ -91,11 +91,11 @@ func vfRequiredSlotAmount(params DropChanceParams) error {
 }
 
 func vfCharInParty(params DropChanceParams) error {
-	if params.Character == nil {
+	if params.CharacterID == nil {
 		return nil
 	}
 
-	if !slices.Contains(params.PartyMembers, *params.Character) {
+	if !slices.Contains(params.PartyMembers, *params.CharacterID) {
 		return newHTTPError(http.StatusBadRequest, "character must be in the party to be eligible for receiving equipment.", nil)
 	}
 

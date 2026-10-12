@@ -114,16 +114,17 @@ func verifyParamFieldArr[T any](cfg *Config, arr []T, fieldName FieldName, value
 	}
 
 	for i, item := range arr {
+		errStart := fmt.Sprintf("index %d of field '%s'", i, fieldName)
 		rawItem := valSlice[i]
 
 		childValMap, ok := rawItem.(map[FieldName]any)
 		if !ok {
-			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("expected value map at index %d of field '%s'", i, fieldName), nil)
+			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("%s: couldn't find value map", errStart), nil)
 		}
 
 		arr[i], err = verifyFn(cfg, item, fieldName, childValMap, valTree[fieldName].Children)
 		if err != nil {
-			return nil, err
+			return nil, editHTTPError(errStart, err)
 		}
 	}
 
@@ -147,13 +148,15 @@ func verifyParamFieldIdArr(cfg *Config, arr []int32, fieldName FieldName, valueM
 	isDupe := make(map[int32]bool)
 
 	for i, val := range arr {
+		errStart := fmt.Sprintf("index %d of field '%s'", i, fieldName)
+
 		if isDupe[val] {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("array of field '%s' can't have duplicate ids.", fieldName), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s: array of field '%s' can't have duplicate ids.", errStart, fieldName), nil)
 		}
 
 		arr[i], err = vfArrayChildId(nil, val, fieldName, nil, valTree)
 		if err != nil {
-			return nil, err
+			return nil, editHTTPError(errStart, err)
 		}
 
 		isDupe[val] = true
