@@ -3,6 +3,8 @@ package api
 import (
 	"net/http"
 	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 func TestTurnOrder(t *testing.T) {
@@ -356,6 +358,40 @@ func TestTurnOrder(t *testing.T) {
 						{
 							pfnMonsterID: 32,
 							pfnAltState: 4,
+						},
+					},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method: 		http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "field 'mons': duplicate monster found at index 1. exact duplicate monsters are not allowed.",
+				requestBody: map[FieldName]any{
+					pfnMons: []map[FieldName]any{
+						{
+							pfnMonsterID: 32,
+						},
+						{
+							pfnMonsterID: 32,
+						},
+					},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method: 		http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "monster 'penance' is immune to 'slow'.",
+				requestBody: map[FieldName]any{
+					pfnMons: []map[FieldName]any{
+						{
+							pfnMonsterID: 305,
+							pfnStatus: string(database.HasteStatusSlow),
 						},
 					},
 				},

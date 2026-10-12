@@ -122,21 +122,20 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 }
 
 func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon) (Participant, *seeding.AgilityTier, error) {
+	var err error
+	
 	if mon.MonsterID == nil {
 		return Participant{}, nil, nil
 	}
 
-	monster, firstTurnAglTier, err := assembleMonTurnOrder(cfg, *mon.MonsterID, mon.AltState)
-	if err != nil {
-		return Participant{}, nil, err
-	}
-
+	monster, firstTurnAglTier := assembleMonTurnOrder(cfg, *mon.MonsterID, mon.AltState)
 	participant := Participant{
 		Name:        h.NameToString(monster.Name, monster.Version, nil),
 		Agility:     getTurnOrderMonAgility(cfg, *mon.MonsterID, monster),
 		FirstStrike: monsterHasFirstStrike(monster),
 		AltState:    mon.AltState,
 	}
+
 	participant.Status, err = fetchMonsterHasteStatus(monster, mon.Status, params.IgnImmunities)
 	if err != nil {
 		return Participant{}, nil, err
