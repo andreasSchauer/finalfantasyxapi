@@ -12,6 +12,10 @@ func GetFloat32Ptr(f float32) *float32 {
 	return &f
 }
 
+func GetFloat64Ptr(f float64) *float64 {
+	return &f
+}
+
 func GetStrPtr(s string) *string {
 	return &s
 }

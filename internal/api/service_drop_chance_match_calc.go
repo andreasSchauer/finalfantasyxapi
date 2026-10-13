@@ -76,11 +76,13 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 }
 
 func initEquipment(p EquipmentMatchParams) ([4]int32, int32) {
-	equipment := [4]int32{-1, -1, -1, -1}
+	const idxPrioritySlot int32 = 7
+	const idxEmpty int32 = -1
 	var eqLen int32
+	equipment := [4]int32{idxEmpty, idxEmpty, idxEmpty, idxEmpty}
 
 	if p.AbilityWheel.PrioritySlot != nil {
-		equipment[0] = 7
+		equipment[0] = idxPrioritySlot
 		eqLen++
 	}
 
@@ -93,8 +95,9 @@ func assembleEquipment(clashes [8][8]bool, equipment [4]int32, shotAmt, equipmen
             break
         }
 
-        rolledIdx := int32(idx % 7)
-        idx /= 7
+        rolledIdx := int32(idx % 7) // can only ever be 0 to 6 | 55 % 7 = 6 (49 + 6)
+        idx /= 7 // 55 / 7 = 7.87 => 7 | oldIdx = newIdx * 7 + rolledIdx | 55 = 7 * 7 + 6
+		// newIdx will be moduloed further to get a new rolledIdx (7 % 7 = 0)
 
 		if autoAbilityLockedOut(&clashes, &equipment, eqLen, rolledIdx) {
 			continue
@@ -131,10 +134,13 @@ func duplicateAutoAbility(equipment *[4]int32, eqLen, rolledIdx int32) bool {
 
 
 func isMatch(wantedIndices [][]int32, equipment *[4]int32, minEmptySlots *int32, equipmentSlots, wantedLen, eqLen int32, lenientAbilities bool) bool {
-    if !allAbilitiesPresent(wantedIndices, equipment, eqLen) {
+    if !allWantedAbilitiesPresent(wantedIndices, equipment, eqLen) {
         return false
     }
 
+	// if I want piercing and have piercing and strength +5%,
+	// then all wanted abilities are present
+	// but the abilities don't match with what I want (just piercing)
     if !strictAbilitiesMatch(lenientAbilities, wantedLen, eqLen) {
         return false
     }
@@ -146,12 +152,12 @@ func isMatch(wantedIndices [][]int32, equipment *[4]int32, minEmptySlots *int32,
     return true
 }
 
-func allAbilitiesPresent(wantedIndices [][]int32, equipment *[4]int32, eqLen int32) bool {
-    for _, abilityGroup := range wantedIndices {
+func allWantedAbilitiesPresent(wantedIndices [][]int32, equipment *[4]int32, eqLen int32) bool {
+    for _, wantedIdxGroup := range wantedIndices {
         var found bool
 
         for i := range eqLen {
-            if slices.Contains(abilityGroup, equipment[i]) {
+            if slices.Contains(wantedIdxGroup, equipment[i]) {
                 found = true
                 break
             }

@@ -20,10 +20,7 @@ func vfAutoAbilities(cfg *Config, params DropChanceParams, charPtr *seeding.Char
 		return nil, nil, err
 	}
 
-	monsterAbilities, err := getMonAutoAbilities(params, mon)
-	if err != nil {
-		return nil, nil, err
-	}
+	monsterAbilities := getMonAutoAbilities(*params.EquipType, mon) // equipType will never be nil at this point
 
 	err = vfAutoAbilitiesDropped(autoAbilities, monsterAbilities, mon, charPtr)
 	if err != nil {
@@ -57,23 +54,20 @@ func vfWantedAutoAbilities(cfg *Config, params DropChanceParams) (DropChancePara
 	return params, autoAbilities, nil
 }
 
-func getMonAutoAbilities(params DropChanceParams, mon seeding.Monster) ([]seeding.EquipmentDrop, error) {
-	switch *params.EquipType {
+func getMonAutoAbilities(equipType string, mon seeding.Monster) []seeding.EquipmentDrop {
+	switch equipType {
 	case string(database.EquipTypeWeapon):
-		return mon.Equipment.WeaponAbilities, nil
+		return mon.Equipment.WeaponAbilities
 
 	case string(database.EquipTypeArmor):
-		return mon.Equipment.ArmorAbilities, nil
-
-	// just a fallback. won't ever be triggered.
-	// vfWantedAutoAbilities does the same check
-	default:
-		return nil, newHTTPError(http.StatusBadRequest, "equip type must be set.", nil)
+		return mon.Equipment.ArmorAbilities
 	}
+
+	return nil
 }
 
-func vfAutoAbilitiesDropped(autoAbilities []seeding.AutoAbility, monsterAbilities []seeding.EquipmentDrop, mon seeding.Monster, charPtr *seeding.Character) error {
-	for _, ability := range autoAbilities {
+func vfAutoAbilitiesDropped(wantedAutoAbilities []seeding.AutoAbility, monsterAbilities []seeding.EquipmentDrop, mon seeding.Monster, charPtr *seeding.Character) error {
+	for _, ability := range wantedAutoAbilities {
 		var isPresent bool
 
 		for _, monAbility := range monsterAbilities {

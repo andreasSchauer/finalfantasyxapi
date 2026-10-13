@@ -63,7 +63,10 @@ func calcCharRandomChances(cfg *Config, params DropChanceParams, wantedAbilities
 		chances.AnyCharFinBlow = chances.AnyCharNoFinBlow + 0.25
 	}
 
-	if eligibleChars == 7 {
+	// if we don't care about who gets the equipment and all characters in the party are eligible
+	// then it doesn't matter who scores the finishing blow
+	// therefore, it's always a guaranteed character match
+	if eligibleChars == h.Len32(params.PartyMembers) {
 		chances.AnyCharFinBlow = 1
 		chances.AnyCharNoFinBlow = 1
 	}
@@ -84,13 +87,9 @@ func charLearnsReqAbilities(char seeding.Character, wantedAbilities []seeding.Au
 }
 
 func charGetsAbility(ability seeding.EquipmentDrop, charPtr *seeding.Character) bool {
-	if charPtr == nil {
-		return true
-	}
-
 	chars := ability.Characters
 
-	if len(chars) == 0 {
+	if charPtr == nil || len(chars) == 0 {
 		return true
 	}
 

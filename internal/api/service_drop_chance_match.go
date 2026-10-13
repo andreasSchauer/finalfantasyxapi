@@ -56,18 +56,18 @@ func getWantedIndices(wantedAbilities []seeding.AutoAbility, wheel AbilityWheel)
 	var indices [][]int32
 
 	for _, ability := range wantedAbilities {
-		var group []int32
+		var abilityIdxGroup []int32
 		for i, name := range wheel.IndexedNames {
 			if ability.Name == name {
-				group = append(group, int32(i))
+				abilityIdxGroup = append(abilityIdxGroup, int32(i))
 			}
 		}
 
-		if len(group) == 0 {
+		if len(abilityIdxGroup) == 0 {
 			return nil, errContinue
 		}
 
-		indices = append(indices, group)
+		indices = append(indices, abilityIdxGroup)
 	}
 
 	return indices, nil

@@ -8,26 +8,26 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func vfId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (int32, error) {
-	doc := valTree[fieldName].Doc
+func vfId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (int32, error) {
+	doc := paramsRules[fieldName].Doc
 
 	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "id", false)
 }
 
-func vfInt(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (int32, error) {
-	doc := valTree[fieldName].Doc
+func vfInt(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (int32, error) {
+	doc := paramsRules[fieldName].Doc
 
 	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "value", false)
 }
 
-func vfArrayChildId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (int32, error) {
-	doc := valTree[fieldName].Doc
+func vfArrayChildId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (int32, error) {
+	doc := paramsRules[fieldName].Doc
 
 	return vfIntRange(val, doc.ChildMinVal, doc.ChildMaxVal, fieldName, "id", true)
 }
 
 func vfIntRange(val int32, minVal, maxVal *int32, fieldName FieldName, intType string, isArray bool) (int32, error) {
-	errStart := getRangeErrStart(val, fieldName, intType, isArray)
+	errStart := getFieldRangeErrStart(val, fieldName, intType, isArray)
 
 	if minVal != nil && maxVal != nil && (val < *minVal || val > *maxVal) {
 		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s allowed range: %d to %d.", errStart, *minVal, *maxVal), nil)
@@ -44,20 +44,8 @@ func vfIntRange(val int32, minVal, maxVal *int32, fieldName FieldName, intType s
 	return val, nil
 }
 
-func getRangeErrStart(val int32, fieldName FieldName, intType string, isArray bool) string {
-	errStart := fmt.Sprintf("%s '%d'", intType, val)
-
-	if !isArray {
-		errStart += fmt.Sprintf(" of field '%s'", fieldName)
-	}
-
-	errStart += " is out of range."
-
-	return errStart
-}
-
-func vfEnum(_ *Config, typedVal string, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) (string, error) {
-	doc := valTree[fieldName].Doc
+func vfEnum(_ *Config, typedVal string, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (string, error) {
+	doc := paramsRules[fieldName].Doc
 
 	if doc.EnumValues == nil {
 		return typedVal, nil
@@ -70,12 +58,12 @@ func vfEnum(_ *Config, typedVal string, fieldName FieldName, _ map[FieldName]any
 	return typedVal, nil
 }
 
-func vfArray[T any](_ *Config, arr []T, fieldName FieldName, _ map[FieldName]any, valTree ValidationTree) ([]T, error) {
+func vfArray[T any](_ *Config, arr []T, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) ([]T, error) {
 	if arr == nil {
 		return arr, errNullArray
 	}
 
-	doc := valTree[fieldName].Doc
+	doc := paramsRules[fieldName].Doc
 
 	if len(arr) == 0 {
 		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("empty array used for field '%s'. the use of empty arrays is not supported by this API. omit the field, or use 'null' instead.", fieldName), nil)

@@ -4,22 +4,12 @@ import (
 	"reflect"
 )
 
-func getInt32FromValMap(fieldName FieldName, valueMap map[FieldName]any) (int32, error) {
-	raw, ok := valueMap[fieldName]
-	if !ok {
-		return 0, errNoVal
-	}
-	intVal := int32(raw.(float64))
-
-	return intVal, nil
-}
-
 func hasDefaultVal(doc FieldDoc) bool {
 	return doc.DefaultVal != nil
 }
 
-func hasVal(fieldName FieldName, valueMap map[FieldName]any) bool {
-	jsonVal, ok := valueMap[fieldName]
+func hasVal(fieldName FieldName, userValues map[FieldName]any) bool {
+	jsonVal, ok := userValues[fieldName]
 	return ok && jsonVal != nil
 }
 

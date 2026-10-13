@@ -32,9 +32,9 @@ func (w *AbilityWheel) compileClashes(cfg *Config) {
 		ability, _ := seeding.GetResource(abilityName, cfg.l.AutoAbilities)
 
 		for _, lockedOutName := range ability.LockedOutAbilities {
-			targetGroup := getTargetIdx(lockedOutName, w.IndexedNames)
+			targetIdxGroup := getTargetIdxGroup(lockedOutName, w.IndexedNames)
 
-			for _, targetIdx := range targetGroup {
+			for _, targetIdx := range targetIdxGroup {
 				w.Clashes[sourceIdx][targetIdx] = true
 				w.Clashes[targetIdx][sourceIdx] = true
 			}
@@ -42,15 +42,15 @@ func (w *AbilityWheel) compileClashes(cfg *Config) {
 	}
 }
 
-func getTargetIdx(targetName string, indexedNames [8]string) []int32 {
-	var group []int32
+func getTargetIdxGroup(targetName string, indexedNames [8]string) []int32 {
+	var targetIndexGroup []int32
 	for targetIdx := range 8 {
 		if indexedNames[targetIdx] == targetName {
-			group = append(group, int32(targetIdx))
+			targetIndexGroup = append(targetIndexGroup, int32(targetIdx))
 		}
 	}
 
-	return group
+	return targetIndexGroup
 }
 
 func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params DropChanceParams) []AbilityWheel {
@@ -65,10 +65,10 @@ func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params 
 		return wheels
 	}
 
-	for _, chars := range uniqueKeys {
-		char := chars[0]
+	for _, wheelCharList := range uniqueKeys {
+		char := wheelCharList[0]
 		wheel := createAbilityWheel(cfg, abilities, char)
-		wheel.Characters = chars
+		wheel.Characters = wheelCharList
 		wheels = append(wheels, wheel)
 	}
 
