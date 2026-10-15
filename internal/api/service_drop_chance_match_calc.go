@@ -22,12 +22,10 @@ type EquipmentMatchParams struct {
 
 func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 	baseEquipment, baseEqLen := initEquipment(p)
-	clashes := p.AbilityWheel.Clashes
-	wantedIndices := p.WantedIndices
 	wantedLen := h.Len32(p.WantedAbilities)
 	
 	if p.ShotAmt == 0 {
-		if isMatch(wantedIndices, &baseEquipment, p.MinEmptySlots, p.EquipmentSlots, wantedLen, baseEqLen, p.LenientAbilities) {
+		if isMatch(p, &baseEquipment, wantedLen, baseEqLen) {
 			return 1
 		}
 
@@ -53,9 +51,9 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 			var localMatches int32
 
 			for i := start; i < end; i++ {
-				equipment, eqLen := assembleEquipment(clashes, baseEquipment, p.ShotAmt, p.EquipmentSlots, baseEqLen, i)
+				equipment, eqLen := assembleEquipment(p, baseEquipment, baseEqLen, i)
 		
-				if isMatch(wantedIndices, &equipment, p.MinEmptySlots, p.EquipmentSlots, wantedLen, eqLen, p.LenientAbilities) {
+				if isMatch(p, &equipment, wantedLen, eqLen) {
 					localMatches++
 				}
 			}
@@ -89,24 +87,24 @@ func initEquipment(p EquipmentMatchParams) ([4]int32, int32) {
 	return equipment, eqLen
 }
 
-func assembleEquipment(clashes [8][8]bool, equipment [4]int32, shotAmt, equipmentSlots, eqLen, idx int32) ([4]int32, int32) {
-	for range shotAmt {
-		if eqLen == equipmentSlots {
+func assembleEquipment(p EquipmentMatchParams, equipment [4]int32, eqLen, idx int32) ([4]int32, int32) {
+	for range p.ShotAmt {
+		if eqLen == p.EquipmentSlots {
             break
         }
 
         rolledIdx := int32(idx % 7) // can only ever be 0 to 6 | 55 % 7 = 6 (49 + 6)
         idx /= 7 // 55 / 7 = 7.87 => 7 | oldIdx = newIdx * 7 + rolledIdx | 55 = 7 * 7 + 6
 		// newIdx will be moduloed further to get a new rolledIdx (7 % 7 = 0)
-
-		if autoAbilityLockedOut(&clashes, &equipment, eqLen, rolledIdx) {
-			continue
-		}
-
-		if duplicateAutoAbility(&equipment, eqLen, rolledIdx) {
+		
+		if autoAbilityLockedOut(&p.AbilityWheel.Clashes, &equipment, eqLen, rolledIdx) {
 			continue
 		}
 		
+		if duplicateAutoAbility(p.AbilityWheel.IdxGroups, &equipment, eqLen, rolledIdx) {
+			continue
+		}
+
 		equipment[eqLen] = rolledIdx
 		eqLen++
 	}
@@ -123,29 +121,42 @@ func autoAbilityLockedOut(clashes *[8][8]bool, equipment *[4]int32, eqLen, rolle
     return false
 }
 
-func duplicateAutoAbility(equipment *[4]int32, eqLen, rolledIdx int32) bool {
+func duplicateAutoAbility(wheelIndices [][]int32, equipment *[4]int32, eqLen, rolledIdx int32) bool {
     for i := range eqLen {
-        if equipment[i] == rolledIdx {
+		eqGroupIdx := getIdxGroupIndex(wheelIndices, equipment[i])
+		rolledGroupIdx := getIdxGroupIndex(wheelIndices, rolledIdx)
+
+        if eqGroupIdx == rolledGroupIdx {
             return true
         }
     }
     return false
 }
 
+func getIdxGroupIndex(wantedIndices [][]int32, idx int32) int32 {
+	for i, wantedIdxGroup := range wantedIndices {
+		if slices.Contains(wantedIdxGroup, idx) {
+			return int32(i)
+		}
+	}
 
-func isMatch(wantedIndices [][]int32, equipment *[4]int32, minEmptySlots *int32, equipmentSlots, wantedLen, eqLen int32, lenientAbilities bool) bool {
-    if !allWantedAbilitiesPresent(wantedIndices, equipment, eqLen) {
+	return -1
+}
+
+
+func isMatch(p EquipmentMatchParams, equipment *[4]int32, wantedLen, eqLen int32) bool {
+    if !allWantedAbilitiesPresent(p.WantedIndices, equipment, eqLen) {
         return false
     }
 
 	// if I want piercing and have piercing and strength +5%,
 	// then all wanted abilities are present
 	// but the abilities don't match with what I want (just piercing)
-    if !strictAbilitiesMatch(lenientAbilities, wantedLen, eqLen) {
+    if !strictAbilitiesMatch(p.LenientAbilities, wantedLen, eqLen) {
         return false
     }
 
-    if !emptySlotsPossible(minEmptySlots, equipmentSlots, eqLen) {
+    if !emptySlotsPossible(p.MinEmptySlots, p.EquipmentSlots, eqLen) {
         return false
     }
 
@@ -154,21 +165,22 @@ func isMatch(wantedIndices [][]int32, equipment *[4]int32, minEmptySlots *int32,
 
 func allWantedAbilitiesPresent(wantedIndices [][]int32, equipment *[4]int32, eqLen int32) bool {
     for _, wantedIdxGroup := range wantedIndices {
-        var found bool
-
-        for i := range eqLen {
-            if slices.Contains(wantedIdxGroup, equipment[i]) {
-                found = true
-                break
-            }
-        }
-
-        if !found {
+        if !wantedAbilityPresent(wantedIdxGroup, equipment, eqLen) {
             return false
         }
     }
 
     return true
+}
+
+func wantedAbilityPresent(wantedIdxGroup []int32, equipment *[4]int32, eqLen int32) bool {
+	for i := range eqLen {
+		if slices.Contains(wantedIdxGroup, equipment[i]) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func strictAbilitiesMatch(lenientAbilities bool, wantedLen, eqLen int32) bool {

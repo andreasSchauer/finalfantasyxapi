@@ -70,14 +70,13 @@ func (c EquipmentChances) Round(n int32) EquipmentChances {
 
 func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse, error) {
 	mon, _ := seeding.GetResourceByID(params.Monster, cfg.l.MonstersID)
-	charPtr := getCharPtr(cfg, params)
 
-	wantedAbilities, monAbilities, err := vfAutoAbilities(cfg, params, charPtr, mon)
+	wantedAbilities, monAbilities, err := vfAutoAbilities(cfg, params, mon)
 	if err != nil {
 		return DropChanceResponse{}, err
 	}
 
-	characterChances := calcCharRandomChances(cfg, params, wantedAbilities, monAbilities)
+	characterChances := calcCharChances(cfg, params, wantedAbilities, monAbilities)
 	monDropChance := calcMonDropChance(mon)
 	matchFinBlow, matchNoFinBlow := calcEquipmentMatchChances(cfg, params, mon, wantedAbilities, monAbilities, characterChances)
 

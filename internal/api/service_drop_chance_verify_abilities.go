@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func vfAutoAbilities(cfg *Config, params DropChanceParams, charPtr *seeding.Character, mon seeding.Monster) ([]seeding.AutoAbility, []seeding.EquipmentDrop, error) {
+func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seeding.Monster) ([]seeding.AutoAbility, []seeding.EquipmentDrop, error) {
 	if mon.Equipment == nil {
 		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' doesn't drop equipment.", mon), nil)
 	}
@@ -22,7 +22,7 @@ func vfAutoAbilities(cfg *Config, params DropChanceParams, charPtr *seeding.Char
 
 	monsterAbilities := getMonAutoAbilities(*params.EquipType, mon) // equipType will never be nil at this point
 
-	err = vfAutoAbilitiesDropped(autoAbilities, monsterAbilities, mon, charPtr)
+	err = vfAutoAbilitiesDropped(autoAbilities, monsterAbilities, mon)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -66,7 +66,7 @@ func getMonAutoAbilities(equipType string, mon seeding.Monster) []seeding.Equipm
 	return nil
 }
 
-func vfAutoAbilitiesDropped(wantedAutoAbilities []seeding.AutoAbility, monsterAbilities []seeding.EquipmentDrop, mon seeding.Monster, charPtr *seeding.Character) error {
+func vfAutoAbilitiesDropped(wantedAutoAbilities []seeding.AutoAbility, monsterAbilities []seeding.EquipmentDrop, mon seeding.Monster) error {
 	for _, ability := range wantedAutoAbilities {
 		var isPresent bool
 
@@ -74,10 +74,12 @@ func vfAutoAbilitiesDropped(wantedAutoAbilities []seeding.AutoAbility, monsterAb
 			if ability.Name == monAbility.Ability {
 				isPresent = true
 
+				/*
 				err := vfCharGetsAbility(monAbility, charPtr, mon)
 				if err != nil {
 					return err
 				}
+				*/
 			}
 		}
 

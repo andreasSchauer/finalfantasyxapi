@@ -110,7 +110,7 @@ func compFloat32(test test, fieldName string, exp, got float32) {
 func compFloat64(test test, fieldName string, exp, got float64) {
 	test.t.Helper()
 	if exp != got {
-		test.t.Errorf("expected %s %.4f, got %.4f\n\n", fieldName, exp, got)
+		test.t.Errorf("expected %s %f, got %f\n\n", fieldName, exp, got)
 	}
 }
 

@@ -20,7 +20,7 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 			continue
 		}
 
-		wheelWeightFinBlow, wheelWeightNoFinBlow := getWheelWeights(params, wheel, cc)
+		wheelWeightFinBlow, wheelWeightNoFinBlow := getWheelWeights(wheel, cc)
 
 		for _, slots := range slotsTable {
 			slotWeight := h.PercentageToDecimal(slots.Chance)
@@ -52,8 +52,9 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 	return chanceFinBlow, chanceNoFinBlow
 }
 
+
 func getWantedIndices(wantedAbilities []seeding.AutoAbility, wheel AbilityWheel) ([][]int32, error) {
-	var indices [][]int32
+	var idxGroups [][]int32
 
 	for _, ability := range wantedAbilities {
 		var abilityIdxGroup []int32
@@ -67,10 +68,10 @@ func getWantedIndices(wantedAbilities []seeding.AutoAbility, wheel AbilityWheel)
 			return nil, errContinue
 		}
 
-		indices = append(indices, abilityIdxGroup)
+		idxGroups = append(idxGroups, abilityIdxGroup)
 	}
 
-	return indices, nil
+	return idxGroups, nil
 }
 
 func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding.EquipmentSlotsChance {
@@ -93,9 +94,14 @@ func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding
 	return chances
 }
 
-func getWheelWeights(params DropChanceParams, wheel AbilityWheel, cc CharacterChances) (float64, float64) {
-	if params.CharacterID != nil {
-		return *cc.CharFinBlow, *cc.CharNoFinBlow
+func getWheelWeights(wheel AbilityWheel, cc CharacterChances) (float64, float64) {
+	if cc.SpecificChar != nil {
+		specificChar := *cc.SpecificChar
+		return specificChar.CharFinBlow, specificChar.CharNoFinBlow
+	}
+
+	if cc.EligibleChars == 0 {
+		return 0, 0
 	}
 
 	charRatio := h.FloatLen(wheel.Characters) / float64(cc.EligibleChars)

@@ -11,9 +11,9 @@ func (e expDropChanceResponse) GetTestGeneral() testGeneral {
 
 func compareDropChanceResponses(test test, exp expDropChanceResponse, got DropChanceResponse) {
 	test.t.Helper()
-	compareTotalDropChances(test, "total drop chances", exp.TotalDropChances, got.TotalDropChances)
-	compareEquipmentChances(test, "equipment chances", exp.EquipmentChances, got.EquipmentChances)
-	compareCharacterChances(test, "character chances", exp.CharacterChances, got.CharacterChances)
+	compStructsWithFn(test, "total drop chances", exp.TotalDropChances, got.TotalDropChances, compareTotalDropChances)
+	compStructsWithFn(test, "equipment chances", exp.EquipmentChances, got.EquipmentChances, compareEquipmentChances)
+	compStructsWithFn(test, "character chances", exp.CharacterChances, got.CharacterChances, compareCharacterChances)
 }
 
 func compareTotalDropChances(test test, fieldName string, exp TotalDropChances, got TotalDropChances) {
@@ -34,6 +34,12 @@ func compareCharacterChances(test test, fieldName string, exp CharacterChances, 
 	compare(test, fieldName+" eligible chars", exp.EligibleChars, got.EligibleChars)
 	compare(test, fieldName+" any char fin blow", exp.AnyCharFinBlow, got.AnyCharFinBlow)
 	compare(test, fieldName+" any char no fin blow", exp.AnyCharNoFinBlow, got.AnyCharNoFinBlow)
+	compStructPtrsWithFn(test, fieldName+" specific character", exp.SpecificChar, got.SpecificChar, compareSpecificCharChances)
+}
+
+func compareSpecificCharChances(test test, fieldName string, exp SpecificCharChances, got SpecificCharChances) {
+	test.t.Helper()
+	compare(test, fieldName+" char is eligible", exp.CharIsEligible, got.CharIsEligible)
 	compare(test, fieldName+" char fin blow", exp.CharFinBlow, got.CharFinBlow)
 	compare(test, fieldName+" char no fin blow", exp.CharNoFinBlow, got.CharNoFinBlow)
 }

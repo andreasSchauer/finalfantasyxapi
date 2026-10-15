@@ -20,6 +20,10 @@ func GetStrPtr(s string) *string {
 	return &s
 }
 
+func GetBoolPtr(b bool) *bool {
+	return &b
+}
+
 func GetStructPtr[T any](obj T) *T {
 	return &obj
 }
