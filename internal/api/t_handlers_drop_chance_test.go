@@ -320,7 +320,7 @@ func TestDropChance(t *testing.T) {
 							Chance: 50,
 						},
 					},
-					AutoAbilities: DroppedAbilities{
+					AutoAbilities: DroppedAutoAbilities{
 						Forced: &EqAbilitySimple{
 							ID:         2,
 							Name:       "piercing",
@@ -434,7 +434,7 @@ func TestDropChance(t *testing.T) {
 							Chance: 0.25,
 						},
 					},
-					AutoAbilities: DroppedAbilities{
+					AutoAbilities: DroppedAutoAbilities{
 						Forced: &EqAbilitySimple{
 							ID:         2,
 							Name:       "piercing",
@@ -660,7 +660,7 @@ func TestDropChance(t *testing.T) {
 							Chance: 50,
 						},
 					},
-					AutoAbilities: DroppedAbilities{
+					AutoAbilities: DroppedAutoAbilities{
 						Forced: &EqAbilitySimple{
 							ID:         37,
 							Name:       "counterattack",
@@ -996,7 +996,7 @@ func TestDropChance(t *testing.T) {
 							Chance: 100,
 						},
 					},
-					AutoAbilities: DroppedAbilities{
+					AutoAbilities: DroppedAutoAbilities{
 						Dropped: []EqAbilityChance{
 							{
 								EqAbilitySimple: EqAbilitySimple{
@@ -1049,7 +1049,7 @@ func TestDropChance(t *testing.T) {
 							Chance: 100,
 						},
 					},
-					AutoAbilities: DroppedAbilities{
+					AutoAbilities: DroppedAutoAbilities{
 						Dropped: []EqAbilityChance{
 							{
 								EqAbilitySimple: EqAbilitySimple{

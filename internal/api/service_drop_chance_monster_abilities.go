@@ -5,34 +5,34 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type DroppedAbilities struct {
+type DroppedAutoAbilities struct {
 	Forced  *EqAbilitySimple  `json:"forced"`
 	Dropped []EqAbilityChance `json:"dropped"`
 }
 
-func (d DroppedAbilities) Percent() DroppedAbilities {
+func (d DroppedAutoAbilities) Percent() DroppedAutoAbilities {
 	d.Dropped = h.SlicePercent(d.Dropped)
 
 	return d
 }
 
-func (d DroppedAbilities) Round(n int32) DroppedAbilities {
+func (d DroppedAutoAbilities) Round(n int32) DroppedAutoAbilities {
 	d.Dropped = h.SliceRound(d.Dropped, n)
 
 	return d
 }
 
-func getDroppedAutoAbilities(cfg *Config, abilities []seeding.EquipmentDrop) DroppedAbilities {
+func getDroppedAutoAbilities(cfg *Config, abilities []seeding.EquipmentDrop) DroppedAutoAbilities {
 	if abilities[0].IsForced {
 		forcedAbility := convertEqAbilitySimple(abilities[0])
 
-		return DroppedAbilities{
+		return DroppedAutoAbilities{
 			Forced:  &forcedAbility,
 			Dropped: convertObjSlice(cfg, abilities[1:], convertEqAbilityChance),
 		}
 	}
 
-	return DroppedAbilities{
+	return DroppedAutoAbilities{
 		Dropped: convertObjSlice(cfg, abilities, convertEqAbilityChance),
 	}
 }

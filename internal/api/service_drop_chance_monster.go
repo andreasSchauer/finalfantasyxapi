@@ -6,12 +6,12 @@ import (
 )
 
 type MonsterDropChances struct {
-	MonsterID           int32            `json:"monster_id"`
-	MonsterName         string           `json:"monster_name"`
-	EquipmentDropChance float64          `json:"equipment_drop_chance"`
-	SlotsChances        []ChanceAmount   `json:"slots_chances"`
-	ShotsChances        []ChanceAmount   `json:"shots_chances"`
-	AutoAbilities       DroppedAbilities `json:"auto_abilities"`
+	MonsterID           int32                `json:"monster_id"`
+	MonsterName         string               `json:"monster_name"`
+	EquipmentDropChance float64              `json:"equipment_drop_chance"`
+	SlotsChances        []ChanceAmount       `json:"slots_chances"`
+	ShotsChances        []ChanceAmount       `json:"shots_chances"`
+	AutoAbilities       DroppedAutoAbilities `json:"auto_abilities"`
 }
 
 func (c MonsterDropChances) Percent() MonsterDropChances {

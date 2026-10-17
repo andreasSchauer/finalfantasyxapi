@@ -5,6 +5,25 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
+type EquipmentMatchChances struct {
+	FinBlow   float64 `json:"fin_blow"`
+	NoFinBlow float64 `json:"no_fin_blow"`
+}
+
+func (c EquipmentMatchChances) Percent() EquipmentMatchChances {
+	c.FinBlow = h.DecimalToPercent(c.FinBlow)
+	c.NoFinBlow = h.DecimalToPercent(c.NoFinBlow)
+
+	return c
+}
+
+func (c EquipmentMatchChances) Round(n int32) EquipmentMatchChances {
+	c.FinBlow = h.FloatRound(c.FinBlow, n)
+	c.NoFinBlow = h.FloatRound(c.NoFinBlow, n)
+
+	return c
+}
+
 func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, cc CharacterChances) EquipmentMatchChances {
 	equipTypeChance := 0.5
 	slotsTable := extractAbilitySlots(params, mon)

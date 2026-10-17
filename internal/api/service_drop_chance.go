@@ -14,42 +14,23 @@ type DropChanceResponse struct {
 }
 
 func (r DropChanceResponse) Percent() DropChanceResponse {
-	r.DropChanceFinBlow = h.DecimalToPercent(r.DropChanceFinBlow)
-	r.DropChanceNoFinBlow = h.DecimalToPercent(r.DropChanceNoFinBlow)
-	r.EquipmentMatchChances = r.EquipmentMatchChances.Percent()
-	r.CharacterChances = r.CharacterChances.Percent()
-	r.MonsterChances = r.MonsterChances.Percent()
-
-	return r
+	return DropChanceResponse{
+		DropChanceFinBlow: h.DecimalToPercent(r.DropChanceFinBlow),
+		DropChanceNoFinBlow: h.DecimalToPercent(r.DropChanceNoFinBlow),
+		EquipmentMatchChances: r.EquipmentMatchChances.Percent(),
+		CharacterChances: r.CharacterChances.Percent(),
+		MonsterChances: r.MonsterChances.Percent(),
+	}
 }
 
 func (r DropChanceResponse) Round(n int32) DropChanceResponse {
-	r.DropChanceFinBlow = h.DecimalToPercent(r.DropChanceFinBlow)
-	r.DropChanceNoFinBlow = h.DecimalToPercent(r.DropChanceNoFinBlow)
-	r.EquipmentMatchChances = r.EquipmentMatchChances.Round(n)
-	r.CharacterChances = r.CharacterChances.Round(n)
-	r.MonsterChances = r.MonsterChances.Round(n)
-
-	return r
-}
-
-type EquipmentMatchChances struct {
-	FinBlow   float64 `json:"fin_blow"`
-	NoFinBlow float64 `json:"no_fin_blow"`
-}
-
-func (c EquipmentMatchChances) Percent() EquipmentMatchChances {
-	c.FinBlow = h.DecimalToPercent(c.FinBlow)
-	c.NoFinBlow = h.DecimalToPercent(c.NoFinBlow)
-
-	return c
-}
-
-func (c EquipmentMatchChances) Round(n int32) EquipmentMatchChances {
-	c.FinBlow = h.FloatRound(c.FinBlow, n)
-	c.NoFinBlow = h.FloatRound(c.NoFinBlow, n)
-
-	return c
+	return DropChanceResponse{
+		DropChanceFinBlow: h.DecimalToPercent(r.DropChanceFinBlow),
+		DropChanceNoFinBlow: h.DecimalToPercent(r.DropChanceNoFinBlow),
+		EquipmentMatchChances: r.EquipmentMatchChances.Round(n),
+		CharacterChances: r.CharacterChances.Round(n),
+		MonsterChances: r.MonsterChances.Round(n),
+	}
 }
 
 func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse, error) {

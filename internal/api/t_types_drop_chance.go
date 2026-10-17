@@ -46,10 +46,10 @@ func compareMonsterDropChances(test test, fieldName string, exp, got MonsterDrop
 	compare(test, fieldName+" equipment drop chance", exp.EquipmentDropChance, got.EquipmentDropChance)
 	compStructSlices(test, fieldName+" slots chances", exp.SlotsChances, got.SlotsChances)
 	compStructSlices(test, fieldName+" shots chances", exp.ShotsChances, got.ShotsChances)
-	compareDroppedAbilities(test, fieldName+" auto abilities", exp.AutoAbilities, got.AutoAbilities)
+	compareDroppedAutoAbilities(test, fieldName+" auto abilities", exp.AutoAbilities, got.AutoAbilities)
 }
 
-func compareDroppedAbilities(test test, fieldName string, exp, got DroppedAbilities) {
+func compareDroppedAutoAbilities(test test, fieldName string, exp, got DroppedAutoAbilities) {
 	test.t.Helper()
 	compStructPtrsWithFn(test, fieldName+" forced", exp.Forced, got.Forced, compareEqAbilitiesSimple)
 	compStructSlicesWithFn(test, fieldName+" dropped", exp.Dropped, got.Dropped, compareEqAbilitiesChance)
