@@ -6,64 +6,48 @@ import (
 )
 
 type DropChanceResponse struct {
-	TotalDropChances   TotalDropChances   `json:"total_drop_chances"`
-	EquipmentChances   EquipmentChances   `json:"equipment_chances"`
-	CharacterChances   CharacterChances   `json:"character_chances"`
-	MonsterDropChances MonsterDropChances `json:"monster_drop_chances"`
+	DropChanceFinBlow     float64               `json:"drop_chance_fin_blow"`
+	DropChanceNoFinBlow   float64               `json:"drop_chance_no_fin_blow"`
+	EquipmentMatchChances EquipmentMatchChances `json:"equipment_match_chances"`
+	CharacterChances      CharacterChances      `json:"character_chances"`
+	MonsterChances        MonsterDropChances    `json:"monster_chances"`
 }
 
 func (r DropChanceResponse) Percent() DropChanceResponse {
-	r.TotalDropChances = r.TotalDropChances.Percent()
-	r.EquipmentChances = r.EquipmentChances.Percent()
+	r.DropChanceFinBlow = h.DecimalToPercent(r.DropChanceFinBlow)
+	r.DropChanceNoFinBlow = h.DecimalToPercent(r.DropChanceNoFinBlow)
+	r.EquipmentMatchChances = r.EquipmentMatchChances.Percent()
 	r.CharacterChances = r.CharacterChances.Percent()
-	r.MonsterDropChances = r.MonsterDropChances.Percent()
+	r.MonsterChances = r.MonsterChances.Percent()
 
 	return r
 }
 
 func (r DropChanceResponse) Round(n int32) DropChanceResponse {
-	r.TotalDropChances = r.TotalDropChances.Round(n)
-	r.EquipmentChances = r.EquipmentChances.Round(n)
+	r.DropChanceFinBlow = h.DecimalToPercent(r.DropChanceFinBlow)
+	r.DropChanceNoFinBlow = h.DecimalToPercent(r.DropChanceNoFinBlow)
+	r.EquipmentMatchChances = r.EquipmentMatchChances.Round(n)
 	r.CharacterChances = r.CharacterChances.Round(n)
-	r.MonsterDropChances = r.MonsterDropChances.Round(n)
+	r.MonsterChances = r.MonsterChances.Round(n)
 
 	return r
 }
 
-type TotalDropChances struct {
-	WithFinBlow float64 `json:"with_fin_blow"`
-	NoFinBlow   float64 `json:"no_fin_blow"`
+type EquipmentMatchChances struct {
+	FinBlow   float64 `json:"fin_blow"`
+	NoFinBlow float64 `json:"no_fin_blow"`
 }
 
-func (c TotalDropChances) Percent() TotalDropChances {
-	c.WithFinBlow = h.DecimalToPercent(c.WithFinBlow)
+func (c EquipmentMatchChances) Percent() EquipmentMatchChances {
+	c.FinBlow = h.DecimalToPercent(c.FinBlow)
 	c.NoFinBlow = h.DecimalToPercent(c.NoFinBlow)
 
 	return c
 }
 
-func (c TotalDropChances) Round(n int32) TotalDropChances {
-	c.WithFinBlow = h.FloatRound(c.WithFinBlow, n)
+func (c EquipmentMatchChances) Round(n int32) EquipmentMatchChances {
+	c.FinBlow = h.FloatRound(c.FinBlow, n)
 	c.NoFinBlow = h.FloatRound(c.NoFinBlow, n)
-
-	return c
-}
-
-type EquipmentChances struct {
-	MatchFinBlow   float64 `json:"match_fin_blow"`
-	MatchNoFinBlow float64 `json:"match_no_fin_blow"`
-}
-
-func (c EquipmentChances) Percent() EquipmentChances {
-	c.MatchFinBlow = h.DecimalToPercent(c.MatchFinBlow)
-	c.MatchNoFinBlow = h.DecimalToPercent(c.MatchNoFinBlow)
-
-	return c
-}
-
-func (c EquipmentChances) Round(n int32) EquipmentChances {
-	c.MatchFinBlow = h.FloatRound(c.MatchFinBlow, n)
-	c.MatchNoFinBlow = h.FloatRound(c.MatchNoFinBlow, n)
 
 	return c
 }
@@ -78,19 +62,14 @@ func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse,
 
 	characterChances := calcCharChances(cfg, params, wantedAbilities, monAbilities)
 	monDropChances := getMonsterDropChances(cfg, mon, monAbilities)
-	matchFinBlow, matchNoFinBlow := calcEquipmentMatchChances(cfg, params, mon, wantedAbilities, monAbilities, characterChances)
+	equipmentMatchChances := calcEquipmentMatchChances(cfg, params, mon, wantedAbilities, monAbilities, characterChances)
 
 	response := DropChanceResponse{
-		TotalDropChances: TotalDropChances{
-			WithFinBlow: monDropChances.EquipmentDropChance * matchFinBlow,
-			NoFinBlow:   monDropChances.EquipmentDropChance * matchNoFinBlow,
-		},
-		EquipmentChances: EquipmentChances{
-			MatchFinBlow:   matchFinBlow,
-			MatchNoFinBlow: matchNoFinBlow,
-		},
-		CharacterChances:   characterChances,
-		MonsterDropChances: getMonsterDropChances(cfg, mon, monAbilities),
+		DropChanceFinBlow:     monDropChances.EquipmentDropChance * equipmentMatchChances.FinBlow,
+		DropChanceNoFinBlow:   monDropChances.EquipmentDropChance * equipmentMatchChances.NoFinBlow,
+		EquipmentMatchChances: equipmentMatchChances,
+		CharacterChances:      characterChances,
+		MonsterChances:        monDropChances,
 	}
 
 	if params.Decimals {

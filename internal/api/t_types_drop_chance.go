@@ -11,37 +11,32 @@ func (e expDropChanceResponse) GetTestGeneral() testGeneral {
 
 func compareDropChanceResponses(test test, exp expDropChanceResponse, got DropChanceResponse) {
 	test.t.Helper()
-	compStructsWithFn(test, "total drop chances", exp.TotalDropChances, got.TotalDropChances, compareTotalDropChances)
-	compStructsWithFn(test, "equipment chances", exp.EquipmentChances, got.EquipmentChances, compareEquipmentChances)
+	compare(test, "drop chance fin blow", exp.DropChanceFinBlow, got.DropChanceFinBlow)
+	compare(test, "drop chance no fin blow", exp.DropChanceNoFinBlow, got.DropChanceNoFinBlow)
+	compStructsWithFn(test, "equipment match chances", exp.EquipmentMatchChances, got.EquipmentMatchChances, compareEquipmentMatchChances)
 	compStructsWithFn(test, "character chances", exp.CharacterChances, got.CharacterChances, compareCharacterChances)
-	compStructsWithFn(test, "monster drop chances", exp.MonsterDropChances, got.MonsterDropChances, compareMonsterDropChances)
+	compStructsWithFn(test, "monster drop chances", exp.MonsterChances, got.MonsterChances, compareMonsterDropChances)
 }
 
-func compareTotalDropChances(test test, fieldName string, exp, got TotalDropChances) {
+func compareEquipmentMatchChances(test test, fieldName string, exp, got EquipmentMatchChances) {
 	test.t.Helper()
-	compare(test, fieldName+" with fin blow", exp.WithFinBlow, got.WithFinBlow)
+	compare(test, fieldName+" fin blow", exp.FinBlow, got.FinBlow)
 	compare(test, fieldName+" no fin blow", exp.NoFinBlow, got.NoFinBlow)
-}
-
-func compareEquipmentChances(test test, fieldName string, exp, got EquipmentChances) {
-	test.t.Helper()
-	compare(test, fieldName+" match fin blow", exp.MatchFinBlow, got.MatchFinBlow)
-	compare(test, fieldName+" match no fin blow", exp.MatchNoFinBlow, got.MatchNoFinBlow)
 }
 
 func compareCharacterChances(test test, fieldName string, exp, got CharacterChances) {
 	test.t.Helper()
 	compare(test, fieldName+" eligible chars", exp.EligibleChars, got.EligibleChars)
-	compare(test, fieldName+" any char fin blow", exp.AnyCharFinBlow, got.AnyCharFinBlow)
-	compare(test, fieldName+" any char no fin blow", exp.AnyCharNoFinBlow, got.AnyCharNoFinBlow)
+	compare(test, fieldName+" any fin blow", exp.AnyFinBlow, got.AnyFinBlow)
+	compare(test, fieldName+" any no fin blow", exp.AnyNoFinBlow, got.AnyNoFinBlow)
 	compStructPtrsWithFn(test, fieldName+" specific character", exp.SpecificChar, got.SpecificChar, compareSpecificCharChances)
 }
 
 func compareSpecificCharChances(test test, fieldName string, exp, got SpecificCharChances) {
 	test.t.Helper()
-	compare(test, fieldName+" char is eligible", exp.CharIsEligible, got.CharIsEligible)
-	compare(test, fieldName+" char fin blow", exp.CharFinBlow, got.CharFinBlow)
-	compare(test, fieldName+" char no fin blow", exp.CharNoFinBlow, got.CharNoFinBlow)
+	compare(test, fieldName+" is eligible", exp.IsEligible, got.IsEligible)
+	compare(test, fieldName+" fin blow", exp.FinBlow, got.FinBlow)
+	compare(test, fieldName+" no fin blow", exp.NoFinBlow, got.NoFinBlow)
 }
 
 func compareMonsterDropChances(test test, fieldName string, exp, got MonsterDropChances) {
@@ -51,24 +46,24 @@ func compareMonsterDropChances(test test, fieldName string, exp, got MonsterDrop
 	compare(test, fieldName+" equipment drop chance", exp.EquipmentDropChance, got.EquipmentDropChance)
 	compStructSlices(test, fieldName+" slots chances", exp.SlotsChances, got.SlotsChances)
 	compStructSlices(test, fieldName+" shots chances", exp.ShotsChances, got.ShotsChances)
-	compareDroppedAutoAbilities(test, fieldName+" dropped auto abilities", exp.DroppedAutoAbilities, got.DroppedAutoAbilities)
+	compareDroppedAbilities(test, fieldName+" auto abilities", exp.AutoAbilities, got.AutoAbilities)
 }
 
-func compareDroppedAutoAbilities(test test, fieldName string, exp, got DroppedAutoAbilities) {
+func compareDroppedAbilities(test test, fieldName string, exp, got DroppedAbilities) {
 	test.t.Helper()
-	compStructPtrsWithFn(test, fieldName+" forced ability", exp.ForcedAbility, got.ForcedAbility, compareDroppedAutoAbilityInfo)
-	compStructSlicesWithFn(test, fieldName+" dropped abilities", exp.DroppedAbilities, got.DroppedAbilities, compareDroppedAutoAbility)
+	compStructPtrsWithFn(test, fieldName+" forced", exp.Forced, got.Forced, compareEqAbilitiesSimple)
+	compStructSlicesWithFn(test, fieldName+" dropped", exp.Dropped, got.Dropped, compareEqAbilitiesChance)
 }
 
-func compareDroppedAutoAbilityInfo(test test, fieldName string, exp, got DroppedAutoAbilityInfo) {
+func compareEqAbilitiesSimple(test test, fieldName string, exp, got EqAbilitySimple) {
 	test.t.Helper()
 	compare(test, fieldName+" id", exp.ID, got.ID)
 	compare(test, fieldName+" name", exp.Name, got.Name)
 	compareSlices(test, fieldName+" characters", exp.Characters, got.Characters)
 }
 
-func compareDroppedAutoAbility(test test, fieldName string, exp, got DroppedAutoAbility) {
+func compareEqAbilitiesChance(test test, fieldName string, exp, got EqAbilityChance) {
 	test.t.Helper()
-	compareDroppedAutoAbilityInfo(test, fieldName+" dropped auto ability info", exp.DroppedAutoAbilityInfo, got.DroppedAutoAbilityInfo)
+	compareEqAbilitiesSimple(test, fieldName+" dropped auto ability info", exp.EqAbilitySimple, got.EqAbilitySimple)
 	compare(test, fieldName+" chance", exp.Chance, got.Chance)
 }

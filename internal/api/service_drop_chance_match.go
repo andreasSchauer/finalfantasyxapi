@@ -5,7 +5,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, cc CharacterChances) (float64, float64) {
+func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, cc CharacterChances) EquipmentMatchChances {
 	equipTypeChance := 0.5
 	slotsTable := extractAbilitySlots(params, mon)
 	shotsTable := mon.Equipment.AttachedAbilities.Chances
@@ -49,7 +49,10 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 	chanceFinBlow *= equipTypeChance
 	chanceNoFinBlow *= equipTypeChance
 
-	return chanceFinBlow, chanceNoFinBlow
+	return EquipmentMatchChances{
+		FinBlow:   	chanceFinBlow,
+		NoFinBlow: 	chanceNoFinBlow,
+	}
 }
 
 func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding.EquipmentSlotsChance {
@@ -85,7 +88,7 @@ func getRequiredSlots(params DropChanceParams) int32 {
 func getWheelWeights(wheel AbilityWheel, cc CharacterChances) (float64, float64) {
 	if cc.SpecificChar != nil {
 		specificChar := *cc.SpecificChar
-		return specificChar.CharFinBlow, specificChar.CharNoFinBlow
+		return specificChar.FinBlow, specificChar.NoFinBlow
 	}
 
 	if cc.EligibleChars == 0 {
@@ -93,8 +96,8 @@ func getWheelWeights(wheel AbilityWheel, cc CharacterChances) (float64, float64)
 	}
 
 	charRatio := h.FloatLen(wheel.Characters) / float64(cc.EligibleChars)
-	wheelWeightFinBlow := charRatio * cc.AnyCharFinBlow
-	wheelWeightNoFinBlow := charRatio * cc.AnyCharNoFinBlow
+	wheelWeightFinBlow := charRatio * cc.AnyFinBlow
+	wheelWeightNoFinBlow := charRatio * cc.AnyNoFinBlow
 
 	return wheelWeightFinBlow, wheelWeightNoFinBlow
 }

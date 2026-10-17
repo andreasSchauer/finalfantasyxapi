@@ -6,19 +6,19 @@ import (
 )
 
 type MonsterDropChances struct {
-	MonsterID            int32                `json:"monster_id"`
-	MonsterName          string               `json:"monster_name"`
-	EquipmentDropChance  float64              `json:"equipment_drop_chance"`
-	SlotsChances         []SlotsChance        `json:"slots_chances"`
-	ShotsChances         []SlotsChance        `json:"shots_chances"`
-	DroppedAutoAbilities DroppedAutoAbilities `json:"dropped_auto_abilities"`
+	MonsterID           int32            `json:"monster_id"`
+	MonsterName         string           `json:"monster_name"`
+	EquipmentDropChance float64          `json:"equipment_drop_chance"`
+	SlotsChances        []ChanceAmount   `json:"slots_chances"`
+	ShotsChances        []ChanceAmount   `json:"shots_chances"`
+	AutoAbilities       DroppedAbilities `json:"auto_abilities"`
 }
 
 func (c MonsterDropChances) Percent() MonsterDropChances {
 	c.EquipmentDropChance = h.DecimalToPercent(c.EquipmentDropChance)
 	c.SlotsChances = h.SlicePercent(c.SlotsChances)
 	c.ShotsChances = h.SlicePercent(c.ShotsChances)
-	c.DroppedAutoAbilities = c.DroppedAutoAbilities.Percent()
+	c.AutoAbilities = c.AutoAbilities.Percent()
 
 	return c
 }
@@ -27,19 +27,19 @@ func (c MonsterDropChances) Round(n int32) MonsterDropChances {
 	c.EquipmentDropChance = h.FloatRound(c.EquipmentDropChance, n)
 	c.SlotsChances = h.SliceRound(c.SlotsChances, n)
 	c.ShotsChances = h.SliceRound(c.ShotsChances, n)
-	c.DroppedAutoAbilities = c.DroppedAutoAbilities.Round(n)
+	c.AutoAbilities = c.AutoAbilities.Round(n)
 
 	return c
 }
 
 func getMonsterDropChances(cfg *Config, mon seeding.Monster, wantedAbilities []seeding.EquipmentDrop) MonsterDropChances {
 	return MonsterDropChances{
-		MonsterID:            mon.ID,
-		MonsterName:          h.NameToString(mon.Name, mon.Version, mon.Specification),
-		EquipmentDropChance:  calcMonDropChance(mon),
-		SlotsChances:         convertObjSlice(cfg, mon.Equipment.AbilitySlots.Chances, convertSlotsChance),
-		ShotsChances:         convertObjSlice(cfg, mon.Equipment.AttachedAbilities.Chances, convertSlotsChance),
-		DroppedAutoAbilities: getDroppedAutoAbilities(cfg, wantedAbilities),
+		MonsterID:           mon.ID,
+		MonsterName:         h.NameToString(mon.Name, mon.Version, mon.Specification),
+		EquipmentDropChance: calcMonDropChance(mon),
+		SlotsChances:        convertObjSlice(cfg, mon.Equipment.AbilitySlots.Chances, convertChanceAmount),
+		ShotsChances:        convertObjSlice(cfg, mon.Equipment.AttachedAbilities.Chances, convertChanceAmount),
+		AutoAbilities:       getDroppedAutoAbilities(cfg, wantedAbilities),
 	}
 }
 
@@ -47,25 +47,25 @@ func calcMonDropChance(mon seeding.Monster) float64 {
 	return float64(mon.Equipment.DropChance) / 255
 }
 
-type SlotsChance struct {
+type ChanceAmount struct {
 	Amount int32   `json:"amount"`
 	Chance float64 `json:"chance"`
 }
 
-func (c SlotsChance) Percent() SlotsChance {
+func (c ChanceAmount) Percent() ChanceAmount {
 	c.Chance = h.DecimalToPercent(c.Chance)
 
 	return c
 }
 
-func (c SlotsChance) Round(n int32) SlotsChance {
+func (c ChanceAmount) Round(n int32) ChanceAmount {
 	c.Chance = h.FloatRound(c.Chance, n)
 
 	return c
 }
 
-func convertSlotsChance(_ *Config, c seeding.EquipmentSlotsChance) SlotsChance {
-	return SlotsChance{
+func convertChanceAmount(_ *Config, c seeding.EquipmentSlotsChance) ChanceAmount {
+	return ChanceAmount{
 		Amount: c.Amount,
 		Chance: h.PercentToDecimal(float64(c.Chance)),
 	}

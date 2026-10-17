@@ -5,73 +5,73 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type DroppedAutoAbilities struct {
-	ForcedAbility    *DroppedAutoAbilityInfo `json:"forced_ability"`
-	DroppedAbilities []DroppedAutoAbility    `json:"dropped_abilities"`
+type DroppedAbilities struct {
+	Forced  *EqAbilitySimple  `json:"forced"`
+	Dropped []EqAbilityChance `json:"dropped"`
 }
 
-func (d DroppedAutoAbilities) Percent() DroppedAutoAbilities {
-	d.DroppedAbilities = h.SlicePercent(d.DroppedAbilities)
+func (d DroppedAbilities) Percent() DroppedAbilities {
+	d.Dropped = h.SlicePercent(d.Dropped)
 
 	return d
 }
 
-func (d DroppedAutoAbilities) Round(n int32) DroppedAutoAbilities {
-	d.DroppedAbilities = h.SliceRound(d.DroppedAbilities, n)
+func (d DroppedAbilities) Round(n int32) DroppedAbilities {
+	d.Dropped = h.SliceRound(d.Dropped, n)
 
 	return d
 }
 
-func getDroppedAutoAbilities(cfg *Config, abilities []seeding.EquipmentDrop) DroppedAutoAbilities {
+func getDroppedAutoAbilities(cfg *Config, abilities []seeding.EquipmentDrop) DroppedAbilities {
 	if abilities[0].IsForced {
-		forcedAbility := convertDroppedAutoAbilityInfo(abilities[0])
+		forcedAbility := convertEqAbilitySimple(abilities[0])
 
-		return DroppedAutoAbilities{
-			ForcedAbility:    &forcedAbility,
-			DroppedAbilities: convertObjSlice(cfg, abilities[1:], convertDroppedAutoAbility),
+		return DroppedAbilities{
+			Forced:  &forcedAbility,
+			Dropped: convertObjSlice(cfg, abilities[1:], convertEqAbilityChance),
 		}
 	}
 
-	return DroppedAutoAbilities{
-		DroppedAbilities: convertObjSlice(cfg, abilities, convertDroppedAutoAbility),
+	return DroppedAbilities{
+		Dropped: convertObjSlice(cfg, abilities, convertEqAbilityChance),
 	}
 }
 
-type DroppedAutoAbilityInfo struct {
+type EqAbilitySimple struct {
 	ID         int32    `json:"id"`
 	Name       string   `json:"name"`
 	Characters []string `json:"characters"`
 }
 
-func convertDroppedAutoAbilityInfo(ed seeding.EquipmentDrop) DroppedAutoAbilityInfo {
-	return DroppedAutoAbilityInfo{
+func convertEqAbilitySimple(ed seeding.EquipmentDrop) EqAbilitySimple {
+	return EqAbilitySimple{
 		ID:         ed.AutoAbilityID,
 		Name:       ed.Ability,
 		Characters: ed.Characters,
 	}
 }
 
-type DroppedAutoAbility struct {
-	DroppedAutoAbilityInfo
+type EqAbilityChance struct {
+	EqAbilitySimple
 	Chance float64 `json:"chance"`
 }
 
-func (a DroppedAutoAbility) Percent() DroppedAutoAbility {
+func (a EqAbilityChance) Percent() EqAbilityChance {
 	a.Chance = h.DecimalToPercent(a.Chance)
 
 	return a
 }
 
-func (a DroppedAutoAbility) Round(n int32) DroppedAutoAbility {
+func (a EqAbilityChance) Round(n int32) EqAbilityChance {
 	a.Chance = h.FloatRound(a.Chance, n)
 
 	return a
 }
 
-func convertDroppedAutoAbility(_ *Config, ed seeding.EquipmentDrop) DroppedAutoAbility {
-	return DroppedAutoAbility{
-		DroppedAutoAbilityInfo: convertDroppedAutoAbilityInfo(ed),
-		Chance:                 calcAutoAbilityDropChance(ed),
+func convertEqAbilityChance(_ *Config, ed seeding.EquipmentDrop) EqAbilityChance {
+	return EqAbilityChance{
+		EqAbilitySimple: convertEqAbilitySimple(ed),
+		Chance:          calcAutoAbilityDropChance(ed),
 	}
 }
 
