@@ -14,7 +14,6 @@ type AbilityWheel struct {
 	Abilities    [7]string
 	Clashes      [8][8]bool
 	IndexedNames [8]string
-	IdxGroups	 [][]int32
 }
 
 func (w *AbilityWheel) compileClashes(cfg *Config) {
@@ -43,34 +42,6 @@ func (w *AbilityWheel) compileClashes(cfg *Config) {
 	}
 }
 
-func (w *AbilityWheel) compileIdxGroups() {
-	var idxGroups [][]int32
-	idxMap := make(map[string][]int32)
-
-	for i, ability := range w.IndexedNames {
-		if ability == "" {
-			continue
-		}
-
-		idxMap[ability] = append(idxMap[ability], int32(i))
-	}
-
-	for _, idxGroup := range idxMap {
-		 idxGroups = append(idxGroups, idxGroup)
-	}
-
-	slices.SortStableFunc(idxGroups, func(a, b []int32) int {
-		if a[0] < b[0] {
-			return -1
-		}
-		if a[0] > b[0] {
-			return 1
-		}
-		return 0
-	})
-
-	w.IdxGroups = idxGroups
-}
 
 func getTargetIdxGroup(targetName string, indexedNames [8]string) []int32 {
 	var targetIndexGroup []int32
@@ -131,7 +102,6 @@ func createAbilityWheel(cfg *Config, abilities []seeding.EquipmentDrop, char see
 	}
 
 	wheel.compileClashes(cfg)
-	wheel.compileIdxGroups()
 	return wheel
 }
 
