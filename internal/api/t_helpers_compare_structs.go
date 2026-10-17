@@ -44,6 +44,18 @@ func compStructPtrsWithFn[T any](test test, fieldName string, exp, got *T, compF
 	compFn(test, fieldName, *exp, *got)
 }
 
+func compStructSlicesWithFn[T any](test test, fieldName string, exp, got []T, compFn func(test, string, T, T)) {
+	test.t.Helper()
+	err := sliceBasicChecks(test, fieldName, exp, got)
+	if errors.Is(err, errIgnoredField) {
+		return
+	}
+
+	for i := range exp {
+		compFn(test, fieldName, exp[i], got[i])
+	}
+}
+
 // checks if two struct pointers with the same type are equal. ptr presence is checked via compPtr
 // itemAmount == itemAmount (both ptrs)
 func compStructPtrs[T any](test test, fieldName string, exp, got *T) {

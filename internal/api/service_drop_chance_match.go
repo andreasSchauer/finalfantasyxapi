@@ -52,28 +52,6 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 	return chanceFinBlow, chanceNoFinBlow
 }
 
-
-func getWantedIndices(wantedAbilities []seeding.AutoAbility, wheel AbilityWheel) ([][]int32, error) {
-	var idxGroups [][]int32
-
-	for _, ability := range wantedAbilities {
-		var abilityIdxGroup []int32
-		for i, name := range wheel.IndexedNames {
-			if ability.Name == name {
-				abilityIdxGroup = append(abilityIdxGroup, int32(i))
-			}
-		}
-
-		if len(abilityIdxGroup) == 0 {
-			return nil, errContinue
-		}
-
-		idxGroups = append(idxGroups, abilityIdxGroup)
-	}
-
-	return idxGroups, nil
-}
-
 func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding.EquipmentSlotsChance {
 	var minSlots int32 = getRequiredSlots(params)
 	var maxSlots int32 = 4
@@ -94,6 +72,16 @@ func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding
 	return chances
 }
 
+func getRequiredSlots(params DropChanceParams) int32 {
+	var minEmptySlots int32 = 0
+
+	if params.MinEmptySlots != nil {
+		minEmptySlots = *params.MinEmptySlots
+	}
+
+	return int32(len(params.AutoAbilities)) + minEmptySlots
+}
+
 func getWheelWeights(wheel AbilityWheel, cc CharacterChances) (float64, float64) {
 	if cc.SpecificChar != nil {
 		specificChar := *cc.SpecificChar
@@ -109,4 +97,25 @@ func getWheelWeights(wheel AbilityWheel, cc CharacterChances) (float64, float64)
 	wheelWeightNoFinBlow := charRatio * cc.AnyCharNoFinBlow
 
 	return wheelWeightFinBlow, wheelWeightNoFinBlow
+}
+
+func getWantedIndices(wantedAbilities []seeding.AutoAbility, wheel AbilityWheel) ([][]int32, error) {
+	var idxGroups [][]int32
+
+	for _, ability := range wantedAbilities {
+		var abilityIdxGroup []int32
+		for i, name := range wheel.IndexedNames {
+			if ability.Name == name {
+				abilityIdxGroup = append(abilityIdxGroup, int32(i))
+			}
+		}
+
+		if len(abilityIdxGroup) == 0 {
+			return nil, errContinue
+		}
+
+		idxGroups = append(idxGroups, abilityIdxGroup)
+	}
+
+	return idxGroups, nil
 }

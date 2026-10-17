@@ -6,15 +6,17 @@ import (
 )
 
 type DropChanceResponse struct {
-	TotalDropChances TotalDropChances `json:"total_drop_chances"`
-	EquipmentChances EquipmentChances `json:"equipment_chances"`
-	CharacterChances CharacterChances `json:"character_chances"`
+	TotalDropChances   TotalDropChances   `json:"total_drop_chances"`
+	EquipmentChances   EquipmentChances   `json:"equipment_chances"`
+	CharacterChances   CharacterChances   `json:"character_chances"`
+	MonsterDropChances MonsterDropChances `json:"monster_drop_chances"`
 }
 
 func (r DropChanceResponse) Percent() DropChanceResponse {
 	r.TotalDropChances = r.TotalDropChances.Percent()
 	r.EquipmentChances = r.EquipmentChances.Percent()
 	r.CharacterChances = r.CharacterChances.Percent()
+	r.MonsterDropChances = r.MonsterDropChances.Percent()
 
 	return r
 }
@@ -23,6 +25,7 @@ func (r DropChanceResponse) Round(n int32) DropChanceResponse {
 	r.TotalDropChances = r.TotalDropChances.Round(n)
 	r.EquipmentChances = r.EquipmentChances.Round(n)
 	r.CharacterChances = r.CharacterChances.Round(n)
+	r.MonsterDropChances = r.MonsterDropChances.Round(n)
 
 	return r
 }
@@ -47,13 +50,11 @@ func (c TotalDropChances) Round(n int32) TotalDropChances {
 }
 
 type EquipmentChances struct {
-	MonsterDrop    float64 `json:"monster_drop"`
 	MatchFinBlow   float64 `json:"match_fin_blow"`
 	MatchNoFinBlow float64 `json:"match_no_fin_blow"`
 }
 
 func (c EquipmentChances) Percent() EquipmentChances {
-	c.MonsterDrop = h.DecimalToPercent(c.MonsterDrop)
 	c.MatchFinBlow = h.DecimalToPercent(c.MatchFinBlow)
 	c.MatchNoFinBlow = h.DecimalToPercent(c.MatchNoFinBlow)
 
@@ -61,7 +62,6 @@ func (c EquipmentChances) Percent() EquipmentChances {
 }
 
 func (c EquipmentChances) Round(n int32) EquipmentChances {
-	c.MonsterDrop = h.FloatRound(c.MonsterDrop, n)
 	c.MatchFinBlow = h.FloatRound(c.MatchFinBlow, n)
 	c.MatchNoFinBlow = h.FloatRound(c.MatchNoFinBlow, n)
 
@@ -77,20 +77,20 @@ func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse,
 	}
 
 	characterChances := calcCharChances(cfg, params, wantedAbilities, monAbilities)
-	monDropChance := calcMonDropChance(mon)
+	monDropChances := getMonsterDropChances(cfg, mon, monAbilities)
 	matchFinBlow, matchNoFinBlow := calcEquipmentMatchChances(cfg, params, mon, wantedAbilities, monAbilities, characterChances)
 
 	response := DropChanceResponse{
 		TotalDropChances: TotalDropChances{
-			WithFinBlow: monDropChance * matchFinBlow,
-			NoFinBlow:   monDropChance * matchNoFinBlow,
+			WithFinBlow: monDropChances.EquipmentDropChance * matchFinBlow,
+			NoFinBlow:   monDropChances.EquipmentDropChance * matchNoFinBlow,
 		},
 		EquipmentChances: EquipmentChances{
-			MonsterDrop:    monDropChance,
 			MatchFinBlow:   matchFinBlow,
 			MatchNoFinBlow: matchNoFinBlow,
 		},
-		CharacterChances: characterChances,
+		CharacterChances:   characterChances,
+		MonsterDropChances: getMonsterDropChances(cfg, mon, monAbilities),
 	}
 
 	if params.Decimals {
@@ -98,18 +98,4 @@ func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse,
 	}
 
 	return response.Percent(), nil
-}
-
-func calcMonDropChance(mon seeding.Monster) float64 {
-	return float64(mon.Equipment.DropChance) / 255
-}
-
-func getRequiredSlots(params DropChanceParams) int32 {
-	var minEmptySlots int32 = 0
-
-	if params.MinEmptySlots != nil {
-		minEmptySlots = *params.MinEmptySlots
-	}
-
-	return int32(len(params.AutoAbilities)) + minEmptySlots
 }

@@ -290,7 +290,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.2647,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 4.7059,
 					MatchFinBlow: 15,
 					MatchNoFinBlow: 5.625,
 				},
@@ -299,6 +298,56 @@ func TestDropChance(t *testing.T) {
 					AnyCharFinBlow: 40,
 					AnyCharNoFinBlow: 15,
 				},
+				MonsterDropChances: MonsterDropChances{
+					MonsterID: 27,
+					MonsterName: "yellow element",
+					EquipmentDropChance: 4.7059,
+					SlotsChances: []SlotsChance{
+						{
+							Amount: 1,
+							Chance: 75,
+						},
+						{
+							Amount: 2,
+							Chance: 25,
+						},
+					},
+					ShotsChances: []SlotsChance{
+						{
+							Amount: 0,
+							Chance: 50,
+						},
+						{
+							Amount: 1,
+							Chance: 50,
+						},
+					},
+					DroppedAutoAbilities: DroppedAutoAbilities{
+						ForcedAbility: &DroppedAutoAbilityInfo{
+							ID: 2,
+							Name: "piercing",
+							Characters: []string{"kimahri", "auron"},
+						},
+						DroppedAbilities: []DroppedAutoAbility{
+							{
+								DroppedAutoAbilityInfo: DroppedAutoAbilityInfo{
+									ID: 6,
+									Name: "lightningstrike",
+									Characters: []string{},
+								},
+								Chance: 57.1429,
+							},
+							{
+								DroppedAutoAbilityInfo: DroppedAutoAbilityInfo{
+									ID: 26,
+									Name: "distill mana",
+									Characters: []string{},
+								},
+								Chance: 42.8571,
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -306,6 +355,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 27,
 					pfnAutoAbilities: []any{2},
@@ -318,7 +370,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.2206,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 4.7059,
 					MatchFinBlow: 15.625,
 					MatchNoFinBlow: 4.6875,
 				},
@@ -352,7 +403,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 0.501961,
 					MatchFinBlow: 0,
 					MatchNoFinBlow: 0,
 				},
@@ -366,6 +416,64 @@ func TestDropChance(t *testing.T) {
 						CharIsEligible: false,
 					},
 				},
+				MonsterDropChances: MonsterDropChances{
+					MonsterID: 50,
+					MonsterName: "garuda - 3 (regular encounter)",
+					EquipmentDropChance: 0.501961,
+					SlotsChances: []SlotsChance{
+						{
+							Amount: 1,
+							Chance: 0.5,
+						},
+						{
+							Amount: 2,
+							Chance: 0.5,
+						},
+					},
+					ShotsChances: []SlotsChance{
+						{
+							Amount: 1,
+							Chance: 0.75,
+						},
+						{
+							Amount: 2,
+							Chance: 0.25,
+						},
+					},
+					DroppedAutoAbilities: DroppedAutoAbilities{
+						ForcedAbility: &DroppedAutoAbilityInfo{
+							ID: 2,
+							Name: "piercing",
+							Characters: []string{"kimahri", "auron"},
+						},
+						DroppedAbilities: []DroppedAutoAbility{
+							{
+								DroppedAutoAbilityInfo: DroppedAutoAbilityInfo{
+									ID: 9,
+									Name: "darktouch",
+									Characters: []string{},
+								},
+								Chance: 0.285714,
+							},
+							{
+								DroppedAutoAbilityInfo: DroppedAutoAbilityInfo{
+									ID: 29,
+									Name: "strength +3%",
+									Characters: []string{"tidus", "wakka", "kimahri", "auron", "rikku"},
+								},
+								Chance: 0.714286,
+							},
+							{
+								DroppedAutoAbilityInfo: DroppedAutoAbilityInfo{
+									ID: 33,
+									Name: "magic +3%",
+									Characters: []string{"yuna", "lulu"},
+								},
+								Chance: 0.714286,
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -373,6 +481,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 50,
 					pfnAutoAbilities: []any{9},
@@ -385,7 +496,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 50.1961,
 					MatchFinBlow: 0,
 					MatchNoFinBlow: 0,
 				},
@@ -408,6 +518,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"character chances": true,
+					"monster drop chances": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 50,
@@ -422,7 +533,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.3842,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 50.1961,
 					MatchFinBlow: 2.551,
 					MatchNoFinBlow: 0.7653,
 				},
@@ -435,6 +545,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"character chances": true,
+					"monster drop chances": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 50,
@@ -449,7 +560,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 50.1961,
 					MatchFinBlow: 0,
 					MatchNoFinBlow: 0,
 				},
@@ -462,6 +572,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"character chances": true,
+					"monster drop chances": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 50,
@@ -476,7 +587,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 50.1961,
 					MatchFinBlow: 0,
 					MatchNoFinBlow: 0,
 				},
@@ -487,6 +597,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 50,
 					pfnAutoAbilities: []any{2},
@@ -501,7 +614,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 1.3445,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 50.1961,
 					MatchFinBlow: 8.9286,
 					MatchNoFinBlow: 2.6786,
 				},
@@ -534,7 +646,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 100,
 					MatchFinBlow: 0,
 					MatchNoFinBlow: 0,
 				},
@@ -543,6 +654,64 @@ func TestDropChance(t *testing.T) {
 					AnyCharFinBlow: 100,
 					AnyCharNoFinBlow: 100,
 				},
+				MonsterDropChances: MonsterDropChances{
+					MonsterID: 258,
+					MonsterName: "kottos",
+					EquipmentDropChance: 100,
+					SlotsChances: []SlotsChance{
+						{
+							Amount: 2,
+							Chance: 50,
+						},
+						{
+							Amount: 3,
+							Chance: 50,
+						},
+					},
+					ShotsChances: []SlotsChance{
+						{
+							Amount: 4,
+							Chance: 50,
+						},
+						{
+							Amount: 5,
+							Chance: 50,
+						},
+					},
+					DroppedAutoAbilities: DroppedAutoAbilities{
+						ForcedAbility: &DroppedAutoAbilityInfo{
+							ID: 37,
+							Name: "counterattack",
+							Characters: []string{},
+						},
+						DroppedAbilities: []DroppedAutoAbility{
+							{
+								DroppedAutoAbilityInfo: DroppedAutoAbilityInfo{
+									ID: 37,
+									Name: "counterattack",
+									Characters: []string{},
+								},
+								Chance: 28.5714,
+							},
+							{
+								DroppedAutoAbilityInfo: DroppedAutoAbilityInfo{
+									ID: 38,
+									Name: "evade & counter",
+									Characters: []string{},
+								},
+								Chance: 42.8571,
+							},
+							{
+								DroppedAutoAbilityInfo: DroppedAutoAbilityInfo{
+									ID: 39,
+									Name: "magic counter",
+									Characters: []string{},
+								},
+								Chance: 28.5714,
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -550,6 +719,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 258,
 					pfnAutoAbilities: []any{38},
@@ -562,7 +734,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 100,
 					MatchFinBlow: 0,
 					MatchNoFinBlow: 0,
 				},
@@ -578,6 +749,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 258,
 					pfnAutoAbilities: []any{37},
@@ -590,7 +764,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 50,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 100,
 					MatchFinBlow: 50,
 					MatchNoFinBlow: 50,
 				},
@@ -606,6 +779,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 243,
 					pfnAutoAbilities: []any{30, 19},
@@ -617,7 +793,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.1543,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 23.5294,
 					MatchFinBlow: 1.1662,
 					MatchNoFinBlow: 0.656,
 				},
@@ -633,6 +808,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 243,
 					pfnPartyMembers: []any{1,3,7},
@@ -645,7 +823,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.4802,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 23.5294,
 					MatchFinBlow: 2.0408,
 					MatchNoFinBlow: 2.0408,
 				},
@@ -661,6 +838,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 243,
 					pfnAutoAbilities: []any{34, 19},
@@ -672,7 +852,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.1029,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 23.5294,
 					MatchFinBlow: 0.9475,
 					MatchNoFinBlow: 0.4373,
 				},
@@ -688,34 +867,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[FieldName]any{
-					pfnMonsterID: 247,
-					pfnTotalSlots: 4,
-					pfnEquipType: string(database.EquipTypeWeapon),
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
 				},
-			},
-			DropChanceResponse: DropChanceResponse{
-				TotalDropChances: TotalDropChances{
-					WithFinBlow: 6.5076,
-					NoFinBlow: 4.437,
-				},
-				EquipmentChances: EquipmentChances{
-					MonsterDrop: 50.1961,
-					MatchFinBlow: 12.9643,
-					MatchNoFinBlow: 8.8393,
-				},
-				CharacterChances: CharacterChances{
-					EligibleChars: 5,
-					AnyCharFinBlow: 78.5714,
-					AnyCharNoFinBlow: 53.5714,
-				},
-			},
-		},
-		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method: 		http.MethodPost,
-				expectedStatus: http.StatusOK,
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 243,
 					pfnAutoAbilities: []any{30, 19},
@@ -729,7 +883,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 23.5294,
 					MatchFinBlow: 0,
 					MatchNoFinBlow: 0,
 				},
@@ -750,34 +903,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[FieldName]any{
-					pfnMonsterID: 247,
-					pfnMinEmptySlots: 4,
-					pfnEquipType: string(database.EquipTypeWeapon),
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
 				},
-			},
-			DropChanceResponse: DropChanceResponse{
-				TotalDropChances: TotalDropChances{
-					WithFinBlow: 6.5076,
-					NoFinBlow: 4.437,
-				},
-				EquipmentChances: EquipmentChances{
-					MonsterDrop: 50.1961,
-					MatchFinBlow: 12.9643,
-					MatchNoFinBlow: 8.8393,
-				},
-				CharacterChances: CharacterChances{
-					EligibleChars: 5,
-					AnyCharFinBlow: 78.5714,
-					AnyCharNoFinBlow: 53.5714,
-				},
-			},
-		},
-		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method: 		http.MethodPost,
-				expectedStatus: http.StatusOK,
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 243,
 					pfnAutoAbilities: []any{30, 19},
@@ -791,7 +919,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.0514,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 23.5294,
 					MatchFinBlow: 0.7289,
 					MatchNoFinBlow: 0.2187,
 				},
@@ -812,6 +939,121 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
+				requestBody: map[FieldName]any{
+					pfnMonsterID: 247,
+					pfnTotalSlots: 4,
+					pfnEquipType: string(database.EquipTypeWeapon),
+				},
+			},
+			DropChanceResponse: DropChanceResponse{
+				TotalDropChances: TotalDropChances{
+					WithFinBlow: 6.5076,
+					NoFinBlow: 4.437,
+				},
+				EquipmentChances: EquipmentChances{
+					MatchFinBlow: 12.9643,
+					MatchNoFinBlow: 8.8393,
+				},
+				CharacterChances: CharacterChances{
+					EligibleChars: 5,
+					AnyCharFinBlow: 78.5714,
+					AnyCharNoFinBlow: 53.5714,
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method: 		http.MethodPost,
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
+				requestBody: map[FieldName]any{
+					pfnMonsterID: 247,
+					pfnMinEmptySlots: 4,
+					pfnEquipType: string(database.EquipTypeWeapon),
+				},
+			},
+			DropChanceResponse: DropChanceResponse{
+				TotalDropChances: TotalDropChances{
+					WithFinBlow: 6.5076,
+					NoFinBlow: 4.437,
+				},
+				EquipmentChances: EquipmentChances{
+					MatchFinBlow: 12.9643,
+					MatchNoFinBlow: 8.8393,
+				},
+				CharacterChances: CharacterChances{
+					EligibleChars: 5,
+					AnyCharFinBlow: 78.5714,
+					AnyCharNoFinBlow: 53.5714,
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method: 		http.MethodPost,
+				expectedStatus: http.StatusOK,
+				requestBody: map[FieldName]any{
+					pfnMonsterID: 305,
+					pfnAutoAbilities: []any{129},
+				},
+			},
+			DropChanceResponse: DropChanceResponse{
+				TotalDropChances: TotalDropChances{
+					WithFinBlow: 50,
+					NoFinBlow: 50,
+				},
+				EquipmentChances: EquipmentChances{
+					MatchFinBlow: 50,
+					MatchNoFinBlow: 50,
+				},
+				CharacterChances: CharacterChances{
+					EligibleChars: 7,
+					AnyCharFinBlow: 100,
+					AnyCharNoFinBlow: 100,
+				},
+				MonsterDropChances: MonsterDropChances{
+					MonsterID: 305,
+					MonsterName: "penance",
+					EquipmentDropChance: 100,
+					SlotsChances: []SlotsChance{
+						{
+							Amount: 4,
+							Chance: 100,
+						},
+					},
+					ShotsChances: []SlotsChance{
+						{
+							Amount: 1,
+							Chance: 100,
+						},
+					},
+					DroppedAutoAbilities: DroppedAutoAbilities{
+						DroppedAbilities: []DroppedAutoAbility{
+							{
+								DroppedAutoAbilityInfo: DroppedAutoAbilityInfo{
+									ID: 129,
+									Name: "ribbon",
+									Characters: []string{},
+								},
+								Chance: 100,
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method: 		http.MethodPost,
+				expectedStatus: http.StatusOK,
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 305,
 					pfnAutoAbilities: []any{51},
@@ -823,7 +1065,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 50,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 100,
 					MatchFinBlow: 50,
 					MatchNoFinBlow: 50,
 				},
@@ -832,6 +1073,35 @@ func TestDropChance(t *testing.T) {
 					AnyCharFinBlow: 100,
 					AnyCharNoFinBlow: 100,
 				},
+				MonsterDropChances: MonsterDropChances{
+					MonsterID: 305,
+					MonsterName: "penance",
+					EquipmentDropChance: 100,
+					SlotsChances: []SlotsChance{
+						{
+							Amount: 4,
+							Chance: 100,
+						},
+					},
+					ShotsChances: []SlotsChance{
+						{
+							Amount: 1,
+							Chance: 100,
+						},
+					},
+					DroppedAutoAbilities: DroppedAutoAbilities{
+						DroppedAbilities: []DroppedAutoAbility{
+							{
+								DroppedAutoAbilityInfo: DroppedAutoAbilityInfo{
+									ID: 51,
+									Name: "break damage limit",
+									Characters: []string{},
+								},
+								Chance: 100,
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -839,6 +1109,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 305,
 					pfnAutoAbilities: []any{51},
@@ -851,7 +1124,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 5.3571,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 100,
 					MatchFinBlow: 17.8571,
 					MatchNoFinBlow: 5.3571,
 				},
@@ -872,6 +1144,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 13,
 					pfnAutoAbilities: []any{61},
@@ -884,7 +1159,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 2.0168,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 4.7059,
 					MatchFinBlow: 42.8571,
 					MatchNoFinBlow: 42.8571,
 				},
@@ -900,6 +1174,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 13,
 					pfnAutoAbilities: []any{62},
@@ -912,7 +1189,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.3361,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 4.7059,
 					MatchFinBlow: 7.1429,
 					MatchNoFinBlow: 7.1429,
 				},
@@ -928,6 +1204,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 13,
 					pfnAutoAbilities: []any{61},
@@ -940,7 +1219,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 2.0168,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 4.7059,
 					MatchFinBlow: 42.8571,
 					MatchNoFinBlow: 42.8571,
 				},
@@ -956,6 +1234,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 13,
 					pfnAutoAbilities: []any{62},
@@ -968,7 +1249,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.3361,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 4.7059,
 					MatchFinBlow: 7.1429,
 					MatchNoFinBlow: 7.1429,
 				},
@@ -984,6 +1264,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 13,
 					pfnAutoAbilities: []any{62,61},
@@ -995,7 +1278,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 4.7059,
 					MatchFinBlow: 0,
 					MatchNoFinBlow: 0,
 				},
@@ -1011,6 +1293,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 256,
 					pfnAutoAbilities: []any{113,112},
@@ -1023,7 +1308,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 100,
 					MatchFinBlow: 0,
 					MatchNoFinBlow: 0,
 				},
@@ -1039,6 +1323,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 256,
 					pfnAutoAbilities: []any{113,112},
@@ -1051,7 +1338,6 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 31.7126,
 				},
 				EquipmentChances: EquipmentChances{
-					MonsterDrop: 100,
 					MatchFinBlow: 31.7126,
 					MatchNoFinBlow: 31.7126,
 				},

@@ -1,5 +1,7 @@
 package api
 
+import "errors"
+
 // checks if two standard-type values or pointers of a field are equal
 func compare(test test, fieldName string, exp, got any) {
 	t := test.t
@@ -182,4 +184,16 @@ func compPageURL(test test, fieldName string, expPathPtr, gotURLPtr *string) {
 	}
 
 	compare(test, fieldName, expURLPtr, gotURLPtr)
+}
+
+func compareSlices[T any](test test, fieldName string, exp, got []T) {
+	test.t.Helper()
+	err := sliceBasicChecks(test, fieldName, exp, got)
+	if errors.Is(err, errIgnoredField) {
+		return
+	}
+
+	for i := range exp {
+		compare(test, fieldName, exp[i], got[i])
+	}
 }
