@@ -230,8 +230,7 @@ func handleEndpointsEndpointSections(cfg *Config, w http.ResponseWriter, r *http
 	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests.", nil)
 }
 
-
-func handleEndpointServiceGet[P ServiceParams, R any](w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
+func handleEndpointServiceBody[P ServiceParams, R any](w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
 	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return
@@ -240,11 +239,37 @@ func handleEndpointServiceGet[P ServiceParams, R any](w http.ResponseWriter, r *
 	segment := segments[0]
 
 	if segment == string(snBody) {
-		handleBody(w, i.paramsDoc)
+		// body logic is missing here
 		return
 	}
 
 	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'.", i.endpoint), nil)
+}
+
+func handleEndpointServiceBodySections[P ServiceParams, R any](w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
+	err := verifyQueryParamsService(r)
+	if handleHTTPError(w, err) {
+		return
+	}
+
+	if segments[0] != string(snBody) {
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'.", i.endpoint), nil)
+		return
+	}
+
+	switch segments[1] {
+	case string(snDocs):
+		respondWithJSON(w, http.StatusOK, i.paramsDoc)
+		return
+
+	case string(snSamples):
+		respondWithJSON(w, http.StatusOK, i.samplesFn())
+		return
+
+	default:
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s/body' only supports the following sections: 'docs', 'samples'.", i.endpoint), nil)
+		return
+	}
 }
 
 func handleEndpointServicePost[P ServiceParams, R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {

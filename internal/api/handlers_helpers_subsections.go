@@ -29,7 +29,7 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 	}
 
 	setLimitMax(cfg, r, q)
-	
+
 	// if a subsection refers to the resource itself (/endpoint/{id}/simple, or /aeons/{id}/stats),
 	// it doesn't need a db query and can create a SimpleResource with the given id,
 	// instead of querying the db for relations of the given id
@@ -56,7 +56,6 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 	}
 	respondWithJSON(w, http.StatusOK, list)
 }
-
 
 func handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) {
 	segment := string(snParameters)
@@ -88,10 +87,6 @@ func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 		return
 	}
 	respondWithJSON(w, http.StatusOK, sectionList)
-}
-
-func handleBody(w http.ResponseWriter, doc ParamsDoc) {
-	respondWithJSON(w, http.StatusOK, doc)
 }
 
 func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {

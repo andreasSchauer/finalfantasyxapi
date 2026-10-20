@@ -9,6 +9,7 @@ import (
 type TurnOrderResponse struct {
 	TurnsAmt      int32         `json:"turns_amt"`
 	IgnFirstTurn  bool          `json:"ign_first_turn"`
+	IgnImmunities bool          `json:"ign_immunities"`
 	BattleStart   string        `json:"battle_start"`
 	RNG           string        `json:"rng"`
 	PlayerParty   []Participant `json:"player_party"`
@@ -37,17 +38,18 @@ func handleTurnOrder(cfg *Config, params TurnOrderParams) (TurnOrderResponse, er
 	var err error
 
 	response := TurnOrderResponse{
-		TurnsAmt:     params.TurnsAmt,
-		IgnFirstTurn: params.IgnFirstTurn,
-		BattleStart:  params.BattleStart,
-		RNG:          params.RNG,
+		TurnsAmt:     	params.TurnsAmt,
+		IgnFirstTurn: 	params.IgnFirstTurn,
+		IgnImmunities: 	params.IgnImmunities,
+		RNG:          	params.RNG,
 	}
 
-	response.PlayerParty, response.OpponentParty, err = getParticipants(cfg, params)
+	params, response.PlayerParty, response.OpponentParty, err = getParticipants(cfg, params)
 	if err != nil {
 		return TurnOrderResponse{}, err
 	}
 	participants := slices.Concat(response.PlayerParty, response.OpponentParty)
+	response.BattleStart = params.BattleStart
 
 	response.TurnOrder = calcTurnOrder(params, participants)
 
@@ -58,12 +60,12 @@ func handleTurnOrder(cfg *Config, params TurnOrderParams) (TurnOrderResponse, er
 
 func calcTurnOrder(params TurnOrderParams, participants []Participant) []BattleTurn {
 	turnQueue := readyTurnQueue(participants, params.RNG)
-	var turns []BattleTurn
+	turns := []BattleTurn{}
 	var ticksTotal int32
 	var turnsTotal int32
 
 	for {
-		if len(turns) == int(params.TurnsAmt) {
+		if len(turns) == int(params.TurnsAmt) || len(turnQueue) == 0 {
 			break
 		}
 

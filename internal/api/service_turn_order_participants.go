@@ -41,7 +41,7 @@ type participantMaps struct {
 	namesCurrent map[string]int
 }
 
-func getParticipants(cfg *Config, params TurnOrderParams) ([]Participant, []Participant, error) {
+func getParticipants(cfg *Config, params TurnOrderParams) (TurnOrderParams, []Participant, []Participant, error) {
 	maps := &participantMaps{
 		namesTotal:   make(map[string]int),
 		namesCurrent: make(map[string]int),
@@ -51,22 +51,22 @@ func getParticipants(cfg *Config, params TurnOrderParams) ([]Participant, []Part
 
 	playerParty, err := getParticipantsParty(cfg, params, maps)
 	if err != nil {
-		return nil, nil, err
+		return TurnOrderParams{}, nil, nil, err
 	}
 
 	mons, err := getParticipantsMons(cfg, params, maps)
 	if err != nil {
-		return nil, nil, err
+		return TurnOrderParams{}, nil, nil, err
 	}
 
 	opponentParty := createDuplicateNames(mons, maps)
 
-	return playerParty, opponentParty, nil
+	return params, playerParty, opponentParty, nil
 }
 
 func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participantMaps) ([]Participant, error) {
 	const idFormationSpectral int32 = 253
-	var playerParty []Participant
+	playerParty := []Participant{}
 
 	for i, partyMember := range params.Party {
 		isDupe := maps.duplicates[partyMember.getDuplicateKey()]
@@ -80,7 +80,7 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 			Name:        unit.Name,
 			Party:       battlePartyPlayer,
 			Agility:     partyMember.Agility,
-			FirstStrike: partyMember.FS,
+			FirstStrike: partyMember.FirstStrike,
 			Status:      partyMember.Status,
 		}
 		participant.AgilityVals = extractAglTierChar(cfg, participant, params)
@@ -98,7 +98,7 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 }
 
 func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantMaps) ([]Participant, error) {
-	var monParty []Participant
+	monParty := []Participant{}
 
 	for i, mon := range params.Mons {
 		isDupe := maps.duplicates[mon.getDuplicateKey()]
@@ -123,7 +123,7 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 
 func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon) (Participant, *seeding.AgilityTier, error) {
 	var err error
-	
+
 	if mon.MonsterID == nil {
 		return Participant{}, nil, nil
 	}

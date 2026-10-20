@@ -25,10 +25,10 @@ func (p TurnOrderParams) GetDoc(cfg *Config) ParamsDoc {
 }
 
 type turnOrderParty struct {
-	UnitID  int32   `json:"unit_id,omitempty"`
-	Agility int32   `json:"agility,omitempty"`
-	FS      bool    `json:"first_strike,omitempty"`
-	Status  *string `json:"status,omitempty"`
+	UnitID  	int32   `json:"unit_id,omitempty"`
+	Agility 	int32   `json:"agility,omitempty"`
+	FirstStrike bool    `json:"first_strike,omitempty"`
+	Status  	*string `json:"status,omitempty"`
 }
 
 func (p turnOrderParty) getDuplicateKey() string {
@@ -169,10 +169,10 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 			Description:   "To define a monster, you can specify an ID and look up the corresponding monster. Its agility stat, first strike, as well as its innate 'haste' status will be applied automatically. These values can be overridden however, through the use of the other fields.",
 		},
 		{
-			Field:        pfnAltState,
-			Type:         "int (idx +1: monster altered states)",
-			AllowZeroVal: true,
-			RequiresAll:  []FieldName{pfnMonsterID},
+			Field:         pfnAltState,
+			Type:          "int (idx +1: monster altered states)",
+			AllowZeroVal:  true,
+			RequiresAll:   []FieldName{pfnMonsterID},
 			ParentIdField: pfnPtr(pfnMonsterID),
 			AllowedIdValPairs: []AllowedIdValPairs{
 				{

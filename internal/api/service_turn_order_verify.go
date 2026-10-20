@@ -1,7 +1,7 @@
 package api
 
 func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, userValues map[FieldName]any) (TurnOrderParams, error) {
-	paramsRules := compileParamsRules(cfg.getTurnOrderParamsDoc().Fields)
+	paramsRules := compileParamsRules(params.GetDoc(cfg).Fields)
 
 	err := vfExistingFields(userValues, paramsRules)
 	if err != nil {
@@ -69,7 +69,7 @@ func vfTurnOrderParty(cfg *Config, item turnOrderParty, _ FieldName, userValues 
 		return turnOrderParty{}, err
 	}
 
-	item.FS, err = verifyParamField(cfg, item.FS, pfnFirstStrike, userValues, paramsRules, nil)
+	item.FirstStrike, err = verifyParamField(cfg, item.FirstStrike, pfnFirstStrike, userValues, paramsRules, nil)
 	if err != nil {
 		return turnOrderParty{}, err
 	}

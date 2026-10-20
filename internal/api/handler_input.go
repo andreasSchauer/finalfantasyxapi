@@ -41,8 +41,8 @@ type handlerInputEndpoints struct {
 type handlerInputService[P ServiceParams, R any] struct {
 	endpoint    EndpointName
 	usage       []string
-	queryLookup map[QueryParamName]QueryParam
 	paramsDoc   ParamsDoc
 	verifyFn    func(*Config, P, map[FieldName]any) (P, error)
 	executeFn   func(*Config, P) (R, error)
+	samplesFn	func() []SampleParams[P]
 }

@@ -118,7 +118,11 @@ func routerServiceGet[P ServiceParams, R any](w http.ResponseWriter, r *http.Req
 
 	switch len(segments) {
 	case 1:
-		handleEndpointServiceGet(w, r, i, segments)
+		handleEndpointServiceBody(w, r, i, segments)
+		return
+
+	case 2:
+		handleEndpointServiceBodySections(w, r, i, segments)
 		return
 
 	default:

@@ -14,6 +14,7 @@ func compareTurnOrderResponses(test test, exp expTurnOrderResponse, got TurnOrde
 	test.t.Helper()
 	compare(test, "turns amt", exp.TurnsAmt, got.TurnsAmt)
 	compare(test, "ign first turn", exp.IgnFirstTurn, got.IgnFirstTurn)
+	compare(test, "ign immunities", exp.IgnImmunities, got.IgnImmunities)
 	compare(test, "battle start", exp.BattleStart, got.BattleStart)
 	compare(test, "rng", exp.RNG, got.RNG)
 	compTestStructSlices(test, "player party", exp.PlayerParty, got.PlayerParty, compareParticipants)
@@ -21,7 +22,7 @@ func compareTurnOrderResponses(test test, exp expTurnOrderResponse, got TurnOrde
 	checkTestStructsInSlice(test, "turn order", exp.testTurnOrder, got.TurnOrder, compareBattleTurns)
 }
 
-func compareParticipants(test test, fieldName string, exp Participant, got Participant) {
+func compareParticipants(test test, fieldName string, exp, got Participant) {
 	test.t.Helper()
 	compare(test, fieldName+" name", exp.Name, got.Name)
 	compare(test, fieldName+" party", string(exp.Party), string(got.Party))

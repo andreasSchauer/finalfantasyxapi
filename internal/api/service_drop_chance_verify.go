@@ -6,7 +6,7 @@ import (
 )
 
 func verifyDropChanceParams(cfg *Config, params DropChanceParams, userValues map[FieldName]any) (DropChanceParams, error) {
-	paramsRules := compileParamsRules(cfg.getDropChanceParamsDoc().Fields)
+	paramsRules := compileParamsRules(params.GetDoc(cfg).Fields)
 
 	err := vfExistingFields(userValues, paramsRules)
 	if err != nil {
