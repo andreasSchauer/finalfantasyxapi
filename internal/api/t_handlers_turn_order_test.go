@@ -1340,6 +1340,151 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method: 		http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"turn order": true,
+				},
+				expLengths: map[string]int{
+					"turn order": 30,
+					"player party": 0,
+					"opponent party": 1,
+				},
+				requestBody: map[FieldName]any{
+					pfnMons: []map[FieldName]any{
+						{
+							pfnMonsterID: 93,
+							pfnAgility: 55,
+							pfnFirstStrike: false,
+						},
+					},
+				},
+			},
+			TurnOrderResponse: TurnOrderResponse{
+				TurnsAmt: 30,
+				IgnFirstTurn: false,
+				IgnImmunities: false,
+				BattleStart: string(database.BattleStartNormal),
+				RNG: string(database.TurnOrderRngMedian),
+				PlayerParty: []Participant{},
+				OpponentParty: []Participant{
+					{
+						Name: "seymour",
+						Agility: 55,
+						AgilityVals: AgilityVals{
+							TickSpeed: 6,
+							MinICV: h.GetInt32Ptr(18),
+							MaxICV: h.GetInt32Ptr(20),
+						},
+						FirstStrike: false,
+						TurnsReceived: 30,
+						TurnsPercent: 100,
+					},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method: 		http.MethodPost,
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"turn order": true,
+				},
+				expLengths: map[string]int{
+					"turn order": 30,
+					"player party": 0,
+					"opponent party": 1,
+				},
+				requestBody: map[FieldName]any{
+					pfnIgnImmunities: true,
+					pfnMons: []map[FieldName]any{
+						{
+							pfnMonsterID: 306,
+							pfnStatus: string(database.HasteStatusSlow),
+						},
+					},
+				},
+			},
+			TurnOrderResponse: TurnOrderResponse{
+				TurnsAmt: 30,
+				IgnFirstTurn: false,
+				IgnImmunities: true,
+				BattleStart: string(database.BattleStartNormal),
+				RNG: string(database.TurnOrderRngMedian),
+				PlayerParty: []Participant{},
+				OpponentParty: []Participant{
+					{
+						Name: "left arm",
+						Agility: 255,
+						AgilityVals: AgilityVals{
+							TickSpeed: 6,
+							MinICV: h.GetInt32Ptr(12),
+							MaxICV: h.GetInt32Ptr(13),
+						},
+						FirstStrike: false,
+						Status: h.GetStrPtr(string(database.HasteStatusSlow)),
+						TurnsReceived: 30,
+						TurnsPercent: 100,
+					},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method: 		http.MethodPost,
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"turn order": true,
+				},
+				expLengths: map[string]int{
+					"turn order": 30,
+					"player party": 0,
+					"opponent party": 2,
+				},
+				requestBody: map[FieldName]any{
+					pfnFormationID: 226,
+				},
+			},
+			TurnOrderResponse: TurnOrderResponse{
+				TurnsAmt: 30,
+				IgnFirstTurn: false,
+				IgnImmunities: false,
+				BattleStart: string(database.BattleStartAmbush),
+				RNG: string(database.TurnOrderRngMedian),
+				PlayerParty: []Participant{},
+				OpponentParty: []Participant{
+					{
+						Name: "dark yojimbo",
+						Agility: 243,
+						AgilityVals: AgilityVals{
+							TickSpeed: 3,
+							MinICV: h.GetInt32Ptr(0),
+							MaxICV: h.GetInt32Ptr(0),
+						},
+						FirstStrike: false,
+						TurnsReceived: 30,
+						TurnsPercent: 100,
+					},
+					{
+						Name: "dark koma inu",
+						Agility: 0,
+						AgilityVals: AgilityVals{
+							TickSpeed: 0,
+							MinICV: nil,
+							MaxICV: nil,
+						},
+						FirstStrike: false,
+						TurnsReceived: 0,
+						TurnsPercent: 0,
+					},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method: 		http.MethodPost,
+				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
 					"turn order": 0,
 					"player party": 1,
