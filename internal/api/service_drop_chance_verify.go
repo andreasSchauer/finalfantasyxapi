@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 	"slices"
 )
@@ -72,7 +73,7 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, userValues map
 }
 
 func vfRequiredSlotAmount(params DropChanceParams) error {
-	requiredSlots := getRequiredSlots(params)
+	requiredSlots := params.GetRequiredSlots()
 	var totalSlots int32 = 4
 
 	if params.TotalSlots != nil {
@@ -84,7 +85,7 @@ func vfRequiredSlotAmount(params DropChanceParams) error {
 			return newHTTPError(http.StatusBadRequest, "the amount of auto-abilities and empty slots combined can't exceed 4.", nil)
 		}
 
-		return newHTTPError(http.StatusBadRequest, "the amount of auto-abilities and empty slots combined can't exceed the total amount of slots.", nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("the amount of auto-abilities and empty slots combined (%d) can't exceed the given total amount of slots (%d).", requiredSlots, totalSlots), nil)
 	}
 
 	return nil

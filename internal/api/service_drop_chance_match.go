@@ -75,7 +75,7 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding
 }
 
 func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding.EquipmentSlotsChance {
-	var minSlots int32 = getRequiredSlots(params)
+	var minSlots int32 = params.GetRequiredSlots()
 	var maxSlots int32 = 4
 	abilitySlotChances := mon.Equipment.AbilitySlots.Chances
 	var chances []seeding.EquipmentSlotsChance
@@ -92,16 +92,6 @@ func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding
 	}
 
 	return chances
-}
-
-func getRequiredSlots(params DropChanceParams) int32 {
-	var minEmptySlots int32 = 0
-
-	if params.MinEmptySlots != nil {
-		minEmptySlots = *params.MinEmptySlots
-	}
-
-	return int32(len(params.AutoAbilities)) + minEmptySlots
 }
 
 func getWheelWeights(wheel AbilityWheel, cc CharacterChances) (float64, float64) {

@@ -14,6 +14,15 @@ func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seeding.Monster) 
 	if mon.Equipment == nil {
 		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' doesn't drop equipment.", mon), nil)
 	}
+	
+	monMaxSlots := getMonMaxSlots(mon)
+
+
+	reqSlots := params.GetRequiredSlots()
+
+	if reqSlots > monMaxSlots {
+		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("query requires %d slots, but the max amount of slots, monster '%s' can drop, is %d.", reqSlots, mon, monMaxSlots), nil)
+	}
 
 	params, autoAbilities, err := vfWantedAutoAbilities(cfg, params)
 	if err != nil {
@@ -28,6 +37,15 @@ func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seeding.Monster) 
 	}
 
 	return autoAbilities, monsterAbilities, nil
+}
+
+func getMonMaxSlots(mon seeding.Monster) int32 {
+	if mon.Equipment == nil {
+		return 0
+	}
+
+	slotsChances := mon.Equipment.AbilitySlots.Chances
+	return slotsChances[len(slotsChances)-1].Amount
 }
 
 func vfWantedAutoAbilities(cfg *Config, params DropChanceParams) (DropChanceParams, []seeding.AutoAbility, error) {

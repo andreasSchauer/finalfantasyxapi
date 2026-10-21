@@ -9,14 +9,9 @@ import (
 func getTurnOrderParamsSamples() []SampleParams[TurnOrderParams] {
 	return []SampleParams[TurnOrderParams]{
 		{
-			Description: "Check the turns of one party member.",
+			Description: "Load in all unique monsters of a formation and check the turn order.",
 			Params: TurnOrderParams{
-				Party: []turnOrderParty{
-					{
-						UnitID: 1,
-						Agility: 34,
-					},
-				},
+				FormationID: h.GetInt32Ptr(15),
 			},
 		},
 		{
@@ -79,21 +74,21 @@ func getTurnOrderParamsSamples() []SampleParams[TurnOrderParams] {
 				Party: []turnOrderParty{
 					{
 						UnitID: 1,
-						Agility: 160,
+						Agility: 60,
 					},
 					{
 						UnitID: 2,
-						Agility: 180,
+						Agility: 80,
 					},
 					{
 						UnitID: 3,
-						Agility: 120,
+						Agility: 40,
 					},
 				},
 				Mons: []turnOrderMon{
 					{
 						MonsterID: h.GetInt32Ptr(140),
-						Agility: h.GetInt32Ptr(135),
+						Agility: h.GetInt32Ptr(75),
 					},
 					{
 						Name: h.GetStrPtr("fast boi"),

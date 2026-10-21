@@ -60,7 +60,7 @@ func (c SpecificCharChances) Round(n int32) SpecificCharChances {
 	return c
 }
 
-func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) CharacterChances {
+func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, mon seeding.Monster) CharacterChances {
 	var eligibleChars int32
 	baseRandomChance := 0.75 / h.FloatLen(params.PartyMembers)
 	var chances CharacterChances
@@ -72,7 +72,7 @@ func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []see
 		specificChar := SpecificCharChances{
 			NoFinBlow:  baseRandomChance,
 			FinBlow:    finBlowChance,
-			IsEligible: charIsEligible(char, wantedAbilities, monAbilities, params.LenientAbilities),
+			IsEligible: charIsEligible(params, char, mon, wantedAbilities, monAbilities),
 		}
 
 		chances.SpecificChar = &specificChar
@@ -81,7 +81,7 @@ func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []see
 	for _, charID := range params.PartyMembers {
 		char, _ := seeding.GetResourceByID(charID, cfg.l.CharactersID)
 
-		if charIsEligible(char, wantedAbilities, monAbilities, params.LenientAbilities) {
+		if charIsEligible(params, char, mon, wantedAbilities, monAbilities) {
 			eligibleChars++
 		}
 	}
@@ -104,8 +104,10 @@ func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []see
 	return chances
 }
 
-func charIsEligible(char seeding.Character, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, lenientAbilities bool) bool {
-	if charGetsForcedButNotWanted(char, wantedAbilities, monAbilities, lenientAbilities) {
+
+
+func charIsEligible(params DropChanceParams, char seeding.Character, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) bool {
+	if forcedAbilityEliminatesChar(params, char, mon, wantedAbilities, monAbilities) {
 		return false
 	}
 
@@ -120,11 +122,27 @@ func charIsEligible(char seeding.Character, wantedAbilities []seeding.AutoAbilit
 	return true
 }
 
-func charGetsForcedButNotWanted(char seeding.Character, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, lenientAbilities bool) bool {
-	return forcedSlotExists(monAbilities) &&
-		!forcedSlotWanted(wantedAbilities, monAbilities) &&
-		charGetsAbility(monAbilities[0], &char) &&
-		!lenientAbilities
+func forcedAbilityEliminatesChar(params DropChanceParams, char seeding.Character, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) bool {
+	// the character gets the forced ability, but the ability wasn't specified in auto_abilities
+	charGetsUnwantedForced := charGetsUnwantedForced(char, wantedAbilities, monAbilities)
+	reqSlotsEqualMaxSlots := reqSlotsEqualMaxSlots(params, mon) // there's no loose slot left to fill in with a lenient ability
+
+	if charGetsUnwantedForced { // if this is true, the char gets the forced ability, but it is not desired
+		return !params.LenientAbilities || // lenientAbilities is false, so the forced ability can't be on it
+				reqSlotsEqualMaxSlots // lenientAbilities is true, but requirements leave no space for the forced ability
+	}
+	
+	return false
+}
+
+func charGetsUnwantedForced(char seeding.Character, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) bool {
+	return 	forcedSlotExists(monAbilities) &&
+			!forcedSlotWanted(wantedAbilities, monAbilities) &&
+			charGetsAbility(monAbilities[0], &char)
+}
+
+func reqSlotsEqualMaxSlots(params DropChanceParams, mon seeding.Monster) bool {
+	return params.GetRequiredSlots() == getMonMaxSlots(mon)
 }
 
 func forcedSlotExists(monAbilities []seeding.EquipmentDrop) bool {

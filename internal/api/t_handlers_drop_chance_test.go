@@ -167,7 +167,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "the amount of auto-abilities and empty slots combined can't exceed the total amount of slots.",
+				expectedErr:    "the amount of auto-abilities and empty slots combined (1) can't exceed the given total amount of slots (0).",
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     13,
 					pfnAutoAbilities: []any{2},
@@ -246,7 +246,7 @@ func TestDropChance(t *testing.T) {
 				expectedErr:    "water flan - 1 (tutorial) doesn't drop auto-ability 'zombiestrike' (22). it only drops the following auto-abilities: 'piercing' (2), 'waterstrike' (7), 'distill mana' (26), 'water ward' (61), 'waterproof' (62).",
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     13,
-					pfnAutoAbilities: []any{2, 7, 22},
+					pfnAutoAbilities: []any{7, 22},
 				},
 			},
 		},
@@ -534,13 +534,12 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
-					"character chances":    true,
 					"monster drop chances": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     50,
 					pfnAutoAbilities: []any{9},
-					pfnMinEmptySlots: 2,
+					pfnMinEmptySlots: 1,
 					pfnCharacterID:   5,
 				},
 			},
@@ -550,6 +549,16 @@ func TestDropChance(t *testing.T) {
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
+				},
+				CharacterChances: CharacterChances{
+					EligibleChars: 5,
+					AnyFinBlow:    78.5714,
+					AnyNoFinBlow:  53.5714,
+					SpecificChar: &SpecificCharChances{
+						IsEligible: false,
+						FinBlow:    35.7143,
+						NoFinBlow:  10.7143,
+					},
 				},
 			},
 		},
@@ -1289,6 +1298,122 @@ func TestDropChance(t *testing.T) {
 					EligibleChars: 7,
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
+				requestBody: map[FieldName]any{
+					pfnMonsterID:        	191,
+					pfnMinEmptySlots: 		4,
+					pfnEquipType: 			string(database.EquipTypeWeapon),
+					pfnLenientAbilities: 	false,
+				},
+			},
+			DropChanceResponse: DropChanceResponse{
+				DropChanceFinBlow:   0.2311,
+				DropChanceNoFinBlow: 0.1576,
+				EquipmentMatchChances: EquipmentMatchChances{
+					FinBlow:   1.9643,
+					NoFinBlow: 1.3393,
+				},
+				CharacterChances: CharacterChances{
+					EligibleChars: 5,
+					AnyFinBlow:    78.5714,
+					AnyNoFinBlow:  53.5714,
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
+				requestBody: map[FieldName]any{
+					pfnMonsterID:        	191,
+					pfnMinEmptySlots: 		4,
+					pfnEquipType: 			string(database.EquipTypeWeapon),
+					pfnLenientAbilities: 	true,
+				},
+			},
+			DropChanceResponse: DropChanceResponse{
+				DropChanceFinBlow:   0.2311,
+				DropChanceNoFinBlow: 0.1576,
+				EquipmentMatchChances: EquipmentMatchChances{
+					FinBlow:   1.9643,
+					NoFinBlow: 1.3393,
+				},
+				CharacterChances: CharacterChances{
+					EligibleChars: 5,
+					AnyFinBlow:    78.5714,
+					AnyNoFinBlow:  53.5714,
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
+				requestBody: map[FieldName]any{
+					pfnMonsterID:        	191,
+					pfnTotalSlots: 			4,
+					pfnEquipType: 			string(database.EquipTypeWeapon),
+					pfnLenientAbilities: 	false,
+				},
+			},
+			DropChanceResponse: DropChanceResponse{
+				DropChanceFinBlow:   0.2311,
+				DropChanceNoFinBlow: 0.1576,
+				EquipmentMatchChances: EquipmentMatchChances{
+					FinBlow:   1.9643,
+					NoFinBlow: 1.3393,
+				},
+				CharacterChances: CharacterChances{
+					EligibleChars: 5,
+					AnyFinBlow:    78.5714,
+					AnyNoFinBlow:  53.5714,
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"monster drop chances": true,
+				},
+				requestBody: map[FieldName]any{
+					pfnMonsterID:        	191,
+					pfnTotalSlots: 			4,
+					pfnEquipType: 			string(database.EquipTypeWeapon),
+					pfnLenientAbilities: 	true,
+				},
+			},
+			DropChanceResponse: DropChanceResponse{
+				DropChanceFinBlow:   0.6471,
+				DropChanceNoFinBlow: 0.4412,
+				EquipmentMatchChances: EquipmentMatchChances{
+					FinBlow:   5.5,
+					NoFinBlow: 3.75,
+				},
+				CharacterChances: CharacterChances{
+					EligibleChars: 5,
+					AnyFinBlow:    78.5714,
+					AnyNoFinBlow:  53.5714,
 				},
 			},
 		},

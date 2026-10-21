@@ -20,6 +20,24 @@ func (p DropChanceParams) GetDoc(cfg *Config) ParamsDoc {
 	return cfg.getDropChanceParamsDoc()
 }
 
+
+func (p DropChanceParams) GetRequiredSlots() int32 {
+	var totalSlots int32
+	var minEmptySlots int32
+	
+	if p.TotalSlots != nil {
+		totalSlots = *p.TotalSlots
+	}
+
+	if p.MinEmptySlots != nil {
+		minEmptySlots = *p.MinEmptySlots
+	}
+
+	wantedSlots := h.Len32(p.AutoAbilities) + minEmptySlots
+
+	return max(totalSlots, wantedSlots)
+}
+
 func (cfg *Config) getDropChanceParamsDoc() ParamsDoc {
 	return ParamsDoc{
 		Fields: []FieldDoc{

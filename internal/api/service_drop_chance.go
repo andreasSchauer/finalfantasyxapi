@@ -41,8 +41,8 @@ func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse,
 		return DropChanceResponse{}, err
 	}
 
-	characterChances := calcCharChances(cfg, params, wantedAbilities, monAbilities)
 	monDropChances := getMonsterDropChances(cfg, mon, monAbilities)
+	characterChances := calcCharChances(cfg, params, wantedAbilities, monAbilities, mon)
 	equipmentMatchChances := calcEquipmentMatchChances(cfg, params, mon, wantedAbilities, monAbilities, characterChances)
 
 	response := DropChanceResponse{
