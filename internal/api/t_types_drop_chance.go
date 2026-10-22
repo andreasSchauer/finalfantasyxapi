@@ -13,9 +13,21 @@ func compareDropChanceResponses(test test, exp expDropChanceResponse, got DropCh
 	test.t.Helper()
 	compare(test, "drop chance fin blow", exp.DropChanceFinBlow, got.DropChanceFinBlow)
 	compare(test, "drop chance no fin blow", exp.DropChanceNoFinBlow, got.DropChanceNoFinBlow)
+	compStructsWithFn(test, "wanted equipment", exp.WantedEquipment, got.WantedEquipment, compareWantedEquipments)
 	compStructsWithFn(test, "equipment match chances", exp.EquipmentMatchChances, got.EquipmentMatchChances, compareEquipmentMatchChances)
 	compStructsWithFn(test, "character chances", exp.CharacterChances, got.CharacterChances, compareCharacterChances)
 	compStructsWithFn(test, "monster drop chances", exp.MonsterChances, got.MonsterChances, compareMonsterDropChances)
+}
+
+func compareWantedEquipments(test test, fieldName string, exp, got WantedEquipment) {
+	test.t.Helper()
+	compare(test, fieldName+" min slots", exp.MinSlots, got.MinSlots)
+	compare(test, fieldName+" max slots", exp.MaxSlots, got.MaxSlots)
+	compareSlices(test, fieldName+" req abilities", exp.ReqAbilities, got.ReqAbilities)
+	compare(test, fieldName+" req empty slots", exp.ReqEmptySlots, got.ReqEmptySlots)
+	compare(test, fieldName+" min optional slots", exp.MinOptionalSlots, got.MinOptionalSlots)
+	compare(test, fieldName+" max optional slots", exp.MaxOptionalSlots, got.MaxOptionalSlots)
+	compare(test, fieldName+" optional slots are", exp.OptionalSlotsAre, got.OptionalSlotsAre)
 }
 
 func compareEquipmentMatchChances(test test, fieldName string, exp, got EquipmentMatchChances) {
@@ -26,7 +38,7 @@ func compareEquipmentMatchChances(test test, fieldName string, exp, got Equipmen
 
 func compareCharacterChances(test test, fieldName string, exp, got CharacterChances) {
 	test.t.Helper()
-	compare(test, fieldName+" eligible chars", exp.EligibleChars, got.EligibleChars)
+	compareSlices(test, fieldName+" eligible chars", exp.EligibleChars, got.EligibleChars)
 	compare(test, fieldName+" any fin blow", exp.AnyFinBlow, got.AnyFinBlow)
 	compare(test, fieldName+" any no fin blow", exp.AnyNoFinBlow, got.AnyNoFinBlow)
 	compStructPtrsWithFn(test, fieldName+" specific character", exp.SpecificChar, got.SpecificChar, compareSpecificCharChances)

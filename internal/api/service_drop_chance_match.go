@@ -24,31 +24,49 @@ func (c EquipmentMatchChances) Round(n int32) EquipmentMatchChances {
 	return c
 }
 
-func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, cc CharacterChances) EquipmentMatchChances {
+type MatchChanceParams struct {
+	mon				 	seeding.Monster
+	wantedAbilities  	[]seeding.AutoAbility
+	monAbilities	 	[]seeding.EquipmentDrop
+	slotsTable		 	[]seeding.EquipmentSlotsChance
+	shotsTable		 	[]seeding.EquipmentSlotsChance
+	characterChances	CharacterChances
+}
+
+func createMatchChanceParams(params DropChanceParams, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, cc CharacterChances) MatchChanceParams {
+	return MatchChanceParams{
+		mon: mon,
+		wantedAbilities: wantedAbilities,
+		monAbilities: monAbilities,
+		slotsTable: extractAbilitySlots(params, mon),
+		shotsTable: mon.Equipment.AttachedAbilities.Chances,
+		characterChances: cc,
+	}
+}
+
+func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mcp MatchChanceParams) EquipmentMatchChances {
 	equipTypeChance := 0.5
-	slotsTable := extractAbilitySlots(params, mon)
-	shotsTable := mon.Equipment.AttachedAbilities.Chances
-	wheels := createAbilityWheels(cfg, monAbilities, params)
+	wheels := createAbilityWheels(cfg, mcp.monAbilities, params)
 
 	var chanceFinBlow float64
 	var chanceNoFinBlow float64
 
 	for _, wheel := range wheels {
-		wantedIndices, err := getWantedIndices(wantedAbilities, wheel)
+		wantedIndices, err := getWantedIndices(mcp.wantedAbilities, wheel)
 		if err != nil {
 			continue
 		}
 
-		wheelWeightFinBlow, wheelWeightNoFinBlow := getWheelWeights(wheel, cc)
+		wheelWeightFinBlow, wheelWeightNoFinBlow := getWheelWeights(wheel, mcp.characterChances)
 
-		for _, slots := range slotsTable {
+		for _, slots := range mcp.slotsTable {
 			slotWeight := h.PercentageToDecimal(slots.Chance)
 
-			for _, shots := range shotsTable {
+			for _, shots := range mcp.shotsTable {
 				shotWeight := h.PercentageToDecimal(shots.Chance)
 
 				matchParams := EquipmentMatchParams{
-					WantedAbilities:  wantedAbilities,
+					WantedAbilities:  mcp.wantedAbilities,
 					WantedIndices:    wantedIndices,
 					LenientAbilities: params.LenientAbilities,
 					MinEmptySlots:    params.MinEmptySlots,
@@ -99,12 +117,13 @@ func getWheelWeights(wheel AbilityWheel, cc CharacterChances) (float64, float64)
 		specificChar := *cc.SpecificChar
 		return specificChar.FinBlow, specificChar.NoFinBlow
 	}
+	eligibleCharsAmt := len(cc.EligibleChars)
 
-	if cc.EligibleChars == 0 {
+	if eligibleCharsAmt == 0 {
 		return 0, 0
 	}
 
-	charRatio := h.FloatLen(wheel.Characters) / float64(cc.EligibleChars)
+	charRatio := h.FloatLen(wheel.Characters) / float64(eligibleCharsAmt)
 	wheelWeightFinBlow := charRatio * cc.AnyFinBlow
 	wheelWeightNoFinBlow := charRatio * cc.AnyNoFinBlow
 

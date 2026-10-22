@@ -16,8 +16,6 @@ func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seeding.Monster) 
 	}
 	
 	monMaxSlots := getMonMaxSlots(mon)
-
-
 	reqSlots := params.GetRequiredSlots()
 
 	if reqSlots > monMaxSlots {
@@ -66,7 +64,7 @@ func vfWantedAutoAbilities(cfg *Config, params DropChanceParams) (DropChancePara
 	}
 
 	if params.EquipType == nil {
-		return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, "can't discern equipment's type.", nil)
+		return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("can't discern equipment's type. use '%s' to discern the type, or set it manually by using '%s'.", pfnAutoAbilities, pfnEquipType), nil)
 	}
 
 	return params, autoAbilities, nil
@@ -135,7 +133,17 @@ func formatMonAutoAbilities(mon seeding.Monster) string {
 
 func formatEquipmentDrops(monsterAbilities []seeding.EquipmentDrop) string {
 	var names []string
+	var forcedName string
+
 	for _, ability := range monsterAbilities {
+		if ability.Ability == forcedName {
+			continue
+		}
+		
+		if ability.IsForced {
+			forcedName = ability.Ability
+		}
+
 		name := fmt.Sprintf("'%s' (%d)", ability.Ability, ability.AutoAbilityID)
 		names = append(names, name)
 	}

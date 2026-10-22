@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func TestDropChance(t *testing.T) {
@@ -155,7 +156,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "can't discern equipment's type.",
+				expectedErr:    "can't discern equipment's type. use 'auto_abilities' to discern the type, or set it manually by using 'equip_type'.",
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     13,
 					pfnMinEmptySlots: 2,
@@ -197,6 +198,19 @@ func TestDropChance(t *testing.T) {
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     13,
 					pfnAutoAbilities: []any{2, 129},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "weapon- and armor-abilities can't be combined.",
+				requestBody: map[FieldName]any{
+					pfnMonsterID:     13,
+					pfnAutoAbilities: []any{2},
+					pfnEquipType: string(database.EquipTypeArmor),
 				},
 			},
 		},
@@ -255,6 +269,18 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "kottos doesn't drop auto-ability 'piercing' (2). it only drops the following auto-abilities: 'counterattack' (37), 'evade & counter' (38), 'magic counter' (39), 'hp +30%' (114), 'hp +20%' (113), 'hp +10%' (112).",
+				requestBody: map[FieldName]any{
+					pfnMonsterID:     258,
+					pfnAutoAbilities: []any{2},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "at least one of these fields must have a value: 'min_empty_slots', 'total_slots', 'auto_abilities'.",
 				requestBody: map[FieldName]any{
 					pfnMonsterID: 13,
@@ -287,12 +313,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   0.7059,
 				DropChanceNoFinBlow: 0.2647,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 1,
+					MaxSlots: 1,
+					ReqAbilities: []string{"piercing"},
+					ReqEmptySlots: nil,
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 0,
+					OptionalSlotsAre: string(optionalSlotAllEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   15,
 					NoFinBlow: 5.625,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 1,
+					EligibleChars: []string{"kimahri"},
 					AnyFinBlow:    40,
 					AnyNoFinBlow:  15,
 				},
@@ -365,12 +400,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   0.7353,
 				DropChanceNoFinBlow: 0.2206,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 1,
+					MaxSlots: 2,
+					ReqAbilities: []string{"piercing"},
+					ReqEmptySlots: nil,
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 1,
+					OptionalSlotsAre: string(optionalSlotAllEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   15.625,
 					NoFinBlow: 4.6875,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 2,
+					EligibleChars: []string{"kimahri", "auron"},
 					AnyFinBlow:    46.4286,
 					AnyNoFinBlow:  21.4286,
 					SpecificChar: &SpecificCharChances{
@@ -396,12 +440,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 1,
+					MaxSlots: 2,
+					ReqAbilities: []string{"darktouch"},
+					ReqEmptySlots: nil,
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 1,
+					OptionalSlotsAre: string(optionalSlotAllEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 5,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    0.785714,
 					AnyNoFinBlow:  0.535714,
 					SpecificChar: &SpecificCharChances{
@@ -477,6 +530,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     50,
@@ -492,7 +546,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 5,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
 					SpecificChar: &SpecificCharChances{
@@ -522,6 +576,15 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   1.2805,
 				DropChanceNoFinBlow: 0.3842,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 1,
+					MaxSlots: 2,
+					ReqAbilities: []string{"darktouch"},
+					ReqEmptySlots: nil,
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 1,
+					OptionalSlotsAre: string(optionalSlotAbilityOrEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   2.551,
 					NoFinBlow: 0.7653,
@@ -535,6 +598,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     50,
@@ -551,7 +615,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 5,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
 					SpecificChar: &SpecificCharChances{
@@ -570,6 +634,7 @@ func TestDropChance(t *testing.T) {
 				dontCheck: map[string]bool{
 					"character chances":    true,
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     50,
@@ -594,6 +659,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:        50,
@@ -611,7 +677,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 2.6786,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 2,
+					EligibleChars: []string{"kimahri", "auron"},
 					AnyFinBlow:    46.4286,
 					AnyNoFinBlow:  21.4286,
 					SpecificChar: &SpecificCharChances{
@@ -636,12 +702,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 2,
+					MaxSlots: 3,
+					ReqAbilities: []string{"evade & counter"},
+					ReqEmptySlots: nil,
+					MinOptionalSlots: 1,
+					MaxOptionalSlots: 2,
+					OptionalSlotsAre: string(optionalSlotAbilityOrEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 7,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
@@ -712,6 +787,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:        258,
@@ -727,7 +803,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 0,
+					EligibleChars: []string{},
 					AnyFinBlow:    0,
 					AnyNoFinBlow:  0,
 				},
@@ -740,6 +816,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:        258,
@@ -755,7 +832,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 50,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 7,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
@@ -768,6 +845,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     243,
@@ -782,7 +860,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.656,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 3,
+					EligibleChars: []string{"tidus", "wakka", "rikku"},
 					AnyFinBlow:    57.1429,
 					AnyNoFinBlow:  32.1429,
 				},
@@ -795,6 +873,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     243,
@@ -810,7 +889,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 2.0408,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 3,
+					EligibleChars: []string{"tidus", "wakka", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
@@ -823,6 +902,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     243,
@@ -837,7 +917,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.4373,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 2,
+					EligibleChars: []string{"yuna", "lulu"},
 					AnyFinBlow:    46.4286,
 					AnyNoFinBlow:  21.4286,
 				},
@@ -850,6 +930,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:        243,
@@ -866,7 +947,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 3,
+					EligibleChars: []string{"tidus", "wakka", "rikku"},
 					AnyFinBlow:    57.1429,
 					AnyNoFinBlow:  32.1429,
 					SpecificChar: &SpecificCharChances{
@@ -884,6 +965,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:        243,
@@ -900,7 +982,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0.2187,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 3,
+					EligibleChars: []string{"tidus", "wakka", "rikku"},
 					AnyFinBlow:    57.1429,
 					AnyNoFinBlow:  32.1429,
 					SpecificChar: &SpecificCharChances{
@@ -928,12 +1010,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   6.5076,
 				DropChanceNoFinBlow: 4.437,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 4,
+					MaxSlots: 4,
+					ReqAbilities: []string{},
+					ReqEmptySlots: nil,
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 0,
+					OptionalSlotsAre: string(optionalSlotAllEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   12.9643,
 					NoFinBlow: 8.8393,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 5,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
 				},
@@ -956,12 +1047,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   6.5076,
 				DropChanceNoFinBlow: 4.437,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 4,
+					MaxSlots: 4,
+					ReqAbilities: []string{},
+					ReqEmptySlots: h.GetInt32Ptr(4),
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 0,
+					OptionalSlotsAre: string(optionalSlotAllEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   12.9643,
 					NoFinBlow: 8.8393,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 5,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
 				},
@@ -980,12 +1080,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   50,
 				DropChanceNoFinBlow: 50,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 4,
+					MaxSlots: 4,
+					ReqAbilities: []string{"ribbon"},
+					ReqEmptySlots: nil,
+					MinOptionalSlots: 3,
+					MaxOptionalSlots: 3,
+					OptionalSlotsAre: string(optionalSlotAllEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   50,
 					NoFinBlow: 50,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 7,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
@@ -1025,6 +1134,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
+				dontCheck: map[string]bool{
+					"wanted equipment": true,
+				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     305,
 					pfnAutoAbilities: []any{51},
@@ -1038,7 +1150,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 50,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 7,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
@@ -1080,6 +1192,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     305,
@@ -1095,7 +1208,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 5.3571,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 7,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 					SpecificChar: &SpecificCharChances{
@@ -1123,12 +1236,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   2.0168,
 				DropChanceNoFinBlow: 2.0168,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 1,
+					MaxSlots: 2,
+					ReqAbilities: []string{"water ward"},
+					ReqEmptySlots: nil,
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 1,
+					OptionalSlotsAre: string(optionalSlotAbilityOrEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   42.8571,
 					NoFinBlow: 42.8571,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 7,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
@@ -1141,6 +1263,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:        13,
@@ -1156,7 +1279,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 7.1429,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 7,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
@@ -1169,6 +1292,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:        13,
@@ -1184,7 +1308,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 42.8571,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 7,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
@@ -1197,6 +1321,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:        13,
@@ -1212,7 +1337,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 7.1429,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 7,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
@@ -1225,6 +1350,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:     13,
@@ -1239,7 +1365,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 0,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 7,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
@@ -1262,12 +1388,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 2,
+					MaxSlots: 4,
+					ReqAbilities: []string{"hp +20%", "hp +10%"},
+					ReqEmptySlots: nil,
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 2,
+					OptionalSlotsAre: string(optionalSlotAllEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 0,
+					EligibleChars: []string{},
 					AnyFinBlow:    0,
 					AnyNoFinBlow:  0,
 				},
@@ -1280,6 +1415,7 @@ func TestDropChance(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
+					"wanted equipment": true,
 				},
 				requestBody: map[FieldName]any{
 					pfnMonsterID:        256,
@@ -1295,7 +1431,7 @@ func TestDropChance(t *testing.T) {
 					NoFinBlow: 31.7126,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 7,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
@@ -1319,12 +1455,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   0.2311,
 				DropChanceNoFinBlow: 0.1576,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 4,
+					MaxSlots: 4,
+					ReqAbilities: []string{},
+					ReqEmptySlots: h.GetInt32Ptr(4),
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 0,
+					OptionalSlotsAre: string(optionalSlotAllEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   1.9643,
 					NoFinBlow: 1.3393,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 5,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
 				},
@@ -1348,12 +1493,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   0.2311,
 				DropChanceNoFinBlow: 0.1576,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 4,
+					MaxSlots: 4,
+					ReqAbilities: []string{},
+					ReqEmptySlots: h.GetInt32Ptr(4),
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 0,
+					OptionalSlotsAre: string(optionalSlotAbilityOrEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   1.9643,
 					NoFinBlow: 1.3393,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 5,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
 				},
@@ -1377,12 +1531,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   0.2311,
 				DropChanceNoFinBlow: 0.1576,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 4,
+					MaxSlots: 4,
+					ReqAbilities: []string{},
+					ReqEmptySlots: nil,
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 0,
+					OptionalSlotsAre: string(optionalSlotAllEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   1.9643,
 					NoFinBlow: 1.3393,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 5,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
 				},
@@ -1406,12 +1569,21 @@ func TestDropChance(t *testing.T) {
 			DropChanceResponse: DropChanceResponse{
 				DropChanceFinBlow:   0.6471,
 				DropChanceNoFinBlow: 0.4412,
+				WantedEquipment: WantedEquipment{
+					MinSlots: 4,
+					MaxSlots: 4,
+					ReqAbilities: []string{},
+					ReqEmptySlots: nil,
+					MinOptionalSlots: 0,
+					MaxOptionalSlots: 0,
+					OptionalSlotsAre: string(optionalSlotAbilityOrEmpty),
+				},
 				EquipmentMatchChances: EquipmentMatchChances{
 					FinBlow:   5.5,
 					NoFinBlow: 3.75,
 				},
 				CharacterChances: CharacterChances{
-					EligibleChars: 5,
+					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
 				},

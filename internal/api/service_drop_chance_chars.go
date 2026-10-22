@@ -10,7 +10,7 @@ import (
 // put the char specific field in their own struct and make that a pointer
 // that's better than having three pointer fields, one of them a boolean
 type CharacterChances struct {
-	EligibleChars int32                `json:"eligible_chars"`
+	EligibleChars []string             `json:"eligible_chars"`
 	AnyFinBlow    float64              `json:"any_fin_blow"`
 	AnyNoFinBlow  float64              `json:"any_no_fin_blow"`
 	SpecificChar  *SpecificCharChances `json:"specific_character,omitempty"`
@@ -60,8 +60,8 @@ func (c SpecificCharChances) Round(n int32) SpecificCharChances {
 	return c
 }
 
-func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, mon seeding.Monster) CharacterChances {
-	var eligibleChars int32
+func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, monMaxSlots int32) CharacterChances {
+	eligibleChars := []string{}
 	baseRandomChance := 0.75 / h.FloatLen(params.PartyMembers)
 	var chances CharacterChances
 
@@ -72,7 +72,7 @@ func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []see
 		specificChar := SpecificCharChances{
 			NoFinBlow:  baseRandomChance,
 			FinBlow:    finBlowChance,
-			IsEligible: charIsEligible(params, char, mon, wantedAbilities, monAbilities),
+			IsEligible: charIsEligible(params, char, monMaxSlots, wantedAbilities, monAbilities),
 		}
 
 		chances.SpecificChar = &specificChar
@@ -81,22 +81,23 @@ func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []see
 	for _, charID := range params.PartyMembers {
 		char, _ := seeding.GetResourceByID(charID, cfg.l.CharactersID)
 
-		if charIsEligible(params, char, mon, wantedAbilities, monAbilities) {
-			eligibleChars++
+		if charIsEligible(params, char, monMaxSlots, wantedAbilities, monAbilities) {
+			eligibleChars = append(eligibleChars, char.Name)
 		}
 	}
+	eligibleCharsAmt := len(eligibleChars)
 
-	chances.AnyNoFinBlow = float64(eligibleChars) * baseRandomChance
+	chances.AnyNoFinBlow = float64(eligibleCharsAmt) * baseRandomChance
 	chances.EligibleChars = eligibleChars
 
-	if eligibleChars > 0 {
+	if eligibleCharsAmt > 0 {
 		chances.AnyFinBlow = chances.AnyNoFinBlow + 0.25
 	}
 
 	// if we don't care about who gets the equipment and all characters in the party are eligible
 	// then it doesn't matter who scores the finishing blow
 	// therefore, it's always a guaranteed character match
-	if eligibleChars == h.Len32(params.PartyMembers) {
+	if eligibleCharsAmt == len(params.PartyMembers) {
 		chances.AnyFinBlow = 1
 		chances.AnyNoFinBlow = 1
 	}
@@ -106,8 +107,8 @@ func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []see
 
 
 
-func charIsEligible(params DropChanceParams, char seeding.Character, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) bool {
-	if forcedAbilityEliminatesChar(params, char, mon, wantedAbilities, monAbilities) {
+func charIsEligible(params DropChanceParams, char seeding.Character, monMaxSlots int32, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) bool {
+	if forcedAbilityEliminatesChar(params, char, monMaxSlots, wantedAbilities, monAbilities) {
 		return false
 	}
 
@@ -122,14 +123,14 @@ func charIsEligible(params DropChanceParams, char seeding.Character, mon seeding
 	return true
 }
 
-func forcedAbilityEliminatesChar(params DropChanceParams, char seeding.Character, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) bool {
+func forcedAbilityEliminatesChar(params DropChanceParams, char seeding.Character, monMaxSlots int32, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) bool {
 	// the character gets the forced ability, but the ability wasn't specified in auto_abilities
 	charGetsUnwantedForced := charGetsUnwantedForced(char, wantedAbilities, monAbilities)
-	reqSlotsEqualMaxSlots := reqSlotsEqualMaxSlots(params, mon) // there's no loose slot left to fill in with a lenient ability
+	noLooseSlotLeft := noLooseSlotLeft(params, monMaxSlots) // there's no loose slot left to fill in with a lenient ability
 
 	if charGetsUnwantedForced { // if this is true, the char gets the forced ability, but it is not desired
 		return !params.LenientAbilities || // lenientAbilities is false, so the forced ability can't be on it
-				reqSlotsEqualMaxSlots // lenientAbilities is true, but requirements leave no space for the forced ability
+				noLooseSlotLeft // lenientAbilities is true, but requirements leave no space for the forced ability
 	}
 	
 	return false
@@ -141,8 +142,8 @@ func charGetsUnwantedForced(char seeding.Character, wantedAbilities []seeding.Au
 			charGetsAbility(monAbilities[0], &char)
 }
 
-func reqSlotsEqualMaxSlots(params DropChanceParams, mon seeding.Monster) bool {
-	return params.GetRequiredSlots() == getMonMaxSlots(mon)
+func noLooseSlotLeft(params DropChanceParams, monMaxSlots int32) bool {
+	return params.GetRequiredSlots() == monMaxSlots
 }
 
 func forcedSlotExists(monAbilities []seeding.EquipmentDrop) bool {
