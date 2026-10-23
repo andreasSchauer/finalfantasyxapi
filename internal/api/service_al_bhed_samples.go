@@ -2,7 +2,7 @@ package api
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
 
-type SampleParams[P ServiceParams] struct {
+type SampleParams[P any] struct {
 	Description 	string		`json:"description"`
 	Params			P			`json:"params"`
 }

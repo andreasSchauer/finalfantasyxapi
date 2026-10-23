@@ -16,15 +16,11 @@ type DropChanceParams struct {
 	Decimals          bool    `json:"decimals,omitempty"`
 }
 
-func (p DropChanceParams) GetDoc(cfg *Config) ParamsDoc {
-	return cfg.getDropChanceParamsDoc()
-}
-
 func (p DropChanceParams) GetRequiredSlots() int32 {
 	return h.Len32(p.AutoAbilities) + h.DerefInt32Ptr(p.MinEmptySlots)
 }
 
-func (cfg *Config) getDropChanceParamsDoc() ParamsDoc {
+func getDropChanceParamsDoc(cfg *Config) ParamsDoc {
 	return ParamsDoc{
 		Fields: []FieldDoc{
 			{

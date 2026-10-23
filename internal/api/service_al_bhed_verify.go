@@ -1,7 +1,7 @@
 package api
 
-func verifyAlBhedParams(cfg *Config, params AlBhedParams, userValues map[FieldName]any) (AlBhedParams, error) {
-	paramsRules := compileParamsRules(params.GetDoc(cfg).Fields)
+func verifyAlBhedParams(cfg *Config, params AlBhedParams, docs ParamsDoc, userValues map[FieldName]any) (AlBhedParams, error) {
+	paramsRules := compileParamsRules(docs.Fields)
 
 	err := vfExistingFields(userValues, paramsRules)
 	if err != nil {

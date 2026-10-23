@@ -6,8 +6,8 @@ import (
 	"slices"
 )
 
-func verifyDropChanceParams(cfg *Config, params DropChanceParams, userValues map[FieldName]any) (DropChanceParams, error) {
-	paramsRules := compileParamsRules(params.GetDoc(cfg).Fields)
+func verifyDropChanceParams(cfg *Config, params DropChanceParams, docs ParamsDoc, userValues map[FieldName]any) (DropChanceParams, error) {
+	paramsRules := compileParamsRules(docs.Fields)
 
 	err := vfExistingFields(userValues, paramsRules)
 	if err != nil {

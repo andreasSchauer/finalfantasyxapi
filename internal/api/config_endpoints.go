@@ -1033,25 +1033,25 @@ func (cfg *Config) EndpointsInit() {
 
 	e.alBhed = handlerInputService[AlBhedParams, AlBhedResponse]{
 		endpoint:  epAlBhed,
-		paramsDoc: cfg.getAlBhedParamsDoc(),
 		verifyFn:  verifyAlBhedParams,
 		executeFn: handleAlBhed,
+		docsFn:    getAlBhedParamsDoc,
 		samplesFn: getAlBhedParamsSamples,
 	}
 
 	e.turnOrder = handlerInputService[TurnOrderParams, TurnOrderResponse]{
 		endpoint:  epTurnOrder,
-		paramsDoc: cfg.getTurnOrderParamsDoc(),
 		verifyFn:  verifyTurnOrderParams,
 		executeFn: handleTurnOrder,
+		docsFn:    getTurnOrderParamsDoc,
 		samplesFn: getTurnOrderParamsSamples,
 	}
 
 	e.dropChance = handlerInputService[DropChanceParams, DropChanceResponse]{
 		endpoint:  epDropChance,
-		paramsDoc: cfg.getDropChanceParamsDoc(),
 		verifyFn:  verifyDropChanceParams,
 		executeFn: handleDropChance,
+		docsFn:    getDropChanceParamsDoc,
 		samplesFn: getDropChanceParamsSamples,
 	}
 

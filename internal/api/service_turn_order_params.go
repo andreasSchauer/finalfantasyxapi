@@ -20,10 +20,6 @@ type TurnOrderParams struct {
 	Mons          []turnOrderMon   `json:"mons,omitempty"`
 }
 
-func (p TurnOrderParams) GetDoc(cfg *Config) ParamsDoc {
-	return cfg.getTurnOrderParamsDoc()
-}
-
 type turnOrderParty struct {
 	UnitID  	int32   `json:"unit_id,omitempty"`
 	Agility 	int32   `json:"agility,omitempty"`
@@ -59,7 +55,7 @@ func (p turnOrderMon) getDuplicateKey() string {
 	})
 }
 
-func (cfg *Config) getTurnOrderParamsDoc() ParamsDoc {
+func getTurnOrderParamsDoc(cfg *Config) ParamsDoc {
 	return ParamsDoc{
 		GeneralRules: h.GetStrPtr(""),
 		Fields: []FieldDoc{

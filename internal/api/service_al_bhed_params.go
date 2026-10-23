@@ -9,11 +9,7 @@ type AlBhedParams struct {
 	Direction string `json:"direction,omitempty"`
 }
 
-func (p AlBhedParams) GetDoc(cfg *Config) ParamsDoc {
-	return cfg.getAlBhedParamsDoc()
-}
-
-func (cfg *Config) getAlBhedParamsDoc() ParamsDoc {
+func getAlBhedParamsDoc(cfg *Config) ParamsDoc {
 	return ParamsDoc{
 		Fields: []FieldDoc{
 			{
