@@ -7,16 +7,20 @@ import (
 	"strings"
 )
 
+func getBaseURL(cfg *Config) string {
+	return fmt.Sprintf("http://%s/api", cfg.host)
+}
+
 func createListURL(cfg *Config, endpoint EndpointName) string {
-	return fmt.Sprintf("http://%s/api/%s", cfg.host, endpoint)
+	return appendToURL(getBaseURL(cfg), string(endpoint))
 }
 
 func createEnumURL(cfg *Config, e EnumName) string {
-	return fmt.Sprintf("http://%s/api/%s/%s", cfg.host, epEnums, getEnumKey(e))
+	return fmt.Sprintf("%s/%s/%s", getBaseURL(cfg), epEnums, getEnumKey(e))
 }
 
 func urlToPath(cfg *Config, url string) string {
-	prefix := fmt.Sprintf("http://%s/api", cfg.host)
+	prefix := getBaseURL(cfg)
 	return strings.TrimPrefix(url, prefix)
 }
 
@@ -31,7 +35,7 @@ func createResourceURLQuery(cfg *Config, endpoint EndpointName, id int32, q url.
 }
 
 func completeTestURL(cfg *Config, path string) string {
-	return fmt.Sprintf("http://%s/api%s", cfg.host, path)
+	return fmt.Sprintf("%s%s", getBaseURL(cfg), path)
 }
 
 func completeTestPath(endpoint EndpointName, id int32) string {
@@ -45,4 +49,12 @@ func getIdFromURL(url string) int32 {
 
 	id, _ := strconv.Atoi(idStr)
 	return int32(id)
+}
+
+func getSectionURL(cfg *Config, endpoint EndpointName, section SectionName) string {
+	return fmt.Sprintf("%s/%s/%s", getBaseURL(cfg), endpoint, section)
+}
+
+func appendToURL(url, segment string) string {
+	return fmt.Sprintf("%s/%s", url, segment)
 }
