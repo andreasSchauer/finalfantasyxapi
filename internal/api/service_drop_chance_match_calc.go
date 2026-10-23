@@ -10,26 +10,26 @@ import (
 )
 
 type EquipmentMatchParams struct {
-	WantedAbilities  []seeding.AutoAbility
-	WantedIndices 	 [][]int32
-	LenientAbilities bool
-	MinEmptySlots    *int32
-	EquipmentSlots   int32
-	ShotAmt          int32
-	AbilityWheel     AbilityWheel
+	WantedAbilities   []seeding.AutoAbility
+	WantedIndices     [][]int32
+	OptionalAbilities bool
+	MinEmptySlots     *int32
+	EquipmentSlots    int32
+	ShotAmt           int32
+	AbilityWheel      AbilityWheel
 }
 
 func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 	baseEquipment, baseEqLen := initEquipment(p)
 
 	matcher := EquipmentMatcher{
-		wantedIndices: 		p.WantedIndices,
-		wantedLen:			h.Len32(p.WantedAbilities),
-		minEmptySlots: 		p.MinEmptySlots,
-		equipmentSlots: 	p.EquipmentSlots,
-		lenientAbilities: 	p.LenientAbilities,
+		wantedIndices:     p.WantedIndices,
+		wantedLen:         h.Len32(p.WantedAbilities),
+		minEmptySlots:     p.MinEmptySlots,
+		equipmentSlots:    p.EquipmentSlots,
+		optionalAbilities: p.OptionalAbilities,
 	}
-	
+
 	if p.ShotAmt == 0 {
 		if matcher.Match(&baseEquipment, baseEqLen) {
 			return 1
@@ -39,12 +39,12 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 	}
 
 	assembler := EquipmentAssembler{
-		indexedNames: 	p.AbilityWheel.IndexedNames,
-		clashes: 		p.AbilityWheel.Clashes,
-		equipment: 		baseEquipment,
-		eqLen: 			baseEqLen,
+		indexedNames:   p.AbilityWheel.IndexedNames,
+		clashes:        p.AbilityWheel.Clashes,
+		equipment:      baseEquipment,
+		eqLen:          baseEqLen,
 		equipmentSlots: p.EquipmentSlots,
-		shotAmt: 		p.ShotAmt,
+		shotAmt:        p.ShotAmt,
 	}
 
 	totalCombinations := h.PowInt(7, p.ShotAmt)
@@ -57,7 +57,7 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 		startIdx := workerID * chunkSize
 		endIdx := startIdx + chunkSize
 
-		if workerID == numWorkers - 1 {
+		if workerID == numWorkers-1 {
 			endIdx = totalCombinations
 		}
 
@@ -68,7 +68,7 @@ func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
 
 			for i := start; i < end; i++ {
 				equipment, eqLen := assembler.assemble(i)
-		
+
 				if matcher.Match(&equipment, eqLen) {
 					localMatches++
 				}

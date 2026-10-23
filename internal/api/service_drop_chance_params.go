@@ -5,37 +5,23 @@ import (
 )
 
 type DropChanceParams struct {
-	Monster          int32   `json:"monster_id,omitempty"`
-	CharacterID      *int32  `json:"character_id,omitempty"`
-	PartyMembers     []int32 `json:"party_members,omitempty"`
-	AutoAbilities    []int32 `json:"auto_abilities,omitempty"`
-	LenientAbilities bool    `json:"lenient_abilities,omitempty"`
-	EquipType        *string `json:"equip_type,omitempty"`
-	MinEmptySlots    *int32  `json:"min_empty_slots,omitempty"`
-	TotalSlots       *int32  `json:"total_slots,omitempty"`
-	Decimals         bool    `json:"decimals,omitempty"`
+	Monster           int32   `json:"monster_id,omitempty"`
+	CharacterID       *int32  `json:"character_id,omitempty"`
+	PartyMembers      []int32 `json:"party_members,omitempty"`
+	AutoAbilities     []int32 `json:"auto_abilities,omitempty"`
+	OptionalAbilities bool    `json:"optional_abilities,omitempty"`
+	EquipType         *string `json:"equip_type,omitempty"`
+	MinEmptySlots     *int32  `json:"min_empty_slots,omitempty"`
+	TotalSlots        *int32  `json:"total_slots,omitempty"`
+	Decimals          bool    `json:"decimals,omitempty"`
 }
 
 func (p DropChanceParams) GetDoc(cfg *Config) ParamsDoc {
 	return cfg.getDropChanceParamsDoc()
 }
 
-
 func (p DropChanceParams) GetRequiredSlots() int32 {
-	var totalSlots int32
-	var minEmptySlots int32
-	
-	if p.TotalSlots != nil {
-		totalSlots = *p.TotalSlots
-	}
-
-	if p.MinEmptySlots != nil {
-		minEmptySlots = *p.MinEmptySlots
-	}
-
-	wantedSlots := h.Len32(p.AutoAbilities) + minEmptySlots
-
-	return max(totalSlots, wantedSlots)
+	return h.Len32(p.AutoAbilities) + h.DerefInt32Ptr(p.MinEmptySlots)
 }
 
 func (cfg *Config) getDropChanceParamsDoc() ParamsDoc {
@@ -75,9 +61,9 @@ func (cfg *Config) getDropChanceParamsDoc() ParamsDoc {
 				Description: "The auto-abilities the equipment must have. By default, the calculator is looking for exact matches of the given auto-abilities (order doesn't matter), while respecting, if a character can get those auto-abilities. Use null, if you don't care about auto-abilities at all. Throws an error, if the monster doesn't drop one of the stated auto-abilities, or if weapon- and armor-abilities are combined.",
 			},
 			{
-				Field:       pfnLenientAbilities,
+				Field:       pfnOptionalAbilities,
 				Type:        "bool",
-				Description: "If this field is set to true, the calculator treats any equipment that contains the given auto-abilities as a match. In short: If true, you search for equipment containing the given abilities; if false, you search for equipment containing only the given abilities. Example: 'auto_abilities' = [sensor, piercing] => if lenient_abilities is true, an equipment with [sensor, piercing, darkstrike] will be a match, if the field is false, it won't, because it's not an exact match. If 'auto_abilities' is null: If this field is true, any ability + empty slot combination will be a match. If it's false, only equipment with all empty slots will match.",
+				Description: "A searched equipment consists of required slots (amount of wanted auto-abilities + minEmptySlots) and optional slots (total slots - required slots). By default, the calculator checks, if all required slots are present, and if all optional slots are empty. This means, only equipment with only the specified abilities and at least the given amount of empty slots will be a match. If this field is set to true, the calculator will also treat equipment with unspecified abilities on optional slots as a match. Example: 'auto_abilities' = [sensor, piercing] => if optional_abilities is true, an equipment with [sensor, piercing, darkstrike] will be a match; if the field is false, it won't, because 'darkstrike' wasn't specified. If 'auto_abilities' is null: If this field is true, any ability + empty slot combination will be a match. If it's false, only equipment with all empty slots will match.",
 			},
 			{
 				Field:       pfnEquipType,

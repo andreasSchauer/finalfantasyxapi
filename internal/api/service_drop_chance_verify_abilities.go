@@ -37,6 +37,10 @@ func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seeding.Monster) 
 	return autoAbilities, monsterAbilities, nil
 }
 
+func getEquipMaxSlots(slotsChances []seeding.EquipmentSlotsChance) int32 {
+	return slotsChances[len(slotsChances)-1].Amount
+}
+
 func getMonMaxSlots(mon seeding.Monster) int32 {
 	if mon.Equipment == nil {
 		return 0

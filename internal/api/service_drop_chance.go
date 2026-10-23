@@ -39,16 +39,27 @@ func (r DropChanceResponse) Round(n int32) DropChanceResponse {
 
 func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse, error) {
 	mon, _ := seeding.GetResourceByID(params.Monster, cfg.l.MonstersID)
-	monMaxSlots := getMonMaxSlots(mon)
-
+	
 	wantedAbilities, monAbilities, err := vfAutoAbilities(cfg, params, mon)
 	if err != nil {
 		return DropChanceResponse{}, err
 	}
+	
+	slotsTable := extractAbilitySlots(params, mon)
+	monMaxSlots := getEquipMaxSlots(slotsTable)
 
 	monDropChances := getMonsterDropChances(cfg, mon, monAbilities)
 	characterChances := calcCharChances(cfg, params, wantedAbilities, monAbilities, monMaxSlots)
-	matchChanceParams := createMatchChanceParams(params, mon, wantedAbilities, monAbilities, characterChances)
+
+	matchChanceParams := MatchChanceParams{
+		mon: mon,
+		wantedAbilities: wantedAbilities,
+		monAbilities: monAbilities,
+		slotsTable: slotsTable,
+		shotsTable: mon.Equipment.AttachedAbilities.Chances,
+		characterChances: characterChances,
+	}
+
 	equipmentMatchChances := calcEquipmentMatchChances(cfg, params, matchChanceParams)
 	wantedEquipment := getWantedEquipment(params, wantedAbilities, matchChanceParams.slotsTable)
 

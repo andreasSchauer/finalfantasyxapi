@@ -105,8 +105,6 @@ func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []see
 	return chances
 }
 
-
-
 func charIsEligible(params DropChanceParams, char seeding.Character, monMaxSlots int32, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) bool {
 	if forcedAbilityEliminatesChar(params, char, monMaxSlots, wantedAbilities, monAbilities) {
 		return false
@@ -126,20 +124,20 @@ func charIsEligible(params DropChanceParams, char seeding.Character, monMaxSlots
 func forcedAbilityEliminatesChar(params DropChanceParams, char seeding.Character, monMaxSlots int32, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) bool {
 	// the character gets the forced ability, but the ability wasn't specified in auto_abilities
 	charGetsUnwantedForced := charGetsUnwantedForced(char, wantedAbilities, monAbilities)
-	noLooseSlotLeft := noLooseSlotLeft(params, monMaxSlots) // there's no loose slot left to fill in with a lenient ability
+	noLooseSlotLeft := noLooseSlotLeft(params, monMaxSlots) // there's no loose slot left to fill in with an optional ability
 
 	if charGetsUnwantedForced { // if this is true, the char gets the forced ability, but it is not desired
-		return !params.LenientAbilities || // lenientAbilities is false, so the forced ability can't be on it
-				noLooseSlotLeft // lenientAbilities is true, but requirements leave no space for the forced ability
+		return !params.OptionalAbilities || // optionalAbilities is false, so the forced ability can't be on it
+			noLooseSlotLeft // optionalAbilities is true, but requirements leave no space for the forced ability
 	}
-	
+
 	return false
 }
 
 func charGetsUnwantedForced(char seeding.Character, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop) bool {
-	return 	forcedSlotExists(monAbilities) &&
-			!forcedSlotWanted(wantedAbilities, monAbilities) &&
-			charGetsAbility(monAbilities[0], &char)
+	return forcedSlotExists(monAbilities) &&
+		!forcedSlotWanted(wantedAbilities, monAbilities) &&
+		charGetsAbility(monAbilities[0], &char)
 }
 
 func noLooseSlotLeft(params DropChanceParams, monMaxSlots int32) bool {

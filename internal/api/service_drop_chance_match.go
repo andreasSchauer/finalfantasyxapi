@@ -25,21 +25,21 @@ func (c EquipmentMatchChances) Round(n int32) EquipmentMatchChances {
 }
 
 type MatchChanceParams struct {
-	mon				 	seeding.Monster
-	wantedAbilities  	[]seeding.AutoAbility
-	monAbilities	 	[]seeding.EquipmentDrop
-	slotsTable		 	[]seeding.EquipmentSlotsChance
-	shotsTable		 	[]seeding.EquipmentSlotsChance
-	characterChances	CharacterChances
+	mon              seeding.Monster
+	wantedAbilities  []seeding.AutoAbility
+	monAbilities     []seeding.EquipmentDrop
+	slotsTable       []seeding.EquipmentSlotsChance
+	shotsTable       []seeding.EquipmentSlotsChance
+	characterChances CharacterChances
 }
 
 func createMatchChanceParams(params DropChanceParams, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, cc CharacterChances) MatchChanceParams {
 	return MatchChanceParams{
-		mon: mon,
-		wantedAbilities: wantedAbilities,
-		monAbilities: monAbilities,
-		slotsTable: extractAbilitySlots(params, mon),
-		shotsTable: mon.Equipment.AttachedAbilities.Chances,
+		mon:              mon,
+		wantedAbilities:  wantedAbilities,
+		monAbilities:     monAbilities,
+		slotsTable:       extractAbilitySlots(params, mon),
+		shotsTable:       mon.Equipment.AttachedAbilities.Chances,
 		characterChances: cc,
 	}
 }
@@ -66,13 +66,13 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mcp MatchCh
 				shotWeight := h.PercentageToDecimal(shots.Chance)
 
 				matchParams := EquipmentMatchParams{
-					WantedAbilities:  mcp.wantedAbilities,
-					WantedIndices:    wantedIndices,
-					LenientAbilities: params.LenientAbilities,
-					MinEmptySlots:    params.MinEmptySlots,
-					EquipmentSlots:   slots.Amount,
-					ShotAmt:          shots.Amount,
-					AbilityWheel:     wheel,
+					WantedAbilities:   mcp.wantedAbilities,
+					WantedIndices:     wantedIndices,
+					OptionalAbilities: params.OptionalAbilities,
+					MinEmptySlots:     params.MinEmptySlots,
+					EquipmentSlots:    slots.Amount,
+					ShotAmt:           shots.Amount,
+					AbilityWheel:      wheel,
 				}
 
 				matchChance := calcEquipmentMatchChance(matchParams)
@@ -87,8 +87,8 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mcp MatchCh
 	chanceNoFinBlow *= equipTypeChance
 
 	return EquipmentMatchChances{
-		FinBlow:   	chanceFinBlow,
-		NoFinBlow: 	chanceNoFinBlow,
+		FinBlow:   chanceFinBlow,
+		NoFinBlow: chanceNoFinBlow,
 	}
 }
 

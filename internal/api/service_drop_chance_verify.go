@@ -34,7 +34,7 @@ func verifyDropChanceParams(cfg *Config, params DropChanceParams, userValues map
 		return DropChanceParams{}, err
 	}
 
-	params.LenientAbilities, err = verifyParamField(cfg, params.LenientAbilities, pfnLenientAbilities, userValues, paramsRules, nil)
+	params.OptionalAbilities, err = verifyParamField(cfg, params.OptionalAbilities, pfnOptionalAbilities, userValues, paramsRules, nil)
 	if err != nil {
 		return DropChanceParams{}, err
 	}

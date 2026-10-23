@@ -5,12 +5,13 @@ import (
 )
 
 var benchMarkResult DropChanceResponse
+
 func BenchmarkHandleDropChance(b *testing.B) {
 	params := DropChanceParams{
-		Monster: 261,
-		PartyMembers: []int32{1,2,3,4,5,6,7},
-		AutoAbilities: []int32{31,30},
-		LenientAbilities: true,
+		Monster:           261,
+		PartyMembers:      []int32{1, 2, 3, 4, 5, 6, 7},
+		AutoAbilities:     []int32{31, 30},
+		OptionalAbilities: true,
 	}
 
 	b.ReportAllocs()

@@ -4,31 +4,31 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 type WantedEquipment struct {
-	MinSlots				int32		`json:"min_slots"`
-	MaxSlots				int32		`json:"max_slots"`
-	ReqAbilities			[]string	`json:"req_abilities"`
-	ReqEmptySlots			*int32		`json:"req_empty_slots"`
-	MinOptionalSlots		int32		`json:"min_optional_slots"`
-	MaxOptionalSlots		int32		`json:"max_optional_slots"`
-	OptionalSlotsAre		string		`json:"optional_slots_are"`
+	MinSlots         int32    `json:"min_slots"`
+	MaxSlots         int32    `json:"max_slots"`
+	ReqAbilities     []string `json:"req_abilities"`
+	ReqEmptySlots    *int32   `json:"req_empty_slots"`
+	MinOptionalSlots int32    `json:"min_optional_slots"`
+	MaxOptionalSlots int32    `json:"max_optional_slots"`
+	OptionalSlotsAre string   `json:"optional_slots_are"`
 }
 
 type OptionalSlotDef string
+
 const (
-	optionalSlotAllEmpty 		OptionalSlotDef = "all-empty"
-	optionalSlotAbilityOrEmpty 	OptionalSlotDef	= "ability-or-empty"
+	optionalSlotAllEmpty       OptionalSlotDef = "all-empty"
+	optionalSlotAbilityOrEmpty OptionalSlotDef = "ability-or-empty"
 )
 
 func getWantedEquipment(params DropChanceParams, wantedAbilities []seeding.AutoAbility, slotsTable []seeding.EquipmentSlotsChance) WantedEquipment {
 	requiredSlots := params.GetRequiredSlots()
-	
+
 	we := WantedEquipment{
-		MinSlots: slotsTable[0].Amount,
-		MaxSlots: slotsTable[len(slotsTable)-1].Amount,
-		ReqAbilities: getReqAbilities(wantedAbilities),
-		ReqEmptySlots: params.MinEmptySlots,
+		MinSlots:         slotsTable[0].Amount,
+		MaxSlots:         slotsTable[len(slotsTable)-1].Amount,
+		ReqAbilities:     getReqAbilities(wantedAbilities),
+		ReqEmptySlots:    params.MinEmptySlots,
 		OptionalSlotsAre: getOptionalSlotDef(params),
 	}
 
@@ -49,7 +49,7 @@ func getReqAbilities(wantedAbilities []seeding.AutoAbility) []string {
 }
 
 func getOptionalSlotDef(params DropChanceParams) string {
-	if params.LenientAbilities {
+	if params.OptionalAbilities {
 		return string(optionalSlotAbilityOrEmpty)
 	}
 
