@@ -8,7 +8,7 @@ import (
 )
 
 func getMasterItemObtainable(cfg *Config, r *http.Request, masterItem seeding.MasterItem) (ObtainableFrom, error) {
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.allItems, masterItem.ID)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.E.AllItems, masterItem.ID)
 	if err != nil {
 		return ObtainableFrom{}, err
 	}
@@ -23,11 +23,11 @@ func getMasterItemObtainable(cfg *Config, r *http.Request, masterItem seeding.Ma
 	}
 
 	obtainable := ObtainableFrom{
-		Monsters:  			bools.Monsters,
-		Treasures: 			bools.Treasures,
-		Shops:     			bools.Shops,
-		Quests:    			bools.Quests,
-		BlitzballPrizes: 	bools.Blitzball,
+		Monsters:        bools.Monsters,
+		Treasures:       bools.Treasures,
+		Shops:           bools.Shops,
+		Quests:          bools.Quests,
+		BlitzballPrizes: bools.Blitzball,
 	}
 
 	return obtainable, nil

@@ -29,7 +29,7 @@ func (w *AbilityWheel) compileClashes(cfg *Config) {
 			continue
 		}
 
-		ability, _ := seeding.GetResource(abilityName, cfg.l.AutoAbilities)
+		ability, _ := seeding.GetResource(abilityName, cfg.L.AutoAbilities)
 
 		for _, lockedOutName := range ability.LockedOutAbilities {
 			targetIdxGroup := getTargetIdxGroup(lockedOutName, w.IndexedNames)
@@ -41,7 +41,6 @@ func (w *AbilityWheel) compileClashes(cfg *Config) {
 		}
 	}
 }
-
 
 func getTargetIdxGroup(targetName string, indexedNames [8]string) []int32 {
 	var targetIndexGroup []int32
@@ -59,7 +58,7 @@ func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params 
 	var wheels []AbilityWheel
 
 	if params.CharacterID != nil {
-		char, _ := seeding.GetResourceByID(*params.CharacterID, cfg.l.CharactersID)
+		char, _ := seeding.GetResourceByID(*params.CharacterID, cfg.L.CharactersID)
 		wheel := createAbilityWheel(cfg, abilities, char)
 		wheel.Characters = []seeding.Character{char}
 		wheels = append(wheels, wheel)
@@ -124,7 +123,7 @@ func getUniqueWheelKeys(cfg *Config, abilities []seeding.EquipmentDrop, params D
 	uniqueKeys := make(map[string][]seeding.Character)
 
 	for _, charID := range params.PartyMembers {
-		char, _ := seeding.GetResourceByID(charID, cfg.l.CharactersID)
+		char, _ := seeding.GetResourceByID(charID, cfg.L.CharactersID)
 		key := getAbilityWheelKey(abilities, &char)
 
 		_, ok := uniqueKeys[key]

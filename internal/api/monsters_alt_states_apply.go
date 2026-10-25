@@ -54,7 +54,7 @@ func applyAlteredState(cfg *Config, mon Monster, altStateID int) Monster {
 	}
 
 	defaultState := AlteredState{
-		URL:         createResourceURL(cfg, cfg.e.monsters.endpoint, mon.ID),
+		URL:         CreateResourceURL(cfg, cfg.E.Monsters.Endpoint, mon.ID),
 		Condition:   "default",
 		IsTemporary: false,
 	}
@@ -83,7 +83,7 @@ func applyAlteredState(cfg *Config, mon Monster, altStateID int) Monster {
 }
 
 func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) (int, error) {
-	queryParam := cfg.q.monsters[queryName]
+	queryParam := cfg.Q.monsters[queryName]
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return 0, err
@@ -100,7 +100,6 @@ func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName QueryPar
 
 	return int(id), nil
 }
-
 
 func vpAltStateID(mon Monster, altStateID int) error {
 	altStateAmt := len(mon.AlteredStates)

@@ -11,67 +11,67 @@ func getLocationRelationships(cfg *Config, r *http.Request, location seeding.Loc
 	var rel Location
 	var locRel LocRel
 	g, ctx := errgroup.WithContext(r.Context())
-	
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.locations, location.ID)
+
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.E.Locations, location.ID)
 	if err != nil {
 		return Location{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.ConnectedLocations, err = getResourcesDbItem(cfg, ctx, cfg.e.locations, location, cfg.db.GetConnectedLocationIDs)
-		return err
-	})
-	
-	g.Go(func() error {
-		var err error
-		rel.Sublocations, err = getResourcesDbItem(cfg, ctx, cfg.e.sublocations, location, cfg.db.GetLocationSublocationIDs)
+		rel.ConnectedLocations, err = getResourcesDbItem(cfg, ctx, cfg.E.Locations, location, cfg.db.GetConnectedLocationIDs)
 		return err
 	})
 
-	g.Go(func() error{
+	g.Go(func() error {
 		var err error
-		locRel.Characters, err = getResourcesDbItem(cfg, ctx, cfg.e.characters, location, cfg.db.GetLocationCharacterIDs)
+		rel.Sublocations, err = getResourcesDbItem(cfg, ctx, cfg.E.Sublocations, location, cfg.db.GetLocationSublocationIDs)
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		locRel.Aeons, err = getResourcesDbItem(cfg, ctx, cfg.e.aeons, location, cfg.db.GetLocationAeonIDs)
+		locRel.Characters, err = getResourcesDbItem(cfg, ctx, cfg.E.Characters, location, cfg.db.GetLocationCharacterIDs)
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		locRel.Shops, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.shops, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeShop))
+		locRel.Aeons, err = getResourcesDbItem(cfg, ctx, cfg.E.Aeons, location, cfg.db.GetLocationAeonIDs)
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		locRel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.treasures, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeTreasure))
+		locRel.Shops, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Shops, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeShop))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		locRel.Monsters, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.monsters, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeMonster))
+		locRel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Treasures, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeTreasure))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		locRel.Formations, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.monsterFormations, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
+		locRel.Monsters, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Monsters, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeMonster))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		locRel.Quests, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.quests, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeQuest))
+		locRel.Formations, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.MonsterFormations, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
+		var err error
+		locRel.Quests, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Quests, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeQuest))
+		return err
+	})
+
+	g.Go(func() error {
 		var err error
 		locRel.Music, err = getMusicLocBased(cfg, ctx, location, LocBasedMusicQueries{
 			CueSongs:  cfg.db.GetLocationCueSongIDs,
@@ -81,10 +81,10 @@ func getLocationRelationships(cfg *Config, r *http.Request, location seeding.Loc
 		})
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		locRel.FMVs, err = getResourcesDbItem(cfg, ctx, cfg.e.fmvs, location, cfg.db.GetLocationFmvIDs)
+		locRel.FMVs, err = getResourcesDbItem(cfg, ctx, cfg.E.FMVs, location, cfg.db.GetLocationFmvIDs)
 		return err
 	})
 

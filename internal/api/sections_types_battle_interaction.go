@@ -45,26 +45,26 @@ func convertBattleInteractionSimple(cfg *Config, bi seeding.BattleInteraction) B
 }
 
 type DamageSimple struct {
-	AttackType      string   `json:"attack_type"`
-	DamageType      string   `json:"damage_type"`
-	HP				*string	 `json:"hp"`
-	MP				*string	 `json:"mp"`
-	CTB				*string	 `json:"ctb"`
-	CanCritical   	bool     `json:"can_critical"`
-	BreakDmgLimit 	*string  `json:"break_dmg_limit,omitempty"`
-	Element       	*string  `json:"element,omitempty"`
+	AttackType    string  `json:"attack_type"`
+	DamageType    string  `json:"damage_type"`
+	HP            *string `json:"hp"`
+	MP            *string `json:"mp"`
+	CTB           *string `json:"ctb"`
+	CanCritical   bool    `json:"can_critical"`
+	BreakDmgLimit *string `json:"break_dmg_limit,omitempty"`
+	Element       *string `json:"element,omitempty"`
 }
 
 func convertDamageSimple(cfg *Config, d seeding.Damage) DamageSimple {
 	return DamageSimple{
-		AttackType: 	d.AttackType,
-		DamageType: 	d.DamageType,
-		HP: 			convertObjPtr(cfg, d.HP, convertClassDamageSimple),
-		MP: 			convertObjPtr(cfg, d.MP, convertClassDamageSimple),
-		CTB: 			convertObjPtr(cfg, d.CTB, convertClassDamageSimple),
-		CanCritical:   	h.PtrIsNotNil(d.Critical),
-		BreakDmgLimit: 	convertObjPtr(cfg, d.BreakDmgLimit, convertBreakDmgLimitSimple),
-		Element:       	d.Element,
+		AttackType:    d.AttackType,
+		DamageType:    d.DamageType,
+		HP:            convertObjPtr(cfg, d.HP, convertClassDamageSimple),
+		MP:            convertObjPtr(cfg, d.MP, convertClassDamageSimple),
+		CTB:           convertObjPtr(cfg, d.CTB, convertClassDamageSimple),
+		CanCritical:   h.PtrIsNotNil(d.Critical),
+		BreakDmgLimit: convertObjPtr(cfg, d.BreakDmgLimit, convertBreakDmgLimitSimple),
+		Element:       d.Element,
 	}
 }
 
@@ -126,7 +126,7 @@ func convertStatChangeSimple(_ *Config, sc seeding.StatChange) string {
 
 func convertModChangeSimple(cfg *Config, mc seeding.ModifierChange) string {
 	formatted := formatChange(mc.ModifierName, mc.CalculationType, mc.Value)
-	modifier, _ := seeding.GetResource(mc.ModifierName, cfg.l.Modifiers)
+	modifier, _ := seeding.GetResource(mc.ModifierName, cfg.L.Modifiers)
 
 	if modifier.Category == string(database.ModifierCategoryPercentage) {
 		formatted += "%"

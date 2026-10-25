@@ -21,8 +21,8 @@ func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.Ce
 		ID:            celestialWeapon.ID,
 		Name:          celestialWeapon.Name,
 		Formula:       celestialWeapon.Formula,
-		Character:     nameToNamedAPIResource(cfg, cfg.e.characters, celestialWeapon.Character, nil),
-		Aeon:          namePtrToNamedAPIResPtr(cfg, cfg.e.aeons, celestialWeapon.Aeon, nil),
+		Character:     nameToNamedAPIResource(cfg, cfg.E.Characters, celestialWeapon.Character, nil),
+		Aeon:          namePtrToNamedAPIResPtr(cfg, cfg.E.Aeons, celestialWeapon.Aeon, nil),
 		AutoAbilities: rel.AutoAbilities,
 		Equipment:     rel.Equipment,
 		Crest:         rel.Crest,
@@ -42,6 +42,6 @@ func (cfg *Config) retrieveCelestialWeapons(r *http.Request, i handlerInput[seed
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		enumQuery(r, i, cfg.t.CelestialFormula, ids, qpnFormula, cfg.db.GetCelestialWeaponIDsByFormula),
+		enumQuery(r, i, cfg.T.CelestialFormula, ids, QpnFormula, cfg.db.GetCelestialWeaponIDsByFormula),
 	})
 }

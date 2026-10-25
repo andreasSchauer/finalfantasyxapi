@@ -67,7 +67,7 @@ func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []see
 
 	if params.CharacterID != nil {
 		finBlowChance := baseRandomChance + 0.25
-		char, _ := seeding.GetResourceByID(*params.CharacterID, cfg.l.CharactersID)
+		char, _ := seeding.GetResourceByID(*params.CharacterID, cfg.L.CharactersID)
 
 		specificChar := SpecificCharChances{
 			NoFinBlow:  baseRandomChance,
@@ -79,7 +79,7 @@ func calcCharChances(cfg *Config, params DropChanceParams, wantedAbilities []see
 	}
 
 	for _, charID := range params.PartyMembers {
-		char, _ := seeding.GetResourceByID(charID, cfg.l.CharactersID)
+		char, _ := seeding.GetResourceByID(charID, cfg.L.CharactersID)
 
 		if charIsEligible(params, char, monMaxSlots, wantedAbilities, monAbilities) {
 			eligibleChars = append(eligibleChars, char.Name)

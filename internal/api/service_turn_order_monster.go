@@ -13,7 +13,7 @@ func fetchFormationMons(cfg *Config, params TurnOrderParams) TurnOrderParams {
 		return params
 	}
 
-	formation, _ := seeding.GetResourceByID(*params.FormationID, cfg.l.MonsterFormationsID)
+	formation, _ := seeding.GetResourceByID(*params.FormationID, cfg.L.MonsterFormationsID)
 
 	if formation.FormationData.IsForcedAmbush {
 		params.BattleStart = string(database.BattleStartAmbush)

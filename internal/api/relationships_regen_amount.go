@@ -1,12 +1,12 @@
 package api
 
 type RegenAmount struct {
-	Ticks		int32		`json:"ticks"`
-	HealedHP	int32		`json:"healed_hp"`
+	Ticks    int32 `json:"ticks"`
+	HealedHP int32 `json:"healed_hp"`
 }
 
 func calcRegenAmountsMonster(cfg *Config, mon Monster) []RegenAmount {
-	regenRes := nameToNamedAPIResource(cfg, cfg.e.statusConditions, "regen", nil)
+	regenRes := nameToNamedAPIResource(cfg, cfg.E.StatusConditions, "regen", nil)
 	if resourcesContain(mon.StatusImmunities, regenRes) {
 		return nil
 	}
@@ -28,7 +28,7 @@ func calcRegenAmounts(cfg *Config, baseStats []BaseStat) []RegenAmount {
 
 func getRegenAmount(hp, ticks int32) RegenAmount {
 	return RegenAmount{
-		Ticks: 	  ticks,
+		Ticks:    ticks,
 		HealedHP: calcRegenAmount(hp, ticks),
 	}
 }
@@ -36,6 +36,6 @@ func getRegenAmount(hp, ticks int32) RegenAmount {
 func calcRegenAmount(hp, ticks int32) int32 {
 	hpFloat := float64(hp)
 	ticksFloat := float64(ticks)
-	healedFloat := ticksFloat * hpFloat / 256 + 100
+	healedFloat := ticksFloat*hpFloat/256 + 100
 	return int32(healedFloat)
 }

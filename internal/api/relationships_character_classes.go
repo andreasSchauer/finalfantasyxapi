@@ -11,16 +11,16 @@ import (
 func getCharClassRelationships(cfg *Config, r *http.Request, class seeding.CharacterClass) (CharacterClass, error) {
 	var rel CharacterClass
 	g, ctx := errgroup.WithContext(r.Context())
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		rel.Members, err = getResourcesDbItem(cfg, ctx, cfg.e.playerUnits, class, cfg.db.GetCharacterClassUnitIDs)
+		rel.Members, err = getResourcesDbItem(cfg, ctx, cfg.E.PlayerUnits, class, cfg.db.GetCharacterClassUnitIDs)
 		return err
 	})
 
-	g.Go(func() error{
+	g.Go(func() error {
 		var err error
-		rel.DefaultAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.abilities, class, cfg.db.GetCharacterClassDefaultAbilityIDs)
+		rel.DefaultAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.Abilities, class, cfg.db.GetCharacterClassDefaultAbilityIDs)
 		if err != nil {
 			return err
 		}
@@ -29,24 +29,24 @@ func getCharClassRelationships(cfg *Config, r *http.Request, class seeding.Chara
 		return err
 	})
 
-	g.Go(func() error{
+	g.Go(func() error {
 		var err error
-		rel.DefaultOverdrives, err = getResourcesDbItem(cfg, ctx, cfg.e.overdrives, class, cfg.db.GetCharacterClassDefaultOverdriveIDs)
+		rel.DefaultOverdrives, err = getResourcesDbItem(cfg, ctx, cfg.E.Overdrives, class, cfg.db.GetCharacterClassDefaultOverdriveIDs)
 		return err
 	})
 
-	g.Go(func() error{
+	g.Go(func() error {
 		var err error
-		rel.LearnableOverdrives, err = getResourcesDbItem(cfg, ctx, cfg.e.overdrives, class, cfg.db.GetCharacterClassLearnableOverdriveIDs)
+		rel.LearnableOverdrives, err = getResourcesDbItem(cfg, ctx, cfg.E.Overdrives, class, cfg.db.GetCharacterClassLearnableOverdriveIDs)
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		rel.Submenus, err = getResourcesDbItem(cfg, ctx, cfg.e.submenus, class, cfg.db.GetCharacterClassSubmenuIDs)
+		rel.Submenus, err = getResourcesDbItem(cfg, ctx, cfg.E.Submenus, class, cfg.db.GetCharacterClassSubmenuIDs)
 		return err
 	})
-	
+
 	err := g.Wait()
 	if err != nil {
 		return CharacterClass{}, err
@@ -56,7 +56,7 @@ func getCharClassRelationships(cfg *Config, r *http.Request, class seeding.Chara
 }
 
 func getClassLearnableAbilities(cfg *Config, ctx context.Context, class seeding.CharacterClass, defaultAbilities []TypedAPIResource) ([]TypedAPIResource, error) {
-	allAbilities, err := getResourcesDbItem(cfg, ctx, cfg.e.abilities, class, cfg.db.GetCharacterClassLearnableAbilityIDs)
+	allAbilities, err := getResourcesDbItem(cfg, ctx, cfg.E.Abilities, class, cfg.db.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
 		return nil, err
 	}

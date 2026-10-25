@@ -9,10 +9,10 @@ import (
 func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) ([]BaseStat, error) {
 	allowedStatIDs := []int32{1, 3, 5, 7}
 	baseStats := mon.BaseStats
-	queryParam := cfg.q.monsters[queryName]
+	queryParam := cfg.Q.monsters[queryName]
 
-	kimahri, _ := cfg.l.Characters["kimahri"]
-	kimahriBS := toResAmtType(cfg, cfg.e.stats, kimahri.BaseStats, newBaseStat)
+	kimahri, _ := cfg.L.Characters["kimahri"]
+	kimahriBS := toResAmtType(cfg, cfg.E.Stats, kimahri.BaseStats, newBaseStat)
 
 	kimahriStatCalcMap, err := getStatCalcMap(cfg, r, queryParam, kimahriBS, allowedStatIDs)
 	if queryIsEmpty(err) {

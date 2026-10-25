@@ -10,19 +10,19 @@ import (
 )
 
 func filterShopsEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]int32, error) {
-	i := cfg.e.shops
+	i := cfg.E.Shops
 
-	autoAbilityID, err := getQueryIdPtr(r, cfg.e.autoAbilities, qpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := getQueryIdPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup[qpnEmptySlots])
+	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup[QpnEmptySlots])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	charID, err := getQueryNameIdPtr(r, cfg.e.characters, qpnCharacter, i.queryLookup)
+	charID, err := getQueryNameIdPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -39,20 +39,20 @@ func filterShopsEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]
 	return dbIDs, nil
 }
 
-func filterTreasuresEquipment(cfg *Config, r *http.Request,  ctx context.Context) ([]int32, error) {
-	i := cfg.e.treasures
+func filterTreasuresEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]int32, error) {
+	i := cfg.E.Treasures
 
-	autoAbilityID, err := getQueryIdPtr(r, cfg.e.autoAbilities, qpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := getQueryIdPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup[qpnEmptySlots])
+	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup[QpnEmptySlots])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	charID, err := getQueryNameIdPtr(r, cfg.e.characters, qpnCharacter, i.queryLookup)
+	charID, err := getQueryNameIdPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

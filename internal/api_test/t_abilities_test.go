@@ -1,0 +1,406 @@
+package apiTest
+
+import (
+	"net/http"
+	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+)
+
+func TestGetAbility(t *testing.T) {
+	t.Parallel()
+	tests := []expAbility{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities/841",
+				expectedStatus: http.StatusNotFound,
+				expectedErr:    "ability with provided id '841' doesn't exist. max id: 840.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities/736",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"monsters":            2,
+					"battle interactions": 2,
+					"battle interactions 1 inflicted status conditions": 1,
+				},
+			},
+			expNameVer:       newExpNameVer(736, "self destruct", 1),
+			rank:             h.GetInt32Ptr(3),
+			appearsInHelpBar: true,
+			canCopyCat:       false,
+			abilityType:      database.AbilityTypeEnemyAbility,
+			typedAbility:     "/enemy-abilities/339",
+			monsters:         []int32{38, 176},
+			battleInteractions: []expBattleInteraction{
+				{
+					target:         "single-target",
+					abilityRange:   h.GetInt32Ptr(3),
+					hitAmount:      1,
+					shatterRate:    0,
+					basedOnUserAtk: false,
+					darkable:       false,
+					silenceable:    false,
+					reflectable:    false,
+					accuracy: expAccuracy{
+						accSource:   "rate",
+						hitChance:   h.GetInt32Ptr(255),
+						accModifier: nil,
+					},
+					damage: &expDamage{
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaSpecialNoVar,
+							damageConstant: 12,
+						},
+						critical:    nil,
+						isPiercing:  true,
+						breakDmgLmt: nil,
+						element:     h.GetInt32Ptr(1),
+					},
+					inflictedDelay:            nil,
+					inflictedStatusConditions: []int32{},
+					removedStatusConditions:   []int32{},
+					copiedStatusConditions:    []int32{},
+					statChanges:               []expStatChange{},
+					modifierChanges:           []expModChange{},
+				},
+				{
+					target:         "self",
+					abilityRange:   nil,
+					hitAmount:      1,
+					shatterRate:    0,
+					basedOnUserAtk: false,
+					darkable:       false,
+					silenceable:    false,
+					reflectable:    false,
+					accuracy: expAccuracy{
+						accSource:   "rate",
+						hitChance:   h.GetInt32Ptr(255),
+						accModifier: nil,
+					},
+					damage:                    nil,
+					inflictedDelay:            nil,
+					inflictedStatusConditions: []int32{7},
+					removedStatusConditions:   []int32{},
+					copiedStatusConditions:    []int32{},
+					statChanges:               []expStatChange{},
+					modifierChanges:           []expModChange{},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities/269",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"monsters":            0,
+					"battle interactions": 1,
+					"battle interactions 0 inflicted status conditions": 5,
+				},
+			},
+			expNameVer:       newExpNameVer(269, "hyper mighty g", 0),
+			rank:             h.GetInt32Ptr(6),
+			appearsInHelpBar: true,
+			canCopyCat:       false,
+			abilityType:      database.AbilityTypeOverdriveAbility,
+			typedAbility:     "/overdrive-abilities/167",
+			monsters:         []int32{},
+			battleInteractions: []expBattleInteraction{
+				{
+					target:         "all-allies",
+					abilityRange:   nil,
+					hitAmount:      1,
+					shatterRate:    0,
+					basedOnUserAtk: false,
+					darkable:       false,
+					silenceable:    false,
+					reflectable:    false,
+					accuracy: expAccuracy{
+						accSource:   "rate",
+						hitChance:   h.GetInt32Ptr(255),
+						accModifier: nil,
+					},
+					damage: &expDamage{
+						attackType: database.AttackTypeHeal,
+						damageType: database.DamageTypeSpecial,
+						ctb: &expClassDamage{
+							damageFormula:  database.DamageFormulaCtbCurrent,
+							damageConstant: 8,
+						},
+						critical:    nil,
+						isPiercing:  true,
+						breakDmgLmt: nil,
+						element:     nil,
+					},
+					inflictedDelay:            nil,
+					inflictedStatusConditions: []int32{29, 26, 21, 28, 30},
+					removedStatusConditions:   []int32{},
+					copiedStatusConditions:    []int32{},
+					statChanges:               []expStatChange{},
+					modifierChanges:           []expModChange{},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities/72",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"monsters":            6,
+					"battle interactions": 1,
+				},
+			},
+			expNameVer:       newExpNameVer(72, "blizzard", 0),
+			rank:             h.GetInt32Ptr(3),
+			appearsInHelpBar: true,
+			canCopyCat:       true,
+			abilityType:      database.AbilityTypePlayerAbility,
+			typedAbility:     "/player-abilities/72",
+			monsters:         []int32{45, 47, 65, 86, 94, 167},
+			battleInteractions: []expBattleInteraction{
+				{
+					target:         "single-target",
+					abilityRange:   h.GetInt32Ptr(4),
+					hitAmount:      1,
+					shatterRate:    10,
+					basedOnUserAtk: false,
+					darkable:       false,
+					silenceable:    true,
+					reflectable:    true,
+					accuracy: expAccuracy{
+						accSource:   "rate",
+						hitChance:   h.GetInt32Ptr(255),
+						accModifier: nil,
+					},
+					damage: &expDamage{
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypeMagical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaMagVsMdf,
+							damageConstant: 12,
+						},
+						critical:    nil,
+						isPiercing:  true,
+						breakDmgLmt: h.GetStrPtr("auto-ability"),
+						element:     h.GetInt32Ptr(4),
+					},
+					inflictedDelay:            nil,
+					inflictedStatusConditions: []int32{},
+					removedStatusConditions:   []int32{},
+					copiedStatusConditions:    []int32{},
+					statChanges:               []expStatChange{},
+					modifierChanges:           []expModChange{},
+				},
+			},
+		},
+	}
+
+	testSingleResources(t, tests, "GetAbility", testCfg.HandleAbilities, compareAbilities)
+}
+
+func TestRetrieveAbilities(t *testing.T) {
+	t.Parallel()
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?type=7",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "provided id '7' used for parameter 'type' doesn't exist. max id: 6.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?type=asd",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid enum value 'asd' used for parameter 'type'. use /api/abilities/parameters to see allowed values.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    840,
+			previous: nil,
+			next:     nil,
+			results:  []int32{1, 133, 299, 333, 555, 666, 840},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?monster=86",
+				expectedStatus: http.StatusOK,
+			},
+			count:    11,
+			previous: nil,
+			next:     nil,
+			results:  []int32{69, 70, 71, 72, 415, 481, 548, 565, 705, 804, 831},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?type=2&help_bar=false&rank=5&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    8,
+			previous: nil,
+			next:     nil,
+			results:  []int32{111, 112, 113, 114, 115, 116, 117, 118},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?type=3&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    69,
+			previous: nil,
+			next:     nil,
+			results:  []int32{293, 295, 310, 337, 344, 352, 361},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?delay=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    33,
+			previous: nil,
+			next:     nil,
+			results:  []int32{9, 10, 88, 138, 340, 546, 709, 803},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?status_inflict=4&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    39,
+			previous: nil,
+			next:     nil,
+			results:  []int32{3, 6, 8, 134, 226, 333, 422, 708, 752},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?bdl=true&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    281,
+			previous: nil,
+			next:     nil,
+			results:  []int32{1, 5, 65, 89, 128, 170, 205, 399, 449, 530, 623, 830},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?copycat=true&target_type=single-enemy&user_atk=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{20, 21},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?darkable=true&attack_type=absorb",
+				expectedStatus: http.StatusOK,
+			},
+			count:   2,
+			results: []int32{538, 539},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?silenceable=true&reflectable=true&damage_type=magical&element=1",
+				expectedStatus: http.StatusOK,
+			},
+			count:   5,
+			results: []int32{69, 73, 77, 565, 665},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?damage_formula=special-var&can_crit=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   12,
+			results: []int32{220, 225, 229, 328, 329},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?status_remove=4",
+				expectedStatus: http.StatusOK,
+			},
+			count:   12,
+			results: []int32{53, 254, 260, 308, 672, 790},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/abilities?stat_changes=true&mod_changes=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   6,
+			results: []int32{27, 29, 264, 265, 272, 275},
+		},
+	}
+
+	testIdList(t, tests, testCfg.E.Abilities.Endpoint, "RetrieveAbilities", testCfg.HandleAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+}
+
+func TestSubsectionAbilities(t *testing.T) {
+	t.Parallel()
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/character-classes/1/default-abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleCharacterClasses,
+			},
+			count:          5,
+			parentResource: h.GetStrPtr("/character-classes/1"),
+			results:        []int32{374, 376, 377, 378, 379},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/character-classes/1/learnable-abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleCharacterClasses,
+			},
+			count:          90,
+			parentResource: h.GetStrPtr("/character-classes/1"),
+			results:        []int32{1, 13, 24, 53, 66, 78, 374, 379},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/submenus/2/abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleSubmenus,
+			},
+			count:          22,
+			parentResource: h.GetStrPtr("/submenus/2"),
+			results:        []int32{1, 5, 8, 13, 17, 19, 22},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/topmenus/2/abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleTopmenus,
+			},
+			count:          6,
+			parentResource: h.GetStrPtr("/topmenus/2"),
+			results:        []int32{377, 378, 379, 380, 381, 382},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/monsters/185/abilities",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleMonsters,
+			},
+			count:          6,
+			parentResource: h.GetStrPtr("/monsters/185"),
+			results:        []int32{61, 62, 460, 531, 573, 630},
+		},
+	}
+
+	testIdList(t, tests, testCfg.E.Abilities.Endpoint, "SubsectionAbilities", nil, compareSimpleResourceLists[api.NamedAPIResource, api.AbilitySimple])
+}

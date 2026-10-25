@@ -32,14 +32,14 @@ func (m MonsterSimple) GetURL() string {
 }
 
 func createMonsterSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
-	i := cfg.e.monsters
+	i := cfg.E.Monsters
 	mon, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	areaIDs := subsection.relations[id][RelationAreas]
 
 	monSimple := MonsterSimple{
 		ID:             mon.ID,
-		URL:            createResourceURL(cfg, i.endpoint, id),
+		URL:            CreateResourceURL(cfg, i.Endpoint, id),
 		Name:           mon.Name,
 		Version:        mon.Version,
 		Specification:  mon.Specification,
@@ -88,10 +88,10 @@ func getMonsterSimpleBribeAmount(mon seeding.Monster, hp int32) *int32 {
 }
 
 func getMonsterSectionRelations(cfg *Config, r *http.Request, monIDs []int32) (map[int32]map[Relation][]int32, error) {
-	i := cfg.e.monsters
+	i := cfg.E.Monsters
 	relations := make(map[int32]map[Relation][]int32)
 
-	monsterJunctions, err := getDbJunctions(r.Context(), monIDs, i.resTypeSingle, cfg.e.areas.resTypeSingle, cfg.db.GetMonsterAreaIdPairs, juncMonsterArea)
+	monsterJunctions, err := getDbJunctions(r.Context(), monIDs, i.resTypeSingle, cfg.E.Areas.resTypeSingle, cfg.db.GetMonsterAreaIdPairs, juncMonsterArea)
 	if err != nil {
 		return nil, err
 	}

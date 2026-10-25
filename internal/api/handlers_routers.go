@@ -10,7 +10,7 @@ import (
 
 func routerIdOnly[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	i.usage = []string{"/{id}"}
-	segments := getPathSegments(r.URL.Path, i.endpoint)
+	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
@@ -33,7 +33,7 @@ func routerIdOnly[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 
 func routerNameOrID[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	i.usage = []string{"/{id}", "/{name}"}
-	segments := getPathSegments(r.URL.Path, i.endpoint)
+	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
@@ -56,7 +56,7 @@ func routerNameOrID[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 
 func routerNameVersion[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
 	i.usage = []string{"/{id}", "/{name}", "/{name}/{version}"}
-	segments := getPathSegments(r.URL.Path, i.endpoint)
+	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
@@ -78,7 +78,7 @@ func routerNameVersion[T seeding.Lookupable, R any, A APIResource, L APIResource
 }
 
 func routerEnums(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums) {
-	segments := getPathSegments(r.URL.Path, i.endpoint)
+	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
@@ -96,7 +96,7 @@ func routerEnums(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerI
 }
 
 func routerEndpoints(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints) {
-	segments := getPathSegments(r.URL.Path, i.endpoint)
+	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
@@ -114,7 +114,7 @@ func routerEndpoints(cfg *Config, w http.ResponseWriter, r *http.Request, i hand
 }
 
 func routerServiceGet[P, R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
-	segments := getPathSegments(r.URL.Path, i.endpoint)
+	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 1:
@@ -126,13 +126,13 @@ func routerServiceGet[P, R any](cfg *Config, w http.ResponseWriter, r *http.Requ
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: 'GET /api/%s/body', 'POST /api/%s'.", i.endpoint, i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: 'GET /api/%s/body', 'POST /api/%s'.", i.Endpoint, i.Endpoint), nil)
 		return
 	}
 }
 
 func routerServicePost[P, R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
-	segments := getPathSegments(r.URL.Path, i.endpoint)
+	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
@@ -140,7 +140,7 @@ func routerServicePost[P, R any](cfg *Config, w http.ResponseWriter, r *http.Req
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: /api/%s. Use /api/%s/body to learn more about the required json format for the request body.", i.endpoint, i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: /api/%s. Use /api/%s/body to learn more about the required json format for the request body.", i.Endpoint, i.Endpoint), nil)
 		return
 	}
 }

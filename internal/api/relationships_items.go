@@ -9,7 +9,7 @@ import (
 )
 
 func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item, error) {
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.items, item.ID)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.E.Items, item.ID)
 	if err != nil {
 		return Item{}, err
 	}
@@ -20,7 +20,7 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 	}
 
 	if item.Category == string(database.ItemCategorySphere) {
-		sphereRes := nameToNamedAPIResource(cfg, cfg.e.spheres, item.Name, nil)
+		sphereRes := nameToNamedAPIResource(cfg, cfg.E.Spheres, item.Name, nil)
 		rel.Sphere = &sphereRes
 	}
 
@@ -30,9 +30,9 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabilityParams RelAvlParams) (Item, error) {
 	var rel Item
 	g, ctx := errgroup.WithContext(r.Context())
-	
-	g.Go(func() error{
-		monsters, err := runRelAvailabilityQuery(cfg, ctx, cfg.e.monsters, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeMonster))
+
+	g.Go(func() error {
+		monsters, err := runRelAvailabilityQuery(cfg, ctx, cfg.E.Monsters, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeMonster))
 		if err != nil {
 			return err
 		}
@@ -40,60 +40,60 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabi
 		return nil
 	})
 
-	g.Go(func() error{
-		treasures, err := runRelAvailabilityQuery(cfg, ctx, cfg.e.treasures, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeTreasure))
+	g.Go(func() error {
+		treasures, err := runRelAvailabilityQuery(cfg, ctx, cfg.E.Treasures, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeTreasure))
 		if err != nil {
 			return err
 		}
-		rel.Treasures = itemAmtsToChildResAmts2(cfg, cfg.e.treasures, treasures, item.ID)
+		rel.Treasures = itemAmtsToChildResAmts2(cfg, cfg.E.Treasures, treasures, item.ID)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.shops, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeShop))
+		rel.Shops, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Shops, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeShop))
 		return err
 	})
 
-	g.Go(func() error{
-		quests, err := runRelAvailabilityQuery(cfg, ctx, cfg.e.quests, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeQuest))
+	g.Go(func() error {
+		quests, err := runRelAvailabilityQuery(cfg, ctx, cfg.E.Quests, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeQuest))
 		if err != nil {
 			return err
 		}
-		rel.Quests = itemAmtsToChildResAmts(cfg.e.quests, quests)
+		rel.Quests = itemAmtsToChildResAmts(cfg.E.Quests, quests)
 		return nil
 	})
 
-	g.Go(func() error{
-		blitzballPrizes, err := runRelAvailabilityQuery(cfg, ctx, cfg.e.blitzballPrizes, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeBlitzball))
+	g.Go(func() error {
+		blitzballPrizes, err := runRelAvailabilityQuery(cfg, ctx, cfg.E.BlitzballPrizes, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeBlitzball))
 		if err != nil {
 			return err
 		}
-		rel.BlitzballPrizes = itemAmtsToChildResAmts2(cfg, cfg.e.blitzballPrizes, blitzballPrizes, item.ID)
+		rel.BlitzballPrizes = itemAmtsToChildResAmts2(cfg, cfg.E.BlitzballPrizes, blitzballPrizes, item.ID)
 		return nil
 	})
 
-	g.Go(func() error{
-		playerAbilities, err := getResourcesDbItem(cfg, ctx, cfg.e.playerAbilities, item, cfg.db.GetItemPlayerAbilityIDs)
+	g.Go(func() error {
+		playerAbilities, err := getResourcesDbItem(cfg, ctx, cfg.E.PlayerAbilities, item, cfg.db.GetItemPlayerAbilityIDs)
 		if err != nil {
 			return err
 		}
-		rel.AeonLearnAbilities = itemAmtsToChildResAmts(cfg.e.playerAbilities, playerAbilities)
+		rel.AeonLearnAbilities = itemAmtsToChildResAmts(cfg.E.PlayerAbilities, playerAbilities)
 		return nil
 	})
 
-	g.Go(func() error{
-		autoAbilities, err := getResourcesDbItem(cfg, ctx, cfg.e.autoAbilities, item, cfg.db.GetItemAutoAbilityIDs)
+	g.Go(func() error {
+		autoAbilities, err := getResourcesDbItem(cfg, ctx, cfg.E.AutoAbilities, item, cfg.db.GetItemAutoAbilityIDs)
 		if err != nil {
 			return err
 		}
-		rel.AutoAbilities = itemAmtsToChildResAmts(cfg.e.autoAbilities, autoAbilities)
+		rel.AutoAbilities = itemAmtsToChildResAmts(cfg.E.AutoAbilities, autoAbilities)
 		return nil
 	})
 
-	g.Go(func() error{
+	g.Go(func() error {
 		var err error
-		rel.Mixes, err = getResourcesDbItem(cfg, ctx, cfg.e.mixes, item, cfg.db.GetItemMixIDs)
+		rel.Mixes, err = getResourcesDbItem(cfg, ctx, cfg.E.Mixes, item, cfg.db.GetItemMixIDs)
 		return err
 	})
 

@@ -17,8 +17,8 @@ type WantedEquipment struct {
 type OptionalSlotDef string
 
 const (
-	optionalSlotAllEmpty       OptionalSlotDef = "all-empty"
-	optionalSlotAbilityOrEmpty OptionalSlotDef = "ability-or-empty"
+	OptionalSlotAllEmpty       OptionalSlotDef = "all-empty"
+	OptionalSlotAbilityOrEmpty OptionalSlotDef = "ability-or-empty"
 )
 
 func getWantedEquipment(params DropChanceParams, wantedAbilities []seeding.AutoAbility, slotsTable []seeding.EquipmentSlotsChance) WantedEquipment {
@@ -50,8 +50,8 @@ func getReqAbilities(wantedAbilities []seeding.AutoAbility) []string {
 
 func getOptionalSlotDef(params DropChanceParams) string {
 	if params.OptionalAbilities {
-		return string(optionalSlotAbilityOrEmpty)
+		return string(OptionalSlotAbilityOrEmpty)
 	}
 
-	return string(optionalSlotAllEmpty)
+	return string(OptionalSlotAllEmpty)
 }

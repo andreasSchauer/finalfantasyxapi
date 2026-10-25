@@ -3,12 +3,12 @@ package api
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
 type Shop struct {
-	ID          int32            `json:"id"`
-	Area        AreaAPIResource  `json:"area"`
-	Category    string			 `json:"category"`
-	Notes       *string          `json:"notes,omitempty"`
-	PreAirship  *SubShop         `json:"pre_airship"`
-	PostAirship *SubShop         `json:"post_airship"`
+	ID          int32           `json:"id"`
+	Area        AreaAPIResource `json:"area"`
+	Category    string          `json:"category"`
+	Notes       *string         `json:"notes,omitempty"`
+	PreAirship  *SubShop        `json:"pre_airship"`
+	PostAirship *SubShop        `json:"post_airship"`
 }
 
 type SubShop struct {
@@ -30,7 +30,7 @@ type ShopItem struct {
 
 func convertShopItem(cfg *Config, si seeding.ShopItem) ShopItem {
 	return ShopItem{
-		Item:  nameToNamedAPIResource(cfg, cfg.e.items, si.Name, nil),
+		Item:  nameToNamedAPIResource(cfg, cfg.E.Items, si.Name, nil),
 		Price: si.Price,
 	}
 }

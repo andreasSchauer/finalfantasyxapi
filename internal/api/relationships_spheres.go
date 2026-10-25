@@ -7,9 +7,9 @@ import (
 )
 
 func getSphereRelationships(cfg *Config, r *http.Request, sphere seeding.Sphere) (Sphere, error) {
-	item, _ := seeding.GetResourceByID(sphere.ItemID, cfg.l.ItemsID)
+	item, _ := seeding.GetResourceByID(sphere.ItemID, cfg.L.ItemsID)
 
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.spheres, item.ID)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.E.Spheres, item.ID)
 	if err != nil {
 		return Sphere{}, err
 	}
@@ -20,7 +20,7 @@ func getSphereRelationships(cfg *Config, r *http.Request, sphere seeding.Sphere)
 	}
 
 	rel := Sphere{
-		Item:            nameToNamedAPIResource(cfg, cfg.e.items, item.Name, nil),
+		Item:            nameToNamedAPIResource(cfg, cfg.E.Items, item.Name, nil),
 		Description:     item.Description,
 		Effect:          item.Effect,
 		Monsters:        itemRel.Monsters,

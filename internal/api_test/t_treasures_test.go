@@ -1,0 +1,274 @@
+package apiTest
+
+import (
+	"net/http"
+	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+)
+
+func TestGetTreasure(t *testing.T) {
+	t.Parallel()
+	tests := []expTreasure{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures/a",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid id 'a'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures/343",
+				expectedStatus: http.StatusNotFound,
+				expectedErr:    "treasure with provided id '343' doesn't exist. max id: 342.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures/3/a",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "endpoint /treasures doesn't have any subsections.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures/a/3",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "wrong format. usage: '/api/treasures', '/api/treasures/{id}'",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures/2/2",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/treasures/sections for valid subsections.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures/199",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths:     map[string]int{},
+			},
+			expIdOnly:       newExpIdOnly(199),
+			area:            158,
+			availability:    database.AvailabilityTypePreStory,
+			isAnimaTreasure: false,
+			treasureType:    database.TreasureTypeChest,
+			lootType:        database.LootTypeItem,
+			gilAmount:       nil,
+			items: []testResAmount[api.TypedAPIResource]{
+				newTestResAmount[api.TypedAPIResource](82, 1),
+			},
+			equipment: nil,
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures/13",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths:     map[string]int{},
+			},
+			expIdOnly:       newExpIdOnly(13),
+			area:            15,
+			availability:    database.AvailabilityTypePreStory,
+			isAnimaTreasure: false,
+			treasureType:    database.TreasureTypeObject,
+			lootType:        database.LootTypeItem,
+			gilAmount:       nil,
+			items: []testResAmount[api.TypedAPIResource]{
+				newTestResAmount[api.TypedAPIResource](147, 1),
+			},
+			equipment: nil,
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures/62",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths:     map[string]int{},
+			},
+			expIdOnly:       newExpIdOnly(62),
+			area:            60,
+			availability:    database.AvailabilityTypeAlways,
+			isAnimaTreasure: true,
+			treasureType:    database.TreasureTypeChest,
+			lootType:        database.LootTypeEquipment,
+			gilAmount:       nil,
+			items:           nil,
+			equipment: &testFoundEquipment{
+				equipmentName:    877,
+				abilities:        []int32{55, 64, 58},
+				emptySlotsAmount: 0,
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures/284",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths:     map[string]int{},
+			},
+			expIdOnly:       newExpIdOnly(284),
+			area:            212,
+			availability:    database.AvailabilityTypeAlways,
+			isAnimaTreasure: false,
+			treasureType:    database.TreasureTypeChest,
+			lootType:        database.LootTypeGil,
+			gilAmount:       h.GetInt32Ptr(20000),
+			items:           nil,
+			equipment:       nil,
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures/45",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths:     map[string]int{},
+			},
+			expIdOnly:       newExpIdOnly(45),
+			area:            42,
+			availability:    database.AvailabilityTypePost,
+			isAnimaTreasure: false,
+			treasureType:    database.TreasureTypeGift,
+			lootType:        database.LootTypeItem,
+			gilAmount:       nil,
+			items: []testResAmount[api.TypedAPIResource]{
+				newTestResAmount[api.TypedAPIResource](97, 1),
+			},
+			equipment: nil,
+		},
+	}
+
+	testSingleResources(t, tests, "GetTreasure", testCfg.HandleTreasures, compareTreasures)
+}
+
+func TestRetrieveTreasures(t *testing.T) {
+	t.Parallel()
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   342,
+			results: []int32{1, 28, 53, 84, 123, 127, 167, 191, 214, 286, 300, 342},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?location=4&loot_type=item&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   21,
+			results: []int32{15, 18, 20, 23, 35, 37, 41, 44},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?sublocation=43&treasure_type=chest", // omega ruins
+				expectedStatus: http.StatusOK,
+			},
+			count:   15,
+			results: []int32{328, 330, 335, 337, 339, 342},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?area=212", // gagazet - mountain trail
+				expectedStatus: http.StatusOK,
+			},
+			count:   6,
+			results: []int32{284, 285, 286, 287, 288, 289},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?anima=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:   6,
+			results: []int32{39, 62, 150, 210, 253, 302},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?availability=pre-story&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   99,
+			results: []int32{1, 23, 91, 119, 139, 206, 239, 261, 263},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?availability=post&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   59,
+			results: []int32{5, 30, 43, 64, 81, 109, 153, 211, 308, 342},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?availability=always&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   174,
+			results: []int32{2, 54, 80, 108, 147, 179, 214, 265, 295, 303},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?availability=pre-story&limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:   99,
+			results: []int32{1, 55, 112, 206, 248, 267},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/treasures?availability=post-story",
+				expectedStatus: http.StatusOK,
+			},
+			count:   10,
+			results: []int32{317, 321, 324, 326},
+		},
+	}
+
+	testIdList(t, tests, testCfg.E.Treasures.Endpoint, "RetrieveTreasures", testCfg.HandleTreasures, compareAPIResourceLists[api.UnnamedApiResourceList])
+}
+
+func TestSubsectionTreasures(t *testing.T) {
+	t.Parallel()
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/locations/6/treasures",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleLocations,
+			},
+			count:          17,
+			parentResource: h.GetStrPtr("/locations/6"),
+			results:        []int32{50, 53, 55, 59, 62, 65, 66},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/sublocations/21/treasures",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleSublocations,
+			},
+			count:          5,
+			parentResource: h.GetStrPtr("/sublocations/21"),
+			results:        []int32{167, 168, 169, 170, 171},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/areas/223/treasures",
+				expectedStatus: http.StatusOK,
+				handler:        testCfg.HandleAreas,
+			},
+			count:          3,
+			parentResource: h.GetStrPtr("/areas/223"),
+			results:        []int32{298, 299, 300},
+		},
+	}
+
+	testIdList(t, tests, testCfg.E.Treasures.Endpoint, "SubsectionTreasures", nil, compareSimpleResourceLists[api.UnnamedAPIResource, api.TreasureSimple])
+}

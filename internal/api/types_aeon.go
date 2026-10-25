@@ -18,7 +18,7 @@ type Aeon struct {
 	CelestialWeapon        *NamedAPIResource  `json:"celestial_weapon"`
 	CharacterClasses       []NamedAPIResource `json:"character_classes"`
 	BaseStats              []BaseStat         `json:"base_stats"`
-	RegenAmounts		   []RegenAmount	  `json:"regen_amounts"`
+	RegenAmounts           []RegenAmount      `json:"regen_amounts"`
 	AeonCommands           []NamedAPIResource `json:"aeon_commands"`
 	DefaultPlayerAbilities []NamedAPIResource `json:"default_player_abilities"`
 	Overdrives             []NamedAPIResource `json:"overdrives"`
@@ -33,7 +33,7 @@ type AeonEquipment struct {
 
 func convertAeonEquipment(cfg *Config, ae seeding.AeonEquipment) AeonEquipment {
 	return AeonEquipment{
-		AutoAbility:     nameToNamedAPIResource(cfg, cfg.e.autoAbilities, ae.AutoAbility, nil),
+		AutoAbility:     nameToNamedAPIResource(cfg, cfg.E.AutoAbilities, ae.AutoAbility, nil),
 		CelestialWeapon: ae.CelestialWeapon,
 	}
 }

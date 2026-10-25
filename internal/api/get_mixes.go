@@ -12,7 +12,7 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seeding.Mix, Mix, Name
 		return Mix{}, err
 	}
 
-	overdrive, _ := seeding.GetResourceByID(mix.OverdriveID, cfg.l.OverdrivesID)
+	overdrive, _ := seeding.GetResourceByID(mix.OverdriveID, cfg.L.OverdrivesID)
 
 	combinations, err := getMixCombinations(cfg, r, mix)
 	if err != nil {
@@ -23,7 +23,7 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seeding.Mix, Mix, Name
 		ID:           mix.ID,
 		Name:         mix.Name,
 		Category:     mix.Category,
-		Overdrive:    nameToNamedAPIResource(cfg, cfg.e.overdrives, overdrive.Name, nil),
+		Overdrive:    nameToNamedAPIResource(cfg, cfg.E.Overdrives, overdrive.Name, nil),
 		Description:  overdrive.Description,
 		Effect:       overdrive.Effect,
 		Combinations: combinations,
@@ -39,7 +39,7 @@ func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seeding.Mix, Mi
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		enumListQuery(cfg, r, i, cfg.t.MixCategory, ids, qpnCategory, cfg.db.GetMixIDsByCategory),
-		idQueryWrapper(cfg, r, i, ids, qpnReqItem, cfg.l.Items, getMixesByItem),
+		enumListQuery(cfg, r, i, cfg.T.MixCategory, ids, QpnCategory, cfg.db.GetMixIDsByCategory),
+		idQueryWrapper(cfg, r, i, ids, QpnReqItem, cfg.L.Items, getMixesByItem),
 	})
 }

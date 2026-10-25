@@ -13,11 +13,11 @@ type AreaApiResourceList struct {
 	Results []AreaAPIResource `json:"results"`
 }
 
-func (l AreaApiResourceList) getListParams() ListParams {
+func (l AreaApiResourceList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func (l AreaApiResourceList) getResults() []HasAPIResource {
+func (l AreaApiResourceList) GetResults() []HasAPIResource {
 	return toHasAPIResSlice(l.Results)
 }
 
@@ -95,7 +95,7 @@ func areaToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaA
 			Version:     params.Version,
 		},
 		Specification: params.Specification,
-		URL:           createResourceURL(cfg, i.endpoint, params.AreaID),
+		URL:           CreateResourceURL(cfg, i.Endpoint, params.AreaID),
 	}
 }
 

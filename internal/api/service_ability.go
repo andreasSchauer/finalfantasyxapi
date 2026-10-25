@@ -8,10 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
-
 func getBattleInteraction(cfg *Config, abilityID int32, interactionPtr *int32) (seeding.BattleInteraction, error) {
-	ability, _ := seeding.GetResourceByID(abilityID, cfg.l.AbilitiesID)
+	ability, _ := seeding.GetResourceByID(abilityID, cfg.L.AbilitiesID)
 	interactionsAmt := h.Len32(ability.BattleInteractions)
 	abilityType := string(ability.Type)
 	abilityString := h.NameToString(ability.Name, ability.Version, &abilityType)

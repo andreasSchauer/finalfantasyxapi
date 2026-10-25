@@ -6,7 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 type BaseStat struct {
 	Stat  NamedAPIResource `json:"stat"`
 	Value int32            `json:"value"`
@@ -43,7 +42,7 @@ func (bs BaseStat) ToResAmount() ResourceAmount[NamedAPIResource] {
 }
 
 func getBaseStat(cfg *Config, stat string, baseStats []BaseStat) BaseStat {
-	statLookup, _ := seeding.GetResource(stat, cfg.l.Stats)
+	statLookup, _ := seeding.GetResource(stat, cfg.L.Stats)
 	statMap := getResourceMap(baseStats)
 
 	return statMap[statLookup.ID]
@@ -59,7 +58,7 @@ func replaceBaseStats(baseStats []BaseStat, statMap map[string]int32, allowedSta
 		if !slices.Contains(allowedStatIDs, baseStat.Stat.ID) {
 			continue
 		}
-		
+
 		newVal, ok := statMap[baseStat.Stat.Name]
 		if ok {
 			baseStats[i].Value = newVal
@@ -68,7 +67,6 @@ func replaceBaseStats(baseStats []BaseStat, statMap map[string]int32, allowedSta
 
 	return baseStats
 }
-
 
 func addToBaseStats(baseStats []BaseStat, statMap map[string]int32) []BaseStat {
 	for i, baseStat := range baseStats {

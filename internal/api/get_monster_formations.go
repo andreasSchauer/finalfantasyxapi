@@ -19,16 +19,15 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.M
 		IsForcedAmbush:  formation.FormationData.IsForcedAmbush,
 		CanEscape:       formation.FormationData.CanEscape,
 		Notes:           formation.FormationData.Notes,
-		FormationLoot: 	 getFormationLoot(cfg, formation),
+		FormationLoot:   getFormationLoot(cfg, formation),
 		BossMusic:       convertObjPtr(cfg, formation.FormationData.BossMusic, convertFormationBossSong),
-		Monsters:        nameAmtsToResAmts(cfg, cfg.e.monsters, formation.Monsters),
+		Monsters:        nameAmtsToResAmts(cfg, cfg.E.Monsters, formation.Monsters),
 		Areas:           convertObjSlice(cfg, formation.EncounterAreas, convertEncounterArea),
 		TriggerCommands: convertObjSlice(cfg, formation.TriggerCommands, convertFormationTriggerCommand),
 	}
 
 	return response, nil
 }
-
 
 func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
@@ -37,12 +36,12 @@ func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[see
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		idQuery(r, i, ids, qpnMonster, cfg.l.Monsters, cfg.db.GetMonsterFormationIDsByMonster),
-		idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetMonsterFormationIDsByLocation),
-		idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetMonsterFormationIDsBySublocation),
-		idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetMonsterFormationIDsByArea),
-		boolQuery(r, i, ids, qpnAmbush, cfg.db.GetMonsterFormationIDsByForcedAmbush),
-		boolQuery(r, i, ids, qpnEscape, cfg.db.GetMonsterFormationIDsByCanEscape),
-		enumListQuery(cfg, r, i, cfg.t.MonsterFormationCategory, ids, qpnCategory, cfg.db.GetMonsterFormationIDsByCategory),
+		idQuery(r, i, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetMonsterFormationIDsByMonster),
+		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetMonsterFormationIDsByLocation),
+		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetMonsterFormationIDsBySublocation),
+		idQuery(r, i, ids, QpnArea, cfg.L.Areas, cfg.db.GetMonsterFormationIDsByArea),
+		boolQuery(r, i, ids, QpnAmbush, cfg.db.GetMonsterFormationIDsByForcedAmbush),
+		boolQuery(r, i, ids, QpnEscape, cfg.db.GetMonsterFormationIDsByCanEscape),
+		enumListQuery(cfg, r, i, cfg.T.MonsterFormationCategory, ids, QpnCategory, cfg.db.GetMonsterFormationIDsByCategory),
 	})
 }

@@ -7,45 +7,44 @@ import (
 	"strings"
 )
 
-
 type SectionName NamedParam
 
 const (
-	snSimple					SectionName = "simple"
-	snSections					SectionName = "sections"
-	snParameters				SectionName = "parameters"
-	snBody						SectionName = "body"
-	snDocs						SectionName = "docs"
-	snSamples					SectionName = "samples"
-	snTemplate					SectionName = "template"
-	snAbilities					SectionName = "abilities"
-	snAreas						SectionName = "areas"
-	snAutoAbilities				SectionName = "auto-abilities"
-	snConnected					SectionName = "connected"
-	snDefaultAbilities			SectionName = "default-abilities"
-	snDefaultOverdrives			SectionName = "default-overdrives"
-	snExpSgAbilities			SectionName = "exp-sg-abilities"
-	snLearnableAbilities		SectionName = "learnable-abilities"
-	snLearnableOverdrives		SectionName = "learnable-overdrives"
-	snMixes						SectionName = "mixes"
-	snMonsterFormations			SectionName = "monster-formations"
-	snMonsters					SectionName = "monsters"
-	snOverdriveAbilities		SectionName = "overdrive-abilities"
-	snOverdrives				SectionName = "overdrives"
-	snShops						SectionName = "shops"
-	snSongs						SectionName = "songs"
-	snStats						SectionName = "stats"
-	snStdSgAbilities			SectionName = "std-sg-abilities"
-	snSublocations				SectionName = "sublocations"
-	snSubquests					SectionName = "subquests"
-	snTreasures					SectionName = "treasures"
+	SnSimple              SectionName = "simple"
+	SnSections            SectionName = "sections"
+	SnParameters          SectionName = "parameters"
+	SnBody                SectionName = "body"
+	SnDocs                SectionName = "docs"
+	SnSamples             SectionName = "samples"
+	SnTemplate            SectionName = "template"
+	SnAbilities           SectionName = "abilities"
+	SnAreas               SectionName = "areas"
+	SnAutoAbilities       SectionName = "auto-abilities"
+	SnConnected           SectionName = "connected"
+	SnDefaultAbilities    SectionName = "default-abilities"
+	SnDefaultOverdrives   SectionName = "default-overdrives"
+	SnExpSgAbilities      SectionName = "exp-sg-abilities"
+	SnLearnableAbilities  SectionName = "learnable-abilities"
+	SnLearnableOverdrives SectionName = "learnable-overdrives"
+	SnMixes               SectionName = "mixes"
+	SnMonsterFormations   SectionName = "monster-formations"
+	SnMonsters            SectionName = "monsters"
+	SnOverdriveAbilities  SectionName = "overdrive-abilities"
+	SnOverdrives          SectionName = "overdrives"
+	SnShops               SectionName = "shops"
+	SnSongs               SectionName = "songs"
+	SnStats               SectionName = "stats"
+	SnStdSgAbilities      SectionName = "std-sg-abilities"
+	SnSublocations        SectionName = "sublocations"
+	SnSubquests           SectionName = "subquests"
+	SnTreasures           SectionName = "treasures"
 )
 
-func snsToNamedParams(sns []SectionName) []NamedParam {
+func SnsToNamedParams(sns []SectionName) []NamedParam {
 	if sns == nil {
 		return nil
 	}
-	
+
 	nps := make([]NamedParam, len(sns))
 
 	for i, sn := range sns {
@@ -54,7 +53,6 @@ func snsToNamedParams(sns []SectionName) []NamedParam {
 
 	return nps
 }
-
 
 func getSnPtr(s SectionName) *SectionName {
 	return &s

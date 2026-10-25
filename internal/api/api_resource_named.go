@@ -14,11 +14,11 @@ type NamedApiResourceList struct {
 	Results []NamedAPIResource `json:"results"`
 }
 
-func (l NamedApiResourceList) getListParams() ListParams {
+func (l NamedApiResourceList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func (l NamedApiResourceList) getResults() []HasAPIResource {
+func (l NamedApiResourceList) GetResults() []HasAPIResource {
 	return toHasAPIResSlice(l.Results)
 }
 
@@ -67,7 +67,7 @@ func idToNamedAPIResource[T seeding.IsNamed, R any, A APIResource, L APIResource
 		Name:          params.Name,
 		Version:       params.Version,
 		Specification: params.Specification,
-		URL:           createResourceURL(cfg, i.endpoint, params.ID),
+		URL:           CreateResourceURL(cfg, i.Endpoint, params.ID),
 	}
 }
 
@@ -107,7 +107,7 @@ func namesToNamedAPIResources[T seeding.IsNamed, R any, A APIResource, L APIReso
 func enumToNamedAPIResource(cfg *Config, e EnumResponse) NamedAPIResource {
 	return NamedAPIResource{
 		Name: string(e.Name),
-		URL: createEnumURL(cfg, e.Name),
+		URL:  createEnumURL(cfg, e.Name),
 	}
 }
 
@@ -122,11 +122,10 @@ func enumsToNamedAPIResources(cfg *Config, enums []EnumResponse) []NamedAPIResou
 	return resources
 }
 
-
 func endpointToNamedAPIResource(cfg *Config, e EndpointName) NamedAPIResource {
 	return NamedAPIResource{
 		Name: string(e),
-		URL: createListURL(cfg, e),
+		URL:  createListURL(cfg, e),
 	}
 }
 
@@ -155,7 +154,6 @@ func newNamedAPIResourceList(cfg *Config, r *http.Request, resources []NamedAPIR
 	return list, nil
 }
 
-
 func refsToNamedAPIResources(cfg *Config, refs []seeding.AbilityReference) []NamedAPIResource {
 	abilities := []NamedAPIResource{}
 
@@ -172,22 +170,22 @@ func refToNamedApiResource(cfg *Config, ref seeding.AbilityReference) NamedAPIRe
 
 	switch database.AbilityType(ref.AbilityType) {
 	case database.AbilityTypeMiscAbility:
-		res = nameToNamedAPIResource(cfg, cfg.e.miscAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, cfg.E.MiscAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypePlayerAbility:
-		res = nameToNamedAPIResource(cfg, cfg.e.playerAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, cfg.E.PlayerAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeEnemyAbility:
-		res = nameToNamedAPIResource(cfg, cfg.e.enemyAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, cfg.E.EnemyAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeOverdriveAbility:
-		res = nameToNamedAPIResource(cfg, cfg.e.overdriveAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, cfg.E.OverdriveAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeItemAbility:
-		res = nameToNamedAPIResource(cfg, cfg.e.itemAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, cfg.E.ItemAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeTriggerCommand:
-		res = nameToNamedAPIResource(cfg, cfg.e.triggerCommands, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, cfg.E.TriggerCommands, ref.Name, ref.Version)
 
 	}
 	return res

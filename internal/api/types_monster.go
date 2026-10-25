@@ -15,12 +15,12 @@ type Monster struct {
 	AppliedState         *AppliedState        `json:"applied_state,omitempty"`
 	AgilityParameters    *AgilityParams       `json:"agility_parameters"`
 	Notes                *string              `json:"notes,omitempty"`
-	Species              string			      `json:"species"`
-	Availability         string			      `json:"availability"`
+	Species              string               `json:"species"`
+	Availability         string               `json:"availability"`
 	IsRepeatable         bool                 `json:"is_repeatable"`
 	CanBeCaptured        bool                 `json:"can_be_captured"`
 	AreaConquestLocation *string              `json:"area_conquest_location,omitempty"`
-	Category             string			      `json:"category"`
+	Category             string               `json:"category"`
 	CTBIconType          string               `json:"ctb_icon_type"`
 	HasOverdrive         bool                 `json:"has_overdrive"`
 	IsUnderwater         bool                 `json:"is_underwater"`
@@ -45,7 +45,7 @@ type Monster struct {
 	Areas                []AreaAPIResource    `json:"areas"`
 	Formations           []UnnamedAPIResource `json:"monster_formations"`
 	BaseStats            []BaseStat           `json:"base_stats"`
-	RegenAmounts		 []RegenAmount		  `json:"regen_amounts"`
+	RegenAmounts         []RegenAmount        `json:"regen_amounts"`
 	Items                *MonsterItems        `json:"items"`
 	BribeChances         []BribeChance        `json:"bribe_chances,omitempty"`
 	Equipment            *MonsterEquipment    `json:"equipment"`
@@ -68,7 +68,7 @@ type MonsterAbility struct {
 
 func convertMonsterAbility(cfg *Config, ability seeding.MonsterAbility) MonsterAbility {
 	return MonsterAbility{
-		Ability:  keyToTypedAPIResource(cfg, cfg.e.abilities, ability.AbilityReference),
+		Ability:  keyToTypedAPIResource(cfg, cfg.E.Abilities, ability.AbilityReference),
 		IsForced: ability.IsForced,
 		IsUnused: ability.IsUnused,
 	}

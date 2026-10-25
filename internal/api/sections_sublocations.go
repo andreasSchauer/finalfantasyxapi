@@ -22,7 +22,7 @@ func (s SublocationSimple) GetURL() string {
 }
 
 func createSublocationSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
-	i := cfg.e.sublocations
+	i := cfg.E.Sublocations
 	sublocation, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	monsterIDs := subsection.relations[id][RelationMonsters]
@@ -30,7 +30,7 @@ func createSublocationSimple(cfg *Config, r *http.Request, id int32, subsection 
 
 	sublocationSimple := SublocationSimple{
 		ID:             sublocation.ID,
-		URL:            createResourceURL(cfg, i.endpoint, id),
+		URL:            CreateResourceURL(cfg, i.Endpoint, id),
 		ParentLocation: createSimpleRef(sublocation.LocationID, sublocation.Location, nil, nil),
 		Name:           sublocation.Name,
 		Shops:          convertObjSlice(cfg, shopIDs, idToShopLocSimple),
@@ -42,28 +42,28 @@ func createSublocationSimple(cfg *Config, r *http.Request, id int32, subsection 
 }
 
 func getSublocationSectionRelations(cfg *Config, r *http.Request, subLocIDs []int32) (map[int32]map[Relation][]int32, error) {
-	i := cfg.e.sublocations
+	i := cfg.E.Sublocations
 	relations := make(map[int32]map[Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())
 
 	var treasureJunctions []Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = getDbJunctions(ctx, subLocIDs, i.resTypeSingle, cfg.e.treasures.resTypeSingle, cfg.db.GetSublocationTreasureIdPairs, juncSublocationTreasure)
+		treasureJunctions, err = getDbJunctions(ctx, subLocIDs, i.resTypeSingle, cfg.E.Treasures.resTypeSingle, cfg.db.GetSublocationTreasureIdPairs, juncSublocationTreasure)
 		return err
 	})
 
 	var shopJunctions []Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = getDbJunctions(ctx, subLocIDs, i.resTypeSingle, cfg.e.shops.resTypeSingle, cfg.db.GetSublocationShopIdPairs, juncSublocationShop)
+		shopJunctions, err = getDbJunctions(ctx, subLocIDs, i.resTypeSingle, cfg.E.Shops.resTypeSingle, cfg.db.GetSublocationShopIdPairs, juncSublocationShop)
 		return err
 	})
 
 	var monsterJunctions []Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = getDbJunctions(ctx, subLocIDs, i.resTypeSingle, cfg.e.monsters.resTypeSingle, cfg.db.GetSublocationMonsterIdPairs, juncSublocationMonster)
+		monsterJunctions, err = getDbJunctions(ctx, subLocIDs, i.resTypeSingle, cfg.E.Monsters.resTypeSingle, cfg.db.GetSublocationMonsterIdPairs, juncSublocationMonster)
 		return err
 	})
 

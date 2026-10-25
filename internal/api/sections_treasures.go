@@ -24,12 +24,12 @@ func (t TreasureSimple) GetURL() string {
 }
 
 func createTreasureSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.treasures
+	i := cfg.E.Treasures
 	treasure, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	treasureSimple := TreasureSimple{
 		ID:           treasure.ID,
-		URL:          createResourceURL(cfg, i.endpoint, id),
+		URL:          CreateResourceURL(cfg, i.Endpoint, id),
 		Area:         idToLocAreaString(cfg, treasure.AreaID),
 		Availability: treasure.Availability,
 		Notes:        treasure.Notes,

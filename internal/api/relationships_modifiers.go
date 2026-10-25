@@ -13,49 +13,49 @@ func getModifierRelationships(cfg *Config, r *http.Request, modifier seeding.Mod
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.autoAbilities, modifier, cfg.db.GetModifierAutoAbilityIDs)
+		rel.AutoAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.AutoAbilities, modifier, cfg.db.GetModifierAutoAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.playerAbilities, modifier, cfg.db.GetModifierPlayerAbilityIDs)
+		rel.PlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.PlayerAbilities, modifier, cfg.db.GetModifierPlayerAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.overdriveAbilities, modifier, cfg.db.GetModifierOverdriveAbilityIDs)
+		rel.OverdriveAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.OverdriveAbilities, modifier, cfg.db.GetModifierOverdriveAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.itemAbilities, modifier, cfg.db.GetModifierItemAbilityIDs)
+		rel.ItemAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.ItemAbilities, modifier, cfg.db.GetModifierItemAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.TriggerCommands, err = getResourcesDbItem(cfg, ctx, cfg.e.triggerCommands, modifier, cfg.db.GetModifierTriggerCommandIDs)
+		rel.TriggerCommands, err = getResourcesDbItem(cfg, ctx, cfg.E.TriggerCommands, modifier, cfg.db.GetModifierTriggerCommandIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.EnemyAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.enemyAbilities, modifier, cfg.db.GetModifierEnemyAbilityIDs)
+		rel.EnemyAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.EnemyAbilities, modifier, cfg.db.GetModifierEnemyAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.StatusConditions, err = getResourcesDbItem(cfg, ctx, cfg.e.statusConditions, modifier, cfg.db.GetModifierStatusConditionIDs)
+		rel.StatusConditions, err = getResourcesDbItem(cfg, ctx, cfg.E.StatusConditions, modifier, cfg.db.GetModifierStatusConditionIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Properties, err = getResourcesDbItem(cfg, ctx, cfg.e.properties, modifier, cfg.db.GetModifierPropertyIDs)
+		rel.Properties, err = getResourcesDbItem(cfg, ctx, cfg.E.Properties, modifier, cfg.db.GetModifierPropertyIDs)
 		return err
 	})
 

@@ -23,54 +23,54 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 	var rel LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.areas, area.ID)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.E.Areas, area.ID)
 	if err != nil {
 		return LocRel{}, err
 	}
 
-	g.Go(func() error{
+	g.Go(func() error {
 		var err error
-		rel.Characters, err = getResourcesDbItem(cfg, ctx, cfg.e.characters, area, ToIntManyNull(cfg.db.GetAreaCharacterIDs))
+		rel.Characters, err = getResourcesDbItem(cfg, ctx, cfg.E.Characters, area, ToIntManyNull(cfg.db.GetAreaCharacterIDs))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		rel.Aeons, err = getResourcesDbItem(cfg, ctx, cfg.e.aeons, area, ToIntManyNull(cfg.db.GetAreaAeonIDs))
+		rel.Aeons, err = getResourcesDbItem(cfg, ctx, cfg.E.Aeons, area, ToIntManyNull(cfg.db.GetAreaAeonIDs))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		rel.Shops, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.shops, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeShop))
+		rel.Shops, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Shops, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeShop))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		rel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.treasures, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeTreasure))
+		rel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Treasures, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeTreasure))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		rel.Monsters, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.monsters, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeMonster))
+		rel.Monsters, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Monsters, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeMonster))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		rel.Formations, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.monsterFormations, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
+		rel.Formations, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.MonsterFormations, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		rel.Quests, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.quests, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeQuest))
+		rel.Quests, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Quests, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeQuest))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
 		rel.Music, err = getMusicLocBased(cfg, ctx, area, LocBasedMusicQueries{
 			CueSongs:  ToIntManyNull(cfg.db.GetAreaCueSongIDs),
@@ -80,13 +80,13 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 		})
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		rel.FMVs, err = getResourcesDbItem(cfg, ctx, cfg.e.fmvs, area, cfg.db.GetAreaFmvIDs)
+		rel.FMVs, err = getResourcesDbItem(cfg, ctx, cfg.E.FMVs, area, cfg.db.GetAreaFmvIDs)
 		return err
 	})
-	
+
 	err = g.Wait()
 	if err != nil {
 		return LocRel{}, err
@@ -96,7 +96,7 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 }
 
 func getAreaConnectedAreas(cfg *Config, area seeding.Area) ([]AreaConnection, error) {
-	i := cfg.e.areas
+	i := cfg.E.Areas
 	connectedAreas := []AreaConnection{}
 
 	for _, connArea := range area.ConnectedAreas {

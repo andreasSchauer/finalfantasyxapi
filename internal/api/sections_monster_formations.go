@@ -7,13 +7,13 @@ import (
 )
 
 type MonsterFormationSimple struct {
-	ID             int32    `json:"id"`
-	URL            string   `json:"url"`
-	Category       string   `json:"category"`
-	IsForcedAmbush bool     `json:"is_forced_ambush"`
+	ID             int32  `json:"id"`
+	URL            string `json:"url"`
+	Category       string `json:"category"`
+	IsForcedAmbush bool   `json:"is_forced_ambush"`
 	FormationLoot
-	Monsters       []string `json:"monsters"`
-	Areas          []string `json:"areas"`
+	Monsters []string `json:"monsters"`
+	Areas    []string `json:"areas"`
 }
 
 func (m MonsterFormationSimple) GetURL() string {
@@ -21,12 +21,12 @@ func (m MonsterFormationSimple) GetURL() string {
 }
 
 func createMonsterFormationSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.monsterFormations
+	i := cfg.E.MonsterFormations
 	formation, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	formationSub := MonsterFormationSimple{
 		ID:             formation.ID,
-		URL:            createResourceURL(cfg, i.endpoint, id),
+		URL:            CreateResourceURL(cfg, i.Endpoint, id),
 		Category:       formation.FormationData.Category,
 		IsForcedAmbush: formation.FormationData.IsForcedAmbush,
 		FormationLoot:  getFormationLoot(cfg, formation),

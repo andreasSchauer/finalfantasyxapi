@@ -133,7 +133,7 @@ func vfAllowedIDs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool,
 		return nil
 	}
 
-	id, err := getInt32FromUserVals(pfnUnitID, userValues)
+	id, err := getInt32FromUserVals(PfnUnitID, userValues)
 	if err != nil {
 		return nil
 	}

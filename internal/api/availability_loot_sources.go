@@ -7,7 +7,7 @@ import (
 )
 
 func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.shops
+	i := cfg.E.Shops
 
 	avlParams, err := checkAvl(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -47,7 +47,7 @@ func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 }
 
 func filterAvlTreasures(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.treasures
+	i := cfg.E.Treasures
 
 	avlParams, err := checkAvl(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -70,7 +70,7 @@ func filterAvlTreasures(cfg *Config, r *http.Request, inputIDs []int32) ([]int32
 }
 
 func filterAvlQuests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.quests
+	i := cfg.E.Quests
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -94,7 +94,7 @@ func filterAvlQuests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, e
 }
 
 func filterAvlSidequests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.sidequests
+	i := cfg.E.Sidequests
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -117,7 +117,7 @@ func filterAvlSidequests(cfg *Config, r *http.Request, inputIDs []int32) ([]int3
 }
 
 func filterAvlSubquests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.subquests
+	i := cfg.E.Subquests
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {

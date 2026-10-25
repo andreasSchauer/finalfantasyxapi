@@ -10,7 +10,7 @@ type SectionList struct {
 	Results []string `json:"results"`
 }
 
-func (l SectionList) getListParams() ListParams {
+func (l SectionList) GetListParams() ListParams {
 	return l.ListParams
 }
 

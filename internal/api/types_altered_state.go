@@ -59,8 +59,8 @@ func getMonsterAlteredStates(cfg *Config, r *http.Request, mon seeding.Monster) 
 		// if this function is triggered via a jsonParam
 		if r != nil {
 			q := r.URL.Query()
-			q.Set(string(qpnAlteredState), strconv.Itoa(i+1))
-			url = createResourceURLQuery(cfg, cfg.e.monsters.endpoint, mon.ID, q)
+			q.Set(string(QpnAlteredState), strconv.Itoa(i+1))
+			url = CreateResourceURLQuery(cfg, cfg.E.Monsters.Endpoint, mon.ID, q)
 		}
 
 		alteredState := AlteredState{
@@ -91,11 +91,11 @@ func getAlts(cfg *Config, as seeding.AlteredState) []Alt {
 
 func convertAlt(cfg *Config, asc seeding.Alt) Alt {
 	return Alt{
-		Properties:       h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.e.properties, asc.Properties)),
-		AutoAbilities:    h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.e.autoAbilities, asc.AutoAbilities)),
-		BaseStats:        h.SliceOrNil(toResAmtType(cfg, cfg.e.stats, asc.BaseStats, newBaseStat)),
+		Properties:       h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.E.Properties, asc.Properties)),
+		AutoAbilities:    h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, asc.AutoAbilities)),
+		BaseStats:        h.SliceOrNil(toResAmtType(cfg, cfg.E.Stats, asc.BaseStats, newBaseStat)),
 		ElemResists:      h.SliceOrNil(namesToElemResists(cfg, asc.ElemResists)),
-		StatusImmunities: h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.e.statusConditions, asc.StatusImmunities)),
+		StatusImmunities: h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.E.StatusConditions, asc.StatusImmunities)),
 		AddedStatus:      convertObjPtr(cfg, asc.AddedStatus, convertInflictedStatus),
 	}
 }

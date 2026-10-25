@@ -7,7 +7,7 @@ import (
 )
 
 type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList] struct {
-	endpoint         EndpointName
+	Endpoint         EndpointName
 	resTypeSingle    ResTypeSingle
 	resTypePlural    ResTypePlural
 	usage            []string
@@ -25,21 +25,21 @@ type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 }
 
 type handlerInputEnums struct {
-	endpoint    EndpointName
+	Endpoint    EndpointName
 	usage       []string
 	lookup      map[string]EnumResponse
 	queryLookup map[QueryParamName]QueryParam
 }
 
 type handlerInputEndpoints struct {
-	endpoint    EndpointName
+	Endpoint    EndpointName
 	usage       []string
 	slice       []EndpointName
 	queryLookup map[QueryParamName]QueryParam
 }
 
 type handlerInputService[P, R any] struct {
-	endpoint  EndpointName
+	Endpoint  EndpointName
 	usage     []string
 	verifyFn  func(*Config, P, ParamsRules, map[FieldName]any) (P, error)
 	executeFn func(*Config, P) (R, error)

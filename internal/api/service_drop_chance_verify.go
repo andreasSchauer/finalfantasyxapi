@@ -9,47 +9,47 @@ import (
 func verifyDropChanceParams(cfg *Config, params DropChanceParams, paramsRules ParamsRules, userValues map[FieldName]any) (DropChanceParams, error) {
 	var err error
 
-	params.Monster, err = verifyParamField(cfg, params.Monster, pfnMonsterID, userValues, paramsRules, vfId)
+	params.Monster, err = verifyParamField(cfg, params.Monster, PfnMonsterID, userValues, paramsRules, vfId)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.CharacterID, err = verifyParamFieldPtr(cfg, params.CharacterID, pfnCharacterID, userValues, paramsRules, vfId)
+	params.CharacterID, err = verifyParamFieldPtr(cfg, params.CharacterID, PfnCharacterID, userValues, paramsRules, vfId)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.PartyMembers, err = verifyParamFieldIdArr(cfg, params.PartyMembers, pfnPartyMembers, userValues, paramsRules)
+	params.PartyMembers, err = verifyParamFieldIdArr(cfg, params.PartyMembers, PfnPartyMembers, userValues, paramsRules)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.AutoAbilities, err = verifyParamFieldIdArr(cfg, params.AutoAbilities, pfnAutoAbilities, userValues, paramsRules)
+	params.AutoAbilities, err = verifyParamFieldIdArr(cfg, params.AutoAbilities, PfnAutoAbilities, userValues, paramsRules)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.OptionalAbilities, err = verifyParamField(cfg, params.OptionalAbilities, pfnOptionalAbilities, userValues, paramsRules, nil)
+	params.OptionalAbilities, err = verifyParamField(cfg, params.OptionalAbilities, PfnOptionalAbilities, userValues, paramsRules, nil)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.EquipType, err = verifyParamFieldPtr(cfg, params.EquipType, pfnEquipType, userValues, paramsRules, vfEnum)
+	params.EquipType, err = verifyParamFieldPtr(cfg, params.EquipType, PfnEquipType, userValues, paramsRules, vfEnum)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.MinEmptySlots, err = verifyParamFieldPtr(cfg, params.MinEmptySlots, pfnMinEmptySlots, userValues, paramsRules, vfInt)
+	params.MinEmptySlots, err = verifyParamFieldPtr(cfg, params.MinEmptySlots, PfnMinEmptySlots, userValues, paramsRules, vfInt)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.TotalSlots, err = verifyParamFieldPtr(cfg, params.TotalSlots, pfnTotalSlots, userValues, paramsRules, vfInt)
+	params.TotalSlots, err = verifyParamFieldPtr(cfg, params.TotalSlots, PfnTotalSlots, userValues, paramsRules, vfInt)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.Decimals, err = verifyParamField(cfg, params.Decimals, pfnDecimals, userValues, paramsRules, nil)
+	params.Decimals, err = verifyParamField(cfg, params.Decimals, PfnDecimals, userValues, paramsRules, nil)
 	if err != nil {
 		return DropChanceParams{}, err
 	}

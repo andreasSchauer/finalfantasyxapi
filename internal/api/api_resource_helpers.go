@@ -45,7 +45,7 @@ func removeResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemov
 }
 
 func separateResourcesURL[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
-	removeMap := getResourceURLMap(itemsToRemove)
+	removeMap := GetResourceURLMap(itemsToRemove)
 	kept := []T{}
 	removed := []T{}
 
@@ -108,7 +108,7 @@ func getResourceMap[T HasAPIResource](items []T) map[int32]T {
 	return resourceMap
 }
 
-func getResourceURLMap[T HasAPIResource](items []T) map[string]T {
+func GetResourceURLMap[T HasAPIResource](items []T) map[string]T {
 	resourceMap := make(map[string]T)
 
 	for _, item := range items {
@@ -119,7 +119,7 @@ func getResourceURLMap[T HasAPIResource](items []T) map[string]T {
 	return resourceMap
 }
 
-func getSimpleResourceURLMap[T SimpleResource](items []T) map[string]T {
+func GetSimpleResourceURLMap[T SimpleResource](items []T) map[string]T {
 	resourceMap := make(map[string]T)
 
 	for _, item := range items {

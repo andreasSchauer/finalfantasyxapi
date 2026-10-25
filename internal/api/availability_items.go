@@ -8,7 +8,7 @@ import (
 )
 
 func filterAvlMasterItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.allItems
+	i := cfg.E.AllItems
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -23,7 +23,7 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int
 		return nil, err
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup[qpnMethods])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup[QpnMethods])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int
 }
 
 func filterAvlItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.items
+	i := cfg.E.Items
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -61,7 +61,7 @@ func filterAvlItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 		return nil, err
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup[qpnMethods])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup[QpnMethods])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func filterAvlItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 }
 
 func filterAvlKeyItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.keyItems
+	i := cfg.E.KeyItems
 
 	avlParams, err := checkAvl(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -99,7 +99,7 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 		return nil, err
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup[qpnMethods])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup[QpnMethods])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -120,7 +120,7 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 }
 
 func filterAvlSpheres(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.spheres
+	i := cfg.E.Spheres
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -135,7 +135,7 @@ func filterAvlSpheres(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, 
 		return nil, err
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup[qpnMethods])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup[QpnMethods])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -158,7 +158,7 @@ func filterAvlSpheres(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, 
 }
 
 func filterAvlPrimers(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.primers
+	i := cfg.E.Primers
 
 	avlParams, err := checkAvl(cfg, r, i)
 	if errExceptEmptyQuery(err) {

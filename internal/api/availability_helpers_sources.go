@@ -36,7 +36,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	reqs := []string{string(srcType)}
 	excls := []string{}
 
-	monID, err := getQueryIdPtr(r, cfg.e.monsters, qpnMonster, i.queryLookup)
+	monID, err := getQueryIdPtr(r, cfg.E.Monsters, QpnMonster, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -44,7 +44,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		reqs = append(reqs, "monster-single")
 	}
 
-	itemID, err := getQueryIdPtr(r, cfg.e.items, qpnItem, i.queryLookup)
+	itemID, err := getQueryIdPtr(r, cfg.E.Items, QpnItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -52,7 +52,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		reqs = append(reqs, string(ViewSourceTypeItem))
 	}
 
-	keyItemID, err := getQueryIdPtr(r, cfg.e.keyItems, qpnKeyItem, i.queryLookup)
+	keyItemID, err := getQueryIdPtr(r, cfg.E.KeyItems, QpnKeyItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -60,7 +60,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		reqs = append(reqs, string(ViewSourceTypeKeyItem))
 	}
 
-	autoAbilityID, err := getQueryIdPtr(r, cfg.e.autoAbilities, qpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := getQueryIdPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -68,17 +68,17 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		reqs = append(reqs, string(ViewSourceTypeAutoAbility))
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup[qpnMethods])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup[QpnMethods])
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
 
 	reqs, excls, err = parseBoolSources(r, i, reqs, excls, map[QueryParamName]string{
-		qpnMonsters:   string(ViewSourceTypeMonster),
-		qpnBossFights: string(ViewSourceTypeBoss),
-		qpnShops:      string(ViewSourceTypeShop),
-		qpnTreasures:  string(ViewSourceTypeTreasure),
-		qpnSidequests: string(ViewSourceTypeQuest),
+		QpnMonsters:   string(ViewSourceTypeMonster),
+		QpnBossFights: string(ViewSourceTypeBoss),
+		QpnShops:      string(ViewSourceTypeShop),
+		QpnTreasures:  string(ViewSourceTypeTreasure),
+		QpnSidequests: string(ViewSourceTypeQuest),
 	})
 	if err != nil {
 		return locBasedSources{}, err
@@ -112,7 +112,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	reqs := []string{}
 	excls := []string{}
 
-	autoAbilityID, err := getQueryIdPtr(r, cfg.e.autoAbilities, qpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := getQueryIdPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
@@ -121,7 +121,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 		reqs = append(reqs, "equip-filter")
 	}
 
-	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup[qpnEmptySlots])
+	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup[QpnEmptySlots])
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
@@ -130,7 +130,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 		reqs = append(reqs, "equip-filter")
 	}
 
-	charID, err := getQueryNameIdPtr(r, cfg.e.characters, qpnCharacter, i.queryLookup)
+	charID, err := getQueryNameIdPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
@@ -140,8 +140,8 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	}
 
 	reqs, excls, err = parseBoolSources(r, i, reqs, excls, map[QueryParamName]string{
-		qpnItems:     string(ViewSourceTypeItem),
-		qpnEquipment: string(ViewSourceTypeEquipment),
+		QpnItems:     string(ViewSourceTypeItem),
+		QpnEquipment: string(ViewSourceTypeEquipment),
 	})
 	if err != nil {
 		return shopSources{}, err

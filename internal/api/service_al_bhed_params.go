@@ -13,17 +13,17 @@ func getAlBhedParamsDoc(cfg *Config) ParamsDoc {
 	return ParamsDoc{
 		Fields: []FieldDoc{
 			{
-				Field:       pfnText,
+				Field:       PfnText,
 				Type:        "string",
 				ExampleUses: []string{"cysbma daqd", "c[am]bma da[x]d"},
 				Required:    true,
 				Description: "The text you want to be translated. You can wrap letters that are already translated (e.g. the red letters in the game's subtitles) into square brackets to keep them unchanged. By default, it is assumed that you want to translate English text into Al Bhed.",
 			},
 			{
-				Field:       pfnDirection,
+				Field:       PfnDirection,
 				Type:        "string (enum: translationDirection)",
 				DefaultVal:  string(database.TranslationDirectionToAlBhed),
-				EnumValues:  cfg.t.TranslationDirection.Strings(),
+				EnumValues:  cfg.T.TranslationDirection.Strings(),
 				Description: "The translation direction.",
 			},
 		},

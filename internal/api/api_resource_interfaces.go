@@ -20,8 +20,8 @@ type HasURL interface {
 }
 
 type APIResourceList interface {
-	getListParams() ListParams
-	getResults() []HasAPIResource
+	GetListParams() ListParams
+	GetResults() []HasAPIResource
 }
 
 type SimpleResource interface {

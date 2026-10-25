@@ -14,11 +14,11 @@ type QuestApiResourceList struct {
 	Results []QuestAPIResource `json:"results"`
 }
 
-func (l QuestApiResourceList) getListParams() ListParams {
+func (l QuestApiResourceList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func (l QuestApiResourceList) getResults() []HasAPIResource {
+func (l QuestApiResourceList) GetResults() []HasAPIResource {
 	return toHasAPIResSlice(l.Results)
 }
 
@@ -64,24 +64,24 @@ func idToQuestAPIResource[T seeding.IsQuest, R any, A APIResource, L APIResource
 
 	switch params.Type {
 	case string(database.QuestTypeSidequest):
-		sidequest, _ := seeding.GetResource(*params.Sidequest, cfg.l.Sidequests)
+		sidequest, _ := seeding.GetResource(*params.Sidequest, cfg.L.Sidequests)
 
 		return QuestAPIResource{
 			ID:        params.ID,
 			Sidequest: sidequest.Name,
 			Subquest:  nil,
-			URL:       createResourceURL(cfg, i.endpoint, params.ID),
+			URL:       CreateResourceURL(cfg, i.Endpoint, params.ID),
 		}
 
 	case string(database.QuestTypeSubquest):
-		subquest, _ := seeding.GetResource(*params.Subquest, cfg.l.Subquests)
-		sidequest, _ := seeding.GetResourceByID(subquest.SidequestID, cfg.l.SidequestsID)
+		subquest, _ := seeding.GetResource(*params.Subquest, cfg.L.Subquests)
+		sidequest, _ := seeding.GetResourceByID(subquest.SidequestID, cfg.L.SidequestsID)
 
 		return QuestAPIResource{
 			ID:        params.ID,
 			Sidequest: sidequest.Name,
 			Subquest:  &subquest.Name,
-			URL:       createResourceURL(cfg, i.endpoint, params.ID),
+			URL:       CreateResourceURL(cfg, i.Endpoint, params.ID),
 		}
 	}
 
@@ -91,10 +91,10 @@ func idToQuestAPIResource[T seeding.IsQuest, R any, A APIResource, L APIResource
 func questToQuestAPIResource(cfg *Config, quest seeding.Quest) QuestAPIResource {
 	switch quest.Type {
 	case database.QuestTypeSidequest:
-		return nameToQuestAPIResource(cfg, cfg.e.sidequests, quest.Name)
+		return nameToQuestAPIResource(cfg, cfg.E.Sidequests, quest.Name)
 
 	case database.QuestTypeSubquest:
-		return nameToQuestAPIResource(cfg, cfg.e.subquests, quest.Name)
+		return nameToQuestAPIResource(cfg, cfg.E.Subquests, quest.Name)
 	}
 
 	return QuestAPIResource{}

@@ -16,10 +16,10 @@ type userAbility interface {
 }
 
 type unitRepl struct {
-	unit     	seeding.PlayerUnit
-	bombWpn  	bool
-	isCelestial	bool
-	replVals 	biReplacement
+	unit        seeding.PlayerUnit
+	bombWpn     bool
+	isCelestial bool
+	replVals    biReplacement
 }
 
 type biReplacement struct {
@@ -51,14 +51,14 @@ func applyUser[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cf
 
 func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], queryName QueryParamName) (unitRepl, error) {
 	queryParamUser := i.queryLookup[queryName]
-	queryParamBomb := i.queryLookup[qpnBombWpn]
-	queryParamCelestialWpn := i.queryLookup[qpnCelestialWeapon]
+	queryParamBomb := i.queryLookup[QpnBombWpn]
+	queryParamCelestialWpn := i.queryLookup[QpnCelestialWeapon]
 
-	unitID, err := parseNameIdQuery(r, queryParamUser, cfg.e.playerUnits.resTypeSingle, cfg.e.playerUnits.objLookup)
+	unitID, err := parseNameIdQuery(r, queryParamUser, cfg.E.PlayerUnits.resTypeSingle, cfg.E.PlayerUnits.objLookup)
 	if err != nil {
 		return unitRepl{}, err
 	}
-	unit, _ := seeding.GetResourceByID(unitID, cfg.l.PlayerUnitsID)
+	unit, _ := seeding.GetResourceByID(unitID, cfg.L.PlayerUnitsID)
 
 	bombWpn, err := parseBooleanQuery(r, queryParamBomb)
 	if errExceptEmptyQuery(err) {
@@ -71,10 +71,10 @@ func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 	}
 
 	repl := unitRepl{
-		unit:     		unit,
-		bombWpn:  		bombWpn,
-		isCelestial: 	isCelestial,
-		replVals: 		biReplacement{},
+		unit:        unit,
+		bombWpn:     bombWpn,
+		isCelestial: isCelestial,
+		replVals:    biReplacement{},
 	}
 
 	switch repl.unit.Type {
@@ -97,15 +97,15 @@ func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
 	charFormulas := map[string]database.DamageFormula{
 		string(database.CelestialFormulaHpHigh): database.DamageFormulaClstlHpHigh,
-		string(database.CelestialFormulaHpLow): database.DamageFormulaClstlHpLow,
+		string(database.CelestialFormulaHpLow):  database.DamageFormulaClstlHpLow,
 		string(database.CelestialFormulaMpHigh): database.DamageFormulaClstlMpHigh,
 	}
 
-	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), queryParamUser, cfg.l.Characters)
+	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), queryParamUser, cfg.L.Characters)
 	if err != nil {
 		return unitRepl{}, err
 	}
-	character, _ := seeding.GetResourceByID(id, cfg.l.CharactersID)
+	character, _ := seeding.GetResourceByID(id, cfg.L.CharactersID)
 
 	repl.replVals.Range = &character.PhysAtkRange
 
@@ -114,7 +114,7 @@ func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam
 	}
 
 	if repl.isCelestial {
-		clstlWpn, err := seeding.GetResourceByID(id, cfg.l.CelestialWeaponsID)
+		clstlWpn, err := seeding.GetResourceByID(id, cfg.L.CelestialWeaponsID)
 		if err != nil {
 			return unitRepl{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't have a celestial weapon.", character), err)
 		}
@@ -131,11 +131,11 @@ func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (un
 		return unitRepl{}, newHTTPError(http.StatusBadRequest, "aeons don't use celestial weapons.", nil)
 	}
 
-	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), queryParamUser, cfg.l.Aeons)
+	id, err := checkQueryNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), queryParamUser, cfg.L.Aeons)
 	if err != nil {
 		return unitRepl{}, err
 	}
-	aeon, _ := seeding.GetResourceByID(id, cfg.l.AeonsID)
+	aeon, _ := seeding.GetResourceByID(id, cfg.L.AeonsID)
 
 	repl.replVals.Range = aeon.PhysAtkRange
 	repl.replVals.ShatterRate = aeon.PhysAtkShatterRate
@@ -147,7 +147,7 @@ func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (un
 
 func verifyAbilityUsage(cfg *Config, ability userAbility, repl unitRepl, queryName QueryParamName) error {
 	if !ability.canUseAbility(cfg, repl.unit.Name) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, cfg.e.playerUnits.resTypeSingle, repl.unit.Name, ability), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, cfg.E.PlayerUnits.resTypeSingle, repl.unit.Name, ability), nil)
 	}
 
 	return nil

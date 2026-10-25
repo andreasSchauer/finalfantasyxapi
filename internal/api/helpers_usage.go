@@ -8,18 +8,18 @@ import (
 )
 
 func getUsageString[T seeding.Lookupable, R any, A APIResource, L APIResourceList](i handlerInput[T, R, A, L]) string {
-	listUsage := getUsagePath("", i.endpoint)
+	listUsage := getUsagePath("", i.Endpoint)
 	usageStrings := []string{listUsage}
 
 	for _, s := range i.usage {
-		usageString := getUsagePath(s, i.endpoint)
+		usageString := getUsagePath(s, i.Endpoint)
 		usageStrings = append(usageStrings, usageString)
 	}
 
 	usage := h.FormatStringSlice(usageStrings)
 
 	if i.subsections != nil {
-		sectionUsage := getUsagePath("/id/{subsection}", i.endpoint)
+		sectionUsage := getUsagePath("/id/{subsection}", i.Endpoint)
 		sectionStr := formatSectionNames(i.subsections)
 		usage = fmt.Sprintf("%s, '%s'. supported subsections: %s.", usage, sectionUsage, sectionStr)
 	}

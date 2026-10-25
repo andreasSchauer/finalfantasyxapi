@@ -67,11 +67,11 @@ type Enums struct {
 	DurationType                EnumType[database.DurationType, any]
 	SpecialActionType           EnumType[database.SpecialActionType, database.NullSpecialActionType]
 	TargetType                  EnumType[database.TargetType, database.NullTargetType]
-	BattleStart					EnumType[database.BattleStart, any]
-	DelayStrength				EnumType[database.DelayStrength, any]
-	HasteStatus					EnumType[database.HasteStatus, any]
+	BattleStart                 EnumType[database.BattleStart, any]
+	DelayStrength               EnumType[database.DelayStrength, any]
+	HasteStatus                 EnumType[database.HasteStatus, any]
 	TranslationDirection        EnumType[database.TranslationDirection, any]
-	TurnOrderRNG        		EnumType[database.TurnOrderRng, any]
+	TurnOrderRNG                EnumType[database.TurnOrderRng, any]
 
 	// internal?
 	// AlterationType              EnumType[database.AlterationType, any]
@@ -79,77 +79,77 @@ type Enums struct {
 }
 
 func (cfg *Config) EnumLookupInit() {
-	cfg.t = &Enums{
+	cfg.T = &Enums{
 		Lookup: make(map[string]EnumResponse),
 	}
 
-	cfg.t.initAbilityType()
-	cfg.t.initUnitType()
-	cfg.t.initItemType()
-	cfg.t.initQuestType()
+	cfg.T.initAbilityType()
+	cfg.T.initUnitType()
+	cfg.T.initItemType()
+	cfg.T.initQuestType()
 
-	cfg.t.initAaActivationCondition()
+	cfg.T.initAaActivationCondition()
 	//cfg.t.initAlterationType()
-	cfg.t.initAreaConnectionType()
-	cfg.t.initArenaCreationCategory()
-	cfg.t.initArmorType()
-	cfg.t.initArranger()
-	cfg.t.initAutoAbilityCategory()
-	cfg.t.initAvailabilityType()
-	cfg.t.initBgReplacementType()
-	cfg.t.initBlitzballPositionSlot()
-	cfg.t.initBlitzballTournamentCategory()
-	cfg.t.initCelestialFormula()
-	cfg.t.initCharacterClassCategory()
-	cfg.t.initComposer()
-	cfg.t.initCounterType()
-	cfg.t.initCreationArea()
-	cfg.t.initCreationsUnlockedCategory()
-	cfg.t.initCTBIconType()
-	cfg.t.initElementalAffinity()
-	cfg.t.initEquipClass()
-	cfg.t.initEquipType()
-	cfg.t.initItemCategory()
-	cfg.t.initItemUsability()
-	cfg.t.initKeyItemCategory()
-	cfg.t.initLootType()
-	cfg.t.initMixCategory()
-	cfg.t.initModifierCategory()
-	cfg.t.initMonsterCategory()
-	cfg.t.initMonsterFormationCategory()
-	cfg.t.initMonsterSpecies()
-	cfg.t.initMusicUseCase()
-	cfg.t.initNodePosition()
-	cfg.t.initNodeState()
-	cfg.t.initNodeType()
-	cfg.t.initNullifyArmored()
-	cfg.t.initOverdriveModeType()
-	cfg.t.initPlayerAbilityCategory()
-	cfg.t.initShopCategory()
+	cfg.T.initAreaConnectionType()
+	cfg.T.initArenaCreationCategory()
+	cfg.T.initArmorType()
+	cfg.T.initArranger()
+	cfg.T.initAutoAbilityCategory()
+	cfg.T.initAvailabilityType()
+	cfg.T.initBgReplacementType()
+	cfg.T.initBlitzballPositionSlot()
+	cfg.T.initBlitzballTournamentCategory()
+	cfg.T.initCelestialFormula()
+	cfg.T.initCharacterClassCategory()
+	cfg.T.initComposer()
+	cfg.T.initCounterType()
+	cfg.T.initCreationArea()
+	cfg.T.initCreationsUnlockedCategory()
+	cfg.T.initCTBIconType()
+	cfg.T.initElementalAffinity()
+	cfg.T.initEquipClass()
+	cfg.T.initEquipType()
+	cfg.T.initItemCategory()
+	cfg.T.initItemUsability()
+	cfg.T.initKeyItemCategory()
+	cfg.T.initLootType()
+	cfg.T.initMixCategory()
+	cfg.T.initModifierCategory()
+	cfg.T.initMonsterCategory()
+	cfg.T.initMonsterFormationCategory()
+	cfg.T.initMonsterSpecies()
+	cfg.T.initMusicUseCase()
+	cfg.T.initNodePosition()
+	cfg.T.initNodeState()
+	cfg.T.initNodeType()
+	cfg.T.initNullifyArmored()
+	cfg.T.initOverdriveModeType()
+	cfg.T.initPlayerAbilityCategory()
+	cfg.T.initShopCategory()
 	//cfg.t.initShopType()
-	cfg.t.initSpecialActionType()
-	cfg.t.initSphereColor()
-	cfg.t.initSphereEffect()
-	cfg.t.initSphereGridType()
-	cfg.t.initStatusConditionCategory()
-	cfg.t.initTreasureType()
-	cfg.t.initWeaponType()
+	cfg.T.initSpecialActionType()
+	cfg.T.initSphereColor()
+	cfg.T.initSphereEffect()
+	cfg.T.initSphereGridType()
+	cfg.T.initStatusConditionCategory()
+	cfg.T.initTreasureType()
+	cfg.T.initWeaponType()
 
-	cfg.t.initAccSourceType()
-	cfg.t.initAttackType()
-	cfg.t.initBreakDmgLimitType()
-	cfg.t.initCalculationType()
-	cfg.t.initCriticalType()
-	cfg.t.initDamageFormula()
-	cfg.t.initDamageType()
-	cfg.t.initDelayStrength()
-	cfg.t.initDurationType()
-	cfg.t.initTargetType()
+	cfg.T.initAccSourceType()
+	cfg.T.initAttackType()
+	cfg.T.initBreakDmgLimitType()
+	cfg.T.initCalculationType()
+	cfg.T.initCriticalType()
+	cfg.T.initDamageFormula()
+	cfg.T.initDamageType()
+	cfg.T.initDelayStrength()
+	cfg.T.initDurationType()
+	cfg.T.initTargetType()
 
-	cfg.t.initBattleStart()
-	cfg.t.initHasteStatus()
-	cfg.t.initTranslationDirection()
-	cfg.t.initTurnOrderRNG()
+	cfg.T.initBattleStart()
+	cfg.T.initHasteStatus()
+	cfg.T.initTranslationDirection()
+	cfg.T.initTurnOrderRNG()
 }
 
 func enumLookupToSlice(lookup map[string]EnumResponse) []EnumResponse {

@@ -75,12 +75,12 @@ func toResAmtType[NA NameAmount, RA ResourceAmountType[A], T seeding.Lookupable,
 	return resAmts
 }
 
-func getResAmtTypeMap[T ResourceAmountType[A], A APIResource](items []T) map[string]int32 {
-	resAmts := resAmtTypesToStructs(items)
-	return getResAmtMap(resAmts)
+func GetResAmtTypeMap[T ResourceAmountType[A], A APIResource](items []T) map[string]int32 {
+	resAmts := ResAmtTypesToStructs(items)
+	return GetResAmtMap(resAmts)
 }
 
-func getResAmtMap[A APIResource](items []ResourceAmount[A]) map[string]int32 {
+func GetResAmtMap[A APIResource](items []ResourceAmount[A]) map[string]int32 {
 	amountMap := make(map[string]int32)
 
 	for _, item := range items {
@@ -91,7 +91,7 @@ func getResAmtMap[A APIResource](items []ResourceAmount[A]) map[string]int32 {
 	return amountMap
 }
 
-func getResAmtIdMap[A APIResource](items []ResourceAmount[A]) map[int32]int32 {
+func GetResAmtIdMap[A APIResource](items []ResourceAmount[A]) map[int32]int32 {
 	amountMap := make(map[int32]int32)
 
 	for _, item := range items {
@@ -103,7 +103,7 @@ func getResAmtIdMap[A APIResource](items []ResourceAmount[A]) map[int32]int32 {
 	return amountMap
 }
 
-func resAmtTypesToStructs[T ResourceAmountType[A], A APIResource](items []T) []ResourceAmount[A] {
+func ResAmtTypesToStructs[T ResourceAmountType[A], A APIResource](items []T) []ResourceAmount[A] {
 	resAmts := []ResourceAmount[A]{}
 
 	for _, item := range items {
@@ -148,7 +148,7 @@ func itemAmtsToChildResAmts2[T seeding.HasItemAmounts, R any, A APIResource, L A
 		var itemAmount seeding.ItemAmount
 
 		for _, ia := range itemAmounts {
-			item, _ := seeding.GetResource(ia.ItemName, cfg.l.Items)
+			item, _ := seeding.GetResource(ia.ItemName, cfg.L.Items)
 			if item.ID == itemID {
 				itemAmount = ia
 			}

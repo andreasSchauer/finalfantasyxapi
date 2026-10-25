@@ -18,7 +18,7 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 
 	subsection, ok := i.subsections[SectionName(sectionName)]
 	if !ok {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s.", sectionName, i.endpoint, formatSectionNames(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s.", sectionName, i.Endpoint, formatSectionNames(i.subsections)), nil)
 		return
 	}
 
@@ -58,7 +58,7 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 }
 
 func handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) {
-	segment := string(snParameters)
+	segment := string(SnParameters)
 	err := verifyQueryParamsAltList(cfg, r, endpoint, queryLookup, &segment)
 	if handleHTTPError(w, err) {
 		return
@@ -74,8 +74,8 @@ func handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request, endpo
 }
 
 func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
-	segment := string(snSections)
-	err := verifyQueryParamsAltList(cfg, r, i.endpoint, i.queryLookup, &segment)
+	segment := string(SnSections)
+	err := verifyQueryParamsAltList(cfg, r, i.Endpoint, i.queryLookup, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -90,11 +90,11 @@ func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 }
 
 func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
-	segment := string(snSimple)
+	segment := string(SnSimple)
 
-	_, ok := i.subsections[snSimple]
+	_, ok := i.subsections[SnSimple]
 	if !ok {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("simple view is not available for endpoint /%s.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("simple view is not available for endpoint /%s.", i.Endpoint), nil)
 		return
 	}
 
@@ -122,13 +122,13 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 }
 
 func getIDsQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], segment *string) ([]int32, error) {
-	err := verifyQueryParams[any](r, i.endpoint, i.queryLookup, nil, segment)
+	err := verifyQueryParams[any](r, i.Endpoint, i.queryLookup, nil, segment)
 	if err != nil {
 		return nil, err
 	}
 
 	// ifs ids param is empty, just retrieve all ids
-	queryParamIDs := i.queryLookup[qpnIDs]
+	queryParamIDs := i.queryLookup[QpnIDs]
 	_, err = checkEmptyQuery(r, queryParamIDs)
 	if queryIsEmpty(err) {
 		return i.retrieveFunc(r, i)

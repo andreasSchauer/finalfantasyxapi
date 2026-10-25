@@ -38,13 +38,13 @@ func (a PlayerAbilitySimple) GetURL() string {
 }
 
 func createAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
-	i := cfg.e.abilities
+	i := cfg.E.Abilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 	typeStr := string(ability.Type)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                createResourceURL(cfg, i.endpoint, id),
+		URL:                CreateResourceURL(cfg, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
@@ -56,14 +56,13 @@ func createAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subs
 	return abilitySimple, nil
 }
 
-
 func createEnemyAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.enemyAbilities
+	i := cfg.E.EnemyAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                createResourceURL(cfg, i.endpoint, id),
+		URL:                CreateResourceURL(cfg, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
@@ -75,12 +74,12 @@ func createEnemyAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsecti
 }
 
 func createItemAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.itemAbilities
+	i := cfg.E.ItemAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                createResourceURL(cfg, i.endpoint, id),
+		URL:                CreateResourceURL(cfg, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
@@ -92,12 +91,12 @@ func createItemAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsectio
 }
 
 func createOverdriveAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
-	i := cfg.e.overdriveAbilities
+	i := cfg.E.OverdriveAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                createResourceURL(cfg, i.endpoint, id),
+		URL:                CreateResourceURL(cfg, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
@@ -108,14 +107,13 @@ func createOverdriveAbilitySimple(cfg *Config, r *http.Request, id int32, subsec
 	return abilitySimple, nil
 }
 
-
 func createPlayerAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.playerAbilities
+	i := cfg.E.PlayerAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	playerAbilitySimple := PlayerAbilitySimple{
 		ID:                 ability.ID,
-		URL:                createResourceURL(cfg, i.endpoint, id),
+		URL:                CreateResourceURL(cfg, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
@@ -128,12 +126,12 @@ func createPlayerAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsect
 }
 
 func createTriggerCommandSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.triggerCommands
+	i := cfg.E.TriggerCommands
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                createResourceURL(cfg, i.endpoint, id),
+		URL:                CreateResourceURL(cfg, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
@@ -145,12 +143,12 @@ func createTriggerCommandSimple(cfg *Config, _ *http.Request, id int32, _ Subsec
 }
 
 func createMiscAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.miscAbilities
+	i := cfg.E.MiscAbilities
 	ability, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                createResourceURL(cfg, i.endpoint, id),
+		URL:                CreateResourceURL(cfg, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,

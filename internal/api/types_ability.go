@@ -10,17 +10,17 @@ import (
 )
 
 type Ability struct {
-	ID                 int32               	`json:"id"`
-	Name               string              	`json:"name"`
-	Version            *int32              	`json:"version,omitempty"`
-	Specification      *string             	`json:"specification,omitempty"`
+	ID                 int32                `json:"id"`
+	Name               string               `json:"name"`
+	Version            *int32               `json:"version,omitempty"`
+	Specification      *string              `json:"specification,omitempty"`
 	Type               database.AbilityType `json:"type"`
-	TypedAbility       NamedAPIResource    	`json:"typed_ability"`
-	Rank               *int32              	`json:"rank"`
-	AppearsInHelpBar   bool                	`json:"appears_in_help_bar"`
-	CanCopycat         bool                	`json:"can_copycat"`
-	Monsters           []NamedAPIResource  	`json:"monsters"`
-	BattleInteractions []BattleInteraction 	`json:"battle_interactions"`
+	TypedAbility       NamedAPIResource     `json:"typed_ability"`
+	Rank               *int32               `json:"rank"`
+	AppearsInHelpBar   bool                 `json:"appears_in_help_bar"`
+	CanCopycat         bool                 `json:"can_copycat"`
+	Monsters           []NamedAPIResource   `json:"monsters"`
+	BattleInteractions []BattleInteraction  `json:"battle_interactions"`
 }
 
 type EnemyAbility struct {
@@ -47,7 +47,7 @@ type ItemAbility struct {
 	Item                NamedAPIResource    `json:"item"`
 	Description         string              `json:"description"`
 	Effect              string              `json:"effect"`
-	Category            string  		    `json:"category"`
+	Category            string              `json:"category"`
 	CanUseOutsideBattle bool                `json:"can_use_outside_battle"`
 	Cursor              string              `json:"cursor"`
 	RelatedStats        []NamedAPIResource  `json:"related_stats"`
@@ -79,7 +79,7 @@ type PlayerAbility struct {
 	Rank                  *int32                            `json:"rank"`
 	AppearsInHelpBar      bool                              `json:"appears_in_help_bar"`
 	CanCopycat            bool                              `json:"can_copycat"`
-	Category              string		                    `json:"category"`
+	Category              string                            `json:"category"`
 	Description           *string                           `json:"description"`
 	Effect                string                            `json:"effect"`
 	Topmenu               *NamedAPIResource                 `json:"topmenu"`
@@ -99,7 +99,7 @@ type PlayerAbility struct {
 
 func (a PlayerAbility) canUseAbility(cfg *Config, unitName string) bool {
 	for _, class := range a.LearnedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
+		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.L.CharClassesID)
 
 		if slices.Contains(classLookup.Members, unitName) {
 			return true
@@ -138,7 +138,7 @@ type TriggerCommand struct {
 
 func (a TriggerCommand) canUseAbility(cfg *Config, unitName string) bool {
 	for _, class := range a.UsedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
+		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.L.CharClassesID)
 
 		if slices.Contains(classLookup.Members, unitName) {
 			return true
@@ -177,7 +177,7 @@ type MiscAbility struct {
 
 func (a MiscAbility) canUseAbility(cfg *Config, unitName string) bool {
 	for _, class := range a.LearnedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.l.CharClassesID)
+		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.L.CharClassesID)
 
 		if slices.Contains(classLookup.Members, unitName) {
 			return true

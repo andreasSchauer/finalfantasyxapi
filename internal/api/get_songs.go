@@ -54,12 +54,12 @@ func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, S
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetLocationSongIDs),
-		idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetSublocationSongIDs),
-		idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetAreaSongIDs),
-		boolQuery2(r, i, ids, qpnSpecialUse, cfg.db.GetSongIDsWithSpecialUseCase),
-		boolQuery2(r, i, ids, qpnFMVs, cfg.db.GetSongIDsWithFMVs),
-		enumQuery(r, i, cfg.t.Composer, ids, qpnComposer, ToEnumQuery(cfg.t.Composer, cfg.db.GetSongIDsByComposer)),
-		enumQuery(r, i, cfg.t.Arranger, ids, qpnArranger, ToEnumQuery(cfg.t.Arranger, cfg.db.GetSongIDsByArranger)),
+		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationSongIDs),
+		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationSongIDs),
+		idQuery(r, i, ids, QpnArea, cfg.L.Areas, cfg.db.GetAreaSongIDs),
+		boolQuery2(r, i, ids, QpnSpecialUse, cfg.db.GetSongIDsWithSpecialUseCase),
+		boolQuery2(r, i, ids, QpnFMVs, cfg.db.GetSongIDsWithFMVs),
+		enumQuery(r, i, cfg.T.Composer, ids, QpnComposer, ToEnumQuery(cfg.T.Composer, cfg.db.GetSongIDsByComposer)),
+		enumQuery(r, i, cfg.T.Arranger, ids, QpnArranger, ToEnumQuery(cfg.T.Arranger, cfg.db.GetSongIDsByArranger)),
 	})
 }

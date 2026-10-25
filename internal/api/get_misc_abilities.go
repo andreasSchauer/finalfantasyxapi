@@ -18,21 +18,21 @@ func (cfg *Config) getMiscAbility(r *http.Request, i handlerInput[seeding.MiscAb
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		UntypedAbility:     idToTypedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		UntypedAbility:     idToTypedAPIResource(cfg, cfg.E.Abilities, ability.Ability.ID),
 		Description:        ability.Description,
 		Effect:             ability.Effect,
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
-		LearnedBy:          namesToNamedAPIResources(cfg, cfg.e.characterClasses, ability.LearnedBy),
-		Topmenu:            namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, ability.Topmenu, nil),
-		Submenu:            namePtrToNamedAPIResPtr(cfg, cfg.e.submenus, ability.Submenu, nil),
-		OpenSubmenu:        namePtrToNamedAPIResPtr(cfg, cfg.e.submenus, ability.OpenSubmenu, nil),
+		LearnedBy:          namesToNamedAPIResources(cfg, cfg.E.CharacterClasses, ability.LearnedBy),
+		Topmenu:            namePtrToNamedAPIResPtr(cfg, cfg.E.Topmenus, ability.Topmenu, nil),
+		Submenu:            namePtrToNamedAPIResPtr(cfg, cfg.E.Submenus, ability.Submenu, nil),
+		OpenSubmenu:        namePtrToNamedAPIResPtr(cfg, cfg.E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:             ability.Cursor,
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, i, response, qpnAbilityUser)
+	battleInteractions, err := applyUser(cfg, r, i, response, QpnAbilityUser)
 	if err != nil {
 		return MiscAbility{}, err
 	}
@@ -49,10 +49,10 @@ func (cfg *Config) retrieveMiscAbilities(r *http.Request, i handlerInput[seeding
 	abilityType := database.AbilityTypeMiscAbility
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		intListQuery(cfg, r, i, ids, qpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSingle, cfg.l.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass),
-		boolQuery(r, i, ids, qpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
-		boolQuery(r, i, ids, qpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
-		boolQuery2(r, i, ids, qpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType)),
+		intListQuery(cfg, r, i, ids, QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
+		nameIdQuery(r, i, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, cfg.L.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass),
+		boolQuery(r, i, ids, QpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
+		boolQuery(r, i, ids, QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
+		boolQuery2(r, i, ids, QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType)),
 	})
 }

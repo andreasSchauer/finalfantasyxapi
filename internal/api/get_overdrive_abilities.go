@@ -17,21 +17,21 @@ func (cfg *Config) getOverdriveAbility(r *http.Request, i handlerInput[seeding.O
 	if err != nil {
 		return OverdriveAbility{}, newHTTPError(http.StatusInternalServerError, "couldn't get parent overdrive.", err)
 	}
-	overdrive, _ := seeding.GetResourceByID(overdriveIDs[0], cfg.l.OverdrivesID)
+	overdrive, _ := seeding.GetResourceByID(overdriveIDs[0], cfg.L.OverdrivesID)
 
 	response := OverdriveAbility{
 		ID:                 ability.ID,
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		UntypedAbility:     idToTypedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		UntypedAbility:     idToTypedAPIResource(cfg, cfg.E.Abilities, ability.Ability.ID),
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
-		Overdrives:         idsToAPIResources(cfg, cfg.e.overdrives, overdriveIDs),
-		OverdriveCommand:   namePtrToNamedAPIResPtr(cfg, cfg.e.overdriveCommands, overdrive.OverdriveCommand, nil),
-		User:               nameToNamedAPIResource(cfg, cfg.e.characterClasses, overdrive.User, nil),
-		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, ability.RelatedStats),
+		Overdrives:         idsToAPIResources(cfg, cfg.E.Overdrives, overdriveIDs),
+		OverdriveCommand:   namePtrToNamedAPIResPtr(cfg, cfg.E.OverdriveCommands, overdrive.OverdriveCommand, nil),
+		User:               nameToNamedAPIResource(cfg, cfg.E.CharacterClasses, overdrive.User, nil),
+		RelatedStats:       namesToNamedAPIResources(cfg, cfg.E.Stats, ability.RelatedStats),
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
@@ -46,18 +46,18 @@ func (cfg *Config) retrieveOverdriveAbilities(r *http.Request, i handlerInput[se
 	abilityType := database.AbilityTypeOverdriveAbility
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		enumListQuery(cfg, r, i, cfg.t.AttackType, ids, qpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType)),
-		enumListQuery(cfg, r, i, cfg.t.TargetType, ids, qpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType)),
-		enumQuery(r, i, cfg.t.DamageFormula, ids, qpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType)),
-		intListQuery(cfg, r, i, ids, qpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		nameIdListQueryNul(cfg, r, i, ids, qpnElement, cfg.e.elements.resTypeSingle, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
-		nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSingle, cfg.l.CharClasses, cfg.db.GetOverdriveAbilityIDsByCharClass),
-		nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSingle, cfg.l.Stats, cfg.db.GetOverdriveAbilityIDsByRelatedStat),
-		idQueryNul(r, i, ids, qpnStatusInflict, cfg.l.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
-		idQueryNul(r, i, ids, qpnStatusRemove, cfg.l.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
-		boolQuery2(r, i, ids, qpnCanCrit, getTypedAbilityIDsCanCrit(cfg, abilityType)),
-		boolQuery2(r, i, ids, qpnDelay, getTypedAbilityIDsDealsDelay(cfg, abilityType)),
-		boolQuery2(r, i, ids, qpnStatChanges, getTypedAbilityIDsWithStatChanges(cfg, abilityType)),
-		boolQuery2(r, i, ids, qpnModChanges, getTypedAbilityIDsWithModifierChanges(cfg, abilityType)),
+		enumListQuery(cfg, r, i, cfg.T.AttackType, ids, QpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType)),
+		enumListQuery(cfg, r, i, cfg.T.TargetType, ids, QpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType)),
+		enumQuery(r, i, cfg.T.DamageFormula, ids, QpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType)),
+		intListQuery(cfg, r, i, ids, QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
+		nameIdListQueryNul(cfg, r, i, ids, QpnElement, cfg.E.Elements.resTypeSingle, cfg.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
+		nameIdQuery(r, i, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, cfg.L.CharClasses, cfg.db.GetOverdriveAbilityIDsByCharClass),
+		nameIdQuery(r, i, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, cfg.L.Stats, cfg.db.GetOverdriveAbilityIDsByRelatedStat),
+		idQueryNul(r, i, ids, QpnStatusInflict, cfg.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
+		idQueryNul(r, i, ids, QpnStatusRemove, cfg.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
+		boolQuery2(r, i, ids, QpnCanCrit, getTypedAbilityIDsCanCrit(cfg, abilityType)),
+		boolQuery2(r, i, ids, QpnDelay, getTypedAbilityIDsDealsDelay(cfg, abilityType)),
+		boolQuery2(r, i, ids, QpnStatChanges, getTypedAbilityIDsWithStatChanges(cfg, abilityType)),
+		boolQuery2(r, i, ids, QpnModChanges, getTypedAbilityIDsWithModifierChanges(cfg, abilityType)),
 	})
 }

@@ -11,23 +11,23 @@ func (cfg *Config) assignDefaultParams(sections map[SectionName]Subsection) map[
 }
 
 func (cfg *Config) completeQueryParamsInit(params []QueryParam, sections map[SectionName]Subsection) map[QueryParamName]QueryParam {
-	params = slices.Concat(params, cfg.q.defaultParamSlice)
+	params = slices.Concat(params, cfg.Q.defaultParamSlice)
 
 	if hasSimpleView(sections) {
 		queryParamIDs := QueryParam{
-			Name:        qpnIDs,
+			Name:        QpnIDs,
 			Description: "Used to manually input the ids of resources to be batch-fetched for simple display. The original order will be preserved, but duplicates will be removed.",
 			Type:        qptIdList,
 			IsExclusive: true,
 			ParamUse:    puSimple,
-			ForSegment:  getSnPtr(snSimple),
+			ForSegment:  getSnPtr(SnSimple),
 		}
 		params = append(params, queryParamIDs)
 	}
 
 	if hasFilters(cfg, params) {
 		queryParamFlip := QueryParam{
-			Name:        qpnFlip,
+			Name:        QpnFlip,
 			Description: "Flips the filtered results in a list response and returns the negative.",
 			Type:        qptBool,
 			ParamUse:    puList,
@@ -43,13 +43,13 @@ func hasSimpleView(sections map[SectionName]Subsection) bool {
 		return false
 	}
 
-	_, ok := sections[snSimple]
+	_, ok := sections[SnSimple]
 	return ok
 }
 
 func hasFilters(cfg *Config, params []QueryParam) bool {
 	for _, param := range params {
-		if param.ParamUse == puList && !hasParam(param, cfg.q.defaultParamSlice) {
+		if param.ParamUse == puList && !hasParam(param, cfg.Q.defaultParamSlice) {
 			return true
 		}
 	}

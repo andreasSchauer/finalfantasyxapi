@@ -7,7 +7,7 @@ import (
 )
 
 func filterAvlMonsters(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.monsters
+	i := cfg.E.Monsters
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -39,7 +39,7 @@ func filterAvlMonsters(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 }
 
 func filterAvlMonsterFormations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.monsterFormations
+	i := cfg.E.MonsterFormations
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {

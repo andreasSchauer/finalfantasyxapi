@@ -13,11 +13,11 @@ type TypedAPIResourceList struct {
 	Results []TypedAPIResource `json:"results"`
 }
 
-func (l TypedAPIResourceList) getListParams() ListParams {
+func (l TypedAPIResourceList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func (l TypedAPIResourceList) getResults() []HasAPIResource {
+func (l TypedAPIResourceList) GetResults() []HasAPIResource {
 	return toHasAPIResSlice(l.Results)
 }
 
@@ -65,7 +65,7 @@ func idToTypedAPIResource[T seeding.IsTyped, R any, A APIResource, L APIResource
 		Version:       params.Version,
 		Specification: params.Specification,
 		Type:          params.Type,
-		URL:           createResourceURL(cfg, i.endpoint, params.ID),
+		URL:           CreateResourceURL(cfg, i.Endpoint, params.ID),
 	}
 }
 

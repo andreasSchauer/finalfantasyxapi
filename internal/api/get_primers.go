@@ -17,12 +17,12 @@ func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seeding.Primer, Pri
 		return Primer{}, err
 	}
 
-	keyItem, _ := seeding.GetResource(primer, cfg.l.KeyItems)
+	keyItem, _ := seeding.GetResource(primer, cfg.L.KeyItems)
 
 	response := Primer{
 		ID:            primer.ID,
 		Name:          primer.Name,
-		KeyItem:       nameToNamedAPIResource(cfg, cfg.e.keyItems, keyItem.Name, nil),
+		KeyItem:       nameToNamedAPIResource(cfg, cfg.E.KeyItems, keyItem.Name, nil),
 		Description:   keyItem.Description,
 		AlBhedLetter:  primer.AlBhedLetter,
 		EnglishLetter: primer.EnglishLetter,

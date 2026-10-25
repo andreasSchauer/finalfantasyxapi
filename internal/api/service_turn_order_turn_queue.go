@@ -25,19 +25,19 @@ func readyTurnQueue(participants []Participant, rng string) []TurnParams {
 		switch rng {
 		case string(database.TurnOrderRngBest):
 			switch participant.Party {
-			case battlePartyPlayer:
+			case BattlePartyPlayer:
 				params.TicksNextTurn = *participant.MinICV
 
-			case battlePartyOpponent:
+			case BattlePartyOpponent:
 				params.TicksNextTurn = *participant.MaxICV
 			}
 
 		case string(database.TurnOrderRngWorst):
 			switch participant.Party {
-			case battlePartyPlayer:
+			case BattlePartyPlayer:
 				params.TicksNextTurn = *participant.MaxICV
 
-			case battlePartyOpponent:
+			case BattlePartyOpponent:
 				params.TicksNextTurn = *participant.MinICV
 			}
 

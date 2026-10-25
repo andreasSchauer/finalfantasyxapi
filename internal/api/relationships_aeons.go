@@ -13,31 +13,31 @@ func getAeonRelationships(cfg *Config, r *http.Request, aeon seeding.Aeon) (Aeon
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = getResPtrDB(cfg, ctx, cfg.e.celestialWeapons, aeon, cfg.db.GetAeonCelestialWeaponID)
+		rel.CelestialWeapon, err = getResPtrDB(cfg, ctx, cfg.E.CelestialWeapons, aeon, cfg.db.GetAeonCelestialWeaponID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = getResourcesDbItem(cfg, ctx, cfg.e.characterClasses, aeon, cfg.db.GetAeonCharClassIDs)
+		rel.CharacterClasses, err = getResourcesDbItem(cfg, ctx, cfg.E.CharacterClasses, aeon, cfg.db.GetAeonCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AeonCommands, err = getResourcesDbItem(cfg, ctx, cfg.e.aeonCommands, aeon, cfg.db.GetAeonAeonCommandIDs)
+		rel.AeonCommands, err = getResourcesDbItem(cfg, ctx, cfg.E.AeonCommands, aeon, cfg.db.GetAeonAeonCommandIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Overdrives, err = getResourcesDbItem(cfg, ctx, cfg.e.overdrives, aeon, cfg.db.GetAeonOverdriveIDs)
+		rel.Overdrives, err = getResourcesDbItem(cfg, ctx, cfg.E.Overdrives, aeon, cfg.db.GetAeonOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.playerAbilities, aeon, cfg.db.GetAeonDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.PlayerAbilities, aeon, cfg.db.GetAeonDefaultAbilityIDs)
 		return err
 	})
 
@@ -51,18 +51,18 @@ func getAeonRelationships(cfg *Config, r *http.Request, aeon seeding.Aeon) (Aeon
 
 func getAeonBaseStats(cfg *Config, aeon seeding.Aeon) []BaseStat {
 	baseStats := aeon.BaseStats.XVals[0].BaseStats
-	return toResAmtType(cfg, cfg.e.stats, baseStats, newBaseStat)
+	return toResAmtType(cfg, cfg.E.Stats, baseStats, newBaseStat)
 }
 
 func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon, allowedStatIDs []int32) (Aeon, error) {
 	var err error
 
-	aeon.BaseStats, err = applyAeonStatsBattles(cfg, r, aeon, qpnBattles)
+	aeon.BaseStats, err = applyAeonStatsBattles(cfg, r, aeon, QpnBattles)
 	if err != nil {
 		return Aeon{}, err
 	}
 
-	aeon.BaseStats, err = applyYunaStats(cfg, r, aeon, qpnYunaStats, allowedStatIDs)
+	aeon.BaseStats, err = applyYunaStats(cfg, r, aeon, QpnYunaStats, allowedStatIDs)
 	if err != nil {
 		return Aeon{}, err
 	}
@@ -71,7 +71,7 @@ func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon, allowedStatIDs []in
 }
 
 func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName QueryParamName) ([]BaseStat, error) {
-	queryParam := cfg.q.aeons[queryName]
+	queryParam := cfg.Q.aeons[queryName]
 	battles, err := parseIntQuery(r, queryParam)
 	if queryIsEmpty(err) {
 		return aeon.BaseStats, nil
@@ -86,18 +86,18 @@ func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName Qu
 		i = 0
 	}
 
-	seedAeon, _ := seeding.GetResourceByID(aeon.ID, cfg.l.AeonsID)
+	seedAeon, _ := seeding.GetResourceByID(aeon.ID, cfg.L.AeonsID)
 	newBaseStats := seedAeon.BaseStats.XVals[i].BaseStats
-	baseStats := toResAmtType(cfg, cfg.e.stats, newBaseStats, newBaseStat)
+	baseStats := toResAmtType(cfg, cfg.E.Stats, newBaseStats, newBaseStat)
 
 	return baseStats, nil
 }
 
 func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName QueryParamName, allowedStatIDs []int32) ([]BaseStat, error) {
-	queryParam := cfg.q.aeons[queryName]
+	queryParam := cfg.Q.aeons[queryName]
 
-	yuna := cfg.l.Characters["yuna"]
-	yunaBS := toResAmtType(cfg, cfg.e.stats, yuna.BaseStats, newBaseStat)
+	yuna := cfg.L.Characters["yuna"]
+	yunaBS := toResAmtType(cfg, cfg.E.Stats, yuna.BaseStats, newBaseStat)
 
 	yunaStatCalcMap, err := getStatCalcMap(cfg, r, queryParam, yunaBS, allowedStatIDs)
 	if queryIsEmpty(err) {
@@ -131,14 +131,14 @@ func calcAeonStats(cfg *Config, aeon Aeon, yuna map[string]int32) []BaseStat {
 }
 
 func getAeonStatTables(cfg *Config, aeon Aeon) (map[string]float64, map[string]float64) {
-	aeonLookup, _ := seeding.GetResourceByID(aeon.ID, cfg.l.AeonsID)
+	aeonLookup, _ := seeding.GetResourceByID(aeon.ID, cfg.L.AeonsID)
 
-	aValsSlice := toResAmtType(cfg, cfg.e.stats, aeonLookup.BaseStats.AVals, newBaseStat)
-	aValsInt := getResAmtTypeMap(aValsSlice)
+	aValsSlice := toResAmtType(cfg, cfg.E.Stats, aeonLookup.BaseStats.AVals, newBaseStat)
+	aValsInt := GetResAmtTypeMap(aValsSlice)
 	aVals := resAmtMapToFloat(aValsInt)
 
-	bValsSlice := toResAmtType(cfg, cfg.e.stats, aeonLookup.BaseStats.BVals, newBaseStat)
-	bValsInt := getResAmtTypeMap(bValsSlice)
+	bValsSlice := toResAmtType(cfg, cfg.E.Stats, aeonLookup.BaseStats.BVals, newBaseStat)
+	bValsInt := GetResAmtTypeMap(bValsSlice)
 	bVals := resAmtMapToFloat(bValsInt)
 
 	return aVals, bVals
@@ -191,7 +191,7 @@ func getUnitAgilityParams(cfg *Config, r *http.Request, baseStats []BaseStat) (A
 	}
 
 	agilityParams := AgilityParams{
-		AgilityTier: idToUnnamedAPIResource(cfg, cfg.e.agilityTiers, agilityTier.ID),
+		AgilityTier: idToUnnamedAPIResource(cfg, cfg.E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   agilityTier.TickSpeed,
 		MinICV:      minICV,
 		MaxICV:      agilityTier.CharacterMaxICV,

@@ -13,13 +13,13 @@ func getTriggerCommandRelationships(cfg *Config, r *http.Request, command seedin
 
 	g.Go(func() error {
 		var err error
-		rel.MonsterFormations, err = getResourcesDbItem(cfg, ctx, cfg.e.monsterFormations, command, cfg.db.GetTriggerCommandMonsterFormationIDs)
+		rel.MonsterFormations, err = getResourcesDbItem(cfg, ctx, cfg.E.MonsterFormations, command, cfg.db.GetTriggerCommandMonsterFormationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.UsedBy, err = getResourcesDbItem(cfg, ctx, cfg.e.characterClasses, command, cfg.db.GetTriggerCommandCharClassIDs)
+		rel.UsedBy, err = getResourcesDbItem(cfg, ctx, cfg.E.CharacterClasses, command, cfg.db.GetTriggerCommandCharClassIDs)
 		return err
 	})
 

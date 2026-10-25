@@ -22,11 +22,11 @@ type AbilityPool struct {
 
 func convertAbilityPool(cfg *Config, p seeding.AbilityPool) AbilityPool {
 	return AbilityPool{
-		AutoAbilities: namesToNamedAPIResources(cfg, cfg.e.autoAbilities, p.AutoAbilities),
+		AutoAbilities: namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, p.AutoAbilities),
 		ReqAmount:     p.ReqAmount,
 	}
 }
 
 func convertEquipmentName(cfg *Config, n seeding.EquipmentName) NamedAPIResource {
-	return nameToNamedAPIResource(cfg, cfg.e.equipment, n.Name, nil)
+	return nameToNamedAPIResource(cfg, cfg.E.Equipment, n.Name, nil)
 }

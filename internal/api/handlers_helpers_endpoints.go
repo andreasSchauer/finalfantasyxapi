@@ -24,17 +24,17 @@ func handleEndpointList[T seeding.Lookupable, R any, A APIResource, L APIResourc
 func handleEndpointIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	segment := segments[0]
 
-	if segment == string(snParameters) {
-		handleParameters(cfg, w, r, i.endpoint, i.queryLookup)
+	if segment == string(SnParameters) {
+		handleParameters(cfg, w, r, i.Endpoint, i.queryLookup)
 		return
 	}
 
-	if segment == string(snSections) {
+	if segment == string(SnSections) {
 		handleSections(cfg, w, r, i)
 		return
 	}
 
-	if segment == string(snSimple) {
+	if segment == string(SnSimple) {
 		handleSimple(cfg, w, r, i)
 		return
 	}
@@ -55,17 +55,17 @@ func handleEndpointIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResou
 func handleEndpointNameOrID[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
 	segment := segments[0]
 
-	if segment == string(snParameters) {
-		handleParameters(cfg, w, r, i.endpoint, i.queryLookup)
+	if segment == string(SnParameters) {
+		handleParameters(cfg, w, r, i.Endpoint, i.queryLookup)
 		return
 	}
 
-	if segment == string(snSections) {
+	if segment == string(SnSections) {
 		handleSections(cfg, w, r, i)
 		return
 	}
 
-	if segment == string(snSimple) {
+	if segment == string(SnSimple) {
 		handleSimple(cfg, w, r, i)
 		return
 	}
@@ -123,12 +123,12 @@ func handleEndpointSubsections[T seeding.Lookupable, R any, A APIResource, L API
 
 	// /ep/2/2
 	case sectionIsInt:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid subsection '%s'. subsection can't be an integer. use /api/%s/sections for valid subsections.", posSection, i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid subsection '%s'. subsection can't be an integer. use /api/%s/sections for valid subsections.", posSection, i.Endpoint), nil)
 		return
 
 	// /ep/2/a (no subsections)
 	case i.subsections == nil:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("endpoint /%s doesn't have any subsections.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("endpoint /%s doesn't have any subsections.", i.Endpoint), nil)
 		return
 
 	// /ep/2/a (subsections)
@@ -151,7 +151,7 @@ func handleEndpointSubOrNameVer[T seeding.Lookupable, R any, A APIResource, L AP
 		return
 
 	case subsectionIsInt:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid subsection '%s'. subsection can't be an integer. use /api/%s/sections for available subsections.", segments[1], i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid subsection '%s'. subsection can't be an integer. use /api/%s/sections for available subsections.", segments[1], i.Endpoint), nil)
 		return
 
 	default:
@@ -162,7 +162,7 @@ func handleEndpointSubOrNameVer[T seeding.Lookupable, R any, A APIResource, L AP
 
 // if len(segments) is 0, this function crafts the response for /enums
 func handleEnumsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums) {
-	err := verifyQueryParams[string](r, i.endpoint, i.queryLookup, nil, nil)
+	err := verifyQueryParams[string](r, i.Endpoint, i.queryLookup, nil, nil)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -181,8 +181,8 @@ func handleEnumsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request
 func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums, segments []string) {
 	segment := segments[0]
 
-	if segment == string(snParameters) {
-		handleParameters(cfg, w, r, i.endpoint, i.queryLookup)
+	if segment == string(SnParameters) {
+		handleParameters(cfg, w, r, i.Endpoint, i.queryLookup)
 		return
 	}
 
@@ -192,7 +192,7 @@ func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Reque
 	}
 
 	// happens after enum parsing, just for error priority reasons. if I prioritize wrong query param errors over wrong enum errors, I can simply swap the two functions
-	err = verifyQueryParams(r, i.endpoint, i.queryLookup, &key, nil)
+	err = verifyQueryParams(r, i.Endpoint, i.queryLookup, &key, nil)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -202,7 +202,7 @@ func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Reque
 
 // if len(segments) is 0, this function crafts the response for /endpoints
 func handleEndpointsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints) {
-	err := verifyQueryParams[string](r, i.endpoint, i.queryLookup, nil, nil)
+	err := verifyQueryParams[string](r, i.Endpoint, i.queryLookup, nil, nil)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -222,8 +222,8 @@ func handleEndpointsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Req
 func handleEndpointsEndpointSections(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints, segments []string) {
 	segment := segments[0]
 
-	if segment == string(snParameters) {
-		handleParameters(cfg, w, r, i.endpoint, i.queryLookup)
+	if segment == string(SnParameters) {
+		handleParameters(cfg, w, r, i.Endpoint, i.queryLookup)
 		return
 	}
 
@@ -238,12 +238,12 @@ func handleEndpointServiceBody[P, R any](cfg *Config, w http.ResponseWriter, r *
 
 	segment := segments[0]
 
-	if segment == string(snBody) {
-		respondWithJSON(w, http.StatusOK, getBody(cfg, i.endpoint))
+	if segment == string(SnBody) {
+		respondWithJSON(w, http.StatusOK, getBody(cfg, i.Endpoint))
 		return
 	}
 
-	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'.", i.endpoint), nil)
+	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'.", i.Endpoint), nil)
 }
 
 func handleEndpointServiceBodySections[P, R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
@@ -252,22 +252,22 @@ func handleEndpointServiceBodySections[P, R any](cfg *Config, w http.ResponseWri
 		return
 	}
 
-	if segments[0] != string(snBody) {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'.", i.endpoint), nil)
+	if segments[0] != string(SnBody) {
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'.", i.Endpoint), nil)
 		return
 	}
 
 	switch segments[1] {
-	case string(snDocs):
+	case string(SnDocs):
 		respondWithJSON(w, http.StatusOK, i.docsFn(cfg))
 		return
 
-	case string(snSamples):
+	case string(SnSamples):
 		respondWithJSON(w, http.StatusOK, i.samplesFn())
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s/body' only supports the following sections: 'docs', 'samples'.", i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s/body' only supports the following sections: 'docs', 'samples'.", i.Endpoint), nil)
 		return
 	}
 }

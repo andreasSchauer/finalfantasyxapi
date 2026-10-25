@@ -19,7 +19,7 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.Over
 		Effect:      mode.Effect,
 		Type:        mode.Type,
 		FillRate:    mode.FillRate,
-		Actions:     nameAmtsToResAmts(cfg, cfg.e.characters, mode.ActionsToLearn),
+		Actions:     nameAmtsToResAmts(cfg, cfg.E.Characters, mode.ActionsToLearn),
 	}
 
 	return response, nil
@@ -32,6 +32,6 @@ func (cfg *Config) retrieveOverdriveModes(r *http.Request, i handlerInput[seedin
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		enumQuery(r, i, cfg.t.OverdriveModeType, ids, qpnType, cfg.db.GetOverdriveModeIDsByType),
+		enumQuery(r, i, cfg.T.OverdriveModeType, ids, QpnType, cfg.db.GetOverdriveModeIDsByType),
 	})
 }

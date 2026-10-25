@@ -12,7 +12,7 @@ func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seeding.O
 		return OverdriveCommand{}, err
 	}
 
-	overdrives, err := getResourcesDbItem(cfg, r.Context(), cfg.e.overdrives, command, ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveIDs))
+	overdrives, err := getResourcesDbItem(cfg, r.Context(), cfg.E.Overdrives, command, ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveIDs))
 	if err != nil {
 		return OverdriveCommand{}, err
 	}
@@ -22,9 +22,9 @@ func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seeding.O
 		Name:        command.Name,
 		Description: command.Description,
 		Rank:        command.Rank,
-		User:        nameToNamedAPIResource(cfg, cfg.e.characterClasses, command.User, nil),
-		Topmenu:     namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, command.Topmenu, nil),
-		OpenSubmenu: nameToNamedAPIResource(cfg, cfg.e.submenus, command.OpenSubmenu, nil),
+		User:        nameToNamedAPIResource(cfg, cfg.E.CharacterClasses, command.User, nil),
+		Topmenu:     namePtrToNamedAPIResPtr(cfg, cfg.E.Topmenus, command.Topmenu, nil),
+		OpenSubmenu: nameToNamedAPIResource(cfg, cfg.E.Submenus, command.OpenSubmenu, nil),
 		Overdrives:  overdrives,
 	}
 

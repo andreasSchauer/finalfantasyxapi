@@ -26,6 +26,6 @@ func TestMain(m *testing.M) {
 	testCfg = cfg
 
 	code := m.Run()
-	_ = testCfg.dbConn.Close()
+	_ = testCfg.DbConn.Close()
 	os.Exit(code)
 }

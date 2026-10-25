@@ -13,20 +13,20 @@ func (cfg *Config) getItemAbility(r *http.Request, i handlerInput[seeding.ItemAb
 		return ItemAbility{}, err
 	}
 
-	item, _ := seeding.GetResourceByID(id, cfg.l.ItemsID)
+	item, _ := seeding.GetResourceByID(id, cfg.L.ItemsID)
 
 	response := ItemAbility{
 		ID:                 ability.ID,
 		Name:               ability.Name,
-		Item:               idToNamedAPIResource(cfg, cfg.e.items, id),
-		UntypedAbility:     idToTypedAPIResource(cfg, cfg.e.abilities, ability.Ability.ID),
+		Item:               idToNamedAPIResource(cfg, cfg.E.Items, id),
+		UntypedAbility:     idToTypedAPIResource(cfg, cfg.E.Abilities, ability.Ability.ID),
 		Description:        item.Description,
 		Effect:             item.Effect,
 		Category:           item.Category,
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
-		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, item.RelatedStats),
+		RelatedStats:       namesToNamedAPIResources(cfg, cfg.E.Stats, item.RelatedStats),
 		Cursor:             item.Cursor,
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
@@ -46,17 +46,17 @@ func (cfg *Config) retrieveItemAbilities(r *http.Request, i handlerInput[seeding
 	abilityType := database.AbilityTypeItemAbility
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		enumListQuery(cfg, r, i, cfg.t.ItemCategory, ids, qpnCategory, cfg.db.GetItemAbilityIDsByCategory),
-		enumListQuery(cfg, r, i, cfg.t.AttackType, ids, qpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType)),
-		enumListQuery(cfg, r, i, cfg.t.TargetType, ids, qpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType)),
-		enumQuery(r, i, cfg.t.DamageFormula, ids, qpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType)),
-		nameIdListQueryNul(cfg, r, i, ids, qpnElement, cfg.e.elements.resTypeSingle, cfg.l.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
-		nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSingle, cfg.l.Stats, cfg.db.GetItemAbilityIDsByRelatedStat),
-		idQueryNul(r, i, ids, qpnStatusInflict, cfg.l.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
-		idQueryNul(r, i, ids, qpnStatusRemove, cfg.l.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
-		boolQuery2(r, i, ids, qpnOutsideBattle, cfg.db.GetItemAbilityIDsCanUseOutsideBattle),
-		boolQuery2(r, i, ids, qpnDelay, getTypedAbilityIDsDealsDelay(cfg, abilityType)),
-		boolQuery2(r, i, ids, qpnStatChanges, getTypedAbilityIDsWithStatChanges(cfg, abilityType)),
-		boolQuery2(r, i, ids, qpnModChanges, getTypedAbilityIDsWithModifierChanges(cfg, abilityType)),
+		enumListQuery(cfg, r, i, cfg.T.ItemCategory, ids, QpnCategory, cfg.db.GetItemAbilityIDsByCategory),
+		enumListQuery(cfg, r, i, cfg.T.AttackType, ids, QpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType)),
+		enumListQuery(cfg, r, i, cfg.T.TargetType, ids, QpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType)),
+		enumQuery(r, i, cfg.T.DamageFormula, ids, QpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType)),
+		nameIdListQueryNul(cfg, r, i, ids, QpnElement, cfg.E.Elements.resTypeSingle, cfg.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
+		nameIdQuery(r, i, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, cfg.L.Stats, cfg.db.GetItemAbilityIDsByRelatedStat),
+		idQueryNul(r, i, ids, QpnStatusInflict, cfg.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
+		idQueryNul(r, i, ids, QpnStatusRemove, cfg.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
+		boolQuery2(r, i, ids, QpnOutsideBattle, cfg.db.GetItemAbilityIDsCanUseOutsideBattle),
+		boolQuery2(r, i, ids, QpnDelay, getTypedAbilityIDsDealsDelay(cfg, abilityType)),
+		boolQuery2(r, i, ids, QpnStatChanges, getTypedAbilityIDsWithStatChanges(cfg, abilityType)),
+		boolQuery2(r, i, ids, QpnModChanges, getTypedAbilityIDsWithModifierChanges(cfg, abilityType)),
 	})
 }

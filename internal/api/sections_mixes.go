@@ -23,18 +23,18 @@ func (m MixSimple) GetURL() string {
 }
 
 func createMixSimple(cfg *Config, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.mixes
+	i := cfg.E.Mixes
 	mix, _ := seeding.GetResourceByID(id, i.objLookupID)
 	combinations := mix.PossibleCombinations
 
-	prefix := fmt.Sprintf("/api/%s", cfg.e.items.endpoint)
+	prefix := fmt.Sprintf("/api/%s", cfg.E.Items.Endpoint)
 	path := strings.ToLower(r.URL.Path)
-	segments := getPathSegments(path, cfg.e.items.endpoint)
+	segments := getPathSegments(path, cfg.E.Items.Endpoint)
 	isItemsSection := len(segments) == 2 && strings.HasPrefix(path, prefix)
 
 	if isItemsSection {
 		itemID, _ := strconv.Atoi(segments[0])
-		item, _ := seeding.GetResourceByID(int32(itemID), cfg.l.ItemsID)
+		item, _ := seeding.GetResourceByID(int32(itemID), cfg.L.ItemsID)
 
 		combinations = h.Filter(combinations, func(c seeding.MixCombination) bool {
 			return item.Name == c.FirstItem || item.Name == c.SecondItem
@@ -44,7 +44,7 @@ func createMixSimple(cfg *Config, r *http.Request, id int32, _ Subsection) (Simp
 	mixSimple := MixSimple{
 		ID:           mix.ID,
 		Name:         mix.Name,
-		URL:          createResourceURL(cfg, i.endpoint, id),
+		URL:          CreateResourceURL(cfg, i.Endpoint, id),
 		Category:     mix.Category,
 		Combinations: convertObjSlice(cfg, combinations, convertMixCombinationSimple),
 	}

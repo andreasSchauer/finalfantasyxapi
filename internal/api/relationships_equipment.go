@@ -11,11 +11,11 @@ import (
 )
 
 func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.EquipmentName) (EquipmentName, error) {
-	i := cfg.e.equipment
+	i := cfg.E.Equipment
 	var table seeding.EquipmentTable
-	
+
 	rel := EquipmentName{
-		Character: nameToNamedAPIResource(cfg, cfg.e.characters, equipment.CharacterName, nil),
+		Character: nameToNamedAPIResource(cfg, cfg.E.Characters, equipment.CharacterName, nil),
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -24,30 +24,30 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.E
 		return EquipmentName{}, err
 	}
 
-	g.Go(func() error{
+	g.Go(func() error {
 		var err error
-		rel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.treasures, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeTreasure))
+		rel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Treasures, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeTreasure))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		rel.Shops, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.shops, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeShop))
+		rel.Shops, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Shops, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeShop))
 		return err
 	})
-	
-	g.Go(func() error{
+
+	g.Go(func() error {
 		var err error
-		rel.EquipmentTable, err = getEquipmentTableRef(cfg, r, ctx, i.queryLookup[qpnTable], equipment)
+		rel.EquipmentTable, err = getEquipmentTableRef(cfg, r, ctx, i.queryLookup[QpnTable], equipment)
 		if err != nil {
 			return err
 		}
-		table, _ = seeding.GetResourceByID(rel.EquipmentTable.ID, cfg.l.EquipmentTablesID)
+		table, _ = seeding.GetResourceByID(rel.EquipmentTable.ID, cfg.L.EquipmentTablesID)
 		rel.Type = table.Type
 		rel.Classification = table.Classification
 		rel.Priority = table.Priority
 		rel.RequiredSlots = table.RequiredSlots
-		rel.RequiredAutoAbilities = namesToNamedAPIResources(cfg, cfg.e.autoAbilities, table.RequiredAutoAbilities)
+		rel.RequiredAutoAbilities = namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, table.RequiredAutoAbilities)
 		rel.SelectableAutoAbilities = convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool)
 		return nil
 	})
@@ -58,8 +58,8 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.E
 	}
 
 	if table.Classification == string(database.EquipClassCelestialWeapon) {
-		char, _ := seeding.GetResource(equipment.CharacterName, cfg.l.Characters)
-		cwRes, err := getResPtrDB(cfg, r.Context(), cfg.e.celestialWeapons, char, cfg.db.GetCharacterCelestialWeaponID)
+		char, _ := seeding.GetResource(equipment.CharacterName, cfg.L.Characters)
+		cwRes, err := getResPtrDB(cfg, r.Context(), cfg.E.CelestialWeapons, char, cfg.db.GetCharacterCelestialWeaponID)
 		if err != nil {
 			return EquipmentName{}, err
 		}
@@ -70,7 +70,7 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.E
 }
 
 func getEquipmentTableRef(cfg *Config, r *http.Request, ctx context.Context, queryParam QueryParam, equipment seeding.EquipmentName) (UnnamedAPIResource, error) {
-	tables, err := getResourcesDbItem(cfg, ctx, cfg.e.equipmentTables, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
+	tables, err := getResourcesDbItem(cfg, ctx, cfg.E.EquipmentTables, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
 	if err != nil {
 		return UnnamedAPIResource{}, err
 	}

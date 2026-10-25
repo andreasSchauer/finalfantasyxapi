@@ -8,70 +8,70 @@ import (
 )
 
 type endpoints struct {
-	locations          handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
-	sublocations       handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]
-	areas              handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
-	monsterFormations  handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]
-	shops              handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
-	treasures          handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
-	quests             handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]
-	sidequests         handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]
-	subquests          handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]
-	arenaCreations     handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
-	blitzballPrizes    handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]
-	songs              handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
-	fmvs               handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]
-	playerUnits        handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]
-	characters         handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]
-	aeons              handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]
-	characterClasses   handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]
-	monsters           handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]
-	abilities          handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]
-	playerAbilities    handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
-	overdriveAbilities handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]
-	itemAbilities      handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]
-	triggerCommands    handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]
-	miscAbilities      handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList]
-	enemyAbilities     handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
-	aeonCommands       handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]
-	overdriveCommands  handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]
-	overdrives         handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]
-	ronsoRages         handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]
-	submenus           handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]
-	topmenus           handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]
-	allItems           handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]
-	items              handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
-	keyItems           handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]
-	spheres            handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]
-	primers            handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]
-	mixes              handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]
-	autoAbilities      handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]
-	equipmentTables    handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]
-	equipment          handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]
-	celestialWeapons   handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]
-	stats              handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]
-	properties         handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]
-	overdriveModes     handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
-	elements           handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]
-	statusConditions   handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]
-	modifiers          handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]
-	agilityTiers       handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]
-	enums              handlerInputEnums
-	endpoints          handlerInputEndpoints
-	alBhed             handlerInputService[AlBhedParams, AlBhedResponse]
-	turnOrder          handlerInputService[TurnOrderParams, TurnOrderResponse]
-	dropChance         handlerInputService[DropChanceParams, DropChanceResponse]
+	Locations          handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]
+	Sublocations       handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]
+	Areas              handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]
+	MonsterFormations  handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]
+	Shops              handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]
+	Treasures          handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]
+	Quests             handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]
+	Sidequests         handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]
+	Subquests          handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]
+	ArenaCreations     handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]
+	BlitzballPrizes    handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]
+	Songs              handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]
+	FMVs               handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]
+	PlayerUnits        handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]
+	Characters         handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]
+	Aeons              handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]
+	CharacterClasses   handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]
+	Monsters           handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]
+	Abilities          handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]
+	PlayerAbilities    handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]
+	OverdriveAbilities handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]
+	ItemAbilities      handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]
+	TriggerCommands    handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]
+	MiscAbilities      handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList]
+	EnemyAbilities     handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]
+	AeonCommands       handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]
+	OverdriveCommands  handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]
+	Overdrives         handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]
+	RonsoRages         handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]
+	Submenus           handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]
+	Topmenus           handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]
+	AllItems           handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]
+	Items              handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]
+	KeyItems           handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]
+	Spheres            handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]
+	Primers            handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]
+	Mixes              handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]
+	AutoAbilities      handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]
+	EquipmentTables    handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]
+	Equipment          handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]
+	CelestialWeapons   handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]
+	Stats              handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]
+	Properties         handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]
+	OverdriveModes     handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]
+	Elements           handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]
+	StatusConditions   handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]
+	Modifiers          handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]
+	AgilityTiers       handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]
+	Enums              handlerInputEnums
+	Endpoints          handlerInputEndpoints
+	AlBhed             handlerInputService[AlBhedParams, AlBhedResponse]
+	TurnOrder          handlerInputService[TurnOrderParams, TurnOrderResponse]
+	DropChance         handlerInputService[DropChanceParams, DropChanceResponse]
 }
 
 func (cfg *Config) EndpointsInit() {
 	e := endpoints{}
 
-	e.locations = handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epLocations,
+	e.Locations = handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epLocations,
 		resTypeSingle: rtsLocations,
 		resTypePlural: rtpLocations,
-		objLookup:     cfg.l.Locations,
-		objLookupID:   cfg.l.LocationsID,
+		objLookup:     cfg.L.Locations,
+		objLookupID:   cfg.L.LocationsID,
 		idToResFunc:   idToNamedAPIResource[seeding.Location, Location, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetLocationIDs,
@@ -79,55 +79,55 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveLocations,
 		avlFunc:       filterAvlLocations,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createLocationSimple,
 				relationsFn: getLocationSectionRelations,
 			},
-			snConnected: {
+			SnConnected: {
 				dbQuery:     cfg.db.GetConnectedLocationIDs,
 				createSubFn: createLocationSimple,
 				relationsFn: getLocationSectionRelations,
 			},
-			snSublocations: {
+			SnSublocations: {
 				dbQuery:     cfg.db.GetLocationSublocationIDs,
 				createSubFn: createSublocationSimple,
 				relationsFn: getSublocationSectionRelations,
 			},
-			snAreas: {
+			SnAreas: {
 				dbQuery:     cfg.db.GetLocationAreaIDs,
 				createSubFn: createAreaSimple,
 				relationsFn: getAreaSectionRelations,
 			},
-			snMonsterFormations: {
+			SnMonsterFormations: {
 				dbQuery:     cfg.db.GetLocationMonsterFormationIDs,
 				createSubFn: createMonsterFormationSimple,
 			},
-			snMonsters: {
+			SnMonsters: {
 				dbQuery:     cfg.db.GetLocationMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
 			},
-			snShops: {
+			SnShops: {
 				dbQuery:     cfg.db.GetLocationShopIDs,
 				createSubFn: createShopSimple,
 			},
-			snSongs: {
+			SnSongs: {
 				dbQuery:     cfg.getLocationSongIDs,
 				createSubFn: createSongSimple,
 			},
-			snTreasures: {
+			SnTreasures: {
 				dbQuery:     cfg.db.GetLocationTreasureIDs,
 				createSubFn: createTreasureSimple,
 			},
 		},
 	}
 
-	e.sublocations = handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epSublocations,
+	e.Sublocations = handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epSublocations,
 		resTypeSingle: rtsSublocations,
 		resTypePlural: rtpSublocations,
-		objLookup:     cfg.l.Sublocations,
-		objLookupID:   cfg.l.SublocationsID,
+		objLookup:     cfg.L.Sublocations,
+		objLookupID:   cfg.L.SublocationsID,
 		idToResFunc:   idToNamedAPIResource[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetSublocationIDs,
@@ -135,49 +135,49 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveSublocations,
 		avlFunc:       filterAvlSublocations,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createSublocationSimple,
 				relationsFn: getSublocationSectionRelations,
 			},
-			snConnected: {
+			SnConnected: {
 				dbQuery:     cfg.db.GetConnectedSublocationIDs,
 				createSubFn: createSublocationSimple,
 				relationsFn: getSublocationSectionRelations,
 			},
-			snAreas: {
+			SnAreas: {
 				dbQuery:     cfg.db.GetSublocationAreaIDs,
 				createSubFn: createAreaSimple,
 			},
-			snMonsterFormations: {
+			SnMonsterFormations: {
 				dbQuery:     cfg.db.GetSublocationMonsterFormationIDs,
 				createSubFn: createMonsterFormationSimple,
 			},
-			snMonsters: {
+			SnMonsters: {
 				dbQuery:     cfg.db.GetSublocationMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
 			},
-			snShops: {
+			SnShops: {
 				dbQuery:     cfg.db.GetSublocationShopIDs,
 				createSubFn: createShopSimple,
 			},
-			snSongs: {
+			SnSongs: {
 				dbQuery:     cfg.getSublocationSongIDs,
 				createSubFn: createSongSimple,
 			},
-			snTreasures: {
+			SnTreasures: {
 				dbQuery:     cfg.db.GetSublocationTreasureIDs,
 				createSubFn: createTreasureSimple,
 			},
 		},
 	}
 
-	e.areas = handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]{
-		endpoint:      epAreas,
+	e.Areas = handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]{
+		Endpoint:      epAreas,
 		resTypeSingle: rtsAreas,
 		resTypePlural: rtpAreas,
-		objLookup:     cfg.l.Areas,
-		objLookupID:   cfg.l.AreasID,
+		objLookup:     cfg.L.Areas,
+		objLookupID:   cfg.L.AreasID,
 		idToResFunc:   idToAreaAPIResource,
 		resToListFunc: newAreaAPIResourceList,
 		retrieveQuery: cfg.db.GetAreaIDs,
@@ -185,41 +185,41 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveAreas,
 		avlFunc:       filterAvlAreas,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createAreaSimple,
 				relationsFn: getAreaSectionRelations,
 			},
-			snConnected: {
+			SnConnected: {
 				dbQuery:     cfg.db.GetAreaConnectionIDs,
 				createSubFn: createAreaSimple,
 				relationsFn: getAreaSectionRelations,
 			},
-			snMonsterFormations: {
+			SnMonsterFormations: {
 				dbQuery:     cfg.db.GetAreaMonsterFormationIDs,
 				createSubFn: createMonsterFormationSimple,
 			},
-			snMonsters: {
+			SnMonsters: {
 				dbQuery:     cfg.db.GetAreaMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
 			},
-			snSongs: {
+			SnSongs: {
 				dbQuery:     cfg.getAreaSongIDs,
 				createSubFn: createSongSimple,
 			},
-			snTreasures: {
+			SnTreasures: {
 				dbQuery:     cfg.db.GetAreaTreasureIDs,
 				createSubFn: createTreasureSimple,
 			},
 		},
 	}
 
-	e.monsterFormations = handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]{
-		endpoint:      epMonsterFormations,
+	e.MonsterFormations = handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]{
+		Endpoint:      epMonsterFormations,
 		resTypeSingle: rtsMonsterFormations,
 		resTypePlural: rtpMonsterFormations,
-		objLookup:     cfg.l.MonsterFormations,
-		objLookupID:   cfg.l.MonsterFormationsID,
+		objLookup:     cfg.L.MonsterFormations,
+		objLookupID:   cfg.L.MonsterFormationsID,
 		idToResFunc:   idToUnnamedAPIResource[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList],
 		resToListFunc: newUnnamedAPIResourceList,
 		retrieveQuery: cfg.db.GetMonsterFormationIDs,
@@ -227,10 +227,10 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveMonsterFormations,
 		avlFunc:       filterAvlMonsterFormations,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createMonsterFormationSimple,
 			},
-			snMonsters: {
+			SnMonsters: {
 				dbQuery:     cfg.db.GetMonsterFormationMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
@@ -238,12 +238,12 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.shops = handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]{
-		endpoint:      epShops,
+	e.Shops = handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList]{
+		Endpoint:      epShops,
 		resTypeSingle: rtsShops,
 		resTypePlural: rtpShops,
-		objLookup:     cfg.l.Shops,
-		objLookupID:   cfg.l.ShopsID,
+		objLookup:     cfg.L.Shops,
+		objLookupID:   cfg.L.ShopsID,
 		idToResFunc:   idToUnnamedAPIResource[seeding.Shop, Shop, UnnamedAPIResource, UnnamedApiResourceList],
 		resToListFunc: newUnnamedAPIResourceList,
 		retrieveQuery: cfg.db.GetShopIDs,
@@ -251,18 +251,18 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveShops,
 		avlFunc:       filterAvlShops,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createShopSimple,
 			},
 		},
 	}
 
-	e.treasures = handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]{
-		endpoint:      epTreasures,
+	e.Treasures = handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]{
+		Endpoint:      epTreasures,
 		resTypeSingle: rtsTreasures,
 		resTypePlural: rtpTreasures,
-		objLookup:     cfg.l.Treasures,
-		objLookupID:   cfg.l.TreasuresID,
+		objLookup:     cfg.L.Treasures,
+		objLookupID:   cfg.L.TreasuresID,
 		idToResFunc:   idToUnnamedAPIResource[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList],
 		resToListFunc: newUnnamedAPIResourceList,
 		retrieveQuery: cfg.db.GetTreasureIDs,
@@ -271,12 +271,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveTreasures,
 	}
 
-	e.quests = handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]{
-		endpoint:      epQuests,
+	e.Quests = handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList]{
+		Endpoint:      epQuests,
 		resTypeSingle: rtsQuests,
 		resTypePlural: rtpQuests,
-		objLookup:     cfg.l.Quests,
-		objLookupID:   cfg.l.QuestsID,
+		objLookup:     cfg.L.Quests,
+		objLookupID:   cfg.L.QuestsID,
 		idToResFunc:   idToQuestAPIResource[seeding.Quest, Quest, QuestAPIResource, QuestApiResourceList],
 		resToListFunc: newQuestAPIResourceList,
 		retrieveQuery: cfg.db.GetQuestIDs,
@@ -285,12 +285,12 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlQuests,
 	}
 
-	e.sidequests = handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]{
-		endpoint:      epSidequests,
+	e.Sidequests = handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]{
+		Endpoint:      epSidequests,
 		resTypeSingle: rtsSidequests,
 		resTypePlural: rtpSidequests,
-		objLookup:     cfg.l.Sidequests,
-		objLookupID:   cfg.l.SidequestsID,
+		objLookup:     cfg.L.Sidequests,
+		objLookupID:   cfg.L.SidequestsID,
 		idToResFunc:   idToQuestAPIResource[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList],
 		resToListFunc: newQuestAPIResourceList,
 		retrieveQuery: cfg.db.GetSidequestIDs,
@@ -298,19 +298,19 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveSidequests,
 		avlFunc:       filterAvlSidequests,
 		subsections: map[SectionName]Subsection{
-			snSubquests: {
+			SnSubquests: {
 				dbQuery:     cfg.db.GetSidequestSubquestIDs,
 				createSubFn: createSubquestSimple,
 			},
 		},
 	}
 
-	e.subquests = handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]{
-		endpoint:      epSubquests,
+	e.Subquests = handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]{
+		Endpoint:      epSubquests,
 		resTypeSingle: rtsSubquests,
 		resTypePlural: rtpSubquests,
-		objLookup:     cfg.l.Subquests,
-		objLookupID:   cfg.l.SubquestsID,
+		objLookup:     cfg.L.Subquests,
+		objLookupID:   cfg.L.SubquestsID,
 		idToResFunc:   idToQuestAPIResource[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList],
 		resToListFunc: newQuestAPIResourceList,
 		retrieveQuery: cfg.db.GetSubquestIDs,
@@ -319,12 +319,12 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlSubquests,
 	}
 
-	e.arenaCreations = handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epArenaCreations,
+	e.ArenaCreations = handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epArenaCreations,
 		resTypeSingle: rtsArenaCreations,
 		resTypePlural: rtpArenaCreations,
-		objLookup:     cfg.l.ArenaCreations,
-		objLookupID:   cfg.l.ArenaCreationsID,
+		objLookup:     cfg.L.ArenaCreations,
+		objLookupID:   cfg.L.ArenaCreationsID,
 		idToResFunc:   idToNamedAPIResource[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetArenaCreationIDs,
@@ -332,12 +332,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveArenaCreations,
 	}
 
-	e.blitzballPrizes = handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epBlitzballPrizes,
+	e.BlitzballPrizes = handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epBlitzballPrizes,
 		resTypeSingle: rtsBlitzballPrizes,
 		resTypePlural: rtpBlitzballPrizes,
-		objLookup:     cfg.l.Positions,
-		objLookupID:   cfg.l.PositionsID,
+		objLookup:     cfg.L.Positions,
+		objLookupID:   cfg.L.PositionsID,
 		idToResFunc:   idToNamedAPIResource[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetBlitzballPrizeIDs,
@@ -345,12 +345,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveBlitzballPrizes,
 	}
 
-	e.songs = handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epSongs,
+	e.Songs = handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epSongs,
 		resTypeSingle: rtsSongs,
 		resTypePlural: rtpSongs,
-		objLookup:     cfg.l.Songs,
-		objLookupID:   cfg.l.SongsID,
+		objLookup:     cfg.L.Songs,
+		objLookupID:   cfg.L.SongsID,
 		idToResFunc:   idToNamedAPIResource[seeding.Song, Song, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetSongIDs,
@@ -358,12 +358,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveSongs,
 	}
 
-	e.fmvs = handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epFMVs,
+	e.FMVs = handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epFMVs,
 		resTypeSingle: rtsFMVs,
 		resTypePlural: rtpFMVs,
-		objLookup:     cfg.l.FMVs,
-		objLookupID:   cfg.l.FMVsID,
+		objLookup:     cfg.L.FMVs,
+		objLookupID:   cfg.L.FMVsID,
 		idToResFunc:   idToNamedAPIResource[seeding.FMV, FMV, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetFmvIDs,
@@ -371,12 +371,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveFMVs,
 	}
 
-	e.playerUnits = handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]{
-		endpoint:      epPlayerUnits,
+	e.PlayerUnits = handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]{
+		Endpoint:      epPlayerUnits,
 		resTypeSingle: rtsPlayerUnits,
 		resTypePlural: rtpPlayerUnits,
-		objLookup:     cfg.l.PlayerUnits,
-		objLookupID:   cfg.l.PlayerUnitsID,
+		objLookup:     cfg.L.PlayerUnits,
+		objLookupID:   cfg.L.PlayerUnitsID,
 		idToResFunc:   idToTypedAPIResource[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList],
 		resToListFunc: newTypedAPIResourceList,
 		retrieveQuery: cfg.db.GetPlayerUnitIDs,
@@ -384,108 +384,108 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrievePlayerUnits,
 	}
 
-	e.characters = handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epCharacters,
+	e.Characters = handlerInput[seeding.Character, Character, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epCharacters,
 		resTypeSingle: rtsCharacters,
 		resTypePlural: rtpCharacters,
-		objLookup:     cfg.l.Characters,
-		objLookupID:   cfg.l.CharactersID,
+		objLookup:     cfg.L.Characters,
+		objLookupID:   cfg.L.CharactersID,
 		idToResFunc:   idToNamedAPIResource[seeding.Character, Character, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetCharacterIDs,
 		getSingleFunc: cfg.getCharacter,
 		retrieveFunc:  cfg.retrieveCharacters,
 		subsections: map[SectionName]Subsection{
-			snDefaultAbilities: {
+			SnDefaultAbilities: {
 				dbQuery:     cfg.db.GetCharacterDefaultAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
 			},
-			snStdSgAbilities: {
+			SnStdSgAbilities: {
 				dbQuery:     cfg.db.GetCharacterSgAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
 			},
-			snExpSgAbilities: {
+			SnExpSgAbilities: {
 				dbQuery:     cfg.db.GetCharacterEgAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
 			},
-			snOverdriveAbilities: {
+			SnOverdriveAbilities: {
 				dbQuery:     cfg.db.GetCharacterOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
 			},
-			snOverdrives: {
+			SnOverdrives: {
 				dbQuery:     cfg.db.GetCharacterOverdriveIDs,
 				createSubFn: createOverdriveSimple,
 			},
 		},
 	}
 
-	e.aeons = handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epAeons,
+	e.Aeons = handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epAeons,
 		resTypeSingle: rtsAeons,
 		resTypePlural: rtpAeons,
-		objLookup:     cfg.l.Aeons,
-		objLookupID:   cfg.l.AeonsID,
+		objLookup:     cfg.L.Aeons,
+		objLookupID:   cfg.L.AeonsID,
 		idToResFunc:   idToNamedAPIResource[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetAeonIDs,
 		getSingleFunc: cfg.getAeon,
 		retrieveFunc:  cfg.retrieveAeons,
 		subsections: map[SectionName]Subsection{
-			snDefaultAbilities: {
+			SnDefaultAbilities: {
 				dbQuery:     cfg.db.GetAeonDefaultAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
 			},
-			snOverdriveAbilities: {
+			SnOverdriveAbilities: {
 				dbQuery:     cfg.db.GetAeonOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
 			},
-			snOverdrives: {
+			SnOverdrives: {
 				dbQuery:     cfg.db.GetAeonOverdriveIDs,
 				createSubFn: createOverdriveSimple,
 			},
-			snStats: {
+			SnStats: {
 				createSubFn: createAeonStatSimple,
 			},
 		},
 	}
 
-	e.characterClasses = handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epCharacterClasses,
+	e.CharacterClasses = handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epCharacterClasses,
 		resTypeSingle: rtsCharacterClasses,
 		resTypePlural: rtpCharacterClasses,
-		objLookup:     cfg.l.CharClasses,
-		objLookupID:   cfg.l.CharClassesID,
+		objLookup:     cfg.L.CharClasses,
+		objLookupID:   cfg.L.CharClassesID,
 		idToResFunc:   idToNamedAPIResource[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetCharacterClassesIDs,
 		getSingleFunc: cfg.getCharacterClass,
 		retrieveFunc:  cfg.retrieveCharacterClasses,
 		subsections: map[SectionName]Subsection{
-			snDefaultAbilities: {
+			SnDefaultAbilities: {
 				dbQuery:     cfg.db.GetCharacterClassDefaultAbilityIDs,
 				createSubFn: createAbilitySimple,
 			},
-			snLearnableAbilities: {
+			SnLearnableAbilities: {
 				dbQuery:     cfg.db.GetCharacterClassLearnableAbilityIDs,
 				createSubFn: createAbilitySimple,
 			},
-			snDefaultOverdrives: {
+			SnDefaultOverdrives: {
 				dbQuery:     cfg.db.GetCharacterClassDefaultOverdriveIDs,
 				createSubFn: createOverdriveSimple,
 			},
-			snLearnableOverdrives: {
+			SnLearnableOverdrives: {
 				dbQuery:     cfg.db.GetCharacterClassLearnableOverdriveIDs,
 				createSubFn: createOverdriveSimple,
 			},
 		},
 	}
 
-	e.monsters = handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]{
-		endpoint:         epMonsters,
+	e.Monsters = handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:         epMonsters,
 		resTypeSingle:    rtsMonsters,
 		resTypePlural:    rtpMonsters,
-		objLookup:        cfg.l.Monsters,
-		objLookupID:      cfg.l.MonstersID,
+		objLookup:        cfg.L.Monsters,
+		objLookupID:      cfg.L.MonstersID,
 		idToResFunc:      idToNamedAPIResource[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
 		getMultipleQuery: cfg.db.GetMonsterIDsByName,
@@ -494,50 +494,50 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:     cfg.retrieveMonsters,
 		avlFunc:          filterAvlMonsters,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
 			},
-			snAbilities: {
+			SnAbilities: {
 				dbQuery:     cfg.db.GetMonsterAbilityIDs,
 				createSubFn: createAbilitySimple,
 			},
-			snAreas: {
+			SnAreas: {
 				dbQuery:     cfg.db.GetMonsterAreaIDs,
 				createSubFn: createAreaSimple,
 				relationsFn: getAreaSectionRelations,
 			},
-			snMonsterFormations: {
+			SnMonsterFormations: {
 				dbQuery:     cfg.db.GetMonsterMonsterFormationIDs,
 				createSubFn: createMonsterFormationSimple,
 			},
 		},
 	}
 
-	e.abilities = handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]{
-		endpoint:      epAbilities,
+	e.Abilities = handlerInput[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList]{
+		Endpoint:      epAbilities,
 		resTypeSingle: rtsAbilities,
 		resTypePlural: rtpAbilities,
-		objLookup:     cfg.l.Abilities,
-		objLookupID:   cfg.l.AbilitiesID,
+		objLookup:     cfg.L.Abilities,
+		objLookupID:   cfg.L.AbilitiesID,
 		idToResFunc:   idToTypedAPIResource[seeding.Ability, Ability, TypedAPIResource, TypedAPIResourceList],
 		resToListFunc: newTypedAPIResourceList,
 		retrieveQuery: cfg.db.GetAbilityIDs,
 		getSingleFunc: cfg.getAbility,
 		retrieveFunc:  cfg.retrieveAbilities,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createAbilitySimple,
 			},
 		},
 	}
 
-	e.playerAbilities = handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]{
-		endpoint:         epPlayerAbilities,
+	e.PlayerAbilities = handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:         epPlayerAbilities,
 		resTypeSingle:    rtsPlayerAbilities,
 		resTypePlural:    rtpPlayerAbilities,
-		objLookup:        cfg.l.PlayerAbilities,
-		objLookupID:      cfg.l.PlayerAbilitiesID,
+		objLookup:        cfg.L.PlayerAbilities,
+		objLookupID:      cfg.L.PlayerAbilitiesID,
 		idToResFunc:      idToNamedAPIResource[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
 		getMultipleQuery: getTypedAbilityIDsByName(cfg, database.AbilityTypePlayerAbility),
@@ -545,10 +545,10 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc:    cfg.getPlayerAbility,
 		retrieveFunc:     cfg.retrievePlayerAbilities,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createPlayerAbilitySimple,
 			},
-			snMonsters: {
+			SnMonsters: {
 				dbQuery:     cfg.db.GetPlayerAbilityMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
@@ -556,12 +556,12 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.overdriveAbilities = handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]{
-		endpoint:         epOverdriveAbilities,
+	e.OverdriveAbilities = handlerInput[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:         epOverdriveAbilities,
 		resTypeSingle:    rtsOverdriveAbilities,
 		resTypePlural:    rtpOverdriveAbilities,
-		objLookup:        cfg.l.OverdriveAbilities,
-		objLookupID:      cfg.l.OverdriveAbilitiesID,
+		objLookup:        cfg.L.OverdriveAbilities,
+		objLookupID:      cfg.L.OverdriveAbilitiesID,
 		idToResFunc:      idToNamedAPIResource[seeding.OverdriveAbility, OverdriveAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
 		getMultipleQuery: getTypedAbilityIDsByName(cfg, database.AbilityTypeOverdriveAbility),
@@ -569,36 +569,36 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc:    cfg.getOverdriveAbility,
 		retrieveFunc:     cfg.retrieveOverdriveAbilities,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createOverdriveAbilitySimple,
 			},
 		},
 	}
 
-	e.itemAbilities = handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epItemAbilities,
+	e.ItemAbilities = handlerInput[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epItemAbilities,
 		resTypeSingle: rtsItemAbilities,
 		resTypePlural: rtpItemAbilities,
-		objLookup:     cfg.l.ItemAbilities,
-		objLookupID:   cfg.l.ItemAbilitiesID,
+		objLookup:     cfg.L.ItemAbilities,
+		objLookupID:   cfg.L.ItemAbilitiesID,
 		idToResFunc:   idToNamedAPIResource[seeding.ItemAbility, ItemAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetItemAbilityIDs,
 		getSingleFunc: cfg.getItemAbility,
 		retrieveFunc:  cfg.retrieveItemAbilities,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createItemAbilitySimple,
 			},
 		},
 	}
 
-	e.triggerCommands = handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]{
-		endpoint:         epTriggerCommands,
+	e.TriggerCommands = handlerInput[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:         epTriggerCommands,
 		resTypeSingle:    rtsTriggerCommands,
 		resTypePlural:    rtpTriggerCommands,
-		objLookup:        cfg.l.TriggerCommands,
-		objLookupID:      cfg.l.TriggerCommandsID,
+		objLookup:        cfg.L.TriggerCommands,
+		objLookupID:      cfg.L.TriggerCommandsID,
 		idToResFunc:      idToNamedAPIResource[seeding.TriggerCommand, TriggerCommand, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
 		getMultipleQuery: getTypedAbilityIDsByName(cfg, database.AbilityTypeTriggerCommand),
@@ -606,18 +606,18 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc:    cfg.getTriggerCommand,
 		retrieveFunc:     cfg.retrieveTriggerCommands,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createTriggerCommandSimple,
 			},
 		},
 	}
 
-	e.miscAbilities = handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList]{
-		endpoint:         epMiscAbilities,
+	e.MiscAbilities = handlerInput[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:         epMiscAbilities,
 		resTypeSingle:    rtsMiscAbilities,
 		resTypePlural:    rtpMiscAbilities,
-		objLookup:        cfg.l.MiscAbilities,
-		objLookupID:      cfg.l.MiscAbilitiesID,
+		objLookup:        cfg.L.MiscAbilities,
+		objLookupID:      cfg.L.MiscAbilitiesID,
 		idToResFunc:      idToNamedAPIResource[seeding.MiscAbility, MiscAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
 		getMultipleQuery: getTypedAbilityIDsByName(cfg, database.AbilityTypeMiscAbility),
@@ -625,18 +625,18 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc:    cfg.getMiscAbility,
 		retrieveFunc:     cfg.retrieveMiscAbilities,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createMiscAbilitySimple,
 			},
 		},
 	}
 
-	e.enemyAbilities = handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]{
-		endpoint:         epEnemyAbilities,
+	e.EnemyAbilities = handlerInput[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:         epEnemyAbilities,
 		resTypeSingle:    rtsEnemyAbilities,
 		resTypePlural:    rtpEnemyAbilities,
-		objLookup:        cfg.l.EnemyAbilities,
-		objLookupID:      cfg.l.EnemyAbilitiesID,
+		objLookup:        cfg.L.EnemyAbilities,
+		objLookupID:      cfg.L.EnemyAbilitiesID,
 		idToResFunc:      idToNamedAPIResource[seeding.EnemyAbility, EnemyAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc:    newNamedAPIResourceList,
 		getMultipleQuery: getTypedAbilityIDsByName(cfg, database.AbilityTypeEnemyAbility),
@@ -644,10 +644,10 @@ func (cfg *Config) EndpointsInit() {
 		getSingleFunc:    cfg.getEnemyAbility,
 		retrieveFunc:     cfg.retrieveEnemyAbilities,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createEnemyAbilitySimple,
 			},
-			snMonsters: {
+			SnMonsters: {
 				dbQuery:     cfg.db.GetEnemyAbilityMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
@@ -655,12 +655,12 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.aeonCommands = handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epAeonCommands,
+	e.AeonCommands = handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epAeonCommands,
 		resTypeSingle: rtsAeonCommands,
 		resTypePlural: rtpAeonCommands,
-		objLookup:     cfg.l.AeonCommands,
-		objLookupID:   cfg.l.AeonCommandsID,
+		objLookup:     cfg.L.AeonCommands,
+		objLookupID:   cfg.L.AeonCommandsID,
 		idToResFunc:   idToNamedAPIResource[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetAeonCommandIDs,
@@ -668,64 +668,64 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveAeonCommands,
 	}
 
-	e.overdriveCommands = handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epOverdriveCommands,
+	e.OverdriveCommands = handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epOverdriveCommands,
 		resTypeSingle: rtsOverdriveCommands,
 		resTypePlural: rtpOverdriveCommands,
-		objLookup:     cfg.l.OverdriveCommands,
-		objLookupID:   cfg.l.OverdriveCommandsID,
+		objLookup:     cfg.L.OverdriveCommands,
+		objLookupID:   cfg.L.OverdriveCommandsID,
 		idToResFunc:   idToNamedAPIResource[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetOverdriveCommandIDs,
 		getSingleFunc: cfg.getOverdriveCommand,
 		retrieveFunc:  cfg.retrieveOverdriveCommands,
 		subsections: map[SectionName]Subsection{
-			snOverdriveAbilities: {
+			SnOverdriveAbilities: {
 				dbQuery:     ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveAbilityIDs),
 				createSubFn: createOverdriveAbilitySimple,
 			},
-			snOverdrives: {
+			SnOverdrives: {
 				dbQuery:     ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveIDs),
 				createSubFn: createOverdriveSimple,
 			},
 		},
 	}
 
-	e.overdrives = handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epOverdrives,
+	e.Overdrives = handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epOverdrives,
 		resTypeSingle: rtsOverdrives,
 		resTypePlural: rtpOverdrives,
-		objLookup:     cfg.l.Overdrives,
-		objLookupID:   cfg.l.OverdrivesID,
+		objLookup:     cfg.L.Overdrives,
+		objLookupID:   cfg.L.OverdrivesID,
 		idToResFunc:   idToNamedAPIResource[seeding.Overdrive, Overdrive, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetOverdriveIDs,
 		getSingleFunc: cfg.getOverdrive,
 		retrieveFunc:  cfg.retrieveOverdrives,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createOverdriveSimple,
 			},
-			snOverdriveAbilities: {
+			SnOverdriveAbilities: {
 				dbQuery:     cfg.db.GetOverdriveOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
 			},
 		},
 	}
 
-	e.ronsoRages = handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epRonsoRages,
+	e.RonsoRages = handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epRonsoRages,
 		resTypeSingle: rtsRonsoRages,
 		resTypePlural: rtpRonsoRages,
-		objLookup:     cfg.l.RonsoRages,
-		objLookupID:   cfg.l.RonsoRagesID,
+		objLookup:     cfg.L.RonsoRages,
+		objLookupID:   cfg.L.RonsoRagesID,
 		idToResFunc:   idToNamedAPIResource[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetRonsoRageIDs,
 		getSingleFunc: cfg.getRonsoRage,
 		retrieveFunc:  cfg.retrieveRonsoRages,
 		subsections: map[SectionName]Subsection{
-			snMonsters: {
+			SnMonsters: {
 				dbQuery:     cfg.db.GetRonsoRageMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
@@ -733,50 +733,50 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.submenus = handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epSubmenus,
+	e.Submenus = handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epSubmenus,
 		resTypeSingle: rtsSubmenus,
 		resTypePlural: rtpSubmenus,
-		objLookup:     cfg.l.Submenus,
-		objLookupID:   cfg.l.SubmenusID,
+		objLookup:     cfg.L.Submenus,
+		objLookupID:   cfg.L.SubmenusID,
 		idToResFunc:   idToNamedAPIResource[seeding.Submenu, Submenu, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetSubmenuIDs,
 		getSingleFunc: cfg.getSubmenu,
 		retrieveFunc:  cfg.retrieveSubmenus,
 		subsections: map[SectionName]Subsection{
-			snAbilities: {
+			SnAbilities: {
 				dbQuery:     ToIntManyNull(cfg.db.GetSubmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
 			},
 		},
 	}
 
-	e.topmenus = handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epTopmenus,
+	e.Topmenus = handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epTopmenus,
 		resTypeSingle: rtsTopmenus,
 		resTypePlural: rtpTopmenus,
-		objLookup:     cfg.l.Topmenus,
-		objLookupID:   cfg.l.TopmenusID,
+		objLookup:     cfg.L.Topmenus,
+		objLookupID:   cfg.L.TopmenusID,
 		idToResFunc:   idToNamedAPIResource[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetTopmenuIDs,
 		getSingleFunc: cfg.getTopmenu,
 		retrieveFunc:  cfg.retrieveTopmenus,
 		subsections: map[SectionName]Subsection{
-			snAbilities: {
+			SnAbilities: {
 				dbQuery:     ToIntManyNull(cfg.db.GetTopmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
 			},
 		},
 	}
 
-	e.allItems = handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]{
-		endpoint:      epAllItems,
+	e.AllItems = handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]{
+		Endpoint:      epAllItems,
 		resTypeSingle: rtsAllItems,
 		resTypePlural: rtpAllItems,
-		objLookup:     cfg.l.MasterItems,
-		objLookupID:   cfg.l.MasterItemsID,
+		objLookup:     cfg.L.MasterItems,
+		objLookupID:   cfg.L.MasterItemsID,
 		idToResFunc:   idToTypedAPIResource[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList],
 		resToListFunc: newTypedAPIResourceList,
 		retrieveQuery: cfg.db.GetMasterItemIDs,
@@ -785,12 +785,12 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlMasterItems,
 	}
 
-	e.items = handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epItems,
+	e.Items = handlerInput[seeding.Item, Item, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epItems,
 		resTypeSingle: rtsItems,
 		resTypePlural: rtpItems,
-		objLookup:     cfg.l.Items,
-		objLookupID:   cfg.l.ItemsID,
+		objLookup:     cfg.L.Items,
+		objLookupID:   cfg.L.ItemsID,
 		idToResFunc:   idToNamedAPIResource[seeding.Item, Item, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetItemIDs,
@@ -798,19 +798,19 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveItems,
 		avlFunc:       filterAvlItems,
 		subsections: map[SectionName]Subsection{
-			snMixes: {
+			SnMixes: {
 				dbQuery:     cfg.db.GetItemMixIDs,
 				createSubFn: createMixSimple,
 			},
 		},
 	}
 
-	e.spheres = handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epSpheres,
+	e.Spheres = handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epSpheres,
 		resTypeSingle: rtsSpheres,
 		resTypePlural: rtpSpheres,
-		objLookup:     cfg.l.Spheres,
-		objLookupID:   cfg.l.SpheresID,
+		objLookup:     cfg.L.Spheres,
+		objLookupID:   cfg.L.SpheresID,
 		idToResFunc:   idToNamedAPIResource[seeding.Sphere, Sphere, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetSphereIDs,
@@ -819,12 +819,12 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlSpheres,
 	}
 
-	e.keyItems = handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epKeyItems,
+	e.KeyItems = handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epKeyItems,
 		resTypeSingle: rtsKeyItems,
 		resTypePlural: rtpKeyItems,
-		objLookup:     cfg.l.KeyItems,
-		objLookupID:   cfg.l.KeyItemsID,
+		objLookup:     cfg.L.KeyItems,
+		objLookupID:   cfg.L.KeyItemsID,
 		idToResFunc:   idToNamedAPIResource[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetKeyItemIDs,
@@ -833,12 +833,12 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlKeyItems,
 	}
 
-	e.primers = handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epPrimers,
+	e.Primers = handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epPrimers,
 		resTypeSingle: rtsPrimers,
 		resTypePlural: rtpPrimers,
-		objLookup:     cfg.l.Primers,
-		objLookupID:   cfg.l.PrimersID,
+		objLookup:     cfg.L.Primers,
+		objLookupID:   cfg.L.PrimersID,
 		idToResFunc:   idToNamedAPIResource[seeding.Primer, Primer, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetPrimerIDs,
@@ -847,30 +847,30 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlPrimers,
 	}
 
-	e.mixes = handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epMixes,
+	e.Mixes = handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epMixes,
 		resTypeSingle: rtsMixes,
 		resTypePlural: rtpMixes,
-		objLookup:     cfg.l.Mixes,
-		objLookupID:   cfg.l.MixesID,
+		objLookup:     cfg.L.Mixes,
+		objLookupID:   cfg.L.MixesID,
 		idToResFunc:   idToNamedAPIResource[seeding.Mix, Mix, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetMixIDs,
 		getSingleFunc: cfg.getMix,
 		retrieveFunc:  cfg.retrieveMixes,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createMixSimple,
 			},
 		},
 	}
 
-	e.autoAbilities = handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epAutoAbilities,
+	e.AutoAbilities = handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epAutoAbilities,
 		resTypeSingle: rtsAutoAbilities,
 		resTypePlural: rtpAutoAbilities,
-		objLookup:     cfg.l.AutoAbilities,
-		objLookupID:   cfg.l.AutoAbilitiesID,
+		objLookup:     cfg.L.AutoAbilities,
+		objLookupID:   cfg.L.AutoAbilitiesID,
 		idToResFunc:   idToNamedAPIResource[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetAutoAbilityIDs,
@@ -878,18 +878,18 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveAutoAbilities,
 		avlFunc:       filterAvlAutoAbilities,
 		subsections: map[SectionName]Subsection{
-			snSimple: {
+			SnSimple: {
 				createSubFn: createAutoAbilitySimple,
 			},
 		},
 	}
 
-	e.equipmentTables = handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]{
-		endpoint:      epEquipmentTables,
+	e.EquipmentTables = handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]{
+		Endpoint:      epEquipmentTables,
 		resTypeSingle: rtsEquipmentTables,
 		resTypePlural: rtpEquipmentTables,
-		objLookup:     cfg.l.EquipmentTables,
-		objLookupID:   cfg.l.EquipmentTablesID,
+		objLookup:     cfg.L.EquipmentTables,
+		objLookupID:   cfg.L.EquipmentTablesID,
 		idToResFunc:   idToUnnamedAPIResource[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList],
 		resToListFunc: newUnnamedAPIResourceList,
 		retrieveQuery: cfg.db.GetEquipmentTableIDs,
@@ -897,12 +897,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveEquipmentTables,
 	}
 
-	e.equipment = handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epEquipment,
+	e.Equipment = handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epEquipment,
 		resTypeSingle: rtsEquipment,
 		resTypePlural: rtpEquipment,
-		objLookup:     cfg.l.EquipmentNames,
-		objLookupID:   cfg.l.EquipmentNamesID,
+		objLookup:     cfg.L.EquipmentNames,
+		objLookupID:   cfg.L.EquipmentNamesID,
 		idToResFunc:   idToNamedAPIResource[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetEquipmentIDs,
@@ -910,31 +910,31 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveEquipment,
 	}
 
-	e.celestialWeapons = handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epCelestialWeapons,
+	e.CelestialWeapons = handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epCelestialWeapons,
 		resTypeSingle: rtsCelestialWeapons,
 		resTypePlural: rtpCelestialWeapons,
-		objLookup:     cfg.l.CelestialWeapons,
-		objLookupID:   cfg.l.CelestialWeaponsID,
+		objLookup:     cfg.L.CelestialWeapons,
+		objLookupID:   cfg.L.CelestialWeaponsID,
 		idToResFunc:   idToNamedAPIResource[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetCelestialWeaponIDs,
 		getSingleFunc: cfg.getCelestialWeapon,
 		retrieveFunc:  cfg.retrieveCelestialWeapons,
 		subsections: map[SectionName]Subsection{
-			snAutoAbilities: {
+			SnAutoAbilities: {
 				dbQuery:     convertGetCelestialWeaponAutoAbilityIDs(cfg),
 				createSubFn: createAutoAbilitySimple,
 			},
 		},
 	}
 
-	e.stats = handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epStats,
+	e.Stats = handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epStats,
 		resTypeSingle: rtsStats,
 		resTypePlural: rtpStats,
-		objLookup:     cfg.l.Stats,
-		objLookupID:   cfg.l.StatsID,
+		objLookup:     cfg.L.Stats,
+		objLookupID:   cfg.L.StatsID,
 		idToResFunc:   idToNamedAPIResource[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetStatIDs,
@@ -942,12 +942,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveStats,
 	}
 
-	e.properties = handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epProperties,
+	e.Properties = handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epProperties,
 		resTypeSingle: rtsProperties,
 		resTypePlural: rtpProperties,
-		objLookup:     cfg.l.Properties,
-		objLookupID:   cfg.l.PropertiesID,
+		objLookup:     cfg.L.Properties,
+		objLookupID:   cfg.L.PropertiesID,
 		idToResFunc:   idToNamedAPIResource[seeding.Property, Property, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetPropertyIDs,
@@ -955,12 +955,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveProperties,
 	}
 
-	e.overdriveModes = handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epOverdriveModes,
+	e.OverdriveModes = handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epOverdriveModes,
 		resTypeSingle: rtsOverdriveModes,
 		resTypePlural: rtpOverdriveModes,
-		objLookup:     cfg.l.OverdriveModes,
-		objLookupID:   cfg.l.OverdriveModesID,
+		objLookup:     cfg.L.OverdriveModes,
+		objLookupID:   cfg.L.OverdriveModesID,
 		idToResFunc:   idToNamedAPIResource[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetOverdriveModeIDs,
@@ -968,12 +968,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveOverdriveModes,
 	}
 
-	e.elements = handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epElements,
+	e.Elements = handlerInput[seeding.Element, Element, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epElements,
 		resTypeSingle: rtsElements,
 		resTypePlural: rtpElements,
-		objLookup:     cfg.l.Elements,
-		objLookupID:   cfg.l.ElementsID,
+		objLookup:     cfg.L.Elements,
+		objLookupID:   cfg.L.ElementsID,
 		idToResFunc:   idToNamedAPIResource[seeding.Element, Element, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetElementIDs,
@@ -981,12 +981,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveElements,
 	}
 
-	e.statusConditions = handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epStatusConditions,
+	e.StatusConditions = handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epStatusConditions,
 		resTypeSingle: rtsStatusConditions,
 		resTypePlural: rtpStatusConditions,
-		objLookup:     cfg.l.StatusConditions,
-		objLookupID:   cfg.l.StatusConditionsID,
+		objLookup:     cfg.L.StatusConditions,
+		objLookupID:   cfg.L.StatusConditionsID,
 		idToResFunc:   idToNamedAPIResource[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetStatusConditionIDs,
@@ -994,12 +994,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveStatusConditions,
 	}
 
-	e.modifiers = handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]{
-		endpoint:      epModifiers,
+	e.Modifiers = handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]{
+		Endpoint:      epModifiers,
 		resTypeSingle: rtsModifiers,
 		resTypePlural: rtpModifiers,
-		objLookup:     cfg.l.Modifiers,
-		objLookupID:   cfg.l.ModifiersID,
+		objLookup:     cfg.L.Modifiers,
+		objLookupID:   cfg.L.ModifiersID,
 		idToResFunc:   idToNamedAPIResource[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList],
 		resToListFunc: newNamedAPIResourceList,
 		retrieveQuery: cfg.db.GetModifierIDs,
@@ -1007,12 +1007,12 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveModifiers,
 	}
 
-	e.agilityTiers = handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]{
-		endpoint:      epAgilityTiers,
+	e.AgilityTiers = handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList]{
+		Endpoint:      epAgilityTiers,
 		resTypeSingle: rtsAgilityTiers,
 		resTypePlural: rtpAgilityTiers,
 		objLookup:     nil,
-		objLookupID:   cfg.l.AgilityTiersID,
+		objLookupID:   cfg.L.AgilityTiersID,
 		idToResFunc:   idToUnnamedAPIResource[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedApiResourceList],
 		resToListFunc: newUnnamedAPIResourceList,
 		retrieveQuery: cfg.db.GetAgilityTierIDs,
@@ -1020,101 +1020,101 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveAgilityTiers,
 	}
 
-	e.enums = handlerInputEnums{
-		endpoint: epEnums,
+	e.Enums = handlerInputEnums{
+		Endpoint: epEnums,
 		usage:    []string{"/api/enums", "/api/enums/{enum_name}"},
-		lookup:   cfg.t.Lookup,
+		lookup:   cfg.T.Lookup,
 	}
 
-	e.endpoints = handlerInputEndpoints{
-		endpoint: epEndpoints,
+	e.Endpoints = handlerInputEndpoints{
+		Endpoint: epEndpoints,
 		usage:    []string{"/api/endpoints"},
 	}
 
-	e.alBhed = handlerInputService[AlBhedParams, AlBhedResponse]{
-		endpoint:  epAlBhed,
+	e.AlBhed = handlerInputService[AlBhedParams, AlBhedResponse]{
+		Endpoint:  epAlBhed,
 		verifyFn:  verifyAlBhedParams,
 		executeFn: handleAlBhed,
 		docsFn:    getAlBhedParamsDoc,
 		samplesFn: getAlBhedParamsSamples,
 	}
 
-	e.turnOrder = handlerInputService[TurnOrderParams, TurnOrderResponse]{
-		endpoint:  epTurnOrder,
+	e.TurnOrder = handlerInputService[TurnOrderParams, TurnOrderResponse]{
+		Endpoint:  epTurnOrder,
 		verifyFn:  verifyTurnOrderParams,
 		executeFn: handleTurnOrder,
 		docsFn:    getTurnOrderParamsDoc,
 		samplesFn: getTurnOrderParamsSamples,
 	}
 
-	e.dropChance = handlerInputService[DropChanceParams, DropChanceResponse]{
-		endpoint:  epDropChance,
+	e.DropChance = handlerInputService[DropChanceParams, DropChanceResponse]{
+		Endpoint:  epDropChance,
 		verifyFn:  verifyDropChanceParams,
 		executeFn: handleDropChance,
 		docsFn:    getDropChanceParamsDoc,
 		samplesFn: getDropChanceParamsSamples,
 	}
 
-	cfg.e = &e
-	e.endpoints.slice = e.initializeEndpointSlice()
+	cfg.E = &e
+	e.Endpoints.slice = e.InitializeEndpointSlice()
 
 }
 
-func (e endpoints) initializeEndpointSlice() []EndpointName {
+func (e endpoints) InitializeEndpointSlice() []EndpointName {
 	endpoints := []EndpointName{
-		e.locations.endpoint,
-		e.sublocations.endpoint,
-		e.areas.endpoint,
-		e.monsterFormations.endpoint,
-		e.shops.endpoint,
-		e.treasures.endpoint,
-		e.quests.endpoint,
-		e.sidequests.endpoint,
-		e.subquests.endpoint,
-		e.arenaCreations.endpoint,
-		e.blitzballPrizes.endpoint,
-		e.songs.endpoint,
-		e.fmvs.endpoint,
-		e.playerUnits.endpoint,
-		e.characters.endpoint,
-		e.aeons.endpoint,
-		e.characterClasses.endpoint,
-		e.monsters.endpoint,
-		e.abilities.endpoint,
-		e.playerAbilities.endpoint,
-		e.overdriveAbilities.endpoint,
-		e.itemAbilities.endpoint,
-		e.triggerCommands.endpoint,
-		e.miscAbilities.endpoint,
-		e.enemyAbilities.endpoint,
-		e.aeonCommands.endpoint,
-		e.overdriveCommands.endpoint,
-		e.overdrives.endpoint,
-		e.ronsoRages.endpoint,
-		e.submenus.endpoint,
-		e.topmenus.endpoint,
-		e.allItems.endpoint,
-		e.items.endpoint,
-		e.spheres.endpoint,
-		e.keyItems.endpoint,
-		e.primers.endpoint,
-		e.mixes.endpoint,
-		e.autoAbilities.endpoint,
-		e.equipmentTables.endpoint,
-		e.equipment.endpoint,
-		e.celestialWeapons.endpoint,
-		e.stats.endpoint,
-		e.properties.endpoint,
-		e.overdriveModes.endpoint,
-		e.elements.endpoint,
-		e.statusConditions.endpoint,
-		e.modifiers.endpoint,
-		e.agilityTiers.endpoint,
-		e.enums.endpoint,
-		e.endpoints.endpoint,
-		e.alBhed.endpoint,
-		e.turnOrder.endpoint,
-		e.dropChance.endpoint,
+		e.Locations.Endpoint,
+		e.Sublocations.Endpoint,
+		e.Areas.Endpoint,
+		e.MonsterFormations.Endpoint,
+		e.Shops.Endpoint,
+		e.Treasures.Endpoint,
+		e.Quests.Endpoint,
+		e.Sidequests.Endpoint,
+		e.Subquests.Endpoint,
+		e.ArenaCreations.Endpoint,
+		e.BlitzballPrizes.Endpoint,
+		e.Songs.Endpoint,
+		e.FMVs.Endpoint,
+		e.PlayerUnits.Endpoint,
+		e.Characters.Endpoint,
+		e.Aeons.Endpoint,
+		e.CharacterClasses.Endpoint,
+		e.Monsters.Endpoint,
+		e.Abilities.Endpoint,
+		e.PlayerAbilities.Endpoint,
+		e.OverdriveAbilities.Endpoint,
+		e.ItemAbilities.Endpoint,
+		e.TriggerCommands.Endpoint,
+		e.MiscAbilities.Endpoint,
+		e.EnemyAbilities.Endpoint,
+		e.AeonCommands.Endpoint,
+		e.OverdriveCommands.Endpoint,
+		e.Overdrives.Endpoint,
+		e.RonsoRages.Endpoint,
+		e.Submenus.Endpoint,
+		e.Topmenus.Endpoint,
+		e.AllItems.Endpoint,
+		e.Items.Endpoint,
+		e.Spheres.Endpoint,
+		e.KeyItems.Endpoint,
+		e.Primers.Endpoint,
+		e.Mixes.Endpoint,
+		e.AutoAbilities.Endpoint,
+		e.EquipmentTables.Endpoint,
+		e.Equipment.Endpoint,
+		e.CelestialWeapons.Endpoint,
+		e.Stats.Endpoint,
+		e.Properties.Endpoint,
+		e.OverdriveModes.Endpoint,
+		e.Elements.Endpoint,
+		e.StatusConditions.Endpoint,
+		e.Modifiers.Endpoint,
+		e.AgilityTiers.Endpoint,
+		e.Enums.Endpoint,
+		e.Endpoints.Endpoint,
+		e.AlBhed.Endpoint,
+		e.TurnOrder.Endpoint,
+		e.DropChance.Endpoint,
 	}
 
 	slices.Sort(endpoints)

@@ -6,15 +6,15 @@ import (
 )
 
 type AgilityVals struct {
-	TickSpeed		int32		`json:"tick_speed"`
-	MinICV			*int32		`json:"min_icv"`
-	MaxICV			*int32		`json:"max_icv"`
+	TickSpeed int32  `json:"tick_speed"`
+	MinICV    *int32 `json:"min_icv"`
+	MaxICV    *int32 `json:"max_icv"`
 }
 
 func getAllAgilityTiers(cfg *Config) []seeding.AgilityTier {
-	tiers := make([]seeding.AgilityTier, len(cfg.l.AgilityTiersID))
+	tiers := make([]seeding.AgilityTier, len(cfg.L.AgilityTiersID))
 
-	for _, tier := range cfg.l.AgilityTiersID {
+	for _, tier := range cfg.L.AgilityTiersID {
 		tiers = append(tiers, tier)
 	}
 
@@ -38,8 +38,8 @@ func getAgilityTier(cfg *Config, agility int32) seeding.AgilityTier {
 func extractAglTierChar(cfg *Config, participant Participant, params TurnOrderParams) AgilityVals {
 	agilityTier := getAgilityTier(cfg, participant.Agility)
 	aglVals := AgilityVals{
-		TickSpeed: 	agilityTier.TickSpeed,
-		MaxICV: 	agilityTier.CharacterMaxICV,
+		TickSpeed: agilityTier.TickSpeed,
+		MaxICV:    agilityTier.CharacterMaxICV,
 	}
 
 	for _, subtier := range agilityTier.CharacterMinICVs {
@@ -52,18 +52,16 @@ func extractAglTierChar(cfg *Config, participant Participant, params TurnOrderPa
 	return calcAgilityVals(aglVals, participant, params, nil)
 }
 
-
 func extractAglTierMon(cfg *Config, participant Participant, params TurnOrderParams, monFirstTurnTier *seeding.AgilityTier) AgilityVals {
 	agilityTier := getAgilityTier(cfg, participant.Agility)
 	aglVals := AgilityVals{
-		TickSpeed: 	agilityTier.TickSpeed,
-		MinICV: 	agilityTier.MonsterMinICV,
-		MaxICV: 	agilityTier.MonsterMaxICV,
+		TickSpeed: agilityTier.TickSpeed,
+		MinICV:    agilityTier.MonsterMinICV,
+		MaxICV:    agilityTier.MonsterMaxICV,
 	}
 
 	return calcAgilityVals(aglVals, participant, params, monFirstTurnTier)
 }
-
 
 func calcAgilityVals(aglVals AgilityVals, participant Participant, params TurnOrderParams, monFirstTurnTier *seeding.AgilityTier) AgilityVals {
 	aglVals.TickSpeed = calcTickSpeed(aglVals.TickSpeed, participant.Status)
@@ -71,7 +69,6 @@ func calcAgilityVals(aglVals AgilityVals, participant Participant, params TurnOr
 
 	return aglVals
 }
-
 
 func calcTickSpeed(tickSpeed int32, statusPtr *string) int32 {
 	if statusPtr == nil {
@@ -100,44 +97,44 @@ func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderPa
 	if minPtr == nil || maxPtr == nil {
 		return nil, nil
 	}
-	
+
 	if params.IgnFirstTurn {
 		return getEqualICVs(0)
 	}
 
 	if participant.FirstStrike {
 		switch participant.Party {
-		case battlePartyPlayer:
+		case BattlePartyPlayer:
 			return getEqualICVs(0)
 
-		case battlePartyOpponent:
+		case BattlePartyOpponent:
 			return getEqualICVs(-1)
-		} 
+		}
 	}
 
 	switch params.BattleStart {
 	case string(database.BattleStartAmbush):
 		switch participant.Party {
-		case battlePartyPlayer:
+		case BattlePartyPlayer:
 			return calcICVsStartFavorable(*minPtr, participant.Status)
 
-		case battlePartyOpponent:
+		case BattlePartyOpponent:
 			return getEqualICVs(0)
 		}
 
 	case string(database.BattleStartPreemptive):
 		switch participant.Party {
-		case battlePartyPlayer:
+		case BattlePartyPlayer:
 			return getEqualICVs(0)
-			
-		case battlePartyOpponent:
+
+		case BattlePartyOpponent:
 			return calcICVsStartFavorable(*minPtr, participant.Status)
 		}
 	}
 
 	minICV := *minPtr
 	maxICV := *maxPtr
-	
+
 	if participant.Status == nil {
 		return &minICV, &maxICV
 	}
@@ -163,7 +160,7 @@ func calcICVsStartFavorable(minVal int32, status *string) (*int32, *int32) {
 	if status == nil || *status != string(database.HasteStatusAutoHaste) {
 		return minPtr, maxPtr
 	}
-	
+
 	*minPtr /= 2
 	*maxPtr /= 2
 

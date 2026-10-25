@@ -10,8 +10,8 @@ type FoundEquipment struct {
 
 func convertFoundEquipment(cfg *Config, fe seeding.TreasureEquipment) FoundEquipment {
 	return FoundEquipment{
-		EquipmentName:    nameToNamedAPIResource(cfg, cfg.e.equipment, fe.Name, nil),
-		Abilities:        namesToNamedAPIResources(cfg, cfg.e.autoAbilities, fe.Abilities),
+		EquipmentName:    nameToNamedAPIResource(cfg, cfg.E.Equipment, fe.Name, nil),
+		Abilities:        namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, fe.Abilities),
 		EmptySlotsAmount: fe.EmptySlotsAmount,
 	}
 }

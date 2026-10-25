@@ -53,7 +53,7 @@ func filterIDs[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cf
 		}
 	}
 
-	flip, err := parseBooleanQuery(r, i.queryLookup[qpnFlip])
+	flip, err := parseBooleanQuery(r, i.queryLookup[QpnFlip])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

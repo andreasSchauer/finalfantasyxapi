@@ -1,0 +1,340 @@
+package apiTest
+
+import (
+	"net/http"
+	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+)
+
+func TestGetMiscAbility(t *testing.T) {
+	t.Parallel()
+	tests := []expMiscAbility{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/25",
+				expectedStatus: http.StatusNotFound,
+				expectedErr:    "misc ability with provided id '25' doesn't exist. max id: 24.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/2?ability_user=wakka",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid input for parameter 'ability_user': player unit 'wakka' can't learn misc ability 'attack - 2'",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/2?ability_user=we",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "unknown player unit 'we' used for parameter 'ability_user'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/2?bomb_wpn=true",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid usage of parameter 'bomb_wpn'. when using parameter 'bomb_wpn', the following parameter(s) must be present: 'ability_user'.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/1?ability_user=8&celestial_weapon=true",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "character seymour doesn't have a celestial weapon.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/1?ability_user=9&celestial_weapon=true",
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "aeons don't use celestial weapons.",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/1?ability_user=wakka&celestial_weapon=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"battle interactions": 1,
+				},
+			},
+			expNameVer:       newExpNameVer(1, "attack", 1),
+			rank:             h.GetInt32Ptr(3),
+			appearsInHelpBar: false,
+			canCopyCat:       true,
+			untypedAbility:   374,
+			topmenu:          h.GetInt32Ptr(1),
+			submenu:          nil,
+			openSubmenu:      nil,
+			battleInteractions: []expBattleInteraction{
+				{
+					target:         "single-target",
+					abilityRange:   h.GetInt32Ptr(4),
+					hitAmount:      1,
+					shatterRate:    30,
+					basedOnUserAtk: true,
+					darkable:       true,
+					silenceable:    false,
+					reflectable:    false,
+					accuracy: expAccuracy{
+						accSource:   "accuracy",
+						hitChance:   nil,
+						accModifier: h.GetFloat32Ptr(1),
+					},
+					damage: &expDamage{
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaClstlHpHigh,
+							damageConstant: 16,
+						},
+						critical:        h.GetStrPtr("crit-equip"),
+						criticalPlusVal: nil,
+						isPiercing:      false,
+						breakDmgLmt:     h.GetStrPtr("auto-ability"),
+						element:         nil,
+					},
+					inflictedDelay:            nil,
+					inflictedStatusConditions: []int32{},
+					removedStatusConditions:   []int32{},
+					copiedStatusConditions:    []int32{},
+					statChanges:               []expStatChange{},
+					modifierChanges:           []expModChange{},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/1?ability_user=3&bomb_wpn=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"battle interactions": 1,
+				},
+			},
+			expNameVer:       newExpNameVer(1, "attack", 1),
+			rank:             h.GetInt32Ptr(3),
+			appearsInHelpBar: false,
+			canCopyCat:       true,
+			untypedAbility:   374,
+			topmenu:          h.GetInt32Ptr(1),
+			submenu:          nil,
+			openSubmenu:      nil,
+			battleInteractions: []expBattleInteraction{
+				{
+					target:         "single-target",
+					abilityRange:   h.GetInt32Ptr(4),
+					hitAmount:      1,
+					shatterRate:    30,
+					basedOnUserAtk: true,
+					darkable:       true,
+					silenceable:    false,
+					reflectable:    false,
+					accuracy: expAccuracy{
+						accSource:   "accuracy",
+						hitChance:   nil,
+						accModifier: h.GetFloat32Ptr(1),
+					},
+					damage: &expDamage{
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaStrVsDef,
+							damageConstant: 18,
+						},
+						critical:        h.GetStrPtr("crit-equip"),
+						criticalPlusVal: nil,
+						isPiercing:      false,
+						breakDmgLmt:     h.GetStrPtr("auto-ability"),
+						element:         nil,
+					},
+					inflictedDelay:            nil,
+					inflictedStatusConditions: []int32{},
+					removedStatusConditions:   []int32{},
+					copiedStatusConditions:    []int32{},
+					statChanges:               []expStatChange{},
+					modifierChanges:           []expModChange{},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/2?ability_user=16&bomb_wpn=true",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"battle interactions": 1,
+				},
+			},
+			expNameVer:       newExpNameVer(2, "attack", 2),
+			rank:             h.GetInt32Ptr(3),
+			appearsInHelpBar: false,
+			canCopyCat:       false,
+			untypedAbility:   375,
+			topmenu:          h.GetInt32Ptr(1),
+			submenu:          nil,
+			openSubmenu:      nil,
+			battleInteractions: []expBattleInteraction{
+				{
+					target:         "single-target",
+					abilityRange:   h.GetInt32Ptr(1),
+					hitAmount:      1,
+					shatterRate:    20,
+					basedOnUserAtk: true,
+					darkable:       true,
+					silenceable:    false,
+					reflectable:    false,
+					accuracy: expAccuracy{
+						accSource:   "rate",
+						hitChance:   h.GetInt32Ptr(255),
+						accModifier: nil,
+					},
+					damage: &expDamage{
+						attackType: database.AttackTypeAttack,
+						damageType: database.DamageTypePhysical,
+						hp: &expClassDamage{
+							damageFormula:  database.DamageFormulaStrVsDef,
+							damageConstant: 14,
+						},
+						critical:        h.GetStrPtr("crit-equip"),
+						criticalPlusVal: nil,
+						isPiercing:      true,
+						breakDmgLmt:     h.GetStrPtr("auto-ability"),
+						element:         nil,
+					},
+					inflictedDelay:            nil,
+					inflictedStatusConditions: []int32{},
+					removedStatusConditions:   []int32{},
+					copiedStatusConditions:    []int32{},
+					statChanges:               []expStatChange{},
+					modifierChanges:           []expModChange{},
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/10",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"battle interactions": 0,
+				},
+			},
+			expNameVer:         newExpNameVer(10, "switch", 1),
+			rank:               h.GetInt32Ptr(0),
+			appearsInHelpBar:   false,
+			canCopyCat:         false,
+			untypedAbility:     383,
+			topmenu:            nil,
+			submenu:            h.GetInt32Ptr(13),
+			openSubmenu:        nil,
+			battleInteractions: []expBattleInteraction{},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/4",
+				expectedStatus: http.StatusOK,
+				dontCheck:      map[string]bool{},
+				expLengths: map[string]int{
+					"battle interactions": 0,
+				},
+			},
+			expNameVer:         newExpNameVer(4, "weapon", 0),
+			rank:               h.GetInt32Ptr(1),
+			appearsInHelpBar:   false,
+			canCopyCat:         false,
+			untypedAbility:     377,
+			topmenu:            h.GetInt32Ptr(2),
+			submenu:            nil,
+			openSubmenu:        h.GetInt32Ptr(7),
+			battleInteractions: []expBattleInteraction{},
+		},
+	}
+
+	testSingleResources(t, tests, "GetMiscAbility", testCfg.HandleMiscAbilities, compareMiscAbilities)
+}
+
+func TestGetMultipleMiscAbilities(t *testing.T) {
+	t.Parallel()
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/attack",
+				expectedStatus: http.StatusMultipleChoices,
+			},
+			count:   2,
+			results: []int32{1, 2},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/switch",
+				expectedStatus: http.StatusMultipleChoices,
+			},
+			count:   7,
+			results: []int32{10, 11, 12, 13, 14, 15, 16},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities/summon",
+				expectedStatus: http.StatusMultipleChoices,
+			},
+			count:   8,
+			results: []int32{17, 18, 19, 20, 21, 22, 23, 24},
+		},
+	}
+
+	testIdList(t, tests, testCfg.E.MiscAbilities.Endpoint, "GetMultipleMiscAbilities", testCfg.HandleMiscAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+}
+
+func TestRetrieveMiscAbilities(t *testing.T) {
+	t.Parallel()
+	tests := []expListIDs{
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities?limit=max",
+				expectedStatus: http.StatusOK,
+			},
+			count:    24,
+			previous: nil,
+			next:     nil,
+			results:  []int32{1, 8, 13, 17, 18, 24},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities?rank=1",
+				expectedStatus: http.StatusOK,
+			},
+			count:    3,
+			previous: nil,
+			next:     nil,
+			results:  []int32{4, 5, 6},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities?help_bar=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:    3,
+			previous: nil,
+			next:     nil,
+			results:  []int32{7, 8, 9},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     "/api/misc-abilities?user=characters&copycat=true",
+				expectedStatus: http.StatusOK,
+			},
+			count:    3,
+			previous: nil,
+			next:     nil,
+			results:  []int32{1, 3, 6},
+		},
+	}
+
+	testIdList(t, tests, testCfg.E.MiscAbilities.Endpoint, "RetrieveMiscAbilities", testCfg.HandleMiscAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+}

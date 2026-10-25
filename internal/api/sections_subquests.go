@@ -20,12 +20,12 @@ func (s SubquestSimple) GetURL() string {
 }
 
 func createSubquestSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.subquests
+	i := cfg.E.Subquests
 	subquest, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	subquestSimple := SubquestSimple{
 		ID:        subquest.ID,
-		URL:       createResourceURL(cfg, i.endpoint, id),
+		URL:       CreateResourceURL(cfg, i.Endpoint, id),
 		Name:      subquest.Name,
 		Condition: subquest.Completion.Condition,
 		Areas:     locAreaStrings(cfg, subquest.Completion.Areas),

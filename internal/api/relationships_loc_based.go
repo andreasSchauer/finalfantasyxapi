@@ -41,29 +41,29 @@ type LocBasedMusicQueries struct {
 }
 
 func getMusicLocBased(cfg *Config, ctx context.Context, item seeding.Lookupable, queries LocBasedMusicQueries) (*LocBasedMusic, error) {
-	i := cfg.e.songs
+	i := cfg.E.Songs
 	var music LocBasedMusic
 	g, ctx := errgroup.WithContext(ctx)
 
-	g.Go(func() error{
+	g.Go(func() error {
 		var err error
 		music.Cues, err = getResourcesDbItem(cfg, ctx, i, item, queries.CueSongs)
 		return err
 	})
 
-	g.Go(func() error{
+	g.Go(func() error {
 		var err error
 		music.BackgroundMusic, err = getResourcesDbItem(cfg, ctx, i, item, queries.BmSongs)
 		return err
 	})
 
-	g.Go(func() error{
+	g.Go(func() error {
 		var err error
 		music.FMVs, err = getResourcesDbItem(cfg, ctx, i, item, queries.FMVSongs)
 		return err
 	})
 
-	g.Go(func() error{
+	g.Go(func() error {
 		var err error
 		music.BossMusic, err = getResourcesDbItem(cfg, ctx, i, item, queries.BossMusic)
 		return err

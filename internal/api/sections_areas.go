@@ -27,7 +27,7 @@ func (a AreaSimple) GetURL() string {
 }
 
 func createAreaSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
-	i := cfg.e.areas
+	i := cfg.E.Areas
 	area, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	monsterIDs := subsection.relations[id][RelationMonsters]
@@ -35,7 +35,7 @@ func createAreaSimple(cfg *Config, r *http.Request, id int32, subsection Subsect
 
 	areaSimple := AreaSimple{
 		ID:                area.ID,
-		URL:               createResourceURL(cfg, i.endpoint, id),
+		URL:               CreateResourceURL(cfg, i.Endpoint, id),
 		ParentLocation:    createSimpleRef(area.LocationID, area.Location, nil, nil),
 		ParentSublocation: createSimpleRef(area.SublocationID, area.Sublocation, nil, nil),
 		Name:              area.Name,
@@ -52,28 +52,28 @@ func createAreaSimple(cfg *Config, r *http.Request, id int32, subsection Subsect
 }
 
 func getAreaSectionRelations(cfg *Config, r *http.Request, areaIDs []int32) (map[int32]map[Relation][]int32, error) {
-	i := cfg.e.areas
+	i := cfg.E.Areas
 	relations := make(map[int32]map[Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())
 
 	var treasureJunctions []Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSingle, cfg.e.treasures.resTypeSingle, cfg.db.GetAreaTreasureIdPairs, juncAreaTreasure)
+		treasureJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Treasures.resTypeSingle, cfg.db.GetAreaTreasureIdPairs, juncAreaTreasure)
 		return err
 	})
 
 	var shopJunctions []Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSingle, cfg.e.shops.resTypeSingle, cfg.db.GetAreaShopIdPairs, juncAreaShop)
+		shopJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Shops.resTypeSingle, cfg.db.GetAreaShopIdPairs, juncAreaShop)
 		return err
 	})
 
 	var monsterJunctions []Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSingle, cfg.e.monsters.resTypeSingle, cfg.db.GetAreaMonsterIdPairs, juncAreaMonster)
+		monsterJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Monsters.resTypeSingle, cfg.db.GetAreaMonsterIdPairs, juncAreaMonster)
 		return err
 	})
 

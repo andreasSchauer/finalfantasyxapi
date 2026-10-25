@@ -20,13 +20,13 @@ func (cfg *Config) HandlerResetDatabase(w http.ResponseWriter, r *http.Request) 
 
 	goose.SetDialect("postgres")
 
-	err := goose.DownTo(cfg.dbConn, "./sql/schema", 0)
+	err := goose.DownTo(cfg.DbConn, "./sql/schema", 0)
 	if err != nil {
 		http.Error(w, "Failed to reset database", http.StatusInternalServerError)
 		return
 	}
 
-	err = goose.Up(cfg.dbConn, "./sql/schema")
+	err = goose.Up(cfg.DbConn, "./sql/schema")
 	if err != nil {
 		http.Error(w, "Failed to rebuild database", http.StatusInternalServerError)
 		return

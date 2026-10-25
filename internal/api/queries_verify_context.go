@@ -33,7 +33,7 @@ func vpContext(q url.Values, queryParam QueryParam, queryLookup map[QueryParamNa
 
 // checks, if the query param is a default param.
 func isDefaultParam(cfg *Config, queryName QueryParamName) bool {
-	_, ok := cfg.q.defaultParams[queryName]
+	_, ok := cfg.Q.defaultParams[queryName]
 	return ok
 }
 

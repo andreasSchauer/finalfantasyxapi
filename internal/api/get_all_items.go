@@ -27,18 +27,18 @@ func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seeding.MasterI
 
 	switch masterItem.Type {
 	case database.ItemTypeItem:
-		item, _ := seeding.GetResource(masterItem, cfg.l.Items)
+		item, _ := seeding.GetResource(masterItem, cfg.L.Items)
 
 		response.Description = item.Description
 		response.Effect = item.Effect
-		response.TypedItem = nameToNamedAPIResource(cfg, cfg.e.items, item.Name, nil)
+		response.TypedItem = nameToNamedAPIResource(cfg, cfg.E.Items, item.Name, nil)
 
 	case database.ItemTypeKeyItem:
-		keyItem, _ := seeding.GetResource(masterItem, cfg.l.KeyItems)
+		keyItem, _ := seeding.GetResource(masterItem, cfg.L.KeyItems)
 
 		response.Description = keyItem.Description
 		response.Effect = keyItem.Effect
-		response.TypedItem = nameToNamedAPIResource(cfg, cfg.e.keyItems, keyItem.Name, nil)
+		response.TypedItem = nameToNamedAPIResource(cfg, cfg.E.KeyItems, keyItem.Name, nil)
 	}
 
 	return response, nil
@@ -51,10 +51,10 @@ func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seeding.M
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		enumListQuery(cfg, r, i, cfg.t.ItemType, ids, qpnType, cfg.db.GetMasterItemIDsByType),
-		valueListQuery(cfg, r, i, ids, qpnMethods, cfg.db.GetMasterItemIDsByMethods),
-		idQueryWrapper(cfg, r, i, ids, qpnLocation, cfg.e.locations.objLookup, getMasterItemsByLocation),
-		idQueryWrapper(cfg, r, i, ids, qpnSublocation, cfg.e.sublocations.objLookup, getMasterItemsBySublocation),
-		idQueryWrapper(cfg, r, i, ids, qpnArea, cfg.e.areas.objLookup, getMasterItemsByArea),
+		enumListQuery(cfg, r, i, cfg.T.ItemType, ids, QpnType, cfg.db.GetMasterItemIDsByType),
+		valueListQuery(cfg, r, i, ids, QpnMethods, cfg.db.GetMasterItemIDsByMethods),
+		idQueryWrapper(cfg, r, i, ids, QpnLocation, cfg.E.Locations.objLookup, getMasterItemsByLocation),
+		idQueryWrapper(cfg, r, i, ids, QpnSublocation, cfg.E.Sublocations.objLookup, getMasterItemsBySublocation),
+		idQueryWrapper(cfg, r, i, ids, QpnArea, cfg.E.Areas.objLookup, getMasterItemsByArea),
 	})
 }

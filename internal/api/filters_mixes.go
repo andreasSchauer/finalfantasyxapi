@@ -10,9 +10,9 @@ import (
 )
 
 func getMixesByItem(cfg *Config, r *http.Request, ctx context.Context, firstItemId int32) ([]int32, error) {
-	i := cfg.e.mixes
+	i := cfg.E.Mixes
 
-	secondItemIdPtr, err := getQueryIdPtr(r, cfg.e.items, qpnSecondItem, i.queryLookup)
+	secondItemIdPtr, err := getQueryIdPtr(r, cfg.E.Items, QpnSecondItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

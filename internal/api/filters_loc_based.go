@@ -9,8 +9,8 @@ import (
 )
 
 func getAreasByItem(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.e.areas
-	queryParamMethods := i.queryLookup[qpnMethods]
+	i := cfg.E.Areas
+	queryParamMethods := i.queryLookup[QpnMethods]
 
 	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
@@ -29,8 +29,8 @@ func getAreasByItem(cfg *Config, r *http.Request, ctx context.Context, id int32)
 }
 
 func getSublocationsByItem(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.e.sublocations
-	queryParamMethods := i.queryLookup[qpnMethods]
+	i := cfg.E.Sublocations
+	queryParamMethods := i.queryLookup[QpnMethods]
 
 	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {
@@ -49,8 +49,8 @@ func getSublocationsByItem(cfg *Config, r *http.Request, ctx context.Context, id
 }
 
 func getLocationsByItem(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.e.locations
-	queryParamMethods := i.queryLookup[qpnMethods]
+	i := cfg.E.Locations
+	queryParamMethods := i.queryLookup[QpnMethods]
 
 	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
 	if errExceptEmptyQuery(err) {

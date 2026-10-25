@@ -9,7 +9,7 @@ type QueryParameterList struct {
 	Results []QueryParam `json:"results"`
 }
 
-func (l QueryParameterList) getListParams() ListParams {
+func (l QueryParameterList) GetListParams() ListParams {
 	return l.ListParams
 }
 
@@ -61,7 +61,7 @@ func createQueryParamRefResURLs(cfg *Config, params []QueryParam) []QueryParam {
 func getAllowedResources(cfg *Config, endpoint EndpointName, params []QueryParam) []QueryParam {
 	for idx, param := range params {
 		for _, id := range param.AllowedIDs {
-			allowedRes := createResourceURL(cfg, endpoint, id)
+			allowedRes := CreateResourceURL(cfg, endpoint, id)
 			param.AllowedResources = append(param.AllowedResources, allowedRes)
 		}
 		params[idx] = param

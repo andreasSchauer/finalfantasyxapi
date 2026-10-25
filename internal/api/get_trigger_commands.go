@@ -22,21 +22,21 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seeding.Tri
 		Name:               command.Name,
 		Version:            command.Version,
 		Specification:      command.Specification,
-		UntypedAbility:     idToTypedAPIResource(cfg, cfg.e.abilities, command.Ability.ID),
+		UntypedAbility:     idToTypedAPIResource(cfg, cfg.E.Abilities, command.Ability.ID),
 		Description:        command.Description,
 		Effect:             command.Effect,
 		Rank:               command.Rank,
 		AppearsInHelpBar:   command.AppearsInHelpBar,
 		CanCopycat:         command.CanCopycat,
 		UsedBy:             rel.UsedBy,
-		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, command.RelatedStats),
-		Topmenu:            namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, command.Topmenu, nil),
+		RelatedStats:       namesToNamedAPIResources(cfg, cfg.E.Stats, command.RelatedStats),
+		Topmenu:            namePtrToNamedAPIResPtr(cfg, cfg.E.Topmenus, command.Topmenu, nil),
 		Cursor:             command.Cursor,
 		MonsterFormations:  rel.MonsterFormations,
 		BattleInteractions: convertObjSlice(cfg, command.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, i, response, qpnAbilityUser)
+	battleInteractions, err := applyUser(cfg, r, i, response, QpnAbilityUser)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
@@ -52,7 +52,7 @@ func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seedi
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		nameIdQuery(r, i, ids, qpnUser, cfg.e.characterClasses.resTypeSingle, cfg.l.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
-		nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSingle, cfg.l.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
+		nameIdQuery(r, i, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, cfg.L.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
+		nameIdQuery(r, i, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, cfg.L.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
 	})
 }

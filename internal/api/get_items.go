@@ -25,7 +25,7 @@ func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, N
 	response := Item{
 		ID:                 item.ID,
 		Name:               item.Name,
-		UntypedItem:        idToTypedAPIResource(cfg, cfg.e.allItems, item.MasterItem.ID),
+		UntypedItem:        idToTypedAPIResource(cfg, cfg.E.AllItems, item.MasterItem.ID),
 		Category:           item.Category,
 		Description:        item.Description,
 		SgDescription:      item.SphereGridDescription,
@@ -33,10 +33,10 @@ func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, N
 		Usability:          item.Usability,
 		BasePrice:          item.BasePrice,
 		SellValue:          item.SellValue,
-		ItemAbility:        namePtrToNamedAPIResPtr(cfg, cfg.e.itemAbilities, itemAbilityNamePtr, nil),
+		ItemAbility:        namePtrToNamedAPIResPtr(cfg, cfg.E.ItemAbilities, itemAbilityNamePtr, nil),
 		Sphere:             rel.Sphere,
-		AvailableMenus:     namesToNamedAPIResources(cfg, cfg.e.submenus, item.AvailableMenus),
-		RelatedStats:       namesToNamedAPIResources(cfg, cfg.e.stats, item.RelatedStats),
+		AvailableMenus:     namesToNamedAPIResources(cfg, cfg.E.Submenus, item.AvailableMenus),
+		RelatedStats:       namesToNamedAPIResources(cfg, cfg.E.Stats, item.RelatedStats),
 		Monsters:           rel.Monsters,
 		Treasures:          rel.Treasures,
 		Shops:              rel.Shops,
@@ -57,12 +57,12 @@ func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seeding.Item, I
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		enumListQuery(cfg, r, i, cfg.t.ItemCategory, ids, qpnCategory, cfg.db.GetItemIDsCategory),
-		boolQuery2(r, i, ids, qpnHasAbility, cfg.db.GetItemIDsWithAbility),
-		nameIdQuery(r, i, ids, qpnRelatedStat, cfg.e.stats.resTypeSingle, cfg.l.Stats, cfg.db.GetItemIDsByRelatedStat),
-		valueListQuery(cfg, r, i, ids, qpnMethods, cfg.db.GetItemIDsByMethods),
-		idQueryWrapper(cfg, r, i, ids, qpnLocation, cfg.e.locations.objLookup, getItemsByLocation),
-		idQueryWrapper(cfg, r, i, ids, qpnSublocation, cfg.e.sublocations.objLookup, getItemsBySublocation),
-		idQueryWrapper(cfg, r, i, ids, qpnArea, cfg.e.areas.objLookup, getItemsByArea),
+		enumListQuery(cfg, r, i, cfg.T.ItemCategory, ids, QpnCategory, cfg.db.GetItemIDsCategory),
+		boolQuery2(r, i, ids, QpnHasAbility, cfg.db.GetItemIDsWithAbility),
+		nameIdQuery(r, i, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, cfg.L.Stats, cfg.db.GetItemIDsByRelatedStat),
+		valueListQuery(cfg, r, i, ids, QpnMethods, cfg.db.GetItemIDsByMethods),
+		idQueryWrapper(cfg, r, i, ids, QpnLocation, cfg.E.Locations.objLookup, getItemsByLocation),
+		idQueryWrapper(cfg, r, i, ids, QpnSublocation, cfg.E.Sublocations.objLookup, getItemsBySublocation),
+		idQueryWrapper(cfg, r, i, ids, QpnArea, cfg.E.Areas.objLookup, getItemsByArea),
 	})
 }

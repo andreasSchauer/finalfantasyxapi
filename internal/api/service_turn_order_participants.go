@@ -21,7 +21,7 @@ type Participant struct {
 }
 
 func (p Participant) getKey() string {
-	if p.Party == battlePartyPlayer {
+	if p.Party == BattlePartyPlayer {
 		return p.Name
 	}
 
@@ -31,8 +31,8 @@ func (p Participant) getKey() string {
 type BattleParty string
 
 const (
-	battlePartyPlayer   BattleParty = "player"
-	battlePartyOpponent BattleParty = "opponent"
+	BattlePartyPlayer   BattleParty = "player"
+	BattlePartyOpponent BattleParty = "opponent"
 )
 
 type participantMaps struct {
@@ -71,14 +71,14 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 	for i, partyMember := range params.Party {
 		isDupe := maps.duplicates[partyMember.getDuplicateKey()]
 		if isDupe {
-			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(pfnParty, fmt.Sprintf("duplicate unit id found at index %d. each party member can only appear once.", i)), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(PfnParty, fmt.Sprintf("duplicate unit id found at index %d. each party member can only appear once.", i)), nil)
 		}
 
-		unit, _ := seeding.GetResourceByID(partyMember.UnitID, cfg.l.PlayerUnitsID)
+		unit, _ := seeding.GetResourceByID(partyMember.UnitID, cfg.L.PlayerUnitsID)
 
 		participant := Participant{
 			Name:        unit.Name,
-			Party:       battlePartyPlayer,
+			Party:       BattlePartyPlayer,
 			Agility:     partyMember.Agility,
 			FirstStrike: partyMember.FirstStrike,
 			Status:      partyMember.Status,
@@ -103,7 +103,7 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 	for i, mon := range params.Mons {
 		isDupe := maps.duplicates[mon.getDuplicateKey()]
 		if isDupe {
-			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(pfnMons, fmt.Sprintf("duplicate monster found at index %d. exact duplicate monsters are not allowed.", i)), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(PfnMons, fmt.Sprintf("duplicate monster found at index %d. exact duplicate monsters are not allowed.", i)), nil)
 		}
 
 		participant, firstTurnAglTier, err := fetchTurnOrderMonster(cfg, params, mon)
@@ -161,7 +161,7 @@ func populateParticipantMon(cfg *Config, params TurnOrderParams, participant Par
 		participant.Status = mon.Status
 	}
 
-	participant.Party = battlePartyOpponent
+	participant.Party = BattlePartyOpponent
 	participant.AgilityVals = extractAglTierMon(cfg, participant, params, firstTurnAglTier)
 
 	if isSpectralKeeperInStoryFight(*mon.MonsterID, params.FormationID) {

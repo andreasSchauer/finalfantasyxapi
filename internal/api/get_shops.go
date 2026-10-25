@@ -14,7 +14,7 @@ func (cfg *Config) getShop(r *http.Request, i handlerInput[seeding.Shop, Shop, U
 
 	response := Shop{
 		ID:          shop.ID,
-		Area:        idToAreaAPIResource(cfg, cfg.e.areas, shop.AreaID),
+		Area:        idToAreaAPIResource(cfg, cfg.E.Areas, shop.AreaID),
 		Notes:       shop.Notes,
 		Category:    shop.Category,
 		PreAirship:  convertObjPtr(cfg, shop.PreAirship, convertSubShop),
@@ -31,11 +31,11 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, S
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		joinedQuery(cfg, r, i, ids, []QueryParamName{qpnAutoAbility, qpnEmptySlots, qpnCharacter}, filterShopsEquipment),
-		idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetShopIDsByLocation),
-		idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetShopIDsBySublocation),
-		boolQuery2(r, i, ids, qpnItems, cfg.db.GetShopIDsWithItems),
-		boolQuery2(r, i, ids, qpnEquipment, cfg.db.GetShopIDsWithEquipment),
-		enumListQuery(cfg, r, i, cfg.t.ShopCategory, ids, qpnCategory, cfg.db.GetShopIDsByCategory),
+		joinedQuery(cfg, r, i, ids, []QueryParamName{QpnAutoAbility, QpnEmptySlots, QpnCharacter}, filterShopsEquipment),
+		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetShopIDsByLocation),
+		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetShopIDsBySublocation),
+		boolQuery2(r, i, ids, QpnItems, cfg.db.GetShopIDsWithItems),
+		boolQuery2(r, i, ids, QpnEquipment, cfg.db.GetShopIDsWithEquipment),
+		enumListQuery(cfg, r, i, cfg.T.ShopCategory, ids, QpnCategory, cfg.db.GetShopIDsByCategory),
 	})
 }

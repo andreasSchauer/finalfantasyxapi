@@ -24,12 +24,12 @@ func (s SongSimple) GetURL() string {
 }
 
 func createSongSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.songs
+	i := cfg.E.Songs
 	song, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	songSimple := SongSimple{
 		ID:                song.ID,
-		URL:               createResourceURL(cfg, i.endpoint, id),
+		URL:               CreateResourceURL(cfg, i.Endpoint, id),
 		Name:              song.Name,
 		DurationInSeconds: song.DurationInSeconds,
 		CanLoop:           song.CanLoop,

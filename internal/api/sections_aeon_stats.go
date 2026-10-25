@@ -8,12 +8,12 @@ import (
 )
 
 type AeonStatSimple struct {
-	ID    int32     `json:"id"`
-	URL   string    `json:"url"`
-	Name  string    `json:"name"`
+	ID    int32         `json:"id"`
+	URL   string        `json:"url"`
+	Name  string        `json:"name"`
 	AVals AeonStatTable `json:"a_vals"`
 	BVals AeonStatTable `json:"b_vals"`
-	XVals []Xval    `json:"x_vals"`
+	XVals []Xval        `json:"x_vals"`
 }
 
 func (a AeonStatSimple) GetURL() string {
@@ -21,7 +21,7 @@ func (a AeonStatSimple) GetURL() string {
 }
 
 type Xval struct {
-	Battles int32     `json:"battles"`
+	Battles int32         `json:"battles"`
 	Stats   AeonStatTable `json:"stats"`
 }
 
@@ -46,8 +46,8 @@ type AeonStatTable struct {
 }
 
 func newAeonStatTable(cfg *Config, baseStats []seeding.BaseStat) AeonStatTable {
-	stats := toResAmtType(cfg, cfg.e.stats, baseStats, newBaseStat)
-	statMap := getResAmtTypeMap(stats)
+	stats := toResAmtType(cfg, cfg.E.Stats, baseStats, newBaseStat)
+	statMap := GetResAmtTypeMap(stats)
 	luckPtr := h.GetInt32Ptr(statMap["luck"])
 
 	if *luckPtr == 0 {
@@ -69,12 +69,12 @@ func newAeonStatTable(cfg *Config, baseStats []seeding.BaseStat) AeonStatTable {
 }
 
 func createAeonStatSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.aeons
-	aeon, _ := seeding.GetResourceByID(id, cfg.l.AeonsID)
+	i := cfg.E.Aeons
+	aeon, _ := seeding.GetResourceByID(id, cfg.L.AeonsID)
 
 	aeonStatSub := AeonStatSimple{
 		ID:    aeon.ID,
-		URL:   createResourceURL(cfg, i.endpoint, id),
+		URL:   CreateResourceURL(cfg, i.Endpoint, id),
 		Name:  aeon.Name,
 		AVals: newAeonStatTable(cfg, aeon.BaseStats.AVals),
 		BVals: newAeonStatTable(cfg, aeon.BaseStats.BVals),

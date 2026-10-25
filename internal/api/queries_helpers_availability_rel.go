@@ -17,18 +17,18 @@ type RelAvlParams struct {
 }
 
 func getRelAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], parentID int32) (RelAvlParams, error) {
-	queryParam := i.queryLookup[qpnRelAvailability]
+	queryParam := i.queryLookup[QpnRelAvailability]
 
-	availabilities, err := parseEnumListQuery(cfg, r, i.endpoint, queryParam, cfg.t.AvailabilityType)
+	availabilities, err := parseEnumListQuery(cfg, r, i.Endpoint, queryParam, cfg.T.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return RelAvlParams{}, err
 	}
 
 	var repeatable *bool
 
-	_, ok := i.queryLookup[qpnRelRepeatable]
+	_, ok := i.queryLookup[QpnRelRepeatable]
 	if ok {
-		repeatable, err = getQueryBoolPtr(r, qpnRelRepeatable, i.queryLookup)
+		repeatable, err = getQueryBoolPtr(r, QpnRelRepeatable, i.queryLookup)
 		if errExceptEmptyQuery(err) {
 			return RelAvlParams{}, err
 		}

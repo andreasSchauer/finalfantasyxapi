@@ -12,11 +12,11 @@ type UnnamedApiResourceList struct {
 	Results []UnnamedAPIResource `json:"results"`
 }
 
-func (l UnnamedApiResourceList) getListParams() ListParams {
+func (l UnnamedApiResourceList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func (l UnnamedApiResourceList) getResults() []HasAPIResource {
+func (l UnnamedApiResourceList) GetResults() []HasAPIResource {
 	return toHasAPIResSlice(l.Results)
 }
 
@@ -55,7 +55,7 @@ func idToUnnamedAPIResource[T seeding.IsUnnamed, R any, A APIResource, L APIReso
 
 	return UnnamedAPIResource{
 		ID:  params.ID,
-		URL: createResourceURL(cfg, i.endpoint, params.ID),
+		URL: CreateResourceURL(cfg, i.Endpoint, params.ID),
 	}
 }
 

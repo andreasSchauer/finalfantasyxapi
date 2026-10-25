@@ -77,12 +77,12 @@ func foundEquipmentAbilitiesStringPtr(fe seeding.TreasureEquipment) *string {
 }
 
 func createShopSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.shops
+	i := cfg.E.Shops
 	shop, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	shopSimple := ShopSimple{
 		ID:          shop.ID,
-		URL:         createResourceURL(cfg, i.endpoint, id),
+		URL:         CreateResourceURL(cfg, i.Endpoint, id),
 		Area:        idToLocAreaString(cfg, shop.AreaID),
 		Category:    shop.Category,
 		Notes:       shop.Notes,

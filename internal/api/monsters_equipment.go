@@ -73,8 +73,8 @@ func (ed EquipmentDrop) GetAPIResource() APIResource {
 
 func convertEquipmentDrop(cfg *Config, drop seeding.EquipmentDrop) EquipmentDrop {
 	return EquipmentDrop{
-		AutoAbility: nameToNamedAPIResource(cfg, cfg.e.autoAbilities, drop.Ability, nil),
-		ForcedChars: namesToNamedAPIResources(cfg, cfg.e.characters, drop.Characters),
+		AutoAbility: nameToNamedAPIResource(cfg, cfg.E.AutoAbilities, drop.Ability, nil),
+		ForcedChars: namesToNamedAPIResources(cfg, cfg.E.Characters, drop.Characters),
 		IsForced:    drop.IsForced,
 		Probability: drop.Probability,
 	}

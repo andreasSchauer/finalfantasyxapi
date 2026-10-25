@@ -14,8 +14,8 @@ type ListParams struct {
 }
 
 func createPaginatedList[T any](cfg *Config, r *http.Request, items []T) (ListParams, []T, error) {
-	queryParamOffset := cfg.q.defaultParams[qpnOffset]
-	queryParamLimit := cfg.q.defaultParams[qpnLimit]
+	queryParamOffset := cfg.Q.defaultParams[QpnOffset]
+	queryParamLimit := cfg.Q.defaultParams[QpnLimit]
 
 	offset, err := parseIntQuery(r, queryParamOffset)
 	if err != nil {
@@ -65,8 +65,8 @@ func createPreviousURL(cfg *Config, r *http.Request, offset, limit int) *string 
 
 	path := strings.TrimSuffix(r.URL.Path, "/")
 	q := r.URL.Query()
-	q.Set(string(qpnLimit), strconv.Itoa(limit))
-	q.Set(string(qpnOffset), strconv.Itoa(previousOffset))
+	q.Set(string(QpnLimit), strconv.Itoa(limit))
+	q.Set(string(QpnOffset), strconv.Itoa(previousOffset))
 
 	previousURL := fmt.Sprintf("http://%s%s?%s", cfg.host, path, q.Encode())
 	return &previousURL
@@ -81,8 +81,8 @@ func createNextURL(cfg *Config, r *http.Request, offset, limit, size int) *strin
 
 	path := strings.TrimSuffix(r.URL.Path, "/")
 	q := r.URL.Query()
-	q.Set(string(qpnLimit), strconv.Itoa(limit))
-	q.Set(string(qpnOffset), strconv.Itoa(nextOffset))
+	q.Set(string(QpnLimit), strconv.Itoa(limit))
+	q.Set(string(QpnOffset), strconv.Itoa(nextOffset))
 
 	nextURL := fmt.Sprintf("http://%s%s?%s", cfg.host, path, q.Encode())
 	return &nextURL

@@ -16,9 +16,9 @@ type avlParams struct {
 }
 
 func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (avlParams, error) {
-	queryParamAvl := i.queryLookup[qpnAvailability]
-	
-	availabilities, err := parseEnumListQuery(cfg, r, i.endpoint, queryParamAvl, cfg.t.AvailabilityType)
+	queryParamAvl := i.queryLookup[QpnAvailability]
+
+	availabilities, err := parseEnumListQuery(cfg, r, i.Endpoint, queryParamAvl, cfg.T.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return avlParams{}, err
 	}
@@ -28,9 +28,9 @@ func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg
 
 	var preAirship bool
 
-	_, ok := i.queryLookup[qpnPreAirship]
+	_, ok := i.queryLookup[QpnPreAirship]
 	if ok {
-		preAirship, err = parseBooleanQuery(r, i.queryLookup[qpnPreAirship])
+		preAirship, err = parseBooleanQuery(r, i.queryLookup[QpnPreAirship])
 		if errExceptEmptyQuery(err) {
 			return avlParams{}, err
 		}
@@ -57,7 +57,7 @@ func checkAvlAndRep[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 		return avlParams{}, errAvl
 	}
 
-	isRepeatable, errRepl := getQueryBoolPtr(r, qpnRepeatable, i.queryLookup)
+	isRepeatable, errRepl := getQueryBoolPtr(r, QpnRepeatable, i.queryLookup)
 	if errExceptEmptyQuery(errRepl) {
 		return avlParams{}, errRepl
 	}

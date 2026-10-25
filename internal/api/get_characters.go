@@ -20,8 +20,8 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 	response := Character{
 		ID:                     character.ID,
 		Name:                   character.Name,
-		UntypedUnit:            idToTypedAPIResource(cfg, cfg.e.playerUnits, character.PlayerUnit.ID),
-		Area:                   locAreaToAreaAPIResource(cfg, cfg.e.areas, character.LocationArea),
+		UntypedUnit:            idToTypedAPIResource(cfg, cfg.E.PlayerUnits, character.PlayerUnit.ID),
+		Area:                   locAreaToAreaAPIResource(cfg, cfg.E.Areas, character.LocationArea),
 		IsStoryBased:           character.IsStoryBased,
 		CanFightUnderwater:     character.CanFightUnderwater,
 		PhysAtkRange:           character.PhysAtkRange,
@@ -30,7 +30,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 		CelestialWeapon:        rel.CelestialWeapon,
 		OverdriveCommand:       rel.OverdriveCommand,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              toResAmtType(cfg, cfg.e.stats, character.BaseStats, newBaseStat),
+		BaseStats:              toResAmtType(cfg, cfg.E.Stats, character.BaseStats, newBaseStat),
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		StdSphereGrid:          rel.StdSphereGrid,
 		ExpSphereGrid:          rel.ExpSphereGrid,
@@ -60,7 +60,7 @@ func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seeding.Ch
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		boolQuery(r, i, ids, qpnStoryBased, cfg.db.GetCharacterIDsStoryBased),
-		boolQuery(r, i, ids, qpnUnderwater, cfg.db.GetCharacterIDsCanFightUnderwater),
+		boolQuery(r, i, ids, QpnStoryBased, cfg.db.GetCharacterIDsStoryBased),
+		boolQuery(r, i, ids, QpnUnderwater, cfg.db.GetCharacterIDsCanFightUnderwater),
 	})
 }

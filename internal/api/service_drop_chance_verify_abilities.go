@@ -14,7 +14,7 @@ func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seeding.Monster) 
 	if mon.Equipment == nil {
 		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' doesn't drop equipment.", mon), nil)
 	}
-	
+
 	monMaxSlots := getMonMaxSlots(mon)
 	reqSlots := params.GetRequiredSlots()
 
@@ -52,23 +52,23 @@ func getMonMaxSlots(mon seeding.Monster) int32 {
 
 func vfWantedAutoAbilities(cfg *Config, params DropChanceParams) (DropChanceParams, []seeding.AutoAbility, error) {
 	var autoAbilities []seeding.AutoAbility
-	
+
 	for _, id := range params.AutoAbilities {
-		ability, _ := seeding.GetResourceByID(id, cfg.l.AutoAbilitiesID)
-		
+		ability, _ := seeding.GetResourceByID(id, cfg.L.AutoAbilitiesID)
+
 		if params.EquipType == nil {
 			params.EquipType = &ability.Type
 		}
-		
+
 		if *params.EquipType != ability.Type {
 			return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, "weapon- and armor-abilities can't be combined.", nil)
 		}
-		
+
 		autoAbilities = append(autoAbilities, ability)
 	}
 
 	if params.EquipType == nil {
-		return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("can't discern equipment's type. use '%s' to discern the type, or set it manually by using '%s'.", pfnAutoAbilities, pfnEquipType), nil)
+		return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("can't discern equipment's type. use '%s' to discern the type, or set it manually by using '%s'.", PfnAutoAbilities, PfnEquipType), nil)
 	}
 
 	return params, autoAbilities, nil
@@ -125,7 +125,7 @@ func formatEquipmentDrops(monsterAbilities []seeding.EquipmentDrop) string {
 		if ability.Ability == forcedName {
 			continue
 		}
-		
+
 		if ability.IsForced {
 			forcedName = ability.Ability
 		}

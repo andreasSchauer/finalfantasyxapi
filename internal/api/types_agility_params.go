@@ -22,7 +22,7 @@ func getAgilityTierDB(cfg *Config, r *http.Request, stats []BaseStat) (seeding.A
 		return seeding.AgilityTier{}, newHTTPError(http.StatusInternalServerError, "couldn't extract agility parameters.", err)
 	}
 
-	agilityTier, _ := seeding.GetResourceByID(dbAgilityTier.ID, cfg.l.AgilityTiersID)
+	agilityTier, _ := seeding.GetResourceByID(dbAgilityTier.ID, cfg.L.AgilityTiersID)
 
 	return agilityTier, nil
 }

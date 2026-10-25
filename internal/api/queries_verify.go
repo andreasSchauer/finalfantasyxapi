@@ -42,7 +42,7 @@ func verifyQueryParamsAltList(cfg *Config, r *http.Request, endpoint EndpointNam
 			return err
 		}
 
-		err = verifyQueryUsage[any](q, queryParam, endpoint, cfg.q.defaultParams, nil, listName)
+		err = verifyQueryUsage[any](q, queryParam, endpoint, cfg.Q.defaultParams, nil, listName)
 		if err != nil {
 			return err
 		}

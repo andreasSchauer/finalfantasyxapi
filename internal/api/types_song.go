@@ -36,7 +36,7 @@ func convertBackgroundMusic(cfg *Config, bm seeding.BackgroundMusic) BackgroundM
 	return BackgroundMusic{
 		Condition:              bm.Condition,
 		ReplacesEncounterMusic: bm.ReplacesEncounterMusic,
-		Areas:                  locAreasToAreaAPIResources(cfg, cfg.e.areas, bm.LocationAreas),
+		Areas:                  locAreasToAreaAPIResources(cfg, cfg.E.Areas, bm.LocationAreas),
 	}
 }
 
@@ -53,14 +53,14 @@ func convertCue(cfg *Config, cue seeding.Cue) Cue {
 	var triggerAreaPtr *AreaAPIResource
 
 	if cue.TriggerLocationArea != nil {
-		triggerArea := locAreaToAreaAPIResource(cfg, cfg.e.areas, *cue.TriggerLocationArea)
+		triggerArea := locAreaToAreaAPIResource(cfg, cfg.E.Areas, *cue.TriggerLocationArea)
 		triggerAreaPtr = &triggerArea
 	}
 
 	return Cue{
 		SceneDescription:       cue.SceneDescription,
 		TriggerArea:            triggerAreaPtr,
-		IncludedAreas:          locAreasToAreaAPIResources(cfg, cfg.e.areas, cue.IncludedAreas),
+		IncludedAreas:          locAreasToAreaAPIResources(cfg, cfg.E.Areas, cue.IncludedAreas),
 		ReplacesEncounterMusic: cue.ReplacesEncounterMusic,
 		ReplacesBGMusic:        cue.ReplacesBGMusic,
 		EndTrigger:             cue.EndTrigger,

@@ -33,12 +33,12 @@ func (a AutoAbilitySimple) GetURL() string {
 }
 
 func createAutoAbilitySimple(cfg *Config, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.e.autoAbilities
+	i := cfg.E.AutoAbilities
 	autoAbility, _ := seeding.GetResourceByID(id, i.objLookupID)
 
 	autoAbilitySimple := AutoAbilitySimple{
 		ID:                  autoAbility.ID,
-		URL:                 createResourceURL(cfg, i.endpoint, id),
+		URL:                 CreateResourceURL(cfg, i.Endpoint, id),
 		Name:                autoAbility.Name,
 		RequiredItem:        convertObjPtr(cfg, autoAbility.RequiredItem, convertItemAmountSimple),
 		ActivationCondition: autoAbility.ActivationCondition,

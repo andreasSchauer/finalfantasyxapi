@@ -8,7 +8,7 @@ import (
 type DropChanceResponse struct {
 	DropChanceFinBlow     float64               `json:"drop_chance_fin_blow"`
 	DropChanceNoFinBlow   float64               `json:"drop_chance_no_fin_blow"`
-	WantedEquipment		  WantedEquipment		`json:"wanted_equipment"`
+	WantedEquipment       WantedEquipment       `json:"wanted_equipment"`
 	EquipmentMatchChances EquipmentMatchChances `json:"equipment_match_chances"`
 	CharacterChances      CharacterChances      `json:"character_chances"`
 	MonsterChances        MonsterDropChances    `json:"monster_chances"`
@@ -16,35 +16,34 @@ type DropChanceResponse struct {
 
 func (r DropChanceResponse) Percent() DropChanceResponse {
 	return DropChanceResponse{
-		DropChanceFinBlow: 		h.DecimalToPercent(r.DropChanceFinBlow),
-		DropChanceNoFinBlow: 	h.DecimalToPercent(r.DropChanceNoFinBlow),
-		WantedEquipment: 		r.WantedEquipment,
-		EquipmentMatchChances: 	r.EquipmentMatchChances.Percent(),
-		CharacterChances: 		r.CharacterChances.Percent(),
-		MonsterChances: 		r.MonsterChances.Percent(),
+		DropChanceFinBlow:     h.DecimalToPercent(r.DropChanceFinBlow),
+		DropChanceNoFinBlow:   h.DecimalToPercent(r.DropChanceNoFinBlow),
+		WantedEquipment:       r.WantedEquipment,
+		EquipmentMatchChances: r.EquipmentMatchChances.Percent(),
+		CharacterChances:      r.CharacterChances.Percent(),
+		MonsterChances:        r.MonsterChances.Percent(),
 	}
 }
 
 func (r DropChanceResponse) Round(n int32) DropChanceResponse {
 	return DropChanceResponse{
-		DropChanceFinBlow: 		h.DecimalToPercent(r.DropChanceFinBlow),
-		DropChanceNoFinBlow: 	h.DecimalToPercent(r.DropChanceNoFinBlow),
-		WantedEquipment: 		r.WantedEquipment,
-		EquipmentMatchChances: 	r.EquipmentMatchChances.Round(n),
-		CharacterChances: 		r.CharacterChances.Round(n),
-		MonsterChances: 		r.MonsterChances.Round(n),
+		DropChanceFinBlow:     h.DecimalToPercent(r.DropChanceFinBlow),
+		DropChanceNoFinBlow:   h.DecimalToPercent(r.DropChanceNoFinBlow),
+		WantedEquipment:       r.WantedEquipment,
+		EquipmentMatchChances: r.EquipmentMatchChances.Round(n),
+		CharacterChances:      r.CharacterChances.Round(n),
+		MonsterChances:        r.MonsterChances.Round(n),
 	}
 }
 
-
 func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse, error) {
-	mon, _ := seeding.GetResourceByID(params.Monster, cfg.l.MonstersID)
-	
+	mon, _ := seeding.GetResourceByID(params.Monster, cfg.L.MonstersID)
+
 	wantedAbilities, monAbilities, err := vfAutoAbilities(cfg, params, mon)
 	if err != nil {
 		return DropChanceResponse{}, err
 	}
-	
+
 	slotsTable := extractAbilitySlots(params, mon)
 	monMaxSlots := getEquipMaxSlots(slotsTable)
 
@@ -52,11 +51,11 @@ func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse,
 	characterChances := calcCharChances(cfg, params, wantedAbilities, monAbilities, monMaxSlots)
 
 	matchChanceParams := MatchChanceParams{
-		mon: mon,
-		wantedAbilities: wantedAbilities,
-		monAbilities: monAbilities,
-		slotsTable: slotsTable,
-		shotsTable: mon.Equipment.AttachedAbilities.Chances,
+		mon:              mon,
+		wantedAbilities:  wantedAbilities,
+		monAbilities:     monAbilities,
+		slotsTable:       slotsTable,
+		shotsTable:       mon.Equipment.AttachedAbilities.Chances,
 		characterChances: characterChances,
 	}
 
@@ -66,7 +65,7 @@ func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse,
 	response := DropChanceResponse{
 		DropChanceFinBlow:     monDropChances.EquipmentDropChance * equipmentMatchChances.FinBlow,
 		DropChanceNoFinBlow:   monDropChances.EquipmentDropChance * equipmentMatchChances.NoFinBlow,
-		WantedEquipment: 	   wantedEquipment,
+		WantedEquipment:       wantedEquipment,
 		EquipmentMatchChances: equipmentMatchChances,
 		CharacterChances:      characterChances,
 		MonsterChances:        monDropChances,

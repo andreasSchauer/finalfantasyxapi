@@ -36,7 +36,7 @@ func convertBattleInteraction(cfg *Config, bi seeding.BattleInteraction) BattleI
 		SpecialAction:             bi.SpecialAction,
 		InflictedDelay:            convertObjPtr(cfg, bi.InflictedDelay, convertInflictedDelay),
 		InflictedStatusConditions: convertObjSlice(cfg, bi.InflictedStatusConditions, convertInflictedStatus),
-		RemovedStatusConditions:   namesToNamedAPIResources(cfg, cfg.e.statusConditions, bi.RemovedStatusConditions),
+		RemovedStatusConditions:   namesToNamedAPIResources(cfg, cfg.E.StatusConditions, bi.RemovedStatusConditions),
 		CopiedStatusConditions:    convertObjSlice(cfg, bi.CopiedStatusConditions, convertInflictedStatus),
 		StatChanges:               convertObjSlice(cfg, bi.StatChanges, convertStatChange),
 		ModifierChanges:           convertObjSlice(cfg, bi.ModifierChanges, convertModifierChange),
@@ -82,7 +82,7 @@ func convertDamage(cfg *Config, d seeding.Damage) Damage {
 		CriticalPlusVal: d.CriticalPlusVal,
 		IsPiercing:      d.IsPiercing,
 		BreakDmgLimit:   d.BreakDmgLimit,
-		Element:         namePtrToNamedAPIResPtr(cfg, cfg.e.elements, d.Element, nil),
+		Element:         namePtrToNamedAPIResPtr(cfg, cfg.E.Elements, d.Element, nil),
 	}
 }
 
@@ -143,7 +143,7 @@ func (is InflictedStatus) IsZero() bool {
 
 func convertInflictedStatus(cfg *Config, status seeding.InflictedStatus) InflictedStatus {
 	return InflictedStatus{
-		StatusCondition: nameToNamedAPIResource(cfg, cfg.e.statusConditions, status.StatusCondition, nil),
+		StatusCondition: nameToNamedAPIResource(cfg, cfg.E.StatusConditions, status.StatusCondition, nil),
 		Probability:     status.Probability,
 		DurationType:    status.DurationType,
 		Amount:          status.Amount,
@@ -166,7 +166,7 @@ func (sc StatChange) IsZero() bool {
 
 func convertStatChange(cfg *Config, sc seeding.StatChange) StatChange {
 	return StatChange{
-		Stat:            nameToNamedAPIResource(cfg, cfg.e.stats, sc.StatName, nil),
+		Stat:            nameToNamedAPIResource(cfg, cfg.E.Stats, sc.StatName, nil),
 		CalculationType: sc.CalculationType,
 		Value:           sc.Value,
 	}
@@ -188,7 +188,7 @@ func (mc ModifierChange) IsZero() bool {
 
 func convertModifierChange(cfg *Config, mc seeding.ModifierChange) ModifierChange {
 	return ModifierChange{
-		Modifier:        nameToNamedAPIResource(cfg, cfg.e.modifiers, mc.ModifierName, nil),
+		Modifier:        nameToNamedAPIResource(cfg, cfg.E.Modifiers, mc.ModifierName, nil),
 		CalculationType: mc.CalculationType,
 		Value:           mc.Value,
 	}

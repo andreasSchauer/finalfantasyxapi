@@ -11,20 +11,20 @@ func getMonsterRelationships(cfg *Config, r *http.Request, monster seeding.Monst
 	var rel Monster
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.monsters, monster.ID)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.E.Monsters, monster.ID)
 	if err != nil {
 		return Monster{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.areas, monster, availabilityParams, getMonsterAreaIDs(cfg))
+		rel.Areas, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Areas, monster, availabilityParams, getMonsterAreaIDs(cfg))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Formations, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.monsterFormations, monster, availabilityParams, getMonsterMonsterFormationIDs(cfg))
+		rel.Formations, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.MonsterFormations, monster, availabilityParams, getMonsterMonsterFormationIDs(cfg))
 		return err
 	})
 
@@ -37,7 +37,7 @@ func getMonsterRelationships(cfg *Config, r *http.Request, monster seeding.Monst
 }
 
 func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster, error) {
-	mon, err := applyAlteredStateFromQuery(cfg, r, mon, qpnAlteredState)
+	mon, err := applyAlteredStateFromQuery(cfg, r, mon, QpnAlteredState)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -47,14 +47,14 @@ func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster
 		return Monster{}, err
 	}
 
-	mon.BaseStats, err = applyRonsoStats(cfg, r, mon, qpnKimahriStats)
+	mon.BaseStats, err = applyRonsoStats(cfg, r, mon, QpnKimahriStats)
 	if err != nil {
 		return Monster{}, err
 	}
 
 	mon.RegenAmounts = calcRegenAmountsMonster(cfg, mon)
 
-	mon.ElemResists, err = applyOmnisElements(cfg, r, mon, qpnOmnisElements)
+	mon.ElemResists, err = applyOmnisElements(cfg, r, mon, QpnOmnisElements)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -83,10 +83,10 @@ func getMonsterElemResists(cfg *Config, resists []seeding.ElementalResist) []Ele
 	elemResists := namesToElemResists(cfg, resists)
 	elemResistMap := getResourceMap(elemResists)
 
-	for key := range cfg.l.ElementsID {
+	for key := range cfg.L.ElementsID {
 		_, ok := elemResistMap[key]
 		if !ok {
-			element := cfg.l.ElementsID[key]
+			element := cfg.L.ElementsID[key]
 			elemResistMap[element.ID] = newElemResist(cfg, element.Name, "neutral")
 		}
 	}
@@ -123,13 +123,13 @@ func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*Agilit
 	}
 
 	agilityParams := AgilityParams{
-		AgilityTier: idToUnnamedAPIResource(cfg, cfg.e.agilityTiers, agilityTier.ID),
+		AgilityTier: idToUnnamedAPIResource(cfg, cfg.E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   tickspeed,
 		MinICV:      agilityTier.MonsterMinICV,
 		MaxICV:      agilityTier.MonsterMaxICV,
 	}
 
-	fs := nameToNamedAPIResource(cfg, cfg.e.autoAbilities, "first strike", nil)
+	fs := nameToNamedAPIResource(cfg, cfg.E.AutoAbilities, "first strike", nil)
 	if resourcesContain(mon.AutoAbilities, fs) {
 		agilityParams.MinICV, agilityParams.MaxICV = getEqualICVs(-1)
 	}
@@ -151,7 +151,7 @@ func appliedStateHaste(mon Monster) bool {
 
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
 func getMonsterBribeChances(cfg *Config, mon Monster) ([]BribeChance, error) {
-	bribe := nameToNamedAPIResource(cfg, cfg.e.statusConditions, "bribe", nil)
+	bribe := nameToNamedAPIResource(cfg, cfg.E.StatusConditions, "bribe", nil)
 	if resourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
 		return nil, nil
 	}

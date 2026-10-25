@@ -36,17 +36,17 @@ func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seeding.Loc
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		idQuery(r, i, ids, qpnMonster, cfg.l.Monsters, cfg.db.GetLocationIDsWithMonster),
-		idQueryWrapper(cfg, r, i, ids, qpnItem, cfg.l.Items, getLocationsByItem),
-		idQuery(r, i, ids, qpnKeyItem, cfg.l.KeyItems, cfg.db.GetLocationIDsWithKeyItem),
-		idQuery(r, i, ids, qpnAutoAbility, cfg.l.AutoAbilities, cfg.db.GetLocationIDsWithAutoAbility),
-		boolQuery2(r, i, ids, qpnCharacters, cfg.db.GetLocationIDsWithCharacters),
-		boolQuery2(r, i, ids, qpnAeons, cfg.db.GetLocationIDsWithAeons),
-		boolQuery2(r, i, ids, qpnMonsters, cfg.db.GetLocationIDsWithMonsters),
-		boolQuery2(r, i, ids, qpnBossFights, cfg.db.GetLocationIDsWithBosses),
-		boolQuery2(r, i, ids, qpnShops, cfg.db.GetLocationIDsWithShops),
-		boolQuery2(r, i, ids, qpnTreasures, cfg.db.GetLocationIDsWithTreasures),
-		boolQuery2(r, i, ids, qpnSidequests, cfg.db.GetLocationIDsWithSidequests),
-		boolQuery2(r, i, ids, qpnFMVs, cfg.db.GetLocationIDsWithFMVs),
+		idQuery(r, i, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetLocationIDsWithMonster),
+		idQueryWrapper(cfg, r, i, ids, QpnItem, cfg.L.Items, getLocationsByItem),
+		idQuery(r, i, ids, QpnKeyItem, cfg.L.KeyItems, cfg.db.GetLocationIDsWithKeyItem),
+		idQuery(r, i, ids, QpnAutoAbility, cfg.L.AutoAbilities, cfg.db.GetLocationIDsWithAutoAbility),
+		boolQuery2(r, i, ids, QpnCharacters, cfg.db.GetLocationIDsWithCharacters),
+		boolQuery2(r, i, ids, QpnAeons, cfg.db.GetLocationIDsWithAeons),
+		boolQuery2(r, i, ids, QpnMonsters, cfg.db.GetLocationIDsWithMonsters),
+		boolQuery2(r, i, ids, QpnBossFights, cfg.db.GetLocationIDsWithBosses),
+		boolQuery2(r, i, ids, QpnShops, cfg.db.GetLocationIDsWithShops),
+		boolQuery2(r, i, ids, QpnTreasures, cfg.db.GetLocationIDsWithTreasures),
+		boolQuery2(r, i, ids, QpnSidequests, cfg.db.GetLocationIDsWithSidequests),
+		boolQuery2(r, i, ids, QpnFMVs, cfg.db.GetLocationIDsWithFMVs),
 	})
 }

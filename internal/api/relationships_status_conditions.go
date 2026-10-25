@@ -11,7 +11,7 @@ import (
 func getStatusConditionRelationships(cfg *Config, r *http.Request, status seeding.StatusCondition) (StatusCondition, error) {
 	var rel StatusCondition
 	g, ctx := errgroup.WithContext(r.Context())
-	
+
 	res, err := getStatusQueryResistance(cfg, r)
 	if err != nil {
 		return StatusCondition{}, err
@@ -19,24 +19,24 @@ func getStatusConditionRelationships(cfg *Config, r *http.Request, status seedin
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.autoAbilities, status, cfg.db.GetStatusConditionAutoAbilityIDs)
+		rel.AutoAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.AutoAbilities, status, cfg.db.GetStatusConditionAutoAbilityIDs)
 		return err
 	})
-	
+
 	g.Go(func() error {
 		var err error
-		rel.MonstersResistance, err = getResourcesDbItem(cfg, ctx, cfg.e.monsters, status, convGetStatusConditionResistingMonsterIDs(cfg, res.Resistance))
+		rel.MonstersResistance, err = getResourcesDbItem(cfg, ctx, cfg.E.Monsters, status, convGetStatusConditionResistingMonsterIDs(cfg, res.Resistance))
 		return err
 	})
-	
+
 	g.Go(func() error {
 		var err error
 		rel.InflictedBy, err = getStatusInfliction(cfg, ctx, status, StatusInteractionQueries{
-			Abilities:        convGetStatusConditionAbilityIDsInflicted(cfg, res.MinRate, res.MaxRate),
+			Abilities: convGetStatusConditionAbilityIDsInflicted(cfg, res.MinRate, res.MaxRate),
 		})
 		return err
 	})
-	
+
 	g.Go(func() error {
 		var err error
 		rel.RemovedBy, err = getStatusRemoval(cfg, ctx, status, StatusInteractionQueries{
@@ -45,7 +45,7 @@ func getStatusConditionRelationships(cfg *Config, r *http.Request, status seedin
 		})
 		return err
 	})
-	
+
 	err = g.Wait()
 	if err != nil {
 		return StatusCondition{}, err
@@ -54,31 +54,30 @@ func getStatusConditionRelationships(cfg *Config, r *http.Request, status seedin
 	return rel, nil
 }
 
-
 type StatusQueryResistance struct {
-	Resistance 	int32
-	MinRate		int32
-	MaxRate		int32
+	Resistance int32
+	MinRate    int32
+	MaxRate    int32
 }
 
 func getStatusQueryResistance(cfg *Config, r *http.Request) (StatusQueryResistance, error) {
 	var res StatusQueryResistance
-	
-	queryParamResistance := cfg.q.statusConditions[qpnResistance]
+
+	queryParamResistance := cfg.Q.statusConditions[QpnResistance]
 	resistance, err := parseIntQuery(r, queryParamResistance)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.Resistance = int32(resistance)
 
-	queryParamMinRate := cfg.q.statusConditions[qpnInflictMin]
+	queryParamMinRate := cfg.Q.statusConditions[QpnInflictMin]
 	minRate, err := parseIntQuery(r, queryParamMinRate)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.MinRate = int32(minRate)
 
-	queryParamMaxRate := cfg.q.statusConditions[qpnInflictMax]
+	queryParamMaxRate := cfg.Q.statusConditions[QpnInflictMax]
 	maxRate, err := parseIntQuery(r, queryParamMaxRate)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err

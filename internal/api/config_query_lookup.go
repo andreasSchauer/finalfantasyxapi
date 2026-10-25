@@ -70,11 +70,11 @@ type QueryLookup struct {
 }
 
 func (cfg *Config) QueryLookupInit() {
-	cfg.q = &QueryLookup{}
+	cfg.Q = &QueryLookup{}
 
 	defaultParams := []QueryParam{
 		{
-			Name:        qpnLimit,
+			Name:        QpnLimit,
 			Description: "Sets the amount of displayed entries in a list response. If not set manually, the default is 20. The value 'max' can also be used to forgo pagination of lists entirely.",
 			Type:        qptInt,
 			ParamUse:    puList,
@@ -87,7 +87,7 @@ func (cfg *Config) QueryLookupInit() {
 			DefaultVal: h.GetIntPtr(20),
 		},
 		{
-			Name:        qpnOffset,
+			Name:        QpnOffset,
 			Description: "Sets the offset from where to start the displayed entries in a list response. If not set manually, the default is 0.",
 			Type:        qptInt,
 			ParamUse:    puList,
@@ -95,8 +95,8 @@ func (cfg *Config) QueryLookupInit() {
 		},
 	}
 
-	cfg.q.defaultParamSlice = defaultParams
-	cfg.q.defaultParams = querySliceToMap(cfg, defaultParams)
+	cfg.Q.defaultParamSlice = defaultParams
+	cfg.Q.defaultParams = querySliceToMap(cfg, defaultParams)
 	cfg.initLocationsParams()
 	cfg.initSublocationsParams()
 	cfg.initAreasParams()
@@ -126,12 +126,12 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initMiscAbilitiesParams()
 	cfg.initEnemyAbilitiesParams()
 
-	cfg.q.aeonCommands = cfg.assignDefaultParams(cfg.e.aeonCommands.subsections)
-	cfg.q.overdriveCommands = cfg.assignDefaultParams(cfg.e.overdriveCommands.subsections)
+	cfg.Q.aeonCommands = cfg.assignDefaultParams(cfg.E.AeonCommands.subsections)
+	cfg.Q.overdriveCommands = cfg.assignDefaultParams(cfg.E.OverdriveCommands.subsections)
 	cfg.initOverdrivesParams()
-	cfg.q.ronsoRages = cfg.assignDefaultParams(cfg.e.ronsoRages.subsections)
+	cfg.Q.ronsoRages = cfg.assignDefaultParams(cfg.E.RonsoRages.subsections)
 	cfg.initSubmenusParams()
-	cfg.q.topmenus = cfg.assignDefaultParams(cfg.e.topmenus.subsections)
+	cfg.Q.topmenus = cfg.assignDefaultParams(cfg.E.Topmenus.subsections)
 
 	cfg.initAllItemsParams()
 	cfg.initItemsParams()
@@ -146,22 +146,22 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initCelestialWeaponsParams()
 
 	cfg.initStatsParams()
-	cfg.q.properties = cfg.assignDefaultParams(cfg.e.properties.subsections)
+	cfg.Q.properties = cfg.assignDefaultParams(cfg.E.Properties.subsections)
 	cfg.initOverdriveModesParams()
-	cfg.q.elements = cfg.assignDefaultParams(cfg.e.elements.subsections)
+	cfg.Q.elements = cfg.assignDefaultParams(cfg.E.Elements.subsections)
 	cfg.initStatusConditionsParams()
 	cfg.initModifiersParams()
 	cfg.initAgilityTierParams()
 
-	cfg.q.enums = cfg.assignDefaultParams(nil)
-	cfg.q.endpoints = cfg.assignDefaultParams(nil)
+	cfg.Q.enums = cfg.assignDefaultParams(nil)
+	cfg.Q.endpoints = cfg.assignDefaultParams(nil)
 
-	cfg.e.aeonCommands.queryLookup = cfg.q.aeonCommands
-	cfg.e.overdriveCommands.queryLookup = cfg.q.overdriveCommands
-	cfg.e.ronsoRages.queryLookup = cfg.q.ronsoRages
-	cfg.e.topmenus.queryLookup = cfg.q.topmenus
-	cfg.e.properties.queryLookup = cfg.q.properties
-	cfg.e.elements.queryLookup = cfg.q.elements
-	cfg.e.enums.queryLookup = cfg.q.enums
-	cfg.e.endpoints.queryLookup = cfg.q.endpoints
+	cfg.E.AeonCommands.queryLookup = cfg.Q.aeonCommands
+	cfg.E.OverdriveCommands.queryLookup = cfg.Q.overdriveCommands
+	cfg.E.RonsoRages.queryLookup = cfg.Q.ronsoRages
+	cfg.E.Topmenus.queryLookup = cfg.Q.topmenus
+	cfg.E.Properties.queryLookup = cfg.Q.properties
+	cfg.E.Elements.queryLookup = cfg.Q.elements
+	cfg.E.Enums.queryLookup = cfg.Q.enums
+	cfg.E.Endpoints.queryLookup = cfg.Q.endpoints
 }

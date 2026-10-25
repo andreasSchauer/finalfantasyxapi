@@ -25,8 +25,8 @@ func (cfg *Config) getStatusCondition(r *http.Request, i handlerInput[seeding.St
 		Visualization:           status.Visualization,
 		Effect:                  status.Effect,
 		NullifyArmored:          status.NullifyArmored,
-		RelatedStats:            namesToNamedAPIResources(cfg, cfg.e.stats, status.RelatedStats),
-		RemovedStatusConditions: namesToNamedAPIResources(cfg, cfg.e.statusConditions, status.RemovedStatusConditions),
+		RelatedStats:            namesToNamedAPIResources(cfg, cfg.E.Stats, status.RelatedStats),
+		RemovedStatusConditions: namesToNamedAPIResources(cfg, cfg.E.StatusConditions, status.RemovedStatusConditions),
 		AddedElemResist:         convertObjPtr(cfg, status.AddedElemResist, convertElemResist),
 		StatChanges:             convertObjSlice(cfg, status.StatChanges, convertStatChange),
 		ModifierChanges:         convertObjSlice(cfg, status.ModifierChanges, convertModifierChange),
@@ -46,6 +46,6 @@ func (cfg *Config) retrieveStatusConditions(r *http.Request, i handlerInput[seed
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		enumListQuery(cfg, r, i, cfg.t.StatusConditionCategory, ids, qpnCategory, cfg.db.GetStatusConditionIDsByCategory),
+		enumListQuery(cfg, r, i, cfg.T.StatusConditionCategory, ids, QpnCategory, cfg.db.GetStatusConditionIDsByCategory),
 	})
 }

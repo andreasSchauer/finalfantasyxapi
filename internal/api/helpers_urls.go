@@ -19,26 +19,26 @@ func createEnumURL(cfg *Config, e EnumName) string {
 	return fmt.Sprintf("%s/%s/%s", getBaseURL(cfg), epEnums, getEnumKey(e))
 }
 
-func urlToPath(cfg *Config, url string) string {
+func UrlToPath(cfg *Config, url string) string {
 	prefix := getBaseURL(cfg)
 	return strings.TrimPrefix(url, prefix)
 }
 
-func createResourceURL(cfg *Config, endpoint EndpointName, id int32) string {
+func CreateResourceURL(cfg *Config, endpoint EndpointName, id int32) string {
 	url := createListURL(cfg, endpoint)
 	return fmt.Sprintf("%s/%d", url, id)
 }
 
-func createResourceURLQuery(cfg *Config, endpoint EndpointName, id int32, q url.Values) string {
-	url := createResourceURL(cfg, endpoint, id)
+func CreateResourceURLQuery(cfg *Config, endpoint EndpointName, id int32, q url.Values) string {
+	url := CreateResourceURL(cfg, endpoint, id)
 	return fmt.Sprintf("%s?%s", url, q.Encode())
 }
 
-func completeTestURL(cfg *Config, path string) string {
+func CompleteTestURL(cfg *Config, path string) string {
 	return fmt.Sprintf("%s%s", getBaseURL(cfg), path)
 }
 
-func completeTestPath(endpoint EndpointName, id int32) string {
+func CompleteTestPath(endpoint EndpointName, id int32) string {
 	return fmt.Sprintf("/%s/%d", endpoint, id)
 }
 

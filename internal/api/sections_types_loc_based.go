@@ -18,7 +18,7 @@ type ShopSummarySimple struct {
 }
 
 func idToShopLocSimple(cfg *Config, shopID int32) ShopLocSimple {
-	shopLookup, _ := seeding.GetResourceByID(shopID, cfg.l.ShopsID)
+	shopLookup, _ := seeding.GetResourceByID(shopID, cfg.L.ShopsID)
 	return ShopLocSimple{
 		ID:          shopID,
 		Category:    database.ShopCategory(shopLookup.Category),
@@ -67,7 +67,7 @@ func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSi
 	itemAmounts := []seeding.ItemAmount{}
 
 	for _, treasureID := range treasureIDs {
-		treasure, _ := seeding.GetResourceByID(treasureID, cfg.l.TreasuresID)
+		treasure, _ := seeding.GetResourceByID(treasureID, cfg.L.TreasuresID)
 
 		switch treasure.LootType {
 		case string(database.LootTypeGil):

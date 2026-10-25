@@ -24,7 +24,7 @@ func (cfg *Config) getStat(r *http.Request, i handlerInput[seeding.Stat, Stat, N
 		MinVal:             stat.MinVal,
 		MaxVal:             stat.MaxVal,
 		MaxVal2:            stat.MaxVal2,
-		ActivationSphere:   nameToNamedAPIResource(cfg, cfg.e.spheres, stat.ActivationSphere, nil),
+		ActivationSphere:   nameToNamedAPIResource(cfg, cfg.E.Spheres, stat.ActivationSphere, nil),
 		Spheres:            rel.Spheres,
 		AutoAbilities:      rel.AutoAbilities,
 		PlayerAbilities:    rel.PlayerAbilities,

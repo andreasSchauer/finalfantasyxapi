@@ -13,11 +13,11 @@ type SimpleResourceList struct {
 	Results        []SimpleResource `json:"results"`
 }
 
-func (l SimpleResourceList) getListParams() ListParams {
+func (l SimpleResourceList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func (l SimpleResourceList) getResults() []SimpleResource {
+func (l SimpleResourceList) GetResults() []SimpleResource {
 	return l.Results
 }
 

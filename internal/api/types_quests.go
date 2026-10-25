@@ -6,20 +6,20 @@ import (
 )
 
 type Quest struct {
-	ID           int32            	`json:"id"`
-	Name         string           	`json:"name"`
+	ID           int32              `json:"id"`
+	Name         string             `json:"name"`
 	Type         database.QuestType `json:"type"`
-	TypedQuest   QuestAPIResource 	`json:"typed_quest"`
-	Availability string			 	`json:"availability"`
-	IsRepeatable bool             	`json:"is_repeatable"`
-	Completion   *QuestCompletion 	`json:"completion"`
+	TypedQuest   QuestAPIResource   `json:"typed_quest"`
+	Availability string             `json:"availability"`
+	IsRepeatable bool               `json:"is_repeatable"`
+	Completion   *QuestCompletion   `json:"completion"`
 }
 
 type Sidequest struct {
 	ID           int32              `json:"id"`
 	Name         string             `json:"name"`
 	UntypedQuest QuestAPIResource   `json:"untyped_quest"`
-	Availability string			    `json:"availability"`
+	Availability string             `json:"availability"`
 	IsRepeatable bool               `json:"is_repeatable"`
 	Completion   *QuestCompletion   `json:"completion"`
 	Subquests    []QuestAPIResource `json:"subquests"`
@@ -29,7 +29,7 @@ type Subquest struct {
 	ID              int32             `json:"id"`
 	Name            string            `json:"name"`
 	UntypedQuest    QuestAPIResource  `json:"untyped_quest"`
-	Availability    string			  `json:"availability"`
+	Availability    string            `json:"availability"`
 	IsRepeatable    bool              `json:"is_repeatable"`
 	ParentSidequest QuestAPIResource  `json:"parent_sidequest"`
 	Completion      QuestCompletion   `json:"completion"`
@@ -46,7 +46,7 @@ func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestComple
 	return QuestCompletion{
 		Condition: qc.Condition,
 		Areas:     convertObjSlice(cfg, qc.Areas, convertCompletionArea),
-		Reward:    nameAmountToResourceAmount(cfg, cfg.e.allItems, qc.Reward),
+		Reward:    nameAmountToResourceAmount(cfg, cfg.E.AllItems, qc.Reward),
 	}
 }
 
@@ -61,7 +61,7 @@ func (ca CompletionArea) GetAPIResource() APIResource {
 
 func convertCompletionArea(cfg *Config, cl seeding.CompletionArea) CompletionArea {
 	return CompletionArea{
-		Area:  locAreaToAreaAPIResource(cfg, cfg.e.areas, cl.LocationArea),
+		Area:  locAreaToAreaAPIResource(cfg, cfg.E.Areas, cl.LocationArea),
 		Notes: cl.Notes,
 	}
 }

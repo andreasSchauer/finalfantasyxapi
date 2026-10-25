@@ -14,26 +14,26 @@ func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyIt
 	var rel KeyItem
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.e.keyItems, keyItem.ID)
+	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.E.KeyItems, keyItem.ID)
 	if err != nil {
 		return KeyItem{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.treasures, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeTreasure))
+		rel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Treasures, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Quests, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.quests, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeQuest))
+		rel.Quests, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Quests, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeQuest))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = runRelAvailabilityQuery(cfg, ctx, cfg.e.areas, keyItem, availabilityParams, getKeyItemAreaIDs(cfg))
+		rel.Areas, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Areas, keyItem, availabilityParams, getKeyItemAreaIDs(cfg))
 		return err
 	})
 
@@ -45,7 +45,7 @@ func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyIt
 
 	var primer *NamedAPIResource
 	if keyItem.Category == string(database.KeyItemCategoryPrimer) {
-		primerRes := nameToNamedAPIResource(cfg, cfg.e.primers, keyItem.Name, nil)
+		primerRes := nameToNamedAPIResource(cfg, cfg.E.Primers, keyItem.Name, nil)
 		primer = &primerRes
 	}
 	rel.Primer = primer
@@ -67,9 +67,9 @@ func getKeyItemCelestialWeapon(cfg *Config, ctx context.Context, keyItem seeding
 
 	celestialID, err := cfg.db.GetKeyItemCelestialWeapon(ctx, database.KeyItemBase(keyItemBase))
 	if err != nil {
-		return nil, newHTTPErrorDbOne(cfg.e.celestialWeapons.resTypeSingle, keyItem, err)
+		return nil, newHTTPErrorDbOne(cfg.E.CelestialWeapons.resTypeSingle, keyItem, err)
 	}
 
-	celestialRes := idToNamedAPIResource(cfg, cfg.e.celestialWeapons, celestialID)
+	celestialRes := idToNamedAPIResource(cfg, cfg.E.CelestialWeapons, celestialID)
 	return &celestialRes, nil
 }

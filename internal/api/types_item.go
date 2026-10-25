@@ -6,7 +6,7 @@ type Item struct {
 	ID                 int32                                `json:"id"`
 	Name               string                               `json:"name"`
 	UntypedItem        TypedAPIResource                     `json:"untyped_item"`
-	Category           string               		        `json:"category"`
+	Category           string                               `json:"category"`
 	Description        string                               `json:"description"`
 	SgDescription      *string                              `json:"sg_description,omitempty"`
 	Effect             string                               `json:"effect"`
@@ -40,7 +40,7 @@ type MonItemAmts struct {
 }
 
 func createItemMonster(cfg *Config, itemName string, mon NamedAPIResource) MonItemAmts {
-	monster, _ := seeding.GetResourceByID(mon.ID, cfg.l.MonstersID)
+	monster, _ := seeding.GetResourceByID(mon.ID, cfg.L.MonstersID)
 
 	return MonItemAmts{
 		Monster:             mon,

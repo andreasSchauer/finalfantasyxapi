@@ -33,7 +33,7 @@ func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName Que
 		}
 
 		// lookup element to find out the opposite element
-		elementLookup, err := seeding.GetResource(elementName, cfg.l.Elements)
+		elementLookup, err := seeding.GetResource(elementName, cfg.L.Elements)
 		if err != nil {
 			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get element '%s'.", elementName), err)
 		}
@@ -57,7 +57,7 @@ func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName Que
 
 // verifies the input and counts the amounts of circles pointing to each element
 func parseOmnisQuery(cfg *Config, r *http.Request, queryName QueryParamName) (map[string]int, error) {
-	queryParam := cfg.q.monsters[queryName]
+	queryParam := cfg.Q.monsters[queryName]
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err

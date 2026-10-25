@@ -3,42 +3,42 @@ package api
 func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, paramsRules ParamsRules, userValues map[FieldName]any) (TurnOrderParams, error) {
 	var err error
 
-	params.TurnsAmt, err = verifyParamField(cfg, params.TurnsAmt, pfnTurnsAmt, userValues, paramsRules, vfInt)
+	params.TurnsAmt, err = verifyParamField(cfg, params.TurnsAmt, PfnTurnsAmt, userValues, paramsRules, vfInt)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.IgnFirstTurn, err = verifyParamField(cfg, params.IgnFirstTurn, pfnIgnFirstTurn, userValues, paramsRules, nil)
+	params.IgnFirstTurn, err = verifyParamField(cfg, params.IgnFirstTurn, PfnIgnFirstTurn, userValues, paramsRules, nil)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.IgnImmunities, err = verifyParamField(cfg, params.IgnImmunities, pfnIgnImmunities, userValues, paramsRules, nil)
+	params.IgnImmunities, err = verifyParamField(cfg, params.IgnImmunities, PfnIgnImmunities, userValues, paramsRules, nil)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.RNG, err = verifyParamField(cfg, params.RNG, pfnRNG, userValues, paramsRules, vfEnum)
+	params.RNG, err = verifyParamField(cfg, params.RNG, PfnRNG, userValues, paramsRules, vfEnum)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.BattleStart, err = verifyParamField(cfg, params.BattleStart, pfnBattleStart, userValues, paramsRules, vfEnum)
+	params.BattleStart, err = verifyParamField(cfg, params.BattleStart, PfnBattleStart, userValues, paramsRules, vfEnum)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.FormationID, err = verifyParamFieldPtr(cfg, params.FormationID, pfnFormationID, userValues, paramsRules, vfId)
+	params.FormationID, err = verifyParamFieldPtr(cfg, params.FormationID, PfnFormationID, userValues, paramsRules, vfId)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.Party, err = verifyParamFieldArr(cfg, params.Party, pfnParty, userValues, paramsRules, vfTurnOrderParty)
+	params.Party, err = verifyParamFieldArr(cfg, params.Party, PfnParty, userValues, paramsRules, vfTurnOrderParty)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.Mons, err = verifyParamFieldArr(cfg, params.Mons, pfnMons, userValues, paramsRules, vfTurnOrderMon)
+	params.Mons, err = verifyParamFieldArr(cfg, params.Mons, PfnMons, userValues, paramsRules, vfTurnOrderMon)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
@@ -54,22 +54,22 @@ func vfTurnOrderParty(cfg *Config, item turnOrderParty, _ FieldName, userValues 
 		return turnOrderParty{}, err
 	}
 
-	item.UnitID, err = verifyParamField(cfg, item.UnitID, pfnUnitID, userValues, paramsRules, vfId)
+	item.UnitID, err = verifyParamField(cfg, item.UnitID, PfnUnitID, userValues, paramsRules, vfId)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
 
-	item.Agility, err = verifyParamField(cfg, item.Agility, pfnAgility, userValues, paramsRules, vfInt)
+	item.Agility, err = verifyParamField(cfg, item.Agility, PfnAgility, userValues, paramsRules, vfInt)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
 
-	item.FirstStrike, err = verifyParamField(cfg, item.FirstStrike, pfnFirstStrike, userValues, paramsRules, nil)
+	item.FirstStrike, err = verifyParamField(cfg, item.FirstStrike, PfnFirstStrike, userValues, paramsRules, nil)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
 
-	item.Status, err = verifyParamFieldPtr(cfg, item.Status, pfnStatus, userValues, paramsRules, vfEnum)
+	item.Status, err = verifyParamFieldPtr(cfg, item.Status, PfnStatus, userValues, paramsRules, vfEnum)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
@@ -85,32 +85,32 @@ func vfTurnOrderMon(cfg *Config, item turnOrderMon, _ FieldName, userValues map[
 		return turnOrderMon{}, err
 	}
 
-	item.MonsterID, err = verifyParamFieldPtr(cfg, item.MonsterID, pfnUnitID, userValues, paramsRules, vfId)
+	item.MonsterID, err = verifyParamFieldPtr(cfg, item.MonsterID, PfnUnitID, userValues, paramsRules, vfId)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
 
-	item.AltState, err = verifyParamFieldPtr(cfg, item.AltState, pfnAltState, userValues, paramsRules, vfInt)
+	item.AltState, err = verifyParamFieldPtr(cfg, item.AltState, PfnAltState, userValues, paramsRules, vfInt)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
 
-	item.Name, err = verifyParamFieldPtr(cfg, item.Name, pfnName, userValues, paramsRules, nil)
+	item.Name, err = verifyParamFieldPtr(cfg, item.Name, PfnName, userValues, paramsRules, nil)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
 
-	item.Agility, err = verifyParamFieldPtr(cfg, item.Agility, pfnAgility, userValues, paramsRules, vfInt)
+	item.Agility, err = verifyParamFieldPtr(cfg, item.Agility, PfnAgility, userValues, paramsRules, vfInt)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
 
-	item.FirstStrike, err = verifyParamFieldPtr(cfg, item.FirstStrike, pfnFirstStrike, userValues, paramsRules, nil)
+	item.FirstStrike, err = verifyParamFieldPtr(cfg, item.FirstStrike, PfnFirstStrike, userValues, paramsRules, nil)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
 
-	item.Status, err = verifyParamFieldPtr(cfg, item.Status, pfnStatus, userValues, paramsRules, vfEnum)
+	item.Status, err = verifyParamFieldPtr(cfg, item.Status, PfnStatus, userValues, paramsRules, vfEnum)
 	if err != nil {
 		return turnOrderMon{}, err
 	}

@@ -20,8 +20,8 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 	response := Aeon{
 		ID:                     aeon.ID,
 		Name:                   aeon.Name,
-		UntypedUnit:            idToTypedAPIResource(cfg, cfg.e.playerUnits, aeon.PlayerUnit.ID),
-		Area:                   locAreaToAreaAPIResource(cfg, cfg.e.areas, aeon.LocationArea),
+		UntypedUnit:            idToTypedAPIResource(cfg, cfg.E.PlayerUnits, aeon.PlayerUnit.ID),
+		Area:                   locAreaToAreaAPIResource(cfg, cfg.E.Areas, aeon.LocationArea),
 		UnlockCondition:        aeon.UnlockCondition,
 		IsOptional:             aeon.IsOptional,
 		BattlesToRegenerate:    aeon.BattlesToRegenerate,
@@ -54,7 +54,6 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 	return response, nil
 }
 
-
 func (cfg *Config) retrieveAeons(r *http.Request, i handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
@@ -62,6 +61,6 @@ func (cfg *Config) retrieveAeons(r *http.Request, i handlerInput[seeding.Aeon, A
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		boolQuery(r, i, ids, qpnOptional, cfg.db.GetAeonIDsOptional),
+		boolQuery(r, i, ids, QpnOptional, cfg.db.GetAeonIDsOptional),
 	})
 }

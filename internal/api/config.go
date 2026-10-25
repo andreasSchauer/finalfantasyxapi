@@ -14,11 +14,11 @@ import (
 
 type Config struct {
 	db          *database.Queries
-	dbConn      *sql.DB
-	l           *seeding.Lookup
-	t           *Enums
-	q           *QueryLookup
-	e           *endpoints
+	DbConn      *sql.DB
+	L           *seeding.Lookup
+	T           *Enums
+	Q           *QueryLookup
+	E           *endpoints
 	platform    string
 	adminApiKey string
 	host        string
@@ -56,14 +56,14 @@ func ConfigInit() (*Config, error) {
 
 	apiCfg := Config{
 		db:          dbQueries,
-		dbConn:      dbConn,
+		DbConn:      dbConn,
 		platform:    platform,
 		adminApiKey: adminApiKey,
 		host:        domain,
 		fetchLimit:  fetchLimit,
 	}
 
-	apiCfg.l, err = seeding.LoadDatabase(apiCfg.db, apiCfg.dbConn)
+	apiCfg.L, err = seeding.LoadDatabase(apiCfg.db, apiCfg.DbConn)
 	if err != nil {
 		return nil, err
 	}

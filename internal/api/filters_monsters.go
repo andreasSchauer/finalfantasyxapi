@@ -39,7 +39,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}
 
-		elementID, err := checkQueryNameID(elementStr, cfg.e.elements.resTypeSingle, queryParam, cfg.l.Elements)
+		elementID, err := checkQueryNameID(elementStr, cfg.E.Elements.resTypeSingle, queryParam, cfg.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -48,7 +48,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 		}
 		elemMap[elementID] = true
 
-		affinity, err := checkQueryEnum(affinityStr, cfg.e.monsters.endpoint, queryParam, cfg.t.ElementalAffinity)
+		affinity, err := checkQueryEnum(affinityStr, cfg.E.Monsters.Endpoint, queryParam, cfg.T.ElementalAffinity)
 		if err != nil {
 			return nil, err
 		}
@@ -58,7 +58,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			Affinity:  affinity.Name,
 		}
 
-		erLookup, err := seeding.GetResource(seeding.Key(elemResist), cfg.l.ElementalResists)
+		erLookup, err := seeding.GetResource(seeding.Key(elemResist), cfg.L.ElementalResists)
 		if err != nil {
 			return nil, nil
 		}
@@ -87,7 +87,7 @@ func getMonstersByStatusResists(cfg *Config, r *http.Request, ctx context.Contex
 }
 
 func verifyMonsterResistance(cfg *Config, r *http.Request) (int32, error) {
-	queryParam := cfg.q.monsters[qpnResistance]
+	queryParam := cfg.Q.monsters[QpnResistance]
 
 	resistance, err := parseIntQuery(r, queryParam)
 	if err != nil {
@@ -98,9 +98,9 @@ func verifyMonsterResistance(cfg *Config, r *http.Request) (int32, error) {
 }
 
 func getMonstersByAutoAbility(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.e.monsters
+	i := cfg.E.Monsters
 
-	queryParam := i.queryLookup[qpnIsForced]
+	queryParam := i.queryLookup[QpnIsForced]
 
 	isForced, err := parseBooleanQuery(r, queryParam)
 	if queryIsEmpty(err) {
@@ -119,7 +119,7 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, ctx context.Context,
 }
 
 func getMonstersByItem(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.e.monsters
+	i := cfg.E.Monsters
 
 	methods, err := getMonsterItemMethods(cfg, r)
 	if err != nil {
@@ -131,15 +131,15 @@ func getMonstersByItem(cfg *Config, r *http.Request, ctx context.Context, id int
 		Methods: methods,
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resTypePlural, i.queryLookup[qpnItem], err)
+		return nil, newHTTPErrorDbFilter(i.resTypePlural, i.queryLookup[QpnItem], err)
 	}
 
 	return dbIDs, nil
 }
 
 func getMonsterItemMethods(cfg *Config, r *http.Request) ([]string, error) {
-	i := cfg.e.monsters
-	paramMethods := i.queryLookup[qpnMethods]
+	i := cfg.E.Monsters
+	paramMethods := i.queryLookup[QpnMethods]
 	aliasses := map[string][]string{
 		"steal": {"steal_common", "steal_rare"},
 		"drop":  {"drop_common", "drop_rare", "drop_secondary_common", "drop_secondary_rare"},

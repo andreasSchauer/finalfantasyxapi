@@ -8,7 +8,7 @@ import (
 )
 
 func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.autoAbilities
+	i := cfg.E.AutoAbilities
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -18,7 +18,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		return inputIDs, nil
 	}
 
-	customize, err := parseBooleanQuery(r, i.queryLookup[qpnCustomize])
+	customize, err := parseBooleanQuery(r, i.queryLookup[QpnCustomize])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -28,12 +28,12 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		return nil, err
 	}
 
-	charID, err := getQueryIdPtr(r, cfg.e.characters, qpnCharacter, i.queryLookup)
+	charID, err := getQueryIdPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup[qpnMethods])
+	methods, err := parseValueListQuery(cfg, r, i.queryLookup[QpnMethods])
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

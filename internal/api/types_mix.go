@@ -5,7 +5,7 @@ import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 type Mix struct {
 	ID           int32            `json:"id"`
 	Name         string           `json:"name"`
-	Category     string			  `json:"category"`
+	Category     string           `json:"category"`
 	Overdrive    NamedAPIResource `json:"overdrive"`
 	Description  string           `json:"description"`
 	Effect       string           `json:"effect"`
@@ -19,7 +19,7 @@ type MixCombination struct {
 
 func convertMixCombination(cfg *Config, mc seeding.MixCombination) MixCombination {
 	return MixCombination{
-		FirstItem:  nameToNamedAPIResource(cfg, cfg.e.items, mc.FirstItem, nil),
-		SecondItem: nameToNamedAPIResource(cfg, cfg.e.items, mc.SecondItem, nil),
+		FirstItem:  nameToNamedAPIResource(cfg, cfg.E.Items, mc.FirstItem, nil),
+		SecondItem: nameToNamedAPIResource(cfg, cfg.E.Items, mc.SecondItem, nil),
 	}
 }

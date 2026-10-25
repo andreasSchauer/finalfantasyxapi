@@ -85,7 +85,7 @@ func setTranslator(translate, newState bool) (bool, error) {
 func initCharLookup(cfg *Config, direction string) map[rune]rune {
 	charLookup := make(map[rune]rune)
 
-	for _, primer := range cfg.l.Primers {
+	for _, primer := range cfg.L.Primers {
 		alBhedChar := charToRune(primer.AlBhedLetter)
 		englishChar := charToRune(primer.EnglishLetter)
 

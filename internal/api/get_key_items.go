@@ -20,7 +20,7 @@ func (cfg *Config) getKeyItem(r *http.Request, i handlerInput[seeding.KeyItem, K
 	response := KeyItem{
 		ID:              keyItem.ID,
 		Name:            keyItem.Name,
-		UntypedItem:     idToTypedAPIResource(cfg, cfg.e.allItems, keyItem.MasterItem.ID),
+		UntypedItem:     idToTypedAPIResource(cfg, cfg.E.AllItems, keyItem.MasterItem.ID),
 		Category:        keyItem.Category,
 		Description:     keyItem.Description,
 		Effect:          keyItem.Effect,
@@ -41,10 +41,10 @@ func (cfg *Config) retrieveKeyItems(r *http.Request, i handlerInput[seeding.KeyI
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		enumListQuery(cfg, r, i, cfg.t.KeyItemCategory, ids, qpnCategory, cfg.db.GetKeyItemIDsCategory),
-		valueListQuery(cfg, r, i, ids, qpnMethods, cfg.db.GetKeyItemIDsByMethods),
-		idQuery(r, i, ids, qpnLocation, cfg.e.locations.objLookup, cfg.db.GetKeyItemIDsByLocation),
-		idQuery(r, i, ids, qpnSublocation, cfg.e.sublocations.objLookup, cfg.db.GetKeyItemIDsBySublocation),
-		idQuery(r, i, ids, qpnArea, cfg.e.areas.objLookup, cfg.db.GetKeyItemIDsByArea),
+		enumListQuery(cfg, r, i, cfg.T.KeyItemCategory, ids, QpnCategory, cfg.db.GetKeyItemIDsCategory),
+		valueListQuery(cfg, r, i, ids, QpnMethods, cfg.db.GetKeyItemIDsByMethods),
+		idQuery(r, i, ids, QpnLocation, cfg.E.Locations.objLookup, cfg.db.GetKeyItemIDsByLocation),
+		idQuery(r, i, ids, QpnSublocation, cfg.E.Sublocations.objLookup, cfg.db.GetKeyItemIDsBySublocation),
+		idQuery(r, i, ids, QpnArea, cfg.E.Areas.objLookup, cfg.db.GetKeyItemIDsByArea),
 	})
 }

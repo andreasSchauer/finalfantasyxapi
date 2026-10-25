@@ -20,7 +20,7 @@ type StatQueries struct {
 func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat, error) {
 	var rel Stat
 	g, ctx := errgroup.WithContext(r.Context())
-	
+
 	queries, err := getStatQueries(cfg, r)
 	if err != nil {
 		return Stat{}, err
@@ -28,50 +28,50 @@ func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat
 
 	g.Go(func() error {
 		var err error
-		rel.Spheres, err = getResourcesDbItem(cfg, ctx, cfg.e.spheres, stat, cfg.db.GetStatSphereIDs)
+		rel.Spheres, err = getResourcesDbItem(cfg, ctx, cfg.E.Spheres, stat, cfg.db.GetStatSphereIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.autoAbilities, stat, queries.AutoAbilities)
+		rel.AutoAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.AutoAbilities, stat, queries.AutoAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.playerAbilities, stat, queries.PlayerAbilities)
+		rel.PlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.PlayerAbilities, stat, queries.PlayerAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.overdriveAbilities, stat, queries.OverdriveAbilities)
+		rel.OverdriveAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.OverdriveAbilities, stat, queries.OverdriveAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = getResourcesDbItem(cfg, ctx, cfg.e.itemAbilities, stat, queries.ItemAbilities)
+		rel.ItemAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.ItemAbilities, stat, queries.ItemAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.TriggerCommands, err = getResourcesDbItem(cfg, ctx, cfg.e.triggerCommands, stat, queries.TriggerCommands)
+		rel.TriggerCommands, err = getResourcesDbItem(cfg, ctx, cfg.E.TriggerCommands, stat, queries.TriggerCommands)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.StatusConditions, err = getResourcesDbItem(cfg, ctx, cfg.e.statusConditions, stat, queries.StatusConditions)
+		rel.StatusConditions, err = getResourcesDbItem(cfg, ctx, cfg.E.StatusConditions, stat, queries.StatusConditions)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		if queries.Properties != nil {
-			rel.Properties, err = getResourcesDbItem(cfg, ctx, cfg.e.properties, stat, queries.Properties)
+			rel.Properties, err = getResourcesDbItem(cfg, ctx, cfg.E.Properties, stat, queries.Properties)
 			return err
 		}
 		return nil
@@ -86,7 +86,7 @@ func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat
 }
 
 func getStatQueries(cfg *Config, r *http.Request) (StatQueries, error) {
-	changesOnly, err := parseBooleanQuery(r, cfg.q.stats[qpnChangesOnly])
+	changesOnly, err := parseBooleanQuery(r, cfg.Q.stats[QpnChangesOnly])
 	if errExceptEmptyQuery(err) {
 		return StatQueries{}, err
 	}

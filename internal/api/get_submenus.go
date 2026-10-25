@@ -22,8 +22,8 @@ func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, S
 		Name:        submenu.Name,
 		Description: submenu.Description,
 		Effect:      submenu.Effect,
-		Topmenu:     namePtrToNamedAPIResPtr(cfg, cfg.e.topmenus, submenu.Topmenu, nil),
-		Users:       namesToNamedAPIResources(cfg, cfg.e.characterClasses, submenu.Users),
+		Topmenu:     namePtrToNamedAPIResPtr(cfg, cfg.E.Topmenus, submenu.Topmenu, nil),
+		Users:       namesToNamedAPIResources(cfg, cfg.E.CharacterClasses, submenu.Users),
 		OpenedBy:    rel.OpenedBy,
 		Abilities:   rel.Abilities,
 	}
@@ -38,6 +38,6 @@ func (cfg *Config) retrieveSubmenus(r *http.Request, i handlerInput[seeding.Subm
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		nameIdQuery(r, i, ids, qpnTopmenu, cfg.e.topmenus.resTypeSingle, cfg.l.Topmenus, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs)),
+		nameIdQuery(r, i, ids, QpnTopmenu, cfg.E.Topmenus.resTypeSingle, cfg.L.Topmenus, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs)),
 	})
 }

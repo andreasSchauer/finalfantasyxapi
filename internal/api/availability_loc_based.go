@@ -8,7 +8,7 @@ import (
 )
 
 func filterAvlAreas(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.areas
+	i := cfg.E.Areas
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -53,7 +53,7 @@ func filterAvlAreas(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 }
 
 func filterAvlSublocations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.sublocations
+	i := cfg.E.Sublocations
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {
@@ -98,7 +98,7 @@ func filterAvlSublocations(cfg *Config, r *http.Request, inputIDs []int32) ([]in
 }
 
 func filterAvlLocations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.e.locations
+	i := cfg.E.Locations
 
 	avlParams, err := checkAvlAndRep(cfg, r, i)
 	if errExceptEmptyQuery(err) {

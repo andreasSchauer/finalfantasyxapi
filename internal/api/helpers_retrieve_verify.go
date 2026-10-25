@@ -10,7 +10,7 @@ import (
 func verifyParamsAndGet[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], id int32) (T, error) {
 	var zeroType T
 
-	err := verifyQueryParams(r, i.endpoint, i.queryLookup, &id, nil)
+	err := verifyQueryParams(r, i.Endpoint, i.queryLookup, &id, nil)
 	if err != nil {
 		return zeroType, err
 	}
@@ -23,9 +23,8 @@ func verifyParamsAndGet[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	return resource, nil
 }
 
-
 func verifyParamsAndRetrieve[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L]) ([]int32, error) {
-	err := verifyQueryParams[int32](r, i.endpoint, i.queryLookup, nil, nil)
+	err := verifyQueryParams[int32](r, i.Endpoint, i.queryLookup, nil, nil)
 	if err != nil {
 		return nil, err
 	}

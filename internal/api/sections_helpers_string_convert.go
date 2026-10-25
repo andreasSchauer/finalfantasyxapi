@@ -8,12 +8,12 @@ import (
 )
 
 func idToLocAreaString(cfg *Config, areaID int32) string {
-	area, _ := seeding.GetResourceByID(areaID, cfg.l.AreasID)
+	area, _ := seeding.GetResourceByID(areaID, cfg.L.AreasID)
 	return areaToLocAreaString(area)
 }
 
 func locAreaString(cfg *Config, locArea seeding.LocationArea) string {
-	area, _ := seeding.GetResource(locArea, cfg.l.Areas)
+	area, _ := seeding.GetResource(locArea, cfg.L.Areas)
 	return areaToLocAreaString(area)
 }
 
@@ -49,12 +49,12 @@ func locAreaStrings[T seeding.HasLocArea](cfg *Config, items []T) []string {
 }
 
 func monsterAmountString(cfg *Config, ma seeding.MonsterAmount) string {
-	mon, _ := seeding.GetResource(ma, cfg.l.Monsters)
+	mon, _ := seeding.GetResource(ma, cfg.L.Monsters)
 	return h.NameAmountString(mon.Name, mon.Version, mon.Specification, ma.Amount)
 }
 
 func idToMonsterSimpleString(cfg *Config, monID int32) string {
-	mon, _ := seeding.GetResourceByID(monID, cfg.l.MonstersID)
+	mon, _ := seeding.GetResourceByID(monID, cfg.L.MonstersID)
 	return h.NameToString(mon.Name, mon.Version, mon.Specification)
 }
 
@@ -68,6 +68,6 @@ func monsterAutoAbilityString(_ *Config, drop seeding.EquipmentDrop) string {
 }
 
 func abilityRefString(cfg *Config, ref seeding.AbilityReference) string {
-	ability, _ := seeding.GetResource(ref, cfg.l.Abilities)
+	ability, _ := seeding.GetResource(ref, cfg.L.Abilities)
 	return h.NameToString(ability.Name, ability.Version, ability.Specification)
 }

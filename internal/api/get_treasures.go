@@ -14,14 +14,14 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 
 	response := Treasure{
 		ID:              treasure.ID,
-		Area:            idToAreaAPIResource(cfg, cfg.e.areas, treasure.AreaID),
+		Area:            idToAreaAPIResource(cfg, cfg.E.Areas, treasure.AreaID),
 		Availability:    treasure.Availability,
 		IsAnimaTreasure: treasure.IsAnimaTreasure,
 		Notes:           treasure.Notes,
 		TreasureType:    treasure.TreasureType,
 		LootType:        treasure.LootType,
 		GilAmount:       treasure.GilAmount,
-		Items:           nameAmtsToResAmts(cfg, cfg.e.allItems, treasure.Items),
+		Items:           nameAmtsToResAmts(cfg, cfg.E.AllItems, treasure.Items),
 		Equipment:       convertObjPtr(cfg, treasure.Equipment, convertFoundEquipment),
 	}
 
@@ -35,13 +35,13 @@ func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Tre
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		idQuery(r, i, ids, qpnLocation, cfg.l.Locations, cfg.db.GetLocationTreasureIDs),
-		idQuery(r, i, ids, qpnSublocation, cfg.l.Sublocations, cfg.db.GetSublocationTreasureIDs),
-		idQuery(r, i, ids, qpnArea, cfg.l.Areas, cfg.db.GetAreaTreasureIDs),
-		idQuery(r, i, ids, qpnItem, cfg.l.Items, cfg.db.GetTreasureIDsByItem),
-		joinedQuery(cfg, r, i, ids, []QueryParamName{qpnAutoAbility, qpnEmptySlots, qpnCharacter}, filterTreasuresEquipment),
-		boolQuery(r, i, ids, qpnAnima, cfg.db.GetTreasureIDsByIsAnimaTreasure),
-		enumQuery(r, i, cfg.t.LootType, ids, qpnLootType, cfg.db.GetTreasureIDsByLootType),
-		enumQuery(r, i, cfg.t.TreasureType, ids, qpnTreasureType, cfg.db.GetTreasureIDsByTreasureType),
+		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationTreasureIDs),
+		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationTreasureIDs),
+		idQuery(r, i, ids, QpnArea, cfg.L.Areas, cfg.db.GetAreaTreasureIDs),
+		idQuery(r, i, ids, QpnItem, cfg.L.Items, cfg.db.GetTreasureIDsByItem),
+		joinedQuery(cfg, r, i, ids, []QueryParamName{QpnAutoAbility, QpnEmptySlots, QpnCharacter}, filterTreasuresEquipment),
+		boolQuery(r, i, ids, QpnAnima, cfg.db.GetTreasureIDsByIsAnimaTreasure),
+		enumQuery(r, i, cfg.T.LootType, ids, QpnLootType, cfg.db.GetTreasureIDsByLootType),
+		enumQuery(r, i, cfg.T.TreasureType, ids, QpnTreasureType, cfg.db.GetTreasureIDsByTreasureType),
 	})
 }

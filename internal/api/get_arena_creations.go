@@ -15,7 +15,7 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 		return ArenaCreation{}, err
 	}
 
-	subquest, _ := seeding.GetResourceByID(creation.SubquestID, cfg.l.SubquestsID)
+	subquest, _ := seeding.GetResourceByID(creation.SubquestID, cfg.L.SubquestsID)
 	ia := subquest.Completion.Reward
 
 	monsters, err := getArenaCreationMonsters(cfg, r, creation)
@@ -27,9 +27,9 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 		ID:                        creation.ID,
 		Name:                      creation.Name,
 		Category:                  creation.Category,
-		Monster:                   idToNamedAPIResource(cfg, cfg.e.monsters, *creation.MonsterID),
-		ParentSubquest:            idToQuestAPIResource(cfg, cfg.e.subquests, creation.SubquestID),
-		Reward:                    nameAmountToResourceAmount(cfg, cfg.e.allItems, ia),
+		Monster:                   idToNamedAPIResource(cfg, cfg.E.Monsters, *creation.MonsterID),
+		ParentSubquest:            idToQuestAPIResource(cfg, cfg.E.Subquests, creation.SubquestID),
+		Reward:                    nameAmountToResourceAmount(cfg, cfg.E.AllItems, ia),
 		RequiredCatchAmount:       creation.Amount,
 		UnlockedCreationsCategory: creation.CreationsUnlockedCategory,
 		RequiredMonsters:          monsters,
@@ -45,7 +45,7 @@ func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seedin
 	}
 
 	return filterIDs(cfg, r, i, ids, []IdFilter{
-		enumListQuery(cfg, r, i, cfg.t.ArenaCreationCategory, ids, qpnCategory, cfg.db.GetArenaCreationIDsByCategory),
+		enumListQuery(cfg, r, i, cfg.T.ArenaCreationCategory, ids, QpnCategory, cfg.db.GetArenaCreationIDsByCategory),
 	})
 }
 
@@ -114,6 +114,6 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seeding.Are
 		return nil, err
 	}
 
-	monsters := idsToAPIResources(cfg, cfg.e.monsters, monsterIDs)
+	monsters := idsToAPIResources(cfg, cfg.E.Monsters, monsterIDs)
 	return monsters, nil
 }

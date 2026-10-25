@@ -3,12 +3,12 @@ package api
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 
 type MonsterFormation struct {
-	ID              int32                              `json:"id"`
-	Category        string                             `json:"category"`
-	Availability    string			                   `json:"availability"`
-	IsForcedAmbush  bool                               `json:"is_forced_ambush"`
-	CanEscape       bool                               `json:"can_escape"`
-	Notes           *string                            `json:"notes,omitempty"`
+	ID             int32   `json:"id"`
+	Category       string  `json:"category"`
+	Availability   string  `json:"availability"`
+	IsForcedAmbush bool    `json:"is_forced_ambush"`
+	CanEscape      bool    `json:"can_escape"`
+	Notes          *string `json:"notes,omitempty"`
 	FormationLoot
 	BossMusic       *FormationBossSong                 `json:"boss_music,omitempty"`
 	Monsters        []ResourceAmount[NamedAPIResource] `json:"monsters"`
@@ -17,15 +17,15 @@ type MonsterFormation struct {
 }
 
 type FormationLoot struct {
-	AP			int32		`json:"ap"`
-	ApOverkill	int32		`json:"ap_overkill"`
-	Gil			int32		`json:"gil"`
+	AP         int32 `json:"ap"`
+	ApOverkill int32 `json:"ap_overkill"`
+	Gil        int32 `json:"gil"`
 }
 
 type EncounterArea struct {
-	Area          AreaAPIResource 	`json:"area"`
-	Specification *string         	`json:"specification"`
-	Availability  string			`json:"availability"`
+	Area          AreaAPIResource `json:"area"`
+	Specification *string         `json:"specification"`
+	Availability  string          `json:"availability"`
 }
 
 func (ec EncounterArea) GetAPIResource() APIResource {
@@ -34,7 +34,7 @@ func (ec EncounterArea) GetAPIResource() APIResource {
 
 func convertEncounterArea(cfg *Config, ea seeding.EncounterArea) EncounterArea {
 	return EncounterArea{
-		Area:          locAreaToAreaAPIResource(cfg, cfg.e.areas, ea.LocationArea),
+		Area:          locAreaToAreaAPIResource(cfg, cfg.E.Areas, ea.LocationArea),
 		Specification: ea.Specification,
 		Availability:  ea.Availability,
 	}
@@ -53,10 +53,10 @@ func (tc FormationTriggerCommand) GetAPIResource() APIResource {
 
 func convertFormationTriggerCommand(cfg *Config, tc seeding.FormationTriggerCommand) FormationTriggerCommand {
 	return FormationTriggerCommand{
-		Ability:   nameToNamedAPIResource(cfg, cfg.e.triggerCommands, tc.Name, tc.Version),
+		Ability:   nameToNamedAPIResource(cfg, cfg.E.TriggerCommands, tc.Name, tc.Version),
 		Condition: tc.Condition,
 		UseAmount: tc.UseAmount,
-		Users:     namesToNamedAPIResources(cfg, cfg.e.characterClasses, tc.Users),
+		Users:     namesToNamedAPIResources(cfg, cfg.E.CharacterClasses, tc.Users),
 	}
 }
 
@@ -71,7 +71,7 @@ func (bs FormationBossSong) GetAPIResource() APIResource {
 
 func convertFormationBossSong(cfg *Config, bossMusic seeding.FormationBossSong) FormationBossSong {
 	return FormationBossSong{
-		Song:             nameToNamedAPIResource(cfg, cfg.e.songs, bossMusic.Song, nil),
+		Song:             nameToNamedAPIResource(cfg, cfg.E.Songs, bossMusic.Song, nil),
 		CelebrateVictory: bossMusic.CelebrateVictory,
 	}
 }

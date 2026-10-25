@@ -1,0 +1,127 @@
+package apiTest
+
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+)
+
+type expBattleInteraction struct {
+	target                    string
+	abilityRange              *int32
+	hitAmount                 int32
+	shatterRate               int32
+	specialAction             *string
+	basedOnUserAtk            bool
+	darkable                  bool
+	silenceable               bool
+	reflectable               bool
+	accuracy                  expAccuracy
+	damage                    *expDamage
+	inflictedDelay            *expInflictedDelay
+	inflictedStatusConditions []int32
+	removedStatusConditions   []int32
+	copiedStatusConditions    []int32
+	statChanges               []expStatChange
+	modifierChanges           []expModChange
+}
+
+func compareBattleInteractions(test test, fieldName string, exp expBattleInteraction, got api.BattleInteraction) {
+	test.t.Helper()
+	compare(test, fieldName+" target", exp.target, got.Target)
+	compare(test, fieldName+" range", exp.abilityRange, got.Range)
+	compare(test, fieldName+" hit amount", exp.hitAmount, got.HitAmount)
+	compare(test, fieldName+" shatter rate", exp.shatterRate, got.ShatterRate)
+	compare(test, fieldName+" special action", exp.specialAction, got.SpecialAction)
+	compare(test, fieldName+" based on phys atk", exp.basedOnUserAtk, got.BasedOnUserAttack)
+	compare(test, fieldName+" darkable", exp.darkable, got.Darkable)
+	compare(test, fieldName+" silenceable", exp.silenceable, got.Silenceable)
+	compare(test, fieldName+" reflectable", exp.reflectable, got.Reflectable)
+	compareAccuracies(test, fieldName+" accuracy", exp.accuracy, got.Accuracy)
+	compTestStructPtrs(test, fieldName+" damage", exp.damage, got.Damage, compareDamages)
+	compTestStructPtrs(test, fieldName+" inflicted delay", exp.inflictedDelay, got.InflictedDelay, compareInflictedDelays)
+	checkResIDsInSlice(test, fieldName+" inflicted status conditions", test.cfg.E.StatusConditions.Endpoint, exp.inflictedStatusConditions, got.InflictedStatusConditions)
+	checkResIDsInSlice(test, fieldName+" removed status conditions", test.cfg.E.StatusConditions.Endpoint, exp.removedStatusConditions, got.RemovedStatusConditions)
+	checkResIDsInSlice(test, fieldName+" copied status conditions", test.cfg.E.StatusConditions.Endpoint, exp.copiedStatusConditions, got.CopiedStatusConditions)
+	compTestStructSlices(test, fieldName+" stat changes", exp.statChanges, got.StatChanges, compareStatChanges)
+	compTestStructSlices(test, fieldName+" mod changes", exp.modifierChanges, got.ModifierChanges, compareModChanges)
+}
+
+type expAccuracy struct {
+	accSource   string
+	hitChance   *int32
+	accModifier *float32
+}
+
+func compareAccuracies(test test, fieldName string, exp expAccuracy, got api.Accuracy) {
+	compare(test, fieldName+" acc source", exp.accSource, got.AccSource)
+	compare(test, fieldName+" hit chance", exp.hitChance, got.HitChance)
+	compare(test, fieldName+" acc modifier", exp.accModifier, got.AccModifier)
+}
+
+type expDamage struct {
+	attackType      database.AttackType
+	damageType      database.DamageType
+	hp              *expClassDamage
+	mp              *expClassDamage
+	ctb             *expClassDamage
+	critical        *string
+	criticalPlusVal *int32
+	isPiercing      bool
+	breakDmgLmt     *string
+	element         *int32
+}
+
+func compareDamages(test test, fieldName string, exp expDamage, got api.Damage) {
+	compare(test, fieldName+" attack type", string(exp.attackType), got.AttackType)
+	compare(test, fieldName+" damage type", string(exp.damageType), got.DamageType)
+	compTestStructPtrs(test, fieldName+" hp", exp.hp, got.HP, compareClassDamages)
+	compTestStructPtrs(test, fieldName+" mp", exp.mp, got.MP, compareClassDamages)
+	compTestStructPtrs(test, fieldName+" ctb", exp.ctb, got.CTB, compareClassDamages)
+	compare(test, fieldName+" critical", exp.critical, got.Critical)
+	compare(test, fieldName+" criticalPlusVal", exp.criticalPlusVal, got.CriticalPlusVal)
+	compare(test, fieldName+" is piercing", exp.isPiercing, got.IsPiercing)
+	compare(test, fieldName+" break dmg lmt", exp.breakDmgLmt, got.BreakDmgLimit)
+	compIdApiResourcePtrs(test, fieldName+" element", test.cfg.E.Elements.Endpoint, exp.element, got.Element)
+}
+
+type expClassDamage struct {
+	damageFormula  database.DamageFormula
+	damageConstant int32
+}
+
+func compareClassDamages(test test, fieldName string, exp expClassDamage, got api.ClassDamage) {
+	compare(test, fieldName+" - damage formula", string(exp.damageFormula), got.DamageFormula)
+	compare(test, fieldName+" - damage constant", exp.damageConstant, got.DamageConstant)
+}
+
+type expInflictedDelay struct {
+	delayStrength string
+}
+
+func compareInflictedDelays(test test, fieldName string, exp expInflictedDelay, got api.InflictedDelay) {
+	compare(test, fieldName+" delay strength", exp.delayStrength, got.DelayStrength)
+}
+
+type expStatChange struct {
+	stat            int32
+	calculationType string
+	value           float32
+}
+
+func compareStatChanges(test test, fieldName string, exp expStatChange, got api.StatChange) {
+	compIdApiResource(test, fieldName+" - sc stat", test.cfg.E.Stats.Endpoint, exp.stat, got.Stat)
+	compare(test, fieldName+" - calculation type", exp.calculationType, got.CalculationType)
+	compare(test, fieldName+" - value", exp.value, got.Value)
+}
+
+type expModChange struct {
+	modifier        int32
+	calculationType string
+	value           float32
+}
+
+func compareModChanges(test test, fieldName string, exp expModChange, got api.ModifierChange) {
+	compIdApiResource(test, fieldName+" - mc modifier", test.cfg.E.Modifiers.Endpoint, exp.modifier, got.Modifier)
+	compare(test, fieldName+" - calculation type", exp.calculationType, got.CalculationType)
+	compare(test, fieldName+" - value", exp.value, got.Value)
+}

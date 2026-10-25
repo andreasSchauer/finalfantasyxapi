@@ -22,7 +22,7 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seeding.Property,
 		Name:           property.Name,
 		Effect:         property.Effect,
 		NullifyArmored: property.NullifyArmored,
-		RelatedStats:   namesToNamedAPIResources(cfg, cfg.e.stats, property.RelatedStats),
+		RelatedStats:   namesToNamedAPIResources(cfg, cfg.E.Stats, property.RelatedStats),
 		ModifierChange: convertObjPtr(cfg, property.ModifierChange, convertModifierChange),
 		AutoAbilities:  rel.AutoAbilities,
 		Monsters:       rel.Monsters,
@@ -30,8 +30,6 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seeding.Property,
 
 	return response, nil
 }
-
-
 
 func (cfg *Config) retrieveProperties(r *http.Request, i handlerInput[seeding.Property, Property, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
 	return verifyParamsAndRetrieve(r, i)
