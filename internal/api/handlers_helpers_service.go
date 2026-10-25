@@ -15,10 +15,23 @@ func servicePost[P, R any](cfg *Config, r *http.Request, i handlerInputService[P
 func compute[P, R any](cfg *Config, i handlerInputService[P, R], params P, userValues map[FieldName]any) (R, error) {
 	var zero R
 
-	params, err := i.verifyFn(cfg, params, i.docsFn(cfg), userValues)
+	params, err := verifyJsonParams(cfg, i, params, userValues)
 	if err != nil {
 		return zero, err
 	}
 
 	return i.executeFn(cfg, params)
+}
+
+func verifyJsonParams[P, R any](cfg *Config, i handlerInputService[P, R], params P, userValues map[FieldName]any) (P, error) {
+	var zero P
+	docs := i.docsFn(cfg)
+	paramsRules := compileParamsRules(docs.Fields)
+
+	err := vfExistingFields(userValues, paramsRules)
+	if err != nil {
+		return zero, err
+	}
+
+	return i.verifyFn(cfg, params, paramsRules, userValues)
 }

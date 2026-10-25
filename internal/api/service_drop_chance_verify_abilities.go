@@ -93,31 +93,13 @@ func vfAutoAbilitiesDropped(wantedAutoAbilities []seeding.AutoAbility, monsterAb
 		for _, monAbility := range monsterAbilities {
 			if ability.Name == monAbility.Ability {
 				isPresent = true
-
-				/*
-				err := vfCharGetsAbility(monAbility, charPtr, mon)
-				if err != nil {
-					return err
-				}
-				*/
+				break
 			}
 		}
 
 		if !isPresent {
 			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s' (%d). it only drops the following auto-abilities: %s.", mon, ability.Name, ability.ID, formatMonAutoAbilities(mon)), nil)
 		}
-	}
-
-	return nil
-}
-
-func vfCharGetsAbility(ability seeding.EquipmentDrop, charPtr *seeding.Character, mon seeding.Monster) error {
-	if charPtr == nil {
-		return nil
-	}
-	
-	if !charGetsAbility(ability, charPtr) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s' (%d) for %s.", mon, ability.Ability, ability.AutoAbilityID, charPtr.Name), nil)
 	}
 
 	return nil

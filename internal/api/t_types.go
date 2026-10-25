@@ -49,6 +49,10 @@ type testGeneral struct {
 	requestBody	   any
 }
 
+func (t testGeneral) GetTestGeneral() testGeneral {
+	return t
+}
+
 type expNameVer struct {
 	id      int32
 	name    string

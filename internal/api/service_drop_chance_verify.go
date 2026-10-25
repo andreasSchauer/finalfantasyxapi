@@ -6,13 +6,8 @@ import (
 	"slices"
 )
 
-func verifyDropChanceParams(cfg *Config, params DropChanceParams, docs ParamsDoc, userValues map[FieldName]any) (DropChanceParams, error) {
-	paramsRules := compileParamsRules(docs.Fields)
-
-	err := vfExistingFields(userValues, paramsRules)
-	if err != nil {
-		return DropChanceParams{}, err
-	}
+func verifyDropChanceParams(cfg *Config, params DropChanceParams, paramsRules ParamsRules, userValues map[FieldName]any) (DropChanceParams, error) {
+	var err error
 
 	params.Monster, err = verifyParamField(cfg, params.Monster, pfnMonsterID, userValues, paramsRules, vfId)
 	if err != nil {

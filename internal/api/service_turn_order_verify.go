@@ -1,12 +1,7 @@
 package api
 
-func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, docs ParamsDoc, userValues map[FieldName]any) (TurnOrderParams, error) {
-	paramsRules := compileParamsRules(docs.Fields)
-
-	err := vfExistingFields(userValues, paramsRules)
-	if err != nil {
-		return TurnOrderParams{}, err
-	}
+func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, paramsRules ParamsRules, userValues map[FieldName]any) (TurnOrderParams, error) {
+	var err error
 
 	params.TurnsAmt, err = verifyParamField(cfg, params.TurnsAmt, pfnTurnsAmt, userValues, paramsRules, vfInt)
 	if err != nil {

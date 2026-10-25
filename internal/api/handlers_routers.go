@@ -126,7 +126,7 @@ func routerServiceGet[P, R any](cfg *Config, w http.ResponseWriter, r *http.Requ
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: GET /api/%s/body, POST /api/%s", i.endpoint, i.endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: 'GET /api/%s/body', 'POST /api/%s'.", i.endpoint, i.endpoint), nil)
 		return
 	}
 }

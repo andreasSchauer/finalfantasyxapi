@@ -1591,5 +1591,5 @@ func TestDropChance(t *testing.T) {
 		},
 	}
 
-	testServiceResponses(t, tests, "DropChance", testCfg.HandleDropChanceGet, testCfg.HandleDropChancePost, compareDropChanceResponses)
+	testServiceResponsesPost(t, tests, "DropChance", testCfg.HandleDropChancePost, compareDropChanceResponses)
 }

@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -18,14 +19,6 @@ type testCase interface {
 
 func getTestName(name, requestURL string, caseNum int) string {
 	return fmt.Sprintf("%s-%d: %s", name, caseNum, requestURL)
-}
-
-func getHandlerFunc(tc testGeneral, getHandler, postHandler func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
-	switch tc.method {
-		case http.MethodGet: return getHandler
-		case http.MethodPost: return postHandler
-		default: return getHandler
-	}
 }
 
 func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
@@ -69,23 +62,44 @@ func testStatusses(t *testing.T, tests []testGeneral, testFuncName string, handl
 	}
 }
 
-func testServiceResponses[E testCase, G any](t *testing.T, tests []E, testFuncName string, getHandler, postHandler func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
+func testServiceResponsesGet[G any](t *testing.T, tests []testGeneral, testFuncName string) {
+	t.Helper()
+	var zero G
+
+	for i, tc := range tests {
+		name := getTestName(testFuncName, tc.requestURL, i+1)
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			test, got, err := setupTest[G](t, tc, name, tc.handler)
+			if errors.Is(err, errCorrect) {
+				return
+			}
+
+			if reflect.DeepEqual(zero, got) {
+				test.t.Errorf("expected %s to have a response body, but didn't get one.\n\n", name)
+			}
+		})
+	}
+}
+
+func testServiceResponsesPost[E testCase, G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
 	t.Helper()
 
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()
 		name := getTestName(testFuncName, tc.requestURL, i+1)
-		handlerFunc := getHandlerFunc(tc, getHandler, postHandler)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			testObj, got, err := setupTest[G](t, tc, name, handlerFunc)
+			test, got, err := setupTest[G](t, tc, name, handlerFunc)
 			if errors.Is(err, errCorrect) {
 				return
 			}
 
-			compFunc(testObj, exp, got)
+			compFunc(test, exp, got)
 		})
 	}
 }
@@ -166,23 +180,21 @@ func testNameList[G any](t *testing.T, tests []expListNames, endpoint EndpointNa
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			
+
 			test, got, err := setupTest[G](t, exp.testGeneral, name, expHandler)
 			if errors.Is(err, errCorrect) {
 				return
 			}
-			
+
 			compFunc(test, expEndpoint, exp, got)
 		})
 	}
 }
 
-
-
 // makes the http request for the test and returns the result, as well as a test struct
-func setupTest[T any](t *testing.T, tc testGeneral, testName string, handlerFunc func(http.ResponseWriter, *http.Request)) (test, T, error) {
+func setupTest[G any](t *testing.T, tc testGeneral, testName string, handlerFunc func(http.ResponseWriter, *http.Request)) (test, G, error) {
 	t.Helper()
-	var zeroType T
+	var zero G
 
 	if tc.method == "" {
 		tc.method = http.MethodGet
@@ -212,8 +224,8 @@ func setupTest[T any](t *testing.T, tc testGeneral, testName string, handlerFunc
 		if res.Code >= 400 {
 			t.Fatalf("expected status: %d, got %d, body=%s\n\n", tc.expectedStatus, res.Code, res.Body.String())
 		}
-			
-		t.Fatalf("expected status: %d, got %d\n\n", tc.expectedStatus, res.Code,)
+
+		t.Fatalf("expected status: %d, got %d\n\n", tc.expectedStatus, res.Code)
 	}
 
 	if tc.expectedErr != "" {
@@ -221,11 +233,12 @@ func setupTest[T any](t *testing.T, tc testGeneral, testName string, handlerFunc
 		if !strings.Contains(rawErr, tc.expectedErr) {
 			t.Fatalf("error mismatch.\n- want: %s\n- got %s\n\n", tc.expectedErr, rawErr)
 		}
-		return test{}, zeroType, errCorrect
+		return test{}, zero, errCorrect
 	}
 
-	var got T
-	if err := json.NewDecoder(res.Body).Decode(&got); err != nil {
+	var got G
+	err := json.NewDecoder(res.Body).Decode(&got)
+	if err != nil {
 		t.Fatalf("failed to decode: %v\n\n", err)
 	}
 
