@@ -54,7 +54,7 @@ const (
 	epEnums					   EndpointName = "enums"
 	epEndpoints				   EndpointName = "endpoints"
 	epAlBhed				   EndpointName = "al-bhed"
-	epDelay				 	   EndpointName = "delay"
+	epCritChance			   EndpointName = "crit-chance"
 	epDropChance			   EndpointName = "drop-chance"
 	epTurnOrder				   EndpointName = "turn-order"
 )

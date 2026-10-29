@@ -61,6 +61,7 @@ type endpoints struct {
 	AlBhed             handlerInputService[AlBhedParams, AlBhedResponse]
 	TurnOrder          handlerInputService[TurnOrderParams, TurnOrderResponse]
 	DropChance         handlerInputService[DropChanceParams, DropChanceResponse]
+	CritChance		   handlerInputService[CritChanceParams, CritChanceResponse]
 }
 
 func (cfg *Config) EndpointsInit() {
@@ -1055,6 +1056,14 @@ func (cfg *Config) EndpointsInit() {
 		samplesFn: getDropChanceParamsSamples,
 	}
 
+	e.CritChance = handlerInputService[CritChanceParams, CritChanceResponse]{
+		Endpoint:  epCritChance,
+		verifyFn:  verifyCritChanceParams,
+		executeFn: handleCritChance,
+		docsFn:    getCritChanceParamsDoc,
+		samplesFn: getCritChanceParamsSamples,
+	}
+
 	cfg.E = &e
 	e.Endpoints.slice = e.InitializeEndpointSlice()
 
@@ -1115,6 +1124,7 @@ func (e endpoints) InitializeEndpointSlice() []EndpointName {
 		e.AlBhed.Endpoint,
 		e.TurnOrder.Endpoint,
 		e.DropChance.Endpoint,
+		e.CritChance.Endpoint,
 	}
 
 	slices.Sort(endpoints)

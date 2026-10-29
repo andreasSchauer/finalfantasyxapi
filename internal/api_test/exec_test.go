@@ -28,7 +28,7 @@ func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncNam
 
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()
-		name := getTestName(testFuncName, tc.requestURL, i+1)
+		name := tc.getTestName(testFuncName, i+1)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
@@ -45,18 +45,18 @@ func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncNam
 
 func testStatusses(t *testing.T, tests []testGeneral, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request)) {
 	t.Helper()
-	for i, exp := range tests {
-		name := getTestName(testFuncName, exp.requestURL, i+1)
+	for i, tc := range tests {
+		name := tc.getTestName(testFuncName, i+1)
 
 		expHandler := handlerFunc
 		if handlerFunc == nil {
-			expHandler = exp.handler
+			expHandler = tc.handler
 		}
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			_, _, err := setupTest[any](t, exp, name, expHandler)
+			_, _, err := setupTest[any](t, tc, name, expHandler)
 			if errors.Is(err, errCorrect) {
 				return
 			}
@@ -69,7 +69,7 @@ func testServiceResponsesGet[G any](t *testing.T, tests []testGeneral, testFuncN
 	var zero G
 
 	for i, tc := range tests {
-		name := getTestName(testFuncName, tc.requestURL, i+1)
+		name := tc.getTestName(testFuncName, i+1)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
@@ -91,7 +91,7 @@ func testServiceResponsesPost[E testCase, G any](t *testing.T, tests []E, testFu
 
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()
-		name := getTestName(testFuncName, tc.requestURL, i+1)
+		name := tc.getTestName(testFuncName, i+1)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
@@ -111,8 +111,8 @@ func testServiceResponsesPost[E testCase, G any](t *testing.T, tests []E, testFu
 func testIdList[G any](t *testing.T, tests []expListIDs, endpoint api.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, api.EndpointName, expListIDs, G)) {
 	t.Helper()
 	for i, exp := range tests {
-		tc := exp.testGeneral
-		name := getTestName(testFuncName, tc.requestURL, i+1)
+		tc := exp.GetTestGeneral()
+		name := tc.getTestName(testFuncName, i+1)
 
 		expHandler := handlerFunc
 		if handlerFunc == nil {
@@ -142,7 +142,7 @@ func testPathList[G any](t *testing.T, tests []expListPaths, testFuncName string
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.testGeneral
-		name := getTestName(testFuncName, tc.requestURL, i+1)
+		name := tc.getTestName(testFuncName, i+1)
 
 		expHandler := handlerFunc
 		if handlerFunc == nil {
@@ -168,7 +168,7 @@ func testNameList[G any](t *testing.T, tests []expListNames, endpoint api.Endpoi
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.testGeneral
-		name := getTestName(testFuncName, tc.requestURL, i+1)
+		name := tc.getTestName(testFuncName, i+1)
 
 		expHandler := handlerFunc
 		if handlerFunc == nil {

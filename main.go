@@ -99,6 +99,11 @@ func main() {
 	mux.HandleFunc("POST /api/drop-chance", apiCfg.HandleDropChancePost)
 	mux.HandleFunc("POST /api/drop-chance/", apiCfg.HandleDropChancePost)
 
+	mux.HandleFunc("GET /api/crit-chance", apiCfg.HandleCritChanceGet)
+	mux.HandleFunc("GET /api/crit-chance/", apiCfg.HandleCritChanceGet)
+	mux.HandleFunc("POST /api/crit-chance", apiCfg.HandleCritChancePost)
+	mux.HandleFunc("POST /api/crit-chance/", apiCfg.HandleCritChancePost)
+
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: mux,

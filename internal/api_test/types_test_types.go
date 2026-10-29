@@ -1,6 +1,8 @@
 package apiTest
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"testing"
 
@@ -52,6 +54,19 @@ type testGeneral struct {
 
 func (t testGeneral) GetTestGeneral() testGeneral {
 	return t
+}
+
+func (t testGeneral) getTestName(name string, caseNum int) string {
+	context := fmt.Sprintf("url: %s", t.requestURL)
+
+	if t.requestBody != nil {
+		json, _ := json.Marshal(t.requestBody)
+		json = h.CleanUpJson(json)
+
+		context = fmt.Sprintf("%s | json body: %s", context, string(json))
+	}
+
+	return fmt.Sprintf("%s-%d: %s", name, caseNum, context)
 }
 
 type expNameVer struct {

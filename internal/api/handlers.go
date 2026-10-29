@@ -225,3 +225,11 @@ func (cfg *Config) HandleDropChanceGet(w http.ResponseWriter, r *http.Request) {
 func (cfg *Config) HandleDropChancePost(w http.ResponseWriter, r *http.Request) {
 	routerServicePost(cfg, w, r, cfg.E.DropChance)
 }
+
+func (cfg *Config) HandleCritChanceGet(w http.ResponseWriter, r *http.Request) {
+	routerServiceGet(cfg, w, r, cfg.E.CritChance)
+}
+
+func (cfg *Config) HandleCritChancePost(w http.ResponseWriter, r *http.Request) {
+	routerServicePost(cfg, w, r, cfg.E.CritChance)
+}

@@ -1,10 +1,11 @@
 package api
 
 import (
-	"bytes"
 	"encoding/json"
 	"log"
 	"net/http"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func respondWithError(w http.ResponseWriter, code int, msg string, err error) {
@@ -34,10 +35,7 @@ func respondWithJSON(w http.ResponseWriter, code int, payload any) {
 		return
 	}
 
-	dat = bytes.ReplaceAll(dat, []byte(`\u0026`), []byte("&"))
-	dat = bytes.ReplaceAll(dat, []byte(`\u003c`), []byte("<"))
-	dat = bytes.ReplaceAll(dat, []byte(`\u003e`), []byte(">"))
-
+	dat = h.CleanUpJson(dat)
 	w.WriteHeader(code)
 	w.Write(dat)
 }

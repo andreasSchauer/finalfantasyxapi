@@ -37,9 +37,7 @@ func WriteFile[T any](dirName, fileName string, data []T) error {
 		return err
 	}
 
-	jsonBytes = bytes.ReplaceAll(jsonBytes, []byte(`\u0026`), []byte("&"))
-	jsonBytes = bytes.ReplaceAll(jsonBytes, []byte(`\u003c`), []byte("<"))
-	jsonBytes = bytes.ReplaceAll(jsonBytes, []byte(`\u003e`), []byte(">"))
+	jsonBytes = CleanUpJson(jsonBytes)
 
 	destPath := filepath.Join(fileDir, fileName)
 
@@ -49,4 +47,12 @@ func WriteFile[T any](dirName, fileName string, data []T) error {
 	}
 
 	return nil
+}
+
+func CleanUpJson(json []byte) []byte {
+	json = bytes.ReplaceAll(json, []byte(`\u0026`), []byte("&"))
+	json = bytes.ReplaceAll(json, []byte(`\u003c`), []byte("<"))
+	json = bytes.ReplaceAll(json, []byte(`\u003e`), []byte(">"))
+
+	return json
 }

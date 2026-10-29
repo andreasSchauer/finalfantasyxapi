@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-// remove omitempty tags after testing functionality
+
 type TurnOrderParams struct {
 	TurnsAmt      int32            `json:"turns_amt,omitempty"`
 	IgnFirstTurn  bool             `json:"ign_first_turn,omitempty"`
@@ -34,6 +34,7 @@ func (p turnOrderParty) getDuplicateKey() string {
 	})
 }
 
+// use the same separation that is used for crit chance
 type turnOrderMon struct {
 	MonsterID   *int32  `json:"monster_id,omitempty"`
 	AltState    *int32  `json:"alt_state,omitempty"`
@@ -167,7 +168,6 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 		{
 			Field:         PfnAltState,
 			Type:          "int (idx +1: monster altered states)",
-			AllowZeroVal:  true,
 			RequiresAll:   []FieldName{PfnMonsterID},
 			ParentIdField: pfnPtr(PfnMonsterID),
 			AllowedIdValPairs: []AllowedIdValPairs{

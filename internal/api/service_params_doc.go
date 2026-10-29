@@ -15,7 +15,6 @@ type ParamsDoc struct {
 type FieldDoc struct {
 	Field             FieldName           `json:"field"`
 	Type              string              `json:"type"`
-	AllowZeroVal      bool                `json:"-"`
 	ExampleUses       []string            `json:"example_uses,omitempty"`
 	Required          bool                `json:"required"`
 	RequiredOr        []FieldName         `json:"required_or,omitempty"`

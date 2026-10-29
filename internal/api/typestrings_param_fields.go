@@ -7,6 +7,7 @@ import (
 type FieldName string
 
 const (
+	PfnAbility           FieldName = "ability"
 	PfnAbilityID         FieldName = "ability_id"
 	PfnAgility           FieldName = "agility"
 	PfnAglOverride       FieldName = "agl_override"
@@ -17,6 +18,11 @@ const (
 	PfnBattles           FieldName = "battles"
 	PfnBattleStart       FieldName = "battle_start"
 	PfnCharacterID       FieldName = "character_id"
+	PfnCritical			 FieldName = "critical"
+	PfnCriticalPlusChar	 FieldName = "critical_plus_char"
+	PfnCriticalPlusMon	 FieldName = "critical_plus_mon"
+	PfnCriticalPlusVal	 FieldName = "critical_plus_val"
+	PfnCustom		 	 FieldName = "custom"
 	PfnDecimals          FieldName = "decimals"
 	PfnDelay             FieldName = "delay"
 	PfnDelayConstant     FieldName = "delay_constant"
@@ -28,11 +34,16 @@ const (
 	PfnIgnFirstTurn      FieldName = "ign_first_turn"
 	PfnIgnImmunities     FieldName = "ign_immunities"
 	PfnInteraction       FieldName = "interaction"
+	PfnJinxStacks		 FieldName = "jinx_stacks"
+	PfnLookup			 FieldName = "lookup"
+	PfnLuck				 FieldName = "luck"
+	PfnLuckStacks		 FieldName = "luck_stacks"
 	PfnMinEmptySlots     FieldName = "min_empty_slots"
 	PfnMons              FieldName = "mons"
 	PfnMonsterID         FieldName = "monster_id"
 	PfnName              FieldName = "name"
 	PfnOptionalAbilities FieldName = "optional_abilities"
+	PfnOverrides 		 FieldName = "overrides"
 	PfnParty             FieldName = "party"
 	PfnPartyMembers      FieldName = "party_members"
 	PfnRemainingTicks    FieldName = "remaining_ticks"
@@ -44,6 +55,7 @@ const (
 	PfnTotalSlots        FieldName = "total_slots"
 	PfnTurnsAmt          FieldName = "turns_amt"
 	PfnUnitID            FieldName = "unit_id"
+	PfnUser				 FieldName = "user"
 )
 
 func formatPfnSlice(pfns []FieldName) string {
