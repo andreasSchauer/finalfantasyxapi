@@ -3,12 +3,12 @@ package api
 func verifyAlBhedParams(v paramsVerifyer, params AlBhedParams) (AlBhedParams, error) {
 	var err error
 
-	params.Text, err = v.vfField(params.Text, PfnText)
+	params.Text, err = v.field(params.Text, PfnText)
 	if err != nil {
 		return AlBhedParams{}, err
 	}
 
-	params.Direction, err = v.vfEnumField(params.Direction, PfnDirection)
+	params.Direction, err = v.enum(params.Direction, PfnDirection)
 	if err != nil {
 		return AlBhedParams{}, err
 	}

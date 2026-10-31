@@ -3,42 +3,42 @@ package api
 func verifyTurnOrderParams(v paramsVerifyer, params TurnOrderParams) (TurnOrderParams, error) {
 	var err error
 
-	params.TurnsAmt, err = v.vfIntField(params.TurnsAmt, PfnTurnsAmt)
+	params.TurnsAmt, err = v.int(params.TurnsAmt, PfnTurnsAmt)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.IgnFirstTurn, err = v.vfField(params.IgnFirstTurn, PfnIgnFirstTurn)
+	params.IgnFirstTurn, err = v.field(params.IgnFirstTurn, PfnIgnFirstTurn)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.IgnImmunities, err = v.vfField(params.IgnImmunities, PfnIgnImmunities)
+	params.IgnImmunities, err = v.field(params.IgnImmunities, PfnIgnImmunities)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.RNG, err = v.vfEnumField(params.RNG, PfnRNG)
+	params.RNG, err = v.enum(params.RNG, PfnRNG)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.BattleStart, err = v.vfEnumField(params.BattleStart, PfnBattleStart)
+	params.BattleStart, err = v.enum(params.BattleStart, PfnBattleStart)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.FormationID, err = v.verifyParamFieldPtr(params.FormationID, PfnFormationID, vfID)
+	params.FormationID, err = v.idPtr(params.FormationID, PfnFormationID)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.Party, err = v.verifyParamFieldArr(params.Party, PfnParty, vfTurnOrderParty)
+	params.Party, err = v.array(params.Party, PfnParty, vfTurnOrderParty)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.Mons, err = v.verifyParamFieldArr(params.Mons, PfnMons, vfTurnOrderMon)
+	params.Mons, err = v.array(params.Mons, PfnMons, vfTurnOrderMon)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
@@ -49,27 +49,22 @@ func verifyTurnOrderParams(v paramsVerifyer, params TurnOrderParams) (TurnOrderP
 func vfTurnOrderParty(v paramsVerifyer, item turnOrderParty, _ FieldName) (turnOrderParty, error) {
 	var err error
 
-	err = v.vfExistingFields()
+	item.UnitID, err = v.id(item.UnitID, PfnUnitID)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
 
-	item.UnitID, err = v.vfIDField(item.UnitID, PfnUnitID)
+	item.Agility, err = v.int(item.Agility, PfnAgility)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
 
-	item.Agility, err = v.vfIntField(item.Agility, PfnAgility)
+	item.FirstStrike, err = v.field(item.FirstStrike, PfnFirstStrike)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
 
-	item.FirstStrike, err = v.vfField(item.FirstStrike, PfnFirstStrike)
-	if err != nil {
-		return turnOrderParty{}, err
-	}
-
-	item.Status, err = v.verifyParamFieldPtr(item.Status, PfnStatus, vfEnum)
+	item.Status, err = v.enumPtr(item.Status, PfnStatus)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
@@ -80,37 +75,32 @@ func vfTurnOrderParty(v paramsVerifyer, item turnOrderParty, _ FieldName) (turnO
 func vfTurnOrderMon(v paramsVerifyer, item turnOrderMon, _ FieldName) (turnOrderMon, error) {
 	var err error
 
-	err = v.vfExistingFields()
+	item.MonsterID, err = v.idPtr(item.MonsterID, PfnUnitID)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
 
-	item.MonsterID, err = v.verifyParamFieldPtr(item.MonsterID, PfnUnitID, vfID)
+	item.AltState, err = v.intPtr(item.AltState, PfnAltState)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
 
-	item.AltState, err = v.verifyParamFieldPtr(item.AltState, PfnAltState, vfInt)
+	item.Name, err = v.fieldPtr(item.Name, PfnName)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
 
-	item.Name, err = v.verifyParamFieldPtr(item.Name, PfnName, nil)
+	item.Agility, err = v.intPtr(item.Agility, PfnAgility)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
 
-	item.Agility, err = v.verifyParamFieldPtr(item.Agility, PfnAgility, vfInt)
+	item.FirstStrike, err = v.fieldPtr(item.FirstStrike, PfnFirstStrike)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
 
-	item.FirstStrike, err = v.verifyParamFieldPtr(item.FirstStrike, PfnFirstStrike, nil)
-	if err != nil {
-		return turnOrderMon{}, err
-	}
-
-	item.Status, err = v.verifyParamFieldPtr(item.Status, PfnStatus, vfEnum)
+	item.Status, err = v.enumPtr(item.Status, PfnStatus)
 	if err != nil {
 		return turnOrderMon{}, err
 	}

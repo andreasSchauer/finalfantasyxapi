@@ -9,47 +9,47 @@ import (
 func verifyDropChanceParams(v paramsVerifyer, params DropChanceParams) (DropChanceParams, error) {
 	var err error
 
-	params.Monster, err = v.vfIDField(params.Monster, PfnMonsterID)
+	params.Monster, err = v.id(params.Monster, PfnMonsterID)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.CharacterID, err = v.verifyParamFieldPtr(params.CharacterID, PfnCharacterID, vfID)
+	params.CharacterID, err = v.idPtr(params.CharacterID, PfnCharacterID)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.PartyMembers, err = v.verifyParamFieldIDArr(params.PartyMembers, PfnPartyMembers)
+	params.PartyMembers, err = v.idArray(params.PartyMembers, PfnPartyMembers)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.AutoAbilities, err = v.verifyParamFieldIDArr(params.AutoAbilities, PfnAutoAbilities)
+	params.AutoAbilities, err = v.idArray(params.AutoAbilities, PfnAutoAbilities)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.OptionalAbilities, err = v.vfField(params.OptionalAbilities, PfnOptionalAbilities)
+	params.OptionalAbilities, err = v.field(params.OptionalAbilities, PfnOptionalAbilities)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.EquipType, err = v.verifyParamFieldPtr(params.EquipType, PfnEquipType, vfEnum)
+	params.EquipType, err = v.enumPtr(params.EquipType, PfnEquipType)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.MinEmptySlots, err = v.verifyParamFieldPtr(params.MinEmptySlots, PfnMinEmptySlots, vfInt)
+	params.MinEmptySlots, err = v.intPtr(params.MinEmptySlots, PfnMinEmptySlots)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.TotalSlots, err = v.verifyParamFieldPtr(params.TotalSlots, PfnTotalSlots, vfInt)
+	params.TotalSlots, err = v.intPtr(params.TotalSlots, PfnTotalSlots)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.Decimals, err = v.vfField(params.Decimals, PfnDecimals)
+	params.Decimals, err = v.field(params.Decimals, PfnDecimals)
 	if err != nil {
 		return DropChanceParams{}, err
 	}

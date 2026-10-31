@@ -230,7 +230,7 @@ func handleEndpointsEndpointSections(cfg *Config, w http.ResponseWriter, r *http
 	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests.", nil)
 }
 
-func handleEndpointServiceBody[P, R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
+func handleEndpointServiceBody[P serviceParams, R serviceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
 	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return
@@ -246,7 +246,7 @@ func handleEndpointServiceBody[P, R any](cfg *Config, w http.ResponseWriter, r *
 	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'.", i.Endpoint), nil)
 }
 
-func handleEndpointServiceBodySections[P, R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
+func handleEndpointServiceBodySections[P serviceParams, R serviceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
 	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return
@@ -272,7 +272,7 @@ func handleEndpointServiceBodySections[P, R any](cfg *Config, w http.ResponseWri
 	}
 }
 
-func handleEndpointServicePost[P, R any](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
+func handleEndpointServicePost[P serviceParams, R serviceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
 	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return
