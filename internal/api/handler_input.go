@@ -41,7 +41,7 @@ type handlerInputEndpoints struct {
 type handlerInputService[P, R any] struct {
 	Endpoint  EndpointName
 	usage     []string
-	verifyFn  func(*Config, P, ParamsRules, map[FieldName]any) (P, error)
+	verifyFn  func(paramsVerifyer, P) (P, error)
 	executeFn func(*Config, P) (R, error)
 	docsFn    func(*Config) ParamsDoc
 	samplesFn func() []SampleParams[P]

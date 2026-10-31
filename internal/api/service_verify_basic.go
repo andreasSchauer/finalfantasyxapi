@@ -8,9 +8,28 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func vfExistingFields(userValues map[FieldName]any, paramsRules ParamsRules) error {
-	for fieldName := range userValues {
-		_, exists := paramsRules[fieldName]
+
+type fieldVerifyer[T any] struct {
+	fieldName		FieldName
+	val 			T
+	doc 			FieldDoc
+	valIsPresent	bool
+	pv				paramsVerifyer
+}
+
+func (v paramsVerifyer) createFieldVerifyer[T any](val T, fieldName FieldName) fieldVerifyer[T] {
+	return fieldVerifyer[T]{
+		fieldName: 		fieldName,
+		val: 			val,
+		doc: 			v.paramsRules[fieldName].Doc,
+		valIsPresent: 	hasVal(fieldName, v.userValues),
+		pv: 			v,
+	}
+}
+
+func (v paramsVerifyer) vfExistingFields() error {
+	for fieldName := range v.userValues {
+		_, exists := v.paramsRules[fieldName]
 		if !exists {
 			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid field: '%s'.", fieldName), nil)
 		}
@@ -19,177 +38,175 @@ func vfExistingFields(userValues map[FieldName]any, paramsRules ParamsRules) err
 	return nil
 }
 
-func basicFieldChecks[T any](val T, fieldName FieldName, userValues map[FieldName]any, paramsRules ParamsRules) (T, error) {
+func (v paramsVerifyer) vfField[T any](val T, fieldName FieldName) (T, error) {
 	var zero T
-	doc := paramsRules[fieldName].Doc
-	valIsPresent := hasVal(fieldName, userValues)
+	fv := v.createFieldVerifyer(val, fieldName)
 
-	err := vfRequired(fieldName, doc, valIsPresent)
+	err := fv.vfRequired()
 	if err != nil {
 		return zero, err
 	}
 
-	err = vfConflictsWith(fieldName, doc, valIsPresent, userValues, paramsRules)
+	err = fv.vfConflictsWith()
 	if err != nil {
 		return zero, err
 	}
 
-	err = vfRequiredOr(fieldName, doc, valIsPresent, userValues)
+	err = fv.vfRequiredOr()
 	if err != nil {
 		return zero, err
 	}
 
-	err = vfRequiresAll(fieldName, doc, valIsPresent, userValues)
+	err = fv.vfRequiresAll()
 	if err != nil {
 		return zero, err
 	}
 
-	err = vfRequiresOne(fieldName, doc, valIsPresent, userValues)
+	err = fv.vfRequiresOne()
 	if err != nil {
 		return zero, err
 	}
 
-	err = vfAllowedIDs(val, fieldName, doc, valIsPresent, userValues)
+	err = fv.vfAllowedIDs()
 	if err != nil {
 		return zero, err
 	}
 
-	err = vfAllowedIDValPairs(val, fieldName, doc, valIsPresent, userValues)
+	err = fv.vfAllowedIDValPairs()
 	if err != nil {
 		return zero, err
 	}
 
-	return assignDefaultVal(val, valIsPresent, doc), nil
+	return fv.assignDefaultVal(), nil
 }
 
-func vfRequired(fieldName FieldName, doc FieldDoc, valIsPresent bool) error {
-	if !valIsPresent && doc.Required {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be empty.", fieldName), nil)
+func (v fieldVerifyer[T]) vfRequired() error {
+	if !v.valIsPresent && v.doc.Required {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be empty.", v.fieldName), nil)
 	}
 
 	return nil
 }
 
-func vfConflictsWith(fieldName FieldName, doc FieldDoc, valIsPresent bool, userValues map[FieldName]any, paramsRules ParamsRules) error {
-	if doc.ConflictsWith == nil {
+func (v fieldVerifyer[T]) vfConflictsWith() error {
+	if v.doc.ConflictsWith == nil {
 		return nil
 	}
 
-	for _, conflictingField := range doc.ConflictsWith {
-		if valIsPresent && hasVal(conflictingField, userValues) {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be used in combination with field '%s'.", fieldName, paramsRules[conflictingField].Doc.Field), nil)
+	for _, conflictingField := range v.doc.ConflictsWith {
+		if v.valIsPresent && hasVal(conflictingField, v.pv.userValues) {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be used in combination with field '%s'.", v.fieldName, v.pv.paramsRules[conflictingField].Doc.Field), nil)
 		}
 	}
 
 	return nil
 }
 
-func vfRequiredOr(fieldName FieldName, doc FieldDoc, valIsPresent bool, userValues map[FieldName]any) error {
-	if doc.RequiredOr == nil || valIsPresent {
+func (v fieldVerifyer[T]) vfRequiredOr() error {
+	if v.doc.RequiredOr == nil || v.valIsPresent {
 		return nil
 	}
 
-	for _, option := range doc.RequiredOr {
-		if hasVal(option, userValues) {
+	for _, option := range v.doc.RequiredOr {
+		if hasVal(option, v.pv.userValues) {
 			return nil
 		}
 	}
 
-	requiredFields := append(doc.RequiredOr, fieldName)
+	requiredFields := append(v.doc.RequiredOr, v.fieldName)
 
 	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: %s.", formatPfnSlice(requiredFields)), nil)
 }
 
-func vfRequiresAll(fieldName FieldName, doc FieldDoc, valIsPresent bool, userValues map[FieldName]any) error {
-	if doc.RequiresAll == nil || !valIsPresent {
+func (v fieldVerifyer[T]) vfRequiresAll() error {
+	if v.doc.RequiresAll == nil || !v.valIsPresent {
 		return nil
 	}
 
-	for _, field := range doc.RequiresAll {
-		if !hasVal(field, userValues) {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires the following fields to have a value: %s.", fieldName, formatPfnSlice(doc.RequiresAll)), nil)
+	for _, field := range v.doc.RequiresAll {
+		if !hasVal(field, v.pv.userValues) {
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires the following fields to have a value: %s.", v.fieldName, formatPfnSlice(v.doc.RequiresAll)), nil)
 		}
 	}
 
 	return nil
 }
 
-func vfRequiresOne(fieldName FieldName, doc FieldDoc, valIsPresent bool, userValues map[FieldName]any) error {
-	if doc.RequiresOne == nil || !valIsPresent {
+func (v fieldVerifyer[T]) vfRequiresOne() error {
+	if v.doc.RequiresOne == nil || !v.valIsPresent {
 		return nil
 	}
 
-	for _, field := range doc.RequiresOne {
-		if hasVal(field, userValues) {
+	for _, field := range v.doc.RequiresOne {
+		if hasVal(field, v.pv.userValues) {
 			return nil
 		}
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires one of the following fields to have a value: %s.", fieldName, formatPfnSlice(doc.RequiresOne)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires one of the following fields to have a value: %s.", v.fieldName, formatPfnSlice(v.doc.RequiresOne)), nil)
 }
 
-func vfAllowedIDs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool, userValues map[FieldName]any) error {
-	if !valIsPresent || len(doc.AllowedIDs) == 0 || valIsPointer(val) {
+func (v fieldVerifyer[T]) vfAllowedIDs() error {
+	if !v.valIsPresent || len(v.doc.AllowedIDs) == 0 || valIsPointer(v.val) {
 		return nil
 	}
 
-	id, err := getInt32FromUserVals(PfnUnitID, userValues)
+	id, err := getInt32FromUserVals(PfnUnitID, v.pv.userValues)
 	if err != nil {
 		return nil
 	}
 
-	if !slices.Contains(doc.AllowedIDs, id) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following ids: %s.", fieldName, h.FormatIntSlice(doc.AllowedIDs)), nil)
+	if !slices.Contains(v.doc.AllowedIDs, id) {
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following ids: %s.", v.fieldName, h.FormatIntSlice(v.doc.AllowedIDs)), nil)
 	}
 
 	return nil
 }
 
-func vfAllowedIDValPairs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool, userValues map[FieldName]any) error {
-	if !valIsPresent || len(doc.AllowedIDValPairs) == 0 || valIsPointer(val) {
+func (v fieldVerifyer[T]) vfAllowedIDValPairs() error {
+	if !v.valIsPresent || len(v.doc.AllowedIDValPairs) == 0 || valIsPointer(v.val) {
 		return nil
 	}
 
-	if doc.ParentIDField == nil {
-		return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find parent id field for field '%s'", fieldName), nil)
+	if v.doc.ParentIDField == nil {
+		return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find parent id field for field '%s'", v.fieldName), nil)
 	}
 
-	id, _ := getInt32FromUserVals(*doc.ParentIDField, userValues)
-	value, err := getInt32FromUserVals(fieldName, userValues)
+	id, _ := getInt32FromUserVals(*v.doc.ParentIDField, v.pv.userValues)
+	value, err := getInt32FromUserVals(v.fieldName, v.pv.userValues)
 	if err != nil {
 		return nil
 	}
 
-	for _, entry := range doc.AllowedIDValPairs {
+	for _, entry := range v.doc.AllowedIDValPairs {
 		if id != entry.ID {
 			continue
 		}
 
 		if value > entry.MaxVal || value <= 0 {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is out of range for id '%d'. max val: %d. allowed vals: %s.", value, fieldName, id, entry.MaxVal, h.IntSliceToString(entry.Values)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is out of range for id '%d'. max val: %d. allowed vals: %s.", value, v.fieldName, id, entry.MaxVal, h.IntSliceToString(entry.Values)), nil)
 		}
 
 		if !slices.Contains(entry.Values, value) {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is not available for id '%d'. allowed vals: %s.", value, fieldName, id, h.IntSliceToString(entry.Values)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is not available for id '%d'. allowed vals: %s.", value, v.fieldName, id, h.IntSliceToString(entry.Values)), nil)
 		}
 
 		return nil
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s.", fieldName, formatAllowedIDValPairs(doc.AllowedIDValPairs)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s.", v.fieldName, formatAllowedIDValPairs(v.doc.AllowedIDValPairs)), nil)
 }
 
-// sideNote: a pointer is completely optional, so it will never have a default value.
-// otherwise it wouldn't be a pointer
-func assignDefaultVal[T any](val T, valIsPresent bool, doc FieldDoc) T {
-	if valIsPresent || !hasDefaultVal(doc) {
-		return val
+
+func (v fieldVerifyer[T]) assignDefaultVal() T {
+	if v.valIsPresent || !hasDefaultVal(v.doc) {
+		return v.val
 	}
 
-	typedDefault, ok := doc.DefaultVal.(T)
+	typedDefault, ok := v.doc.DefaultVal.(T)
 	if ok {
 		return typedDefault
 	}
 
-	return val
+	return v.val
 }

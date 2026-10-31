@@ -1,14 +1,14 @@
 package api
 
-func verifyAlBhedParams(cfg *Config, params AlBhedParams, paramsRules ParamsRules, userValues map[FieldName]any) (AlBhedParams, error) {
+func verifyAlBhedParams(v paramsVerifyer, params AlBhedParams) (AlBhedParams, error) {
 	var err error
 
-	params.Text, err = verifyParamField(cfg, params.Text, PfnText, userValues, paramsRules, nil)
+	params.Text, err = v.vfField(params.Text, PfnText)
 	if err != nil {
 		return AlBhedParams{}, err
 	}
 
-	params.Direction, err = verifyParamField(cfg, params.Direction, PfnDirection, userValues, paramsRules, vfEnum)
+	params.Direction, err = v.vfEnumField(params.Direction, PfnDirection)
 	if err != nil {
 		return AlBhedParams{}, err
 	}

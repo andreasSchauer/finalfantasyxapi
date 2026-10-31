@@ -28,10 +28,12 @@ func verifyJSONParams[P, R any](cfg *Config, i handlerInputService[P, R], params
 	docs := i.docsFn(cfg)
 	paramsRules := compileParamsRules(docs.Fields)
 
-	err := vfExistingFields(userValues, paramsRules)
+	v := createParamsVerifyer(cfg, paramsRules, userValues)
+
+	err := v.vfExistingFields()
 	if err != nil {
 		return zero, err
 	}
+	return i.verifyFn(v, params)
 
-	return i.verifyFn(cfg, params, paramsRules, userValues)
 }

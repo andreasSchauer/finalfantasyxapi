@@ -6,19 +6,48 @@ import (
 	"net/http"
 )
 
-type verifyFn[T any] func(*Config, T, FieldName, map[FieldName]any, ParamsRules) (T, error)
+type verifyFn[T any] func(paramsVerifyer, T, FieldName) (T, error)
 
-// verifies, if a field fulfills all its conditions. assigns a default value, if the field is empty. if the field is of a certain type, a type-specific verification function can be performed on the typed value.
-func verifyParamField[T any](cfg *Config, val T, fieldName FieldName, userValues map[FieldName]any, paramsRules ParamsRules, verifyFn verifyFn[T]) (T, error) {
+type paramsVerifyer struct {
+	cfg         *Config
+	paramsRules ParamsRules
+	userValues  map[FieldName]any
+}
+
+func createParamsVerifyer(cfg *Config, paramsRules ParamsRules, userValues map[FieldName]any) paramsVerifyer {
+	return paramsVerifyer{
+		cfg:         cfg,
+		paramsRules: paramsRules,
+		userValues:  userValues,
+	}
+}
+
+func (v paramsVerifyer) vfIntField(val int32, fieldName FieldName) (int32, error) {
+	return v.vfFieldWrapper(val, fieldName, vfInt)
+}
+
+func (v paramsVerifyer) vfIDField(val int32, fieldName FieldName) (int32, error) {
+	return v.vfFieldWrapper(val, fieldName, vfID)
+}
+
+func (v paramsVerifyer) vfEnumField(val string, fieldName FieldName) (string, error) {
+	return v.vfFieldWrapper(val, fieldName, vfEnum)
+}
+
+func (v paramsVerifyer) vfArrayField[T any](arr []T, fieldName FieldName) ([]T, error) {
+	return v.vfFieldWrapper(arr, fieldName, vfArray)
+}
+
+func (v paramsVerifyer) vfFieldWrapper[T any](val T, fieldName FieldName, verifyFn verifyFn[T]) (T, error) {
 	var zero T
 
-	val, err := basicFieldChecks(val, fieldName, userValues, paramsRules)
+	val, err := v.vfField(val, fieldName)
 	if err != nil {
 		return zero, err
 	}
 
 	if verifyFn != nil {
-		val, err = verifyFn(cfg, val, fieldName, userValues, paramsRules)
+		val, err = verifyFn(v, val, fieldName)
 		if err != nil {
 			return zero, err
 		}
@@ -28,8 +57,8 @@ func verifyParamField[T any](cfg *Config, val T, fieldName FieldName, userValues
 }
 
 // verifies, if a pointer-field fulfills all its conditions. the basic checks are performed on the pointer itself. after that, the pointer is safely dereferenced and a type-specific verification function can be performed on the pointer's typed value. a pointer will never have a default value since it's optional.
-func verifyParamFieldPtr[T any](cfg *Config, ptr *T, fieldName FieldName, userValues map[FieldName]any, paramsRules ParamsRules, verifyFn verifyFn[T]) (*T, error) {
-	ptr, err := basicFieldChecks(ptr, fieldName, userValues, paramsRules)
+func (v paramsVerifyer) verifyParamFieldPtr[T any](ptr *T, fieldName FieldName, verifyFn verifyFn[T]) (*T, error) {
+	ptr, err := v.vfField(ptr, fieldName)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +67,7 @@ func verifyParamFieldPtr[T any](cfg *Config, ptr *T, fieldName FieldName, userVa
 		return ptr, nil
 	}
 
-	*ptr, err = verifyParamField(cfg, *ptr, fieldName, userValues, paramsRules, verifyFn)
+	*ptr, err = v.vfFieldWrapper(*ptr, fieldName, verifyFn)
 	if err != nil {
 		return nil, err
 	}
@@ -46,10 +75,10 @@ func verifyParamFieldPtr[T any](cfg *Config, ptr *T, fieldName FieldName, userVa
 	return ptr, nil
 }
 
-func verifyParamFieldObj[T any](cfg *Config, obj T, fieldName FieldName, userValues map[FieldName]any, paramsRules ParamsRules, verifyFn verifyFn[T]) (T, error) {
+func (v paramsVerifyer) verifyParamFieldObj[T any](obj T, fieldName FieldName, verifyFn verifyFn[T]) (T, error) {
 	var zero T
 
-	obj, err := basicFieldChecks(obj, fieldName, userValues, paramsRules)
+	obj, err := v.vfField(obj, fieldName)
 	if err != nil {
 		return zero, err
 	}
@@ -58,15 +87,14 @@ func verifyParamFieldObj[T any](cfg *Config, obj T, fieldName FieldName, userVal
 		return obj, nil
 	}
 
-	childValMap, ok := userValues[fieldName].(map[FieldName]any)
-	if !ok {
-		return zero, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find value map of field '%s'", fieldName), nil)
-	}
-
-	// connect fields with dots somehow
 	errStart := fmt.Sprintf("object at field '%s'", fieldName)
 
-	obj, err = verifyParamField(cfg, obj, fieldName, childValMap, paramsRules[fieldName].Children, verifyFn)
+	cv, err := v.childObj(fieldName)
+	if err != nil {
+		return zero, cascadeHTTPError(errStart, err)
+	}
+
+	obj, err = cv.vfFieldWrapper(obj, fieldName, verifyFn)
 	if err != nil {
 		return zero, cascadeHTTPError(errStart, err)
 	}
@@ -74,8 +102,8 @@ func verifyParamFieldObj[T any](cfg *Config, obj T, fieldName FieldName, userVal
 	return obj, nil
 }
 
-func verifyParamFieldObjPtr[T any](cfg *Config, objPtr *T, fieldName FieldName, userValues map[FieldName]any, paramsRules ParamsRules, verifyFn verifyFn[T]) (*T, error) {
-	objPtr, err := basicFieldChecks(objPtr, fieldName, userValues, paramsRules)
+func (v paramsVerifyer) verifyParamFieldObjPtr[T any](objPtr *T, fieldName FieldName, verifyFn verifyFn[T]) (*T, error) {
+	objPtr, err := v.vfField(objPtr, fieldName)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +112,7 @@ func verifyParamFieldObjPtr[T any](cfg *Config, objPtr *T, fieldName FieldName, 
 		return objPtr, nil
 	}
 
-	*objPtr, err = verifyParamFieldObj(cfg, *objPtr, fieldName, userValues, paramsRules, verifyFn)
+	*objPtr, err = v.verifyParamFieldObj(*objPtr, fieldName, verifyFn)
 	if err != nil {
 		return nil, err
 	}
@@ -93,13 +121,8 @@ func verifyParamFieldObjPtr[T any](cfg *Config, objPtr *T, fieldName FieldName, 
 }
 
 // verifies, if an array-field fulfills all its conditions. the basic checks as well as a max length check are performed on the array itself. after that, a type-specific verification function can be performed on each of the array's items.
-func verifyParamFieldArr[T any](cfg *Config, arr []T, fieldName FieldName, userValues map[FieldName]any, paramsRules ParamsRules, verifyFn verifyFn[T]) ([]T, error) {
-	arr, err := basicFieldChecks(arr, fieldName, userValues, paramsRules)
-	if err != nil {
-		return nil, err
-	}
-
-	arr, err = vfArray(cfg, arr, fieldName, userValues, paramsRules)
+func (v paramsVerifyer) verifyParamFieldArr[T any](arr []T, fieldName FieldName, verifyFn verifyFn[T]) ([]T, error) {
+	arr, err := v.vfArrayField(arr, fieldName)
 	if errors.Is(err, errNullArray) {
 		return arr, nil
 	}
@@ -111,21 +134,20 @@ func verifyParamFieldArr[T any](cfg *Config, arr []T, fieldName FieldName, userV
 		return arr, nil
 	}
 
-	valSlice, ok := userValues[fieldName].([]any)
+	valSlice, ok := v.userValues[fieldName].([]any)
 	if !ok {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find value slice of field '%s'", fieldName), nil)
 	}
 
 	for i, item := range arr {
 		errStart := fmt.Sprintf("index %d of array at field '%s'", i, fieldName)
-		rawItem := valSlice[i]
 
-		childValMap, ok := rawItem.(map[FieldName]any)
-		if !ok {
-			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("%s: couldn't find value map", errStart), nil)
+		cv, err := v.childArr(valSlice[i], fieldName)
+		if err != nil {
+			return nil, cascadeHTTPError(errStart, err)
 		}
 
-		arr[i], err = verifyFn(cfg, item, fieldName, childValMap, paramsRules[fieldName].Children)
+		arr[i], err = verifyFn(cv, item, fieldName)
 		if err != nil {
 			return nil, cascadeHTTPError(errStart, err)
 		}
@@ -134,13 +156,8 @@ func verifyParamFieldArr[T any](cfg *Config, arr []T, fieldName FieldName, userV
 	return arr, nil
 }
 
-func verifyParamFieldIDArr(cfg *Config, arr []int32, fieldName FieldName, userValues map[FieldName]any, paramsRules ParamsRules) ([]int32, error) {
-	arr, err := basicFieldChecks(arr, fieldName, userValues, paramsRules)
-	if err != nil {
-		return nil, err
-	}
-
-	arr, err = vfArray(cfg, arr, fieldName, userValues, paramsRules)
+func (v paramsVerifyer) verifyParamFieldIDArr(arr []int32, fieldName FieldName) ([]int32, error) {
+	arr, err := v.vfArrayField(arr, fieldName)
 	if errors.Is(err, errNullArray) {
 		return arr, nil
 	}
@@ -157,7 +174,7 @@ func verifyParamFieldIDArr(cfg *Config, arr []int32, fieldName FieldName, userVa
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s: array of field '%s' can't have duplicate ids.", errStart, fieldName), nil)
 		}
 
-		arr[i], err = vfArrayChildID(nil, val, fieldName, nil, paramsRules)
+		arr[i], err = vfArrayChildID(v, val, fieldName)
 		if err != nil {
 			return nil, cascadeHTTPError(errStart, err)
 		}
@@ -166,4 +183,26 @@ func verifyParamFieldIDArr(cfg *Config, arr []int32, fieldName FieldName, userVa
 	}
 
 	return arr, nil
+}
+
+func (v paramsVerifyer) childObj(fieldName FieldName) (paramsVerifyer, error) {
+	childUserVals, ok := v.userValues[fieldName].(map[FieldName]any)
+	if !ok {
+		return paramsVerifyer{}, newHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
+	}
+
+	cv := createParamsVerifyer(v.cfg, v.paramsRules[fieldName].Children, childUserVals)
+
+	return cv, nil
+}
+
+func (v paramsVerifyer) childArr(rawItem any, fieldName FieldName) (paramsVerifyer, error) {
+	childUserVals, ok := rawItem.(map[FieldName]any)
+	if !ok {
+		return paramsVerifyer{}, newHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
+	}
+
+	cv := createParamsVerifyer(v.cfg, v.paramsRules[fieldName].Children, childUserVals)
+
+	return cv, nil
 }

@@ -8,25 +8,25 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func vfID(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (int32, error) {
-	doc := paramsRules[fieldName].Doc
+func vfID(v paramsVerifyer, val int32, fieldName FieldName) (int32, error) {
+	doc := v.paramsRules[fieldName].Doc
 
-	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "id", false)
+	return v.vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "id", false)
 }
 
-func vfInt(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (int32, error) {
-	doc := paramsRules[fieldName].Doc
+func vfInt(v paramsVerifyer, val int32, fieldName FieldName) (int32, error) {
+	doc := v.paramsRules[fieldName].Doc
 
-	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "value", false)
+	return v.vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "value", false)
 }
 
-func vfArrayChildID(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (int32, error) {
-	doc := paramsRules[fieldName].Doc
+func vfArrayChildID(v paramsVerifyer, val int32, fieldName FieldName) (int32, error) {
+	doc := v.paramsRules[fieldName].Doc
 
-	return vfIntRange(val, doc.ChildMinVal, doc.ChildMaxVal, fieldName, "id", true)
+	return v.vfIntRange(val, doc.ChildMinVal, doc.ChildMaxVal, fieldName, "id", true)
 }
 
-func vfIntRange(val int32, minVal, maxVal *int32, fieldName FieldName, intType string, isArray bool) (int32, error) {
+func (v paramsVerifyer) vfIntRange(val int32, minVal, maxVal *int32, fieldName FieldName, intType string, isArray bool) (int32, error) {
 	errStart := getFieldRangeErrStart(val, fieldName, intType, isArray)
 
 	if minVal != nil && maxVal != nil && (val < *minVal || val > *maxVal) {
@@ -44,8 +44,8 @@ func vfIntRange(val int32, minVal, maxVal *int32, fieldName FieldName, intType s
 	return val, nil
 }
 
-func vfEnum(_ *Config, typedVal string, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (string, error) {
-	doc := paramsRules[fieldName].Doc
+func vfEnum(v paramsVerifyer, typedVal string, fieldName FieldName) (string, error) {
+	doc := v.paramsRules[fieldName].Doc
 
 	if doc.EnumValues == nil {
 		return typedVal, nil
@@ -58,12 +58,12 @@ func vfEnum(_ *Config, typedVal string, fieldName FieldName, _ map[FieldName]any
 	return typedVal, nil
 }
 
-func vfArray[T any](_ *Config, arr []T, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) ([]T, error) {
+func vfArray[T any](v paramsVerifyer, arr []T, fieldName FieldName) ([]T, error) {
 	if arr == nil {
 		return arr, errNullArray
 	}
 
-	doc := paramsRules[fieldName].Doc
+	doc := v.paramsRules[fieldName].Doc
 
 	if len(arr) == 0 {
 		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("empty array used for field '%s'. the use of empty arrays is not supported by this API. omit the field, or use 'null' instead.", fieldName), nil)

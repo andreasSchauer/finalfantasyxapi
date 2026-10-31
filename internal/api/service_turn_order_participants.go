@@ -164,6 +164,10 @@ func populateParticipantMon(cfg *Config, params TurnOrderParams, participant Par
 	participant.Party = BattlePartyOpponent
 	participant.AgilityVals = extractAglTierMon(cfg, participant, params, firstTurnAglTier)
 
+	if mon.MonsterID == nil {
+		return participant
+	}
+
 	if isSpectralKeeperInStoryFight(*mon.MonsterID, params.FormationID) {
 		participant.MinICV, participant.MaxICV = getEqualICVs(21)
 	}
