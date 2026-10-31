@@ -19,25 +19,25 @@ func getLocationRelationships(cfg *Config, r *http.Request, location seeding.Loc
 
 	g.Go(func() error {
 		var err error
-		rel.ConnectedLocations, err = getResourcesDbItem(cfg, ctx, cfg.E.Locations, location, cfg.db.GetConnectedLocationIDs)
+		rel.ConnectedLocations, err = getResourcesDBItem(cfg, ctx, cfg.E.Locations, location, cfg.db.GetConnectedLocationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Sublocations, err = getResourcesDbItem(cfg, ctx, cfg.E.Sublocations, location, cfg.db.GetLocationSublocationIDs)
+		rel.Sublocations, err = getResourcesDBItem(cfg, ctx, cfg.E.Sublocations, location, cfg.db.GetLocationSublocationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Characters, err = getResourcesDbItem(cfg, ctx, cfg.E.Characters, location, cfg.db.GetLocationCharacterIDs)
+		locRel.Characters, err = getResourcesDBItem(cfg, ctx, cfg.E.Characters, location, cfg.db.GetLocationCharacterIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Aeons, err = getResourcesDbItem(cfg, ctx, cfg.E.Aeons, location, cfg.db.GetLocationAeonIDs)
+		locRel.Aeons, err = getResourcesDBItem(cfg, ctx, cfg.E.Aeons, location, cfg.db.GetLocationAeonIDs)
 		return err
 	})
 
@@ -84,7 +84,7 @@ func getLocationRelationships(cfg *Config, r *http.Request, location seeding.Loc
 
 	g.Go(func() error {
 		var err error
-		locRel.FMVs, err = getResourcesDbItem(cfg, ctx, cfg.E.FMVs, location, cfg.db.GetLocationFmvIDs)
+		locRel.FMVs, err = getResourcesDBItem(cfg, ctx, cfg.E.FMVs, location, cfg.db.GetLocationFmvIDs)
 		return err
 	})
 

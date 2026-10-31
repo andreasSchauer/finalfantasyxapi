@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], id int32) (Area, error) {
+func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaAPIResourceList], id int32) (Area, error) {
 	area, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Area{}, err
@@ -42,13 +42,13 @@ func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, A
 	return response, nil
 }
 
-func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationAreaIDs),
 		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationAreaIDs),
 		idQuery(r, i, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetAreaIDsWithMonster),

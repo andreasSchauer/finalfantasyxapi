@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
@@ -27,7 +27,7 @@ func (e expItem) GetTestGeneral() testGeneral {
 func compareItems(test test, exp expItem, got api.Item) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResource(test, "untyped item", test.cfg.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
+	compIDAPIResource(test, "untyped item", test.cfg.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
 	compare(test, "category", string(exp.category), got.Category)
 	checkTestStructsInSlice(test, "monsters", exp.monsters, got.Monsters, compareMonItemAmts)
 	checkResAmtsID(test, "treasures", exp.treasures, got.Treasures)
@@ -58,7 +58,7 @@ func (t testMonItemAmts) GetIndex() int {
 
 func compareMonItemAmts(test test, fieldName string, exp testMonItemAmts, got api.MonItemAmts) {
 	test.t.Helper()
-	compIdApiResource(test, fieldName+" - monster", test.cfg.E.Monsters.Endpoint, exp.monster, got.Monster)
+	compIDAPIResource(test, fieldName+" - monster", test.cfg.E.Monsters.Endpoint, exp.monster, got.Monster)
 	compare(test, fieldName+" - steal common", exp.stealCommon, got.StealCommon)
 	compare(test, fieldName+" - steal rare", exp.stealRare, got.StealRare)
 	compare(test, fieldName+" - drop common", exp.dropCommon, got.DropCommon)

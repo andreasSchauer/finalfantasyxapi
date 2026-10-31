@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
@@ -21,7 +21,7 @@ func compareOverdrives(test test, exp expOverdrive, got api.Overdrive) {
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "countdown in sec", exp.countdownInSec, got.CountdownInSec)
-	compIdApiResource(test, "user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
-	compIdApiResourcePtrs(test, "overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
+	compIDAPIResource(test, "user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
+	compIDAPIResourcePtrs(test, "overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
 	checkResIDsInSlice(test, "overdrive abilities", test.cfg.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
 }

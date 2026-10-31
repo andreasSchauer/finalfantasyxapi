@@ -47,7 +47,7 @@ func (r TypedAPIResource) GetTestKey() string {
 	return fmt.Sprintf("%s - %s", r.Type, nameStr)
 }
 
-func (r TypedAPIResource) Error() string {
+func (r TypedAPIResource) String() string {
 	return fmt.Sprintf("typed api resource '%s', type: %s, url: %s", h.NameToString(r.Name, r.Version, r.Specification), r.Type, r.URL)
 }
 

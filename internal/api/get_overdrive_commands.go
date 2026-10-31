@@ -6,13 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList], id int32) (OverdriveCommand, error) {
+func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedAPIResourceList], id int32) (OverdriveCommand, error) {
 	command, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return OverdriveCommand{}, err
 	}
 
-	overdrives, err := getResourcesDbItem(cfg, r.Context(), cfg.E.Overdrives, command, ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveIDs))
+	overdrives, err := getResourcesDBItem(cfg, r.Context(), cfg.E.Overdrives, command, ToIntManyNull(cfg.db.GetOverdriveCommandOverdriveIDs))
 	if err != nil {
 		return OverdriveCommand{}, err
 	}
@@ -31,6 +31,6 @@ func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seeding.O
 	return response, nil
 }
 
-func (cfg *Config) retrieveOverdriveCommands(r *http.Request, i handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveOverdriveCommands(r *http.Request, i handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	return verifyParamsAndRetrieve(r, i)
 }

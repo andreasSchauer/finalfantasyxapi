@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
@@ -28,12 +28,12 @@ func (e expCharacter) GetTestGeneral() testGeneral {
 func compareCharacters(test test, exp expCharacter, got api.Character) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResource(test, "untyped unit", test.cfg.E.PlayerUnits.Endpoint, exp.untypedUnit, got.UntypedUnit)
-	compIdApiResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
+	compIDAPIResource(test, "untyped unit", test.cfg.E.PlayerUnits.Endpoint, exp.untypedUnit, got.UntypedUnit)
+	compIDAPIResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
 	compare(test, "weapon type", exp.weaponType, got.WeaponType)
-	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
+	compIDAPIResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
 	compare(test, "celestial formula", exp.celestialFormula, got.CelestialFormula)
-	compIdApiResourcePtrs(test, "overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
+	compIDAPIResourcePtrs(test, "overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
 	checkResIDsInSlice(test, "character classes", test.cfg.E.CharacterClasses.Endpoint, exp.characterClasses, got.CharacterClasses)
 	compareAgilityParams(test, "agility params", exp.agility, got.AgilityParameters)
 	checkResAmtTypes(test, "base stats", exp.baseStats, got.BaseStats)

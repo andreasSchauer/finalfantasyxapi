@@ -74,9 +74,7 @@ func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSi
 			treasures.TotalGil += *treasure.GilAmount
 
 		case string(database.LootTypeItem):
-			for _, itemAmount := range treasure.Items {
-				itemAmounts = append(itemAmounts, itemAmount)
-			}
+			itemAmounts = append(itemAmounts, treasure.Items...)
 
 		case string(database.LootTypeEquipment):
 			equipment := treasure.Equipment

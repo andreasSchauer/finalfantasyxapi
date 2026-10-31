@@ -1,10 +1,9 @@
-package apiTest
+package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
-
 
 type expAbility struct {
 	testGeneral
@@ -30,7 +29,7 @@ func compareAbilities(test test, exp expAbility, got api.Ability) {
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
 
-	compPathApiResource(test, "typed ability", exp.typedAbility, got.TypedAbility)
+	compPathAPIResource(test, "typed ability", exp.typedAbility, got.TypedAbility)
 	checkResIDsInSlice(test, "monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
 	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
@@ -56,7 +55,7 @@ func compareEnemyAbilities(test test, exp expEnemyAbility, got api.EnemyAbility)
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
-	compIdApiResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
 	checkResIDsInSlice(test, "monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
 	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
@@ -84,8 +83,8 @@ func compareItemAbilities(test test, exp expItemAbility, got api.ItemAbility) {
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
-	compIdApiResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
-	compIdApiResource(test, "item", test.cfg.E.Items.Endpoint, exp.item, got.Item)
+	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	compIDAPIResource(test, "item", test.cfg.E.Items.Endpoint, exp.item, got.Item)
 	compare(test, "category", string(exp.category), got.Category)
 	compare(test, "can use outside battle", exp.CanUseOutsideBattle, got.CanUseOutsideBattle)
 	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
@@ -117,12 +116,12 @@ func comparePlayerAbilities(test test, exp expPlayerAbility, got api.PlayerAbili
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
-	compIdApiResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
-	compIdApiResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	compIdApiResourcePtrs(test, "submenu", test.cfg.E.Submenus.Endpoint, exp.submenu, got.Submenu)
-	compIdApiResourcePtrs(test, "open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
-	compIdApiResourcePtrs(test, "std sg char", test.cfg.E.Characters.Endpoint, exp.stdChar, got.StandardGridCharacter)
-	compIdApiResourcePtrs(test, "exp sg char", test.cfg.E.Characters.Endpoint, exp.expChar, got.ExpertGridCharacter)
+	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	compIDAPIResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
+	compIDAPIResourcePtrs(test, "submenu", test.cfg.E.Submenus.Endpoint, exp.submenu, got.Submenu)
+	compIDAPIResourcePtrs(test, "open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
+	compIDAPIResourcePtrs(test, "std sg char", test.cfg.E.Characters.Endpoint, exp.stdChar, got.StandardGridCharacter)
+	compIDAPIResourcePtrs(test, "exp sg char", test.cfg.E.Characters.Endpoint, exp.expChar, got.ExpertGridCharacter)
 	checkResIDsInSlice(test, "monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
 	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
@@ -145,8 +144,8 @@ func compareOverdriveAbilities(test test, exp expOverdriveAbility, got api.Overd
 	test.t.Helper()
 	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
 	compare(test, "rank", exp.rank, got.Rank)
-	compIdApiResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
-	compIdApiResourcePtrs(test, "overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
+	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	compIDAPIResourcePtrs(test, "overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
 	checkResIDsInSlice(test, "overdrives", test.cfg.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
 	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
@@ -174,10 +173,10 @@ func compareMiscAbilities(test test, exp expMiscAbility, got api.MiscAbility) {
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
-	compIdApiResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
-	compIdApiResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	compIdApiResourcePtrs(test, "submenu", test.cfg.E.Submenus.Endpoint, exp.submenu, got.Submenu)
-	compIdApiResourcePtrs(test, "open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
+	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	compIDAPIResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
+	compIDAPIResourcePtrs(test, "submenu", test.cfg.E.Submenus.Endpoint, exp.submenu, got.Submenu)
+	compIDAPIResourcePtrs(test, "open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
 	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
@@ -204,8 +203,8 @@ func compareTriggerCommands(test test, exp expTriggerCommand, got api.TriggerCom
 	compare(test, "rank", exp.rank, got.Rank)
 	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
-	compIdApiResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
-	compIdApiResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
+	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	compIDAPIResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
 	checkResIDsInSlice(test, "used by", test.cfg.E.CharacterClasses.Endpoint, exp.usedBy, got.UsedBy)
 	checkResIDsInSlice(test, "monster-formations", test.cfg.E.MonsterFormations.Endpoint, exp.monsterFormations, got.MonsterFormations)
 	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)

@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList], id int32) (Topmenu, error) {
+func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedAPIResourceList], id int32) (Topmenu, error) {
 	topmenu, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Topmenu{}, err
@@ -30,6 +30,6 @@ func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seeding.Topmenu, T
 	return response, nil
 }
 
-func (cfg *Config) retrieveTopmenus(r *http.Request, i handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveTopmenus(r *http.Request, i handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	return verifyParamsAndRetrieve(r, i)
 }

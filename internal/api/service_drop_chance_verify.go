@@ -9,22 +9,22 @@ import (
 func verifyDropChanceParams(cfg *Config, params DropChanceParams, paramsRules ParamsRules, userValues map[FieldName]any) (DropChanceParams, error) {
 	var err error
 
-	params.Monster, err = verifyParamField(cfg, params.Monster, PfnMonsterID, userValues, paramsRules, vfId)
+	params.Monster, err = verifyParamField(cfg, params.Monster, PfnMonsterID, userValues, paramsRules, vfID)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.CharacterID, err = verifyParamFieldPtr(cfg, params.CharacterID, PfnCharacterID, userValues, paramsRules, vfId)
+	params.CharacterID, err = verifyParamFieldPtr(cfg, params.CharacterID, PfnCharacterID, userValues, paramsRules, vfID)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.PartyMembers, err = verifyParamFieldIdArr(cfg, params.PartyMembers, PfnPartyMembers, userValues, paramsRules)
+	params.PartyMembers, err = verifyParamFieldIDArr(cfg, params.PartyMembers, PfnPartyMembers, userValues, paramsRules)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.AutoAbilities, err = verifyParamFieldIdArr(cfg, params.AutoAbilities, PfnAutoAbilities, userValues, paramsRules)
+	params.AutoAbilities, err = verifyParamFieldIDArr(cfg, params.AutoAbilities, PfnAutoAbilities, userValues, paramsRules)
 	if err != nil {
 		return DropChanceParams{}, err
 	}

@@ -7,10 +7,10 @@ import (
 )
 
 type ItemAbility struct {
-	ID 			int32		`json:"item_ability_id,omitempty"`
+	ID int32 `json:"item_ability_id,omitempty"`
 	Ability
-	ItemID      int32		`json:"item_id,omitempty"`
-	Cursor      string      `json:"cursor"`
+	ItemID int32  `json:"item_id,omitempty"`
+	Cursor string `json:"cursor"`
 }
 
 func (a ItemAbility) ToHashFields() []any {
@@ -44,7 +44,7 @@ func (a ItemAbility) GetAbilityRef() AbilityReference {
 	}
 }
 
-func (a ItemAbility) Error() string {
+func (a ItemAbility) String() string {
 	return fmt.Sprintf("item ability %s", a.Name)
 }
 

@@ -3,8 +3,8 @@ package seeding
 import "fmt"
 
 type BaseStat struct {
-	ID       int32	`json:"id"`
-	StatID   int32	`json:"stat_id"`
+	ID       int32  `json:"id"`
+	StatID   int32  `json:"stat_id"`
 	StatName string `json:"name"`
 	Value    int32  `json:"value"`
 }
@@ -21,8 +21,8 @@ func (bs BaseStat) GetID() int32 {
 	return bs.ID
 }
 
-func (b *BaseStat) SetID(id int32) {
-	b.ID = id
+func (bs *BaseStat) SetID(id int32) {
+	bs.ID = id
 }
 
 func (bs BaseStat) GetName() string {
@@ -37,6 +37,6 @@ func (bs BaseStat) GetVal() int32 {
 	return bs.Value
 }
 
-func (bs BaseStat) Error() string {
+func (bs BaseStat) String() string {
 	return fmt.Sprintf("base stat %s, value: %d", bs.StatName, bs.Value)
 }

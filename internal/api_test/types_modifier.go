@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 

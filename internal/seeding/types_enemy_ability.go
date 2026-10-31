@@ -40,7 +40,7 @@ func (e EnemyAbility) GetAbilityRef() AbilityReference {
 	}
 }
 
-func (e EnemyAbility) Error() string {
+func (e EnemyAbility) String() string {
 	return fmt.Sprintf("enemy ability '%s'", h.NameToString(e.Name, e.Version, e.Specification))
 }
 

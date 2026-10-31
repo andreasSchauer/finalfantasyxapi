@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -59,5 +59,5 @@ func TestRetrieveRonsoRages(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.RonsoRages.Endpoint, "RetrieveRonsoRages", testCfg.HandleRonsoRages, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.RonsoRages.Endpoint, "RetrieveRonsoRages", testCfg.HandleRonsoRages, compareAPIResourceLists[api.NamedAPIResourceList])
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList], id int32) (Subquest, error) {
+func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestAPIResourceList], id int32) (Subquest, error) {
 	subquest, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Subquest{}, err
@@ -29,13 +29,13 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 	return response, nil
 }
 
-func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		boolQuery(r, i, ids, QpnRepeatable, cfg.db.GetSubquestIDsByRepeatable),
 	})
 }

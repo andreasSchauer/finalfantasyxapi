@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -29,7 +29,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			expIdOnly:      newExpIdOnly(27),
+			expIDOnly:      newExpIDOnly(27),
 			category:       "boss-fight",
 			isForcedAmbush: false,
 			canEscape:      false,
@@ -57,7 +57,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			expIdOnly:      newExpIdOnly(77),
+			expIDOnly:      newExpIDOnly(77),
 			category:       "random-encounter",
 			isForcedAmbush: false,
 			canEscape:      true,
@@ -80,7 +80,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 2,
 				},
 			},
-			expIdOnly:      newExpIdOnly(137),
+			expIDOnly:      newExpIDOnly(137),
 			category:       "boss-fight",
 			isForcedAmbush: false,
 			canEscape:      false,
@@ -116,7 +116,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			expIdOnly:      newExpIdOnly(265),
+			expIDOnly:      newExpIDOnly(265),
 			category:       "random-encounter",
 			isForcedAmbush: true,
 			canEscape:      true,
@@ -282,7 +282,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.MonsterFormations.Endpoint, "RetrieveMonsterFormations", testCfg.HandleMonsterFormations, compareAPIResourceLists[api.UnnamedApiResourceList])
+	testIDList(t, tests, testCfg.E.MonsterFormations.Endpoint, "RetrieveMonsterFormations", testCfg.HandleMonsterFormations, compareAPIResourceLists[api.UnnamedAPIResourceList])
 }
 
 func TestSubsectionMonsterFormations(t *testing.T) {
@@ -370,5 +370,5 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.MonsterFormations.Endpoint, "SubsectionMonsterFormations", nil, compareSimpleResourceLists[api.UnnamedAPIResource, api.MonsterFormationSimple])
+	testIDList(t, tests, testCfg.E.MonsterFormations.Endpoint, "SubsectionMonsterFormations", nil, compareSimpleResourceLists[api.UnnamedAPIResource, api.MonsterFormationSimple])
 }

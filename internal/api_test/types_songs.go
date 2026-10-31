@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
@@ -62,7 +62,7 @@ func (t testCue) GetIndex() int {
 
 func compareCues(test test, fieldName string, exp testCue, got api.Cue) {
 	test.t.Helper()
-	compIdApiResourcePtrs(test, fieldName+" - trigger area", test.cfg.E.Areas.Endpoint, exp.triggerArea, got.TriggerArea)
+	compIDAPIResourcePtrs(test, fieldName+" - trigger area", test.cfg.E.Areas.Endpoint, exp.triggerArea, got.TriggerArea)
 	checkResIDsInSlice(test, fieldName+" - included areas", test.cfg.E.Areas.Endpoint, exp.includedAreas, got.IncludedAreas)
 	compare(test, fieldName+" - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
 	compare(test, fieldName+" - replaces bg music", exp.replacesBGMusic, got.ReplacesBGMusic)

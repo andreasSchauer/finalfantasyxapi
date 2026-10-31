@@ -28,7 +28,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		return nil, err
 	}
 
-	charID, err := getQueryIdPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
+	charID, err := getQueryIDPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

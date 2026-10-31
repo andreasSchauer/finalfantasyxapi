@@ -13,31 +13,31 @@ func getTopmenuRelationships(cfg *Config, r *http.Request, topmenu seeding.Topme
 
 	g.Go(func() error {
 		var err error
-		rel.Submenus, err = getResourcesDbItem(cfg, ctx, cfg.E.Submenus, topmenu, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs))
+		rel.Submenus, err = getResourcesDBItem(cfg, ctx, cfg.E.Submenus, topmenu, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveCommands, err = getResourcesDbItem(cfg, ctx, cfg.E.OverdriveCommands, topmenu, ToIntManyNull(cfg.db.GetTopmenuOverdriveCommandIDs))
+		rel.OverdriveCommands, err = getResourcesDBItem(cfg, ctx, cfg.E.OverdriveCommands, topmenu, ToIntManyNull(cfg.db.GetTopmenuOverdriveCommandIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Overdrives, err = getResourcesDbItem(cfg, ctx, cfg.E.Overdrives, topmenu, ToIntManyNull(cfg.db.GetTopmenuOverdriveIDs))
+		rel.Overdrives, err = getResourcesDBItem(cfg, ctx, cfg.E.Overdrives, topmenu, ToIntManyNull(cfg.db.GetTopmenuOverdriveIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AeonCommands, err = getResourcesDbItem(cfg, ctx, cfg.E.AeonCommands, topmenu, ToIntManyNull(cfg.db.GetTopmenuAeonCommandIDs))
+		rel.AeonCommands, err = getResourcesDBItem(cfg, ctx, cfg.E.AeonCommands, topmenu, ToIntManyNull(cfg.db.GetTopmenuAeonCommandIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Abilities, err = getResourcesDbItem(cfg, ctx, cfg.E.Abilities, topmenu, ToIntManyNull(cfg.db.GetTopmenuAbilityIDs))
+		rel.Abilities, err = getResourcesDBItem(cfg, ctx, cfg.E.Abilities, topmenu, ToIntManyNull(cfg.db.GetTopmenuAbilityIDs))
 		return err
 	})
 

@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -130,5 +130,5 @@ func TestRetrieveSidequests(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Sidequests.Endpoint, "RetrieveSidequests", testCfg.HandleSidequests, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Sidequests.Endpoint, "RetrieveSidequests", testCfg.HandleSidequests, compareAPIResourceLists[api.NamedAPIResourceList])
 }

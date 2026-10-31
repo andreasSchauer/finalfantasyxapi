@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
@@ -17,7 +17,7 @@ func (e expPrimer) GetTestGeneral() testGeneral {
 func comparePrimers(test test, exp expPrimer, got api.Primer) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResource(test, "key item", test.cfg.E.KeyItems.Endpoint, exp.keyItem, got.KeyItem)
+	compIDAPIResource(test, "key item", test.cfg.E.KeyItems.Endpoint, exp.keyItem, got.KeyItem)
 	checkResIDsInSlice(test, "areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
 	checkResIDsInSlice(test, "treasures", test.cfg.E.Treasures.Endpoint, exp.treasures, got.Treasures)
 }

@@ -7,8 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-// put the char specific field in their own struct and make that a pointer
-// that's better than having three pointer fields, one of them a boolean
+
 type CharacterChances struct {
 	EligibleChars []string             `json:"eligible_chars"`
 	AnyFinBlow    float64              `json:"any_fin_blow"`

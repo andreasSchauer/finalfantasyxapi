@@ -7,7 +7,7 @@ import (
 )
 
 type BackgroundMusic struct {
-	ID                     int32		  `json:"id"`
+	ID                     int32          `json:"id"`
 	Condition              *string        `json:"condition"`
 	ReplacesEncounterMusic bool           `json:"replaces_encounter_music"`
 	LocationAreas          []LocationArea `json:"location_areas"`
@@ -29,14 +29,14 @@ func (bm *BackgroundMusic) SetID(id int32) {
 	bm.ID = id
 }
 
-func (bm BackgroundMusic) Error() string {
+func (bm BackgroundMusic) String() string {
 	return fmt.Sprintf("background music replacing encounter music: %t, condition: %v", bm.ReplacesEncounterMusic, h.PtrToString(bm.Condition))
 }
 
 type Cue struct {
-	ID                     int32		  `json:"id"`
-	SongID                 int32		  `json:"song_id"`
-	TriggerAreaID          *int32		  `json:"trigger_area_id"`
+	ID                     int32          `json:"id"`
+	SongID                 int32          `json:"song_id"`
+	TriggerAreaID          *int32         `json:"trigger_area_id"`
 	SceneDescription       string         `json:"scene_description"`
 	TriggerLocationArea    *LocationArea  `json:"trigger_location_area"`
 	IncludedAreas          []LocationArea `json:"included_areas"`
@@ -65,6 +65,6 @@ func (c *Cue) SetID(id int32) {
 	c.ID = id
 }
 
-func (c Cue) Error() string {
+func (c Cue) String() string {
 	return fmt.Sprintf("cue for scene: %s at %v, with song id: %d", c.SceneDescription, h.PtrToString(c.TriggerLocationArea), c.SongID)
 }

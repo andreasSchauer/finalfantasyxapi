@@ -1,6 +1,8 @@
 package seeding
 
 import (
+	"fmt"
+
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -11,12 +13,12 @@ type Lookupable interface {
 
 type LookupableID interface {
 	h.HasID
-	error
+	fmt.Stringer
 }
 
 type LookupableKey interface {
 	ToKeyFields() []any
-	error
+	fmt.Stringer
 }
 
 func Key(l LookupableKey) string {
@@ -31,7 +33,7 @@ type Hashable interface {
 type needsID interface {
 	SetID(int32)
 	Hashable
-	error
+	fmt.Stringer
 }
 
 type HasItemAmount interface {

@@ -9,8 +9,8 @@ import (
 )
 
 // query uses an integer value as input.
-func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, dbQuery DbQueryIntMany) IdFilter {
-	return func (ctx context.Context) ([]int32, error) {
+func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, dbQuery DBQueryIntMany) IDFilter {
+	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {
 			return inputIDs, nil
@@ -26,7 +26,7 @@ func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *
 
 		dbIDs, err := dbQuery(ctx, int32(integer))
 		if err != nil {
-			return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParam, err)
+			return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParam, err)
 		}
 
 		return dbIDs, nil
@@ -34,8 +34,8 @@ func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *
 }
 
 // query uses an integer value as input.
-func intQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapInt) IdFilter {
-	return func (ctx context.Context) ([]int32, error) {
+func intQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapInt) IDFilter {
+	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {
 			return inputIDs, nil

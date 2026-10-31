@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
@@ -16,6 +16,6 @@ func (e expFMV) GetTestGeneral() testGeneral {
 func compareFMVs(test test, exp expFMV, got api.FMV) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
-	compIdApiResourcePtrs(test, "song", test.cfg.E.Songs.Endpoint, exp.song, got.Song)
+	compIDAPIResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
+	compIDAPIResourcePtrs(test, "song", test.cfg.E.Songs.Endpoint, exp.song, got.Song)
 }

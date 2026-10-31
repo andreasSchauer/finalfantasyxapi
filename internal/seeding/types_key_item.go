@@ -5,7 +5,7 @@ import (
 )
 
 type KeyItem struct {
-	ID 			int32  `json:"id"`
+	ID int32 `json:"id"`
 	MasterItem
 	Category    string `json:"category"`
 	Description string `json:"description"`
@@ -32,7 +32,7 @@ func (k KeyItem) GetID() int32 {
 	return k.ID
 }
 
-func (k KeyItem) Error() string {
+func (k KeyItem) String() string {
 	return fmt.Sprintf("key item %s", k.Name)
 }
 

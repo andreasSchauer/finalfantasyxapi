@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -97,7 +97,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of field 'auto_abilities': id '131' is out of range. allowed range: 1 to 130.",
+				expectedErr:    "index 0 of array at field 'auto_abilities': id '131' is out of range. allowed range: 1 to 130.",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnAutoAbilities: []any{131},

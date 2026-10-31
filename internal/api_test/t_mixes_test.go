@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -145,5 +145,5 @@ func TestRetrieveMixes(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Mixes.Endpoint, "RetrieveMixes", testCfg.HandleMixes, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Mixes.Endpoint, "RetrieveMixes", testCfg.HandleMixes, compareAPIResourceLists[api.NamedAPIResourceList])
 }

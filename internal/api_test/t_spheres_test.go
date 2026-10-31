@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -364,5 +364,5 @@ func TestRetrieveSpheres(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Spheres.Endpoint, "RetrieveSpheres", testCfg.HandleSpheres, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Spheres.Endpoint, "RetrieveSpheres", testCfg.HandleSpheres, compareAPIResourceLists[api.NamedAPIResourceList])
 }

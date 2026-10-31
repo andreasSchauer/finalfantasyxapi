@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList], id int32) (Monster, error) {
+func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedAPIResourceList], id int32) (Monster, error) {
 	monster, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Monster{}, err
@@ -64,13 +64,13 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 	return completeMonsterResponse(cfg, r, response)
 }
 
-func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		basicQueryWrapper(cfg, r, i, ids, QpnElementalResists, getMonstersByElemResists),
 		idListQueryWrapper(cfg, r, i, ids, QpnStatusResists, cfg.L.StatusConditions, getMonstersByStatusResists),
 

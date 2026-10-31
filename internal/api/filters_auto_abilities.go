@@ -11,17 +11,17 @@ import (
 func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.AutoAbilities
 
-	charIdPtr, err := getQueryNameIdPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
+	charIDPtr, err := getQueryNameIDPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetAutoAbilityIDsByMonster(ctx, database.GetAutoAbilityIDsByMonsterParams{
 		MonsterID:   id,
-		CharacterID: h.GetNullInt32(charIdPtr),
+		CharacterID: h.GetNullInt32(charIDPtr),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resTypePlural, i.queryLookup[QpnMonster], err)
+		return nil, newHTTPErrorDBFilter(i.resTypePlural, i.queryLookup[QpnMonster], err)
 	}
 
 	return dbIDs, nil
@@ -30,17 +30,17 @@ func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, ctx context.Context
 func getAutoAbilitiesByShop(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.AutoAbilities
 
-	charIdPtr, err := getQueryNameIdPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
+	charIDPtr, err := getQueryNameIDPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetAutoAbilityIDsByShop(ctx, database.GetAutoAbilityIDsByShopParams{
 		ShopID:      id,
-		CharacterID: h.GetNullInt32(charIdPtr),
+		CharacterID: h.GetNullInt32(charIDPtr),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resTypePlural, i.queryLookup[QpnMonster], err)
+		return nil, newHTTPErrorDBFilter(i.resTypePlural, i.queryLookup[QpnMonster], err)
 	}
 
 	return dbIDs, nil

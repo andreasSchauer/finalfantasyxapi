@@ -7,7 +7,7 @@ import (
 )
 
 type Item struct {
-	ID 					  int32	   `json:"id,omitempty"`
+	ID int32 `json:"id,omitempty"`
 	MasterItem
 	ItemAbility
 	Description           string   `json:"description"`
@@ -45,7 +45,7 @@ func (i Item) GetID() int32 {
 	return i.ID
 }
 
-func (i Item) Error() string {
+func (i Item) String() string {
 	return fmt.Sprintf("item %s", i.Name)
 }
 

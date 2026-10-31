@@ -7,9 +7,9 @@ import (
 )
 
 type PlayerUnit struct {
-	ID   int32				`json:"player_unit_id"`
-	Name string 			`json:"name"`
-	Type database.UnitType	`json:"type"`
+	ID   int32             `json:"player_unit_id"`
+	Name string            `json:"name"`
+	Type database.UnitType `json:"type"`
 }
 
 func (pu PlayerUnit) ToHashFields() []any {
@@ -30,7 +30,7 @@ func (pu PlayerUnit) GetID() int32 {
 	return pu.ID
 }
 
-func (pu PlayerUnit) Error() string {
+func (pu PlayerUnit) String() string {
 	return fmt.Sprintf("player unit %s, type %s", pu.Name, pu.Type)
 }
 

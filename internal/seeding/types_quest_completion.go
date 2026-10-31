@@ -7,8 +7,8 @@ import (
 )
 
 type QuestCompletion struct {
-	ID        int32			   `json:"id"`
-	QuestID	  int32			   `json:"quest_id"`
+	ID        int32            `json:"id"`
+	QuestID   int32            `json:"quest_id"`
 	Condition *string          `json:"condition"`
 	Areas     []CompletionArea `json:"areas"`
 	Reward    ItemAmount       `json:"reward"`
@@ -27,13 +27,13 @@ func (qc QuestCompletion) GetID() int32 {
 	return qc.ID
 }
 
-func (qc QuestCompletion) Error() string {
+func (qc QuestCompletion) String() string {
 	return fmt.Sprintf("quest completion with reward item: %s, amount: %d, condition: %s", qc.Reward.ItemName, qc.Reward.Amount, h.DerefStringPtr(qc.Condition))
 }
 
 type CompletionArea struct {
-	CompletionID int32		  `json:"completion_id"`
-	AreaID       int32		  `json:"area_id"`
+	CompletionID int32        `json:"completion_id"`
+	AreaID       int32        `json:"area_id"`
 	LocationArea LocationArea `json:"location_area"`
 	Notes        *string      `json:"notes"`
 }
@@ -47,7 +47,7 @@ func (cl CompletionArea) ToHashFields() []any {
 	}
 }
 
-func (cl CompletionArea) Error() string {
+func (cl CompletionArea) String() string {
 	return fmt.Sprintf("completion location %s, with completion id: %d, notes: %v", cl.LocationArea, cl.CompletionID, h.PtrToString(cl.Notes))
 }
 

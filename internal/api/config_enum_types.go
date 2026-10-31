@@ -18,12 +18,12 @@ type EnumType[E, N any] struct {
 	aliasses     map[string][]E
 }
 
-// Verifies an EnumVal based on its value or an idString (mostly from query params)
+// CheckVal verifies an EnumVal based on its value or an idString (mostly from query params)
 func (e EnumType[E, N]) CheckVal(key string) (EnumVal, error) {
 	id, err := strconv.Atoi(key)
 	if err == nil {
 		if id > len(e.lookup) || id <= 0 {
-			return EnumVal{}, errIdNotFound
+			return EnumVal{}, errIDNotFound
 		}
 
 		for _, res := range e.lookup {
@@ -43,7 +43,7 @@ func (e EnumType[E, N]) CheckVal(key string) (EnumVal, error) {
 	if found {
 		return res, nil
 	}
-	
+
 	return EnumVal{}, errNoResource
 }
 
@@ -54,7 +54,7 @@ func (e EnumType[E, N]) Vals() []EnumVal {
 		vals = append(vals, val)
 	}
 
-	slices.SortStableFunc(vals, h.SortOnId)
+	slices.SortStableFunc(vals, h.SortOnID)
 
 	return vals
 }
@@ -69,7 +69,6 @@ func (e EnumType[E, N]) Strings() []string {
 
 	return strings
 }
-
 
 type EnumResponse struct {
 	Name               EnumName       `json:"name"`
@@ -2574,7 +2573,6 @@ func (t *Enums) initHasteStatus() {
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
-
 
 func (t *Enums) initTranslationDirection() {
 	enumDescription := fmt.Sprintf("Determines the direction of translation for the /%s endpoint.", epAlBhed)

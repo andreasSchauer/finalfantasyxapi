@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
@@ -7,7 +7,7 @@ import (
 
 type expShop struct {
 	testGeneral
-	expIdOnly
+	expIDOnly
 	area        int32
 	category    database.ShopCategory
 	preAirship  *testSubShop
@@ -20,8 +20,8 @@ func (e expShop) GetTestGeneral() testGeneral {
 
 func compareShops(test test, exp expShop, got api.Shop) {
 	test.t.Helper()
-	compareExpIdOnly(test, exp.expIdOnly, got.ID)
-	compIdApiResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
+	compareExpIDOnly(test, exp.expIDOnly, got.ID)
+	compIDAPIResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
 	compare(test, "category", string(exp.category), got.Category)
 	compTestStructPtrs(test, "pre airship", exp.preAirship, got.PreAirship, compareSubShops)
 	compTestStructPtrs(test, "post airship", exp.postAirship, got.PostAirship, compareSubShops)
@@ -58,7 +58,7 @@ func newTestShopItem(idx int, itemID, price int32) testShopItem {
 
 func compareShopItems(test test, fieldName string, exp testShopItem, got api.ShopItem) {
 	test.t.Helper()
-	compIdApiResource(test, fieldName+" - item", test.cfg.E.Items.Endpoint, exp.item, got.Item)
+	compIDAPIResource(test, fieldName+" - item", test.cfg.E.Items.Endpoint, exp.item, got.Item)
 	compare(test, fieldName+" - price", exp.price, got.Price)
 }
 

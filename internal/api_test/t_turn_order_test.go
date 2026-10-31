@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -95,7 +95,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of field 'party': id '0' of field 'unit_id' is out of range. allowed range: 1 to 18.",
+				expectedErr:    "index 0 of array at field 'party': id '0' of field 'unit_id' is out of range. allowed range: 1 to 18.",
 				requestBody: map[api.FieldName]any{
 					api.PfnParty: []map[api.FieldName]any{
 						{
@@ -110,7 +110,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of field 'party': field 'unit_id' can't be empty.",
+				expectedErr:    "index 1 of array at field 'party': field 'unit_id' can't be empty.",
 				requestBody: map[api.FieldName]any{
 					api.PfnParty: []map[api.FieldName]any{
 						{
@@ -129,7 +129,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of field 'party': id '0' of field 'unit_id' is out of range. allowed range: 1 to 18.",
+				expectedErr:    "index 1 of array at field 'party': id '0' of field 'unit_id' is out of range. allowed range: 1 to 18.",
 				requestBody: map[api.FieldName]any{
 					api.PfnParty: []map[api.FieldName]any{
 						{
@@ -149,7 +149,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of field 'party': field 'agility' can't be empty.",
+				expectedErr:    "index 1 of array at field 'party': field 'agility' can't be empty.",
 				requestBody: map[api.FieldName]any{
 					api.PfnParty: []map[api.FieldName]any{
 						{
@@ -188,7 +188,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of field 'party': value 'hapfte' of field 'status' is not a valid enum value. allowed values: 'haste', 'slow', 'auto-haste'.",
+				expectedErr:    "index 0 of array at field 'party': value 'hapfte' of field 'status' is not a valid enum value. allowed values: 'haste', 'slow', 'auto-haste'.",
 				requestBody: map[api.FieldName]any{
 					api.PfnParty: []map[api.FieldName]any{
 						{
@@ -209,7 +209,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of field 'party': invalid field: 'text'.",
+				expectedErr:    "index 1 of array at field 'party': invalid field: 'text'.",
 				requestBody: map[api.FieldName]any{
 					api.PfnParty: []map[api.FieldName]any{
 						{
@@ -229,7 +229,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of field 'mons': at least one of these fields must have a value: 'monster_id', 'name'.",
+				expectedErr:    "index 0 of array at field 'mons': at least one of these fields must have a value: 'monster_id', 'name'.",
 				requestBody: map[api.FieldName]any{
 					api.PfnMons: []map[api.FieldName]any{
 						{
@@ -244,7 +244,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of field 'mons': field 'name' requires the following fields to have a value: 'agility'.",
+				expectedErr:    "index 0 of array at field 'mons': field 'name' requires the following fields to have a value: 'agility'.",
 				requestBody: map[api.FieldName]any{
 					api.PfnMons: []map[api.FieldName]any{
 						{
@@ -259,7 +259,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of field 'mons': field 'name' can't be used in combination with field 'monster_id'.",
+				expectedErr:    "index 1 of array at field 'mons': field 'name' can't be used in combination with field 'monster_id'.",
 				requestBody: map[api.FieldName]any{
 					api.PfnMons: []map[api.FieldName]any{
 						{
@@ -278,7 +278,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of field 'mons': field 'alt_state' requires the following fields to have a value: 'monster_id'.",
+				expectedErr:    "index 1 of array at field 'mons': field 'alt_state' requires the following fields to have a value: 'monster_id'.",
 				requestBody: map[api.FieldName]any{
 					api.PfnMons: []map[api.FieldName]any{
 						{
@@ -297,7 +297,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 2 of field 'mons': field 'alt_state' can only be used with the following id-value pairs: id: 32, vals: 2, 3 | id: 139, vals: 1, 2, 3 | id: 160, vals: 1 | id: 198, vals: 1 | id: 285, vals: 1 | id: 287, vals: 2.",
+				expectedErr:    "index 2 of array at field 'mons': field 'alt_state' can only be used with the following id-value pairs: id: 32, vals: 2, 3 | id: 139, vals: 1, 2, 3 | id: 160, vals: 1 | id: 198, vals: 1 | id: 285, vals: 1 | id: 287, vals: 2.",
 				requestBody: map[api.FieldName]any{
 					api.PfnMons: []map[api.FieldName]any{
 						{
@@ -322,7 +322,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of field 'mons': provided value '1' used for 'alt_state' is not available for id '32'. allowed vals: 2, 3.",
+				expectedErr:    "index 0 of array at field 'mons': provided value '1' used for 'alt_state' is not available for id '32'. allowed vals: 2, 3.",
 				requestBody: map[api.FieldName]any{
 					api.PfnMons: []map[api.FieldName]any{
 						{
@@ -338,7 +338,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of field 'mons': provided value '0' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3.",
+				expectedErr:    "index 0 of array at field 'mons': provided value '0' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3.",
 				requestBody: map[api.FieldName]any{
 					api.PfnMons: []map[api.FieldName]any{
 						{
@@ -354,7 +354,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of field 'mons': provided value '4' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3.",
+				expectedErr:    "index 0 of array at field 'mons': provided value '4' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3.",
 				requestBody: map[api.FieldName]any{
 					api.PfnMons: []map[api.FieldName]any{
 						{

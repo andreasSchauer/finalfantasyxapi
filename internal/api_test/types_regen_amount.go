@@ -1,11 +1,11 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
 type testRegenAmount struct {
-	index		int
-	ticks		int32
-	healedHP	int32
+	index    int
+	ticks    int32
+	healedHP int32
 }
 
 func (t testRegenAmount) GetIndex() int {

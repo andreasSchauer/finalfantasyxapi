@@ -8,10 +8,10 @@ import (
 )
 
 type OverdriveAbility struct {
-	ID 				   int32			   `json:"id,omitempty"`
+	ID int32 `json:"id,omitempty"`
 	Ability
-	Overdrive          LookupObject        `json:"overdrive"` // not meant for seeding (still needed?)
-	RelatedStats       []string            `json:"related_stats"`
+	Overdrive    LookupObject `json:"overdrive"` // not meant for seeding (still needed?)
+	RelatedStats []string     `json:"related_stats"`
 }
 
 func (o OverdriveAbility) ToHashFields() []any {
@@ -40,7 +40,7 @@ func (o OverdriveAbility) GetAbilityRef() AbilityReference {
 	}
 }
 
-func (o OverdriveAbility) Error() string {
+func (o OverdriveAbility) String() string {
 	return fmt.Sprintf("overdrive ability '%s'", h.NameToString(o.Name, o.Version, o.Specification))
 }
 

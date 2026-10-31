@@ -22,7 +22,7 @@ func (la LocationArea) ToKeyFields() []any {
 	}
 }
 
-func (la LocationArea) Error() string {
+func (la LocationArea) String() string {
 	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: '%s'", la.Location, la.Sublocation, h.NameToString(la.Area, la.Version, nil))
 }
 

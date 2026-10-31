@@ -13,13 +13,13 @@ func getSongRelationships(cfg *Config, r *http.Request, song seeding.Song) (Song
 
 	g.Go(func() error {
 		var err error
-		rel.BossFights, err = getResourcesDbItem(cfg, ctx, cfg.E.MonsterFormations, song, ToIntManyNull(cfg.db.GetSongMonsterFormationIDs))
+		rel.BossFights, err = getResourcesDBItem(cfg, ctx, cfg.E.MonsterFormations, song, ToIntManyNull(cfg.db.GetSongMonsterFormationIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.FMVs, err = getResourcesDbItem(cfg, ctx, cfg.E.FMVs, song, ToIntManyNull(cfg.db.GetSongFmvIDs))
+		rel.FMVs, err = getResourcesDBItem(cfg, ctx, cfg.E.FMVs, song, ToIntManyNull(cfg.db.GetSongFmvIDs))
 		return err
 	})
 

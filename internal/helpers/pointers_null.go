@@ -4,7 +4,7 @@ type Zeroable interface {
 	IsZero() bool
 }
 
-// Use derefOrNil for every field that is a pointer
+
 func DerefOrNil[T any](ptr *T) any {
 	if ptr == nil {
 		return nil

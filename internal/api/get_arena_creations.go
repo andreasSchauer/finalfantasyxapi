@@ -9,7 +9,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList], id int32) (ArenaCreation, error) {
+func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedAPIResourceList], id int32) (ArenaCreation, error) {
 	creation, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return ArenaCreation{}, err
@@ -38,13 +38,13 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 	return response, nil
 }
 
-func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		enumListQuery(cfg, r, i, cfg.T.ArenaCreationCategory, ids, QpnCategory, cfg.db.GetArenaCreationIDsByCategory),
 	})
 }
@@ -56,7 +56,7 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seeding.Are
 		return nil, nil
 	}
 
-	monsterIdSlices := [][]int32{}
+	monsterIDSlices := [][]int32{}
 	g, ctx := errgroup.WithContext(r.Context())
 	var mu sync.Mutex
 
@@ -69,7 +69,7 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seeding.Are
 			}
 
 			mu.Lock()
-			monsterIdSlices = append(monsterIdSlices, idSlice)
+			monsterIDSlices = append(monsterIDSlices, idSlice)
 			mu.Unlock()
 			return nil
 		})
@@ -84,7 +84,7 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seeding.Are
 			}
 
 			mu.Lock()
-			monsterIdSlices = append(monsterIdSlices, idSlice)
+			monsterIDSlices = append(monsterIDSlices, idSlice)
 			mu.Unlock()
 			return nil
 		})
@@ -98,7 +98,7 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seeding.Are
 			}
 
 			mu.Lock()
-			monsterIdSlices = append(monsterIdSlices, idSlice)
+			monsterIDSlices = append(monsterIDSlices, idSlice)
 			mu.Unlock()
 			return nil
 		})
@@ -109,7 +109,7 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seeding.Are
 		return nil, err
 	}
 
-	monsterIDs, err := filterIdSlices(monsterIdSlices)
+	monsterIDs, err := filterIDSlices(monsterIDSlices)
 	if err != nil {
 		return nil, err
 	}

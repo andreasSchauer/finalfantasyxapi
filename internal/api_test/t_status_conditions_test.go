@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -188,5 +188,5 @@ func TestRetrieveStatusConditions(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.StatusConditions.Endpoint, "RetrieveStatusConditions", testCfg.HandleStatusConditions, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.StatusConditions.Endpoint, "RetrieveStatusConditions", testCfg.HandleStatusConditions, compareAPIResourceLists[api.NamedAPIResourceList])
 }

@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
@@ -27,11 +27,11 @@ func (e expAeon) GetTestGeneral() testGeneral {
 func compareAeons(test test, exp expAeon, got api.Aeon) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResource(test, "untyped unit", test.cfg.E.PlayerUnits.Endpoint, exp.untypedUnit, got.UntypedUnit)
-	compIdApiResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
+	compIDAPIResource(test, "untyped unit", test.cfg.E.PlayerUnits.Endpoint, exp.untypedUnit, got.UntypedUnit)
+	compIDAPIResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
 	compare(test, "battles to regenerate", exp.battlesToRegen, got.BattlesToRegenerate)
 	compareAgilityParams(test, "agility params", exp.agility, got.AgilityParameters)
-	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
+	compIDAPIResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
 	checkResIDsInSlice(test, "character classes", test.cfg.E.CharacterClasses.Endpoint, exp.characterClasses, got.CharacterClasses)
 	checkResAmtTypes(test, "base stats", exp.baseStats, got.BaseStats)
 	checkResIDsInSlice(test, "aeon commands", test.cfg.E.AeonCommands.Endpoint, exp.aeonCommands, got.AeonCommands)
@@ -48,6 +48,6 @@ type expAeonEquipment struct {
 
 func compareAeonEquipment(test test, _ string, exp expAeonEquipment, got api.AeonEquipment) {
 	test.t.Helper()
-	compIdApiResource(test, "auto ability", test.cfg.E.AutoAbilities.Endpoint, exp.autoAbility, got.AutoAbility)
+	compIDAPIResource(test, "auto ability", test.cfg.E.AutoAbilities.Endpoint, exp.autoAbility, got.AutoAbility)
 	compare(test, "celestial weapon", exp.celestialWeapon, got.CelestialWeapon)
 }

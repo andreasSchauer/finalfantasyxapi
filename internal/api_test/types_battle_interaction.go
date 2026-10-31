@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
@@ -81,7 +81,7 @@ func compareDamages(test test, fieldName string, exp expDamage, got api.Damage) 
 	compare(test, fieldName+" criticalPlusVal", exp.criticalPlusVal, got.CriticalPlusVal)
 	compare(test, fieldName+" is piercing", exp.isPiercing, got.IsPiercing)
 	compare(test, fieldName+" break dmg lmt", exp.breakDmgLmt, got.BreakDmgLimit)
-	compIdApiResourcePtrs(test, fieldName+" element", test.cfg.E.Elements.Endpoint, exp.element, got.Element)
+	compIDAPIResourcePtrs(test, fieldName+" element", test.cfg.E.Elements.Endpoint, exp.element, got.Element)
 }
 
 type expClassDamage struct {
@@ -109,7 +109,7 @@ type expStatChange struct {
 }
 
 func compareStatChanges(test test, fieldName string, exp expStatChange, got api.StatChange) {
-	compIdApiResource(test, fieldName+" - sc stat", test.cfg.E.Stats.Endpoint, exp.stat, got.Stat)
+	compIDAPIResource(test, fieldName+" - sc stat", test.cfg.E.Stats.Endpoint, exp.stat, got.Stat)
 	compare(test, fieldName+" - calculation type", exp.calculationType, got.CalculationType)
 	compare(test, fieldName+" - value", exp.value, got.Value)
 }
@@ -121,7 +121,7 @@ type expModChange struct {
 }
 
 func compareModChanges(test test, fieldName string, exp expModChange, got api.ModifierChange) {
-	compIdApiResource(test, fieldName+" - mc modifier", test.cfg.E.Modifiers.Endpoint, exp.modifier, got.Modifier)
+	compIDAPIResource(test, fieldName+" - mc modifier", test.cfg.E.Modifiers.Endpoint, exp.modifier, got.Modifier)
 	compare(test, fieldName+" - calculation type", exp.calculationType, got.CalculationType)
 	compare(test, fieldName+" - value", exp.value, got.Value)
 }

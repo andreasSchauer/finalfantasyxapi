@@ -1,3 +1,4 @@
+// Package api includes all the api routers, handlers, and their logic
 package api
 
 import (
@@ -14,13 +15,13 @@ import (
 
 type Config struct {
 	db          *database.Queries
-	DbConn      *sql.DB
+	DBConn      *sql.DB
 	L           *seeding.Lookup
 	T           *Enums
 	Q           *QueryLookup
 	E           *endpoints
 	platform    string
-	adminApiKey string
+	adminAPIKey string
 	host        string
 	fetchLimit  int
 }
@@ -40,8 +41,8 @@ func ConfigInit() (*Config, error) {
 		return nil, errors.New("PLATFORM must be set")
 	}
 
-	adminApiKey := os.Getenv("ADMIN_API_KEY")
-	if adminApiKey == "" {
+	adminAPIKey := os.Getenv("ADMIN_API_KEY")
+	if adminAPIKey == "" {
 		return nil, errors.New("ADMIN_API_KEY must be set")
 	}
 
@@ -56,14 +57,14 @@ func ConfigInit() (*Config, error) {
 
 	apiCfg := Config{
 		db:          dbQueries,
-		DbConn:      dbConn,
+		DBConn:      dbConn,
 		platform:    platform,
-		adminApiKey: adminApiKey,
+		adminAPIKey: adminAPIKey,
 		host:        domain,
 		fetchLimit:  fetchLimit,
 	}
 
-	apiCfg.L, err = seeding.LoadDatabase(apiCfg.db, apiCfg.DbConn)
+	apiCfg.L, err = seeding.LoadDatabase(apiCfg.db, apiCfg.DBConn)
 	if err != nil {
 		return nil, err
 	}

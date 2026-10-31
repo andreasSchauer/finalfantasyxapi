@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
@@ -24,10 +24,10 @@ func (e expKeyItem) GetTestGeneral() testGeneral {
 func compareKeyItems(test test, exp expKeyItem, got api.KeyItem) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResource(test, "untyped item", test.cfg.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
+	compIDAPIResource(test, "untyped item", test.cfg.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
 	compare(test, "category", string(exp.category), got.Category)
-	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
-	compIdApiResourcePtrs(test, "primer", test.cfg.E.Primers.Endpoint, exp.primer, got.Primer)
+	compIDAPIResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
+	compIDAPIResourcePtrs(test, "primer", test.cfg.E.Primers.Endpoint, exp.primer, got.Primer)
 	checkResIDsInSlice(test, "areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
 	checkResIDsInSlice(test, "treasures", test.cfg.E.Treasures.Endpoint, exp.treasures, got.Treasures)
 	checkResIDsInSlice(test, "quests", test.cfg.E.Quests.Endpoint, exp.quests, got.Quests)

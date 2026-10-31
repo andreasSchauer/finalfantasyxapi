@@ -9,16 +9,16 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type QuestApiResourceList struct {
+type QuestAPIResourceList struct {
 	ListParams
 	Results []QuestAPIResource `json:"results"`
 }
 
-func (l QuestApiResourceList) GetListParams() ListParams {
+func (l QuestAPIResourceList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func (l QuestApiResourceList) GetResults() []HasAPIResource {
+func (l QuestAPIResourceList) GetResults() []HasAPIResource {
 	return toHasAPIResSlice(l.Results)
 }
 
@@ -50,7 +50,7 @@ func (r QuestAPIResource) GetTestKey() string {
 	return r.Sidequest + subquestStr
 }
 
-func (r QuestAPIResource) Error() string {
+func (r QuestAPIResource) String() string {
 	return fmt.Sprintf("quest api resource '%s', url: %s", h.PtrToString(r.Subquest), r.URL)
 }
 
@@ -116,13 +116,13 @@ func namesToQuestAPIResources[T seeding.IsQuest, R any, A APIResource, L APIReso
 	return resources
 }
 
-func newQuestAPIResourceList(cfg *Config, r *http.Request, resources []QuestAPIResource) (QuestApiResourceList, error) {
+func newQuestAPIResourceList(cfg *Config, r *http.Request, resources []QuestAPIResource) (QuestAPIResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {
-		return QuestApiResourceList{}, err
+		return QuestAPIResourceList{}, err
 	}
 
-	list := QuestApiResourceList{
+	list := QuestAPIResourceList{
 		ListParams: listParams,
 		Results:    shownResources,
 	}

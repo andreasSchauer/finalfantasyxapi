@@ -7,13 +7,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList], id int32) (PlayerAbility, error) {
+func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedAPIResourceList], id int32) (PlayerAbility, error) {
 	ability, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return PlayerAbility{}, err
 	}
 
-	monsters, err := getResourcesDbItem(cfg, r.Context(), cfg.E.Monsters, ability, cfg.db.GetPlayerAbilityMonsterIDs)
+	monsters, err := getResourcesDBItem(cfg, r.Context(), cfg.E.Monsters, ability, cfg.db.GetPlayerAbilityMonsterIDs)
 	if err != nil {
 		return PlayerAbility{}, err
 	}
@@ -54,14 +54,14 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seeding.Play
 	return response, nil
 }
 
-func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seeding.PlayerAbility, PlayerAbility, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 	abilityType := database.AbilityTypePlayerAbility
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		enumListQuery(cfg, r, i, cfg.T.PlayerAbilityCategory, ids, QpnCategory, cfg.db.GetPlayerAbilityIDsByCategory),
 		enumListQuery(cfg, r, i, cfg.T.DamageType, ids, QpnDamageType, getTypedAbilityIDsByDamageType(cfg, abilityType)),
 		enumListQuery(cfg, r, i, cfg.T.AttackType, ids, QpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType)),
@@ -71,14 +71,14 @@ func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seedi
 		intQuery(r, i, ids, QpnMpMin, cfg.db.GetPlayerAbilityIDsByMpCostMin),
 		intQuery(r, i, ids, QpnMpMax, cfg.db.GetPlayerAbilityIDsByMpCostMax),
 		intListQuery(cfg, r, i, ids, QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		nameIdListQueryNul(cfg, r, i, ids, QpnElement, cfg.E.Elements.resTypeSingle, cfg.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
-		nameIdQuery(r, i, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, cfg.L.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass),
+		nameIDListQueryNul(cfg, r, i, ids, QpnElement, cfg.E.Elements.resTypeSingle, cfg.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
+		nameIDQuery(r, i, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, cfg.L.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass),
 		idQuery(r, i, ids, QpnLearnItem, cfg.L.Items, cfg.db.GetPlayerAbilityIDsByLearnItem),
-		nameIdQuery(r, i, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, cfg.L.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat),
+		nameIDQuery(r, i, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, cfg.L.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat),
 		idQueryNul(r, i, ids, QpnStatusInflict, cfg.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
 		idQueryNul(r, i, ids, QpnStatusRemove, cfg.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
-		nameIdQuery(r, i, ids, QpnStdSg, cfg.E.Characters.resTypeSingle, cfg.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar)),
-		nameIdQuery(r, i, ids, QpnExpSg, cfg.E.Characters.resTypeSingle, cfg.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar)),
+		nameIDQuery(r, i, ids, QpnStdSg, cfg.E.Characters.resTypeSingle, cfg.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar)),
+		nameIDQuery(r, i, ids, QpnExpSg, cfg.E.Characters.resTypeSingle, cfg.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar)),
 		boolQuery(r, i, ids, QpnOutsideBattle, cfg.db.GetPlayerAbilityIDsCanUseOutsideBattle),
 		boolQuery(r, i, ids, QpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
 		boolQuery(r, i, ids, QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),

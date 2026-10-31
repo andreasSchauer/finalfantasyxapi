@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -40,7 +40,7 @@ func TestGetBlitzballPrize(t *testing.T) {
 					"items": 8,
 				},
 			},
-			expIdOnly: newExpIdOnly(1),
+			expIDOnly: newExpIDOnly(1),
 			category:  "league",
 			slot:      "1st",
 			items: []testPossibleItem{
@@ -58,7 +58,7 @@ func TestGetBlitzballPrize(t *testing.T) {
 					"items": 3,
 				},
 			},
-			expIdOnly: newExpIdOnly(8),
+			expIDOnly: newExpIDOnly(8),
 			category:  "tournament",
 			slot:      "top-scorer",
 			items: []testPossibleItem{
@@ -99,5 +99,5 @@ func TestRetrieveBlitzballPrizes(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.BlitzballPrizes.Endpoint, "RetrieveBlitzballPositions", testCfg.HandleBlitzballPrizes, compareAPIResourceLists[api.UnnamedApiResourceList])
+	testIDList(t, tests, testCfg.E.BlitzballPrizes.Endpoint, "RetrieveBlitzballPositions", testCfg.HandleBlitzballPrizes, compareAPIResourceLists[api.UnnamedAPIResourceList])
 }

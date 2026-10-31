@@ -4,7 +4,7 @@ import "net/http"
 
 func servicePost[P, R any](cfg *Config, r *http.Request, i handlerInputService[P, R]) (R, error) {
 	var zero R
-	params, userValues, err := getParamsJsonBody[P](r)
+	params, userValues, err := getParamsJSONBody[P](r)
 	if err != nil {
 		return zero, err
 	}
@@ -15,7 +15,7 @@ func servicePost[P, R any](cfg *Config, r *http.Request, i handlerInputService[P
 func compute[P, R any](cfg *Config, i handlerInputService[P, R], params P, userValues map[FieldName]any) (R, error) {
 	var zero R
 
-	params, err := verifyJsonParams(cfg, i, params, userValues)
+	params, err := verifyJSONParams(cfg, i, params, userValues)
 	if err != nil {
 		return zero, err
 	}
@@ -23,7 +23,7 @@ func compute[P, R any](cfg *Config, i handlerInputService[P, R], params P, userV
 	return i.executeFn(cfg, params)
 }
 
-func verifyJsonParams[P, R any](cfg *Config, i handlerInputService[P, R], params P, userValues map[FieldName]any) (P, error) {
+func verifyJSONParams[P, R any](cfg *Config, i handlerInputService[P, R], params P, userValues map[FieldName]any) (P, error) {
 	var zero P
 	docs := i.docsFn(cfg)
 	paramsRules := compileParamsRules(docs.Fields)

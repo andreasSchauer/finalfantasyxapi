@@ -11,23 +11,23 @@ func (cfg *Config) HandleSublocations(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
-	routerIdOnly(cfg, w, r, cfg.E.Areas)
+	routerIDOnly(cfg, w, r, cfg.E.Areas)
 }
 
 func (cfg *Config) HandleMonsterFormations(w http.ResponseWriter, r *http.Request) {
-	routerIdOnly(cfg, w, r, cfg.E.MonsterFormations)
+	routerIDOnly(cfg, w, r, cfg.E.MonsterFormations)
 }
 
 func (cfg *Config) HandleShops(w http.ResponseWriter, r *http.Request) {
-	routerIdOnly(cfg, w, r, cfg.E.Shops)
+	routerIDOnly(cfg, w, r, cfg.E.Shops)
 }
 
 func (cfg *Config) HandleTreasures(w http.ResponseWriter, r *http.Request) {
-	routerIdOnly(cfg, w, r, cfg.E.Treasures)
+	routerIDOnly(cfg, w, r, cfg.E.Treasures)
 }
 
 func (cfg *Config) HandleQuests(w http.ResponseWriter, r *http.Request) {
-	routerIdOnly(cfg, w, r, cfg.E.Quests)
+	routerIDOnly(cfg, w, r, cfg.E.Quests)
 }
 
 func (cfg *Config) HandleSidequests(w http.ResponseWriter, r *http.Request) {
@@ -35,7 +35,7 @@ func (cfg *Config) HandleSidequests(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cfg *Config) HandleSubquests(w http.ResponseWriter, r *http.Request) {
-	routerIdOnly(cfg, w, r, cfg.E.Subquests)
+	routerIDOnly(cfg, w, r, cfg.E.Subquests)
 }
 
 func (cfg *Config) HandleArenaCreations(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +43,7 @@ func (cfg *Config) HandleArenaCreations(w http.ResponseWriter, r *http.Request) 
 }
 
 func (cfg *Config) HandleBlitzballPrizes(w http.ResponseWriter, r *http.Request) {
-	routerIdOnly(cfg, w, r, cfg.E.BlitzballPrizes)
+	routerIDOnly(cfg, w, r, cfg.E.BlitzballPrizes)
 }
 
 func (cfg *Config) HandleSongs(w http.ResponseWriter, r *http.Request) {
@@ -75,7 +75,7 @@ func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cfg *Config) HandleAbilities(w http.ResponseWriter, r *http.Request) {
-	routerIdOnly(cfg, w, r, cfg.E.Abilities)
+	routerIDOnly(cfg, w, r, cfg.E.Abilities)
 }
 
 func (cfg *Config) HandlePlayerAbilities(w http.ResponseWriter, r *http.Request) {
@@ -155,7 +155,7 @@ func (cfg *Config) HandleAutoAbilities(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cfg *Config) HandleEquipmentTables(w http.ResponseWriter, r *http.Request) {
-	routerIdOnly(cfg, w, r, cfg.E.EquipmentTables)
+	routerIDOnly(cfg, w, r, cfg.E.EquipmentTables)
 }
 
 func (cfg *Config) HandleEquipment(w http.ResponseWriter, r *http.Request) {
@@ -191,7 +191,7 @@ func (cfg *Config) HandleModifiers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cfg *Config) HandleAgilityTiers(w http.ResponseWriter, r *http.Request) {
-	routerIdOnly(cfg, w, r, cfg.E.AgilityTiers)
+	routerIDOnly(cfg, w, r, cfg.E.AgilityTiers)
 }
 
 func (cfg *Config) HandleEnums(w http.ResponseWriter, r *http.Request) {

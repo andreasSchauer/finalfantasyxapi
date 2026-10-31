@@ -70,7 +70,7 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.E
 }
 
 func getEquipmentTableRef(cfg *Config, r *http.Request, ctx context.Context, queryParam QueryParam, equipment seeding.EquipmentName) (UnnamedAPIResource, error) {
-	tables, err := getResourcesDbItem(cfg, ctx, cfg.E.EquipmentTables, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
+	tables, err := getResourcesDBItem(cfg, ctx, cfg.E.EquipmentTables, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
 	if err != nil {
 		return UnnamedAPIResource{}, err
 	}

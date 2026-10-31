@@ -35,7 +35,7 @@ func quickAssembleMon(cfg *Config, monID int32, altStatePtr *int32) (Monster, er
 		AlteredStates:    getMonsterAlteredStates(cfg, nil, monsterLookup),
 	}
 
-	monster, err := applyAlteredStateFromJson(cfg, monster, altStatePtr)
+	monster, err := applyAlteredStateFromJSON(cfg, monster, altStatePtr)
 	if err != nil {
 		return Monster{}, err
 	}

@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
@@ -17,7 +17,7 @@ func (e expSidequest) GetTestGeneral() testGeneral {
 func compareSidequests(test test, exp expSidequest, got api.Sidequest) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResource(test, "untyped quest", test.cfg.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
+	compIDAPIResource(test, "untyped quest", test.cfg.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
 	compTestStructPtrs(test, "completion", exp.completion, got.Completion, compareQuestCompletions)
 	checkResIDsInSlice(test, "subquests", test.cfg.E.Subquests.Endpoint, exp.subquests, got.Subquests)
 }
@@ -38,10 +38,10 @@ func (e expSubquest) GetTestGeneral() testGeneral {
 func compareSubquests(test test, exp expSubquest, got api.Subquest) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResource(test, "untyped quest", test.cfg.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
-	compIdApiResource(test, "parent sidequest", test.cfg.E.Sidequests.Endpoint, exp.parentSidequest, got.ParentSidequest)
+	compIDAPIResource(test, "untyped quest", test.cfg.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
+	compIDAPIResource(test, "parent sidequest", test.cfg.E.Sidequests.Endpoint, exp.parentSidequest, got.ParentSidequest)
 	compareQuestCompletions(test, "completion", exp.completion, got.Completion)
-	compIdApiResourcePtrs(test, "arena creation", test.cfg.E.ArenaCreations.Endpoint, exp.arenaCreation, got.ArenaCreation)
+	compIDAPIResourcePtrs(test, "arena creation", test.cfg.E.ArenaCreations.Endpoint, exp.arenaCreation, got.ArenaCreation)
 }
 
 type testQuestCompletion struct {

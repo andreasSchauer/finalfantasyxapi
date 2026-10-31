@@ -113,7 +113,7 @@ func (a PlayerAbility) getBattleInteractions() []BattleInteraction {
 	return a.BattleInteractions
 }
 
-func (a PlayerAbility) Error() string {
+func (a PlayerAbility) String() string {
 	return fmt.Sprintf("player ability '%s'", h.NameToString(a.Name, a.Version, nil))
 }
 
@@ -152,7 +152,7 @@ func (a TriggerCommand) getBattleInteractions() []BattleInteraction {
 	return a.BattleInteractions
 }
 
-func (a TriggerCommand) Error() string {
+func (a TriggerCommand) String() string {
 	return fmt.Sprintf("trigger command '%s'", h.NameToString(a.Name, a.Version, nil))
 }
 
@@ -191,6 +191,6 @@ func (a MiscAbility) getBattleInteractions() []BattleInteraction {
 	return a.BattleInteractions
 }
 
-func (a MiscAbility) Error() string {
+func (a MiscAbility) String() string {
 	return fmt.Sprintf("misc ability '%s'", h.NameToString(a.Name, a.Version, nil))
 }

@@ -5,17 +5,17 @@ import (
 )
 
 type Location struct {
-	ID           int32			`json:"id"`
-	Name         string        	`json:"location"`
-	Availability string			`json:"availability"`
-	Sublocations []Sublocation 	`json:"sublocations"`
+	ID           int32         `json:"id"`
+	Name         string        `json:"location"`
+	Availability string        `json:"availability"`
+	Sublocations []Sublocation `json:"sublocations"`
 }
 
 func (l Location) ToHashFields() []any {
 	return []any{
 		fmt.Sprintf("%T", l),
 		l.Name,
-		l.Availability, 
+		l.Availability,
 	}
 }
 
@@ -29,7 +29,7 @@ func (l Location) GetID() int32 {
 	return l.ID
 }
 
-func (l Location) Error() string {
+func (l Location) String() string {
 	return fmt.Sprintf("location %s", l.Name)
 }
 

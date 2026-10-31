@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -344,7 +344,7 @@ func TestRetrieveAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Abilities.Endpoint, "RetrieveAbilities", testCfg.HandleAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Abilities.Endpoint, "RetrieveAbilities", testCfg.HandleAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestSubsectionAbilities(t *testing.T) {
@@ -402,5 +402,5 @@ func TestSubsectionAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Abilities.Endpoint, "SubsectionAbilities", nil, compareSimpleResourceLists[api.NamedAPIResource, api.AbilitySimple])
+	testIDList(t, tests, testCfg.E.Abilities.Endpoint, "SubsectionAbilities", nil, compareSimpleResourceLists[api.NamedAPIResource, api.AbilitySimple])
 }

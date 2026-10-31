@@ -33,16 +33,6 @@ type MatchChanceParams struct {
 	characterChances CharacterChances
 }
 
-func createMatchChanceParams(params DropChanceParams, mon seeding.Monster, wantedAbilities []seeding.AutoAbility, monAbilities []seeding.EquipmentDrop, cc CharacterChances) MatchChanceParams {
-	return MatchChanceParams{
-		mon:              mon,
-		wantedAbilities:  wantedAbilities,
-		monAbilities:     monAbilities,
-		slotsTable:       extractAbilitySlots(params, mon),
-		shotsTable:       mon.Equipment.AttachedAbilities.Chances,
-		characterChances: cc,
-	}
-}
 
 func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mcp MatchChanceParams) EquipmentMatchChances {
 	equipTypeChance := 0.5
@@ -93,7 +83,7 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mcp MatchCh
 }
 
 func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding.EquipmentSlotsChance {
-	var minSlots int32 = params.GetRequiredSlots()
+	var minSlots = params.GetRequiredSlots()
 	var maxSlots int32 = 4
 	abilitySlotChances := mon.Equipment.AbilitySlots.Chances
 	var chances []seeding.EquipmentSlotsChance

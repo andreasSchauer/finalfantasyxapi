@@ -7,8 +7,8 @@ import (
 )
 
 type InflictedStatus struct {
-	ID                int32	 `json:"inflicted_status_id,omitempty"`
-	StatusConditionID int32	 `json:"status_condition_id,omitempty"`
+	ID                int32  `json:"inflicted_status_id,omitempty"`
+	StatusConditionID int32  `json:"status_condition_id,omitempty"`
 	StatusCondition   string `json:"name"`
 	Probability       int32  `json:"probability"`
 	DurationType      string `json:"duration_type"`
@@ -33,6 +33,6 @@ func (is *InflictedStatus) SetID(id int32) {
 	is.ID = id
 }
 
-func (is InflictedStatus) Error() string {
+func (is InflictedStatus) String() string {
 	return fmt.Sprintf("inflicted status with condition: %s, probability: %d, duration type: %s, amount: %v", is.StatusCondition, is.Probability, is.DurationType, is.Amount)
 }

@@ -8,16 +8,16 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type AreaApiResourceList struct {
+type AreaAPIResourceList struct {
 	ListParams
 	Results []AreaAPIResource `json:"results"`
 }
 
-func (l AreaApiResourceList) GetListParams() ListParams {
+func (l AreaAPIResourceList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func (l AreaApiResourceList) GetResults() []HasAPIResource {
+func (l AreaAPIResourceList) GetResults() []HasAPIResource {
 	return toHasAPIResSlice(l.Results)
 }
 
@@ -44,7 +44,7 @@ func (r AreaAPIResource) GetTestKey() string {
 	return h.NameToString(r.Area, r.Version, nil)
 }
 
-func (r AreaAPIResource) Error() string {
+func (r AreaAPIResource) String() string {
 	return fmt.Sprintf("area api resource: %s, url: %s", r.LocationArea, r.URL)
 }
 
@@ -52,12 +52,12 @@ func (r AreaAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func idToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], id int32) AreaAPIResource {
+func idToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaAPIResourceList], id int32) AreaAPIResource {
 	res, _ := seeding.GetResourceByID(id, i.objLookupID)
 	return areaToAreaAPIResource(cfg, i, res)
 }
 
-func idPtrToAreaAPIResPtr(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], idPtr *int32) *AreaAPIResource {
+func idPtrToAreaAPIResPtr(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaAPIResourceList], idPtr *int32) *AreaAPIResource {
 	if idPtr == nil {
 		return nil
 	}
@@ -66,12 +66,12 @@ func idPtrToAreaAPIResPtr(cfg *Config, i handlerInput[seeding.Area, Area, AreaAP
 	return &res
 }
 
-func locAreaToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], area seeding.LocationArea) AreaAPIResource {
+func locAreaToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaAPIResourceList], area seeding.LocationArea) AreaAPIResource {
 	res, _ := seeding.GetResource(area, i.objLookup)
 	return areaToAreaAPIResource(cfg, i, res)
 }
 
-func locAreasToAreaAPIResources(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], areas []seeding.LocationArea) []AreaAPIResource {
+func locAreasToAreaAPIResources(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaAPIResourceList], areas []seeding.LocationArea) []AreaAPIResource {
 	resources := []AreaAPIResource{}
 
 	for _, area := range areas {
@@ -83,7 +83,7 @@ func locAreasToAreaAPIResources(cfg *Config, i handlerInput[seeding.Area, Area, 
 }
 
 // shared logic. not indended to be called directly
-func areaToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaApiResourceList], area seeding.Area) AreaAPIResource {
+func areaToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaAPIResourceList], area seeding.Area) AreaAPIResource {
 	params := area.GetResParamsLocation()
 
 	return AreaAPIResource{
@@ -99,13 +99,13 @@ func areaToAreaAPIResource(cfg *Config, i handlerInput[seeding.Area, Area, AreaA
 	}
 }
 
-func newAreaAPIResourceList(cfg *Config, r *http.Request, resources []AreaAPIResource) (AreaApiResourceList, error) {
+func newAreaAPIResourceList(cfg *Config, r *http.Request, resources []AreaAPIResource) (AreaAPIResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {
-		return AreaApiResourceList{}, err
+		return AreaAPIResourceList{}, err
 	}
 
-	list := AreaApiResourceList{
+	list := AreaAPIResourceList{
 		ListParams: listParams,
 		Results:    shownResources,
 	}

@@ -26,8 +26,8 @@ type FieldDoc struct {
 	MaxVal            *int32              `json:"max_val,omitempty"`
 	MaxArrayLen       *int                `json:"max_array_len,omitempty"`
 	AllowedIDs        []int32             `json:"allowed_ids,omitempty"`
-	ParentIdField     *FieldName          `json:"parent_id_field,omitempty"`
-	AllowedIdValPairs []AllowedIdValPairs `json:"allowed_id_val_pairs"`
+	ParentIDField     *FieldName          `json:"parent_id_field,omitempty"`
+	AllowedIDValPairs []AllowedIDValPairs `json:"allowed_id_val_pairs"`
 	EnumValues        []string            `json:"enum_values,omitempty"`
 	Description       string              `json:"description"`
 	ChildProps        []FieldDoc          `json:"child_properties,omitempty"`
@@ -35,17 +35,17 @@ type FieldDoc struct {
 	ChildMaxVal       *int32              `json:"child_max_val,omitempty"`
 }
 
-type AllowedIdValPairs struct {
+type AllowedIDValPairs struct {
 	ID     int32   `json:"id"`
 	Values []int32 `json:"values"`
 	MaxVal int32   `json:"-"`
 }
 
-func (e AllowedIdValPairs) format() string {
+func (e AllowedIDValPairs) format() string {
 	return fmt.Sprintf("id: %d, vals: %s", e.ID, h.IntSliceToString(e.Values))
 }
 
-func formatAllowedIdValPairs(entries []AllowedIdValPairs) string {
+func formatAllowedIDValPairs(entries []AllowedIDValPairs) string {
 	slice := make([]string, len(entries))
 
 	for i := range entries {

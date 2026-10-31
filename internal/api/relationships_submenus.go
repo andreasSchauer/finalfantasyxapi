@@ -15,7 +15,7 @@ func getSubmenuRelationships(cfg *Config, r *http.Request, submenu seeding.Subme
 
 	g.Go(func() error {
 		var err error
-		rel.Abilities, err = getResourcesDbItem(cfg, ctx, cfg.E.Abilities, submenu, ToIntManyNull(cfg.db.GetSubmenuAbilityIDs))
+		rel.Abilities, err = getResourcesDBItem(cfg, ctx, cfg.E.Abilities, submenu, ToIntManyNull(cfg.db.GetSubmenuAbilityIDs))
 		return err
 	})
 
@@ -50,7 +50,7 @@ func createSubmenuOpenedBy(cfg *Config, ctx context.Context, submenu seeding.Sub
 	})
 
 	g.Go(func() error {
-		overdriveCommands, err := getResourcesDbItem(cfg, ctx, cfg.E.OverdriveCommands, submenu, ToIntManyNull(cfg.db.GetSubmenuOpenedByOverdriveCommandIDs))
+		overdriveCommands, err := getResourcesDBItem(cfg, ctx, cfg.E.OverdriveCommands, submenu, ToIntManyNull(cfg.db.GetSubmenuOpenedByOverdriveCommandIDs))
 		if err != nil {
 			return err
 		}

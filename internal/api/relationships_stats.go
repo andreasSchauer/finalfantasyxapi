@@ -8,13 +8,13 @@ import (
 )
 
 type StatQueries struct {
-	AutoAbilities      DbQueryIntMany
-	PlayerAbilities    DbQueryIntMany
-	OverdriveAbilities DbQueryIntMany
-	ItemAbilities      DbQueryIntMany
-	TriggerCommands    DbQueryIntMany
-	StatusConditions   DbQueryIntMany
-	Properties         DbQueryIntMany
+	AutoAbilities      DBQueryIntMany
+	PlayerAbilities    DBQueryIntMany
+	OverdriveAbilities DBQueryIntMany
+	ItemAbilities      DBQueryIntMany
+	TriggerCommands    DBQueryIntMany
+	StatusConditions   DBQueryIntMany
+	Properties         DBQueryIntMany
 }
 
 func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat, error) {
@@ -28,50 +28,50 @@ func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat
 
 	g.Go(func() error {
 		var err error
-		rel.Spheres, err = getResourcesDbItem(cfg, ctx, cfg.E.Spheres, stat, cfg.db.GetStatSphereIDs)
+		rel.Spheres, err = getResourcesDBItem(cfg, ctx, cfg.E.Spheres, stat, cfg.db.GetStatSphereIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.AutoAbilities, stat, queries.AutoAbilities)
+		rel.AutoAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.AutoAbilities, stat, queries.AutoAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.PlayerAbilities, stat, queries.PlayerAbilities)
+		rel.PlayerAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.PlayerAbilities, stat, queries.PlayerAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.OverdriveAbilities, stat, queries.OverdriveAbilities)
+		rel.OverdriveAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.OverdriveAbilities, stat, queries.OverdriveAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.ItemAbilities, stat, queries.ItemAbilities)
+		rel.ItemAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.ItemAbilities, stat, queries.ItemAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.TriggerCommands, err = getResourcesDbItem(cfg, ctx, cfg.E.TriggerCommands, stat, queries.TriggerCommands)
+		rel.TriggerCommands, err = getResourcesDBItem(cfg, ctx, cfg.E.TriggerCommands, stat, queries.TriggerCommands)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.StatusConditions, err = getResourcesDbItem(cfg, ctx, cfg.E.StatusConditions, stat, queries.StatusConditions)
+		rel.StatusConditions, err = getResourcesDBItem(cfg, ctx, cfg.E.StatusConditions, stat, queries.StatusConditions)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		if queries.Properties != nil {
-			rel.Properties, err = getResourcesDbItem(cfg, ctx, cfg.E.Properties, stat, queries.Properties)
+			rel.Properties, err = getResourcesDBItem(cfg, ctx, cfg.E.Properties, stat, queries.Properties)
 			return err
 		}
 		return nil

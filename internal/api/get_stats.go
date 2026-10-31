@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getStat(r *http.Request, i handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList], id int32) (Stat, error) {
+func (cfg *Config) getStat(r *http.Request, i handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedAPIResourceList], id int32) (Stat, error) {
 	stat, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Stat{}, err
@@ -38,6 +38,6 @@ func (cfg *Config) getStat(r *http.Request, i handlerInput[seeding.Stat, Stat, N
 	return response, nil
 }
 
-func (cfg *Config) retrieveStats(r *http.Request, i handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveStats(r *http.Request, i handlerInput[seeding.Stat, Stat, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	return verifyParamsAndRetrieve(r, i)
 }

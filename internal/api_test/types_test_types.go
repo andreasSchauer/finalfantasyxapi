@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"encoding/json"
@@ -61,7 +61,7 @@ func (t testGeneral) getTestName(name string, caseNum int) string {
 
 	if t.requestBody != nil {
 		json, _ := json.Marshal(t.requestBody)
-		json = h.CleanUpJson(json)
+		json = h.CleanUpJSON(json)
 
 		context = fmt.Sprintf("%s | json body: %s", context, string(json))
 	}
@@ -113,17 +113,17 @@ func compareExpUnique(test test, exp expUnique, gotID int32, gotName string) {
 	compare(test, "name", exp.name, gotName)
 }
 
-type expIdOnly struct {
+type expIDOnly struct {
 	id int32
 }
 
-func newExpIdOnly(id int32) expIdOnly {
-	return expIdOnly{
+func newExpIDOnly(id int32) expIDOnly {
+	return expIDOnly{
 		id: id,
 	}
 }
 
-func compareExpIdOnly(test test, exp expIdOnly, gotID int32) {
+func compareExpIDOnly(test test, exp expIDOnly, gotID int32) {
 	test.t.Helper()
 	compare(test, "id", exp.id, gotID)
 }

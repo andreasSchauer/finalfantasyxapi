@@ -91,12 +91,12 @@ func GetResAmtMap[A APIResource](items []ResourceAmount[A]) map[string]int32 {
 	return amountMap
 }
 
-func GetResAmtIdMap[A APIResource](items []ResourceAmount[A]) map[int32]int32 {
+func GetResAmtIDMap[A APIResource](items []ResourceAmount[A]) map[int32]int32 {
 	amountMap := make(map[int32]int32)
 
 	for _, item := range items {
 		url := item.Resource.GetURL()
-		id := getIdFromURL(url)
+		id := getIDFromURL(url)
 		amountMap[id] = item.Amount
 	}
 

@@ -34,7 +34,6 @@ func GetNullBool(b *bool) sql.NullBool {
 	return sql.NullBool{Bool: *b, Valid: true}
 }
 
-// these functions are all used to convert a nullable db value into a normal value or pointer
 func NullStringToPtr(s sql.NullString) *string {
 	if !s.Valid {
 		return nil

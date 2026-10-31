@@ -8,7 +8,7 @@ import (
 )
 
 // s1 [1,2,3] s2 [2,3,4,5] => [1,2,3,4,5]
-func combineIdSlices(idSlices ...[]int32) []int32 {
+func combineIDSlices(idSlices ...[]int32) []int32 {
 	ids := []int32{}
 
 	for _, slice := range idSlices {
@@ -18,7 +18,7 @@ func combineIdSlices(idSlices ...[]int32) []int32 {
 	return ids
 }
 
-func filterIdSlices(slices [][]int32) ([]int32, error) {
+func filterIDSlices(slices [][]int32) ([]int32, error) {
 	switch len(slices) {
 	case 0:
 		return []int32{}, nil
@@ -38,7 +38,7 @@ func filterIdSlices(slices [][]int32) ([]int32, error) {
 }
 
 func addUniqueIDsToSlice(s1, s2 []int32) []int32 {
-	idMap := getIdMap(s1)
+	idMap := getIDMap(s1)
 
 	for _, id := range s2 {
 		_, ok := idMap[id]
@@ -54,7 +54,7 @@ func addUniqueIDsToSlice(s1, s2 []int32) []int32 {
 // s1 [1,2,3,4,5] s2 [2,4,5,7,8,9] => [2,4,5]
 func getSharedIDs(s1, s2 []int32) []int32 {
 	sharedIDs := []int32{}
-	s2Map := getIdMap(s2)
+	s2Map := getIDMap(s2)
 
 	for _, id := range s1 {
 		_, ok := s2Map[id]
@@ -67,7 +67,7 @@ func getSharedIDs(s1, s2 []int32) []int32 {
 	return sharedIDs
 }
 
-func getIdMap(s []int32) map[int32]bool {
+func getIDMap(s []int32) map[int32]bool {
 	idMap := make(map[int32]bool)
 
 	for _, id := range s {
@@ -82,7 +82,7 @@ func sortNamesByID[T seeding.Lookupable](s []string, lookup map[string]T) []stri
 		A, _ := seeding.GetResource(a, lookup)
 		B, _ := seeding.GetResource(b, lookup)
 
-		return h.SortOnId(A, B)
+		return h.SortOnID(A, B)
 	})
 
 	return s
@@ -90,7 +90,7 @@ func sortNamesByID[T seeding.Lookupable](s []string, lookup map[string]T) []stri
 
 // ids [1,2,3,4,5] idsToRemove [2,4] => keptIDs [1,3,5] removedIDs [2,4]
 func separateIDs(ids []int32, idsToRemove []int32) ([]int32, []int32) {
-	removeMap := getIdMap(idsToRemove)
+	removeMap := getIDMap(idsToRemove)
 	kept := []int32{}
 	removed := []int32{}
 

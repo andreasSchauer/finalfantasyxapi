@@ -7,11 +7,11 @@ import (
 )
 
 type Aeon struct {
-	ID int32							`json:"id"`
+	ID int32 `json:"id"`
 	PlayerUnit
-	UnlockCondition     string       	`json:"unlock_condition"`
-	LocationArea        LocationArea 	`json:"location_area"`
-	AreaID              *int32			`json:"area_id"`
+	UnlockCondition     string          `json:"unlock_condition"`
+	LocationArea        LocationArea    `json:"location_area"`
+	AreaID              *int32          `json:"area_id"`
 	Category            *string         `json:"category"`
 	IsOptional          bool            `json:"is_optional"`
 	BattlesToRegenerate int32           `json:"num_battles_to_regenerate"`
@@ -49,7 +49,7 @@ func (a Aeon) GetID() int32 {
 	return a.ID
 }
 
-func (a Aeon) Error() string {
+func (a Aeon) String() string {
 	return fmt.Sprintf("aeon %s", a.Name)
 }
 

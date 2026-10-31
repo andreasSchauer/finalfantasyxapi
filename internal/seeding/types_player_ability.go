@@ -8,27 +8,27 @@ import (
 )
 
 type PlayerAbility struct {
-	ID 					int32				`json:"id,omitempty"`
+	ID int32 `json:"id,omitempty"`
 	Ability
-	TopmenuID           *int32				`json:"topmenu_id,omitempty"`
-	SubmenuID           *int32				`json:"submenu_id,omitempty"`
-	OpenSubmenuID       *int32				`json:"open_submenu_id,omitempty"`
-	StandardGridCharID  *int32				`json:"std_grid_char_id,omitempty"`
-	ExpertGridCharID    *int32				`json:"expert_grid_char_id,omitempty"`
-	Description         *string             `json:"description"`
-	Effect              string              `json:"effect"`
-	RelatedStats        []string            `json:"related_stats"`
-	Category            string              `json:"category"`
-	Topmenu             *string             `json:"topmenu"`
-	Submenu             *string             `json:"submenu"`
-	OpenSubmenu         *string             `json:"open_submenu"`
-	LearnedBy           []string            `json:"learned_by"`
-	StandardGridPos     *string             `json:"standard_grid_pos"`
-	ExpertGridPos       *string             `json:"expert_grid_pos"`
-	CanUseOutsideBattle bool                `json:"can_use_outside_battle"`
-	AeonLearnItem       *ItemAmount         `json:"aeon_learn_item"`
-	MPCost              int32               `json:"mp_cost"`
-	Cursor              *string             `json:"cursor"`
+	TopmenuID           *int32      `json:"topmenu_id,omitempty"`
+	SubmenuID           *int32      `json:"submenu_id,omitempty"`
+	OpenSubmenuID       *int32      `json:"open_submenu_id,omitempty"`
+	StandardGridCharID  *int32      `json:"std_grid_char_id,omitempty"`
+	ExpertGridCharID    *int32      `json:"expert_grid_char_id,omitempty"`
+	Description         *string     `json:"description"`
+	Effect              string      `json:"effect"`
+	RelatedStats        []string    `json:"related_stats"`
+	Category            string      `json:"category"`
+	Topmenu             *string     `json:"topmenu"`
+	Submenu             *string     `json:"submenu"`
+	OpenSubmenu         *string     `json:"open_submenu"`
+	LearnedBy           []string    `json:"learned_by"`
+	StandardGridPos     *string     `json:"standard_grid_pos"`
+	ExpertGridPos       *string     `json:"expert_grid_pos"`
+	CanUseOutsideBattle bool        `json:"can_use_outside_battle"`
+	AeonLearnItem       *ItemAmount `json:"aeon_learn_item"`
+	MPCost              int32       `json:"mp_cost"`
+	Cursor              *string     `json:"cursor"`
 }
 
 func (p PlayerAbility) ToHashFields() []any {
@@ -69,7 +69,7 @@ func (p PlayerAbility) GetAbilityRef() AbilityReference {
 	}
 }
 
-func (p PlayerAbility) Error() string {
+func (p PlayerAbility) String() string {
 	return fmt.Sprintf("player ability '%s'", h.NameToString(p.Name, p.Version, p.Specification))
 }
 

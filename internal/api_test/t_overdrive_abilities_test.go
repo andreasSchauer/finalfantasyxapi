@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -323,7 +323,7 @@ func TestGetMultipleOverdriveAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.OverdriveAbilities.Endpoint, "GetMultipleOverdriveAbilities", testCfg.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.OverdriveAbilities.Endpoint, "GetMultipleOverdriveAbilities", testCfg.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestRetrieveOverdriveAbilities(t *testing.T) {
@@ -391,7 +391,7 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.OverdriveAbilities.Endpoint, "RetrieveOverdriveAbilities", testCfg.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.OverdriveAbilities.Endpoint, "RetrieveOverdriveAbilities", testCfg.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestSubsectionOverdriveAbilities(t *testing.T) {
@@ -439,5 +439,5 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.OverdriveAbilities.Endpoint, "SubsectionOverdriveAbilities", nil, compareSimpleResourceLists[api.NamedAPIResource, api.AbilitySimple])
+	testIDList(t, tests, testCfg.E.OverdriveAbilities.Endpoint, "SubsectionOverdriveAbilities", nil, compareSimpleResourceLists[api.NamedAPIResource, api.AbilitySimple])
 }

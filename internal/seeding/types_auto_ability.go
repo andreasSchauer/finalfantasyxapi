@@ -7,12 +7,12 @@ import (
 )
 
 type AutoAbility struct {
-	ID                  int32			 `json:"id"`
-	GradRecoveryStatID  *int32			 `json:"grad_recovery_stat_id"`
-	OnHitElementID      *int32			 `json:"on_hit_element_id"`
-	AddedPropertyID     *int32			 `json:"added_property_id"`
-	CnvrsnFromModID     *int32			 `json:"cnvrsn_from_mod_id"`
-	CnvrsnToModID       *int32			 `json:"cnvrsn_to_mod_id"`
+	ID                  int32            `json:"id"`
+	GradRecoveryStatID  *int32           `json:"grad_recovery_stat_id"`
+	OnHitElementID      *int32           `json:"on_hit_element_id"`
+	AddedPropertyID     *int32           `json:"added_property_id"`
+	CnvrsnFromModID     *int32           `json:"cnvrsn_from_mod_id"`
+	CnvrsnToModID       *int32           `json:"cnvrsn_to_mod_id"`
 	Name                string           `json:"name"`
 	Description         *string          `json:"description"`
 	Effect              string           `json:"effect"`
@@ -70,7 +70,7 @@ func (a AutoAbility) GetID() int32 {
 	return a.ID
 }
 
-func (a AutoAbility) Error() string {
+func (a AutoAbility) String() string {
 	return fmt.Sprintf("auto ability %s", a.Name)
 }
 

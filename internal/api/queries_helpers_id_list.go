@@ -10,7 +10,7 @@ import (
 )
 
 // checks for emptiness of id-list-queryParam and converts its input into a slice of valid ids.
-func parseIdListQuery[F seeding.Lookupable](cfg *Config, r *http.Request, queryParam QueryParam, fLookup map[string]F) ([]int32, error) {
+func parseIDListQuery[F seeding.Lookupable](cfg *Config, r *http.Request, queryParam QueryParam, fLookup map[string]F) ([]int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func queryIDsToSlice[F seeding.Lookupable](cfg *Config, r *http.Request, query s
 	ids := []int32{}
 
 	for _, segment := range idSegments {
-		idsNew, err := checkQueryIdRange(queryParam, segment, fLookup)
+		idsNew, err := checkQueryIDRange(queryParam, segment, fLookup)
 		if err != nil {
 			return nil, err
 		}
@@ -47,7 +47,7 @@ func queryIDsToSlice[F seeding.Lookupable](cfg *Config, r *http.Request, query s
 	return ids, nil
 }
 
-func checkQueryIdRange[F seeding.Lookupable](queryParam QueryParam, segment string, fLookup map[string]F) ([]int32, error) {
+func checkQueryIDRange[F seeding.Lookupable](queryParam QueryParam, segment string, fLookup map[string]F) ([]int32, error) {
 	idStrs := strings.Split(segment, "-")
 	ids := []int32{}
 
@@ -77,17 +77,17 @@ func checkQueryIdRange[F seeding.Lookupable](queryParam QueryParam, segment stri
 }
 
 func idRangeToSlice[F seeding.Lookupable](queryParam QueryParam, idStrs []string, fLookup map[string]F) ([]int32, error) {
-	minId, err := parseQueryID(idStrs[0], queryParam, len(fLookup))
+	minID, err := parseQueryID(idStrs[0], queryParam, len(fLookup))
 	if err != nil {
 		return nil, err
 	}
 
-	maxId, err := parseQueryID(idStrs[1], queryParam, len(fLookup))
+	maxID, err := parseQueryID(idStrs[1], queryParam, len(fLookup))
 	if err != nil {
 		return nil, err
 	}
 
-	ids := sliceFromIntRange(minId, maxId)
+	ids := sliceFromIntRange(minID, maxID)
 
 	return ids, nil
 }

@@ -66,7 +66,7 @@ func (cfg *Config) getLocationSongIDs(ctx context.Context, id int32) ([]int32, e
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of location with id '%d'.", err)
 	}
 
-	ids := combineIdSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
+	ids := combineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
 	return ids, nil
 }
 
@@ -91,7 +91,7 @@ func (cfg *Config) getSublocationSongIDs(ctx context.Context, id int32) ([]int32
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of sublocation with id '%d'.", err)
 	}
 
-	ids := combineIdSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
+	ids := combineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
 	return ids, nil
 }
 
@@ -116,6 +116,6 @@ func (cfg *Config) getAreaSongIDs(ctx context.Context, id int32) ([]int32, error
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of area with id '%d'.", err)
 	}
 
-	ids := combineIdSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
+	ids := combineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
 	return ids, nil
 }

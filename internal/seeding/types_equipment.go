@@ -7,10 +7,10 @@ import (
 )
 
 type EquipmentTable struct {
-	ID                      int32			`json:"id"`
-	Type                    string 			`json:"type"`
-	Classification          string 			`json:"classification"`
-	SpecificCharacterID     *int32			`json:"specific_character_id"`
+	ID                      int32           `json:"id"`
+	Type                    string          `json:"type"`
+	Classification          string          `json:"classification"`
+	SpecificCharacterID     *int32          `json:"specific_character_id"`
 	SpecificCharacter       *string         `json:"specific_character"`
 	Version                 *int32          `json:"version"`
 	Priority                *int32          `json:"priority"`
@@ -46,7 +46,7 @@ func (e EquipmentTable) GetID() int32 {
 	return e.ID
 }
 
-func (e EquipmentTable) Error() string {
+func (e EquipmentTable) String() string {
 	return fmt.Sprintf("equipment table with type: %s, classification: %s, specific character: %v, version: %v, priority: %v", e.Type, e.Classification, h.PtrToString(e.SpecificCharacter), h.PtrToString(e.Version), h.PtrToString(e.Priority))
 }
 
@@ -57,11 +57,11 @@ func (e EquipmentTable) GetResParamsUnnamed() ResParamsUnnamed {
 }
 
 type AbilityPool struct {
-	ID               int32		`json:"ability_pool_id"`
-	EquipmentTableID int32		`json:"equipment_table_id"`
-	PoolIdx          int32		`json:"pool_idx"`
-	AutoAbilities    []string 	`json:"auto_abilities"`
-	ReqAmount        int32    	`json:"req_amount"`
+	ID               int32    `json:"ability_pool_id"`
+	EquipmentTableID int32    `json:"equipment_table_id"`
+	PoolIdx          int32    `json:"pool_idx"`
+	AutoAbilities    []string `json:"auto_abilities"`
+	ReqAmount        int32    `json:"req_amount"`
 }
 
 func (p AbilityPool) ToHashFields() []any {
@@ -81,13 +81,13 @@ func (p *AbilityPool) SetID(id int32) {
 	p.ID = id
 }
 
-func (p AbilityPool) Error() string {
+func (p AbilityPool) String() string {
 	return fmt.Sprintf("ability pool with equipment table id: %d, req amount: %d", p.EquipmentTableID, p.ReqAmount)
 }
 
 type EquipmentName struct {
-	ID            int32	 `json:"id"`
-	CharacterID   int32	 `json:"character_id"`
+	ID            int32  `json:"id"`
+	CharacterID   int32  `json:"character_id"`
 	CharacterName string `json:"character"`
 	Name          string `json:"name"`
 }
@@ -114,7 +114,7 @@ func (e *EquipmentName) SetID(id int32) {
 	e.ID = id
 }
 
-func (e EquipmentName) Error() string {
+func (e EquipmentName) String() string {
 	return fmt.Sprintf("equipment name %s, character name: %s", e.Name, e.CharacterName)
 }
 

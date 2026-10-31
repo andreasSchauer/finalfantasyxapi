@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList], id int32) (EquipmentName, error) {
+func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedAPIResourceList], id int32) (EquipmentName, error) {
 	equipment, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return EquipmentName{}, err
@@ -36,15 +36,15 @@ func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.Equipmen
 	return response, nil
 }
 
-func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		idListQuery(cfg, r, i, ids, QpnAutoAbilities, cfg.L.AutoAbilities, cfg.db.GetEquipmentIDsByAutoAbility),
-		nameIdQuery(r, i, ids, QpnCharacter, cfg.E.Characters.resTypeSingle, cfg.E.Characters.objLookup, cfg.db.GetEquipmentIDsByCharacter),
+		nameIDQuery(r, i, ids, QpnCharacter, cfg.E.Characters.resTypeSingle, cfg.E.Characters.objLookup, cfg.db.GetEquipmentIDsByCharacter),
 		enumQuery(r, i, cfg.T.EquipType, ids, QpnType, cfg.db.GetEquipmentIDsByEquipType),
 		boolQuery2(r, i, ids, QpnCelestialWeapon, cfg.db.GetEquipmentIDsCelestialWeapon),
 	})

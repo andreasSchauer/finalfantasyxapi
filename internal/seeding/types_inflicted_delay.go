@@ -24,6 +24,6 @@ func (id InflictedDelay) GetID() int32 {
 	return id.ID
 }
 
-func (id InflictedDelay) Error() string {
+func (id InflictedDelay) String() string {
 	return fmt.Sprintf("inflicted delay with delay strength: %s, condition: %v", id.DelayStrength, h.PtrToString(id.Condition))
 }

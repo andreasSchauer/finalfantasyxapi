@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
@@ -24,7 +24,7 @@ func (e expElement) GetTestGeneral() testGeneral {
 func compareElements(test test, exp expElement, got api.Element) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResourcePtrs(test, "status protection", test.cfg.E.StatusConditions.Endpoint, exp.statusProtection, got.StatusProtection)
+	compIDAPIResourcePtrs(test, "status protection", test.cfg.E.StatusConditions.Endpoint, exp.statusProtection, got.StatusProtection)
 	checkResIDsInSlice(test, "auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
 	checkResIDsInSlice(test, "player abilities", test.cfg.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
 	checkResIDsInSlice(test, "overdrive abilities", test.cfg.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)

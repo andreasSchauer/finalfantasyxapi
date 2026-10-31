@@ -25,7 +25,7 @@ func (mf MonsterFilter) IsZero() bool {
 	return mf.RequiredArea == nil &&
 		mf.RequiredSpecies == nil &&
 		mf.CreationsUnlockedCategory == nil &&
-		mf.UnderwaterOnly == false
+		!mf.UnderwaterOnly
 }
 
 func createMonsterFilter(creation seeding.ArenaCreation) MonsterFilter {

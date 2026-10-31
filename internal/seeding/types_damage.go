@@ -45,7 +45,7 @@ func (d *Damage) SetID(id int32) {
 	d.ID = id
 }
 
-func (d Damage) Error() string {
+func (d Damage) String() string {
 	return fmt.Sprintf("damage with attack type: %s, damage type %s, critical: %v, crit plus: %v, piercing: %t, bdl: %v, element: %v", d.AttackType, d.DamageType, h.PtrToString(d.Critical), h.PtrToString(d.CriticalPlusVal), d.IsPiercing, h.PtrToString(d.BreakDmgLimit), h.PtrToString(d.Element))
 }
 
@@ -73,6 +73,6 @@ func (cd *ClassDamage) SetID(id int32) {
 	cd.ID = id
 }
 
-func (cd ClassDamage) Error() string {
+func (cd ClassDamage) String() string {
 	return fmt.Sprintf("class damage with formula: %s, damage constant %d, condition: %v", cd.DamageFormula, cd.DamageConstant, h.PtrToString(cd.Condition))
 }

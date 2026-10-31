@@ -7,16 +7,16 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type UnnamedApiResourceList struct {
+type UnnamedAPIResourceList struct {
 	ListParams
 	Results []UnnamedAPIResource `json:"results"`
 }
 
-func (l UnnamedApiResourceList) GetListParams() ListParams {
+func (l UnnamedAPIResourceList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func (l UnnamedApiResourceList) GetResults() []HasAPIResource {
+func (l UnnamedAPIResourceList) GetResults() []HasAPIResource {
 	return toHasAPIResSlice(l.Results)
 }
 
@@ -41,7 +41,7 @@ func (r UnnamedAPIResource) GetTestKey() string {
 	return fmt.Sprint(r.ID)
 }
 
-func (r UnnamedAPIResource) Error() string {
+func (r UnnamedAPIResource) String() string {
 	return fmt.Sprintf("unnamed api resource with url: %s", r.URL)
 }
 
@@ -59,13 +59,13 @@ func idToUnnamedAPIResource[T seeding.IsUnnamed, R any, A APIResource, L APIReso
 	}
 }
 
-func newUnnamedAPIResourceList(cfg *Config, r *http.Request, resources []UnnamedAPIResource) (UnnamedApiResourceList, error) {
+func newUnnamedAPIResourceList(cfg *Config, r *http.Request, resources []UnnamedAPIResource) (UnnamedAPIResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {
-		return UnnamedApiResourceList{}, err
+		return UnnamedAPIResourceList{}, err
 	}
 
-	list := UnnamedApiResourceList{
+	list := UnnamedAPIResourceList{
 		ListParams: listParams,
 		Results:    shownResources,
 	}

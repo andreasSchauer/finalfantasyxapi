@@ -7,12 +7,12 @@ import (
 )
 
 type Submenu struct {
-	ID          int32	 `json:"id"`
+	ID          int32    `json:"id"`
 	Name        string   `json:"name"`
 	Description *string  `json:"description"`
 	Effect      string   `json:"effect"`
 	Topmenu     *string  `json:"topmenu"`
-	TopmenuID   *int32	 `json:"topmenu_id"`
+	TopmenuID   *int32   `json:"topmenu_id"`
 	Users       []string `json:"users"`
 }
 
@@ -36,7 +36,7 @@ func (s Submenu) GetID() int32 {
 	return s.ID
 }
 
-func (s Submenu) Error() string {
+func (s Submenu) String() string {
 	return fmt.Sprintf("submenu %s", s.Name)
 }
 

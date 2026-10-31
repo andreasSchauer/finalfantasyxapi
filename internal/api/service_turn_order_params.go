@@ -8,7 +8,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-
 type TurnOrderParams struct {
 	TurnsAmt      int32            `json:"turns_amt,omitempty"`
 	IgnFirstTurn  bool             `json:"ign_first_turn,omitempty"`
@@ -169,8 +168,8 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 			Field:         PfnAltState,
 			Type:          "int (idx +1: monster altered states)",
 			RequiresAll:   []FieldName{PfnMonsterID},
-			ParentIdField: pfnPtr(PfnMonsterID),
-			AllowedIdValPairs: []AllowedIdValPairs{
+			ParentIDField: pfnPtr(PfnMonsterID),
+			AllowedIDValPairs: []AllowedIDValPairs{
 				{
 					ID:     32,
 					Values: []int32{2, 3},

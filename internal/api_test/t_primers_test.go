@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -97,5 +97,5 @@ func TestRetrievePrimers(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Primers.Endpoint, "RetrievePrimers", testCfg.HandlePrimers, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Primers.Endpoint, "RetrievePrimers", testCfg.HandlePrimers, compareAPIResourceLists[api.NamedAPIResourceList])
 }

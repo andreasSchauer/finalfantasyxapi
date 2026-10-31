@@ -62,7 +62,7 @@ func (cfg *Config) retrievePlayerUnits(r *http.Request, i handlerInput[seeding.P
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		enumQuery(r, i, cfg.T.UnitType, ids, QpnType, cfg.db.GetPlayerUnitIDsByType),
 	})
 }

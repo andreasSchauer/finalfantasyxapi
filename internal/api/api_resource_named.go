@@ -9,16 +9,16 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type NamedApiResourceList struct {
+type NamedAPIResourceList struct {
 	ListParams
 	Results []NamedAPIResource `json:"results"`
 }
 
-func (l NamedApiResourceList) GetListParams() ListParams {
+func (l NamedAPIResourceList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func (l NamedApiResourceList) GetResults() []HasAPIResource {
+func (l NamedAPIResourceList) GetResults() []HasAPIResource {
 	return toHasAPIResSlice(l.Results)
 }
 
@@ -46,7 +46,7 @@ func (r NamedAPIResource) GetTestKey() string {
 	return h.NameToString(r.Name, r.Version, nil)
 }
 
-func (r NamedAPIResource) Error() string {
+func (r NamedAPIResource) String() string {
 	return fmt.Sprintf("named api resource '%s', url: %s", h.NameToString(r.Name, r.Version, r.Specification), r.URL)
 }
 
@@ -140,13 +140,13 @@ func endpointsToNamedAPIResources(cfg *Config, endpoints []EndpointName) []Named
 	return resources
 }
 
-func newNamedAPIResourceList(cfg *Config, r *http.Request, resources []NamedAPIResource) (NamedApiResourceList, error) {
+func newNamedAPIResourceList(cfg *Config, r *http.Request, resources []NamedAPIResource) (NamedAPIResourceList, error) {
 	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
 	if err != nil {
-		return NamedApiResourceList{}, err
+		return NamedAPIResourceList{}, err
 	}
 
-	list := NamedApiResourceList{
+	list := NamedAPIResourceList{
 		ListParams: listParams,
 		Results:    shownResources,
 	}
@@ -158,14 +158,14 @@ func refsToNamedAPIResources(cfg *Config, refs []seeding.AbilityReference) []Nam
 	abilities := []NamedAPIResource{}
 
 	for _, ref := range refs {
-		abilityRes := refToNamedApiResource(cfg, ref)
+		abilityRes := refToNamedAPIResource(cfg, ref)
 		abilities = append(abilities, abilityRes)
 	}
 
 	return abilities
 }
 
-func refToNamedApiResource(cfg *Config, ref seeding.AbilityReference) NamedAPIResource {
+func refToNamedAPIResource(cfg *Config, ref seeding.AbilityReference) NamedAPIResource {
 	var res NamedAPIResource
 
 	switch database.AbilityType(ref.AbilityType) {

@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -142,5 +142,5 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.OverdriveModes.Endpoint, "RetrieveOverdriveModes", testCfg.HandleOverdriveModes, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.OverdriveModes.Endpoint, "RetrieveOverdriveModes", testCfg.HandleOverdriveModes, compareAPIResourceLists[api.NamedAPIResourceList])
 }

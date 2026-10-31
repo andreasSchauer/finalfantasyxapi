@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -215,5 +215,5 @@ func TestRetrieveCharacterClasses(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.CharacterClasses.Endpoint, "RetrieveCharacterClasses", testCfg.HandleCharacterClasses, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.CharacterClasses.Endpoint, "RetrieveCharacterClasses", testCfg.HandleCharacterClasses, compareAPIResourceLists[api.NamedAPIResourceList])
 }

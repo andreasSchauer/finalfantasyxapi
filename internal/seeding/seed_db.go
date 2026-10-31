@@ -1,3 +1,4 @@
+// Package seeding includes the whole process from mapping the raw JSON files to go structs and populating the database, as well as the lookup that is used for the api
 package seeding
 
 import (

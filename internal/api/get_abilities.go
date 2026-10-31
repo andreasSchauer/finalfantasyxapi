@@ -12,7 +12,7 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		return Ability{}, err
 	}
 
-	monsters, err := getResourcesDbItem(cfg, r.Context(), cfg.E.Monsters, ability, cfg.db.GetAbilityMonsterIDs)
+	monsters, err := getResourcesDBItem(cfg, r.Context(), cfg.E.Monsters, ability, cfg.db.GetAbilityMonsterIDs)
 	if err != nil {
 		return Ability{}, err
 	}
@@ -26,7 +26,7 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seeding.Ability, A
 		Rank:               ability.Rank,
 		CanCopycat:         ability.CanCopycat,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
-		TypedAbility:       refToNamedApiResource(cfg, ability.GetAbilityRef()),
+		TypedAbility:       refToNamedAPIResource(cfg, ability.GetAbilityRef()),
 		Monsters:           monsters,
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
@@ -40,14 +40,14 @@ func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seeding.Abi
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		enumListQuery(cfg, r, i, cfg.T.AbilityType, ids, QpnType, cfg.db.GetAbilityIDsByType),
 		enumListQuery(cfg, r, i, cfg.T.DamageType, ids, QpnDamageType, cfg.db.GetAbilityIDsByDamageType),
 		enumListQuery(cfg, r, i, cfg.T.AttackType, ids, QpnAttackType, cfg.db.GetAbilityIDsByAttackType),
 		enumListQuery(cfg, r, i, cfg.T.TargetType, ids, QpnTargetType, cfg.db.GetAbilityIDsByTargetType),
 		enumQuery(r, i, cfg.T.DamageFormula, ids, QpnDamageFormula, cfg.db.GetAbilityIDsByDamageFormula),
 		intListQuery(cfg, r, i, ids, QpnRank, cfg.db.GetAbilityIDsByRank),
-		nameIdListQueryNul(cfg, r, i, ids, QpnElement, cfg.E.Elements.resTypeSingle, cfg.L.Elements, cfg.db.GetAbilityIDsByElement),
+		nameIDListQueryNul(cfg, r, i, ids, QpnElement, cfg.E.Elements.resTypeSingle, cfg.L.Elements, cfg.db.GetAbilityIDsByElement),
 		idQueryNul(r, i, ids, QpnStatusInflict, cfg.L.StatusConditions, cfg.db.GetAbilityIDsByInflictedStatus),
 		idQueryNul(r, i, ids, QpnStatusRemove, cfg.L.StatusConditions, cfg.db.GetAbilityIDsByRemovedStatus),
 		idQuery(r, i, ids, QpnMonster, cfg.L.MonsterFormations, cfg.db.GetAbilityIDsByMonster),

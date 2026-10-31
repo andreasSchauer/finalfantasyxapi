@@ -22,7 +22,7 @@ func getAreasByItem(cfg *Config, r *http.Request, ctx context.Context, id int32)
 		Methods: h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParamMethods, err)
+		return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParamMethods, err)
 	}
 
 	return dbIDs, nil
@@ -42,7 +42,7 @@ func getSublocationsByItem(cfg *Config, r *http.Request, ctx context.Context, id
 		Methods: h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParamMethods, err)
+		return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParamMethods, err)
 	}
 
 	return dbIDs, nil
@@ -62,7 +62,7 @@ func getLocationsByItem(cfg *Config, r *http.Request, ctx context.Context, id in
 		Methods: h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParamMethods, err)
+		return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParamMethods, err)
 	}
 
 	return dbIDs, nil

@@ -4,7 +4,7 @@ type HasID interface {
 	GetID() int32
 }
 
-func SortOnId[T HasID](a, b T) int {
+func SortOnID[T HasID](a, b T) int {
 	if a.GetID() < b.GetID() {
 		return -1
 	}

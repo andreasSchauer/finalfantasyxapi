@@ -19,25 +19,25 @@ func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seedi
 
 	g.Go(func() error {
 		var err error
-		rel.ConnectedSublocations, err = getResourcesDbItem(cfg, r.Context(), cfg.E.Sublocations, sublocation, cfg.db.GetConnectedSublocationIDs)
+		rel.ConnectedSublocations, err = getResourcesDBItem(cfg, r.Context(), cfg.E.Sublocations, sublocation, cfg.db.GetConnectedSublocationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = getResourcesDbItem(cfg, r.Context(), cfg.E.Areas, sublocation, cfg.db.GetSublocationAreaIDs)
+		rel.Areas, err = getResourcesDBItem(cfg, r.Context(), cfg.E.Areas, sublocation, cfg.db.GetSublocationAreaIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Characters, err = getResourcesDbItem(cfg, ctx, cfg.E.Characters, sublocation, cfg.db.GetSublocationCharacterIDs)
+		locRel.Characters, err = getResourcesDBItem(cfg, ctx, cfg.E.Characters, sublocation, cfg.db.GetSublocationCharacterIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Aeons, err = getResourcesDbItem(cfg, ctx, cfg.E.Aeons, sublocation, cfg.db.GetSublocationAeonIDs)
+		locRel.Aeons, err = getResourcesDBItem(cfg, ctx, cfg.E.Aeons, sublocation, cfg.db.GetSublocationAeonIDs)
 		return err
 	})
 
@@ -84,7 +84,7 @@ func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seedi
 
 	g.Go(func() error {
 		var err error
-		locRel.FMVs, err = getResourcesDbItem(cfg, ctx, cfg.E.FMVs, sublocation, cfg.db.GetSublocationFmvIDs)
+		locRel.FMVs, err = getResourcesDBItem(cfg, ctx, cfg.E.FMVs, sublocation, cfg.db.GetSublocationFmvIDs)
 		return err
 	})
 

@@ -9,6 +9,9 @@ import (
 
 func (l *Lookup) loop2SeedKeyItems(qtx *database.Queries, ctx context.Context) error {
 	keyItems, err := l.extractKeyItems()
+	if err != nil {
+		return err
+	}
 
 	params := database.CreateKeyItemBulkParams{
 		DataHash:     make([]string, len(keyItems)),

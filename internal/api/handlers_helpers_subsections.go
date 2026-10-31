@@ -134,7 +134,7 @@ func getIDsQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 		return i.retrieveFunc(r, i)
 	}
 
-	ids, err := parseIdListQuery(cfg, r, queryParamIDs, i.objLookup)
+	ids, err := parseIDListQuery(cfg, r, queryParamIDs, i.objLookup)
 	if err != nil {
 		return nil, err
 	}

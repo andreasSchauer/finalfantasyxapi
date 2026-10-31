@@ -1,11 +1,11 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
 type expTurnOrderResponse struct {
 	testGeneral
 	api.TurnOrderResponse
-	testTurnOrder		[]testBattleTurn
+	testTurnOrder []testBattleTurn
 }
 
 func (e expTurnOrderResponse) GetTestGeneral() testGeneral {
@@ -40,7 +40,7 @@ func compareParticipants(test test, fieldName string, exp, got api.Participant) 
 }
 
 type testBattleTurn struct {
-	index		int
+	index       int
 	turn        int32
 	currentTick int32
 	name        string

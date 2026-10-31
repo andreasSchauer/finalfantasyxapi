@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList], id int32) (Sublocation, error) {
+func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedAPIResourceList], id int32) (Sublocation, error) {
 	sublocation, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Sublocation{}, err
@@ -30,13 +30,13 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seeding.Subloc
 	return response, nil
 }
 
-func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seeding.Sublocation, Sublocation, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationSublocationIDs),
 		idQuery(r, i, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetSublocationIDsWithMonster),
 		idQueryWrapper(cfg, r, i, ids, QpnItem, cfg.L.Items, getSublocationsByItem),

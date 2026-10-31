@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -117,5 +117,5 @@ func TestRetrieveArenaCreations(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.ArenaCreations.Endpoint, "RetrieveArenaCreations", testCfg.HandleArenaCreations, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.ArenaCreations.Endpoint, "RetrieveArenaCreations", testCfg.HandleArenaCreations, compareAPIResourceLists[api.NamedAPIResourceList])
 }

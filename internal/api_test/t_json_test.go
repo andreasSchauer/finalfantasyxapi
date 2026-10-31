@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -14,12 +14,12 @@ func TestReadJsonRequest_Malformed(t *testing.T) {
 		Name string `json:"name"`
 	}
 
-	_, _, err := api.ReadJsonRequest(malformedData, MockPayload{}, "custom decode error")
+	_, _, err := api.ReadJSONRequest(malformedData, MockPayload{}, "custom decode error")
 	if err == nil {
 		t.Fatal("expected an error for malformed JSON, got nil")
 	}
 
-	httpErr, ok := err.(api.HttpError)
+	httpErr, ok := err.(api.HTTPError)
 	if !ok || httpErr.Code != http.StatusBadRequest {
 		t.Errorf("expected status 400, got %v", err)
 	}

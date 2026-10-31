@@ -6,13 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList], id int32) (Sidequest, error) {
+func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestAPIResourceList], id int32) (Sidequest, error) {
 	sidequest, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Sidequest{}, err
 	}
 
-	subquests, err := getResourcesDbItem(cfg, r.Context(), cfg.E.Subquests, sidequest, cfg.db.GetSidequestSubquestIDs)
+	subquests, err := getResourcesDBItem(cfg, r.Context(), cfg.E.Subquests, sidequest, cfg.db.GetSidequestSubquestIDs)
 	if err != nil {
 		return Sidequest{}, err
 	}
@@ -30,11 +30,11 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seeding.Sideques
 	return response, nil
 }
 
-func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveSidequests(r *http.Request, i handlerInput[seeding.Sidequest, Sidequest, QuestAPIResource, QuestAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{})
+	return filterIDs(cfg, r, i, ids, []IDFilter{})
 }

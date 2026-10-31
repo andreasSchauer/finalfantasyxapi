@@ -11,6 +11,9 @@ import (
 
 func (l *Lookup) loop2SeedItems(qtx *database.Queries, ctx context.Context) error {
 	items, err := l.extractItems()
+	if err != nil {
+		return err
+	}
 
 	params := database.CreateItemBulkParams{
 		DataHash:     make([]string, len(items)),

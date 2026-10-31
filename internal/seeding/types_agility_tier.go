@@ -7,7 +7,7 @@ import (
 )
 
 type AgilityTier struct {
-	ID               int32			  `json:"id"`
+	ID               int32            `json:"id"`
 	MinAgility       int32            `json:"min_agility"`
 	MaxAgility       int32            `json:"max_agility"`
 	TickSpeed        int32            `json:"tick_speed"`
@@ -40,7 +40,7 @@ func (a AgilityTier) GetID() int32 {
 	return a.ID
 }
 
-func (a AgilityTier) Error() string {
+func (a AgilityTier) String() string {
 	return fmt.Sprintf("agility tier with min agility: %d, max agility: %d", a.MinAgility, a.MaxAgility)
 }
 
@@ -51,11 +51,11 @@ func (a AgilityTier) GetResParamsUnnamed() ResParamsUnnamed {
 }
 
 type AgilitySubtier struct {
-	ID              int32	`json:"subtier_id"`
-	AgilityTierID   int32	`json:"agility_tier_id"`
-	MinAgility      int32  	`json:"subtier_min_agility"`
-	MaxAgility      int32  	`json:"subtier_max_agility"`
-	CharacterMinICV *int32 	`json:"character_min_icv"`
+	ID              int32  `json:"subtier_id"`
+	AgilityTierID   int32  `json:"agility_tier_id"`
+	MinAgility      int32  `json:"subtier_min_agility"`
+	MaxAgility      int32  `json:"subtier_max_agility"`
+	CharacterMinICV *int32 `json:"character_min_icv"`
 }
 
 func (a AgilitySubtier) ToHashFields() []any {
@@ -76,6 +76,6 @@ func (a *AgilitySubtier) SetID(id int32) {
 	a.ID = id
 }
 
-func (a AgilitySubtier) Error() string {
+func (a AgilitySubtier) String() string {
 	return fmt.Sprintf("agility subtier with min agility: %d, max agility: %d", a.MinAgility, a.MaxAgility)
 }

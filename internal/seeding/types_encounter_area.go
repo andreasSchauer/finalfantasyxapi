@@ -7,11 +7,11 @@ import (
 )
 
 type EncounterArea struct {
-	ID            int32			`json:"id"`
-	LocationArea  LocationArea  `json:"location_area"`
-	AreaID        int32			`json:"area_id"`
-	Specification *string 		`json:"specification"`
-	Availability  string		`json:"availability"`
+	ID            int32        `json:"id"`
+	LocationArea  LocationArea `json:"location_area"`
+	AreaID        int32        `json:"area_id"`
+	Specification *string      `json:"specification"`
+	Availability  string       `json:"availability"`
 }
 
 func (ea EncounterArea) ToHashFields() []any {
@@ -38,7 +38,7 @@ func (ea *EncounterArea) SetID(id int32) {
 	ea.ID = id
 }
 
-func (ea EncounterArea) Error() string {
+func (ea EncounterArea) String() string {
 	return fmt.Sprintf("encounter location with %s, specification: %s", ea.LocationArea, h.PtrToString(ea.Specification))
 }
 

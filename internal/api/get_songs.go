@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList], id int32) (Song, error) {
+func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource, NamedAPIResourceList], id int32) (Song, error) {
 	song, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Song{}, err
@@ -47,13 +47,13 @@ func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, N
 	return response, nil
 }
 
-func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationSongIDs),
 		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationSongIDs),
 		idQuery(r, i, ids, QpnArea, cfg.L.Areas, cfg.db.GetAreaSongIDs),

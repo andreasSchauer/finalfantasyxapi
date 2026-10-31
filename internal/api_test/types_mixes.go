@@ -1,9 +1,10 @@
-package apiTest
+package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
+
 type expMix struct {
 	testGeneral
 	expUnique
@@ -20,7 +21,7 @@ func compareMixes(test test, exp expMix, got api.Mix) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "category", string(exp.category), got.Category)
-	compIdApiResource(test, "overdrive", test.cfg.E.Overdrives.Endpoint, exp.overdrive, got.Overdrive)
+	compIDAPIResource(test, "overdrive", test.cfg.E.Overdrives.Endpoint, exp.overdrive, got.Overdrive)
 	checkTestStructsInSlice(test, "combinations", exp.combinations, got.Combinations, compareMixCombinations)
 }
 
@@ -36,6 +37,6 @@ func (mc testMixCombination) GetIndex() int {
 
 func compareMixCombinations(test test, fieldName string, exp testMixCombination, got api.MixCombination) {
 	test.t.Helper()
-	compIdApiResource(test, fieldName+" - first item", test.cfg.E.Items.Endpoint, exp.firstItem, got.FirstItem)
-	compIdApiResource(test, fieldName+" - second item", test.cfg.E.Items.Endpoint, exp.secondItem, got.SecondItem)
+	compIDAPIResource(test, fieldName+" - first item", test.cfg.E.Items.Endpoint, exp.firstItem, got.FirstItem)
+	compIDAPIResource(test, fieldName+" - second item", test.cfg.E.Items.Endpoint, exp.secondItem, got.SecondItem)
 }

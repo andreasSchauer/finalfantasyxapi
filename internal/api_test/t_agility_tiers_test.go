@@ -1,9 +1,8 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
 	"testing"
-
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -28,7 +27,7 @@ func TestGetAgilityTier(t *testing.T) {
 					"char min icvs": 9,
 				},
 			},
-			expIdOnly:   newExpIdOnly(15),
+			expIDOnly:   newExpIDOnly(15),
 			fromAgility: 35,
 			toAgility:   43,
 			tickSpeed:   7,
@@ -109,5 +108,5 @@ func TestRetrieveAgilityTiers(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.AgilityTiers.Endpoint, "RetrieveAgilityTiers", testCfg.HandleAgilityTiers, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.AgilityTiers.Endpoint, "RetrieveAgilityTiers", testCfg.HandleAgilityTiers, compareAPIResourceLists[api.NamedAPIResourceList])
 }

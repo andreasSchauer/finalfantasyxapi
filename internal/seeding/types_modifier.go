@@ -7,7 +7,7 @@ import (
 )
 
 type Modifier struct {
-	ID           int32	  `json:"id"`
+	ID           int32    `json:"id"`
 	Name         string   `json:"name"`
 	Effect       string   `json:"effect"`
 	Category     string   `json:"type"`
@@ -34,7 +34,7 @@ func (m Modifier) GetID() int32 {
 	return m.ID
 }
 
-func (m Modifier) Error() string {
+func (m Modifier) String() string {
 	return fmt.Sprintf("modifier %s", m.Name)
 }
 

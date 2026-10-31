@@ -8,8 +8,8 @@ import (
 )
 
 type MonsterEquipment struct {
-	ID                int32					`json:"id"`
-	MonsterID         int32					`json:"monster_id"`
+	ID                int32                 `json:"id"`
+	MonsterID         int32                 `json:"monster_id"`
 	DropChance        int32                 `json:"drop_chance"`
 	Power             int32                 `json:"power"`
 	CriticalPlus      int32                 `json:"critical_plus"`
@@ -37,17 +37,17 @@ func (m *MonsterEquipment) SetID(id int32) {
 	m.ID = id
 }
 
-func (m MonsterEquipment) Error() string {
+func (m MonsterEquipment) String() string {
 	return fmt.Sprintf("monster equipment of monster with id %d", m.MonsterID)
 }
 
 type MonsterEquipmentSlots struct {
-	ID                 int32				  		`json:"id"`
-	MonsterEquipmentID int32				  		`json:"monster_equipment_id"`
-	MinAmount          int32                  		`json:"min_amount"`
-	MaxAmount          int32                  		`json:"max_amount"`
-	Chances            []EquipmentSlotsChance 		`json:"chances"`
-	Type               database.EquipmentSlotsType	`json:"type"`
+	ID                 int32                       `json:"id"`
+	MonsterEquipmentID int32                       `json:"monster_equipment_id"`
+	MinAmount          int32                       `json:"min_amount"`
+	MaxAmount          int32                       `json:"max_amount"`
+	Chances            []EquipmentSlotsChance      `json:"chances"`
+	Type               database.EquipmentSlotsType `json:"type"`
 }
 
 func (m MonsterEquipmentSlots) ToHashFields() []any {
@@ -68,7 +68,7 @@ func (m *MonsterEquipmentSlots) SetID(id int32) {
 	m.ID = id
 }
 
-func (m MonsterEquipmentSlots) Error() string {
+func (m MonsterEquipmentSlots) String() string {
 	return fmt.Sprintf("monster equipment slots with monster equipment id: %d, type: %s, min amount: %d, max amount: %d", m.ID, m.Type, m.MinAmount, m.MaxAmount)
 }
 
@@ -94,18 +94,18 @@ func (e *EquipmentSlotsChance) SetID(id int32) {
 	e.ID = id
 }
 
-func (e EquipmentSlotsChance) Error() string {
+func (e EquipmentSlotsChance) String() string {
 	return fmt.Sprintf("equipment slots chance with amount: %d, chance: %d", e.Amount, e.Chance)
 }
 
 type EquipmentDrop struct {
-	ID            int32					`json:"id"`
-	AutoAbilityID int32					`json:"auto_ability_id"`
-	Ability       string   				`json:"ability"`
-	Characters    []string 				`json:"characters"`
-	IsForced      bool     				`json:"is_forced"`
-	Probability   *int32   				`json:"probability"`
-	Type          database.EquipType	`json:"type"`
+	ID            int32              `json:"id"`
+	AutoAbilityID int32              `json:"auto_ability_id"`
+	Ability       string             `json:"ability"`
+	Characters    []string           `json:"characters"`
+	IsForced      bool               `json:"is_forced"`
+	Probability   *int32             `json:"probability"`
+	Type          database.EquipType `json:"type"`
 }
 
 func (e EquipmentDrop) ToHashFields() []any {
@@ -126,6 +126,6 @@ func (e *EquipmentDrop) SetID(id int32) {
 	e.ID = id
 }
 
-func (e EquipmentDrop) Error() string {
+func (e EquipmentDrop) String() string {
 	return fmt.Sprintf("equipment drop with auto-ability id: %d, type: %s, is forced: %t, probability: %v", e.AutoAbilityID, e.Type, e.IsForced, h.PtrToString(e.Probability))
 }

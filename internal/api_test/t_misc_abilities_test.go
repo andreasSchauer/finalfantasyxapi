@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -288,7 +288,7 @@ func TestGetMultipleMiscAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.MiscAbilities.Endpoint, "GetMultipleMiscAbilities", testCfg.HandleMiscAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.MiscAbilities.Endpoint, "GetMultipleMiscAbilities", testCfg.HandleMiscAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestRetrieveMiscAbilities(t *testing.T) {
@@ -336,5 +336,5 @@ func TestRetrieveMiscAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.MiscAbilities.Endpoint, "RetrieveMiscAbilities", testCfg.HandleMiscAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.MiscAbilities.Endpoint, "RetrieveMiscAbilities", testCfg.HandleMiscAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
 }

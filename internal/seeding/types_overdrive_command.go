@@ -7,10 +7,10 @@ import (
 )
 
 type OverdriveCommand struct {
-	ID          int32	`json:"id"`
-	CharClassID *int32	`json:"char_class_id"`
-	TopmenuID   *int32	`json:"topmenu_id"`
-	SubmenuID   *int32	`json:"submenu_id"`
+	ID          int32   `json:"id"`
+	CharClassID *int32  `json:"char_class_id"`
+	TopmenuID   *int32  `json:"topmenu_id"`
+	SubmenuID   *int32  `json:"submenu_id"`
 	Name        string  `json:"name"`
 	Description string  `json:"description"`
 	User        string  `json:"user"`
@@ -42,7 +42,7 @@ func (o OverdriveCommand) GetID() int32 {
 	return o.ID
 }
 
-func (o OverdriveCommand) Error() string {
+func (o OverdriveCommand) String() string {
 	return fmt.Sprintf("overdrive command %s", o.Name)
 }
 

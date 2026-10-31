@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
@@ -18,7 +18,7 @@ func (e expSublocation) GetTestGeneral() testGeneral {
 func compareSublocations(test test, exp expSublocation, got api.Sublocation) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResource(test, "location", test.cfg.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)
+	compIDAPIResource(test, "location", test.cfg.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)
 	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
 	checkResIDsInSlice(test, "connected sublocations", test.cfg.E.Sublocations.Endpoint, exp.connectedSublocations, got.ConnectedSublocations)
 	checkResIDsInSlice(test, "areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)

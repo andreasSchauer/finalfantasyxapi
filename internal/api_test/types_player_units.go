@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
@@ -23,8 +23,8 @@ func comparePlayerUnits(test test, exp expPlayerUnit, got api.PlayerUnit) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "unit type", string(exp.unitType), string(got.Type))
-	compPathApiResource(test, "typed unit", exp.typedUnit, got.TypedUnit)
-	compIdApiResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
-	compIdApiResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
+	compPathAPIResource(test, "typed unit", exp.typedUnit, got.TypedUnit)
+	compIDAPIResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
+	compIDAPIResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
 	checkResIDsInSlice(test, "character classes", test.cfg.E.CharacterClasses.Endpoint, exp.characterClasses, got.CharacterClasses)
 }

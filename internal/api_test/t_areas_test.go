@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -663,7 +663,7 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Areas.Endpoint, "RetrieveAreas", testCfg.HandleAreas, compareAPIResourceLists[api.AreaApiResourceList])
+	testIDList(t, tests, testCfg.E.Areas.Endpoint, "RetrieveAreas", testCfg.HandleAreas, compareAPIResourceLists[api.AreaAPIResourceList])
 }
 
 func TestSubsectionAreas(t *testing.T) {
@@ -771,5 +771,5 @@ func TestSubsectionAreas(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Areas.Endpoint, "SubsectionAreas", nil, compareSimpleResourceLists[api.AreaAPIResource, api.AreaSimple])
+	testIDList(t, tests, testCfg.E.Areas.Endpoint, "SubsectionAreas", nil, compareSimpleResourceLists[api.AreaAPIResource, api.AreaSimple])
 }

@@ -9,7 +9,7 @@ import (
 )
 
 // validates name/id-queryParam and checks emptiness. returns the corresponding id.
-func parseNameIdQuery[P seeding.Lookupable](r *http.Request, queryParam QueryParam, pResType ResTypeSingle, pLookup map[string]P) (int32, error) {
+func parseNameIDQuery[P seeding.Lookupable](r *http.Request, queryParam QueryParam, pResType ResTypeSingle, pLookup map[string]P) (int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return 0, err

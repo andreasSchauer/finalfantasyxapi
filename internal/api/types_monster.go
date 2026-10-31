@@ -56,7 +56,7 @@ type Monster struct {
 	AlteredStates        []AlteredState       `json:"altered_states"`
 }
 
-func (m Monster) Error() string {
+func (m Monster) String() string {
 	return fmt.Sprintf("monster '%s'", h.NameToString(m.Name, m.Version, m.Specification))
 }
 

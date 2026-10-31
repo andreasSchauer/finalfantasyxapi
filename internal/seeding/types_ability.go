@@ -8,13 +8,13 @@ import (
 )
 
 type Ability struct {
-	ID            int32						`json:"ability_id,omitempty"`
-	Name          string 					`json:"name"`
-	Version       *int32 					`json:"version"`
-	Specification *string 					`json:"specification"`
-	Type          database.AbilityType		`json:"type,omitempty"`
+	ID            int32                `json:"ability_id,omitempty"`
+	Name          string               `json:"name"`
+	Version       *int32               `json:"version"`
+	Specification *string              `json:"specification"`
+	Type          database.AbilityType `json:"type,omitempty"`
 	Attributes
-	BattleInteractions []BattleInteraction 	`json:"battle_interactions,omitempty"`
+	BattleInteractions []BattleInteraction `json:"battle_interactions,omitempty"`
 }
 
 func (a Ability) ToHashFields() []any {
@@ -40,7 +40,7 @@ func (a Ability) GetID() int32 {
 	return a.ID
 }
 
-func (a Ability) Error() string {
+func (a Ability) String() string {
 	return fmt.Sprintf("ability '%s', type %s", h.NameToString(a.Name, a.Version, a.Specification), a.Type)
 }
 
@@ -63,7 +63,7 @@ func (a Ability) GetResParamsTyped() ResParamsTyped {
 }
 
 type Attributes struct {
-	ID               int32	`json:"attributes_id,omitempty"`
+	ID               int32  `json:"attributes_id,omitempty"`
 	Rank             *int32 `json:"rank"`
 	AppearsInHelpBar bool   `json:"appears_in_help_bar"`
 	CanCopycat       bool   `json:"can_copycat"`
@@ -82,6 +82,6 @@ func (a Attributes) GetID() int32 {
 	return a.ID
 }
 
-func (a Attributes) Error() string {
+func (a Attributes) String() string {
 	return fmt.Sprintf("ability attributes with rank: %v, help bar: %t, copycat: %t", h.PtrToString(a.Rank), a.AppearsInHelpBar, a.CanCopycat)
 }

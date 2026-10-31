@@ -1,11 +1,11 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
 // checks presence of two pointers
 func bothPtrsPresent[E, G any](test test, fieldName string, exp *E, got *G) bool {
 	test.t.Helper()
-	
+
 	switch {
 	case exp == nil && got == nil:
 		return false

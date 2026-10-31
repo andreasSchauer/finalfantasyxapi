@@ -7,10 +7,10 @@ import (
 )
 
 type ShopItem struct {
-	ID     int32	`json:"id"`
-	ItemID int32	`json:"item_id"`
-	Name   string 	`json:"name"`
-	Price  int32  	`json:"price"`
+	ID     int32  `json:"id"`
+	ItemID int32  `json:"item_id"`
+	Name   string `json:"name"`
+	Price  int32  `json:"price"`
 }
 
 func (s ShopItem) ToHashFields() []any {
@@ -36,16 +36,16 @@ func (s *ShopItem) SetID(id int32) {
 	s.ID = id
 }
 
-func (s ShopItem) Error() string {
+func (s ShopItem) String() string {
 	return fmt.Sprintf("shop item %s, price %d", s.Name, s.Price)
 }
 
 type ShopEquipment struct {
-	ID       int32				`json:"id"`
-	ShopID   int32				`json:"shop_id"`
-	ShopType database.ShopType	`json:"type"`
+	ID       int32             `json:"id"`
+	ShopID   int32             `json:"shop_id"`
+	ShopType database.ShopType `json:"type"`
 	TreasureEquipment
-	Price int32 				`json:"price"`
+	Price int32 `json:"price"`
 }
 
 func (s ShopEquipment) ToHashFields() []any {
@@ -75,6 +75,6 @@ func (s *ShopEquipment) SetID(id int32) {
 	s.ID = id
 }
 
-func (s ShopEquipment) Error() string {
+func (s ShopEquipment) String() string {
 	return fmt.Sprintf("shop equipment %s, empty slots %d, price %d", s.Name, s.EmptySlotsAmount, s.Price)
 }

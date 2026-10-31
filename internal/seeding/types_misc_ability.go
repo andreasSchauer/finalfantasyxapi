@@ -8,19 +8,19 @@ import (
 )
 
 type MiscAbility struct {
-	ID 				   int32			   `json:"id,omitempty"`
+	ID int32 `json:"id,omitempty"`
 	Ability
-	TopmenuID          *int32			   `json:"topmenu_id,omitempty"`
-	SubmenuID          *int32			   `json:"submenu_id,omitempty"`
-	OpenSubmenuID      *int32			   `json:"open_submenu_id,omitempty"`
-	Description        string              `json:"description"`
-	Effect             string              `json:"effect"`
-	RelatedStats       []string            `json:"related_stats"`
-	Topmenu            *string             `json:"topmenu"`
-	Submenu            *string             `json:"submenu"`
-	OpenSubmenu        *string             `json:"open_submenu"`
-	LearnedBy          []string            `json:"learned_by"`
-	Cursor             *string             `json:"cursor"`
+	TopmenuID     *int32   `json:"topmenu_id,omitempty"`
+	SubmenuID     *int32   `json:"submenu_id,omitempty"`
+	OpenSubmenuID *int32   `json:"open_submenu_id,omitempty"`
+	Description   string   `json:"description"`
+	Effect        string   `json:"effect"`
+	RelatedStats  []string `json:"related_stats"`
+	Topmenu       *string  `json:"topmenu"`
+	Submenu       *string  `json:"submenu"`
+	OpenSubmenu   *string  `json:"open_submenu"`
+	LearnedBy     []string `json:"learned_by"`
+	Cursor        *string  `json:"cursor"`
 }
 
 func (u MiscAbility) ToHashFields() []any {
@@ -55,7 +55,7 @@ func (u MiscAbility) GetAbilityRef() AbilityReference {
 	}
 }
 
-func (u MiscAbility) Error() string {
+func (u MiscAbility) String() string {
 	return fmt.Sprintf("misc ability '%s'", h.NameToString(u.Name, u.Version, u.Specification))
 }
 

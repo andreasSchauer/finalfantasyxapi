@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -54,7 +54,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIdOnly:       newExpIdOnly(199),
+			expIDOnly:       newExpIDOnly(199),
 			area:            158,
 			availability:    database.AvailabilityTypePreStory,
 			isAnimaTreasure: false,
@@ -73,7 +73,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIdOnly:       newExpIdOnly(13),
+			expIDOnly:       newExpIDOnly(13),
 			area:            15,
 			availability:    database.AvailabilityTypePreStory,
 			isAnimaTreasure: false,
@@ -92,7 +92,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIdOnly:       newExpIdOnly(62),
+			expIDOnly:       newExpIDOnly(62),
 			area:            60,
 			availability:    database.AvailabilityTypeAlways,
 			isAnimaTreasure: true,
@@ -113,7 +113,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIdOnly:       newExpIdOnly(284),
+			expIDOnly:       newExpIDOnly(284),
 			area:            212,
 			availability:    database.AvailabilityTypeAlways,
 			isAnimaTreasure: false,
@@ -130,7 +130,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIdOnly:       newExpIdOnly(45),
+			expIDOnly:       newExpIDOnly(45),
 			area:            42,
 			availability:    database.AvailabilityTypePost,
 			isAnimaTreasure: false,
@@ -232,7 +232,7 @@ func TestRetrieveTreasures(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Treasures.Endpoint, "RetrieveTreasures", testCfg.HandleTreasures, compareAPIResourceLists[api.UnnamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Treasures.Endpoint, "RetrieveTreasures", testCfg.HandleTreasures, compareAPIResourceLists[api.UnnamedAPIResourceList])
 }
 
 func TestSubsectionTreasures(t *testing.T) {
@@ -270,5 +270,5 @@ func TestSubsectionTreasures(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Treasures.Endpoint, "SubsectionTreasures", nil, compareSimpleResourceLists[api.UnnamedAPIResource, api.TreasureSimple])
+	testIDList(t, tests, testCfg.E.Treasures.Endpoint, "SubsectionTreasures", nil, compareSimpleResourceLists[api.UnnamedAPIResource, api.TreasureSimple])
 }

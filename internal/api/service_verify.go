@@ -63,9 +63,12 @@ func verifyParamFieldObj[T any](cfg *Config, obj T, fieldName FieldName, userVal
 		return zero, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find value map of field '%s'", fieldName), nil)
 	}
 
+	// connect fields with dots somehow
+	errStart := fmt.Sprintf("object at field '%s'", fieldName)
+
 	obj, err = verifyParamField(cfg, obj, fieldName, childValMap, paramsRules[fieldName].Children, verifyFn)
 	if err != nil {
-		return zero, err
+		return zero, cascadeHTTPError(errStart, err)
 	}
 
 	return obj, nil
@@ -114,7 +117,7 @@ func verifyParamFieldArr[T any](cfg *Config, arr []T, fieldName FieldName, userV
 	}
 
 	for i, item := range arr {
-		errStart := fmt.Sprintf("index %d of field '%s'", i, fieldName)
+		errStart := fmt.Sprintf("index %d of array at field '%s'", i, fieldName)
 		rawItem := valSlice[i]
 
 		childValMap, ok := rawItem.(map[FieldName]any)
@@ -124,14 +127,14 @@ func verifyParamFieldArr[T any](cfg *Config, arr []T, fieldName FieldName, userV
 
 		arr[i], err = verifyFn(cfg, item, fieldName, childValMap, paramsRules[fieldName].Children)
 		if err != nil {
-			return nil, editHTTPError(errStart, err)
+			return nil, cascadeHTTPError(errStart, err)
 		}
 	}
 
 	return arr, nil
 }
 
-func verifyParamFieldIdArr(cfg *Config, arr []int32, fieldName FieldName, userValues map[FieldName]any, paramsRules ParamsRules) ([]int32, error) {
+func verifyParamFieldIDArr(cfg *Config, arr []int32, fieldName FieldName, userValues map[FieldName]any, paramsRules ParamsRules) ([]int32, error) {
 	arr, err := basicFieldChecks(arr, fieldName, userValues, paramsRules)
 	if err != nil {
 		return nil, err
@@ -148,15 +151,15 @@ func verifyParamFieldIdArr(cfg *Config, arr []int32, fieldName FieldName, userVa
 	isDupe := make(map[int32]bool)
 
 	for i, val := range arr {
-		errStart := fmt.Sprintf("index %d of field '%s'", i, fieldName)
+		errStart := fmt.Sprintf("index %d of array at field '%s'", i, fieldName)
 
 		if isDupe[val] {
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s: array of field '%s' can't have duplicate ids.", errStart, fieldName), nil)
 		}
 
-		arr[i], err = vfArrayChildId(nil, val, fieldName, nil, paramsRules)
+		arr[i], err = vfArrayChildID(nil, val, fieldName, nil, paramsRules)
 		if err != nil {
-			return nil, editHTTPError(errStart, err)
+			return nil, cascadeHTTPError(errStart, err)
 		}
 
 		isDupe[val] = true

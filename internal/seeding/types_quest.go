@@ -7,12 +7,12 @@ import (
 )
 
 type Quest struct {
-	ID           int32			  	`json:"quest_id"`
-	Name         string           	`json:"name"`
-	Availability string           	`json:"availability"`
-	IsRepeatable bool             	`json:"is_repeatable"`
-	Completion   *QuestCompletion 	`json:"completion"`
-	Type         database.QuestType	`json:"type"`
+	ID           int32              `json:"quest_id"`
+	Name         string             `json:"name"`
+	Availability string             `json:"availability"`
+	IsRepeatable bool               `json:"is_repeatable"`
+	Completion   *QuestCompletion   `json:"completion"`
+	Type         database.QuestType `json:"type"`
 }
 
 func (q Quest) ToHashFields() []any {
@@ -35,7 +35,7 @@ func (q Quest) GetID() int32 {
 	return q.ID
 }
 
-func (q Quest) Error() string {
+func (q Quest) String() string {
 	return fmt.Sprintf("quest %s, type %s", q.Name, q.Type)
 }
 

@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
@@ -13,6 +13,6 @@ type testElemResist struct {
 func compareElemResists(test test, fieldName string, exp testElemResist, got api.ElementalResist) {
 	test.t.Helper()
 
-	compIdApiResource(test, fieldName+" - elements", test.cfg.E.Elements.Endpoint, exp.element, got.Element)
+	compIDAPIResource(test, fieldName+" - elements", test.cfg.E.Elements.Endpoint, exp.element, got.Element)
 	compare(test, fieldName+" - affinities", string(exp.affinity), got.Affinity)
 }

@@ -34,10 +34,10 @@ func (m LocBasedMusic) IsZero() bool {
 }
 
 type LocBasedMusicQueries struct {
-	CueSongs  DbQueryIntMany
-	BmSongs   DbQueryIntMany
-	FMVSongs  DbQueryIntMany
-	BossMusic DbQueryIntMany
+	CueSongs  DBQueryIntMany
+	BmSongs   DBQueryIntMany
+	FMVSongs  DBQueryIntMany
+	BossMusic DBQueryIntMany
 }
 
 func getMusicLocBased(cfg *Config, ctx context.Context, item seeding.Lookupable, queries LocBasedMusicQueries) (*LocBasedMusic, error) {
@@ -47,25 +47,25 @@ func getMusicLocBased(cfg *Config, ctx context.Context, item seeding.Lookupable,
 
 	g.Go(func() error {
 		var err error
-		music.Cues, err = getResourcesDbItem(cfg, ctx, i, item, queries.CueSongs)
+		music.Cues, err = getResourcesDBItem(cfg, ctx, i, item, queries.CueSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.BackgroundMusic, err = getResourcesDbItem(cfg, ctx, i, item, queries.BmSongs)
+		music.BackgroundMusic, err = getResourcesDBItem(cfg, ctx, i, item, queries.BmSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.FMVs, err = getResourcesDbItem(cfg, ctx, i, item, queries.FMVSongs)
+		music.FMVs, err = getResourcesDBItem(cfg, ctx, i, item, queries.FMVSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.BossMusic, err = getResourcesDbItem(cfg, ctx, i, item, queries.BossMusic)
+		music.BossMusic, err = getResourcesDBItem(cfg, ctx, i, item, queries.BossMusic)
 		return err
 	})
 

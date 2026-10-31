@@ -29,13 +29,13 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = getResourcesDbItem(cfg, ctx, cfg.E.CharacterClasses, char, cfg.db.GetCharacterCharClassIDs)
+		rel.CharacterClasses, err = getResourcesDBItem(cfg, ctx, cfg.E.CharacterClasses, char, cfg.db.GetCharacterCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.PlayerAbilities, char, cfg.db.GetCharacterDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.PlayerAbilities, char, cfg.db.GetCharacterDefaultAbilityIDs)
 		return err
 	})
 
@@ -43,14 +43,14 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 		g.Go(func() error {
 			var err error
 			rel.StdSphereGrid = convertObjPtr(cfg, char.StdSphereGrid, convertSphereGrid)
-			rel.StdSphereGrid.PlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.PlayerAbilities, char, cfg.db.GetCharacterSgAbilityIDs)
+			rel.StdSphereGrid.PlayerAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.PlayerAbilities, char, cfg.db.GetCharacterSgAbilityIDs)
 			return err
 		})
 
 		g.Go(func() error {
 			var err error
 			rel.ExpSphereGrid = convertObjPtr(cfg, char.ExpSphereGrid, convertSphereGrid)
-			rel.ExpSphereGrid.PlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.PlayerAbilities, char, cfg.db.GetCharacterEgAbilityIDs)
+			rel.ExpSphereGrid.PlayerAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.PlayerAbilities, char, cfg.db.GetCharacterEgAbilityIDs)
 			return err
 		})
 	}

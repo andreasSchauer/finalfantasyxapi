@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -305,7 +305,7 @@ func TestGetMultiplePlayerAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.PlayerAbilities.Endpoint, "GetMultiplePlayerAbilities", testCfg.HandlePlayerAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.PlayerAbilities.Endpoint, "GetMultiplePlayerAbilities", testCfg.HandlePlayerAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestRetrievePlayerAbilities(t *testing.T) {
@@ -441,7 +441,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.PlayerAbilities.Endpoint, "RetrievePlayerAbilities", testCfg.HandlePlayerAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.PlayerAbilities.Endpoint, "RetrievePlayerAbilities", testCfg.HandlePlayerAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestSubsectionPlayerAbilities(t *testing.T) {
@@ -489,5 +489,5 @@ func TestSubsectionPlayerAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.PlayerAbilities.Endpoint, "SubsectionPlayerAbilities", nil, compareSimpleResourceLists[api.NamedAPIResource, api.PlayerAbilitySimple])
+	testIDList(t, tests, testCfg.E.PlayerAbilities.Endpoint, "SubsectionPlayerAbilities", nil, compareSimpleResourceLists[api.NamedAPIResource, api.PlayerAbilitySimple])
 }

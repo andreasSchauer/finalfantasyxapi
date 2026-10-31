@@ -7,10 +7,10 @@ import (
 )
 
 type Element struct {
-	ID                int32		`json:"id"`
-	Name              string  	`json:"name"`
-	OppositeElement   *string 	`json:"opposite_element"`
-	OppositeElementID *int32	`json:"opposite_element_id"`
+	ID                int32   `json:"id"`
+	Name              string  `json:"name"`
+	OppositeElement   *string `json:"opposite_element"`
+	OppositeElementID *int32  `json:"opposite_element_id"`
 }
 
 func (e Element) ToHashFields() []any {
@@ -31,7 +31,7 @@ func (e Element) GetID() int32 {
 	return e.ID
 }
 
-func (e Element) Error() string {
+func (e Element) String() string {
 	return fmt.Sprintf("element %s", e.Name)
 }
 

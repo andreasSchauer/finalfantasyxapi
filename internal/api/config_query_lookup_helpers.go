@@ -17,7 +17,7 @@ func (cfg *Config) completeQueryParamsInit(params []QueryParam, sections map[Sec
 		queryParamIDs := QueryParam{
 			Name:        QpnIDs,
 			Description: "Used to manually input the ids of resources to be batch-fetched for simple display. The original order will be preserved, but duplicates will be removed.",
-			Type:        qptIdList,
+			Type:        qptIDList,
 			IsExclusive: true,
 			ParamUse:    puSimple,
 			ForSegment:  getSnPtr(SnSimple),
@@ -90,15 +90,15 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 		p.Usage = s + "{value|id},..."
 		p.ExampleUses = []string{s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2)}
 
-	case qptId:
+	case qptID:
 		p.Usage = s + "{id}"
 		p.ExampleUses = []string{s + "1"}
 
-	case qptIdNul:
+	case qptIDNul:
 		p.Usage = s + "{id|'none'}"
 		p.ExampleUses = []string{s + "1", s + "none"}
 
-	case qptIdList:
+	case qptIDList:
 		p.Usage = s + "{id},..."
 		p.ExampleUses = []string{s + "1", s + "1,2"}
 
@@ -110,18 +110,18 @@ func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
 		p.Usage = s + "{int},...|{int}-{int}"
 		p.ExampleUses = []string{s + "1", s + "1,2", s + "1-3", s + "1,2-4"}
 
-	case qptNameId:
+	case qptNameID:
 		e := p.ExampleVals[0]
 		p.Usage = s + "{name|id}"
 		p.ExampleUses = []string{s + "1", s + e}
 
-	case qptNameIdList:
+	case qptNameIDList:
 		e1 := p.ExampleVals[0]
 		e2 := p.ExampleVals[1]
 		p.Usage = s + "{name|id},..."
 		p.ExampleUses = []string{s + "1", s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2)}
 
-	case qptNameIdListNul:
+	case qptNameIDListNul:
 		e1 := p.ExampleVals[0]
 		e2 := p.ExampleVals[1]
 		p.Usage = s + "{name|id},...|{'none'}"

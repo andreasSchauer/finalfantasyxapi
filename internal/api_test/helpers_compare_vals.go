@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"errors"
@@ -44,7 +44,7 @@ func compare(test test, fieldName string, exp, got any) {
 			t.Errorf("%s type mismatch: expected float64, got %T\n\n", fieldName, got)
 		}
 		compFloat64(test, fieldName, e, g)
-		
+
 	case string:
 		g, ok := got.(string)
 		if !ok {
@@ -72,7 +72,7 @@ func compare(test test, fieldName string, exp, got any) {
 			t.Errorf("%s type mismatch: expected *float32, got %T\n\n", fieldName, got)
 		}
 		compFloat32Ptr(test, fieldName, e, g)
-		
+
 	case *float64:
 		g, ok := got.(*float64)
 		if !ok {

@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -410,7 +410,7 @@ func TestRetrieveLocations(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Locations.Endpoint, "RetrieveLocations", testCfg.HandleLocations, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Locations.Endpoint, "RetrieveLocations", testCfg.HandleLocations, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestSubsectionLocations(t *testing.T) {
@@ -445,5 +445,5 @@ func TestSubsectionLocations(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Locations.Endpoint, "SubsectionLocations", testCfg.HandleLocations, compareSimpleResourceLists[api.NamedAPIResource, api.LocationSimple])
+	testIDList(t, tests, testCfg.E.Locations.Endpoint, "SubsectionLocations", testCfg.HandleLocations, compareSimpleResourceLists[api.NamedAPIResource, api.LocationSimple])
 }

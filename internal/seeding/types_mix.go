@@ -5,8 +5,8 @@ import (
 )
 
 type Mix struct {
-	ID                   int32			  `json:"id"`
-	OverdriveID          int32			  `json:"overdrive_id"`
+	ID                   int32            `json:"id"`
+	OverdriveID          int32            `json:"overdrive_id"`
 	Name                 string           `json:"name"`
 	Category             string           `json:"category"`
 	BestCombinations     []MixCombination `json:"best_combinations"`
@@ -31,7 +31,7 @@ func (m Mix) GetID() int32 {
 	return m.ID
 }
 
-func (m Mix) Error() string {
+func (m Mix) String() string {
 	return fmt.Sprintf("mix %s", m.Name)
 }
 
@@ -43,13 +43,13 @@ func (m Mix) GetResParamsNamed() ResParamsNamed {
 }
 
 type MixCombination struct {
-	ID           int32	`json:"mix_combination_id"`
-	MixID        int32	`json:"mix_id"`
+	ID           int32  `json:"mix_combination_id"`
+	MixID        int32  `json:"mix_id"`
 	FirstItem    string `json:"first_item"`
 	SecondItem   string `json:"second_item"`
-	FirstItemID  int32	`json:"first_item_id"`
-	SecondItemID int32	`json:"second_item_id"`
-	IsBestCombo  bool	`json:"is_best_combo"`
+	FirstItemID  int32  `json:"first_item_id"`
+	SecondItemID int32  `json:"second_item_id"`
+	IsBestCombo  bool   `json:"is_best_combo"`
 }
 
 func (m MixCombination) ToHashFields() []any {
@@ -77,6 +77,6 @@ func (m *MixCombination) SetID(id int32) {
 	m.ID = id
 }
 
-func (m MixCombination) Error() string {
+func (m MixCombination) String() string {
 	return fmt.Sprintf("mix combination with first item: %s, second item: %s", m.FirstItem, m.SecondItem)
 }

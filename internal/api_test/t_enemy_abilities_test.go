@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -195,7 +195,7 @@ func TestGetMultipleEnemyAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.EnemyAbilities.Endpoint, "GetMultipleEnemyAbilities", testCfg.HandleEnemyAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.EnemyAbilities.Endpoint, "GetMultipleEnemyAbilities", testCfg.HandleEnemyAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestRetrieveEnemyAbilities(t *testing.T) {
@@ -253,5 +253,5 @@ func TestRetrieveEnemyAbilities(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.EnemyAbilities.Endpoint, "RetrieveEnemyAbilities", testCfg.HandleEnemyAbilities, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.EnemyAbilities.Endpoint, "RetrieveEnemyAbilities", testCfg.HandleEnemyAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
 }

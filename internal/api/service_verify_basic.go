@@ -54,7 +54,7 @@ func basicFieldChecks[T any](val T, fieldName FieldName, userValues map[FieldNam
 		return zero, err
 	}
 
-	err = vfAllowedIdValPairs(val, fieldName, doc, valIsPresent, userValues)
+	err = vfAllowedIDValPairs(val, fieldName, doc, valIsPresent, userValues)
 	if err != nil {
 		return zero, err
 	}
@@ -145,22 +145,22 @@ func vfAllowedIDs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool,
 	return nil
 }
 
-func vfAllowedIdValPairs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool, userValues map[FieldName]any) error {
-	if !valIsPresent || len(doc.AllowedIdValPairs) == 0 || valIsPointer(val) {
+func vfAllowedIDValPairs(val any, fieldName FieldName, doc FieldDoc, valIsPresent bool, userValues map[FieldName]any) error {
+	if !valIsPresent || len(doc.AllowedIDValPairs) == 0 || valIsPointer(val) {
 		return nil
 	}
 
-	if doc.ParentIdField == nil {
+	if doc.ParentIDField == nil {
 		return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find parent id field for field '%s'", fieldName), nil)
 	}
 
-	id, _ := getInt32FromUserVals(*doc.ParentIdField, userValues)
+	id, _ := getInt32FromUserVals(*doc.ParentIDField, userValues)
 	value, err := getInt32FromUserVals(fieldName, userValues)
 	if err != nil {
 		return nil
 	}
 
-	for _, entry := range doc.AllowedIdValPairs {
+	for _, entry := range doc.AllowedIDValPairs {
 		if id != entry.ID {
 			continue
 		}
@@ -176,7 +176,7 @@ func vfAllowedIdValPairs(val any, fieldName FieldName, doc FieldDoc, valIsPresen
 		return nil
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s.", fieldName, formatAllowedIdValPairs(doc.AllowedIdValPairs)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s.", fieldName, formatAllowedIDValPairs(doc.AllowedIDValPairs)), nil)
 }
 
 // sideNote: a pointer is completely optional, so it will never have a default value.

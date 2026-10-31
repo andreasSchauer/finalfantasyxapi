@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList], id int32) (Treasure, error) {
+func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedAPIResourceList], id int32) (Treasure, error) {
 	treasure, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Treasure{}, err
@@ -28,13 +28,13 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 	return response, nil
 }
 
-func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationTreasureIDs),
 		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationTreasureIDs),
 		idQuery(r, i, ids, QpnArea, cfg.L.Areas, cfg.db.GetAreaTreasureIDs),

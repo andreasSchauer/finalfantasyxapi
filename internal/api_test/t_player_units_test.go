@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -140,5 +140,5 @@ func TestRetrievePlayerUnits(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.PlayerUnits.Endpoint, "RetrievePlayerUnits", testCfg.HandlePlayerUnits, compareAPIResourceLists[api.TypedAPIResourceList])
+	testIDList(t, tests, testCfg.E.PlayerUnits.Endpoint, "RetrievePlayerUnits", testCfg.HandlePlayerUnits, compareAPIResourceLists[api.TypedAPIResourceList])
 }

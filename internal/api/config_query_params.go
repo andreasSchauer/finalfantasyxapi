@@ -88,7 +88,7 @@ func (cfg *Config) initLocationsParams() {
 		{
 			Name:          QpnMonster,
 			Description:   "Searches for locations where the specified monster can be found. If combined with 'availability', the location must contain a monster-formation with the monster and whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the monster must have a monster-formation whose farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epMonsters},
@@ -96,7 +96,7 @@ func (cfg *Config) initLocationsParams() {
 		{
 			Name:          QpnItem,
 			Description:   "Searches for locations where the specified item can be acquired. Can be specified further with the 'methods' parameter. If combined with 'availability', the item must have a source inside the location whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the item must have a source whose farmability matches the given value.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epItems},
@@ -112,7 +112,7 @@ func (cfg *Config) initLocationsParams() {
 		{
 			Name:          QpnKeyItem,
 			Description:   "Searches for locations where the specified key-item can be acquired. If combined with 'availability', the key-item must have a source inside the location whose most accessible availability matches one of the specified availabilities. Key-items are never farmable, so combining this parameter with 'repeatable' will either yield 0 results (true) or the results won't be affected (false).",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epKeyItems},
@@ -120,7 +120,7 @@ func (cfg *Config) initLocationsParams() {
 		{
 			Name:          QpnAutoAbility,
 			Description:   "Searches for locations where the specified auto-ability can be acquired. If combined with 'availability', the auto-ability must have a source inside the location whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the auto-ability must have a source whose farmability matches the given value.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epAutoAbilities},
@@ -204,7 +204,7 @@ func (cfg *Config) initSublocationsParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for sublocations that are located within the specified location.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epLocations},
 		},
@@ -233,7 +233,7 @@ func (cfg *Config) initSublocationsParams() {
 		{
 			Name:          QpnMonster,
 			Description:   "Searches for sublocations where the specified monster can be found. If combined with 'availability', the sublocation must contain a monster-formation with the monster and whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the monster must have a monster-formation whose farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epMonsters},
@@ -241,7 +241,7 @@ func (cfg *Config) initSublocationsParams() {
 		{
 			Name:          QpnItem,
 			Description:   "Searches for sublocations where the specified item can be acquired. Can be specified further with the 'methods' parameter. If combined with 'availability', the item must have a source inside the sublocation whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the item must have a source whose farmability matches the given value.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epItems},
@@ -257,7 +257,7 @@ func (cfg *Config) initSublocationsParams() {
 		{
 			Name:          QpnKeyItem,
 			Description:   "Searches for sublocations where the specified key-item can be acquired. If combined with 'availability', the key-item must have a source inside the sublocation whose most accessible availability matches one of the specified availabilities. Key-items are never farmable, so combining this parameter with 'repeatable' will either yield 0 results (true) or the results won't be affected (false).",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epKeyItems},
@@ -265,7 +265,7 @@ func (cfg *Config) initSublocationsParams() {
 		{
 			Name:          QpnAutoAbility,
 			Description:   "Searches for sublocations where the specified auto-ability can be acquired. If combined with 'availability', the auto-ability must have a source inside the sublocation whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the auto-ability must have a source whose farmability matches the given value.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epAutoAbilities},
@@ -349,7 +349,7 @@ func (cfg *Config) initAreasParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for areas that are located within the specified location.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnSublocation},
 			ReferencesInt: []EndpointName{epLocations},
@@ -357,7 +357,7 @@ func (cfg *Config) initAreasParams() {
 		{
 			Name:          QpnSublocation,
 			Description:   "Searches for areas that are located within the specified sublocation.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epSublocations},
 		},
@@ -386,7 +386,7 @@ func (cfg *Config) initAreasParams() {
 		{
 			Name:          QpnMonster,
 			Description:   "Searches for areas where the specified monster can be found. If combined with 'availability', the area must contain a monster-formation with the monster and whose most accessible availability matches one of the specified availabilities (based on the formation's encounter areas). If combined with 'repeatable', the monster must have a monster-formation whose farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epMonsters},
@@ -394,7 +394,7 @@ func (cfg *Config) initAreasParams() {
 		{
 			Name:          QpnItem,
 			Description:   "Searches for areas where the specified item can be acquired. Can be specified further with the 'methods' parameter. If combined with 'availability', the item must have a source inside the area whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the item must have a source whose farmability matches the given value.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epItems},
@@ -410,7 +410,7 @@ func (cfg *Config) initAreasParams() {
 		{
 			Name:          QpnKeyItem,
 			Description:   "Searches for areas where the specified key-item can be acquired. If combined with 'availability', the key-item must have a source inside the area whose most accessible availability matches one of the specified availabilities. Key-items are never farmable, so combining this parameter with 'repeatable' will either yield 0 results (true) or the results won't be affected (false).",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epKeyItems},
@@ -418,7 +418,7 @@ func (cfg *Config) initAreasParams() {
 		{
 			Name:          QpnAutoAbility,
 			Description:   "Searches for areas where the specified auto-ability can be acquired. If combined with 'availability', the auto-ability must have a source inside the area whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', the auto-ability must have a source whose farmability matches the given value.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epAutoAbilities},
@@ -512,7 +512,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		{
 			Name:          QpnMonster,
 			Description:   "Searches for monster-formations that feature the specified monster.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epMonsters},
 		},
@@ -548,7 +548,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for monster-formations that appear within the specified location. If combined with 'availability', this parameter searches for monster-formations within this location whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monster-formations within this location whose farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnSublocation, QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epLocations},
@@ -556,7 +556,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		{
 			Name:          QpnSublocation,
 			Description:   "Searches for monster-formations that appear within the specified sublocation. If combined with 'availability', this parameter searches for monster-formations within this sublocation whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monster-formations within this sublocation whose farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epSublocations},
@@ -564,7 +564,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		{
 			Name:          QpnArea,
 			Description:   "Searches for monster-formations that appear within the specified area. If combined with 'availability', this parameter searches for monster-formations within this area whose most accessible availability matches one of the specified availabilities (based on the formation's encounter areas). If combined with 'repeatable', this parameter searches for monster-formations within this area whose farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epAreas},
@@ -609,7 +609,7 @@ func (cfg *Config) initShopsParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for shops that appear at the specified location. If combined with 'availability', this parameter searches for shops within this location whose availability matches one of the specified availabilities.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnSublocation, QpnAvailability},
 			ReferencesInt: []EndpointName{epLocations},
@@ -617,7 +617,7 @@ func (cfg *Config) initShopsParams() {
 		{
 			Name:          QpnSublocation,
 			Description:   "Searches for shops that appear at the specified sublocation. If combined with 'availability', this parameter searches for shops within this sublocation whose availability matches one of the specified availabilities.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability},
 			ReferencesInt: []EndpointName{epSublocations},
@@ -625,7 +625,7 @@ func (cfg *Config) initShopsParams() {
 		{
 			Name:          QpnAutoAbility,
 			Description:   "Searches for shops that offer equipment with the specified auto-ability. Can be combined with 'empty_slots' and 'character' for more specific searches. If this query param is combined with 'availability', the availability of the shop's inventory is used ('pre-story' for pre-airship inventory and 'post' for post-airship inventory).",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ConflictsWith: []QueryParamName{QpnItems, QpnEquipment},
 			ReplacedBy:    []QueryParamName{QpnAvailability},
@@ -643,7 +643,7 @@ func (cfg *Config) initShopsParams() {
 		{
 			Name:          QpnCharacter,
 			Description:   "Searches for shops that offer equipment for the specified character. Can be combined with 'auto_ability', 'empty_slots', and 'availability' for more specific searches. If this query param is combined with 'availability', the availability of the shop's inventory is used ('pre-story' for pre-airship inventory and 'post' for post-airship inventory).",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"wakka"},
 			ParamUse:      puList,
 			ConflictsWith: []QueryParamName{QpnItems, QpnEquipment},
@@ -678,7 +678,7 @@ func (cfg *Config) initTreasuresParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for treasures that appear within the specified location.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnSublocation, QpnArea},
 			ReferencesInt: []EndpointName{epLocations},
@@ -686,7 +686,7 @@ func (cfg *Config) initTreasuresParams() {
 		{
 			Name:          QpnSublocation,
 			Description:   "Searches for treasures that appear within the specified sublocation.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnArea},
 			ReferencesInt: []EndpointName{epSublocations},
@@ -694,14 +694,14 @@ func (cfg *Config) initTreasuresParams() {
 		{
 			Name:          QpnArea,
 			Description:   "Searches for treasures that appear within the specified area.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epAreas},
 		},
 		{
 			Name:          QpnAutoAbility,
 			Description:   "Searches for treasures that contain equipment with the specified auto-ability. Can be combined with 'empty_slots', 'character', and 'availability' for more specific searches.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
@@ -715,7 +715,7 @@ func (cfg *Config) initTreasuresParams() {
 		{
 			Name:          QpnCharacter,
 			Description:   "Searches for treasures that contain equipment for the specified character. Can be combined with 'auto_ability', 'empty_slots', and 'availability' for more specific searches.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"wakka"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epCharacters},
@@ -723,7 +723,7 @@ func (cfg *Config) initTreasuresParams() {
 		{
 			Name:          QpnItem,
 			Description:   "Searches for treasures that contain the specified item.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epItems},
 		},
@@ -874,7 +874,7 @@ func (cfg *Config) initSongsParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for songs that are played within the specified location. Songs with special use cases are not included.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnSublocation, QpnArea},
 			ReferencesInt: []EndpointName{epLocations},
@@ -882,7 +882,7 @@ func (cfg *Config) initSongsParams() {
 		{
 			Name:          QpnSublocation,
 			Description:   "Searches for songs that are played within the specified sublocation. Songs with special use cases are not included.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnArea},
 			ReferencesInt: []EndpointName{epSublocations},
@@ -890,7 +890,7 @@ func (cfg *Config) initSongsParams() {
 		{
 			Name:          QpnArea,
 			Description:   "Searches for songs that are played within the specified area. Songs with special use cases are not included.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epAreas},
 		},
@@ -934,7 +934,7 @@ func (cfg *Config) initFMVsParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for fmvs that are played within the specified location.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epLocations},
 		},
@@ -1082,7 +1082,7 @@ func (cfg *Config) initMonstersParams() {
 		{
 			Name:        QpnAlteredState,
 			Description: "If a monster has altered states, apply the changes of an altered state to that monster. The default state will show up as the first altered state in the new entry.",
-			Type:        qptId,
+			Type:        qptID,
 			ParamUse:    puSingle,
 		},
 		{
@@ -1108,7 +1108,7 @@ func (cfg *Config) initMonstersParams() {
 		{
 			Name:          QpnStatusResists,
 			Description:   "Searches for monsters that resist or are immune to the specified status conditions. You can optionally use the 'resistance' parameter to specify the minimum resistance. By default, the minimum resistance is 1.",
-			Type:          qptIdList,
+			Type:          qptIDList,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStatusConditions},
 		},
@@ -1130,7 +1130,7 @@ func (cfg *Config) initMonstersParams() {
 		{
 			Name:          QpnItem,
 			Description:   "Searches for monsters that have the specified item as loot. Can be specified further with the 'methods' parameter.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epItems},
 		},
@@ -1145,7 +1145,7 @@ func (cfg *Config) initMonstersParams() {
 		{
 			Name:          QpnAutoAbility,
 			Description:   "Searches for monsters that drop the specified auto-ability.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
@@ -1166,7 +1166,7 @@ func (cfg *Config) initMonstersParams() {
 		{
 			Name:          QpnRonsoRage,
 			Description:   "Searches for monsters that can teach the specified ronso rage to Kimahri.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epRonsoRages},
 		},
@@ -1194,7 +1194,7 @@ func (cfg *Config) initMonstersParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for monsters that appear within the specified location. If combined with 'availability', this parameter searches for monsters that are part of at least one monster-formation within this location whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monsters that are part of at least one monster-formation within this location whose farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnSublocation, QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epLocations},
@@ -1202,7 +1202,7 @@ func (cfg *Config) initMonstersParams() {
 		{
 			Name:          QpnSublocation,
 			Description:   "Searches for monsters that appear within the specified sublocation. If combined with 'availability', this parameter searches for monsters that are part of at least one monster-formation within this sublocation whose most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for monsters that are part of at least one monster-formation within this sublocation whose farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epSublocations},
@@ -1210,7 +1210,7 @@ func (cfg *Config) initMonstersParams() {
 		{
 			Name:          QpnArea,
 			Description:   "Searches for monsters that appear within the specified area. If combined with 'availability', this parameter searches for monsters that are part of at least one monster-formation within this area whose most accessible availability matches one of the specified availabilities (based on the formation's encounter areas). If combined with 'repeatable', this parameter searches for monsters that are part of at least one monster-formation within this area whose farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epAreas},
@@ -1308,7 +1308,7 @@ func (cfg *Config) initAbilitiesParams() {
 		{
 			Name:          QpnMonster,
 			Description:   "Searches for abilities that can be used by the specified monster.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epMonsters},
 		},
@@ -1383,7 +1383,7 @@ func (cfg *Config) initAbilitiesParams() {
 		{
 			Name:          QpnElement,
 			Description:   "Searches for abilities that deal elemental damage based on the specified element.",
-			Type:          qptNameIdListNul,
+			Type:          qptNameIDListNul,
 			ExampleVals:   []string{"fire", "ice"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epElements},
@@ -1397,14 +1397,14 @@ func (cfg *Config) initAbilitiesParams() {
 		{
 			Name:          QpnStatusInflict,
 			Description:   "Searches for abilities that can inflict the specified status condition.",
-			Type:          qptIdNul,
+			Type:          qptIDNul,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:          QpnStatusRemove,
 			Description:   "Searches for abilities that can remove the specified status condition.",
-			Type:          qptIdNul,
+			Type:          qptIDNul,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStatusConditions},
 		},
@@ -1432,7 +1432,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 		{
 			Name:          QpnAbilityUser,
 			Description:   "If a player ability is based on a user's attack, this parameter modifies its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"wakka", "valefor"},
 			ParamUse:      puSingle,
 			ReferencesInt: []EndpointName{epPlayerUnits},
@@ -1504,7 +1504,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 		{
 			Name:          QpnRelatedStat,
 			Description:   "Searches for player abilities that are related to the specified stat.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"hp", "strength"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStats},
@@ -1512,7 +1512,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 		{
 			Name:          QpnUser,
 			Description:   "Searches for player abilities that are learned by the specified character class.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"characters", "tidus"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epCharacterClasses},
@@ -1520,7 +1520,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 		{
 			Name:          QpnStdSg,
 			Description:   "Searches for player abilities that are located on the specified character's standard sphere grid.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"tidus", "wakka"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epCharacters},
@@ -1528,7 +1528,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 		{
 			Name:          QpnExpSg,
 			Description:   "Searches for player abilities that are located on the specified character's expert sphere grid.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"tidus", "wakka"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epCharacters},
@@ -1536,7 +1536,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 		{
 			Name:          QpnLearnItem,
 			Description:   "Searches for player abilities an aeon can learn via the specified item.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epItems},
 		},
@@ -1599,7 +1599,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 		{
 			Name:          QpnElement,
 			Description:   "Searches for player abilities that deal elemental damage based on the specified element.",
-			Type:          qptNameIdListNul,
+			Type:          qptNameIDListNul,
 			ExampleVals:   []string{"fire", "ice"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epElements},
@@ -1613,14 +1613,14 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 		{
 			Name:          QpnStatusInflict,
 			Description:   "Searches for player abilities that can inflict the specified status condition.",
-			Type:          qptIdNul,
+			Type:          qptIDNul,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:          QpnStatusRemove,
 			Description:   "Searches for player abilities that can remove the specified status condition.",
-			Type:          qptIdNul,
+			Type:          qptIDNul,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStatusConditions},
 		},
@@ -1654,7 +1654,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 		{
 			Name:          QpnUser,
 			Description:   "Searches for overdrive abilities that are learned by the specified character class.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"characters", "tidus"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epCharacterClasses},
@@ -1662,7 +1662,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 		{
 			Name:          QpnRelatedStat,
 			Description:   "Searches for overdrive abilities that are related to the specified stat.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"hp", "strength"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStats},
@@ -1700,7 +1700,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 		{
 			Name:          QpnElement,
 			Description:   "Searches for overdrive abilities that deal elemental damage based on the specified element.",
-			Type:          qptNameIdListNul,
+			Type:          qptNameIDListNul,
 			ExampleVals:   []string{"fire", "ice"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epElements},
@@ -1714,14 +1714,14 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 		{
 			Name:          QpnStatusInflict,
 			Description:   "Searches for overdrive abilities that can inflict the specified status condition.",
-			Type:          qptIdNul,
+			Type:          qptIDNul,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:          QpnStatusRemove,
 			Description:   "Searches for overdrive abilities that can remove the specified status condition.",
-			Type:          qptIdNul,
+			Type:          qptIDNul,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStatusConditions},
 		},
@@ -1763,7 +1763,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 		{
 			Name:          QpnRelatedStat,
 			Description:   "Searches for item abilities that are related to the specified stat.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"hp", "strength"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStats},
@@ -1795,7 +1795,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 		{
 			Name:          QpnElement,
 			Description:   "Searches for item abilities that deal elemental damage based on the specified element.",
-			Type:          qptNameIdListNul,
+			Type:          qptNameIDListNul,
 			ExampleVals:   []string{"fire", "ice"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epElements},
@@ -1809,14 +1809,14 @@ func (cfg *Config) initItemAbilitiesParams() {
 		{
 			Name:          QpnStatusInflict,
 			Description:   "Searches for item abilities that can inflict the specified status condition.",
-			Type:          qptIdNul,
+			Type:          qptIDNul,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:          QpnStatusRemove,
 			Description:   "Searches for item abilities that can remove the specified status condition.",
-			Type:          qptIdNul,
+			Type:          qptIDNul,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStatusConditions},
 		},
@@ -1844,7 +1844,7 @@ func (cfg *Config) initTriggerCommandsParams() {
 		{
 			Name:          QpnAbilityUser,
 			Description:   "If a trigger command is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this command.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"wakka", "valefor"},
 			ParamUse:      puSingle,
 			ReferencesInt: []EndpointName{epPlayerUnits},
@@ -1866,7 +1866,7 @@ func (cfg *Config) initTriggerCommandsParams() {
 		{
 			Name:          QpnRelatedStat,
 			Description:   "Searches for trigger commands that are related to the specified stat.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"hp", "strength"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStats},
@@ -1874,7 +1874,7 @@ func (cfg *Config) initTriggerCommandsParams() {
 		{
 			Name:          QpnUser,
 			Description:   "Searches for trigger commands that are learned by the specified character class.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"characters", "tidus"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epCharacterClasses},
@@ -1891,7 +1891,7 @@ func (cfg *Config) initMiscAbilitiesParams() {
 		{
 			Name:          QpnAbilityUser,
 			Description:   "If a misc ability is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"wakka", "valefor"},
 			ParamUse:      puSingle,
 			ReferencesInt: []EndpointName{epPlayerUnits},
@@ -1931,7 +1931,7 @@ func (cfg *Config) initMiscAbilitiesParams() {
 		{
 			Name:          QpnUser,
 			Description:   "Searches for misc abilities that are learned by the specified character class.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"characters", "tidus"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epCharacterClasses},
@@ -1966,7 +1966,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 		{
 			Name:          QpnMonster,
 			Description:   "Searches for enemy abilities that can be used by the specified monster.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epMonsters},
 		},
@@ -2035,7 +2035,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 		{
 			Name:          QpnElement,
 			Description:   "Searches for enemy abilities that deal elemental damage based on the specified element.",
-			Type:          qptNameIdListNul,
+			Type:          qptNameIDListNul,
 			ExampleVals:   []string{"fire", "ice"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epElements},
@@ -2049,14 +2049,14 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 		{
 			Name:          QpnStatusInflict,
 			Description:   "Searches for enemy abilities that can inflict the specified status condition.",
-			Type:          qptIdNul,
+			Type:          qptIDNul,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStatusConditions},
 		},
 		{
 			Name:          QpnStatusRemove,
 			Description:   "Searches for enemy abilities that can remove the specified status condition.",
-			Type:          qptIdNul,
+			Type:          qptIDNul,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStatusConditions},
 		},
@@ -2078,7 +2078,7 @@ func (cfg *Config) initOverdrivesParams() {
 		{
 			Name:          QpnUser,
 			Description:   "Searches for overdrives that are learned by the specified character class.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"characters", "tidus"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epCharacterClasses},
@@ -2095,7 +2095,7 @@ func (cfg *Config) initSubmenusParams() {
 		{
 			Name:          QpnTopmenu,
 			Description:   "Searches for submenus that are found within the specified topmenu.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"main", "left"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epTopmenus},
@@ -2163,7 +2163,7 @@ func (cfg *Config) initAllItemsParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for items that can be obtained at the specified location. If combined with 'availability', this parameter searches for items within this location whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for items within this location whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnSublocation, QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epLocations},
@@ -2171,7 +2171,7 @@ func (cfg *Config) initAllItemsParams() {
 		{
 			Name:          QpnSublocation,
 			Description:   "Searches for items that can be obtained at the specified sublocation. If combined with 'availability', this parameter searches for items within this sublocation whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for items within this sublocation whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epSublocations},
@@ -2179,7 +2179,7 @@ func (cfg *Config) initAllItemsParams() {
 		{
 			Name:          QpnArea,
 			Description:   "Searches for items that can be obtained in the specified area. If combined with 'availability', this parameter searches for items within this area whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for items within this area whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epAreas},
@@ -2216,7 +2216,7 @@ func (cfg *Config) initItemsParams() {
 		{
 			Name:          QpnRelatedStat,
 			Description:   "Searches for items that are related to the specified stat.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"hp", "strength"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epStats},
@@ -2261,7 +2261,7 @@ func (cfg *Config) initItemsParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for items that can be obtained at the specified location. If combined with 'availability', this parameter searches for items within this location whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for items within this location whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnSublocation, QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epLocations},
@@ -2269,7 +2269,7 @@ func (cfg *Config) initItemsParams() {
 		{
 			Name:          QpnSublocation,
 			Description:   "Searches for items that can be obtained at the specified sublocation. If combined with 'availability', this parameter searches for items within this sublocation whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for items within this sublocation whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epSublocations},
@@ -2277,7 +2277,7 @@ func (cfg *Config) initItemsParams() {
 		{
 			Name:          QpnArea,
 			Description:   "Searches for items that can be obtained in the specified area. If combined with 'availability', this parameter searches for items within this area whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for items within this area whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epAreas},
@@ -2326,7 +2326,7 @@ func (cfg *Config) initKeyItemsParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for key-items that can be obtained at the specified location. If combined with 'availability', this parameter searches for key-items within this location whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for key-items within this location whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnSublocation, QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epLocations},
@@ -2334,7 +2334,7 @@ func (cfg *Config) initKeyItemsParams() {
 		{
 			Name:          QpnSublocation,
 			Description:   "Searches for key-items that can be obtained at the specified sublocation. If combined with 'availability', this parameter searches for key-items within this sublocation whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for key-items within this sublocation whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epSublocations},
@@ -2342,7 +2342,7 @@ func (cfg *Config) initKeyItemsParams() {
 		{
 			Name:          QpnArea,
 			Description:   "Searches for key-items that can be obtained in the specified area. If combined with 'availability', this parameter searches for key-items within this area whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for key-items within this area whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epAreas},
@@ -2410,7 +2410,7 @@ func (cfg *Config) initSpheresParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for spheres that can be obtained at the specified location. If combined with 'availability', this parameter searches for spheres within this location whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for spheres within this location whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnSublocation, QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epLocations},
@@ -2418,7 +2418,7 @@ func (cfg *Config) initSpheresParams() {
 		{
 			Name:          QpnSublocation,
 			Description:   "Searches for spheres that can be obtained at the specified sublocation. If combined with 'availability', this parameter searches for spheres within this sublocation whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for spheres within this sublocation whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epSublocations},
@@ -2426,7 +2426,7 @@ func (cfg *Config) initSpheresParams() {
 		{
 			Name:          QpnArea,
 			Description:   "Searches for spheres that can be obtained in the specified area. If combined with 'availability', this parameter searches for spheres within this area whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for spheres within this area whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epAreas},
@@ -2460,7 +2460,7 @@ func (cfg *Config) initMixesParams() {
 		{
 			Name:          QpnContainsItem,
 			Description:   "Modifies combinations to only display item combinations that include the specified item.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"grenade", "power_sphere"},
 			ParamUse:      puSingle,
 			ConflictsWith: []QueryParamName{QpnBest},
@@ -2484,7 +2484,7 @@ func (cfg *Config) initMixesParams() {
 		{
 			Name:          QpnReqItem,
 			Description:   "Searches for mixes that can be built with the specified item.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"grenade", "power_sphere"},
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epItems},
@@ -2492,7 +2492,7 @@ func (cfg *Config) initMixesParams() {
 		{
 			Name:           QpnSecondItem,
 			Description:    "Can be used in combination with 'req_item' to get the mix the two specified items will create.",
-			Type:           qptNameId,
+			Type:           qptNameID,
 			ExampleVals:    []string{"grenade", "power_sphere"},
 			ParamUse:       puList,
 			RequiredParams: []QueryParamName{QpnReqItem},
@@ -2561,28 +2561,28 @@ func (cfg *Config) initAutoAbilitiesParams() {
 		{
 			Name:          QpnMonster,
 			Description:   "Searches for auto-abilities that are dropped by the specified monster.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:          QpnMonsterItems,
 			Description:   "Searches for auto-abilities that can be crafted with the items dropped by the specified monster.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:          QpnShop,
 			Description:   "Searches for auto-abilities that can be obtained from the specified shop.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
 			Name:          QpnCharacter,
 			Description:   "Restricts the search for 'availability', 'monster' and 'shop' to only include auto-abilities that can be obtained by the specified character. This includes auto-abilities with no character restriction like regular monster equipment drop slots.",
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ExampleVals:   []string{"kimahri"},
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
@@ -2607,7 +2607,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 		{
 			Name:          QpnLocation,
 			Description:   "Searches for auto-abilities that can be obtained at the specified location. If combined with 'availability', this parameter searches for auto-abilities within this location whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for auto-abilities within this location whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnSublocation, QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epLocations},
@@ -2615,7 +2615,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 		{
 			Name:          QpnSublocation,
 			Description:   "Searches for auto-abilities that can be obtained at the specified sublocation. If combined with 'availability', this parameter searches for auto-abilities within this sublocation whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for auto-abilities within this sublocation whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnArea, QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epSublocations},
@@ -2623,7 +2623,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 		{
 			Name:          QpnArea,
 			Description:   "Searches for auto-abilities that can be obtained in the specified area. If combined with 'availability', this parameter searches for auto-abilities within this area whose sources' most accessible availability matches one of the specified availabilities. If combined with 'repeatable', this parameter searches for auto-abilities within this area whose sources' farmability matches the given value based on its category.",
-			Type:          qptId,
+			Type:          qptID,
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
 			ReferencesInt: []EndpointName{epAreas},
@@ -2640,7 +2640,7 @@ func (cfg *Config) initEquipmentTablesParams() {
 		{
 			Name:          QpnAutoAbilities,
 			Description:   "Searches for equipment tables with all of the given auto-abilities.",
-			Type:          qptIdList,
+			Type:          qptIDList,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
@@ -2686,7 +2686,7 @@ func (cfg *Config) initEquipmentParams() {
 		{
 			Name:          QpnAutoAbilities,
 			Description:   "Searches for equipment with all of the given auto-abilities.",
-			Type:          qptIdList,
+			Type:          qptIDList,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
@@ -2694,7 +2694,7 @@ func (cfg *Config) initEquipmentParams() {
 			Name:          QpnCharacter,
 			Description:   "Searches for equipment of the specified character.",
 			ExampleVals:   []string{"yuna"},
-			Type:          qptNameId,
+			Type:          qptNameID,
 			ParamUse:      puList,
 			ReferencesInt: []EndpointName{epCharacters},
 		},

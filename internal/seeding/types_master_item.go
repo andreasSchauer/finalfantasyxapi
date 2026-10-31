@@ -7,9 +7,9 @@ import (
 )
 
 type MasterItem struct {
-	ID   int32				`json:"master_item_id,omitempty"`
-	Name string 			`json:"name"`
-	Type database.ItemType	`json:"type,omitempty"`
+	ID   int32             `json:"master_item_id,omitempty"`
+	Name string            `json:"name"`
+	Type database.ItemType `json:"type,omitempty"`
 }
 
 func (i MasterItem) ToHashFields() []any {
@@ -30,7 +30,7 @@ func (i MasterItem) GetID() int32 {
 	return i.ID
 }
 
-func (i MasterItem) Error() string {
+func (i MasterItem) String() string {
 	return fmt.Sprintf("master item %s, type %s", i.Name, i.Type)
 }
 

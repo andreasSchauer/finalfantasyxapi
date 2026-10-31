@@ -3,7 +3,7 @@ package seeding
 import "fmt"
 
 type ElementalResist struct {
-	ID        int32	 `json:"elemental_resist_id"`
+	ID        int32  `json:"elemental_resist_id"`
 	ElementID int32  `json:"element_id"`
 	Element   string `json:"name"`
 	Affinity  string `json:"affinity"`
@@ -32,6 +32,6 @@ func (er *ElementalResist) SetID(id int32) {
 	er.ID = id
 }
 
-func (er ElementalResist) Error() string {
+func (er ElementalResist) String() string {
 	return fmt.Sprintf("elemental resist with element: %s, affinity: %s", er.Element, er.Affinity)
 }

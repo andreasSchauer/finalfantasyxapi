@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -240,5 +240,5 @@ func TestRetrieveKeyItems(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.KeyItems.Endpoint, "RetrieveKeyItems", testCfg.HandleKeyItems, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.KeyItems.Endpoint, "RetrieveKeyItems", testCfg.HandleKeyItems, compareAPIResourceLists[api.NamedAPIResourceList])
 }

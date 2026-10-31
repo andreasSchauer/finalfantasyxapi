@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func convertGetCelestialWeaponAutoAbilityIDs(cfg *Config) DbQueryIntMany {
+func convertGetCelestialWeaponAutoAbilityIDs(cfg *Config) DBQueryIntMany {
 	return func(ctx context.Context, id int32) ([]int32, error) {
 		cw, _ := seeding.GetResourceByID(id, cfg.L.CelestialWeaponsID)
 

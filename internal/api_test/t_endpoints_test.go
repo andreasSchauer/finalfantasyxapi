@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -44,5 +44,5 @@ func TestRetrieveEndpoints(t *testing.T) {
 		},
 	}
 
-	testPathList(t, tests, "RetrieveEndpoints", testCfg.HandleEndpoints, compareAPIResourceListPaths[api.NamedApiResourceList])
+	testPathList(t, tests, "RetrieveEndpoints", testCfg.HandleEndpoints, compareAPIResourceListPaths[api.NamedAPIResourceList])
 }

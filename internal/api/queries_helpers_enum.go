@@ -19,7 +19,7 @@ func parseEnumQuery[E, N any](r *http.Request, endpoint EndpointName, queryParam
 func checkQueryEnum[E, N any](val string, endpoint EndpointName, queryParam QueryParam, et EnumType[E, N]) (EnumVal, error) {
 	enum, err := et.CheckVal(val)
 	switch err {
-	case errIdNotFound:
+	case errIDNotFound:
 		return EnumVal{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%s' used for parameter '%s' doesn't exist. max id: %d.", val, queryParam.Name, len(et.lookup)), nil)
 
 	case errNoResource:

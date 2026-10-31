@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -79,5 +79,5 @@ func TestRetrieveCelestialWeapons(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.CelestialWeapons.Endpoint, "RetrieveCelestialWeapons", testCfg.HandleCelestialWeapons, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.CelestialWeapons.Endpoint, "RetrieveCelestialWeapons", testCfg.HandleCelestialWeapons, compareAPIResourceLists[api.NamedAPIResourceList])
 }

@@ -7,7 +7,7 @@ import (
 )
 
 type StatusCondition struct {
-	ID                      int32			 `json:"id"`
+	ID                      int32            `json:"id"`
 	Name                    string           `json:"name"`
 	Category                string           `json:"category"`
 	IsPermanent             bool             `json:"is_permanent"`
@@ -44,7 +44,7 @@ func (s StatusCondition) GetID() int32 {
 	return s.ID
 }
 
-func (s StatusCondition) Error() string {
+func (s StatusCondition) String() string {
 	return fmt.Sprintf("status condition %s", s.Name)
 }
 

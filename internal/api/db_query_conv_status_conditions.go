@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-func convGetStatusConditionResistingMonsterIDs(cfg *Config, resistance int32) DbQueryIntMany {
+func convGetStatusConditionResistingMonsterIDs(cfg *Config, resistance int32) DBQueryIntMany {
 	return func(ctx context.Context, id int32) ([]int32, error) {
 		return cfg.db.GetStatusConditionResistingMonsterIDs(ctx, database.GetStatusConditionResistingMonsterIDsParams{
 			StatusConditionID: id,
@@ -15,7 +15,7 @@ func convGetStatusConditionResistingMonsterIDs(cfg *Config, resistance int32) Db
 	}
 }
 
-func convGetStatusConditionAbilityIDsInflicted(cfg *Config, minRate, maxRate int32) DbQueryIntMany {
+func convGetStatusConditionAbilityIDsInflicted(cfg *Config, minRate, maxRate int32) DBQueryIntMany {
 	return func(ctx context.Context, id int32) ([]int32, error) {
 		return cfg.db.GetStatusConditionAbilityIDsInflicted(ctx, database.GetStatusConditionAbilityIDsInflictedParams{
 			StatusConditionID: id,

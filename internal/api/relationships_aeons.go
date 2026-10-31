@@ -19,25 +19,25 @@ func getAeonRelationships(cfg *Config, r *http.Request, aeon seeding.Aeon) (Aeon
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = getResourcesDbItem(cfg, ctx, cfg.E.CharacterClasses, aeon, cfg.db.GetAeonCharClassIDs)
+		rel.CharacterClasses, err = getResourcesDBItem(cfg, ctx, cfg.E.CharacterClasses, aeon, cfg.db.GetAeonCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AeonCommands, err = getResourcesDbItem(cfg, ctx, cfg.E.AeonCommands, aeon, cfg.db.GetAeonAeonCommandIDs)
+		rel.AeonCommands, err = getResourcesDBItem(cfg, ctx, cfg.E.AeonCommands, aeon, cfg.db.GetAeonAeonCommandIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Overdrives, err = getResourcesDbItem(cfg, ctx, cfg.E.Overdrives, aeon, cfg.db.GetAeonOverdriveIDs)
+		rel.Overdrives, err = getResourcesDBItem(cfg, ctx, cfg.E.Overdrives, aeon, cfg.db.GetAeonOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = getResourcesDbItem(cfg, ctx, cfg.E.PlayerAbilities, aeon, cfg.db.GetAeonDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.PlayerAbilities, aeon, cfg.db.GetAeonDefaultAbilityIDs)
 		return err
 	})
 

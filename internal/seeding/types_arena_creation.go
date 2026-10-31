@@ -7,16 +7,16 @@ import (
 )
 
 type ArenaCreation struct {
-	ID                        int32		`json:"id"`
-	SubquestID                int32		`json:"subquest_id"`
-	MonsterID                 *int32	`json:"monster_id"`
-	Name                      string  	`json:"name"`
-	Category                  string  	`json:"category"`
-	RequiredArea              *string 	`json:"required_area"`
-	RequiredSpecies           *string 	`json:"required_species"`
-	UnderwaterOnly            bool    	`json:"underwater_only"`
-	CreationsUnlockedCategory *string 	`json:"creations_unlocked_category"`
-	Amount                    int32   	`json:"amount"`
+	ID                        int32   `json:"id"`
+	SubquestID                int32   `json:"subquest_id"`
+	MonsterID                 *int32  `json:"monster_id"`
+	Name                      string  `json:"name"`
+	Category                  string  `json:"category"`
+	RequiredArea              *string `json:"required_area"`
+	RequiredSpecies           *string `json:"required_species"`
+	UnderwaterOnly            bool    `json:"underwater_only"`
+	CreationsUnlockedCategory *string `json:"creations_unlocked_category"`
+	Amount                    int32   `json:"amount"`
 }
 
 func (a ArenaCreation) ToHashFields() []any {
@@ -43,7 +43,7 @@ func (a ArenaCreation) GetID() int32 {
 	return a.ID
 }
 
-func (a ArenaCreation) Error() string {
+func (a ArenaCreation) String() string {
 	return fmt.Sprintf("monster arena creation %s", a.Name)
 }
 

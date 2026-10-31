@@ -214,7 +214,7 @@ func lookupInit() (*Lookup, error) {
 		TreasuresID:          make(map[int32]Treasure),
 	}
 
-	err := l.loadJsonFiles()
+	err := l.loadJSONFiles()
 	if err != nil {
 		return nil, err
 	}

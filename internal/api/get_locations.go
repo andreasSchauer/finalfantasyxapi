@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList], id int32) (Location, error) {
+func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location, Location, NamedAPIResource, NamedAPIResourceList], id int32) (Location, error) {
 	location, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Location{}, err
@@ -29,13 +29,13 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 	return response, nil
 }
 
-func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seeding.Location, Location, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seeding.Location, Location, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		idQuery(r, i, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetLocationIDsWithMonster),
 		idQueryWrapper(cfg, r, i, ids, QpnItem, cfg.L.Items, getLocationsByItem),
 		idQuery(r, i, ids, QpnKeyItem, cfg.L.KeyItems, cfg.db.GetLocationIDsWithKeyItem),

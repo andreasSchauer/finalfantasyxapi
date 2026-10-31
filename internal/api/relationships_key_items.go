@@ -67,7 +67,7 @@ func getKeyItemCelestialWeapon(cfg *Config, ctx context.Context, keyItem seeding
 
 	celestialID, err := cfg.db.GetKeyItemCelestialWeapon(ctx, database.KeyItemBase(keyItemBase))
 	if err != nil {
-		return nil, newHTTPErrorDbOne(cfg.E.CelestialWeapons.resTypeSingle, keyItem, err)
+		return nil, newHTTPErrorDBOne(cfg.E.CelestialWeapons.resTypeSingle, keyItem, err)
 	}
 
 	celestialRes := idToNamedAPIResource(cfg, cfg.E.CelestialWeapons, celestialID)

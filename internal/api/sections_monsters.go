@@ -91,7 +91,7 @@ func getMonsterSectionRelations(cfg *Config, r *http.Request, monIDs []int32) (m
 	i := cfg.E.Monsters
 	relations := make(map[int32]map[Relation][]int32)
 
-	monsterJunctions, err := getDbJunctions(r.Context(), monIDs, i.resTypeSingle, cfg.E.Areas.resTypeSingle, cfg.db.GetMonsterAreaIdPairs, juncMonsterArea)
+	monsterJunctions, err := getDBJunctions(r.Context(), monIDs, i.resTypeSingle, cfg.E.Areas.resTypeSingle, cfg.db.GetMonsterAreaIdPairs, juncMonsterArea)
 	if err != nil {
 		return nil, err
 	}

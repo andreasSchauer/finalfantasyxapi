@@ -7,7 +7,7 @@ import (
 )
 
 // checks for emptiness of name/id-list-queryParam and converts its input into a slice of valid ids. accepts "none" as input.
-func parseNameIdListQuery[P seeding.Lookupable](cfg *Config, r *http.Request, queryParam QueryParam, pResType ResTypeSingle, pLookup map[string]P) ([]int32, error) {
+func parseNameIDListQuery[P seeding.Lookupable](cfg *Config, r *http.Request, queryParam QueryParam, pResType ResTypeSingle, pLookup map[string]P) ([]int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err

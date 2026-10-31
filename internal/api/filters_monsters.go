@@ -131,7 +131,7 @@ func getMonstersByItem(cfg *Config, r *http.Request, ctx context.Context, id int
 		Methods: methods,
 	})
 	if err != nil {
-		return nil, newHTTPErrorDbFilter(i.resTypePlural, i.queryLookup[QpnItem], err)
+		return nil, newHTTPErrorDBFilter(i.resTypePlural, i.queryLookup[QpnItem], err)
 	}
 
 	return dbIDs, nil

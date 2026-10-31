@@ -1,7 +1,6 @@
-package apiTest
+package apitest
 
 import (
-	// "filepath"
 	"io"
 	"log"
 	"os"
@@ -28,6 +27,6 @@ func TestMain(m *testing.M) {
 	testCfg = cfg
 
 	code := m.Run()
-	_ = testCfg.DbConn.Close()
+	_ = testCfg.DBConn.Close()
 	os.Exit(code)
 }

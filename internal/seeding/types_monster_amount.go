@@ -57,6 +57,6 @@ func (ma MonsterAmount) GetVal() int32 {
 	return ma.Amount
 }
 
-func (ma MonsterAmount) Error() string {
+func (ma MonsterAmount) String() string {
 	return fmt.Sprintf("monster amount with monster: '%s', amount: %d", h.NameToString(ma.MonsterName, ma.Version, nil), ma.Amount)
 }

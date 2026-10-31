@@ -31,7 +31,7 @@ func (p Primer) GetID() int32 {
 	return p.ID
 }
 
-func (p Primer) Error() string {
+func (p Primer) String() string {
 	return fmt.Sprintf("primer %s", p.Name)
 }
 

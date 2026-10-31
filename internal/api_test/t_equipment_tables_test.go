@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -29,7 +29,7 @@ func TestGetEquipmentTable(t *testing.T) {
 					"equipment":                 1,
 				},
 			},
-			expIdOnly:               newExpIdOnly(2),
+			expIDOnly:               newExpIDOnly(2),
 			celestialWeapon:         h.GetInt32Ptr(2),
 			specificCharacter:       h.GetInt32Ptr(2),
 			requiredAutoAbilities:   []int32{51, 49, 44, 43},
@@ -48,7 +48,7 @@ func TestGetEquipmentTable(t *testing.T) {
 					"equipment":                 7,
 				},
 			},
-			expIdOnly:               newExpIdOnly(20),
+			expIDOnly:               newExpIDOnly(20),
 			celestialWeapon:         nil,
 			specificCharacter:       nil,
 			requiredAutoAbilities:   []int32{45},
@@ -69,7 +69,7 @@ func TestGetEquipmentTable(t *testing.T) {
 					"equipment": 7,
 				},
 			},
-			expIdOnly:             newExpIdOnly(145),
+			expIDOnly:             newExpIDOnly(145),
 			celestialWeapon:       nil,
 			specificCharacter:     nil,
 			requiredAutoAbilities: []int32{},
@@ -130,5 +130,5 @@ func TestRetrieveEquipmentTables(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.EquipmentTables.Endpoint, "RetrieveEquipmentTables", testCfg.HandleEquipmentTables, compareAPIResourceLists[api.UnnamedApiResourceList])
+	testIDList(t, tests, testCfg.E.EquipmentTables.Endpoint, "RetrieveEquipmentTables", testCfg.HandleEquipmentTables, compareAPIResourceLists[api.UnnamedAPIResourceList])
 }

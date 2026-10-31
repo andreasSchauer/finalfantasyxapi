@@ -7,7 +7,7 @@ import (
 )
 
 type Area struct {
-	ID                   int32			  `json:"id"`
+	ID                   int32            `json:"id"`
 	Name                 string           `json:"area"`
 	Version              *int32           `json:"version"`
 	Specification        *string          `json:"specification"`
@@ -17,10 +17,10 @@ type Area struct {
 	HasCompilationSphere bool             `json:"has_compilation_sphere"`
 	CanRideChocobo       bool             `json:"can_ride_chocobo"`
 	ConnectedAreas       []AreaConnection `json:"connected_areas"`
-	LocationID			 int32			  `json:"location_id"`
-	SublocationID		 int32			  `json:"sublocation_id"`
-	Location          	 string			  `json:"location"`
-	Sublocation          string			  `json:"sublocation"`
+	LocationID           int32            `json:"location_id"`
+	SublocationID        int32            `json:"sublocation_id"`
+	Location             string           `json:"location"`
+	Sublocation          string           `json:"sublocation"`
 }
 
 func (a Area) ToHashFields() []any {
@@ -50,7 +50,7 @@ func (a *Area) SetID(id int32) {
 	a.ID = id
 }
 
-func (a Area) Error() string {
+func (a Area) String() string {
 	return fmt.Sprintf("area '%s'", h.NameToString(a.Name, a.Version, a.Specification))
 }
 
@@ -75,8 +75,8 @@ func (a Area) GetResParamsLocation() ResParamsLocation {
 }
 
 type AreaConnection struct {
-	ID             int32		`json:"area_connection_id"`
-	AreaID         int32		`json:"area_id"`
+	ID             int32        `json:"area_connection_id"`
+	AreaID         int32        `json:"area_id"`
 	LocationArea   LocationArea `json:"location_area"`
 	ConnectionType string       `json:"connection_type"`
 	IsStoryBased   bool         `json:"is_story_based"`
@@ -101,6 +101,6 @@ func (ac *AreaConnection) SetID(id int32) {
 	ac.ID = id
 }
 
-func (ac AreaConnection) Error() string {
+func (ac AreaConnection) String() string {
 	return fmt.Sprintf("area connection with %s", ac.LocationArea)
 }

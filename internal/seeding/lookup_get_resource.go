@@ -7,8 +7,8 @@ import (
 )
 
 type LookupObject struct {
-	Name    string	`json:"name"`
-	Version *int32	`json:"version"`
+	Name    string `json:"name"`
+	Version *int32 `json:"version"`
 }
 
 func (l LookupObject) ToKeyFields() []any {
@@ -18,7 +18,7 @@ func (l LookupObject) ToKeyFields() []any {
 	}
 }
 
-func (l LookupObject) Error() string {
+func (l LookupObject) String() string {
 	return fmt.Sprintf("lookup object '%s'", h.NameToString(l.Name, l.Version, nil))
 }
 
@@ -26,7 +26,7 @@ func GetResourceByID[T LookupableID](id int32, lookup map[int32]T) (T, error) {
 	resource, found := lookup[id]
 	if !found {
 		var zeroType T
-		return zeroType, fmt.Errorf("couldn't find %s with id '%d'.", getTypeName[T](), id)
+		return zeroType, fmt.Errorf("couldn't find %s with id '%d'", getTypeName[T](), id)
 	}
 
 	return resource, nil
@@ -48,7 +48,7 @@ func getResourceByName[T LookupableKey](key string, lookup map[string]T) (T, err
 	resource, found := lookup[key]
 	if !found {
 		var zeroType T
-		return zeroType, h.NewErr(key, fmt.Errorf("couldn't find %s '%s'.", getTypeName[T](), key))
+		return zeroType, h.NewErr(key, fmt.Errorf("couldn't find %s '%s'", getTypeName[T](), key))
 	}
 
 	return resource, nil
@@ -60,7 +60,7 @@ func getResourceByKey[T, K LookupableKey](obj K, lookup map[string]T) (T, error)
 	resource, err := GetResource(key, lookup)
 	if err != nil {
 		var zeroType T
-		return zeroType, h.NewErr(obj.Error(), fmt.Errorf("couldn't find %s.", getTypeName[T]()))
+		return zeroType, h.NewErr(obj.String(), fmt.Errorf("couldn't find %s", getTypeName[T]()))
 	}
 
 	return resource, nil

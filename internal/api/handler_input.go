@@ -14,8 +14,8 @@ type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 	objLookup        map[string]T
 	objLookupID      map[int32]T
 	queryLookup      map[QueryParamName]QueryParam
-	getMultipleQuery DbQueryStringMany
-	retrieveQuery    DbQueryNoInput
+	getMultipleQuery DBQueryStringMany
+	retrieveQuery    DBQueryNoInput
 	idToResFunc      func(*Config, handlerInput[T, R, A, L], int32) A
 	resToListFunc    func(*Config, *http.Request, []A) (L, error)
 	getSingleFunc    func(*http.Request, handlerInput[T, R, A, L], int32) (R, error)

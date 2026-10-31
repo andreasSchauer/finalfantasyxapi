@@ -7,7 +7,7 @@ import (
 )
 
 type Song struct {
-	ID                   int32			   `json:"id"`
+	ID                   int32             `json:"id"`
 	Name                 string            `json:"name"`
 	StreamingName        *string           `json:"streaming_name"`
 	InGameName           *string           `json:"in_game_name"`
@@ -54,7 +54,7 @@ func (s Song) GetID() int32 {
 	return s.ID
 }
 
-func (s Song) Error() string {
+func (s Song) String() string {
 	return fmt.Sprintf("song %s", s.Name)
 }
 
@@ -66,7 +66,7 @@ func (s Song) GetResParamsNamed() ResParamsNamed {
 }
 
 type SongCredits struct {
-	ID        int32	  `json:"id"`
+	ID        int32   `json:"id"`
 	Composer  *string `json:"composer"`
 	Arranger  *string `json:"arranger"`
 	Performer *string `json:"performer"`
@@ -87,6 +87,6 @@ func (sc SongCredits) GetID() int32 {
 	return sc.ID
 }
 
-func (sc SongCredits) Error() string {
+func (sc SongCredits) String() string {
 	return fmt.Sprintf("song credits with composer: %v, arranger: %v, performer: %v, lyricist: %v", h.PtrToString(sc.Composer), h.PtrToString(sc.Arranger), h.PtrToString(sc.Performer), h.PtrToString(sc.Lyricist))
 }

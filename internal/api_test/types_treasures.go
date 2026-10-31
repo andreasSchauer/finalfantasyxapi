@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
@@ -7,7 +7,7 @@ import (
 
 type expTreasure struct {
 	testGeneral
-	expIdOnly
+	expIDOnly
 	area            int32
 	availability    database.AvailabilityType
 	isAnimaTreasure bool
@@ -24,8 +24,8 @@ func (e expTreasure) GetTestGeneral() testGeneral {
 
 func compareTreasures(test test, exp expTreasure, got api.Treasure) {
 	test.t.Helper()
-	compareExpIdOnly(test, exp.expIdOnly, got.ID)
-	compIdApiResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
+	compareExpIDOnly(test, exp.expIDOnly, got.ID)
+	compIDAPIResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
 	compare(test, "availability", string(exp.availability), got.Availability)
 	compare(test, "is anima treasure", exp.isAnimaTreasure, got.IsAnimaTreasure)
 	compare(test, "treasure type", string(exp.treasureType), got.TreasureType)
@@ -46,7 +46,7 @@ func compareFoundEquipment(test test, fieldName string, exp testFoundEquipment, 
 	enEndpoint := test.cfg.E.Equipment.Endpoint
 	aaEndpoint := test.cfg.E.AutoAbilities.Endpoint
 
-	compIdApiResource(test, fieldName+" - equipment name", enEndpoint, exp.equipmentName, got.EquipmentName)
+	compIDAPIResource(test, fieldName+" - equipment name", enEndpoint, exp.equipmentName, got.EquipmentName)
 	checkResIDsInSlice(test, fieldName+" - abilities", aaEndpoint, exp.abilities, got.Abilities)
 	compare(test, fieldName+" - empty slots amount", exp.emptySlotsAmount, got.EmptySlotsAmount)
 }

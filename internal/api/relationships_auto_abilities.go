@@ -52,7 +52,7 @@ func getAutoAbilityRelationships(cfg *Config, r *http.Request, autoAbility seedi
 
 	g.Go(func() error {
 		var err error
-		rel.EquipmentTables, err = getResourcesDbItem(cfg, ctx, cfg.E.EquipmentTables, autoAbility, cfg.db.GetAutoAbilityEquipmentTableIDs)
+		rel.EquipmentTables, err = getResourcesDBItem(cfg, ctx, cfg.E.EquipmentTables, autoAbility, cfg.db.GetAutoAbilityEquipmentTableIDs)
 		return err
 	})
 

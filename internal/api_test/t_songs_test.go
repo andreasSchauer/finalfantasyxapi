@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -229,7 +229,7 @@ func TestRetrieveSongs(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Songs.Endpoint, "RetrieveSongs", testCfg.HandleSongs, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Songs.Endpoint, "RetrieveSongs", testCfg.HandleSongs, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestSubsectionSongs(t *testing.T) {
@@ -267,5 +267,5 @@ func TestSubsectionSongs(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Songs.Endpoint, "SubsectionSongs", nil, compareSimpleResourceLists[api.NamedAPIResource, api.SongSimple])
+	testIDList(t, tests, testCfg.E.Songs.Endpoint, "SubsectionSongs", nil, compareSimpleResourceLists[api.NamedAPIResource, api.SongSimple])
 }

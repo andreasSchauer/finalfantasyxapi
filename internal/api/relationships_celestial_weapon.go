@@ -20,7 +20,7 @@ func getCelestialWeaponRelationships(cfg *Config, r *http.Request, cw seeding.Ce
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
-		tables, err := getResourcesDbItem(cfg, ctx, cfg.E.EquipmentTables, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
+		tables, err := getResourcesDBItem(cfg, ctx, cfg.E.EquipmentTables, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
 		if err != nil {
 			return err
 		}
@@ -31,12 +31,12 @@ func getCelestialWeaponRelationships(cfg *Config, r *http.Request, cw seeding.Ce
 
 	g.Go(func() error {
 		var err error
-		rel.WpnTreasure, err = getResDbItemOne(cfg, ctx, cfg.E.Treasures, cw, ToIntOneNull(cfg.db.GetCelestialWeaponTreasureID))
+		rel.WpnTreasure, err = getResDBItemOne(cfg, ctx, cfg.E.Treasures, cw, ToIntOneNull(cfg.db.GetCelestialWeaponTreasureID))
 		return err
 	})
 
 	g.Go(func() error {
-		crestTreasures, err := getResourcesDbItem(cfg, ctx, cfg.E.Treasures, crest, cfg.db.GetKeyItemTreasureIDs)
+		crestTreasures, err := getResourcesDBItem(cfg, ctx, cfg.E.Treasures, crest, cfg.db.GetKeyItemTreasureIDs)
 		if err != nil {
 			return err
 		}
@@ -45,7 +45,7 @@ func getCelestialWeaponRelationships(cfg *Config, r *http.Request, cw seeding.Ce
 	})
 
 	g.Go(func() error {
-		sigilQuests, err := getResourcesDbItem(cfg, ctx, cfg.E.Quests, sigil, cfg.db.GetKeyItemQuestIDs)
+		sigilQuests, err := getResourcesDBItem(cfg, ctx, cfg.E.Quests, sigil, cfg.db.GetKeyItemQuestIDs)
 		if err != nil {
 			return err
 		}

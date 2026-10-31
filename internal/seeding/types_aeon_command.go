@@ -7,9 +7,9 @@ import (
 )
 
 type AeonCommand struct {
-	ID                int32					`json:"id"`
-	TopmenuID         *int32				`json:"topmenu_id"`
-	SubmenuID         *int32				`json:"submenu_id"`
+	ID                int32                 `json:"id"`
+	TopmenuID         *int32                `json:"topmenu_id"`
+	SubmenuID         *int32                `json:"submenu_id"`
 	Name              string                `json:"name"`
 	Description       string                `json:"description"`
 	Effect            string                `json:"effect"`
@@ -41,7 +41,7 @@ func (c AeonCommand) GetID() int32 {
 	return c.ID
 }
 
-func (c AeonCommand) Error() string {
+func (c AeonCommand) String() string {
 	return fmt.Sprintf("aeon command %s", c.Name)
 }
 
@@ -57,6 +57,6 @@ type PossibleAbilityList struct {
 	Abilities []AbilityReference `json:"abilities"`
 }
 
-func (pa PossibleAbilityList) Error() string {
+func (pa PossibleAbilityList) String() string {
 	return fmt.Sprintf("possible abilities for %s", pa.User)
 }

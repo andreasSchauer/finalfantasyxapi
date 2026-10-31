@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getModifier(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList], id int32) (Modifier, error) {
+func (cfg *Config) getModifier(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedAPIResourceList], id int32) (Modifier, error) {
 	modifier, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return Modifier{}, err
@@ -36,13 +36,13 @@ func (cfg *Config) getModifier(r *http.Request, i handlerInput[seeding.Modifier,
 	return response, nil
 }
 
-func (cfg *Config) retrieveModifiers(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveModifiers(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		enumListQuery(cfg, r, i, cfg.T.ModifierCategory, ids, QpnCategory, cfg.db.GetModifierIDsByCategory),
 	})
 }

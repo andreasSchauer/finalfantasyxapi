@@ -10,7 +10,7 @@ import (
 )
 
 // validates id-queryParam and checks emptiness.
-func parseIdQuery[F seeding.Lookupable](r *http.Request, queryParam QueryParam, fLookup map[string]F) (int32, error) {
+func parseIDQuery[F seeding.Lookupable](r *http.Request, queryParam QueryParam, fLookup map[string]F) (int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return 0, err
@@ -25,7 +25,7 @@ func parseIdQuery[F seeding.Lookupable](r *http.Request, queryParam QueryParam, 
 }
 
 // validates id-queryParam and checks emptiness. accepts "none" as input.
-func parseIdQueryNul[F seeding.Lookupable](r *http.Request, queryParam QueryParam, fLookup map[string]F) (*int32, error) {
+func parseIDQueryNul[F seeding.Lookupable](r *http.Request, queryParam QueryParam, fLookup map[string]F) (*int32, error) {
 	query, err := checkEmptyQuery(r, queryParam)
 	if err != nil {
 		return nil, err

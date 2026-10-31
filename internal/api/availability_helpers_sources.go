@@ -36,7 +36,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 	reqs := []string{string(srcType)}
 	excls := []string{}
 
-	monID, err := getQueryIdPtr(r, cfg.E.Monsters, QpnMonster, i.queryLookup)
+	monID, err := getQueryIDPtr(r, cfg.E.Monsters, QpnMonster, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -44,7 +44,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		reqs = append(reqs, "monster-single")
 	}
 
-	itemID, err := getQueryIdPtr(r, cfg.E.Items, QpnItem, i.queryLookup)
+	itemID, err := getQueryIDPtr(r, cfg.E.Items, QpnItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -52,7 +52,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		reqs = append(reqs, string(ViewSourceTypeItem))
 	}
 
-	keyItemID, err := getQueryIdPtr(r, cfg.E.KeyItems, QpnKeyItem, i.queryLookup)
+	keyItemID, err := getQueryIDPtr(r, cfg.E.KeyItems, QpnKeyItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -60,7 +60,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourc
 		reqs = append(reqs, string(ViewSourceTypeKeyItem))
 	}
 
-	autoAbilityID, err := getQueryIdPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := getQueryIDPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -112,7 +112,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	reqs := []string{}
 	excls := []string{}
 
-	autoAbilityID, err := getQueryIdPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := getQueryIDPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
@@ -130,7 +130,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 		reqs = append(reqs, "equip-filter")
 	}
 
-	charID, err := getQueryNameIdPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
+	charID, err := getQueryNameIDPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}

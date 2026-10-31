@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func enumListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputIDs []int32, queryName QueryParamName, dbQuery DbQueryEnumList[E]) IdFilter {
+func enumListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputIDs []int32, queryName QueryParamName, dbQuery DBQueryEnumList[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {
@@ -24,7 +24,7 @@ func enumListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList
 
 		dbIDs, err := dbQuery(ctx, enums)
 		if err != nil {
-			return nil, newHTTPErrorDbFilter(i.resTypePlural, queryParam, err)
+			return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParam, err)
 		}
 
 		return dbIDs, nil

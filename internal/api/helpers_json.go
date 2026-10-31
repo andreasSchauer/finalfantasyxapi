@@ -35,7 +35,7 @@ func respondWithJSON(w http.ResponseWriter, code int, payload any) {
 		return
 	}
 
-	dat = h.CleanUpJson(dat)
+	dat = h.CleanUpJSON(dat)
 	w.WriteHeader(code)
 	w.Write(dat)
 }

@@ -20,7 +20,7 @@ func getMultipleAPIResources[T seeding.Lookupable, R any, A APIResource, L APIRe
 	return idsToAPIResourceList(cfg, r, i, dbIDs)
 }
 
-func filterIDs[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], IDs []int32, queryFns []IdFilter) ([]int32, error) {
+func filterIDs[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], IDs []int32, queryFns []IDFilter) ([]int32, error) {
 	filteredIDs := IDs
 	g, ctx := errgroup.WithContext(r.Context())
 	var mu sync.Mutex

@@ -168,7 +168,7 @@ func assignLookup[T Lookupable](fileName string, keyLookup *map[string]T, idLook
 	lookupPath := filepath.Join("data_lookups", fileName)
 
 	var dataSlice []T
-	err := loadJsonFile(lookupPath, &dataSlice)
+	err := loadJSONFile(lookupPath, &dataSlice)
 	if err != nil {
 		return err
 	}
@@ -178,7 +178,7 @@ func assignLookup[T Lookupable](fileName string, keyLookup *map[string]T, idLook
 	}
 
 	if idLookup != nil {
-		*idLookup = sliceToIdLookup(dataSlice)
+		*idLookup = sliceToIDLookup(dataSlice)
 	}
 
 	return nil
@@ -194,7 +194,7 @@ func sliceToKeyLookup[T Lookupable](slice []T) map[string]T {
 	return lookup
 }
 
-func sliceToIdLookup[T Lookupable](slice []T) map[int32]T {
+func sliceToIDLookup[T Lookupable](slice []T) map[int32]T {
 	lookup := make(map[int32]T, len(slice))
 
 	for _, obj := range slice {

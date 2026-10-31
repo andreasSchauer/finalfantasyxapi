@@ -59,21 +59,21 @@ func getAreaSectionRelations(cfg *Config, r *http.Request, areaIDs []int32) (map
 	var treasureJunctions []Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Treasures.resTypeSingle, cfg.db.GetAreaTreasureIdPairs, juncAreaTreasure)
+		treasureJunctions, err = getDBJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Treasures.resTypeSingle, cfg.db.GetAreaTreasureIdPairs, juncAreaTreasure)
 		return err
 	})
 
 	var shopJunctions []Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Shops.resTypeSingle, cfg.db.GetAreaShopIdPairs, juncAreaShop)
+		shopJunctions, err = getDBJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Shops.resTypeSingle, cfg.db.GetAreaShopIdPairs, juncAreaShop)
 		return err
 	})
 
 	var monsterJunctions []Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = getDbJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Monsters.resTypeSingle, cfg.db.GetAreaMonsterIdPairs, juncAreaMonster)
+		monsterJunctions, err = getDBJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Monsters.resTypeSingle, cfg.db.GetAreaMonsterIdPairs, juncAreaMonster)
 		return err
 	})
 

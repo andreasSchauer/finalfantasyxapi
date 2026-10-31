@@ -7,13 +7,13 @@ import (
 )
 
 type Stat struct {
-	ID               int32	`json:"id"`
+	ID               int32  `json:"id"`
 	Name             string `json:"name"`
 	Effect           string `json:"effect"`
 	MinVal           int32  `json:"min_val"`
 	MaxVal           int32  `json:"max_val"`
 	MaxVal2          *int32 `json:"max_val_2"`
-	SphereID         *int32	`json:"sphere_id"`
+	SphereID         *int32 `json:"sphere_id"`
 	ActivationSphere string `json:"activation_sphere"`
 }
 
@@ -39,7 +39,7 @@ func (s Stat) GetID() int32 {
 	return s.ID
 }
 
-func (s Stat) Error() string {
+func (s Stat) String() string {
 	return fmt.Sprintf("stat %s", s.Name)
 }
 

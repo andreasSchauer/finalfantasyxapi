@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func ConvertJsonData[O, N any](fileName string, old []O, convFn func(O) N) error {
+func ConvertJSONData[O, N any](fileName string, old []O, convFn func(O) N) error {
 	return WriteFile("new_files", fileName, convertStructs(old, convFn))
 }
 
@@ -37,7 +37,7 @@ func WriteFile[T any](dirName, fileName string, data []T) error {
 		return err
 	}
 
-	jsonBytes = CleanUpJson(jsonBytes)
+	jsonBytes = CleanUpJSON(jsonBytes)
 
 	destPath := filepath.Join(fileDir, fileName)
 
@@ -49,7 +49,7 @@ func WriteFile[T any](dirName, fileName string, data []T) error {
 	return nil
 }
 
-func CleanUpJson(json []byte) []byte {
+func CleanUpJSON(json []byte) []byte {
 	json = bytes.ReplaceAll(json, []byte(`\u0026`), []byte("&"))
 	json = bytes.ReplaceAll(json, []byte(`\u003c`), []byte("<"))
 	json = bytes.ReplaceAll(json, []byte(`\u003e`), []byte(">"))

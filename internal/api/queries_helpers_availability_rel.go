@@ -43,7 +43,7 @@ func getRelAvailabilityParams[T seeding.Lookupable, R any, A APIResource, L APIR
 	return availabilityParams, nil
 }
 
-func runRelAvailabilityQuery[T, K seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, ctx context.Context, i handlerInput[T, R, A, L], item K, params RelAvlParams, dbQuery RelAvailabilityDbQuery) ([]A, error) {
+func runRelAvailabilityQuery[T, K seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, ctx context.Context, i handlerInput[T, R, A, L], item K, params RelAvlParams, dbQuery RelAvailabilityDBQuery) ([]A, error) {
 	dbIDs, err := dbQuery(ctx, params)
 	if err != nil {
 		return nil, newHTTPErrorDB(i.resTypePlural, item, err)

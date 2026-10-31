@@ -30,13 +30,13 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 
 	g.Go(func() error {
 		var err error
-		rel.Characters, err = getResourcesDbItem(cfg, ctx, cfg.E.Characters, area, ToIntManyNull(cfg.db.GetAreaCharacterIDs))
+		rel.Characters, err = getResourcesDBItem(cfg, ctx, cfg.E.Characters, area, ToIntManyNull(cfg.db.GetAreaCharacterIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Aeons, err = getResourcesDbItem(cfg, ctx, cfg.E.Aeons, area, ToIntManyNull(cfg.db.GetAreaAeonIDs))
+		rel.Aeons, err = getResourcesDBItem(cfg, ctx, cfg.E.Aeons, area, ToIntManyNull(cfg.db.GetAreaAeonIDs))
 		return err
 	})
 
@@ -83,7 +83,7 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 
 	g.Go(func() error {
 		var err error
-		rel.FMVs, err = getResourcesDbItem(cfg, ctx, cfg.E.FMVs, area, cfg.db.GetAreaFmvIDs)
+		rel.FMVs, err = getResourcesDBItem(cfg, ctx, cfg.E.FMVs, area, cfg.db.GetAreaFmvIDs)
 		return err
 	})
 

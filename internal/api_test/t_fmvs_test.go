@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -84,5 +84,5 @@ func TestRetrieveFMVs(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.FMVs.Endpoint, "RetrieveFMVs", testCfg.HandleFMVs, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.FMVs.Endpoint, "RetrieveFMVs", testCfg.HandleFMVs, compareAPIResourceLists[api.NamedAPIResourceList])
 }

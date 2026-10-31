@@ -5,7 +5,7 @@ import (
 )
 
 type Topmenu struct {
-	ID   int32	`json:"id"`
+	ID   int32  `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -26,7 +26,7 @@ func (t Topmenu) GetID() int32 {
 	return t.ID
 }
 
-func (t Topmenu) Error() string {
+func (t Topmenu) String() string {
 	return fmt.Sprintf("topmenu %s", t.Name)
 }
 

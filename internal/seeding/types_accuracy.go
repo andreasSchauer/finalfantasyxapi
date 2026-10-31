@@ -7,7 +7,7 @@ import (
 )
 
 type Accuracy struct {
-	ID          int32	 `json:"accuracy_id,omitempty"`
+	ID          int32    `json:"accuracy_id,omitempty"`
 	AccSource   string   `json:"acc_source"`
 	HitChance   *int32   `json:"hit_chance"`
 	AccModifier *float32 `json:"acc_modifier"`
@@ -26,6 +26,6 @@ func (a Accuracy) GetID() int32 {
 	return a.ID
 }
 
-func (a Accuracy) Error() string {
+func (a Accuracy) String() string {
 	return fmt.Sprintf("accuracy with source: %s, hit chance: %v, modifier: %v", a.AccSource, h.PtrToString(a.HitChance), h.PtrToString(a.AccModifier))
 }

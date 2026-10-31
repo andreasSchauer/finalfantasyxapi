@@ -5,7 +5,7 @@ import (
 )
 
 type BlitzballPosition struct {
-	ID       int32			 `json:"id"`
+	ID       int32           `json:"id"`
 	Category string          `json:"category"`
 	Slot     string          `json:"slot"`
 	Items    []BlitzballItem `json:"items"`
@@ -30,7 +30,7 @@ func (b BlitzballPosition) ToKeyFields() []any {
 	}
 }
 
-func (b BlitzballPosition) Error() string {
+func (b BlitzballPosition) String() string {
 	return fmt.Sprintf("blitzball position %s in %s", b.Slot, b.Category)
 }
 
@@ -73,6 +73,6 @@ func (b *BlitzballItem) SetID(id int32) {
 	b.ID = id
 }
 
-func (b BlitzballItem) Error() string {
+func (b BlitzballItem) String() string {
 	return fmt.Sprintf("blitzball item %s, chance %d, position id %d", b.ItemAmount.ItemName, b.Chance, b.PositionID)
 }

@@ -19,7 +19,7 @@ func createEnumURL(cfg *Config, e EnumName) string {
 	return fmt.Sprintf("%s/%s/%s", getBaseURL(cfg), epEnums, getEnumKey(e))
 }
 
-func UrlToPath(cfg *Config, url string) string {
+func URLToPath(cfg *Config, url string) string {
 	prefix := getBaseURL(cfg)
 	return strings.TrimPrefix(url, prefix)
 }
@@ -42,7 +42,7 @@ func CompleteTestPath(endpoint EndpointName, id int32) string {
 	return fmt.Sprintf("/%s/%d", endpoint, id)
 }
 
-func getIdFromURL(url string) int32 {
+func getIDFromURL(url string) int32 {
 	urlTrimmed := strings.TrimSuffix(url, "/")
 	segments := strings.Split(urlTrimmed, "/")
 	idStr := segments[len(segments)-1]

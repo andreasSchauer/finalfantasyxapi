@@ -7,14 +7,14 @@ import (
 )
 
 type FMV struct {
-	ID                  int32		 `json:"id"`
+	ID                  int32        `json:"id"`
 	Name                string       `json:"name"`
 	Translation         *string      `json:"translation"`
 	CutsceneDescription string       `json:"cutscene_description"`
 	SongName            *string      `json:"music"`
 	LocationArea        LocationArea `json:"location_area"`
-	SongID              *int32		 `json:"song_id"`
-	AreaID              int32		 `json:"area_id"`
+	SongID              *int32       `json:"song_id"`
+	AreaID              int32        `json:"area_id"`
 }
 
 func (f FMV) ToHashFields() []any {
@@ -39,7 +39,7 @@ func (f FMV) GetID() int32 {
 	return f.ID
 }
 
-func (f FMV) Error() string {
+func (f FMV) String() string {
 	return fmt.Sprintf("fmv %s", f.Name)
 }
 

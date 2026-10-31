@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -104,7 +104,7 @@ func TestRetrieveOverdrives(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Overdrives.Endpoint, "RetrieveOverdrives", testCfg.HandleOverdrives, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Overdrives.Endpoint, "RetrieveOverdrives", testCfg.HandleOverdrives, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestSubsectionOverdrives(t *testing.T) {
@@ -162,5 +162,5 @@ func TestSubsectionOverdrives(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Overdrives.Endpoint, "SubsectionOverdrives", nil, compareSimpleResourceLists[api.NamedAPIResource, api.OverdriveSimple])
+	testIDList(t, tests, testCfg.E.Overdrives.Endpoint, "SubsectionOverdrives", nil, compareSimpleResourceLists[api.NamedAPIResource, api.OverdriveSimple])
 }

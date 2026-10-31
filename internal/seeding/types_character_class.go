@@ -5,10 +5,10 @@ import (
 )
 
 type CharacterClass struct {
-	ID       int32		`json:"id"`
-	Name     string   	`json:"name"`
-	Category string   	`json:"category"`
-	Members  []string 	`json:"members"`
+	ID       int32    `json:"id"`
+	Name     string   `json:"name"`
+	Category string   `json:"category"`
+	Members  []string `json:"members"`
 }
 
 func (c CharacterClass) ToHashFields() []any {
@@ -28,7 +28,7 @@ func (c CharacterClass) GetID() int32 {
 	return c.ID
 }
 
-func (c CharacterClass) Error() string {
+func (c CharacterClass) String() string {
 	return fmt.Sprintf("character class %s", c.Name)
 }
 

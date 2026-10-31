@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getKeyItem(r *http.Request, i handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList], id int32) (KeyItem, error) {
+func (cfg *Config) getKeyItem(r *http.Request, i handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedAPIResourceList], id int32) (KeyItem, error) {
 	keyItem, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return KeyItem{}, err
@@ -34,13 +34,13 @@ func (cfg *Config) getKeyItem(r *http.Request, i handlerInput[seeding.KeyItem, K
 	return response, nil
 }
 
-func (cfg *Config) retrieveKeyItems(r *http.Request, i handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveKeyItems(r *http.Request, i handlerInput[seeding.KeyItem, KeyItem, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		enumListQuery(cfg, r, i, cfg.T.KeyItemCategory, ids, QpnCategory, cfg.db.GetKeyItemIDsCategory),
 		valueListQuery(cfg, r, i, ids, QpnMethods, cfg.db.GetKeyItemIDsByMethods),
 		idQuery(r, i, ids, QpnLocation, cfg.E.Locations.objLookup, cfg.db.GetKeyItemIDsByLocation),

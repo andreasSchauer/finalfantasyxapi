@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
@@ -21,6 +21,6 @@ func compareMasterItems(test test, exp expMasterItem, got api.MasterItem) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "item type", string(exp.itemType), string(got.Type))
-	compPathApiResource(test, "typed item", exp.typedItem, got.TypedItem)
+	compPathAPIResource(test, "typed item", exp.typedItem, got.TypedItem)
 	compStructs(test, "obtainable from", exp.obtainableFrom, got.ObtainableFrom)
 }

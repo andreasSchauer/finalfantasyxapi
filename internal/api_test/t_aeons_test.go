@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -290,5 +290,5 @@ func TestRetrieveAeons(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Aeons.Endpoint, "RetrieveAeons", testCfg.HandleAeons, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Aeons.Endpoint, "RetrieveAeons", testCfg.HandleAeons, compareAPIResourceLists[api.NamedAPIResourceList])
 }

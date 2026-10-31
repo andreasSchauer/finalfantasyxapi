@@ -74,7 +74,7 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabi
 	})
 
 	g.Go(func() error {
-		playerAbilities, err := getResourcesDbItem(cfg, ctx, cfg.E.PlayerAbilities, item, cfg.db.GetItemPlayerAbilityIDs)
+		playerAbilities, err := getResourcesDBItem(cfg, ctx, cfg.E.PlayerAbilities, item, cfg.db.GetItemPlayerAbilityIDs)
 		if err != nil {
 			return err
 		}
@@ -83,7 +83,7 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabi
 	})
 
 	g.Go(func() error {
-		autoAbilities, err := getResourcesDbItem(cfg, ctx, cfg.E.AutoAbilities, item, cfg.db.GetItemAutoAbilityIDs)
+		autoAbilities, err := getResourcesDBItem(cfg, ctx, cfg.E.AutoAbilities, item, cfg.db.GetItemAutoAbilityIDs)
 		if err != nil {
 			return err
 		}
@@ -93,7 +93,7 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabi
 
 	g.Go(func() error {
 		var err error
-		rel.Mixes, err = getResourcesDbItem(cfg, ctx, cfg.E.Mixes, item, cfg.db.GetItemMixIDs)
+		rel.Mixes, err = getResourcesDBItem(cfg, ctx, cfg.E.Mixes, item, cfg.db.GetItemMixIDs)
 		return err
 	})
 

@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -1288,7 +1288,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Monsters.Endpoint, "GetMultipleMonsters", testCfg.HandleMonsters, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Monsters.Endpoint, "GetMultipleMonsters", testCfg.HandleMonsters, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestRetrieveMonsters(t *testing.T) {
@@ -1652,7 +1652,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Monsters.Endpoint, "RetrieveMonsters", testCfg.HandleMonsters, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Monsters.Endpoint, "RetrieveMonsters", testCfg.HandleMonsters, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestSubsectionMonsters(t *testing.T) {
@@ -1775,5 +1775,5 @@ func TestSubsectionMonsters(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Monsters.Endpoint, "SubsectionMonsters", nil, compareSimpleResourceLists[api.NamedAPIResource, api.MonsterSimple])
+	testIDList(t, tests, testCfg.E.Monsters.Endpoint, "SubsectionMonsters", nil, compareSimpleResourceLists[api.NamedAPIResource, api.MonsterSimple])
 }

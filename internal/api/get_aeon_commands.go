@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getAeonCommand(r *http.Request, i handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList], id int32) (AeonCommand, error) {
+func (cfg *Config) getAeonCommand(r *http.Request, i handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedAPIResourceList], id int32) (AeonCommand, error) {
 	command, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return AeonCommand{}, err
@@ -35,6 +35,6 @@ func (cfg *Config) getAeonCommand(r *http.Request, i handlerInput[seeding.AeonCo
 	return response, nil
 }
 
-func (cfg *Config) retrieveAeonCommands(r *http.Request, i handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveAeonCommands(r *http.Request, i handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	return verifyParamsAndRetrieve(r, i)
 }

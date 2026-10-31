@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -117,5 +117,5 @@ func TestRetrieveSubmenus(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Submenus.Endpoint, "RetrieveSubmenus", testCfg.HandleSubmenus, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Submenus.Endpoint, "RetrieveSubmenus", testCfg.HandleSubmenus, compareAPIResourceLists[api.NamedAPIResourceList])
 }

@@ -8,17 +8,17 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-var errNotAnID = errors.New("not an id.")
-var errIdNotFound = errors.New("id doesn't exit.")
-var errContinue = errors.New("loop that called the function should be continued.")
-var errNoResource = errors.New("no resources found.")
-var errEmptyQuery = errors.New("query parameter is empty.")
-var errNullArray = errors.New("array field is empty.")
-var errQueryNone = errors.New("'none' input in query.")
-var errQueryRedirect = errors.New("query parameter is not empty, but will be dealt with else where.")
-var errNoDefaultVal = errors.New("query parameter doesn't have a default value, or default value is unused.")
-var errNoSpecialInput = errors.New("query parameter doesn't have special inputs, or no special input was found.")
-var errNoIntRange = errors.New("query parameter doesn't have integer range.")
+var errNotAnID = errors.New("not an id")
+var errIDNotFound = errors.New("id doesn't exit")
+var errContinue = errors.New("loop that called the function should be continued")
+var errNoResource = errors.New("no resources found")
+var errEmptyQuery = errors.New("query parameter is empty")
+var errNullArray = errors.New("array field is empty")
+var errQueryNone = errors.New("'none' input in query")
+var errQueryRedirect = errors.New("query parameter is not empty, but will be dealt with else where")
+var errNoDefaultVal = errors.New("query parameter doesn't have a default value, or default value is unused")
+var errNoSpecialInput = errors.New("query parameter doesn't have special inputs, or no special input was found")
+var errNoIntRange = errors.New("query parameter doesn't have integer range")
 var errNoVal = errors.New("param has no value")
 
 func errExceptEmptyQuery(err error) bool {
@@ -29,48 +29,48 @@ func queryIsEmpty(err error) bool {
 	return errors.Is(err, errEmptyQuery)
 }
 
-type HttpError struct {
+type HTTPError struct {
 	Code int
 	msg  string
 	err  error
 }
 
-func (e HttpError) Error() string {
+func (e HTTPError) Error() string {
 	if e.err != nil {
 		return fmt.Sprintf("http error: %s: %v", e.msg, e.err)
 	}
 	return fmt.Sprintf("http error: %s", e.msg)
 }
 
-func newHTTPError(code int, msg string, err error) HttpError {
-	return HttpError{
+func newHTTPError(code int, msg string, err error) HTTPError {
+	return HTTPError{
 		Code: code,
 		msg:  msg,
 		err:  err,
 	}
 }
 
-func newHTTPErrorDB(fetchType ResTypePlural, parentItem seeding.Lookupable, err error) HttpError {
+func newHTTPErrorDB(fetchType ResTypePlural, parentItem seeding.Lookupable, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", fetchType, parentItem), err)
 }
 
-func newHTTPErrorDbPairs(childResType, parentResType ResTypeSingle, err error) HttpError {
+func newHTTPErrorDBPairs(childResType, parentResType ResTypeSingle, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs.", childResType, parentResType), err)
 }
 
-func newHTTPErrorDbOne(fetchType ResTypeSingle, parentItem seeding.Lookupable, err error) HttpError {
+func newHTTPErrorDBOne(fetchType ResTypeSingle, parentItem seeding.Lookupable, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", fetchType, parentItem), err)
 }
 
-func newHTTPErrorDbFilter(fetchType ResTypePlural, queryParam QueryParam, err error) HttpError {
+func newHTTPErrorDBFilter(fetchType ResTypePlural, queryParam QueryParam, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s for parameter '%s'.", fetchType, queryParam.Name), err)
 }
 
-func newHTTPErrorFetchLimit(fetchLimit int) HttpError {
+func newHTTPErrorFetchLimit(fetchLimit int) HTTPError {
 	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of inputs is %d.", fetchLimit), nil)
 }
 
-func newHTTPErrorAvailability(fetchType ResTypePlural, err error) HttpError {
+func newHTTPErrorAvailability(fetchType ResTypePlural, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by availability", fetchType), err)
 }
 
@@ -79,7 +79,7 @@ func handleHTTPError(w http.ResponseWriter, err error) bool {
 		return false
 	}
 
-	httpErr, ok := err.(HttpError)
+	httpErr, ok := err.(HTTPError)
 	if ok {
 		respondWithError(w, httpErr.Code, httpErr.msg, httpErr.err)
 		return true
@@ -89,12 +89,12 @@ func handleHTTPError(w http.ResponseWriter, err error) bool {
 	return true
 }
 
-func editHTTPError(msg string, err error) error {
+func cascadeHTTPError(msg string, err error) error {
 	if err == nil {
 		return nil
 	}
 
-	httpErr, ok := err.(HttpError)
+	httpErr, ok := err.(HTTPError)
 	if ok {
 		httpErr.msg = fmt.Sprintf("%s: %s", msg, httpErr.msg)
 		return httpErr

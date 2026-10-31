@@ -6,13 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList], id int32) (RonsoRage, error) {
+func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedAPIResourceList], id int32) (RonsoRage, error) {
 	ronsoRage, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return RonsoRage{}, err
 	}
 
-	monsters, err := getResourcesDbItem(cfg, r.Context(), cfg.E.Monsters, ronsoRage, cfg.db.GetRonsoRageMonsterIDs)
+	monsters, err := getResourcesDBItem(cfg, r.Context(), cfg.E.Monsters, ronsoRage, cfg.db.GetRonsoRageMonsterIDs)
 	if err != nil {
 		return RonsoRage{}, err
 	}
@@ -29,6 +29,6 @@ func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seeding.RonsoRag
 	return response, nil
 }
 
-func (cfg *Config) retrieveRonsoRages(r *http.Request, i handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveRonsoRages(r *http.Request, i handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
 	return verifyParamsAndRetrieve(r, i)
 }

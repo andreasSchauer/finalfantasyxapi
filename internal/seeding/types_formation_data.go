@@ -32,7 +32,7 @@ func (fd FormationData) ToHashFields() []any {
 	}
 }
 
-func (fd FormationData) Error() string {
+func (fd FormationData) String() string {
 	return fmt.Sprintf("formation data with category: %s, forced ambush: %t, can escape: %t, boss music id: %v, notes: %v", fd.Category, fd.IsForcedAmbush, fd.CanEscape, h.ObjPtrToID(fd.BossMusic), h.PtrToString(fd.Notes))
 }
 
@@ -55,6 +55,6 @@ func (s FormationBossSong) GetID() int32 {
 	return s.ID
 }
 
-func (s FormationBossSong) Error() string {
+func (s FormationBossSong) String() string {
 	return fmt.Sprintf("formation boss song %s, celebrate victory: %t", s.Song, s.CelebrateVictory)
 }

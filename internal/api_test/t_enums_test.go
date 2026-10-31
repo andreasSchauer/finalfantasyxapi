@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -78,5 +78,5 @@ func TestRetrieveEnums(t *testing.T) {
 		},
 	}
 
-	testPathList(t, tests, "RetrieveEnums", testCfg.HandleEnums, compareAPIResourceListPaths[api.NamedApiResourceList])
+	testPathList(t, tests, "RetrieveEnums", testCfg.HandleEnums, compareAPIResourceListPaths[api.NamedAPIResourceList])
 }

@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
@@ -18,9 +18,9 @@ func (e expAeonCommand) GetTestGeneral() testGeneral {
 func compareAeonCommands(test test, exp expAeonCommand, got api.AeonCommand) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIdApiResource(test, "user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
-	compIdApiResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	compIdApiResourcePtrs(test, "open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
+	compIDAPIResource(test, "user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
+	compIDAPIResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
+	compIDAPIResourcePtrs(test, "open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
 	compTestStructSlices(test, "possible abilities", exp.possibleAbilities, got.PossibleAbilities, comparePosAbilityList)
 }
 
@@ -31,6 +31,6 @@ type expPossibleAbilityList struct {
 
 func comparePosAbilityList(test test, fieldName string, exp expPossibleAbilityList, got api.PossibleAbilityList) {
 	test.t.Helper()
-	compIdApiResource(test, fieldName+" - user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
+	compIDAPIResource(test, fieldName+" - user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
 	checkResIDsInSlice(test, fieldName+" - abilities", test.cfg.E.Abilities.Endpoint, exp.abilities, got.Abilities)
 }

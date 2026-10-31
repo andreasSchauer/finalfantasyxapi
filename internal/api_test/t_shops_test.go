@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -45,7 +45,7 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 14,
 				},
 			},
-			expIdOnly: newExpIdOnly(2),
+			expIDOnly: newExpIDOnly(2),
 			area:      47,
 			category:  database.ShopCategoryStandard,
 			preAirship: &testSubShop{
@@ -125,7 +125,7 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 5,
 				},
 			},
-			expIdOnly: newExpIdOnly(16),
+			expIDOnly: newExpIDOnly(16),
 			area:      121,
 			category:  database.ShopCategoryStandard,
 			preAirship: &testSubShop{
@@ -196,7 +196,7 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 0,
 				},
 			},
-			expIdOnly: newExpIdOnly(31),
+			expIDOnly: newExpIDOnly(31),
 			area:      200,
 			category:  database.ShopCategoryTravelAgency,
 			preAirship: &testSubShop{
@@ -366,7 +366,7 @@ func TestRetrieveShops(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Shops.Endpoint, "RetrieveShops", testCfg.HandleShops, compareAPIResourceLists[api.UnnamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Shops.Endpoint, "RetrieveShops", testCfg.HandleShops, compareAPIResourceLists[api.UnnamedAPIResourceList])
 }
 
 func TestSubsectionShops(t *testing.T) {
@@ -394,5 +394,5 @@ func TestSubsectionShops(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Shops.Endpoint, "SubsectionShops", nil, compareSimpleResourceLists[api.UnnamedAPIResource, api.ShopSimple])
+	testIDList(t, tests, testCfg.E.Shops.Endpoint, "SubsectionShops", nil, compareSimpleResourceLists[api.UnnamedAPIResource, api.ShopSimple])
 }

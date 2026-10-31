@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -152,7 +152,7 @@ func TestRetrieveSubquests(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Subquests.Endpoint, "RetrieveSubquests", testCfg.HandleSubquests, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Subquests.Endpoint, "RetrieveSubquests", testCfg.HandleSubquests, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestSubsectionSubquests(t *testing.T) {
@@ -196,5 +196,5 @@ func TestSubsectionSubquests(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Subquests.Endpoint, "SubsectionSubquests", testCfg.HandleSidequests, compareSimpleResourceLists[api.NamedAPIResource, api.SubquestSimple])
+	testIDList(t, tests, testCfg.E.Subquests.Endpoint, "SubsectionSubquests", testCfg.HandleSidequests, compareSimpleResourceLists[api.NamedAPIResource, api.SubquestSimple])
 }

@@ -7,7 +7,7 @@ import (
 )
 
 type Monster struct {
-	ID                   int32			   `json:"id"`
+	ID                   int32             `json:"id"`
 	Name                 string            `json:"name"`
 	Version              *int32            `json:"version"`
 	Specification        *string           `json:"specification"`
@@ -91,7 +91,7 @@ func (m Monster) GetID() int32 {
 	return m.ID
 }
 
-func (m Monster) Error() string {
+func (m Monster) String() string {
 	return h.NameToString(m.Name, m.Version, m.Specification)
 }
 

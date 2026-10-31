@@ -28,7 +28,7 @@ func verifyTurnOrderParams(cfg *Config, params TurnOrderParams, paramsRules Para
 		return TurnOrderParams{}, err
 	}
 
-	params.FormationID, err = verifyParamFieldPtr(cfg, params.FormationID, PfnFormationID, userValues, paramsRules, vfId)
+	params.FormationID, err = verifyParamFieldPtr(cfg, params.FormationID, PfnFormationID, userValues, paramsRules, vfID)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
@@ -54,7 +54,7 @@ func vfTurnOrderParty(cfg *Config, item turnOrderParty, _ FieldName, userValues 
 		return turnOrderParty{}, err
 	}
 
-	item.UnitID, err = verifyParamField(cfg, item.UnitID, PfnUnitID, userValues, paramsRules, vfId)
+	item.UnitID, err = verifyParamField(cfg, item.UnitID, PfnUnitID, userValues, paramsRules, vfID)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
@@ -85,7 +85,7 @@ func vfTurnOrderMon(cfg *Config, item turnOrderMon, _ FieldName, userValues map[
 		return turnOrderMon{}, err
 	}
 
-	item.MonsterID, err = verifyParamFieldPtr(cfg, item.MonsterID, PfnUnitID, userValues, paramsRules, vfId)
+	item.MonsterID, err = verifyParamFieldPtr(cfg, item.MonsterID, PfnUnitID, userValues, paramsRules, vfID)
 	if err != nil {
 		return turnOrderMon{}, err
 	}

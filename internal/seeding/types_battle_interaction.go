@@ -11,7 +11,7 @@ type BattleInteraction struct {
 	Target                    string            `json:"target"`
 	BasedOnUserAttack         bool              `json:"based_on_user_attack"`
 	Range                     *int32            `json:"range"`
-	Damage                    *Damage	        `json:"damage"`
+	Damage                    *Damage           `json:"damage"`
 	ShatterRate               int32             `json:"shatter_rate"`
 	Accuracy                  Accuracy          `json:"accuracy"`
 	AffectedBy                []string          `json:"affected_by"`
@@ -47,6 +47,6 @@ func (bi *BattleInteraction) SetID(id int32) {
 	bi.ID = id
 }
 
-func (bi BattleInteraction) Error() string {
+func (bi BattleInteraction) String() string {
 	return fmt.Sprintf("battle interaction with target: %s, phys attack: %t, range: %v, damage id: %v, shatter rate: %v, accuracy id: %d, hit amount: %d, special action: %v", bi.Target, bi.BasedOnUserAttack, h.PtrToString(bi.Range), h.ObjPtrToID(bi.Damage), bi.ShatterRate, bi.Accuracy.ID, bi.HitAmount, h.PtrToString(bi.SpecialAction))
 }

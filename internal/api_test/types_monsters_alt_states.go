@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ type testAppliedState struct {
 func compareMonsterAppliedStates(test test, _ string, exp testAppliedState, got api.AppliedState) {
 	compare(test, "applied state condition", exp.condition, got.Condition)
 	compare(test, "applied state isTemporary", exp.isTemporary, got.IsTemporary)
-	compIdApiResourcePtrs(test, "applied status", test.cfg.E.StatusConditions.Endpoint, exp.appliedStatus, got.AppliedStatus)
+	compIDAPIResourcePtrs(test, "applied status", test.cfg.E.StatusConditions.Endpoint, exp.appliedStatus, got.AppliedStatus)
 }
 
 type testDefaultState struct {
@@ -92,5 +92,5 @@ func compareAltStateLosses(test test, fieldName string, exp testAltStateLoss, go
 	checkResIDsInSlice(test, desc+"properties", test.cfg.E.Properties.Endpoint, exp.Properties, got.Properties)
 	checkResIDsInSlice(test, desc+"auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.AutoAbilities, got.AutoAbilities)
 	checkResIDsInSlice(test, desc+"status immunities", test.cfg.E.StatusConditions.Endpoint, exp.StatusImmunities, got.StatusImmunities)
-	compIdApiResourcePtrs(test, desc+"removed status", test.cfg.E.StatusConditions.Endpoint, exp.Status, got.Status)
+	compIDAPIResourcePtrs(test, desc+"removed status", test.cfg.E.StatusConditions.Endpoint, exp.Status, got.Status)
 }

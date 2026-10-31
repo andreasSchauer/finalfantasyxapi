@@ -1,10 +1,10 @@
-package apiTest
+package apitest
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
 type expMonsterFormation struct {
 	testGeneral
-	expIdOnly
+	expIDOnly
 	category        string
 	isForcedAmbush  bool
 	canEscape       bool
@@ -23,14 +23,14 @@ func (e expMonsterFormation) GetTestGeneral() testGeneral {
 
 func compareMonsterFormations(test test, exp expMonsterFormation, got api.MonsterFormation) {
 	test.t.Helper()
-	compareExpIdOnly(test, exp.expIdOnly, got.ID)
+	compareExpIDOnly(test, exp.expIDOnly, got.ID)
 	compare(test, "category", exp.category, got.Category)
 	compare(test, "is forced ambush", exp.isForcedAmbush, got.IsForcedAmbush)
 	compare(test, "can escape", exp.canEscape, got.CanEscape)
 	compare(test, "ap", exp.ap, got.AP)
 	compare(test, "ap overkill", exp.apOverkill, got.ApOverkill)
 	compare(test, "gil", exp.gil, got.Gil)
-	compIdApiResourcePtrs(test, "boss song", test.cfg.E.Songs.Endpoint, exp.bossMusic, got.BossMusic)
+	compIDAPIResourcePtrs(test, "boss song", test.cfg.E.Songs.Endpoint, exp.bossMusic, got.BossMusic)
 	checkResAmts(test, "monsters", exp.monsters, got.Monsters)
 	compTestStructSlices(test, "trigger commands", exp.triggerCommands, got.TriggerCommands, compareFormationTCs)
 	checkResIDsInSlice(test, "areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
@@ -46,6 +46,6 @@ func compareFormationTCs(test test, fieldName string, exp testFormationTC, got a
 	tcEndpoint := test.cfg.E.TriggerCommands.Endpoint
 	charClassesEndpoint := test.cfg.E.CharacterClasses.Endpoint
 
-	compIdApiResource(test, fieldName+" - tc ability", tcEndpoint, exp.Ability, got.Ability)
+	compIDAPIResource(test, fieldName+" - tc ability", tcEndpoint, exp.Ability, got.Ability)
 	checkResIDsInSlice(test, fieldName+" - tc users", charClassesEndpoint, exp.Users, got.Users)
 }

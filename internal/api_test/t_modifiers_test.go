@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -147,5 +147,5 @@ func TestRetrieveModifiers(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Modifiers.Endpoint, "RetrieveModifiers", testCfg.HandleModifiers, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Modifiers.Endpoint, "RetrieveModifiers", testCfg.HandleModifiers, compareAPIResourceLists[api.NamedAPIResourceList])
 }

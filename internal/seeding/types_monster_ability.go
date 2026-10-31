@@ -7,11 +7,11 @@ import (
 )
 
 type MonsterAbility struct {
-	ID        int32		`json:"id"`
-	AbilityID int32		`json:"ability_id"`
+	ID        int32 `json:"id"`
+	AbilityID int32 `json:"ability_id"`
 	AbilityReference
-	IsForced bool 		`json:"is_forced"`
-	IsUnused bool 		`json:"is_unused"`
+	IsForced bool `json:"is_forced"`
+	IsUnused bool `json:"is_unused"`
 }
 
 func (m MonsterAbility) ToHashFields() []any {
@@ -31,6 +31,6 @@ func (m *MonsterAbility) SetID(id int32) {
 	m.ID = id
 }
 
-func (m MonsterAbility) Error() string {
+func (m MonsterAbility) String() string {
 	return fmt.Sprintf("monster ability '%s', type: %s, is forced: %t, is unused: %t", h.NameToString(m.Name, m.Version, nil), m.AbilityType, m.IsForced, m.IsUnused)
 }

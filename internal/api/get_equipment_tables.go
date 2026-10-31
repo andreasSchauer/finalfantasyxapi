@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList], id int32) (EquipmentTable, error) {
+func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedAPIResourceList], id int32) (EquipmentTable, error) {
 	table, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return EquipmentTable{}, err
@@ -36,13 +36,13 @@ func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seeding.Equ
 	return response, nil
 }
 
-func (cfg *Config) retrieveEquipmentTables(r *http.Request, i handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveEquipmentTables(r *http.Request, i handlerInput[seeding.EquipmentTable, EquipmentTable, UnnamedAPIResource, UnnamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		idListQuery(cfg, r, i, ids, QpnAutoAbilities, cfg.L.AutoAbilities, cfg.db.GetEquipmentTableIDsByAutoAbility),
 		enumQuery(r, i, cfg.T.EquipType, ids, QpnType, cfg.db.GetEquipmentTableIDsEquipType),
 		boolQuery2(r, i, ids, QpnCelestialWeapon, cfg.db.GetEquipmentTableIDsCelestialWeapon),

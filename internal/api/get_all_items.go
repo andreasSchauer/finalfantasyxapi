@@ -50,7 +50,7 @@ func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seeding.M
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		enumListQuery(cfg, r, i, cfg.T.ItemType, ids, QpnType, cfg.db.GetMasterItemIDsByType),
 		valueListQuery(cfg, r, i, ids, QpnMethods, cfg.db.GetMasterItemIDsByMethods),
 		idQueryWrapper(cfg, r, i, ids, QpnLocation, cfg.E.Locations.objLookup, getMasterItemsByLocation),

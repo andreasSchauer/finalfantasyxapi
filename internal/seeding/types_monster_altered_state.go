@@ -7,11 +7,11 @@ import (
 )
 
 type AlteredState struct {
-	ID          int32	`json:"id"`
-	MonsterID   int32	`json:"monster_id"`
-	Condition   string 	`json:"condition"`
-	IsTemporary bool   	`json:"is_temporary"`
-	Changes     []Alt  	`json:"changes"`
+	ID          int32  `json:"id"`
+	MonsterID   int32  `json:"monster_id"`
+	Condition   string `json:"condition"`
+	IsTemporary bool   `json:"is_temporary"`
+	Changes     []Alt  `json:"changes"`
 }
 
 func (a AlteredState) ToHashFields() []any {
@@ -31,13 +31,13 @@ func (a *AlteredState) SetID(id int32) {
 	a.ID = id
 }
 
-func (a AlteredState) Error() string {
+func (a AlteredState) String() string {
 	return fmt.Sprintf("altered state with monster id: %d, is temporary: %t, condition: %s", a.MonsterID, a.IsTemporary, a.Condition)
 }
 
 type Alt struct {
-	ID               int32			   `json:"id"`
-	AlteredStateID   int32			   `json:"altered_state_id"`
+	ID               int32             `json:"id"`
+	AlteredStateID   int32             `json:"altered_state_id"`
 	AlterationType   string            `json:"alteration_type"`
 	Distance         *int32            `json:"distance"`
 	Properties       []string          `json:"properties"`
@@ -66,6 +66,6 @@ func (a *Alt) SetID(id int32) {
 	a.ID = id
 }
 
-func (a Alt) Error() string {
+func (a Alt) String() string {
 	return fmt.Sprintf("alt with altered state id: %d, alteration type: %s", a.AlteredStateID, a.AlterationType)
 }

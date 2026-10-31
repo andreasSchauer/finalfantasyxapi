@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -195,7 +195,7 @@ func TestGetMultipleTriggerCommands(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.TriggerCommands.Endpoint, "GetMultipleTriggerCommands", testCfg.HandleTriggerCommands, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.TriggerCommands.Endpoint, "GetMultipleTriggerCommands", testCfg.HandleTriggerCommands, compareAPIResourceLists[api.NamedAPIResourceList])
 }
 
 func TestRetrieveTriggerCommands(t *testing.T) {
@@ -233,5 +233,5 @@ func TestRetrieveTriggerCommands(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.TriggerCommands.Endpoint, "RetrieveTriggerCommands", testCfg.HandleTriggerCommands, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.TriggerCommands.Endpoint, "RetrieveTriggerCommands", testCfg.HandleTriggerCommands, compareAPIResourceLists[api.NamedAPIResourceList])
 }

@@ -5,7 +5,7 @@ import (
 )
 
 type RonsoRage struct {
-	ID 			int32	`json:"id"`
+	ID int32 `json:"id"`
 	Overdrive
 }
 
@@ -26,7 +26,7 @@ func (r RonsoRage) GetID() int32 {
 	return r.ID
 }
 
-func (r RonsoRage) Error() string {
+func (r RonsoRage) String() string {
 	return fmt.Sprintf("ronso rage %s", r.Overdrive.Name)
 }
 

@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"net/http"
@@ -77,5 +77,5 @@ func TestRetrieveProperties(t *testing.T) {
 		},
 	}
 
-	testIdList(t, tests, testCfg.E.Properties.Endpoint, "RetrieveProperties", testCfg.HandleProperties, compareAPIResourceLists[api.NamedApiResourceList])
+	testIDList(t, tests, testCfg.E.Properties.Endpoint, "RetrieveProperties", testCfg.HandleProperties, compareAPIResourceLists[api.NamedAPIResourceList])
 }

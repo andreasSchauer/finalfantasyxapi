@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
@@ -20,5 +20,5 @@ func compareQuests(test test, exp expQuest, got api.Quest) {
 	test.t.Helper()
 	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
 	compare(test, "quest type", string(exp.questType), string(got.Type))
-	compPathApiResource(test, "typed quest", exp.typedQuest, got.TypedQuest)
+	compPathAPIResource(test, "typed quest", exp.typedQuest, got.TypedQuest)
 }

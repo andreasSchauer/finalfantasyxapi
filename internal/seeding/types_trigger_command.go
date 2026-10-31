@@ -7,16 +7,15 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-
 type TriggerCommand struct {
-	ID 				   int32			   `json:"id,omitempty"`
+	ID int32 `json:"id,omitempty"`
 	Ability
-	TopmenuID          *int32			   `json:"topmenu_id,omitempty"`
-	Description        string              `json:"description"`
-	Effect             string              `json:"effect"`
-	Topmenu            *string             `json:"topmenu"`
-	RelatedStats       []string            `json:"related_stats"`
-	Cursor             string              `json:"cursor"`
+	TopmenuID    *int32   `json:"topmenu_id,omitempty"`
+	Description  string   `json:"description"`
+	Effect       string   `json:"effect"`
+	Topmenu      *string  `json:"topmenu"`
+	RelatedStats []string `json:"related_stats"`
+	Cursor       string   `json:"cursor"`
 }
 
 func (t TriggerCommand) ToHashFields() []any {
@@ -49,7 +48,7 @@ func (t TriggerCommand) GetAbilityRef() AbilityReference {
 	}
 }
 
-func (t TriggerCommand) Error() string {
+func (t TriggerCommand) String() string {
 	return fmt.Sprintf("trigger command '%s'", h.NameToString(t.Name, t.Version, t.Specification))
 }
 

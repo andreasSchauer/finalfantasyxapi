@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"bytes"
@@ -108,7 +108,7 @@ func testServiceResponsesPost[E testCase, G any](t *testing.T, tests []E, testFu
 
 // compareAPIResourceLists for normal API Resources
 // compareSimpleResourceLists for Subsections
-func testIdList[G any](t *testing.T, tests []expListIDs, endpoint api.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, api.EndpointName, expListIDs, G)) {
+func testIDList[G any](t *testing.T, tests []expListIDs, endpoint api.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, api.EndpointName, expListIDs, G)) {
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()

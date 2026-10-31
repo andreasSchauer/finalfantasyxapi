@@ -7,7 +7,7 @@ import (
 )
 
 type OverdriveMode struct {
-	ID             int32		   `json:"id"`
+	ID             int32           `json:"id"`
 	Name           string          `json:"name"`
 	Description    string          `json:"description"`
 	Effect         string          `json:"effect"`
@@ -44,7 +44,7 @@ func (o OverdriveMode) GetResParamsNamed() ResParamsNamed {
 	}
 }
 
-func (o OverdriveMode) Error() string {
+func (o OverdriveMode) String() string {
 	return fmt.Sprintf("overdrive mode %s", o.Name)
 }
 
@@ -83,6 +83,6 @@ func (a ActionToLearn) GetVal() int32 {
 	return a.Amount
 }
 
-func (a ActionToLearn) Error() string {
+func (a ActionToLearn) String() string {
 	return fmt.Sprintf("action to learn with user: %s, amount: %d", a.User, a.Amount)
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList], id int32) (MonsterFormation, error) {
+func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedAPIResourceList], id int32) (MonsterFormation, error) {
 	formation, err := verifyParamsAndGet(r, i, id)
 	if err != nil {
 		return MonsterFormation{}, err
@@ -29,13 +29,13 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seeding.M
 	return response, nil
 }
 
-func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedApiResourceList]) ([]int32, error) {
+func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[seeding.MonsterFormation, MonsterFormation, UnnamedAPIResource, UnnamedAPIResourceList]) ([]int32, error) {
 	ids, err := verifyParamsAndRetrieve(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IdFilter{
+	return filterIDs(cfg, r, i, ids, []IDFilter{
 		idQuery(r, i, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetMonsterFormationIDsByMonster),
 		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetMonsterFormationIDsByLocation),
 		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetMonsterFormationIDsBySublocation),

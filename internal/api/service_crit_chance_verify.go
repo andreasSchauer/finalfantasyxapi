@@ -1,5 +1,28 @@
 package api
 
+// the question is: do I want more methods, but no verify function in the parameters
+// or do I want less methods, but with verify functions?
+
+type fieldVerifyer struct {
+	paramsRules ParamsRules
+	userValues  map[FieldName]any
+}
+
+func createFieldVerifyer(paramsRules ParamsRules, userValues map[FieldName]any) fieldVerifyer {
+	return fieldVerifyer{
+		paramsRules: paramsRules,
+		userValues:  userValues,
+	}
+}
+
+func (v fieldVerifyer) vfField[T any](cfg *Config, val T, fieldName FieldName) (T, error) {
+	return verifyParamField(cfg, val, fieldName, v.userValues, v.paramsRules, nil)
+}
+
+func (v fieldVerifyer) vfIntField(cfg *Config, val int32, fieldName FieldName) (int32, error) {
+	return verifyParamField(cfg, val, fieldName, v.userValues, v.paramsRules, vfInt)
+}
+
 func verifyCritChanceParams(cfg *Config, params CritChanceParams, paramsRules ParamsRules, userValues map[FieldName]any) (CritChanceParams, error) {
 	var err error
 
@@ -21,8 +44,6 @@ func verifyCritChanceParams(cfg *Config, params CritChanceParams, paramsRules Pa
 	return params, nil
 }
 
-
-
 func vfAbilityCritChance(cfg *Config, item AbilityCritChance, _ FieldName, userValues map[FieldName]any, paramsRules ParamsRules) (AbilityCritChance, error) {
 	err := vfExistingFields(userValues, paramsRules)
 	if err != nil {
@@ -42,19 +63,18 @@ func vfAbilityCritChance(cfg *Config, item AbilityCritChance, _ FieldName, userV
 	return item, nil
 }
 
-
 func vfAbilityLookupCritChance(cfg *Config, item AbilityLookupCritChance, _ FieldName, userValues map[FieldName]any, paramsRules ParamsRules) (AbilityLookupCritChance, error) {
 	err := vfExistingFields(userValues, paramsRules)
 	if err != nil {
 		return AbilityLookupCritChance{}, err
 	}
 
-	item.AbilityID, err = verifyParamField(cfg, item.AbilityID, PfnAbilityID, userValues, paramsRules, vfId)
+	item.AbilityID, err = verifyParamField(cfg, item.AbilityID, PfnAbilityID, userValues, paramsRules, vfID)
 	if err != nil {
 		return AbilityLookupCritChance{}, err
 	}
 
-	item.Interaction, err = verifyParamFieldPtr(cfg, item.Interaction, PfnInteraction, userValues, paramsRules, vfId)
+	item.Interaction, err = verifyParamFieldPtr(cfg, item.Interaction, PfnInteraction, userValues, paramsRules, vfID)
 	if err != nil {
 		return AbilityLookupCritChance{}, err
 	}
@@ -66,7 +86,6 @@ func vfAbilityLookupCritChance(cfg *Config, item AbilityLookupCritChance, _ Fiel
 
 	return item, nil
 }
-
 
 func vfAbilityOverridesCritChance(cfg *Config, item AbilityOverridesCritChance, _ FieldName, userValues map[FieldName]any, paramsRules ParamsRules) (AbilityOverridesCritChance, error) {
 	err := vfExistingFields(userValues, paramsRules)
@@ -106,7 +125,6 @@ func vfAbilityCustomCritChance(cfg *Config, item AbilityCustomCritChance, _ Fiel
 	return item, nil
 }
 
-
 func vfUserCritChance(cfg *Config, item UserCritChance, _ FieldName, userValues map[FieldName]any, paramsRules ParamsRules) (UserCritChance, error) {
 	err := vfExistingFields(userValues, paramsRules)
 	if err != nil {
@@ -131,14 +149,13 @@ func vfUserCritChance(cfg *Config, item UserCritChance, _ FieldName, userValues 
 	return item, nil
 }
 
-
 func vfUserLookupCritChance(cfg *Config, item UserLookupCritChance, _ FieldName, userValues map[FieldName]any, paramsRules ParamsRules) (UserLookupCritChance, error) {
 	err := vfExistingFields(userValues, paramsRules)
 	if err != nil {
 		return UserLookupCritChance{}, err
 	}
 
-	item.MonsterID, err = verifyParamField(cfg, item.MonsterID, PfnMonsterID, userValues, paramsRules, vfId)
+	item.MonsterID, err = verifyParamField(cfg, item.MonsterID, PfnMonsterID, userValues, paramsRules, vfID)
 	if err != nil {
 		return UserLookupCritChance{}, err
 	}
@@ -150,7 +167,6 @@ func vfUserLookupCritChance(cfg *Config, item UserLookupCritChance, _ FieldName,
 
 	return item, nil
 }
-
 
 func vfUserOverridesCritChance(cfg *Config, item UserOverridesCritChance, _ FieldName, userValues map[FieldName]any, paramsRules ParamsRules) (UserOverridesCritChance, error) {
 	err := vfExistingFields(userValues, paramsRules)
@@ -190,7 +206,6 @@ func vfUserCustomCritChance(cfg *Config, item UserCustomCritChance, _ FieldName,
 	return item, nil
 }
 
-
 func vfTargetCritChance(cfg *Config, item TargetCritChance, _ FieldName, userValues map[FieldName]any, paramsRules ParamsRules) (TargetCritChance, error) {
 	err := vfExistingFields(userValues, paramsRules)
 	if err != nil {
@@ -215,14 +230,13 @@ func vfTargetCritChance(cfg *Config, item TargetCritChance, _ FieldName, userVal
 	return item, nil
 }
 
-
 func vfTargetLookupCritChance(cfg *Config, item TargetLookupCritChance, _ FieldName, userValues map[FieldName]any, paramsRules ParamsRules) (TargetLookupCritChance, error) {
 	err := vfExistingFields(userValues, paramsRules)
 	if err != nil {
 		return TargetLookupCritChance{}, err
 	}
 
-	item.MonsterID, err = verifyParamField(cfg, item.MonsterID, PfnMonsterID, userValues, paramsRules, vfId)
+	item.MonsterID, err = verifyParamField(cfg, item.MonsterID, PfnMonsterID, userValues, paramsRules, vfID)
 	if err != nil {
 		return TargetLookupCritChance{}, err
 	}
@@ -234,7 +248,6 @@ func vfTargetLookupCritChance(cfg *Config, item TargetLookupCritChance, _ FieldN
 
 	return item, nil
 }
-
 
 func vfTargetOverridesCritChance(cfg *Config, item TargetOverridesCritChance, _ FieldName, userValues map[FieldName]any, paramsRules ParamsRules) (TargetOverridesCritChance, error) {
 	err := vfExistingFields(userValues, paramsRules)

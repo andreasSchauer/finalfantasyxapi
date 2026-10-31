@@ -8,7 +8,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func vfId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (int32, error) {
+func vfID(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (int32, error) {
 	doc := paramsRules[fieldName].Doc
 
 	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "id", false)
@@ -20,7 +20,7 @@ func vfInt(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, param
 	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "value", false)
 }
 
-func vfArrayChildId(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (int32, error) {
+func vfArrayChildID(_ *Config, val int32, fieldName FieldName, _ map[FieldName]any, paramsRules ParamsRules) (int32, error) {
 	doc := paramsRules[fieldName].Doc
 
 	return vfIntRange(val, doc.ChildMinVal, doc.ChildMaxVal, fieldName, "id", true)

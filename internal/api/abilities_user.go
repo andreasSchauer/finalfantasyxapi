@@ -12,7 +12,7 @@ import (
 type userAbility interface {
 	canUseAbility(*Config, string) bool
 	getBattleInteractions() []BattleInteraction
-	error
+	fmt.Stringer
 }
 
 type unitRepl struct {
@@ -54,7 +54,7 @@ func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](
 	queryParamBomb := i.queryLookup[QpnBombWpn]
 	queryParamCelestialWpn := i.queryLookup[QpnCelestialWeapon]
 
-	unitID, err := parseNameIdQuery(r, queryParamUser, cfg.E.PlayerUnits.resTypeSingle, cfg.E.PlayerUnits.objLookup)
+	unitID, err := parseNameIDQuery(r, queryParamUser, cfg.E.PlayerUnits.resTypeSingle, cfg.E.PlayerUnits.objLookup)
 	if err != nil {
 		return unitRepl{}, err
 	}

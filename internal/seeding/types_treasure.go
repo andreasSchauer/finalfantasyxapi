@@ -11,14 +11,14 @@ type TreasureList struct {
 	Treasures    []Treasure   `json:"treasures"`
 }
 
-func (tl TreasureList) Error() string {
+func (tl TreasureList) String() string {
 	return fmt.Sprintf("treasures at %s", tl.LocationArea)
 }
 
 type Treasure struct {
-	ID              int32			   `json:"id"`
-	Version         int32			   `json:"version"`
-	AreaID          int32			   `json:"area_id"`
+	ID              int32              `json:"id"`
+	Version         int32              `json:"version"`
+	AreaID          int32              `json:"area_id"`
 	TreasureType    string             `json:"treasure_type"`
 	LootType        string             `json:"loot_type"`
 	Availability    string             `json:"availability"`
@@ -58,7 +58,7 @@ func (t *Treasure) SetID(id int32) {
 	t.ID = id
 }
 
-func (t Treasure) Error() string {
+func (t Treasure) String() string {
 	return fmt.Sprintf("treasure number: %d", t.Version)
 }
 

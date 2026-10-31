@@ -1,4 +1,4 @@
-package apiTest
+package apitest
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ func checkResAmtsID[A api.APIResource](test test, fieldName string, exp map[int3
 	test.t.Helper()
 	compLength(test, fieldName, len(got))
 
-	gotMap := api.GetResAmtIdMap(got)
+	gotMap := api.GetResAmtIDMap(got)
 
 	for id, expVal := range exp {
 		gotVal, ok := gotMap[id]

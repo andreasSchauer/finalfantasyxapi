@@ -3,8 +3,8 @@ package seeding
 import "fmt"
 
 type StatusResist struct {
-	ID                int32	 `json:"id"`
-	StatusConditionID int32	 `json:"status_condition_id"`
+	ID                int32  `json:"id"`
+	StatusConditionID int32  `json:"status_condition_id"`
 	StatusCondition   string `json:"name"`
 	Resistance        int32  `json:"resistance"`
 }
@@ -37,6 +37,6 @@ func (sr StatusResist) GetVal() int32 {
 	return sr.Resistance
 }
 
-func (sr StatusResist) Error() string {
+func (sr StatusResist) String() string {
 	return fmt.Sprintf("status resist with status %s, resistance %d", sr.StatusCondition, sr.Resistance)
 }

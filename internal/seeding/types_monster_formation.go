@@ -9,8 +9,8 @@ import (
 )
 
 type MonsterFormation struct {
-	ID      int32  							  `json:"id"`
-	Version *int32 							  `json:"version"`
+	ID      int32  `json:"id"`
+	Version *int32 `json:"version"`
 	MonsterSelection
 	FormationData   FormationData             `json:"formation_data"`
 	TriggerCommands []FormationTriggerCommand `json:"trigger_commands"`
@@ -38,7 +38,7 @@ func (mf MonsterFormation) GetID() int32 {
 	return mf.ID
 }
 
-func (mf MonsterFormation) Error() string {
+func (mf MonsterFormation) String() string {
 	return fmt.Sprintf("monster-formation with version: %s, %s, %s", h.PtrToString(mf.Version), mf.MonsterSelection, mf.FormationData)
 }
 
@@ -73,11 +73,11 @@ func (ms MonsterSelection) GetID() int32 {
 	return ms.ID
 }
 
-func (ms MonsterSelection) Error() string {
+func (ms MonsterSelection) String() string {
 	errs := []string{}
 
 	for _, ma := range ms.Monsters {
-		errs = append(errs, ma.Error())
+		errs = append(errs, ma.String())
 	}
 
 	return strings.Join(errs, " | ")

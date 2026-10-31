@@ -20,7 +20,7 @@ func (a AbilityReference) ToKeyFields() []any {
 	}
 }
 
-func (a AbilityReference) Error() string {
+func (a AbilityReference) String() string {
 	return fmt.Sprintf("ability reference '%s', type %s", h.NameToString(a.Name, a.Version, nil), a.AbilityType)
 }
 
@@ -43,6 +43,6 @@ func (a UntypedAbilityRef) ToKeyFields() []any {
 	}
 }
 
-func (a UntypedAbilityRef) Error() string {
+func (a UntypedAbilityRef) String() string {
 	return fmt.Sprintf("untyped ability reference '%s'", h.NameToString(a.Name, a.Version, nil))
 }
