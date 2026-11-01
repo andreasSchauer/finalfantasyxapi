@@ -30,7 +30,7 @@ type biReplacement struct {
 	DamageFormula  *string
 }
 
-func applyUser[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], ability userAbility, queryName QueryParamName) ([]BattleInteraction, error) {
+func applyUser[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A], ability userAbility, queryName QueryParamName) ([]BattleInteraction, error) {
 	repl, err := getUnitRepl(cfg, r, i, queryName)
 	if queryIsEmpty(err) {
 		return ability.getBattleInteractions(), nil
@@ -49,7 +49,7 @@ func applyUser[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cf
 	return battleInteractions, nil
 }
 
-func getUnitRepl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], queryName QueryParamName) (unitRepl, error) {
+func getUnitRepl[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A], queryName QueryParamName) (unitRepl, error) {
 	queryParamUser := i.queryLookup[queryName]
 	queryParamBomb := i.queryLookup[QpnBombWpn]
 	queryParamCelestialWpn := i.queryLookup[QpnCelestialWeapon]

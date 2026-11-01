@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getOverdrive(r *http.Request, i handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedAPIResourceList], id int32) (Overdrive, error) {
-	overdrive, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getOverdrive(r *http.Request, i handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource], id int32) (Overdrive, error) {
+	overdrive, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Overdrive{}, err
 	}
@@ -33,14 +33,14 @@ func (cfg *Config) getOverdrive(r *http.Request, i handlerInput[seeding.Overdriv
 	return response, nil
 }
 
-func (cfg *Config) retrieveOverdrives(r *http.Request, i handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveOverdrives(r *http.Request, i handlerInput[seeding.Overdrive, Overdrive, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		intListQuery(cfg, r, i, ids, QpnRank, cfg.db.GetOverdriveIDsByRank),
-		nameIDQuery(r, i, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, cfg.L.CharClasses, ToIntManyNull(cfg.db.GetOverdriveIDsByUser)),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryIntList(cfg, r, ids, QpnRank, cfg.db.GetOverdriveIDsByRank),
+		i.queryNameID(r, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, cfg.L.CharClasses, ToIntManyNull(cfg.db.GetOverdriveIDsByUser)),
 	})
 }

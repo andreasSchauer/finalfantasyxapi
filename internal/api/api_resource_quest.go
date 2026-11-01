@@ -2,25 +2,11 @@ package api
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
-
-type QuestAPIResourceList struct {
-	ListParams
-	Results []QuestAPIResource `json:"results"`
-}
-
-func (l QuestAPIResourceList) GetListParams() ListParams {
-	return l.ListParams
-}
-
-func (l QuestAPIResourceList) GetResults() []HasAPIResource {
-	return toHasAPIResSlice(l.Results)
-}
 
 type QuestAPIResource struct {
 	ID        int32   `json:"-"`
@@ -58,7 +44,7 @@ func (r QuestAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func idToQuestAPIResource[T seeding.IsQuest, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id int32) QuestAPIResource {
+func idToQuestAPIResource[T seeding.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) QuestAPIResource {
 	questLookup, _ := seeding.GetResourceByID(id, i.objLookupID)
 	params := questLookup.GetResParamsQuest()
 
@@ -100,12 +86,12 @@ func questToQuestAPIResource(cfg *Config, quest seeding.Quest) QuestAPIResource 
 	return QuestAPIResource{}
 }
 
-func nameToQuestAPIResource[T seeding.IsQuest, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], name string) QuestAPIResource {
+func nameToQuestAPIResource[T seeding.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], name string) QuestAPIResource {
 	quest, _ := seeding.GetResource(name, i.objLookup)
 	return idToQuestAPIResource(cfg, i, quest.GetID())
 }
 
-func namesToQuestAPIResources[T seeding.IsQuest, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], names []string) []QuestAPIResource {
+func namesToQuestAPIResources[T seeding.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], names []string) []QuestAPIResource {
 	resources := []QuestAPIResource{}
 
 	for _, name := range names {
@@ -114,18 +100,4 @@ func namesToQuestAPIResources[T seeding.IsQuest, R any, A APIResource, L APIReso
 	}
 
 	return resources
-}
-
-func newQuestAPIResourceList(cfg *Config, r *http.Request, resources []QuestAPIResource) (QuestAPIResourceList, error) {
-	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
-	if err != nil {
-		return QuestAPIResourceList{}, err
-	}
-
-	list := QuestAPIResourceList{
-		ListParams: listParams,
-		Results:    shownResources,
-	}
-
-	return list, nil
 }

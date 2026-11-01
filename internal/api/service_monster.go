@@ -27,10 +27,10 @@ func quickAssembleMon(cfg *Config, monID int32, altStatePtr *int32) (Monster, er
 		PoisonRate:       monsterLookup.PoisonRate,
 		ThreatenChance:   monsterLookup.ThreatenChance,
 		ZanmatoLevel:     monsterLookup.ZanmatoLevel,
-		BaseStats:        toResAmtType(cfg, cfg.E.Stats, monsterLookup.BaseStats, newBaseStat),
+		BaseStats:        cfg.E.Stats.toResAmtType(cfg, monsterLookup.BaseStats, newBaseStat),
 		ElemResists:      getMonsterElemResists(cfg, monsterLookup.ElemResists),
 		StatusImmunities: namesToNamedAPIResources(cfg, cfg.E.StatusConditions, monsterLookup.StatusImmunities),
-		StatusResists:    toResAmtType(cfg, cfg.E.StatusConditions, monsterLookup.StatusResists, newStatusResist),
+		StatusResists:    cfg.E.StatusConditions.toResAmtType(cfg, monsterLookup.StatusResists, newStatusResist),
 		Abilities:        convertObjSlice(cfg, monsterLookup.Abilities, convertMonsterAbility),
 		AlteredStates:    getMonsterAlteredStates(cfg, nil, monsterLookup),
 	}

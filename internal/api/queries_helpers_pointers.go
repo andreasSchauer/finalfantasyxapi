@@ -42,7 +42,7 @@ func getQueryValuePtr(r *http.Request, queryName QueryParamName, queryLookup map
 	return &value, nil
 }
 
-func getQueryIDPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (*int32, error) {
+func getQueryIDPtr[T seeding.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := parseIDQuery(r, queryParam, i.objLookup)
@@ -53,7 +53,7 @@ func getQueryIDPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList
 	return &id, nil
 }
 
-func getQueryNameIDPtr[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (*int32, error) {
+func getQueryNameIDPtr[T seeding.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (*int32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := parseNameIDQuery(r, queryParam, i.resTypeSingle, i.objLookup)

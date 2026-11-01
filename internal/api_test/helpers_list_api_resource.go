@@ -3,14 +3,14 @@ package apitest
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
 // checks the basic fields of an APIResourceList (count, pagination urls) and then checks for the stated resources
-func compareAPIResourceLists[T api.APIResourceList](test test, endpoint api.EndpointName, expList expListIDs, gotList T) {
+func compareAPIResourceLists[A api.APIResource](test test, endpoint api.EndpointName, expList expListIDs, gotList api.APIResourceList[A]) {
 	test.t.Helper()
 	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
-	test.checkResIDsInSlice( "results", endpoint, expList.results, gotList.GetResults())
+	test.checkResIDsInSlice("results", endpoint, expList.results, gotList.GetResults())
 }
 
 // checks the basic fields of an APIResourceList (count, pagination urls) and then checks for the stated resource paths
-func compareAPIResourceListPaths[T api.APIResourceList](test test, expList expListPaths, gotList T) {
+func compareAPIResourceListPaths[A api.APIResource](test test, expList expListPaths, gotList api.APIResourceList[A]) {
 	test.t.Helper()
 	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
 	test.checkResPathsInSlice("results", expList.results, gotList.GetResults())
@@ -19,7 +19,7 @@ func compareAPIResourceListPaths[T api.APIResourceList](test test, expList expLi
 // checks if both slices are present and if the provided slice of resources contains all stated resources
 func (test test) checkResPathsInSlice[T api.HasAPIResource](fieldName string, expPaths []string, gotRes []T) {
 	test.t.Helper()
-	test.sliceBasicChecks(fieldName, expPaths, gotRes)
+	test.checkSliceBasic(fieldName, expPaths, gotRes)
 
 	gotMap := api.GetResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
@@ -37,7 +37,7 @@ func (test test) checkResPathsInSlice[T api.HasAPIResource](fieldName string, ex
 
 func (test test) checkResIDsInSlice[T api.HasAPIResource](fieldName string, endpoint api.EndpointName, expIDs []int32, gotRes []T) {
 	test.t.Helper()
-	test.sliceBasicChecks(fieldName, expIDs, gotRes)
+	test.checkSliceBasic(fieldName, expIDs, gotRes)
 
 	gotMap := api.GetResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {

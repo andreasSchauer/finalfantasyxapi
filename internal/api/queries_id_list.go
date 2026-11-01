@@ -8,7 +8,7 @@ import (
 )
 
 // query uses a list of ids as database input to filter for resources
-func idListQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DBQueryIntList) IDFilter {
+func (i handlerInput[T, R, A]) queryIDList[F seeding.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {
@@ -33,7 +33,7 @@ func idListQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceLis
 }
 
 // like idListQuery, but with more specialized logic in between (wrapperFn)
-func idListQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, wrapperFn QueryWrapIntSlice) IDFilter {
+func (i handlerInput[T, R, A]) queryIDListWrapper[F seeding.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, wrapperFn QueryWrapIntSlice) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 

@@ -6,7 +6,6 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type avlParams struct {
@@ -15,10 +14,10 @@ type avlParams struct {
 	preAirship     bool
 }
 
-func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (avlParams, error) {
-	queryParamAvl := i.queryLookup[QpnAvailability]
+func checkAvl(cfg *Config, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) (avlParams, error) {
+	queryParamAvl := queryLookup[QpnAvailability]
 
-	availabilities, err := parseEnumListQuery(cfg, r, i.Endpoint, queryParamAvl, cfg.T.AvailabilityType)
+	availabilities, err := parseEnumListQuery(cfg, r, endpoint, queryParamAvl, cfg.T.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return avlParams{}, err
 	}
@@ -28,9 +27,9 @@ func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg
 
 	var preAirship bool
 
-	_, ok := i.queryLookup[QpnPreAirship]
+	_, ok := queryLookup[QpnPreAirship]
 	if ok {
-		preAirship, err = parseBooleanQuery(r, i.queryLookup[QpnPreAirship])
+		preAirship, err = parseBooleanQuery(r, queryLookup[QpnPreAirship])
 		if errExceptEmptyQuery(err) {
 			return avlParams{}, err
 		}
@@ -51,13 +50,13 @@ func checkAvl[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg
 	return params, nil
 }
 
-func checkAvlAndRep[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (avlParams, error) {
-	params, errAvl := checkAvl(cfg, r, i)
+func checkAvlAndRep(cfg *Config, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) (avlParams, error) {
+	params, errAvl := checkAvl(cfg, r, endpoint, queryLookup)
 	if errExceptEmptyQuery(errAvl) {
 		return avlParams{}, errAvl
 	}
 
-	isRepeatable, errRepl := getQueryBoolPtr(r, QpnRepeatable, i.queryLookup)
+	isRepeatable, errRepl := getQueryBoolPtr(r, QpnRepeatable, queryLookup)
 	if errExceptEmptyQuery(errRepl) {
 		return avlParams{}, errRepl
 	}

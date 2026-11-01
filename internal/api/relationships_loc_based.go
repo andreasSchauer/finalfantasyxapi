@@ -47,25 +47,25 @@ func getMusicLocBased(cfg *Config, ctx context.Context, item seeding.Lookupable,
 
 	g.Go(func() error {
 		var err error
-		music.Cues, err = getResourcesDBItem(cfg, ctx, i, item, queries.CueSongs)
+		music.Cues, err = i.dbGetRelations(cfg, ctx, item, queries.CueSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.BackgroundMusic, err = getResourcesDBItem(cfg, ctx, i, item, queries.BmSongs)
+		music.BackgroundMusic, err = i.dbGetRelations(cfg, ctx, item, queries.BmSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.FMVs, err = getResourcesDBItem(cfg, ctx, i, item, queries.FMVSongs)
+		music.FMVs, err = i.dbGetRelations(cfg, ctx, item, queries.FMVSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.BossMusic, err = getResourcesDBItem(cfg, ctx, i, item, queries.BossMusic)
+		music.BossMusic, err = i.dbGetRelations(cfg, ctx, item, queries.BossMusic)
 		return err
 	})
 

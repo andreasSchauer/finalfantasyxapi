@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource, NamedAPIResourceList], id int32) (Song, error) {
-	song, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource], id int32) (Song, error) {
+	song, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Song{}, err
 	}
@@ -47,19 +47,19 @@ func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, N
 	return response, nil
 }
 
-func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationSongIDs),
-		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationSongIDs),
-		idQuery(r, i, ids, QpnArea, cfg.L.Areas, cfg.db.GetAreaSongIDs),
-		boolQuery2(r, i, ids, QpnSpecialUse, cfg.db.GetSongIDsWithSpecialUseCase),
-		boolQuery2(r, i, ids, QpnFMVs, cfg.db.GetSongIDsWithFMVs),
-		enumQuery(r, i, cfg.T.Composer, ids, QpnComposer, ToEnumQuery(cfg.T.Composer, cfg.db.GetSongIDsByComposer)),
-		enumQuery(r, i, cfg.T.Arranger, ids, QpnArranger, ToEnumQuery(cfg.T.Arranger, cfg.db.GetSongIDsByArranger)),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationSongIDs),
+		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationSongIDs),
+		i.queryID(r, ids, QpnArea, cfg.L.Areas, cfg.db.GetAreaSongIDs),
+		i.queryBool2(r, ids, QpnSpecialUse, cfg.db.GetSongIDsWithSpecialUseCase),
+		i.queryBool2(r, ids, QpnFMVs, cfg.db.GetSongIDsWithFMVs),
+		i.queryEnum(r, cfg.T.Composer, ids, QpnComposer, ToEnumQuery(cfg.T.Composer, cfg.db.GetSongIDsByComposer)),
+		i.queryEnum(r, cfg.T.Arranger, ids, QpnArranger, ToEnumQuery(cfg.T.Arranger, cfg.db.GetSongIDsByArranger)),
 	})
 }

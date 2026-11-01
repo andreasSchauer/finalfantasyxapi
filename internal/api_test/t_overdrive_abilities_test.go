@@ -323,7 +323,7 @@ func TestGetMultipleOverdriveAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.OverdriveAbilities.Endpoint, "GetMultipleOverdriveAbilities", testCfg.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.OverdriveAbilities.Endpoint, "GetMultipleOverdriveAbilities", testCfg.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestRetrieveOverdriveAbilities(t *testing.T) {
@@ -391,7 +391,7 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.OverdriveAbilities.Endpoint, "RetrieveOverdriveAbilities", testCfg.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.OverdriveAbilities.Endpoint, "RetrieveOverdriveAbilities", testCfg.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionOverdriveAbilities(t *testing.T) {

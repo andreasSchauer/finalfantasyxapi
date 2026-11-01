@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaAPIResourceList], id int32) (Area, error) {
-	area, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource], id int32) (Area, error) {
+	area, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Area{}, err
 	}
@@ -42,31 +42,31 @@ func (cfg *Config) getArea(r *http.Request, i handlerInput[seeding.Area, Area, A
 	return response, nil
 }
 
-func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource, AreaAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seeding.Area, Area, AreaAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationAreaIDs),
-		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationAreaIDs),
-		idQuery(r, i, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetAreaIDsWithMonster),
-		idQueryWrapper(cfg, r, i, ids, QpnItem, cfg.L.Items, getAreasByItem),
-		idQuery(r, i, ids, QpnKeyItem, cfg.L.KeyItems, cfg.db.GetAreaIDsWithKeyItem),
-		idQuery(r, i, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetAreasByMonster),
-		idQuery(r, i, ids, QpnAutoAbility, cfg.L.AutoAbilities, cfg.db.GetAreaIDsWithAutoAbility),
-		boolQuery(r, i, ids, QpnSaveSphere, cfg.db.GetAreaIDsWithSaveSphere),
-		boolQuery(r, i, ids, QpnCompSphere, cfg.db.GetAreaIDsWithCompSphere),
-		boolQuery(r, i, ids, QpnAirship, cfg.db.GetAreaIDsWithDropOff),
-		boolQuery(r, i, ids, QpnChocobo, cfg.db.GetAreaIDsChocobo),
-		boolQuery2(r, i, ids, QpnCharacters, cfg.db.GetAreaIDsWithCharacters),
-		boolQuery2(r, i, ids, QpnAeons, cfg.db.GetAreaIDsWithAeons),
-		boolQuery2(r, i, ids, QpnMonsters, cfg.db.GetAreaIDsWithMonsters),
-		boolQuery2(r, i, ids, QpnBossFights, cfg.db.GetAreaIDsWithBosses),
-		boolQuery2(r, i, ids, QpnShops, cfg.db.GetAreaIDsWithShops),
-		boolQuery2(r, i, ids, QpnTreasures, cfg.db.GetAreaIDsWithTreasures),
-		boolQuery2(r, i, ids, QpnSidequests, cfg.db.GetAreaIDsWithSidequests),
-		boolQuery2(r, i, ids, QpnFMVs, cfg.db.GetAreaIDsWithFMVs),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationAreaIDs),
+		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationAreaIDs),
+		i.queryID(r, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetAreaIDsWithMonster),
+		i.queryIDWrapper(cfg, r, ids, QpnItem, cfg.L.Items, getAreasByItem),
+		i.queryID(r, ids, QpnKeyItem, cfg.L.KeyItems, cfg.db.GetAreaIDsWithKeyItem),
+		i.queryID(r, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetAreasByMonster),
+		i.queryID(r, ids, QpnAutoAbility, cfg.L.AutoAbilities, cfg.db.GetAreaIDsWithAutoAbility),
+		i.queryBool(r, ids, QpnSaveSphere, cfg.db.GetAreaIDsWithSaveSphere),
+		i.queryBool(r, ids, QpnCompSphere, cfg.db.GetAreaIDsWithCompSphere),
+		i.queryBool(r, ids, QpnAirship, cfg.db.GetAreaIDsWithDropOff),
+		i.queryBool(r, ids, QpnChocobo, cfg.db.GetAreaIDsChocobo),
+		i.queryBool2(r, ids, QpnCharacters, cfg.db.GetAreaIDsWithCharacters),
+		i.queryBool2(r, ids, QpnAeons, cfg.db.GetAreaIDsWithAeons),
+		i.queryBool2(r, ids, QpnMonsters, cfg.db.GetAreaIDsWithMonsters),
+		i.queryBool2(r, ids, QpnBossFights, cfg.db.GetAreaIDsWithBosses),
+		i.queryBool2(r, ids, QpnShops, cfg.db.GetAreaIDsWithShops),
+		i.queryBool2(r, ids, QpnTreasures, cfg.db.GetAreaIDsWithTreasures),
+		i.queryBool2(r, ids, QpnSidequests, cfg.db.GetAreaIDsWithSidequests),
+		i.queryBool2(r, ids, QpnFMVs, cfg.db.GetAreaIDsWithFMVs),
 	})
 }

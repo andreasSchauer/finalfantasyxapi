@@ -9,8 +9,8 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedAPIResourceList], id int32) (ArenaCreation, error) {
-	creation, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource], id int32) (ArenaCreation, error) {
+	creation, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return ArenaCreation{}, err
 	}
@@ -29,7 +29,7 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 		Category:                  creation.Category,
 		Monster:                   idToNamedAPIResource(cfg, cfg.E.Monsters, *creation.MonsterID),
 		ParentSubquest:            idToQuestAPIResource(cfg, cfg.E.Subquests, creation.SubquestID),
-		Reward:                    nameAmountToResourceAmount(cfg, cfg.E.AllItems, ia),
+		Reward:                    cfg.E.AllItems.toResAmtFromName(cfg, ia),
 		RequiredCatchAmount:       creation.Amount,
 		UnlockedCreationsCategory: creation.CreationsUnlockedCategory,
 		RequiredMonsters:          monsters,
@@ -38,14 +38,14 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 	return response, nil
 }
 
-func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumListQuery(cfg, r, i, cfg.T.ArenaCreationCategory, ids, QpnCategory, cfg.db.GetArenaCreationIDsByCategory),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnumList(cfg, r, cfg.T.ArenaCreationCategory, ids, QpnCategory, cfg.db.GetArenaCreationIDsByCategory),
 	})
 }
 
@@ -114,6 +114,6 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seeding.Are
 		return nil, err
 	}
 
-	monsters := idsToAPIResources(cfg, cfg.E.Monsters, monsterIDs)
+	monsters := cfg.E.Monsters.toResources(cfg, monsterIDs)
 	return monsters, nil
 }

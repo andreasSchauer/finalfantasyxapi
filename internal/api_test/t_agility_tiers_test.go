@@ -108,5 +108,5 @@ func TestRetrieveAgilityTiers(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.AgilityTiers.Endpoint, "RetrieveAgilityTiers", testCfg.HandleAgilityTiers, compareAPIResourceLists[api.NamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.AgilityTiers.Endpoint, "RetrieveAgilityTiers", testCfg.HandleAgilityTiers, compareAPIResourceLists[api.NamedAPIResource])
 }

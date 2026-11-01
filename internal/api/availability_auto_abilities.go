@@ -10,7 +10,7 @@ import (
 func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.E.AutoAbilities
 
-	avlParams, err := checkAvlAndRep(cfg, r, i)
+	avlParams, err := checkAvlAndRep(cfg, r, i.Endpoint, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

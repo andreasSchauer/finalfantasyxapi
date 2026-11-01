@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedAPIResourceList], id int32) (AutoAbility, error) {
-	autoAbility, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource], id int32) (AutoAbility, error) {
+	autoAbility, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return AutoAbility{}, err
 	}
@@ -26,7 +26,7 @@ func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seeding.AutoAb
 		Category:               autoAbility.Category,
 		RelatedStats:           namesToNamedAPIResources(cfg, cfg.E.Stats, autoAbility.RelatedStats),
 		AbilityValue:           autoAbility.AbilityValue,
-		RequiredItem:           nameAmountPtrToResAmtPtr(cfg, cfg.E.AllItems, autoAbility.RequiredItem),
+		RequiredItem:           cfg.E.AllItems.toResAmtFromNamePtr(cfg, autoAbility.RequiredItem),
 		LockedOutAutoAbilities: namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, autoAbility.LockedOutAbilities),
 		ActivationCondition:    autoAbility.ActivationCondition,
 		Counter:                autoAbility.Counter,
@@ -52,21 +52,21 @@ func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seeding.AutoAb
 	return response, nil
 }
 
-func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumListQuery(cfg, r, i, cfg.T.AutoAbilityCategory, ids, QpnCategory, cfg.db.GetAutoAbilityIDsByCategory),
-		enumQuery(r, i, cfg.T.EquipType, ids, QpnType, cfg.db.GetAutoAbilityIDsByEquipType),
-		idQueryWrapper(cfg, r, i, ids, QpnMonster, cfg.L.Monsters, getAutoAbilitiesByMonster),
-		idQuery(r, i, ids, "monster_items", cfg.L.Monsters, cfg.db.GetAutoAbilityIDsByMonsterItems),
-		idQueryWrapper(cfg, r, i, ids, QpnShop, cfg.L.Shops, getAutoAbilitiesByShop),
-		valueListQuery(cfg, r, i, ids, QpnMethods, cfg.db.GetAutoAbilityIDsByMethods),
-		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetAutoAbilityIDsByLocation),
-		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetAutoAbilityIDsBySublocation),
-		idQuery(r, i, ids, "areas", cfg.L.Areas, cfg.db.GetAutoAbilityIDsByArea),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnumList(cfg, r, cfg.T.AutoAbilityCategory, ids, QpnCategory, cfg.db.GetAutoAbilityIDsByCategory),
+		i.queryEnum(r, cfg.T.EquipType, ids, QpnType, cfg.db.GetAutoAbilityIDsByEquipType),
+		i.queryIDWrapper(cfg, r, ids, QpnMonster, cfg.L.Monsters, getAutoAbilitiesByMonster),
+		i.queryID(r, ids, "monster_items", cfg.L.Monsters, cfg.db.GetAutoAbilityIDsByMonsterItems),
+		i.queryIDWrapper(cfg, r, ids, QpnShop, cfg.L.Shops, getAutoAbilitiesByShop),
+		i.queryValueList(cfg, r, ids, QpnMethods, cfg.db.GetAutoAbilityIDsByMethods),
+		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetAutoAbilityIDsByLocation),
+		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetAutoAbilityIDsBySublocation),
+		i.queryID(r, ids, "areas", cfg.L.Areas, cfg.db.GetAutoAbilityIDsByArea),
 	})
 }

@@ -135,9 +135,9 @@ func (test test) compBool(fieldName string, exp, got bool) {
 }
 
 // can be used for any direct pointer comparisons
-func (test test) compPtr[T any](fieldName string, exp, got *T, compFn func(string, T, T)) {
+func (test test) compPtr[T any](fieldName string, exp, got *T, compFn compFnVals[T]) {
 	test.t.Helper()
-	if !test.bothPtrsPresent(fieldName, exp, got) {
+	if !test.presencePtrs(fieldName, exp, got) {
 		return
 	}
 	compFn(fieldName, *exp, *got)
@@ -192,7 +192,7 @@ func (test test) compPageURL(fieldName string, expPathPtr, gotURLPtr *string) {
 
 func (test test) compareSlices[T any](fieldName string, exp, got []T) {
 	test.t.Helper()
-	err := test.sliceBasicChecks(fieldName, exp, got)
+	err := test.checkSliceBasic(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
 	}

@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func getResDBItemOne[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, ctx context.Context, i handlerInput[T, R, A, L], filterItem seeding.Lookupable, dbQuery DBQueryIntOne) (A, error) {
+func (i handlerInput[T, R, A]) dbGetRelation(cfg *Config, ctx context.Context, filterItem seeding.Lookupable, dbQuery DBQueryIntOne) (A, error) {
 	var zeroType A
 
 	dbID, err := dbQuery(ctx, filterItem.GetID())
@@ -23,17 +23,17 @@ func getResDBItemOne[T seeding.Lookupable, R any, A APIResource, L APIResourceLi
 }
 
 // get relationship resources of item. handlerInput = endpoint of fetched resources
-func getResourcesDBItem[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, ctx context.Context, i handlerInput[T, R, A, L], filterItem seeding.Lookupable, dbQuery DBQueryIntMany) ([]A, error) {
+func (i handlerInput[T, R, A]) dbGetRelations(cfg *Config, ctx context.Context, filterItem seeding.Lookupable, dbQuery DBQueryIntMany) ([]A, error) {
 	dbIds, err := dbQuery(ctx, filterItem.GetID())
 	if err != nil {
 		return nil, newHTTPErrorDB(i.resTypePlural, filterItem, err)
 	}
 
-	resources := idsToAPIResources(cfg, i, dbIds)
+	resources := i.toResources(cfg, dbIds)
 	return resources, nil
 }
 
-func getResPtrDB[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, ctx context.Context, i handlerInput[T, R, A, L], item seeding.Lookupable, dbQuery DBQueryIntOne) (*A, error) {
+func (i handlerInput[T, R, A]) dbGetRelationPtr(cfg *Config, ctx context.Context, item seeding.Lookupable, dbQuery DBQueryIntOne) (*A, error) {
 	dbID, err := dbQuery(ctx, item.GetID())
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

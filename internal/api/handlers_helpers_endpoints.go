@@ -3,39 +3,37 @@ package api
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func handleEndpointList[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+func (i handlerInput[T, R, A]) handleList(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	ids, err := i.retrieveFunc(r, i)
 	if handleHTTPError(w, err) {
 		return
 	}
-	resources := idsToAPIResources(cfg, i, ids)
+	resources := i.toResources(cfg, ids)
 
-	resourceList, err := i.resToListFunc(cfg, r, resources)
+	resourceList, err := newAPIResourceList(cfg, r, resources)
 	if handleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, resourceList)
 }
 
-func handleEndpointIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func (i handlerInput[T, R, A]) handleIDOnly(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
 	if segment == string(SnParameters) {
-		handleParameters(cfg, w, r, i.Endpoint, i.queryLookup)
+		i.handleParameters(cfg, w, r)
 		return
 	}
 
 	if segment == string(SnSections) {
-		handleSections(cfg, w, r, i)
+		i.handleSections(cfg, w, r)
 		return
 	}
 
 	if segment == string(SnSimple) {
-		handleSimple(cfg, w, r, i)
+		i.handleSimple(cfg, w, r)
 		return
 	}
 
@@ -52,21 +50,21 @@ func handleEndpointIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResou
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-func handleEndpointNameOrID[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func (i handlerInput[T, R, A]) handleNameID(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
 	if segment == string(SnParameters) {
-		handleParameters(cfg, w, r, i.Endpoint, i.queryLookup)
+		i.handleParameters(cfg, w, r)
 		return
 	}
 
 	if segment == string(SnSections) {
-		handleSections(cfg, w, r, i)
+		i.handleSections(cfg, w, r)
 		return
 	}
 
 	if segment == string(SnSimple) {
-		handleSimple(cfg, w, r, i)
+		i.handleSimple(cfg, w, r)
 		return
 	}
 
@@ -76,7 +74,7 @@ func handleEndpointNameOrID[T seeding.Lookupable, R any, A APIResource, L APIRes
 	}
 
 	if i.getMultipleQuery != nil && parseRes.Name != "" {
-		resources, err := getMultipleAPIResources(cfg, r, i, parseRes.Name)
+		resources, err := i.handleMultiple(cfg, r, parseRes.Name)
 		if handleHTTPError(w, err) {
 			return
 		}
@@ -92,7 +90,7 @@ func handleEndpointNameOrID[T seeding.Lookupable, R any, A APIResource, L APIRes
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-func handleEndpointNameVersion[T seeding.Lookupable, R any, A APIResource, L APIResourceList](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func (i handlerInput[T, R, A]) handleNameVersion(w http.ResponseWriter, r *http.Request, segments []string) {
 	name := segments[0]
 	versionStr := segments[1]
 
@@ -109,7 +107,7 @@ func handleEndpointNameVersion[T seeding.Lookupable, R any, A APIResource, L API
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-func handleEndpointSubsections[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func (i handlerInput[T, R, A]) handleSubsections(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	posIDStr := segments[0]
 	idIsValid := isValidInt(posIDStr)
 	posSection := segments[1]
@@ -118,7 +116,7 @@ func handleEndpointSubsections[T seeding.Lookupable, R any, A APIResource, L API
 	switch {
 	// /ep/a/2 + /ep/a/a
 	case !idIsValid:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", i.compileUsage()), nil)
 		return
 
 	// /ep/2/2
@@ -133,21 +131,21 @@ func handleEndpointSubsections[T seeding.Lookupable, R any, A APIResource, L API
 
 	// /ep/2/a (subsections)
 	case i.subsections != nil:
-		handleSubsection(cfg, w, r, i, segments)
+		i.handleSubsection(cfg, w, r, segments)
 		return
 	}
 }
 
-func handleEndpointSubOrNameVer[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func (i handlerInput[T, R, A]) handleSubOrNameVer(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	isSubsection, isNameVersion, subsectionIsInt := getSegmentCases(segments)
 
 	switch {
 	case isSubsection:
-		handleSubsection(cfg, w, r, i, segments)
+		i.handleSubsection(cfg, w, r, segments)
 		return
 
 	case isNameVersion:
-		handleEndpointNameVersion(w, r, i, segments)
+		i.handleNameVersion(w, r, segments)
 		return
 
 	case subsectionIsInt:
@@ -155,13 +153,13 @@ func handleEndpointSubOrNameVer[T seeding.Lookupable, R any, A APIResource, L AP
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", i.compileUsage()), nil)
 		return
 	}
 }
 
 // if len(segments) is 0, this function crafts the response for /enums
-func handleEnumsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums) {
+func (i handlerInputEnums) handleList(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	err := verifyQueryParams[string](r, i.Endpoint, i.queryLookup, nil, nil)
 	if handleHTTPError(w, err) {
 		return
@@ -178,11 +176,11 @@ func handleEnumsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request
 }
 
 // if len(segments) is 1, this function crafts the response for /enums/{enum_name} and /enums/parameters
-func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums, segments []string) {
+func (i handlerInputEnums) handleSingle(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
 	if segment == string(SnParameters) {
-		handleParameters(cfg, w, r, i.Endpoint, i.queryLookup)
+		i.handleParameters(cfg, w, r)
 		return
 	}
 
@@ -201,7 +199,7 @@ func handleEnumsEndpointSingle(cfg *Config, w http.ResponseWriter, r *http.Reque
 }
 
 // if len(segments) is 0, this function crafts the response for /endpoints
-func handleEndpointsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints) {
+func (i handlerInputEndpoints) handleList(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	err := verifyQueryParams[string](r, i.Endpoint, i.queryLookup, nil, nil)
 	if handleHTTPError(w, err) {
 		return
@@ -219,18 +217,18 @@ func handleEndpointsEndpointList(cfg *Config, w http.ResponseWriter, r *http.Req
 }
 
 // if len(segments) is 1, this function checks if /endpoints was combined with 'parameters'. returns an error, if it wasn't
-func handleEndpointsEndpointSections(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints, segments []string) {
+func (i handlerInputEndpoints) handleSections(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
 	if segment == string(SnParameters) {
-		handleParameters(cfg, w, r, i.Endpoint, i.queryLookup)
+		i.handleParameters(cfg, w, r)
 		return
 	}
 
 	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests.", nil)
 }
 
-func handleEndpointServiceBody[P serviceParams, R serviceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
+func (i handlerInputService[P, R]) handleBody(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return
@@ -246,7 +244,7 @@ func handleEndpointServiceBody[P serviceParams, R serviceResponse](cfg *Config, 
 	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'.", i.Endpoint), nil)
 }
 
-func handleEndpointServiceBodySections[P serviceParams, R serviceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R], segments []string) {
+func (i handlerInputService[P, R]) handleBodySections(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return
@@ -272,7 +270,7 @@ func handleEndpointServiceBodySections[P serviceParams, R serviceResponse](cfg *
 	}
 }
 
-func handleEndpointServicePost[P serviceParams, R serviceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
+func (i handlerInputService[P, R]) handlePost(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return

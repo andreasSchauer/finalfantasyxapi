@@ -305,7 +305,7 @@ func TestGetMultiplePlayerAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.PlayerAbilities.Endpoint, "GetMultiplePlayerAbilities", testCfg.HandlePlayerAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.PlayerAbilities.Endpoint, "GetMultiplePlayerAbilities", testCfg.HandlePlayerAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestRetrievePlayerAbilities(t *testing.T) {
@@ -441,7 +441,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.PlayerAbilities.Endpoint, "RetrievePlayerAbilities", testCfg.HandlePlayerAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.PlayerAbilities.Endpoint, "RetrievePlayerAbilities", testCfg.HandlePlayerAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionPlayerAbilities(t *testing.T) {

@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getFMV(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedAPIResourceList], id int32) (FMV, error) {
-	fmv, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getFMV(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource], id int32) (FMV, error) {
+	fmv, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return FMV{}, err
 	}
@@ -24,13 +24,13 @@ func (cfg *Config) getFMV(r *http.Request, i handlerInput[seeding.FMV, FMV, Name
 	return response, nil
 }
 
-func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationFmvIDs),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationFmvIDs),
 	})
 }

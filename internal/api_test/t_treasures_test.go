@@ -232,7 +232,7 @@ func TestRetrieveTreasures(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.Treasures.Endpoint, "RetrieveTreasures", testCfg.HandleTreasures, compareAPIResourceLists[api.UnnamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.Treasures.Endpoint, "RetrieveTreasures", testCfg.HandleTreasures, compareAPIResourceLists[api.UnnamedAPIResource])
 }
 
 func TestSubsectionTreasures(t *testing.T) {

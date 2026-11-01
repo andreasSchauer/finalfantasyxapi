@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedAPIResourceList], id int32) (Submenu, error) {
-	submenu, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, Submenu, NamedAPIResource], id int32) (Submenu, error) {
+	submenu, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Submenu{}, err
 	}
@@ -31,13 +31,13 @@ func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, S
 	return response, nil
 }
 
-func (cfg *Config) retrieveSubmenus(r *http.Request, i handlerInput[seeding.Submenu, Submenu, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveSubmenus(r *http.Request, i handlerInput[seeding.Submenu, Submenu, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		nameIDQuery(r, i, ids, QpnTopmenu, cfg.E.Topmenus.resTypeSingle, cfg.L.Topmenus, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs)),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryNameID(r, ids, QpnTopmenu, cfg.E.Topmenus.resTypeSingle, cfg.L.Topmenus, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs)),
 	})
 }

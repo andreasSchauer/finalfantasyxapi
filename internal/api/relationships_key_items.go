@@ -14,26 +14,26 @@ func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyIt
 	var rel KeyItem
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.E.KeyItems, keyItem.ID)
+	availabilityParams, err := cfg.E.KeyItems.queryAvlRelGetParams(cfg, r, keyItem.ID)
 	if err != nil {
 		return KeyItem{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Treasures, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeTreasure))
+		rel.Treasures, err = cfg.E.Treasures.queryAvlRelRun(cfg, ctx, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Quests, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Quests, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeQuest))
+		rel.Quests, err = cfg.E.Quests.queryAvlRelRun(cfg, ctx, keyItem, availabilityParams, getKeyItemSourceIDs(cfg, ViewSourceTypeQuest))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Areas, keyItem, availabilityParams, getKeyItemAreaIDs(cfg))
+		rel.Areas, err = cfg.E.Areas.queryAvlRelRun(cfg, ctx, keyItem, availabilityParams, getKeyItemAreaIDs(cfg))
 		return err
 	})
 

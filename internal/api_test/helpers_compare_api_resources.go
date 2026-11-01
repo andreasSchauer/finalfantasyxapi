@@ -27,7 +27,7 @@ func (test test) compPathAPIResourcePtrs[T api.HasAPIResource](fieldName string,
 		return
 	}
 
-	if !test.bothResourcePtrsPresent(fieldName, expPathPtr, gotResPtr) {
+	if !test.presenceResPtrs(fieldName, expPathPtr, gotResPtr) {
 		return
 	}
 

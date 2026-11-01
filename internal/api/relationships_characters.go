@@ -17,25 +17,25 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = getResPtrDB(cfg, ctx, cfg.E.CelestialWeapons, char, cfg.db.GetCharacterCelestialWeaponID)
+		rel.CelestialWeapon, err = cfg.E.CelestialWeapons.dbGetRelationPtr(cfg, ctx, char, cfg.db.GetCharacterCelestialWeaponID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveCommand, err = getResPtrDB(cfg, ctx, cfg.E.OverdriveCommands, char, cfg.db.GetCharacterOverdriveCommandID)
+		rel.OverdriveCommand, err = cfg.E.OverdriveCommands.dbGetRelationPtr(cfg, ctx, char, cfg.db.GetCharacterOverdriveCommandID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = getResourcesDBItem(cfg, ctx, cfg.E.CharacterClasses, char, cfg.db.GetCharacterCharClassIDs)
+		rel.CharacterClasses, err = cfg.E.CharacterClasses.dbGetRelations(cfg, ctx, char, cfg.db.GetCharacterCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.PlayerAbilities, char, cfg.db.GetCharacterDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = cfg.E.PlayerAbilities.dbGetRelations(cfg, ctx, char, cfg.db.GetCharacterDefaultAbilityIDs)
 		return err
 	})
 
@@ -43,14 +43,14 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Charac
 		g.Go(func() error {
 			var err error
 			rel.StdSphereGrid = convertObjPtr(cfg, char.StdSphereGrid, convertSphereGrid)
-			rel.StdSphereGrid.PlayerAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.PlayerAbilities, char, cfg.db.GetCharacterSgAbilityIDs)
+			rel.StdSphereGrid.PlayerAbilities, err = cfg.E.PlayerAbilities.dbGetRelations(cfg, ctx, char, cfg.db.GetCharacterSgAbilityIDs)
 			return err
 		})
 
 		g.Go(func() error {
 			var err error
 			rel.ExpSphereGrid = convertObjPtr(cfg, char.ExpSphereGrid, convertSphereGrid)
-			rel.ExpSphereGrid.PlayerAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.PlayerAbilities, char, cfg.db.GetCharacterEgAbilityIDs)
+			rel.ExpSphereGrid.PlayerAbilities, err = cfg.E.PlayerAbilities.dbGetRelations(cfg, ctx, char, cfg.db.GetCharacterEgAbilityIDs)
 			return err
 		})
 	}
@@ -100,7 +100,7 @@ func getCharModeAmount(cfg *Config, char seeding.Character, id int32) (ResourceA
 	}
 
 	amount := mode.ActionsToLearn[char.GetID()-1].Amount
-	modeAmount := idAmountToResourceAmount(cfg, i, id, amount)
+	modeAmount := i.toResAmt(cfg, id, amount)
 
 	return modeAmount, nil
 }

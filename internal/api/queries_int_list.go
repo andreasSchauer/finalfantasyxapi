@@ -3,11 +3,9 @@ package api
 import (
 	"context"
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func intListQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, dbQuery DBQueryIntList) IDFilter {
+func (i handlerInput[T, R, A]) queryIntList(cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {

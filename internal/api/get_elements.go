@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getElement(r *http.Request, i handlerInput[seeding.Element, Element, NamedAPIResource, NamedAPIResourceList], id int32) (Element, error) {
-	element, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getElement(r *http.Request, i handlerInput[seeding.Element, Element, NamedAPIResource], id int32) (Element, error) {
+	element, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Element{}, err
 	}
@@ -36,6 +36,6 @@ func (cfg *Config) getElement(r *http.Request, i handlerInput[seeding.Element, E
 	return response, nil
 }
 
-func (cfg *Config) retrieveElements(r *http.Request, i handlerInput[seeding.Element, Element, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	return verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveElements(r *http.Request, i handlerInput[seeding.Element, Element, NamedAPIResource]) ([]int32, error) {
+	return i.queryParamsVerifyRetrieve(r)
 }

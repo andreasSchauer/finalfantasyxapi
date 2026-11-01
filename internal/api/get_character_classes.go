@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getCharacterClass(r *http.Request, i handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedAPIResourceList], id int32) (CharacterClass, error) {
-	class, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getCharacterClass(r *http.Request, i handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource], id int32) (CharacterClass, error) {
+	class, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return CharacterClass{}, err
 	}
@@ -32,13 +32,13 @@ func (cfg *Config) getCharacterClass(r *http.Request, i handlerInput[seeding.Cha
 	return response, nil
 }
 
-func (cfg *Config) retrieveCharacterClasses(r *http.Request, i handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveCharacterClasses(r *http.Request, i handlerInput[seeding.CharacterClass, CharacterClass, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumListQuery(cfg, r, i, cfg.T.CharacterClassCategory, ids, QpnCategory, cfg.db.GetCharacterClassesIDsByCategory),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnumList(cfg, r, cfg.T.CharacterClassCategory, ids, QpnCategory, cfg.db.GetCharacterClassesIDsByCategory),
 	})
 }

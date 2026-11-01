@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList] struct {
+type handlerInput[T seeding.Lookupable, R any, A APIResource] struct {
 	Endpoint         EndpointName
 	resTypeSingle    ResTypeSingle
 	resTypePlural    ResTypePlural
@@ -16,10 +16,9 @@ type handlerInput[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 	queryLookup      map[QueryParamName]QueryParam
 	getMultipleQuery DBQueryStringMany
 	retrieveQuery    DBQueryNoInput
-	idToResFunc      func(*Config, handlerInput[T, R, A, L], int32) A
-	resToListFunc    func(*Config, *http.Request, []A) (L, error)
-	getSingleFunc    func(*http.Request, handlerInput[T, R, A, L], int32) (R, error)
-	retrieveFunc     func(*http.Request, handlerInput[T, R, A, L]) ([]int32, error)
+	idToResFunc      func(*Config, handlerInput[T, R, A], int32) A
+	getSingleFunc    func(*http.Request, handlerInput[T, R, A], int32) (R, error)
+	retrieveFunc     func(*http.Request, handlerInput[T, R, A]) ([]int32, error)
 	avlFunc          func(*Config, *http.Request, []int32) ([]int32, error)
 	subsections      map[SectionName]Subsection
 }

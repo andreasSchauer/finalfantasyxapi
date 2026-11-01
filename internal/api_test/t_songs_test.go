@@ -229,7 +229,7 @@ func TestRetrieveSongs(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.Songs.Endpoint, "RetrieveSongs", testCfg.HandleSongs, compareAPIResourceLists[api.NamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.Songs.Endpoint, "RetrieveSongs", testCfg.HandleSongs, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionSongs(t *testing.T) {

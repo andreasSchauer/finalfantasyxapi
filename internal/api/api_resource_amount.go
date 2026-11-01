@@ -20,24 +20,24 @@ func newResourceAmount[A APIResource](resource A, amount int32) ResourceAmount[A
 	}
 }
 
-func idAmountToResourceAmount[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id, amount int32) ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmt(cfg *Config, id, amount int32) ResourceAmount[A] {
 	return ResourceAmount[A]{
 		Resource: i.idToResFunc(cfg, i, id),
 		Amount:   amount,
 	}
 }
 
-func nameAmountPtrToResAmtPtr[NA NameAmount, T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], itemPtr *NA) *ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmtFromNamePtr[NA NameAmount](cfg *Config, itemPtr *NA) *ResourceAmount[A] {
 	if itemPtr == nil {
 		return nil
 	}
 
-	resAmt := nameAmountToResourceAmount(cfg, i, *itemPtr)
+	resAmt := i.toResAmtFromName(cfg, *itemPtr)
 
 	return &resAmt
 }
 
-func nameAmountToResourceAmount[NA NameAmount, T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], item NA) ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmtFromName[NA NameAmount](cfg *Config, item NA) ResourceAmount[A] {
 	var parseResp parseResponse
 	switch item.GetVersion() {
 	case nil:
@@ -52,22 +52,22 @@ func nameAmountToResourceAmount[NA NameAmount, T seeding.Lookupable, R any, A AP
 	}
 }
 
-func nameAmtsToResAmts[NA NameAmount, T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], items []NA) []ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmtsFromNames[NA NameAmount](cfg *Config, items []NA) []ResourceAmount[A] {
 	results := []ResourceAmount[A]{}
 
 	for _, item := range items {
-		ra := nameAmountToResourceAmount(cfg, i, item)
+		ra := i.toResAmtFromName(cfg, item)
 		results = append(results, ra)
 	}
 
 	return results
 }
 
-func toResAmtType[NA NameAmount, RA ResourceAmountType[A], T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], old []NA, fn func(A, int32) RA) []RA {
+func (i handlerInput[T, R, A]) toResAmtType[NA NameAmount, RA ResourceAmountType[A]](cfg *Config, old []NA, fn func(A, int32) RA) []RA {
 	resAmts := []RA{}
 
 	for _, item := range old {
-		ra := nameAmountToResourceAmount(cfg, i, item)
+		ra := i.toResAmtFromName(cfg, item)
 		resAmtType := fn(ra.Resource, ra.Amount)
 		resAmts = append(resAmts, resAmtType)
 	}
@@ -125,7 +125,7 @@ func resAmtMapToFloat(intMap map[string]int32) map[string]float64 {
 }
 
 // takes a slice of parent resources and for each of them, attaches the amount of the resource's seeding.ItemAmount field to the resource.
-func itemAmtsToChildResAmts[T seeding.HasItemAmount, R any, A APIResource, L APIResourceList](i handlerInput[T, R, A, L], resources []A) []ResourceAmount[A] {
+func itemAmtsToChildResAmts[T seeding.HasItemAmount, R any, A APIResource](i handlerInput[T, R, A], resources []A) []ResourceAmount[A] {
 	resAmts := []ResourceAmount[A]{}
 
 	for _, res := range resources {
@@ -139,7 +139,7 @@ func itemAmtsToChildResAmts[T seeding.HasItemAmount, R any, A APIResource, L API
 }
 
 // takes a slice of parent resources and for each of them, searches the resource's seeding.ItemAmount slice for the target item and attaches its amount to the resource.
-func itemAmtsToChildResAmts2[T seeding.HasItemAmounts, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], resources []A, itemID int32) []ResourceAmount[A] {
+func itemAmtsToChildResAmts2[T seeding.HasItemAmounts, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], resources []A, itemID int32) []ResourceAmount[A] {
 	resAmts := []ResourceAmount[A]{}
 
 	for _, res := range resources {

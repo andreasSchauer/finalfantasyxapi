@@ -8,7 +8,7 @@ import (
 )
 
 // query uses the name or id of another resource type to filter resources
-func nameIDQuery[T, P seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, pResType ResTypeSingle, pLookup map[string]P, dbQuery DBQueryIntMany) IDFilter {
+func (i handlerInput[T, R, A]) queryNameID[P seeding.Lookupable](r *http.Request, inputIDs []int32, queryName QueryParamName, pResType ResTypeSingle, pLookup map[string]P, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {
@@ -32,7 +32,7 @@ func nameIDQuery[T, P seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	}
 }
 
-func nameIDQueryWrapper[T, P seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, pResType ResTypeSingle, pLookup map[string]P, wrapperFn QueryWrapInt) IDFilter {
+func (i handlerInput[T, R, A]) queryNameIDWrapper[P seeding.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, pResType ResTypeSingle, pLookup map[string]P, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {

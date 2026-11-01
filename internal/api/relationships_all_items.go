@@ -8,7 +8,7 @@ import (
 )
 
 func getMasterItemObtainable(cfg *Config, r *http.Request, masterItem seeding.MasterItem) (ObtainableFrom, error) {
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.E.AllItems, masterItem.ID)
+	availabilityParams, err := cfg.E.AllItems.queryAvlRelGetParams(cfg, r, masterItem.ID)
 	if err != nil {
 		return ObtainableFrom{}, err
 	}

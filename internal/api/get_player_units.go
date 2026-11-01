@@ -7,8 +7,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList], id int32) (PlayerUnit, error) {
-	unit, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource], id int32) (PlayerUnit, error) {
+	unit, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return PlayerUnit{}, err
 	}
@@ -56,13 +56,13 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seeding.PlayerU
 	return response, nil
 }
 
-func (cfg *Config) retrievePlayerUnits(r *http.Request, i handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource, TypedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrievePlayerUnits(r *http.Request, i handlerInput[seeding.PlayerUnit, PlayerUnit, TypedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumQuery(r, i, cfg.T.UnitType, ids, QpnType, cfg.db.GetPlayerUnitIDsByType),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnum(r, cfg.T.UnitType, ids, QpnType, cfg.db.GetPlayerUnitIDsByType),
 	})
 }

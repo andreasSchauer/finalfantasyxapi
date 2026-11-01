@@ -11,20 +11,20 @@ func getMonsterRelationships(cfg *Config, r *http.Request, monster seeding.Monst
 	var rel Monster
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.E.Monsters, monster.ID)
+	availabilityParams, err := cfg.E.Monsters.queryAvlRelGetParams(cfg, r, monster.ID)
 	if err != nil {
 		return Monster{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Areas, monster, availabilityParams, getMonsterAreaIDs(cfg))
+		rel.Areas, err = cfg.E.Areas.queryAvlRelRun(cfg, ctx, monster, availabilityParams, getMonsterAreaIDs(cfg))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Formations, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.MonsterFormations, monster, availabilityParams, getMonsterMonsterFormationIDs(cfg))
+		rel.Formations, err = cfg.E.MonsterFormations.queryAvlRelRun(cfg, ctx, monster, availabilityParams, getMonsterMonsterFormationIDs(cfg))
 		return err
 	})
 

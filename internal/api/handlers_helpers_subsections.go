@@ -3,11 +3,9 @@ package api
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L], segments []string) {
+func (i handlerInput[T, R, A]) handleSubsection(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	idStr := segments[0]
 	sectionName := segments[1]
 
@@ -50,14 +48,26 @@ func handleSubsection[T seeding.Lookupable, R any, A APIResource, L APIResourceL
 		return
 	}
 
-	list, err := newSimpleResourceList(cfg, r, i, parseRes.ID, sectionName, subsection)
+	list, err := i.newSimpleResourceList(cfg, r, parseRes.ID, sectionName, subsection)
 	if handleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, list)
 }
 
-func handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) {
+func (i handlerInput[T, R, A]) handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request) {
+	handleParametersWrapper(cfg, w, r, i.Endpoint, i.queryLookup)
+}
+
+func (i handlerInputEnums) handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request) {
+	handleParametersWrapper(cfg, w, r, i.Endpoint, i.queryLookup)
+}
+
+func (i handlerInputEndpoints) handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request) {
+	handleParametersWrapper(cfg, w, r, i.Endpoint, i.queryLookup)
+}
+
+func handleParametersWrapper(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) {
 	segment := string(SnParameters)
 	err := verifyQueryParamsAltList(cfg, r, endpoint, queryLookup, &segment)
 	if handleHTTPError(w, err) {
@@ -73,7 +83,7 @@ func handleParameters(cfg *Config, w http.ResponseWriter, r *http.Request, endpo
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
-func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+func (i handlerInput[T, R, A]) handleSections(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	segment := string(SnSections)
 	err := verifyQueryParamsAltList(cfg, r, i.Endpoint, i.queryLookup, &segment)
 	if handleHTTPError(w, err) {
@@ -89,7 +99,7 @@ func handleSections[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	respondWithJSON(w, http.StatusOK, sectionList)
 }
 
-func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+func (i handlerInput[T, R, A]) handleSimple(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	segment := string(SnSimple)
 
 	_, ok := i.subsections[SnSimple]
@@ -98,7 +108,7 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 		return
 	}
 
-	ids, err := getIDsQuery(cfg, r, i, &segment)
+	ids, err := i.queryIDsParam(cfg, r, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -121,7 +131,7 @@ func handleSimple[T seeding.Lookupable, R any, A APIResource, L APIResourceList]
 	respondWithJSON(w, http.StatusOK, subResList)
 }
 
-func getIDsQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], segment *string) ([]int32, error) {
+func(i handlerInput[T, R, A]) queryIDsParam(cfg *Config, r *http.Request, segment *string) ([]int32, error) {
 	err := verifyQueryParams[any](r, i.Endpoint, i.queryLookup, nil, segment)
 	if err != nil {
 		return nil, err

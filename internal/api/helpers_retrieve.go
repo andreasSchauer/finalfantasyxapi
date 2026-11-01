@@ -5,22 +5,19 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 	"golang.org/x/sync/errgroup"
 )
 
-func getMultipleAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], name string) (L, error) {
-	var zeroType L
-
+func (i handlerInput[T, R, A]) handleMultiple(cfg *Config, r *http.Request, name string) (APIResourceList[A], error) {
 	dbIDs, err := i.getMultipleQuery(r.Context(), name)
 	if err != nil {
-		return zeroType, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'.", i.resTypeSingle, name), err)
+		return APIResourceList[A]{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'.", i.resTypeSingle, name), err)
 	}
 
-	return idsToAPIResourceList(cfg, r, i, dbIDs)
+	return i.toResList(cfg, r, dbIDs)
 }
 
-func filterIDs[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], IDs []int32, queryFns []IDFilter) ([]int32, error) {
+func (i handlerInput[T, R, A]) filterIDs(cfg *Config, r *http.Request, IDs []int32, queryFns []IDFilter) ([]int32, error) {
 	filteredIDs := IDs
 	g, ctx := errgroup.WithContext(r.Context())
 	var mu sync.Mutex

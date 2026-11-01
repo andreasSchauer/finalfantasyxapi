@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedAPIResourceList], id int32) (CelestialWeapon, error) {
-	celestialWeapon, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource], id int32) (CelestialWeapon, error) {
+	celestialWeapon, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return CelestialWeapon{}, err
 	}
@@ -35,13 +35,13 @@ func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.Ce
 	return response, nil
 }
 
-func (cfg *Config) retrieveCelestialWeapons(r *http.Request, i handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveCelestialWeapons(r *http.Request, i handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumQuery(r, i, cfg.T.CelestialFormula, ids, QpnFormula, cfg.db.GetCelestialWeaponIDsByFormula),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnum(r, cfg.T.CelestialFormula, ids, QpnFormula, cfg.db.GetCelestialWeaponIDsByFormula),
 	})
 }

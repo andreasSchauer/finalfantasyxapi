@@ -4,12 +4,10 @@ import (
 	"context"
 	"errors"
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 // query uses an integer value as input.
-func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, dbQuery DBQueryIntMany) IDFilter {
+func (i handlerInput[T, R, A]) queryInt(r *http.Request, inputIDs []int32, queryName QueryParamName, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {
@@ -34,7 +32,7 @@ func intQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *
 }
 
 // query uses an integer value as input.
-func intQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapInt) IDFilter {
+func (i handlerInput[T, R, A]) queryIntWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {

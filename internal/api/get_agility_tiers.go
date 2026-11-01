@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getAgilityTier(r *http.Request, i handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedAPIResourceList], id int32) (AgilityTier, error) {
-	agilityTier, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getAgilityTier(r *http.Request, i handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource], id int32) (AgilityTier, error) {
+	agilityTier, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return AgilityTier{}, err
 	}
@@ -26,13 +26,13 @@ func (cfg *Config) getAgilityTier(r *http.Request, i handlerInput[seeding.Agilit
 	return response, nil
 }
 
-func (cfg *Config) retrieveAgilityTiers(r *http.Request, i handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource, UnnamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveAgilityTiers(r *http.Request, i handlerInput[seeding.AgilityTier, AgilityTier, UnnamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		intQuery(r, i, ids, QpnAgility, cfg.db.GetAgilityTierIDsByAgility),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryInt(r, ids, QpnAgility, cfg.db.GetAgilityTierIDsByAgility),
 	})
 }

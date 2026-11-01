@@ -30,7 +30,7 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []api.A
 		return
 	}
 
-	if !test.defaultAndAltStatesPresent(exp, gotStates) {
+	if !test.presenceDefaultAltStates(exp, gotStates) {
 		return
 	}
 

@@ -3,12 +3,10 @@ package api
 import (
 	"context"
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 // query uses an enum type (id or string possible) that needs to be checked for validity and then returns all resources matching that type
-func enumQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputIDs []int32, queryName QueryParamName, dbQuery DBQueryEnum[E]) IDFilter {
+func (i handlerInput[T, R, A]) queryEnum[E, N any](r *http.Request, et EnumType[E, N], inputIDs []int32, queryName QueryParamName, dbQuery DBQueryEnum[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {
@@ -35,7 +33,7 @@ func enumQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E,
 }
 
 // like enum query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
-func enumQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList, E, N any](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], et EnumType[E, N], inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapEnum[E]) IDFilter {
+func (i handlerInput[T, R, A]) queryEnumWrapper[E, N any](cfg *Config, r *http.Request, et EnumType[E, N], inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapEnum[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		enum, err := parseEnumQuery(r, i.Endpoint, queryParam, et)

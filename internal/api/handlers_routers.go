@@ -5,88 +5,87 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func routerIDOnly[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+func (i handlerInput[T, R, A]) routerIDOnly(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	i.usage = []string{"/{id}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		handleEndpointList(cfg, w, r, i)
+		i.handleList(cfg, w, r)
 		return
 
 	case 1:
-		handleEndpointIDOnly(cfg, w, r, i, segments)
+		i.handleIDOnly(cfg, w, r, segments)
 		return
 
 	case 2:
-		handleEndpointSubsections(cfg, w, r, i, segments)
+		i.handleSubsections(cfg, w, r, segments)
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", i.compileUsage()), nil)
 		return
 	}
 }
 
-func routerNameOrID[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+func (i handlerInput[T, R, A]) routerNameID(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	i.usage = []string{"/{id}", "/{name}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		handleEndpointList(cfg, w, r, i)
+		i.handleList(cfg, w, r)
 		return
 
 	case 1:
-		handleEndpointNameOrID(cfg, w, r, i, segments)
+		i.handleNameID(cfg, w, r, segments)
 		return
 
 	case 2:
-		handleEndpointSubsections(cfg, w, r, i, segments)
+		i.handleSubsections(cfg, w, r, segments)
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", i.compileUsage()), nil)
 		return
 	}
 }
 
-func routerNameVersion[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A, L]) {
+func (i handlerInput[T, R, A]) routerNameVersion(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	i.usage = []string{"/{id}", "/{name}", "/{name}/{version}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		handleEndpointList(cfg, w, r, i)
+		i.handleList(cfg, w, r)
 		return
 
 	case 1:
-		handleEndpointNameOrID(cfg, w, r, i, segments)
+		i.handleNameID(cfg, w, r, segments)
 		return
 
 	case 2:
-		handleEndpointSubOrNameVer(cfg, w, r, i, segments)
+		i.handleSubOrNameVer(cfg, w, r, segments)
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", getUsageString(i)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: %s", i.compileUsage()), nil)
 		return
 	}
 }
 
-func routerEnums(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEnums) {
+func (i handlerInputEnums) router(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		handleEnumsEndpointList(cfg, w, r, i)
+		i.handleList(cfg, w, r)
 		return
 
 	case 1:
-		handleEnumsEndpointSingle(cfg, w, r, i, segments)
+		i.handleSingle(cfg, w, r, segments)
 		return
 
 	default:
@@ -95,16 +94,16 @@ func routerEnums(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerI
 	}
 }
 
-func routerEndpoints(cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputEndpoints) {
+func (i handlerInputEndpoints) router(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		handleEndpointsEndpointList(cfg, w, r, i)
+		i.handleList(cfg, w, r)
 		return
 
 	case 1:
-		handleEndpointsEndpointSections(cfg, w, r, i, segments)
+		i.handleSections(cfg, w, r, segments)
 		return
 
 	default:
@@ -113,16 +112,16 @@ func routerEndpoints(cfg *Config, w http.ResponseWriter, r *http.Request, i hand
 	}
 }
 
-func routerServiceGet[P serviceParams, R serviceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
+func (i handlerInputService[P, R]) routerGet(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 1:
-		handleEndpointServiceBody(cfg, w, r, i, segments)
+		i.handleBody(cfg, w, r, segments)
 		return
 
 	case 2:
-		handleEndpointServiceBodySections(cfg, w, r, i, segments)
+		i.handleBodySections(cfg, w, r, segments)
 		return
 
 	default:
@@ -131,12 +130,12 @@ func routerServiceGet[P serviceParams, R serviceResponse](cfg *Config, w http.Re
 	}
 }
 
-func routerServicePost[P serviceParams, R serviceResponse](cfg *Config, w http.ResponseWriter, r *http.Request, i handlerInputService[P, R]) {
+func (i handlerInputService[P, R]) routerPost(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		handleEndpointServicePost(cfg, w, r, i)
+		i.handlePost(cfg, w, r)
 		return
 
 	default:

@@ -3,12 +3,10 @@ package api
 import (
 	"context"
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 // db query searches for resources with matching boolean db column value
-func boolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, dbQuery DBQueryBool) IDFilter {
+func (i handlerInput[T, R, A]) queryBool(r *http.Request, inputIDs []int32, queryName QueryParamName, dbQuery DBQueryBool) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {
@@ -33,7 +31,7 @@ func boolQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r 
 }
 
 // db query accumulates all resources that fulfill a certain condition. a false boolean flips these results.
-func boolQuery2[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, dbQuery DBQueryNoInput) IDFilter {
+func (i handlerInput[T, R, A]) queryBool2(r *http.Request, inputIDs []int32, queryName QueryParamName, dbQuery DBQueryNoInput) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {
@@ -61,7 +59,7 @@ func boolQuery2[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r
 	}
 }
 
-func boolQueryWrapper[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapBool) IDFilter {
+func (i handlerInput[T, R, A]) queryBoolWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapBool) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {

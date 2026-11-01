@@ -84,5 +84,5 @@ func TestRetrieveFMVs(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.FMVs.Endpoint, "RetrieveFMVs", testCfg.HandleFMVs, compareAPIResourceLists[api.NamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.FMVs.Endpoint, "RetrieveFMVs", testCfg.HandleFMVs, compareAPIResourceLists[api.NamedAPIResource])
 }

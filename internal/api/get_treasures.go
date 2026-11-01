@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedAPIResourceList], id int32) (Treasure, error) {
-	treasure, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource], id int32) (Treasure, error) {
+	treasure, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Treasure{}, err
 	}
@@ -21,27 +21,27 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 		TreasureType:    treasure.TreasureType,
 		LootType:        treasure.LootType,
 		GilAmount:       treasure.GilAmount,
-		Items:           nameAmtsToResAmts(cfg, cfg.E.AllItems, treasure.Items),
+		Items:           cfg.E.AllItems.toResAmtsFromNames(cfg, treasure.Items),
 		Equipment:       convertObjPtr(cfg, treasure.Equipment, convertFoundEquipment),
 	}
 
 	return response, nil
 }
 
-func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource, UnnamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationTreasureIDs),
-		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationTreasureIDs),
-		idQuery(r, i, ids, QpnArea, cfg.L.Areas, cfg.db.GetAreaTreasureIDs),
-		idQuery(r, i, ids, QpnItem, cfg.L.Items, cfg.db.GetTreasureIDsByItem),
-		joinedQuery(cfg, r, i, ids, []QueryParamName{QpnAutoAbility, QpnEmptySlots, QpnCharacter}, filterTreasuresEquipment),
-		boolQuery(r, i, ids, QpnAnima, cfg.db.GetTreasureIDsByIsAnimaTreasure),
-		enumQuery(r, i, cfg.T.LootType, ids, QpnLootType, cfg.db.GetTreasureIDsByLootType),
-		enumQuery(r, i, cfg.T.TreasureType, ids, QpnTreasureType, cfg.db.GetTreasureIDsByTreasureType),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationTreasureIDs),
+		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationTreasureIDs),
+		i.queryID(r, ids, QpnArea, cfg.L.Areas, cfg.db.GetAreaTreasureIDs),
+		i.queryID(r, ids, QpnItem, cfg.L.Items, cfg.db.GetTreasureIDsByItem),
+		i.queryJoined(cfg, r, ids, []QueryParamName{QpnAutoAbility, QpnEmptySlots, QpnCharacter}, filterTreasuresEquipment),
+		i.queryBool(r, ids, QpnAnima, cfg.db.GetTreasureIDsByIsAnimaTreasure),
+		i.queryEnum(r, cfg.T.LootType, ids, QpnLootType, cfg.db.GetTreasureIDsByLootType),
+		i.queryEnum(r, cfg.T.TreasureType, ids, QpnTreasureType, cfg.db.GetTreasureIDsByTreasureType),
 	})
 }

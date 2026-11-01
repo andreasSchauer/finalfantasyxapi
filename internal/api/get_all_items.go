@@ -7,8 +7,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList], id int32) (MasterItem, error) {
-	masterItem, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource], id int32) (MasterItem, error) {
+	masterItem, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return MasterItem{}, err
 	}
@@ -44,17 +44,17 @@ func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seeding.MasterI
 	return response, nil
 }
 
-func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource, TypedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumListQuery(cfg, r, i, cfg.T.ItemType, ids, QpnType, cfg.db.GetMasterItemIDsByType),
-		valueListQuery(cfg, r, i, ids, QpnMethods, cfg.db.GetMasterItemIDsByMethods),
-		idQueryWrapper(cfg, r, i, ids, QpnLocation, cfg.E.Locations.objLookup, getMasterItemsByLocation),
-		idQueryWrapper(cfg, r, i, ids, QpnSublocation, cfg.E.Sublocations.objLookup, getMasterItemsBySublocation),
-		idQueryWrapper(cfg, r, i, ids, QpnArea, cfg.E.Areas.objLookup, getMasterItemsByArea),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnumList(cfg, r, cfg.T.ItemType, ids, QpnType, cfg.db.GetMasterItemIDsByType),
+		i.queryValueList(cfg, r, ids, QpnMethods, cfg.db.GetMasterItemIDsByMethods),
+		i.queryIDWrapper(cfg, r, ids, QpnLocation, cfg.E.Locations.objLookup, getMasterItemsByLocation),
+		i.queryIDWrapper(cfg, r, ids, QpnSublocation, cfg.E.Sublocations.objLookup, getMasterItemsBySublocation),
+		i.queryIDWrapper(cfg, r, ids, QpnArea, cfg.E.Areas.objLookup, getMasterItemsByArea),
 	})
 }

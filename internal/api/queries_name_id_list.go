@@ -8,7 +8,7 @@ import (
 )
 
 // query uses a list of names or ids as database input to filter for resources. alternatively, "none" can be used as input instead.
-func nameIDListQueryNul[T, P seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, pResType ResTypeSingle, pLookup map[string]P, dbQuery DBQueryIntList) IDFilter {
+func (i handlerInput[T, R, A]) queryNameIDListNul[P seeding.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, pResType ResTypeSingle, pLookup map[string]P, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {

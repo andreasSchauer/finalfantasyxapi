@@ -2,24 +2,10 @@ package api
 
 import (
 	"fmt"
-	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
-
-type TypedAPIResourceList struct {
-	ListParams
-	Results []TypedAPIResource `json:"results"`
-}
-
-func (l TypedAPIResourceList) GetListParams() ListParams {
-	return l.ListParams
-}
-
-func (l TypedAPIResourceList) GetResults() []HasAPIResource {
-	return toHasAPIResSlice(l.Results)
-}
 
 type TypedAPIResource struct {
 	ID            int32   `json:"-"`
@@ -55,7 +41,7 @@ func (r TypedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func idToTypedAPIResource[T seeding.IsTyped, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id int32) TypedAPIResource {
+func idToTypedAPIResource[T seeding.IsTyped, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) TypedAPIResource {
 	res, _ := seeding.GetResourceByID(id, i.objLookupID)
 	params := res.GetResParamsTyped()
 
@@ -69,12 +55,12 @@ func idToTypedAPIResource[T seeding.IsTyped, R any, A APIResource, L APIResource
 	}
 }
 
-func keyToTypedAPIResource[T seeding.IsTyped, R, K any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], key K) TypedAPIResource {
+func keyToTypedAPIResource[T seeding.IsTyped, R, K any, A APIResource](cfg *Config, i handlerInput[T, R, A], key K) TypedAPIResource {
 	res, _ := seeding.GetResource(key, i.objLookup)
 	return idToTypedAPIResource(cfg, i, res.GetID())
 }
 
-func keyPtrToTypedAPIResourcePtr[T seeding.IsTyped, R, K any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], keyPtr *K) *TypedAPIResource {
+func keyPtrToTypedAPIResourcePtr[T seeding.IsTyped, R, K any, A APIResource](cfg *Config, i handlerInput[T, R, A], keyPtr *K) *TypedAPIResource {
 	if keyPtr == nil {
 		return nil
 	}
@@ -83,7 +69,7 @@ func keyPtrToTypedAPIResourcePtr[T seeding.IsTyped, R, K any, A APIResource, L A
 	return &res
 }
 
-func keysToTypedAPIResources[T seeding.IsTyped, R, K any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], refs []K) []TypedAPIResource {
+func keysToTypedAPIResources[T seeding.IsTyped, R, K any, A APIResource](cfg *Config, i handlerInput[T, R, A], refs []K) []TypedAPIResource {
 	resources := []TypedAPIResource{}
 
 	for _, ref := range refs {
@@ -92,18 +78,4 @@ func keysToTypedAPIResources[T seeding.IsTyped, R, K any, A APIResource, L APIRe
 	}
 
 	return resources
-}
-
-func newTypedAPIResourceList(cfg *Config, r *http.Request, resources []TypedAPIResource) (TypedAPIResourceList, error) {
-	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
-	if err != nil {
-		return TypedAPIResourceList{}, err
-	}
-
-	list := TypedAPIResourceList{
-		ListParams: listParams,
-		Results:    shownResources,
-	}
-
-	return list, nil
 }

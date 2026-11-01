@@ -152,7 +152,7 @@ func TestRetrieveSubquests(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.Subquests.Endpoint, "RetrieveSubquests", testCfg.HandleSubquests, compareAPIResourceLists[api.NamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.Subquests.Endpoint, "RetrieveSubquests", testCfg.HandleSubquests, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionSubquests(t *testing.T) {

@@ -6,6 +6,8 @@ import (
 	"net/url"
 )
 
+// can make a queryVerifyer struct with q and queryParam
+
 // verifies, if the query param is used in the correct context (the relationships with the parameters it is combined with are correct (exclusive, required, forbidden, usable with))
 func vpContext(q url.Values, queryParam QueryParam, queryLookup map[QueryParamName]QueryParam) error {
 	err := vpExclusive(q, queryParam, queryLookup)

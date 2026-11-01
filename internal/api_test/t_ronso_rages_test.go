@@ -59,5 +59,5 @@ func TestRetrieveRonsoRages(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.RonsoRages.Endpoint, "RetrieveRonsoRages", testCfg.HandleRonsoRages, compareAPIResourceLists[api.NamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.RonsoRages.Endpoint, "RetrieveRonsoRages", testCfg.HandleRonsoRages, compareAPIResourceLists[api.NamedAPIResource])
 }

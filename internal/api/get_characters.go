@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource, NamedAPIResourceList], id int32) (Character, error) {
-	character, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource], id int32) (Character, error) {
+	character, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Character{}, err
 	}
@@ -30,7 +30,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 		CelestialWeapon:        rel.CelestialWeapon,
 		OverdriveCommand:       rel.OverdriveCommand,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              toResAmtType(cfg, cfg.E.Stats, character.BaseStats, newBaseStat),
+		BaseStats:              cfg.E.Stats.toResAmtType(cfg, character.BaseStats, newBaseStat),
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		StdSphereGrid:          rel.StdSphereGrid,
 		ExpSphereGrid:          rel.ExpSphereGrid,
@@ -53,14 +53,14 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 	return response, nil
 }
 
-func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		boolQuery(r, i, ids, QpnStoryBased, cfg.db.GetCharacterIDsStoryBased),
-		boolQuery(r, i, ids, QpnUnderwater, cfg.db.GetCharacterIDsCanFightUnderwater),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryBool(r, ids, QpnStoryBased, cfg.db.GetCharacterIDsStoryBased),
+		i.queryBool(r, ids, QpnUnderwater, cfg.db.GetCharacterIDsCanFightUnderwater),
 	})
 }

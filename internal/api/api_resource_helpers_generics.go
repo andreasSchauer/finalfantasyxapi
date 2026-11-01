@@ -2,29 +2,24 @@ package api
 
 import (
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func idsToAPIResources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], IDs []int32) []A {
-	resources := []A{}
+func (i handlerInput[T, R, A]) toResources(cfg *Config, IDs []int32) []A {
+	resources := make([]A, len(IDs))
 
-	for _, id := range IDs {
-		resource := i.idToResFunc(cfg, i, id)
-		resources = append(resources, resource)
+	for idx, id := range IDs {
+		resources[idx] = i.idToResFunc(cfg, i, id)
 	}
 
 	return resources
 }
 
-func idsToAPIResourceList[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], dbIDs []int32) (L, error) {
-	var zeroType L
+func (i handlerInput[T, R, A]) toResList(cfg *Config, r *http.Request, IDs []int32) (APIResourceList[A], error) {
+	resources := i.toResources(cfg, IDs)
 
-	resources := idsToAPIResources(cfg, i, dbIDs)
-
-	resourceList, err := i.resToListFunc(cfg, r, resources)
+	resourceList, err := newAPIResourceList(cfg, r, resources)
 	if err != nil {
-		return zeroType, err
+		return APIResourceList[A]{}, err
 	}
 
 	return resourceList, nil

@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedAPIResourceList], id int32) (Primer, error) {
-	primer, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seeding.Primer, Primer, NamedAPIResource], id int32) (Primer, error) {
+	primer, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Primer{}, err
 	}
@@ -33,11 +33,11 @@ func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seeding.Primer, Pri
 	return response, nil
 }
 
-func (cfg *Config) retrievePrimers(r *http.Request, i handlerInput[seeding.Primer, Primer, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrievePrimers(r *http.Request, i handlerInput[seeding.Primer, Primer, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{})
+	return i.filterIDs(cfg, r, ids, []IDFilter{})
 }

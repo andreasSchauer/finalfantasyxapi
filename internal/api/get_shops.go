@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getShop(r *http.Request, i handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedAPIResourceList], id int32) (Shop, error) {
-	shop, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getShop(r *http.Request, i handlerInput[seeding.Shop, Shop, UnnamedAPIResource], id int32) (Shop, error) {
+	shop, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Shop{}, err
 	}
@@ -24,18 +24,18 @@ func (cfg *Config) getShop(r *http.Request, i handlerInput[seeding.Shop, Shop, U
 	return response, nil
 }
 
-func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, Shop, UnnamedAPIResource, UnnamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, Shop, UnnamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		joinedQuery(cfg, r, i, ids, []QueryParamName{QpnAutoAbility, QpnEmptySlots, QpnCharacter}, filterShopsEquipment),
-		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetShopIDsByLocation),
-		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetShopIDsBySublocation),
-		boolQuery2(r, i, ids, QpnItems, cfg.db.GetShopIDsWithItems),
-		boolQuery2(r, i, ids, QpnEquipment, cfg.db.GetShopIDsWithEquipment),
-		enumListQuery(cfg, r, i, cfg.T.ShopCategory, ids, QpnCategory, cfg.db.GetShopIDsByCategory),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryJoined(cfg, r, ids, []QueryParamName{QpnAutoAbility, QpnEmptySlots, QpnCharacter}, filterShopsEquipment),
+		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetShopIDsByLocation),
+		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetShopIDsBySublocation),
+		i.queryBool2(r, ids, QpnItems, cfg.db.GetShopIDsWithItems),
+		i.queryBool2(r, ids, QpnEquipment, cfg.db.GetShopIDsWithEquipment),
+		i.queryEnumList(cfg, r, cfg.T.ShopCategory, ids, QpnCategory, cfg.db.GetShopIDsByCategory),
 	})
 }

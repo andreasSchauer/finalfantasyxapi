@@ -92,5 +92,5 @@ func TestRetrieveTopmenus(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.Topmenus.Endpoint, "RetrieveTopmenus", testCfg.HandleTopmenus, compareAPIResourceLists[api.NamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.Topmenus.Endpoint, "RetrieveTopmenus", testCfg.HandleTopmenus, compareAPIResourceLists[api.NamedAPIResource])
 }

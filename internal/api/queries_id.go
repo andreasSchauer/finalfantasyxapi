@@ -9,7 +9,7 @@ import (
 )
 
 // query uses an id of another resource type to filter resources
-func idQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DBQueryIntMany) IDFilter {
+func (i handlerInput[T, R, A]) queryID[F seeding.Lookupable](r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {
@@ -34,7 +34,7 @@ func idQuery[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](r
 }
 
 // like idOnlyQuery, but with more specialized logic in between (wrapperFn)
-func idQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, wrapperFn QueryWrapInt) IDFilter {
+func (i handlerInput[T, R, A]) queryIDWrapper[F seeding.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {
@@ -53,7 +53,7 @@ func idQueryWrapper[T, F seeding.Lookupable, R any, A APIResource, L APIResource
 	}
 }
 
-func idQueryNul[T, F seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DBQueryNullIntMany) IDFilter {
+func (i handlerInput[T, R, A]) queryIDNul[F seeding.Lookupable](r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DBQueryNullIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if replParamsPresent(r, queryParam, i.queryLookup) {

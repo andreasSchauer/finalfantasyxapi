@@ -3,8 +3,6 @@ package api
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 type SimpleResourceList struct {
@@ -21,7 +19,7 @@ func (l SimpleResourceList) GetResults() []SimpleResource {
 	return l.Results
 }
 
-func newSimpleResourceList[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], id int32, sectionName string, subsection Subsection) (SimpleResourceList, error) {
+func (i handlerInput[T, R, A]) newSimpleResourceList(cfg *Config, r *http.Request, id int32, sectionName string, subsection Subsection) (SimpleResourceList, error) {
 	dbIDs, err := subsection.dbQuery(r.Context(), id)
 	if err != nil {
 		return SimpleResourceList{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, i.resTypeSingle, id), err)

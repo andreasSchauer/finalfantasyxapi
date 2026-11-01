@@ -28,7 +28,7 @@ func compareSimpleResourceLists[T api.APIResource, S api.SimpleResource](test te
 
 func (test test) checkSubResIDsInSlice[T api.SimpleResource](fieldName string, endpoint api.EndpointName, expIDs []int32, gotRes []T) {
 	test.t.Helper()
-	test.sliceBasicChecks(fieldName, expIDs, gotRes)
+	test.checkSliceBasic(fieldName, expIDs, gotRes)
 
 	gotMap := api.GetSimpleResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {

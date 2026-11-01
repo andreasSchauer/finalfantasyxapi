@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getQuest(r *http.Request, i handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestAPIResourceList], id int32) (Quest, error) {
-	quest, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getQuest(r *http.Request, i handlerInput[seeding.Quest, Quest, QuestAPIResource], id int32) (Quest, error) {
+	quest, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Quest{}, err
 	}
@@ -25,14 +25,14 @@ func (cfg *Config) getQuest(r *http.Request, i handlerInput[seeding.Quest, Quest
 	return response, nil
 }
 
-func (cfg *Config) retrieveQuests(r *http.Request, i handlerInput[seeding.Quest, Quest, QuestAPIResource, QuestAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveQuests(r *http.Request, i handlerInput[seeding.Quest, Quest, QuestAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumQuery(r, i, cfg.T.QuestType, ids, QpnType, cfg.db.GetQuestIDsByType),
-		boolQuery(r, i, ids, QpnRepeatable, cfg.db.GetQuestIDsByRepeatable),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnum(r, cfg.T.QuestType, ids, QpnType, cfg.db.GetQuestIDsByType),
+		i.queryBool(r, ids, QpnRepeatable, cfg.db.GetQuestIDsByRepeatable),
 	})
 }

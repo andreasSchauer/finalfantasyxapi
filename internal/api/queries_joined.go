@@ -3,11 +3,9 @@ package api
 import (
 	"context"
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func joinedQuery[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], inputIDs []int32, queryNames []QueryParamName, wrapperFn QueryWrapJoined) IDFilter {
+func (i handlerInput[T, R, A]) queryJoined(cfg *Config, r *http.Request, inputIDs []int32, queryNames []QueryParamName, wrapperFn QueryWrapJoined) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		allEmpty := true
 

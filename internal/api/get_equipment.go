@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedAPIResourceList], id int32) (EquipmentName, error) {
-	equipment, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource], id int32) (EquipmentName, error) {
+	equipment, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return EquipmentName{}, err
 	}
@@ -36,16 +36,16 @@ func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.Equipmen
 	return response, nil
 }
 
-func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		idListQuery(cfg, r, i, ids, QpnAutoAbilities, cfg.L.AutoAbilities, cfg.db.GetEquipmentIDsByAutoAbility),
-		nameIDQuery(r, i, ids, QpnCharacter, cfg.E.Characters.resTypeSingle, cfg.E.Characters.objLookup, cfg.db.GetEquipmentIDsByCharacter),
-		enumQuery(r, i, cfg.T.EquipType, ids, QpnType, cfg.db.GetEquipmentIDsByEquipType),
-		boolQuery2(r, i, ids, QpnCelestialWeapon, cfg.db.GetEquipmentIDsCelestialWeapon),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryIDList(cfg, r, ids, QpnAutoAbilities, cfg.L.AutoAbilities, cfg.db.GetEquipmentIDsByAutoAbility),
+		i.queryNameID(r, ids, QpnCharacter, cfg.E.Characters.resTypeSingle, cfg.E.Characters.objLookup, cfg.db.GetEquipmentIDsByCharacter),
+		i.queryEnum(r, cfg.T.EquipType, ids, QpnType, cfg.db.GetEquipmentIDsByEquipType),
+		i.queryBool2(r, ids, QpnCelestialWeapon, cfg.db.GetEquipmentIDsCelestialWeapon),
 	})
 }

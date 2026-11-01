@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, NamedAPIResource, NamedAPIResourceList], id int32) (Item, error) {
-	item, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, NamedAPIResource], id int32) (Item, error) {
+	item, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Item{}, err
 	}
@@ -50,19 +50,19 @@ func (cfg *Config) getItem(r *http.Request, i handlerInput[seeding.Item, Item, N
 	return response, nil
 }
 
-func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seeding.Item, Item, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seeding.Item, Item, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumListQuery(cfg, r, i, cfg.T.ItemCategory, ids, QpnCategory, cfg.db.GetItemIDsCategory),
-		boolQuery2(r, i, ids, QpnHasAbility, cfg.db.GetItemIDsWithAbility),
-		nameIDQuery(r, i, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, cfg.L.Stats, cfg.db.GetItemIDsByRelatedStat),
-		valueListQuery(cfg, r, i, ids, QpnMethods, cfg.db.GetItemIDsByMethods),
-		idQueryWrapper(cfg, r, i, ids, QpnLocation, cfg.E.Locations.objLookup, getItemsByLocation),
-		idQueryWrapper(cfg, r, i, ids, QpnSublocation, cfg.E.Sublocations.objLookup, getItemsBySublocation),
-		idQueryWrapper(cfg, r, i, ids, QpnArea, cfg.E.Areas.objLookup, getItemsByArea),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnumList(cfg, r, cfg.T.ItemCategory, ids, QpnCategory, cfg.db.GetItemIDsCategory),
+		i.queryBool2(r, ids, QpnHasAbility, cfg.db.GetItemIDsWithAbility),
+		i.queryNameID(r, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, cfg.L.Stats, cfg.db.GetItemIDsByRelatedStat),
+		i.queryValueList(cfg, r, ids, QpnMethods, cfg.db.GetItemIDsByMethods),
+		i.queryIDWrapper(cfg, r, ids, QpnLocation, cfg.E.Locations.objLookup, getItemsByLocation),
+		i.queryIDWrapper(cfg, r, ids, QpnSublocation, cfg.E.Sublocations.objLookup, getItemsBySublocation),
+		i.queryIDWrapper(cfg, r, ids, QpnArea, cfg.E.Areas.objLookup, getItemsByArea),
 	})
 }

@@ -28,50 +28,50 @@ func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat
 
 	g.Go(func() error {
 		var err error
-		rel.Spheres, err = getResourcesDBItem(cfg, ctx, cfg.E.Spheres, stat, cfg.db.GetStatSphereIDs)
+		rel.Spheres, err = cfg.E.Spheres.dbGetRelations(cfg, ctx, stat, cfg.db.GetStatSphereIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.AutoAbilities, stat, queries.AutoAbilities)
+		rel.AutoAbilities, err = cfg.E.AutoAbilities.dbGetRelations(cfg, ctx, stat, queries.AutoAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.PlayerAbilities, stat, queries.PlayerAbilities)
+		rel.PlayerAbilities, err = cfg.E.PlayerAbilities.dbGetRelations(cfg, ctx, stat, queries.PlayerAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.OverdriveAbilities, stat, queries.OverdriveAbilities)
+		rel.OverdriveAbilities, err = cfg.E.OverdriveAbilities.dbGetRelations(cfg, ctx, stat, queries.OverdriveAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = getResourcesDBItem(cfg, ctx, cfg.E.ItemAbilities, stat, queries.ItemAbilities)
+		rel.ItemAbilities, err = cfg.E.ItemAbilities.dbGetRelations(cfg, ctx, stat, queries.ItemAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.TriggerCommands, err = getResourcesDBItem(cfg, ctx, cfg.E.TriggerCommands, stat, queries.TriggerCommands)
+		rel.TriggerCommands, err = cfg.E.TriggerCommands.dbGetRelations(cfg, ctx, stat, queries.TriggerCommands)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.StatusConditions, err = getResourcesDBItem(cfg, ctx, cfg.E.StatusConditions, stat, queries.StatusConditions)
+		rel.StatusConditions, err = cfg.E.StatusConditions.dbGetRelations(cfg, ctx, stat, queries.StatusConditions)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		if queries.Properties != nil {
-			rel.Properties, err = getResourcesDBItem(cfg, ctx, cfg.E.Properties, stat, queries.Properties)
+			rel.Properties, err = cfg.E.Properties.dbGetRelations(cfg, ctx, stat, queries.Properties)
 			return err
 		}
 		return nil

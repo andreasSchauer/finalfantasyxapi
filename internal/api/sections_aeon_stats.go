@@ -46,7 +46,7 @@ type AeonStatTable struct {
 }
 
 func newAeonStatTable(cfg *Config, baseStats []seeding.BaseStat) AeonStatTable {
-	stats := toResAmtType(cfg, cfg.E.Stats, baseStats, newBaseStat)
+	stats := cfg.E.Stats.toResAmtType(cfg, baseStats, newBaseStat)
 	statMap := GetResAmtTypeMap(stats)
 	luckPtr := h.GetInt32Ptr(statMap["luck"])
 

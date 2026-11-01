@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getMix(r *http.Request, i handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedAPIResourceList], id int32) (Mix, error) {
-	mix, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getMix(r *http.Request, i handlerInput[seeding.Mix, Mix, NamedAPIResource], id int32) (Mix, error) {
+	mix, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Mix{}, err
 	}
@@ -32,14 +32,14 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seeding.Mix, Mix, Name
 	return response, nil
 }
 
-func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seeding.Mix, Mix, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seeding.Mix, Mix, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumListQuery(cfg, r, i, cfg.T.MixCategory, ids, QpnCategory, cfg.db.GetMixIDsByCategory),
-		idQueryWrapper(cfg, r, i, ids, QpnReqItem, cfg.L.Items, getMixesByItem),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnumList(cfg, r, cfg.T.MixCategory, ids, QpnCategory, cfg.db.GetMixIDsByCategory),
+		i.queryIDWrapper(cfg, r, ids, QpnReqItem, cfg.L.Items, getMixesByItem),
 	})
 }

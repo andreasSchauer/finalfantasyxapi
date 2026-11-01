@@ -93,7 +93,7 @@ func convertAlt(cfg *Config, asc seeding.Alt) Alt {
 	return Alt{
 		Properties:       h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.E.Properties, asc.Properties)),
 		AutoAbilities:    h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, asc.AutoAbilities)),
-		BaseStats:        h.SliceOrNil(toResAmtType(cfg, cfg.E.Stats, asc.BaseStats, newBaseStat)),
+		BaseStats:        h.SliceOrNil(cfg.E.Stats.toResAmtType(cfg, asc.BaseStats, newBaseStat)),
 		ElemResists:      h.SliceOrNil(namesToElemResists(cfg, asc.ElemResists)),
 		StatusImmunities: h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.E.StatusConditions, asc.StatusImmunities)),
 		AddedStatus:      convertObjPtr(cfg, asc.AddedStatus, convertInflictedStatus),

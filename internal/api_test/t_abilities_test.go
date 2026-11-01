@@ -344,7 +344,7 @@ func TestRetrieveAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.Abilities.Endpoint, "RetrieveAbilities", testCfg.HandleAbilities, compareAPIResourceLists[api.NamedAPIResourceList])
+	testIDList(t, tests, testCfg.E.Abilities.Endpoint, "RetrieveAbilities", testCfg.HandleAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionAbilities(t *testing.T) {

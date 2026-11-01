@@ -32,7 +32,7 @@ func reqsAreZero(reqs []string, srcType ViewSourceType) bool {
 	return len(reqs) == 1 && reqs[0] == string(srcType)
 }
 
-func getLocBasedSources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L], srcType ViewSourceType) (locBasedSources, error) {
+func getLocBasedSources[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A], srcType ViewSourceType) (locBasedSources, error) {
 	reqs := []string{string(srcType)}
 	excls := []string{}
 
@@ -107,7 +107,7 @@ type shopSources struct {
 	EmptySlots      []int32
 }
 
-func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](cfg *Config, r *http.Request, i handlerInput[T, R, A, L]) (shopSources, error) {
+func getShopSources[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A]) (shopSources, error) {
 	avlType := AvlTypeSelf
 	reqs := []string{}
 	excls := []string{}
@@ -162,7 +162,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource, L APIResourceLis
 	return sources, nil
 }
 
-func parseBoolSources[T seeding.Lookupable, R any, A APIResource, L APIResourceList](r *http.Request, i handlerInput[T, R, A, L], reqs, excls []string, sourceMap map[QueryParamName]string) ([]string, []string, error) {
+func parseBoolSources[T seeding.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], reqs, excls []string, sourceMap map[QueryParamName]string) ([]string, []string, error) {
 	for queryParam := range sourceMap {
 		b, err := parseBooleanQuery(r, i.queryLookup[queryParam])
 		if errExceptEmptyQuery(err) {

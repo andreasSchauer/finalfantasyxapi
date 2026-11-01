@@ -46,7 +46,7 @@ func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestComple
 	return QuestCompletion{
 		Condition: qc.Condition,
 		Areas:     convertObjSlice(cfg, qc.Areas, convertCompletionArea),
-		Reward:    nameAmountToResourceAmount(cfg, cfg.E.AllItems, qc.Reward),
+		Reward:    cfg.E.AllItems.toResAmtFromName(cfg, qc.Reward),
 	}
 }
 

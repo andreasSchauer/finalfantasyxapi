@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedAPIResourceList], id int32) (Aeon, error) {
-	aeon, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, NamedAPIResource], id int32) (Aeon, error) {
+	aeon, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Aeon{}, err
 	}
@@ -54,13 +54,13 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seeding.Aeon, Aeon, N
 	return response, nil
 }
 
-func (cfg *Config) retrieveAeons(r *http.Request, i handlerInput[seeding.Aeon, Aeon, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveAeons(r *http.Request, i handlerInput[seeding.Aeon, Aeon, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		boolQuery(r, i, ids, QpnOptional, cfg.db.GetAeonIDsOptional),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryBool(r, ids, QpnOptional, cfg.db.GetAeonIDsOptional),
 	})
 }

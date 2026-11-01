@@ -58,7 +58,7 @@ func (r NamedAPIResource) NameIs(name string, version *int32) bool {
 	return r.Name == name && h.PtrsEqual(r.Version, version, h.DerefInt32Ptr)
 }
 
-func idToNamedAPIResource[T seeding.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], id int32) NamedAPIResource {
+func idToNamedAPIResource[T seeding.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) NamedAPIResource {
 	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
 	params := res.GetResParamsNamed()
 
@@ -72,7 +72,7 @@ func idToNamedAPIResource[T seeding.IsNamed, R any, A APIResource, L APIResource
 }
 
 // essentially parses name or name/version like a handler and then converts the id to a NamedAPIResource
-func nameToNamedAPIResource[T seeding.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], name string, version *int32) NamedAPIResource {
+func nameToNamedAPIResource[T seeding.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], name string, version *int32) NamedAPIResource {
 	var parseResp parseResponse
 	switch version {
 	case nil:
@@ -84,7 +84,7 @@ func nameToNamedAPIResource[T seeding.IsNamed, R any, A APIResource, L APIResour
 	return idToNamedAPIResource(cfg, i, parseResp.ID)
 }
 
-func namePtrToNamedAPIResPtr[T seeding.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], namePtr *string, version *int32) *NamedAPIResource {
+func namePtrToNamedAPIResPtr[T seeding.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], namePtr *string, version *int32) *NamedAPIResource {
 	if namePtr == nil {
 		return nil
 	}
@@ -93,7 +93,7 @@ func namePtrToNamedAPIResPtr[T seeding.IsNamed, R any, A APIResource, L APIResou
 	return &res
 }
 
-func namesToNamedAPIResources[T seeding.IsNamed, R any, A APIResource, L APIResourceList](cfg *Config, i handlerInput[T, R, A, L], names []string) []NamedAPIResource {
+func namesToNamedAPIResources[T seeding.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], names []string) []NamedAPIResource {
 	resources := make([]NamedAPIResource, 0, len(names)) // put this into more high frequency places
 
 	for _, name := range names {

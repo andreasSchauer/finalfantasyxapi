@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getStatusCondition(r *http.Request, i handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedAPIResourceList], id int32) (StatusCondition, error) {
-	status, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getStatusCondition(r *http.Request, i handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource], id int32) (StatusCondition, error) {
+	status, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return StatusCondition{}, err
 	}
@@ -39,13 +39,13 @@ func (cfg *Config) getStatusCondition(r *http.Request, i handlerInput[seeding.St
 	return response, nil
 }
 
-func (cfg *Config) retrieveStatusConditions(r *http.Request, i handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveStatusConditions(r *http.Request, i handlerInput[seeding.StatusCondition, StatusCondition, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumListQuery(cfg, r, i, cfg.T.StatusConditionCategory, ids, QpnCategory, cfg.db.GetStatusConditionIDsByCategory),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnumList(cfg, r, cfg.T.StatusConditionCategory, ids, QpnCategory, cfg.db.GetStatusConditionIDsByCategory),
 	})
 }

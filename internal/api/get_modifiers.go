@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getModifier(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedAPIResourceList], id int32) (Modifier, error) {
-	modifier, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getModifier(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource], id int32) (Modifier, error) {
+	modifier, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Modifier{}, err
 	}
@@ -36,13 +36,13 @@ func (cfg *Config) getModifier(r *http.Request, i handlerInput[seeding.Modifier,
 	return response, nil
 }
 
-func (cfg *Config) retrieveModifiers(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveModifiers(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumListQuery(cfg, r, i, cfg.T.ModifierCategory, ids, QpnCategory, cfg.db.GetModifierIDsByCategory),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnumList(cfg, r, cfg.T.ModifierCategory, ids, QpnCategory, cfg.db.GetModifierIDsByCategory),
 	})
 }

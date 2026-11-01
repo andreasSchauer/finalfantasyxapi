@@ -12,62 +12,62 @@ func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seedi
 	var locRel LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := getRelAvailabilityParams(cfg, r, cfg.E.Sublocations, sublocation.ID)
+	availabilityParams, err := cfg.E.Sublocations.queryAvlRelGetParams(cfg, r, sublocation.ID)
 	if err != nil {
 		return Sublocation{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.ConnectedSublocations, err = getResourcesDBItem(cfg, r.Context(), cfg.E.Sublocations, sublocation, cfg.db.GetConnectedSublocationIDs)
+		rel.ConnectedSublocations, err = cfg.E.Sublocations.dbGetRelations(cfg, r.Context(), sublocation, cfg.db.GetConnectedSublocationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = getResourcesDBItem(cfg, r.Context(), cfg.E.Areas, sublocation, cfg.db.GetSublocationAreaIDs)
+		rel.Areas, err = cfg.E.Areas.dbGetRelations(cfg, r.Context(), sublocation, cfg.db.GetSublocationAreaIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Characters, err = getResourcesDBItem(cfg, ctx, cfg.E.Characters, sublocation, cfg.db.GetSublocationCharacterIDs)
+		locRel.Characters, err = cfg.E.Characters.dbGetRelations(cfg, ctx, sublocation, cfg.db.GetSublocationCharacterIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Aeons, err = getResourcesDBItem(cfg, ctx, cfg.E.Aeons, sublocation, cfg.db.GetSublocationAeonIDs)
+		locRel.Aeons, err = cfg.E.Aeons.dbGetRelations(cfg, ctx, sublocation, cfg.db.GetSublocationAeonIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Shops, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Shops, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeShop))
+		locRel.Shops, err = cfg.E.Shops.queryAvlRelRun(cfg, ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeShop))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Treasures, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Treasures, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeTreasure))
+		locRel.Treasures, err = cfg.E.Treasures.queryAvlRelRun(cfg, ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Monsters, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Monsters, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeMonster))
+		locRel.Monsters, err = cfg.E.Monsters.queryAvlRelRun(cfg, ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeMonster))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Formations, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.MonsterFormations, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
+		locRel.Formations, err = cfg.E.MonsterFormations.queryAvlRelRun(cfg, ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Quests, err = runRelAvailabilityQuery(cfg, ctx, cfg.E.Quests, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeQuest))
+		locRel.Quests, err = cfg.E.Quests.queryAvlRelRun(cfg, ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(cfg, ViewSourceTypeQuest))
 		return err
 	})
 
@@ -84,7 +84,7 @@ func getSublocationRelationships(cfg *Config, r *http.Request, sublocation seedi
 
 	g.Go(func() error {
 		var err error
-		locRel.FMVs, err = getResourcesDBItem(cfg, ctx, cfg.E.FMVs, sublocation, cfg.db.GetSublocationFmvIDs)
+		locRel.FMVs, err = cfg.E.FMVs.dbGetRelations(cfg, ctx, sublocation, cfg.db.GetSublocationFmvIDs)
 		return err
 	})
 

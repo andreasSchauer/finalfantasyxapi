@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getSphere(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedAPIResourceList], id int32) (Sphere, error) {
-	sphere, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getSphere(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource], id int32) (Sphere, error) {
+	sphere, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Sphere{}, err
 	}
@@ -40,17 +40,17 @@ func (cfg *Config) getSphere(r *http.Request, i handlerInput[seeding.Sphere, Sph
 	return response, nil
 }
 
-func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumListQuery(cfg, r, i, cfg.T.SphereColor, ids, QpnColor, cfg.db.GetSphereIDsByColor),
-		idQuery(r, i, ids, QpnLocation, cfg.L.Locations, cfg.db.GetSphereIDsByLocation),
-		idQuery(r, i, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSphereIDsBySublocation),
-		idQuery(r, i, ids, QpnArea, cfg.L.Areas, cfg.db.GetSphereIDsByArea),
-		valueListQuery(cfg, r, i, ids, QpnMethods, cfg.db.GetSphereIDsByMethods),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnumList(cfg, r, cfg.T.SphereColor, ids, QpnColor, cfg.db.GetSphereIDsByColor),
+		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetSphereIDsByLocation),
+		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSphereIDsBySublocation),
+		i.queryID(r, ids, QpnArea, cfg.L.Areas, cfg.db.GetSphereIDsByArea),
+		i.queryValueList(cfg, r, ids, QpnMethods, cfg.db.GetSphereIDsByMethods),
 	})
 }

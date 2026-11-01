@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedAPIResourceList], id int32) (OverdriveMode, error) {
-	mode, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource], id int32) (OverdriveMode, error) {
+	mode, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return OverdriveMode{}, err
 	}
@@ -19,19 +19,19 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seeding.Over
 		Effect:      mode.Effect,
 		Type:        mode.Type,
 		FillRate:    mode.FillRate,
-		Actions:     nameAmtsToResAmts(cfg, cfg.E.Characters, mode.ActionsToLearn),
+		Actions:     cfg.E.Characters.toResAmtsFromNames(cfg, mode.ActionsToLearn),
 	}
 
 	return response, nil
 }
 
-func (cfg *Config) retrieveOverdriveModes(r *http.Request, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveOverdriveModes(r *http.Request, i handlerInput[seeding.OverdriveMode, OverdriveMode, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumQuery(r, i, cfg.T.OverdriveModeType, ids, QpnType, cfg.db.GetOverdriveModeIDsByType),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnum(r, cfg.T.OverdriveModeType, ids, QpnType, cfg.db.GetOverdriveModeIDsByType),
 	})
 }

@@ -24,7 +24,7 @@ func compareSectionLists(test test, endpoint api.EndpointName, exp expListNames,
 // checks if the provided slice of strings contains all stated strings
 func (test test) checkStringsInSlice(fieldName string, expNames []api.NamedParam, gotNames []string) {
 	test.t.Helper()
-	test.sliceBasicChecks(fieldName, expNames, gotNames)
+	test.checkSliceBasic(fieldName, expNames, gotNames)
 
 	gotMap := make(map[string]bool)
 	for _, gotName := range gotNames {

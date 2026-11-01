@@ -7,8 +7,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedAPIResourceList], id int32) (BlitzballPrize, error) {
-	bbPos, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource], id int32) (BlitzballPrize, error) {
+	bbPos, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return BlitzballPrize{}, err
 	}
@@ -24,13 +24,13 @@ func (cfg *Config) getBlitzballPrize(r *http.Request, i handlerInput[seeding.Bli
 	return response, nil
 }
 
-func (cfg *Config) retrieveBlitzballPrizes(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource, NamedAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveBlitzballPrizes(r *http.Request, i handlerInput[seeding.BlitzballPosition, BlitzballPrize, NamedAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		enumQuery(r, i, cfg.T.BlitzballTournamentCategory, ids, QpnCategory, cfg.db.GetBlitzballPrizeIDsByCategory),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryEnum(r, cfg.T.BlitzballTournamentCategory, ids, QpnCategory, cfg.db.GetBlitzballPrizeIDsByCategory),
 	})
 }

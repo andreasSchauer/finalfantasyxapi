@@ -6,8 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestAPIResourceList], id int32) (Subquest, error) {
-	subquest, err := verifyParamsAndGet(r, i, id)
+func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource], id int32) (Subquest, error) {
+	subquest, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Subquest{}, err
 	}
@@ -29,13 +29,13 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 	return response, nil
 }
 
-func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource, QuestAPIResourceList]) ([]int32, error) {
-	ids, err := verifyParamsAndRetrieve(r, i)
+func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource]) ([]int32, error) {
+	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return filterIDs(cfg, r, i, ids, []IDFilter{
-		boolQuery(r, i, ids, QpnRepeatable, cfg.db.GetSubquestIDsByRepeatable),
+	return i.filterIDs(cfg, r, ids, []IDFilter{
+		i.queryBool(r, ids, QpnRepeatable, cfg.db.GetSubquestIDsByRepeatable),
 	})
 }
