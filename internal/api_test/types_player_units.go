@@ -21,10 +21,10 @@ func (e expPlayerUnit) GetTestGeneral() testGeneral {
 
 func comparePlayerUnits(test test, exp expPlayerUnit, got api.PlayerUnit) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compare(test, "unit type", string(exp.unitType), string(got.Type))
-	compPathAPIResource(test, "typed unit", exp.typedUnit, got.TypedUnit)
-	compIDAPIResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
-	compIDAPIResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
-	checkResIDsInSlice(test, "character classes", test.cfg.E.CharacterClasses.Endpoint, exp.characterClasses, got.CharacterClasses)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compare("unit type", string(exp.unitType), string(got.Type))
+	test.compPathAPIResource("typed unit", exp.typedUnit, got.TypedUnit)
+	test.compIDAPIResource("area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
+	test.compIDAPIResourcePtrs("celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
+	test.checkResIDsInSlice("character classes", test.cfg.E.CharacterClasses.Endpoint, exp.characterClasses, got.CharacterClasses)
 }

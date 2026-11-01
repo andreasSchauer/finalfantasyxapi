@@ -17,11 +17,11 @@ func (e expSubmenu) GetTestGeneral() testGeneral {
 
 func compareSubmenus(test test, exp expSubmenu, got api.Submenu) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIDAPIResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	checkResIDsInSlice(test, "users", test.cfg.E.CharacterClasses.Endpoint, exp.users, got.Users)
-	checkResIDsInSlice(test, "abilities", test.cfg.E.Abilities.Endpoint, exp.abilities, got.Abilities)
-	compTestStructPtrs(test, "opened by", exp.openedBy, got.OpenedBy, compareMenuOpen)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResourcePtrs("topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
+	test.checkResIDsInSlice("users", test.cfg.E.CharacterClasses.Endpoint, exp.users, got.Users)
+	test.checkResIDsInSlice("abilities", test.cfg.E.Abilities.Endpoint, exp.abilities, got.Abilities)
+	test.compTestStructPtrs("opened by", exp.openedBy, got.OpenedBy, compareMenuOpen)
 }
 
 type expMenuOpen struct {
@@ -32,7 +32,7 @@ type expMenuOpen struct {
 
 func compareMenuOpen(test test, fieldName string, exp expMenuOpen, got api.MenuOpen) {
 	test.t.Helper()
-	compIDAPIResourcePtrs(test, fieldName+" - ability", test.cfg.E.Abilities.Endpoint, exp.ability, got.Ability)
-	compIDAPIResourcePtrs(test, fieldName+" - aeon command", test.cfg.E.AeonCommands.Endpoint, exp.aeonCommand, got.AeonCommand)
-	checkResIDsInSlice(test, fieldName+" - overdrive commands", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommands, got.OverdriveCommands)
+	test.compIDAPIResourcePtrs(fieldName+" - ability", test.cfg.E.Abilities.Endpoint, exp.ability, got.Ability)
+	test.compIDAPIResourcePtrs(fieldName+" - aeon command", test.cfg.E.AeonCommands.Endpoint, exp.aeonCommand, got.AeonCommand)
+	test.checkResIDsInSlice(fieldName+" - overdrive commands", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommands, got.OverdriveCommands)
 }

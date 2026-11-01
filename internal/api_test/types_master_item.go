@@ -19,8 +19,8 @@ func (e expMasterItem) GetTestGeneral() testGeneral {
 
 func compareMasterItems(test test, exp expMasterItem, got api.MasterItem) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compare(test, "item type", string(exp.itemType), string(got.Type))
-	compPathAPIResource(test, "typed item", exp.typedItem, got.TypedItem)
-	compStructs(test, "obtainable from", exp.obtainableFrom, got.ObtainableFrom)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compare("item type", string(exp.itemType), string(got.Type))
+	test.compPathAPIResource("typed item", exp.typedItem, got.TypedItem)
+	test.compStructs("obtainable from", exp.obtainableFrom, got.ObtainableFrom)
 }

@@ -13,9 +13,9 @@ type testAppliedState struct {
 }
 
 func compareMonsterAppliedStates(test test, _ string, exp testAppliedState, got api.AppliedState) {
-	compare(test, "applied state condition", exp.condition, got.Condition)
-	compare(test, "applied state isTemporary", exp.isTemporary, got.IsTemporary)
-	compIDAPIResourcePtrs(test, "applied status", test.cfg.E.StatusConditions.Endpoint, exp.appliedStatus, got.AppliedStatus)
+	test.compare("applied state condition", exp.condition, got.Condition)
+	test.compare("applied state isTemporary", exp.isTemporary, got.IsTemporary)
+	test.compIDAPIResourcePtrs("applied status", test.cfg.E.StatusConditions.Endpoint, exp.appliedStatus, got.AppliedStatus)
 }
 
 type testDefaultState struct {
@@ -30,21 +30,21 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []api.A
 		return
 	}
 
-	if !defaultAndAltStatesPresent(test, exp, gotStates) {
+	if !test.defaultAndAltStatesPresent(exp, gotStates) {
 		return
 	}
 
-	compLength(test, "altered states", len(gotStates))
+	test.compLength("altered states", len(gotStates))
 
 	got := gotStates[0]
 	if got.Condition != "default" {
 		test.t.Errorf("first altered state must be default when another is applied, got: %s", got.Condition)
 	}
 
-	compare(test, "default state is temporary", exp.IsTemporary, got.IsTemporary)
-	compTestStructPtrs(test, "alt state change", exp.Change, got.Change, compareAltStateChanges)
-	compTestStructPtrs(test, "alt state gain", exp.Gain, got.Gain, compareAltStateGains)
-	compTestStructPtrs(test, "alt state loss", exp.Loss, got.Loss, compareAltStateLosses)
+	test.compare("default state is temporary", exp.IsTemporary, got.IsTemporary)
+	test.compTestStructPtrs("alt state change", exp.Change, got.Change, compareAltStateChanges)
+	test.compTestStructPtrs("alt state gain", exp.Gain, got.Gain, compareAltStateGains)
+	test.compTestStructPtrs("alt state loss", exp.Loss, got.Loss, compareAltStateLosses)
 }
 
 type testAltStateChange struct {
@@ -56,9 +56,9 @@ type testAltStateChange struct {
 func compareAltStateChanges(test test, fieldName string, exp testAltStateChange, got api.AltStateChange) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
-	compare(test, desc+"distance", exp.Distance, got.Distance)
-	checkResAmtTypes(test, desc+"base stats", exp.BaseStats, got.BaseStats)
-	compTestStructSlices(test, desc+"elemental resists", exp.ElemResists, got.ElemResists, compareElemResists)
+	test.compare(desc+"distance", exp.Distance, got.Distance)
+	test.checkResAmtTypes(desc+"base stats", exp.BaseStats, got.BaseStats)
+	test.compTestStructSlices(desc+"elemental resists", exp.ElemResists, got.ElemResists, compareElemResists)
 }
 
 type testAltStateGain struct {
@@ -72,11 +72,11 @@ type testAltStateGain struct {
 func compareAltStateGains(test test, fieldName string, exp testAltStateGain, got api.AltStateGain) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
-	checkResIDsInSlice(test, desc+"properties", test.cfg.E.Properties.Endpoint, exp.Properties, got.Properties)
-	checkResIDsInSlice(test, desc+"auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.AutoAbilities, got.AutoAbilities)
-	checkResIDsInSlice(test, desc+"status immunities", test.cfg.E.StatusConditions.Endpoint, exp.StatusImmunities, got.StatusImmunities)
-	checkResAmtTypes(test, desc+"status resists", exp.StatusResists, got.StatusResists)
-	compStructPtrs(test, desc+"added status", exp.Status, got.Status)
+	test.checkResIDsInSlice(desc+"properties", test.cfg.E.Properties.Endpoint, exp.Properties, got.Properties)
+	test.checkResIDsInSlice(desc+"auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.AutoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice(desc+"status immunities", test.cfg.E.StatusConditions.Endpoint, exp.StatusImmunities, got.StatusImmunities)
+	test.checkResAmtTypes(desc+"status resists", exp.StatusResists, got.StatusResists)
+	test.compStructPtrs(desc+"added status", exp.Status, got.Status)
 }
 
 type testAltStateLoss struct {
@@ -89,8 +89,8 @@ type testAltStateLoss struct {
 func compareAltStateLosses(test test, fieldName string, exp testAltStateLoss, got api.AltStateLoss) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
-	checkResIDsInSlice(test, desc+"properties", test.cfg.E.Properties.Endpoint, exp.Properties, got.Properties)
-	checkResIDsInSlice(test, desc+"auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.AutoAbilities, got.AutoAbilities)
-	checkResIDsInSlice(test, desc+"status immunities", test.cfg.E.StatusConditions.Endpoint, exp.StatusImmunities, got.StatusImmunities)
-	compIDAPIResourcePtrs(test, desc+"removed status", test.cfg.E.StatusConditions.Endpoint, exp.Status, got.Status)
+	test.checkResIDsInSlice(desc+"properties", test.cfg.E.Properties.Endpoint, exp.Properties, got.Properties)
+	test.checkResIDsInSlice(desc+"auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.AutoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice(desc+"status immunities", test.cfg.E.StatusConditions.Endpoint, exp.StatusImmunities, got.StatusImmunities)
+	test.compIDAPIResourcePtrs(desc+"removed status", test.cfg.E.StatusConditions.Endpoint, exp.Status, got.Status)
 }

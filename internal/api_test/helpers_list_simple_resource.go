@@ -18,17 +18,17 @@ func (l gotSimpleResourceList[T, S]) GetResults() []S {
 
 func compareSimpleResourceLists[T api.APIResource, S api.SimpleResource](test test, endpoint api.EndpointName, expList expListIDs, gotList gotSimpleResourceList[T, S]) {
 	test.t.Helper()
-	compareListParams(test, expList.GetListParams(), gotList.GetListParams())
+	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
 
 	gotParentURL := gotList.ParentResource.GetURL()
-	compPageURL(test, "parent resource", expList.parentResource, &gotParentURL)
+	test.compPageURL("parent resource", expList.parentResource, &gotParentURL)
 
-	checkSubResIDsInSlice(test, "results", endpoint, expList.results, gotList.GetResults())
+	test.checkSubResIDsInSlice("results", endpoint, expList.results, gotList.GetResults())
 }
 
-func checkSubResIDsInSlice[T api.SimpleResource](test test, fieldName string, endpoint api.EndpointName, expIDs []int32, gotRes []T) {
+func (test test) checkSubResIDsInSlice[T api.SimpleResource](fieldName string, endpoint api.EndpointName, expIDs []int32, gotRes []T) {
 	test.t.Helper()
-	sliceBasicChecks(test, fieldName, expIDs, gotRes)
+	test.sliceBasicChecks(fieldName, expIDs, gotRes)
 
 	gotMap := api.GetSimpleResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {

@@ -19,11 +19,11 @@ func (e expAutoAbility) GetTestGeneral() testGeneral {
 
 func compareAutoAbilities(test test, exp expAutoAbility, got api.AutoAbility) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	checkResIDsInSlice(test, "monsters drop", test.cfg.E.Monsters.Endpoint, exp.monstersDrop, got.MonstersDrop)
-	checkTestStructsInSlice(test, "monsters items", exp.monstersItems, got.MonstersItems, compareMonItemAmts)
-	checkResIDsInSlice(test, "treasures", test.cfg.E.Treasures.Endpoint, exp.treasures, got.Treasures)
-	checkResIDsInSlice(test, "shops pre airship", test.cfg.E.Shops.Endpoint, exp.shopsPreAirship, got.ShopsPreAirship)
-	checkResIDsInSlice(test, "shops post airship", test.cfg.E.Shops.Endpoint, exp.shopsPostAirship, got.ShopsPostAirship)
-	checkResIDsInSlice(test, "equipment tables", test.cfg.E.EquipmentTables.Endpoint, exp.equipmentTables, got.EquipmentTables)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.checkResIDsInSlice("monsters drop", test.cfg.E.Monsters.Endpoint, exp.monstersDrop, got.MonstersDrop)
+	test.checkTestStructsInSlice("monsters items", exp.monstersItems, got.MonstersItems, compareMonItemAmts)
+	test.checkResIDsInSlice("treasures", test.cfg.E.Treasures.Endpoint, exp.treasures, got.Treasures)
+	test.checkResIDsInSlice("shops pre airship", test.cfg.E.Shops.Endpoint, exp.shopsPreAirship, got.ShopsPreAirship)
+	test.checkResIDsInSlice("shops post airship", test.cfg.E.Shops.Endpoint, exp.shopsPostAirship, got.ShopsPostAirship)
+	test.checkResIDsInSlice("equipment tables", test.cfg.E.EquipmentTables.Endpoint, exp.equipmentTables, got.EquipmentTables)
 }

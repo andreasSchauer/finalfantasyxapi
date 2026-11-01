@@ -17,10 +17,10 @@ func (e expSublocation) GetTestGeneral() testGeneral {
 
 func compareSublocations(test test, exp expSublocation, got api.Sublocation) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIDAPIResource(test, "location", test.cfg.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)
-	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
-	checkResIDsInSlice(test, "connected sublocations", test.cfg.E.Sublocations.Endpoint, exp.connectedSublocations, got.ConnectedSublocations)
-	checkResIDsInSlice(test, "areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("location", test.cfg.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)
+	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)
+	test.checkResIDsInSlice("connected sublocations", test.cfg.E.Sublocations.Endpoint, exp.connectedSublocations, got.ConnectedSublocations)
+	test.checkResIDsInSlice("areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
 	compareLocRel(test, exp.expLocRel, got.LocRel)
 }

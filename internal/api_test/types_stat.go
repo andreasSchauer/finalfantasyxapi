@@ -21,13 +21,13 @@ func (e expStat) GetTestGeneral() testGeneral {
 
 func compareStats(test test, exp expStat, got api.Stat) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	checkResIDsInSlice(test, "spheres", test.cfg.E.Spheres.Endpoint, exp.spheres, got.Spheres)
-	checkResIDsInSlice(test, "auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
-	checkResIDsInSlice(test, "player abilities", test.cfg.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
-	checkResIDsInSlice(test, "overdrive abilities", test.cfg.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
-	checkResIDsInSlice(test, "item abilities", test.cfg.E.ItemAbilities.Endpoint, exp.itemAbilities, got.ItemAbilities)
-	checkResIDsInSlice(test, "trigger commands", test.cfg.E.TriggerCommands.Endpoint, exp.triggerCommands, got.TriggerCommands)
-	checkResIDsInSlice(test, "status conditions", test.cfg.E.StatusConditions.Endpoint, exp.statusConditions, got.StatusConditions)
-	checkResIDsInSlice(test, "properties", test.cfg.E.Properties.Endpoint, exp.properties, got.Properties)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.checkResIDsInSlice("spheres", test.cfg.E.Spheres.Endpoint, exp.spheres, got.Spheres)
+	test.checkResIDsInSlice("auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice("player abilities", test.cfg.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
+	test.checkResIDsInSlice("overdrive abilities", test.cfg.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
+	test.checkResIDsInSlice("item abilities", test.cfg.E.ItemAbilities.Endpoint, exp.itemAbilities, got.ItemAbilities)
+	test.checkResIDsInSlice("trigger commands", test.cfg.E.TriggerCommands.Endpoint, exp.triggerCommands, got.TriggerCommands)
+	test.checkResIDsInSlice("status conditions", test.cfg.E.StatusConditions.Endpoint, exp.statusConditions, got.StatusConditions)
+	test.checkResIDsInSlice("properties", test.cfg.E.Properties.Endpoint, exp.properties, got.Properties)
 }

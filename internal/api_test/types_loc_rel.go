@@ -16,15 +16,15 @@ type expLocRel struct {
 
 func compareLocRel(test test, exp expLocRel, got api.LocRel) {
 	test.t.Helper()
-	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
-	checkResIDsInSlice(test, "characters", test.cfg.E.Characters.Endpoint, exp.characters, got.Characters)
-	checkResIDsInSlice(test, "aeons", test.cfg.E.Aeons.Endpoint, exp.aeons, got.Aeons)
-	checkResIDsInSlice(test, "shops", test.cfg.E.Shops.Endpoint, exp.shops, got.Shops)
-	checkResIDsInSlice(test, "treasures", test.cfg.E.Treasures.Endpoint, exp.treasures, got.Treasures)
-	checkResIDsInSlice(test, "monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
-	checkResIDsInSlice(test, "formations", test.cfg.E.MonsterFormations.Endpoint, exp.formations, got.Formations)
-	checkResIDsInSlice(test, "quests", test.cfg.E.Quests.Endpoint, exp.quests, got.Quests)
-	checkResIDsInSlice(test, "fmvs", test.cfg.E.FMVs.Endpoint, exp.fmvs, got.FMVs)
+	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)
+	test.checkResIDsInSlice("characters", test.cfg.E.Characters.Endpoint, exp.characters, got.Characters)
+	test.checkResIDsInSlice("aeons", test.cfg.E.Aeons.Endpoint, exp.aeons, got.Aeons)
+	test.checkResIDsInSlice("shops", test.cfg.E.Shops.Endpoint, exp.shops, got.Shops)
+	test.checkResIDsInSlice("treasures", test.cfg.E.Treasures.Endpoint, exp.treasures, got.Treasures)
+	test.checkResIDsInSlice("monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
+	test.checkResIDsInSlice("formations", test.cfg.E.MonsterFormations.Endpoint, exp.formations, got.Formations)
+	test.checkResIDsInSlice("quests", test.cfg.E.Quests.Endpoint, exp.quests, got.Quests)
+	test.checkResIDsInSlice("fmvs", test.cfg.E.FMVs.Endpoint, exp.fmvs, got.FMVs)
 }
 
 type testLocMusic struct {
@@ -38,8 +38,8 @@ func compareLocMusic(test test, _ string, exp testLocMusic, got api.LocBasedMusi
 	test.t.Helper()
 	songsEndpoint := test.cfg.E.Songs.Endpoint
 
-	checkResIDsInSlice(test, "bg music", songsEndpoint, exp.bgMusic, got.BackgroundMusic)
-	checkResIDsInSlice(test, "cues music", songsEndpoint, exp.cuesMusic, got.Cues)
-	checkResIDsInSlice(test, "fmvs music", songsEndpoint, exp.fmvsMusic, got.FMVs)
-	checkResIDsInSlice(test, "boss music", songsEndpoint, exp.bossMusic, got.BossMusic)
+	test.checkResIDsInSlice("bg music", songsEndpoint, exp.bgMusic, got.BackgroundMusic)
+	test.checkResIDsInSlice("cues music", songsEndpoint, exp.cuesMusic, got.Cues)
+	test.checkResIDsInSlice("fmvs music", songsEndpoint, exp.fmvsMusic, got.FMVs)
+	test.checkResIDsInSlice("boss music", songsEndpoint, exp.bossMusic, got.BossMusic)
 }

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -17,10 +16,6 @@ import (
 
 type testCase interface {
 	GetTestGeneral() testGeneral
-}
-
-func getTestName(name, requestURL string, caseNum int) string {
-	return fmt.Sprintf("%s-%d: %s", name, caseNum, requestURL)
 }
 
 func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
@@ -164,31 +159,21 @@ func testPathList[G any](t *testing.T, tests []expListPaths, testFuncName string
 
 // compareParameterLists for /parameters lists
 // compareSectionLists for /sections lists
-func testNameList[G any](t *testing.T, tests []expListNames, endpoint api.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, api.EndpointName, expListNames, G)) {
+func testNameList[G any](t *testing.T, tests []expListNames, testFuncName string, compFunc func(test, api.EndpointName, expListNames, G)) {
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.testGeneral
 		name := tc.getTestName(testFuncName, i+1)
 
-		expHandler := handlerFunc
-		if handlerFunc == nil {
-			expHandler = exp.handler
-		}
-
-		expEndpoint := endpoint
-		if endpoint == "" {
-			expEndpoint = exp.endpoint
-		}
-
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			test, got, err := setupTest[G](t, exp.testGeneral, name, expHandler)
+			test, got, err := setupTest[G](t, exp.testGeneral, name, exp.handler)
 			if errors.Is(err, errCorrect) {
 				return
 			}
 
-			compFunc(test, expEndpoint, exp, got)
+			compFunc(test, exp.endpoint, exp, got)
 		})
 	}
 }

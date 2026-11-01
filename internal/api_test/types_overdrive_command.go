@@ -18,10 +18,10 @@ func (e expOverdriveCommand) GetTestGeneral() testGeneral {
 
 func compareOverdriveCommands(test test, exp expOverdriveCommand, got api.OverdriveCommand) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compare(test, "rank", exp.rank, got.Rank)
-	compIDAPIResource(test, "user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
-	compIDAPIResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	compIDAPIResource(test, "open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
-	checkResIDsInSlice(test, "overdrives", test.cfg.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compare("rank", exp.rank, got.Rank)
+	test.compIDAPIResource("user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
+	test.compIDAPIResourcePtrs("topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
+	test.compIDAPIResource("open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
+	test.checkResIDsInSlice("overdrives", test.cfg.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
 }

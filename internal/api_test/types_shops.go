@@ -20,11 +20,11 @@ func (e expShop) GetTestGeneral() testGeneral {
 
 func compareShops(test test, exp expShop, got api.Shop) {
 	test.t.Helper()
-	compareExpIDOnly(test, exp.expIDOnly, got.ID)
-	compIDAPIResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
-	compare(test, "category", string(exp.category), got.Category)
-	compTestStructPtrs(test, "pre airship", exp.preAirship, got.PreAirship, compareSubShops)
-	compTestStructPtrs(test, "post airship", exp.postAirship, got.PostAirship, compareSubShops)
+	test.compareExpIDOnly(exp.expIDOnly, got.ID)
+	test.compIDAPIResource("area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
+	test.compare("category", string(exp.category), got.Category)
+	test.compTestStructPtrs("pre airship", exp.preAirship, got.PreAirship, compareSubShops)
+	test.compTestStructPtrs("post airship", exp.postAirship, got.PostAirship, compareSubShops)
 }
 
 type testSubShop struct {
@@ -34,8 +34,8 @@ type testSubShop struct {
 
 func compareSubShops(test test, fieldName string, exp testSubShop, got api.SubShop) {
 	test.t.Helper()
-	checkTestStructsInSlice(test, fieldName+" - items", exp.items, got.Items, compareShopItems)
-	checkTestStructsInSlice(test, fieldName+" - equipment", exp.equipment, got.Equipment, compareShopEquipment)
+	test.checkTestStructsInSlice(fieldName+" - items", exp.items, got.Items, compareShopItems)
+	test.checkTestStructsInSlice(fieldName+" - equipment", exp.equipment, got.Equipment, compareShopEquipment)
 }
 
 type testShopItem struct {
@@ -58,8 +58,8 @@ func newTestShopItem(idx int, itemID, price int32) testShopItem {
 
 func compareShopItems(test test, fieldName string, exp testShopItem, got api.ShopItem) {
 	test.t.Helper()
-	compIDAPIResource(test, fieldName+" - item", test.cfg.E.Items.Endpoint, exp.item, got.Item)
-	compare(test, fieldName+" - price", exp.price, got.Price)
+	test.compIDAPIResource(fieldName+" - item", test.cfg.E.Items.Endpoint, exp.item, got.Item)
+	test.compare(fieldName+" - price", exp.price, got.Price)
 }
 
 type testShopEquipment struct {
@@ -75,5 +75,5 @@ func (t testShopEquipment) GetIndex() int {
 func compareShopEquipment(test test, fieldName string, exp testShopEquipment, got api.ShopEquipment) {
 	test.t.Helper()
 	compareFoundEquipment(test, fieldName+" - found equipment", exp.equipment, got.Equipment)
-	compare(test, fieldName+" - price", exp.price, got.Price)
+	test.compare(fieldName+" - price", exp.price, got.Price)
 }

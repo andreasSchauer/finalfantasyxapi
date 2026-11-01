@@ -18,10 +18,10 @@ func (e expArea) GetTestGeneral() testGeneral {
 
 func compareAreas(test test, exp expArea, got api.Area) {
 	test.t.Helper()
-	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
-	compare(test, "displayName", exp.displayName, got.DisplayName)
-	compIDAPIResource(test, "location", test.cfg.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)
-	compIDAPIResource(test, "sublocation", test.cfg.E.Sublocations.Endpoint, exp.parentSublocation, got.ParentSublocation)
-	checkResIDsInSlice(test, "connected areas", test.cfg.E.Areas.Endpoint, exp.connectedAreas, got.ConnectedAreas)
+	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compare("displayName", exp.displayName, got.DisplayName)
+	test.compIDAPIResource("location", test.cfg.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)
+	test.compIDAPIResource("sublocation", test.cfg.E.Sublocations.Endpoint, exp.parentSublocation, got.ParentSublocation)
+	test.checkResIDsInSlice("connected areas", test.cfg.E.Areas.Endpoint, exp.connectedAreas, got.ConnectedAreas)
 	compareLocRel(test, exp.expLocRel, got.LocRel)
 }

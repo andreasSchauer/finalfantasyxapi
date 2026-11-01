@@ -20,12 +20,12 @@ func (e expSphere) GetTestGeneral() testGeneral {
 
 func compareSpheres(test test, exp expSphere, got api.Sphere) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIDAPIResource(test, "item", test.cfg.E.Items.Endpoint, exp.item, got.Item)
-	compStructPtrs(test, "created node", exp.createdNode, got.CreatedNode)
-	checkTestStructsInSlice(test, "monsters", exp.monsters, got.Monsters, compareMonItemAmts)
-	checkResAmtsID(test, "treasures", exp.treasures, got.Treasures)
-	checkResIDsInSlice(test, "shops", test.cfg.E.Shops.Endpoint, exp.shops, got.Shops)
-	checkResAmtsID(test, "quests", exp.quests, got.Quests)
-	checkResAmtsID(test, "blitzball prizes", exp.blitzballPrizes, got.BlitzballPrizes)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("item", test.cfg.E.Items.Endpoint, exp.item, got.Item)
+	test.compStructPtrs("created node", exp.createdNode, got.CreatedNode)
+	test.checkTestStructsInSlice("monsters", exp.monsters, got.Monsters, compareMonItemAmts)
+	test.checkResAmtsID("treasures", exp.treasures, got.Treasures)
+	test.checkResIDsInSlice("shops", test.cfg.E.Shops.Endpoint, exp.shops, got.Shops)
+	test.checkResAmtsID("quests", exp.quests, got.Quests)
+	test.checkResAmtsID("blitzball prizes", exp.blitzballPrizes, got.BlitzballPrizes)
 }

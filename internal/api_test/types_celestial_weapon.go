@@ -20,12 +20,12 @@ func (e expCelestialWeapon) GetTestGeneral() testGeneral {
 
 func compareCelestialWeapons(test test, exp expCelestialWeapon, got api.CelestialWeapon) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIDAPIResource(test, "equipment", test.cfg.E.Equipment.Endpoint, exp.equipment, got.Equipment)
-	checkResIDsInSlice(test, "auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
-	compIDAPIResource(test, "crest", test.cfg.E.KeyItems.Endpoint, exp.crest, got.Crest)
-	compIDAPIResource(test, "sigil", test.cfg.E.KeyItems.Endpoint, exp.sigil, got.Sigil)
-	compIDAPIResource(test, "weapon treasure", test.cfg.E.Treasures.Endpoint, exp.wpnTreasure, got.WpnTreasure)
-	compIDAPIResource(test, "crest treasure", test.cfg.E.Treasures.Endpoint, exp.crestTreasure, got.CrestTreasure)
-	compIDAPIResource(test, "sigil quest", test.cfg.E.Quests.Endpoint, exp.sigilQuest, got.SigilQuest)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("equipment", test.cfg.E.Equipment.Endpoint, exp.equipment, got.Equipment)
+	test.checkResIDsInSlice("auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
+	test.compIDAPIResource("crest", test.cfg.E.KeyItems.Endpoint, exp.crest, got.Crest)
+	test.compIDAPIResource("sigil", test.cfg.E.KeyItems.Endpoint, exp.sigil, got.Sigil)
+	test.compIDAPIResource("weapon treasure", test.cfg.E.Treasures.Endpoint, exp.wpnTreasure, got.WpnTreasure)
+	test.compIDAPIResource("crest treasure", test.cfg.E.Treasures.Endpoint, exp.crestTreasure, got.CrestTreasure)
+	test.compIDAPIResource("sigil quest", test.cfg.E.Quests.Endpoint, exp.sigilQuest, got.SigilQuest)
 }

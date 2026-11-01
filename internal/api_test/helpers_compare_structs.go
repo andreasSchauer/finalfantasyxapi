@@ -8,7 +8,7 @@ import (
 
 // checks if two structs with the same type are equal.
 // itemAmount == itemAmount
-func compStructs[T any](test test, fieldName string, exp, got T) {
+func (test test) compStructs[T any](fieldName string, exp, got T) {
 	test.t.Helper()
 
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
@@ -20,7 +20,7 @@ func compStructs[T any](test test, fieldName string, exp, got T) {
 	}
 }
 
-func compStructsWithFn[T any](test test, fieldName string, exp, got T, compFn func(test, string, T, T)) {
+func (test test) compStructsWithFn[T any](fieldName string, exp, got T, compFn func(test, string, T, T)) {
 	test.t.Helper()
 
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
@@ -30,23 +30,23 @@ func compStructsWithFn[T any](test test, fieldName string, exp, got T, compFn fu
 	compFn(test, fieldName, exp, got)
 }
 
-func compStructPtrsWithFn[T any](test test, fieldName string, exp, got *T, compFn func(test, string, T, T)) {
+func (test test) compStructPtrsWithFn[T any](fieldName string, exp, got *T, compFn func(test, string, T, T)) {
 	test.t.Helper()
 
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
 		return
 	}
 
-	if !bothPtrsPresent(test, fieldName, exp, got) {
+	if !test.bothPtrsPresent(fieldName, exp, got) {
 		return
 	}
 
 	compFn(test, fieldName, *exp, *got)
 }
 
-func compStructSlicesWithFn[T any](test test, fieldName string, exp, got []T, compFn func(test, string, T, T)) {
+func (test test) compStructSlicesWithFn[T any](fieldName string, exp, got []T, compFn func(test, string, T, T)) {
 	test.t.Helper()
-	err := sliceBasicChecks(test, fieldName, exp, got)
+	err := test.sliceBasicChecks(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
 	}
@@ -58,40 +58,40 @@ func compStructSlicesWithFn[T any](test test, fieldName string, exp, got []T, co
 
 // checks if two struct pointers with the same type are equal. ptr presence is checked via compPtr
 // itemAmount == itemAmount (both ptrs)
-func compStructPtrs[T any](test test, fieldName string, exp, got *T) {
+func (test test) compStructPtrs[T any](fieldName string, exp, got *T) {
 	test.t.Helper()
 
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
 		return
 	}
 
-	compPtr(test, fieldName, exp, got, compStructs)
+	test.compPtr(fieldName, exp, got, test.compStructs)
 }
 
 // checks if two same-typed struct slices are equal. if the slice is not nullable, it needs to be explicitely ignored.
 // []itemAmount == []itemAmount
-func compStructSlices[T any](test test, fieldName string, exp, got []T) {
+func (test test) compStructSlices[T any](fieldName string, exp, got []T) {
 	test.t.Helper()
-	err := sliceBasicChecks(test, fieldName, exp, got)
+	err := test.sliceBasicChecks(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
 	}
 
 	for i := range exp {
-		compStructs(test, fieldName, exp[i], got[i])
+		test.compStructs(fieldName, exp[i], got[i])
 	}
 }
 
 // checks if a pointer to a test struct is equal to a pointer to the original struct. uses a compare function.
 // testItemAmount == itemAmount (both Ptrs)
-func compTestStructPtrs[E, G any](test test, fieldName string, exp *E, got *G, compFn func(test, string, E, G)) {
+func (test test) compTestStructPtrs[E, G any](fieldName string, exp *E, got *G, compFn func(test, string, E, G)) {
 	test.t.Helper()
 
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
 		return
 	}
 
-	if !bothPtrsPresent(test, fieldName, exp, got) {
+	if !test.bothPtrsPresent(fieldName, exp, got) {
 		return
 	}
 
@@ -100,9 +100,9 @@ func compTestStructPtrs[E, G any](test test, fieldName string, exp *E, got *G, c
 
 // checks if a slice of test structs is equal to the slice of original structs, meaning it contains every entry of the original struct in the correct order. uses a compare function. if the slice is not nullable, it needs to be explicitely ignored.
 // []testItemAmount == []itemAmount
-func compTestStructSlices[E, G any](test test, fieldName string, exp []E, got []G, compFn func(test, string, E, G)) {
+func (test test) compTestStructSlices[E, G any](fieldName string, exp []E, got []G, compFn func(test, string, E, G)) {
 	test.t.Helper()
-	err := sliceBasicChecks(test, fieldName, exp, got)
+	err := test.sliceBasicChecks(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
 	}
@@ -114,9 +114,9 @@ func compTestStructSlices[E, G any](test test, fieldName string, exp []E, got []
 }
 
 // checks if all stated testStructs with index are present in the gotStruct slice by using a testStruct's targetIndex.
-func checkTestStructsInSlice[E testStructIdx, G any](test test, fieldName string, exp []E, got []G, compFn func(test, string, E, G)) {
+func (test test) checkTestStructsInSlice[E testStructIdx, G any](fieldName string, exp []E, got []G, compFn func(test, string, E, G)) {
 	test.t.Helper()
-	err := sliceBasicChecks(test, fieldName, exp, got)
+	err := test.sliceBasicChecks(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
 	}
@@ -129,15 +129,15 @@ func checkTestStructsInSlice[E testStructIdx, G any](test test, fieldName string
 }
 
 // checks the length of a slice, whether it should be ignored (returns errIgnoredField in that case), and if the exp and got slice are present
-func sliceBasicChecks[E, G any](test test, fieldName string, exp []E, got []G) error {
+func (test test) sliceBasicChecks[E, G any](fieldName string, exp []E, got []G) error {
 	test.t.Helper()
-	compLength(test, fieldName, len(got))
+	test.compLength(fieldName, len(got))
 
 	dontCheck := test.dontCheck
 	if dontCheck != nil && dontCheck[fieldName] {
 		return errIgnoredField
 	}
 
-	bothSlicesPresent(test, fieldName, exp, got)
+	test.bothSlicesPresent(fieldName, exp, got)
 	return nil
 }

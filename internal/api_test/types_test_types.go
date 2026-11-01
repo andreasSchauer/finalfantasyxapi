@@ -76,7 +76,7 @@ type expNameVer struct {
 }
 
 func newExpNameVer(id int32, name string, version int32) expNameVer {
-	vPtr := h.GetInt32Ptr(version)
+	vPtr := new(version)
 	if version == 0 {
 		vPtr = nil
 	}
@@ -88,11 +88,11 @@ func newExpNameVer(id int32, name string, version int32) expNameVer {
 	}
 }
 
-func compareExpNameVer(test test, exp expNameVer, gotID int32, gotName string, gotVer *int32) {
+func (test test) compareExpNameVer(exp expNameVer, gotID int32, gotName string, gotVer *int32) {
 	test.t.Helper()
-	compare(test, "id", exp.id, gotID)
-	compare(test, "name", exp.name, gotName)
-	compare(test, "version", exp.version, gotVer)
+	test.compare("id", exp.id, gotID)
+	test.compare("name", exp.name, gotName)
+	test.compare("version", exp.version, gotVer)
 }
 
 type expUnique struct {
@@ -107,10 +107,10 @@ func newExpUnique(id int32, name string) expUnique {
 	}
 }
 
-func compareExpUnique(test test, exp expUnique, gotID int32, gotName string) {
+func (test test) compareExpUnique(exp expUnique, gotID int32, gotName string) {
 	test.t.Helper()
-	compare(test, "id", exp.id, gotID)
-	compare(test, "name", exp.name, gotName)
+	test.compare("id", exp.id, gotID)
+	test.compare("name", exp.name, gotName)
 }
 
 type expIDOnly struct {
@@ -123,9 +123,9 @@ func newExpIDOnly(id int32) expIDOnly {
 	}
 }
 
-func compareExpIDOnly(test test, exp expIDOnly, gotID int32) {
+func (test test) compareExpIDOnly(exp expIDOnly, gotID int32) {
 	test.t.Helper()
-	compare(test, "id", exp.id, gotID)
+	test.compare("id", exp.id, gotID)
 }
 
 type expListIDs struct {
@@ -177,9 +177,9 @@ func (l expListNames) GetListParams() api.ListParams {
 	}
 }
 
-func compareListParams(test test, exp, got api.ListParams) {
+func (test test) compareListParams(exp, got api.ListParams) {
 	test.t.Helper()
-	compare(test, "count", exp.Count, got.Count)
-	compPageURL(test, "previous", exp.Previous, got.Previous)
-	compPageURL(test, "next", exp.Next, got.Next)
+	test.compare("count", exp.Count, got.Count)
+	test.compPageURL("previous", exp.Previous, got.Previous)
+	test.compPageURL("next", exp.Next, got.Next)
 }

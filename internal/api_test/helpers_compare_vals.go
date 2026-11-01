@@ -7,7 +7,7 @@ import (
 )
 
 // checks if two standard-type values or pointers of a field are equal
-func compare(test test, fieldName string, exp, got any) {
+func (test test) compare(fieldName string, exp, got any) {
 	t := test.t
 	dontCheck := test.dontCheck
 	t.Helper()
@@ -22,112 +22,112 @@ func compare(test test, fieldName string, exp, got any) {
 		if !ok {
 			t.Errorf("%s type mismatch: expected int, got %T\n\n", fieldName, got)
 		}
-		compInt(test, fieldName, e, g)
+		test.compInt(fieldName, e, g)
 
 	case int32:
 		g, ok := got.(int32)
 		if !ok {
 			t.Errorf("%s type mismatch: expected int32, got %T\n\n", fieldName, got)
 		}
-		compInt32(test, fieldName, e, g)
+		test.compInt32(fieldName, e, g)
 
 	case float32:
 		g, ok := got.(float32)
 		if !ok {
 			t.Errorf("%s type mismatch: expected float32, got %T\n\n", fieldName, got)
 		}
-		compFloat32(test, fieldName, e, g)
+		test.compFloat32(fieldName, e, g)
 
 	case float64:
 		g, ok := got.(float64)
 		if !ok {
 			t.Errorf("%s type mismatch: expected float64, got %T\n\n", fieldName, got)
 		}
-		compFloat64(test, fieldName, e, g)
+		test.compFloat64(fieldName, e, g)
 
 	case string:
 		g, ok := got.(string)
 		if !ok {
 			t.Errorf("%s type mismatch: expected string, got %T\n\n", fieldName, got)
 		}
-		compString(test, fieldName, e, g)
+		test.compString(fieldName, e, g)
 
 	case bool:
 		g, ok := got.(bool)
 		if !ok {
 			t.Errorf("%s type mismatch: expected bool, got %T\n\n", fieldName, got)
 		}
-		compBool(test, fieldName, e, g)
+		test.compBool(fieldName, e, g)
 
 	case *int32:
 		g, ok := got.(*int32)
 		if !ok {
 			t.Errorf("%s type mismatch: expected *int32, got %T\n\n", fieldName, got)
 		}
-		compInt32Ptr(test, fieldName, e, g)
+		test.compInt32Ptr(fieldName, e, g)
 
 	case *float32:
 		g, ok := got.(*float32)
 		if !ok {
 			t.Errorf("%s type mismatch: expected *float32, got %T\n\n", fieldName, got)
 		}
-		compFloat32Ptr(test, fieldName, e, g)
+		test.compFloat32Ptr(fieldName, e, g)
 
 	case *float64:
 		g, ok := got.(*float64)
 		if !ok {
 			t.Errorf("%s type mismatch: expected *float64, got %T\n\n", fieldName, got)
 		}
-		compFloat64Ptr(test, fieldName, e, g)
+		test.compFloat64Ptr(fieldName, e, g)
 
 	case *string:
 		g, ok := got.(*string)
 		if !ok {
 			t.Errorf("%s type mismatch: expected *string, got %T\n\n", fieldName, got)
 		}
-		compStringPtr(test, fieldName, e, g)
+		test.compStringPtr(fieldName, e, g)
 
 	default:
 		t.Errorf("unsupported type for %s: %T", fieldName, exp)
 	}
 }
 
-func compInt(test test, fieldName string, exp, got int) {
+func (test test) compInt(fieldName string, exp, got int) {
 	test.t.Helper()
 	if exp != got {
 		test.t.Errorf("expected %s %d, got %d\n\n", fieldName, exp, got)
 	}
 }
 
-func compInt32(test test, fieldName string, exp, got int32) {
+func (test test) compInt32(fieldName string, exp, got int32) {
 	test.t.Helper()
 	if exp != got {
 		test.t.Errorf("expected %s %d, got %d\n\n", fieldName, exp, got)
 	}
 }
 
-func compFloat32(test test, fieldName string, exp, got float32) {
+func (test test) compFloat32(fieldName string, exp, got float32) {
 	test.t.Helper()
 	if exp != got {
 		test.t.Errorf("expected %s %.2f, got %.2f\n\n", fieldName, exp, got)
 	}
 }
 
-func compFloat64(test test, fieldName string, exp, got float64) {
+func (test test) compFloat64(fieldName string, exp, got float64) {
 	test.t.Helper()
 	if exp != got {
 		test.t.Errorf("expected %s %f, got %f\n\n", fieldName, exp, got)
 	}
 }
 
-func compString(test test, fieldName, exp, got string) {
+func (test test) compString(fieldName, exp, got string) {
 	test.t.Helper()
 	if exp != "" && exp != got {
 		test.t.Errorf("expected %s %s, got %s\n\n", fieldName, exp, got)
 	}
 }
 
-func compBool(test test, fieldName string, exp, got bool) {
+func (test test) compBool(fieldName string, exp, got bool) {
 	test.t.Helper()
 	if exp != got {
 		test.t.Errorf("expected %s %t, got %t\n\n", fieldName, exp, got)
@@ -135,45 +135,45 @@ func compBool(test test, fieldName string, exp, got bool) {
 }
 
 // can be used for any direct pointer comparisons
-func compPtr[T any](test test, fieldName string, exp, got *T, compFunc func(test, string, T, T)) {
+func (test test) compPtr[T any](fieldName string, exp, got *T, compFn func(string, T, T)) {
 	test.t.Helper()
-	if !bothPtrsPresent(test, fieldName, exp, got) {
+	if !test.bothPtrsPresent(fieldName, exp, got) {
 		return
 	}
-	compFunc(test, fieldName, *exp, *got)
+	compFn(fieldName, *exp, *got)
 }
 
-func compInt32Ptr(test test, fieldName string, exp, got *int32) {
+func (test test) compInt32Ptr(fieldName string, exp, got *int32) {
 	test.t.Helper()
-	compPtr(test, fieldName, exp, got, compInt32)
+	test.compPtr(fieldName, exp, got, test.compInt32)
 }
 
-func compFloat32Ptr(test test, fieldName string, exp, got *float32) {
+func (test test) compFloat32Ptr(fieldName string, exp, got *float32) {
 	test.t.Helper()
-	compPtr(test, fieldName, exp, got, compFloat32)
+	test.compPtr(fieldName, exp, got, test.compFloat32)
 }
 
-func compFloat64Ptr(test test, fieldName string, exp, got *float64) {
+func (test test) compFloat64Ptr(fieldName string, exp, got *float64) {
 	test.t.Helper()
-	compPtr(test, fieldName, exp, got, compFloat64)
+	test.compPtr(fieldName, exp, got, test.compFloat64)
 }
 
-func compStringPtr(test test, fieldName string, exp, got *string) {
+func (test test) compStringPtr(fieldName string, exp, got *string) {
 	test.t.Helper()
-	compPtr(test, fieldName, exp, got, compString)
+	test.compPtr(fieldName, exp, got, test.compString)
 }
 
 // compares the length of the gotSlice with the length found in expLengths[fieldName], if given
-func compLength(test test, fieldName string, got int) {
+func (test test) compLength(fieldName string, got int) {
 	test.t.Helper()
 	exp, ok := test.expLengths[fieldName]
 	if ok {
-		compare(test, fieldName+" length", exp, got)
+		test.compare(fieldName+" length", exp, got)
 	}
 }
 
 // compares the expected pagination path with the got url
-func compPageURL(test test, fieldName string, expPathPtr, gotURLPtr *string) {
+func (test test) compPageURL(fieldName string, expPathPtr, gotURLPtr *string) {
 	test.t.Helper()
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
 		return
@@ -187,17 +187,17 @@ func compPageURL(test test, fieldName string, expPathPtr, gotURLPtr *string) {
 		expURLPtr = &expURL
 	}
 
-	compare(test, fieldName, expURLPtr, gotURLPtr)
+	test.compare(fieldName, expURLPtr, gotURLPtr)
 }
 
-func compareSlices[T any](test test, fieldName string, exp, got []T) {
+func (test test) compareSlices[T any](fieldName string, exp, got []T) {
 	test.t.Helper()
-	err := sliceBasicChecks(test, fieldName, exp, got)
+	err := test.sliceBasicChecks(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
 	}
 
 	for i := range exp {
-		compare(test, fieldName, exp[i], got[i])
+		test.compare(fieldName, exp[i], got[i])
 	}
 }

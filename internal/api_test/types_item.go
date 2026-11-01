@@ -26,17 +26,17 @@ func (e expItem) GetTestGeneral() testGeneral {
 
 func compareItems(test test, exp expItem, got api.Item) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIDAPIResource(test, "untyped item", test.cfg.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
-	compare(test, "category", string(exp.category), got.Category)
-	checkTestStructsInSlice(test, "monsters", exp.monsters, got.Monsters, compareMonItemAmts)
-	checkResAmtsID(test, "treasures", exp.treasures, got.Treasures)
-	checkResIDsInSlice(test, "shops", test.cfg.E.Shops.Endpoint, exp.shops, got.Shops)
-	checkResAmtsID(test, "quests", exp.quests, got.Quests)
-	checkResAmtsID(test, "blitzball prizes", exp.blitzballPrizes, got.BlitzballPrizes)
-	checkResAmtsID(test, "aeon learn abilities", exp.aeonLearnAbilities, got.AeonLearnAbilities)
-	checkResAmts(test, "auto abilities", exp.autoAbilities, got.AutoAbilities)
-	checkResIDsInSlice(test, "mixes", test.cfg.E.Mixes.Endpoint, exp.mixes, got.Mixes)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("untyped item", test.cfg.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
+	test.compare("category", string(exp.category), got.Category)
+	test.checkTestStructsInSlice("monsters", exp.monsters, got.Monsters, compareMonItemAmts)
+	test.checkResAmtsID("treasures", exp.treasures, got.Treasures)
+	test.checkResIDsInSlice("shops", test.cfg.E.Shops.Endpoint, exp.shops, got.Shops)
+	test.checkResAmtsID("quests", exp.quests, got.Quests)
+	test.checkResAmtsID("blitzball prizes", exp.blitzballPrizes, got.BlitzballPrizes)
+	test.checkResAmtsID("aeon learn abilities", exp.aeonLearnAbilities, got.AeonLearnAbilities)
+	test.checkResAmts("auto abilities", exp.autoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice("mixes", test.cfg.E.Mixes.Endpoint, exp.mixes, got.Mixes)
 }
 
 type testMonItemAmts struct {
@@ -58,13 +58,13 @@ func (t testMonItemAmts) GetIndex() int {
 
 func compareMonItemAmts(test test, fieldName string, exp testMonItemAmts, got api.MonItemAmts) {
 	test.t.Helper()
-	compIDAPIResource(test, fieldName+" - monster", test.cfg.E.Monsters.Endpoint, exp.monster, got.Monster)
-	compare(test, fieldName+" - steal common", exp.stealCommon, got.StealCommon)
-	compare(test, fieldName+" - steal rare", exp.stealRare, got.StealRare)
-	compare(test, fieldName+" - drop common", exp.dropCommon, got.DropCommon)
-	compare(test, fieldName+" - drop rare", exp.dropRare, got.DropRare)
-	compare(test, fieldName+" - secondary drop common", exp.secondaryDropCommon, got.SecondaryDropCommon)
-	compare(test, fieldName+" - secondary drop rare", exp.secondaryDropRare, got.SecondaryDropRare)
-	compare(test, fieldName+" - bribe", exp.bribe, got.Bribe)
-	compare(test, fieldName+" - other", exp.other, got.Other)
+	test.compIDAPIResource(fieldName+" - monster", test.cfg.E.Monsters.Endpoint, exp.monster, got.Monster)
+	test.compare(fieldName+" - steal common", exp.stealCommon, got.StealCommon)
+	test.compare(fieldName+" - steal rare", exp.stealRare, got.StealRare)
+	test.compare(fieldName+" - drop common", exp.dropCommon, got.DropCommon)
+	test.compare(fieldName+" - drop rare", exp.dropRare, got.DropRare)
+	test.compare(fieldName+" - secondary drop common", exp.secondaryDropCommon, got.SecondaryDropCommon)
+	test.compare(fieldName+" - secondary drop rare", exp.secondaryDropRare, got.SecondaryDropRare)
+	test.compare(fieldName+" - bribe", exp.bribe, got.Bribe)
+	test.compare(fieldName+" - other", exp.other, got.Other)
 }

@@ -27,21 +27,21 @@ func (e expCharacter) GetTestGeneral() testGeneral {
 
 func compareCharacters(test test, exp expCharacter, got api.Character) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIDAPIResource(test, "untyped unit", test.cfg.E.PlayerUnits.Endpoint, exp.untypedUnit, got.UntypedUnit)
-	compIDAPIResource(test, "area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
-	compare(test, "weapon type", exp.weaponType, got.WeaponType)
-	compIDAPIResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
-	compare(test, "celestial formula", exp.celestialFormula, got.CelestialFormula)
-	compIDAPIResourcePtrs(test, "overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
-	checkResIDsInSlice(test, "character classes", test.cfg.E.CharacterClasses.Endpoint, exp.characterClasses, got.CharacterClasses)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("untyped unit", test.cfg.E.PlayerUnits.Endpoint, exp.untypedUnit, got.UntypedUnit)
+	test.compIDAPIResource("area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
+	test.compare("weapon type", exp.weaponType, got.WeaponType)
+	test.compIDAPIResourcePtrs("celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
+	test.compare("celestial formula", exp.celestialFormula, got.CelestialFormula)
+	test.compIDAPIResourcePtrs("overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
+	test.checkResIDsInSlice("character classes", test.cfg.E.CharacterClasses.Endpoint, exp.characterClasses, got.CharacterClasses)
 	compareAgilityParams(test, "agility params", exp.agility, got.AgilityParameters)
-	checkResAmtTypes(test, "base stats", exp.baseStats, got.BaseStats)
-	checkTestStructsInSlice(test, "regen amounts", exp.regenAmounts, got.RegenAmounts, compareRegenAmounts)
-	checkResIDsInSlice(test, "default abilities", test.cfg.E.PlayerAbilities.Endpoint, exp.defaultPlayerAbilities, got.DefaultPlayerAbilities)
-	compTestStructPtrs(test, "std sg", exp.stdSphereGrid, got.StdSphereGrid, compareSphereGrids)
-	compTestStructPtrs(test, "exp sg", exp.expSphereGrid, got.ExpSphereGrid, compareSphereGrids)
-	checkResAmts(test, "overdrive modes", exp.overdriveModes, got.OverdriveModes)
+	test.checkResAmtTypes("base stats", exp.baseStats, got.BaseStats)
+	test.checkTestStructsInSlice("regen amounts", exp.regenAmounts, got.RegenAmounts, compareRegenAmounts)
+	test.checkResIDsInSlice("default abilities", test.cfg.E.PlayerAbilities.Endpoint, exp.defaultPlayerAbilities, got.DefaultPlayerAbilities)
+	test.compTestStructPtrs("std sg", exp.stdSphereGrid, got.StdSphereGrid, compareSphereGrids)
+	test.compTestStructPtrs("exp sg", exp.expSphereGrid, got.ExpSphereGrid, compareSphereGrids)
+	test.checkResAmts("overdrive modes", exp.overdriveModes, got.OverdriveModes)
 }
 
 type expSphereGrid struct {
@@ -50,5 +50,5 @@ type expSphereGrid struct {
 
 func compareSphereGrids(test test, fieldName string, exp expSphereGrid, got api.SphereGrid) {
 	test.t.Helper()
-	checkResIDsInSlice(test, fieldName+" abilities", test.cfg.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
+	test.checkResIDsInSlice(fieldName+" abilities", test.cfg.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
 }

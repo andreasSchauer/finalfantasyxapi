@@ -18,10 +18,10 @@ func (e expOverdriveMode) GetTestGeneral() testGeneral {
 
 func compareOverdriveModes(test test, exp expOverdriveMode, got api.OverdriveMode) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compare(test, "description", exp.description, got.Description)
-	compare(test, "effect", exp.effect, got.Effect)
-	compare(test, "type", exp.modeType, got.Type)
-	compare(test, "fill rate", exp.fillRate, got.FillRate)
-	checkResAmts(test, "actions", exp.actionsAmount, got.Actions)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compare("description", exp.description, got.Description)
+	test.compare("effect", exp.effect, got.Effect)
+	test.compare("type", exp.modeType, got.Type)
+	test.compare("fill rate", exp.fillRate, got.FillRate)
+	test.checkResAmts("actions", exp.actionsAmount, got.Actions)
 }

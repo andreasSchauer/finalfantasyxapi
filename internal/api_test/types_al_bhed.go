@@ -13,7 +13,7 @@ func (e expAlBhedResponse) GetTestGeneral() testGeneral {
 
 func compareAlBhedResponses(test test, exp expAlBhedResponse, got api.AlBhedResponse) {
 	test.t.Helper()
-	compare(test, "translated text", exp.TranslatedText, got.TranslatedText)
-	compare(test, "original text", exp.OriginalText, got.OriginalText)
-	compare(test, "direction", exp.Direction, got.Direction)
+	test.compare("translated text", exp.TranslatedText, got.TranslatedText)
+	test.compare("original text", exp.OriginalText, got.OriginalText)
+	test.compare("direction", exp.Direction, got.Direction)
 }

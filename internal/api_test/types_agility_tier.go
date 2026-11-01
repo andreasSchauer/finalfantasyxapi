@@ -20,12 +20,12 @@ func (e expAgilityTier) GetTestGeneral() testGeneral {
 
 func compareAgilityTiers(test test, exp expAgilityTier, got api.AgilityTier) {
 	test.t.Helper()
-	compareExpIDOnly(test, exp.expIDOnly, got.ID)
-	compare(test, "from agility", exp.fromAgility, got.FromAgility)
-	compare(test, "to agility", exp.toAgility, got.ToAgility)
-	compare(test, "tick speed", exp.tickSpeed, got.TickSpeed)
-	compare(test, "mon max icv", exp.monMaxICV, got.MonMaxICV)
-	compare(test, "mon min icv", exp.monMinICV, got.MonMinICV)
-	compare(test, "char max icv", exp.charMaxICV, got.CharMaxICV)
-	compStructSlices(test, "char min icvs", exp.charMinICVs, got.CharMinICVs)
+	test.compareExpIDOnly(exp.expIDOnly, got.ID)
+	test.compare("from agility", exp.fromAgility, got.FromAgility)
+	test.compare("to agility", exp.toAgility, got.ToAgility)
+	test.compare("tick speed", exp.tickSpeed, got.TickSpeed)
+	test.compare("mon max icv", exp.monMaxICV, got.MonMaxICV)
+	test.compare("mon min icv", exp.monMinICV, got.MonMinICV)
+	test.compare("char max icv", exp.charMaxICV, got.CharMaxICV)
+	test.compStructSlices("char min icvs", exp.charMinICVs, got.CharMinICVs)
 }

@@ -23,17 +23,17 @@ func (e expMonsterFormation) GetTestGeneral() testGeneral {
 
 func compareMonsterFormations(test test, exp expMonsterFormation, got api.MonsterFormation) {
 	test.t.Helper()
-	compareExpIDOnly(test, exp.expIDOnly, got.ID)
-	compare(test, "category", exp.category, got.Category)
-	compare(test, "is forced ambush", exp.isForcedAmbush, got.IsForcedAmbush)
-	compare(test, "can escape", exp.canEscape, got.CanEscape)
-	compare(test, "ap", exp.ap, got.AP)
-	compare(test, "ap overkill", exp.apOverkill, got.ApOverkill)
-	compare(test, "gil", exp.gil, got.Gil)
-	compIDAPIResourcePtrs(test, "boss song", test.cfg.E.Songs.Endpoint, exp.bossMusic, got.BossMusic)
-	checkResAmts(test, "monsters", exp.monsters, got.Monsters)
-	compTestStructSlices(test, "trigger commands", exp.triggerCommands, got.TriggerCommands, compareFormationTCs)
-	checkResIDsInSlice(test, "areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.compareExpIDOnly(exp.expIDOnly, got.ID)
+	test.compare("category", exp.category, got.Category)
+	test.compare("is forced ambush", exp.isForcedAmbush, got.IsForcedAmbush)
+	test.compare("can escape", exp.canEscape, got.CanEscape)
+	test.compare("ap", exp.ap, got.AP)
+	test.compare("ap overkill", exp.apOverkill, got.ApOverkill)
+	test.compare("gil", exp.gil, got.Gil)
+	test.compIDAPIResourcePtrs("boss song", test.cfg.E.Songs.Endpoint, exp.bossMusic, got.BossMusic)
+	test.checkResAmts("monsters", exp.monsters, got.Monsters)
+	test.compTestStructSlices("trigger commands", exp.triggerCommands, got.TriggerCommands, compareFormationTCs)
+	test.checkResIDsInSlice("areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
 }
 
 type testFormationTC struct {
@@ -46,6 +46,6 @@ func compareFormationTCs(test test, fieldName string, exp testFormationTC, got a
 	tcEndpoint := test.cfg.E.TriggerCommands.Endpoint
 	charClassesEndpoint := test.cfg.E.CharacterClasses.Endpoint
 
-	compIDAPIResource(test, fieldName+" - tc ability", tcEndpoint, exp.Ability, got.Ability)
-	checkResIDsInSlice(test, fieldName+" - tc users", charClassesEndpoint, exp.Users, got.Users)
+	test.compIDAPIResource(fieldName+" - tc ability", tcEndpoint, exp.Ability, got.Ability)
+	test.checkResIDsInSlice(fieldName+" - tc users", charClassesEndpoint, exp.Users, got.Users)
 }

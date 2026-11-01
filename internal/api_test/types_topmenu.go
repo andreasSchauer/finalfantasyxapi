@@ -18,10 +18,10 @@ func (e expTopmenu) GetTestGeneral() testGeneral {
 
 func compareTopmenus(test test, exp expTopmenu, got api.Topmenu) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	checkResIDsInSlice(test, "submenus", test.cfg.E.Submenus.Endpoint, exp.submenus, got.Submenus)
-	checkResIDsInSlice(test, "abilities", test.cfg.E.Abilities.Endpoint, exp.abilities, got.Abilities)
-	checkResIDsInSlice(test, "overdrive commands", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommands, got.OverdriveCommands)
-	checkResIDsInSlice(test, "overdrives", test.cfg.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
-	checkResIDsInSlice(test, "aeon commands", test.cfg.E.AeonCommands.Endpoint, exp.aeonCommands, got.AeonCommands)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.checkResIDsInSlice("submenus", test.cfg.E.Submenus.Endpoint, exp.submenus, got.Submenus)
+	test.checkResIDsInSlice("abilities", test.cfg.E.Abilities.Endpoint, exp.abilities, got.Abilities)
+	test.checkResIDsInSlice("overdrive commands", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommands, got.OverdriveCommands)
+	test.checkResIDsInSlice("overdrives", test.cfg.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
+	test.checkResIDsInSlice("aeon commands", test.cfg.E.AeonCommands.Endpoint, exp.aeonCommands, got.AeonCommands)
 }

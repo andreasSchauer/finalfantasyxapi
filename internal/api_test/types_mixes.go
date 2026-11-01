@@ -19,10 +19,10 @@ func (e expMix) GetTestGeneral() testGeneral {
 
 func compareMixes(test test, exp expMix, got api.Mix) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compare(test, "category", string(exp.category), got.Category)
-	compIDAPIResource(test, "overdrive", test.cfg.E.Overdrives.Endpoint, exp.overdrive, got.Overdrive)
-	checkTestStructsInSlice(test, "combinations", exp.combinations, got.Combinations, compareMixCombinations)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compare("category", string(exp.category), got.Category)
+	test.compIDAPIResource("overdrive", test.cfg.E.Overdrives.Endpoint, exp.overdrive, got.Overdrive)
+	test.checkTestStructsInSlice("combinations", exp.combinations, got.Combinations, compareMixCombinations)
 }
 
 type testMixCombination struct {
@@ -37,6 +37,6 @@ func (mc testMixCombination) GetIndex() int {
 
 func compareMixCombinations(test test, fieldName string, exp testMixCombination, got api.MixCombination) {
 	test.t.Helper()
-	compIDAPIResource(test, fieldName+" - first item", test.cfg.E.Items.Endpoint, exp.firstItem, got.FirstItem)
-	compIDAPIResource(test, fieldName+" - second item", test.cfg.E.Items.Endpoint, exp.secondItem, got.SecondItem)
+	test.compIDAPIResource(fieldName+" - first item", test.cfg.E.Items.Endpoint, exp.firstItem, got.FirstItem)
+	test.compIDAPIResource(fieldName+" - second item", test.cfg.E.Items.Endpoint, exp.secondItem, got.SecondItem)
 }

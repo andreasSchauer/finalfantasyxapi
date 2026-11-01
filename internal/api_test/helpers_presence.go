@@ -3,7 +3,7 @@ package apitest
 import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
 // checks presence of two pointers
-func bothPtrsPresent[E, G any](test test, fieldName string, exp *E, got *G) bool {
+func (test test) bothPtrsPresent[E, G any](fieldName string, exp *E, got *G) bool {
 	test.t.Helper()
 
 	switch {
@@ -24,7 +24,7 @@ func bothPtrsPresent[E, G any](test test, fieldName string, exp *E, got *G) bool
 }
 
 // checks presence of two pointers, where one of them is or has an api resource
-func bothResourcePtrsPresent[T api.HasAPIResource](test test, fieldName string, expPathPtr *string, gotResPtr *T) bool {
+func (test test) bothResourcePtrsPresent[T api.HasAPIResource](fieldName string, expPathPtr *string, gotResPtr *T) bool {
 	test.t.Helper()
 
 	switch {
@@ -47,7 +47,7 @@ func bothResourcePtrsPresent[T api.HasAPIResource](test test, fieldName string, 
 }
 
 // checks presence of two struct slices
-func bothSlicesPresent[E, G any](test test, fieldName string, exp []E, got []G) bool {
+func (test test) bothSlicesPresent[E, G any](fieldName string, exp []E, got []G) bool {
 	test.t.Helper()
 
 	switch {
@@ -67,7 +67,7 @@ func bothSlicesPresent[E, G any](test test, fieldName string, exp []E, got []G) 
 	}
 }
 
-func defaultAndAltStatesPresent(test test, exp *testDefaultState, gotStates []api.AlteredState) bool {
+func (test test) defaultAndAltStatesPresent(exp *testDefaultState, gotStates []api.AlteredState) bool {
 	test.t.Helper()
 	switch {
 	case exp == nil && len(gotStates) == 0:

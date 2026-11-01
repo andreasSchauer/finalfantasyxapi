@@ -16,8 +16,8 @@ func (e expBlitzballPrize) GetTestGeneral() testGeneral {
 
 func compareBlitzballPrizes(test test, exp expBlitzballPrize, got api.BlitzballPrize) {
 	test.t.Helper()
-	compareExpIDOnly(test, exp.expIDOnly, got.ID)
-	compare(test, "category", exp.category, got.Category)
-	compare(test, "slot", exp.slot, got.Slot)
-	checkTestStructsInSlice(test, "items", exp.items, got.Items, comparePossibleItems)
+	test.compareExpIDOnly(exp.expIDOnly, got.ID)
+	test.compare("category", exp.category, got.Category)
+	test.compare("slot", exp.slot, got.Slot)
+	test.checkTestStructsInSlice("items", exp.items, got.Items, comparePossibleItems)
 }

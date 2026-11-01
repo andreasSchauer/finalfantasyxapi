@@ -21,13 +21,13 @@ func (e expEquipment) GetTestGeneral() testGeneral {
 
 func compareEquipment(test test, exp expEquipment, got api.EquipmentName) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIDAPIResource(test, "equipment table", test.cfg.E.EquipmentTables.Endpoint, exp.equipmentTable, got.EquipmentTable)
-	compare(test, "priority", exp.priority, got.Priority)
-	compIDAPIResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
-	checkResIDsInSlice(test, "required auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.requiredAutoAbilities, got.RequiredAutoAbilities)
-	compTestStructSlices(test, "selectable auto-abilities", exp.selectableAutoAbilities, got.SelectableAutoAbilities, compareAbilityPools)
-	compare(test, "required slots", exp.requiredSlots, got.RequiredSlots)
-	checkResIDsInSlice(test, "treasures", test.cfg.E.Treasures.Endpoint, exp.treasures, got.Treasures)
-	checkResIDsInSlice(test, "shops", test.cfg.E.Shops.Endpoint, exp.shops, got.Shops)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("equipment table", test.cfg.E.EquipmentTables.Endpoint, exp.equipmentTable, got.EquipmentTable)
+	test.compare("priority", exp.priority, got.Priority)
+	test.compIDAPIResourcePtrs("celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
+	test.checkResIDsInSlice("required auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.requiredAutoAbilities, got.RequiredAutoAbilities)
+	test.compTestStructSlices("selectable auto-abilities", exp.selectableAutoAbilities, got.SelectableAutoAbilities, compareAbilityPools)
+	test.compare("required slots", exp.requiredSlots, got.RequiredSlots)
+	test.checkResIDsInSlice("treasures", test.cfg.E.Treasures.Endpoint, exp.treasures, got.Treasures)
+	test.checkResIDsInSlice("shops", test.cfg.E.Shops.Endpoint, exp.shops, got.Shops)
 }

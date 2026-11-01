@@ -19,13 +19,13 @@ func (e expEquipmentTable) GetTestGeneral() testGeneral {
 
 func compareEquipmentTables(test test, exp expEquipmentTable, got api.EquipmentTable) {
 	test.t.Helper()
-	compareExpIDOnly(test, exp.expIDOnly, got.ID)
-	compIDAPIResourcePtrs(test, "celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
-	compIDAPIResourcePtrs(test, "specific character", test.cfg.E.Characters.Endpoint, exp.specificCharacter, got.SpecificCharacter)
-	checkResIDsInSlice(test, "required auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.requiredAutoAbilities, got.RequiredAutoAbilities)
-	compTestStructSlices(test, "selectable auto-abilities", exp.selectableAutoAbilities, got.SelectableAutoAbilities, compareAbilityPools)
-	compare(test, "required slots", exp.requiredSlots, got.RequiredSlots)
-	checkResIDsInSlice(test, "equipment", test.cfg.E.Equipment.Endpoint, exp.equipment, got.Equipment)
+	test.compareExpIDOnly(exp.expIDOnly, got.ID)
+	test.compIDAPIResourcePtrs("celestial weapon", test.cfg.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
+	test.compIDAPIResourcePtrs("specific character", test.cfg.E.Characters.Endpoint, exp.specificCharacter, got.SpecificCharacter)
+	test.checkResIDsInSlice("required auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.requiredAutoAbilities, got.RequiredAutoAbilities)
+	test.compTestStructSlices("selectable auto-abilities", exp.selectableAutoAbilities, got.SelectableAutoAbilities, compareAbilityPools)
+	test.compare("required slots", exp.requiredSlots, got.RequiredSlots)
+	test.checkResIDsInSlice("equipment", test.cfg.E.Equipment.Endpoint, exp.equipment, got.Equipment)
 }
 
 type testAbilityPool struct {
@@ -36,6 +36,6 @@ type testAbilityPool struct {
 
 func compareAbilityPools(test test, fieldName string, exp testAbilityPool, got api.AbilityPool) {
 	test.t.Helper()
-	checkResIDsInSlice(test, fieldName+" - auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
-	compare(test, fieldName+" - required amount", exp.reqAmount, got.ReqAmount)
+	test.checkResIDsInSlice(fieldName+" - auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
+	test.compare(fieldName+" - required amount", exp.reqAmount, got.ReqAmount)
 }

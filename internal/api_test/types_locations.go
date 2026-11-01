@@ -16,9 +16,9 @@ func (e expLocation) GetTestGeneral() testGeneral {
 
 func compareLocations(test test, exp expLocation, got api.Location) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compTestStructPtrs(test, "music", exp.music, got.Music, compareLocMusic)
-	checkResIDsInSlice(test, "connected locations", test.cfg.E.Locations.Endpoint, exp.connectedLocations, got.ConnectedLocations)
-	checkResIDsInSlice(test, "sublocations", test.cfg.E.Sublocations.Endpoint, exp.sublocations, got.Sublocations)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)
+	test.checkResIDsInSlice("connected locations", test.cfg.E.Locations.Endpoint, exp.connectedLocations, got.ConnectedLocations)
+	test.checkResIDsInSlice("sublocations", test.cfg.E.Sublocations.Endpoint, exp.sublocations, got.Sublocations)
 	compareLocRel(test, exp.expLocRel, got.LocRel)
 }

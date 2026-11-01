@@ -18,7 +18,7 @@ func (e expQuest) GetTestGeneral() testGeneral {
 
 func compareQuests(test test, exp expQuest, got api.Quest) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compare(test, "quest type", string(exp.questType), string(got.Type))
-	compPathAPIResource(test, "typed quest", exp.typedQuest, got.TypedQuest)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compare("quest type", string(exp.questType), string(got.Type))
+	test.compPathAPIResource("typed quest", exp.typedQuest, got.TypedQuest)
 }

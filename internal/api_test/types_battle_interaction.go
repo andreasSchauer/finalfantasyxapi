@@ -27,23 +27,23 @@ type expBattleInteraction struct {
 
 func compareBattleInteractions(test test, fieldName string, exp expBattleInteraction, got api.BattleInteraction) {
 	test.t.Helper()
-	compare(test, fieldName+" target", exp.target, got.Target)
-	compare(test, fieldName+" range", exp.abilityRange, got.Range)
-	compare(test, fieldName+" hit amount", exp.hitAmount, got.HitAmount)
-	compare(test, fieldName+" shatter rate", exp.shatterRate, got.ShatterRate)
-	compare(test, fieldName+" special action", exp.specialAction, got.SpecialAction)
-	compare(test, fieldName+" based on phys atk", exp.basedOnUserAtk, got.BasedOnUserAttack)
-	compare(test, fieldName+" darkable", exp.darkable, got.Darkable)
-	compare(test, fieldName+" silenceable", exp.silenceable, got.Silenceable)
-	compare(test, fieldName+" reflectable", exp.reflectable, got.Reflectable)
+	test.compare(fieldName+" target", exp.target, got.Target)
+	test.compare(fieldName+" range", exp.abilityRange, got.Range)
+	test.compare(fieldName+" hit amount", exp.hitAmount, got.HitAmount)
+	test.compare(fieldName+" shatter rate", exp.shatterRate, got.ShatterRate)
+	test.compare(fieldName+" special action", exp.specialAction, got.SpecialAction)
+	test.compare(fieldName+" based on phys atk", exp.basedOnUserAtk, got.BasedOnUserAttack)
+	test.compare(fieldName+" darkable", exp.darkable, got.Darkable)
+	test.compare(fieldName+" silenceable", exp.silenceable, got.Silenceable)
+	test.compare(fieldName+" reflectable", exp.reflectable, got.Reflectable)
 	compareAccuracies(test, fieldName+" accuracy", exp.accuracy, got.Accuracy)
-	compTestStructPtrs(test, fieldName+" damage", exp.damage, got.Damage, compareDamages)
-	compTestStructPtrs(test, fieldName+" inflicted delay", exp.inflictedDelay, got.InflictedDelay, compareInflictedDelays)
-	checkResIDsInSlice(test, fieldName+" inflicted status conditions", test.cfg.E.StatusConditions.Endpoint, exp.inflictedStatusConditions, got.InflictedStatusConditions)
-	checkResIDsInSlice(test, fieldName+" removed status conditions", test.cfg.E.StatusConditions.Endpoint, exp.removedStatusConditions, got.RemovedStatusConditions)
-	checkResIDsInSlice(test, fieldName+" copied status conditions", test.cfg.E.StatusConditions.Endpoint, exp.copiedStatusConditions, got.CopiedStatusConditions)
-	compTestStructSlices(test, fieldName+" stat changes", exp.statChanges, got.StatChanges, compareStatChanges)
-	compTestStructSlices(test, fieldName+" mod changes", exp.modifierChanges, got.ModifierChanges, compareModChanges)
+	test.compTestStructPtrs(fieldName+" damage", exp.damage, got.Damage, compareDamages)
+	test.compTestStructPtrs(fieldName+" inflicted delay", exp.inflictedDelay, got.InflictedDelay, compareInflictedDelays)
+	test.checkResIDsInSlice(fieldName+" inflicted status conditions", test.cfg.E.StatusConditions.Endpoint, exp.inflictedStatusConditions, got.InflictedStatusConditions)
+	test.checkResIDsInSlice(fieldName+" removed status conditions", test.cfg.E.StatusConditions.Endpoint, exp.removedStatusConditions, got.RemovedStatusConditions)
+	test.checkResIDsInSlice(fieldName+" copied status conditions", test.cfg.E.StatusConditions.Endpoint, exp.copiedStatusConditions, got.CopiedStatusConditions)
+	test.compTestStructSlices(fieldName+" stat changes", exp.statChanges, got.StatChanges, compareStatChanges)
+	test.compTestStructSlices(fieldName+" mod changes", exp.modifierChanges, got.ModifierChanges, compareModChanges)
 }
 
 type expAccuracy struct {
@@ -53,9 +53,9 @@ type expAccuracy struct {
 }
 
 func compareAccuracies(test test, fieldName string, exp expAccuracy, got api.Accuracy) {
-	compare(test, fieldName+" acc source", exp.accSource, got.AccSource)
-	compare(test, fieldName+" hit chance", exp.hitChance, got.HitChance)
-	compare(test, fieldName+" acc modifier", exp.accModifier, got.AccModifier)
+	test.compare(fieldName+" acc source", exp.accSource, got.AccSource)
+	test.compare(fieldName+" hit chance", exp.hitChance, got.HitChance)
+	test.compare(fieldName+" acc modifier", exp.accModifier, got.AccModifier)
 }
 
 type expDamage struct {
@@ -72,16 +72,16 @@ type expDamage struct {
 }
 
 func compareDamages(test test, fieldName string, exp expDamage, got api.Damage) {
-	compare(test, fieldName+" attack type", string(exp.attackType), got.AttackType)
-	compare(test, fieldName+" damage type", string(exp.damageType), got.DamageType)
-	compTestStructPtrs(test, fieldName+" hp", exp.hp, got.HP, compareClassDamages)
-	compTestStructPtrs(test, fieldName+" mp", exp.mp, got.MP, compareClassDamages)
-	compTestStructPtrs(test, fieldName+" ctb", exp.ctb, got.CTB, compareClassDamages)
-	compare(test, fieldName+" critical", exp.critical, got.Critical)
-	compare(test, fieldName+" criticalPlusVal", exp.criticalPlusVal, got.CriticalPlusVal)
-	compare(test, fieldName+" is piercing", exp.isPiercing, got.IsPiercing)
-	compare(test, fieldName+" break dmg lmt", exp.breakDmgLmt, got.BreakDmgLimit)
-	compIDAPIResourcePtrs(test, fieldName+" element", test.cfg.E.Elements.Endpoint, exp.element, got.Element)
+	test.compare(fieldName+" attack type", string(exp.attackType), got.AttackType)
+	test.compare(fieldName+" damage type", string(exp.damageType), got.DamageType)
+	test.compTestStructPtrs(fieldName+" hp", exp.hp, got.HP, compareClassDamages)
+	test.compTestStructPtrs(fieldName+" mp", exp.mp, got.MP, compareClassDamages)
+	test.compTestStructPtrs(fieldName+" ctb", exp.ctb, got.CTB, compareClassDamages)
+	test.compare(fieldName+" critical", exp.critical, got.Critical)
+	test.compare(fieldName+" criticalPlusVal", exp.criticalPlusVal, got.CriticalPlusVal)
+	test.compare(fieldName+" is piercing", exp.isPiercing, got.IsPiercing)
+	test.compare(fieldName+" break dmg lmt", exp.breakDmgLmt, got.BreakDmgLimit)
+	test.compIDAPIResourcePtrs(fieldName+" element", test.cfg.E.Elements.Endpoint, exp.element, got.Element)
 }
 
 type expClassDamage struct {
@@ -90,8 +90,8 @@ type expClassDamage struct {
 }
 
 func compareClassDamages(test test, fieldName string, exp expClassDamage, got api.ClassDamage) {
-	compare(test, fieldName+" - damage formula", string(exp.damageFormula), got.DamageFormula)
-	compare(test, fieldName+" - damage constant", exp.damageConstant, got.DamageConstant)
+	test.compare(fieldName+" - damage formula", string(exp.damageFormula), got.DamageFormula)
+	test.compare(fieldName+" - damage constant", exp.damageConstant, got.DamageConstant)
 }
 
 type expInflictedDelay struct {
@@ -99,7 +99,7 @@ type expInflictedDelay struct {
 }
 
 func compareInflictedDelays(test test, fieldName string, exp expInflictedDelay, got api.InflictedDelay) {
-	compare(test, fieldName+" delay strength", exp.delayStrength, got.DelayStrength)
+	test.compare(fieldName+" delay strength", exp.delayStrength, got.DelayStrength)
 }
 
 type expStatChange struct {
@@ -109,9 +109,9 @@ type expStatChange struct {
 }
 
 func compareStatChanges(test test, fieldName string, exp expStatChange, got api.StatChange) {
-	compIDAPIResource(test, fieldName+" - sc stat", test.cfg.E.Stats.Endpoint, exp.stat, got.Stat)
-	compare(test, fieldName+" - calculation type", exp.calculationType, got.CalculationType)
-	compare(test, fieldName+" - value", exp.value, got.Value)
+	test.compIDAPIResource(fieldName+" - sc stat", test.cfg.E.Stats.Endpoint, exp.stat, got.Stat)
+	test.compare(fieldName+" - calculation type", exp.calculationType, got.CalculationType)
+	test.compare(fieldName+" - value", exp.value, got.Value)
 }
 
 type expModChange struct {
@@ -121,7 +121,7 @@ type expModChange struct {
 }
 
 func compareModChanges(test test, fieldName string, exp expModChange, got api.ModifierChange) {
-	compIDAPIResource(test, fieldName+" - mc modifier", test.cfg.E.Modifiers.Endpoint, exp.modifier, got.Modifier)
-	compare(test, fieldName+" - calculation type", exp.calculationType, got.CalculationType)
-	compare(test, fieldName+" - value", exp.value, got.Value)
+	test.compIDAPIResource(fieldName+" - mc modifier", test.cfg.E.Modifiers.Endpoint, exp.modifier, got.Modifier)
+	test.compare(fieldName+" - calculation type", exp.calculationType, got.CalculationType)
+	test.compare(fieldName+" - value", exp.value, got.Value)
 }

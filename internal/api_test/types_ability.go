@@ -23,15 +23,15 @@ func (e expAbility) GetTestGeneral() testGeneral {
 
 func compareAbilities(test test, exp expAbility, got api.Ability) {
 	test.t.Helper()
-	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
-	compare(test, "ability type", string(exp.abilityType), string(got.Type))
-	compare(test, "rank", exp.rank, got.Rank)
-	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
-	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
+	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compare("ability type", string(exp.abilityType), string(got.Type))
+	test.compare("rank", exp.rank, got.Rank)
+	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", exp.canCopyCat, got.CanCopycat)
 
-	compPathAPIResource(test, "typed ability", exp.typedAbility, got.TypedAbility)
-	checkResIDsInSlice(test, "monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
-	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
+	test.compPathAPIResource("typed ability", exp.typedAbility, got.TypedAbility)
+	test.checkResIDsInSlice("monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
+	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
 type expEnemyAbility struct {
@@ -51,13 +51,13 @@ func (e expEnemyAbility) GetTestGeneral() testGeneral {
 
 func compareEnemyAbilities(test test, exp expEnemyAbility, got api.EnemyAbility) {
 	test.t.Helper()
-	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
-	compare(test, "rank", exp.rank, got.Rank)
-	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
-	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
-	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
-	checkResIDsInSlice(test, "monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
-	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
+	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compare("rank", exp.rank, got.Rank)
+	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", exp.canCopyCat, got.CanCopycat)
+	test.compIDAPIResource("untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	test.checkResIDsInSlice("monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
+	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
 type expItemAbility struct {
@@ -79,15 +79,15 @@ func (e expItemAbility) GetTestGeneral() testGeneral {
 
 func compareItemAbilities(test test, exp expItemAbility, got api.ItemAbility) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compare(test, "rank", exp.rank, got.Rank)
-	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
-	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
-	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
-	compIDAPIResource(test, "item", test.cfg.E.Items.Endpoint, exp.item, got.Item)
-	compare(test, "category", string(exp.category), got.Category)
-	compare(test, "can use outside battle", exp.CanUseOutsideBattle, got.CanUseOutsideBattle)
-	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compare("rank", exp.rank, got.Rank)
+	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", exp.canCopyCat, got.CanCopycat)
+	test.compIDAPIResource("untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	test.compIDAPIResource("item", test.cfg.E.Items.Endpoint, exp.item, got.Item)
+	test.compare("category", string(exp.category), got.Category)
+	test.compare("can use outside battle", exp.CanUseOutsideBattle, got.CanUseOutsideBattle)
+	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
 type expPlayerAbility struct {
@@ -112,18 +112,18 @@ func (e expPlayerAbility) GetTestGeneral() testGeneral {
 
 func comparePlayerAbilities(test test, exp expPlayerAbility, got api.PlayerAbility) {
 	test.t.Helper()
-	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
-	compare(test, "rank", exp.rank, got.Rank)
-	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
-	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
-	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
-	compIDAPIResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	compIDAPIResourcePtrs(test, "submenu", test.cfg.E.Submenus.Endpoint, exp.submenu, got.Submenu)
-	compIDAPIResourcePtrs(test, "open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
-	compIDAPIResourcePtrs(test, "std sg char", test.cfg.E.Characters.Endpoint, exp.stdChar, got.StandardGridCharacter)
-	compIDAPIResourcePtrs(test, "exp sg char", test.cfg.E.Characters.Endpoint, exp.expChar, got.ExpertGridCharacter)
-	checkResIDsInSlice(test, "monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
-	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
+	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compare("rank", exp.rank, got.Rank)
+	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", exp.canCopyCat, got.CanCopycat)
+	test.compIDAPIResource("untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	test.compIDAPIResourcePtrs("topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
+	test.compIDAPIResourcePtrs("submenu", test.cfg.E.Submenus.Endpoint, exp.submenu, got.Submenu)
+	test.compIDAPIResourcePtrs("open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
+	test.compIDAPIResourcePtrs("std sg char", test.cfg.E.Characters.Endpoint, exp.stdChar, got.StandardGridCharacter)
+	test.compIDAPIResourcePtrs("exp sg char", test.cfg.E.Characters.Endpoint, exp.expChar, got.ExpertGridCharacter)
+	test.checkResIDsInSlice("monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
+	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
 type expOverdriveAbility struct {
@@ -142,12 +142,12 @@ func (e expOverdriveAbility) GetTestGeneral() testGeneral {
 
 func compareOverdriveAbilities(test test, exp expOverdriveAbility, got api.OverdriveAbility) {
 	test.t.Helper()
-	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
-	compare(test, "rank", exp.rank, got.Rank)
-	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
-	compIDAPIResourcePtrs(test, "overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
-	checkResIDsInSlice(test, "overdrives", test.cfg.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
-	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
+	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compare("rank", exp.rank, got.Rank)
+	test.compIDAPIResource("untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	test.compIDAPIResourcePtrs("overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
+	test.checkResIDsInSlice("overdrives", test.cfg.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
+	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
 type expMiscAbility struct {
@@ -169,15 +169,15 @@ func (e expMiscAbility) GetTestGeneral() testGeneral {
 
 func compareMiscAbilities(test test, exp expMiscAbility, got api.MiscAbility) {
 	test.t.Helper()
-	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
-	compare(test, "rank", exp.rank, got.Rank)
-	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
-	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
-	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
-	compIDAPIResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	compIDAPIResourcePtrs(test, "submenu", test.cfg.E.Submenus.Endpoint, exp.submenu, got.Submenu)
-	compIDAPIResourcePtrs(test, "open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
-	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
+	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compare("rank", exp.rank, got.Rank)
+	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", exp.canCopyCat, got.CanCopycat)
+	test.compIDAPIResource("untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	test.compIDAPIResourcePtrs("topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
+	test.compIDAPIResourcePtrs("submenu", test.cfg.E.Submenus.Endpoint, exp.submenu, got.Submenu)
+	test.compIDAPIResourcePtrs("open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
+	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
 type expTriggerCommand struct {
@@ -199,13 +199,13 @@ func (e expTriggerCommand) GetTestGeneral() testGeneral {
 
 func compareTriggerCommands(test test, exp expTriggerCommand, got api.TriggerCommand) {
 	test.t.Helper()
-	compareExpNameVer(test, exp.expNameVer, got.ID, got.Name, got.Version)
-	compare(test, "rank", exp.rank, got.Rank)
-	compare(test, "appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
-	compare(test, "can copycat", exp.canCopyCat, got.CanCopycat)
-	compIDAPIResource(test, "untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
-	compIDAPIResourcePtrs(test, "topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	checkResIDsInSlice(test, "used by", test.cfg.E.CharacterClasses.Endpoint, exp.usedBy, got.UsedBy)
-	checkResIDsInSlice(test, "monster-formations", test.cfg.E.MonsterFormations.Endpoint, exp.monsterFormations, got.MonsterFormations)
-	compTestStructSlices(test, "battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
+	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compare("rank", exp.rank, got.Rank)
+	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", exp.canCopyCat, got.CanCopycat)
+	test.compIDAPIResource("untyped ability", test.cfg.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
+	test.compIDAPIResourcePtrs("topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
+	test.checkResIDsInSlice("used by", test.cfg.E.CharacterClasses.Endpoint, exp.usedBy, got.UsedBy)
+	test.checkResIDsInSlice("monster-formations", test.cfg.E.MonsterFormations.Endpoint, exp.monsterFormations, got.MonsterFormations)
+	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }

@@ -202,5 +202,5 @@ func TestParameters(t *testing.T) {
 		},
 	}
 
-	testNameList(t, tests, "", "Parameters", nil, compareParameterLists)
+	testNameList(t, tests, "Parameters", compareParameterLists)
 }

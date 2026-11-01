@@ -14,29 +14,29 @@ func (e expTurnOrderResponse) GetTestGeneral() testGeneral {
 
 func compareTurnOrderResponses(test test, exp expTurnOrderResponse, got api.TurnOrderResponse) {
 	test.t.Helper()
-	compare(test, "turns amt", exp.TurnsAmt, got.TurnsAmt)
-	compare(test, "ign first turn", exp.IgnFirstTurn, got.IgnFirstTurn)
-	compare(test, "ign immunities", exp.IgnImmunities, got.IgnImmunities)
-	compare(test, "battle start", exp.BattleStart, got.BattleStart)
-	compare(test, "rng", exp.RNG, got.RNG)
-	compTestStructSlices(test, "player party", exp.PlayerParty, got.PlayerParty, compareParticipants)
-	compTestStructSlices(test, "opponent party", exp.OpponentParty, got.OpponentParty, compareParticipants)
-	checkTestStructsInSlice(test, "turn order", exp.testTurnOrder, got.TurnOrder, compareBattleTurns)
+	test.compare("turns amt", exp.TurnsAmt, got.TurnsAmt)
+	test.compare("ign first turn", exp.IgnFirstTurn, got.IgnFirstTurn)
+	test.compare("ign immunities", exp.IgnImmunities, got.IgnImmunities)
+	test.compare("battle start", exp.BattleStart, got.BattleStart)
+	test.compare("rng", exp.RNG, got.RNG)
+	test.compTestStructSlices("player party", exp.PlayerParty, got.PlayerParty, compareParticipants)
+	test.compTestStructSlices("opponent party", exp.OpponentParty, got.OpponentParty, compareParticipants)
+	test.checkTestStructsInSlice("turn order", exp.testTurnOrder, got.TurnOrder, compareBattleTurns)
 }
 
 func compareParticipants(test test, fieldName string, exp, got api.Participant) {
 	test.t.Helper()
-	compare(test, fieldName+" name", exp.Name, got.Name)
-	compare(test, fieldName+" party", string(exp.Party), string(got.Party))
-	compare(test, fieldName+" agility", exp.Agility, got.Agility)
-	compare(test, fieldName+" tick speed", exp.TickSpeed, got.TickSpeed)
-	compare(test, fieldName+" min icv", exp.MinICV, got.MinICV)
-	compare(test, fieldName+" max icv", exp.MaxICV, got.MaxICV)
-	compare(test, fieldName+" first strike", exp.FirstStrike, got.FirstStrike)
-	compare(test, fieldName+" status", exp.Status, got.Status)
-	compare(test, fieldName+" alt state", exp.AltState, got.AltState)
-	compare(test, fieldName+" turns received", exp.TurnsReceived, got.TurnsReceived)
-	compare(test, fieldName+" turns percent", exp.TurnsPercent, got.TurnsPercent)
+	test.compare(fieldName+" name", exp.Name, got.Name)
+	test.compare(fieldName+" party", string(exp.Party), string(got.Party))
+	test.compare(fieldName+" agility", exp.Agility, got.Agility)
+	test.compare(fieldName+" tick speed", exp.TickSpeed, got.TickSpeed)
+	test.compare(fieldName+" min icv", exp.MinICV, got.MinICV)
+	test.compare(fieldName+" max icv", exp.MaxICV, got.MaxICV)
+	test.compare(fieldName+" first strike", exp.FirstStrike, got.FirstStrike)
+	test.compare(fieldName+" status", exp.Status, got.Status)
+	test.compare(fieldName+" alt state", exp.AltState, got.AltState)
+	test.compare(fieldName+" turns received", exp.TurnsReceived, got.TurnsReceived)
+	test.compare(fieldName+" turns percent", exp.TurnsPercent, got.TurnsPercent)
 }
 
 type testBattleTurn struct {
@@ -53,8 +53,8 @@ func (t testBattleTurn) GetIndex() int {
 
 func compareBattleTurns(test test, fieldName string, exp testBattleTurn, got api.BattleTurn) {
 	test.t.Helper()
-	compare(test, fieldName+" turn", exp.turn, got.Turn)
-	compare(test, fieldName+" current tick", exp.currentTick, got.CurrentTick)
-	compare(test, fieldName+" name", exp.name, got.Name)
-	compare(test, fieldName+" party", string(exp.party), string(got.Party))
+	test.compare(fieldName+" turn", exp.turn, got.Turn)
+	test.compare(fieldName+" current tick", exp.currentTick, got.CurrentTick)
+	test.compare(fieldName+" name", exp.name, got.Name)
+	test.compare(fieldName+" party", string(exp.party), string(got.Party))
 }

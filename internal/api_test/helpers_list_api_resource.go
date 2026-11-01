@@ -5,21 +5,21 @@ import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 // checks the basic fields of an APIResourceList (count, pagination urls) and then checks for the stated resources
 func compareAPIResourceLists[T api.APIResourceList](test test, endpoint api.EndpointName, expList expListIDs, gotList T) {
 	test.t.Helper()
-	compareListParams(test, expList.GetListParams(), gotList.GetListParams())
-	checkResIDsInSlice(test, "results", endpoint, expList.results, gotList.GetResults())
+	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
+	test.checkResIDsInSlice( "results", endpoint, expList.results, gotList.GetResults())
 }
 
 // checks the basic fields of an APIResourceList (count, pagination urls) and then checks for the stated resource paths
 func compareAPIResourceListPaths[T api.APIResourceList](test test, expList expListPaths, gotList T) {
 	test.t.Helper()
-	compareListParams(test, expList.GetListParams(), gotList.GetListParams())
-	checkResPathsInSlice(test, "results", expList.results, gotList.GetResults())
+	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
+	test.checkResPathsInSlice("results", expList.results, gotList.GetResults())
 }
 
 // checks if both slices are present and if the provided slice of resources contains all stated resources
-func checkResPathsInSlice[T api.HasAPIResource](test test, fieldName string, expPaths []string, gotRes []T) {
+func (test test) checkResPathsInSlice[T api.HasAPIResource](fieldName string, expPaths []string, gotRes []T) {
 	test.t.Helper()
-	sliceBasicChecks(test, fieldName, expPaths, gotRes)
+	test.sliceBasicChecks(fieldName, expPaths, gotRes)
 
 	gotMap := api.GetResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
@@ -35,9 +35,9 @@ func checkResPathsInSlice[T api.HasAPIResource](test test, fieldName string, exp
 	}
 }
 
-func checkResIDsInSlice[T api.HasAPIResource](test test, fieldName string, endpoint api.EndpointName, expIDs []int32, gotRes []T) {
+func (test test) checkResIDsInSlice[T api.HasAPIResource](fieldName string, endpoint api.EndpointName, expIDs []int32, gotRes []T) {
 	test.t.Helper()
-	sliceBasicChecks(test, fieldName, expIDs, gotRes)
+	test.sliceBasicChecks(fieldName, expIDs, gotRes)
 
 	gotMap := api.GetResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {

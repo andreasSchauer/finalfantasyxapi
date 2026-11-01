@@ -18,10 +18,10 @@ func (e expOverdrive) GetTestGeneral() testGeneral {
 
 func compareOverdrives(test test, exp expOverdrive, got api.Overdrive) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compare(test, "rank", exp.rank, got.Rank)
-	compare(test, "countdown in sec", exp.countdownInSec, got.CountdownInSec)
-	compIDAPIResource(test, "user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
-	compIDAPIResourcePtrs(test, "overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
-	checkResIDsInSlice(test, "overdrive abilities", test.cfg.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compare("rank", exp.rank, got.Rank)
+	test.compare("countdown in sec", exp.countdownInSec, got.CountdownInSec)
+	test.compIDAPIResource("user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
+	test.compIDAPIResourcePtrs("overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
+	test.checkResIDsInSlice("overdrive abilities", test.cfg.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
 }

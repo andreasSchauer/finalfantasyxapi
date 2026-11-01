@@ -348,5 +348,5 @@ func TestSections(t *testing.T) {
 		},
 	}
 
-	testNameList(t, tests, "", "Sections", nil, compareSectionLists)
+	testNameList(t, tests, "Sections", compareSectionLists)
 }

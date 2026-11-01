@@ -16,8 +16,8 @@ func (e expPrimer) GetTestGeneral() testGeneral {
 
 func comparePrimers(test test, exp expPrimer, got api.Primer) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIDAPIResource(test, "key item", test.cfg.E.KeyItems.Endpoint, exp.keyItem, got.KeyItem)
-	checkResIDsInSlice(test, "areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
-	checkResIDsInSlice(test, "treasures", test.cfg.E.Treasures.Endpoint, exp.treasures, got.Treasures)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("key item", test.cfg.E.KeyItems.Endpoint, exp.keyItem, got.KeyItem)
+	test.checkResIDsInSlice("areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.checkResIDsInSlice("treasures", test.cfg.E.Treasures.Endpoint, exp.treasures, got.Treasures)
 }

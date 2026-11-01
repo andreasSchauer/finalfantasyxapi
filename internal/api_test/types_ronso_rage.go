@@ -15,7 +15,7 @@ func (e expRonsoRage) GetTestGeneral() testGeneral {
 
 func compareRonsoRages(test test, exp expRonsoRage, got api.RonsoRage) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIDAPIResource(test, "overdrive", test.cfg.E.Overdrives.Endpoint, exp.overdrive, got.Overdrive)
-	checkResIDsInSlice(test, "monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("overdrive", test.cfg.E.Overdrives.Endpoint, exp.overdrive, got.Overdrive)
+	test.checkResIDsInSlice("monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
 }

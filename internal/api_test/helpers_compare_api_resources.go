@@ -4,7 +4,7 @@ import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
 
 // takes an expected path and checks, if it matches the URL of target struct's API Resource.
 // /endpoint/23 == struct with api resource linking to host/api/endpoint/23
-func compPathAPIResource[T api.HasAPIResource](test test, fieldName, expPath string, gotRes T) {
+func (test test) compPathAPIResource[T api.HasAPIResource](fieldName, expPath string, gotRes T) {
 	test.t.Helper()
 
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
@@ -15,36 +15,36 @@ func compPathAPIResource[T api.HasAPIResource](test test, fieldName, expPath str
 	gotURL := gotRes.GetAPIResource().GetURL()
 	gotPath := api.URLToPath(test.cfg, gotURL)
 
-	compare(test, fieldName, expPath, gotPath)
+	test.compare(fieldName, expPath, gotPath)
 }
 
 // takes an expected path ptr and checks, if it matches the URL of target struct ptr's API Resource.
 // /endpoint/23 == struct with api resource linking to host/api/endpoint/23 (both ptrs)
-func compPathAPIResourcePtrs[T api.HasAPIResource](test test, fieldName string, expPathPtr *string, gotResPtr *T) {
+func (test test) compPathAPIResourcePtrs[T api.HasAPIResource](fieldName string, expPathPtr *string, gotResPtr *T) {
 	test.t.Helper()
 
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
 		return
 	}
 
-	if !bothResourcePtrsPresent(test, fieldName, expPathPtr, gotResPtr) {
+	if !test.bothResourcePtrsPresent(fieldName, expPathPtr, gotResPtr) {
 		return
 	}
 
-	compPathAPIResource(test, fieldName, *expPathPtr, *gotResPtr)
+	test.compPathAPIResource(fieldName, *expPathPtr, *gotResPtr)
 }
 
 // takes an id, assembles the url, and checks, if it matches the URL of target struct's API Resource.
 // 23 == struct with api resource linking to host/api/endpoint/23
-func compIDAPIResource[T api.HasAPIResource](test test, fieldName string, endpoint api.EndpointName, expID int32, gotRes T) {
+func (test test) compIDAPIResource[T api.HasAPIResource](fieldName string, endpoint api.EndpointName, expID int32, gotRes T) {
 	test.t.Helper()
 	expPath := api.CompleteTestPath(endpoint, expID)
-	compPathAPIResource(test, fieldName, expPath, gotRes)
+	test.compPathAPIResource(fieldName, expPath, gotRes)
 }
 
 // takes an id ptr, assembles the url, and checks, if it matches the URL of target struct ptr's API Resource.
 // 23 == struct with api resource linking to host/api/endpoint/23 (both ptrs)
-func compIDAPIResourcePtrs[T api.HasAPIResource](test test, fieldName string, endpoint api.EndpointName, expIDPtr *int32, gotResPtr *T) {
+func (test test) compIDAPIResourcePtrs[T api.HasAPIResource](fieldName string, endpoint api.EndpointName, expIDPtr *int32, gotResPtr *T) {
 	test.t.Helper()
 
 	var expPathPtr *string
@@ -56,5 +56,5 @@ func compIDAPIResourcePtrs[T api.HasAPIResource](test test, fieldName string, en
 		expPathPtr = &expPath
 	}
 
-	compPathAPIResourcePtrs(test, fieldName, expPathPtr, gotResPtr)
+	test.compPathAPIResourcePtrs(fieldName, expPathPtr, gotResPtr)
 }

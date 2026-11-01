@@ -16,10 +16,10 @@ func (e expSidequest) GetTestGeneral() testGeneral {
 
 func compareSidequests(test test, exp expSidequest, got api.Sidequest) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIDAPIResource(test, "untyped quest", test.cfg.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
-	compTestStructPtrs(test, "completion", exp.completion, got.Completion, compareQuestCompletions)
-	checkResIDsInSlice(test, "subquests", test.cfg.E.Subquests.Endpoint, exp.subquests, got.Subquests)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("untyped quest", test.cfg.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
+	test.compTestStructPtrs("completion", exp.completion, got.Completion, compareQuestCompletions)
+	test.checkResIDsInSlice("subquests", test.cfg.E.Subquests.Endpoint, exp.subquests, got.Subquests)
 }
 
 type expSubquest struct {
@@ -37,11 +37,11 @@ func (e expSubquest) GetTestGeneral() testGeneral {
 
 func compareSubquests(test test, exp expSubquest, got api.Subquest) {
 	test.t.Helper()
-	compareExpUnique(test, exp.expUnique, got.ID, got.Name)
-	compIDAPIResource(test, "untyped quest", test.cfg.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
-	compIDAPIResource(test, "parent sidequest", test.cfg.E.Sidequests.Endpoint, exp.parentSidequest, got.ParentSidequest)
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("untyped quest", test.cfg.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
+	test.compIDAPIResource("parent sidequest", test.cfg.E.Sidequests.Endpoint, exp.parentSidequest, got.ParentSidequest)
 	compareQuestCompletions(test, "completion", exp.completion, got.Completion)
-	compIDAPIResourcePtrs(test, "arena creation", test.cfg.E.ArenaCreations.Endpoint, exp.arenaCreation, got.ArenaCreation)
+	test.compIDAPIResourcePtrs("arena creation", test.cfg.E.ArenaCreations.Endpoint, exp.arenaCreation, got.ArenaCreation)
 }
 
 type testQuestCompletion struct {
@@ -51,6 +51,6 @@ type testQuestCompletion struct {
 
 func compareQuestCompletions(test test, fieldName string, exp testQuestCompletion, got api.QuestCompletion) {
 	test.t.Helper()
-	checkResIDsInSlice(test, fieldName+" - areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.checkResIDsInSlice(fieldName+" - areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
 	compareResAmounts(test, fieldName+" - rewards", exp.reward, got.Reward)
 }
