@@ -12,7 +12,7 @@ func (i handlerInput[T, R, A]) queryJoined(cfg *Config, r *http.Request, inputID
 		for _, queryName := range queryNames {
 			queryParam := i.queryLookup[queryName]
 
-			if queryParam.replParamsPresent(r, i.queryLookup) {
+			if queryParam.replacingParamsPresent(r, i.queryLookup) {
 				return inputIDs, nil
 			}
 			_, err := queryParam.checkEmpty(r)

@@ -48,7 +48,7 @@ func (i handlerInput[T, R, A]) handleSubsection(cfg *Config, w http.ResponseWrit
 		return
 	}
 
-	list, err := i.newSimpleResourceList(cfg, r, parseRes.ID, sectionName, subsection)
+	list, err := i.toSimpleResourceList(cfg, r, parseRes.ID, sectionName, subsection)
 	if handleHTTPError(w, err) {
 		return
 	}

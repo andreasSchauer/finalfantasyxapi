@@ -19,8 +19,8 @@ type EquipmentMatchParams struct {
 	AbilityWheel      AbilityWheel
 }
 
-func calcEquipmentMatchChance(p EquipmentMatchParams) float64 {
-	baseEquipment, baseEqLen := initEquipment(p)
+func (p EquipmentMatchParams) calcChance() float64 {
+	baseEquipment, baseEqLen := p.initEquipment()
 
 	matcher := EquipmentMatcher{
 		wantedIndices:     p.WantedIndices,

@@ -34,7 +34,7 @@ func (q QueryParam) basicChecks(r *http.Request, queryLookup map[QueryParamName]
 		return "", err
 	}
 
-	if q.replParamsPresent(r, queryLookup) {
+	if q.replacingParamsPresent(r, queryLookup) {
 		return "", errQueryRedirect
 	}
 
@@ -69,7 +69,7 @@ func checkNoneQuery(query string) error {
 	return nil
 }
 
-func (q QueryParam) replParamsPresent(r *http.Request, queryLookup map[QueryParamName]QueryParam) bool {
+func (q QueryParam) replacingParamsPresent(r *http.Request, queryLookup map[QueryParamName]QueryParam) bool {
 	for _, param := range q.ReplacedBy {
 		p := queryLookup[param]
 		_, err := p.checkEmpty(r)

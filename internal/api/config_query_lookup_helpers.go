@@ -6,14 +6,23 @@ import (
 	"strings"
 )
 
-func (cfg *Config) assignDefaultParams(endpoint EndpointName, sections map[SectionName]Subsection) map[QueryParamName]QueryParam {
-	return cfg.completeQueryParamsInit([]QueryParam{}, endpoint, sections)
+func (i handlerInput[T, R, A]) assignDefaultParams(cfg *Config) map[QueryParamName]QueryParam {
+	return i.completeQueryParamsInit(cfg, []QueryParam{})
 }
 
-func (cfg *Config) completeQueryParamsInit(params []QueryParam, endpoint EndpointName, sections map[SectionName]Subsection) map[QueryParamName]QueryParam {
+func (i handlerInputEndpoints) assignDefaultParams(cfg *Config) map[QueryParamName]QueryParam {
+	return paramSliceToMap(cfg.Q.defaultParamSlice, &i.Endpoint)
+}
+
+func (i handlerInputEnums) assignDefaultParams(cfg *Config) map[QueryParamName]QueryParam {
+	return paramSliceToMap(cfg.Q.defaultParamSlice, &i.Endpoint)
+}
+
+// make a wrapper method around this for each handlerInput?
+func (i handlerInput[T, R, A]) completeQueryParamsInit(cfg *Config, params []QueryParam) map[QueryParamName]QueryParam {
 	params = slices.Concat(params, cfg.Q.defaultParamSlice)
 
-	if hasSimpleView(sections) {
+	if hasSimpleView(i.subsections) {
 		queryParamIDs := QueryParam{
 			Name:        QpnIDs,
 			Description: "Used to manually input the ids of resources to be batch-fetched for simple display. The original order will be preserved, but duplicates will be removed.",
@@ -35,7 +44,7 @@ func (cfg *Config) completeQueryParamsInit(params []QueryParam, endpoint Endpoin
 		params = append(params, queryParamFlip)
 	}
 
-	return paramSliceToMap(params, &endpoint)
+	return paramSliceToMap(params, &i.Endpoint)
 }
 
 func hasSimpleView(sections map[SectionName]Subsection) bool {

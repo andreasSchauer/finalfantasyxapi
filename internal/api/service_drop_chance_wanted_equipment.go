@@ -14,11 +14,11 @@ type WantedEquipment struct {
 	OptionalSlotsAre string   `json:"optional_slots_are"`
 }
 
-type OptionalSlotDef string
+type OptionalSlotDefinition string
 
 const (
-	OptionalSlotAllEmpty       OptionalSlotDef = "all-empty"
-	OptionalSlotAbilityOrEmpty OptionalSlotDef = "ability-or-empty"
+	OptionalSlotAllEmpty       OptionalSlotDefinition = "all-empty"
+	OptionalSlotAbilityOrEmpty OptionalSlotDefinition = "ability-or-empty"
 )
 
 func getWantedEquipment(params DropChanceParams, wantedAbilities []seeding.AutoAbility, slotsTable []seeding.EquipmentSlotsChance) WantedEquipment {

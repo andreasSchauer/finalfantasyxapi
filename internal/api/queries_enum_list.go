@@ -8,7 +8,7 @@ import (
 func (i handlerInput[T, R, A]) queryEnumList[E, N any](cfg *Config, r *http.Request, et EnumType[E, N], inputIDs []int32, queryName QueryParamName, dbQuery DBQueryEnumList[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if queryParam.replParamsPresent(r, i.queryLookup) {
+		if queryParam.replacingParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 

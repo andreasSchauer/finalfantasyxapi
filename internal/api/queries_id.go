@@ -12,7 +12,7 @@ import (
 func (i handlerInput[T, R, A]) queryID[F seeding.Lookupable](r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if queryParam.replParamsPresent(r, i.queryLookup) {
+		if queryParam.replacingParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
@@ -37,7 +37,7 @@ func (i handlerInput[T, R, A]) queryID[F seeding.Lookupable](r *http.Request, in
 func (i handlerInput[T, R, A]) queryIDWrapper[F seeding.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if queryParam.replParamsPresent(r, i.queryLookup) {
+		if queryParam.replacingParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
@@ -56,7 +56,7 @@ func (i handlerInput[T, R, A]) queryIDWrapper[F seeding.Lookupable](cfg *Config,
 func (i handlerInput[T, R, A]) queryIDNul[F seeding.Lookupable](r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DBQueryNullIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if queryParam.replParamsPresent(r, i.queryLookup) {
+		if queryParam.replacingParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 

@@ -126,12 +126,12 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initMiscAbilitiesParams()
 	cfg.initEnemyAbilitiesParams()
 
-	cfg.Q.aeonCommands = cfg.assignDefaultParams(cfg.E.AeonCommands.Endpoint, cfg.E.AeonCommands.subsections)
-	cfg.Q.overdriveCommands = cfg.assignDefaultParams(cfg.E.OverdriveCommands.Endpoint, cfg.E.OverdriveCommands.subsections)
+	cfg.Q.aeonCommands = cfg.E.AeonCommands.assignDefaultParams(cfg)
+	cfg.Q.overdriveCommands = cfg.E.OverdriveCommands.assignDefaultParams(cfg)
 	cfg.initOverdrivesParams()
-	cfg.Q.ronsoRages = cfg.assignDefaultParams(cfg.E.RonsoRages.Endpoint, cfg.E.RonsoRages.subsections)
+	cfg.Q.ronsoRages = cfg.E.RonsoRages.assignDefaultParams(cfg)
 	cfg.initSubmenusParams()
-	cfg.Q.topmenus = cfg.assignDefaultParams(cfg.E.Topmenus.Endpoint, cfg.E.Topmenus.subsections)
+	cfg.Q.topmenus = cfg.E.Topmenus.assignDefaultParams(cfg)
 
 	cfg.initAllItemsParams()
 	cfg.initItemsParams()
@@ -146,15 +146,15 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initCelestialWeaponsParams()
 
 	cfg.initStatsParams()
-	cfg.Q.properties = cfg.assignDefaultParams(cfg.E.Properties.Endpoint, cfg.E.Properties.subsections)
+	cfg.Q.properties = cfg.E.Properties.assignDefaultParams(cfg)
 	cfg.initOverdriveModesParams()
-	cfg.Q.elements = cfg.assignDefaultParams(cfg.E.Elements.Endpoint, cfg.E.Elements.subsections)
+	cfg.Q.elements = cfg.E.Elements.assignDefaultParams(cfg)
 	cfg.initStatusConditionsParams()
 	cfg.initModifiersParams()
 	cfg.initAgilityTierParams()
 
-	cfg.Q.enums = cfg.assignDefaultParams(cfg.E.Enums.Endpoint, nil)
-	cfg.Q.endpoints = cfg.assignDefaultParams(cfg.E.Endpoints.Endpoint, nil)
+	cfg.Q.enums = cfg.E.Enums.assignDefaultParams(cfg)
+	cfg.Q.endpoints = cfg.E.Endpoints.assignDefaultParams(cfg)
 
 	cfg.E.AeonCommands.queryLookup = cfg.Q.aeonCommands
 	cfg.E.OverdriveCommands.queryLookup = cfg.Q.overdriveCommands
@@ -162,6 +162,7 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.E.Topmenus.queryLookup = cfg.Q.topmenus
 	cfg.E.Properties.queryLookup = cfg.Q.properties
 	cfg.E.Elements.queryLookup = cfg.Q.elements
+	
 	cfg.E.Enums.queryLookup = cfg.Q.enums
 	cfg.E.Endpoints.queryLookup = cfg.Q.endpoints
 }

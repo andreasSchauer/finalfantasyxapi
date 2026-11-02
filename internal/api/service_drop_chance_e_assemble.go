@@ -45,7 +45,7 @@ func (a *EquipmentAssembler) autoAbilityValid(rolledIdx int32) bool {
     return true
 }
 
-func initEquipment(p EquipmentMatchParams) ([4]int32, int32) {
+func (p EquipmentMatchParams) initEquipment() ([4]int32, int32) {
 	const idxPrioritySlot int32 = 7
 	const idxEmpty int32 = -1
 	var eqLen int32

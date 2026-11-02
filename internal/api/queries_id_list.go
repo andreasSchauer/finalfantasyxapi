@@ -11,7 +11,7 @@ import (
 func (i handlerInput[T, R, A]) queryIDList[F seeding.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if queryParam.replParamsPresent(r, i.queryLookup) {
+		if queryParam.replacingParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 

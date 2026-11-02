@@ -180,7 +180,7 @@ func (cfg *Config) initLocationsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Locations.Endpoint, cfg.E.Locations.subsections)
+	paramsMap := cfg.E.Locations.completeQueryParamsInit(cfg, params)
 	cfg.Q.locations = paramsMap
 	cfg.E.Locations.queryLookup = paramsMap
 }
@@ -325,7 +325,7 @@ func (cfg *Config) initSublocationsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Sublocations.Endpoint, cfg.E.Sublocations.subsections)
+	paramsMap := cfg.E.Sublocations.completeQueryParamsInit(cfg, params)
 	cfg.Q.sublocations = paramsMap
 	cfg.E.Sublocations.queryLookup = paramsMap
 }
@@ -502,7 +502,7 @@ func (cfg *Config) initAreasParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Areas.Endpoint, cfg.E.Areas.subsections)
+	paramsMap := cfg.E.Areas.completeQueryParamsInit(cfg, params)
 	cfg.Q.areas = paramsMap
 	cfg.E.Areas.queryLookup = paramsMap
 }
@@ -583,7 +583,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.MonsterFormations.Endpoint, cfg.E.MonsterFormations.subsections)
+	paramsMap := cfg.E.MonsterFormations.completeQueryParamsInit(cfg, params)
 	cfg.Q.monsterFormations = paramsMap
 	cfg.E.MonsterFormations.queryLookup = paramsMap
 }
@@ -668,7 +668,7 @@ func (cfg *Config) initShopsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Shops.Endpoint, cfg.E.Shops.subsections)
+	paramsMap := cfg.E.Shops.completeQueryParamsInit(cfg, params)
 	cfg.Q.shops = paramsMap
 	cfg.E.Shops.queryLookup = paramsMap
 }
@@ -759,7 +759,7 @@ func (cfg *Config) initTreasuresParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Treasures.Endpoint, cfg.E.Treasures.subsections)
+	paramsMap := cfg.E.Treasures.completeQueryParamsInit(cfg, params)
 	cfg.Q.treasures = paramsMap
 	cfg.E.Treasures.queryLookup = paramsMap
 }
@@ -790,7 +790,7 @@ func (cfg *Config) initQuestsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Quests.Endpoint, cfg.E.Quests.subsections)
+	paramsMap := cfg.E.Quests.completeQueryParamsInit(cfg, params)
 	cfg.Q.quests = paramsMap
 	cfg.E.Quests.queryLookup = paramsMap
 }
@@ -807,7 +807,7 @@ func (cfg *Config) initSidequestsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Sidequests.Endpoint, cfg.E.Sidequests.subsections)
+	paramsMap := cfg.E.Sidequests.completeQueryParamsInit(cfg, params)
 	cfg.Q.sidequests = paramsMap
 	cfg.E.Sidequests.queryLookup = paramsMap
 }
@@ -830,7 +830,7 @@ func (cfg *Config) initSubquestsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Subquests.Endpoint, cfg.E.Subquests.subsections)
+	paramsMap := cfg.E.Subquests.completeQueryParamsInit(cfg, params)
 	cfg.Q.subquests = paramsMap
 	cfg.E.Subquests.queryLookup = paramsMap
 }
@@ -847,7 +847,7 @@ func (cfg *Config) initArenaCreationsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.ArenaCreations.Endpoint, cfg.E.ArenaCreations.subsections)
+	paramsMap := cfg.E.ArenaCreations.completeQueryParamsInit(cfg, params)
 	cfg.Q.arenaCreations = paramsMap
 	cfg.E.ArenaCreations.queryLookup = paramsMap
 }
@@ -864,7 +864,7 @@ func (cfg *Config) initBlitzballPrizesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.BlitzballPrizes.Endpoint, cfg.E.BlitzballPrizes.subsections)
+	paramsMap := cfg.E.BlitzballPrizes.completeQueryParamsInit(cfg, params)
 	cfg.Q.blitzballPrizes = paramsMap
 	cfg.E.BlitzballPrizes.queryLookup = paramsMap
 }
@@ -924,7 +924,7 @@ func (cfg *Config) initSongsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Songs.Endpoint, cfg.E.Songs.subsections)
+	paramsMap := cfg.E.Songs.completeQueryParamsInit(cfg, params)
 	cfg.Q.songs = paramsMap
 	cfg.E.Songs.queryLookup = paramsMap
 }
@@ -940,7 +940,7 @@ func (cfg *Config) initFMVsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.FMVs.Endpoint, cfg.E.FMVs.subsections)
+	paramsMap := cfg.E.FMVs.completeQueryParamsInit(cfg, params)
 	cfg.Q.fmvs = paramsMap
 	cfg.E.FMVs.queryLookup = paramsMap
 }
@@ -957,7 +957,7 @@ func (cfg *Config) initPlayerUnitsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.PlayerUnits.Endpoint, cfg.E.PlayerUnits.subsections)
+	paramsMap := cfg.E.PlayerUnits.completeQueryParamsInit(cfg, params)
 	cfg.Q.playerUnits = paramsMap
 	cfg.E.PlayerUnits.queryLookup = paramsMap
 }
@@ -986,7 +986,7 @@ func (cfg *Config) initCharactersParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Characters.Endpoint, cfg.E.Characters.subsections)
+	paramsMap := cfg.E.Characters.completeQueryParamsInit(cfg, params)
 	cfg.Q.characters = paramsMap
 	cfg.E.Characters.queryLookup = paramsMap
 }
@@ -1016,7 +1016,7 @@ func (cfg *Config) initAeonsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Aeons.Endpoint, cfg.E.Aeons.subsections)
+	paramsMap := cfg.E.Aeons.completeQueryParamsInit(cfg, params)
 	cfg.Q.aeons = paramsMap
 	cfg.E.Aeons.queryLookup = paramsMap
 }
@@ -1033,7 +1033,7 @@ func (cfg *Config) initCharacterClassesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.CharacterClasses.Endpoint, cfg.E.CharacterClasses.subsections)
+	paramsMap := cfg.E.CharacterClasses.completeQueryParamsInit(cfg, params)
 	cfg.Q.characterClasses = paramsMap
 	cfg.E.CharacterClasses.queryLookup = paramsMap
 }
@@ -1272,7 +1272,7 @@ func (cfg *Config) initMonstersParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Monsters.Endpoint, cfg.E.Monsters.subsections)
+	paramsMap := cfg.E.Monsters.completeQueryParamsInit(cfg, params)
 	cfg.Q.monsters = paramsMap
 	cfg.E.Monsters.queryLookup = paramsMap
 }
@@ -1422,7 +1422,7 @@ func (cfg *Config) initAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Abilities.Endpoint, cfg.E.Abilities.subsections)
+	paramsMap := cfg.E.Abilities.completeQueryParamsInit(cfg, params)
 	cfg.Q.abilities = paramsMap
 	cfg.E.Abilities.queryLookup = paramsMap
 }
@@ -1638,7 +1638,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.PlayerAbilities.Endpoint, cfg.E.PlayerAbilities.subsections)
+	paramsMap := cfg.E.PlayerAbilities.completeQueryParamsInit(cfg, params)
 	cfg.Q.playerAbilities = paramsMap
 	cfg.E.PlayerAbilities.queryLookup = paramsMap
 }
@@ -1739,7 +1739,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.OverdriveAbilities.Endpoint, cfg.E.OverdriveAbilities.subsections)
+	paramsMap := cfg.E.OverdriveAbilities.completeQueryParamsInit(cfg, params)
 	cfg.Q.overdriveAbilities = paramsMap
 	cfg.E.OverdriveAbilities.queryLookup = paramsMap
 }
@@ -1834,7 +1834,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.ItemAbilities.Endpoint, cfg.E.ItemAbilities.subsections)
+	paramsMap := cfg.E.ItemAbilities.completeQueryParamsInit(cfg, params)
 	cfg.Q.itemAbilities = paramsMap
 	cfg.E.ItemAbilities.queryLookup = paramsMap
 }
@@ -1881,7 +1881,7 @@ func (cfg *Config) initTriggerCommandsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.TriggerCommands.Endpoint, cfg.E.TriggerCommands.subsections)
+	paramsMap := cfg.E.TriggerCommands.completeQueryParamsInit(cfg, params)
 	cfg.Q.triggerCommands = paramsMap
 	cfg.E.TriggerCommands.queryLookup = paramsMap
 }
@@ -1944,7 +1944,7 @@ func (cfg *Config) initMiscAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.MiscAbilities.Endpoint, cfg.E.MiscAbilities.subsections)
+	paramsMap := cfg.E.MiscAbilities.completeQueryParamsInit(cfg, params)
 	cfg.Q.miscAbilities = paramsMap
 	cfg.E.MiscAbilities.queryLookup = paramsMap
 }
@@ -2062,7 +2062,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.EnemyAbilities.Endpoint, cfg.E.EnemyAbilities.subsections)
+	paramsMap := cfg.E.EnemyAbilities.completeQueryParamsInit(cfg, params)
 	cfg.Q.enemyAbilities = paramsMap
 	cfg.E.EnemyAbilities.queryLookup = paramsMap
 }
@@ -2085,7 +2085,7 @@ func (cfg *Config) initOverdrivesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Overdrives.Endpoint, cfg.E.Overdrives.subsections)
+	paramsMap := cfg.E.Overdrives.completeQueryParamsInit(cfg, params)
 	cfg.Q.overdrives = paramsMap
 	cfg.E.Overdrives.queryLookup = paramsMap
 }
@@ -2102,7 +2102,7 @@ func (cfg *Config) initSubmenusParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Submenus.Endpoint, cfg.E.Submenus.subsections)
+	paramsMap := cfg.E.Submenus.completeQueryParamsInit(cfg, params)
 	cfg.Q.submenus = paramsMap
 	cfg.E.Submenus.queryLookup = paramsMap
 }
@@ -2186,7 +2186,7 @@ func (cfg *Config) initAllItemsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.AllItems.Endpoint, cfg.E.AllItems.subsections)
+	paramsMap := cfg.E.AllItems.completeQueryParamsInit(cfg, params)
 	cfg.Q.allItems = paramsMap
 	cfg.E.AllItems.queryLookup = paramsMap
 }
@@ -2284,7 +2284,7 @@ func (cfg *Config) initItemsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Items.Endpoint, cfg.E.Items.subsections)
+	paramsMap := cfg.E.Items.completeQueryParamsInit(cfg, params)
 	cfg.Q.items = paramsMap
 	cfg.E.Items.queryLookup = paramsMap
 }
@@ -2349,7 +2349,7 @@ func (cfg *Config) initKeyItemsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.KeyItems.Endpoint, cfg.E.KeyItems.subsections)
+	paramsMap := cfg.E.KeyItems.completeQueryParamsInit(cfg, params)
 	cfg.Q.keyItems = paramsMap
 	cfg.E.KeyItems.queryLookup = paramsMap
 }
@@ -2433,7 +2433,7 @@ func (cfg *Config) initSpheresParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Spheres.Endpoint, cfg.E.Spheres.subsections)
+	paramsMap := cfg.E.Spheres.completeQueryParamsInit(cfg, params)
 	cfg.Q.spheres = paramsMap
 	cfg.E.Spheres.queryLookup = paramsMap
 }
@@ -2450,7 +2450,7 @@ func (cfg *Config) initPrimersParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Primers.Endpoint, cfg.E.Primers.subsections)
+	paramsMap := cfg.E.Primers.completeQueryParamsInit(cfg, params)
 	cfg.Q.primers = paramsMap
 	cfg.E.Primers.queryLookup = paramsMap
 }
@@ -2500,7 +2500,7 @@ func (cfg *Config) initMixesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Mixes.Endpoint, cfg.E.Mixes.subsections)
+	paramsMap := cfg.E.Mixes.completeQueryParamsInit(cfg, params)
 	cfg.Q.mixes = paramsMap
 	cfg.E.Mixes.queryLookup = paramsMap
 }
@@ -2630,7 +2630,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.AutoAbilities.Endpoint, cfg.E.AutoAbilities.subsections)
+	paramsMap := cfg.E.AutoAbilities.completeQueryParamsInit(cfg, params)
 	cfg.Q.autoAbilities = paramsMap
 	cfg.E.AutoAbilities.queryLookup = paramsMap
 }
@@ -2660,7 +2660,7 @@ func (cfg *Config) initEquipmentTablesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.EquipmentTables.Endpoint, cfg.E.EquipmentTables.subsections)
+	paramsMap := cfg.E.EquipmentTables.completeQueryParamsInit(cfg, params)
 	cfg.Q.equipmentTables = paramsMap
 	cfg.E.EquipmentTables.queryLookup = paramsMap
 }
@@ -2714,7 +2714,7 @@ func (cfg *Config) initEquipmentParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Equipment.Endpoint, cfg.E.Equipment.subsections)
+	paramsMap := cfg.E.Equipment.completeQueryParamsInit(cfg, params)
 	cfg.Q.equipment = paramsMap
 	cfg.E.Equipment.queryLookup = paramsMap
 }
@@ -2731,7 +2731,7 @@ func (cfg *Config) initCelestialWeaponsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.CelestialWeapons.Endpoint, cfg.E.CelestialWeapons.subsections)
+	paramsMap := cfg.E.CelestialWeapons.completeQueryParamsInit(cfg, params)
 	cfg.Q.celestialWeapons = paramsMap
 	cfg.E.CelestialWeapons.queryLookup = paramsMap
 }
@@ -2746,7 +2746,7 @@ func (cfg *Config) initStatsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Stats.Endpoint, cfg.E.Stats.subsections)
+	paramsMap := cfg.E.Stats.completeQueryParamsInit(cfg, params)
 	cfg.Q.stats = paramsMap
 	cfg.E.Stats.queryLookup = paramsMap
 }
@@ -2763,7 +2763,7 @@ func (cfg *Config) initOverdriveModesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.OverdriveModes.Endpoint, cfg.E.OverdriveModes.subsections)
+	paramsMap := cfg.E.OverdriveModes.completeQueryParamsInit(cfg, params)
 	cfg.Q.overdriveModes = paramsMap
 	cfg.E.OverdriveModes.queryLookup = paramsMap
 }
@@ -2830,7 +2830,7 @@ func (cfg *Config) initStatusConditionsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.StatusConditions.Endpoint, cfg.E.StatusConditions.subsections)
+	paramsMap := cfg.E.StatusConditions.completeQueryParamsInit(cfg, params)
 	cfg.Q.statusConditions = paramsMap
 	cfg.E.StatusConditions.queryLookup = paramsMap
 }
@@ -2847,7 +2847,7 @@ func (cfg *Config) initModifiersParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Modifiers.Endpoint, cfg.E.Modifiers.subsections)
+	paramsMap := cfg.E.Modifiers.completeQueryParamsInit(cfg, params)
 	cfg.Q.modifiers = paramsMap
 	cfg.E.Modifiers.queryLookup = paramsMap
 }
@@ -2863,7 +2863,7 @@ func (cfg *Config) initAgilityTierParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.AgilityTiers.Endpoint, cfg.E.AgilityTiers.subsections)
+	paramsMap := cfg.E.AgilityTiers.completeQueryParamsInit(cfg, params)
 	cfg.Q.agilityTiers = paramsMap
 	cfg.E.AgilityTiers.queryLookup = paramsMap
 }

@@ -45,12 +45,16 @@ func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse,
 	}
 
 	slotsTable := extractAbilitySlots(params, mon)
-	monMaxSlots := getEquipMaxSlots(slotsTable)
-
 	monDropChances := getMonsterDropChances(cfg, mon, monAbilities)
-	characterChances := calcCharChances(cfg, params, wantedAbilities, monAbilities, monMaxSlots)
 
-	matchChanceParams := MatchChanceParams{
+	ccp := CharChanceParams{
+		monMaxSlots:     getEquipMaxSlots(slotsTable),
+		wantedAbilities: wantedAbilities,
+		monAbilities:    monAbilities,
+	}
+	characterChances := ccp.calcChances(cfg, params)
+
+	mcp := MatchChanceParams{
 		mon:              mon,
 		wantedAbilities:  wantedAbilities,
 		monAbilities:     monAbilities,
@@ -58,14 +62,12 @@ func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse,
 		shotsTable:       mon.Equipment.AttachedAbilities.Chances,
 		characterChances: characterChances,
 	}
-
-	equipmentMatchChances := calcEquipmentMatchChances(cfg, params, matchChanceParams)
-	wantedEquipment := getWantedEquipment(params, wantedAbilities, matchChanceParams.slotsTable)
+	equipmentMatchChances := mcp.calcChances(cfg, params)
 
 	response := DropChanceResponse{
 		DropChanceFinBlow:     monDropChances.EquipmentDropChance * equipmentMatchChances.FinBlow,
 		DropChanceNoFinBlow:   monDropChances.EquipmentDropChance * equipmentMatchChances.NoFinBlow,
-		WantedEquipment:       wantedEquipment,
+		WantedEquipment:       getWantedEquipment(params, wantedAbilities, slotsTable),
 		EquipmentMatchChances: equipmentMatchChances,
 		CharacterChances:      characterChances,
 		MonsterChances:        monDropChances,

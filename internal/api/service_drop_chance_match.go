@@ -33,30 +33,29 @@ type MatchChanceParams struct {
 	characterChances CharacterChances
 }
 
-
-func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mcp MatchChanceParams) EquipmentMatchChances {
+func (p MatchChanceParams) calcChances(cfg *Config, params DropChanceParams) EquipmentMatchChances {
 	equipTypeChance := 0.5
-	wheels := createAbilityWheels(cfg, mcp.monAbilities, params)
+	wheels := createAbilityWheels(cfg, p.monAbilities, params)
 
 	var chanceFinBlow float64
 	var chanceNoFinBlow float64
 
 	for _, wheel := range wheels {
-		wantedIndices, err := getWantedIndices(mcp.wantedAbilities, wheel)
+		wantedIndices, err := getWantedIndices(p.wantedAbilities, wheel)
 		if err != nil {
 			continue
 		}
 
-		wheelWeightFinBlow, wheelWeightNoFinBlow := getWheelWeights(wheel, mcp.characterChances)
+		wheelWeightFinBlow, wheelWeightNoFinBlow := getWheelWeights(wheel, p.characterChances)
 
-		for _, slots := range mcp.slotsTable {
+		for _, slots := range p.slotsTable {
 			slotWeight := h.PercentageToDecimal(slots.Chance)
 
-			for _, shots := range mcp.shotsTable {
+			for _, shots := range p.shotsTable {
 				shotWeight := h.PercentageToDecimal(shots.Chance)
 
 				matchParams := EquipmentMatchParams{
-					WantedAbilities:   mcp.wantedAbilities,
+					WantedAbilities:   p.wantedAbilities,
 					WantedIndices:     wantedIndices,
 					OptionalAbilities: params.OptionalAbilities,
 					MinEmptySlots:     params.MinEmptySlots,
@@ -65,7 +64,7 @@ func calcEquipmentMatchChances(cfg *Config, params DropChanceParams, mcp MatchCh
 					AbilityWheel:      wheel,
 				}
 
-				matchChance := calcEquipmentMatchChance(matchParams)
+				matchChance := matchParams.calcChance()
 
 				chanceFinBlow += matchChance * wheelWeightFinBlow * slotWeight * shotWeight
 				chanceNoFinBlow += matchChance * wheelWeightNoFinBlow * slotWeight * shotWeight
