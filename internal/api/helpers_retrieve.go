@@ -11,7 +11,7 @@ import (
 func (i handlerInput[T, R, A]) handleMultiple(cfg *Config, r *http.Request, name string) (APIResourceList[A], error) {
 	dbIDs, err := i.getMultipleQuery(r.Context(), name)
 	if err != nil {
-		return APIResourceList[A]{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'.", i.resTypeSingle, name), err)
+		return APIResourceList[A]{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'", i.resTypeSingle, name), err)
 	}
 
 	return i.toResList(cfg, r, dbIDs)

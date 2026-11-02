@@ -16,7 +16,7 @@ func TestGetKeyItem(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/key-items/61",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "key-item with provided id '61' doesn't exist. max id: 60.",
+				expectedErr:    "key-item with provided id '61' doesn't exist. max id: 60",
 			},
 		},
 		{
@@ -131,7 +131,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?methods=a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'a' used for parameter 'methods'. allowed values: 'treasure', 'quest'.",
+				expectedErr:    "invalid value 'a' used for parameter 'methods'. allowed values: 'treasure', 'quest'",
 			},
 		},
 		{

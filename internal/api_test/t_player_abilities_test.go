@@ -16,7 +16,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities/103",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "player ability with provided id '103' doesn't exist. max id: 102.",
+				expectedErr:    "player ability with provided id '103' doesn't exist. max id: 102",
 			},
 		},
 		{

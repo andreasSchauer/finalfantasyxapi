@@ -15,14 +15,14 @@ func TestGetArenaCreation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/36",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "arena creation with provided id '36' doesn't exist. max id: 35.",
+				expectedErr:    "arena creation with provided id '36' doesn't exist. max id: 35",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "arena creation not found: 'a'.",
+				expectedErr:    "arena creation not found: 'a'",
 			},
 		},
 		{
@@ -96,7 +96,7 @@ func TestRetrieveArenaCreations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations?category=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value 'asd' used for parameter 'category'. use /api/arena-creations/parameters to see allowed values.",
+				expectedErr:    "invalid enum value 'asd' used for parameter 'category'. use /api/arena-creations/parameters to see allowed values",
 			},
 		},
 		{

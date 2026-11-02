@@ -15,7 +15,7 @@ func TestGetEquipmentTable(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/equipment-tables/164",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "equipment table with provided id '164' doesn't exist. max id: 163.",
+				expectedErr:    "equipment table with provided id '164' doesn't exist. max id: 163",
 			},
 		},
 		{

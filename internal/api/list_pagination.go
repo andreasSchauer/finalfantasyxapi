@@ -43,7 +43,7 @@ func createPaginatedList[T any](cfg *Config, r *http.Request, items []T) (ListPa
 	}
 
 	if offset >= size {
-		return ListParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("offset must be smaller than number of resources (%d).", size), err)
+		return ListParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("offset must be smaller than number of resources (%d)", size), err)
 	}
 
 	upperLimit := min(offset+limit, size)

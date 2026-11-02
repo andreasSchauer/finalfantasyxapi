@@ -14,28 +14,28 @@ func TestGetSidequest(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/11",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sidequest with provided id '11' doesn't exist. max id: 10.",
+				expectedErr:    "sidequest with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/11/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sidequest with provided id '11' doesn't exist. max id: 10.",
+				expectedErr:    "sidequest with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sidequest not found: 'a'.",
+				expectedErr:    "sidequest not found: 'a'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/10/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "subsection 'a' does not exist for endpoint /sidequests. supported subsections: 'subquests'.",
+				expectedErr:    "subsection 'a' does not exist for endpoint /sidequests. supported subsections: 'subquests'",
 			},
 		},
 		{

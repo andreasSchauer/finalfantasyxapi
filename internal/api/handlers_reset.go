@@ -14,7 +14,7 @@ func (cfg *Config) HandlerResetDatabase(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if cfg.platform != "dev" {
-		http.Error(w, "Reset is only allowed in dev environment.", http.StatusForbidden)
+		http.Error(w, "Reset is only allowed in dev environment", http.StatusForbidden)
 		return
 	}
 

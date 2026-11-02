@@ -11,7 +11,7 @@ import (
 func (i handlerInput[T, R, A]) parseSingleSegmentResource(segment string) (parseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {
-		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding.", err)
+		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding", err)
 	}
 
 	response, err := checkID(decoded, i.resTypeSingle, len(i.objLookup))
@@ -32,14 +32,14 @@ func (i handlerInput[T, R, A]) parseSingleSegmentResource(segment string) (parse
 		return response, nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s'.", i.resTypeSingle, segment), err)
+	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s'", i.resTypeSingle, segment), err)
 }
 
 // deals with a name/version path and returns a parseResponse with the id, if a match is found.
 func (i handlerInput[T, R, A]) parseNameVersionResource(name, versionStr string) (parseResponse, error) {
 	nameDecoded, err := url.PathUnescape(name)
 	if err != nil {
-		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding.", err)
+		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding", err)
 	}
 
 	versionPtr, err := parseVersionStr(versionStr)
@@ -58,12 +58,12 @@ func (i handlerInput[T, R, A]) parseNameVersionResource(name, versionStr string)
 func (i handlerInputEnums) parseSegment(cfg *Config, segment string) (EnumResponse, string, error) {
 	key, err := url.PathUnescape(segment)
 	if err != nil {
-		return EnumResponse{}, "", newHTTPError(http.StatusBadRequest, "invalid url encoding.", err)
+		return EnumResponse{}, "", newHTTPError(http.StatusBadRequest, "invalid url encoding", err)
 	}
 
 	enum, ok := i.lookup[key]
 	if !ok {
-		return EnumResponse{}, "", newHTTPError(http.StatusNotFound, fmt.Sprintf("enum '%s' not found.", key), nil)
+		return EnumResponse{}, "", newHTTPError(http.StatusNotFound, fmt.Sprintf("enum '%s' not found", key), nil)
 	}
 	enum.UsedByEndpoints = endpointsToURLs(cfg, enum.UsedByEndpointsInt)
 

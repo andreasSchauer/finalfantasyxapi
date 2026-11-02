@@ -17,7 +17,7 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid or corrupt payload in request body.",
+				expectedErr:    "invalid or corrupt payload in request body",
 				requestBody:    []byte(string("asjdasoi")),
 			},
 		},
@@ -26,7 +26,7 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "field 'text' can't be empty.",
+				expectedErr:    "field 'text' can't be empty",
 				requestBody: map[api.FieldName]any{
 					api.PfnDirection: "to-english",
 				},
@@ -37,7 +37,7 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "value 'bla' of field 'direction' is not a valid enum value. allowed values: 'to-al-bhed', 'to-english'.",
+				expectedErr:    "value 'bla' of field 'direction' is not a valid enum value. allowed values: 'to-al-bhed', 'to-english'",
 				requestBody: map[api.FieldName]any{
 					api.PfnText:      "father",
 					api.PfnDirection: "bla",
@@ -49,7 +49,7 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. all brackets must be closed.",
+				expectedErr:    "wrong format. all brackets must be closed",
 				requestBody: map[api.FieldName]any{
 					api.PfnText: "v[ath",
 				},
@@ -60,7 +60,7 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket.",
+				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket",
 				requestBody: map[api.FieldName]any{
 					api.PfnText: "v]ath",
 				},
@@ -71,7 +71,7 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket.",
+				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket",
 				requestBody: map[api.FieldName]any{
 					api.PfnText: "v[a[th",
 				},
@@ -82,7 +82,7 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. all brackets must be closed.",
+				expectedErr:    "wrong format. all brackets must be closed",
 				requestBody: map[api.FieldName]any{
 					api.PfnText: "v[ath",
 				},
@@ -93,7 +93,7 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid field: 'monster_id'.",
+				expectedErr:    "invalid field: 'monster_id'",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID: 1,
 				},
@@ -105,12 +105,12 @@ func TestAlBhed(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
 				requestBody: map[api.FieldName]any{
-					api.PfnText: "I am cool.",
+					api.PfnText: "I am cool",
 				},
 			},
 			AlBhedResponse: api.AlBhedResponse{
-				TranslatedText: "E ys luum.",
-				OriginalText:   "I am cool.",
+				TranslatedText: "E ys luum",
+				OriginalText:   "I am cool",
 				Direction:      "to-al-bhed",
 			},
 		},

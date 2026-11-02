@@ -15,7 +15,7 @@ func TestGetAllItem(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/all-items/173",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "all item with provided id '173' doesn't exist. max id: 172.",
+				expectedErr:    "all item with provided id '173' doesn't exist. max id: 172",
 			},
 		},
 		{

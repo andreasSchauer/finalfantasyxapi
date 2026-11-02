@@ -85,7 +85,7 @@ func getStatusQueryResistance(cfg *Config, r *http.Request) (StatusQueryResistan
 	res.MaxRate = int32(maxRate)
 
 	if res.MinRate > res.MaxRate {
-		return StatusQueryResistance{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid use of parameter '%s'. '%s' can't be higher than '%s'.", queryParamMinRate.Name, queryParamMinRate.Name, queryParamMaxRate.Name), nil)
+		return StatusQueryResistance{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid use of parameter '%s'. '%s' can't be higher than '%s'", queryParamMinRate.Name, queryParamMinRate.Name, queryParamMaxRate.Name), nil)
 	}
 
 	return res, nil

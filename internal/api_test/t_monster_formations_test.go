@@ -15,7 +15,7 @@ func TestGetMonsterFormation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/332",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "monster-formation with provided id '332' doesn't exist. max id: 331.",
+				expectedErr:    "monster-formation with provided id '332' doesn't exist. max id: 331",
 			},
 		},
 		{
@@ -141,7 +141,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?limit=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit={int|'max'}'.",
+				expectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit={int|'max'}'",
 			},
 		},
 		{

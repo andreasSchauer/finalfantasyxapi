@@ -14,7 +14,7 @@ func TestGetCharacterClass(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/character-classes/23",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "character class with provided id '23' doesn't exist. max id: 22.",
+				expectedErr:    "character class with provided id '23' doesn't exist. max id: 22",
 			},
 		},
 		{

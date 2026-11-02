@@ -15,7 +15,7 @@ func TestGetMix(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/mixes/65",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "mix with provided id '65' doesn't exist. max id: 64.",
+				expectedErr:    "mix with provided id '65' doesn't exist. max id: 64",
 			},
 		},
 		{

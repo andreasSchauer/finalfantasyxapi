@@ -14,7 +14,7 @@ func TestGetProperty(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/properties/14",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "property with provided id '14' doesn't exist. max id: 13.",
+				expectedErr:    "property with provided id '14' doesn't exist. max id: 13",
 			},
 		},
 		{

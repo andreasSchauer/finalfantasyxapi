@@ -25,7 +25,7 @@ func newParseResponse(id int32, name string) parseResponse {
 func parseID(idStr string, resourceType ResTypeSingle, maxID int) (parseResponse, error) {
 	response, err := checkID(idStr, resourceType, maxID)
 	if errors.Is(err, errNotAnID) {
-		return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s'.", idStr), err)
+		return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s'", idStr), err)
 	}
 	if err != nil {
 		return parseResponse{}, err
@@ -41,7 +41,7 @@ func checkID(idStr string, resourceType ResTypeSingle, maxID int) (parseResponse
 	}
 
 	if id > maxID || id <= 0 {
-		return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with provided id '%d' doesn't exist. max id: %d.", resourceType, id, maxID), err)
+		return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with provided id '%d' doesn't exist. max id: %d", resourceType, id, maxID), err)
 	}
 
 	return newParseResponse(int32(id), ""), nil
@@ -109,7 +109,7 @@ func parseVersionStr(versionStr string) (*int32, error) {
 
 	version, err := strconv.Atoi(versionStr)
 	if err != nil {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid version number: '%s'.", versionStr), err)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid version number: '%s'", versionStr), err)
 	}
 	versionInt32 := int32(version)
 	versionPtr = &versionInt32

@@ -51,23 +51,23 @@ func newHTTPError(code int, msg string, err error) HTTPError {
 }
 
 func newHTTPErrorDB(fetchType ResTypePlural, parentItem seeding.Lookupable, err error) HTTPError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", fetchType, parentItem), err)
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
 }
 
 func newHTTPErrorDBPairs(childResType, parentResType ResTypeSingle, err error) HTTPError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs.", childResType, parentResType), err)
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs", childResType, parentResType), err)
 }
 
 func newHTTPErrorDBOne(fetchType ResTypeSingle, parentItem seeding.Lookupable, err error) HTTPError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", fetchType, parentItem), err)
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
 }
 
 func newHTTPErrorDBFilter(fetchType ResTypePlural, queryParam QueryParam, err error) HTTPError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s for parameter '%s'.", fetchType, queryParam.Name), err)
+	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s for parameter '%s'", fetchType, queryParam.Name), err)
 }
 
 func newHTTPErrorFetchLimit(fetchLimit int) HTTPError {
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of inputs is %d.", fetchLimit), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of inputs is %d", fetchLimit), nil)
 }
 
 func newHTTPErrorAvailability(fetchType ResTypePlural, err error) HTTPError {
@@ -85,7 +85,7 @@ func handleHTTPError(w http.ResponseWriter, err error) bool {
 		return true
 	}
 
-	respondWithError(w, http.StatusInternalServerError, "an unexpected error occurred.", err)
+	respondWithError(w, http.StatusInternalServerError, "an unexpected error occurred", err)
 	return true
 }
 
@@ -114,7 +114,7 @@ func getFieldRangeErrStart(val int32, fieldName FieldName, intType string, isArr
 		errStart += fmt.Sprintf(" of field '%s'", fieldName)
 	}
 
-	errStart += " is out of range."
+	errStart += " is out of range"
 
 	return errStart
 }

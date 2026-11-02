@@ -33,5 +33,5 @@ func (q QueryParam) checkNameID[P seeding.Lookupable](query string, pResType Res
 		return resource.ID, nil
 	}
 
-	return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s' used for parameter '%s'.", pResType, query, q.Name), err)
+	return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s' used for parameter '%s'", pResType, query, q.Name), err)
 }

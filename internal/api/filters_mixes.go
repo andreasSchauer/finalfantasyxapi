@@ -21,7 +21,7 @@ func getMixesByItem(cfg *Config, r *http.Request, ctx context.Context, firstItem
 		SecondItemID: secondItemIDPtr,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by items.", i.resTypePlural), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by items", i.resTypePlural), err)
 	}
 
 	return dbIDs, nil

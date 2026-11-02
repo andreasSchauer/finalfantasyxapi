@@ -14,7 +14,7 @@ func (q QueryParam) parseText(r *http.Request) (string, error) {
 
 	decodedText, err := url.QueryUnescape(text)
 	if err != nil {
-		return "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid query encoding for parameter '%s'.", q.Name), err)
+		return "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid query encoding for parameter '%s'", q.Name), err)
 	}
 
 	return decodedText, nil

@@ -15,7 +15,7 @@ func TestGetOverdrive(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrives/125",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "overdrive with provided id '125' doesn't exist. max id: 124.",
+				expectedErr:    "overdrive with provided id '125' doesn't exist. max id: 124",
 			},
 		},
 		{

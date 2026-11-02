@@ -16,7 +16,7 @@ func TestGetPlayerUnit(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/player-units/19",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "player unit with provided id '19' doesn't exist. max id: 18.",
+				expectedErr:    "player unit with provided id '19' doesn't exist. max id: 18",
 			},
 		},
 		{

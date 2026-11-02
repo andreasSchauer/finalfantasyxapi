@@ -16,7 +16,7 @@ func TestGetMiscAbility(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/misc-abilities/25",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "misc ability with provided id '25' doesn't exist. max id: 24.",
+				expectedErr:    "misc ability with provided id '25' doesn't exist. max id: 24",
 			},
 		},
 		{
@@ -30,28 +30,28 @@ func TestGetMiscAbility(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/misc-abilities/2?ability_user=we",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "unknown player unit 'we' used for parameter 'ability_user'.",
+				expectedErr:    "unknown player unit 'we' used for parameter 'ability_user'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/misc-abilities/2?bomb_wpn=true",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'bomb_wpn'. when using parameter 'bomb_wpn', the following parameter(s) must be present: 'ability_user'.",
+				expectedErr:    "invalid usage of parameter 'bomb_wpn'. when using parameter 'bomb_wpn', the following parameter(s) must be present: 'ability_user'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/misc-abilities/1?ability_user=8&celestial_weapon=true",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "character seymour doesn't have a celestial weapon.",
+				expectedErr:    "character seymour doesn't have a celestial weapon",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/misc-abilities/1?ability_user=9&celestial_weapon=true",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "aeons don't use celestial weapons.",
+				expectedErr:    "aeons don't use celestial weapons",
 			},
 		},
 		{

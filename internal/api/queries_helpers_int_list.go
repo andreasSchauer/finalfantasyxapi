@@ -70,7 +70,7 @@ func (q QueryParam) checkIntRange(segment string) ([]int32, error) {
 		ints = slices.Concat(ints, newInts)
 
 	default:
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", q.Name, segment, q.Usage), nil)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", q.Name, segment, q.Usage), nil)
 	}
 
 	return ints, nil

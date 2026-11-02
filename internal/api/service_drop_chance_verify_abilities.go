@@ -12,14 +12,14 @@ import (
 
 func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seeding.Monster) ([]seeding.AutoAbility, []seeding.EquipmentDrop, error) {
 	if mon.Equipment == nil {
-		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' doesn't drop equipment.", mon), nil)
+		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' doesn't drop equipment", mon), nil)
 	}
 
 	monMaxSlots := getMonMaxSlots(mon)
 	reqSlots := params.GetRequiredSlots()
 
 	if reqSlots > monMaxSlots {
-		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("query requires %d slots, but the max amount of slots, monster '%s' can drop, is %d.", reqSlots, mon, monMaxSlots), nil)
+		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("query requires %d slots, but the max amount of slots, monster '%s' can drop, is %d", reqSlots, mon, monMaxSlots), nil)
 	}
 
 	params, autoAbilities, err := vfWantedAutoAbilities(cfg, params)
@@ -61,14 +61,14 @@ func vfWantedAutoAbilities(cfg *Config, params DropChanceParams) (DropChancePara
 		}
 
 		if *params.EquipType != ability.Type {
-			return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, "weapon- and armor-abilities can't be combined.", nil)
+			return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, "weapon- and armor-abilities can't be combined", nil)
 		}
 
 		autoAbilities = append(autoAbilities, ability)
 	}
 
 	if params.EquipType == nil {
-		return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("can't discern equipment's type. use '%s' to discern the type, or set it manually by using '%s'.", PfnAutoAbilities, PfnEquipType), nil)
+		return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("can't discern equipment's type. use '%s' to discern the type, or set it manually by using '%s'", PfnAutoAbilities, PfnEquipType), nil)
 	}
 
 	return params, autoAbilities, nil
@@ -98,7 +98,7 @@ func vfAutoAbilitiesDropped(wantedAutoAbilities []seeding.AutoAbility, monsterAb
 		}
 
 		if !isPresent {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s' (%d). it only drops the following auto-abilities: %s.", mon, ability.Name, ability.ID, formatMonAutoAbilities(mon)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s' (%d). it only drops the following auto-abilities: %s", mon, ability.Name, ability.ID, formatMonAutoAbilities(mon)), nil)
 		}
 	}
 

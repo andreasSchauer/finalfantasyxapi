@@ -17,7 +17,7 @@ func TestParameters(t *testing.T) {
 				expectedStatus: http.StatusBadRequest,
 				endpoint:       testCfg.E.Areas.Endpoint,
 				handler:        testCfg.HandleAreas,
-				expectedErr:    "parameter 'ass' does not exist for endpoint /areas. use /api/areas/parameters for available parameters.",
+				expectedErr:    "parameter 'ass' does not exist for endpoint /areas. use /api/areas/parameters for available parameters",
 			},
 		},
 		{
@@ -26,7 +26,7 @@ func TestParameters(t *testing.T) {
 				expectedStatus: http.StatusBadRequest,
 				endpoint:       testCfg.E.Areas.Endpoint,
 				handler:        testCfg.HandleAreas,
-				expectedErr:    "only the following default parameters are allowed when using /api/areas/parameters: 'limit', 'offset'.",
+				expectedErr:    "only the following default parameters are allowed when using /api/areas/parameters: 'limit', 'offset'",
 			},
 		},
 		{
@@ -35,7 +35,7 @@ func TestParameters(t *testing.T) {
 				expectedStatus: http.StatusBadRequest,
 				endpoint:       testCfg.E.Enums.Endpoint,
 				handler:        testCfg.HandleEnums,
-				expectedErr:    "parameter 'ass' does not exist for endpoint /enums. use /api/enums/parameters for available parameters.",
+				expectedErr:    "parameter 'ass' does not exist for endpoint /enums. use /api/enums/parameters for available parameters",
 			},
 		},
 		{

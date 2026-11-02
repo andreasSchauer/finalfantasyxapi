@@ -15,21 +15,21 @@ func TestGetLocation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/0",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "location with provided id '0' doesn't exist. max id: 26.",
+				expectedErr:    "location with provided id '0' doesn't exist. max id: 26",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/27",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "location with provided id '27' doesn't exist. max id: 26.",
+				expectedErr:    "location with provided id '27' doesn't exist. max id: 26",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "location not found: 'a'.",
+				expectedErr:    "location not found: 'a'",
 			},
 		},
 		{

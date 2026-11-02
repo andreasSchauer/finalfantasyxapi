@@ -35,7 +35,7 @@ func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName Que
 		// lookup element to find out the opposite element
 		elementLookup, err := seeding.GetResource(elementName, cfg.L.Elements)
 		if err != nil {
-			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get element '%s'.", elementName), err)
+			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get element '%s'", elementName), err)
 		}
 		oppositeElementName := *elementLookup.OppositeElement // safe, because holy continues
 
@@ -72,13 +72,13 @@ func parseOmnisQuery(cfg *Config, r *http.Request, queryName QueryParamName) (ma
 	circleCounts := make(map[string]int)
 
 	if len(query) != 4 {
-		return nil, newHTTPError(http.StatusBadRequest, "invalid input. omnis_elements must contain a combination of exactly four letters. valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).", nil)
+		return nil, newHTTPError(http.StatusBadRequest, "invalid input. omnis_elements must contain a combination of exactly four letters. valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)", nil)
 	}
 
 	for _, char := range query {
 		element, ok := elements[char]
 		if !ok {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid letter '%c' for omnis_elements. use any four-letter-combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).", char), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid letter '%c' for omnis_elements. use any four-letter-combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)", char), nil)
 		}
 
 		circleCounts[element]++

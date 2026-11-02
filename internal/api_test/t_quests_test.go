@@ -15,7 +15,7 @@ func TestGetQuest(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/quests/99",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "quest with provided id '99' doesn't exist. max id: 98.",
+				expectedErr:    "quest with provided id '99' doesn't exist. max id: 98",
 			},
 		},
 		{

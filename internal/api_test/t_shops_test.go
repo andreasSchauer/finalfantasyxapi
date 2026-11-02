@@ -16,21 +16,21 @@ func TestGetShop(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/shops/37",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "shop with provided id '37' doesn't exist. max id: 36.",
+				expectedErr:    "shop with provided id '37' doesn't exist. max id: 36",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/shops/34/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "subsection 'a' does not exist for endpoint /shops. supported subsections: 'simple'.",
+				expectedErr:    "subsection 'a' does not exist for endpoint /shops. supported subsections: 'simple'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/shops/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'a'.",
+				expectedErr:    "invalid id 'a'",
 			},
 		},
 		{

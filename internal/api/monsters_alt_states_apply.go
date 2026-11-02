@@ -90,7 +90,7 @@ func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName QueryPar
 	}
 
 	if len(mon.AlteredStates) == 0 {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states.", mon.String()), nil)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states", mon.String()), nil)
 	}
 
 	id, err := queryParam.parseIDVal(query, len(mon.AlteredStates))
@@ -105,11 +105,11 @@ func vpAltStateID(mon Monster, altStateID int) error {
 	altStateAmt := len(mon.AlteredStates)
 
 	if altStateAmt == 0 {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states.", mon.String()), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states", mon.String()), nil)
 	}
 
 	if altStateID > altStateAmt || altStateID <= 0 {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided alt state id '%d' used for %s is out of range. max id: %d.", altStateID, mon.String(), altStateAmt), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided alt state id '%d' used for %s is out of range. max id: %d", altStateID, mon.String(), altStateAmt), nil)
 	}
 
 	return nil

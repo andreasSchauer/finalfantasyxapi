@@ -14,7 +14,7 @@ func TestRetrieveEndpoints(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/endpoints/1",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. '/endpoints' doesn't support single-resource requests.",
+				expectedErr:    "wrong format. '/endpoints' doesn't support single-resource requests",
 			},
 		},
 		{

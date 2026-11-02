@@ -13,7 +13,7 @@ func TestGetEnum(t *testing.T) {
 		{
 			requestURL:     "/api/enums/1/",
 			expectedStatus: http.StatusNotFound,
-			expectedErr:    "enum '1' not found.",
+			expectedErr:    "enum '1' not found",
 		},
 		{
 			requestURL:     "/api/enums/1/1",
@@ -33,12 +33,12 @@ func TestGetEnum(t *testing.T) {
 		{
 			requestURL:     "/api/enums/ability_type?ass=1",
 			expectedStatus: http.StatusBadRequest,
-			expectedErr:    "parameter 'ass' does not exist for endpoint /enums. use /api/enums/parameters for available parameters.",
+			expectedErr:    "parameter 'ass' does not exist for endpoint /enums. use /api/enums/parameters for available parameters",
 		},
 		{
 			requestURL:     "/api/enums/ability_type?limit=1",
 			expectedStatus: http.StatusBadRequest,
-			expectedErr:    "invalid usage of parameter 'limit'. parameter 'limit' can only be used with list-endpoints.",
+			expectedErr:    "invalid usage of parameter 'limit'. parameter 'limit' can only be used with list-endpoints",
 		},
 		{
 			requestURL:     "/api/enums/ability_type",
@@ -56,7 +56,7 @@ func TestRetrieveEnums(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/enums/ability_type?ass=1",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "parameter 'ass' does not exist for endpoint /enums. use /api/enums/parameters for available parameters.",
+				expectedErr:    "parameter 'ass' does not exist for endpoint /enums. use /api/enums/parameters for available parameters",
 			},
 		},
 		{

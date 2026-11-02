@@ -19,7 +19,7 @@ type fieldVerifyer[T any] struct {
 
 func (v fieldVerifyer[T]) required() error {
 	if !v.valIsPresent && v.doc.Required {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be empty.", v.fieldName), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be empty", v.fieldName), nil)
 	}
 
 	return nil
@@ -32,7 +32,7 @@ func (v fieldVerifyer[T]) conflictsWith() error {
 
 	for _, conflictingField := range v.doc.ConflictsWith {
 		if v.valIsPresent && v.pv.hasVal(conflictingField) {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be used in combination with field '%s'.", v.fieldName, v.pv.paramsRules[conflictingField].Doc.Field), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be used in combination with field '%s'", v.fieldName, v.pv.paramsRules[conflictingField].Doc.Field), nil)
 		}
 	}
 
@@ -50,7 +50,7 @@ func (v fieldVerifyer[T]) requiredOr() error {
 
 	requiredFields := append(v.doc.RequiredOr, v.fieldName)
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: %s.", formatPfnSlice(requiredFields)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: %s", formatPfnSlice(requiredFields)), nil)
 }
 
 func (v fieldVerifyer[T]) requiresAll() error {
@@ -59,7 +59,7 @@ func (v fieldVerifyer[T]) requiresAll() error {
 	}
 
 	if slices.ContainsFunc(v.doc.RequiresAll, v.pv.hasNoVal) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires the following fields to have a value: %s.", v.fieldName, formatPfnSlice(v.doc.RequiresAll)), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires the following fields to have a value: %s", v.fieldName, formatPfnSlice(v.doc.RequiresAll)), nil)
 	}
 
 	return nil
@@ -74,7 +74,7 @@ func (v fieldVerifyer[T]) requiresOne() error {
 		return nil
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires one of the following fields to have a value: %s.", v.fieldName, formatPfnSlice(v.doc.RequiresOne)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires one of the following fields to have a value: %s", v.fieldName, formatPfnSlice(v.doc.RequiresOne)), nil)
 }
 
 func (v fieldVerifyer[T]) allowedIDs() error {
@@ -88,7 +88,7 @@ func (v fieldVerifyer[T]) allowedIDs() error {
 	}
 
 	if !slices.Contains(v.doc.AllowedIDs, id) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following ids: %s.", v.fieldName, h.FormatIntSlice(v.doc.AllowedIDs)), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following ids: %s", v.fieldName, h.FormatIntSlice(v.doc.AllowedIDs)), nil)
 	}
 
 	return nil
@@ -115,17 +115,17 @@ func (v fieldVerifyer[T]) allowedIDValPairs() error {
 		}
 
 		if value > entry.MaxVal || value <= 0 {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is out of range for id '%d'. max val: %d. allowed vals: %s.", value, v.fieldName, id, entry.MaxVal, h.IntSliceToString(entry.Values)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is out of range for id '%d'. max val: %d. allowed vals: %s", value, v.fieldName, id, entry.MaxVal, h.IntSliceToString(entry.Values)), nil)
 		}
 
 		if !slices.Contains(entry.Values, value) {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is not available for id '%d'. allowed vals: %s.", value, v.fieldName, id, h.IntSliceToString(entry.Values)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided value '%d' used for '%s' is not available for id '%d'. allowed vals: %s", value, v.fieldName, id, h.IntSliceToString(entry.Values)), nil)
 		}
 
 		return nil
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s.", v.fieldName, formatAllowedIDValPairs(v.doc.AllowedIDValPairs)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s", v.fieldName, formatAllowedIDValPairs(v.doc.AllowedIDValPairs)), nil)
 }
 
 func (v fieldVerifyer[T]) assignDefaultVal() T {

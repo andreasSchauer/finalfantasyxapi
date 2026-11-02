@@ -15,7 +15,7 @@ func TestGetAgilityTier(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/agility-tiers/20",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "agility tier with provided id '20' doesn't exist. max id: 19.",
+				expectedErr:    "agility tier with provided id '20' doesn't exist. max id: 19",
 			},
 		},
 		{

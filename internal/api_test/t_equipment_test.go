@@ -15,14 +15,14 @@ func TestGetEquipment(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/1053",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "equipment with provided id '1053' doesn't exist. max id: 1052.",
+				expectedErr:    "equipment with provided id '1053' doesn't exist. max id: 1052",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/1?table=4",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value '4' used for parameter 'table'. 'table' can range from 1 to 3 for this resource.",
+				expectedErr:    "invalid value '4' used for parameter 'table'. 'table' can range from 1 to 3 for this resource",
 			},
 		},
 		{

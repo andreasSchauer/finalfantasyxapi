@@ -19,7 +19,7 @@ func getMonstersByElemResists(cfg *Config, r *http.Request, ctx context.Context,
 
 	dbIDs, err := cfg.db.GetMonsterIDsByElemResistIDs(ctx, ids)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by elemental affinities.", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by elemental affinities", err)
 	}
 
 	return dbIDs, nil
@@ -36,7 +36,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 	for _, pair := range eaPairs {
 		elementStr, affinityStr, found := strings.Cut(pair, ":")
 		if !found {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, elementStr, queryParam.Usage), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}
 
 		elementID, err := queryParam.checkNameID(elementStr, cfg.E.Elements.resTypeSingle, cfg.L.Elements)
@@ -44,7 +44,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			return nil, err
 		}
 		if elemMap[elementID] {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of id '%d' for parameter '%s'. each element can only be used once.", elementID, queryParam.Name), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("duplicate use of id '%d' for parameter '%s'. each element can only be used once", elementID, queryParam.Name), nil)
 		}
 		elemMap[elementID] = true
 
@@ -80,7 +80,7 @@ func getMonstersByStatusResists(cfg *Config, r *http.Request, ctx context.Contex
 		MinResistance:      resistance,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't filter monsters by status conditions.", err)
+		return nil, newHTTPError(http.StatusInternalServerError, "couldn't filter monsters by status conditions", err)
 	}
 
 	return dbIDs, nil
@@ -112,7 +112,7 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, ctx context.Context,
 		IsForced:      isForced,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%d'.", i.resTypePlural, id), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%d'", i.resTypePlural, id), err)
 	}
 
 	return dbIDs, nil

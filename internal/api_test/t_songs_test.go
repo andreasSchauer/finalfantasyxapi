@@ -15,7 +15,7 @@ func TestGetSong(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/songs/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "song not found: 'a'.",
+				expectedErr:    "song not found: 'a'",
 			},
 		},
 		{
@@ -29,7 +29,7 @@ func TestGetSong(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/songs/2/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "endpoint /songs doesn't have any subsections.",
+				expectedErr:    "endpoint /songs doesn't have any subsections",
 			},
 		},
 		{

@@ -33,7 +33,7 @@ func (v paramsVerifyer) checkFields() error {
 	for fieldName := range v.userValues {
 		_, exists := v.paramsRules[fieldName]
 		if !exists {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid field: '%s'.", fieldName), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid field: '%s'", fieldName), nil)
 		}
 	}
 
@@ -187,7 +187,7 @@ func (v paramsVerifyer) idArray(arr []int32, fieldName FieldName) ([]int32, erro
 		errStart := fmt.Sprintf("index %d of array at field '%s'", i, fieldName)
 
 		if isDupe[val] {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s: array of field '%s' can't have duplicate ids.", errStart, fieldName), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s: array of field '%s' can't have duplicate ids", errStart, fieldName), nil)
 		}
 
 		arr[i], err = vfArrayChildID(v, val, fieldName)

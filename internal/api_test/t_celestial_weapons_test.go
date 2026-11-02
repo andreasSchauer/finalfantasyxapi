@@ -14,7 +14,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/celestial-weapons/8",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "celestial weapon with provided id '8' doesn't exist. max id: 7.",
+				expectedErr:    "celestial weapon with provided id '8' doesn't exist. max id: 7",
 			},
 		},
 		{

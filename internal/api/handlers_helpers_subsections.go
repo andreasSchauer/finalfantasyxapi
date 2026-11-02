@@ -16,13 +16,13 @@ func (i handlerInput[T, R, A]) handleSubsection(cfg *Config, w http.ResponseWrit
 
 	subsection, ok := i.subsections[SectionName(sectionName)]
 	if !ok {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s.", sectionName, i.Endpoint, formatSectionNames(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s", sectionName, i.Endpoint, formatSectionNames(i.subsections)), nil)
 		return
 	}
 
 	q := r.URL.Query()
 	if len(q) > 0 {
-		respondWithError(w, http.StatusBadRequest, "query parameters can't be used in combination with subsections.", nil)
+		respondWithError(w, http.StatusBadRequest, "query parameters can't be used in combination with subsections", nil)
 		return
 	}
 
@@ -104,7 +104,7 @@ func (i handlerInput[T, R, A]) handleSimple(cfg *Config, w http.ResponseWriter, 
 
 	_, ok := i.subsections[SnSimple]
 	if !ok {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("simple view is not available for endpoint /%s.", i.Endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("simple view is not available for endpoint /%s", i.Endpoint), nil)
 		return
 	}
 

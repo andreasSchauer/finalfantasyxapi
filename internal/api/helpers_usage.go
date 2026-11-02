@@ -20,7 +20,7 @@ func (i handlerInput[T, R, A]) compileUsage() string {
 	if i.subsections != nil {
 		sectionUsage := getUsagePath("/id/{subsection}", i.Endpoint)
 		sectionStr := formatSectionNames(i.subsections)
-		usage = fmt.Sprintf("%s, '%s'. supported subsections: %s.", usage, sectionUsage, sectionStr)
+		usage = fmt.Sprintf("%s, '%s'. supported subsections: %s", usage, sectionUsage, sectionStr)
 	}
 
 	return usage

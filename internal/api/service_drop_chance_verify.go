@@ -77,10 +77,10 @@ func vfRequiredSlotAmount(params DropChanceParams) error {
 
 	if requiredSlots > totalSlots {
 		if params.TotalSlots == nil {
-			return newHTTPError(http.StatusBadRequest, "the amount of auto-abilities and empty slots combined can't exceed 4.", nil)
+			return newHTTPError(http.StatusBadRequest, "the amount of auto-abilities and empty slots combined can't exceed 4", nil)
 		}
 
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("the amount of auto-abilities and empty slots combined (%d) can't exceed the given total amount of slots (%d).", requiredSlots, totalSlots), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("the amount of auto-abilities and empty slots combined (%d) can't exceed the given total amount of slots (%d)", requiredSlots, totalSlots), nil)
 	}
 
 	return nil
@@ -92,7 +92,7 @@ func vfCharInParty(params DropChanceParams) error {
 	}
 
 	if !slices.Contains(params.PartyMembers, *params.CharacterID) {
-		return newHTTPError(http.StatusBadRequest, "character must be in the party to be eligible for receiving equipment.", nil)
+		return newHTTPError(http.StatusBadRequest, "character must be in the party to be eligible for receiving equipment", nil)
 	}
 
 	return nil

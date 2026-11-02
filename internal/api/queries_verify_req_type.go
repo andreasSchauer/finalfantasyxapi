@@ -60,7 +60,7 @@ func (q queryVerifyer[T]) allowedIDs(id int32) error {
 		}
 	}
 	if !allowedIDPresent {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%d'. parameter '%s' can only be used with ids: %s.", id, q.param.Name, h.FormatIntSlice(q.param.AllowedIDs)), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%d'. parameter '%s' can only be used with ids: %s", id, q.param.Name, h.FormatIntSlice(q.param.AllowedIDs)), nil)
 	}
 
 	return nil
@@ -78,7 +78,7 @@ func (q queryVerifyer[T]) list() error {
 // checks, if a query param that is meant for a specific segment is used in the correct context, for example /endpoint/simple. returns an error, if the given segment doesn't match with the requested segment.
 func (q queryVerifyer[T]) subsection() error {
 	if q.param.ForSegment != nil && !segmentsMatch(q.param.ForSegment, q.segment) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in the following format: '/api/%s/%s%s'.", q.param.Name, q.param.Name, q.endpoint, *q.param.ForSegment, q.param.Usage), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in the following format: '/api/%s/%s%s'", q.param.Name, q.param.Name, q.endpoint, *q.param.ForSegment, q.param.Usage), nil)
 	}
 
 	return nil

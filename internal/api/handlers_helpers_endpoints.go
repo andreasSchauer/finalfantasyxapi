@@ -121,12 +121,12 @@ func (i handlerInput[T, R, A]) handleSubsections(cfg *Config, w http.ResponseWri
 
 	// /ep/2/2
 	case sectionIsInt:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid subsection '%s'. subsection can't be an integer. use /api/%s/sections for valid subsections.", posSection, i.Endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid subsection '%s'. subsection can't be an integer. use /api/%s/sections for valid subsections", posSection, i.Endpoint), nil)
 		return
 
 	// /ep/2/a (no subsections)
 	case i.subsections == nil:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("endpoint /%s doesn't have any subsections.", i.Endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("endpoint /%s doesn't have any subsections", i.Endpoint), nil)
 		return
 
 	// /ep/2/a (subsections)
@@ -149,7 +149,7 @@ func (i handlerInput[T, R, A]) handleSubOrNameVer(cfg *Config, w http.ResponseWr
 		return
 
 	case subsectionIsInt:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid subsection '%s'. subsection can't be an integer. use /api/%s/sections for available subsections.", segments[1], i.Endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("invalid subsection '%s'. subsection can't be an integer. use /api/%s/sections for available subsections", segments[1], i.Endpoint), nil)
 		return
 
 	default:
@@ -225,7 +225,7 @@ func (i handlerInputEndpoints) handleSections(cfg *Config, w http.ResponseWriter
 		return
 	}
 
-	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests.", nil)
+	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests", nil)
 }
 
 func (i handlerInputService[P, R]) handleBody(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
@@ -241,7 +241,7 @@ func (i handlerInputService[P, R]) handleBody(cfg *Config, w http.ResponseWriter
 		return
 	}
 
-	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'.", i.Endpoint), nil)
+	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'", i.Endpoint), nil)
 }
 
 func (i handlerInputService[P, R]) handleBodySections(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
@@ -251,7 +251,7 @@ func (i handlerInputService[P, R]) handleBodySections(cfg *Config, w http.Respon
 	}
 
 	if segments[0] != string(SnBody) {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'.", i.Endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'", i.Endpoint), nil)
 		return
 	}
 
@@ -265,7 +265,7 @@ func (i handlerInputService[P, R]) handleBodySections(cfg *Config, w http.Respon
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s/body' only supports the following sections: 'docs', 'samples'.", i.Endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s/body' only supports the following sections: 'docs', 'samples'", i.Endpoint), nil)
 		return
 	}
 }

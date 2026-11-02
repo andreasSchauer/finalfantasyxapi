@@ -15,21 +15,21 @@ func TestGetSublocation(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/0",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sublocation with provided id '0' doesn't exist. max id: 43.",
+				expectedErr:    "sublocation with provided id '0' doesn't exist. max id: 43",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/44",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sublocation with provided id '44' doesn't exist. max id: 43.",
+				expectedErr:    "sublocation with provided id '44' doesn't exist. max id: 43",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sublocation not found: 'a'.",
+				expectedErr:    "sublocation not found: 'a'",
 			},
 		},
 		{

@@ -16,7 +16,7 @@ func TestGetEnemyAbility(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/enemy-abilities/444",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "enemy ability with provided id '444' doesn't exist. max id: 443.",
+				expectedErr:    "enemy ability with provided id '444' doesn't exist. max id: 443",
 			},
 		},
 		{

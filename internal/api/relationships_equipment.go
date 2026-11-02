@@ -91,7 +91,7 @@ func getTableIndex(r *http.Request, queryParam QueryParam, maxID int) (int, erro
 	}
 
 	if tableIdx <= 0 || tableIdx > maxID {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%d' used for parameter '%s'. '%s' can range from 1 to %d for this resource.", tableIdx, queryParam.Name, queryParam.Name, maxID), nil)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%d' used for parameter '%s'. '%s' can range from 1 to %d for this resource", tableIdx, queryParam.Name, queryParam.Name, maxID), nil)
 	}
 	tableIdx -= 1
 

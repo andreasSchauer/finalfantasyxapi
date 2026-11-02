@@ -16,7 +16,7 @@ func TestGetTriggerCommand(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/trigger-commands/13",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "trigger command with provided id '13' doesn't exist. max id: 12.",
+				expectedErr:    "trigger command with provided id '13' doesn't exist. max id: 12",
 			},
 		},
 		{

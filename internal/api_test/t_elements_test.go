@@ -15,7 +15,7 @@ func TestGetElement(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/elements/6",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "element with provided id '6' doesn't exist. max id: 5.",
+				expectedErr:    "element with provided id '6' doesn't exist. max id: 5",
 			},
 		},
 		{

@@ -14,7 +14,7 @@ func TestGetStatusCondition(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/status-conditions/46",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "status condition with provided id '46' doesn't exist. max id: 45.",
+				expectedErr:    "status condition with provided id '46' doesn't exist. max id: 45",
 			},
 		},
 		{

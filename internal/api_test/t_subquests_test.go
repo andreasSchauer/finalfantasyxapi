@@ -15,21 +15,21 @@ func TestGetSubquest(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/89",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "subquest with provided id '89' doesn't exist. max id: 88.",
+				expectedErr:    "subquest with provided id '89' doesn't exist. max id: 88",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/10/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "endpoint /subquests doesn't have any subsections.",
+				expectedErr:    "endpoint /subquests doesn't have any subsections",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'a'.",
+				expectedErr:    "invalid id 'a'",
 			},
 		},
 		{

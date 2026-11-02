@@ -16,14 +16,14 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/308",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "monster with provided id '308' doesn't exist. max id: 307.",
+				expectedErr:    "monster with provided id '308' doesn't exist. max id: 307",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "monster not found: 'a'.",
+				expectedErr:    "monster not found: 'a'",
 			},
 		},
 		{
@@ -37,105 +37,105 @@ func TestGetMonster(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/1/?ids=1",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'.",
+				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/a/2/3",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. usage: '/api/monsters', '/api/monsters/{id}', '/api/monsters/{name}', '/api/monsters/{name}/{version}', '/api/monsters/id/{subsection}'. supported subsections: 'abilities', 'areas', 'monster-formations', 'simple'.",
+				expectedErr:    "wrong format. usage: '/api/monsters', '/api/monsters/{id}', '/api/monsters/{name}', '/api/monsters/{name}/{version}', '/api/monsters/id/{subsection}'. supported subsections: 'abilities', 'areas', 'monster-formations', 'simple'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/211?has_overdrive=true",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'has_overdrive'. parameter 'has_overdrive' can only be used with list-endpoints.",
+				expectedErr:    "invalid usage of parameter 'has_overdrive'. parameter 'has_overdrive' can only be used with list-endpoints",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/1?altered_state=1",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "monster 'sinscale - 1 (dream zanarkand)' has no altered states.",
+				expectedErr:    "monster 'sinscale - 1 (dream zanarkand)' has no altered states",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/105?altered_state=5",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '5' used for parameter 'altered_state' is out of range. max id: 1.",
+				expectedErr:    "provided id '5' used for parameter 'altered_state' is out of range. max id: 1",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/210?omnis_elements=iifii",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id '210'. parameter 'omnis_elements' can only be used with ids: '211'.",
+				expectedErr:    "invalid id '210'. parameter 'omnis_elements' can only be used with ids: '211'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/211?omnis_elements=iifii",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input. omnis_elements must contain a combination of exactly four letters. valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).",
+				expectedErr:    "invalid input. omnis_elements must contain a combination of exactly four letters. valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/211?omnis_elements=iftw",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid letter 't' for omnis_elements. use any four-letter-combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water).",
+				expectedErr:    "invalid letter 't' for omnis_elements. use any four-letter-combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/169?kimahri_stats=hp:1000",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id '169'. parameter 'kimahri_stats' can only be used with ids: '167', '168'.",
+				expectedErr:    "invalid id '169'. parameter 'kimahri_stats' can only be used with ids: '167', '168'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/168?kimahri_stats=hp:100000",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "hp in 'kimahri_stats' can't be higher than 99999.",
+				expectedErr:    "hp in 'kimahri_stats' can't be higher than 99999",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/168?kimahri_stats=hp-3000,strength:255",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input for parameter 'kimahri_stats': 'hp-3000' . usage: '?kimahri_stats={stat}:{int},...'.",
+				expectedErr:    "invalid input for parameter 'kimahri_stats': 'hp-3000' . usage: '?kimahri_stats={stat}:{int},...'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/167?kimahri_stats=defense:5",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid stat 'defense' in 'kimahri_stats'. 'kimahri_stats' only uses 'hp', 'strength', 'magic', 'agility'.",
+				expectedErr:    "invalid stat 'defense' in 'kimahri_stats'. 'kimahri_stats' only uses 'hp', 'strength', 'magic', 'agility'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/1?yuna_stats=hp:200",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id '1'. parameter 'yuna_stats' can only be used with ids: '216', '217', '218', '219', '220', '221', '222', '223', '224', '225'.",
+				expectedErr:    "invalid id '1'. parameter 'yuna_stats' can only be used with ids: '216', '217', '218', '219', '220', '221', '222', '223', '224', '225'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/216?yuna_stats=hp:999999",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "hp in 'yuna_stats' can't be higher than 99999.",
+				expectedErr:    "hp in 'yuna_stats' can't be higher than 99999",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/216?yuna_stats=evasion:999999",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "evasion in 'yuna_stats' can't be higher than 255.",
+				expectedErr:    "evasion in 'yuna_stats' can't be higher than 255",
 			},
 		},
 		{
@@ -1298,119 +1298,119 @@ func TestRetrieveMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?limit=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit={int|'max'}'.",
+				expectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit={int|'max'}'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?ids=1,33,22,68,",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'.",
+				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental_resists=weak",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input for parameter 'elemental_resists': 'weak'. usage: '?elemental_resists={element|id}:{affinity|id},...'.",
+				expectedErr:    "invalid input for parameter 'elemental_resists': 'weak'. usage: '?elemental_resists={element|id}:{affinity|id},...'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental_resists=fire-weak,water:absorb",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input for parameter 'elemental_resists': 'fire-weak'. usage: '?elemental_resists={element|id}:{affinity|id},...'.",
+				expectedErr:    "invalid input for parameter 'elemental_resists': 'fire-weak'. usage: '?elemental_resists={element|id}:{affinity|id},...'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/?omnis_elements=ffff",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'omnis_elements'. parameter 'omnis_elements' can only be used with single-resource-endpoints.",
+				expectedErr:    "invalid usage of parameter 'omnis_elements'. parameter 'omnis_elements' can only be used with single-resource-endpoints",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental_resists=weak:fire",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "unknown element 'weak' used for parameter 'elemental_resists'.",
+				expectedErr:    "unknown element 'weak' used for parameter 'elemental_resists'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?elemental_resists=fire:weak,fire:neutral",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "duplicate use of id '1' for parameter 'elemental_resists'. each element can only be used once.",
+				expectedErr:    "duplicate use of id '1' for parameter 'elemental_resists'. each element can only be used once",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?status_resists=4&resistance=350",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value '350' used for parameter 'resistance'. value must be an integer ranging from 1 to 254.",
+				expectedErr:    "invalid value '350' used for parameter 'resistance'. value must be an integer ranging from 1 to 254",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?status_resists=4&resistance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'frank' used for parameter 'resistance'. usage: '?resistance={int|'immune'}'.",
+				expectedErr:    "invalid value 'frank' used for parameter 'resistance'. usage: '?resistance={int|'immune'}'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?resistance=50",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'resistance'. when using parameter 'resistance', the following parameter(s) must be present: 'status_resists'.",
+				expectedErr:    "invalid usage of parameter 'resistance'. when using parameter 'resistance', the following parameter(s) must be present: 'status_resists'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?methods=steal",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'methods'. when using parameter 'methods', the following parameter(s) must be present: 'item'.",
+				expectedErr:    "invalid usage of parameter 'methods'. when using parameter 'methods', the following parameter(s) must be present: 'item'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?item=22&methods=steals",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'steals' used for parameter 'methods'. allowed values: 'steal', 'drop', 'bribe', 'other'.",
+				expectedErr:    "invalid value 'steals' used for parameter 'methods'. allowed values: 'steal', 'drop', 'bribe', 'other'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?item=asf&methods=drop",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'asf' used for parameter 'item'.",
+				expectedErr:    "invalid id 'asf' used for parameter 'item'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?distance=5",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value '5' used for parameter 'distance'. value must be an integer ranging from 1 to 4.",
+				expectedErr:    "invalid value '5' used for parameter 'distance'. value must be an integer ranging from 1 to 4",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?distance=frank",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'frank' used for parameter 'distance'. usage: '?distance={int},...|{int}-{int}'.",
+				expectedErr:    "invalid value 'frank' used for parameter 'distance'. usage: '?distance={int},...|{int}-{int}'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?ronso_rage=13",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '13' used for parameter 'ronso_rage' is out of range. max id: 12.",
+				expectedErr:    "provided id '13' used for parameter 'ronso_rage' is out of range. max id: 12",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?species=wywrm",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value 'wywrm' used for parameter 'species'. use /api/monsters/parameters to see allowed values.",
+				expectedErr:    "invalid enum value 'wywrm' used for parameter 'species'. use /api/monsters/parameters to see allowed values",
 			},
 		},
 		{
@@ -1663,7 +1663,7 @@ func TestSubsectionMonsters(t *testing.T) {
 				requestURL:     "/api/monsters/?ids=1&location=15",
 				expectedStatus: http.StatusBadRequest,
 				handler:        testCfg.HandleMonsters,
-				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'.",
+				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'",
 			},
 		},
 		{
@@ -1770,7 +1770,7 @@ func TestSubsectionMonsters(t *testing.T) {
 				requestURL:     "/api/monsters/simple?ids=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1",
 				expectedStatus: http.StatusBadRequest,
 				handler:        testCfg.HandleMonsters,
-				expectedErr:    "fetch limit exceeded. the maximum amount of inputs is 1000.",
+				expectedErr:    "fetch limit exceeded. the maximum amount of inputs is 1000",
 			},
 		},
 	}

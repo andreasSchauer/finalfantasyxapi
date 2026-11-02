@@ -14,7 +14,7 @@ func TestGetAutoAbility(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/auto-abilities/131",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "auto-ability with provided id '131' doesn't exist. max id: 130.",
+				expectedErr:    "auto-ability with provided id '131' doesn't exist. max id: 130",
 			},
 		},
 		{

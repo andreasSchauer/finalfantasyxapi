@@ -15,7 +15,7 @@ func TestGetSubmenu(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/submenus/16",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "submenu with provided id '16' doesn't exist. max id: 15.",
+				expectedErr:    "submenu with provided id '16' doesn't exist. max id: 15",
 			},
 		},
 		{

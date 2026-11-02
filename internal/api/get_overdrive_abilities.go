@@ -15,7 +15,7 @@ func (cfg *Config) getOverdriveAbility(r *http.Request, i handlerInput[seeding.O
 
 	overdriveIDs, err := cfg.db.GetOverdriveAbilityOverdriveIDs(r.Context(), id)
 	if err != nil {
-		return OverdriveAbility{}, newHTTPError(http.StatusInternalServerError, "couldn't get parent overdrive.", err)
+		return OverdriveAbility{}, newHTTPError(http.StatusInternalServerError, "couldn't get parent overdrive", err)
 	}
 	overdrive, _ := seeding.GetResourceByID(overdriveIDs[0], cfg.L.OverdrivesID)
 

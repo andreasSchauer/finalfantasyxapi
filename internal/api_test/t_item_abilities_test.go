@@ -16,7 +16,7 @@ func TestGetItemAbility(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/item-abilities/70",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "item ability with provided id '70' doesn't exist. max id: 69.",
+				expectedErr:    "item ability with provided id '70' doesn't exist. max id: 69",
 			},
 		},
 		{

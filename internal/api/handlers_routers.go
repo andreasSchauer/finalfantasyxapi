@@ -125,7 +125,7 @@ func (i handlerInputService[P, R]) routerGet(cfg *Config, w http.ResponseWriter,
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: 'GET /api/%s/body', 'POST /api/%s'.", i.Endpoint, i.Endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: 'GET /api/%s/body', 'POST /api/%s'", i.Endpoint, i.Endpoint), nil)
 		return
 	}
 }
@@ -139,7 +139,7 @@ func (i handlerInputService[P, R]) routerPost(cfg *Config, w http.ResponseWriter
 		return
 
 	default:
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: /api/%s. Use /api/%s/body to learn more about the required json format for the request body.", i.Endpoint, i.Endpoint), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: /api/%s. Use /api/%s/body to learn more about the required json format for the request body", i.Endpoint, i.Endpoint), nil)
 		return
 	}
 }

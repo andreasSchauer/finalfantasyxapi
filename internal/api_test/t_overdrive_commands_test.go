@@ -15,7 +15,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-commands/8",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "overdrive command with provided id '8' doesn't exist. max id: 7.",
+				expectedErr:    "overdrive command with provided id '8' doesn't exist. max id: 7",
 			},
 		},
 		{

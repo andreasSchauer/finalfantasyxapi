@@ -14,7 +14,7 @@ func TestGetStat(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/stats/11",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "stat with provided id '11' doesn't exist. max id: 10.",
+				expectedErr:    "stat with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{

@@ -16,7 +16,7 @@ func TestGetItem(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/items/113",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "item with provided id '113' doesn't exist. max id: 112.",
+				expectedErr:    "item with provided id '113' doesn't exist. max id: 112",
 			},
 		},
 		{
@@ -587,7 +587,7 @@ func TestRetrieveItems(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/items?methods=shop,treasures",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'treasures' used for parameter 'methods'. allowed values: 'monster', 'treasure', 'shop', 'quest', 'blitzball'.",
+				expectedErr:    "invalid value 'treasures' used for parameter 'methods'. allowed values: 'monster', 'treasure', 'shop', 'quest', 'blitzball'",
 			},
 		},
 		{

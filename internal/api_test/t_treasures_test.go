@@ -16,21 +16,21 @@ func TestGetTreasure(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'a'.",
+				expectedErr:    "invalid id 'a'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/343",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "treasure with provided id '343' doesn't exist. max id: 342.",
+				expectedErr:    "treasure with provided id '343' doesn't exist. max id: 342",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/3/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "endpoint /treasures doesn't have any subsections.",
+				expectedErr:    "endpoint /treasures doesn't have any subsections",
 			},
 		},
 		{
@@ -44,7 +44,7 @@ func TestGetTreasure(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/2/2",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/treasures/sections for valid subsections.",
+				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/treasures/sections for valid subsections",
 			},
 		},
 		{

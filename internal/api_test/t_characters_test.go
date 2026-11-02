@@ -16,7 +16,7 @@ func TestGetCharacter(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/characters/9",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "character with provided id '9' doesn't exist. max id: 8.",
+				expectedErr:    "character with provided id '9' doesn't exist. max id: 8",
 			},
 		},
 		{

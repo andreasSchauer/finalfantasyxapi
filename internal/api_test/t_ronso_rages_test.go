@@ -14,7 +14,7 @@ func TestGetRonsoRage(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/ronso-rages/13",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "ronso rage with provided id '13' doesn't exist. max id: 12.",
+				expectedErr:    "ronso rage with provided id '13' doesn't exist. max id: 12",
 			},
 		},
 		{

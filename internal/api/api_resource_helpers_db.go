@@ -39,7 +39,7 @@ func (i handlerInput[T, R, A]) dbGetRelationPtr(cfg *Config, ctx context.Context
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s.", i.resTypeSingle, item), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", i.resTypeSingle, item), err)
 	}
 
 	res := i.idToResFunc(cfg, i, dbID)

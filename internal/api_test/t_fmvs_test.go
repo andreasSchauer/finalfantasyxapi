@@ -15,21 +15,21 @@ func TestGetFMV(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/fmvs/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "fmv not found: 'a'.",
+				expectedErr:    "fmv not found: 'a'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/fmvs/53",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "fmv with provided id '53' doesn't exist. max id: 52.",
+				expectedErr:    "fmv with provided id '53' doesn't exist. max id: 52",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/fmvs/2/2",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/fmvs/sections for valid subsections.",
+				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/fmvs/sections for valid subsections",
 			},
 		},
 		{

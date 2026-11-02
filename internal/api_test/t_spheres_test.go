@@ -14,7 +14,7 @@ func TestGetSphere(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/spheres/31",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sphere with provided id '31' doesn't exist. max id: 30.",
+				expectedErr:    "sphere with provided id '31' doesn't exist. max id: 30",
 			},
 		},
 		{

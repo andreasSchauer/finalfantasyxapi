@@ -71,7 +71,7 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 	for i, partyMember := range params.Party {
 		isDupe := maps.duplicates[partyMember.getDuplicateKey()]
 		if isDupe {
-			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(PfnParty, fmt.Sprintf("duplicate unit id found at index %d. each party member can only appear once.", i)), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(PfnParty, fmt.Sprintf("duplicate unit id found at index %d. each party member can only appear once", i)), nil)
 		}
 
 		unit, _ := seeding.GetResourceByID(partyMember.UnitID, cfg.L.PlayerUnitsID)
@@ -103,7 +103,7 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 	for i, mon := range params.Mons {
 		isDupe := maps.duplicates[mon.getDuplicateKey()]
 		if isDupe {
-			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(PfnMons, fmt.Sprintf("duplicate monster found at index %d. exact duplicate monsters are not allowed.", i)), nil)
+			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(PfnMons, fmt.Sprintf("duplicate monster found at index %d. exact duplicate monsters are not allowed", i)), nil)
 		}
 
 		participant, firstTurnAglTier, err := fetchTurnOrderMonster(cfg, params, mon)

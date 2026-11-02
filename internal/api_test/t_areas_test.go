@@ -15,21 +15,21 @@ func TestGetArea(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/0",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "area with provided id '0' doesn't exist. max id: 237.",
+				expectedErr:    "area with provided id '0' doesn't exist. max id: 237",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/238",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "area with provided id '238' doesn't exist. max id: 237.",
+				expectedErr:    "area with provided id '238' doesn't exist. max id: 237",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'a'.",
+				expectedErr:    "invalid id 'a'",
 			},
 		},
 		{
@@ -410,28 +410,28 @@ func TestRetrieveAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?comp_sphere=fa",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid boolean value 'fa' used for parameter 'comp_sphere'. usage: '?comp_sphere={bool}'.",
+				expectedErr:    "invalid boolean value 'fa' used for parameter 'comp_sphere'. usage: '?comp_sphere={bool}'",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?item=113",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '113' used for parameter 'item' is out of range. max id: 112.",
+				expectedErr:    "provided id '113' used for parameter 'item' is out of range. max id: 112",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?key_item=61",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '61' used for parameter 'key_item' is out of range. max id: 60.",
+				expectedErr:    "provided id '61' used for parameter 'key_item' is out of range. max id: 60",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?location=0",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '0' used for parameter 'location' is out of range. max id: 26.",
+				expectedErr:    "provided id '0' used for parameter 'location' is out of range. max id: 26",
 			},
 		},
 		{

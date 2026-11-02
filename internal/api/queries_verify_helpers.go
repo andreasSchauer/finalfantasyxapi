@@ -24,7 +24,7 @@ func (q queryVerifyer[T]) usage() error {
 func (q queryVerifyer[T]) getParam(queryName string) (QueryParam, error) {
 	queryParam, ok := q.queryLookup[QueryParamName(queryName)]
 	if !ok {
-		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s. use /api/%s/parameters for available parameters.", queryName, q.endpoint, q.endpoint), nil)
+		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s. use /api/%s/parameters for available parameters", queryName, q.endpoint, q.endpoint), nil)
 	}
 
 	return queryParam, nil
@@ -39,7 +39,7 @@ func (q queryVerifyer[T]) getParamAltList(cfg *Config, queryName string, listNam
 
 	queryParam, ok := cfg.Q.defaultParams[QueryParamName(queryName)]
 	if !ok {
-		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s.", q.endpoint, *listName, queryMapToString(cfg.Q.defaultParams)), nil)
+		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s", q.endpoint, *listName, queryMapToString(cfg.Q.defaultParams)), nil)
 	}
 
 	return queryParam, nil

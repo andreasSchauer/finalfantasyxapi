@@ -16,7 +16,7 @@ func TestGetAbility(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/abilities/841",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "ability with provided id '841' doesn't exist. max id: 840.",
+				expectedErr:    "ability with provided id '841' doesn't exist. max id: 840",
 			},
 		},
 		{
@@ -214,14 +214,14 @@ func TestRetrieveAbilities(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/abilities?type=7",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '7' used for parameter 'type' doesn't exist. max id: 6.",
+				expectedErr:    "provided id '7' used for parameter 'type' doesn't exist. max id: 6",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/abilities?type=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value 'asd' used for parameter 'type'. use /api/abilities/parameters to see allowed values.",
+				expectedErr:    "invalid enum value 'asd' used for parameter 'type'. use /api/abilities/parameters to see allowed values",
 			},
 		},
 		{

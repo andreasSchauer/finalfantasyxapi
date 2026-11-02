@@ -14,21 +14,21 @@ func TestGetBlitzballPrize(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/9",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "blitzball prize table with provided id '9' doesn't exist. max id: 8.",
+				expectedErr:    "blitzball prize table with provided id '9' doesn't exist. max id: 8",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/9/2",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/blitzball-prizes/sections for valid subsections.",
+				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/blitzball-prizes/sections for valid subsections",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/a",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'a'.",
+				expectedErr:    "invalid id 'a'",
 			},
 		},
 		{
@@ -78,7 +78,7 @@ func TestRetrieveBlitzballPrizes(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes?category=asd",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value 'asd' used for parameter 'category'. use /api/blitzball-prizes/parameters to see allowed values.",
+				expectedErr:    "invalid enum value 'asd' used for parameter 'category'. use /api/blitzball-prizes/parameters to see allowed values",
 			},
 		},
 		{

@@ -59,7 +59,7 @@ func monHasAppliedStatus(mon Monster) bool {
 
 func enforceMonImmunity(status string, mon Monster, ignImmunities bool) error {
 	if !ignImmunities && monImmuneToStatus(status, mon) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to '%s'.", h.NameToString(mon.Name, mon.Version, nil), status), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to '%s'", h.NameToString(mon.Name, mon.Version, nil), status), nil)
 	}
 
 	return nil

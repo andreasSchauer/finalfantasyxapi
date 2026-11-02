@@ -19,7 +19,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "field 'monster_id' can't be empty.",
+				expectedErr:    "field 'monster_id' can't be empty",
 				requestBody: map[api.FieldName]any{
 					api.PfnMinEmptySlots: 2,
 				},
@@ -30,7 +30,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "id '10' of field 'character_id' is out of range. allowed range: 1 to 7.",
+				expectedErr:    "id '10' of field 'character_id' is out of range. allowed range: 1 to 7",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnCharacterID:   10,
@@ -43,7 +43,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "id '0' of field 'character_id' is out of range. allowed range: 1 to 7.",
+				expectedErr:    "id '0' of field 'character_id' is out of range. allowed range: 1 to 7",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnCharacterID:   0,
@@ -56,7 +56,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "array of field 'party_members' can't have duplicate ids.",
+				expectedErr:    "array of field 'party_members' can't have duplicate ids",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnPartyMembers:  []any{2, 2, 2, 2, 2},
@@ -69,7 +69,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "character must be in the party to be eligible for receiving equipment.",
+				expectedErr:    "character must be in the party to be eligible for receiving equipment",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnCharacterID:   4,
@@ -83,7 +83,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "too many items in array of field 'party_members'. got: 8, maximum allowed: 7.",
+				expectedErr:    "too many items in array of field 'party_members'. got: 8, maximum allowed: 7",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnCharacterID:   4,
@@ -97,7 +97,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of array at field 'auto_abilities': id '131' is out of range. allowed range: 1 to 130.",
+				expectedErr:    "index 0 of array at field 'auto_abilities': id '131' is out of range. allowed range: 1 to 130",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnAutoAbilities: []any{131},
@@ -109,7 +109,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "too many items in array of field 'auto_abilities'. got: 5, maximum allowed: 4.",
+				expectedErr:    "too many items in array of field 'auto_abilities'. got: 5, maximum allowed: 4",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnAutoAbilities: []any{13, 14, 15, 16, 17},
@@ -121,7 +121,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "value '5' of field 'min_empty_slots' is out of range. allowed range: 0 to 4.",
+				expectedErr:    "value '5' of field 'min_empty_slots' is out of range. allowed range: 0 to 4",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnMinEmptySlots: 5,
@@ -133,7 +133,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "value '5' of field 'total_slots' is out of range. allowed range: 0 to 4.",
+				expectedErr:    "value '5' of field 'total_slots' is out of range. allowed range: 0 to 4",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:  13,
 					api.PfnTotalSlots: 5,
@@ -145,7 +145,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "value '-1' of field 'min_empty_slots' is out of range. allowed range: 0 to 4.",
+				expectedErr:    "value '-1' of field 'min_empty_slots' is out of range. allowed range: 0 to 4",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnMinEmptySlots: -1,
@@ -157,7 +157,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "can't discern equipment's type. use 'auto_abilities' to discern the type, or set it manually by using 'equip_type'.",
+				expectedErr:    "can't discern equipment's type. use 'auto_abilities' to discern the type, or set it manually by using 'equip_type'",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnMinEmptySlots: 2,
@@ -169,7 +169,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "the amount of auto-abilities and empty slots combined (1) can't exceed the given total amount of slots (0).",
+				expectedErr:    "the amount of auto-abilities and empty slots combined (1) can't exceed the given total amount of slots (0)",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnAutoAbilities: []any{2},
@@ -182,7 +182,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "the amount of auto-abilities and empty slots combined can't exceed 4.",
+				expectedErr:    "the amount of auto-abilities and empty slots combined can't exceed 4",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnAutoAbilities: []any{2, 7, 22},
@@ -195,7 +195,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "weapon- and armor-abilities can't be combined.",
+				expectedErr:    "weapon- and armor-abilities can't be combined",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnAutoAbilities: []any{2, 129},
@@ -207,7 +207,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "weapon- and armor-abilities can't be combined.",
+				expectedErr:    "weapon- and armor-abilities can't be combined",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnAutoAbilities: []any{2},
@@ -220,7 +220,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "weapon- and armor-abilities can't be combined.",
+				expectedErr:    "weapon- and armor-abilities can't be combined",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnAutoAbilities: []any{129},
@@ -233,7 +233,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "value 'weaponf' of field 'equip_type' is not a valid enum value. allowed values: 'weapon', 'armor'.",
+				expectedErr:    "value 'weaponf' of field 'equip_type' is not a valid enum value. allowed values: 'weapon', 'armor'",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnMinEmptySlots: 1,
@@ -246,7 +246,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "monster 'sinscale - 1 (dream zanarkand)' doesn't drop equipment.",
+				expectedErr:    "monster 'sinscale - 1 (dream zanarkand)' doesn't drop equipment",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     1,
 					api.PfnAutoAbilities: []any{2},
@@ -258,7 +258,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "water flan - 1 (tutorial) doesn't drop auto-ability 'zombiestrike' (22). it only drops the following auto-abilities: 'piercing' (2), 'waterstrike' (7), 'distill mana' (26), 'water ward' (61), 'waterproof' (62).",
+				expectedErr:    "water flan - 1 (tutorial) doesn't drop auto-ability 'zombiestrike' (22). it only drops the following auto-abilities: 'piercing' (2), 'waterstrike' (7), 'distill mana' (26), 'water ward' (61), 'waterproof' (62)",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     13,
 					api.PfnAutoAbilities: []any{7, 22},
@@ -270,7 +270,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "kottos doesn't drop auto-ability 'piercing' (2). it only drops the following auto-abilities: 'counterattack' (37), 'evade & counter' (38), 'magic counter' (39), 'hp +30%' (114), 'hp +20%' (113), 'hp +10%' (112).",
+				expectedErr:    "kottos doesn't drop auto-ability 'piercing' (2). it only drops the following auto-abilities: 'counterattack' (37), 'evade & counter' (38), 'magic counter' (39), 'hp +30%' (114), 'hp +20%' (113), 'hp +10%' (112)",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID:     258,
 					api.PfnAutoAbilities: []any{2},
@@ -282,7 +282,7 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "at least one of these fields must have a value: 'min_empty_slots', 'total_slots', 'auto_abilities'.",
+				expectedErr:    "at least one of these fields must have a value: 'min_empty_slots', 'total_slots', 'auto_abilities'",
 				requestBody: map[api.FieldName]any{
 					api.PfnMonsterID: 13,
 				},
@@ -293,9 +293,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid field: 'text'.",
+				expectedErr:    "invalid field: 'text'",
 				requestBody: map[api.FieldName]any{
-					api.PfnText: "this won't work.",
+					api.PfnText: "this won't work",
 				},
 			},
 		},

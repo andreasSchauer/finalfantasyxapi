@@ -14,7 +14,7 @@ func TestGetTopmenu(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/topmenus/5",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "topmenu with provided id '5' doesn't exist. max id: 4.",
+				expectedErr:    "topmenu with provided id '5' doesn't exist. max id: 4",
 			},
 		},
 		{

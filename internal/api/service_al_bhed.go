@@ -66,7 +66,7 @@ func handleAlBhed(cfg *Config, params AlBhedParams) (AlBhedResponse, error) {
 	}
 
 	if !translate {
-		return AlBhedResponse{}, newHTTPError(http.StatusBadRequest, "wrong format. all brackets must be closed.", nil)
+		return AlBhedResponse{}, newHTTPError(http.StatusBadRequest, "wrong format. all brackets must be closed", nil)
 	}
 
 	response.TranslatedText = string(translatedRunes)
@@ -77,7 +77,7 @@ func handleAlBhed(cfg *Config, params AlBhedParams) (AlBhedResponse, error) {
 func setTranslator(translate, newState bool) (bool, error) {
 	// this essentially means, the same bracket came twice without the other in between, like '[['
 	if translate == newState {
-		return false, newHTTPError(http.StatusBadRequest, "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket.", nil)
+		return false, newHTTPError(http.StatusBadRequest, "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket", nil)
 	}
 	return newState, nil
 }

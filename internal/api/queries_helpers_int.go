@@ -77,7 +77,7 @@ func (q QueryParam) checkIntSpecialVals(query string) (int, error) {
 func (q QueryParam) checkIntAllowedRange(query string) (int, error) {
 	val, err := strconv.Atoi(query)
 	if err != nil {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. usage: '%s'.", query, q.Name, q.Usage), err)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. usage: '%s'", query, q.Name, q.Usage), err)
 	}
 
 	intRange := q.AllowedIntRange
@@ -89,7 +89,7 @@ func (q QueryParam) checkIntAllowedRange(query string) (int, error) {
 	max := intRange[1]
 
 	if val > max || val < min {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%d' used for parameter '%s'. value must be an integer ranging from %d to %d.", val, q.Name, min, max), nil)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%d' used for parameter '%s'. value must be an integer ranging from %d to %d", val, q.Name, min, max), nil)
 	}
 
 	return val, nil

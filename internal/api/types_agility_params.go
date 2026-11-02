@@ -19,7 +19,7 @@ func getAgilityTierDB(cfg *Config, r *http.Request, stats []BaseStat) (seeding.A
 
 	dbAgilityTier, err := cfg.db.GetAgilityTierByAgility(r.Context(), agility)
 	if err != nil {
-		return seeding.AgilityTier{}, newHTTPError(http.StatusInternalServerError, "couldn't extract agility parameters.", err)
+		return seeding.AgilityTier{}, newHTTPError(http.StatusInternalServerError, "couldn't extract agility parameters", err)
 	}
 
 	agilityTier, _ := seeding.GetResourceByID(dbAgilityTier.ID, cfg.L.AgilityTiersID)

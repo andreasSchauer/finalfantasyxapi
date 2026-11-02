@@ -14,7 +14,7 @@ func TestGetModifier(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/modifiers/32",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "modifier with provided id '32' doesn't exist. max id: 31.",
+				expectedErr:    "modifier with provided id '32' doesn't exist. max id: 31",
 			},
 		},
 		{

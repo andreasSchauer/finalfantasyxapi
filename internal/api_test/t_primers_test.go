@@ -14,7 +14,7 @@ func TestGetPrimer(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/primers/27",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "primer with provided id '27' doesn't exist. max id: 26.",
+				expectedErr:    "primer with provided id '27' doesn't exist. max id: 26",
 			},
 		},
 		{

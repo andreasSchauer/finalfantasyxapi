@@ -18,11 +18,11 @@ func parseTypedQuery(r *http.Request, queryParam QueryParam) (string, string, er
 
 	resType, unitStr, found := strings.Cut(query, ":")
 	if !found {
-		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, query, queryParam.Usage), nil)
+		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", queryParam.Name, query, queryParam.Usage), nil)
 	}
 
 	if !slices.Contains(queryParam.AllowedResTypes, resType) {
-		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resource type '%s' for parameter '%s'. supported resource types: %s.", resType, queryParam.Name, h.FormatStringSlice(queryParam.AllowedResTypes)), nil)
+		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resource type '%s' for parameter '%s'. supported resource types: %s", resType, queryParam.Name, h.FormatStringSlice(queryParam.AllowedResTypes)), nil)
 	}
 
 	return resType, unitStr, nil

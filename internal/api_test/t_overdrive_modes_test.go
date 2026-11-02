@@ -22,14 +22,14 @@ func TestGetOverdriveMode(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/18",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "overdrive mode with provided id '18' doesn't exist. max id: 17.",
+				expectedErr:    "overdrive mode with provided id '18' doesn't exist. max id: 17",
 			},
 		},
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/a",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "overdrive mode not found: 'a'.",
+				expectedErr:    "overdrive mode not found: 'a'",
 			},
 		},
 		{
@@ -103,7 +103,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=f",
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value 'f' used for parameter 'type'. use /api/overdrive-modes/parameters to see allowed values.",
+				expectedErr:    "invalid enum value 'f' used for parameter 'type'. use /api/overdrive-modes/parameters to see allowed values",
 			},
 		},
 		{

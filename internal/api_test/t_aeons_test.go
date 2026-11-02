@@ -15,7 +15,7 @@ func TestGetAeon(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/11",
 				expectedStatus: http.StatusNotFound,
-				expectedErr:    "aeon with provided id '11' doesn't exist. max id: 10.",
+				expectedErr:    "aeon with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
