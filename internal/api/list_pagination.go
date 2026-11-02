@@ -17,12 +17,12 @@ func createPaginatedList[T any](cfg *Config, r *http.Request, items []T) (ListPa
 	queryParamOffset := cfg.Q.defaultParams[QpnOffset]
 	queryParamLimit := cfg.Q.defaultParams[QpnLimit]
 
-	offset, err := parseIntQuery(r, queryParamOffset)
+	offset, err := queryParamOffset.parseInt(r)
 	if err != nil {
 		return ListParams{}, nil, err
 	}
 
-	limit, err := parseIntQuery(r, queryParamLimit)
+	limit, err := queryParamLimit.parseInt(r)
 	if err != nil {
 		return ListParams{}, nil, err
 	}

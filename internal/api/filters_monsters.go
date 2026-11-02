@@ -39,7 +39,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}
 
-		elementID, err := checkQueryNameID(elementStr, cfg.E.Elements.resTypeSingle, queryParam, cfg.L.Elements)
+		elementID, err := queryParam.checkNameID(elementStr, cfg.E.Elements.resTypeSingle, cfg.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -48,7 +48,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 		}
 		elemMap[elementID] = true
 
-		affinity, err := checkQueryEnum(affinityStr, cfg.E.Monsters.Endpoint, queryParam, cfg.T.ElementalAffinity)
+		affinity, err := queryParam.checkEnum(affinityStr, cfg.T.ElementalAffinity)
 		if err != nil {
 			return nil, err
 		}
@@ -89,7 +89,7 @@ func getMonstersByStatusResists(cfg *Config, r *http.Request, ctx context.Contex
 func verifyMonsterResistance(cfg *Config, r *http.Request) (int32, error) {
 	queryParam := cfg.Q.monsters[QpnResistance]
 
-	resistance, err := parseIntQuery(r, queryParam)
+	resistance, err := queryParam.parseInt(r)
 	if err != nil {
 		return 0, err
 	}
@@ -102,7 +102,7 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, ctx context.Context,
 
 	queryParam := i.queryLookup[QpnIsForced]
 
-	isForced, err := parseBooleanQuery(r, queryParam)
+	isForced, err := queryParam.parseBool(r)
 	if queryIsEmpty(err) {
 		return cfg.db.GetMonsterIDsByAutoAbility(ctx, id)
 	}
@@ -145,7 +145,7 @@ func getMonsterItemMethods(cfg *Config, r *http.Request) ([]string, error) {
 		"drop":  {"drop_common", "drop_rare", "drop_secondary_common", "drop_secondary_rare"},
 	}
 
-	queryMethods, err := parseValueListQuery(cfg, r, paramMethods)
+	queryMethods, err := paramMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

@@ -68,7 +68,7 @@ func (i handlerInput[T, R, A]) handleNameID(cfg *Config, w http.ResponseWriter, 
 		return
 	}
 
-	parseRes, err := parseSingleSegmentResource(i.resTypeSingle, segment, i.objLookup)
+	parseRes, err := i.parseSingleSegmentResource(segment)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -94,7 +94,7 @@ func (i handlerInput[T, R, A]) handleNameVersion(w http.ResponseWriter, r *http.
 	name := segments[0]
 	versionStr := segments[1]
 
-	parseRes, err := parseNameVersionResource(i.resTypeSingle, name, versionStr, i.objLookup)
+	parseRes, err := i.parseNameVersionResource(name, versionStr)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -168,7 +168,7 @@ func (i handlerInputEnums) handleList(cfg *Config, w http.ResponseWriter, r *htt
 	enums := enumLookupToSlice(i.lookup)
 	resources := enumsToNamedAPIResources(cfg, enums)
 
-	resourceList, err := newNamedAPIResourceList(cfg, r, resources)
+	resourceList, err := newAPIResourceList(cfg, r, resources)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -184,7 +184,7 @@ func (i handlerInputEnums) handleSingle(cfg *Config, w http.ResponseWriter, r *h
 		return
 	}
 
-	enum, key, err := parseEnumsEndpointSegment(cfg, i, segment)
+	enum, key, err := i.parseSegment(cfg, segment)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -209,7 +209,7 @@ func (i handlerInputEndpoints) handleList(cfg *Config, w http.ResponseWriter, r 
 	resources := endpointsToNamedAPIResources(cfg, endpoints)
 	setLimitMax(cfg, r, r.URL.Query())
 
-	resourceList, err := newNamedAPIResourceList(cfg, r, resources)
+	resourceList, err := newAPIResourceList(cfg, r, resources)
 	if handleHTTPError(w, err) {
 		return
 	}

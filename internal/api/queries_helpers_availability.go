@@ -14,10 +14,10 @@ type avlParams struct {
 	preAirship     bool
 }
 
-func checkAvl(cfg *Config, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) (avlParams, error) {
-	queryParamAvl := queryLookup[QpnAvailability]
+func (i handlerInput [T, R, A]) queryAvlGetParams(cfg *Config, r *http.Request) (avlParams, error) {
+	queryParamAvl := i.queryLookup[QpnAvailability]
 
-	availabilities, err := parseEnumListQuery(cfg, r, endpoint, queryParamAvl, cfg.T.AvailabilityType)
+	availabilities, err := queryParamAvl.parseEnumList(cfg, r, cfg.T.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return avlParams{}, err
 	}
@@ -27,9 +27,9 @@ func checkAvl(cfg *Config, r *http.Request, endpoint EndpointName, queryLookup m
 
 	var preAirship bool
 
-	_, ok := queryLookup[QpnPreAirship]
+	_, ok := i.queryLookup[QpnPreAirship]
 	if ok {
-		preAirship, err = parseBooleanQuery(r, queryLookup[QpnPreAirship])
+		preAirship, err = i.queryLookup[QpnPreAirship].parseBool(r)
 		if errExceptEmptyQuery(err) {
 			return avlParams{}, err
 		}
@@ -50,13 +50,13 @@ func checkAvl(cfg *Config, r *http.Request, endpoint EndpointName, queryLookup m
 	return params, nil
 }
 
-func checkAvlAndRep(cfg *Config, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) (avlParams, error) {
-	params, errAvl := checkAvl(cfg, r, endpoint, queryLookup)
+func (i handlerInput [T, R, A]) queryAvlRepGetParams(cfg *Config, r *http.Request) (avlParams, error) {
+	params, errAvl := i.queryAvlGetParams(cfg, r)
 	if errExceptEmptyQuery(errAvl) {
 		return avlParams{}, errAvl
 	}
 
-	isRepeatable, errRepl := getQueryBoolPtr(r, QpnRepeatable, queryLookup)
+	isRepeatable, errRepl := nullBoolFromBoolQuery(r, QpnRepeatable, i.queryLookup)
 	if errExceptEmptyQuery(errRepl) {
 		return avlParams{}, errRepl
 	}
@@ -65,7 +65,7 @@ func checkAvlAndRep(cfg *Config, r *http.Request, endpoint EndpointName, queryLo
 		return avlParams{}, errEmptyQuery
 	}
 
-	params.isRepeatable = h.GetNullBool(isRepeatable)
+	params.isRepeatable = isRepeatable
 
 	return params, nil
 }

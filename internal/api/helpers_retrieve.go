@@ -50,7 +50,7 @@ func (i handlerInput[T, R, A]) filterIDs(cfg *Config, r *http.Request, IDs []int
 		}
 	}
 
-	flip, err := parseBooleanQuery(r, i.queryLookup[QpnFlip])
+	flip, err := i.queryLookup[QpnFlip].parseBool(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

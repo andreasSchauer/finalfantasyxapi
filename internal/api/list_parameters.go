@@ -15,7 +15,7 @@ func (l QueryParameterList) GetListParams() ListParams {
 
 func getQueryParamList(cfg *Config, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) (QueryParameterList, error) {
 
-	queryParams := queryMapToSlice(queryLookup)
+	queryParams := paramMapToSlice(queryLookup)
 	queryParams = getAllowedResources(cfg, endpoint, queryParams)
 	queryParams = getAllowedValuesFromTypes(queryParams)
 

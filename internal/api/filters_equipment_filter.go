@@ -12,28 +12,28 @@ import (
 func filterShopsEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]int32, error) {
 	i := cfg.E.Shops
 
-	autoAbilityID, err := getQueryIDPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := nullInt32FromIDQuery(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup[QpnEmptySlots])
+	emptySlots, err := i.queryLookup[QpnEmptySlots].parseIntList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	charID, err := getQueryNameIDPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
+	charID, err := nullInt32FromNameIDQuery(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetShopIDsEquipmentFilter(ctx, database.GetShopIDsEquipmentFilterParams{
-		AutoAbilityID: h.GetNullInt32(autoAbilityID),
-		CharacterID:   h.GetNullInt32(charID),
+		AutoAbilityID: autoAbilityID,
+		CharacterID:   charID,
 		EmptySlots:    h.SliceOrNil(emptySlots),
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%s', character id '%s', empty slots amount '%s'.", i.resTypePlural, h.PtrToString(autoAbilityID), h.PtrToString(charID), h.FormatIntSlice(emptySlots)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%s', character id '%s', empty slots amount '%s'.", i.resTypePlural, h.NullInt32ToString(autoAbilityID), h.NullInt32ToString(charID), h.FormatIntSlice(emptySlots)), err)
 	}
 
 	return dbIDs, nil
@@ -42,28 +42,28 @@ func filterShopsEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]
 func filterTreasuresEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]int32, error) {
 	i := cfg.E.Treasures
 
-	autoAbilityID, err := getQueryIDPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := nullInt32FromIDQuery(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup[QpnEmptySlots])
+	emptySlots, err := i.queryLookup[QpnEmptySlots].parseIntList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	charID, err := getQueryNameIDPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
+	charID, err := nullInt32FromNameIDQuery(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetTreasureIDsEquipmentFilter(ctx, database.GetTreasureIDsEquipmentFilterParams{
-		AutoAbilityID: h.GetNullInt32(autoAbilityID),
-		CharacterID:   h.GetNullInt32(charID),
+		AutoAbilityID: autoAbilityID,
+		CharacterID:   charID,
 		EmptySlots:    h.SliceOrNil(emptySlots),
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%s', character id '%s', empty slots amount '%s'.", i.resTypePlural, h.PtrToString(autoAbilityID), h.PtrToString(charID), h.FormatIntSlice(emptySlots)), err)
+		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%s', character id '%s', empty slots amount '%s'.", i.resTypePlural, h.NullInt32ToString(autoAbilityID), h.NullInt32ToString(charID), h.FormatIntSlice(emptySlots)), err)
 	}
 
 	return dbIDs, nil

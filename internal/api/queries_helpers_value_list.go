@@ -4,23 +4,23 @@ import (
 	"net/http"
 )
 
-func parseValueListQuery(cfg *Config, r *http.Request, queryParam QueryParam) ([]string, error) {
-	query, err := checkEmptyQuery(r, queryParam)
+func (q QueryParam) parseValueList(cfg *Config, r *http.Request) ([]string, error) {
+	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return queryValuesToSlice(cfg, query, queryParam)
+	return q.sliceValues(cfg, query)
 }
 
-func queryValuesToSlice(cfg *Config, query string, queryParam QueryParam) ([]string, error) {
+func (q QueryParam) sliceValues(cfg *Config, query string) ([]string, error) {
 	values, err := queryListSplit(cfg, query)
 	if err != nil {
 		return nil, err
 	}
 
 	for _, value := range values {
-		err := checkValue(queryParam, value)
+		err := q.checkValue(value)
 		if err != nil {
 			return nil, err
 		}

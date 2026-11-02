@@ -6,24 +6,24 @@ import (
 )
 
 // validates enum-queryParam and checks emptiness.
-func parseEnumQuery[E, N any](r *http.Request, endpoint EndpointName, queryParam QueryParam, et EnumType[E, N]) (EnumVal, error) {
-	query, err := checkEmptyQuery(r, queryParam)
+func (q QueryParam) parseEnum[E, N any](r *http.Request, et EnumType[E, N]) (EnumVal, error) {
+	query, err := q.checkEmpty(r)
 	if err != nil {
 		return EnumVal{}, err
 	}
 
-	return checkQueryEnum(query, endpoint, queryParam, et)
+	return q.checkEnum(query, et)
 }
 
 // checks, if query enum is valid.
-func checkQueryEnum[E, N any](val string, endpoint EndpointName, queryParam QueryParam, et EnumType[E, N]) (EnumVal, error) {
+func (q QueryParam) checkEnum[E, N any](val string, et EnumType[E, N]) (EnumVal, error) {
 	enum, err := et.CheckVal(val)
 	switch err {
 	case errIDNotFound:
-		return EnumVal{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%s' used for parameter '%s' doesn't exist. max id: %d.", val, queryParam.Name, len(et.lookup)), nil)
+		return EnumVal{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%s' used for parameter '%s' doesn't exist. max id: %d.", val, q.Name, len(et.lookup)), nil)
 
 	case errNoResource:
-		return EnumVal{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", val, queryParam.Name, endpoint), nil)
+		return EnumVal{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values.", val, q.Name, q.Endpoint), nil)
 
 	default:
 		return enum, nil

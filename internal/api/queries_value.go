@@ -8,11 +8,11 @@ import (
 func (i handlerInput[T, R, A]) queryValue(r *http.Request, inputIDs []int32, queryName QueryParamName, dbQuery DBQueryStringMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if replParamsPresent(r, queryParam, i.queryLookup) {
+		if queryParam.replParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		value, err := parseValueQuery(r, queryParam)
+		value, err := queryParam.parseValue(r)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}

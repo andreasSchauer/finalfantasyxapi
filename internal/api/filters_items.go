@@ -12,7 +12,7 @@ func getMasterItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id 
 	i := cfg.E.AllItems
 	queryParamMethods := i.queryLookup[QpnMethods]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
+	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func getMasterItemsBySublocation(cfg *Config, r *http.Request, ctx context.Conte
 	i := cfg.E.AllItems
 	queryParamMethods := i.queryLookup[QpnMethods]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
+	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func getMasterItemsByLocation(cfg *Config, r *http.Request, ctx context.Context,
 	i := cfg.E.AllItems
 	queryParamMethods := i.queryLookup[QpnMethods]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
+	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -72,7 +72,7 @@ func getItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id int32)
 	i := cfg.E.Items
 	queryParamMethods := i.queryLookup[QpnMethods]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
+	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -92,7 +92,7 @@ func getItemsBySublocation(cfg *Config, r *http.Request, ctx context.Context, id
 	i := cfg.E.Items
 	queryParamMethods := i.queryLookup[QpnMethods]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
+	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ func getItemsByLocation(cfg *Config, r *http.Request, ctx context.Context, id in
 	i := cfg.E.Items
 	queryParamMethods := i.queryLookup[QpnMethods]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
+	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

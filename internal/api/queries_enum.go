@@ -9,11 +9,11 @@ import (
 func (i handlerInput[T, R, A]) queryEnum[E, N any](r *http.Request, et EnumType[E, N], inputIDs []int32, queryName QueryParamName, dbQuery DBQueryEnum[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if replParamsPresent(r, queryParam, i.queryLookup) {
+		if queryParam.replParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		enum, err := parseEnumQuery(r, i.Endpoint, queryParam, et)
+		enum, err := queryParam.parseEnum(r, et)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}
@@ -36,7 +36,7 @@ func (i handlerInput[T, R, A]) queryEnum[E, N any](r *http.Request, et EnumType[
 func (i handlerInput[T, R, A]) queryEnumWrapper[E, N any](cfg *Config, r *http.Request, et EnumType[E, N], inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapEnum[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		enum, err := parseEnumQuery(r, i.Endpoint, queryParam, et)
+		enum, err := queryParam.parseEnum(r, et)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}

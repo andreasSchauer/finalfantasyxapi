@@ -6,11 +6,11 @@ import (
 	"strings"
 )
 
-func (cfg *Config) assignDefaultParams(sections map[SectionName]Subsection) map[QueryParamName]QueryParam {
-	return cfg.completeQueryParamsInit([]QueryParam{}, sections)
+func (cfg *Config) assignDefaultParams(endpoint EndpointName, sections map[SectionName]Subsection) map[QueryParamName]QueryParam {
+	return cfg.completeQueryParamsInit([]QueryParam{}, endpoint, sections)
 }
 
-func (cfg *Config) completeQueryParamsInit(params []QueryParam, sections map[SectionName]Subsection) map[QueryParamName]QueryParam {
+func (cfg *Config) completeQueryParamsInit(params []QueryParam, endpoint EndpointName, sections map[SectionName]Subsection) map[QueryParamName]QueryParam {
 	params = slices.Concat(params, cfg.Q.defaultParamSlice)
 
 	if hasSimpleView(sections) {
@@ -35,7 +35,7 @@ func (cfg *Config) completeQueryParamsInit(params []QueryParam, sections map[Sec
 		params = append(params, queryParamFlip)
 	}
 
-	return querySliceToMap(cfg, params)
+	return paramSliceToMap(params, &endpoint)
 }
 
 func hasSimpleView(sections map[SectionName]Subsection) bool {
@@ -71,90 +71,90 @@ func hasParam(target QueryParam, params []QueryParam) bool {
 	return false
 }
 
-func (cfg *Config) assignParamUsage(p QueryParam) QueryParam {
-	s := fmt.Sprintf("?%s=", p.Name)
+func (q QueryParam) assignParamUsage() QueryParam {
+	s := fmt.Sprintf("?%s=", q.Name)
 
-	switch p.Type {
+	switch q.Type {
 	case qptBool:
-		p.Usage = s + "{bool}"
-		p.ExampleUses = []string{s + "true", s + "false"}
+		q.Usage = s + "{bool}"
+		q.ExampleUses = []string{s + "true", s + "false"}
 
 	case qptEnum:
-		e := p.EnumVals[0].Name
-		p.Usage = s + "{value|id}"
-		p.ExampleUses = []string{s + "1", s + e}
+		e := q.EnumVals[0].Name
+		q.Usage = s + "{value|id}"
+		q.ExampleUses = []string{s + "1", s + e}
 
 	case qptEnumList:
-		e1 := p.EnumVals[0].Name
-		e2 := p.EnumVals[1].Name
-		p.Usage = s + "{value|id},..."
-		p.ExampleUses = []string{s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2)}
+		e1 := q.EnumVals[0].Name
+		e2 := q.EnumVals[1].Name
+		q.Usage = s + "{value|id},..."
+		q.ExampleUses = []string{s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2)}
 
 	case qptID:
-		p.Usage = s + "{id}"
-		p.ExampleUses = []string{s + "1"}
+		q.Usage = s + "{id}"
+		q.ExampleUses = []string{s + "1"}
 
 	case qptIDNul:
-		p.Usage = s + "{id|'none'}"
-		p.ExampleUses = []string{s + "1", s + "none"}
+		q.Usage = s + "{id|'none'}"
+		q.ExampleUses = []string{s + "1", s + "none"}
 
 	case qptIDList:
-		p.Usage = s + "{id},..."
-		p.ExampleUses = []string{s + "1", s + "1,2"}
+		q.Usage = s + "{id},..."
+		q.ExampleUses = []string{s + "1", s + "1,2"}
 
 	case qptInt:
-		p.Usage = s + "{int}"
-		p.ExampleUses = []string{s + "1"}
+		q.Usage = s + "{int}"
+		q.ExampleUses = []string{s + "1"}
 
 	case qptIntList:
-		p.Usage = s + "{int},...|{int}-{int}"
-		p.ExampleUses = []string{s + "1", s + "1,2", s + "1-3", s + "1,2-4"}
+		q.Usage = s + "{int},...|{int}-{int}"
+		q.ExampleUses = []string{s + "1", s + "1,2", s + "1-3", s + "1,2-4"}
 
 	case qptNameID:
-		e := p.ExampleVals[0]
-		p.Usage = s + "{name|id}"
-		p.ExampleUses = []string{s + "1", s + e}
+		e := q.ExampleVals[0]
+		q.Usage = s + "{name|id}"
+		q.ExampleUses = []string{s + "1", s + e}
 
 	case qptNameIDList:
-		e1 := p.ExampleVals[0]
-		e2 := p.ExampleVals[1]
-		p.Usage = s + "{name|id},..."
-		p.ExampleUses = []string{s + "1", s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2)}
+		e1 := q.ExampleVals[0]
+		e2 := q.ExampleVals[1]
+		q.Usage = s + "{name|id},..."
+		q.ExampleUses = []string{s + "1", s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2)}
 
 	case qptNameIDListNul:
-		e1 := p.ExampleVals[0]
-		e2 := p.ExampleVals[1]
-		p.Usage = s + "{name|id},...|{'none'}"
-		p.ExampleUses = []string{s + "1", s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2), s + "none"}
+		e1 := q.ExampleVals[0]
+		e2 := q.ExampleVals[1]
+		q.Usage = s + "{name|id},...|{'none'}"
+		q.ExampleUses = []string{s + "1", s + "1,2", s + fmt.Sprintf("%s,%s", e1, e2), s + "none"}
 
 	case qptValue:
-		e1 := string(p.AllowedValues[0])
-		e2 := string(p.AllowedValues[1])
-		p.Usage = s + "{val}"
-		p.ExampleUses = []string{s + e1, s + e2}
+		e1 := string(q.AllowedValues[0])
+		e2 := string(q.AllowedValues[1])
+		q.Usage = s + "{val}"
+		q.ExampleUses = []string{s + e1, s + e2}
 
 	case qptValueList:
-		e1 := string(p.AllowedValues[0])
-		e2 := string(p.AllowedValues[1])
-		p.Usage = s + "{val}"
-		p.ExampleUses = []string{s + e1, s + fmt.Sprintf("%s,%s", e1, e2)}
+		e1 := string(q.AllowedValues[0])
+		e2 := string(q.AllowedValues[1])
+		q.Usage = s + "{val}"
+		q.ExampleUses = []string{s + e1, s + fmt.Sprintf("%s,%s", e1, e2)}
 
 	case qptStat:
-		p.Usage = s + "{stat}:{int},..."
+		q.Usage = s + "{stat}:{int},..."
 
 	default:
-		return p
+		return q
 	}
 
-	if p.SpecialInputs != nil {
-		for _, input := range p.SpecialInputs {
-			usageTrimmed := strings.TrimSuffix(p.Usage, "}")
-			p.Usage = fmt.Sprintf("%s|'%s'}", usageTrimmed, input.Key)
-			p.ExampleUses = append(p.ExampleUses, s+string(input.Key))
+	if q.SpecialInputs != nil {
+		for _, input := range q.SpecialInputs {
+			usageTrimmed := strings.TrimSuffix(q.Usage, "}")
+			q.Usage = fmt.Sprintf("%s|'%s'}", usageTrimmed, input.Key)
+			q.ExampleUses = append(q.ExampleUses, s+string(input.Key))
 		}
 	}
 
-	return p
+	return q
 }
 
 func exampleUse(queryName QueryParamName, value string) string {

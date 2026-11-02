@@ -19,16 +19,16 @@ type RelAvlParams struct {
 func (i handlerInput[T, R, A]) queryAvlRelGetParams(cfg *Config, r *http.Request, parentID int32) (RelAvlParams, error) {
 	queryParam := i.queryLookup[QpnRelAvailability]
 
-	availabilities, err := parseEnumListQuery(cfg, r, i.Endpoint, queryParam, cfg.T.AvailabilityType)
+	availabilities, err := queryParam.parseEnumList(cfg, r, cfg.T.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return RelAvlParams{}, err
 	}
 
-	var repeatable *bool
+	var repeatable sql.NullBool
 
 	_, ok := i.queryLookup[QpnRelRepeatable]
 	if ok {
-		repeatable, err = getQueryBoolPtr(r, QpnRelRepeatable, i.queryLookup)
+		repeatable, err = nullBoolFromBoolQuery(r, QpnRelRepeatable, i.queryLookup)
 		if errExceptEmptyQuery(err) {
 			return RelAvlParams{}, err
 		}
@@ -37,7 +37,7 @@ func (i handlerInput[T, R, A]) queryAvlRelGetParams(cfg *Config, r *http.Request
 	availabilityParams := RelAvlParams{
 		ParentID:     parentID,
 		Availability: h.SliceOrNil(availabilities),
-		Repeatable:   h.GetNullBool(repeatable),
+		Repeatable:   repeatable,
 	}
 
 	return availabilityParams, nil

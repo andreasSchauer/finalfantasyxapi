@@ -10,13 +10,13 @@ import (
 )
 
 // validates id-queryParam and checks emptiness.
-func parseIDQuery[F seeding.Lookupable](r *http.Request, queryParam QueryParam, fLookup map[string]F) (int32, error) {
-	query, err := checkEmptyQuery(r, queryParam)
+func (q QueryParam) parseID[F seeding.Lookupable](r *http.Request, fLookup map[string]F) (int32, error) {
+	query, err := q.checkEmpty(r)
 	if err != nil {
 		return 0, err
 	}
 
-	id, err := parseQueryID(query, queryParam, len(fLookup))
+	id, err := q.parseIDVal(query, len(fLookup))
 	if err != nil {
 		return 0, err
 	}
@@ -25,8 +25,8 @@ func parseIDQuery[F seeding.Lookupable](r *http.Request, queryParam QueryParam, 
 }
 
 // validates id-queryParam and checks emptiness. accepts "none" as input.
-func parseIDQueryNul[F seeding.Lookupable](r *http.Request, queryParam QueryParam, fLookup map[string]F) (*int32, error) {
-	query, err := checkEmptyQuery(r, queryParam)
+func (q QueryParam) parseIDPtr[F seeding.Lookupable](r *http.Request, fLookup map[string]F) (*int32, error) {
+	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,7 @@ func parseIDQueryNul[F seeding.Lookupable](r *http.Request, queryParam QueryPara
 		return nil, nil
 	}
 
-	id, err := parseQueryID(query, queryParam, len(fLookup))
+	id, err := q.parseIDVal(query, len(fLookup))
 	if err != nil {
 		return nil, err
 	}
@@ -45,10 +45,10 @@ func parseIDQueryNul[F seeding.Lookupable](r *http.Request, queryParam QueryPara
 }
 
 // checks if query ID is valid and within range. if it's invalid, it will return an httpError. if you want to soft-check the ID and do name checks afterwards, use checkQueryID()
-func parseQueryID(idStr string, queryParam QueryParam, maxID int) (int32, error) {
-	id, err := checkQueryID(idStr, queryParam, maxID)
+func (q QueryParam) parseIDVal(idStr string, maxID int) (int32, error) {
+	id, err := q.checkID(idStr, maxID)
 	if errors.Is(err, errNotAnID) {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s' used for parameter '%s'.", idStr, queryParam.Name), err)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s' used for parameter '%s'.", idStr, q.Name), err)
 	}
 	if err != nil {
 		return 0, err
@@ -58,14 +58,14 @@ func parseQueryID(idStr string, queryParam QueryParam, maxID int) (int32, error)
 }
 
 // checks if query ID is valid and within range. if it's invalid, it will return errNotAnID, providing the possibility to do name-based checks. for a hard-check with errors, use parseQueryID()
-func checkQueryID(idStr string, queryParam QueryParam, maxID int) (int32, error) {
+func (q QueryParam) checkID(idStr string, maxID int) (int32, error) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		return 0, errNotAnID
 	}
 
 	if id > maxID || id <= 0 {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%d' used for parameter '%s' is out of range. max id: %d.", id, queryParam.Name, maxID), err)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%d' used for parameter '%s' is out of range. max id: %d.", id, q.Name, maxID), err)
 	}
 
 	return int32(id), nil

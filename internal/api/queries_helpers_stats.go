@@ -10,8 +10,8 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryParam, allowedStatIDs []int32) (map[string]int32, error) {
-	query, err := checkEmptyQuery(r, queryParam)
+func (q QueryParam) parseStats(cfg *Config, r *http.Request, allowedStatIDs []int32) (map[string]int32, error) {
+	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err
 	}
@@ -20,7 +20,7 @@ func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryParam, allowed
 	statKeyValuePairs := strings.SplitSeq(query, ",")
 
 	for pair := range statKeyValuePairs {
-		stat, value, err := parseStatPair(cfg, pair, queryParam, allowedStatIDs)
+		stat, value, err := q.parseStatPair(cfg, pair, allowedStatIDs)
 		if err != nil {
 			return nil, err
 		}
@@ -32,18 +32,18 @@ func parseStatQuery(cfg *Config, r *http.Request, queryParam QueryParam, allowed
 	return statMap, nil
 }
 
-func parseStatPair(cfg *Config, pair string, queryParam QueryParam, allowedStatIDs []int32) (string, int, error) {
+func (q QueryParam) parseStatPair(cfg *Config, pair string, allowedStatIDs []int32) (string, int, error) {
 	stat, valueStr, found := strings.Cut(pair, ":")
 	if !found {
-		return "", 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s' . usage: '%s'.", queryParam.Name, stat, queryParam.Usage), nil)
+		return "", 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s' . usage: '%s'.", q.Name, stat, q.Usage), nil)
 	}
 
-	err := validateQueryStatName(cfg, stat, allowedStatIDs, queryParam)
+	err := q.validateStatName(cfg, stat, allowedStatIDs)
 	if err != nil {
 		return "", 0, err
 	}
 
-	value, err := validateQueryStatVal(stat, valueStr, queryParam)
+	value, err := q.validateStatVal(stat, valueStr)
 	if err != nil {
 		return "", 0, err
 	}
@@ -51,23 +51,23 @@ func parseStatPair(cfg *Config, pair string, queryParam QueryParam, allowedStatI
 	return stat, value, nil
 }
 
-func validateQueryStatName(cfg *Config, stat string, allowedStatIDs []int32, queryParam QueryParam) error {
+func (q QueryParam) validateStatName(cfg *Config, stat string, allowedStatIDs []int32) error {
 	parseResp, err := checkUniqueName(stat, cfg.L.Stats)
 	if err != nil {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat: '%s' in '%s'. stat doesn't exist. use '/api/stats' to see existing stats.", stat, queryParam.Name), err)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat: '%s' in '%s'. stat doesn't exist. use '/api/stats' to see existing stats.", stat, q.Name), err)
 	}
 
 	if !slices.Contains(allowedStatIDs, parseResp.ID) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat '%s' in '%s'. '%s' only uses %s.", stat, queryParam.Name, queryParam.Name, getAllowedStatString(cfg, allowedStatIDs)), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat '%s' in '%s'. '%s' only uses %s.", stat, q.Name, q.Name, getAllowedStatString(cfg, allowedStatIDs)), nil)
 	}
 
 	return nil
 }
 
-func validateQueryStatVal(statName string, valStr string, queryParam QueryParam) (int, error) {
+func (q QueryParam) validateStatVal(statName string, valStr string) (int, error) {
 	val, err := strconv.Atoi(valStr)
 	if err != nil {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat value '%s' in '%s'. stat value needs to be a positive integer.", valStr, queryParam.Name), err)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat value '%s' in '%s'. stat value needs to be a positive integer.", valStr, q.Name), err)
 	}
 
 	var maxStatVal int
@@ -82,7 +82,7 @@ func validateQueryStatVal(statName string, valStr string, queryParam QueryParam)
 	}
 
 	if val > maxStatVal {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s in '%s' can't be higher than %d.", statName, queryParam.Name, maxStatVal), nil)
+		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s in '%s' can't be higher than %d.", statName, q.Name, maxStatVal), nil)
 	}
 
 	return val, nil
@@ -106,7 +106,7 @@ func getStatCalcMap(cfg *Config, r *http.Request, queryParam QueryParam, baseSta
 		allowedStatIDs = h.GetNumSlice(1, int32(len(cfg.L.Stats)))
 	}
 
-	statMap, err := parseStatQuery(cfg, r, queryParam, allowedStatIDs)
+	statMap, err := queryParam.parseStats(cfg, r, allowedStatIDs)
 	if err != nil {
 		return nil, err
 	}

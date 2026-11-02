@@ -7,16 +7,16 @@ import (
 type ParamUseType string
 
 const (
-	puSingle  ParamUseType = "single"
-	puList    ParamUseType = "list"
-	puSimple  ParamUseType = "simple"
-	puService ParamUseType = "service"
+	puSingle ParamUseType = "single"
+	puList   ParamUseType = "list"
+	puSimple ParamUseType = "simple"
 )
 
 type QueryParam struct {
 	ID                 int                 `json:"-"`
 	Name               QueryParamName      `json:"name"`
 	Type               QueryParamType      `json:"param_type"`
+	Endpoint		   EndpointName		   `json:"-"`
 	Description        string              `json:"description"`
 	ExampleVals        []string            `json:"-"`
 	Usage              string              `json:"usage"`
@@ -25,8 +25,8 @@ type QueryParam struct {
 	ParamUse           ParamUseType        `json:"param_use_type"`
 	ForSegment         *SectionName        `json:"for_segment,omitempty"`
 	EnumVals           []EnumVal           `json:"-"`
-	RequiredParams     []QueryParamName    `json:"required_params,omitempty"`
-	UsableWith         []QueryParamName    `json:"usable_with,omitempty"`
+	RequiresAll        []QueryParamName    `json:"required_params,omitempty"`
+	RequiresOne        []QueryParamName    `json:"usable_with,omitempty"`
 	ReplacedBy         []QueryParamName    `json:"replaced_by,omitempty"`
 	ConflictsWith      []QueryParamName    `json:"conflicts_with,omitempty"`
 	ReferencesInt      []EndpointName      `json:"-"`
@@ -72,18 +72,18 @@ func (cfg *Config) initLocationsParams() {
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
-			Name:           QpnPreAirship,
-			Description:    "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
-			Type:           qptBool,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnAvailability},
+			Name:        QpnPreAirship,
+			Description: "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
+			Type:        qptBool,
+			ParamUse:    puList,
+			RequiresAll: []QueryParamName{QpnAvailability},
 		},
 		{
 			Name:        QpnRepeatable,
 			Description: "Searches for locations where the searched resources can be farmed. Must be combined with a parameter that looks up a resource ('monster', 'item', 'key_item'). This parameter looks for locations where all the requested resources are farmable. Is combinable with 'availability'. In that case, the most accessible availability where all resources are farmable is chosen and used for the location. The query then checks, if this availability matches the given availabilities. It can be that more results show up at less accessible availability values than without using 'repeatable', because the more accessible sources aren't farmable (like an always accessible equipment treasure vs. a story-exclusive monster encounter).",
 			Type:        qptBool,
 			ParamUse:    puList,
-			UsableWith:  []QueryParamName{QpnMonster, QpnItem, QpnKeyItem, QpnAutoAbility},
+			RequiresOne: []QueryParamName{QpnMonster, QpnItem, QpnKeyItem, QpnAutoAbility},
 		},
 		{
 			Name:          QpnMonster,
@@ -102,12 +102,12 @@ func (cfg *Config) initLocationsParams() {
 			ReferencesInt: []EndpointName{epItems},
 		},
 		{
-			Name:           QpnMethods,
-			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
-			Type:           qptValueList,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnItem},
-			AllowedValues:  []QueryValue{qvMonster, qvTreasure, qvShop, qvQuest, qvBlitzball},
+			Name:          QpnMethods,
+			Description:   "Specifies the methods of acquisition for the 'item' parameter.",
+			Type:          qptValueList,
+			ParamUse:      puList,
+			RequiresAll:   []QueryParamName{QpnItem},
+			AllowedValues: []QueryValue{qvMonster, qvTreasure, qvShop, qvQuest, qvBlitzball},
 		},
 		{
 			Name:          QpnKeyItem,
@@ -180,7 +180,7 @@ func (cfg *Config) initLocationsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Locations.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Locations.Endpoint, cfg.E.Locations.subsections)
 	cfg.Q.locations = paramsMap
 	cfg.E.Locations.queryLookup = paramsMap
 }
@@ -217,18 +217,18 @@ func (cfg *Config) initSublocationsParams() {
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
-			Name:           QpnPreAirship,
-			Description:    "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
-			Type:           qptBool,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnAvailability},
+			Name:        QpnPreAirship,
+			Description: "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
+			Type:        qptBool,
+			ParamUse:    puList,
+			RequiresAll: []QueryParamName{QpnAvailability},
 		},
 		{
 			Name:        QpnRepeatable,
 			Description: "Searches for sublocations where the searched resources can be farmed. Must be combined with a parameter that looks up a resource ('monster', 'item', 'key_item'). This parameter looks for sublocations where all the requested resources are farmable. Is combinable with 'availability'. In that case, the most accessible availability where all resources are farmable is chosen and used for the sublocation. The query then checks, if this availability matches the given availabilities. It can be that more results show up at less accessible availability values than without using 'repeatable', because the more accessible sources aren't farmable (like an always accessible equipment treasure vs. a story-exclusive monster encounter).",
 			Type:        qptBool,
 			ParamUse:    puList,
-			UsableWith:  []QueryParamName{QpnMonster, QpnItem, QpnKeyItem, QpnAutoAbility},
+			RequiresOne: []QueryParamName{QpnMonster, QpnItem, QpnKeyItem, QpnAutoAbility},
 		},
 		{
 			Name:          QpnMonster,
@@ -247,12 +247,12 @@ func (cfg *Config) initSublocationsParams() {
 			ReferencesInt: []EndpointName{epItems},
 		},
 		{
-			Name:           QpnMethods,
-			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
-			Type:           qptValueList,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnItem},
-			AllowedValues:  []QueryValue{qvMonster, qvTreasure, qvShop, qvQuest, qvBlitzball},
+			Name:          QpnMethods,
+			Description:   "Specifies the methods of acquisition for the 'item' parameter.",
+			Type:          qptValueList,
+			ParamUse:      puList,
+			RequiresAll:   []QueryParamName{QpnItem},
+			AllowedValues: []QueryValue{qvMonster, qvTreasure, qvShop, qvQuest, qvBlitzball},
 		},
 		{
 			Name:          QpnKeyItem,
@@ -325,7 +325,7 @@ func (cfg *Config) initSublocationsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Sublocations.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Sublocations.Endpoint, cfg.E.Sublocations.subsections)
 	cfg.Q.sublocations = paramsMap
 	cfg.E.Sublocations.queryLookup = paramsMap
 }
@@ -370,18 +370,18 @@ func (cfg *Config) initAreasParams() {
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
-			Name:           QpnPreAirship,
-			Description:    "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
-			Type:           qptBool,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnAvailability},
+			Name:        QpnPreAirship,
+			Description: "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
+			Type:        qptBool,
+			ParamUse:    puList,
+			RequiresAll: []QueryParamName{QpnAvailability},
 		},
 		{
 			Name:        QpnRepeatable,
 			Description: "Searches for areas where the searched resources can be farmed. Must be combined with a parameter that looks up a resource ('monster', 'item', 'key_item'). This parameter looks for areas where all the requested resources are farmable. Is combinable with 'availability'. In that case, the most accessible availability where all resources are farmable is chosen and used for the area. The query then checks, if this availability matches the given availabilities. It can be that more results show up at less accessible availability values than without using 'repeatable', because the more accessible sources aren't farmable (like an always accessible equipment treasure vs. a story-exclusive monster encounter).",
 			Type:        qptBool,
 			ParamUse:    puList,
-			UsableWith:  []QueryParamName{QpnMonster, QpnItem, QpnKeyItem, QpnAutoAbility},
+			RequiresOne: []QueryParamName{QpnMonster, QpnItem, QpnKeyItem, QpnAutoAbility},
 		},
 		{
 			Name:          QpnMonster,
@@ -400,12 +400,12 @@ func (cfg *Config) initAreasParams() {
 			ReferencesInt: []EndpointName{epItems},
 		},
 		{
-			Name:           QpnMethods,
-			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
-			Type:           qptValueList,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnItem},
-			AllowedValues:  []QueryValue{qvMonster, qvTreasure, qvShop, qvQuest, qvBlitzball},
+			Name:          QpnMethods,
+			Description:   "Specifies the methods of acquisition for the 'item' parameter.",
+			Type:          qptValueList,
+			ParamUse:      puList,
+			RequiresAll:   []QueryParamName{QpnItem},
+			AllowedValues: []QueryValue{qvMonster, qvTreasure, qvShop, qvQuest, qvBlitzball},
 		},
 		{
 			Name:          QpnKeyItem,
@@ -502,7 +502,7 @@ func (cfg *Config) initAreasParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Areas.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Areas.Endpoint, cfg.E.Areas.subsections)
 	cfg.Q.areas = paramsMap
 	cfg.E.Areas.queryLookup = paramsMap
 }
@@ -533,11 +533,11 @@ func (cfg *Config) initMonsterFormationsParams() {
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
-			Name:           QpnPreAirship,
-			Description:    "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
-			Type:           qptBool,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnAvailability},
+			Name:        QpnPreAirship,
+			Description: "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
+			Type:        qptBool,
+			ParamUse:    puList,
+			RequiresAll: []QueryParamName{QpnAvailability},
 		},
 		{
 			Name:        QpnRepeatable,
@@ -583,7 +583,7 @@ func (cfg *Config) initMonsterFormationsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.MonsterFormations.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.MonsterFormations.Endpoint, cfg.E.MonsterFormations.subsections)
 	cfg.Q.monsterFormations = paramsMap
 	cfg.E.MonsterFormations.queryLookup = paramsMap
 }
@@ -668,7 +668,7 @@ func (cfg *Config) initShopsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Shops.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Shops.Endpoint, cfg.E.Shops.subsections)
 	cfg.Q.shops = paramsMap
 	cfg.E.Shops.queryLookup = paramsMap
 }
@@ -759,7 +759,7 @@ func (cfg *Config) initTreasuresParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Treasures.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Treasures.Endpoint, cfg.E.Treasures.subsections)
 	cfg.Q.treasures = paramsMap
 	cfg.E.Treasures.queryLookup = paramsMap
 }
@@ -790,7 +790,7 @@ func (cfg *Config) initQuestsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Quests.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Quests.Endpoint, cfg.E.Quests.subsections)
 	cfg.Q.quests = paramsMap
 	cfg.E.Quests.queryLookup = paramsMap
 }
@@ -807,7 +807,7 @@ func (cfg *Config) initSidequestsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Sidequests.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Sidequests.Endpoint, cfg.E.Sidequests.subsections)
 	cfg.Q.sidequests = paramsMap
 	cfg.E.Sidequests.queryLookup = paramsMap
 }
@@ -830,7 +830,7 @@ func (cfg *Config) initSubquestsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Subquests.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Subquests.Endpoint, cfg.E.Subquests.subsections)
 	cfg.Q.subquests = paramsMap
 	cfg.E.Subquests.queryLookup = paramsMap
 }
@@ -847,7 +847,7 @@ func (cfg *Config) initArenaCreationsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.ArenaCreations.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.ArenaCreations.Endpoint, cfg.E.ArenaCreations.subsections)
 	cfg.Q.arenaCreations = paramsMap
 	cfg.E.ArenaCreations.queryLookup = paramsMap
 }
@@ -864,7 +864,7 @@ func (cfg *Config) initBlitzballPrizesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.BlitzballPrizes.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.BlitzballPrizes.Endpoint, cfg.E.BlitzballPrizes.subsections)
 	cfg.Q.blitzballPrizes = paramsMap
 	cfg.E.BlitzballPrizes.queryLookup = paramsMap
 }
@@ -924,7 +924,7 @@ func (cfg *Config) initSongsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Songs.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Songs.Endpoint, cfg.E.Songs.subsections)
 	cfg.Q.songs = paramsMap
 	cfg.E.Songs.queryLookup = paramsMap
 }
@@ -940,7 +940,7 @@ func (cfg *Config) initFMVsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.FMVs.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.FMVs.Endpoint, cfg.E.FMVs.subsections)
 	cfg.Q.fmvs = paramsMap
 	cfg.E.FMVs.queryLookup = paramsMap
 }
@@ -957,7 +957,7 @@ func (cfg *Config) initPlayerUnitsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.PlayerUnits.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.PlayerUnits.Endpoint, cfg.E.PlayerUnits.subsections)
 	cfg.Q.playerUnits = paramsMap
 	cfg.E.PlayerUnits.queryLookup = paramsMap
 }
@@ -986,7 +986,7 @@ func (cfg *Config) initCharactersParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Characters.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Characters.Endpoint, cfg.E.Characters.subsections)
 	cfg.Q.characters = paramsMap
 	cfg.E.Characters.queryLookup = paramsMap
 }
@@ -1016,7 +1016,7 @@ func (cfg *Config) initAeonsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Aeons.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Aeons.Endpoint, cfg.E.Aeons.subsections)
 	cfg.Q.aeons = paramsMap
 	cfg.E.Aeons.queryLookup = paramsMap
 }
@@ -1033,7 +1033,7 @@ func (cfg *Config) initCharacterClassesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.CharacterClasses.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.CharacterClasses.Endpoint, cfg.E.CharacterClasses.subsections)
 	cfg.Q.characterClasses = paramsMap
 	cfg.E.CharacterClasses.queryLookup = paramsMap
 }
@@ -1117,7 +1117,7 @@ func (cfg *Config) initMonstersParams() {
 			Description:     "Specifies the minimum resistance for the 'status_resists' parameter. Resistance is an integer ranging from 1 to 254 (immune). The value 'immune' can also be used, which counts as 254.",
 			Type:            qptInt,
 			ParamUse:        puList,
-			RequiredParams:  []QueryParamName{QpnStatusResists},
+			RequiresAll:     []QueryParamName{QpnStatusResists},
 			AllowedIntRange: []int{1, 254},
 			SpecialInputs: []SpecialQueryInput{
 				{
@@ -1135,12 +1135,12 @@ func (cfg *Config) initMonstersParams() {
 			ReferencesInt: []EndpointName{epItems},
 		},
 		{
-			Name:           QpnMethods,
-			Description:    "Specifies the methods of acquisition for the 'item' parameter.",
-			Type:           qptValueList,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnItem},
-			AllowedValues:  []QueryValue{qvSteal, qvDrop, qvBribe, qvOther},
+			Name:          QpnMethods,
+			Description:   "Specifies the methods of acquisition for the 'item' parameter.",
+			Type:          qptValueList,
+			ParamUse:      puList,
+			RequiresAll:   []QueryParamName{QpnItem},
+			AllowedValues: []QueryValue{qvSteal, qvDrop, qvBribe, qvOther},
 		},
 		{
 			Name:          QpnAutoAbility,
@@ -1150,11 +1150,11 @@ func (cfg *Config) initMonstersParams() {
 			ReferencesInt: []EndpointName{epAutoAbilities},
 		},
 		{
-			Name:           QpnIsForced,
-			Description:    "Specifies whether the auto-ability a monster drops is forced or not when using the 'auto_ability' parameter.",
-			Type:           qptBool,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnAutoAbility},
+			Name:        QpnIsForced,
+			Description: "Specifies whether the auto-ability a monster drops is forced or not when using the 'auto_ability' parameter.",
+			Type:        qptBool,
+			ParamUse:    puList,
+			RequiresAll: []QueryParamName{QpnAutoAbility},
 		},
 		{
 			Name:            QpnEmptySlots,
@@ -1179,11 +1179,11 @@ func (cfg *Config) initMonstersParams() {
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
-			Name:           QpnPreAirship,
-			Description:    "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
-			Type:           qptBool,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnAvailability},
+			Name:        QpnPreAirship,
+			Description: "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
+			Type:        qptBool,
+			ParamUse:    puList,
+			RequiresAll: []QueryParamName{QpnAvailability},
 		},
 		{
 			Name:        QpnRepeatable,
@@ -1272,7 +1272,7 @@ func (cfg *Config) initMonstersParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Monsters.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Monsters.Endpoint, cfg.E.Monsters.subsections)
 	cfg.Q.monsters = paramsMap
 	cfg.E.Monsters.queryLookup = paramsMap
 }
@@ -1422,7 +1422,7 @@ func (cfg *Config) initAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Abilities.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Abilities.Endpoint, cfg.E.Abilities.subsections)
 	cfg.Q.abilities = paramsMap
 	cfg.E.Abilities.queryLookup = paramsMap
 }
@@ -1438,18 +1438,18 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
-			Name:           QpnCelestialWeapon,
-			Description:    "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the player ability's damage formula will be replaced by the character's celestial weapon damage formula.",
-			Type:           qptBool,
-			ParamUse:       puSingle,
-			RequiredParams: []QueryParamName{QpnAbilityUser},
+			Name:        QpnCelestialWeapon,
+			Description: "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the player ability's damage formula will be replaced by the character's celestial weapon damage formula.",
+			Type:        qptBool,
+			ParamUse:    puSingle,
+			RequiresAll: []QueryParamName{QpnAbilityUser},
 		},
 		{
-			Name:           QpnBombWpn,
-			Description:    "If a player ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
-			Type:           qptBool,
-			ParamUse:       puSingle,
-			RequiredParams: []QueryParamName{QpnAbilityUser},
+			Name:        QpnBombWpn,
+			Description: "If a player ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
+			Type:        qptBool,
+			ParamUse:    puSingle,
+			RequiresAll: []QueryParamName{QpnAbilityUser},
 		},
 		{
 			Name:        QpnRank,
@@ -1638,7 +1638,7 @@ func (cfg *Config) initPlayerAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.PlayerAbilities.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.PlayerAbilities.Endpoint, cfg.E.PlayerAbilities.subsections)
 	cfg.Q.playerAbilities = paramsMap
 	cfg.E.PlayerAbilities.queryLookup = paramsMap
 }
@@ -1739,7 +1739,7 @@ func (cfg *Config) initOverdriveAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.OverdriveAbilities.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.OverdriveAbilities.Endpoint, cfg.E.OverdriveAbilities.subsections)
 	cfg.Q.overdriveAbilities = paramsMap
 	cfg.E.OverdriveAbilities.queryLookup = paramsMap
 }
@@ -1834,7 +1834,7 @@ func (cfg *Config) initItemAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.ItemAbilities.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.ItemAbilities.Endpoint, cfg.E.ItemAbilities.subsections)
 	cfg.Q.itemAbilities = paramsMap
 	cfg.E.ItemAbilities.queryLookup = paramsMap
 }
@@ -1850,18 +1850,18 @@ func (cfg *Config) initTriggerCommandsParams() {
 			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
-			Name:           QpnCelestialWeapon,
-			Description:    "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the trigger command's damage formula will be replaced by the character's celestial weapon damage formula.",
-			Type:           qptBool,
-			ParamUse:       puSingle,
-			RequiredParams: []QueryParamName{QpnAbilityUser},
+			Name:        QpnCelestialWeapon,
+			Description: "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the trigger command's damage formula will be replaced by the character's celestial weapon damage formula.",
+			Type:        qptBool,
+			ParamUse:    puSingle,
+			RequiresAll: []QueryParamName{QpnAbilityUser},
 		},
 		{
-			Name:           QpnBombWpn,
-			Description:    "If a trigger command is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
-			Type:           qptBool,
-			ParamUse:       puSingle,
-			RequiredParams: []QueryParamName{QpnAbilityUser},
+			Name:        QpnBombWpn,
+			Description: "If a trigger command is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
+			Type:        qptBool,
+			ParamUse:    puSingle,
+			RequiresAll: []QueryParamName{QpnAbilityUser},
 		},
 		{
 			Name:          QpnRelatedStat,
@@ -1881,7 +1881,7 @@ func (cfg *Config) initTriggerCommandsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.TriggerCommands.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.TriggerCommands.Endpoint, cfg.E.TriggerCommands.subsections)
 	cfg.Q.triggerCommands = paramsMap
 	cfg.E.TriggerCommands.queryLookup = paramsMap
 }
@@ -1897,18 +1897,18 @@ func (cfg *Config) initMiscAbilitiesParams() {
 			ReferencesInt: []EndpointName{epPlayerUnits},
 		},
 		{
-			Name:           QpnCelestialWeapon,
-			Description:    "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the misc ability's damage formula will be replaced by the character's celestial weapon damage formula.",
-			Type:           qptBool,
-			ParamUse:       puSingle,
-			RequiredParams: []QueryParamName{QpnAbilityUser},
+			Name:        QpnCelestialWeapon,
+			Description: "Can only be used in combination with the 'ability_user' parameter. If this parameter is true, the misc ability's damage formula will be replaced by the character's celestial weapon damage formula.",
+			Type:        qptBool,
+			ParamUse:    puSingle,
+			RequiresAll: []QueryParamName{QpnAbilityUser},
 		},
 		{
-			Name:           QpnBombWpn,
-			Description:    "If a misc ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
-			Type:           qptBool,
-			ParamUse:       puSingle,
-			RequiredParams: []QueryParamName{QpnAbilityUser},
+			Name:        QpnBombWpn,
+			Description: "If a misc ability is based on a user's attack, this parameter modifies its damage constant to be 18 instead of 16, since that is the power of weapons dropped by bombs specifically. Can only be used in combination with the 'ability_user' parameter and only takes effect, if the specified user is a character.",
+			Type:        qptBool,
+			ParamUse:    puSingle,
+			RequiresAll: []QueryParamName{QpnAbilityUser},
 		},
 		{
 			Name:        QpnRank,
@@ -1944,7 +1944,7 @@ func (cfg *Config) initMiscAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.MiscAbilities.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.MiscAbilities.Endpoint, cfg.E.MiscAbilities.subsections)
 	cfg.Q.miscAbilities = paramsMap
 	cfg.E.MiscAbilities.queryLookup = paramsMap
 }
@@ -2062,7 +2062,7 @@ func (cfg *Config) initEnemyAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.EnemyAbilities.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.EnemyAbilities.Endpoint, cfg.E.EnemyAbilities.subsections)
 	cfg.Q.enemyAbilities = paramsMap
 	cfg.E.EnemyAbilities.queryLookup = paramsMap
 }
@@ -2085,7 +2085,7 @@ func (cfg *Config) initOverdrivesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Overdrives.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Overdrives.Endpoint, cfg.E.Overdrives.subsections)
 	cfg.Q.overdrives = paramsMap
 	cfg.E.Overdrives.queryLookup = paramsMap
 }
@@ -2102,7 +2102,7 @@ func (cfg *Config) initSubmenusParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Submenus.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Submenus.Endpoint, cfg.E.Submenus.subsections)
 	cfg.Q.submenus = paramsMap
 	cfg.E.Submenus.queryLookup = paramsMap
 }
@@ -2140,11 +2140,11 @@ func (cfg *Config) initAllItemsParams() {
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
-			Name:           QpnPreAirship,
-			Description:    "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
-			Type:           qptBool,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnAvailability},
+			Name:        QpnPreAirship,
+			Description: "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
+			Type:        qptBool,
+			ParamUse:    puList,
+			RequiresAll: []QueryParamName{QpnAvailability},
 		},
 		{
 			Name:        QpnRepeatable,
@@ -2186,7 +2186,7 @@ func (cfg *Config) initAllItemsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.AllItems.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.AllItems.Endpoint, cfg.E.AllItems.subsections)
 	cfg.Q.allItems = paramsMap
 	cfg.E.AllItems.queryLookup = paramsMap
 }
@@ -2238,11 +2238,11 @@ func (cfg *Config) initItemsParams() {
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
-			Name:           QpnPreAirship,
-			Description:    "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
-			Type:           qptBool,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnAvailability},
+			Name:        QpnPreAirship,
+			Description: "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
+			Type:        qptBool,
+			ParamUse:    puList,
+			RequiresAll: []QueryParamName{QpnAvailability},
 		},
 		{
 			Name:        QpnRepeatable,
@@ -2284,7 +2284,7 @@ func (cfg *Config) initItemsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Items.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Items.Endpoint, cfg.E.Items.subsections)
 	cfg.Q.items = paramsMap
 	cfg.E.Items.queryLookup = paramsMap
 }
@@ -2349,7 +2349,7 @@ func (cfg *Config) initKeyItemsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.KeyItems.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.KeyItems.Endpoint, cfg.E.KeyItems.subsections)
 	cfg.Q.keyItems = paramsMap
 	cfg.E.KeyItems.queryLookup = paramsMap
 }
@@ -2387,11 +2387,11 @@ func (cfg *Config) initSpheresParams() {
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
-			Name:           QpnPreAirship,
-			Description:    "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
-			Type:           qptBool,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnAvailability},
+			Name:        QpnPreAirship,
+			Description: "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
+			Type:        qptBool,
+			ParamUse:    puList,
+			RequiresAll: []QueryParamName{QpnAvailability},
 		},
 		{
 			Name:        QpnRepeatable,
@@ -2433,7 +2433,7 @@ func (cfg *Config) initSpheresParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Spheres.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Spheres.Endpoint, cfg.E.Spheres.subsections)
 	cfg.Q.spheres = paramsMap
 	cfg.E.Spheres.queryLookup = paramsMap
 }
@@ -2450,7 +2450,7 @@ func (cfg *Config) initPrimersParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Primers.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Primers.Endpoint, cfg.E.Primers.subsections)
 	cfg.Q.primers = paramsMap
 	cfg.E.Primers.queryLookup = paramsMap
 }
@@ -2490,17 +2490,17 @@ func (cfg *Config) initMixesParams() {
 			ReferencesInt: []EndpointName{epItems},
 		},
 		{
-			Name:           QpnSecondItem,
-			Description:    "Can be used in combination with 'req_item' to get the mix the two specified items will create.",
-			Type:           qptNameID,
-			ExampleVals:    []string{"grenade", "power_sphere"},
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnReqItem},
-			ReferencesInt:  []EndpointName{epItems},
+			Name:          QpnSecondItem,
+			Description:   "Can be used in combination with 'req_item' to get the mix the two specified items will create.",
+			Type:          qptNameID,
+			ExampleVals:   []string{"grenade", "power_sphere"},
+			ParamUse:      puList,
+			RequiresAll:   []QueryParamName{QpnReqItem},
+			ReferencesInt: []EndpointName{epItems},
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Mixes.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Mixes.Endpoint, cfg.E.Mixes.subsections)
 	cfg.Q.mixes = paramsMap
 	cfg.E.Mixes.queryLookup = paramsMap
 }
@@ -2530,11 +2530,11 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ReferencesEnumsInt: []EnumName{enumNameAvailabilityType},
 		},
 		{
-			Name:           QpnPreAirship,
-			Description:    "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
-			Type:           qptBool,
-			ParamUse:       puList,
-			RequiredParams: []QueryParamName{QpnAvailability},
+			Name:        QpnPreAirship,
+			Description: "Makes the 'availability' filter view availability 'pre-story' as more accessible than availability 'post', if both types are present for one resource. This is useful, when you're not in the post-game yet and therefore can't access 'post' resources.",
+			Type:        qptBool,
+			ParamUse:    puList,
+			RequiresAll: []QueryParamName{QpnAvailability},
 		},
 		{
 			Name:        QpnRepeatable,
@@ -2586,7 +2586,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			ExampleVals:   []string{"kimahri"},
 			ParamUse:      puList,
 			ReplacedBy:    []QueryParamName{QpnAvailability, QpnRepeatable},
-			UsableWith:    []QueryParamName{QpnAvailability, QpnMonster, QpnShop},
+			RequiresOne:   []QueryParamName{QpnAvailability, QpnMonster, QpnShop},
 			ReferencesInt: []EndpointName{epMonsters},
 		},
 		{
@@ -2602,7 +2602,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 			Description: "Converts the 'availability' and 'repeatable' parameters to search for auto-abilities based on their required item's availability and/or farmability.",
 			Type:        qptBool,
 			ParamUse:    puList,
-			UsableWith:  []QueryParamName{QpnAvailability, QpnRepeatable},
+			RequiresOne: []QueryParamName{QpnAvailability, QpnRepeatable},
 		},
 		{
 			Name:          QpnLocation,
@@ -2630,7 +2630,7 @@ func (cfg *Config) initAutoAbilitiesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.AutoAbilities.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.AutoAbilities.Endpoint, cfg.E.AutoAbilities.subsections)
 	cfg.Q.autoAbilities = paramsMap
 	cfg.E.AutoAbilities.queryLookup = paramsMap
 }
@@ -2660,7 +2660,7 @@ func (cfg *Config) initEquipmentTablesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.EquipmentTables.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.EquipmentTables.Endpoint, cfg.E.EquipmentTables.subsections)
 	cfg.Q.equipmentTables = paramsMap
 	cfg.E.EquipmentTables.queryLookup = paramsMap
 }
@@ -2714,7 +2714,7 @@ func (cfg *Config) initEquipmentParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Equipment.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Equipment.Endpoint, cfg.E.Equipment.subsections)
 	cfg.Q.equipment = paramsMap
 	cfg.E.Equipment.queryLookup = paramsMap
 }
@@ -2731,7 +2731,7 @@ func (cfg *Config) initCelestialWeaponsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.CelestialWeapons.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.CelestialWeapons.Endpoint, cfg.E.CelestialWeapons.subsections)
 	cfg.Q.celestialWeapons = paramsMap
 	cfg.E.CelestialWeapons.queryLookup = paramsMap
 }
@@ -2746,7 +2746,7 @@ func (cfg *Config) initStatsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Stats.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Stats.Endpoint, cfg.E.Stats.subsections)
 	cfg.Q.stats = paramsMap
 	cfg.E.Stats.queryLookup = paramsMap
 }
@@ -2763,7 +2763,7 @@ func (cfg *Config) initOverdriveModesParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.OverdriveModes.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.OverdriveModes.Endpoint, cfg.E.OverdriveModes.subsections)
 	cfg.Q.overdriveModes = paramsMap
 	cfg.E.OverdriveModes.queryLookup = paramsMap
 }
@@ -2830,7 +2830,7 @@ func (cfg *Config) initStatusConditionsParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.StatusConditions.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.StatusConditions.Endpoint, cfg.E.StatusConditions.subsections)
 	cfg.Q.statusConditions = paramsMap
 	cfg.E.StatusConditions.queryLookup = paramsMap
 }
@@ -2847,7 +2847,7 @@ func (cfg *Config) initModifiersParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Modifiers.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.Modifiers.Endpoint, cfg.E.Modifiers.subsections)
 	cfg.Q.modifiers = paramsMap
 	cfg.E.Modifiers.queryLookup = paramsMap
 }
@@ -2863,7 +2863,7 @@ func (cfg *Config) initAgilityTierParams() {
 		},
 	}
 
-	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.AgilityTiers.subsections)
+	paramsMap := cfg.completeQueryParamsInit(params, cfg.E.AgilityTiers.Endpoint, cfg.E.AgilityTiers.subsections)
 	cfg.Q.agilityTiers = paramsMap
 	cfg.E.AgilityTiers.queryLookup = paramsMap
 }

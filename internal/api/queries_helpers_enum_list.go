@@ -7,17 +7,17 @@ import (
 )
 
 // checks for emptiness of enum-list-queryParam and converts its input into a slice of valid enum-strings.
-func parseEnumListQuery[E, N any](cfg *Config, r *http.Request, endpoint EndpointName, queryParam QueryParam, et EnumType[E, N]) ([]E, error) {
-	query, err := checkEmptyQuery(r, queryParam)
+func (q QueryParam) parseEnumList[E, N any](cfg *Config, r *http.Request, et EnumType[E, N]) ([]E, error) {
+	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return queryEnumsToSlice(cfg, query, endpoint, queryParam, et)
+	return q.sliceEnums(cfg, query, et)
 }
 
 // converts a list of unique query enum values or ids into a slice of valid typed enum-strings.
-func queryEnumsToSlice[E, N any](cfg *Config, query string, endpoint EndpointName, queryParam QueryParam, et EnumType[E, N]) ([]E, error) {
+func (q QueryParam) sliceEnums[E, N any](cfg *Config, query string, et EnumType[E, N]) ([]E, error) {
 	enumStrs, err := queryListSplit(cfg, query)
 	if err != nil {
 		return nil, err
@@ -25,7 +25,7 @@ func queryEnumsToSlice[E, N any](cfg *Config, query string, endpoint EndpointNam
 	enums := []E{}
 
 	for _, enumStr := range enumStrs {
-		enum, err := checkQueryEnum(enumStr, endpoint, queryParam, et)
+		enum, err := q.checkEnum(enumStr, et)
 		if err != nil {
 			return nil, err
 		}

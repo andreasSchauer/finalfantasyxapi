@@ -6,20 +6,19 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func getMixesByItem(cfg *Config, r *http.Request, ctx context.Context, firstItemID int32) ([]int32, error) {
 	i := cfg.E.Mixes
 
-	secondItemIDPtr, err := getQueryIDPtr(r, cfg.E.Items, QpnSecondItem, i.queryLookup)
+	secondItemIDPtr, err := nullInt32FromIDQuery(r, cfg.E.Items, QpnSecondItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := cfg.db.GetMixIDsByItems(ctx, database.GetMixIDsByItemsParams{
 		FirstItemID:  firstItemID,
-		SecondItemID: h.GetNullInt32(secondItemIDPtr),
+		SecondItemID: secondItemIDPtr,
 	})
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by items.", i.resTypePlural), err)

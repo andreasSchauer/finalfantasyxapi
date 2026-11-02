@@ -84,7 +84,7 @@ func applyAlteredState(cfg *Config, mon Monster, altStateID int) Monster {
 
 func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) (int, error) {
 	queryParam := cfg.Q.monsters[queryName]
-	query, err := checkEmptyQuery(r, queryParam)
+	query, err := queryParam.checkEmpty(r)
 	if err != nil {
 		return 0, err
 	}
@@ -93,7 +93,7 @@ func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName QueryPar
 		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states.", mon.String()), nil)
 	}
 
-	id, err := parseQueryID(query, queryParam, len(mon.AlteredStates))
+	id, err := queryParam.parseIDVal(query, len(mon.AlteredStates))
 	if err != nil {
 		return 0, err
 	}

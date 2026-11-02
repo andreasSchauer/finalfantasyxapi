@@ -11,11 +11,11 @@ import (
 func (i handlerInput[T, R, A]) queryNameIDListNul[P seeding.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, pResType ResTypeSingle, pLookup map[string]P, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if replParamsPresent(r, queryParam, i.queryLookup) {
+		if queryParam.replParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		queryIDs, err := parseNameIDListQuery(cfg, r, queryParam, pResType, pLookup)
+		queryIDs, err := queryParam.parseNameIDList(cfg, r, pResType, pLookup)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}

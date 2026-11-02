@@ -8,11 +8,11 @@ import (
 func (i handlerInput[T, R, A]) queryEnumList[E, N any](cfg *Config, r *http.Request, et EnumType[E, N], inputIDs []int32, queryName QueryParamName, dbQuery DBQueryEnumList[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if replParamsPresent(r, queryParam, i.queryLookup) {
+		if queryParam.replParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		enums, err := parseEnumListQuery(cfg, r, i.Endpoint, queryParam, et)
+		enums, err := queryParam.parseEnumList(cfg, r, et)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}

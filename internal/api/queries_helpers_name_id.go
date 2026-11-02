@@ -9,18 +9,18 @@ import (
 )
 
 // validates name/id-queryParam and checks emptiness. returns the corresponding id.
-func parseNameIDQuery[P seeding.Lookupable](r *http.Request, queryParam QueryParam, pResType ResTypeSingle, pLookup map[string]P) (int32, error) {
-	query, err := checkEmptyQuery(r, queryParam)
+func (q QueryParam) parseNameID[P seeding.Lookupable](r *http.Request, pResType ResTypeSingle, pLookup map[string]P) (int32, error) {
+	query, err := q.checkEmpty(r)
 	if err != nil {
 		return 0, err
 	}
 
-	return checkQueryNameID(query, pResType, queryParam, pLookup)
+	return q.checkNameID(query, pResType, pLookup)
 }
 
 // validates an id or single-segment-resource name, checks emptiness, and returns the corresponding id.
-func checkQueryNameID[P seeding.Lookupable](query string, pResType ResTypeSingle, queryParam QueryParam, pLookup map[string]P) (int32, error) {
-	id, err := checkQueryID(query, queryParam, len(pLookup))
+func (q QueryParam) checkNameID[P seeding.Lookupable](query string, pResType ResTypeSingle, pLookup map[string]P) (int32, error) {
+	id, err := q.checkID(query, len(pLookup))
 	if err == nil {
 		return id, nil
 	}
@@ -33,5 +33,5 @@ func checkQueryNameID[P seeding.Lookupable](query string, pResType ResTypeSingle
 		return resource.ID, nil
 	}
 
-	return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s' used for parameter '%s'.", pResType, query, queryParam.Name), err)
+	return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s' used for parameter '%s'.", pResType, query, q.Name), err)
 }

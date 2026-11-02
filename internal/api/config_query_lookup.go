@@ -96,7 +96,7 @@ func (cfg *Config) QueryLookupInit() {
 	}
 
 	cfg.Q.defaultParamSlice = defaultParams
-	cfg.Q.defaultParams = querySliceToMap(cfg, defaultParams)
+	cfg.Q.defaultParams = paramSliceToMap(defaultParams, nil)
 	cfg.initLocationsParams()
 	cfg.initSublocationsParams()
 	cfg.initAreasParams()
@@ -126,12 +126,12 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initMiscAbilitiesParams()
 	cfg.initEnemyAbilitiesParams()
 
-	cfg.Q.aeonCommands = cfg.assignDefaultParams(cfg.E.AeonCommands.subsections)
-	cfg.Q.overdriveCommands = cfg.assignDefaultParams(cfg.E.OverdriveCommands.subsections)
+	cfg.Q.aeonCommands = cfg.assignDefaultParams(cfg.E.AeonCommands.Endpoint, cfg.E.AeonCommands.subsections)
+	cfg.Q.overdriveCommands = cfg.assignDefaultParams(cfg.E.OverdriveCommands.Endpoint, cfg.E.OverdriveCommands.subsections)
 	cfg.initOverdrivesParams()
-	cfg.Q.ronsoRages = cfg.assignDefaultParams(cfg.E.RonsoRages.subsections)
+	cfg.Q.ronsoRages = cfg.assignDefaultParams(cfg.E.RonsoRages.Endpoint, cfg.E.RonsoRages.subsections)
 	cfg.initSubmenusParams()
-	cfg.Q.topmenus = cfg.assignDefaultParams(cfg.E.Topmenus.subsections)
+	cfg.Q.topmenus = cfg.assignDefaultParams(cfg.E.Topmenus.Endpoint, cfg.E.Topmenus.subsections)
 
 	cfg.initAllItemsParams()
 	cfg.initItemsParams()
@@ -146,15 +146,15 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initCelestialWeaponsParams()
 
 	cfg.initStatsParams()
-	cfg.Q.properties = cfg.assignDefaultParams(cfg.E.Properties.subsections)
+	cfg.Q.properties = cfg.assignDefaultParams(cfg.E.Properties.Endpoint, cfg.E.Properties.subsections)
 	cfg.initOverdriveModesParams()
-	cfg.Q.elements = cfg.assignDefaultParams(cfg.E.Elements.subsections)
+	cfg.Q.elements = cfg.assignDefaultParams(cfg.E.Elements.Endpoint, cfg.E.Elements.subsections)
 	cfg.initStatusConditionsParams()
 	cfg.initModifiersParams()
 	cfg.initAgilityTierParams()
 
-	cfg.Q.enums = cfg.assignDefaultParams(nil)
-	cfg.Q.endpoints = cfg.assignDefaultParams(nil)
+	cfg.Q.enums = cfg.assignDefaultParams(cfg.E.Enums.Endpoint, nil)
+	cfg.Q.endpoints = cfg.assignDefaultParams(cfg.E.Endpoints.Endpoint, nil)
 
 	cfg.E.AeonCommands.queryLookup = cfg.Q.aeonCommands
 	cfg.E.OverdriveCommands.queryLookup = cfg.Q.overdriveCommands

@@ -10,17 +10,17 @@ import (
 )
 
 // checks for emptiness of id-list-queryParam and converts its input into a slice of valid ids.
-func parseIDListQuery[F seeding.Lookupable](cfg *Config, r *http.Request, queryParam QueryParam, fLookup map[string]F) ([]int32, error) {
-	query, err := checkEmptyQuery(r, queryParam)
+func (q QueryParam) parseIDList[F seeding.Lookupable](cfg *Config, r *http.Request, fLookup map[string]F) ([]int32, error) {
+	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return queryIDsToSlice(cfg, r, query, queryParam, fLookup)
+	return q.sliceIDs(cfg, r, query, fLookup)
 }
 
 // converts a list of unique query ids into a slice of valid ids.
-func queryIDsToSlice[F seeding.Lookupable](cfg *Config, r *http.Request, query string, queryParam QueryParam, fLookup map[string]F) ([]int32, error) {
+func (q QueryParam) sliceIDs[F seeding.Lookupable](cfg *Config, r *http.Request, query string, fLookup map[string]F) ([]int32, error) {
 	idSegments, err := queryListSplit(cfg, query)
 	if err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func queryIDsToSlice[F seeding.Lookupable](cfg *Config, r *http.Request, query s
 	ids := []int32{}
 
 	for _, segment := range idSegments {
-		idsNew, err := checkQueryIDRange(queryParam, segment, fLookup)
+		idsNew, err := q.checkIDRange(segment, fLookup)
 		if err != nil {
 			return nil, err
 		}
@@ -47,7 +47,7 @@ func queryIDsToSlice[F seeding.Lookupable](cfg *Config, r *http.Request, query s
 	return ids, nil
 }
 
-func checkQueryIDRange[F seeding.Lookupable](queryParam QueryParam, segment string, fLookup map[string]F) ([]int32, error) {
+func (q QueryParam) checkIDRange[F seeding.Lookupable](segment string, fLookup map[string]F) ([]int32, error) {
 	idStrs := strings.Split(segment, "-")
 	ids := []int32{}
 
@@ -56,33 +56,33 @@ func checkQueryIDRange[F seeding.Lookupable](queryParam QueryParam, segment stri
 		return nil, nil
 
 	case 1:
-		id, err := parseQueryID(idStrs[0], queryParam, len(fLookup))
+		id, err := q.parseIDVal(idStrs[0], len(fLookup))
 		if err != nil {
 			return nil, err
 		}
 		ids = append(ids, id)
 
 	case 2:
-		newIDs, err := idRangeToSlice(queryParam, idStrs, fLookup)
+		newIDs, err := q.sliceIDRange(idStrs, fLookup)
 		if err != nil {
 			return nil, err
 		}
 		ids = slices.Concat(ids, newIDs)
 
 	default:
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", queryParam.Name, segment, queryParam.Usage), nil)
+		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'.", q.Name, segment, q.Usage), nil)
 	}
 
 	return ids, nil
 }
 
-func idRangeToSlice[F seeding.Lookupable](queryParam QueryParam, idStrs []string, fLookup map[string]F) ([]int32, error) {
-	minID, err := parseQueryID(idStrs[0], queryParam, len(fLookup))
+func (q QueryParam) sliceIDRange[F seeding.Lookupable](idStrs []string, fLookup map[string]F) ([]int32, error) {
+	minID, err := q.parseIDVal(idStrs[0], len(fLookup))
 	if err != nil {
 		return nil, err
 	}
 
-	maxID, err := parseQueryID(idStrs[1], queryParam, len(fLookup))
+	maxID, err := q.parseIDVal(idStrs[1], len(fLookup))
 	if err != nil {
 		return nil, err
 	}

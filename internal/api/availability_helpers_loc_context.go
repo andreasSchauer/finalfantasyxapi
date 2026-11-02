@@ -16,10 +16,10 @@ type locContextParams struct {
 
 func getLocContextParams[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A]) (locContextParams, error) {
 	avlType := AvlTypeSelf
-	var locContextID *int32
+	var locContextID sql.NullInt32
 	var locContextType string
 
-	locID, err := getQueryIDPtr(r, cfg.E.Locations, QpnLocation, i.queryLookup)
+	locID, err := nullInt32FromIDQuery(r, cfg.E.Locations, QpnLocation, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -29,7 +29,7 @@ func getLocContextParams[T seeding.Lookupable, R any, A APIResource](cfg *Config
 		locContextType = string(ViewSourceTypeLocation)
 	}
 
-	subLocID, err := getQueryIDPtr(r, cfg.E.Sublocations, QpnSublocation, i.queryLookup)
+	subLocID, err := nullInt32FromIDQuery(r, cfg.E.Sublocations, QpnSublocation, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -39,7 +39,7 @@ func getLocContextParams[T seeding.Lookupable, R any, A APIResource](cfg *Config
 		locContextType = string(ViewSourceTypeSublocation)
 	}
 
-	areaID, err := getQueryIDPtr(r, cfg.E.Areas, QpnArea, i.queryLookup)
+	areaID, err := nullInt32FromIDQuery(r, cfg.E.Areas, QpnArea, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -57,7 +57,7 @@ func getLocContextParams[T seeding.Lookupable, R any, A APIResource](cfg *Config
 
 	params := locContextParams{
 		AvlType: string(avlType),
-		ID:      h.GetNullInt32(locContextID),
+		ID:      locContextID,
 		Type:    h.GetNullString(locCtxTypePtr),
 	}
 

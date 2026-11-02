@@ -11,7 +11,7 @@ import (
 func (i handlerInput[T, R, A]) queryBasicWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapBasic) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		query, err := basicQueryChecks(r, queryParam, i.queryLookup)
+		query, err := queryParam.basicChecks(r, i.queryLookup)
 		if err != nil {
 			return inputIDs, nil
 		}
@@ -28,13 +28,13 @@ func (i handlerInput[T, R, A]) queryBasicWrapper(cfg *Config, r *http.Request, i
 	}
 }
 
-func basicQueryChecks(r *http.Request, queryParam QueryParam, queryLookup map[QueryParamName]QueryParam) (string, error) {
-	query, err := checkEmptyQuery(r, queryParam)
+func (q QueryParam) basicChecks(r *http.Request, queryLookup map[QueryParamName]QueryParam) (string, error) {
+	query, err := q.checkEmpty(r)
 	if err != nil {
 		return "", err
 	}
 
-	if replParamsPresent(r, queryParam, queryLookup) {
+	if q.replParamsPresent(r, queryLookup) {
 		return "", errQueryRedirect
 	}
 
@@ -42,8 +42,8 @@ func basicQueryChecks(r *http.Request, queryParam QueryParam, queryLookup map[Qu
 }
 
 // checks, if a queryParam is empty and returns errEmptyQuery, if it is
-func checkEmptyQuery(r *http.Request, queryParam QueryParam) (string, error) {
-	query := r.URL.Query().Get(string(queryParam.Name))
+func (q QueryParam) checkEmpty(r *http.Request) (string, error) {
+	query := r.URL.Query().Get(string(q.Name))
 	if query == "" {
 		return "", errEmptyQuery
 	}
@@ -51,8 +51,8 @@ func checkEmptyQuery(r *http.Request, queryParam QueryParam) (string, error) {
 	return strings.ToLower(query), nil
 }
 
-func checkEmptyQueryNoLower(r *http.Request, queryParam QueryParam) (string, error) {
-	query := r.URL.Query().Get(string(queryParam.Name))
+func (q QueryParam) checkEmptyNoLower(r *http.Request) (string, error) {
+	query := r.URL.Query().Get(string(q.Name))
 	if query == "" {
 		return "", errEmptyQuery
 	}
@@ -69,10 +69,10 @@ func checkNoneQuery(query string) error {
 	return nil
 }
 
-func replParamsPresent(r *http.Request, queryParam QueryParam, queryLookup map[QueryParamName]QueryParam) bool {
-	for _, param := range queryParam.ReplacedBy {
+func (q QueryParam) replParamsPresent(r *http.Request, queryLookup map[QueryParamName]QueryParam) bool {
+	for _, param := range q.ReplacedBy {
 		p := queryLookup[param]
-		_, err := checkEmptyQuery(r, p)
+		_, err := p.checkEmpty(r)
 		if !queryIsEmpty(err) {
 			return true
 		}

@@ -36,7 +36,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource](cfg *Config,
 	reqs := []string{string(srcType)}
 	excls := []string{}
 
-	monID, err := getQueryIDPtr(r, cfg.E.Monsters, QpnMonster, i.queryLookup)
+	monID, err := nullInt32FromIDQuery(r, cfg.E.Monsters, QpnMonster, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -44,7 +44,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource](cfg *Config,
 		reqs = append(reqs, "monster-single")
 	}
 
-	itemID, err := getQueryIDPtr(r, cfg.E.Items, QpnItem, i.queryLookup)
+	itemID, err := nullInt32FromIDQuery(r, cfg.E.Items, QpnItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -52,7 +52,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource](cfg *Config,
 		reqs = append(reqs, string(ViewSourceTypeItem))
 	}
 
-	keyItemID, err := getQueryIDPtr(r, cfg.E.KeyItems, QpnKeyItem, i.queryLookup)
+	keyItemID, err := nullInt32FromIDQuery(r, cfg.E.KeyItems, QpnKeyItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -60,7 +60,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource](cfg *Config,
 		reqs = append(reqs, string(ViewSourceTypeKeyItem))
 	}
 
-	autoAbilityID, err := getQueryIDPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := nullInt32FromIDQuery(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -68,7 +68,7 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource](cfg *Config,
 		reqs = append(reqs, string(ViewSourceTypeAutoAbility))
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup[QpnMethods])
+	methods, err := i.queryLookup[QpnMethods].parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -88,10 +88,10 @@ func getLocBasedSources[T seeding.Lookupable, R any, A APIResource](cfg *Config,
 		SrcType:         srcType,
 		RequiredSources: reqs,
 		ExcludedSources: h.SliceOrNil(excls),
-		MonsterID:       h.GetNullInt32(monID),
-		ItemID:          h.GetNullInt32(itemID),
-		KeyItemID:       h.GetNullInt32(keyItemID),
-		AutoAbilityID:   h.GetNullInt32(autoAbilityID),
+		MonsterID:       monID,
+		ItemID:          itemID,
+		KeyItemID:       keyItemID,
+		AutoAbilityID:   autoAbilityID,
 		Methods:         h.SliceOrNil(methods),
 	}
 
@@ -112,7 +112,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *
 	reqs := []string{}
 	excls := []string{}
 
-	autoAbilityID, err := getQueryIDPtr(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := nullInt32FromIDQuery(r, cfg.E.AutoAbilities, QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
@@ -121,7 +121,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *
 		reqs = append(reqs, "equip-filter")
 	}
 
-	emptySlots, err := parseIntListQuery(cfg, r, i.queryLookup[QpnEmptySlots])
+	emptySlots, err := i.queryLookup[QpnEmptySlots].parseIntList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
@@ -130,7 +130,7 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *
 		reqs = append(reqs, "equip-filter")
 	}
 
-	charID, err := getQueryNameIDPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
+	charID, err := nullInt32FromNameIDQuery(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
@@ -154,8 +154,8 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *
 		AvlType:         string(avlType),
 		RequiredSources: h.SliceOrNil(reqs),
 		ExcludedSources: h.SliceOrNil(excls),
-		AutoAbilityID:   h.GetNullInt32(autoAbilityID),
-		CharacterID:     h.GetNullInt32(charID),
+		AutoAbilityID:   autoAbilityID,
+		CharacterID:     charID,
 		EmptySlots:      h.SliceOrNil(emptySlots),
 	}
 
@@ -163,16 +163,16 @@ func getShopSources[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *
 }
 
 func parseBoolSources[T seeding.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], reqs, excls []string, sourceMap map[QueryParamName]string) ([]string, []string, error) {
-	for queryParam := range sourceMap {
-		b, err := parseBooleanQuery(r, i.queryLookup[queryParam])
+	for queryName := range sourceMap {
+		b, err := i.queryLookup[queryName].parseBool(r)
 		if errExceptEmptyQuery(err) {
 			return nil, nil, err
 		}
 		if !queryIsEmpty(err) {
 			if b {
-				reqs = append(reqs, sourceMap[queryParam])
+				reqs = append(reqs, sourceMap[queryName])
 			} else {
-				excls = append(excls, sourceMap[queryParam])
+				excls = append(excls, sourceMap[queryName])
 			}
 		}
 	}

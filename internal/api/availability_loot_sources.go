@@ -9,7 +9,7 @@ import (
 func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.E.Shops
 
-	avlParams, err := checkAvl(cfg, r, i.Endpoint, i.queryLookup)
+	avlParams, err := i.queryAvlGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 func filterAvlTreasures(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.E.Treasures
 
-	avlParams, err := checkAvl(cfg, r, i.Endpoint, i.queryLookup)
+	avlParams, err := i.queryAvlGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -72,7 +72,7 @@ func filterAvlTreasures(cfg *Config, r *http.Request, inputIDs []int32) ([]int32
 func filterAvlQuests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.E.Quests
 
-	avlParams, err := checkAvlAndRep(cfg, r, i.Endpoint, i.queryLookup)
+	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func filterAvlQuests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, e
 func filterAvlSidequests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.E.Sidequests
 
-	avlParams, err := checkAvlAndRep(cfg, r, i.Endpoint, i.queryLookup)
+	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -119,7 +119,7 @@ func filterAvlSidequests(cfg *Config, r *http.Request, inputIDs []int32) ([]int3
 func filterAvlSubquests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.E.Subquests
 
-	avlParams, err := checkAvlAndRep(cfg, r, i.Endpoint, i.queryLookup)
+	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

@@ -4,13 +4,12 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
 func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := cfg.E.AutoAbilities
 
-	avlParams, err := checkAvlAndRep(cfg, r, i.Endpoint, i.queryLookup)
+	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -18,7 +17,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		return inputIDs, nil
 	}
 
-	customize, err := parseBooleanQuery(r, i.queryLookup[QpnCustomize])
+	customize, err := i.queryLookup[QpnCustomize].parseBool(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -28,12 +27,12 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		return nil, err
 	}
 
-	charID, err := getQueryIDPtr(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
+	charID, err := nullInt32FromIDQuery(r, cfg.E.Characters, QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	methods, err := parseValueListQuery(cfg, r, i.queryLookup[QpnMethods])
+	methods, err := i.queryLookup[QpnMethods].parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -46,7 +45,7 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		AvlType:        locContext.AvlType,
 		LocContextID:   locContext.ID,
 		LocContextType: locContext.Type,
-		CharacterID:    h.GetNullInt32(charID),
+		CharacterID:    charID,
 		Methods:        methods,
 		Customize:      customize,
 	})

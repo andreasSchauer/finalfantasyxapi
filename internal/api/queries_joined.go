@@ -10,10 +10,12 @@ func (i handlerInput[T, R, A]) queryJoined(cfg *Config, r *http.Request, inputID
 		allEmpty := true
 
 		for _, queryName := range queryNames {
-			if replParamsPresent(r, i.queryLookup[queryName], i.queryLookup) {
+			queryParam := i.queryLookup[queryName]
+
+			if queryParam.replParamsPresent(r, i.queryLookup) {
 				return inputIDs, nil
 			}
-			_, err := checkEmptyQuery(r, i.queryLookup[queryName])
+			_, err := queryParam.checkEmpty(r)
 			if !queryIsEmpty(err) {
 				allEmpty = false
 				break

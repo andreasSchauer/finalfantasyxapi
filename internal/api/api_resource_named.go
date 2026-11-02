@@ -2,25 +2,11 @@ package api
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
-
-type NamedAPIResourceList struct {
-	ListParams
-	Results []NamedAPIResource `json:"results"`
-}
-
-func (l NamedAPIResourceList) GetListParams() ListParams {
-	return l.ListParams
-}
-
-func (l NamedAPIResourceList) GetResults() []HasAPIResource {
-	return toHasAPIResSlice(l.Results)
-}
 
 type NamedAPIResource struct {
 	ID            int32   `json:"-"`
@@ -138,20 +124,6 @@ func endpointsToNamedAPIResources(cfg *Config, endpoints []EndpointName) []Named
 	}
 
 	return resources
-}
-
-func newNamedAPIResourceList(cfg *Config, r *http.Request, resources []NamedAPIResource) (NamedAPIResourceList, error) {
-	listParams, shownResources, err := createPaginatedList(cfg, r, resources)
-	if err != nil {
-		return NamedAPIResourceList{}, err
-	}
-
-	list := NamedAPIResourceList{
-		ListParams: listParams,
-		Results:    shownResources,
-	}
-
-	return list, nil
 }
 
 func refsToNamedAPIResources(cfg *Config, refs []seeding.AbilityReference) []NamedAPIResource {

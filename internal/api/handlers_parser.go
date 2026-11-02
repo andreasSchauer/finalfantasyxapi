@@ -5,18 +5,16 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
 // deals with a single segment path that is either a name or an id and returns a parseResponse with the id, if a single match is found, or a name, if multiple matches with that name were found.
-func parseSingleSegmentResource[T seeding.Lookupable](resourceType ResTypeSingle, segment string, lookup map[string]T) (parseResponse, error) {
+func (i handlerInput[T, R, A]) parseSingleSegmentResource(segment string) (parseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {
 		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding.", err)
 	}
 
-	response, err := checkID(decoded, resourceType, len(lookup))
+	response, err := checkID(decoded, i.resTypeSingle, len(i.objLookup))
 	if err == nil {
 		return response, nil
 	}
@@ -24,21 +22,21 @@ func parseSingleSegmentResource[T seeding.Lookupable](resourceType ResTypeSingle
 		return parseResponse{}, err
 	}
 
-	response, err = checkUniqueName(decoded, lookup)
+	response, err = checkUniqueName(decoded, i.objLookup)
 	if err == nil {
 		return response, nil
 	}
 
-	response, err = checkNameMultiple(decoded, lookup)
+	response, err = checkNameMultiple(decoded, i.objLookup)
 	if err == nil {
 		return response, nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s'.", resourceType, segment), err)
+	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s'.", i.resTypeSingle, segment), err)
 }
 
 // deals with a name/version path and returns a parseResponse with the id, if a match is found.
-func parseNameVersionResource[T seeding.Lookupable](resourceType ResTypeSingle, name, versionStr string, lookup map[string]T) (parseResponse, error) {
+func (i handlerInput[T, R, A]) parseNameVersionResource(name, versionStr string) (parseResponse, error) {
 	nameDecoded, err := url.PathUnescape(name)
 	if err != nil {
 		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding.", err)
@@ -49,15 +47,15 @@ func parseNameVersionResource[T seeding.Lookupable](resourceType ResTypeSingle, 
 		return parseResponse{}, err
 	}
 
-	response, err := checkNameVersion(nameDecoded, versionPtr, lookup)
+	response, err := checkNameVersion(nameDecoded, versionPtr, i.objLookup)
 	if err == nil {
 		return response, nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s', version '%s'", resourceType, name, versionStr), err)
+	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s', version '%s'", i.resTypeSingle, name, versionStr), err)
 }
 
-func parseEnumsEndpointSegment(cfg *Config, i handlerInputEnums, segment string) (EnumResponse, string, error) {
+func (i handlerInputEnums) parseSegment(cfg *Config, segment string) (EnumResponse, string, error) {
 	key, err := url.PathUnescape(segment)
 	if err != nil {
 		return EnumResponse{}, "", newHTTPError(http.StatusBadRequest, "invalid url encoding.", err)

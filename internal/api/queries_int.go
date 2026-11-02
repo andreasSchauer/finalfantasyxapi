@@ -10,11 +10,11 @@ import (
 func (i handlerInput[T, R, A]) queryInt(r *http.Request, inputIDs []int32, queryName QueryParamName, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if replParamsPresent(r, queryParam, i.queryLookup) {
+		if queryParam.replParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		integer, err := parseIntQuery(r, queryParam)
+		integer, err := queryParam.parseInt(r)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}
@@ -35,11 +35,11 @@ func (i handlerInput[T, R, A]) queryInt(r *http.Request, inputIDs []int32, query
 func (i handlerInput[T, R, A]) queryIntWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if replParamsPresent(r, queryParam, i.queryLookup) {
+		if queryParam.replParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		integer, err := parseIntQuery(r, queryParam)
+		integer, err := queryParam.parseInt(r)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}

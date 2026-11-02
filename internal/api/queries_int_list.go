@@ -8,11 +8,11 @@ import (
 func (i handlerInput[T, R, A]) queryIntList(cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if replParamsPresent(r, queryParam, i.queryLookup) {
+		if queryParam.replParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		ints, err := parseIntListQuery(cfg, r, queryParam)
+		ints, err := queryParam.parseIntList(cfg, r)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}

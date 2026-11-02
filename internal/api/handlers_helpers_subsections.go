@@ -131,7 +131,7 @@ func (i handlerInput[T, R, A]) handleSimple(cfg *Config, w http.ResponseWriter, 
 	respondWithJSON(w, http.StatusOK, subResList)
 }
 
-func(i handlerInput[T, R, A]) queryIDsParam(cfg *Config, r *http.Request, segment *string) ([]int32, error) {
+func (i handlerInput[T, R, A]) queryIDsParam(cfg *Config, r *http.Request, segment *string) ([]int32, error) {
 	err := verifyQueryParams[any](r, i.Endpoint, i.queryLookup, nil, segment)
 	if err != nil {
 		return nil, err
@@ -139,12 +139,12 @@ func(i handlerInput[T, R, A]) queryIDsParam(cfg *Config, r *http.Request, segmen
 
 	// ifs ids param is empty, just retrieve all ids
 	queryParamIDs := i.queryLookup[QpnIDs]
-	_, err = checkEmptyQuery(r, queryParamIDs)
+	_, err = queryParamIDs.checkEmpty(r)
 	if queryIsEmpty(err) {
 		return i.retrieveFunc(r, i)
 	}
 
-	ids, err := parseIDListQuery(cfg, r, queryParamIDs, i.objLookup)
+	ids, err := queryParamIDs.parseIDList(cfg, r, i.objLookup)
 	if err != nil {
 		return nil, err
 	}

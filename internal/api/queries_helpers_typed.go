@@ -11,7 +11,7 @@ import (
 
 // validates typed-QueryParam and checks emptiness
 func parseTypedQuery(r *http.Request, queryParam QueryParam) (string, string, error) {
-	query, err := checkEmptyQuery(r, queryParam)
+	query, err := queryParam.checkEmpty(r)
 	if err != nil {
 		return "", "", err
 	}

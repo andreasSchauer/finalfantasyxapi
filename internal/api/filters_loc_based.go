@@ -12,7 +12,7 @@ func getAreasByItem(cfg *Config, r *http.Request, ctx context.Context, id int32)
 	i := cfg.E.Areas
 	queryParamMethods := i.queryLookup[QpnMethods]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
+	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func getSublocationsByItem(cfg *Config, r *http.Request, ctx context.Context, id
 	i := cfg.E.Sublocations
 	queryParamMethods := i.queryLookup[QpnMethods]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
+	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func getLocationsByItem(cfg *Config, r *http.Request, ctx context.Context, id in
 	i := cfg.E.Locations
 	queryParamMethods := i.queryLookup[QpnMethods]
 
-	methods, err := parseValueListQuery(cfg, r, queryParamMethods)
+	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

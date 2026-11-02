@@ -113,7 +113,7 @@ func applyOsgStats(cfg *Config, r *http.Request, char Character) ([]BaseStat, er
 	var statMap map[string]int32
 	queryParam := cfg.Q.characters[QpnOsgStats]
 
-	sgType, err := parseEnumQuery(r, epCharacters, queryParam, cfg.T.SphereGridType)
+	sgType, err := queryParam.parseEnum(r, cfg.T.SphereGridType)
 	if queryIsEmpty(err) {
 		return char.BaseStats, nil
 	}

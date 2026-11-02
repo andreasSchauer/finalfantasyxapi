@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"cmp"
+	"database/sql"
 	"fmt"
 	"slices"
 	"strings"
@@ -39,6 +40,11 @@ func PtrToString[T any](ptr *T) string {
 	}
 
 	return fmt.Sprintf("%v", *ptr)
+}
+
+func NullInt32ToString(i sql.NullInt32) string {
+	ptr := NullInt32ToPtr(i)
+	return PtrToString(ptr)
 }
 
 func GetMapKeyStr[T any](itemMap map[string]T) string {

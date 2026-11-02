@@ -11,11 +11,11 @@ import (
 func (i handlerInput[T, R, A]) queryNameID[P seeding.Lookupable](r *http.Request, inputIDs []int32, queryName QueryParamName, pResType ResTypeSingle, pLookup map[string]P, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if replParamsPresent(r, queryParam, i.queryLookup) {
+		if queryParam.replParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		id, err := parseNameIDQuery(r, queryParam, pResType, pLookup)
+		id, err := queryParam.parseNameID(r, pResType, pLookup)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}
@@ -35,11 +35,11 @@ func (i handlerInput[T, R, A]) queryNameID[P seeding.Lookupable](r *http.Request
 func (i handlerInput[T, R, A]) queryNameIDWrapper[P seeding.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, pResType ResTypeSingle, pLookup map[string]P, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if replParamsPresent(r, queryParam, i.queryLookup) {
+		if queryParam.replParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		id, err := parseNameIDQuery(r, queryParam, pResType, pLookup)
+		id, err := queryParam.parseNameID(r, pResType, pLookup)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}
