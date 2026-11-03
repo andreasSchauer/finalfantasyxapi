@@ -8,27 +8,27 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedSphereGrids(qtx *database.Queries, ctx context.Context) error {
-	grids := l.extractSphereGrids()
+func loop1SeedSphereGrids(qtx *database.Queries, ctx context.Context) error {
+	grids := extractSphereGrids()
 
 	params := database.CreateSphereGridBulkParams{
-		DataHash:           make([]string, len(grids)),
-		Type:               make([]database.SphereGridType, len(grids)),
-		Hp:                 make([]int32, len(grids)),
-		Mp:                 make([]int32, len(grids)),
-		Strength:           make([]int32, len(grids)),
-		Defense:            make([]int32, len(grids)),
-		Magic:              make([]int32, len(grids)),
-		MagicDefense:       make([]int32, len(grids)),
-		Agility:            make([]int32, len(grids)),
-		Luck:               make([]int32, len(grids)),
-		Evasion:            make([]int32, len(grids)),
-		Accuracy: 			make([]int32, len(grids)),
-		Lv1Locks:           make([]int32, len(grids)),
-		Lv2Locks:           make([]int32, len(grids)),
-		Lv3Locks:           make([]int32, len(grids)),
-		Lv4Locks:           make([]int32, len(grids)),
-		EmptyNodes:         make([]int32, len(grids)),
+		DataHash:     make([]string, len(grids)),
+		Type:         make([]database.SphereGridType, len(grids)),
+		Hp:           make([]int32, len(grids)),
+		Mp:           make([]int32, len(grids)),
+		Strength:     make([]int32, len(grids)),
+		Defense:      make([]int32, len(grids)),
+		Magic:        make([]int32, len(grids)),
+		MagicDefense: make([]int32, len(grids)),
+		Agility:      make([]int32, len(grids)),
+		Luck:         make([]int32, len(grids)),
+		Evasion:      make([]int32, len(grids)),
+		Accuracy:     make([]int32, len(grids)),
+		Lv1Locks:     make([]int32, len(grids)),
+		Lv2Locks:     make([]int32, len(grids)),
+		Lv3Locks:     make([]int32, len(grids)),
+		Lv4Locks:     make([]int32, len(grids)),
+		EmptyNodes:   make([]int32, len(grids)),
 	}
 
 	for i, g := range grids {
@@ -57,17 +57,17 @@ func (l *Lookup) loop1SeedSphereGrids(qtx *database.Queries, ctx context.Context
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractSphereGrids() []seedtypes.SphereGrid {
+func extractSphereGrids() []seedtypes.SphereGrid {
 	grids := []seedtypes.SphereGrid{}
 
-	for i := range l.json.characters {
-		char := &l.json.characters[i]
+	for i := range rawJSON.characters {
+		char := &rawJSON.characters[i]
 
 		if char.IsStoryBased {
 			continue
@@ -79,5 +79,5 @@ func (l *Lookup) extractSphereGrids() []seedtypes.SphereGrid {
 		grids = append(grids, *char.ExpSphereGrid)
 	}
 
-	return dedupeRows(grids, l.Hashes)
+	return dedupeRows(grids, hashes)
 }

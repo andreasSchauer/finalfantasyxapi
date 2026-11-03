@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedSpheres(qtx *database.Queries, ctx context.Context) error {
-	spheres, err := l.extractSpheres()
+func loop3SeedSpheres(qtx *database.Queries, ctx context.Context) error {
+	spheres, err := extractSpheres()
 	if err != nil {
 		return err
 	}
@@ -45,29 +45,29 @@ func (l *Lookup) loop3SeedSpheres(qtx *database.Queries, ctx context.Context) er
 
 	for i, row := range dbRows {
 		spheres[i].ID = row.ID
-		l.json.spheres[i].ID = row.ID
-		l.Spheres[seedtypes.Key(spheres[i])] = spheres[i]
-		l.SpheresID[row.ID] = spheres[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.spheres[i].ID = row.ID
+		L.Spheres[seedtypes.Key(spheres[i])] = spheres[i]
+		L.SpheresID[row.ID] = spheres[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractSpheres() ([]seedtypes.Sphere, error) {
+func extractSpheres() ([]seedtypes.Sphere, error) {
 	spheres := []seedtypes.Sphere{}
 	var err error
 
-	for i := range l.json.spheres {
-		sphere := &l.json.spheres[i]
+	for i := range rawJSON.spheres {
+		sphere := &rawJSON.spheres[i]
 
-		sphere.ItemID, err = assignFK(sphere.Name, l.Items)
+		sphere.ItemID, err = assignFK(sphere.Name, L.Items)
 		if err != nil {
 			return nil, err
 		}
 
 		if sphere.CreatedNode != nil {
-			sphere.CreatedNode.ID, err = l.GetHashID(*sphere.CreatedNode)
+			sphere.CreatedNode.ID, err = GetHashID(*sphere.CreatedNode)
 			if err != nil {
 				return nil, err
 			}
@@ -76,11 +76,11 @@ func (l *Lookup) extractSpheres() ([]seedtypes.Sphere, error) {
 		spheres = append(spheres, *sphere)
 	}
 
-	return dedupeRows(spheres, l.Hashes), nil
+	return dedupeRows(spheres, hashes), nil
 }
 
-func (l *Lookup) loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
-	nodes := l.extractCreatedNodes()
+func loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
+	nodes := extractCreatedNodes()
 
 	params := database.CreateCreatedNodeBulkParams{
 		DataHash: make([]string, len(nodes)),
@@ -100,26 +100,26 @@ func (l *Lookup) loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Contex
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractCreatedNodes() []seedtypes.CreatedNode {
+func extractCreatedNodes() []seedtypes.CreatedNode {
 	createdNodes := []seedtypes.CreatedNode{}
 
-	for _, sphere := range l.json.spheres {
+	for _, sphere := range rawJSON.spheres {
 		if sphere.CreatedNode != nil {
 			createdNodes = append(createdNodes, *sphere.CreatedNode)
 		}
 	}
 
-	return dedupeRows(createdNodes, l.Hashes)
+	return dedupeRows(createdNodes, hashes)
 }
 
-func (l *Lookup) loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Context) error {
-	nodes := l.extractTargetableNodes()
+func loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Context) error {
+	nodes := extractTargetableNodes()
 
 	params := database.CreateSphereTargetableNodeBulkParams{
 		DataHash: make([]string, len(nodes)),
@@ -139,17 +139,17 @@ func (l *Lookup) loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Con
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractTargetableNodes() []seedtypes.TargetableNode {
+func extractTargetableNodes() []seedtypes.TargetableNode {
 	nodes := []seedtypes.TargetableNode{}
 
-	for i := range l.json.spheres {
-		sphere := &l.json.spheres[i]
+	for i := range rawJSON.spheres {
+		sphere := &rawJSON.spheres[i]
 
 		for j := range sphere.TargetableNodes {
 			nodeString := sphere.TargetableNodes[j]
@@ -163,5 +163,5 @@ func (l *Lookup) extractTargetableNodes() []seedtypes.TargetableNode {
 		}
 	}
 
-	return dedupeRows(nodes, l.Hashes)
+	return dedupeRows(nodes, hashes)
 }

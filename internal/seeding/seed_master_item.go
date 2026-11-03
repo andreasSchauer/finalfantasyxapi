@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
-	items := l.extractMasterItems()
+func loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
+	items := extractMasterItems()
 
 	params := database.CreateMasterItemBulkParams{
 		DataHash: make([]string, len(items)),
@@ -30,26 +30,26 @@ func (l *Lookup) loop1SeedMasterItems(qtx *database.Queries, ctx context.Context
 
 	for i, row := range dbRows {
 		items[i].ID = row.ID
-		l.MasterItems[seedtypes.Key(items[i])] = items[i]
-		l.MasterItemsID[row.ID] = items[i]
-		l.Hashes[row.DataHash] = row.ID
+		L.MasterItems[seedtypes.Key(items[i])] = items[i]
+		L.MasterItemsID[row.ID] = items[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractMasterItems() []seedtypes.MasterItem {
+func extractMasterItems() []seedtypes.MasterItem {
 	masterItems := []seedtypes.MasterItem{}
 
-	for _, i := range l.json.items {
+	for _, i := range rawJSON.items {
 		i.MasterItem.Type = database.ItemTypeItem
 		masterItems = append(masterItems, i.MasterItem)
 	}
 
-	for _, i := range l.json.keyItems {
+	for _, i := range rawJSON.keyItems {
 		i.MasterItem.Type = database.ItemTypeKeyItem
 		masterItems = append(masterItems, i.MasterItem)
 	}
 
-	return dedupeRows(masterItems, l.Hashes)
+	return dedupeRows(masterItems, hashes)
 }

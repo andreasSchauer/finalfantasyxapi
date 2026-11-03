@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedInflictedDelays(qtx *database.Queries, ctx context.Context) error {
-	delays := l.extractInflictedDelays()
+func loop1SeedInflictedDelays(qtx *database.Queries, ctx context.Context) error {
+	delays := extractInflictedDelays()
 
 	params := database.CreateInflictedDelayBulkParams{
 		DataHash:      make([]string, len(delays)),
@@ -31,16 +31,16 @@ func (l *Lookup) loop1SeedInflictedDelays(qtx *database.Queries, ctx context.Con
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractInflictedDelays() []seedtypes.InflictedDelay {
+func extractInflictedDelays() []seedtypes.InflictedDelay {
 	delays := []seedtypes.InflictedDelay{}
 
-	for _, ability := range l.json.enemyAbilities {
+	for _, ability := range rawJSON.enemyAbilities {
 		for _, bi := range ability.BattleInteractions {
 			if bi.InflictedDelay != nil {
 				delays = append(delays, *bi.InflictedDelay)
@@ -48,7 +48,7 @@ func (l *Lookup) extractInflictedDelays() []seedtypes.InflictedDelay {
 		}
 	}
 
-	for _, ability := range l.json.items {
+	for _, ability := range rawJSON.items {
 		for _, bi := range ability.BattleInteractions {
 			if bi.InflictedDelay != nil {
 				delays = append(delays, *bi.InflictedDelay)
@@ -56,7 +56,7 @@ func (l *Lookup) extractInflictedDelays() []seedtypes.InflictedDelay {
 		}
 	}
 
-	for _, ability := range l.json.overdriveAbilities {
+	for _, ability := range rawJSON.overdriveAbilities {
 		for _, bi := range ability.BattleInteractions {
 			if bi.InflictedDelay != nil {
 				delays = append(delays, *bi.InflictedDelay)
@@ -64,7 +64,7 @@ func (l *Lookup) extractInflictedDelays() []seedtypes.InflictedDelay {
 		}
 	}
 
-	for _, ability := range l.json.playerAbilities {
+	for _, ability := range rawJSON.playerAbilities {
 		for _, bi := range ability.BattleInteractions {
 			if bi.InflictedDelay != nil {
 				delays = append(delays, *bi.InflictedDelay)
@@ -72,7 +72,7 @@ func (l *Lookup) extractInflictedDelays() []seedtypes.InflictedDelay {
 		}
 	}
 
-	for _, ability := range l.json.triggerCommands {
+	for _, ability := range rawJSON.triggerCommands {
 		for _, bi := range ability.BattleInteractions {
 			if bi.InflictedDelay != nil {
 				delays = append(delays, *bi.InflictedDelay)
@@ -80,7 +80,7 @@ func (l *Lookup) extractInflictedDelays() []seedtypes.InflictedDelay {
 		}
 	}
 
-	for _, ability := range l.json.miscAbilities {
+	for _, ability := range rawJSON.miscAbilities {
 		for _, bi := range ability.BattleInteractions {
 			if bi.InflictedDelay != nil {
 				delays = append(delays, *bi.InflictedDelay)
@@ -88,5 +88,5 @@ func (l *Lookup) extractInflictedDelays() []seedtypes.InflictedDelay {
 		}
 	}
 
-	return dedupeRows(delays, l.Hashes)
+	return dedupeRows(delays, hashes)
 }

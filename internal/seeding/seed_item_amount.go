@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop2SeedItemAmounts(qtx *database.Queries, ctx context.Context) error {
-	itemAmts, err := l.extractItemAmounts()
+func loop2SeedItemAmounts(qtx *database.Queries, ctx context.Context) error {
+	itemAmts, err := extractItemAmounts()
 	if err != nil {
 		return err
 	}
@@ -32,21 +32,21 @@ func (l *Lookup) loop2SeedItemAmounts(qtx *database.Queries, ctx context.Context
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractItemAmounts() ([]seedtypes.ItemAmount, error) {
+func extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 	itemAmounts := []seedtypes.ItemAmount{}
 	var err error
 
-	for i := range l.json.autoAbilities {
-		autoAbility := &l.json.autoAbilities[i]
+	for i := range rawJSON.autoAbilities {
+		autoAbility := &rawJSON.autoAbilities[i]
 
 		if autoAbility.RequiredItem != nil {
-			itemAmt, err := l.prepareItemAmt(autoAbility.RequiredItem)
+			itemAmt, err := prepareItemAmt(autoAbility.RequiredItem)
 			if err != nil {
 				return nil, err
 			}
@@ -55,11 +55,11 @@ func (l *Lookup) extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 		}
 	}
 
-	for i := range l.json.blitzballPositions {
-		position := &l.json.blitzballPositions[i]
+	for i := range rawJSON.blitzballPositions {
+		position := &rawJSON.blitzballPositions[i]
 
 		for j := range position.Items {
-			itemAmt, err := l.prepareItemAmt(&position.Items[j].ItemAmount)
+			itemAmt, err := prepareItemAmt(&position.Items[j].ItemAmount)
 			if err != nil {
 				return nil, err
 			}
@@ -68,17 +68,17 @@ func (l *Lookup) extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 		}
 	}
 
-	monsterItems, err := l.extractItemAmtsMonsters()
+	monsterItems, err := extractItemAmtsMonsters()
 	if err != nil {
 		return nil, err
 	}
 	itemAmounts = append(itemAmounts, monsterItems...)
 
-	for i := range l.json.playerAbilities {
-		playerAbility := &l.json.playerAbilities[i]
+	for i := range rawJSON.playerAbilities {
+		playerAbility := &rawJSON.playerAbilities[i]
 
 		if playerAbility.AeonLearnItem != nil {
-			itemAmt, err := l.prepareItemAmt(playerAbility.AeonLearnItem)
+			itemAmt, err := prepareItemAmt(playerAbility.AeonLearnItem)
 			if err != nil {
 				return nil, err
 			}
@@ -87,11 +87,11 @@ func (l *Lookup) extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 		}
 	}
 
-	for i := range l.json.sidequests {
-		sidequest := &l.json.sidequests[i]
+	for i := range rawJSON.sidequests {
+		sidequest := &rawJSON.sidequests[i]
 
 		if sidequest.Completion != nil {
-			itemAmt, err := l.prepareItemAmt(&sidequest.Completion.Reward)
+			itemAmt, err := prepareItemAmt(&sidequest.Completion.Reward)
 			if err != nil {
 				return nil, err
 			}
@@ -103,7 +103,7 @@ func (l *Lookup) extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 			subquest := &sidequest.Subquests[j]
 
 			if subquest.Completion != nil {
-				itemAmt, err := l.prepareItemAmt(&subquest.Completion.Reward)
+				itemAmt, err := prepareItemAmt(&subquest.Completion.Reward)
 				if err != nil {
 					return nil, err
 				}
@@ -113,13 +113,13 @@ func (l *Lookup) extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 		}
 	}
 
-	for i := range l.json.treasureLists {
-		treasureList := &l.json.treasureLists[i]
+	for i := range rawJSON.treasureLists {
+		treasureList := &rawJSON.treasureLists[i]
 		for j := range treasureList.Treasures {
 			treasure := &treasureList.Treasures[j]
 
 			for j := range treasure.Items {
-				itemAmt, err := l.prepareItemAmt(&treasure.Items[j])
+				itemAmt, err := prepareItemAmt(&treasure.Items[j])
 				if err != nil {
 					return nil, err
 				}
@@ -129,15 +129,15 @@ func (l *Lookup) extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 		}
 	}
 
-	return dedupeRows(itemAmounts, l.Hashes), nil
+	return dedupeRows(itemAmounts, hashes), nil
 }
 
-func (l *Lookup) extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
+func extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
 	itemAmounts := []seedtypes.ItemAmount{}
 	var err error
 
-	for i := range l.json.monsters {
-		monster := l.json.monsters[i]
+	for i := range rawJSON.monsters {
+		monster := rawJSON.monsters[i]
 
 		if monster.Items != nil {
 			items := monster.Items
@@ -150,7 +150,7 @@ func (l *Lookup) extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
 			br := items.Bribe
 
 			if sc != nil {
-				sc, err = l.prepareItemAmt(sc)
+				sc, err = prepareItemAmt(sc)
 				if err != nil {
 					return nil, err
 				}
@@ -158,7 +158,7 @@ func (l *Lookup) extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
 			}
 
 			if sr != nil {
-				sr, err = l.prepareItemAmt(sr)
+				sr, err = prepareItemAmt(sr)
 				if err != nil {
 					return nil, err
 				}
@@ -166,7 +166,7 @@ func (l *Lookup) extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
 			}
 
 			if dc != nil {
-				dc, err = l.prepareItemAmt(dc)
+				dc, err = prepareItemAmt(dc)
 				if err != nil {
 					return nil, err
 				}
@@ -174,7 +174,7 @@ func (l *Lookup) extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
 			}
 
 			if dr != nil {
-				dr, err = l.prepareItemAmt(dr)
+				dr, err = prepareItemAmt(dr)
 				if err != nil {
 					return nil, err
 				}
@@ -182,7 +182,7 @@ func (l *Lookup) extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
 			}
 
 			if sdc != nil {
-				sdc, err = l.prepareItemAmt(sdc)
+				sdc, err = prepareItemAmt(sdc)
 				if err != nil {
 					return nil, err
 				}
@@ -190,7 +190,7 @@ func (l *Lookup) extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
 			}
 
 			if sdr != nil {
-				sdr, err = l.prepareItemAmt(sdr)
+				sdr, err = prepareItemAmt(sdr)
 				if err != nil {
 					return nil, err
 				}
@@ -198,7 +198,7 @@ func (l *Lookup) extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
 			}
 
 			if br != nil {
-				br, err = l.prepareItemAmt(br)
+				br, err = prepareItemAmt(br)
 				if err != nil {
 					return nil, err
 				}
@@ -206,7 +206,7 @@ func (l *Lookup) extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
 			}
 
 			for j := range items.OtherItems {
-				itemAmt, err := l.prepareItemAmt(&items.OtherItems[j].ItemAmount)
+				itemAmt, err := prepareItemAmt(&items.OtherItems[j].ItemAmount)
 				if err != nil {
 					return nil, err
 				}
@@ -219,16 +219,16 @@ func (l *Lookup) extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
 	return itemAmounts, nil
 }
 
-func (l *Lookup) prepareItemAmt(ia *seedtypes.ItemAmount) (*seedtypes.ItemAmount, error) {
+func prepareItemAmt(ia *seedtypes.ItemAmount) (*seedtypes.ItemAmount, error) {
 	var err error
 	ia.MasterItem.Name = ia.ItemName
 
-	ia.MasterItem.ID, err = assignFK(ia.MasterItem.Name, l.MasterItems)
+	ia.MasterItem.ID, err = assignFK(ia.MasterItem.Name, L.MasterItems)
 	if err != nil {
 		return nil, err
 	}
 
-	mi, err := GetResourceByID(ia.MasterItem.ID, l.MasterItemsID)
+	mi, err := GetResourceByID(ia.MasterItem.ID, L.MasterItemsID)
 	if err != nil {
 		return nil, err
 	}

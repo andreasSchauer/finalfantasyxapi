@@ -7,13 +7,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getAutoAbilityAddedStatusResists(a seedtypes.AutoAbility) ([]seedtypes.StatusResist, error) {
+func getAutoAbilityAddedStatusResists(a seedtypes.AutoAbility) ([]seedtypes.StatusResist, error) {
 	return a.AddedStatusResists, nil
 }
 
-func (l *Lookup) seedJuncAutoAbilitiesAddedStatusResists(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAutoAbilitiesAddedStatusResists(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + added status resists"
-	jParams, err := processJunctions(l, desc, l.json.autoAbilities, l.getAutoAbilityAddedStatusResists)
+	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityAddedStatusResists)
 	if err != nil {
 		return err
 	}
@@ -25,13 +25,13 @@ func (l *Lookup) seedJuncAutoAbilitiesAddedStatusResists(qtx *database.Queries, 
 	})
 }
 
-func (l *Lookup) getAutoAbilityAddedStatusses(a seedtypes.AutoAbility) ([]seedtypes.StatusCondition, error) {
-	return getResources(a.AddedStatusses, l.StatusConditions)
+func getAutoAbilityAddedStatusses(a seedtypes.AutoAbility) ([]seedtypes.StatusCondition, error) {
+	return GetResources(a.AddedStatusses, L.StatusConditions)
 }
 
-func (l *Lookup) seedJuncAutoAbilitiesAddedStatusses(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAutoAbilitiesAddedStatusses(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + added statusses"
-	jParams, err := processJunctions(l, desc, l.json.autoAbilities, l.getAutoAbilityAddedStatusses)
+	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityAddedStatusses)
 	if err != nil {
 		return err
 	}
@@ -43,13 +43,13 @@ func (l *Lookup) seedJuncAutoAbilitiesAddedStatusses(qtx *database.Queries, ctx 
 	})
 }
 
-func (l *Lookup) getAutoAbilityAutoItems(a seedtypes.AutoAbility) ([]seedtypes.Item, error) {
-	return getResources(a.AutoItemUse, l.Items)
+func getAutoAbilityAutoItems(a seedtypes.AutoAbility) ([]seedtypes.Item, error) {
+	return GetResources(a.AutoItemUse, L.Items)
 }
 
-func (l *Lookup) seedJuncAutoAbilitiesAutoItems(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAutoAbilitiesAutoItems(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + auto items"
-	jParams, err := processJunctions(l, desc, l.json.autoAbilities, l.getAutoAbilityAutoItems)
+	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityAutoItems)
 	if err != nil {
 		return err
 	}
@@ -61,13 +61,13 @@ func (l *Lookup) seedJuncAutoAbilitiesAutoItems(qtx *database.Queries, ctx conte
 	})
 }
 
-func (l *Lookup) getAutoAbilityLockedOutAbilities(a seedtypes.AutoAbility) ([]seedtypes.AutoAbility, error) {
-	return getResources(a.LockedOutAbilities, l.AutoAbilities)
+func getAutoAbilityLockedOutAbilities(a seedtypes.AutoAbility) ([]seedtypes.AutoAbility, error) {
+	return GetResources(a.LockedOutAbilities, L.AutoAbilities)
 }
 
-func (l *Lookup) seedJuncAutoAbilitiesLockedOutAbilities(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAutoAbilitiesLockedOutAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + locked out"
-	jParams, err := processJunctions(l, desc, l.json.autoAbilities, l.getAutoAbilityLockedOutAbilities)
+	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityLockedOutAbilities)
 	if err != nil {
 		return err
 	}
@@ -79,13 +79,13 @@ func (l *Lookup) seedJuncAutoAbilitiesLockedOutAbilities(qtx *database.Queries, 
 	})
 }
 
-func (l *Lookup) getAutoAbilityModifierChanges(a seedtypes.AutoAbility) ([]seedtypes.ModifierChange, error) {
+func getAutoAbilityModifierChanges(a seedtypes.AutoAbility) ([]seedtypes.ModifierChange, error) {
 	return a.ModifierChanges, nil
 }
 
-func (l *Lookup) seedJuncAutoAbilitiesModifierChanges(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAutoAbilitiesModifierChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + modifier changes"
-	jParams, err := processJunctions(l, desc, l.json.autoAbilities, l.getAutoAbilityModifierChanges)
+	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityModifierChanges)
 	if err != nil {
 		return err
 	}
@@ -97,13 +97,13 @@ func (l *Lookup) seedJuncAutoAbilitiesModifierChanges(qtx *database.Queries, ctx
 	})
 }
 
-func (l *Lookup) getAutoAbilityRelatedStats(a seedtypes.AutoAbility) ([]seedtypes.Stat, error) {
-	return getResources(a.RelatedStats, l.Stats)
+func getAutoAbilityRelatedStats(a seedtypes.AutoAbility) ([]seedtypes.Stat, error) {
+	return GetResources(a.RelatedStats, L.Stats)
 }
 
-func (l *Lookup) seedJuncAutoAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAutoAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + related stats"
-	jParams, err := processJunctions(l, desc, l.json.autoAbilities, l.getAutoAbilityRelatedStats)
+	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityRelatedStats)
 	if err != nil {
 		return err
 	}
@@ -115,13 +115,13 @@ func (l *Lookup) seedJuncAutoAbilitiesRelatedStats(qtx *database.Queries, ctx co
 	})
 }
 
-func (l *Lookup) getAutoAbilityStatChanges(a seedtypes.AutoAbility) ([]seedtypes.StatChange, error) {
+func getAutoAbilityStatChanges(a seedtypes.AutoAbility) ([]seedtypes.StatChange, error) {
 	return a.StatChanges, nil
 }
 
-func (l *Lookup) seedJuncAutoAbilitiesStatChanges(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAutoAbilitiesStatChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + stat changes"
-	jParams, err := processJunctions(l, desc, l.json.autoAbilities, l.getAutoAbilityStatChanges)
+	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityStatChanges)
 	if err != nil {
 		return err
 	}

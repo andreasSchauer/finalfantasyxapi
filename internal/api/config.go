@@ -62,9 +62,10 @@ func ConfigInit() (*Config, error) {
 		adminAPIKey: adminAPIKey,
 		host:        domain,
 		fetchLimit:  fetchLimit,
+		L: 			 &seeding.L,
 	}
 
-	apiCfg.L, err = seeding.LoadDatabase(apiCfg.db, apiCfg.DBConn)
+	err = seeding.LoadDatabase(apiCfg.db, apiCfg.DBConn)
 	if err != nil {
 		return nil, err
 	}

@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop5SeedPlayerAbilities(qtx *database.Queries, ctx context.Context) error {
-	abilities, err := l.extractPlayerAbilities()
+func loop5SeedPlayerAbilities(qtx *database.Queries, ctx context.Context) error {
+	abilities, err := extractPlayerAbilities()
 	if err != nil {
 		return err
 	}
@@ -57,54 +57,54 @@ func (l *Lookup) loop5SeedPlayerAbilities(qtx *database.Queries, ctx context.Con
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		l.json.playerAbilities[i].ID = row.ID
-		l.PlayerAbilities[seedtypes.Key(abilities[i])] = abilities[i]
-		l.PlayerAbilitiesID[row.ID] = abilities[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.playerAbilities[i].ID = row.ID
+		L.PlayerAbilities[seedtypes.Key(abilities[i])] = abilities[i]
+		L.PlayerAbilitiesID[row.ID] = abilities[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractPlayerAbilities() ([]seedtypes.PlayerAbility, error) {
+func extractPlayerAbilities() ([]seedtypes.PlayerAbility, error) {
 	abilities := []seedtypes.PlayerAbility{}
 	var err error
 
-	for i := range l.json.playerAbilities {
-		ability := &l.json.playerAbilities[i]
+	for i := range rawJSON.playerAbilities {
+		ability := &rawJSON.playerAbilities[i]
 
-		ability.Ability.ID, err = l.GetHashID(ability.Ability)
+		ability.Ability.ID, err = GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.TopmenuID, err = assignFKPtr(ability.Topmenu, l.Topmenus)
+		ability.TopmenuID, err = assignFKPtr(ability.Topmenu, L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.SubmenuID, err = assignFKPtr(ability.Submenu, l.Submenus)
+		ability.SubmenuID, err = assignFKPtr(ability.Submenu, L.Submenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, l.Submenus)
+		ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, L.Submenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.StandardGridCharID, err = assignFKPtr(ability.StandardGridPos, l.Characters)
+		ability.StandardGridCharID, err = assignFKPtr(ability.StandardGridPos, L.Characters)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.ExpertGridCharID, err = assignFKPtr(ability.ExpertGridPos, l.Characters)
+		ability.ExpertGridCharID, err = assignFKPtr(ability.ExpertGridPos, L.Characters)
 		if err != nil {
 			return nil, err
 		}
 
 		if ability.AeonLearnItem != nil {
-			ability.AeonLearnItem.ID, err = l.GetHashID(ability.AeonLearnItem)
+			ability.AeonLearnItem.ID, err = GetHashID(ability.AeonLearnItem)
 			if err != nil {
 				return nil, err
 			}
@@ -113,32 +113,32 @@ func (l *Lookup) extractPlayerAbilities() ([]seedtypes.PlayerAbility, error) {
 		abilities = append(abilities, *ability)
 	}
 
-	return dedupeRows(abilities, l.Hashes), nil
+	return dedupeRows(abilities, hashes), nil
 }
 
-func (l *Lookup) completePlayerAbilities() error {
-	for i := range l.json.playerAbilities {
-		ability := &l.json.playerAbilities[i]
+func completePlayerAbilities() error {
+	for i := range rawJSON.playerAbilities {
+		ability := &rawJSON.playerAbilities[i]
 
-		err := l.completeBattleInteractions(ability.BattleInteractions)
+		err := completeBattleInteractions(ability.BattleInteractions)
 		if err != nil {
 			return err
 		}
 
-		l.PlayerAbilities[seedtypes.Key(ability)] = *ability
-		l.PlayerAbilitiesID[ability.ID] = *ability
+		L.PlayerAbilities[seedtypes.Key(ability)] = *ability
+		L.PlayerAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
-func (l *Lookup) getPlayerAbilityLearnedBy(pa seedtypes.PlayerAbility) ([]seedtypes.CharacterClass, error) {
-	return getResources(pa.LearnedBy, l.CharClasses)
+func getPlayerAbilityLearnedBy(pa seedtypes.PlayerAbility) ([]seedtypes.CharacterClass, error) {
+	return GetResources(pa.LearnedBy, L.CharClasses)
 }
 
-func (l *Lookup) seedJuncPlayerAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
+func seedJuncPlayerAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "player abilities + learned by"
-	jParams, err := processJunctions(l, desc, l.json.playerAbilities, l.getPlayerAbilityLearnedBy)
+	jParams, err := processJunctions(desc, rawJSON.playerAbilities, getPlayerAbilityLearnedBy)
 	if err != nil {
 		return err
 	}
@@ -150,13 +150,13 @@ func (l *Lookup) seedJuncPlayerAbilitiesLearnedBy(qtx *database.Queries, ctx con
 	})
 }
 
-func (l *Lookup) getPlayerAbilityRelatedStats(pa seedtypes.PlayerAbility) ([]seedtypes.Stat, error) {
-	return getResources(pa.RelatedStats, l.Stats)
+func getPlayerAbilityRelatedStats(pa seedtypes.PlayerAbility) ([]seedtypes.Stat, error) {
+	return GetResources(pa.RelatedStats, L.Stats)
 }
 
-func (l *Lookup) seedJuncPlayerAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
+func seedJuncPlayerAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "player abilites + related stats"
-	jParams, err := processJunctions(l, desc, l.json.playerAbilities, l.getPlayerAbilityRelatedStats)
+	jParams, err := processJunctions(desc, rawJSON.playerAbilities, getPlayerAbilityRelatedStats)
 	if err != nil {
 		return err
 	}

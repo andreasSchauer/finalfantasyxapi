@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Context) error {
-	abilities, err := l.extractEnemyAbilities()
+func loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Context) error {
+	abilities, err := extractEnemyAbilities()
 	if err != nil {
 		return err
 	}
@@ -35,23 +35,23 @@ func (l *Lookup) loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Cont
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		l.json.enemyAbilities[i].ID = row.ID
-		l.EnemyAbilities[seedtypes.Key(abilities[i])] = abilities[i]
-		l.EnemyAbilitiesID[row.ID] = abilities[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.enemyAbilities[i].ID = row.ID
+		L.EnemyAbilities[seedtypes.Key(abilities[i])] = abilities[i]
+		L.EnemyAbilitiesID[row.ID] = abilities[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractEnemyAbilities() ([]seedtypes.EnemyAbility, error) {
+func extractEnemyAbilities() ([]seedtypes.EnemyAbility, error) {
 	abilities := []seedtypes.EnemyAbility{}
 	var err error
 
-	for i := range l.json.enemyAbilities {
-		ability := &l.json.enemyAbilities[i]
+	for i := range rawJSON.enemyAbilities {
+		ability := &rawJSON.enemyAbilities[i]
 
-		ability.Ability.ID, err = l.GetHashID(ability.Ability)
+		ability.Ability.ID, err = GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}
@@ -59,20 +59,20 @@ func (l *Lookup) extractEnemyAbilities() ([]seedtypes.EnemyAbility, error) {
 		abilities = append(abilities, *ability)
 	}
 
-	return dedupeRows(abilities, l.Hashes), nil
+	return dedupeRows(abilities, hashes), nil
 }
 
-func (l *Lookup) completeEnemyAbilities() error {
-	for i := range l.json.enemyAbilities {
-		ability := &l.json.enemyAbilities[i]
+func completeEnemyAbilities() error {
+	for i := range rawJSON.enemyAbilities {
+		ability := &rawJSON.enemyAbilities[i]
 
-		err := l.completeBattleInteractions(ability.BattleInteractions)
+		err := completeBattleInteractions(ability.BattleInteractions)
 		if err != nil {
 			return err
 		}
 
-		l.EnemyAbilities[seedtypes.Key(ability)] = *ability
-		l.EnemyAbilitiesID[ability.ID] = *ability
+		L.EnemyAbilities[seedtypes.Key(ability)] = *ability
+		L.EnemyAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil

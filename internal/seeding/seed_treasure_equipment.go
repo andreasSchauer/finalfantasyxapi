@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop6SeedTreasureEquipment(qtx *database.Queries, ctx context.Context) error {
-	equipment, err := l.extractTreasureEquipment()
+func loop6SeedTreasureEquipment(qtx *database.Queries, ctx context.Context) error {
+	equipment, err := extractTreasureEquipment()
 	if err != nil {
 		return err
 	}
@@ -34,18 +34,18 @@ func (l *Lookup) loop6SeedTreasureEquipment(qtx *database.Queries, ctx context.C
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractTreasureEquipment() ([]seedtypes.TreasureEquipment, error) {
+func extractTreasureEquipment() ([]seedtypes.TreasureEquipment, error) {
 	equipment := []seedtypes.TreasureEquipment{}
 	var err error
 
-	for i := range l.json.treasureLists {
-		list := &l.json.treasureLists[i]
+	for i := range rawJSON.treasureLists {
+		list := &rawJSON.treasureLists[i]
 
 		for j := range list.Treasures {
 			treasure := &list.Treasures[j]
@@ -54,12 +54,12 @@ func (l *Lookup) extractTreasureEquipment() ([]seedtypes.TreasureEquipment, erro
 				continue
 			}
 
-			treasure.Equipment.TreasureID, err = l.GetHashID(treasure)
+			treasure.Equipment.TreasureID, err = GetHashID(treasure)
 			if err != nil {
 				return nil, err
 			}
 
-			treasure.Equipment.EquipmentNameID, err = assignFK(treasure.Equipment.Name, l.EquipmentNames)
+			treasure.Equipment.EquipmentNameID, err = assignFK(treasure.Equipment.Name, L.EquipmentNames)
 			if err != nil {
 				return nil, err
 			}
@@ -68,5 +68,5 @@ func (l *Lookup) extractTreasureEquipment() ([]seedtypes.TreasureEquipment, erro
 		}
 	}
 
-	return dedupeRows(equipment, l.Hashes), nil
+	return dedupeRows(equipment, hashes), nil
 }

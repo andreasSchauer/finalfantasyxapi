@@ -12,7 +12,7 @@ type DefaultAbilitiesEntry struct {
 	DefaultAbilities []seedtypes.AbilityReference `json:"default_abilities"`
 }
 
-func (l *Lookup) seedJuncDefaultAbilities(qtx *database.Queries, ctx context.Context) error {
+func seedJuncDefaultAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "default abilities"
 	params := database.CreateDefaultAbilityJunctionBulkParams{
 		DataHash:  make([]string, 0),
@@ -20,14 +20,14 @@ func (l *Lookup) seedJuncDefaultAbilities(qtx *database.Queries, ctx context.Con
 		AbilityID: make([]int32, 0),
 	}
 
-	for _, entry := range l.json.defaultAbilities {
-		class, err := GetResource(entry.Name, l.CharClasses)
+	for _, entry := range rawJSON.defaultAbilities {
+		class, err := GetResource(entry.Name, L.CharClasses)
 		if err != nil {
 			return err
 		}
 
 		for _, ref := range entry.DefaultAbilities {
-			ability, err := GetResource(ref, l.Abilities)
+			ability, err := GetResource(ref, L.Abilities)
 			if err != nil {
 				return err
 			}

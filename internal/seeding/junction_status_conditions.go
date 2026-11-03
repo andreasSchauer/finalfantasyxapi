@@ -7,13 +7,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getStatusConditionModifierChanges(sc seedtypes.StatusCondition) ([]seedtypes.ModifierChange, error) {
+func getStatusConditionModifierChanges(sc seedtypes.StatusCondition) ([]seedtypes.ModifierChange, error) {
 	return sc.ModifierChanges, nil
 }
 
-func (l *Lookup) seedJuncStatusConditionModifierChanges(qtx *database.Queries, ctx context.Context) error {
+func seedJuncStatusConditionModifierChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + modifier changes"
-	jParams, err := processJunctions(l, desc, l.json.statusConditions, l.getStatusConditionModifierChanges)
+	jParams, err := processJunctions(desc, rawJSON.statusConditions, getStatusConditionModifierChanges)
 	if err != nil {
 		return err
 	}
@@ -25,13 +25,13 @@ func (l *Lookup) seedJuncStatusConditionModifierChanges(qtx *database.Queries, c
 	})
 }
 
-func (l *Lookup) getStatusConditionRelatedStats(sc seedtypes.StatusCondition) ([]seedtypes.Stat, error) {
-	return getResources(sc.RelatedStats, l.Stats)
+func getStatusConditionRelatedStats(sc seedtypes.StatusCondition) ([]seedtypes.Stat, error) {
+	return GetResources(sc.RelatedStats, L.Stats)
 }
 
-func (l *Lookup) seedJuncStatusConditionRelatedStats(qtx *database.Queries, ctx context.Context) error {
+func seedJuncStatusConditionRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + related stats"
-	jParams, err := processJunctions(l, desc, l.json.statusConditions, l.getStatusConditionRelatedStats)
+	jParams, err := processJunctions(desc, rawJSON.statusConditions, getStatusConditionRelatedStats)
 	if err != nil {
 		return err
 	}
@@ -43,13 +43,13 @@ func (l *Lookup) seedJuncStatusConditionRelatedStats(qtx *database.Queries, ctx 
 	})
 }
 
-func (l *Lookup) getStatusConditionRemovedConditions(sc seedtypes.StatusCondition) ([]seedtypes.StatusCondition, error) {
-	return getResources(sc.RemovedStatusConditions, l.StatusConditions)
+func getStatusConditionRemovedConditions(sc seedtypes.StatusCondition) ([]seedtypes.StatusCondition, error) {
+	return GetResources(sc.RemovedStatusConditions, L.StatusConditions)
 }
 
-func (l *Lookup) seedJuncStatusConditionRemovedConditions(qtx *database.Queries, ctx context.Context) error {
+func seedJuncStatusConditionRemovedConditions(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + removed conditions"
-	jParams, err := processJunctions(l, desc, l.json.statusConditions, l.getStatusConditionRemovedConditions)
+	jParams, err := processJunctions(desc, rawJSON.statusConditions, getStatusConditionRemovedConditions)
 	if err != nil {
 		return err
 	}
@@ -61,13 +61,13 @@ func (l *Lookup) seedJuncStatusConditionRemovedConditions(qtx *database.Queries,
 	})
 }
 
-func (l *Lookup) getStatusConditionStatChanges(sc seedtypes.StatusCondition) ([]seedtypes.StatChange, error) {
+func getStatusConditionStatChanges(sc seedtypes.StatusCondition) ([]seedtypes.StatChange, error) {
 	return sc.StatChanges, nil
 }
 
-func (l *Lookup) seedJuncStatusConditionStatChanges(qtx *database.Queries, ctx context.Context) error {
+func seedJuncStatusConditionStatChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + stat changes"
-	jParams, err := processJunctions(l, desc, l.json.statusConditions, l.getStatusConditionStatChanges)
+	jParams, err := processJunctions(desc, rawJSON.statusConditions, getStatusConditionStatChanges)
 	if err != nil {
 		return err
 	}

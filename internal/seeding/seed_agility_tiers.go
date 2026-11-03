@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Context) error {
-	agilityTiers := dedupeRows(l.json.agilityTiers, l.Hashes)
+func loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Context) error {
+	agilityTiers := dedupeRows(rawJSON.agilityTiers, hashes)
 
 	params := database.CreateAgilityTierBulkParams{
 		DataHash:        make([]string, len(agilityTiers)),
@@ -40,16 +40,16 @@ func (l *Lookup) loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Contex
 
 	for i, row := range dbRows {
 		agilityTiers[i].ID = row.ID
-		l.json.agilityTiers[i].ID = row.ID
-		l.AgilityTiersID[row.ID] = agilityTiers[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.agilityTiers[i].ID = row.ID
+		L.AgilityTiersID[row.ID] = agilityTiers[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) loop2SeedAgilitySubtiers(qtx *database.Queries, ctx context.Context) error {
-	subtiers := l.extractAgilitySubtiers()
+func loop2SeedAgilitySubtiers(qtx *database.Queries, ctx context.Context) error {
+	subtiers := extractAgilitySubtiers()
 
 	params := database.CreateAgilitySubtierBulkParams{
 		DataHash:        make([]string, len(subtiers)),
@@ -73,17 +73,17 @@ func (l *Lookup) loop2SeedAgilitySubtiers(qtx *database.Queries, ctx context.Con
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractAgilitySubtiers() []seedtypes.AgilitySubtier {
+func extractAgilitySubtiers() []seedtypes.AgilitySubtier {
 	subtiers := []seedtypes.AgilitySubtier{}
 
-	for i := range l.json.agilityTiers {
-		tier := &l.json.agilityTiers[i]
+	for i := range rawJSON.agilityTiers {
+		tier := &rawJSON.agilityTiers[i]
 
 		for j := range tier.CharacterMinICVs {
 			subtier := &tier.CharacterMinICVs[j]
@@ -92,14 +92,14 @@ func (l *Lookup) extractAgilitySubtiers() []seedtypes.AgilitySubtier {
 		}
 	}
 
-	return dedupeRows(subtiers, l.Hashes)
+	return dedupeRows(subtiers, hashes)
 }
 
-func (l *Lookup) completeAgilityTiers() error {
-	for i := range l.json.agilityTiers {
-		tier := &l.json.agilityTiers[i]
+func completeAgilityTiers() error {
+	for i := range rawJSON.agilityTiers {
+		tier := &rawJSON.agilityTiers[i]
 
-		err := assignIDs(l, tier.CharacterMinICVs)
+		err := assignIDs(tier.CharacterMinICVs)
 		if err != nil {
 			return err
 		}

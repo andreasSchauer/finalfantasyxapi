@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedOverdriveCommands(qtx *database.Queries, ctx context.Context) error {
-	commands, err := l.extractOverdriveCommands()
+func loop3SeedOverdriveCommands(qtx *database.Queries, ctx context.Context) error {
+	commands, err := extractOverdriveCommands()
 	if err != nil {
 		return err
 	}
@@ -43,33 +43,33 @@ func (l *Lookup) loop3SeedOverdriveCommands(qtx *database.Queries, ctx context.C
 
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
-		l.json.overdriveCommands[i].ID = row.ID
-		l.OverdriveCommands[seedtypes.Key(commands[i])] = commands[i]
-		l.OverdriveCommandsID[row.ID] = commands[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.overdriveCommands[i].ID = row.ID
+		L.OverdriveCommands[seedtypes.Key(commands[i])] = commands[i]
+		L.OverdriveCommandsID[row.ID] = commands[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractOverdriveCommands() ([]seedtypes.OverdriveCommand, error) {
+func extractOverdriveCommands() ([]seedtypes.OverdriveCommand, error) {
 	commands := []seedtypes.OverdriveCommand{}
 	var err error
 
-	for i := range l.json.overdriveCommands {
-		command := &l.json.overdriveCommands[i]
+	for i := range rawJSON.overdriveCommands {
+		command := &rawJSON.overdriveCommands[i]
 
-		command.TopmenuID, err = assignFKPtr(command.Topmenu, l.Topmenus)
+		command.TopmenuID, err = assignFKPtr(command.Topmenu, L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, l.Submenus)
+		command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, L.Submenus)
 		if err != nil {
 			return nil, err
 		}
 
-		command.CharClassID, err = assignFKPtr(&command.User, l.CharClasses)
+		command.CharClassID, err = assignFKPtr(&command.User, L.CharClasses)
 		if err != nil {
 			return nil, err
 		}
@@ -77,5 +77,5 @@ func (l *Lookup) extractOverdriveCommands() ([]seedtypes.OverdriveCommand, error
 		commands = append(commands, *command)
 	}
 
-	return dedupeRows(commands, l.Hashes), nil
+	return dedupeRows(commands, hashes), nil
 }

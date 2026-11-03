@@ -7,23 +7,23 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getTreasures() []seedtypes.Treasure {
+func getTreasures() []seedtypes.Treasure {
 	treasures := []seedtypes.Treasure{}
 
-	for _, list := range l.json.treasureLists {
+	for _, list := range rawJSON.treasureLists {
 		treasures = append(treasures, list.Treasures...)
 	}
 
 	return treasures
 }
 
-func (l *Lookup) getTreasureItems(t seedtypes.Treasure) ([]seedtypes.ItemAmount, error) {
+func getTreasureItems(t seedtypes.Treasure) ([]seedtypes.ItemAmount, error) {
 	return t.Items, nil
 }
 
-func (l *Lookup) seedJuncTreasuresItems(qtx *database.Queries, ctx context.Context) error {
+func seedJuncTreasuresItems(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "treasures + items"
-	jParams, err := processJunctions(l, desc, l.getTreasures(), l.getTreasureItems)
+	jParams, err := processJunctions(desc, getTreasures(), getTreasureItems)
 	if err != nil {
 		return err
 	}
@@ -35,10 +35,10 @@ func (l *Lookup) seedJuncTreasuresItems(qtx *database.Queries, ctx context.Conte
 	})
 }
 
-func (l *Lookup) getTreasureEquipment() []seedtypes.TreasureEquipment {
+func getTreasureEquipment() []seedtypes.TreasureEquipment {
 	treasureEquipment := []seedtypes.TreasureEquipment{}
 
-	for _, list := range l.json.treasureLists {
+	for _, list := range rawJSON.treasureLists {
 		for _, treasure := range list.Treasures {
 			if treasure.Equipment != nil {
 				treasureEquipment = append(treasureEquipment, *treasure.Equipment)
@@ -49,13 +49,13 @@ func (l *Lookup) getTreasureEquipment() []seedtypes.TreasureEquipment {
 	return treasureEquipment
 }
 
-func (l *Lookup) getTreasureEquipmentAutoAbilities(te seedtypes.TreasureEquipment) ([]seedtypes.AutoAbility, error) {
-	return getResources(te.Abilities, l.AutoAbilities)
+func getTreasureEquipmentAutoAbilities(te seedtypes.TreasureEquipment) ([]seedtypes.AutoAbility, error) {
+	return GetResources(te.Abilities, L.AutoAbilities)
 }
 
-func (l *Lookup) seedJuncTreasureEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+func seedJuncTreasureEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "treasure equipment + auto-abilities"
-	jParams, err := processJunctions(l, desc, l.getTreasureEquipment(), l.getTreasureEquipmentAutoAbilities)
+	jParams, err := processJunctions(desc, getTreasureEquipment(), getTreasureEquipmentAutoAbilities)
 	if err != nil {
 		return err
 	}

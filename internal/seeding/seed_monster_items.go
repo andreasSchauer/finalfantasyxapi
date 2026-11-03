@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedMonsterItems(qtx *database.Queries, ctx context.Context) error {
-	items, err := l.extractMonsterItems()
+func loop3SeedMonsterItems(qtx *database.Queries, ctx context.Context) error {
+	items, err := extractMonsterItems()
 	if err != nil {
 		return err
 	}
@@ -52,18 +52,18 @@ func (l *Lookup) loop3SeedMonsterItems(qtx *database.Queries, ctx context.Contex
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractMonsterItems() ([]seedtypes.MonsterItems, error) {
+func extractMonsterItems() ([]seedtypes.MonsterItems, error) {
 	items := []seedtypes.MonsterItems{}
 	var err error
 
-	for i := range l.json.monsters {
-		mon := &l.json.monsters[i]
+	for i := range rawJSON.monsters {
+		mon := &rawJSON.monsters[i]
 		monItems := mon.Items
 
 		if monItems == nil {
@@ -73,49 +73,49 @@ func (l *Lookup) extractMonsterItems() ([]seedtypes.MonsterItems, error) {
 		monItems.MonsterID = mon.ID
 
 		if monItems.StealCommon != nil {
-			monItems.StealCommon.ID, err = l.GetHashID(monItems.StealCommon)
+			monItems.StealCommon.ID, err = GetHashID(monItems.StealCommon)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.StealRare != nil {
-			monItems.StealRare.ID, err = l.GetHashID(monItems.StealRare)
+			monItems.StealRare.ID, err = GetHashID(monItems.StealRare)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.DropCommon != nil {
-			monItems.DropCommon.ID, err = l.GetHashID(monItems.DropCommon)
+			monItems.DropCommon.ID, err = GetHashID(monItems.DropCommon)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.DropRare != nil {
-			monItems.DropRare.ID, err = l.GetHashID(monItems.DropRare)
+			monItems.DropRare.ID, err = GetHashID(monItems.DropRare)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.SecondaryDropCommon != nil {
-			monItems.SecondaryDropCommon.ID, err = l.GetHashID(monItems.SecondaryDropCommon)
+			monItems.SecondaryDropCommon.ID, err = GetHashID(monItems.SecondaryDropCommon)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.SecondaryDropRare != nil {
-			monItems.SecondaryDropRare.ID, err = l.GetHashID(monItems.SecondaryDropRare)
+			monItems.SecondaryDropRare.ID, err = GetHashID(monItems.SecondaryDropRare)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.Bribe != nil {
-			monItems.Bribe.ID, err = l.GetHashID(monItems.Bribe)
+			monItems.Bribe.ID, err = GetHashID(monItems.Bribe)
 			if err != nil {
 				return nil, err
 			}
@@ -124,20 +124,20 @@ func (l *Lookup) extractMonsterItems() ([]seedtypes.MonsterItems, error) {
 		items = append(items, *monItems)
 	}
 
-	return dedupeRows(items, l.Hashes), nil
+	return dedupeRows(items, hashes), nil
 }
 
-func (l *Lookup) completeMonsterItems(items *seedtypes.MonsterItems) error {
+func completeMonsterItems(items *seedtypes.MonsterItems) error {
 	if items == nil {
 		return nil
 	}
 
-	err := l.assignID(items)
+	err := assignID(items)
 	if err != nil {
 		return err
 	}
 
-	err = assignIDs(l, items.OtherItems)
+	err = assignIDs(items.OtherItems)
 	if err != nil {
 		return err
 	}

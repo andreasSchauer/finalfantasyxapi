@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop2SeedDamages(qtx *database.Queries, ctx context.Context) error {
-	damages, err := l.extractDamages()
+func loop2SeedDamages(qtx *database.Queries, ctx context.Context) error {
+	damages, err := extractDamages()
 	if err != nil {
 		return err
 	}
@@ -50,19 +50,19 @@ func (l *Lookup) loop2SeedDamages(qtx *database.Queries, ctx context.Context) er
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractDamages() ([]seedtypes.Damage, error) {
+func extractDamages() ([]seedtypes.Damage, error) {
 	damages := []seedtypes.Damage{}
 
-	for i := range l.json.playerAbilities {
-		ability := &l.json.playerAbilities[i]
+	for i := range rawJSON.playerAbilities {
+		ability := &rawJSON.playerAbilities[i]
 
-		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		newDamages, err := prepareDamages(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -70,10 +70,10 @@ func (l *Lookup) extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range l.json.overdriveAbilities {
-		ability := &l.json.overdriveAbilities[i]
+	for i := range rawJSON.overdriveAbilities {
+		ability := &rawJSON.overdriveAbilities[i]
 
-		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		newDamages, err := prepareDamages(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -81,10 +81,10 @@ func (l *Lookup) extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range l.json.items {
-		item := &l.json.items[i]
+	for i := range rawJSON.items {
+		item := &rawJSON.items[i]
 
-		newDamages, err := l.prepareDamages(item.BattleInteractions)
+		newDamages, err := prepareDamages(item.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -92,10 +92,10 @@ func (l *Lookup) extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range l.json.triggerCommands {
-		command := &l.json.triggerCommands[i]
+	for i := range rawJSON.triggerCommands {
+		command := &rawJSON.triggerCommands[i]
 
-		newDamages, err := l.prepareDamages(command.BattleInteractions)
+		newDamages, err := prepareDamages(command.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -103,10 +103,10 @@ func (l *Lookup) extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range l.json.miscAbilities {
-		ability := &l.json.miscAbilities[i]
+	for i := range rawJSON.miscAbilities {
+		ability := &rawJSON.miscAbilities[i]
 
-		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		newDamages, err := prepareDamages(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -114,10 +114,10 @@ func (l *Lookup) extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range l.json.enemyAbilities {
-		ability := &l.json.enemyAbilities[i]
+	for i := range rawJSON.enemyAbilities {
+		ability := &rawJSON.enemyAbilities[i]
 
-		newDamages, err := l.prepareDamages(ability.BattleInteractions)
+		newDamages, err := prepareDamages(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -125,10 +125,10 @@ func (l *Lookup) extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	return dedupeRows(damages, l.Hashes), nil
+	return dedupeRows(damages, hashes), nil
 }
 
-func (l *Lookup) prepareDamages(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.Damage, error) {
+func prepareDamages(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.Damage, error) {
 	damages := []seedtypes.Damage{}
 	var err error
 
@@ -137,26 +137,26 @@ func (l *Lookup) prepareDamages(battleInteractions []seedtypes.BattleInteraction
 
 		if bi.Damage != nil {
 			if bi.Damage.HP != nil {
-				bi.Damage.HP.ID, err = l.GetHashID(bi.Damage.HP)
+				bi.Damage.HP.ID, err = GetHashID(bi.Damage.HP)
 				if err != nil {
 					return nil, err
 				}
 			}
 
 			if bi.Damage.MP != nil {
-				bi.Damage.MP.ID, err = l.GetHashID(bi.Damage.MP)
+				bi.Damage.MP.ID, err = GetHashID(bi.Damage.MP)
 				if err != nil {
 					return nil, err
 				}
 			}
 			if bi.Damage.CTB != nil {
-				bi.Damage.CTB.ID, err = l.GetHashID(bi.Damage.CTB)
+				bi.Damage.CTB.ID, err = GetHashID(bi.Damage.CTB)
 				if err != nil {
 					return nil, err
 				}
 			}
 
-			bi.Damage.ElementID, err = assignFKPtr(bi.Damage.Element, l.Elements)
+			bi.Damage.ElementID, err = assignFKPtr(bi.Damage.Element, L.Elements)
 			if err != nil {
 				return nil, err
 			}
@@ -168,12 +168,12 @@ func (l *Lookup) prepareDamages(battleInteractions []seedtypes.BattleInteraction
 	return damages, nil
 }
 
-func (l *Lookup) completeDamage(damage *seedtypes.Damage) error {
+func completeDamage(damage *seedtypes.Damage) error {
 	if damage == nil {
 		return nil
 	}
 
-	err := l.assignID(damage)
+	err := assignID(damage)
 	if err != nil {
 		return err
 	}

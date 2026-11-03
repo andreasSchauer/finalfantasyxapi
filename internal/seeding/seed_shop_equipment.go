@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop6SeedShopEquipment(qtx *database.Queries, ctx context.Context) error {
-	equipment, err := l.extractShopEquipment()
+func loop6SeedShopEquipment(qtx *database.Queries, ctx context.Context) error {
+	equipment, err := extractShopEquipment()
 	if err != nil {
 		return err
 	}
@@ -38,18 +38,18 @@ func (l *Lookup) loop6SeedShopEquipment(qtx *database.Queries, ctx context.Conte
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
+func extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 	shopEquipment := []seedtypes.ShopEquipment{}
 	var err error
 
-	for i := range l.json.shops {
-		shop := &l.json.shops[i]
+	for i := range rawJSON.shops {
+		shop := &rawJSON.shops[i]
 
 		if shop.PreAirship != nil {
 			for j := range shop.PreAirship.Equipment {
@@ -58,7 +58,7 @@ func (l *Lookup) extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 				equipment.ShopID = shop.ID
 				equipment.ShopType = database.ShopTypePreAirship
 
-				equipment.EquipmentNameID, err = assignFK(equipment.Name, l.EquipmentNames)
+				equipment.EquipmentNameID, err = assignFK(equipment.Name, L.EquipmentNames)
 				if err != nil {
 					return nil, err
 				}
@@ -74,7 +74,7 @@ func (l *Lookup) extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 				equipment.ShopID = shop.ID
 				equipment.ShopType = database.ShopTypePostAirship
 
-				equipment.EquipmentNameID, err = assignFK(equipment.Name, l.EquipmentNames)
+				equipment.EquipmentNameID, err = assignFK(equipment.Name, L.EquipmentNames)
 				if err != nil {
 					return nil, err
 				}
@@ -84,5 +84,5 @@ func (l *Lookup) extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 		}
 	}
 
-	return dedupeRows(shopEquipment, l.Hashes), nil
+	return dedupeRows(shopEquipment, hashes), nil
 }

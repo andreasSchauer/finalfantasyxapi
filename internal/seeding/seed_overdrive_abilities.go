@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
-	abilities, err := l.extractOverdriveAbilities()
+func loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
+	abilities, err := extractOverdriveAbilities()
 	if err != nil {
 		return err
 	}
@@ -31,23 +31,23 @@ func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		l.json.overdriveAbilities[i].ID = row.ID
-		l.OverdriveAbilities[seedtypes.Key(abilities[i])] = abilities[i]
-		l.OverdriveAbilitiesID[row.ID] = abilities[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.overdriveAbilities[i].ID = row.ID
+		L.OverdriveAbilities[seedtypes.Key(abilities[i])] = abilities[i]
+		L.OverdriveAbilitiesID[row.ID] = abilities[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractOverdriveAbilities() ([]seedtypes.OverdriveAbility, error) {
+func extractOverdriveAbilities() ([]seedtypes.OverdriveAbility, error) {
 	abilities := []seedtypes.OverdriveAbility{}
 	var err error
 
-	for i := range l.json.overdriveAbilities {
-		ability := &l.json.overdriveAbilities[i]
+	for i := range rawJSON.overdriveAbilities {
+		ability := &rawJSON.overdriveAbilities[i]
 
-		ability.Ability.ID, err = l.GetHashID(ability.Ability)
+		ability.Ability.ID, err = GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}
@@ -55,32 +55,32 @@ func (l *Lookup) extractOverdriveAbilities() ([]seedtypes.OverdriveAbility, erro
 		abilities = append(abilities, *ability)
 	}
 
-	return dedupeRows(abilities, l.Hashes), nil
+	return dedupeRows(abilities, hashes), nil
 }
 
-func (l *Lookup) completeOverdriveAbilities() error {
-	for i := range l.json.overdriveAbilities {
-		ability := &l.json.overdriveAbilities[i]
+func completeOverdriveAbilities() error {
+	for i := range rawJSON.overdriveAbilities {
+		ability := &rawJSON.overdriveAbilities[i]
 
-		err := l.completeBattleInteractions(ability.BattleInteractions)
+		err := completeBattleInteractions(ability.BattleInteractions)
 		if err != nil {
 			return err
 		}
 
-		l.OverdriveAbilities[seedtypes.Key(ability)] = *ability
-		l.OverdriveAbilitiesID[ability.ID] = *ability
+		L.OverdriveAbilities[seedtypes.Key(ability)] = *ability
+		L.OverdriveAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
-func (l *Lookup) getOverdriveAbilityRelatedStats(oa seedtypes.OverdriveAbility) ([]seedtypes.Stat, error) {
-	return getResources(oa.RelatedStats, l.Stats)
+func getOverdriveAbilityRelatedStats(oa seedtypes.OverdriveAbility) ([]seedtypes.Stat, error) {
+	return GetResources(oa.RelatedStats, L.Stats)
 }
 
-func (l *Lookup) seedJuncOverdriveAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
+func seedJuncOverdriveAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "overdrive abilities + related stats"
-	jParams, err := processJunctions(l, desc, l.json.overdriveAbilities, l.getOverdriveAbilityRelatedStats)
+	jParams, err := processJunctions(desc, rawJSON.overdriveAbilities, getOverdriveAbilityRelatedStats)
 	if err != nil {
 		return err
 	}

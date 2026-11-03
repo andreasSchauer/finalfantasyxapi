@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Context) error {
-	abilities, err := l.extractAutoAbilities()
+func loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+	abilities, err := extractAutoAbilities()
 	if err != nil {
 		return err
 	}
@@ -63,63 +63,63 @@ func (l *Lookup) loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Conte
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		l.json.autoAbilities[i].ID = row.ID
-		l.AutoAbilities[seedtypes.Key(abilities[i])] = abilities[i]
-		l.AutoAbilitiesID[row.ID] = abilities[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.autoAbilities[i].ID = row.ID
+		L.AutoAbilities[seedtypes.Key(abilities[i])] = abilities[i]
+		L.AutoAbilitiesID[row.ID] = abilities[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractAutoAbilities() ([]seedtypes.AutoAbility, error) {
+func extractAutoAbilities() ([]seedtypes.AutoAbility, error) {
 	abilities := []seedtypes.AutoAbility{}
 	var err error
 
-	for i := range l.json.autoAbilities {
-		ability := &l.json.autoAbilities[i]
+	for i := range rawJSON.autoAbilities {
+		ability := &rawJSON.autoAbilities[i]
 
-		ability.GradRecoveryStatID, err = assignFKPtr(ability.GradualRecovery, l.Stats)
+		ability.GradRecoveryStatID, err = assignFKPtr(ability.GradualRecovery, L.Stats)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.OnHitElementID, err = assignFKPtr(ability.OnHitElement, l.Elements)
+		ability.OnHitElementID, err = assignFKPtr(ability.OnHitElement, L.Elements)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.AddedPropertyID, err = assignFKPtr(ability.AddedProperty, l.Properties)
+		ability.AddedPropertyID, err = assignFKPtr(ability.AddedProperty, L.Properties)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.CnvrsnFromModID, err = assignFKPtr(ability.ConversionFrom, l.Modifiers)
+		ability.CnvrsnFromModID, err = assignFKPtr(ability.ConversionFrom, L.Modifiers)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.CnvrsnToModID, err = assignFKPtr(ability.ConversionTo, l.Modifiers)
+		ability.CnvrsnToModID, err = assignFKPtr(ability.ConversionTo, L.Modifiers)
 		if err != nil {
 			return nil, err
 		}
 
 		if ability.RequiredItem != nil {
-			ability.RequiredItem.ID, err = l.GetHashID(ability.RequiredItem)
+			ability.RequiredItem.ID, err = GetHashID(ability.RequiredItem)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if ability.AddedElemResist != nil {
-			ability.AddedElemResist.ID, err = l.GetHashID(ability.AddedElemResist)
+			ability.AddedElemResist.ID, err = GetHashID(ability.AddedElemResist)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if ability.OnHitStatus != nil {
-			ability.OnHitStatus.ID, err = l.GetHashID(ability.OnHitStatus)
+			ability.OnHitStatus.ID, err = GetHashID(ability.OnHitStatus)
 			if err != nil {
 				return nil, err
 			}
@@ -128,30 +128,30 @@ func (l *Lookup) extractAutoAbilities() ([]seedtypes.AutoAbility, error) {
 		abilities = append(abilities, *ability)
 	}
 
-	return dedupeRows(abilities, l.Hashes), nil
+	return dedupeRows(abilities, hashes), nil
 }
 
-func (l *Lookup) completeAutoAbilities() error {
-	for i := range l.json.autoAbilities {
-		autoAbility := &l.json.autoAbilities[i]
+func completeAutoAbilities() error {
+	for i := range rawJSON.autoAbilities {
+		autoAbility := &rawJSON.autoAbilities[i]
 
-		err := assignIDs(l, autoAbility.AddedStatusResists)
+		err := assignIDs(autoAbility.AddedStatusResists)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, autoAbility.StatChanges)
+		err = assignIDs(autoAbility.StatChanges)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, autoAbility.ModifierChanges)
+		err = assignIDs(autoAbility.ModifierChanges)
 		if err != nil {
 			return err
 		}
 
-		l.AutoAbilities[seedtypes.Key(autoAbility)] = *autoAbility
-		l.AutoAbilitiesID[autoAbility.ID] = *autoAbility
+		L.AutoAbilities[seedtypes.Key(autoAbility)] = *autoAbility
+		L.AutoAbilitiesID[autoAbility.ID] = *autoAbility
 	}
 
 	return nil

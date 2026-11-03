@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context) error {
-	rages := l.extractRonsoRages()
+func loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context) error {
+	rages := extractRonsoRages()
 
 	params := database.CreateRonsoRageBulkParams{
 		DataHash:    make([]string, len(rages)),
@@ -28,29 +28,29 @@ func (l *Lookup) loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context)
 
 	for i, row := range dbRows {
 		rages[i].ID = row.ID
-		l.RonsoRages[seedtypes.Key(rages[i])] = rages[i]
-		l.RonsoRagesID[row.ID] = rages[i]
-		l.Hashes[row.DataHash] = row.ID
+		L.RonsoRages[seedtypes.Key(rages[i])] = rages[i]
+		L.RonsoRagesID[row.ID] = rages[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractRonsoRages() []seedtypes.RonsoRage {
+func extractRonsoRages() []seedtypes.RonsoRage {
 	rages := []seedtypes.RonsoRage{}
 
-	for _, overdrive := range l.json.overdrives {
+	for _, overdrive := range rawJSON.overdrives {
 		if overdrive.User != "kimahri" {
 			continue
 		}
 
 		rage := seedtypes.RonsoRage{
-			ID:                  0,
+			ID:        0,
 			Overdrive: overdrive,
 		}
 
 		rages = append(rages, rage)
 	}
 
-	return dedupeRows(rages, l.Hashes)
+	return dedupeRows(rages, hashes)
 }

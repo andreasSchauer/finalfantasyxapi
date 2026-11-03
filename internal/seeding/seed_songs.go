@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop2SeedSongs(qtx *database.Queries, ctx context.Context) error {
-	songs, err := l.extractSongs()
+func loop2SeedSongs(qtx *database.Queries, ctx context.Context) error {
+	songs, err := extractSongs()
 	if err != nil {
 		return err
 	}
@@ -57,24 +57,24 @@ func (l *Lookup) loop2SeedSongs(qtx *database.Queries, ctx context.Context) erro
 
 	for i, row := range dbRows {
 		songs[i].ID = row.ID
-		l.json.songs[i].ID = row.ID
-		l.Songs[seedtypes.Key(songs[i])] = songs[i]
-		l.SongsID[row.ID] = songs[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.songs[i].ID = row.ID
+		L.Songs[seedtypes.Key(songs[i])] = songs[i]
+		L.SongsID[row.ID] = songs[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractSongs() ([]seedtypes.Song, error) {
+func extractSongs() ([]seedtypes.Song, error) {
 	songs := []seedtypes.Song{}
 	var err error
 
-	for i := range l.json.songs {
-		song := &l.json.songs[i]
+	for i := range rawJSON.songs {
+		song := &rawJSON.songs[i]
 
 		if song.Credits != nil {
-			song.Credits.ID, err = l.GetHashID(*song.Credits)
+			song.Credits.ID, err = GetHashID(*song.Credits)
 			if err != nil {
 				return nil, err
 			}
@@ -82,32 +82,32 @@ func (l *Lookup) extractSongs() ([]seedtypes.Song, error) {
 		songs = append(songs, *song)
 	}
 
-	return dedupeRows(songs, l.Hashes), nil
+	return dedupeRows(songs, hashes), nil
 }
 
-func (l *Lookup) completeSongs() error {
-	for i := range l.json.songs {
-		song := &l.json.songs[i]
+func completeSongs() error {
+	for i := range rawJSON.songs {
+		song := &rawJSON.songs[i]
 
-		err := assignIDs(l, song.BackgroundMusic)
+		err := assignIDs(song.BackgroundMusic)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, song.Cues)
+		err = assignIDs(song.Cues)
 		if err != nil {
 			return err
 		}
 
-		l.Songs[seedtypes.Key(song)] = *song
-		l.SongsID[song.ID] = *song
+		L.Songs[seedtypes.Key(song)] = *song
+		L.SongsID[song.ID] = *song
 	}
 
 	return nil
 }
 
-func (l *Lookup) loop1SeedSongCredits(qtx *database.Queries, ctx context.Context) error {
-	credits := l.extractSongCredits()
+func loop1SeedSongCredits(qtx *database.Queries, ctx context.Context) error {
+	credits := extractSongCredits()
 
 	params := database.CreateSongCreditBulkParams{
 		DataHash:  make([]string, len(credits)),
@@ -131,35 +131,35 @@ func (l *Lookup) loop1SeedSongCredits(qtx *database.Queries, ctx context.Context
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractSongCredits() []seedtypes.SongCredits {
+func extractSongCredits() []seedtypes.SongCredits {
 	credits := []seedtypes.SongCredits{}
 
-	for _, song := range l.json.songs {
+	for _, song := range rawJSON.songs {
 		if song.Credits != nil {
 			credits = append(credits, *song.Credits)
 		}
 	}
 
-	return dedupeRows(credits, l.Hashes)
+	return dedupeRows(credits, hashes)
 }
 
-func (l *Lookup) getSongBackgroundMusic(s seedtypes.Song) ([]seedtypes.BackgroundMusic, error) {
+func getSongBackgroundMusic(s seedtypes.Song) ([]seedtypes.BackgroundMusic, error) {
 	return s.BackgroundMusic, nil
 }
 
-func (l *Lookup) getBackgroundMusicAreas(bm seedtypes.BackgroundMusic) ([]seedtypes.Area, error) {
-	return getResources(bm.LocationAreas, l.Areas)
+func getBackgroundMusicAreas(bm seedtypes.BackgroundMusic) ([]seedtypes.Area, error) {
+	return GetResources(bm.LocationAreas, L.Areas)
 }
 
-func (l *Lookup) seedJuncSongsBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
+func seedJuncSongsBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "songs + background music"
-	jParams, err := processThreewayJunctions(l, desc, l.json.songs, l.getSongBackgroundMusic, l.getBackgroundMusicAreas)
+	jParams, err := processThreewayJunctions(desc, rawJSON.songs, getSongBackgroundMusic, getBackgroundMusicAreas)
 	if err != nil {
 		return err
 	}

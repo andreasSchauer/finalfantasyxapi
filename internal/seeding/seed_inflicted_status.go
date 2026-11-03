@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedInflictedStatusses(qtx *database.Queries, ctx context.Context) error {
-	statusses, err := l.extractInflictedStatusses()
+func loop4SeedInflictedStatusses(qtx *database.Queries, ctx context.Context) error {
+	statusses, err := extractInflictedStatusses()
 	if err != nil {
 		return err
 	}
@@ -38,23 +38,23 @@ func (l *Lookup) loop4SeedInflictedStatusses(qtx *database.Queries, ctx context.
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractInflictedStatusses() ([]seedtypes.InflictedStatus, error) {
+func extractInflictedStatusses() ([]seedtypes.InflictedStatus, error) {
 	statusses := []seedtypes.InflictedStatus{}
 
-	for i := range l.json.autoAbilities {
-		autoAbility := &l.json.autoAbilities[i]
+	for i := range rawJSON.autoAbilities {
+		autoAbility := &rawJSON.autoAbilities[i]
 
 		if autoAbility.OnHitStatus == nil {
 			continue
 		}
 
-		status, err := l.prepareInflictedStatus(autoAbility.OnHitStatus)
+		status, err := prepareInflictedStatus(autoAbility.OnHitStatus)
 		if err != nil {
 			return nil, err
 		}
@@ -62,11 +62,11 @@ func (l *Lookup) extractInflictedStatusses() ([]seedtypes.InflictedStatus, error
 		statusses = append(statusses, *status)
 	}
 
-	for i := range l.json.monsters {
-		monster := &l.json.monsters[i]
+	for i := range rawJSON.monsters {
+		monster := &rawJSON.monsters[i]
 
 		for j := range monster.AlteredStates {
-			stateStatusses, err := l.extractAltStateInflictedStatusses(&monster.AlteredStates[j])
+			stateStatusses, err := extractAltStateInflictedStatusses(&monster.AlteredStates[j])
 			if err != nil {
 				return nil, err
 			}
@@ -75,10 +75,10 @@ func (l *Lookup) extractInflictedStatusses() ([]seedtypes.InflictedStatus, error
 		}
 	}
 
-	for i := range l.json.playerAbilities {
-		ability := &l.json.playerAbilities[i]
+	for i := range rawJSON.playerAbilities {
+		ability := &rawJSON.playerAbilities[i]
 
-		statussesNew, err := l.prepareAbilityInflictedStatusses(ability.BattleInteractions)
+		statussesNew, err := prepareAbilityInflictedStatusses(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -86,10 +86,10 @@ func (l *Lookup) extractInflictedStatusses() ([]seedtypes.InflictedStatus, error
 		statusses = append(statusses, statussesNew...)
 	}
 
-	for i := range l.json.overdriveAbilities {
-		ability := &l.json.overdriveAbilities[i]
+	for i := range rawJSON.overdriveAbilities {
+		ability := &rawJSON.overdriveAbilities[i]
 
-		statussesNew, err := l.prepareAbilityInflictedStatusses(ability.BattleInteractions)
+		statussesNew, err := prepareAbilityInflictedStatusses(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -97,10 +97,10 @@ func (l *Lookup) extractInflictedStatusses() ([]seedtypes.InflictedStatus, error
 		statusses = append(statusses, statussesNew...)
 	}
 
-	for i := range l.json.items {
-		item := &l.json.items[i]
+	for i := range rawJSON.items {
+		item := &rawJSON.items[i]
 
-		statussesNew, err := l.prepareAbilityInflictedStatusses(item.BattleInteractions)
+		statussesNew, err := prepareAbilityInflictedStatusses(item.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -108,10 +108,10 @@ func (l *Lookup) extractInflictedStatusses() ([]seedtypes.InflictedStatus, error
 		statusses = append(statusses, statussesNew...)
 	}
 
-	for i := range l.json.triggerCommands {
-		command := &l.json.triggerCommands[i]
+	for i := range rawJSON.triggerCommands {
+		command := &rawJSON.triggerCommands[i]
 
-		statussesNew, err := l.prepareAbilityInflictedStatusses(command.BattleInteractions)
+		statussesNew, err := prepareAbilityInflictedStatusses(command.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -119,10 +119,10 @@ func (l *Lookup) extractInflictedStatusses() ([]seedtypes.InflictedStatus, error
 		statusses = append(statusses, statussesNew...)
 	}
 
-	for i := range l.json.miscAbilities {
-		ability := &l.json.miscAbilities[i]
+	for i := range rawJSON.miscAbilities {
+		ability := &rawJSON.miscAbilities[i]
 
-		statussesNew, err := l.prepareAbilityInflictedStatusses(ability.BattleInteractions)
+		statussesNew, err := prepareAbilityInflictedStatusses(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -130,10 +130,10 @@ func (l *Lookup) extractInflictedStatusses() ([]seedtypes.InflictedStatus, error
 		statusses = append(statusses, statussesNew...)
 	}
 
-	for i := range l.json.enemyAbilities {
-		ability := &l.json.enemyAbilities[i]
+	for i := range rawJSON.enemyAbilities {
+		ability := &rawJSON.enemyAbilities[i]
 
-		statussesNew, err := l.prepareAbilityInflictedStatusses(ability.BattleInteractions)
+		statussesNew, err := prepareAbilityInflictedStatusses(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -141,17 +141,17 @@ func (l *Lookup) extractInflictedStatusses() ([]seedtypes.InflictedStatus, error
 		statusses = append(statusses, statussesNew...)
 	}
 
-	return dedupeRows(statusses, l.Hashes), nil
+	return dedupeRows(statusses, hashes), nil
 }
 
-func (l *Lookup) prepareAbilityInflictedStatusses(bis []seedtypes.BattleInteraction) ([]seedtypes.InflictedStatus, error) {
+func prepareAbilityInflictedStatusses(bis []seedtypes.BattleInteraction) ([]seedtypes.InflictedStatus, error) {
 	statusses := []seedtypes.InflictedStatus{}
 
 	for i := range bis {
 		bi := &bis[i]
 
 		for j := range bi.InflictedStatusConditions {
-			status, err := l.prepareInflictedStatus(&bi.InflictedStatusConditions[j])
+			status, err := prepareInflictedStatus(&bi.InflictedStatusConditions[j])
 			if err != nil {
 				return nil, err
 			}
@@ -159,7 +159,7 @@ func (l *Lookup) prepareAbilityInflictedStatusses(bis []seedtypes.BattleInteract
 		}
 
 		for j := range bi.CopiedStatusConditions {
-			status, err := l.prepareInflictedStatus(&bi.CopiedStatusConditions[j])
+			status, err := prepareInflictedStatus(&bi.CopiedStatusConditions[j])
 			if err != nil {
 				return nil, err
 			}
@@ -170,7 +170,7 @@ func (l *Lookup) prepareAbilityInflictedStatusses(bis []seedtypes.BattleInteract
 	return statusses, nil
 }
 
-func (l *Lookup) extractAltStateInflictedStatusses(state *seedtypes.AlteredState) ([]seedtypes.InflictedStatus, error) {
+func extractAltStateInflictedStatusses(state *seedtypes.AlteredState) ([]seedtypes.InflictedStatus, error) {
 	statusses := []seedtypes.InflictedStatus{}
 
 	for i := range state.Changes {
@@ -180,7 +180,7 @@ func (l *Lookup) extractAltStateInflictedStatusses(state *seedtypes.AlteredState
 			continue
 		}
 
-		status, err := l.prepareInflictedStatus(change.AddedStatus)
+		status, err := prepareInflictedStatus(change.AddedStatus)
 		if err != nil {
 			return nil, err
 		}
@@ -191,10 +191,10 @@ func (l *Lookup) extractAltStateInflictedStatusses(state *seedtypes.AlteredState
 	return statusses, nil
 }
 
-func (l *Lookup) prepareInflictedStatus(is *seedtypes.InflictedStatus) (*seedtypes.InflictedStatus, error) {
+func prepareInflictedStatus(is *seedtypes.InflictedStatus) (*seedtypes.InflictedStatus, error) {
 	var err error
 
-	is.StatusConditionID, err = assignFK(is.StatusCondition, l.StatusConditions)
+	is.StatusConditionID, err = assignFK(is.StatusCondition, L.StatusConditions)
 	if err != nil {
 		return nil, err
 	}

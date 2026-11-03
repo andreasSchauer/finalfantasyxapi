@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
-	bm := l.extractBackgroundMusic()
+func loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
+	bm := extractBackgroundMusic()
 
 	params := database.CreateBackgroundMusicBulkParams{
 		DataHash:               make([]string, len(bm)),
@@ -31,24 +31,24 @@ func (l *Lookup) loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Con
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractBackgroundMusic() []seedtypes.BackgroundMusic {
+func extractBackgroundMusic() []seedtypes.BackgroundMusic {
 	bgMusic := []seedtypes.BackgroundMusic{}
 
-	for _, song := range l.json.songs {
+	for _, song := range rawJSON.songs {
 		bgMusic = append(bgMusic, song.BackgroundMusic...)
 	}
 
-	return dedupeRows(bgMusic, l.Hashes)
+	return dedupeRows(bgMusic, hashes)
 }
 
-func (l *Lookup) loop4SeedCues(qtx *database.Queries, ctx context.Context) error {
-	cues, err := l.extractCues()
+func loop4SeedCues(qtx *database.Queries, ctx context.Context) error {
+	cues, err := extractCues()
 	if err != nil {
 		return err
 	}
@@ -79,25 +79,25 @@ func (l *Lookup) loop4SeedCues(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractCues() ([]seedtypes.Cue, error) {
+func extractCues() ([]seedtypes.Cue, error) {
 	cues := []seedtypes.Cue{}
 	var err error
 
-	for i := range l.json.songs {
-		song := &l.json.songs[i]
+	for i := range rawJSON.songs {
+		song := &rawJSON.songs[i]
 
 		for j := range song.Cues {
 			cue := &song.Cues[j]
 			cue.SongID = song.ID
 
 			if cue.TriggerLocationArea != nil {
-				cue.TriggerAreaID, err = assignFKPtr(cue.TriggerLocationArea, l.Areas)
+				cue.TriggerAreaID, err = assignFKPtr(cue.TriggerLocationArea, L.Areas)
 				if err != nil {
 					return nil, err
 				}
@@ -107,26 +107,26 @@ func (l *Lookup) extractCues() ([]seedtypes.Cue, error) {
 		}
 	}
 
-	return dedupeRows(cues, l.Hashes), nil
+	return dedupeRows(cues, hashes), nil
 }
 
-func (l *Lookup) getCues() []seedtypes.Cue {
+func getCues() []seedtypes.Cue {
 	cues := []seedtypes.Cue{}
 
-	for _, song := range l.json.songs {
+	for _, song := range rawJSON.songs {
 		cues = append(cues, song.Cues...)
 	}
 
 	return cues
 }
 
-func (l *Lookup) getCueIncludedAreas(c seedtypes.Cue) ([]seedtypes.Area, error) {
-	return getResources(c.IncludedAreas, l.Areas)
+func getCueIncludedAreas(c seedtypes.Cue) ([]seedtypes.Area, error) {
+	return GetResources(c.IncludedAreas, L.Areas)
 }
 
-func (l *Lookup) seedJuncCuesIncludedAreas(qtx *database.Queries, ctx context.Context) error {
+func seedJuncCuesIncludedAreas(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "cues + included areas"
-	jParams, err := processJunctions(l, desc, l.getCues(), l.getCueIncludedAreas)
+	jParams, err := processJunctions(desc, getCues(), getCueIncludedAreas)
 	if err != nil {
 		return err
 	}

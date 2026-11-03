@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Context) error {
-	names, err := l.extractEquipmentNames()
+func loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Context) error {
+	names, err := extractEquipmentNames()
 	if err != nil {
 		return err
 	}
@@ -33,25 +33,25 @@ func (l *Lookup) loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Cont
 
 	for i, row := range dbRows {
 		names[i].ID = row.ID
-		l.EquipmentNames[seedtypes.Key(names[i])] = names[i]
-		l.EquipmentNamesID[row.ID] = names[i]
-		l.Hashes[row.DataHash] = row.ID
+		L.EquipmentNames[seedtypes.Key(names[i])] = names[i]
+		L.EquipmentNamesID[row.ID] = names[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractEquipmentNames() ([]seedtypes.EquipmentName, error) {
+func extractEquipmentNames() ([]seedtypes.EquipmentName, error) {
 	names := []seedtypes.EquipmentName{}
 	var err error
 
-	for i := range l.json.equipment {
-		table := &l.json.equipment[i]
+	for i := range rawJSON.equipment {
+		table := &rawJSON.equipment[i]
 
 		for j := range table.EquipmentNames {
 			name := &table.EquipmentNames[j]
 
-			name.CharacterID, err = assignFK(name.CharacterName, l.Characters)
+			name.CharacterID, err = assignFK(name.CharacterName, L.Characters)
 			if err != nil {
 				return nil, err
 			}
@@ -60,5 +60,5 @@ func (l *Lookup) extractEquipmentNames() ([]seedtypes.EquipmentName, error) {
 		}
 	}
 
-	return dedupeRows(names, l.Hashes), nil
+	return dedupeRows(names, hashes), nil
 }

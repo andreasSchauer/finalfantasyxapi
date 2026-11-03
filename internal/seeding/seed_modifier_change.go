@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop2SeedModifierChanges(qtx *database.Queries, ctx context.Context) error {
-	changes, err := l.extractModifierChanges()
+func loop2SeedModifierChanges(qtx *database.Queries, ctx context.Context) error {
+	changes, err := extractModifierChanges()
 	if err != nil {
 		return err
 	}
@@ -34,19 +34,19 @@ func (l *Lookup) loop2SeedModifierChanges(qtx *database.Queries, ctx context.Con
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractModifierChanges() ([]seedtypes.ModifierChange, error) {
+func extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 	changes := []seedtypes.ModifierChange{}
 
-	for i := range l.json.playerAbilities {
-		ability := &l.json.playerAbilities[i]
+	for i := range rawJSON.playerAbilities {
+		ability := &rawJSON.playerAbilities[i]
 
-		newChanges, err := l.prepareAbilityModifierChanges(ability.BattleInteractions)
+		newChanges, err := prepareAbilityModifierChanges(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -54,10 +54,10 @@ func (l *Lookup) extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.overdriveAbilities {
-		ability := &l.json.overdriveAbilities[i]
+	for i := range rawJSON.overdriveAbilities {
+		ability := &rawJSON.overdriveAbilities[i]
 
-		newChanges, err := l.prepareAbilityModifierChanges(ability.BattleInteractions)
+		newChanges, err := prepareAbilityModifierChanges(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -65,10 +65,10 @@ func (l *Lookup) extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.items {
-		item := &l.json.items[i]
+	for i := range rawJSON.items {
+		item := &rawJSON.items[i]
 
-		newChanges, err := l.prepareAbilityModifierChanges(item.BattleInteractions)
+		newChanges, err := prepareAbilityModifierChanges(item.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -76,10 +76,10 @@ func (l *Lookup) extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.triggerCommands {
-		command := &l.json.triggerCommands[i]
+	for i := range rawJSON.triggerCommands {
+		command := &rawJSON.triggerCommands[i]
 
-		newChanges, err := l.prepareAbilityModifierChanges(command.BattleInteractions)
+		newChanges, err := prepareAbilityModifierChanges(command.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -87,10 +87,10 @@ func (l *Lookup) extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.miscAbilities {
-		ability := &l.json.miscAbilities[i]
+	for i := range rawJSON.miscAbilities {
+		ability := &rawJSON.miscAbilities[i]
 
-		newChanges, err := l.prepareAbilityModifierChanges(ability.BattleInteractions)
+		newChanges, err := prepareAbilityModifierChanges(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -98,10 +98,10 @@ func (l *Lookup) extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.enemyAbilities {
-		ability := &l.json.enemyAbilities[i]
+	for i := range rawJSON.enemyAbilities {
+		ability := &rawJSON.enemyAbilities[i]
 
-		newChanges, err := l.prepareAbilityModifierChanges(ability.BattleInteractions)
+		newChanges, err := prepareAbilityModifierChanges(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -109,10 +109,10 @@ func (l *Lookup) extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.autoAbilities {
-		autoAbility := &l.json.autoAbilities[i]
+	for i := range rawJSON.autoAbilities {
+		autoAbility := &rawJSON.autoAbilities[i]
 
-		newChanges, err := l.prepareModifierChanges(autoAbility.ModifierChanges)
+		newChanges, err := prepareModifierChanges(autoAbility.ModifierChanges)
 		if err != nil {
 			return nil, err
 		}
@@ -120,14 +120,14 @@ func (l *Lookup) extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.properties {
-		property := &l.json.properties[i]
+	for i := range rawJSON.properties {
+		property := &rawJSON.properties[i]
 
 		if property.ModifierChange == nil {
 			continue
 		}
 
-		change, err := l.prepareModifierChange(property.ModifierChange)
+		change, err := prepareModifierChange(property.ModifierChange)
 		if err != nil {
 			return nil, err
 		}
@@ -135,10 +135,10 @@ func (l *Lookup) extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, *change)
 	}
 
-	for i := range l.json.statusConditions {
-		status := &l.json.statusConditions[i]
+	for i := range rawJSON.statusConditions {
+		status := &rawJSON.statusConditions[i]
 
-		newChanges, err := l.prepareModifierChanges(status.ModifierChanges)
+		newChanges, err := prepareModifierChanges(status.ModifierChanges)
 		if err != nil {
 			return nil, err
 		}
@@ -146,16 +146,16 @@ func (l *Lookup) extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	return dedupeRows(changes, l.Hashes), nil
+	return dedupeRows(changes, hashes), nil
 }
 
-func (l *Lookup) prepareAbilityModifierChanges(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.ModifierChange, error) {
+func prepareAbilityModifierChanges(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.ModifierChange, error) {
 	changes := []seedtypes.ModifierChange{}
 
 	for i := range battleInteractions {
 		bi := &battleInteractions[i]
 
-		changesNew, err := l.prepareModifierChanges(bi.ModifierChanges)
+		changesNew, err := prepareModifierChanges(bi.ModifierChanges)
 		if err != nil {
 			return nil, err
 		}
@@ -165,11 +165,11 @@ func (l *Lookup) prepareAbilityModifierChanges(battleInteractions []seedtypes.Ba
 	return changes, nil
 }
 
-func (l *Lookup) prepareModifierChanges(changes []seedtypes.ModifierChange) ([]seedtypes.ModifierChange, error) {
+func prepareModifierChanges(changes []seedtypes.ModifierChange) ([]seedtypes.ModifierChange, error) {
 	changesNew := []seedtypes.ModifierChange{}
 
 	for i := range changes {
-		change, err := l.prepareModifierChange(&changes[i])
+		change, err := prepareModifierChange(&changes[i])
 		if err != nil {
 			return nil, err
 		}
@@ -180,14 +180,14 @@ func (l *Lookup) prepareModifierChanges(changes []seedtypes.ModifierChange) ([]s
 	return changesNew, nil
 }
 
-func (l *Lookup) prepareModifierChange(mc *seedtypes.ModifierChange) (*seedtypes.ModifierChange, error) {
+func prepareModifierChange(mc *seedtypes.ModifierChange) (*seedtypes.ModifierChange, error) {
 	var err error
 
 	if mc == nil {
 		return nil, nil
 	}
 
-	mc.ModifierID, err = assignFK(mc.ModifierName, l.Modifiers)
+	mc.ModifierID, err = assignFK(mc.ModifierName, L.Modifiers)
 	if err != nil {
 		return nil, err
 	}

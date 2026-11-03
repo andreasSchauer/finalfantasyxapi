@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
-	sublocations := l.extractSublocations()
+func loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
+	sublocations := extractSublocations()
 
 	params := database.CreateSublocationBulkParams{
 		DataHash:     make([]string, len(sublocations)),
@@ -32,19 +32,19 @@ func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Contex
 
 	for i, row := range dbRows {
 		sublocations[i].ID = row.ID
-		l.Sublocations[seedtypes.Key(sublocations[i])] = sublocations[i]
-		l.SublocationsID[row.ID] = sublocations[i]
-		l.Hashes[row.DataHash] = row.ID
+		L.Sublocations[seedtypes.Key(sublocations[i])] = sublocations[i]
+		L.SublocationsID[row.ID] = sublocations[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractSublocations() []seedtypes.Sublocation {
+func extractSublocations() []seedtypes.Sublocation {
 	sublocations := []seedtypes.Sublocation{}
 
-	for i := range l.json.locations {
-		location := &l.json.locations[i]
+	for i := range rawJSON.locations {
+		location := &rawJSON.locations[i]
 
 		for j := range location.Sublocations {
 			sublocation := &location.Sublocations[j]
@@ -54,20 +54,20 @@ func (l *Lookup) extractSublocations() []seedtypes.Sublocation {
 		}
 	}
 
-	return dedupeRows(sublocations, l.Hashes)
+	return dedupeRows(sublocations, hashes)
 }
 
-func (l *Lookup) completeSublocations(sublocations []seedtypes.Sublocation) error {
+func completeSublocations(sublocations []seedtypes.Sublocation) error {
 	for i := range sublocations {
 		sublocation := &sublocations[i]
 
-		err := l.completeAreas(sublocation.Areas)
+		err := completeAreas(sublocation.Areas)
 		if err != nil {
 			return err
 		}
 
-		l.Sublocations[seedtypes.Key(sublocation)] = *sublocation
-		l.SublocationsID[sublocation.ID] = *sublocation
+		L.Sublocations[seedtypes.Key(sublocation)] = *sublocation
+		L.SublocationsID[sublocation.ID] = *sublocation
 	}
 
 	return nil

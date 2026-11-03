@@ -10,7 +10,7 @@ type JunctionParams struct {
 	ChildIDs            []int32
 }
 
-func processJunctions[P, C seedtypes.Hashable](l *Lookup, desc string, parents []P, getChildren func(P) ([]C, error)) (JunctionParams, error) {
+func processJunctions[P, C seedtypes.Hashable](desc string, parents []P, getChildren func(P) ([]C, error)) (JunctionParams, error) {
 	params := JunctionParams{
 		DataHashes: make([]string, 0),
 		ParentIDs:  make([]int32, 0),
@@ -18,7 +18,7 @@ func processJunctions[P, C seedtypes.Hashable](l *Lookup, desc string, parents [
 	}
 
 	for _, p := range parents {
-		pID, err := l.GetHashID(p)
+		pID, err := GetHashID(p)
 		if err != nil {
 			return JunctionParams{}, err
 		}
@@ -29,7 +29,7 @@ func processJunctions[P, C seedtypes.Hashable](l *Lookup, desc string, parents [
 		}
 
 		for _, c := range children {
-			cID, err := l.GetHashID(c)
+			cID, err := GetHashID(c)
 			if err != nil {
 				return JunctionParams{}, err
 			}
@@ -49,7 +49,7 @@ func processJunctions[P, C seedtypes.Hashable](l *Lookup, desc string, parents [
 	return params, nil
 }
 
-func processThreewayJunctions[GP, P, C seedtypes.Hashable](l *Lookup, desc string, grandParents []GP, getParents func(GP) ([]P, error), getChildren func(P) ([]C, error)) (JunctionParams, error) {
+func processThreewayJunctions[GP, P, C seedtypes.Hashable](desc string, grandParents []GP, getParents func(GP) ([]P, error), getChildren func(P) ([]C, error)) (JunctionParams, error) {
 	params := JunctionParams{
 		DataHashes:     make([]string, 0),
 		GrandParentIDs: make([]int32, 0),
@@ -57,7 +57,7 @@ func processThreewayJunctions[GP, P, C seedtypes.Hashable](l *Lookup, desc strin
 		ChildIDs:       make([]int32, 0),
 	}
 	for _, gp := range grandParents {
-		gpID, err := l.GetHashID(gp)
+		gpID, err := GetHashID(gp)
 		if err != nil {
 			return JunctionParams{}, err
 		}
@@ -68,7 +68,7 @@ func processThreewayJunctions[GP, P, C seedtypes.Hashable](l *Lookup, desc strin
 		}
 
 		for _, p := range parents {
-			pID, err := l.GetHashID(p)
+			pID, err := GetHashID(p)
 			if err != nil {
 				return JunctionParams{}, err
 			}
@@ -79,7 +79,7 @@ func processThreewayJunctions[GP, P, C seedtypes.Hashable](l *Lookup, desc strin
 			}
 
 			for _, c := range children {
-				cID, err := l.GetHashID(c)
+				cID, err := GetHashID(c)
 				if err != nil {
 					return JunctionParams{}, err
 				}

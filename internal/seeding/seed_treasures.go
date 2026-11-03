@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedTreasures(qtx *database.Queries, ctx context.Context) error {
-	treasures, err := l.extractTreasures()
+func loop4SeedTreasures(qtx *database.Queries, ctx context.Context) error {
+	treasures, err := extractTreasures()
 	if err != nil {
 		return err
 	}
@@ -47,26 +47,26 @@ func (l *Lookup) loop4SeedTreasures(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		treasures[i].ID = row.ID
-		l.Treasures[seedtypes.Key(treasures[i])] = treasures[i]
-		l.TreasuresID[row.ID] = treasures[i]
-		l.Hashes[row.DataHash] = row.ID
+		L.Treasures[seedtypes.Key(treasures[i])] = treasures[i]
+		L.TreasuresID[row.ID] = treasures[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractTreasures() ([]seedtypes.Treasure, error) {
+func extractTreasures() ([]seedtypes.Treasure, error) {
 	treasures := []seedtypes.Treasure{}
 	var err error
 
-	for i := range l.json.treasureLists {
-		list := &l.json.treasureLists[i]
+	for i := range rawJSON.treasureLists {
+		list := &rawJSON.treasureLists[i]
 
 		for j := range list.Treasures {
 			treasure := &list.Treasures[j]
 			treasure.Version = int32(j + 1)
 
-			treasure.AreaID, err = assignFK(list.LocationArea, l.Areas)
+			treasure.AreaID, err = assignFK(list.LocationArea, L.Areas)
 			if err != nil {
 				return nil, err
 			}
@@ -75,15 +75,15 @@ func (l *Lookup) extractTreasures() ([]seedtypes.Treasure, error) {
 		}
 	}
 
-	return dedupeRows(treasures, l.Hashes), nil
+	return dedupeRows(treasures, hashes), nil
 }
 
-func (l *Lookup) completeTreasureLists() error {
-	for i := range l.json.treasureLists {
+func completeTreasureLists() error {
+	for i := range rawJSON.treasureLists {
 		var err error
-		list := &l.json.treasureLists[i]
+		list := &rawJSON.treasureLists[i]
 
-		err = l.completeTreasures(list.Treasures)
+		err = completeTreasures(list.Treasures)
 		if err != nil {
 			return err
 		}
@@ -92,29 +92,29 @@ func (l *Lookup) completeTreasureLists() error {
 	return nil
 }
 
-func (l *Lookup) completeTreasures(treasures []seedtypes.Treasure) error {
+func completeTreasures(treasures []seedtypes.Treasure) error {
 	for i := range treasures {
 		treasure := &treasures[i]
 
-		err := assignIDs(l, treasure.Items)
+		err := assignIDs(treasure.Items)
 		if err != nil {
 			return err
 		}
 
-		err = l.assignID(treasure)
+		err = assignID(treasure)
 		if err != nil {
 			return err
 		}
 
 		if treasure.Equipment != nil {
-			err := l.assignID(treasure.Equipment)
+			err := assignID(treasure.Equipment)
 			if err != nil {
 				return err
 			}
 		}
 
-		l.Treasures[seedtypes.Key(*treasure)] = *treasure
-		l.TreasuresID[treasure.ID] = *treasure
+		L.Treasures[seedtypes.Key(*treasure)] = *treasure
+		L.TreasuresID[treasure.ID] = *treasure
 	}
 
 	return nil

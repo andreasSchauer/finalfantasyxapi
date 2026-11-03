@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedStatusResists(qtx *database.Queries, ctx context.Context) error {
-	resists, err := l.extractStatusResists()
+func loop4SeedStatusResists(qtx *database.Queries, ctx context.Context) error {
+	resists, err := extractStatusResists()
 	if err != nil {
 		return err
 	}
@@ -32,22 +32,22 @@ func (l *Lookup) loop4SeedStatusResists(qtx *database.Queries, ctx context.Conte
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractStatusResists() ([]seedtypes.StatusResist, error) {
+func extractStatusResists() ([]seedtypes.StatusResist, error) {
 	resists := []seedtypes.StatusResist{}
 	var err error
 
-	for i := range l.json.monsters {
-		mon := &l.json.monsters[i]
+	for i := range rawJSON.monsters {
+		mon := &rawJSON.monsters[i]
 
 		for j := range mon.StatusResists {
 			resist := &mon.StatusResists[j]
-			resist.StatusConditionID, err = assignFK(resist.StatusCondition, l.StatusConditions)
+			resist.StatusConditionID, err = assignFK(resist.StatusCondition, L.StatusConditions)
 			if err != nil {
 				return nil, err
 			}
@@ -56,12 +56,12 @@ func (l *Lookup) extractStatusResists() ([]seedtypes.StatusResist, error) {
 		}
 	}
 
-	for i := range l.json.autoAbilities {
-		autoAbility := &l.json.autoAbilities[i]
+	for i := range rawJSON.autoAbilities {
+		autoAbility := &rawJSON.autoAbilities[i]
 
 		for j := range autoAbility.AddedStatusResists {
 			resist := &autoAbility.AddedStatusResists[j]
-			resist.StatusConditionID, err = assignFK(resist.StatusCondition, l.StatusConditions)
+			resist.StatusConditionID, err = assignFK(resist.StatusCondition, L.StatusConditions)
 			if err != nil {
 				return nil, err
 			}
@@ -70,5 +70,5 @@ func (l *Lookup) extractStatusResists() ([]seedtypes.StatusResist, error) {
 		}
 	}
 
-	return dedupeRows(resists, l.Hashes), nil
+	return dedupeRows(resists, hashes), nil
 }

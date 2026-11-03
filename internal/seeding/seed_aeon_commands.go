@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedAeonCommands(qtx *database.Queries, ctx context.Context) error {
-	commands, err := l.extractAeonCommands()
+func loop3SeedAeonCommands(qtx *database.Queries, ctx context.Context) error {
+	commands, err := extractAeonCommands()
 	if err != nil {
 		return err
 	}
@@ -43,28 +43,28 @@ func (l *Lookup) loop3SeedAeonCommands(qtx *database.Queries, ctx context.Contex
 
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
-		l.json.aeonCommands[i].ID = row.ID
-		l.AeonCommands[seedtypes.Key(commands[i])] = commands[i]
-		l.AeonCommandsID[row.ID] = commands[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.aeonCommands[i].ID = row.ID
+		L.AeonCommands[seedtypes.Key(commands[i])] = commands[i]
+		L.AeonCommandsID[row.ID] = commands[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractAeonCommands() ([]seedtypes.AeonCommand, error) {
+func extractAeonCommands() ([]seedtypes.AeonCommand, error) {
 	commands := []seedtypes.AeonCommand{}
 	var err error
 
-	for i := range l.json.aeonCommands {
-		command := &l.json.aeonCommands[i]
+	for i := range rawJSON.aeonCommands {
+		command := &rawJSON.aeonCommands[i]
 
-		command.TopmenuID, err = assignFKPtr(command.Topmenu, l.Topmenus)
+		command.TopmenuID, err = assignFKPtr(command.Topmenu, L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, l.Submenus)
+		command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, L.Submenus)
 		if err != nil {
 			return nil, err
 		}
@@ -72,5 +72,5 @@ func (l *Lookup) extractAeonCommands() ([]seedtypes.AeonCommand, error) {
 		commands = append(commands, *command)
 	}
 
-	return dedupeRows(commands, l.Hashes), nil
+	return dedupeRows(commands, hashes), nil
 }

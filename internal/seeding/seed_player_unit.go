@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context) error {
-	units := l.extractPlayerUnits()
+func loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context) error {
+	units := extractPlayerUnits()
 
 	params := database.CreatePlayerUnitBulkParams{
 		DataHash: make([]string, len(units)),
@@ -30,28 +30,28 @@ func (l *Lookup) loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context
 
 	for i, row := range dbRows {
 		units[i].ID = row.ID
-		l.PlayerUnits[seedtypes.Key(units[i])] = units[i]
-		l.PlayerUnitsID[row.ID] = units[i]
-		l.Hashes[row.DataHash] = row.ID
+		L.PlayerUnits[seedtypes.Key(units[i])] = units[i]
+		L.PlayerUnitsID[row.ID] = units[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractPlayerUnits() []seedtypes.PlayerUnit {
+func extractPlayerUnits() []seedtypes.PlayerUnit {
 	playerUnits := []seedtypes.PlayerUnit{}
 
-	for i := range l.json.characters {
-		c := &l.json.characters[i]
+	for i := range rawJSON.characters {
+		c := &rawJSON.characters[i]
 		c.PlayerUnit.Type = database.UnitTypeCharacter
 		playerUnits = append(playerUnits, c.PlayerUnit)
 	}
 
-	for i := range l.json.aeons {
-		a := &l.json.aeons[i]
+	for i := range rawJSON.aeons {
+		a := &rawJSON.aeons[i]
 		a.PlayerUnit.Type = database.UnitTypeAeon
 		playerUnits = append(playerUnits, a.PlayerUnit)
 	}
 
-	return dedupeRows(playerUnits, l.Hashes)
+	return dedupeRows(playerUnits, hashes)
 }

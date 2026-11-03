@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Context) error {
-	commands, err := l.extractTriggerCommands()
+func loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Context) error {
+	commands, err := extractTriggerCommands()
 	if err != nil {
 		return err
 	}
@@ -41,28 +41,28 @@ func (l *Lookup) loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Con
 
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
-		l.json.triggerCommands[i].ID = row.ID
-		l.TriggerCommands[seedtypes.Key(commands[i])] = commands[i]
-		l.TriggerCommandsID[row.ID] = commands[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.triggerCommands[i].ID = row.ID
+		L.TriggerCommands[seedtypes.Key(commands[i])] = commands[i]
+		L.TriggerCommandsID[row.ID] = commands[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractTriggerCommands() ([]seedtypes.TriggerCommand, error) {
+func extractTriggerCommands() ([]seedtypes.TriggerCommand, error) {
 	commands := []seedtypes.TriggerCommand{}
 	var err error
 
-	for i := range l.json.triggerCommands {
-		command := &l.json.triggerCommands[i]
+	for i := range rawJSON.triggerCommands {
+		command := &rawJSON.triggerCommands[i]
 
-		command.Ability.ID, err = l.GetHashID(command.Ability)
+		command.Ability.ID, err = GetHashID(command.Ability)
 		if err != nil {
 			return nil, err
 		}
 
-		command.TopmenuID, err = assignFKPtr(command.Topmenu, l.Topmenus)
+		command.TopmenuID, err = assignFKPtr(command.Topmenu, L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
@@ -70,32 +70,32 @@ func (l *Lookup) extractTriggerCommands() ([]seedtypes.TriggerCommand, error) {
 		commands = append(commands, *command)
 	}
 
-	return dedupeRows(commands, l.Hashes), nil
+	return dedupeRows(commands, hashes), nil
 }
 
-func (l *Lookup) completeTriggerCommands() error {
-	for i := range l.json.triggerCommands {
-		ability := &l.json.triggerCommands[i]
+func completeTriggerCommands() error {
+	for i := range rawJSON.triggerCommands {
+		ability := &rawJSON.triggerCommands[i]
 
-		err := l.completeBattleInteractions(ability.BattleInteractions)
+		err := completeBattleInteractions(ability.BattleInteractions)
 		if err != nil {
 			return err
 		}
 
-		l.TriggerCommands[seedtypes.Key(ability)] = *ability
-		l.TriggerCommandsID[ability.ID] = *ability
+		L.TriggerCommands[seedtypes.Key(ability)] = *ability
+		L.TriggerCommandsID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
-func (l *Lookup) getTriggerCommandRelatedStats(tc seedtypes.TriggerCommand) ([]seedtypes.Stat, error) {
-	return getResources(tc.RelatedStats, l.Stats)
+func getTriggerCommandRelatedStats(tc seedtypes.TriggerCommand) ([]seedtypes.Stat, error) {
+	return GetResources(tc.RelatedStats, L.Stats)
 }
 
-func (l *Lookup) seedJuncTriggerCommandsRelatedStats(qtx *database.Queries, ctx context.Context) error {
+func seedJuncTriggerCommandsRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "trigger commands + related stats"
-	jParams, err := processJunctions(l, desc, l.json.triggerCommands, l.getTriggerCommandRelatedStats)
+	jParams, err := processJunctions(desc, rawJSON.triggerCommands, getTriggerCommandRelatedStats)
 	if err != nil {
 		return err
 	}

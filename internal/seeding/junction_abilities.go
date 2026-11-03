@@ -7,46 +7,46 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getAbilities() []seedtypes.Ability {
+func getAbilities() []seedtypes.Ability {
 	abilities := []seedtypes.Ability{}
 
-	for _, ability := range l.json.playerAbilities {
+	for _, ability := range rawJSON.playerAbilities {
 		abilities = append(abilities, ability.Ability)
 	}
 
-	for _, ability := range l.json.overdriveAbilities {
+	for _, ability := range rawJSON.overdriveAbilities {
 		abilities = append(abilities, ability.Ability)
 	}
 
-	for _, item := range l.json.items {
+	for _, item := range rawJSON.items {
 		if len(item.BattleInteractions) == 0 {
 			continue
 		}
 		abilities = append(abilities, item.Ability)
 	}
 
-	for _, command := range l.json.triggerCommands {
+	for _, command := range rawJSON.triggerCommands {
 		abilities = append(abilities, command.Ability)
 	}
 
-	for _, ability := range l.json.miscAbilities {
+	for _, ability := range rawJSON.miscAbilities {
 		abilities = append(abilities, ability.Ability)
 	}
 
-	for _, ability := range l.json.enemyAbilities {
+	for _, ability := range rawJSON.enemyAbilities {
 		abilities = append(abilities, ability.Ability)
 	}
 
 	return abilities
 }
 
-func (l *Lookup) getAbilityBattleInteractions(a seedtypes.Ability) ([]seedtypes.BattleInteraction, error) {
+func getAbilityBattleInteractions(a seedtypes.Ability) ([]seedtypes.BattleInteraction, error) {
 	return a.BattleInteractions, nil
 }
 
-func (l *Lookup) seedJuncAbilitiesBattleInteractions(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAbilitiesBattleInteractions(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "abilities + battle interactions"
-	jParams, err := processJunctions(l, desc, l.getAbilities(), l.getAbilityBattleInteractions)
+	jParams, err := processJunctions(desc, getAbilities(), getAbilityBattleInteractions)
 	if err != nil {
 		return err
 	}

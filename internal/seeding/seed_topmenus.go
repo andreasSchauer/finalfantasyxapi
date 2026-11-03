@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) error {
-	topmenus := dedupeRows(l.json.topmenus, l.Hashes)
+func loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) error {
+	topmenus := dedupeRows(rawJSON.topmenus, hashes)
 
 	params := database.CreateTopmenuBulkParams{
 		DataHash: make([]string, len(topmenus)),
@@ -28,10 +28,10 @@ func (l *Lookup) loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) e
 
 	for i, row := range dbRows {
 		topmenus[i].ID = row.ID
-		l.json.topmenus[i].ID = row.ID
-		l.Topmenus[seedtypes.Key(topmenus[i])] = topmenus[i]
-		l.TopmenusID[row.ID] = topmenus[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.topmenus[i].ID = row.ID
+		L.Topmenus[seedtypes.Key(topmenus[i])] = topmenus[i]
+		L.TopmenusID[row.ID] = topmenus[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil

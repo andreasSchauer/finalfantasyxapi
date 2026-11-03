@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedElements(qtx *database.Queries, ctx context.Context) error {
-	elements := dedupeRows(l.json.elements, l.Hashes)
+func loop1SeedElements(qtx *database.Queries, ctx context.Context) error {
+	elements := dedupeRows(rawJSON.elements, hashes)
 
 	params := database.CreateElementBulkParams{
 		DataHash: make([]string, len(elements)),
@@ -30,17 +30,17 @@ func (l *Lookup) loop1SeedElements(qtx *database.Queries, ctx context.Context) e
 
 	for i, row := range dbRows {
 		elements[i].ID = row.ID
-		l.json.elements[i].ID = row.ID
-		l.Elements[seedtypes.Key(elements[i])] = elements[i]
-		l.ElementsID[row.ID] = elements[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.elements[i].ID = row.ID
+		L.Elements[seedtypes.Key(elements[i])] = elements[i]
+		L.ElementsID[row.ID] = elements[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) loop2UpdateElements(qtx *database.Queries, ctx context.Context) error {
-	elements, err := l.extractUpdatedElements()
+func loop2UpdateElements(qtx *database.Queries, ctx context.Context) error {
+	elements, err := extractUpdatedElements()
 	if err != nil {
 		return err
 	}
@@ -63,26 +63,26 @@ func (l *Lookup) loop2UpdateElements(qtx *database.Queries, ctx context.Context)
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractUpdatedElements() ([]seedtypes.Element, error) {
+func extractUpdatedElements() ([]seedtypes.Element, error) {
 	elements := []seedtypes.Element{}
 	var err error
 
-	for i := range l.json.elements {
-		element := &l.json.elements[i]
+	for i := range rawJSON.elements {
+		element := &rawJSON.elements[i]
 
 		if element.OppositeElement == nil {
 			continue
 		}
 
-		delete(l.Hashes, generateDataHash(element))
+		delete(hashes, generateDataHash(element))
 
-		element.OppositeElementID, err = assignFKPtr(element.OppositeElement, l.Elements)
+		element.OppositeElementID, err = assignFKPtr(element.OppositeElement, L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -90,5 +90,5 @@ func (l *Lookup) extractUpdatedElements() ([]seedtypes.Element, error) {
 		elements = append(elements, *element)
 	}
 
-	return dedupeRows(elements, l.Hashes), nil
+	return dedupeRows(elements, hashes), nil
 }

@@ -2,39 +2,39 @@ package seeding
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
-func (l *Lookup) completeAeonStats() error {
-	for i := range l.json.aeonStats {
-		as := &l.json.aeonStats[i]
-		err := assignIDs(l, as.AVals)
+func completeAeonStats() error {
+	for i := range rawJSON.aeonStats {
+		as := &rawJSON.aeonStats[i]
+		err := assignIDs(as.AVals)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, as.BVals)
+		err = assignIDs(as.BVals)
 		if err != nil {
 			return err
 		}
 
-		err = l.completeAeonXVals(as.XVals)
+		err = completeAeonXVals(as.XVals)
 		if err != nil {
 			return err
 		}
 
-		aeon := l.Aeons[as.Name]
+		aeon := L.Aeons[as.Name]
 		as.AeonID = aeon.ID
 		aeon.BaseStats = *as
-		l.Aeons[seedtypes.Key(aeon)] = aeon
-		l.AeonsID[as.AeonID] = aeon
-		l.json.aeons[i].BaseStats = *as
+		L.Aeons[seedtypes.Key(aeon)] = aeon
+		L.AeonsID[as.AeonID] = aeon
+		rawJSON.aeons[i].BaseStats = *as
 	}
 
 	return nil
 }
 
-func (l *Lookup) completeAeonXVals(xVals []seedtypes.XVal) error {
+func completeAeonXVals(xVals []seedtypes.XVal) error {
 	for i := range xVals {
 		xVal := &xVals[i]
-		err := assignIDs(l, xVal.BaseStats)
+		err := assignIDs(xVal.BaseStats)
 		if err != nil {
 			return err
 		}

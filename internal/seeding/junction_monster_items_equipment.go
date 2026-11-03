@@ -8,10 +8,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getMonsterItems() []seedtypes.MonsterItems {
+func getMonsterItems() []seedtypes.MonsterItems {
 	monsterItems := []seedtypes.MonsterItems{}
 
-	for _, mon := range l.json.monsters {
+	for _, mon := range rawJSON.monsters {
 		if mon.Items != nil {
 			monsterItems = append(monsterItems, *mon.Items)
 		}
@@ -20,13 +20,13 @@ func (l *Lookup) getMonsterItems() []seedtypes.MonsterItems {
 	return monsterItems
 }
 
-func (l *Lookup) getMonsterItemsOtherItems(mi seedtypes.MonsterItems) ([]seedtypes.PossibleItem, error) {
+func getMonsterItemsOtherItems(mi seedtypes.MonsterItems) ([]seedtypes.PossibleItem, error) {
 	return mi.OtherItems, nil
 }
 
-func (l *Lookup) seedJuncMonsterItemsOtherItems(qtx *database.Queries, ctx context.Context) error {
+func seedJuncMonsterItemsOtherItems(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster items + other items"
-	jParams, err := processJunctions(l, desc, l.getMonsterItems(), l.getMonsterItemsOtherItems)
+	jParams, err := processJunctions(desc, getMonsterItems(), getMonsterItemsOtherItems)
 	if err != nil {
 		return err
 	}
@@ -38,10 +38,10 @@ func (l *Lookup) seedJuncMonsterItemsOtherItems(qtx *database.Queries, ctx conte
 	})
 }
 
-func (l *Lookup) getMonsterEquipment() []seedtypes.MonsterEquipment {
+func getMonsterEquipment() []seedtypes.MonsterEquipment {
 	monsterEquipment := []seedtypes.MonsterEquipment{}
 
-	for _, mon := range l.json.monsters {
+	for _, mon := range rawJSON.monsters {
 		if mon.Equipment != nil {
 			monsterEquipment = append(monsterEquipment, *mon.Equipment)
 		}
@@ -50,13 +50,13 @@ func (l *Lookup) getMonsterEquipment() []seedtypes.MonsterEquipment {
 	return monsterEquipment
 }
 
-func (l *Lookup) getMonsterEquipmentEquipmentDrops(me seedtypes.MonsterEquipment) ([]seedtypes.EquipmentDrop, error) {
+func getMonsterEquipmentEquipmentDrops(me seedtypes.MonsterEquipment) ([]seedtypes.EquipmentDrop, error) {
 	return slices.Concat(me.WeaponAbilities, me.ArmorAbilities), nil
 }
 
-func (l *Lookup) seedJuncMonsterEquipmentEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
+func seedJuncMonsterEquipmentEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster equipment + equipment drops"
-	jParams, err := processJunctions(l, desc, l.getMonsterEquipment(), l.getMonsterEquipmentEquipmentDrops)
+	jParams, err := processJunctions(desc, getMonsterEquipment(), getMonsterEquipmentEquipmentDrops)
 	if err != nil {
 		return err
 	}
@@ -68,17 +68,17 @@ func (l *Lookup) seedJuncMonsterEquipmentEquipmentDrops(qtx *database.Queries, c
 	})
 }
 
-func (l *Lookup) getMonsterEquipmentEquipmentSlots(me seedtypes.MonsterEquipment) ([]seedtypes.MonsterEquipmentSlots, error) {
+func getMonsterEquipmentEquipmentSlots(me seedtypes.MonsterEquipment) ([]seedtypes.MonsterEquipmentSlots, error) {
 	return []seedtypes.MonsterEquipmentSlots{me.AbilitySlots, me.AttachedAbilities}, nil
 }
 
-func (l *Lookup) getMonsterEquipmentSlotsSlotChances(mes seedtypes.MonsterEquipmentSlots) ([]seedtypes.EquipmentSlotsChance, error) {
+func getMonsterEquipmentSlotsSlotChances(mes seedtypes.MonsterEquipmentSlots) ([]seedtypes.EquipmentSlotsChance, error) {
 	return mes.Chances, nil
 }
 
-func (l *Lookup) seedJuncMonsterEquipmentSlotChances(qtx *database.Queries, ctx context.Context) error {
+func seedJuncMonsterEquipmentSlotChances(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster equipment + equipment slot chances"
-	jParams, err := processThreewayJunctions(l, desc, l.getMonsterEquipment(), l.getMonsterEquipmentEquipmentSlots, l.getMonsterEquipmentSlotsSlotChances)
+	jParams, err := processThreewayJunctions(desc, getMonsterEquipment(), getMonsterEquipmentEquipmentSlots, getMonsterEquipmentSlotsSlotChances)
 	if err != nil {
 		return err
 	}
@@ -91,13 +91,13 @@ func (l *Lookup) seedJuncMonsterEquipmentSlotChances(qtx *database.Queries, ctx 
 	})
 }
 
-func (l *Lookup) getEquipmentDropCharacters(ed seedtypes.EquipmentDrop) ([]seedtypes.Character, error) {
-	return getResources(ed.Characters, l.Characters)
+func getEquipmentDropCharacters(ed seedtypes.EquipmentDrop) ([]seedtypes.Character, error) {
+	return GetResources(ed.Characters, L.Characters)
 }
 
-func (l *Lookup) seedJuncEquipmentDropsCharacters(qtx *database.Queries, ctx context.Context) error {
+func seedJuncEquipmentDropsCharacters(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "equipment drops + characters"
-	jParams, err := processThreewayJunctions(l, desc, l.getMonsterEquipment(), l.getMonsterEquipmentEquipmentDrops, l.getEquipmentDropCharacters)
+	jParams, err := processThreewayJunctions(desc, getMonsterEquipment(), getMonsterEquipmentEquipmentDrops, getEquipmentDropCharacters)
 	if err != nil {
 		return err
 	}

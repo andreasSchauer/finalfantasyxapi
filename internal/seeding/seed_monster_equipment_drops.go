@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
-	drops, err := l.extractEquipmentDrops()
+func loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
+	drops, err := extractEquipmentDrops()
 	if err != nil {
 		return err
 	}
@@ -38,18 +38,18 @@ func (l *Lookup) loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Cont
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
+func extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
 	drops := []seedtypes.EquipmentDrop{}
 	var err error
 
-	for i := range l.json.monsters {
-		mon := &l.json.monsters[i]
+	for i := range rawJSON.monsters {
+		mon := &rawJSON.monsters[i]
 
 		if mon.Equipment == nil {
 			continue
@@ -59,7 +59,7 @@ func (l *Lookup) extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
 			drop := &mon.Equipment.WeaponAbilities[j]
 			drop.Type = database.EquipTypeWeapon
 
-			drop.AutoAbilityID, err = assignFK(drop.Ability, l.AutoAbilities)
+			drop.AutoAbilityID, err = assignFK(drop.Ability, L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}
@@ -71,7 +71,7 @@ func (l *Lookup) extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
 			drop := &mon.Equipment.ArmorAbilities[j]
 			drop.Type = database.EquipTypeArmor
 
-			drop.AutoAbilityID, err = assignFK(drop.Ability, l.AutoAbilities)
+			drop.AutoAbilityID, err = assignFK(drop.Ability, L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}
@@ -80,5 +80,5 @@ func (l *Lookup) extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
 		}
 	}
 
-	return dedupeRows(drops, l.Hashes), nil
+	return dedupeRows(drops, hashes), nil
 }

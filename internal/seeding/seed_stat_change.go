@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop5SeedStatChanges(qtx *database.Queries, ctx context.Context) error {
-	changes, err := l.extractStatChanges()
+func loop5SeedStatChanges(qtx *database.Queries, ctx context.Context) error {
+	changes, err := extractStatChanges()
 	if err != nil {
 		return err
 	}
@@ -34,19 +34,19 @@ func (l *Lookup) loop5SeedStatChanges(qtx *database.Queries, ctx context.Context
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractStatChanges() ([]seedtypes.StatChange, error) {
+func extractStatChanges() ([]seedtypes.StatChange, error) {
 	changes := []seedtypes.StatChange{}
 
-	for i := range l.json.playerAbilities {
-		ability := &l.json.playerAbilities[i]
+	for i := range rawJSON.playerAbilities {
+		ability := &rawJSON.playerAbilities[i]
 
-		newChanges, err := l.prepareAbilityStatChanges(ability.BattleInteractions)
+		newChanges, err := prepareAbilityStatChanges(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -54,10 +54,10 @@ func (l *Lookup) extractStatChanges() ([]seedtypes.StatChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.overdriveAbilities {
-		ability := &l.json.overdriveAbilities[i]
+	for i := range rawJSON.overdriveAbilities {
+		ability := &rawJSON.overdriveAbilities[i]
 
-		newChanges, err := l.prepareAbilityStatChanges(ability.BattleInteractions)
+		newChanges, err := prepareAbilityStatChanges(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -65,10 +65,10 @@ func (l *Lookup) extractStatChanges() ([]seedtypes.StatChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.items {
-		item := &l.json.items[i]
+	for i := range rawJSON.items {
+		item := &rawJSON.items[i]
 
-		newChanges, err := l.prepareAbilityStatChanges(item.BattleInteractions)
+		newChanges, err := prepareAbilityStatChanges(item.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -76,10 +76,10 @@ func (l *Lookup) extractStatChanges() ([]seedtypes.StatChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.triggerCommands {
-		command := &l.json.triggerCommands[i]
+	for i := range rawJSON.triggerCommands {
+		command := &rawJSON.triggerCommands[i]
 
-		newChanges, err := l.prepareAbilityStatChanges(command.BattleInteractions)
+		newChanges, err := prepareAbilityStatChanges(command.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -87,10 +87,10 @@ func (l *Lookup) extractStatChanges() ([]seedtypes.StatChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.miscAbilities {
-		ability := &l.json.miscAbilities[i]
+	for i := range rawJSON.miscAbilities {
+		ability := &rawJSON.miscAbilities[i]
 
-		newChanges, err := l.prepareAbilityStatChanges(ability.BattleInteractions)
+		newChanges, err := prepareAbilityStatChanges(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -98,10 +98,10 @@ func (l *Lookup) extractStatChanges() ([]seedtypes.StatChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.enemyAbilities {
-		ability := &l.json.enemyAbilities[i]
+	for i := range rawJSON.enemyAbilities {
+		ability := &rawJSON.enemyAbilities[i]
 
-		newChanges, err := l.prepareAbilityStatChanges(ability.BattleInteractions)
+		newChanges, err := prepareAbilityStatChanges(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -109,10 +109,10 @@ func (l *Lookup) extractStatChanges() ([]seedtypes.StatChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.autoAbilities {
-		autoAbility := &l.json.autoAbilities[i]
+	for i := range rawJSON.autoAbilities {
+		autoAbility := &rawJSON.autoAbilities[i]
 
-		newChanges, err := l.prepareStatChanges(autoAbility.StatChanges)
+		newChanges, err := prepareStatChanges(autoAbility.StatChanges)
 		if err != nil {
 			return nil, err
 		}
@@ -120,10 +120,10 @@ func (l *Lookup) extractStatChanges() ([]seedtypes.StatChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range l.json.statusConditions {
-		status := &l.json.statusConditions[i]
+	for i := range rawJSON.statusConditions {
+		status := &rawJSON.statusConditions[i]
 
-		newChanges, err := l.prepareStatChanges(status.StatChanges)
+		newChanges, err := prepareStatChanges(status.StatChanges)
 		if err != nil {
 			return nil, err
 		}
@@ -131,16 +131,16 @@ func (l *Lookup) extractStatChanges() ([]seedtypes.StatChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	return dedupeRows(changes, l.Hashes), nil
+	return dedupeRows(changes, hashes), nil
 }
 
-func (l *Lookup) prepareAbilityStatChanges(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.StatChange, error) {
+func prepareAbilityStatChanges(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.StatChange, error) {
 	changes := []seedtypes.StatChange{}
 
 	for i := range battleInteractions {
 		bi := &battleInteractions[i]
 
-		changesNew, err := l.prepareStatChanges(bi.StatChanges)
+		changesNew, err := prepareStatChanges(bi.StatChanges)
 		if err != nil {
 			return nil, err
 		}
@@ -150,14 +150,14 @@ func (l *Lookup) prepareAbilityStatChanges(battleInteractions []seedtypes.Battle
 	return changes, nil
 }
 
-func (l *Lookup) prepareStatChanges(changes []seedtypes.StatChange) ([]seedtypes.StatChange, error) {
+func prepareStatChanges(changes []seedtypes.StatChange) ([]seedtypes.StatChange, error) {
 	changesNew := []seedtypes.StatChange{}
 	var err error
 
 	for i := range changes {
 		change := &changes[i]
 
-		change.StatID, err = assignFK(change.StatName, l.Stats)
+		change.StatID, err = assignFK(change.StatName, L.Stats)
 		if err != nil {
 			return nil, err
 		}

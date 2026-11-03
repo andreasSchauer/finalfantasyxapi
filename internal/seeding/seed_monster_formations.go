@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop5SeedMonsterFormations(qtx *database.Queries, ctx context.Context) error {
-	formations, err := l.extractMonsterFormations()
+func loop5SeedMonsterFormations(qtx *database.Queries, ctx context.Context) error {
+	formations, err := extractMonsterFormations()
 	if err != nil {
 		return err
 	}
@@ -37,28 +37,28 @@ func (l *Lookup) loop5SeedMonsterFormations(qtx *database.Queries, ctx context.C
 
 	for i, row := range dbRows {
 		formations[i].ID = row.ID
-		l.json.monsterFormations[i].ID = row.ID
-		l.MonsterFormations[seedtypes.Key(formations[i])] = formations[i]
-		l.MonsterFormationsID[row.ID] = formations[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.monsterFormations[i].ID = row.ID
+		L.MonsterFormations[seedtypes.Key(formations[i])] = formations[i]
+		L.MonsterFormationsID[row.ID] = formations[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractMonsterFormations() ([]seedtypes.MonsterFormation, error) {
+func extractMonsterFormations() ([]seedtypes.MonsterFormation, error) {
 	formations := []seedtypes.MonsterFormation{}
 	var err error
 
-	for i := range l.json.monsterFormations {
-		mf := &l.json.monsterFormations[i]
+	for i := range rawJSON.monsterFormations {
+		mf := &rawJSON.monsterFormations[i]
 
-		mf.FormationData.ID, err = l.GetHashID(mf.FormationData)
+		mf.FormationData.ID, err = GetHashID(mf.FormationData)
 		if err != nil {
 			return nil, err
 		}
 
-		mf.MonsterSelection.ID, err = l.GetHashID(mf.MonsterSelection)
+		mf.MonsterSelection.ID, err = GetHashID(mf.MonsterSelection)
 		if err != nil {
 			return nil, err
 		}
@@ -66,37 +66,37 @@ func (l *Lookup) extractMonsterFormations() ([]seedtypes.MonsterFormation, error
 		formations = append(formations, *mf)
 	}
 
-	return dedupeRows(formations, l.Hashes), nil
+	return dedupeRows(formations, hashes), nil
 }
 
-func (l *Lookup) completeMonsterFormations() error {
-	for i := range l.json.monsterFormations {
-		formation := &l.json.monsterFormations[i]
+func completeMonsterFormations() error {
+	for i := range rawJSON.monsterFormations {
+		formation := &rawJSON.monsterFormations[i]
 
-		err := assignIDs(l, formation.Monsters)
+		err := assignIDs(formation.Monsters)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, formation.EncounterAreas)
+		err = assignIDs(formation.EncounterAreas)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, formation.TriggerCommands)
+		err = assignIDs(formation.TriggerCommands)
 		if err != nil {
 			return err
 		}
 
-		l.MonsterFormations[seedtypes.Key(*formation)] = *formation
-		l.MonsterFormationsID[formation.ID] = *formation
+		L.MonsterFormations[seedtypes.Key(*formation)] = *formation
+		L.MonsterFormationsID[formation.ID] = *formation
 	}
 
 	return nil
 }
 
-func (l *Lookup) loop1SeedMonsterSelections(qtx *database.Queries, ctx context.Context) error {
-	selections, err := l.extractMonsterSelections()
+func loop1SeedMonsterSelections(qtx *database.Queries, ctx context.Context) error {
+	selections, err := extractMonsterSelections()
 	if err != nil {
 		return err
 	}
@@ -113,24 +113,24 @@ func (l *Lookup) loop1SeedMonsterSelections(qtx *database.Queries, ctx context.C
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractMonsterSelections() ([]seedtypes.MonsterSelection, error) {
+func extractMonsterSelections() ([]seedtypes.MonsterSelection, error) {
 	selections := []seedtypes.MonsterSelection{}
 	var err error
 
-	for i := range l.json.monsterFormations {
-		mf := &l.json.monsterFormations[i]
+	for i := range rawJSON.monsterFormations {
+		mf := &rawJSON.monsterFormations[i]
 
 		for j := range mf.MonsterSelection.Monsters {
 			ma := &mf.MonsterSelection.Monsters[j]
 
 			key := seedtypes.Key(*ma)
-			ma.MonsterID, err = assignFK(key, l.Monsters)
+			ma.MonsterID, err = assignFK(key, L.Monsters)
 			if err != nil {
 				return nil, err
 			}
@@ -139,5 +139,5 @@ func (l *Lookup) extractMonsterSelections() ([]seedtypes.MonsterSelection, error
 		selections = append(selections, mf.MonsterSelection)
 	}
 
-	return dedupeRows(selections, l.Hashes), nil
+	return dedupeRows(selections, hashes), nil
 }

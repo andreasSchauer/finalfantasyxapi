@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedPrimers(qtx *database.Queries, ctx context.Context) error {
-	primers, err := l.extractPrimers()
+func loop3SeedPrimers(qtx *database.Queries, ctx context.Context) error {
+	primers, err := extractPrimers()
 	if err != nil {
 		return err
 	}
@@ -35,23 +35,23 @@ func (l *Lookup) loop3SeedPrimers(qtx *database.Queries, ctx context.Context) er
 
 	for i, row := range dbRows {
 		primers[i].ID = row.ID
-		l.json.primers[i].ID = row.ID
-		l.Primers[seedtypes.Key(primers[i])] = primers[i]
-		l.PrimersID[row.ID] = primers[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.primers[i].ID = row.ID
+		L.Primers[seedtypes.Key(primers[i])] = primers[i]
+		L.PrimersID[row.ID] = primers[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractPrimers() ([]seedtypes.Primer, error) {
+func extractPrimers() ([]seedtypes.Primer, error) {
 	primers := []seedtypes.Primer{}
 	var err error
 
-	for i := range l.json.primers {
-		primer := &l.json.primers[i]
+	for i := range rawJSON.primers {
+		primer := &rawJSON.primers[i]
 
-		primer.KeyItemID, err = assignFK(primer.Name, l.KeyItems)
+		primer.KeyItemID, err = assignFK(primer.Name, L.KeyItems)
 		if err != nil {
 			return nil, err
 		}
@@ -59,5 +59,5 @@ func (l *Lookup) extractPrimers() ([]seedtypes.Primer, error) {
 		primers = append(primers, *primer)
 	}
 
-	return dedupeRows(primers, l.Hashes), nil
+	return dedupeRows(primers, hashes), nil
 }

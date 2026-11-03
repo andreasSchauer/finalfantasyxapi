@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-func (l *Lookup) processAeonCommandsPossibleAbilities(desc string) (JunctionParams, error) {
+func processAeonCommandsPossibleAbilities(desc string) (JunctionParams, error) {
 	params := JunctionParams{
 		DataHashes:     make([]string, 0),
 		GrandParentIDs: make([]int32, 0),
@@ -14,15 +14,15 @@ func (l *Lookup) processAeonCommandsPossibleAbilities(desc string) (JunctionPara
 		ChildIDs:       make([]int32, 0),
 	}
 
-	for _, command := range l.json.aeonCommands {
+	for _, command := range rawJSON.aeonCommands {
 		for _, list := range command.PossibleAbilities {
-			class, err := GetResource(list.User, l.CharClasses)
+			class, err := GetResource(list.User, L.CharClasses)
 			if err != nil {
 				return JunctionParams{}, err
 			}
 
 			for _, ref := range list.Abilities {
-				ability, err := GetResource(ref, l.Abilities)
+				ability, err := GetResource(ref, L.Abilities)
 				if err != nil {
 					return JunctionParams{}, err
 				}
@@ -44,9 +44,9 @@ func (l *Lookup) processAeonCommandsPossibleAbilities(desc string) (JunctionPara
 	return params, nil
 }
 
-func (l *Lookup) seedJuncAeonCommandsPossibleAbilities(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAeonCommandsPossibleAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeon commands + possible abilities"
-	jParams, err := l.processAeonCommandsPossibleAbilities(desc)
+	jParams, err := processAeonCommandsPossibleAbilities(desc)
 	if err != nil {
 		return err
 	}

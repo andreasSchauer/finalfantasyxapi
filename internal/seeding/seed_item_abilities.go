@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedItemAbilities(qtx *database.Queries, ctx context.Context) error {
-	abilities, err := l.extractItemAbilities()
+func loop3SeedItemAbilities(qtx *database.Queries, ctx context.Context) error {
+	abilities, err := extractItemAbilities()
 	if err != nil {
 		return err
 	}
@@ -35,20 +35,20 @@ func (l *Lookup) loop3SeedItemAbilities(qtx *database.Queries, ctx context.Conte
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		l.ItemAbilities[seedtypes.Key(abilities[i])] = abilities[i]
-		l.ItemAbilitiesID[row.ID] = abilities[i]
-		l.Hashes[row.DataHash] = row.ID
+		L.ItemAbilities[seedtypes.Key(abilities[i])] = abilities[i]
+		L.ItemAbilitiesID[row.ID] = abilities[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractItemAbilities() ([]seedtypes.ItemAbility, error) {
+func extractItemAbilities() ([]seedtypes.ItemAbility, error) {
 	abilities := []seedtypes.ItemAbility{}
 	var err error
 
-	for i := range l.json.items {
-		item := &l.json.items[i]
+	for i := range rawJSON.items {
+		item := &rawJSON.items[i]
 
 		if len(item.BattleInteractions) == 0 {
 			continue
@@ -59,7 +59,7 @@ func (l *Lookup) extractItemAbilities() ([]seedtypes.ItemAbility, error) {
 		ability.Type = database.AbilityTypeItemAbility
 		ability.ItemID = item.ID
 
-		ability.Ability.ID, err = l.GetHashID(ability.Ability)
+		ability.Ability.ID, err = GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}
@@ -67,5 +67,5 @@ func (l *Lookup) extractItemAbilities() ([]seedtypes.ItemAbility, error) {
 		abilities = append(abilities, *ability)
 	}
 
-	return dedupeRows(abilities, l.Hashes), nil
+	return dedupeRows(abilities, hashes), nil
 }

@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedQuests(qtx *database.Queries, ctx context.Context) error {
-	quests, err := l.extractQuests()
+func loop1SeedQuests(qtx *database.Queries, ctx context.Context) error {
+	quests, err := extractQuests()
 	if err != nil {
 		return err
 	}
@@ -37,26 +37,26 @@ func (l *Lookup) loop1SeedQuests(qtx *database.Queries, ctx context.Context) err
 
 	for i, row := range dbRows {
 		quests[i].ID = row.ID
-		l.Quests[seedtypes.Key(quests[i])] = quests[i]
-		l.QuestsID[row.ID] = quests[i]
-		l.Hashes[row.DataHash] = row.ID
+		L.Quests[seedtypes.Key(quests[i])] = quests[i]
+		L.QuestsID[row.ID] = quests[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractQuests() ([]seedtypes.Quest, error) {
+func extractQuests() ([]seedtypes.Quest, error) {
 	quests := []seedtypes.Quest{}
 
-	for i := range l.json.sidequests {
-		quest := &l.json.sidequests[i].Quest
+	for i := range rawJSON.sidequests {
+		quest := &rawJSON.sidequests[i].Quest
 		quest.Type = database.QuestTypeSidequest
 
 		quests = append(quests, *quest)
 	}
 
-	for i := range l.json.sidequests {
-		sidequest := &l.json.sidequests[i]
+	for i := range rawJSON.sidequests {
+		sidequest := &rawJSON.sidequests[i]
 
 		for j := range sidequest.Subquests {
 			quest := &sidequest.Subquests[j].Quest
@@ -66,5 +66,5 @@ func (l *Lookup) extractQuests() ([]seedtypes.Quest, error) {
 		}
 	}
 
-	return dedupeRows(quests, l.Hashes), nil
+	return dedupeRows(quests, hashes), nil
 }

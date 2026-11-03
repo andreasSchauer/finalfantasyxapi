@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop5SeedAlts(qtx *database.Queries, ctx context.Context) error {
-	changes, err := l.extractAlts()
+func loop5SeedAlts(qtx *database.Queries, ctx context.Context) error {
+	changes, err := extractAlts()
 	if err != nil {
 		return err
 	}
@@ -38,19 +38,19 @@ func (l *Lookup) loop5SeedAlts(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractAlts() ([]seedtypes.Alt, error) {
+func extractAlts() ([]seedtypes.Alt, error) {
 	changes := []seedtypes.Alt{}
 
-	for i := range l.json.monsters {
-		mon := &l.json.monsters[i]
+	for i := range rawJSON.monsters {
+		mon := &rawJSON.monsters[i]
 
-		changesNew, err := l.prepareAlts(mon.AlteredStates)
+		changesNew, err := prepareAlts(mon.AlteredStates)
 		if err != nil {
 			return nil, err
 		}
@@ -58,10 +58,10 @@ func (l *Lookup) extractAlts() ([]seedtypes.Alt, error) {
 		changes = append(changes, changesNew...)
 	}
 
-	return dedupeRows(changes, l.Hashes), nil
+	return dedupeRows(changes, hashes), nil
 }
 
-func (l *Lookup) prepareAlts(states []seedtypes.AlteredState) ([]seedtypes.Alt, error) {
+func prepareAlts(states []seedtypes.AlteredState) ([]seedtypes.Alt, error) {
 	changes := []seedtypes.Alt{}
 	var err error
 
@@ -71,13 +71,13 @@ func (l *Lookup) prepareAlts(states []seedtypes.AlteredState) ([]seedtypes.Alt, 
 		for j := range state.Changes {
 			change := &state.Changes[j]
 
-			change.AlteredStateID, err = l.GetHashID(state)
+			change.AlteredStateID, err = GetHashID(state)
 			if err != nil {
 				return nil, err
 			}
 
 			if change.AddedStatus != nil {
-				change.AddedStatus.ID, err = l.GetHashID(change.AddedStatus)
+				change.AddedStatus.ID, err = GetHashID(change.AddedStatus)
 				if err != nil {
 					return nil, err
 				}
@@ -90,21 +90,21 @@ func (l *Lookup) prepareAlts(states []seedtypes.AlteredState) ([]seedtypes.Alt, 
 	return changes, nil
 }
 
-func (l *Lookup) completeAlts(changes []seedtypes.Alt) error {
+func completeAlts(changes []seedtypes.Alt) error {
 	for i := range changes {
 		change := &changes[i]
 
-		err := l.assignID(change)
+		err := assignID(change)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, change.BaseStats)
+		err = assignIDs(change.BaseStats)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, change.ElemResists)
+		err = assignIDs(change.ElemResists)
 		if err != nil {
 			return err
 		}

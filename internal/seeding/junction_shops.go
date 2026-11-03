@@ -25,7 +25,7 @@ func (j ShopJunction) ToHashFieldsJ(name string) []any {
 	return slices.Concat([]any{name}, j.ToHashFields())
 }
 
-func (l *Lookup) seedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
+func seedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "shops + shop items"
 	params := database.CreateShopsItemsJunctionBulkParams{
 		DataHash:   make([]string, 0),
@@ -34,7 +34,7 @@ func (l *Lookup) seedJuncShopsShopItems(qtx *database.Queries, ctx context.Conte
 		ShopType:   make([]database.ShopType, 0),
 	}
 
-	for _, shop := range l.json.shops {
+	for _, shop := range rawJSON.shops {
 		if shop.PreAirship != nil {
 			for _, item := range shop.PreAirship.Items {
 				j := ShopJunction{}
@@ -69,10 +69,10 @@ func (l *Lookup) seedJuncShopsShopItems(qtx *database.Queries, ctx context.Conte
 	return qtx.CreateShopsItemsJunctionBulk(ctx, params)
 }
 
-func (l *Lookup) getShopEquipment() []seedtypes.ShopEquipment {
+func getShopEquipment() []seedtypes.ShopEquipment {
 	shopEquipment := []seedtypes.ShopEquipment{}
 
-	for _, shop := range l.json.shops {
+	for _, shop := range rawJSON.shops {
 		if shop.PreAirship != nil {
 			shopEquipment = append(shopEquipment, shop.PreAirship.Equipment...)
 		}
@@ -85,13 +85,13 @@ func (l *Lookup) getShopEquipment() []seedtypes.ShopEquipment {
 	return shopEquipment
 }
 
-func (l *Lookup) getShopEquipmentAutoAbilities(se seedtypes.ShopEquipment) ([]seedtypes.AutoAbility, error) {
-	return getResources(se.Abilities, l.AutoAbilities)
+func getShopEquipmentAutoAbilities(se seedtypes.ShopEquipment) ([]seedtypes.AutoAbility, error) {
+	return GetResources(se.Abilities, L.AutoAbilities)
 }
 
-func (l *Lookup) seedJuncShopEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+func seedJuncShopEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "shop equipment + auto-abilities"
-	jParams, err := processJunctions(l, desc, l.getShopEquipment(), l.getShopEquipmentAutoAbilities)
+	jParams, err := processJunctions(desc, getShopEquipment(), getShopEquipmentAutoAbilities)
 	if err != nil {
 		return err
 	}

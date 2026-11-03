@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedAccuracies(qtx *database.Queries, ctx context.Context) error {
-	accuracies := l.extractAccuracies()
+func loop1SeedAccuracies(qtx *database.Queries, ctx context.Context) error {
+	accuracies := extractAccuracies()
 
 	params := database.CreateAbilityAccuracyBulkParams{
 		DataHash:    make([]string, len(accuracies)),
@@ -33,56 +33,56 @@ func (l *Lookup) loop1SeedAccuracies(qtx *database.Queries, ctx context.Context)
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractAccuracies() []seedtypes.Accuracy {
+func extractAccuracies() []seedtypes.Accuracy {
 	accuracies := []seedtypes.Accuracy{}
 
-	for _, ability := range l.json.enemyAbilities {
+	for _, ability := range rawJSON.enemyAbilities {
 		for _, bi := range ability.BattleInteractions {
 			accuracies = append(accuracies, bi.Accuracy)
 		}
 	}
 
-	for _, ability := range l.json.items {
+	for _, ability := range rawJSON.items {
 		for _, bi := range ability.BattleInteractions {
 			accuracies = append(accuracies, bi.Accuracy)
 		}
 	}
 
-	for _, ability := range l.json.overdriveAbilities {
+	for _, ability := range rawJSON.overdriveAbilities {
 		for _, bi := range ability.BattleInteractions {
 			accuracies = append(accuracies, bi.Accuracy)
 		}
 	}
 
-	for _, ability := range l.json.playerAbilities {
+	for _, ability := range rawJSON.playerAbilities {
 		for _, bi := range ability.BattleInteractions {
 			accuracies = append(accuracies, bi.Accuracy)
 		}
 	}
 
-	for _, ability := range l.json.triggerCommands {
+	for _, ability := range rawJSON.triggerCommands {
 		for _, bi := range ability.BattleInteractions {
 			accuracies = append(accuracies, bi.Accuracy)
 		}
 	}
 
-	for _, ability := range l.json.miscAbilities {
+	for _, ability := range rawJSON.miscAbilities {
 		for _, bi := range ability.BattleInteractions {
 			accuracies = append(accuracies, bi.Accuracy)
 		}
 	}
 
-	for _, aeon := range l.json.aeons {
+	for _, aeon := range rawJSON.aeons {
 		if aeon.PhysAtkAccuracy != nil {
 			accuracies = append(accuracies, *aeon.PhysAtkAccuracy)
 		}
 	}
 
-	return dedupeRows(accuracies, l.Hashes)
+	return dedupeRows(accuracies, hashes)
 }

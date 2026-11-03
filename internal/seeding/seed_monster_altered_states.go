@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop2SeedAlteredStates(qtx *database.Queries, ctx context.Context) error {
-	states := l.extractMonsterAlteredStates()
+func loop2SeedAlteredStates(qtx *database.Queries, ctx context.Context) error {
+	states := extractMonsterAlteredStates()
 
 	params := database.CreateAlteredStateBulkParams{
 		DataHash:    make([]string, len(states)),
@@ -31,17 +31,17 @@ func (l *Lookup) loop2SeedAlteredStates(qtx *database.Queries, ctx context.Conte
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractMonsterAlteredStates() []seedtypes.AlteredState {
+func extractMonsterAlteredStates() []seedtypes.AlteredState {
 	states := []seedtypes.AlteredState{}
 
-	for i := range l.json.monsters {
-		mon := &l.json.monsters[i]
+	for i := range rawJSON.monsters {
+		mon := &rawJSON.monsters[i]
 
 		for j := range mon.AlteredStates {
 			state := &mon.AlteredStates[j]
@@ -50,19 +50,19 @@ func (l *Lookup) extractMonsterAlteredStates() []seedtypes.AlteredState {
 		}
 	}
 
-	return dedupeRows(states, l.Hashes)
+	return dedupeRows(states, hashes)
 }
 
-func (l *Lookup) completeAlteredStates(states []seedtypes.AlteredState) error {
+func completeAlteredStates(states []seedtypes.AlteredState) error {
 	for i := range states {
 		state := &states[i]
 
-		err := l.assignID(state)
+		err := assignID(state)
 		if err != nil {
 			return err
 		}
 
-		err = l.completeAlts(state.Changes)
+		err = completeAlts(state.Changes)
 		if err != nil {
 			return err
 		}

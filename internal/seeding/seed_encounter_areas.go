@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Context) error {
-	areas, err := l.extractEncounterAreas()
+func loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Context) error {
+	areas, err := extractEncounterAreas()
 	if err != nil {
 		return err
 	}
@@ -36,23 +36,23 @@ func (l *Lookup) loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Cont
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractEncounterAreas() ([]seedtypes.EncounterArea, error) {
+func extractEncounterAreas() ([]seedtypes.EncounterArea, error) {
 	areas := []seedtypes.EncounterArea{}
 	var err error
 
-	for i := range l.json.monsterFormations {
-		mf := &l.json.monsterFormations[i]
+	for i := range rawJSON.monsterFormations {
+		mf := &rawJSON.monsterFormations[i]
 
 		for j := range mf.EncounterAreas {
 			area := &mf.EncounterAreas[j]
 
-			area.AreaID, err = assignFK(area.LocationArea, l.Areas)
+			area.AreaID, err = assignFK(area.LocationArea, L.Areas)
 			if err != nil {
 				return nil, err
 			}
@@ -61,5 +61,5 @@ func (l *Lookup) extractEncounterAreas() ([]seedtypes.EncounterArea, error) {
 		}
 	}
 
-	return dedupeRows(areas, l.Hashes), nil
+	return dedupeRows(areas, hashes), nil
 }

@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedCharacters(qtx *database.Queries, ctx context.Context) error {
-	chars, err := l.extractCharacters()
+func loop4SeedCharacters(qtx *database.Queries, ctx context.Context) error {
+	chars, err := extractCharacters()
 	if err != nil {
 		return err
 	}
@@ -45,41 +45,41 @@ func (l *Lookup) loop4SeedCharacters(qtx *database.Queries, ctx context.Context)
 
 	for i, row := range dbRows {
 		chars[i].ID = row.ID
-		l.json.characters[i].ID = row.ID
-		l.Characters[seedtypes.Key(chars[i])] = chars[i]
-		l.CharactersID[row.ID] = chars[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.characters[i].ID = row.ID
+		L.Characters[seedtypes.Key(chars[i])] = chars[i]
+		L.CharactersID[row.ID] = chars[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractCharacters() ([]seedtypes.Character, error) {
+func extractCharacters() ([]seedtypes.Character, error) {
 	chars := []seedtypes.Character{}
 	var err error
 
-	for i := range l.json.characters {
-		char := &l.json.characters[i]
+	for i := range rawJSON.characters {
+		char := &rawJSON.characters[i]
 
-		char.PlayerUnit.ID, err = l.GetHashID(char.PlayerUnit)
+		char.PlayerUnit.ID, err = GetHashID(char.PlayerUnit)
 		if err != nil {
 			return nil, err
 		}
 
-		char.AreaID, err = assignFKPtr(&char.LocationArea, l.Areas)
+		char.AreaID, err = assignFKPtr(&char.LocationArea, L.Areas)
 		if err != nil {
 			return nil, err
 		}
 
 		if char.StdSphereGrid != nil {
-			char.StdSphereGrid.ID, err = l.GetHashID(*char.StdSphereGrid)
+			char.StdSphereGrid.ID, err = GetHashID(*char.StdSphereGrid)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if char.ExpSphereGrid != nil {
-			char.ExpSphereGrid.ID, err = l.GetHashID(*char.ExpSphereGrid)
+			char.ExpSphereGrid.ID, err = GetHashID(*char.ExpSphereGrid)
 			if err != nil {
 				return nil, err
 			}
@@ -88,31 +88,31 @@ func (l *Lookup) extractCharacters() ([]seedtypes.Character, error) {
 		chars = append(chars, *char)
 	}
 
-	return dedupeRows(chars, l.Hashes), nil
+	return dedupeRows(chars, hashes), nil
 }
 
-func (l *Lookup) completeCharacters() error {
-	for i := range l.json.characters {
-		character := &l.json.characters[i]
-		err := assignIDs(l, character.BaseStats)
+func completeCharacters() error {
+	for i := range rawJSON.characters {
+		character := &rawJSON.characters[i]
+		err := assignIDs(character.BaseStats)
 		if err != nil {
 			return err
 		}
 
-		l.Characters[seedtypes.Key(character)] = *character
-		l.CharactersID[character.ID] = *character
+		L.Characters[seedtypes.Key(character)] = *character
+		L.CharactersID[character.ID] = *character
 	}
 
 	return nil
 }
 
-func (l *Lookup) getCharacterBaseStats(c seedtypes.Character) ([]seedtypes.BaseStat, error) {
+func getCharacterBaseStats(c seedtypes.Character) ([]seedtypes.BaseStat, error) {
 	return c.BaseStats, nil
 }
 
-func (l *Lookup) seedJuncCharactersBaseStats(qtx *database.Queries, ctx context.Context) error {
+func seedJuncCharactersBaseStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "characters + base stats"
-	jParams, err := processJunctions(l, desc, l.json.characters, l.getCharacterBaseStats)
+	jParams, err := processJunctions(desc, rawJSON.characters, getCharacterBaseStats)
 	if err != nil {
 		return err
 	}

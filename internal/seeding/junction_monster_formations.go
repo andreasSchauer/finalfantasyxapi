@@ -7,13 +7,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getMonsterFormationEncounterAreas(mf seedtypes.MonsterFormation) ([]seedtypes.EncounterArea, error) {
+func getMonsterFormationEncounterAreas(mf seedtypes.MonsterFormation) ([]seedtypes.EncounterArea, error) {
 	return mf.EncounterAreas, nil
 }
 
-func (l *Lookup) seedJuncMonsterFormationsEncounterAreas(qtx *database.Queries, ctx context.Context) error {
+func seedJuncMonsterFormationsEncounterAreas(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster-formations + encounter areas"
-	jParams, err := processJunctions(l, desc, l.json.monsterFormations, l.getMonsterFormationEncounterAreas)
+	jParams, err := processJunctions(desc, rawJSON.monsterFormations, getMonsterFormationEncounterAreas)
 	if err != nil {
 		return err
 	}
@@ -25,13 +25,13 @@ func (l *Lookup) seedJuncMonsterFormationsEncounterAreas(qtx *database.Queries, 
 	})
 }
 
-func (l *Lookup) getMonsterFormationTriggerCommands(mf seedtypes.MonsterFormation) ([]seedtypes.FormationTriggerCommand, error) {
+func getMonsterFormationTriggerCommands(mf seedtypes.MonsterFormation) ([]seedtypes.FormationTriggerCommand, error) {
 	return mf.TriggerCommands, nil
 }
 
-func (l *Lookup) seedJuncMonsterFormationsTriggerCommands(qtx *database.Queries, ctx context.Context) error {
+func seedJuncMonsterFormationsTriggerCommands(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster-formations + trigger commands"
-	jParams, err := processJunctions(l, desc, l.json.monsterFormations, l.getMonsterFormationTriggerCommands)
+	jParams, err := processJunctions(desc, rawJSON.monsterFormations, getMonsterFormationTriggerCommands)
 	if err != nil {
 		return err
 	}
@@ -43,23 +43,23 @@ func (l *Lookup) seedJuncMonsterFormationsTriggerCommands(qtx *database.Queries,
 	})
 }
 
-func (l *Lookup) getMonsterSelections() []seedtypes.MonsterSelection {
+func getMonsterSelections() []seedtypes.MonsterSelection {
 	selections := []seedtypes.MonsterSelection{}
 
-	for _, formation := range l.json.monsterFormations {
+	for _, formation := range rawJSON.monsterFormations {
 		selections = append(selections, formation.MonsterSelection)
 	}
 
 	return selections
 }
 
-func (l *Lookup) getMonsterSelectionMonsterAmounts(ms seedtypes.MonsterSelection) ([]seedtypes.MonsterAmount, error) {
+func getMonsterSelectionMonsterAmounts(ms seedtypes.MonsterSelection) ([]seedtypes.MonsterAmount, error) {
 	return ms.Monsters, nil
 }
 
-func (l *Lookup) seedJuncMonsterSelectionMonsterAmounts(qtx *database.Queries, ctx context.Context) error {
+func seedJuncMonsterSelectionMonsterAmounts(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster selection + monsters"
-	jParams, err := processJunctions(l, desc, l.getMonsterSelections(), l.getMonsterSelectionMonsterAmounts)
+	jParams, err := processJunctions(desc, getMonsterSelections(), getMonsterSelectionMonsterAmounts)
 	if err != nil {
 		return err
 	}

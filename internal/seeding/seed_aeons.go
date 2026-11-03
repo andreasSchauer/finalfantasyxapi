@@ -11,8 +11,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedAeons(qtx *database.Queries, ctx context.Context) error {
-	aeons, err := l.extractAeons()
+func loop4SeedAeons(qtx *database.Queries, ctx context.Context) error {
+	aeons, err := extractAeons()
 	if err != nil {
 		return err
 	}
@@ -50,34 +50,34 @@ func (l *Lookup) loop4SeedAeons(qtx *database.Queries, ctx context.Context) erro
 
 	for i, row := range dbRows {
 		aeons[i].ID = row.ID
-		l.json.aeons[i].ID = row.ID
-		l.Aeons[seedtypes.Key(aeons[i])] = aeons[i]
-		l.AeonsID[row.ID] = aeons[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.aeons[i].ID = row.ID
+		L.Aeons[seedtypes.Key(aeons[i])] = aeons[i]
+		L.AeonsID[row.ID] = aeons[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractAeons() ([]seedtypes.Aeon, error) {
+func extractAeons() ([]seedtypes.Aeon, error) {
 	aeons := []seedtypes.Aeon{}
 	var err error
 
-	for i := range l.json.aeons {
-		aeon := &l.json.aeons[i]
+	for i := range rawJSON.aeons {
+		aeon := &rawJSON.aeons[i]
 
-		aeon.PlayerUnit.ID, err = l.GetHashID(aeon.PlayerUnit)
+		aeon.PlayerUnit.ID, err = GetHashID(aeon.PlayerUnit)
 		if err != nil {
 			return nil, err
 		}
 
-		aeon.AreaID, err = assignFKPtr(&aeon.LocationArea, l.Areas)
+		aeon.AreaID, err = assignFKPtr(&aeon.LocationArea, L.Areas)
 		if err != nil {
 			return nil, err
 		}
 
 		if aeon.PhysAtkAccuracy != nil {
-			aeon.PhysAtkAccuracy.ID, err = l.GetHashID(aeon.PhysAtkAccuracy)
+			aeon.PhysAtkAccuracy.ID, err = GetHashID(aeon.PhysAtkAccuracy)
 			if err != nil {
 				return nil, err
 			}
@@ -86,36 +86,36 @@ func (l *Lookup) extractAeons() ([]seedtypes.Aeon, error) {
 		aeons = append(aeons, *aeon)
 	}
 
-	return dedupeRows(aeons, l.Hashes), nil
+	return dedupeRows(aeons, hashes), nil
 }
 
-func (l *Lookup) completeAeons() error {
-	for i := range l.json.aeons {
-		aeon := &l.json.aeons[i]
-		err := assignIDs(l, aeon.Weapon)
+func completeAeons() error {
+	for i := range rawJSON.aeons {
+		aeon := &rawJSON.aeons[i]
+		err := assignIDs(aeon.Weapon)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, aeon.Armor)
+		err = assignIDs(aeon.Armor)
 		if err != nil {
 			return err
 		}
 
-		l.Aeons[seedtypes.Key(aeon)] = *aeon
-		l.AeonsID[aeon.ID] = *aeon
+		L.Aeons[seedtypes.Key(aeon)] = *aeon
+		L.AeonsID[aeon.ID] = *aeon
 	}
 
 	return nil
 }
 
-func (l *Lookup) getAeonAeonEquipment(a seedtypes.Aeon) ([]seedtypes.AeonEquipment, error) {
+func getAeonAeonEquipment(a seedtypes.Aeon) ([]seedtypes.AeonEquipment, error) {
 	return slices.Concat(a.Weapon, a.Armor), nil
 }
 
-func (l *Lookup) seedJuncAeonAeonEquipment(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAeonAeonEquipment(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + aeon equipment"
-	jParams, err := processJunctions(l, desc, l.json.aeons, l.getAeonAeonEquipment)
+	jParams, err := processJunctions(desc, rawJSON.aeons, getAeonAeonEquipment)
 	if err != nil {
 		return err
 	}

@@ -25,13 +25,13 @@ func (j AeonXStatJunction) ToHashFieldsJ(name string) []any {
 	return slices.Concat([]any{name}, j.ToHashFields())
 }
 
-func (l *Lookup) getAeonBaseStatsA(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
+func getAeonBaseStatsA(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
 	return a.BaseStats.AVals, nil
 }
 
-func (l *Lookup) seedJuncAeonBaseStatsA(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAeonBaseStatsA(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + base stats a"
-	jParams, err := processJunctions(l, desc, l.json.aeons, l.getAeonBaseStatsA)
+	jParams, err := processJunctions(desc, rawJSON.aeons, getAeonBaseStatsA)
 	if err != nil {
 		return err
 	}
@@ -43,13 +43,13 @@ func (l *Lookup) seedJuncAeonBaseStatsA(qtx *database.Queries, ctx context.Conte
 	})
 }
 
-func (l *Lookup) getAeonBaseStatsB(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
+func getAeonBaseStatsB(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
 	return a.BaseStats.BVals, nil
 }
 
-func (l *Lookup) seedJuncAeonBaseStatsB(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAeonBaseStatsB(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + base stats b"
-	jParams, err := processJunctions(l, desc, l.json.aeons, l.getAeonBaseStatsB)
+	jParams, err := processJunctions(desc, rawJSON.aeons, getAeonBaseStatsB)
 	if err != nil {
 		return err
 	}
@@ -61,7 +61,7 @@ func (l *Lookup) seedJuncAeonBaseStatsB(qtx *database.Queries, ctx context.Conte
 	})
 }
 
-func (l *Lookup) seedJuncAeonBaseStatsX(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAeonBaseStatsX(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + base stats x"
 	params := database.CreateAeonsBaseStatXJunctionBulkParams{
 		DataHash:   make([]string, 0),
@@ -70,7 +70,7 @@ func (l *Lookup) seedJuncAeonBaseStatsX(qtx *database.Queries, ctx context.Conte
 		Battles:    make([]int32, 0),
 	}
 
-	for _, aeon := range l.json.aeons {
+	for _, aeon := range rawJSON.aeons {
 		for _, xVal := range aeon.BaseStats.XVals {
 			for _, baseStat := range xVal.BaseStats {
 				j := AeonXStatJunction{}

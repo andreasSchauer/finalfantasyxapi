@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Context) error {
-	wpns, err := l.extractCelestialWeapons()
+func loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Context) error {
+	wpns, err := extractCelestialWeapons()
 	if err != nil {
 		return err
 	}
@@ -41,28 +41,28 @@ func (l *Lookup) loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Co
 
 	for i, row := range dbRows {
 		wpns[i].ID = row.ID
-		l.json.celestialWeapons[i].ID = row.ID
-		l.CelestialWeapons[seedtypes.Key(wpns[i])] = wpns[i]
-		l.CelestialWeaponsID[row.ID] = wpns[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.celestialWeapons[i].ID = row.ID
+		L.CelestialWeapons[seedtypes.Key(wpns[i])] = wpns[i]
+		L.CelestialWeaponsID[row.ID] = wpns[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractCelestialWeapons() ([]seedtypes.CelestialWeapon, error) {
+func extractCelestialWeapons() ([]seedtypes.CelestialWeapon, error) {
 	wpns := []seedtypes.CelestialWeapon{}
 	var err error
 
-	for i := range l.json.celestialWeapons {
-		wpn := &l.json.celestialWeapons[i]
+	for i := range rawJSON.celestialWeapons {
+		wpn := &rawJSON.celestialWeapons[i]
 
-		wpn.CharacterID, err = assignFKPtr(&wpn.Character, l.Characters)
+		wpn.CharacterID, err = assignFKPtr(&wpn.Character, L.Characters)
 		if err != nil {
 			return nil, err
 		}
 
-		wpn.AeonID, err = assignFKPtr(wpn.Aeon, l.Aeons)
+		wpn.AeonID, err = assignFKPtr(wpn.Aeon, L.Aeons)
 		if err != nil {
 			return nil, err
 		}
@@ -70,5 +70,5 @@ func (l *Lookup) extractCelestialWeapons() ([]seedtypes.CelestialWeapon, error) 
 		wpns = append(wpns, *wpn)
 	}
 
-	return dedupeRows(wpns, l.Hashes), nil
+	return dedupeRows(wpns, hashes), nil
 }

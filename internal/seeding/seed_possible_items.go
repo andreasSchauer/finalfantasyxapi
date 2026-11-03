@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedPossibleItems(qtx *database.Queries, ctx context.Context) error {
-	items, err := l.extractPossibleItems()
+func loop3SeedPossibleItems(qtx *database.Queries, ctx context.Context) error {
+	items, err := extractPossibleItems()
 	if err != nil {
 		return err
 	}
@@ -32,23 +32,23 @@ func (l *Lookup) loop3SeedPossibleItems(qtx *database.Queries, ctx context.Conte
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractPossibleItems() ([]seedtypes.PossibleItem, error) {
+func extractPossibleItems() ([]seedtypes.PossibleItem, error) {
 	items := []seedtypes.PossibleItem{}
 	var err error
 
-	for i := range l.json.blitzballPositions {
-		pos := &l.json.blitzballPositions[i]
+	for i := range rawJSON.blitzballPositions {
+		pos := &rawJSON.blitzballPositions[i]
 
 		for j := range pos.Items {
 			item := &pos.Items[j]
 
-			item.ItemAmount.ID, err = l.GetHashID(item.ItemAmount)
+			item.ItemAmount.ID, err = GetHashID(item.ItemAmount)
 			if err != nil {
 				return nil, err
 			}
@@ -57,8 +57,8 @@ func (l *Lookup) extractPossibleItems() ([]seedtypes.PossibleItem, error) {
 		}
 	}
 
-	for i := range l.json.monsters {
-		mon := &l.json.monsters[i]
+	for i := range rawJSON.monsters {
+		mon := &rawJSON.monsters[i]
 
 		if mon.Items == nil {
 			continue
@@ -67,7 +67,7 @@ func (l *Lookup) extractPossibleItems() ([]seedtypes.PossibleItem, error) {
 		for j := range mon.Items.OtherItems {
 			item := &mon.Items.OtherItems[j]
 
-			item.ItemAmount.ID, err = l.GetHashID(item.ItemAmount)
+			item.ItemAmount.ID, err = GetHashID(item.ItemAmount)
 			if err != nil {
 				return nil, err
 			}
@@ -76,5 +76,5 @@ func (l *Lookup) extractPossibleItems() ([]seedtypes.PossibleItem, error) {
 		}
 	}
 
-	return dedupeRows(items, l.Hashes), nil
+	return dedupeRows(items, hashes), nil
 }

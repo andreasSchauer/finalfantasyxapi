@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
-	locations := dedupeRows(l.json.locations, l.Hashes)
+func loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
+	locations := dedupeRows(rawJSON.locations, hashes)
 
 	params := database.CreateLocationBulkParams{
 		DataHash:     make([]string, len(locations)),
@@ -30,26 +30,26 @@ func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		locations[i].ID = row.ID
-		l.json.locations[i].ID = row.ID
-		l.Locations[seedtypes.Key(locations[i])] = locations[i]
-		l.LocationsID[row.ID] = locations[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.locations[i].ID = row.ID
+		L.Locations[seedtypes.Key(locations[i])] = locations[i]
+		L.LocationsID[row.ID] = locations[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) completeLocations() error {
-	for i := range l.json.locations {
-		location := &l.json.locations[i]
+func completeLocations() error {
+	for i := range rawJSON.locations {
+		location := &rawJSON.locations[i]
 
-		err := l.completeSublocations(location.Sublocations)
+		err := completeSublocations(location.Sublocations)
 		if err != nil {
 			return err
 		}
 
-		l.Locations[seedtypes.Key(location)] = *location
-		l.LocationsID[location.ID] = *location
+		L.Locations[seedtypes.Key(location)] = *location
+		L.LocationsID[location.ID] = *location
 	}
 
 	return nil

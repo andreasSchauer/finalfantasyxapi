@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedProperties(qtx *database.Queries, ctx context.Context) error {
-	properties, err := l.extractProperties()
+func loop3SeedProperties(qtx *database.Queries, ctx context.Context) error {
+	properties, err := extractProperties()
 	if err != nil {
 		return err
 	}
@@ -39,24 +39,24 @@ func (l *Lookup) loop3SeedProperties(qtx *database.Queries, ctx context.Context)
 
 	for i, row := range dbRows {
 		properties[i].ID = row.ID
-		l.json.properties[i].ID = row.ID
-		l.Properties[seedtypes.Key(properties[i])] = properties[i]
-		l.PropertiesID[row.ID] = properties[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.properties[i].ID = row.ID
+		L.Properties[seedtypes.Key(properties[i])] = properties[i]
+		L.PropertiesID[row.ID] = properties[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractProperties() ([]seedtypes.Property, error) {
+func extractProperties() ([]seedtypes.Property, error) {
 	properties := []seedtypes.Property{}
 	var err error
 
-	for i := range l.json.properties {
-		property := &l.json.properties[i]
+	for i := range rawJSON.properties {
+		property := &rawJSON.properties[i]
 
 		if property.ModifierChange != nil {
-			property.ModifierChange.ID, err = l.GetHashID(property.ModifierChange)
+			property.ModifierChange.ID, err = GetHashID(property.ModifierChange)
 			if err != nil {
 				return nil, err
 			}
@@ -65,16 +65,16 @@ func (l *Lookup) extractProperties() ([]seedtypes.Property, error) {
 		properties = append(properties, *property)
 	}
 
-	return dedupeRows(properties, l.Hashes), nil
+	return dedupeRows(properties, hashes), nil
 }
 
-func (l *Lookup) getPropertyRelatedStats(p seedtypes.Property) ([]seedtypes.Stat, error) {
-	return getResources(p.RelatedStats, l.Stats)
+func getPropertyRelatedStats(p seedtypes.Property) ([]seedtypes.Stat, error) {
+	return GetResources(p.RelatedStats, L.Stats)
 }
 
-func (l *Lookup) seedJuncPropertiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
+func seedJuncPropertiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "properties + related stats"
-	jParams, err := processJunctions(l, desc, l.json.properties, l.getPropertyRelatedStats)
+	jParams, err := processJunctions(desc, rawJSON.properties, getPropertyRelatedStats)
 	if err != nil {
 		return err
 	}

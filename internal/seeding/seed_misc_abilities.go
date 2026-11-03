@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedMiscAbilities(qtx *database.Queries, ctx context.Context) error {
-	abilities, err := l.extractMiscAbilities()
+func loop3SeedMiscAbilities(qtx *database.Queries, ctx context.Context) error {
+	abilities, err := extractMiscAbilities()
 	if err != nil {
 		return err
 	}
@@ -45,38 +45,38 @@ func (l *Lookup) loop3SeedMiscAbilities(qtx *database.Queries, ctx context.Conte
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		l.json.miscAbilities[i].ID = row.ID
-		l.MiscAbilities[seedtypes.Key(abilities[i])] = abilities[i]
-		l.MiscAbilitiesID[row.ID] = abilities[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.miscAbilities[i].ID = row.ID
+		L.MiscAbilities[seedtypes.Key(abilities[i])] = abilities[i]
+		L.MiscAbilitiesID[row.ID] = abilities[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractMiscAbilities() ([]seedtypes.MiscAbility, error) {
+func extractMiscAbilities() ([]seedtypes.MiscAbility, error) {
 	abilities := []seedtypes.MiscAbility{}
 	var err error
 
-	for i := range l.json.miscAbilities {
-		ability := &l.json.miscAbilities[i]
+	for i := range rawJSON.miscAbilities {
+		ability := &rawJSON.miscAbilities[i]
 
-		ability.Ability.ID, err = l.GetHashID(ability.Ability)
+		ability.Ability.ID, err = GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.TopmenuID, err = assignFKPtr(ability.Topmenu, l.Topmenus)
+		ability.TopmenuID, err = assignFKPtr(ability.Topmenu, L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.SubmenuID, err = assignFKPtr(ability.Submenu, l.Submenus)
+		ability.SubmenuID, err = assignFKPtr(ability.Submenu, L.Submenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, l.Submenus)
+		ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, L.Submenus)
 		if err != nil {
 			return nil, err
 		}
@@ -84,32 +84,32 @@ func (l *Lookup) extractMiscAbilities() ([]seedtypes.MiscAbility, error) {
 		abilities = append(abilities, *ability)
 	}
 
-	return dedupeRows(abilities, l.Hashes), nil
+	return dedupeRows(abilities, hashes), nil
 }
 
-func (l *Lookup) completeMiscAbilities() error {
-	for i := range l.json.miscAbilities {
-		ability := &l.json.miscAbilities[i]
+func completeMiscAbilities() error {
+	for i := range rawJSON.miscAbilities {
+		ability := &rawJSON.miscAbilities[i]
 
-		err := l.completeBattleInteractions(ability.BattleInteractions)
+		err := completeBattleInteractions(ability.BattleInteractions)
 		if err != nil {
 			return err
 		}
 
-		l.MiscAbilities[seedtypes.Key(ability)] = *ability
-		l.MiscAbilitiesID[ability.ID] = *ability
+		L.MiscAbilities[seedtypes.Key(ability)] = *ability
+		L.MiscAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
-func (l *Lookup) getMiscAbilityLearnedBy(ua seedtypes.MiscAbility) ([]seedtypes.CharacterClass, error) {
-	return getResources(ua.LearnedBy, l.CharClasses)
+func getMiscAbilityLearnedBy(ua seedtypes.MiscAbility) ([]seedtypes.CharacterClass, error) {
+	return GetResources(ua.LearnedBy, L.CharClasses)
 }
 
-func (l *Lookup) seedJuncMiscAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
+func seedJuncMiscAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "misc abilities + learned by"
-	jParams, err := processJunctions(l, desc, l.json.miscAbilities, l.getMiscAbilityLearnedBy)
+	jParams, err := processJunctions(desc, rawJSON.miscAbilities, getMiscAbilityLearnedBy)
 	if err != nil {
 		return err
 	}

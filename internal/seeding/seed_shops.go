@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedShops(qtx *database.Queries, ctx context.Context) error {
-	shops, err := l.extractShops()
+func loop4SeedShops(qtx *database.Queries, ctx context.Context) error {
+	shops, err := extractShops()
 	if err != nil {
 		return err
 	}
@@ -41,21 +41,21 @@ func (l *Lookup) loop4SeedShops(qtx *database.Queries, ctx context.Context) erro
 
 	for i, row := range dbRows {
 		shops[i].ID = row.ID
-		l.json.shops[i].ID = row.ID
-		l.Shops[seedtypes.Key(shops[i])] = shops[i]
-		l.ShopsID[row.ID] = shops[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.shops[i].ID = row.ID
+		L.Shops[seedtypes.Key(shops[i])] = shops[i]
+		L.ShopsID[row.ID] = shops[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractShops() ([]seedtypes.Shop, error) {
+func extractShops() ([]seedtypes.Shop, error) {
 	shops := []seedtypes.Shop{}
 	var err error
 
-	for i := range l.json.shops {
-		shop := &l.json.shops[i]
+	for i := range rawJSON.shops {
+		shop := &rawJSON.shops[i]
 
 		if shop.PreAirship != nil {
 			shop.PreAirship.Type = database.ShopTypePreAirship
@@ -65,7 +65,7 @@ func (l *Lookup) extractShops() ([]seedtypes.Shop, error) {
 			shop.PostAirship.Type = database.ShopTypePostAirship
 		}
 
-		shop.AreaID, err = assignFK(shop.LocationArea, l.Areas)
+		shop.AreaID, err = assignFK(shop.LocationArea, L.Areas)
 		if err != nil {
 			return nil, err
 		}
@@ -73,41 +73,41 @@ func (l *Lookup) extractShops() ([]seedtypes.Shop, error) {
 		shops = append(shops, *shop)
 	}
 
-	return dedupeRows(shops, l.Hashes), nil
+	return dedupeRows(shops, hashes), nil
 }
 
-func (l *Lookup) completeShops() error {
-	for i := range l.json.shops {
-		shop := &l.json.shops[i]
+func completeShops() error {
+	for i := range rawJSON.shops {
+		shop := &rawJSON.shops[i]
 
-		err := l.completeSubShop(shop.PreAirship)
+		err := completeSubShop(shop.PreAirship)
 		if err != nil {
 			return err
 		}
 
-		err = l.completeSubShop(shop.PostAirship)
+		err = completeSubShop(shop.PostAirship)
 		if err != nil {
 			return err
 		}
 
-		l.Shops[seedtypes.Key(*shop)] = *shop
-		l.ShopsID[shop.ID] = *shop
+		L.Shops[seedtypes.Key(*shop)] = *shop
+		L.ShopsID[shop.ID] = *shop
 	}
 
 	return nil
 }
 
-func (l *Lookup) completeSubShop(subShop *seedtypes.SubShop) error {
+func completeSubShop(subShop *seedtypes.SubShop) error {
 	if subShop == nil {
 		return nil
 	}
 
-	err := assignIDs(l, subShop.Items)
+	err := assignIDs(subShop.Items)
 	if err != nil {
 		return err
 	}
 
-	err = assignIDs(l, subShop.Equipment)
+	err = assignIDs(subShop.Equipment)
 	if err != nil {
 		return err
 	}

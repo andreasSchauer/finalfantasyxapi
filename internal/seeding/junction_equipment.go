@@ -27,13 +27,13 @@ func (j EquipmentTableNameJunction) ToHashFieldsJ(name string) []any {
 	return slices.Concat([]any{name}, j.ToHashFields())
 }
 
-func (l *Lookup) getEquipmentReqAutoAbilities(et seedtypes.EquipmentTable) ([]seedtypes.AutoAbility, error) {
-	return getResources(et.RequiredAutoAbilities, l.AutoAbilities)
+func getEquipmentReqAutoAbilities(et seedtypes.EquipmentTable) ([]seedtypes.AutoAbility, error) {
+	return GetResources(et.RequiredAutoAbilities, L.AutoAbilities)
 }
 
-func (l *Lookup) seedJuncEquipmentReqAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+func seedJuncEquipmentReqAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "equipment table + required auto-abilities"
-	jParams, err := processJunctions(l, desc, l.json.equipment, l.getEquipmentReqAutoAbilities)
+	jParams, err := processJunctions(desc, rawJSON.equipment, getEquipmentReqAutoAbilities)
 	if err != nil {
 		return err
 	}
@@ -45,7 +45,7 @@ func (l *Lookup) seedJuncEquipmentReqAutoAbilities(qtx *database.Queries, ctx co
 	})
 }
 
-func (l *Lookup) seedJuncEquipmentTablesNames(qtx *database.Queries, ctx context.Context) error {
+func seedJuncEquipmentTablesNames(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "equipment tables + equipment names"
 	params := database.CreateEquipmentTablesNamesJunctionBulkParams{
 		DataHash:          make([]string, 0),
@@ -54,7 +54,7 @@ func (l *Lookup) seedJuncEquipmentTablesNames(qtx *database.Queries, ctx context
 		CelestialWeaponID: make([]sql.NullInt32, 0),
 	}
 
-	for _, table := range l.json.equipment {
+	for _, table := range rawJSON.equipment {
 		for _, name := range table.EquipmentNames {
 			j := EquipmentTableNameJunction{}
 			j.ParentID = table.ID
@@ -62,7 +62,7 @@ func (l *Lookup) seedJuncEquipmentTablesNames(qtx *database.Queries, ctx context
 
 			if table.Classification == string(database.EquipClassCelestialWeapon) {
 				var err error
-				j.CelestialWeaponID, err = assignFKPtr(&name.Name, l.CelestialWeapons)
+				j.CelestialWeaponID, err = assignFKPtr(&name.Name, L.CelestialWeapons)
 				if err != nil {
 					return err
 				}
@@ -80,23 +80,23 @@ func (l *Lookup) seedJuncEquipmentTablesNames(qtx *database.Queries, ctx context
 	return qtx.CreateEquipmentTablesNamesJunctionBulk(ctx, params)
 }
 
-func (l *Lookup) getAbilityPools() []seedtypes.AbilityPool {
+func getAbilityPools() []seedtypes.AbilityPool {
 	pools := []seedtypes.AbilityPool{}
 
-	for _, table := range l.json.equipment {
+	for _, table := range rawJSON.equipment {
 		pools = append(pools, table.SelectableAutoAbilities...)
 	}
 
 	return pools
 }
 
-func (l *Lookup) getAbilityPoolAutoAbilities(ap seedtypes.AbilityPool) ([]seedtypes.AutoAbility, error) {
-	return getResources(ap.AutoAbilities, l.AutoAbilities)
+func getAbilityPoolAutoAbilities(ap seedtypes.AbilityPool) ([]seedtypes.AutoAbility, error) {
+	return GetResources(ap.AutoAbilities, L.AutoAbilities)
 }
 
-func (l *Lookup) seedJuncAbilityPoolsAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAbilityPoolsAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "ability pools + auto-abilities"
-	jParams, err := processJunctions(l, desc, l.getAbilityPools(), l.getAbilityPoolAutoAbilities)
+	jParams, err := processJunctions(desc, getAbilityPools(), getAbilityPoolAutoAbilities)
 	if err != nil {
 		return err
 	}

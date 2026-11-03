@@ -51,7 +51,7 @@ func getResourceByKey[T, K seedtypes.LookupableKey](obj K, lookup map[string]T) 
 	return resource, nil
 }
 
-func getResources[T seedtypes.LookupableKey, K any](keys []K, lookup map[string]T) ([]T, error) {
+func GetResources[T seedtypes.LookupableKey, K any](keys []K, lookup map[string]T) ([]T, error) {
 	objects := make([]T, len(keys))
 
 	for i, key := range keys {
@@ -66,7 +66,7 @@ func getResources[T seedtypes.LookupableKey, K any](keys []K, lookup map[string]
 	return objects, nil
 }
 
-func typedRefsToResources[T seedtypes.LookupableKey](refs []seedtypes.AbilityReference, lookup map[string]T) ([]T, error) {
+func TypedRefsToResources[T seedtypes.LookupableKey](refs []seedtypes.AbilityReference, lookup map[string]T) ([]T, error) {
 	objects := make([]T, len(refs))
 
 	for i, ref := range refs {

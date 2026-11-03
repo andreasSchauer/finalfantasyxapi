@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedOverdrives(qtx *database.Queries, ctx context.Context) error {
-	overdrives, err := l.extractOverdrives()
+func loop4SeedOverdrives(qtx *database.Queries, ctx context.Context) error {
+	overdrives, err := extractOverdrives()
 	if err != nil {
 		return err
 	}
@@ -55,38 +55,38 @@ func (l *Lookup) loop4SeedOverdrives(qtx *database.Queries, ctx context.Context)
 
 	for i, row := range dbRows {
 		overdrives[i].ID = row.ID
-		l.json.overdrives[i].ID = row.ID
-		l.Overdrives[seedtypes.Key(overdrives[i])] = overdrives[i]
-		l.OverdrivesID[row.ID] = overdrives[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.overdrives[i].ID = row.ID
+		L.Overdrives[seedtypes.Key(overdrives[i])] = overdrives[i]
+		L.OverdrivesID[row.ID] = overdrives[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractOverdrives() ([]seedtypes.Overdrive, error) {
+func extractOverdrives() ([]seedtypes.Overdrive, error) {
 	overdrives := []seedtypes.Overdrive{}
 	var err error
 
-	for i := range l.json.overdrives {
-		overdrive := &l.json.overdrives[i]
+	for i := range rawJSON.overdrives {
+		overdrive := &rawJSON.overdrives[i]
 
-		overdrive.ODCommandID, err = assignFKPtr(overdrive.OverdriveCommand, l.OverdriveCommands)
+		overdrive.ODCommandID, err = assignFKPtr(overdrive.OverdriveCommand, L.OverdriveCommands)
 		if err != nil {
 			return nil, err
 		}
 
-		overdrive.CharClassID, err = assignFKPtr(&overdrive.User, l.CharClasses)
+		overdrive.CharClassID, err = assignFKPtr(&overdrive.User, L.CharClasses)
 		if err != nil {
 			return nil, err
 		}
 
-		overdrive.TopmenuID, err = assignFKPtr(overdrive.Topmenu, l.Topmenus)
+		overdrive.TopmenuID, err = assignFKPtr(overdrive.Topmenu, L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		overdrive.Attributes.ID, err = l.GetHashID(overdrive.Attributes)
+		overdrive.Attributes.ID, err = GetHashID(overdrive.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -94,5 +94,5 @@ func (l *Lookup) extractOverdrives() ([]seedtypes.Overdrive, error) {
 		overdrives = append(overdrives, *overdrive)
 	}
 
-	return dedupeRows(overdrives, l.Hashes), nil
+	return dedupeRows(overdrives, hashes), nil
 }

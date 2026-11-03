@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop5SeedBaseStats(qtx *database.Queries, ctx context.Context) error {
-	stats, err := l.extractBaseStats()
+func loop5SeedBaseStats(qtx *database.Queries, ctx context.Context) error {
+	stats, err := extractBaseStats()
 	if err != nil {
 		return err
 	}
@@ -32,19 +32,19 @@ func (l *Lookup) loop5SeedBaseStats(qtx *database.Queries, ctx context.Context) 
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractBaseStats() ([]seedtypes.BaseStat, error) {
+func extractBaseStats() ([]seedtypes.BaseStat, error) {
 	stats := []seedtypes.BaseStat{}
 
-	for i := range l.json.characters {
-		char := &l.json.characters[i]
+	for i := range rawJSON.characters {
+		char := &rawJSON.characters[i]
 
-		statsNew, err := l.prepareBaseStats(char.BaseStats)
+		statsNew, err := prepareBaseStats(char.BaseStats)
 		if err != nil {
 			return nil, err
 		}
@@ -52,10 +52,10 @@ func (l *Lookup) extractBaseStats() ([]seedtypes.BaseStat, error) {
 		stats = append(stats, statsNew...)
 	}
 
-	for i := range l.json.monsters {
-		mon := &l.json.monsters[i]
+	for i := range rawJSON.monsters {
+		mon := &rawJSON.monsters[i]
 
-		statsNew, err := l.prepareBaseStats(mon.BaseStats)
+		statsNew, err := prepareBaseStats(mon.BaseStats)
 		if err != nil {
 			return nil, err
 		}
@@ -63,7 +63,7 @@ func (l *Lookup) extractBaseStats() ([]seedtypes.BaseStat, error) {
 		stats = append(stats, statsNew...)
 
 		for j := range mon.AlteredStates {
-			stateBs, err := l.extractAltStateBaseStats(&mon.AlteredStates[j])
+			stateBs, err := extractAltStateBaseStats(&mon.AlteredStates[j])
 			if err != nil {
 				return nil, err
 			}
@@ -71,16 +71,16 @@ func (l *Lookup) extractBaseStats() ([]seedtypes.BaseStat, error) {
 		}
 	}
 
-	for i := range l.json.aeonStats {
-		aeon := &l.json.aeonStats[i]
+	for i := range rawJSON.aeonStats {
+		aeon := &rawJSON.aeonStats[i]
 
-		aVals, err := l.prepareBaseStats(aeon.AVals)
+		aVals, err := prepareBaseStats(aeon.AVals)
 		if err != nil {
 			return nil, err
 		}
 		stats = append(stats, aVals...)
 
-		bVals, err := l.prepareBaseStats(aeon.BVals)
+		bVals, err := prepareBaseStats(aeon.BVals)
 		if err != nil {
 			return nil, err
 		}
@@ -89,7 +89,7 @@ func (l *Lookup) extractBaseStats() ([]seedtypes.BaseStat, error) {
 		for j := range aeon.XVals {
 			xVal := &aeon.XVals[j]
 
-			xVals, err := l.prepareBaseStats(xVal.BaseStats)
+			xVals, err := prepareBaseStats(xVal.BaseStats)
 			if err != nil {
 				return nil, err
 			}
@@ -97,10 +97,10 @@ func (l *Lookup) extractBaseStats() ([]seedtypes.BaseStat, error) {
 		}
 	}
 
-	return dedupeRows(stats, l.Hashes), nil
+	return dedupeRows(stats, hashes), nil
 }
 
-func (l *Lookup) extractAltStateBaseStats(state *seedtypes.AlteredState) ([]seedtypes.BaseStat, error) {
+func extractAltStateBaseStats(state *seedtypes.AlteredState) ([]seedtypes.BaseStat, error) {
 	stats := []seedtypes.BaseStat{}
 	var err error
 
@@ -114,7 +114,7 @@ func (l *Lookup) extractAltStateBaseStats(state *seedtypes.AlteredState) ([]seed
 		for j := range change.BaseStats {
 			bs := &change.BaseStats[j]
 
-			bs.StatID, err = assignFK(bs.StatName, l.Stats)
+			bs.StatID, err = assignFK(bs.StatName, L.Stats)
 			if err != nil {
 				return nil, err
 			}
@@ -126,14 +126,14 @@ func (l *Lookup) extractAltStateBaseStats(state *seedtypes.AlteredState) ([]seed
 	return stats, nil
 }
 
-func (l *Lookup) prepareBaseStats(stats []seedtypes.BaseStat) ([]seedtypes.BaseStat, error) {
+func prepareBaseStats(stats []seedtypes.BaseStat) ([]seedtypes.BaseStat, error) {
 	statsNew := []seedtypes.BaseStat{}
 	var err error
 
 	for i := range stats {
 		bs := &stats[i]
 
-		bs.StatID, err = assignFK(bs.StatName, l.Stats)
+		bs.StatID, err = assignFK(bs.StatName, L.Stats)
 		if err != nil {
 			return nil, err
 		}

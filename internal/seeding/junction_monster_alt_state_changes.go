@@ -7,10 +7,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getAlts() []seedtypes.Alt {
+func getAlts() []seedtypes.Alt {
 	changes := []seedtypes.Alt{}
 
-	for _, mon := range l.json.monsters {
+	for _, mon := range rawJSON.monsters {
 		for _, state := range mon.AlteredStates {
 			changes = append(changes, state.Changes...)
 		}
@@ -19,13 +19,13 @@ func (l *Lookup) getAlts() []seedtypes.Alt {
 	return changes
 }
 
-func (l *Lookup) getAltAutoAbilities(c seedtypes.Alt) ([]seedtypes.AutoAbility, error) {
-	return getResources(c.AutoAbilities, l.AutoAbilities)
+func getAltAutoAbilities(c seedtypes.Alt) ([]seedtypes.AutoAbility, error) {
+	return GetResources(c.AutoAbilities, L.AutoAbilities)
 }
 
-func (l *Lookup) seedJuncAltsAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAltsAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alts + auto-abilities"
-	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltAutoAbilities)
+	jParams, err := processJunctions(desc, getAlts(), getAltAutoAbilities)
 	if err != nil {
 		return err
 	}
@@ -37,13 +37,13 @@ func (l *Lookup) seedJuncAltsAutoAbilities(qtx *database.Queries, ctx context.Co
 	})
 }
 
-func (l *Lookup) getAltBaseStats(c seedtypes.Alt) ([]seedtypes.BaseStat, error) {
+func getAltBaseStats(c seedtypes.Alt) ([]seedtypes.BaseStat, error) {
 	return c.BaseStats, nil
 }
 
-func (l *Lookup) seedJuncAltsBaseStats(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAltsBaseStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alts + base stats"
-	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltBaseStats)
+	jParams, err := processJunctions(desc, getAlts(), getAltBaseStats)
 	if err != nil {
 		return err
 	}
@@ -55,13 +55,13 @@ func (l *Lookup) seedJuncAltsBaseStats(qtx *database.Queries, ctx context.Contex
 	})
 }
 
-func (l *Lookup) getAltElementalResists(c seedtypes.Alt) ([]seedtypes.ElementalResist, error) {
+func getAltElementalResists(c seedtypes.Alt) ([]seedtypes.ElementalResist, error) {
 	return c.ElemResists, nil
 }
 
-func (l *Lookup) seedJuncAltsElementalResists(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAltsElementalResists(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alts + elemental resists"
-	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltElementalResists)
+	jParams, err := processJunctions(desc, getAlts(), getAltElementalResists)
 	if err != nil {
 		return err
 	}
@@ -73,13 +73,13 @@ func (l *Lookup) seedJuncAltsElementalResists(qtx *database.Queries, ctx context
 	})
 }
 
-func (l *Lookup) getAltProperties(c seedtypes.Alt) ([]seedtypes.Property, error) {
-	return getResources(c.Properties, l.Properties)
+func getAltProperties(c seedtypes.Alt) ([]seedtypes.Property, error) {
+	return GetResources(c.Properties, L.Properties)
 }
 
-func (l *Lookup) seedJuncAltsProperties(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAltsProperties(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alts + properties"
-	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltProperties)
+	jParams, err := processJunctions(desc, getAlts(), getAltProperties)
 	if err != nil {
 		return err
 	}
@@ -91,13 +91,13 @@ func (l *Lookup) seedJuncAltsProperties(qtx *database.Queries, ctx context.Conte
 	})
 }
 
-func (l *Lookup) getAltStatusImmunities(c seedtypes.Alt) ([]seedtypes.StatusCondition, error) {
-	return getResources(c.StatusImmunities, l.StatusConditions)
+func getAltStatusImmunities(c seedtypes.Alt) ([]seedtypes.StatusCondition, error) {
+	return GetResources(c.StatusImmunities, L.StatusConditions)
 }
 
-func (l *Lookup) seedJuncAltsStatusImmunities(qtx *database.Queries, ctx context.Context) error {
+func seedJuncAltsStatusImmunities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alts + status immunities"
-	jParams, err := processJunctions(l, desc, l.getAlts(), l.getAltStatusImmunities)
+	jParams, err := processJunctions(desc, getAlts(), getAltStatusImmunities)
 	if err != nil {
 		return err
 	}

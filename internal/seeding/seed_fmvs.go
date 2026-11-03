@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedFMVs(qtx *database.Queries, ctx context.Context) error {
-	fmvs, err := l.extractFMVs()
+func loop4SeedFMVs(qtx *database.Queries, ctx context.Context) error {
+	fmvs, err := extractFMVs()
 	if err != nil {
 		return err
 	}
@@ -41,28 +41,28 @@ func (l *Lookup) loop4SeedFMVs(qtx *database.Queries, ctx context.Context) error
 
 	for i, row := range dbRows {
 		fmvs[i].ID = row.ID
-		l.json.fmvs[i].ID = row.ID
-		l.FMVs[seedtypes.Key(fmvs[i])] = fmvs[i]
-		l.FMVsID[row.ID] = fmvs[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.fmvs[i].ID = row.ID
+		L.FMVs[seedtypes.Key(fmvs[i])] = fmvs[i]
+		L.FMVsID[row.ID] = fmvs[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractFMVs() ([]seedtypes.FMV, error) {
+func extractFMVs() ([]seedtypes.FMV, error) {
 	fmvs := []seedtypes.FMV{}
 	var err error
 
-	for i := range l.json.fmvs {
-		fmv := &l.json.fmvs[i]
+	for i := range rawJSON.fmvs {
+		fmv := &rawJSON.fmvs[i]
 
-		fmv.SongID, err = assignFKPtr(fmv.SongName, l.Songs)
+		fmv.SongID, err = assignFKPtr(fmv.SongName, L.Songs)
 		if err != nil {
 			return nil, err
 		}
 
-		fmv.AreaID, err = assignFK(fmv.LocationArea, l.Areas)
+		fmv.AreaID, err = assignFK(fmv.LocationArea, L.Areas)
 		if err != nil {
 			return nil, err
 		}
@@ -70,5 +70,5 @@ func (l *Lookup) extractFMVs() ([]seedtypes.FMV, error) {
 		fmvs = append(fmvs, *fmv)
 	}
 
-	return dedupeRows(fmvs, l.Hashes), nil
+	return dedupeRows(fmvs, hashes), nil
 }

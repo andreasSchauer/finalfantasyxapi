@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop7SeedArenaCreations(qtx *database.Queries, ctx context.Context) error {
-	creations, err := l.extractArenaCreations()
+func loop7SeedArenaCreations(qtx *database.Queries, ctx context.Context) error {
+	creations, err := extractArenaCreations()
 	if err != nil {
 		return err
 	}
@@ -47,23 +47,23 @@ func (l *Lookup) loop7SeedArenaCreations(qtx *database.Queries, ctx context.Cont
 
 	for i, row := range dbRows {
 		creations[i].ID = row.ID
-		l.json.monsterArenaCreations[i].ID = row.ID
-		l.ArenaCreations[seedtypes.Key(creations[i])] = creations[i]
-		l.ArenaCreationsID[row.ID] = creations[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.monsterArenaCreations[i].ID = row.ID
+		L.ArenaCreations[seedtypes.Key(creations[i])] = creations[i]
+		L.ArenaCreationsID[row.ID] = creations[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractArenaCreations() ([]seedtypes.ArenaCreation, error) {
+func extractArenaCreations() ([]seedtypes.ArenaCreation, error) {
 	creations := []seedtypes.ArenaCreation{}
 	var err error
 
-	for i := range l.json.monsterArenaCreations {
-		creation := &l.json.monsterArenaCreations[i]
+	for i := range rawJSON.monsterArenaCreations {
+		creation := &rawJSON.monsterArenaCreations[i]
 
-		creation.SubquestID, err = assignFK(creation.Name, l.Subquests)
+		creation.SubquestID, err = assignFK(creation.Name, L.Subquests)
 		if err != nil {
 			return nil, err
 		}
@@ -72,7 +72,7 @@ func (l *Lookup) extractArenaCreations() ([]seedtypes.ArenaCreation, error) {
 			Name: creation.Name,
 		}
 
-		creation.MonsterID, err = assignFKPtr(&obj, l.Monsters)
+		creation.MonsterID, err = assignFKPtr(&obj, L.Monsters)
 		if err != nil {
 			return nil, err
 		}
@@ -80,5 +80,5 @@ func (l *Lookup) extractArenaCreations() ([]seedtypes.ArenaCreation, error) {
 		creations = append(creations, *creation)
 	}
 
-	return dedupeRows(creations, l.Hashes), nil
+	return dedupeRows(creations, hashes), nil
 }

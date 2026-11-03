@@ -7,13 +7,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getOverdriveOverdriveAbilities(o seedtypes.Overdrive) ([]seedtypes.OverdriveAbility, error) {
-	return typedRefsToResources(o.OverdriveAbilities, l.OverdriveAbilities)
+func getOverdriveOverdriveAbilities(o seedtypes.Overdrive) ([]seedtypes.OverdriveAbility, error) {
+	return TypedRefsToResources(o.OverdriveAbilities, L.OverdriveAbilities)
 }
 
-func (l *Lookup) seedJuncOverdrivesOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
+func seedJuncOverdrivesOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "overdrives + overdrive abilities"
-	jParams, err := processJunctions(l, desc, l.json.overdrives, l.getOverdriveOverdriveAbilities)
+	jParams, err := processJunctions(desc, rawJSON.overdrives, getOverdriveOverdriveAbilities)
 	if err != nil {
 		return err
 	}
@@ -25,7 +25,7 @@ func (l *Lookup) seedJuncOverdrivesOverdriveAbilities(qtx *database.Queries, ctx
 	})
 }
 
-func (l *Lookup) seedJuncDefaultOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
+func seedJuncDefaultOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "default overdrive + overdrive abilities"
 	params := database.CreateDefaultOverdriveAbilityJunctionBulkParams{
 		DataHash:  make([]string, 0),
@@ -33,18 +33,18 @@ func (l *Lookup) seedJuncDefaultOverdriveAbilities(qtx *database.Queries, ctx co
 		AbilityID: make([]int32, 0),
 	}
 
-	for _, overdrive := range l.json.overdrives {
+	for _, overdrive := range rawJSON.overdrives {
 		if overdrive.UnlockCondition != nil {
 			continue
 		}
 
-		class, err := GetResource(overdrive.User, l.CharClasses)
+		class, err := GetResource(overdrive.User, L.CharClasses)
 		if err != nil {
 			return err
 		}
 
 		for _, ref := range overdrive.OverdriveAbilities {
-			oa, err := GetResource(ref.Untyped(), l.OverdriveAbilities)
+			oa, err := GetResource(ref.Untyped(), L.OverdriveAbilities)
 			if err != nil {
 				return err
 			}

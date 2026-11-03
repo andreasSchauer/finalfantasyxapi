@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedStats(qtx *database.Queries, ctx context.Context) error {
-	stats, err := l.extractStats()
+func loop4SeedStats(qtx *database.Queries, ctx context.Context) error {
+	stats, err := extractStats()
 	if err != nil {
 		return err
 	}
@@ -43,23 +43,23 @@ func (l *Lookup) loop4SeedStats(qtx *database.Queries, ctx context.Context) erro
 
 	for i, row := range dbRows {
 		stats[i].ID = row.ID
-		l.json.stats[i].ID = row.ID
-		l.Stats[seedtypes.Key(stats[i])] = stats[i]
-		l.StatsID[row.ID] = stats[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.stats[i].ID = row.ID
+		L.Stats[seedtypes.Key(stats[i])] = stats[i]
+		L.StatsID[row.ID] = stats[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractStats() ([]seedtypes.Stat, error) {
+func extractStats() ([]seedtypes.Stat, error) {
 	stats := []seedtypes.Stat{}
 	var err error
 
-	for i := range l.json.stats {
-		stat := &l.json.stats[i]
+	for i := range rawJSON.stats {
+		stat := &rawJSON.stats[i]
 
-		stat.SphereID, err = assignFKPtr(&stat.ActivationSphere, l.Spheres)
+		stat.SphereID, err = assignFKPtr(&stat.ActivationSphere, L.Spheres)
 		if err != nil {
 			return nil, err
 		}
@@ -67,5 +67,5 @@ func (l *Lookup) extractStats() ([]seedtypes.Stat, error) {
 		stats = append(stats, *stat)
 	}
 
-	return dedupeRows(stats, l.Hashes), nil
+	return dedupeRows(stats, hashes), nil
 }

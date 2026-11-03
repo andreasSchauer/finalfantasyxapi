@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedFormationData(qtx *database.Queries, ctx context.Context) error {
-	data, err := l.extractFormationData()
+func loop4SeedFormationData(qtx *database.Queries, ctx context.Context) error {
+	data, err := extractFormationData()
 	if err != nil {
 		return err
 	}
@@ -42,21 +42,21 @@ func (l *Lookup) loop4SeedFormationData(qtx *database.Queries, ctx context.Conte
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractFormationData() ([]seedtypes.FormationData, error) {
+func extractFormationData() ([]seedtypes.FormationData, error) {
 	data := []seedtypes.FormationData{}
 	var err error
 
-	for i := range l.json.monsterFormations {
-		mfData := &l.json.monsterFormations[i].FormationData
+	for i := range rawJSON.monsterFormations {
+		mfData := &rawJSON.monsterFormations[i].FormationData
 
 		if mfData.BossMusic != nil {
-			mfData.BossMusic.ID, err = l.GetHashID(mfData.BossMusic)
+			mfData.BossMusic.ID, err = GetHashID(mfData.BossMusic)
 			if err != nil {
 				return nil, err
 			}
@@ -65,11 +65,11 @@ func (l *Lookup) extractFormationData() ([]seedtypes.FormationData, error) {
 		data = append(data, *mfData)
 	}
 
-	return dedupeRows(data, l.Hashes), nil
+	return dedupeRows(data, hashes), nil
 }
 
-func (l *Lookup) loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.Context) error {
-	songs, err := l.extractFormationBossSongs()
+func loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.Context) error {
+	songs, err := extractFormationBossSongs()
 	if err != nil {
 		return err
 	}
@@ -92,24 +92,24 @@ func (l *Lookup) loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractFormationBossSongs() ([]seedtypes.FormationBossSong, error) {
+func extractFormationBossSongs() ([]seedtypes.FormationBossSong, error) {
 	songs := []seedtypes.FormationBossSong{}
 	var err error
 
-	for i := range l.json.monsterFormations {
-		data := &l.json.monsterFormations[i].FormationData
+	for i := range rawJSON.monsterFormations {
+		data := &rawJSON.monsterFormations[i].FormationData
 
 		if data.BossMusic == nil {
 			continue
 		}
 
-		data.BossMusic.SongID, err = assignFK(data.BossMusic.Song, l.Songs)
+		data.BossMusic.SongID, err = assignFK(data.BossMusic.Song, L.Songs)
 		if err != nil {
 			return nil, err
 		}
@@ -117,5 +117,5 @@ func (l *Lookup) extractFormationBossSongs() ([]seedtypes.FormationBossSong, err
 		songs = append(songs, *data.BossMusic)
 	}
 
-	return dedupeRows(songs, l.Hashes), nil
+	return dedupeRows(songs, hashes), nil
 }

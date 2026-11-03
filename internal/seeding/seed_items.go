@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop2SeedItems(qtx *database.Queries, ctx context.Context) error {
-	items, err := l.extractItems()
+func loop2SeedItems(qtx *database.Queries, ctx context.Context) error {
+	items, err := extractItems()
 	if err != nil {
 		return err
 	}
@@ -45,23 +45,23 @@ func (l *Lookup) loop2SeedItems(qtx *database.Queries, ctx context.Context) erro
 
 	for i, row := range dbRows {
 		items[i].ID = row.ID
-		l.json.items[i].ID = row.ID
-		l.Items[seedtypes.Key(items[i])] = items[i]
-		l.ItemsID[row.ID] = items[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.items[i].ID = row.ID
+		L.Items[seedtypes.Key(items[i])] = items[i]
+		L.ItemsID[row.ID] = items[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractItems() ([]seedtypes.Item, error) {
+func extractItems() ([]seedtypes.Item, error) {
 	items := []seedtypes.Item{}
 	var err error
 
-	for i := range l.json.items {
-		item := &l.json.items[i]
+	for i := range rawJSON.items {
+		item := &rawJSON.items[i]
 
-		item.MasterItem.ID, err = assignFK(item.Name, l.MasterItems)
+		item.MasterItem.ID, err = assignFK(item.Name, L.MasterItems)
 		if err != nil {
 			return nil, err
 		}
@@ -70,39 +70,39 @@ func (l *Lookup) extractItems() ([]seedtypes.Item, error) {
 		items = append(items, *item)
 	}
 
-	return dedupeRows(items, l.Hashes), nil
+	return dedupeRows(items, hashes), nil
 }
 
-func (l *Lookup) completeItems() error {
-	for i := range l.json.items {
-		item := &l.json.items[i]
+func completeItems() error {
+	for i := range rawJSON.items {
+		item := &rawJSON.items[i]
 
 		if len(item.BattleInteractions) > 0 {
 			item.ItemAbility.ID = item.ID
 
-			err := l.completeBattleInteractions(item.BattleInteractions)
+			err := completeBattleInteractions(item.BattleInteractions)
 			if err != nil {
 				return err
 			}
 
-			l.ItemAbilities[seedtypes.Key(item.ItemAbility)] = item.ItemAbility
-			l.ItemAbilitiesID[item.ID] = item.ItemAbility
+			L.ItemAbilities[seedtypes.Key(item.ItemAbility)] = item.ItemAbility
+			L.ItemAbilitiesID[item.ID] = item.ItemAbility
 		}
 
-		l.Items[seedtypes.Key(item)] = *item
-		l.ItemsID[item.ID] = *item
+		L.Items[seedtypes.Key(item)] = *item
+		L.ItemsID[item.ID] = *item
 	}
 
 	return nil
 }
 
-func (l *Lookup) getItemAvailableMenus(i seedtypes.Item) ([]seedtypes.Submenu, error) {
-	return getResources(i.AvailableMenus, l.Submenus)
+func getItemAvailableMenus(i seedtypes.Item) ([]seedtypes.Submenu, error) {
+	return GetResources(i.AvailableMenus, L.Submenus)
 }
 
-func (l *Lookup) seedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.Context) error {
+func seedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "items + available menus"
-	jParams, err := processJunctions(l, desc, l.json.items, l.getItemAvailableMenus)
+	jParams, err := processJunctions(desc, rawJSON.items, getItemAvailableMenus)
 	if err != nil {
 		return err
 	}
@@ -114,13 +114,13 @@ func (l *Lookup) seedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.
 	})
 }
 
-func (l *Lookup) getItemRelatedStats(i seedtypes.Item) ([]seedtypes.Stat, error) {
-	return getResources(i.RelatedStats, l.Stats)
+func getItemRelatedStats(i seedtypes.Item) ([]seedtypes.Stat, error) {
+	return GetResources(i.RelatedStats, L.Stats)
 }
 
-func (l *Lookup) seedJuncItemsRelatedStats(qtx *database.Queries, ctx context.Context) error {
+func seedJuncItemsRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "items + related stats"
-	jParams, err := processJunctions(l, desc, l.json.items, l.getItemRelatedStats)
+	jParams, err := processJunctions(desc, rawJSON.items, getItemRelatedStats)
 	if err != nil {
 		return err
 	}

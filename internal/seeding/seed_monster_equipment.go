@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop2SeedMonsterEquipment(qtx *database.Queries, ctx context.Context) error {
-	equipments := l.extractMonsterEquipment()
+func loop2SeedMonsterEquipment(qtx *database.Queries, ctx context.Context) error {
+	equipments := extractMonsterEquipment()
 
 	params := database.CreateMonsterEquipmentBulkParams{
 		DataHash:     make([]string, len(equipments)),
@@ -33,17 +33,17 @@ func (l *Lookup) loop2SeedMonsterEquipment(qtx *database.Queries, ctx context.Co
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractMonsterEquipment() []seedtypes.MonsterEquipment {
+func extractMonsterEquipment() []seedtypes.MonsterEquipment {
 	equipments := []seedtypes.MonsterEquipment{}
 
-	for i := range l.json.monsters {
-		mon := &l.json.monsters[i]
+	for i := range rawJSON.monsters {
+		mon := &rawJSON.monsters[i]
 
 		if mon.Equipment != nil {
 			mon.Equipment.MonsterID = mon.ID
@@ -51,45 +51,45 @@ func (l *Lookup) extractMonsterEquipment() []seedtypes.MonsterEquipment {
 		}
 	}
 
-	return dedupeRows(equipments, l.Hashes)
+	return dedupeRows(equipments, hashes)
 }
 
-func (l *Lookup) completeMonsterEquipment(equipment *seedtypes.MonsterEquipment) error {
+func completeMonsterEquipment(equipment *seedtypes.MonsterEquipment) error {
 	if equipment == nil {
 		return nil
 	}
 
-	err := l.assignID(equipment)
+	err := assignID(equipment)
 	if err != nil {
 		return nil
 	}
 
-	err = l.assignID(&equipment.AbilitySlots)
+	err = assignID(&equipment.AbilitySlots)
 	if err != nil {
 		return nil
 	}
 
-	err = l.assignID(&equipment.AttachedAbilities)
+	err = assignID(&equipment.AttachedAbilities)
 	if err != nil {
 		return nil
 	}
 
-	err = assignIDs(l, equipment.AbilitySlots.Chances)
+	err = assignIDs(equipment.AbilitySlots.Chances)
 	if err != nil {
 		return nil
 	}
 
-	err = assignIDs(l, equipment.AttachedAbilities.Chances)
+	err = assignIDs(equipment.AttachedAbilities.Chances)
 	if err != nil {
 		return nil
 	}
 
-	err = assignIDs(l, equipment.WeaponAbilities)
+	err = assignIDs(equipment.WeaponAbilities)
 	if err != nil {
 		return nil
 	}
 
-	err = assignIDs(l, equipment.ArmorAbilities)
+	err = assignIDs(equipment.ArmorAbilities)
 	if err != nil {
 		return nil
 	}

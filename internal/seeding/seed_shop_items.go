@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedShopItems(qtx *database.Queries, ctx context.Context) error {
-	items, err := l.extractShopItems()
+func loop3SeedShopItems(qtx *database.Queries, ctx context.Context) error {
+	items, err := extractShopItems()
 	if err != nil {
 		return err
 	}
@@ -32,24 +32,24 @@ func (l *Lookup) loop3SeedShopItems(qtx *database.Queries, ctx context.Context) 
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractShopItems() ([]seedtypes.ShopItem, error) {
+func extractShopItems() ([]seedtypes.ShopItem, error) {
 	items := []seedtypes.ShopItem{}
 	var err error
 
-	for i := range l.json.shops {
-		shop := &l.json.shops[i]
+	for i := range rawJSON.shops {
+		shop := &rawJSON.shops[i]
 
 		if shop.PreAirship != nil {
 			for j := range shop.PreAirship.Items {
 				item := &shop.PreAirship.Items[j]
 
-				item.ItemID, err = assignFK(item.Name, l.Items)
+				item.ItemID, err = assignFK(item.Name, L.Items)
 				if err != nil {
 					return nil, err
 				}
@@ -62,7 +62,7 @@ func (l *Lookup) extractShopItems() ([]seedtypes.ShopItem, error) {
 			for j := range shop.PostAirship.Items {
 				item := &shop.PostAirship.Items[j]
 
-				item.ItemID, err = assignFK(item.Name, l.Items)
+				item.ItemID, err = assignFK(item.Name, L.Items)
 				if err != nil {
 					return nil, err
 				}
@@ -72,5 +72,5 @@ func (l *Lookup) extractShopItems() ([]seedtypes.ShopItem, error) {
 		}
 	}
 
-	return dedupeRows(items, l.Hashes), nil
+	return dedupeRows(items, hashes), nil
 }

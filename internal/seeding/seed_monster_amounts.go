@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop2SeedMonsterAmounts(qtx *database.Queries, ctx context.Context) error {
-	mas, err := l.extractMonsterAmounts()
+func loop2SeedMonsterAmounts(qtx *database.Queries, ctx context.Context) error {
+	mas, err := extractMonsterAmounts()
 	if err != nil {
 		return err
 	}
@@ -32,24 +32,24 @@ func (l *Lookup) loop2SeedMonsterAmounts(qtx *database.Queries, ctx context.Cont
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractMonsterAmounts() ([]seedtypes.MonsterAmount, error) {
+func extractMonsterAmounts() ([]seedtypes.MonsterAmount, error) {
 	mas := []seedtypes.MonsterAmount{}
 	var err error
 
-	for i := range l.json.monsterFormations {
-		mf := &l.json.monsterFormations[i]
+	for i := range rawJSON.monsterFormations {
+		mf := &rawJSON.monsterFormations[i]
 
 		for j := range mf.Monsters {
 			ma := &mf.Monsters[j]
 
 			key := seedtypes.Key(*ma)
-			ma.MonsterID, err = assignFK(key, l.Monsters)
+			ma.MonsterID, err = assignFK(key, L.Monsters)
 			if err != nil {
 				return nil, err
 			}
@@ -58,5 +58,5 @@ func (l *Lookup) extractMonsterAmounts() ([]seedtypes.MonsterAmount, error) {
 		}
 	}
 
-	return dedupeRows(mas, l.Hashes), nil
+	return dedupeRows(mas, hashes), nil
 }

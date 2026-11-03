@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedMonsterAbilities(qtx *database.Queries, ctx context.Context) error {
-	abilities, err := l.extractMonsterAbilities()
+func loop3SeedMonsterAbilities(qtx *database.Queries, ctx context.Context) error {
+	abilities, err := extractMonsterAbilities()
 	if err != nil {
 		return err
 	}
@@ -34,23 +34,23 @@ func (l *Lookup) loop3SeedMonsterAbilities(qtx *database.Queries, ctx context.Co
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractMonsterAbilities() ([]seedtypes.MonsterAbility, error) {
+func extractMonsterAbilities() ([]seedtypes.MonsterAbility, error) {
 	abilities := []seedtypes.MonsterAbility{}
 	var err error
 
-	for i := range l.json.monsters {
-		mon := &l.json.monsters[i]
+	for i := range rawJSON.monsters {
+		mon := &rawJSON.monsters[i]
 
 		for j := range mon.Abilities {
 			ability := &mon.Abilities[j]
 
-			ability.AbilityID, err = assignFK(ability.AbilityReference, l.Abilities)
+			ability.AbilityID, err = assignFK(ability.AbilityReference, L.Abilities)
 			if err != nil {
 				return nil, err
 			}
@@ -59,5 +59,5 @@ func (l *Lookup) extractMonsterAbilities() ([]seedtypes.MonsterAbility, error) {
 		}
 	}
 
-	return dedupeRows(abilities, l.Hashes), nil
+	return dedupeRows(abilities, hashes), nil
 }

@@ -11,7 +11,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func getRawDataHash() (string, error) {
+func getCacheHash() (string, error) {
 	dataDir, err := h.GetAbsoluteFilepath("data")
 	if err != nil {
 		return "", err

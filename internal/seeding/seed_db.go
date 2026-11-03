@@ -12,21 +12,25 @@ import (
 	"github.com/pressly/goose/v3"
 )
 
-func LoadDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
+var rawJSON jsonFiles
+var hashes = make(map[string]int32)
+
+func LoadDatabase(db *database.Queries, dbConn *sql.DB) error {
 	defer fmt.Println()
 	defer h.MeasureTime("database seeding")()
 	ctx := context.Background()
+	L.Init()
 
-	l, err := lookupInit()
+	err := rawJSON.loadFiles()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// if schema needs to be converted to something else, do it here (use h.ConvertJsonData)
 
-	dataHash, err := getRawDataHash()
+	cacheHash, err := getCacheHash()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	dbHash, _ := db.GetDbState(ctx)
@@ -36,28 +40,28 @@ func LoadDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 		}
 	*/
 
-	if dataHash == dbHash {
-		err = l.skipSeeding(db, ctx)
+	if cacheHash == dbHash {
+		err = skipSeeding(db, ctx)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
-		return l, nil
+		return nil
 	}
 
-	err = seedDatabase(db, dbConn, ctx, l, dataHash)
+	err = seedDatabase(db, dbConn, ctx, cacheHash)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return l, nil
+	return nil
 }
 
-func (l *Lookup) skipSeeding(db *database.Queries, ctx context.Context) error {
+func skipSeeding(db *database.Queries, ctx context.Context) error {
 	fmt.Println("database is up to date")
 	fmt.Println()
 
-	err := l.assignLookups()
+	err := L.InitCached()
 	if err != nil {
 		return fmt.Errorf("couldn't assign lookups: %v", err)
 	}
@@ -72,7 +76,7 @@ func (l *Lookup) skipSeeding(db *database.Queries, ctx context.Context) error {
 	return nil
 }
 
-func seedDatabase(db *database.Queries, dbConn *sql.DB, ctx context.Context, l *Lookup, dataHash string) error {
+func seedDatabase(db *database.Queries, dbConn *sql.DB, ctx context.Context, dataHash string) error {
 	fmt.Println("updating database...")
 	fmt.Println()
 
@@ -91,33 +95,33 @@ func seedDatabase(db *database.Queries, dbConn *sql.DB, ctx context.Context, l *
 		defer h.MeasureTime("initial database seeding")()
 		fmt.Println("initial database seeding...")
 
-		return l.seedLoop(qtx, ctx, []seedFunc{
-			l.seedLoop1,
-			l.seedLoop2,
-			l.seedLoop3,
-			l.seedLoop4,
-			l.seedLoop5,
-			l.seedLoop6,
-			l.seedLoop7,
+		return seedLoop(qtx, ctx, []seedFunc{
+			seedLoop1,
+			seedLoop2,
+			seedLoop3,
+			seedLoop4,
+			seedLoop5,
+			seedLoop6,
+			seedLoop7,
 		})
 	})
 	if err != nil {
 		return err
 	}
 
-	err = l.completeLookups()
+	err = completeLookups()
 	if err != nil {
 		return err
 	}
 
-	err = l.saveCompletedLookups()
+	err = L.Cache()
 	if err != nil {
 		return err
 	}
 
 	err = queryInTransaction(db, dbConn, func(qtx *database.Queries) error {
 		defer h.MeasureTime("seeding junctions")()
-		return l.seedJunctions(qtx, ctx)
+		return seedJunctions(qtx, ctx)
 	})
 	if err != nil {
 		return err
@@ -161,33 +165,33 @@ func setupDB(dbConn *sql.DB, migrationsDir string) error {
 	return nil
 }
 
-func (l *Lookup) completeLookups() error {
+func completeLookups() error {
 	defer h.MeasureTime("lookup completion")()
 
 	fns := []func() error{
-		l.completeEnemyAbilities,
-		l.completeItems,
-		l.completeOverdriveAbilities,
-		l.completePlayerAbilities,
-		l.completeTriggerCommands,
-		l.completeMiscAbilities,
-		l.completeAeons,
-		l.completeAeonStats,
-		l.completeAgilityTiers,
-		l.completeAutoAbilities,
-		l.completeBlitzballPositions,
-		l.completeCharacters,
-		l.completeEquipment,
-		l.completeLocations,
-		l.completeMixes,
-		l.completeMonsterFormations,
-		l.completeMonsters,
-		l.completeOverdriveModes,
-		l.completeShops,
-		l.completeSidequests,
-		l.completeSongs,
-		l.completeStatusConditions,
-		l.completeTreasureLists,
+		completeEnemyAbilities,
+		completeItems,
+		completeOverdriveAbilities,
+		completePlayerAbilities,
+		completeTriggerCommands,
+		completeMiscAbilities,
+		completeAeons,
+		completeAeonStats,
+		completeAgilityTiers,
+		completeAutoAbilities,
+		completeBlitzballPositions,
+		completeCharacters,
+		completeEquipment,
+		completeLocations,
+		completeMixes,
+		completeMonsterFormations,
+		completeMonsters,
+		completeOverdriveModes,
+		completeShops,
+		completeSidequests,
+		completeSongs,
+		completeStatusConditions,
+		completeTreasureLists,
 	}
 
 	for _, fn := range fns {

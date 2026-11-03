@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedStatusConditions(qtx *database.Queries, ctx context.Context) error {
-	statusses, err := l.extractStatusConditions()
+func loop3SeedStatusConditions(qtx *database.Queries, ctx context.Context) error {
+	statusses, err := extractStatusConditions()
 	if err != nil {
 		return err
 	}
@@ -45,24 +45,24 @@ func (l *Lookup) loop3SeedStatusConditions(qtx *database.Queries, ctx context.Co
 
 	for i, row := range dbRows {
 		statusses[i].ID = row.ID
-		l.json.statusConditions[i].ID = row.ID
-		l.StatusConditions[seedtypes.Key(statusses[i])] = statusses[i]
-		l.StatusConditionsID[row.ID] = statusses[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.statusConditions[i].ID = row.ID
+		L.StatusConditions[seedtypes.Key(statusses[i])] = statusses[i]
+		L.StatusConditionsID[row.ID] = statusses[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractStatusConditions() ([]seedtypes.StatusCondition, error) {
+func extractStatusConditions() ([]seedtypes.StatusCondition, error) {
 	statusses := []seedtypes.StatusCondition{}
 	var err error
 
-	for i := range l.json.statusConditions {
-		status := &l.json.statusConditions[i]
+	for i := range rawJSON.statusConditions {
+		status := &rawJSON.statusConditions[i]
 
 		if status.AddedElemResist != nil {
-			status.AddedElemResist.ID, err = l.GetHashID(status.AddedElemResist)
+			status.AddedElemResist.ID, err = GetHashID(status.AddedElemResist)
 			if err != nil {
 				return nil, err
 			}
@@ -71,25 +71,25 @@ func (l *Lookup) extractStatusConditions() ([]seedtypes.StatusCondition, error) 
 		statusses = append(statusses, *status)
 	}
 
-	return dedupeRows(statusses, l.Hashes), nil
+	return dedupeRows(statusses, hashes), nil
 }
 
-func (l *Lookup) completeStatusConditions() error {
-	for i := range l.json.statusConditions {
-		status := &l.json.statusConditions[i]
+func completeStatusConditions() error {
+	for i := range rawJSON.statusConditions {
+		status := &rawJSON.statusConditions[i]
 
-		err := assignIDs(l, status.StatChanges)
+		err := assignIDs(status.StatChanges)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, status.ModifierChanges)
+		err = assignIDs(status.ModifierChanges)
 		if err != nil {
 			return err
 		}
 
-		l.StatusConditions[seedtypes.Key(status)] = *status
-		l.StatusConditionsID[status.ID] = *status
+		L.StatusConditions[seedtypes.Key(status)] = *status
+		L.StatusConditionsID[status.ID] = *status
 	}
 
 	return nil

@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Context) error {
-	tables, err := l.extractEquipmentTables()
+func loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Context) error {
+	tables, err := extractEquipmentTables()
 	if err != nil {
 		return err
 	}
@@ -43,23 +43,23 @@ func (l *Lookup) loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Con
 
 	for i, row := range dbRows {
 		tables[i].ID = row.ID
-		l.json.equipment[i].ID = row.ID
-		l.EquipmentTables[seedtypes.Key(tables[i])] = tables[i]
-		l.EquipmentTablesID[row.ID] = tables[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.equipment[i].ID = row.ID
+		L.EquipmentTables[seedtypes.Key(tables[i])] = tables[i]
+		L.EquipmentTablesID[row.ID] = tables[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractEquipmentTables() ([]seedtypes.EquipmentTable, error) {
+func extractEquipmentTables() ([]seedtypes.EquipmentTable, error) {
 	tables := []seedtypes.EquipmentTable{}
 	var err error
 
-	for i := range l.json.equipment {
-		table := &l.json.equipment[i]
+	for i := range rawJSON.equipment {
+		table := &rawJSON.equipment[i]
 
-		table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, l.Characters)
+		table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, L.Characters)
 		if err != nil {
 			return nil, err
 		}
@@ -67,31 +67,31 @@ func (l *Lookup) extractEquipmentTables() ([]seedtypes.EquipmentTable, error) {
 		tables = append(tables, *table)
 	}
 
-	return dedupeRows(tables, l.Hashes), nil
+	return dedupeRows(tables, hashes), nil
 }
 
-func (l *Lookup) completeEquipment() error {
-	for i := range l.json.equipment {
-		table := &l.json.equipment[i]
-		err := assignIDs(l, table.SelectableAutoAbilities)
+func completeEquipment() error {
+	for i := range rawJSON.equipment {
+		table := &rawJSON.equipment[i]
+		err := assignIDs(table.SelectableAutoAbilities)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, table.EquipmentNames)
+		err = assignIDs(table.EquipmentNames)
 		if err != nil {
 			return err
 		}
 
-		l.EquipmentTables[seedtypes.Key(*table)] = *table
-		l.EquipmentTablesID[table.ID] = *table
+		L.EquipmentTables[seedtypes.Key(*table)] = *table
+		L.EquipmentTablesID[table.ID] = *table
 	}
 
 	return nil
 }
 
-func (l *Lookup) loop6SeedAbilityPools(qtx *database.Queries, ctx context.Context) error {
-	pools := l.extractAbilityPools()
+func loop6SeedAbilityPools(qtx *database.Queries, ctx context.Context) error {
+	pools := extractAbilityPools()
 
 	params := database.CreateAbilityPoolBulkParams{
 		DataHash:         make([]string, len(pools)),
@@ -113,17 +113,17 @@ func (l *Lookup) loop6SeedAbilityPools(qtx *database.Queries, ctx context.Contex
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractAbilityPools() []seedtypes.AbilityPool {
+func extractAbilityPools() []seedtypes.AbilityPool {
 	pools := []seedtypes.AbilityPool{}
 
-	for i := range l.json.equipment {
-		table := &l.json.equipment[i]
+	for i := range rawJSON.equipment {
+		table := &rawJSON.equipment[i]
 
 		for j := range table.SelectableAutoAbilities {
 			pool := &table.SelectableAutoAbilities[j]
@@ -133,5 +133,5 @@ func (l *Lookup) extractAbilityPools() []seedtypes.AbilityPool {
 		}
 	}
 
-	return dedupeRows(pools, l.Hashes)
+	return dedupeRows(pools, hashes)
 }

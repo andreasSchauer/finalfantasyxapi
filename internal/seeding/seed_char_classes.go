@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Context) error {
-	classes := dedupeRows(l.json.characterClasses, l.Hashes)
+func loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Context) error {
+	classes := dedupeRows(rawJSON.characterClasses, hashes)
 
 	params := database.CreateCharacterClassBulkParams{
 		DataHash: make([]string, len(classes)),
@@ -30,22 +30,22 @@ func (l *Lookup) loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Co
 
 	for i, row := range dbRows {
 		classes[i].ID = row.ID
-		l.json.characterClasses[i].ID = row.ID
-		l.CharClasses[seedtypes.Key(classes[i])] = classes[i]
-		l.CharClassesID[row.ID] = classes[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.characterClasses[i].ID = row.ID
+		L.CharClasses[seedtypes.Key(classes[i])] = classes[i]
+		L.CharClassesID[row.ID] = classes[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) getCharacterClassPlayerUnits(c seedtypes.CharacterClass) ([]seedtypes.PlayerUnit, error) {
-	return getResources(c.Members, l.PlayerUnits)
+func getCharacterClassPlayerUnits(c seedtypes.CharacterClass) ([]seedtypes.PlayerUnit, error) {
+	return GetResources(c.Members, L.PlayerUnits)
 }
 
-func (l *Lookup) seedJuncCharacterClassesPlayerUnits(qtx *database.Queries, ctx context.Context) error {
+func seedJuncCharacterClassesPlayerUnits(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "character classes + player units"
-	jParams, err := processJunctions(l, desc, l.json.characterClasses, l.getCharacterClassPlayerUnits)
+	jParams, err := processJunctions(desc, rawJSON.characterClasses, getCharacterClassPlayerUnits)
 	if err != nil {
 		return err
 	}

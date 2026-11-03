@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop4SeedFormationTriggerCommands(qtx *database.Queries, ctx context.Context) error {
-	commands, err := l.extractFormationTriggerCommands()
+func loop4SeedFormationTriggerCommands(qtx *database.Queries, ctx context.Context) error {
+	commands, err := extractFormationTriggerCommands()
 	if err != nil {
 		return err
 	}
@@ -36,23 +36,23 @@ func (l *Lookup) loop4SeedFormationTriggerCommands(qtx *database.Queries, ctx co
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractFormationTriggerCommands() ([]seedtypes.FormationTriggerCommand, error) {
+func extractFormationTriggerCommands() ([]seedtypes.FormationTriggerCommand, error) {
 	commands := []seedtypes.FormationTriggerCommand{}
 	var err error
 
-	for i := range l.json.monsterFormations {
-		mf := &l.json.monsterFormations[i]
+	for i := range rawJSON.monsterFormations {
+		mf := &rawJSON.monsterFormations[i]
 
 		for j := range mf.TriggerCommands {
 			command := &mf.TriggerCommands[j]
 
-			command.TriggerCommandID, err = assignFK(command.AbilityReference.Untyped(), l.TriggerCommands)
+			command.TriggerCommandID, err = assignFK(command.AbilityReference.Untyped(), L.TriggerCommands)
 			if err != nil {
 				return nil, err
 			}
@@ -61,26 +61,26 @@ func (l *Lookup) extractFormationTriggerCommands() ([]seedtypes.FormationTrigger
 		}
 	}
 
-	return dedupeRows(commands, l.Hashes), nil
+	return dedupeRows(commands, hashes), nil
 }
 
-func (l *Lookup) getFormationTriggerCommands() []seedtypes.FormationTriggerCommand {
+func getFormationTriggerCommands() []seedtypes.FormationTriggerCommand {
 	commands := []seedtypes.FormationTriggerCommand{}
 
-	for _, formation := range l.json.monsterFormations {
+	for _, formation := range rawJSON.monsterFormations {
 		commands = append(commands, formation.TriggerCommands...)
 	}
 
 	return commands
 }
 
-func (l *Lookup) getFormationTriggerCommandUsers(tc seedtypes.FormationTriggerCommand) ([]seedtypes.CharacterClass, error) {
-	return getResources(tc.Users, l.CharClasses)
+func getFormationTriggerCommandUsers(tc seedtypes.FormationTriggerCommand) ([]seedtypes.CharacterClass, error) {
+	return GetResources(tc.Users, L.CharClasses)
 }
 
-func (l *Lookup) seedJuncFormationTriggerCommandsUsers(qtx *database.Queries, ctx context.Context) error {
+func seedJuncFormationTriggerCommandsUsers(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "formation trigger commands + users"
-	jParams, err := processJunctions(l, desc, l.getFormationTriggerCommands(), l.getFormationTriggerCommandUsers)
+	jParams, err := processJunctions(desc, getFormationTriggerCommands(), getFormationTriggerCommandUsers)
 	if err != nil {
 		return err
 	}

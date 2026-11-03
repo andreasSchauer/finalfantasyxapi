@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Context) error {
-	completions, err := l.extractQuestCompletions()
+func loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Context) error {
+	completions, err := extractQuestCompletions()
 	if err != nil {
 		return err
 	}
@@ -37,27 +37,27 @@ func (l *Lookup) loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Co
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractQuestCompletions() ([]seedtypes.QuestCompletion, error) {
+func extractQuestCompletions() ([]seedtypes.QuestCompletion, error) {
 	completions := []seedtypes.QuestCompletion{}
 	var err error
 
-	for i := range l.json.sidequests {
-		sidequest := &l.json.sidequests[i]
+	for i := range rawJSON.sidequests {
+		sidequest := &rawJSON.sidequests[i]
 
 		if sidequest.Completion != nil {
 			completion := sidequest.Completion
-			completion.Reward.ID, err = l.GetHashID(completion.Reward)
+			completion.Reward.ID, err = GetHashID(completion.Reward)
 			if err != nil {
 				return nil, err
 			}
 
-			completion.QuestID, err = assignFK(sidequest.Quest, l.Quests)
+			completion.QuestID, err = assignFK(sidequest.Quest, L.Quests)
 			if err != nil {
 				return nil, err
 			}
@@ -70,12 +70,12 @@ func (l *Lookup) extractQuestCompletions() ([]seedtypes.QuestCompletion, error) 
 
 			if subquest.Completion != nil {
 				completion := subquest.Completion
-				completion.Reward.ID, err = l.GetHashID(completion.Reward)
+				completion.Reward.ID, err = GetHashID(completion.Reward)
 				if err != nil {
 					return nil, err
 				}
 
-				completion.QuestID, err = assignFK(subquest.Quest, l.Quests)
+				completion.QuestID, err = assignFK(subquest.Quest, L.Quests)
 				if err != nil {
 					return nil, err
 				}
@@ -85,11 +85,11 @@ func (l *Lookup) extractQuestCompletions() ([]seedtypes.QuestCompletion, error) 
 		}
 	}
 
-	return dedupeRows(completions, l.Hashes), nil
+	return dedupeRows(completions, hashes), nil
 }
 
-func (l *Lookup) loop4SeedCompletionAreas(qtx *database.Queries, ctx context.Context) error {
-	areas, err := l.extractCompletionAreas()
+func loop4SeedCompletionAreas(qtx *database.Queries, ctx context.Context) error {
+	areas, err := extractCompletionAreas()
 	if err != nil {
 		return err
 	}
@@ -114,26 +114,26 @@ func (l *Lookup) loop4SeedCompletionAreas(qtx *database.Queries, ctx context.Con
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractCompletionAreas() ([]seedtypes.CompletionArea, error) {
+func extractCompletionAreas() ([]seedtypes.CompletionArea, error) {
 	areas := []seedtypes.CompletionArea{}
 	var err error
 
-	for i := range l.json.sidequests {
-		sidequest := &l.json.sidequests[i]
+	for i := range rawJSON.sidequests {
+		sidequest := &rawJSON.sidequests[i]
 
 		if sidequest.Completion != nil {
-			sidequest.Completion.ID, err = l.GetHashID(sidequest.Completion)
+			sidequest.Completion.ID, err = GetHashID(sidequest.Completion)
 			if err != nil {
 				return nil, err
 			}
 
-			areasNew, err := l.prepareCompletionAreas(sidequest.Completion.Areas, sidequest.Completion.ID)
+			areasNew, err := prepareCompletionAreas(sidequest.Completion.Areas, sidequest.Completion.ID)
 			if err != nil {
 				return nil, err
 			}
@@ -145,12 +145,12 @@ func (l *Lookup) extractCompletionAreas() ([]seedtypes.CompletionArea, error) {
 			subquest := &sidequest.Subquests[j]
 
 			if subquest.Completion != nil {
-				subquest.Completion.ID, err = l.GetHashID(subquest.Completion)
+				subquest.Completion.ID, err = GetHashID(subquest.Completion)
 				if err != nil {
 					return nil, err
 				}
 
-				areasNew, err := l.prepareCompletionAreas(subquest.Completion.Areas, subquest.Completion.ID)
+				areasNew, err := prepareCompletionAreas(subquest.Completion.Areas, subquest.Completion.ID)
 				if err != nil {
 					return nil, err
 				}
@@ -160,10 +160,10 @@ func (l *Lookup) extractCompletionAreas() ([]seedtypes.CompletionArea, error) {
 		}
 	}
 
-	return dedupeRows(areas, l.Hashes), nil
+	return dedupeRows(areas, hashes), nil
 }
 
-func (l *Lookup) prepareCompletionAreas(areas []seedtypes.CompletionArea, completionID int32) ([]seedtypes.CompletionArea, error) {
+func prepareCompletionAreas(areas []seedtypes.CompletionArea, completionID int32) ([]seedtypes.CompletionArea, error) {
 	areasNew := []seedtypes.CompletionArea{}
 	var err error
 
@@ -171,7 +171,7 @@ func (l *Lookup) prepareCompletionAreas(areas []seedtypes.CompletionArea, comple
 		area := &areas[i]
 		area.CompletionID = completionID
 
-		area.AreaID, err = assignFK(area.LocationArea, l.Areas)
+		area.AreaID, err = assignFK(area.LocationArea, L.Areas)
 		if err != nil {
 			return nil, err
 		}

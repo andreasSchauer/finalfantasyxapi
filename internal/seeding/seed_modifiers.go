@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedModifiers(qtx *database.Queries, ctx context.Context) error {
-	modifiers := dedupeRows(l.json.modifiers, l.Hashes)
+func loop1SeedModifiers(qtx *database.Queries, ctx context.Context) error {
+	modifiers := dedupeRows(rawJSON.modifiers, hashes)
 
 	params := database.CreateModifierBulkParams{
 		DataHash:     make([]string, len(modifiers)),
@@ -36,10 +36,10 @@ func (l *Lookup) loop1SeedModifiers(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		modifiers[i].ID = row.ID
-		l.json.modifiers[i].ID = row.ID
-		l.Modifiers[seedtypes.Key(modifiers[i])] = modifiers[i]
-		l.ModifiersID[row.ID] = modifiers[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.modifiers[i].ID = row.ID
+		L.Modifiers[seedtypes.Key(modifiers[i])] = modifiers[i]
+		L.ModifiersID[row.ID] = modifiers[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil

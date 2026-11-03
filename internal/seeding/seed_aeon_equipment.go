@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop6SeedAeonEquipment(qtx *database.Queries, ctx context.Context) error {
-	equipment, err := l.extractAeonEquipment()
+func loop6SeedAeonEquipment(qtx *database.Queries, ctx context.Context) error {
+	equipment, err := extractAeonEquipment()
 	if err != nil {
 		return err
 	}
@@ -34,24 +34,24 @@ func (l *Lookup) loop6SeedAeonEquipment(qtx *database.Queries, ctx context.Conte
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractAeonEquipment() ([]seedtypes.AeonEquipment, error) {
+func extractAeonEquipment() ([]seedtypes.AeonEquipment, error) {
 	equipment := []seedtypes.AeonEquipment{}
 	var err error
 
-	for i := range l.json.aeons {
-		aeon := &l.json.aeons[i]
+	for i := range rawJSON.aeons {
+		aeon := &rawJSON.aeons[i]
 
 		for j := range aeon.Weapon {
 			ae := &aeon.Weapon[j]
 			ae.EquipType = string(database.EquipTypeWeapon)
 
-			ae.AutoAbilityID, err = assignFK(ae.AutoAbility, l.AutoAbilities)
+			ae.AutoAbilityID, err = assignFK(ae.AutoAbility, L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}
@@ -63,7 +63,7 @@ func (l *Lookup) extractAeonEquipment() ([]seedtypes.AeonEquipment, error) {
 			ae := &aeon.Armor[j]
 			ae.EquipType = string(database.EquipTypeArmor)
 
-			ae.AutoAbilityID, err = assignFK(ae.AutoAbility, l.AutoAbilities)
+			ae.AutoAbilityID, err = assignFK(ae.AutoAbility, L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}
@@ -72,5 +72,5 @@ func (l *Lookup) extractAeonEquipment() ([]seedtypes.AeonEquipment, error) {
 		}
 	}
 
-	return dedupeRows(equipment, l.Hashes), nil
+	return dedupeRows(equipment, hashes), nil
 }

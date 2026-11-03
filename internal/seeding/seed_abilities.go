@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop2SeedAbilities(qtx *database.Queries, ctx context.Context) error {
-	abilities, err := l.extractAbilities()
+func loop2SeedAbilities(qtx *database.Queries, ctx context.Context) error {
+	abilities, err := extractAbilities()
 	if err != nil {
 		return err
 	}
@@ -41,21 +41,21 @@ func (l *Lookup) loop2SeedAbilities(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		l.Abilities[seedtypes.Key(abilities[i])] = abilities[i]
-		l.AbilitiesID[row.ID] = abilities[i]
-		l.Hashes[row.DataHash] = row.ID
+		L.Abilities[seedtypes.Key(abilities[i])] = abilities[i]
+		L.AbilitiesID[row.ID] = abilities[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractAbilities() ([]seedtypes.Ability, error) {
+func extractAbilities() ([]seedtypes.Ability, error) {
 	abilities := []seedtypes.Ability{}
 	var err error
 
-	for i := range l.json.playerAbilities {
-		ability := &l.json.playerAbilities[i]
-		ability.Attributes.ID, err = l.GetHashID(ability.Attributes)
+	for i := range rawJSON.playerAbilities {
+		ability := &rawJSON.playerAbilities[i]
+		ability.Attributes.ID, err = GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -64,9 +64,9 @@ func (l *Lookup) extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, ability.Ability)
 	}
 
-	for i := range l.json.overdriveAbilities {
-		ability := &l.json.overdriveAbilities[i]
-		ability.Attributes.ID, err = l.GetHashID(ability.Attributes)
+	for i := range rawJSON.overdriveAbilities {
+		ability := &rawJSON.overdriveAbilities[i]
+		ability.Attributes.ID, err = GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -75,14 +75,14 @@ func (l *Lookup) extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, ability.Ability)
 	}
 
-	for i := range l.json.items {
-		item := &l.json.items[i]
+	for i := range rawJSON.items {
+		item := &rawJSON.items[i]
 
 		if len(item.BattleInteractions) == 0 {
 			continue
 		}
 
-		item.Attributes.ID, err = l.GetHashID(item.Attributes)
+		item.Attributes.ID, err = GetHashID(item.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -91,9 +91,9 @@ func (l *Lookup) extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, item.Ability)
 	}
 
-	for i := range l.json.triggerCommands {
-		command := &l.json.triggerCommands[i]
-		command.Attributes.ID, err = l.GetHashID(command.Attributes)
+	for i := range rawJSON.triggerCommands {
+		command := &rawJSON.triggerCommands[i]
+		command.Attributes.ID, err = GetHashID(command.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -102,9 +102,9 @@ func (l *Lookup) extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, command.Ability)
 	}
 
-	for i := range l.json.miscAbilities {
-		ability := &l.json.miscAbilities[i]
-		ability.Attributes.ID, err = l.GetHashID(ability.Attributes)
+	for i := range rawJSON.miscAbilities {
+		ability := &rawJSON.miscAbilities[i]
+		ability.Attributes.ID, err = GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -113,9 +113,9 @@ func (l *Lookup) extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, ability.Ability)
 	}
 
-	for i := range l.json.enemyAbilities {
-		ability := &l.json.enemyAbilities[i]
-		ability.Attributes.ID, err = l.GetHashID(ability.Attributes)
+	for i := range rawJSON.enemyAbilities {
+		ability := &rawJSON.enemyAbilities[i]
+		ability.Attributes.ID, err = GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -124,11 +124,11 @@ func (l *Lookup) extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, ability.Ability)
 	}
 
-	return dedupeRows(abilities, l.Hashes), nil
+	return dedupeRows(abilities, hashes), nil
 }
 
-func (l *Lookup) loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.Context) error {
-	attributes := l.extractAbilityAttributes()
+func loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.Context) error {
+	attributes := extractAbilityAttributes()
 
 	params := database.CreateAbilityAttributesBulkParams{
 		DataHash:         make([]string, len(attributes)),
@@ -150,45 +150,45 @@ func (l *Lookup) loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.C
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractAbilityAttributes() []seedtypes.Attributes {
+func extractAbilityAttributes() []seedtypes.Attributes {
 	attributes := []seedtypes.Attributes{}
 
-	for _, ability := range l.json.enemyAbilities {
+	for _, ability := range rawJSON.enemyAbilities {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range l.json.items {
+	for _, ability := range rawJSON.items {
 		if len(ability.BattleInteractions) == 0 {
 			continue
 		}
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range l.json.overdrives {
+	for _, ability := range rawJSON.overdrives {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range l.json.overdriveAbilities {
+	for _, ability := range rawJSON.overdriveAbilities {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range l.json.playerAbilities {
+	for _, ability := range rawJSON.playerAbilities {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range l.json.triggerCommands {
+	for _, ability := range rawJSON.triggerCommands {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range l.json.miscAbilities {
+	for _, ability := range rawJSON.miscAbilities {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	return dedupeRows(attributes, l.Hashes)
+	return dedupeRows(attributes, hashes)
 }

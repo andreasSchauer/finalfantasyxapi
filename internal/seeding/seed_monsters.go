@@ -10,12 +10,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop1SeedMonsters(qtx *database.Queries, ctx context.Context) error {
-	err := l.completeMonstersElements()
+func loop1SeedMonsters(qtx *database.Queries, ctx context.Context) error {
+	err := completeMonstersElements()
 	if err != nil {
 		return err
 	}
-	monsters := dedupeRows(l.json.monsters, l.Hashes)
+	monsters := dedupeRows(rawJSON.monsters, hashes)
 
 	params := database.CreateMonsterBulkParams{
 		DataHash:             make([]string, len(monsters)),
@@ -86,65 +86,65 @@ func (l *Lookup) loop1SeedMonsters(qtx *database.Queries, ctx context.Context) e
 
 	for i, row := range dbRows {
 		monsters[i].ID = row.ID
-		l.json.monsters[i].ID = row.ID
-		l.Monsters[seedtypes.Key(monsters[i])] = monsters[i]
-		l.MonstersID[row.ID] = monsters[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.monsters[i].ID = row.ID
+		L.Monsters[seedtypes.Key(monsters[i])] = monsters[i]
+		L.MonstersID[row.ID] = monsters[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) completeMonsters() error {
-	for i := range l.json.monsters {
-		mon := &l.json.monsters[i]
+func completeMonsters() error {
+	for i := range rawJSON.monsters {
+		mon := &rawJSON.monsters[i]
 
-		err := assignIDs(l, mon.ElemResists)
+		err := assignIDs(mon.ElemResists)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, mon.StatusResists)
+		err = assignIDs(mon.StatusResists)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, mon.BaseStats)
+		err = assignIDs(mon.BaseStats)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, mon.Abilities)
+		err = assignIDs(mon.Abilities)
 		if err != nil {
 			return err
 		}
 
-		err = l.completeMonsterItems(mon.Items)
+		err = completeMonsterItems(mon.Items)
 		if err != nil {
 			return err
 		}
 
-		err = l.completeMonsterEquipment(mon.Equipment)
+		err = completeMonsterEquipment(mon.Equipment)
 		if err != nil {
 			return err
 		}
 
-		err = l.completeAlteredStates(mon.AlteredStates)
+		err = completeAlteredStates(mon.AlteredStates)
 		if err != nil {
 			return err
 		}
 
-		l.Monsters[seedtypes.Key(*mon)] = *mon
-		l.MonstersID[mon.ID] = *mon
+		L.Monsters[seedtypes.Key(*mon)] = *mon
+		L.MonstersID[mon.ID] = *mon
 	}
 
 	return nil
 }
 
-func (l *Lookup) completeMonstersElements() error {
+func completeMonstersElements() error {
 	elements := []string{"fire", "lightning", "water", "ice", "holy"}
 
-	for i, mon := range l.json.monsters {
+	for i, mon := range rawJSON.monsters {
 		elemResistLookup := make(map[string]string)
 
 		for _, elemResist := range mon.ElemResists {
@@ -156,13 +156,13 @@ func (l *Lookup) completeMonstersElements() error {
 			_, found := elemResistLookup[element]
 			if !found {
 				elemResist := seedtypes.ElementalResist{
-					Element: element,
-					Affinity:          "neutral",
+					Element:  element,
+					Affinity: "neutral",
 				}
 				resists = append(resists, elemResist)
 			}
 		}
-		l.json.monsters[i].ElemResists = resists
+		rawJSON.monsters[i].ElemResists = resists
 	}
 
 	return nil

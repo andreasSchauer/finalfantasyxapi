@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) error {
-	submenus, err := l.extractSubmenus()
+func loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) error {
+	submenus, err := extractSubmenus()
 	if err != nil {
 		return err
 	}
@@ -39,24 +39,24 @@ func (l *Lookup) loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) e
 
 	for i, row := range dbRows {
 		submenus[i].ID = row.ID
-		l.json.submenus[i].ID = row.ID
-		l.Submenus[seedtypes.Key(submenus[i])] = submenus[i]
-		l.SubmenusID[row.ID] = submenus[i]
-		l.Hashes[row.DataHash] = row.ID
+		rawJSON.submenus[i].ID = row.ID
+		L.Submenus[seedtypes.Key(submenus[i])] = submenus[i]
+		L.SubmenusID[row.ID] = submenus[i]
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractSubmenus() ([]seedtypes.Submenu, error) {
+func extractSubmenus() ([]seedtypes.Submenu, error) {
 	submenus := []seedtypes.Submenu{}
 	var err error
 
-	for i := range l.json.submenus {
-		submenu := &l.json.submenus[i]
+	for i := range rawJSON.submenus {
+		submenu := &rawJSON.submenus[i]
 
 		if submenu.Topmenu != nil {
-			submenu.TopmenuID, err = assignFKPtr(submenu.Topmenu, l.Topmenus)
+			submenu.TopmenuID, err = assignFKPtr(submenu.Topmenu, L.Topmenus)
 			if err != nil {
 				return nil, err
 			}
@@ -64,16 +64,16 @@ func (l *Lookup) extractSubmenus() ([]seedtypes.Submenu, error) {
 		submenus = append(submenus, *submenu)
 	}
 
-	return dedupeRows(submenus, l.Hashes), nil
+	return dedupeRows(submenus, hashes), nil
 }
 
-func (l *Lookup) getSubmenuUsers(s seedtypes.Submenu) ([]seedtypes.CharacterClass, error) {
-	return getResources(s.Users, l.CharClasses)
+func getSubmenuUsers(s seedtypes.Submenu) ([]seedtypes.CharacterClass, error) {
+	return GetResources(s.Users, L.CharClasses)
 }
 
-func (l *Lookup) seedJuncSubmenusUsers(qtx *database.Queries, ctx context.Context) error {
+func seedJuncSubmenusUsers(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "submenus + users"
-	jParams, err := processJunctions(l, desc, l.json.submenus, l.getSubmenuUsers)
+	jParams, err := processJunctions(desc, rawJSON.submenus, getSubmenuUsers)
 	if err != nil {
 		return err
 	}

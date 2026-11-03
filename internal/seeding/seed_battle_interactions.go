@@ -10,8 +10,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) loop3SeedBattleInteractions(qtx *database.Queries, ctx context.Context) error {
-	bis, err := l.extractBattleInteractions()
+func loop3SeedBattleInteractions(qtx *database.Queries, ctx context.Context) error {
+	bis, err := extractBattleInteractions()
 	if err != nil {
 		return err
 	}
@@ -46,19 +46,19 @@ func (l *Lookup) loop3SeedBattleInteractions(qtx *database.Queries, ctx context.
 	}
 
 	for _, row := range dbRows {
-		l.Hashes[row.DataHash] = row.ID
+		hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
-func (l *Lookup) extractBattleInteractions() ([]seedtypes.BattleInteraction, error) {
+func extractBattleInteractions() ([]seedtypes.BattleInteraction, error) {
 	bis := []seedtypes.BattleInteraction{}
 
-	for i := range l.json.playerAbilities {
-		ability := &l.json.playerAbilities[i]
+	for i := range rawJSON.playerAbilities {
+		ability := &rawJSON.playerAbilities[i]
 
-		bisNew, err := l.prepareBattleInteractions(ability.BattleInteractions)
+		bisNew, err := prepareBattleInteractions(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -66,10 +66,10 @@ func (l *Lookup) extractBattleInteractions() ([]seedtypes.BattleInteraction, err
 		bis = append(bis, bisNew...)
 	}
 
-	for i := range l.json.overdriveAbilities {
-		ability := &l.json.overdriveAbilities[i]
+	for i := range rawJSON.overdriveAbilities {
+		ability := &rawJSON.overdriveAbilities[i]
 
-		bisNew, err := l.prepareBattleInteractions(ability.BattleInteractions)
+		bisNew, err := prepareBattleInteractions(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -77,10 +77,10 @@ func (l *Lookup) extractBattleInteractions() ([]seedtypes.BattleInteraction, err
 		bis = append(bis, bisNew...)
 	}
 
-	for i := range l.json.items {
-		item := &l.json.items[i]
+	for i := range rawJSON.items {
+		item := &rawJSON.items[i]
 
-		bisNew, err := l.prepareBattleInteractions(item.BattleInteractions)
+		bisNew, err := prepareBattleInteractions(item.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -88,10 +88,10 @@ func (l *Lookup) extractBattleInteractions() ([]seedtypes.BattleInteraction, err
 		bis = append(bis, bisNew...)
 	}
 
-	for i := range l.json.triggerCommands {
-		command := &l.json.triggerCommands[i]
+	for i := range rawJSON.triggerCommands {
+		command := &rawJSON.triggerCommands[i]
 
-		bisNew, err := l.prepareBattleInteractions(command.BattleInteractions)
+		bisNew, err := prepareBattleInteractions(command.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -99,10 +99,10 @@ func (l *Lookup) extractBattleInteractions() ([]seedtypes.BattleInteraction, err
 		bis = append(bis, bisNew...)
 	}
 
-	for i := range l.json.miscAbilities {
-		ability := &l.json.miscAbilities[i]
+	for i := range rawJSON.miscAbilities {
+		ability := &rawJSON.miscAbilities[i]
 
-		bisNew, err := l.prepareBattleInteractions(ability.BattleInteractions)
+		bisNew, err := prepareBattleInteractions(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -110,10 +110,10 @@ func (l *Lookup) extractBattleInteractions() ([]seedtypes.BattleInteraction, err
 		bis = append(bis, bisNew...)
 	}
 
-	for i := range l.json.enemyAbilities {
-		ability := &l.json.enemyAbilities[i]
+	for i := range rawJSON.enemyAbilities {
+		ability := &rawJSON.enemyAbilities[i]
 
-		bisNew, err := l.prepareBattleInteractions(ability.BattleInteractions)
+		bisNew, err := prepareBattleInteractions(ability.BattleInteractions)
 		if err != nil {
 			return nil, err
 		}
@@ -121,23 +121,23 @@ func (l *Lookup) extractBattleInteractions() ([]seedtypes.BattleInteraction, err
 		bis = append(bis, bisNew...)
 	}
 
-	return dedupeRows(bis, l.Hashes), nil
+	return dedupeRows(bis, hashes), nil
 }
 
-func (l *Lookup) prepareBattleInteractions(bis []seedtypes.BattleInteraction) ([]seedtypes.BattleInteraction, error) {
+func prepareBattleInteractions(bis []seedtypes.BattleInteraction) ([]seedtypes.BattleInteraction, error) {
 	bisNew := []seedtypes.BattleInteraction{}
 	var err error
 
 	for j := range bis {
 		bi := &bis[j]
 
-		bi.Accuracy.ID, err = l.GetHashID(bi.Accuracy)
+		bi.Accuracy.ID, err = GetHashID(bi.Accuracy)
 		if err != nil {
 			return nil, err
 		}
 
 		if bi.InflictedDelay != nil {
-			bi.InflictedDelay.ID, err = l.GetHashID(bi.InflictedDelay)
+			bi.InflictedDelay.ID, err = GetHashID(bi.InflictedDelay)
 			if err != nil {
 				return nil, err
 			}
@@ -149,36 +149,36 @@ func (l *Lookup) prepareBattleInteractions(bis []seedtypes.BattleInteraction) ([
 	return bisNew, nil
 }
 
-func (l *Lookup) completeBattleInteractions(bis []seedtypes.BattleInteraction) error {
+func completeBattleInteractions(bis []seedtypes.BattleInteraction) error {
 	for i := range bis {
 		bi := &bis[i]
 
-		err := l.assignID(bi)
+		err := assignID(bi)
 		if err != nil {
 			return err
 		}
 
-		err = l.completeDamage(bi.Damage)
+		err = completeDamage(bi.Damage)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, bi.InflictedStatusConditions)
+		err = assignIDs(bi.InflictedStatusConditions)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, bi.CopiedStatusConditions)
+		err = assignIDs(bi.CopiedStatusConditions)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, bi.StatChanges)
+		err = assignIDs(bi.StatChanges)
 		if err != nil {
 			return err
 		}
 
-		err = assignIDs(l, bi.ModifierChanges)
+		err = assignIDs(bi.ModifierChanges)
 		if err != nil {
 			return err
 		}
