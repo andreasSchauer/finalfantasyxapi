@@ -19,7 +19,7 @@ func getLocContextParams[T seeding.Lookupable, R any, A APIResource](cfg *Config
 	var locContextID sql.NullInt32
 	var locContextType string
 
-	locID, err := nullInt32FromIDQuery(r, cfg.E.Locations, QpnLocation, i.queryLookup)
+	locID, err := nullID(r, cfg.E.Locations, QpnLocation, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -29,7 +29,7 @@ func getLocContextParams[T seeding.Lookupable, R any, A APIResource](cfg *Config
 		locContextType = string(ViewSourceTypeLocation)
 	}
 
-	subLocID, err := nullInt32FromIDQuery(r, cfg.E.Sublocations, QpnSublocation, i.queryLookup)
+	subLocID, err := nullID(r, cfg.E.Sublocations, QpnSublocation, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -39,7 +39,7 @@ func getLocContextParams[T seeding.Lookupable, R any, A APIResource](cfg *Config
 		locContextType = string(ViewSourceTypeSublocation)
 	}
 
-	areaID, err := nullInt32FromIDQuery(r, cfg.E.Areas, QpnArea, i.queryLookup)
+	areaID, err := nullID(r, cfg.E.Areas, QpnArea, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}

@@ -33,6 +33,29 @@ func (p turnOrderParty) getDuplicateKey() string {
 	})
 }
 
+/*
+
+turnOrderMon
+- *turnOrderMonLookup
+	- monsterID
+	- *altState
+	- *turnOderMonOverrides
+		- *agility
+		- *firstStrike
+- *turnOrderMonCustom
+	- name
+	- agility
+	- firstStrike
+- *status
+
+- look up the monster and assign name, agility, firstStrike via id and altState
+- override those values based on overrides
+- do the other path where you can directly assign the three values
+- add the status
+- 
+
+*/
+
 // use the same separation that is used for crit chance
 type turnOrderMon struct {
 	MonsterID   *int32  `json:"monster_id,omitempty"`

@@ -14,7 +14,7 @@ type avlParams struct {
 	preAirship     bool
 }
 
-func (i handlerInput [T, R, A]) queryAvlGetParams(cfg *Config, r *http.Request) (avlParams, error) {
+func (i handlerInput[T, R, A]) queryAvlGetParams(cfg *Config, r *http.Request) (avlParams, error) {
 	queryParamAvl := i.queryLookup[QpnAvailability]
 
 	availabilities, err := queryParamAvl.parseEnumList(cfg, r, cfg.T.AvailabilityType)
@@ -50,13 +50,13 @@ func (i handlerInput [T, R, A]) queryAvlGetParams(cfg *Config, r *http.Request) 
 	return params, nil
 }
 
-func (i handlerInput [T, R, A]) queryAvlRepGetParams(cfg *Config, r *http.Request) (avlParams, error) {
+func (i handlerInput[T, R, A]) queryAvlRepGetParams(cfg *Config, r *http.Request) (avlParams, error) {
 	params, errAvl := i.queryAvlGetParams(cfg, r)
 	if errExceptEmptyQuery(errAvl) {
 		return avlParams{}, errAvl
 	}
 
-	isRepeatable, errRepl := nullBoolFromBoolQuery(r, QpnRepeatable, i.queryLookup)
+	isRepeatable, errRepl := nullBool(r, QpnRepeatable, i.queryLookup)
 	if errExceptEmptyQuery(errRepl) {
 		return avlParams{}, errRepl
 	}

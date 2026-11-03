@@ -1,29 +1,29 @@
 package helpers
 
 func GetIntPtr(i int) *int {
-	return &i
+	return new(i)
 }
 
 func GetInt32Ptr(i int32) *int32 {
-	return &i
+	return new(i)
 }
 
 func GetFloat32Ptr(f float32) *float32 {
-	return &f
+	return new(f)
 }
 
 func GetFloat64Ptr(f float64) *float64 {
-	return &f
+	return new(f)
 }
 
 func GetStrPtr(s string) *string {
-	return &s
+	return new(s)
 }
 
 func GetBoolPtr(b bool) *bool {
-	return &b
+	return new(b)
 }
 
 func GetStructPtr[T any](obj T) *T {
-	return &obj
+	return new(obj)
 }

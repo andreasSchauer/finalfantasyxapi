@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 )
 
-func nullBoolFromBoolQuery(r *http.Request, queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullBool, error) {
+func nullBool(r *http.Request, queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullBool, error) {
 	queryParam := queryLookup[queryName]
 
 	b, err := queryParam.parseBool(r)
@@ -19,7 +19,7 @@ func nullBoolFromBoolQuery(r *http.Request, queryName QueryParamName, queryLooku
 	return h.GetNullBool(&b), nil
 }
 
-func nullInt32FromIntQuery(r *http.Request, queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullInt32, error) {
+func nullInt32(r *http.Request, queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
 	integer, err := queryParam.parseInt(r)
@@ -31,7 +31,7 @@ func nullInt32FromIntQuery(r *http.Request, queryName QueryParamName, queryLooku
 	return h.GetNullInt32(&integer32), nil
 }
 
-func nullStringFromValueQuery(r *http.Request, queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullString, error) {
+func nullValue(r *http.Request, queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullString, error) {
 	queryParam := queryLookup[queryName]
 
 	value, err := queryParam.parseValue(r)
@@ -42,7 +42,7 @@ func nullStringFromValueQuery(r *http.Request, queryName QueryParamName, queryLo
 	return h.GetNullString(&value), nil
 }
 
-func nullInt32FromIDQuery[T seeding.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullInt32, error) {
+func nullID[T seeding.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := queryParam.parseID(r, i.objLookup)
@@ -53,7 +53,7 @@ func nullInt32FromIDQuery[T seeding.Lookupable, R any, A APIResource](r *http.Re
 	return h.GetNullInt32(&id), nil
 }
 
-func nullInt32FromNameIDQuery[T seeding.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullInt32, error) {
+func nullNameID[T seeding.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := queryParam.parseNameID(r, i.resTypeSingle, i.objLookup)
@@ -64,7 +64,7 @@ func nullInt32FromNameIDQuery[T seeding.Lookupable, R any, A APIResource](r *htt
 	return h.GetNullInt32(&id), nil
 }
 
-func nullStringFromEnumQuery[E, N any](r *http.Request, queryName QueryParamName, et EnumType[E, N], queryLookup map[QueryParamName]QueryParam) (sql.NullString, error) {
+func nullEnum[E, N any](r *http.Request, queryName QueryParamName, et EnumType[E, N], queryLookup map[QueryParamName]QueryParam) (sql.NullString, error) {
 	queryParam := queryLookup[queryName]
 
 	enumRes, err := queryParam.parseEnum(r, et)

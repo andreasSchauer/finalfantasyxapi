@@ -11,7 +11,7 @@ import (
 func getMixesByItem(cfg *Config, r *http.Request, ctx context.Context, firstItemID int32) ([]int32, error) {
 	i := cfg.E.Mixes
 
-	secondItemIDPtr, err := nullInt32FromIDQuery(r, cfg.E.Items, QpnSecondItem, i.queryLookup)
+	secondItemIDPtr, err := nullID(r, cfg.E.Items, QpnSecondItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

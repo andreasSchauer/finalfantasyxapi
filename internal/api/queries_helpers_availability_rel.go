@@ -28,7 +28,7 @@ func (i handlerInput[T, R, A]) queryAvlRelGetParams(cfg *Config, r *http.Request
 
 	_, ok := i.queryLookup[QpnRelRepeatable]
 	if ok {
-		repeatable, err = nullBoolFromBoolQuery(r, QpnRelRepeatable, i.queryLookup)
+		repeatable, err = nullBool(r, QpnRelRepeatable, i.queryLookup)
 		if errExceptEmptyQuery(err) {
 			return RelAvlParams{}, err
 		}

@@ -7,7 +7,7 @@ import (
 )
 
 type Aeon struct {
-	ID int32 `json:"id"`
+	ID 					int32 			`json:"id"`
 	PlayerUnit
 	UnlockCondition     string          `json:"unlock_condition"`
 	LocationArea        LocationArea    `json:"location_area"`

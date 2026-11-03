@@ -10,19 +10,19 @@ import (
 )
 
 // validates typed-QueryParam and checks emptiness
-func parseTypedQuery(r *http.Request, queryParam QueryParam) (string, string, error) {
-	query, err := queryParam.checkEmpty(r)
+func (q QueryParam) parseTyped(r *http.Request) (string, string, error) {
+	query, err := q.checkEmpty(r)
 	if err != nil {
 		return "", "", err
 	}
 
 	resType, unitStr, found := strings.Cut(query, ":")
 	if !found {
-		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", queryParam.Name, query, queryParam.Usage), nil)
+		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", q.Name, query, q.Usage), nil)
 	}
 
-	if !slices.Contains(queryParam.AllowedResTypes, resType) {
-		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resource type '%s' for parameter '%s'. supported resource types: %s", resType, queryParam.Name, h.FormatStringSlice(queryParam.AllowedResTypes)), nil)
+	if !slices.Contains(q.AllowedResTypes, resType) {
+		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resource type '%s' for parameter '%s'. supported resource types: %s", resType, q.Name, h.FormatStringSlice(q.AllowedResTypes)), nil)
 	}
 
 	return resType, unitStr, nil
