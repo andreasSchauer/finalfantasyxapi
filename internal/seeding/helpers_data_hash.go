@@ -2,40 +2,23 @@ package seeding
 
 import (
 	"fmt"
-	"strings"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func generateDataHash(h Hashable) string {
-	return CombineFields(h.ToHashFields())
+func generateDataHash(hs Hashable) string {
+	return h.CombineFields(hs.ToHashFields())
 }
 
 func generateJunctionHash(j Junction, desc string) string {
-	return CombineFields(j.ToHashFieldsJ(desc))
+	return h.CombineFields(j.ToHashFieldsJ(desc))
 }
 
-func (l *Lookup) GetHashID(h Hashable) (int32, error) {
-	id, ok := l.Hashes[generateDataHash(h)]
+func (l *Lookup) GetHashID(hs Hashable) (int32, error) {
+	id, ok := l.Hashes[generateDataHash(hs)]
 	if !ok {
-		return 0, fmt.Errorf("no data hash available for %s", CombineFields(h.ToHashFields()))
+		return 0, fmt.Errorf("no data hash available for %s", h.CombineFields(hs.ToHashFields()))
 	}
 
 	return id, nil
-}
-
-func CombineFields(fields []any) string {
-	var builder strings.Builder
-
-	for i, field := range fields {
-		if i > 0 {
-			builder.WriteString("|")
-		}
-
-		if field == nil {
-			builder.WriteString("NULL")
-		} else {
-			fmt.Fprint(&builder, field)
-		}
-	}
-
-	return builder.String()
 }

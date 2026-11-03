@@ -27,7 +27,7 @@ type turnOrderParty struct {
 }
 
 func (p turnOrderParty) getDuplicateKey() string {
-	return seeding.CombineFields([]any{
+	return h.CombineFields([]any{
 		fmt.Sprintf("%T", p),
 		p.UnitID,
 	})
@@ -67,7 +67,7 @@ type turnOrderMon struct {
 }
 
 func (p turnOrderMon) getDuplicateKey() string {
-	return seeding.CombineFields([]any{
+	return h.CombineFields([]any{
 		fmt.Sprintf("%T", p),
 		h.DerefOrNil(p.MonsterID),
 		h.DerefOrNil(p.AltState),

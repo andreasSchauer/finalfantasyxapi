@@ -23,7 +23,7 @@ type LookupableKey interface {
 
 func Key(l LookupableKey) string {
 	fields := l.ToKeyFields()
-	return CombineFields(fields)
+	return h.CombineFields(fields)
 }
 
 type Hashable interface {
