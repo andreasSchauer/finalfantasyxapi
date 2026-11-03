@@ -34,11 +34,6 @@ func LoadDatabase(db *database.Queries, dbConn *sql.DB) error {
 	}
 
 	dbHash, _ := db.GetDbState(ctx)
-	/*
-		if err != nil {
-			return nil, fmt.Errorf("couldn't get database state: %v", err)
-		}
-	*/
 
 	if cacheHash == dbHash {
 		err = skipSeeding(db, ctx)
