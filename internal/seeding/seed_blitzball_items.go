@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.Context) error {
@@ -30,7 +31,7 @@ func (l *Lookup) loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.
 	for i, row := range dbRows {
 		positions[i].ID = row.ID
 		l.json.blitzballPositions[i].ID = row.ID
-		l.Positions[Key(positions[i])] = positions[i]
+		l.Positions[seedtypes.Key(positions[i])] = positions[i]
 		l.PositionsID[row.ID] = positions[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -68,8 +69,8 @@ func (l *Lookup) loop4SeedBlitzballItems(qtx *database.Queries, ctx context.Cont
 	return nil
 }
 
-func (l *Lookup) extractBlitzballItems() ([]BlitzballItem, error) {
-	items := []BlitzballItem{}
+func (l *Lookup) extractBlitzballItems() ([]seedtypes.BlitzballItem, error) {
+	items := []seedtypes.BlitzballItem{}
 	var err error
 
 	for i := range l.json.blitzballPositions {
@@ -99,7 +100,7 @@ func (l *Lookup) completeBlitzballPositions() error {
 			return err
 		}
 
-		l.Positions[Key(*pos)] = *pos
+		l.Positions[seedtypes.Key(*pos)] = *pos
 		l.PositionsID[pos.ID] = *pos
 	}
 

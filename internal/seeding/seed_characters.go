@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop4SeedCharacters(qtx *database.Queries, ctx context.Context) error {
@@ -45,7 +46,7 @@ func (l *Lookup) loop4SeedCharacters(qtx *database.Queries, ctx context.Context)
 	for i, row := range dbRows {
 		chars[i].ID = row.ID
 		l.json.characters[i].ID = row.ID
-		l.Characters[Key(chars[i])] = chars[i]
+		l.Characters[seedtypes.Key(chars[i])] = chars[i]
 		l.CharactersID[row.ID] = chars[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -53,8 +54,8 @@ func (l *Lookup) loop4SeedCharacters(qtx *database.Queries, ctx context.Context)
 	return nil
 }
 
-func (l *Lookup) extractCharacters() ([]Character, error) {
-	chars := []Character{}
+func (l *Lookup) extractCharacters() ([]seedtypes.Character, error) {
+	chars := []seedtypes.Character{}
 	var err error
 
 	for i := range l.json.characters {
@@ -98,14 +99,14 @@ func (l *Lookup) completeCharacters() error {
 			return err
 		}
 
-		l.Characters[Key(character)] = *character
+		l.Characters[seedtypes.Key(character)] = *character
 		l.CharactersID[character.ID] = *character
 	}
 
 	return nil
 }
 
-func (l *Lookup) getCharacterBaseStats(c Character) ([]BaseStat, error) {
+func (l *Lookup) getCharacterBaseStats(c seedtypes.Character) ([]seedtypes.BaseStat, error) {
 	return c.BaseStats, nil
 }
 

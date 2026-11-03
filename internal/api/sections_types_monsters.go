@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type MonsterItemsSimple struct {
 	StealCommon         *string  `json:"steal_common,omitempty"`
@@ -13,7 +13,7 @@ type MonsterItemsSimple struct {
 	OtherItems          []string `json:"other_items,omitempty"`
 }
 
-func convertMonsterItemsSimple(cfg *Config, items seeding.MonsterItems) MonsterItemsSimple {
+func convertMonsterItemsSimple(cfg *Config, items seedtypes.MonsterItems) MonsterItemsSimple {
 	return MonsterItemsSimple{
 		StealCommon:         convertObjPtr(cfg, items.StealCommon, convertItemAmountSimple),
 		StealRare:           convertObjPtr(cfg, items.StealRare, convertItemAmountSimple),
@@ -31,7 +31,7 @@ type MonsterEquipmentSimple struct {
 	ArmorAbilities  []string `json:"armor_abilities"`
 }
 
-func convertMonsterEquipmentSimple(cfg *Config, equipment seeding.MonsterEquipment) MonsterEquipmentSimple {
+func convertMonsterEquipmentSimple(cfg *Config, equipment seedtypes.MonsterEquipment) MonsterEquipmentSimple {
 	return MonsterEquipmentSimple{
 		WeaponAbilities: convertObjSlice(cfg, equipment.WeaponAbilities, monsterAutoAbilityString),
 		ArmorAbilities:  convertObjSlice(cfg, equipment.ArmorAbilities, monsterAutoAbilityString),

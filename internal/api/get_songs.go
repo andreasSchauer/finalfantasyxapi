@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource], id int32) (Song, error) {
+func (cfg *Config) getSong(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResource], id int32) (Song, error) {
 	song, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Song{}, err
@@ -47,7 +47,7 @@ func (cfg *Config) getSong(r *http.Request, i handlerInput[seeding.Song, Song, N
 	return response, nil
 }
 
-func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seeding.Song, Song, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

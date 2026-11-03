@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedSpheres(qtx *database.Queries, ctx context.Context) error {
@@ -45,7 +46,7 @@ func (l *Lookup) loop3SeedSpheres(qtx *database.Queries, ctx context.Context) er
 	for i, row := range dbRows {
 		spheres[i].ID = row.ID
 		l.json.spheres[i].ID = row.ID
-		l.Spheres[Key(spheres[i])] = spheres[i]
+		l.Spheres[seedtypes.Key(spheres[i])] = spheres[i]
 		l.SpheresID[row.ID] = spheres[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -53,8 +54,8 @@ func (l *Lookup) loop3SeedSpheres(qtx *database.Queries, ctx context.Context) er
 	return nil
 }
 
-func (l *Lookup) extractSpheres() ([]Sphere, error) {
-	spheres := []Sphere{}
+func (l *Lookup) extractSpheres() ([]seedtypes.Sphere, error) {
+	spheres := []seedtypes.Sphere{}
 	var err error
 
 	for i := range l.json.spheres {
@@ -105,8 +106,8 @@ func (l *Lookup) loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Contex
 	return nil
 }
 
-func (l *Lookup) extractCreatedNodes() []CreatedNode {
-	createdNodes := []CreatedNode{}
+func (l *Lookup) extractCreatedNodes() []seedtypes.CreatedNode {
+	createdNodes := []seedtypes.CreatedNode{}
 
 	for _, sphere := range l.json.spheres {
 		if sphere.CreatedNode != nil {
@@ -144,8 +145,8 @@ func (l *Lookup) loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractTargetableNodes() []TargetableNode {
-	nodes := []TargetableNode{}
+func (l *Lookup) extractTargetableNodes() []seedtypes.TargetableNode {
+	nodes := []seedtypes.TargetableNode{}
 
 	for i := range l.json.spheres {
 		sphere := &l.json.spheres[i]
@@ -153,7 +154,7 @@ func (l *Lookup) extractTargetableNodes() []TargetableNode {
 		for j := range sphere.TargetableNodes {
 			nodeString := sphere.TargetableNodes[j]
 
-			node := TargetableNode{
+			node := seedtypes.TargetableNode{
 				SphereID: sphere.ID,
 				Node:     nodeString,
 			}

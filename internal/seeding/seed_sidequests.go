@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedSidequests(qtx *database.Queries, ctx context.Context) error {
@@ -31,7 +32,7 @@ func (l *Lookup) loop5SeedSidequests(qtx *database.Queries, ctx context.Context)
 	for i, row := range dbRows {
 		sidequests[i].ID = row.ID
 		l.json.sidequests[i].ID = row.ID
-		l.Sidequests[Key(sidequests[i])] = sidequests[i]
+		l.Sidequests[seedtypes.Key(sidequests[i])] = sidequests[i]
 		l.SidequestsID[row.ID] = sidequests[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -39,8 +40,8 @@ func (l *Lookup) loop5SeedSidequests(qtx *database.Queries, ctx context.Context)
 	return nil
 }
 
-func (l *Lookup) extractSidequests() ([]Sidequest, error) {
-	sidequests := []Sidequest{}
+func (l *Lookup) extractSidequests() ([]seedtypes.Sidequest, error) {
+	sidequests := []seedtypes.Sidequest{}
 	var err error
 
 	for i := range l.json.sidequests {
@@ -66,7 +67,7 @@ func (l *Lookup) completeSidequests() error {
 			return err
 		}
 
-		l.Sidequests[Key(sidequest)] = *sidequest
+		l.Sidequests[seedtypes.Key(sidequest)] = *sidequest
 		l.SidequestsID[sidequest.ID] = *sidequest
 	}
 
@@ -98,7 +99,7 @@ func (l *Lookup) loop6SeedSubquests(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		subquests[i].ID = row.ID
-		l.Subquests[Key(subquests[i])] = subquests[i]
+		l.Subquests[seedtypes.Key(subquests[i])] = subquests[i]
 		l.SubquestsID[row.ID] = subquests[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -106,8 +107,8 @@ func (l *Lookup) loop6SeedSubquests(qtx *database.Queries, ctx context.Context) 
 	return nil
 }
 
-func (l *Lookup) extractSubquests() ([]Subquest, error) {
-	quests := []Subquest{}
+func (l *Lookup) extractSubquests() ([]seedtypes.Subquest, error) {
+	quests := []seedtypes.Subquest{}
 	var err error
 
 	for i := range l.json.sidequests {

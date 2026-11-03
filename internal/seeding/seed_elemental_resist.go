@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop2SeedElementalResists(qtx *database.Queries, ctx context.Context) error {
@@ -32,7 +33,7 @@ func (l *Lookup) loop2SeedElementalResists(qtx *database.Queries, ctx context.Co
 
 	for i, row := range dbRows {
 		resists[i].ID = row.ID
-		l.ElementalResists[Key(resists[i])] = resists[i]
+		l.ElementalResists[seedtypes.Key(resists[i])] = resists[i]
 		l.ElementalResistsID[row.ID] = resists[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -40,8 +41,8 @@ func (l *Lookup) loop2SeedElementalResists(qtx *database.Queries, ctx context.Co
 	return nil
 }
 
-func (l *Lookup) extractElementalResists() ([]ElementalResist, error) {
-	resists := []ElementalResist{}
+func (l *Lookup) extractElementalResists() ([]seedtypes.ElementalResist, error) {
+	resists := []seedtypes.ElementalResist{}
 	var err error
 
 	for i := range l.json.autoAbilities {
@@ -101,8 +102,8 @@ func (l *Lookup) extractElementalResists() ([]ElementalResist, error) {
 	return dedupeRows(resists, l.Hashes), nil
 }
 
-func (l *Lookup) extractAltStateElemResists(state *AlteredState) ([]ElementalResist, error) {
-	elemResists := []ElementalResist{}
+func (l *Lookup) extractAltStateElemResists(state *seedtypes.AlteredState) ([]seedtypes.ElementalResist, error) {
+	elemResists := []seedtypes.ElementalResist{}
 	var err error
 
 	for i := range state.Changes {

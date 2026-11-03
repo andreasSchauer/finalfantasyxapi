@@ -5,6 +5,7 @@ import (
 	"slices"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) saveCompletedLookups() error {
@@ -72,11 +73,11 @@ func (l *Lookup) saveCompletedLookups() error {
 	return err
 }
 
-func writeLookupFile[T Lookupable](fileName string, lookup map[int32]T) error {
+func writeLookupFile[T seedtypes.Lookupable](fileName string, lookup map[int32]T) error {
 	return h.WriteFile("data_lookups", fileName, lookupToSlice(lookup))
 }
 
-func lookupToSlice[T Lookupable](lookup map[int32]T) []T {
+func lookupToSlice[T seedtypes.Lookupable](lookup map[int32]T) []T {
 	var s []T
 
 	for _, obj := range lookup {
@@ -164,7 +165,7 @@ func (l *Lookup) assignLookups() error {
 	return err
 }
 
-func assignLookup[T Lookupable](fileName string, keyLookup *map[string]T, idLookup *map[int32]T) error {
+func assignLookup[T seedtypes.Lookupable](fileName string, keyLookup *map[string]T, idLookup *map[int32]T) error {
 	lookupPath := filepath.Join("data_lookups", fileName)
 
 	var dataSlice []T
@@ -184,17 +185,17 @@ func assignLookup[T Lookupable](fileName string, keyLookup *map[string]T, idLook
 	return nil
 }
 
-func sliceToKeyLookup[T Lookupable](slice []T) map[string]T {
+func sliceToKeyLookup[T seedtypes.Lookupable](slice []T) map[string]T {
 	lookup := make(map[string]T, len(slice))
 
 	for _, obj := range slice {
-		lookup[Key(obj)] = obj
+		lookup[seedtypes.Key(obj)] = obj
 	}
 
 	return lookup
 }
 
-func sliceToIDLookup[T Lookupable](slice []T) map[int32]T {
+func sliceToIDLookup[T seedtypes.Lookupable](slice []T) map[int32]T {
 	lookup := make(map[int32]T, len(slice))
 
 	for _, obj := range slice {

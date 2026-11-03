@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedAlts(qtx *database.Queries, ctx context.Context) error {
@@ -43,8 +44,8 @@ func (l *Lookup) loop5SeedAlts(qtx *database.Queries, ctx context.Context) error
 	return nil
 }
 
-func (l *Lookup) extractAlts() ([]Alt, error) {
-	changes := []Alt{}
+func (l *Lookup) extractAlts() ([]seedtypes.Alt, error) {
+	changes := []seedtypes.Alt{}
 
 	for i := range l.json.monsters {
 		mon := &l.json.monsters[i]
@@ -60,8 +61,8 @@ func (l *Lookup) extractAlts() ([]Alt, error) {
 	return dedupeRows(changes, l.Hashes), nil
 }
 
-func (l *Lookup) prepareAlts(states []AlteredState) ([]Alt, error) {
-	changes := []Alt{}
+func (l *Lookup) prepareAlts(states []seedtypes.AlteredState) ([]seedtypes.Alt, error) {
+	changes := []seedtypes.Alt{}
 	var err error
 
 	for i := range states {
@@ -89,7 +90,7 @@ func (l *Lookup) prepareAlts(states []AlteredState) ([]Alt, error) {
 	return changes, nil
 }
 
-func (l *Lookup) completeAlts(changes []Alt) error {
+func (l *Lookup) completeAlts(changes []seedtypes.Alt) error {
 	for i := range changes {
 		change := &changes[i]
 

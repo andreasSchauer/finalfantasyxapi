@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 var errNotAnID = errors.New("not an id")
@@ -50,7 +50,7 @@ func newHTTPError(code int, msg string, err error) HTTPError {
 	}
 }
 
-func newHTTPErrorDB(fetchType ResTypePlural, parentItem seeding.Lookupable, err error) HTTPError {
+func newHTTPErrorDB(fetchType ResTypePlural, parentItem seedtypes.Lookupable, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
 }
 
@@ -58,7 +58,7 @@ func newHTTPErrorDBPairs(childResType, parentResType ResTypeSingle, err error) H
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs", childResType, parentResType), err)
 }
 
-func newHTTPErrorDBOne(fetchType ResTypeSingle, parentItem seeding.Lookupable, err error) HTTPError {
+func newHTTPErrorDBOne(fetchType ResTypeSingle, parentItem seedtypes.Lookupable, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
 }
 

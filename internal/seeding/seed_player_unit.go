@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context) error {
@@ -29,7 +30,7 @@ func (l *Lookup) loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context
 
 	for i, row := range dbRows {
 		units[i].ID = row.ID
-		l.PlayerUnits[Key(units[i])] = units[i]
+		l.PlayerUnits[seedtypes.Key(units[i])] = units[i]
 		l.PlayerUnitsID[row.ID] = units[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -37,8 +38,8 @@ func (l *Lookup) loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context
 	return nil
 }
 
-func (l *Lookup) extractPlayerUnits() []PlayerUnit {
-	playerUnits := []PlayerUnit{}
+func (l *Lookup) extractPlayerUnits() []seedtypes.PlayerUnit {
+	playerUnits := []seedtypes.PlayerUnit{}
 
 	for i := range l.json.characters {
 		c := &l.json.characters[i]

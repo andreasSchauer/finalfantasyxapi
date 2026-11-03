@@ -3,11 +3,11 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getPrimerRelationships(cfg *Config, r *http.Request, primer seeding.Primer) (Primer, error) {
+func getPrimerRelationships(cfg *Config, r *http.Request, primer seedtypes.Primer) (Primer, error) {
 	var rel Primer
 	g, ctx := errgroup.WithContext(r.Context())
 

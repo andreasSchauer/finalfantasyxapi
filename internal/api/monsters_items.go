@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type MonsterItems struct {
@@ -22,7 +22,7 @@ func (mi MonsterItems) IsZero() bool {
 	return mi.DropChance == 0 && mi.OtherItemsCondition == nil
 }
 
-func convertMonsterItems(cfg *Config, items seeding.MonsterItems) MonsterItems {
+func convertMonsterItems(cfg *Config, items seedtypes.MonsterItems) MonsterItems {
 	monItems := MonsterItems{
 		DropChance:          items.DropChance,
 		DropCondition:       items.DropCondition,

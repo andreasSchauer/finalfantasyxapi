@@ -3,11 +3,11 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getLocationRelationships(cfg *Config, r *http.Request, location seeding.Location) (Location, error) {
+func getLocationRelationships(cfg *Config, r *http.Request, location seedtypes.Location) (Location, error) {
 	var rel Location
 	var locRel LocRel
 	g, ctx := errgroup.WithContext(r.Context())

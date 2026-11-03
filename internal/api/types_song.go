@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type Song struct {
 	ID                   int32                `json:"id"`
@@ -32,7 +32,7 @@ type BackgroundMusic struct {
 	Areas                  []AreaAPIResource `json:"areas"`
 }
 
-func convertBackgroundMusic(cfg *Config, bm seeding.BackgroundMusic) BackgroundMusic {
+func convertBackgroundMusic(cfg *Config, bm seedtypes.BackgroundMusic) BackgroundMusic {
 	return BackgroundMusic{
 		Condition:              bm.Condition,
 		ReplacesEncounterMusic: bm.ReplacesEncounterMusic,
@@ -49,7 +49,7 @@ type Cue struct {
 	EndTrigger             *string           `json:"end_trigger,omitempty"`
 }
 
-func convertCue(cfg *Config, cue seeding.Cue) Cue {
+func convertCue(cfg *Config, cue seedtypes.Cue) Cue {
 	var triggerAreaPtr *AreaAPIResource
 
 	if cue.TriggerLocationArea != nil {

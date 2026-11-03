@@ -8,6 +8,7 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type MixSimple struct {
@@ -36,7 +37,7 @@ func createMixSimple(cfg *Config, r *http.Request, id int32, _ Subsection) (Simp
 		itemID, _ := strconv.Atoi(segments[0])
 		item, _ := seeding.GetResourceByID(int32(itemID), cfg.L.ItemsID)
 
-		combinations = h.Filter(combinations, func(c seeding.MixCombination) bool {
+		combinations = h.Filter(combinations, func(c seedtypes.MixCombination) bool {
 			return item.Name == c.FirstItem || item.Name == c.SecondItem
 		})
 	}
@@ -52,6 +53,6 @@ func createMixSimple(cfg *Config, r *http.Request, id int32, _ Subsection) (Simp
 	return mixSimple, nil
 }
 
-func convertMixCombinationSimple(cfg *Config, mc seeding.MixCombination) string {
+func convertMixCombinationSimple(cfg *Config, mc seedtypes.MixCombination) string {
 	return fmt.Sprintf("%s + %s", mc.FirstItem, mc.SecondItem)
 }

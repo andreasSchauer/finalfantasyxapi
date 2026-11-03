@@ -5,6 +5,7 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type ShopJunction struct {
@@ -68,8 +69,8 @@ func (l *Lookup) seedJuncShopsShopItems(qtx *database.Queries, ctx context.Conte
 	return qtx.CreateShopsItemsJunctionBulk(ctx, params)
 }
 
-func (l *Lookup) getShopEquipment() []ShopEquipment {
-	shopEquipment := []ShopEquipment{}
+func (l *Lookup) getShopEquipment() []seedtypes.ShopEquipment {
+	shopEquipment := []seedtypes.ShopEquipment{}
 
 	for _, shop := range l.json.shops {
 		if shop.PreAirship != nil {
@@ -84,7 +85,7 @@ func (l *Lookup) getShopEquipment() []ShopEquipment {
 	return shopEquipment
 }
 
-func (l *Lookup) getShopEquipmentAutoAbilities(se ShopEquipment) ([]AutoAbility, error) {
+func (l *Lookup) getShopEquipmentAutoAbilities(se seedtypes.ShopEquipment) ([]seedtypes.AutoAbility, error) {
 	return getResources(se.Abilities, l.AutoAbilities)
 }
 

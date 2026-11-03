@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedElements(qtx *database.Queries, ctx context.Context) error {
@@ -30,7 +31,7 @@ func (l *Lookup) loop1SeedElements(qtx *database.Queries, ctx context.Context) e
 	for i, row := range dbRows {
 		elements[i].ID = row.ID
 		l.json.elements[i].ID = row.ID
-		l.Elements[Key(elements[i])] = elements[i]
+		l.Elements[seedtypes.Key(elements[i])] = elements[i]
 		l.ElementsID[row.ID] = elements[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -68,8 +69,8 @@ func (l *Lookup) loop2UpdateElements(qtx *database.Queries, ctx context.Context)
 	return nil
 }
 
-func (l *Lookup) extractUpdatedElements() ([]Element, error) {
-	elements := []Element{}
+func (l *Lookup) extractUpdatedElements() ([]seedtypes.Element, error) {
+	elements := []seedtypes.Element{}
 	var err error
 
 	for i := range l.json.elements {

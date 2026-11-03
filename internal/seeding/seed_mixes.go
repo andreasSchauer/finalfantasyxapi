@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedMixes(qtx *database.Queries, ctx context.Context) error {
@@ -33,7 +34,7 @@ func (l *Lookup) loop5SeedMixes(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		mixes[i].ID = row.ID
 		l.json.mixes[i].ID = row.ID
-		l.Mixes[Key(mixes[i])] = mixes[i]
+		l.Mixes[seedtypes.Key(mixes[i])] = mixes[i]
 		l.MixesID[row.ID] = mixes[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -41,18 +42,18 @@ func (l *Lookup) loop5SeedMixes(qtx *database.Queries, ctx context.Context) erro
 	return nil
 }
 
-func (l *Lookup) extractMixes() ([]Mix, error) {
-	mixes := []Mix{}
+func (l *Lookup) extractMixes() ([]seedtypes.Mix, error) {
+	mixes := []seedtypes.Mix{}
 	var err error
 
 	for i := range l.json.mixes {
 		mix := &l.json.mixes[i]
 
-		obj := LookupObject{
+		obj := seedtypes.LookupObject{
 			Name: mix.Name,
 		}
 
-		mix.OverdriveID, err = assignFK(Key(obj), l.Overdrives)
+		mix.OverdriveID, err = assignFK(seedtypes.Key(obj), l.Overdrives)
 		if err != nil {
 			return nil, err
 		}
@@ -72,7 +73,7 @@ func (l *Lookup) completeMixes() error {
 			return err
 		}
 
-		l.Mixes[Key(mix)] = *mix
+		l.Mixes[seedtypes.Key(mix)] = *mix
 		l.MixesID[mix.ID] = *mix
 	}
 
@@ -113,8 +114,8 @@ func (l *Lookup) loop6SeedMixCombinations(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractMixCombinations() ([]MixCombination, error) {
-	combos := []MixCombination{}
+func (l *Lookup) extractMixCombinations() ([]seedtypes.MixCombination, error) {
+	combos := []seedtypes.MixCombination{}
 	var err error
 
 	for i := range l.json.mixes {
@@ -125,7 +126,7 @@ func (l *Lookup) extractMixCombinations() ([]MixCombination, error) {
 			combo := &mix.PossibleCombinations[j]
 			combo.MixID = mix.ID
 
-			key := Key(combo)
+			key := seedtypes.Key(combo)
 			combo.IsBestCombo = bestComboMap[key]
 
 			combo.FirstItemID, err = assignFK(combo.FirstItem, l.Items)
@@ -151,11 +152,11 @@ func (l *Lookup) extractMixCombinations() ([]MixCombination, error) {
 	return dedupeRows(combos, l.Hashes), nil
 }
 
-func getBestComboMap(mix Mix) map[string]bool {
+func getBestComboMap(mix seedtypes.Mix) map[string]bool {
 	bestComboMap := make(map[string]bool)
 
 	for _, combo := range mix.BestCombinations {
-		key := Key(combo)
+		key := seedtypes.Key(combo)
 		bestComboMap[key] = true
 	}
 

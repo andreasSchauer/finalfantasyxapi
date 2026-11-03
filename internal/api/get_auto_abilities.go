@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource], id int32) (AutoAbility, error) {
+func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seedtypes.AutoAbility, AutoAbility, NamedAPIResource], id int32) (AutoAbility, error) {
 	autoAbility, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return AutoAbility{}, err
@@ -52,7 +52,7 @@ func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seeding.AutoAb
 	return response, nil
 }
 
-func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seeding.AutoAbility, AutoAbility, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seedtypes.AutoAbility, AutoAbility, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -4,11 +4,11 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 // query uses a list of ids as database input to filter for resources
-func (i handlerInput[T, R, A]) queryIDList[F seeding.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DBQueryIntList) IDFilter {
+func (i handlerInput[T, R, A]) queryIDList[F seedtypes.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
@@ -33,7 +33,7 @@ func (i handlerInput[T, R, A]) queryIDList[F seeding.Lookupable](cfg *Config, r 
 }
 
 // like idListQuery, but with more specialized logic in between (wrapperFn)
-func (i handlerInput[T, R, A]) queryIDListWrapper[F seeding.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, wrapperFn QueryWrapIntSlice) IDFilter {
+func (i handlerInput[T, R, A]) queryIDListWrapper[F seedtypes.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, fLookup map[string]F, wrapperFn QueryWrapIntSlice) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 

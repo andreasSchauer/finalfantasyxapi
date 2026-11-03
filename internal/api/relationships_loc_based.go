@@ -3,7 +3,7 @@ package api
 import (
 	"context"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -40,7 +40,7 @@ type LocBasedMusicQueries struct {
 	BossMusic DBQueryIntMany
 }
 
-func getMusicLocBased(cfg *Config, ctx context.Context, item seeding.Lookupable, queries LocBasedMusicQueries) (*LocBasedMusic, error) {
+func getMusicLocBased(cfg *Config, ctx context.Context, item seedtypes.Lookupable, queries LocBasedMusicQueries) (*LocBasedMusic, error) {
 	i := cfg.E.Songs
 	var music LocBasedMusic
 	g, ctx := errgroup.WithContext(ctx)

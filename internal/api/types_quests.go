@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type Quest struct {
@@ -42,7 +42,7 @@ type QuestCompletion struct {
 	Reward    ResourceAmount[TypedAPIResource] `json:"reward"`
 }
 
-func convertQuestCompletion(cfg *Config, qc seeding.QuestCompletion) QuestCompletion {
+func convertQuestCompletion(cfg *Config, qc seedtypes.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
 		Condition: qc.Condition,
 		Areas:     convertObjSlice(cfg, qc.Areas, convertCompletionArea),
@@ -59,7 +59,7 @@ func (ca CompletionArea) GetAPIResource() APIResource {
 	return ca.Area
 }
 
-func convertCompletionArea(cfg *Config, cl seeding.CompletionArea) CompletionArea {
+func convertCompletionArea(cfg *Config, cl seedtypes.CompletionArea) CompletionArea {
 	return CompletionArea{
 		Area:  locAreaToAreaAPIResource(cfg, cfg.E.Areas, cl.LocationArea),
 		Notes: cl.Notes,

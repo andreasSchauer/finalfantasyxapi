@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type NamedAPIResource struct {
@@ -44,8 +45,8 @@ func (r NamedAPIResource) NameIs(name string, version *int32) bool {
 	return r.Name == name && h.PtrsEqual(r.Version, version, h.DerefInt32Ptr)
 }
 
-func idToNamedAPIResource[T seeding.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) NamedAPIResource {
-	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
+func idToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) NamedAPIResource {
+	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
 	params := res.GetResParamsNamed()
 
 	return NamedAPIResource{
@@ -58,7 +59,7 @@ func idToNamedAPIResource[T seeding.IsNamed, R any, A APIResource](cfg *Config, 
 }
 
 // essentially parses name or name/version like a handler and then converts the id to a NamedAPIResource
-func nameToNamedAPIResource[T seeding.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], name string, version *int32) NamedAPIResource {
+func nameToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], name string, version *int32) NamedAPIResource {
 	var parseResp parseResponse
 	switch version {
 	case nil:
@@ -70,7 +71,7 @@ func nameToNamedAPIResource[T seeding.IsNamed, R any, A APIResource](cfg *Config
 	return idToNamedAPIResource(cfg, i, parseResp.ID)
 }
 
-func namePtrToNamedAPIResPtr[T seeding.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], namePtr *string, version *int32) *NamedAPIResource {
+func namePtrToNamedAPIResPtr[T seedtypes.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], namePtr *string, version *int32) *NamedAPIResource {
 	if namePtr == nil {
 		return nil
 	}
@@ -79,7 +80,7 @@ func namePtrToNamedAPIResPtr[T seeding.IsNamed, R any, A APIResource](cfg *Confi
 	return &res
 }
 
-func namesToNamedAPIResources[T seeding.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], names []string) []NamedAPIResource {
+func namesToNamedAPIResources[T seedtypes.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], names []string) []NamedAPIResource {
 	resources := make([]NamedAPIResource, 0, len(names)) // put this into more high frequency places
 
 	for _, name := range names {
@@ -126,7 +127,7 @@ func endpointsToNamedAPIResources(cfg *Config, endpoints []EndpointName) []Named
 	return resources
 }
 
-func refsToNamedAPIResources(cfg *Config, refs []seeding.AbilityReference) []NamedAPIResource {
+func refsToNamedAPIResources(cfg *Config, refs []seedtypes.AbilityReference) []NamedAPIResource {
 	abilities := []NamedAPIResource{}
 
 	for _, ref := range refs {
@@ -137,7 +138,7 @@ func refsToNamedAPIResources(cfg *Config, refs []seeding.AbilityReference) []Nam
 	return abilities
 }
 
-func refToNamedAPIResource(cfg *Config, ref seeding.AbilityReference) NamedAPIResource {
+func refToNamedAPIResource(cfg *Config, ref seedtypes.AbilityReference) NamedAPIResource {
 	var res NamedAPIResource
 
 	switch database.AbilityType(ref.AbilityType) {

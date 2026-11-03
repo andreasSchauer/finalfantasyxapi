@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource], id int32) (Monster, error) {
+func (cfg *Config) getMonster(r *http.Request, i handlerInput[seedtypes.Monster, Monster, NamedAPIResource], id int32) (Monster, error) {
 	monster, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Monster{}, err
@@ -64,7 +64,7 @@ func (cfg *Config) getMonster(r *http.Request, i handlerInput[seeding.Monster, M
 	return completeMonsterResponse(cfg, r, response)
 }
 
-func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seeding.Monster, Monster, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seedtypes.Monster, Monster, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

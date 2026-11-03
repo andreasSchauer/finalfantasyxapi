@@ -4,11 +4,12 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type DefaultAbilitiesEntry struct {
-	Name             string             `json:"name"`
-	DefaultAbilities []AbilityReference `json:"default_abilities"`
+	Name             string                       `json:"name"`
+	DefaultAbilities []seedtypes.AbilityReference `json:"default_abilities"`
 }
 
 func (l *Lookup) seedJuncDefaultAbilities(qtx *database.Queries, ctx context.Context) error {

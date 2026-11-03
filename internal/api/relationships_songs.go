@@ -3,11 +3,11 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getSongRelationships(cfg *Config, r *http.Request, song seeding.Song) (Song, error) {
+func getSongRelationships(cfg *Config, r *http.Request, song seedtypes.Song) (Song, error) {
 	var rel Song
 	g, ctx := errgroup.WithContext(r.Context())
 

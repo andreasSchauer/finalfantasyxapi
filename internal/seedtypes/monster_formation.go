@@ -1,0 +1,84 @@
+package seedtypes
+
+import (
+	"fmt"
+	"sort"
+	"strings"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+)
+
+type MonsterFormation struct {
+	ID      int32  `json:"id"`
+	Version *int32 `json:"version"`
+	MonsterSelection
+	FormationData   FormationData             `json:"formation_data"`
+	TriggerCommands []FormationTriggerCommand `json:"trigger_commands"`
+	EncounterAreas  []EncounterArea           `json:"encounter_areas"`
+}
+
+func (mf MonsterFormation) ToHashFields() []any {
+	return []any{
+		fmt.Sprintf("%T", mf),
+		h.DerefOrNil(mf.Version),
+		mf.MonsterSelection.ID,
+		mf.FormationData.ID,
+	}
+}
+
+func (mf MonsterFormation) ToKeyFields() []any {
+	return []any{
+		h.DerefOrNil(mf.Version),
+		mf.MonsterSelection.ID,
+		mf.FormationData.ID,
+	}
+}
+
+func (mf MonsterFormation) GetID() int32 {
+	return mf.ID
+}
+
+func (mf MonsterFormation) String() string {
+	return fmt.Sprintf("monster-formation with version: %s, %s, %s", h.PtrToString(mf.Version), mf.MonsterSelection, mf.FormationData)
+}
+
+func (mf MonsterFormation) GetResParamsUnnamed() ResParamsUnnamed {
+	return ResParamsUnnamed{
+		ID: mf.ID,
+	}
+}
+
+type MonsterSelection struct {
+	ID       int32           `json:"monster_selection_id"`
+	Monsters []MonsterAmount `json:"monsters"`
+}
+
+func (ms MonsterSelection) ToHashFields() []any {
+	monsters := ms.Monsters
+
+	sort.SliceStable(monsters, func(i, j int) bool { return monsters[i].MonsterID < monsters[j].MonsterID })
+	monsterKeys := []any{
+		fmt.Sprintf("%T", ms),
+	}
+
+	for _, mon := range ms.Monsters {
+		key := h.CombineFields(mon.ToFormationHashFields())
+		monsterKeys = append(monsterKeys, key)
+	}
+
+	return monsterKeys
+}
+
+func (ms MonsterSelection) GetID() int32 {
+	return ms.ID
+}
+
+func (ms MonsterSelection) String() string {
+	errs := []string{}
+
+	for _, ma := range ms.Monsters {
+		errs = append(errs, ma.String())
+	}
+
+	return strings.Join(errs, " | ")
+}

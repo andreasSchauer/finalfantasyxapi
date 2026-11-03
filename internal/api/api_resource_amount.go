@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type ResourceAmount[A APIResource] struct {
@@ -124,8 +125,8 @@ func resAmtMapToFloat(intMap map[string]int32) map[string]float64 {
 	return floatMap
 }
 
-// takes a slice of parent resources and for each of them, attaches the amount of the resource's seeding.ItemAmount field to the resource.
-func itemAmtsToChildResAmts[T seeding.HasItemAmount, R any, A APIResource](i handlerInput[T, R, A], resources []A) []ResourceAmount[A] {
+// takes a slice of parent resources and for each of them, attaches the amount of the resource's seedtypes.ItemAmount field to the resource.
+func itemAmtsToChildResAmts[T seedtypes.HasItemAmount, R any, A APIResource](i handlerInput[T, R, A], resources []A) []ResourceAmount[A] {
 	resAmts := []ResourceAmount[A]{}
 
 	for _, res := range resources {
@@ -138,14 +139,14 @@ func itemAmtsToChildResAmts[T seeding.HasItemAmount, R any, A APIResource](i han
 	return resAmts
 }
 
-// takes a slice of parent resources and for each of them, searches the resource's seeding.ItemAmount slice for the target item and attaches its amount to the resource.
-func itemAmtsToChildResAmts2[T seeding.HasItemAmounts, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], resources []A, itemID int32) []ResourceAmount[A] {
+// takes a slice of parent resources and for each of them, searches the resource's seedtypes.ItemAmount slice for the target item and attaches its amount to the resource.
+func itemAmtsToChildResAmts2[T seedtypes.HasItemAmounts, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], resources []A, itemID int32) []ResourceAmount[A] {
 	resAmts := []ResourceAmount[A]{}
 
 	for _, res := range resources {
 		lookup, _ := seeding.GetResourceByID(res.GetID(), i.objLookupID)
 		itemAmounts := lookup.GetItemAmounts()
-		var itemAmount seeding.ItemAmount
+		var itemAmount seedtypes.ItemAmount
 
 		for _, ia := range itemAmounts {
 			item, _ := seeding.GetResource(ia.ItemName, cfg.L.Items)

@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type ArenaCreation struct {
 	ID                        int32                            `json:"id"`
@@ -28,7 +28,7 @@ func (mf MonsterFilter) IsZero() bool {
 		!mf.UnderwaterOnly
 }
 
-func createMonsterFilter(creation seeding.ArenaCreation) MonsterFilter {
+func createMonsterFilter(creation seedtypes.ArenaCreation) MonsterFilter {
 	return MonsterFilter{
 		RequiredArea:              creation.RequiredArea,
 		RequiredSpecies:           creation.RequiredSpecies,

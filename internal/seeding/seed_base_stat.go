@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedBaseStats(qtx *database.Queries, ctx context.Context) error {
@@ -37,8 +38,8 @@ func (l *Lookup) loop5SeedBaseStats(qtx *database.Queries, ctx context.Context) 
 	return nil
 }
 
-func (l *Lookup) extractBaseStats() ([]BaseStat, error) {
-	stats := []BaseStat{}
+func (l *Lookup) extractBaseStats() ([]seedtypes.BaseStat, error) {
+	stats := []seedtypes.BaseStat{}
 
 	for i := range l.json.characters {
 		char := &l.json.characters[i]
@@ -99,8 +100,8 @@ func (l *Lookup) extractBaseStats() ([]BaseStat, error) {
 	return dedupeRows(stats, l.Hashes), nil
 }
 
-func (l *Lookup) extractAltStateBaseStats(state *AlteredState) ([]BaseStat, error) {
-	stats := []BaseStat{}
+func (l *Lookup) extractAltStateBaseStats(state *seedtypes.AlteredState) ([]seedtypes.BaseStat, error) {
+	stats := []seedtypes.BaseStat{}
 	var err error
 
 	for i := range state.Changes {
@@ -125,8 +126,8 @@ func (l *Lookup) extractAltStateBaseStats(state *AlteredState) ([]BaseStat, erro
 	return stats, nil
 }
 
-func (l *Lookup) prepareBaseStats(stats []BaseStat) ([]BaseStat, error) {
-	statsNew := []BaseStat{}
+func (l *Lookup) prepareBaseStats(stats []seedtypes.BaseStat) ([]seedtypes.BaseStat, error) {
+	statsNew := []seedtypes.BaseStat{}
 	var err error
 
 	for i := range stats {

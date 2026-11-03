@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Context) error {
@@ -41,8 +42,8 @@ func (l *Lookup) loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Cont
 	return nil
 }
 
-func (l *Lookup) extractEncounterAreas() ([]EncounterArea, error) {
-	areas := []EncounterArea{}
+func (l *Lookup) extractEncounterAreas() ([]seedtypes.EncounterArea, error) {
+	areas := []seedtypes.EncounterArea{}
 	var err error
 
 	for i := range l.json.monsterFormations {

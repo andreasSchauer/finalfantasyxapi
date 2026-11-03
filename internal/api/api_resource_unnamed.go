@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type UnnamedAPIResource struct {
@@ -35,8 +36,8 @@ func (r UnnamedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func idToUnnamedAPIResource[T seeding.IsUnnamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) UnnamedAPIResource {
-	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seeding
+func idToUnnamedAPIResource[T seedtypes.IsUnnamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) UnnamedAPIResource {
+	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
 	params := res.GetResParamsUnnamed()
 
 	return UnnamedAPIResource{

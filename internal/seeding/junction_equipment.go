@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type EquipmentTableNameJunction struct {
@@ -26,7 +27,7 @@ func (j EquipmentTableNameJunction) ToHashFieldsJ(name string) []any {
 	return slices.Concat([]any{name}, j.ToHashFields())
 }
 
-func (l *Lookup) getEquipmentReqAutoAbilities(et EquipmentTable) ([]AutoAbility, error) {
+func (l *Lookup) getEquipmentReqAutoAbilities(et seedtypes.EquipmentTable) ([]seedtypes.AutoAbility, error) {
 	return getResources(et.RequiredAutoAbilities, l.AutoAbilities)
 }
 
@@ -79,8 +80,8 @@ func (l *Lookup) seedJuncEquipmentTablesNames(qtx *database.Queries, ctx context
 	return qtx.CreateEquipmentTablesNamesJunctionBulk(ctx, params)
 }
 
-func (l *Lookup) getAbilityPools() []AbilityPool {
-	pools := []AbilityPool{}
+func (l *Lookup) getAbilityPools() []seedtypes.AbilityPool {
+	pools := []seedtypes.AbilityPool{}
 
 	for _, table := range l.json.equipment {
 		pools = append(pools, table.SelectableAutoAbilities...)
@@ -89,7 +90,7 @@ func (l *Lookup) getAbilityPools() []AbilityPool {
 	return pools
 }
 
-func (l *Lookup) getAbilityPoolAutoAbilities(ap AbilityPool) ([]AutoAbility, error) {
+func (l *Lookup) getAbilityPoolAutoAbilities(ap seedtypes.AbilityPool) ([]seedtypes.AutoAbility, error) {
 	return getResources(ap.AutoAbilities, l.AutoAbilities)
 }
 

@@ -3,31 +3,32 @@ package seeding
 import (
 	"context"
 	"fmt"
-	
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedSphereGrids(qtx *database.Queries, ctx context.Context) error {
 	grids := l.extractSphereGrids()
 
 	params := database.CreateSphereGridBulkParams{
-		DataHash:       make([]string, len(grids)),
-		Type: 			make([]database.SphereGridType, len(grids)),
-		Hp: 			make([]int32, len(grids)),
-		Mp: 			make([]int32, len(grids)),
-		Strength: 		make([]int32, len(grids)),
-		Defense: 		make([]int32, len(grids)),
-		Magic: 			make([]int32, len(grids)),
-		MagicDefense: 	make([]int32, len(grids)),
-		Agility: 		make([]int32, len(grids)),
-		Luck: 			make([]int32, len(grids)),
-		Evasion: 		make([]int32, len(grids)),
-		Accuracy: 		make([]int32, len(grids)),
-		Lv1Locks: 		make([]int32, len(grids)),
-		Lv2Locks: 		make([]int32, len(grids)),
-		Lv3Locks: 		make([]int32, len(grids)),
-		Lv4Locks: 		make([]int32, len(grids)),
-		EmptyNodes: 	make([]int32, len(grids)),
+		DataHash:           make([]string, len(grids)),
+		Type:               make([]database.SphereGridType, len(grids)),
+		Hp:                 make([]int32, len(grids)),
+		Mp:                 make([]int32, len(grids)),
+		Strength:           make([]int32, len(grids)),
+		Defense:            make([]int32, len(grids)),
+		Magic:              make([]int32, len(grids)),
+		MagicDefense:       make([]int32, len(grids)),
+		Agility:            make([]int32, len(grids)),
+		Luck:               make([]int32, len(grids)),
+		Evasion:            make([]int32, len(grids)),
+		Accuracy: 			make([]int32, len(grids)),
+		Lv1Locks:           make([]int32, len(grids)),
+		Lv2Locks:           make([]int32, len(grids)),
+		Lv3Locks:           make([]int32, len(grids)),
+		Lv4Locks:           make([]int32, len(grids)),
+		EmptyNodes:         make([]int32, len(grids)),
 	}
 
 	for i, g := range grids {
@@ -62,8 +63,8 @@ func (l *Lookup) loop1SeedSphereGrids(qtx *database.Queries, ctx context.Context
 	return nil
 }
 
-func (l *Lookup) extractSphereGrids() []SphereGrid {
-	grids := []SphereGrid{}
+func (l *Lookup) extractSphereGrids() []seedtypes.SphereGrid {
+	grids := []seedtypes.SphereGrid{}
 
 	for i := range l.json.characters {
 		char := &l.json.characters[i]

@@ -3,11 +3,11 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getMonsterRelationships(cfg *Config, r *http.Request, monster seeding.Monster) (Monster, error) {
+func getMonsterRelationships(cfg *Config, r *http.Request, monster seedtypes.Monster) (Monster, error) {
 	var rel Monster
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -79,7 +79,7 @@ func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster
 	return mon, nil
 }
 
-func getMonsterElemResists(cfg *Config, resists []seeding.ElementalResist) []ElementalResist {
+func getMonsterElemResists(cfg *Config, resists []seedtypes.ElementalResist) []ElementalResist {
 	elemResists := namesToElemResists(cfg, resists)
 	elemResistMap := getResourceMap(elemResists)
 

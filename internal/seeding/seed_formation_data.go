@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop4SeedFormationData(qtx *database.Queries, ctx context.Context) error {
@@ -47,8 +48,8 @@ func (l *Lookup) loop4SeedFormationData(qtx *database.Queries, ctx context.Conte
 	return nil
 }
 
-func (l *Lookup) extractFormationData() ([]FormationData, error) {
-	data := []FormationData{}
+func (l *Lookup) extractFormationData() ([]seedtypes.FormationData, error) {
+	data := []seedtypes.FormationData{}
 	var err error
 
 	for i := range l.json.monsterFormations {
@@ -97,8 +98,8 @@ func (l *Lookup) loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.
 	return nil
 }
 
-func (l *Lookup) extractFormationBossSongs() ([]FormationBossSong, error) {
-	songs := []FormationBossSong{}
+func (l *Lookup) extractFormationBossSongs() ([]seedtypes.FormationBossSong, error) {
+	songs := []seedtypes.FormationBossSong{}
 	var err error
 
 	for i := range l.json.monsterFormations {

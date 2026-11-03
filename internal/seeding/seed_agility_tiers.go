@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Context) error {
@@ -78,8 +79,8 @@ func (l *Lookup) loop2SeedAgilitySubtiers(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractAgilitySubtiers() []AgilitySubtier {
-	subtiers := []AgilitySubtier{}
+func (l *Lookup) extractAgilitySubtiers() []seedtypes.AgilitySubtier {
+	subtiers := []seedtypes.AgilitySubtier{}
 
 	for i := range l.json.agilityTiers {
 		tier := &l.json.agilityTiers[i]

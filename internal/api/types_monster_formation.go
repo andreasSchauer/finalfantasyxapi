@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type MonsterFormation struct {
 	ID             int32   `json:"id"`
@@ -32,7 +32,7 @@ func (ec EncounterArea) GetAPIResource() APIResource {
 	return ec.Area
 }
 
-func convertEncounterArea(cfg *Config, ea seeding.EncounterArea) EncounterArea {
+func convertEncounterArea(cfg *Config, ea seedtypes.EncounterArea) EncounterArea {
 	return EncounterArea{
 		Area:          locAreaToAreaAPIResource(cfg, cfg.E.Areas, ea.LocationArea),
 		Specification: ea.Specification,
@@ -51,7 +51,7 @@ func (tc FormationTriggerCommand) GetAPIResource() APIResource {
 	return tc.Ability
 }
 
-func convertFormationTriggerCommand(cfg *Config, tc seeding.FormationTriggerCommand) FormationTriggerCommand {
+func convertFormationTriggerCommand(cfg *Config, tc seedtypes.FormationTriggerCommand) FormationTriggerCommand {
 	return FormationTriggerCommand{
 		Ability:   nameToNamedAPIResource(cfg, cfg.E.TriggerCommands, tc.Name, tc.Version),
 		Condition: tc.Condition,
@@ -69,7 +69,7 @@ func (bs FormationBossSong) GetAPIResource() APIResource {
 	return bs.Song
 }
 
-func convertFormationBossSong(cfg *Config, bossMusic seeding.FormationBossSong) FormationBossSong {
+func convertFormationBossSong(cfg *Config, bossMusic seedtypes.FormationBossSong) FormationBossSong {
 	return FormationBossSong{
 		Song:             nameToNamedAPIResource(cfg, cfg.E.Songs, bossMusic.Song, nil),
 		CelebrateVictory: bossMusic.CelebrateVictory,

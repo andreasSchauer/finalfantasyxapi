@@ -2,7 +2,7 @@ package api
 
 import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type EquipmentMatchChances struct {
@@ -25,11 +25,11 @@ func (c EquipmentMatchChances) Round(n int32) EquipmentMatchChances {
 }
 
 type MatchChanceParams struct {
-	mon              seeding.Monster
-	wantedAbilities  []seeding.AutoAbility
-	monAbilities     []seeding.EquipmentDrop
-	slotsTable       []seeding.EquipmentSlotsChance
-	shotsTable       []seeding.EquipmentSlotsChance
+	mon              seedtypes.Monster
+	wantedAbilities  []seedtypes.AutoAbility
+	monAbilities     []seedtypes.EquipmentDrop
+	slotsTable       []seedtypes.EquipmentSlotsChance
+	shotsTable       []seedtypes.EquipmentSlotsChance
 	characterChances CharacterChances
 }
 
@@ -81,11 +81,11 @@ func (p MatchChanceParams) calcChances(cfg *Config, params DropChanceParams) Equ
 	}
 }
 
-func extractAbilitySlots(params DropChanceParams, mon seeding.Monster) []seeding.EquipmentSlotsChance {
+func extractAbilitySlots(params DropChanceParams, mon seedtypes.Monster) []seedtypes.EquipmentSlotsChance {
 	var minSlots = params.GetRequiredSlots()
 	var maxSlots int32 = 4
 	abilitySlotChances := mon.Equipment.AbilitySlots.Chances
-	var chances []seeding.EquipmentSlotsChance
+	var chances []seedtypes.EquipmentSlotsChance
 
 	if params.TotalSlots != nil {
 		minSlots = *params.TotalSlots
@@ -119,7 +119,7 @@ func getWheelWeights(wheel AbilityWheel, cc CharacterChances) (float64, float64)
 	return wheelWeightFinBlow, wheelWeightNoFinBlow
 }
 
-func getWantedIndices(wantedAbilities []seeding.AutoAbility, wheel AbilityWheel) ([][]int32, error) {
+func getWantedIndices(wantedAbilities []seedtypes.AutoAbility, wheel AbilityWheel) ([][]int32, error) {
 	var idxGroups [][]int32
 
 	for _, ability := range wantedAbilities {

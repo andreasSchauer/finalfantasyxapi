@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type ElementalResist struct {
@@ -13,7 +13,7 @@ func (er ElementalResist) GetAPIResource() APIResource {
 	return er.Element
 }
 
-func convertElemResist(cfg *Config, er seeding.ElementalResist) ElementalResist {
+func convertElemResist(cfg *Config, er seedtypes.ElementalResist) ElementalResist {
 	return ElementalResist{
 		Element:  nameToNamedAPIResource(cfg, cfg.E.Elements, er.Element, nil),
 		Affinity: er.Affinity,
@@ -27,7 +27,7 @@ func newElemResist(cfg *Config, element, affinity string) ElementalResist {
 	}
 }
 
-func namesToElemResists(cfg *Config, resists []seeding.ElementalResist) []ElementalResist {
+func namesToElemResists(cfg *Config, resists []seedtypes.ElementalResist) []ElementalResist {
 	elemResists := []ElementalResist{}
 
 	for _, seedResist := range resists {

@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource], id int32) (Treasure, error) {
+func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seedtypes.Treasure, Treasure, UnnamedAPIResource], id int32) (Treasure, error) {
 	treasure, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Treasure{}, err
@@ -28,7 +28,7 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seeding.Treasure,
 	return response, nil
 }
 
-func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seeding.Treasure, Treasure, UnnamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seedtypes.Treasure, Treasure, UnnamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

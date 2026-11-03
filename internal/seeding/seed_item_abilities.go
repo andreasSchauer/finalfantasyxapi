@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedItemAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -34,7 +35,7 @@ func (l *Lookup) loop3SeedItemAbilities(qtx *database.Queries, ctx context.Conte
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		l.ItemAbilities[Key(abilities[i])] = abilities[i]
+		l.ItemAbilities[seedtypes.Key(abilities[i])] = abilities[i]
 		l.ItemAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -42,8 +43,8 @@ func (l *Lookup) loop3SeedItemAbilities(qtx *database.Queries, ctx context.Conte
 	return nil
 }
 
-func (l *Lookup) extractItemAbilities() ([]ItemAbility, error) {
-	abilities := []ItemAbility{}
+func (l *Lookup) extractItemAbilities() ([]seedtypes.ItemAbility, error) {
+	abilities := []seedtypes.ItemAbility{}
 	var err error
 
 	for i := range l.json.items {

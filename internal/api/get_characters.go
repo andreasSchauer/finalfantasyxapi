@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource], id int32) (Character, error) {
+func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seedtypes.Character, Character, NamedAPIResource], id int32) (Character, error) {
 	character, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Character{}, err
@@ -53,7 +53,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seeding.Characte
 	return response, nil
 }
 
-func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seeding.Character, Character, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seedtypes.Character, Character, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

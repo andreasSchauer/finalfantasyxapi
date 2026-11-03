@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedMonsterItems(qtx *database.Queries, ctx context.Context) error {
@@ -57,8 +58,8 @@ func (l *Lookup) loop3SeedMonsterItems(qtx *database.Queries, ctx context.Contex
 	return nil
 }
 
-func (l *Lookup) extractMonsterItems() ([]MonsterItems, error) {
-	items := []MonsterItems{}
+func (l *Lookup) extractMonsterItems() ([]seedtypes.MonsterItems, error) {
+	items := []seedtypes.MonsterItems{}
 	var err error
 
 	for i := range l.json.monsters {
@@ -126,7 +127,7 @@ func (l *Lookup) extractMonsterItems() ([]MonsterItems, error) {
 	return dedupeRows(items, l.Hashes), nil
 }
 
-func (l *Lookup) completeMonsterItems(items *MonsterItems) error {
+func (l *Lookup) completeMonsterItems(items *seedtypes.MonsterItems) error {
 	if items == nil {
 		return nil
 	}

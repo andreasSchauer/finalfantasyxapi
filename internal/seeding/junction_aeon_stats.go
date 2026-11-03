@@ -5,6 +5,7 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type AeonXStatJunction struct {
@@ -24,7 +25,7 @@ func (j AeonXStatJunction) ToHashFieldsJ(name string) []any {
 	return slices.Concat([]any{name}, j.ToHashFields())
 }
 
-func (l *Lookup) getAeonBaseStatsA(a Aeon) ([]BaseStat, error) {
+func (l *Lookup) getAeonBaseStatsA(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
 	return a.BaseStats.AVals, nil
 }
 
@@ -42,7 +43,7 @@ func (l *Lookup) seedJuncAeonBaseStatsA(qtx *database.Queries, ctx context.Conte
 	})
 }
 
-func (l *Lookup) getAeonBaseStatsB(a Aeon) ([]BaseStat, error) {
+func (l *Lookup) getAeonBaseStatsB(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
 	return a.BaseStats.BVals, nil
 }
 

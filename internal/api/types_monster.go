@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type Monster struct {
@@ -66,7 +66,7 @@ type MonsterAbility struct {
 	IsUnused bool             `json:"is_unused"`
 }
 
-func convertMonsterAbility(cfg *Config, ability seeding.MonsterAbility) MonsterAbility {
+func convertMonsterAbility(cfg *Config, ability seedtypes.MonsterAbility) MonsterAbility {
 	return MonsterAbility{
 		Ability:  keyToTypedAPIResource(cfg, cfg.E.Abilities, ability.AbilityReference),
 		IsForced: ability.IsForced,

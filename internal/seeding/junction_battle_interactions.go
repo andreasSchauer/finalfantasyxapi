@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getBattleInteractionAffectedBy(bi BattleInteraction) ([]StatusCondition, error) {
+func (l *Lookup) getBattleInteractionAffectedBy(bi seedtypes.BattleInteraction) ([]seedtypes.StatusCondition, error) {
 	return getResources(bi.AffectedBy, l.StatusConditions)
 }
 
@@ -25,7 +26,7 @@ func (l *Lookup) seedJuncBattleInteractionsAffectedBy(qtx *database.Queries, ctx
 	})
 }
 
-func (l *Lookup) getBattleInteractionCopiedStatusConditions(bi BattleInteraction) ([]InflictedStatus, error) {
+func (l *Lookup) getBattleInteractionCopiedStatusConditions(bi seedtypes.BattleInteraction) ([]seedtypes.InflictedStatus, error) {
 	return bi.CopiedStatusConditions, nil
 }
 
@@ -44,8 +45,8 @@ func (l *Lookup) seedJuncBattleInteractionsCopiedStatusConditions(qtx *database.
 	})
 }
 
-func (l *Lookup) getBattleInteractionDamages(bi BattleInteraction) ([]Damage, error) {
-	damages := []Damage{}
+func (l *Lookup) getBattleInteractionDamages(bi seedtypes.BattleInteraction) ([]seedtypes.Damage, error) {
+	damages := []seedtypes.Damage{}
 	if bi.Damage != nil {
 		damages = append(damages, *bi.Damage)
 	}
@@ -67,7 +68,7 @@ func (l *Lookup) seedJuncBattleInteractionsDamages(qtx *database.Queries, ctx co
 	})
 }
 
-func (l *Lookup) getBattleInteractionInflictedStatusConditions(bi BattleInteraction) ([]InflictedStatus, error) {
+func (l *Lookup) getBattleInteractionInflictedStatusConditions(bi seedtypes.BattleInteraction) ([]seedtypes.InflictedStatus, error) {
 	return bi.InflictedStatusConditions, nil
 }
 
@@ -86,7 +87,7 @@ func (l *Lookup) seedJuncBattleInteractionsInflictedStatusConditions(qtx *databa
 	})
 }
 
-func (l *Lookup) getBattleInteractionModifierChanges(bi BattleInteraction) ([]ModifierChange, error) {
+func (l *Lookup) getBattleInteractionModifierChanges(bi seedtypes.BattleInteraction) ([]seedtypes.ModifierChange, error) {
 	return bi.ModifierChanges, nil
 }
 
@@ -105,7 +106,7 @@ func (l *Lookup) seedJuncBattleInteractionsModifierChanges(qtx *database.Queries
 	})
 }
 
-func (l *Lookup) getBattleInteractionRemovedStatusConditions(bi BattleInteraction) ([]StatusCondition, error) {
+func (l *Lookup) getBattleInteractionRemovedStatusConditions(bi seedtypes.BattleInteraction) ([]seedtypes.StatusCondition, error) {
 	return getResources(bi.RemovedStatusConditions, l.StatusConditions)
 }
 
@@ -124,7 +125,7 @@ func (l *Lookup) seedJuncBattleInteractionsRemovedStatusConditions(qtx *database
 	})
 }
 
-func (l *Lookup) getBattleInteractionStatChanges(bi BattleInteraction) ([]StatChange, error) {
+func (l *Lookup) getBattleInteractionStatChanges(bi seedtypes.BattleInteraction) ([]seedtypes.StatChange, error) {
 	return bi.StatChanges, nil
 }
 

@@ -2,7 +2,7 @@ package api
 
 import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type MonsterDropChances struct {
@@ -32,7 +32,7 @@ func (c MonsterDropChances) Round(n int32) MonsterDropChances {
 	return c
 }
 
-func getMonsterDropChances(cfg *Config, mon seeding.Monster, wantedAbilities []seeding.EquipmentDrop) MonsterDropChances {
+func getMonsterDropChances(cfg *Config, mon seedtypes.Monster, wantedAbilities []seedtypes.EquipmentDrop) MonsterDropChances {
 	return MonsterDropChances{
 		MonsterID:           mon.ID,
 		MonsterName:         h.NameToString(mon.Name, mon.Version, mon.Specification),
@@ -43,7 +43,7 @@ func getMonsterDropChances(cfg *Config, mon seeding.Monster, wantedAbilities []s
 	}
 }
 
-func calcMonDropChance(mon seeding.Monster) float64 {
+func calcMonDropChance(mon seedtypes.Monster) float64 {
 	return float64(mon.Equipment.DropChance) / 255
 }
 
@@ -64,7 +64,7 @@ func (c ChanceAmount) Round(n int32) ChanceAmount {
 	return c
 }
 
-func convertChanceAmount(_ *Config, c seeding.EquipmentSlotsChance) ChanceAmount {
+func convertChanceAmount(_ *Config, c seedtypes.EquipmentSlotsChance) ChanceAmount {
 	return ChanceAmount{
 		Amount: c.Amount,
 		Chance: h.PercentToDecimal(float64(c.Chance)),

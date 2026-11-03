@@ -4,25 +4,10 @@ import (
 	"fmt"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-type LookupObject struct {
-	Name    string `json:"name"`
-	Version *int32 `json:"version"`
-}
-
-func (l LookupObject) ToKeyFields() []any {
-	return []any{
-		l.Name,
-		h.DerefOrNil(l.Version),
-	}
-}
-
-func (l LookupObject) String() string {
-	return fmt.Sprintf("lookup object '%s'", h.NameToString(l.Name, l.Version, nil))
-}
-
-func GetResourceByID[T LookupableID](id int32, lookup map[int32]T) (T, error) {
+func GetResourceByID[T seedtypes.LookupableID](id int32, lookup map[int32]T) (T, error) {
 	resource, found := lookup[id]
 	if !found {
 		var zeroType T
@@ -32,19 +17,19 @@ func GetResourceByID[T LookupableID](id int32, lookup map[int32]T) (T, error) {
 	return resource, nil
 }
 
-func GetResource[T LookupableKey, K any](key K, lookup map[string]T) (T, error) {
+func GetResource[T seedtypes.LookupableKey, K any](key K, lookup map[string]T) (T, error) {
 	switch k := any(key).(type) {
 	case string:
 		return getResourceByName(k, lookup)
-	case LookupableKey:
+	case seedtypes.LookupableKey:
 		return getResourceByKey(k, lookup)
 	default:
 		var zeroType T
-		return zeroType, fmt.Errorf("key must be either string or Lookupable, got %T", key)
+		return zeroType, fmt.Errorf("key must be either string or seedtypes.Lookupable, got %T", key)
 	}
 }
 
-func getResourceByName[T LookupableKey](key string, lookup map[string]T) (T, error) {
+func getResourceByName[T seedtypes.LookupableKey](key string, lookup map[string]T) (T, error) {
 	resource, found := lookup[key]
 	if !found {
 		var zeroType T
@@ -54,8 +39,8 @@ func getResourceByName[T LookupableKey](key string, lookup map[string]T) (T, err
 	return resource, nil
 }
 
-func getResourceByKey[T, K LookupableKey](obj K, lookup map[string]T) (T, error) {
-	key := Key(obj)
+func getResourceByKey[T, K seedtypes.LookupableKey](obj K, lookup map[string]T) (T, error) {
+	key := seedtypes.Key(obj)
 
 	resource, err := GetResource(key, lookup)
 	if err != nil {
@@ -66,7 +51,7 @@ func getResourceByKey[T, K LookupableKey](obj K, lookup map[string]T) (T, error)
 	return resource, nil
 }
 
-func getResources[T LookupableKey, K any](keys []K, lookup map[string]T) ([]T, error) {
+func getResources[T seedtypes.LookupableKey, K any](keys []K, lookup map[string]T) ([]T, error) {
 	objects := make([]T, len(keys))
 
 	for i, key := range keys {
@@ -81,7 +66,7 @@ func getResources[T LookupableKey, K any](keys []K, lookup map[string]T) ([]T, e
 	return objects, nil
 }
 
-func typedRefsToResources[T LookupableKey](refs []AbilityReference, lookup map[string]T) ([]T, error) {
+func typedRefsToResources[T seedtypes.LookupableKey](refs []seedtypes.AbilityReference, lookup map[string]T) ([]T, error) {
 	objects := make([]T, len(refs))
 
 	for i, ref := range refs {

@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func nullBool(r *http.Request, queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullBool, error) {
@@ -42,7 +42,7 @@ func nullValue(r *http.Request, queryName QueryParamName, queryLookup map[QueryP
 	return h.GetNullString(&value), nil
 }
 
-func nullID[T seeding.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullInt32, error) {
+func nullID[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := queryParam.parseID(r, i.objLookup)
@@ -53,7 +53,7 @@ func nullID[T seeding.Lookupable, R any, A APIResource](r *http.Request, i handl
 	return h.GetNullInt32(&id), nil
 }
 
-func nullNameID[T seeding.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullInt32, error) {
+func nullNameID[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName QueryParamName, queryLookup map[QueryParamName]QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := queryParam.parseNameID(r, i.resTypeSingle, i.objLookup)

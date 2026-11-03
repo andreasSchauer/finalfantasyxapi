@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type WantedEquipment struct {
@@ -21,7 +21,7 @@ const (
 	OptionalSlotAbilityOrEmpty OptionalSlotDefinition = "ability-or-empty"
 )
 
-func getWantedEquipment(params DropChanceParams, wantedAbilities []seeding.AutoAbility, slotsTable []seeding.EquipmentSlotsChance) WantedEquipment {
+func getWantedEquipment(params DropChanceParams, wantedAbilities []seedtypes.AutoAbility, slotsTable []seedtypes.EquipmentSlotsChance) WantedEquipment {
 	requiredSlots := params.GetRequiredSlots()
 
 	we := WantedEquipment{
@@ -38,7 +38,7 @@ func getWantedEquipment(params DropChanceParams, wantedAbilities []seeding.AutoA
 	return we
 }
 
-func getReqAbilities(wantedAbilities []seeding.AutoAbility) []string {
+func getReqAbilities(wantedAbilities []seedtypes.AutoAbility) []string {
 	reqAbilities := []string{}
 
 	for _, ability := range wantedAbilities {

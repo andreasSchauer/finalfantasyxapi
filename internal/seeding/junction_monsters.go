@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getMonsterMonsterAbilities(m Monster) ([]MonsterAbility, error) {
+func (l *Lookup) getMonsterMonsterAbilities(m seedtypes.Monster) ([]seedtypes.MonsterAbility, error) {
 	return m.Abilities, nil
 }
 
@@ -24,7 +25,7 @@ func (l *Lookup) seedJuncMonstersMonsterAbilities(qtx *database.Queries, ctx con
 	})
 }
 
-func (l *Lookup) getMonsterAutoAbilities(m Monster) ([]AutoAbility, error) {
+func (l *Lookup) getMonsterAutoAbilities(m seedtypes.Monster) ([]seedtypes.AutoAbility, error) {
 	return getResources(m.AutoAbilities, l.AutoAbilities)
 }
 
@@ -42,7 +43,7 @@ func (l *Lookup) seedJuncMonstersAutoAbilities(qtx *database.Queries, ctx contex
 	})
 }
 
-func (l *Lookup) getMonsterBaseStats(m Monster) ([]BaseStat, error) {
+func (l *Lookup) getMonsterBaseStats(m seedtypes.Monster) ([]seedtypes.BaseStat, error) {
 	return m.BaseStats, nil
 }
 
@@ -60,7 +61,7 @@ func (l *Lookup) seedJuncMonstersBaseStats(qtx *database.Queries, ctx context.Co
 	})
 }
 
-func (l *Lookup) getMonsterElementalResists(m Monster) ([]ElementalResist, error) {
+func (l *Lookup) getMonsterElementalResists(m seedtypes.Monster) ([]seedtypes.ElementalResist, error) {
 	return m.ElemResists, nil
 }
 
@@ -78,7 +79,7 @@ func (l *Lookup) seedJuncMonstersElementalResists(qtx *database.Queries, ctx con
 	})
 }
 
-func (l *Lookup) getMonsterStatusImmunities(m Monster) ([]StatusCondition, error) {
+func (l *Lookup) getMonsterStatusImmunities(m seedtypes.Monster) ([]seedtypes.StatusCondition, error) {
 	return getResources(m.StatusImmunities, l.StatusConditions)
 }
 
@@ -96,7 +97,7 @@ func (l *Lookup) seedJuncMonstersStatusImmunities(qtx *database.Queries, ctx con
 	})
 }
 
-func (l *Lookup) getMonsterProperties(m Monster) ([]Property, error) {
+func (l *Lookup) getMonsterProperties(m seedtypes.Monster) ([]seedtypes.Property, error) {
 	return getResources(m.Properties, l.Properties)
 }
 
@@ -114,7 +115,7 @@ func (l *Lookup) seedJuncMonstersProperties(qtx *database.Queries, ctx context.C
 	})
 }
 
-func (l *Lookup) getMonsterRonsoRages(m Monster) ([]RonsoRage, error) {
+func (l *Lookup) getMonsterRonsoRages(m seedtypes.Monster) ([]seedtypes.RonsoRage, error) {
 	return getResources(m.RonsoRages, l.RonsoRages)
 }
 
@@ -132,7 +133,7 @@ func (l *Lookup) seedJuncMonstersRonsoRages(qtx *database.Queries, ctx context.C
 	})
 }
 
-func (l *Lookup) getMonsterStatusResists(m Monster) ([]StatusResist, error) {
+func (l *Lookup) getMonsterStatusResists(m seedtypes.Monster) ([]seedtypes.StatusResist, error) {
 	return m.StatusResists, nil
 }
 

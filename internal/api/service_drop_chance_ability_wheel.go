@@ -6,10 +6,11 @@ import (
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type AbilityWheel struct {
-	Characters   []seeding.Character
+	Characters   []seedtypes.Character
 	PrioritySlot *string
 	Abilities    [7]string
 	Clashes      [8][8]bool
@@ -53,14 +54,14 @@ func getTargetIdxGroup(targetName string, indexedNames [8]string) []int32 {
 	return targetIndexGroup
 }
 
-func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params DropChanceParams) []AbilityWheel {
+func createAbilityWheels(cfg *Config, abilities []seedtypes.EquipmentDrop, params DropChanceParams) []AbilityWheel {
 	uniqueKeys := getUniqueWheelKeys(cfg, abilities, params)
 	var wheels []AbilityWheel
 
 	if params.CharacterID != nil {
 		char, _ := seeding.GetResourceByID(*params.CharacterID, cfg.L.CharactersID)
 		wheel := createAbilityWheel(cfg, abilities, char)
-		wheel.Characters = []seeding.Character{char}
+		wheel.Characters = []seedtypes.Character{char}
 		wheels = append(wheels, wheel)
 		return wheels
 	}
@@ -77,7 +78,7 @@ func createAbilityWheels(cfg *Config, abilities []seeding.EquipmentDrop, params 
 	return wheels
 }
 
-func createAbilityWheel(cfg *Config, abilities []seeding.EquipmentDrop, char seeding.Character) AbilityWheel {
+func createAbilityWheel(cfg *Config, abilities []seedtypes.EquipmentDrop, char seedtypes.Character) AbilityWheel {
 	var wheel AbilityWheel
 
 	idx := 0
@@ -119,8 +120,8 @@ func sortAbilityWheels(a, b AbilityWheel) int {
 	return 0
 }
 
-func getUniqueWheelKeys(cfg *Config, abilities []seeding.EquipmentDrop, params DropChanceParams) map[string][]seeding.Character {
-	uniqueKeys := make(map[string][]seeding.Character)
+func getUniqueWheelKeys(cfg *Config, abilities []seedtypes.EquipmentDrop, params DropChanceParams) map[string][]seedtypes.Character {
+	uniqueKeys := make(map[string][]seedtypes.Character)
 
 	for _, charID := range params.PartyMembers {
 		char, _ := seeding.GetResourceByID(charID, cfg.L.CharactersID)
@@ -132,13 +133,13 @@ func getUniqueWheelKeys(cfg *Config, abilities []seeding.EquipmentDrop, params D
 			continue
 		}
 
-		uniqueKeys[key] = []seeding.Character{char}
+		uniqueKeys[key] = []seedtypes.Character{char}
 	}
 
 	return uniqueKeys
 }
 
-func getAbilityWheelKey(abilities []seeding.EquipmentDrop, charPtr *seeding.Character) string {
+func getAbilityWheelKey(abilities []seedtypes.EquipmentDrop, charPtr *seedtypes.Character) string {
 	var keys []string
 
 	for _, ability := range abilities {
@@ -151,7 +152,7 @@ func getAbilityWheelKey(abilities []seeding.EquipmentDrop, charPtr *seeding.Char
 	return strings.Join(keys, "|")
 }
 
-func getAbilityKey(ability seeding.EquipmentDrop) string {
+func getAbilityKey(ability seedtypes.EquipmentDrop) string {
 	if ability.IsForced {
 		return fmt.Sprintf("%s_priority", ability.Ability)
 	}

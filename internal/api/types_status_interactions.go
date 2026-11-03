@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type StatusInfliction struct {
@@ -44,7 +45,7 @@ type StatusInteractionQueries struct {
 	StatusConditions DBQueryIntMany
 }
 
-func getStatusInfliction(cfg *Config, ctx context.Context, status seeding.StatusCondition, queries StatusInteractionQueries) (*StatusInfliction, error) {
+func getStatusInfliction(cfg *Config, ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*StatusInfliction, error) {
 	var statusInfliction StatusInfliction
 
 	abilities, err := cfg.E.Abilities.dbGetRelations(cfg, ctx, status, queries.Abilities)
@@ -60,7 +61,7 @@ func getStatusInfliction(cfg *Config, ctx context.Context, status seeding.Status
 	return &statusInfliction, nil
 }
 
-func getStatusRemoval(cfg *Config, ctx context.Context, status seeding.StatusCondition, queries StatusInteractionQueries) (*StatusRemoval, error) {
+func getStatusRemoval(cfg *Config, ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*StatusRemoval, error) {
 	abilities, err := cfg.E.Abilities.dbGetRelations(cfg, ctx, status, queries.Abilities)
 	if err != nil {
 		return nil, err
@@ -89,7 +90,7 @@ func populateStatusInfliction(cfg *Config, abilities []TypedAPIResource) StatusI
 	}
 
 	for _, ability := range abilities {
-		obj := seeding.LookupObject{
+		obj := seedtypes.LookupObject{
 			Name:    ability.Name,
 			Version: ability.Version,
 		}
@@ -133,7 +134,7 @@ func populateStatusRemoval(cfg *Config, abilities []TypedAPIResource) StatusRemo
 	}
 
 	for _, ability := range abilities {
-		obj := seeding.LookupObject{
+		obj := seedtypes.LookupObject{
 			Name:    ability.Name,
 			Version: ability.Version,
 		}

@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource], id int32) (EquipmentName, error) {
+func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, NamedAPIResource], id int32) (EquipmentName, error) {
 	equipment, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return EquipmentName{}, err
@@ -36,7 +36,7 @@ func (cfg *Config) getEquipment(r *http.Request, i handlerInput[seeding.Equipmen
 	return response, nil
 }
 
-func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seeding.EquipmentName, EquipmentName, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

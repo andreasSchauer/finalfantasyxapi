@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Context) error {
@@ -32,7 +33,7 @@ func (l *Lookup) loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Cont
 
 	for i, row := range dbRows {
 		names[i].ID = row.ID
-		l.EquipmentNames[Key(names[i])] = names[i]
+		l.EquipmentNames[seedtypes.Key(names[i])] = names[i]
 		l.EquipmentNamesID[row.ID] = names[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -40,8 +41,8 @@ func (l *Lookup) loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Cont
 	return nil
 }
 
-func (l *Lookup) extractEquipmentNames() ([]EquipmentName, error) {
-	names := []EquipmentName{}
+func (l *Lookup) extractEquipmentNames() ([]seedtypes.EquipmentName, error) {
+	names := []seedtypes.EquipmentName{}
 	var err error
 
 	for i := range l.json.equipment {

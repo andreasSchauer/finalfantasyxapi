@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 // validates name/id-queryParam and checks emptiness. returns the corresponding id.
-func (q QueryParam) parseNameID[P seeding.Lookupable](r *http.Request, pResType ResTypeSingle, pLookup map[string]P) (int32, error) {
+func (q QueryParam) parseNameID[P seedtypes.Lookupable](r *http.Request, pResType ResTypeSingle, pLookup map[string]P) (int32, error) {
 	query, err := q.checkEmpty(r)
 	if err != nil {
 		return 0, err
@@ -19,7 +19,7 @@ func (q QueryParam) parseNameID[P seeding.Lookupable](r *http.Request, pResType 
 }
 
 // validates an id or single-segment-resource name, checks emptiness, and returns the corresponding id.
-func (q QueryParam) checkNameID[P seeding.Lookupable](query string, pResType ResTypeSingle, pLookup map[string]P) (int32, error) {
+func (q QueryParam) checkNameID[P seedtypes.Lookupable](query string, pResType ResTypeSingle, pLookup map[string]P) (int32, error) {
 	id, err := q.checkID(query, len(pLookup))
 	if err == nil {
 		return id, nil

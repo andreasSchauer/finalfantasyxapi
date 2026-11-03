@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop7SeedArenaCreations(qtx *database.Queries, ctx context.Context) error {
@@ -47,7 +48,7 @@ func (l *Lookup) loop7SeedArenaCreations(qtx *database.Queries, ctx context.Cont
 	for i, row := range dbRows {
 		creations[i].ID = row.ID
 		l.json.monsterArenaCreations[i].ID = row.ID
-		l.ArenaCreations[Key(creations[i])] = creations[i]
+		l.ArenaCreations[seedtypes.Key(creations[i])] = creations[i]
 		l.ArenaCreationsID[row.ID] = creations[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -55,8 +56,8 @@ func (l *Lookup) loop7SeedArenaCreations(qtx *database.Queries, ctx context.Cont
 	return nil
 }
 
-func (l *Lookup) extractArenaCreations() ([]ArenaCreation, error) {
-	creations := []ArenaCreation{}
+func (l *Lookup) extractArenaCreations() ([]seedtypes.ArenaCreation, error) {
+	creations := []seedtypes.ArenaCreation{}
 	var err error
 
 	for i := range l.json.monsterArenaCreations {
@@ -67,7 +68,7 @@ func (l *Lookup) extractArenaCreations() ([]ArenaCreation, error) {
 			return nil, err
 		}
 
-		obj := LookupObject{
+		obj := seedtypes.LookupObject{
 			Name: creation.Name,
 		}
 

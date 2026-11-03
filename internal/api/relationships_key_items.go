@@ -6,11 +6,11 @@ import (
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyItem) (KeyItem, error) {
+func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seedtypes.KeyItem) (KeyItem, error) {
 	var rel KeyItem
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -58,7 +58,7 @@ func getKeyItemRelationships(cfg *Config, r *http.Request, keyItem seeding.KeyIt
 	return rel, nil
 }
 
-func getKeyItemCelestialWeapon(cfg *Config, ctx context.Context, keyItem seeding.KeyItem) (*NamedAPIResource, error) {
+func getKeyItemCelestialWeapon(cfg *Config, ctx context.Context, keyItem seedtypes.KeyItem) (*NamedAPIResource, error) {
 	if !(strings.HasSuffix(keyItem.Name, "crest") || strings.HasSuffix(keyItem.Name, "sigil")) {
 		return nil, nil
 	}

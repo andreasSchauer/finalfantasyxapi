@@ -6,6 +6,7 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type ShopSimple struct {
@@ -27,7 +28,7 @@ type SubShopSimple struct {
 	Equipment []ShopEquipmentSimple `json:"equipment"`
 }
 
-func convertSubShopSimple(cfg *Config, ss seeding.SubShop) SubShopSimple {
+func convertSubShopSimple(cfg *Config, ss seedtypes.SubShop) SubShopSimple {
 	return SubShopSimple{
 		Items:     convertObjSlice(cfg, ss.Items, shopItemNameString),
 		Equipment: convertObjSlice(cfg, ss.Equipment, convertShopEquipmentSimple),
@@ -39,22 +40,22 @@ type ShopEquipmentSimple struct {
 	Abilities     *string `json:"abilities"`
 }
 
-func convertShopEquipmentSimple(cfg *Config, se seeding.ShopEquipment) ShopEquipmentSimple {
+func convertShopEquipmentSimple(cfg *Config, se seedtypes.ShopEquipment) ShopEquipmentSimple {
 	return ShopEquipmentSimple{
 		EquipmentName: shopEquipmentNameString(cfg, se),
 		Abilities:     foundEquipmentAbilitiesStringPtr(se.TreasureEquipment),
 	}
 }
 
-func shopItemNameString(_ *Config, si seeding.ShopItem) string {
+func shopItemNameString(_ *Config, si seedtypes.ShopItem) string {
 	return fmt.Sprintf("%s - %d Gil", si.Name, si.Price)
 }
 
-func shopEquipmentNameString(_ *Config, se seeding.ShopEquipment) string {
+func shopEquipmentNameString(_ *Config, se seedtypes.ShopEquipment) string {
 	return fmt.Sprintf("%s - %d Gil", se.Name, se.Price)
 }
 
-func foundEquipmentAbilitiesStringPtr(fe seeding.TreasureEquipment) *string {
+func foundEquipmentAbilitiesStringPtr(fe seedtypes.TreasureEquipment) *string {
 	zeroAbilities := len(fe.Abilities) == 0
 	zeroSlots := fe.EmptySlotsAmount == 0
 	slotsStr := fmt.Sprintf("(%d)", fe.EmptySlotsAmount)

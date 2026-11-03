@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) error {
@@ -39,7 +40,7 @@ func (l *Lookup) loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) e
 	for i, row := range dbRows {
 		submenus[i].ID = row.ID
 		l.json.submenus[i].ID = row.ID
-		l.Submenus[Key(submenus[i])] = submenus[i]
+		l.Submenus[seedtypes.Key(submenus[i])] = submenus[i]
 		l.SubmenusID[row.ID] = submenus[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -47,8 +48,8 @@ func (l *Lookup) loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) e
 	return nil
 }
 
-func (l *Lookup) extractSubmenus() ([]Submenu, error) {
-	submenus := []Submenu{}
+func (l *Lookup) extractSubmenus() ([]seedtypes.Submenu, error) {
+	submenus := []seedtypes.Submenu{}
 	var err error
 
 	for i := range l.json.submenus {
@@ -66,7 +67,7 @@ func (l *Lookup) extractSubmenus() ([]Submenu, error) {
 	return dedupeRows(submenus, l.Hashes), nil
 }
 
-func (l *Lookup) getSubmenuUsers(s Submenu) ([]CharacterClass, error) {
+func (l *Lookup) getSubmenuUsers(s seedtypes.Submenu) ([]seedtypes.CharacterClass, error) {
 	return getResources(s.Users, l.CharClasses)
 }
 

@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type ShopLocSimple struct {
@@ -27,7 +28,7 @@ func idToShopLocSimple(cfg *Config, shopID int32) ShopLocSimple {
 	}
 }
 
-func convertShopSummarySimple(_ *Config, shop seeding.SubShop) ShopSummarySimple {
+func convertShopSummarySimple(_ *Config, shop seedtypes.SubShop) ShopSummarySimple {
 	shopLoc := ShopSummarySimple{}
 
 	if len(shop.Items) != 0 {
@@ -64,7 +65,7 @@ func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSi
 		TreasureCount: len(treasureIDs),
 	}
 
-	itemAmounts := []seeding.ItemAmount{}
+	itemAmounts := []seedtypes.ItemAmount{}
 
 	for _, treasureID := range treasureIDs {
 		treasure, _ := seeding.GetResourceByID(treasureID, cfg.L.TreasuresID)
@@ -93,7 +94,7 @@ type EquipmentSimple struct {
 	AutoAbilities *string `json:"auto_abilities"`
 }
 
-func convertEquipmentSimple(_ *Config, equipment seeding.TreasureEquipment) EquipmentSimple {
+func convertEquipmentSimple(_ *Config, equipment seedtypes.TreasureEquipment) EquipmentSimple {
 	return EquipmentSimple{
 		Name:          equipment.Name,
 		AutoAbilities: foundEquipmentAbilitiesStringPtr(equipment),

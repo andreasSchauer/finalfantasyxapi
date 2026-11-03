@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop4SeedFormationTriggerCommands(qtx *database.Queries, ctx context.Context) error {
@@ -41,8 +42,8 @@ func (l *Lookup) loop4SeedFormationTriggerCommands(qtx *database.Queries, ctx co
 	return nil
 }
 
-func (l *Lookup) extractFormationTriggerCommands() ([]FormationTriggerCommand, error) {
-	commands := []FormationTriggerCommand{}
+func (l *Lookup) extractFormationTriggerCommands() ([]seedtypes.FormationTriggerCommand, error) {
+	commands := []seedtypes.FormationTriggerCommand{}
 	var err error
 
 	for i := range l.json.monsterFormations {
@@ -63,8 +64,8 @@ func (l *Lookup) extractFormationTriggerCommands() ([]FormationTriggerCommand, e
 	return dedupeRows(commands, l.Hashes), nil
 }
 
-func (l *Lookup) getFormationTriggerCommands() []FormationTriggerCommand {
-	commands := []FormationTriggerCommand{}
+func (l *Lookup) getFormationTriggerCommands() []seedtypes.FormationTriggerCommand {
+	commands := []seedtypes.FormationTriggerCommand{}
 
 	for _, formation := range l.json.monsterFormations {
 		commands = append(commands, formation.TriggerCommands...)
@@ -73,7 +74,7 @@ func (l *Lookup) getFormationTriggerCommands() []FormationTriggerCommand {
 	return commands
 }
 
-func (l *Lookup) getFormationTriggerCommandUsers(tc FormationTriggerCommand) ([]CharacterClass, error) {
+func (l *Lookup) getFormationTriggerCommandUsers(tc seedtypes.FormationTriggerCommand) ([]seedtypes.CharacterClass, error) {
 	return getResources(tc.Users, l.CharClasses)
 }
 

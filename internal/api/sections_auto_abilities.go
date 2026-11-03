@@ -6,6 +6,7 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type AutoAbilitySimple struct {
@@ -59,11 +60,11 @@ func createAutoAbilitySimple(cfg *Config, r *http.Request, id int32, _ Subsectio
 	return autoAbilitySimple, nil
 }
 
-func convertElemResistSimple(_ *Config, er seeding.ElementalResist) string {
+func convertElemResistSimple(_ *Config, er seedtypes.ElementalResist) string {
 	return fmt.Sprintf("%s: %s", er.Element, er.Affinity)
 }
 
-func convertStatusResistSimple(_ *Config, sr seeding.StatusResist) string {
+func convertStatusResistSimple(_ *Config, sr seedtypes.StatusResist) string {
 	if sr.Resistance == 254 {
 		return fmt.Sprintf("%s (immune)", sr.StatusCondition)
 	}

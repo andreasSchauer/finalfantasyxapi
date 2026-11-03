@@ -3,11 +3,11 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getModifierRelationships(cfg *Config, r *http.Request, modifier seeding.Modifier) (Modifier, error) {
+func getModifierRelationships(cfg *Config, r *http.Request, modifier seedtypes.Modifier) (Modifier, error) {
 	var rel Modifier
 	g, ctx := errgroup.WithContext(r.Context())
 

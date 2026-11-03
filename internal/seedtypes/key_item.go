@@ -1,0 +1,44 @@
+package seedtypes
+
+import (
+	"fmt"
+)
+
+type KeyItem struct {
+	ID int32 `json:"id"`
+	MasterItem
+	Category    string `json:"category"`
+	Description string `json:"description"`
+	Effect      string `json:"effect"`
+}
+
+func (k KeyItem) ToHashFields() []any {
+	return []any{
+		fmt.Sprintf("%T", k),
+		k.MasterItem.ID,
+		k.Category,
+		k.Description,
+		k.Effect,
+	}
+}
+
+func (k KeyItem) ToKeyFields() []any {
+	return []any{
+		k.Name,
+	}
+}
+
+func (k KeyItem) GetID() int32 {
+	return k.ID
+}
+
+func (k KeyItem) String() string {
+	return fmt.Sprintf("key item %s", k.Name)
+}
+
+func (k KeyItem) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
+		ID:   k.ID,
+		Name: k.Name,
+	}
+}

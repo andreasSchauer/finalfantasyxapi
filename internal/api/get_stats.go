@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getStat(r *http.Request, i handlerInput[seeding.Stat, Stat, NamedAPIResource], id int32) (Stat, error) {
+func (cfg *Config) getStat(r *http.Request, i handlerInput[seedtypes.Stat, Stat, NamedAPIResource], id int32) (Stat, error) {
 	stat, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Stat{}, err
@@ -38,6 +38,6 @@ func (cfg *Config) getStat(r *http.Request, i handlerInput[seeding.Stat, Stat, N
 	return response, nil
 }
 
-func (cfg *Config) retrieveStats(r *http.Request, i handlerInput[seeding.Stat, Stat, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveStats(r *http.Request, i handlerInput[seedtypes.Stat, Stat, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

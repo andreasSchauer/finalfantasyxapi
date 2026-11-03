@@ -7,7 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type RelAvlParams struct {
@@ -43,7 +43,7 @@ func (i handlerInput[T, R, A]) queryAvlRelGetParams(cfg *Config, r *http.Request
 	return availabilityParams, nil
 }
 
-func (i handlerInput[T, R, A]) queryAvlRelRun[K seeding.Lookupable](cfg *Config, ctx context.Context, item K, params RelAvlParams, dbQuery RelAvailabilityDBQuery) ([]A, error) {
+func (i handlerInput[T, R, A]) queryAvlRelRun[K seedtypes.Lookupable](cfg *Config, ctx context.Context, item K, params RelAvlParams, dbQuery RelAvailabilityDBQuery) ([]A, error) {
 	dbIDs, err := dbQuery(ctx, params)
 	if err != nil {
 		return nil, newHTTPErrorDB(i.resTypePlural, item, err)

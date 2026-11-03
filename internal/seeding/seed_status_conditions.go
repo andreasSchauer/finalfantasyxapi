@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedStatusConditions(qtx *database.Queries, ctx context.Context) error {
@@ -45,7 +46,7 @@ func (l *Lookup) loop3SeedStatusConditions(qtx *database.Queries, ctx context.Co
 	for i, row := range dbRows {
 		statusses[i].ID = row.ID
 		l.json.statusConditions[i].ID = row.ID
-		l.StatusConditions[Key(statusses[i])] = statusses[i]
+		l.StatusConditions[seedtypes.Key(statusses[i])] = statusses[i]
 		l.StatusConditionsID[row.ID] = statusses[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -53,8 +54,8 @@ func (l *Lookup) loop3SeedStatusConditions(qtx *database.Queries, ctx context.Co
 	return nil
 }
 
-func (l *Lookup) extractStatusConditions() ([]StatusCondition, error) {
-	statusses := []StatusCondition{}
+func (l *Lookup) extractStatusConditions() ([]seedtypes.StatusCondition, error) {
+	statusses := []seedtypes.StatusCondition{}
 	var err error
 
 	for i := range l.json.statusConditions {
@@ -87,7 +88,7 @@ func (l *Lookup) completeStatusConditions() error {
 			return err
 		}
 
-		l.StatusConditions[Key(status)] = *status
+		l.StatusConditions[seedtypes.Key(status)] = *status
 		l.StatusConditionsID[status.ID] = *status
 	}
 

@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedMiscAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -45,7 +46,7 @@ func (l *Lookup) loop3SeedMiscAbilities(qtx *database.Queries, ctx context.Conte
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.miscAbilities[i].ID = row.ID
-		l.MiscAbilities[Key(abilities[i])] = abilities[i]
+		l.MiscAbilities[seedtypes.Key(abilities[i])] = abilities[i]
 		l.MiscAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -53,8 +54,8 @@ func (l *Lookup) loop3SeedMiscAbilities(qtx *database.Queries, ctx context.Conte
 	return nil
 }
 
-func (l *Lookup) extractMiscAbilities() ([]MiscAbility, error) {
-	abilities := []MiscAbility{}
+func (l *Lookup) extractMiscAbilities() ([]seedtypes.MiscAbility, error) {
+	abilities := []seedtypes.MiscAbility{}
 	var err error
 
 	for i := range l.json.miscAbilities {
@@ -95,14 +96,14 @@ func (l *Lookup) completeMiscAbilities() error {
 			return err
 		}
 
-		l.MiscAbilities[Key(ability)] = *ability
+		l.MiscAbilities[seedtypes.Key(ability)] = *ability
 		l.MiscAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
-func (l *Lookup) getMiscAbilityLearnedBy(ua MiscAbility) ([]CharacterClass, error) {
+func (l *Lookup) getMiscAbilityLearnedBy(ua seedtypes.MiscAbility) ([]seedtypes.CharacterClass, error) {
 	return getResources(ua.LearnedBy, l.CharClasses)
 }
 

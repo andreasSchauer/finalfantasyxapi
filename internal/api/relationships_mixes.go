@@ -5,9 +5,10 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getMixCombinations(cfg *Config, r *http.Request, mix seeding.Mix) ([]MixCombination, error) {
+func getMixCombinations(cfg *Config, r *http.Request, mix seedtypes.Mix) ([]MixCombination, error) {
 	combinations := mix.PossibleCombinations
 
 	best, err := cfg.Q.mixes[QpnBest].parseBool(r)
@@ -25,7 +26,7 @@ func getMixCombinations(cfg *Config, r *http.Request, mix seeding.Mix) ([]MixCom
 	if itemID != 0 {
 		item, _ := seeding.GetResourceByID(itemID, cfg.L.ItemsID)
 
-		combinations = h.Filter(combinations, func(c seeding.MixCombination) bool {
+		combinations = h.Filter(combinations, func(c seedtypes.MixCombination) bool {
 			return item.Name == c.FirstItem || item.Name == c.SecondItem
 		})
 	}

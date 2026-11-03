@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type Aeon struct {
 	ID                     int32              `json:"id"`
@@ -31,7 +31,7 @@ type AeonEquipment struct {
 	CelestialWeapon bool             `json:"celestial_weapon"`
 }
 
-func convertAeonEquipment(cfg *Config, ae seeding.AeonEquipment) AeonEquipment {
+func convertAeonEquipment(cfg *Config, ae seedtypes.AeonEquipment) AeonEquipment {
 	return AeonEquipment{
 		AutoAbility:     nameToNamedAPIResource(cfg, cfg.E.AutoAbilities, ae.AutoAbility, nil),
 		CelestialWeapon: ae.CelestialWeapon,

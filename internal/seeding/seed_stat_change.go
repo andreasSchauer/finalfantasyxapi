@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedStatChanges(qtx *database.Queries, ctx context.Context) error {
@@ -39,8 +40,8 @@ func (l *Lookup) loop5SeedStatChanges(qtx *database.Queries, ctx context.Context
 	return nil
 }
 
-func (l *Lookup) extractStatChanges() ([]StatChange, error) {
-	changes := []StatChange{}
+func (l *Lookup) extractStatChanges() ([]seedtypes.StatChange, error) {
+	changes := []seedtypes.StatChange{}
 
 	for i := range l.json.playerAbilities {
 		ability := &l.json.playerAbilities[i]
@@ -133,8 +134,8 @@ func (l *Lookup) extractStatChanges() ([]StatChange, error) {
 	return dedupeRows(changes, l.Hashes), nil
 }
 
-func (l *Lookup) prepareAbilityStatChanges(battleInteractions []BattleInteraction) ([]StatChange, error) {
-	changes := []StatChange{}
+func (l *Lookup) prepareAbilityStatChanges(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.StatChange, error) {
+	changes := []seedtypes.StatChange{}
 
 	for i := range battleInteractions {
 		bi := &battleInteractions[i]
@@ -149,8 +150,8 @@ func (l *Lookup) prepareAbilityStatChanges(battleInteractions []BattleInteractio
 	return changes, nil
 }
 
-func (l *Lookup) prepareStatChanges(changes []StatChange) ([]StatChange, error) {
-	changesNew := []StatChange{}
+func (l *Lookup) prepareStatChanges(changes []seedtypes.StatChange) ([]seedtypes.StatChange, error) {
+	changesNew := []seedtypes.StatChange{}
 	var err error
 
 	for i := range changes {

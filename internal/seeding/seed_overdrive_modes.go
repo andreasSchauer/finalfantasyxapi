@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Context) error {
@@ -38,7 +39,7 @@ func (l *Lookup) loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Cont
 	for i, row := range dbRows {
 		modes[i].ID = row.ID
 		l.json.overdriveModes[i].ID = row.ID
-		l.OverdriveModes[Key(modes[i])] = modes[i]
+		l.OverdriveModes[seedtypes.Key(modes[i])] = modes[i]
 		l.OverdriveModesID[row.ID] = modes[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -55,7 +56,7 @@ func (l *Lookup) completeOverdriveModes() error {
 			return err
 		}
 
-		l.OverdriveModes[Key(mode)] = *mode
+		l.OverdriveModes[seedtypes.Key(mode)] = *mode
 		l.OverdriveModesID[mode.ID] = *mode
 	}
 
@@ -92,8 +93,8 @@ func (l *Lookup) loop5SeedOdModeActions(qtx *database.Queries, ctx context.Conte
 	return nil
 }
 
-func (l *Lookup) extractOdModeActions() ([]ActionToLearn, error) {
-	actions := []ActionToLearn{}
+func (l *Lookup) extractOdModeActions() ([]seedtypes.ActionToLearn, error) {
+	actions := []seedtypes.ActionToLearn{}
 	var err error
 
 	for i := range l.json.overdriveModes {
@@ -114,7 +115,7 @@ func (l *Lookup) extractOdModeActions() ([]ActionToLearn, error) {
 	return dedupeRows(actions, l.Hashes), nil
 }
 
-func (l *Lookup) getOverdriveModeActions(om OverdriveMode) ([]ActionToLearn, error) {
+func (l *Lookup) getOverdriveModeActions(om seedtypes.OverdriveMode) ([]seedtypes.ActionToLearn, error) {
 	return om.ActionsToLearn, nil
 }
 

@@ -5,16 +5,17 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
 	sublocations := l.extractSublocations()
 
 	params := database.CreateSublocationBulkParams{
-		DataHash:   	make([]string, len(sublocations)),
-		LocationID: 	make([]int32, len(sublocations)),
-		Name:       	make([]string, len(sublocations)),
-		Availability: 	make([]database.AvailabilityType, len(sublocations)),
+		DataHash:     make([]string, len(sublocations)),
+		LocationID:   make([]int32, len(sublocations)),
+		Name:         make([]string, len(sublocations)),
+		Availability: make([]database.AvailabilityType, len(sublocations)),
 	}
 
 	for i, s := range sublocations {
@@ -31,7 +32,7 @@ func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Contex
 
 	for i, row := range dbRows {
 		sublocations[i].ID = row.ID
-		l.Sublocations[Key(sublocations[i])] = sublocations[i]
+		l.Sublocations[seedtypes.Key(sublocations[i])] = sublocations[i]
 		l.SublocationsID[row.ID] = sublocations[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -39,8 +40,8 @@ func (l *Lookup) loop2SeedSublocations(qtx *database.Queries, ctx context.Contex
 	return nil
 }
 
-func (l *Lookup) extractSublocations() []Sublocation {
-	sublocations := []Sublocation{}
+func (l *Lookup) extractSublocations() []seedtypes.Sublocation {
+	sublocations := []seedtypes.Sublocation{}
 
 	for i := range l.json.locations {
 		location := &l.json.locations[i]
@@ -56,7 +57,7 @@ func (l *Lookup) extractSublocations() []Sublocation {
 	return dedupeRows(sublocations, l.Hashes)
 }
 
-func (l *Lookup) completeSublocations(sublocations []Sublocation) error {
+func (l *Lookup) completeSublocations(sublocations []seedtypes.Sublocation) error {
 	for i := range sublocations {
 		sublocation := &sublocations[i]
 
@@ -65,7 +66,7 @@ func (l *Lookup) completeSublocations(sublocations []Sublocation) error {
 			return err
 		}
 
-		l.Sublocations[Key(sublocation)] = *sublocation
+		l.Sublocations[seedtypes.Key(sublocation)] = *sublocation
 		l.SublocationsID[sublocation.ID] = *sublocation
 	}
 

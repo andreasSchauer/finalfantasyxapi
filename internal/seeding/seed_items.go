@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop2SeedItems(qtx *database.Queries, ctx context.Context) error {
@@ -45,7 +46,7 @@ func (l *Lookup) loop2SeedItems(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		items[i].ID = row.ID
 		l.json.items[i].ID = row.ID
-		l.Items[Key(items[i])] = items[i]
+		l.Items[seedtypes.Key(items[i])] = items[i]
 		l.ItemsID[row.ID] = items[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -53,8 +54,8 @@ func (l *Lookup) loop2SeedItems(qtx *database.Queries, ctx context.Context) erro
 	return nil
 }
 
-func (l *Lookup) extractItems() ([]Item, error) {
-	items := []Item{}
+func (l *Lookup) extractItems() ([]seedtypes.Item, error) {
+	items := []seedtypes.Item{}
 	var err error
 
 	for i := range l.json.items {
@@ -84,18 +85,18 @@ func (l *Lookup) completeItems() error {
 				return err
 			}
 
-			l.ItemAbilities[Key(item.ItemAbility)] = item.ItemAbility
+			l.ItemAbilities[seedtypes.Key(item.ItemAbility)] = item.ItemAbility
 			l.ItemAbilitiesID[item.ID] = item.ItemAbility
 		}
 
-		l.Items[Key(item)] = *item
+		l.Items[seedtypes.Key(item)] = *item
 		l.ItemsID[item.ID] = *item
 	}
 
 	return nil
 }
 
-func (l *Lookup) getItemAvailableMenus(i Item) ([]Submenu, error) {
+func (l *Lookup) getItemAvailableMenus(i seedtypes.Item) ([]seedtypes.Submenu, error) {
 	return getResources(i.AvailableMenus, l.Submenus)
 }
 
@@ -113,7 +114,7 @@ func (l *Lookup) seedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.
 	})
 }
 
-func (l *Lookup) getItemRelatedStats(i Item) ([]Stat, error) {
+func (l *Lookup) getItemRelatedStats(i seedtypes.Item) ([]seedtypes.Stat, error) {
 	return getResources(i.RelatedStats, l.Stats)
 }
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -31,7 +32,7 @@ func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.overdriveAbilities[i].ID = row.ID
-		l.OverdriveAbilities[Key(abilities[i])] = abilities[i]
+		l.OverdriveAbilities[seedtypes.Key(abilities[i])] = abilities[i]
 		l.OverdriveAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -39,8 +40,8 @@ func (l *Lookup) loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.
 	return nil
 }
 
-func (l *Lookup) extractOverdriveAbilities() ([]OverdriveAbility, error) {
-	abilities := []OverdriveAbility{}
+func (l *Lookup) extractOverdriveAbilities() ([]seedtypes.OverdriveAbility, error) {
+	abilities := []seedtypes.OverdriveAbility{}
 	var err error
 
 	for i := range l.json.overdriveAbilities {
@@ -66,14 +67,14 @@ func (l *Lookup) completeOverdriveAbilities() error {
 			return err
 		}
 
-		l.OverdriveAbilities[Key(ability)] = *ability
+		l.OverdriveAbilities[seedtypes.Key(ability)] = *ability
 		l.OverdriveAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
-func (l *Lookup) getOverdriveAbilityRelatedStats(oa OverdriveAbility) ([]Stat, error) {
+func (l *Lookup) getOverdriveAbilityRelatedStats(oa seedtypes.OverdriveAbility) ([]seedtypes.Stat, error) {
 	return getResources(oa.RelatedStats, l.Stats)
 }
 

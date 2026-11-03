@@ -5,25 +5,25 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type ItemAmountSimple struct {
-	ia            seeding.ItemAmount `json:"-"`
-	ItemAmountStr string             `json:"item"`
-	ItemType      database.ItemType  `json:"item_type"`
+	ia            seedtypes.ItemAmount `json:"-"`
+	ItemAmountStr string               `json:"item"`
+	ItemType      database.ItemType    `json:"item_type"`
 }
 
-func convertItemAmountSimple(cfg *Config, ia seeding.ItemAmount) string {
+func convertItemAmountSimple(cfg *Config, ia seedtypes.ItemAmount) string {
 	return h.NameAmountString(ia.ItemName, nil, nil, ia.Amount)
 }
 
-func posItemToItemAmtSimple(cfg *Config, posItem seeding.PossibleItem) string {
+func posItemToItemAmtSimple(cfg *Config, posItem seedtypes.PossibleItem) string {
 	return convertItemAmountSimple(cfg, posItem.ItemAmount)
 }
 
-func sortItemAmountsByID(s []seeding.ItemAmount) []seeding.ItemAmount {
-	slices.SortStableFunc(s, func(a, b seeding.ItemAmount) int {
+func sortItemAmountsByID(s []seedtypes.ItemAmount) []seedtypes.ItemAmount {
+	slices.SortStableFunc(s, func(a, b seedtypes.ItemAmount) int {
 		A := a.MasterItem.ID
 		B := b.MasterItem.ID
 

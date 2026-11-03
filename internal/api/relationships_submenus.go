@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getSubmenuRelationships(cfg *Config, r *http.Request, submenu seeding.Submenu) (Submenu, error) {
+func getSubmenuRelationships(cfg *Config, r *http.Request, submenu seedtypes.Submenu) (Submenu, error) {
 	var rel Submenu
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -33,7 +33,7 @@ func getSubmenuRelationships(cfg *Config, r *http.Request, submenu seeding.Subme
 	return rel, nil
 }
 
-func createSubmenuOpenedBy(cfg *Config, ctx context.Context, submenu seeding.Submenu) (*MenuOpen, error) {
+func createSubmenuOpenedBy(cfg *Config, ctx context.Context, submenu seedtypes.Submenu) (*MenuOpen, error) {
 	var menuOpen MenuOpen
 	g, ctx := errgroup.WithContext(ctx)
 

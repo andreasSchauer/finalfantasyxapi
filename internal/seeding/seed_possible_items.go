@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedPossibleItems(qtx *database.Queries, ctx context.Context) error {
@@ -37,8 +38,8 @@ func (l *Lookup) loop3SeedPossibleItems(qtx *database.Queries, ctx context.Conte
 	return nil
 }
 
-func (l *Lookup) extractPossibleItems() ([]PossibleItem, error) {
-	items := []PossibleItem{}
+func (l *Lookup) extractPossibleItems() ([]seedtypes.PossibleItem, error) {
+	items := []seedtypes.PossibleItem{}
 	var err error
 
 	for i := range l.json.blitzballPositions {

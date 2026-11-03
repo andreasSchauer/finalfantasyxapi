@@ -7,15 +7,16 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedInflictedDelays(qtx *database.Queries, ctx context.Context) error {
 	delays := l.extractInflictedDelays()
 
 	params := database.CreateInflictedDelayBulkParams{
-		DataHash:       make([]string, len(delays)),
-		Condition:      make([]sql.NullString, len(delays)),
-		DelayStrength:  make([]database.DelayStrength, len(delays)),
+		DataHash:      make([]string, len(delays)),
+		Condition:     make([]sql.NullString, len(delays)),
+		DelayStrength: make([]database.DelayStrength, len(delays)),
 	}
 
 	for i, d := range delays {
@@ -36,8 +37,8 @@ func (l *Lookup) loop1SeedInflictedDelays(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractInflictedDelays() []InflictedDelay {
-	delays := []InflictedDelay{}
+func (l *Lookup) extractInflictedDelays() []seedtypes.InflictedDelay {
+	delays := []seedtypes.InflictedDelay{}
 
 	for _, ability := range l.json.enemyAbilities {
 		for _, bi := range ability.BattleInteractions {

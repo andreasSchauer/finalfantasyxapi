@@ -4,10 +4,10 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getMasterItemObtainable(cfg *Config, r *http.Request, masterItem seeding.MasterItem) (ObtainableFrom, error) {
+func getMasterItemObtainable(cfg *Config, r *http.Request, masterItem seedtypes.MasterItem) (ObtainableFrom, error) {
 	availabilityParams, err := cfg.E.AllItems.queryAvlRelGetParams(cfg, r, masterItem.ID)
 	if err != nil {
 		return ObtainableFrom{}, err

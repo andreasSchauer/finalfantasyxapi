@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location, Location, NamedAPIResource], id int32) (Location, error) {
+func (cfg *Config) getLocation(r *http.Request, i handlerInput[seedtypes.Location, Location, NamedAPIResource], id int32) (Location, error) {
 	location, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Location{}, err
@@ -29,7 +29,7 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seeding.Location,
 	return response, nil
 }
 
-func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seeding.Location, Location, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seedtypes.Location, Location, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

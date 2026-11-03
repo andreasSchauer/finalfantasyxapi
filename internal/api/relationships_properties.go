@@ -3,11 +3,11 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getPropertyRelationships(cfg *Config, r *http.Request, property seeding.Property) (Property, error) {
+func getPropertyRelationships(cfg *Config, r *http.Request, property seedtypes.Property) (Property, error) {
 	var rel Property
 	g, ctx := errgroup.WithContext(r.Context())
 

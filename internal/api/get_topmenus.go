@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource], id int32) (Topmenu, error) {
+func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seedtypes.Topmenu, Topmenu, NamedAPIResource], id int32) (Topmenu, error) {
 	topmenu, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Topmenu{}, err
@@ -30,6 +30,6 @@ func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seeding.Topmenu, T
 	return response, nil
 }
 
-func (cfg *Config) retrieveTopmenus(r *http.Request, i handlerInput[seeding.Topmenu, Topmenu, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveTopmenus(r *http.Request, i handlerInput[seedtypes.Topmenu, Topmenu, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

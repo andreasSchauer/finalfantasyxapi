@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type userAbility interface {
@@ -16,7 +17,7 @@ type userAbility interface {
 }
 
 type unitRepl struct {
-	unit        seeding.PlayerUnit
+	unit        seedtypes.PlayerUnit
 	bombWpn     bool
 	isCelestial bool
 	replVals    biReplacement
@@ -30,7 +31,7 @@ type biReplacement struct {
 	DamageFormula  *string
 }
 
-func applyUser[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A], ability userAbility, queryName QueryParamName) ([]BattleInteraction, error) {
+func applyUser[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A], ability userAbility, queryName QueryParamName) ([]BattleInteraction, error) {
 	repl, err := getUnitRepl(cfg, r, i, queryName)
 	if queryIsEmpty(err) {
 		return ability.getBattleInteractions(), nil
@@ -49,7 +50,7 @@ func applyUser[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *http.
 	return battleInteractions, nil
 }
 
-func getUnitRepl[T seeding.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A], queryName QueryParamName) (unitRepl, error) {
+func getUnitRepl[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A], queryName QueryParamName) (unitRepl, error) {
 	queryParamUser := i.queryLookup[queryName]
 	queryParamBomb := i.queryLookup[QpnBombWpn]
 	queryParamCelestialWpn := i.queryLookup[QpnCelestialWeapon]

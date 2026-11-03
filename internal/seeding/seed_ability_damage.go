@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedClassDamages(qtx *database.Queries, ctx context.Context) error {
@@ -41,8 +42,8 @@ func (l *Lookup) loop1SeedClassDamages(qtx *database.Queries, ctx context.Contex
 	return nil
 }
 
-func (l *Lookup) extractClassDamages() ([]ClassDamage, error) {
-	damages := []ClassDamage{}
+func (l *Lookup) extractClassDamages() ([]seedtypes.ClassDamage, error) {
+	damages := []seedtypes.ClassDamage{}
 
 	for i := range l.json.playerAbilities {
 		ability := &l.json.playerAbilities[i]
@@ -112,8 +113,8 @@ func (l *Lookup) extractClassDamages() ([]ClassDamage, error) {
 	return dedupeRows(damages, l.Hashes), nil
 }
 
-func (l *Lookup) getClassDamages(battleInteractions []BattleInteraction) ([]ClassDamage, error) {
-	damages := []ClassDamage{}
+func (l *Lookup) getClassDamages(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.ClassDamage, error) {
+	damages := []seedtypes.ClassDamage{}
 
 	for j := range battleInteractions {
 		bi := &battleInteractions[j]

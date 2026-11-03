@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -19,7 +19,7 @@ func (ac AreaConnection) GetAPIResource() APIResource {
 	return ac.Area
 }
 
-func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocRel, error) {
+func getAreaRelationships(cfg *Config, r *http.Request, area seedtypes.Area) (LocRel, error) {
 	var rel LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -95,7 +95,7 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seeding.Area) (LocR
 	return rel, nil
 }
 
-func getAreaConnectedAreas(cfg *Config, area seeding.Area) ([]AreaConnection, error) {
+func getAreaConnectedAreas(cfg *Config, area seedtypes.Area) ([]AreaConnection, error) {
 	i := cfg.E.Areas
 	connectedAreas := []AreaConnection{}
 
@@ -113,7 +113,7 @@ func getAreaConnectedAreas(cfg *Config, area seeding.Area) ([]AreaConnection, er
 	return connectedAreas, nil
 }
 
-func getAreaDisplayName(area seeding.Area) string {
+func getAreaDisplayName(area seedtypes.Area) string {
 	sublocName := area.Sublocation
 
 	if sublocName == area.Name {

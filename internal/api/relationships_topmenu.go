@@ -3,11 +3,11 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getTopmenuRelationships(cfg *Config, r *http.Request, topmenu seeding.Topmenu) (Topmenu, error) {
+func getTopmenuRelationships(cfg *Config, r *http.Request, topmenu seedtypes.Topmenu) (Topmenu, error) {
 	var rel Topmenu
 	g, ctx := errgroup.WithContext(r.Context())
 

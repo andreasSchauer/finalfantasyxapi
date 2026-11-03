@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context) error {
@@ -27,7 +28,7 @@ func (l *Lookup) loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context)
 
 	for i, row := range dbRows {
 		rages[i].ID = row.ID
-		l.RonsoRages[Key(rages[i])] = rages[i]
+		l.RonsoRages[seedtypes.Key(rages[i])] = rages[i]
 		l.RonsoRagesID[row.ID] = rages[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -35,16 +36,16 @@ func (l *Lookup) loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context)
 	return nil
 }
 
-func (l *Lookup) extractRonsoRages() []RonsoRage {
-	rages := []RonsoRage{}
+func (l *Lookup) extractRonsoRages() []seedtypes.RonsoRage {
+	rages := []seedtypes.RonsoRage{}
 
 	for _, overdrive := range l.json.overdrives {
 		if overdrive.User != "kimahri" {
 			continue
 		}
 
-		rage := RonsoRage{
-			ID:        0,
+		rage := seedtypes.RonsoRage{
+			ID:                  0,
 			Overdrive: overdrive,
 		}
 

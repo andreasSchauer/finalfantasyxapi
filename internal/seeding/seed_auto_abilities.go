@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -63,7 +64,7 @@ func (l *Lookup) loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Conte
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.autoAbilities[i].ID = row.ID
-		l.AutoAbilities[Key(abilities[i])] = abilities[i]
+		l.AutoAbilities[seedtypes.Key(abilities[i])] = abilities[i]
 		l.AutoAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -71,8 +72,8 @@ func (l *Lookup) loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Conte
 	return nil
 }
 
-func (l *Lookup) extractAutoAbilities() ([]AutoAbility, error) {
-	abilities := []AutoAbility{}
+func (l *Lookup) extractAutoAbilities() ([]seedtypes.AutoAbility, error) {
+	abilities := []seedtypes.AutoAbility{}
 	var err error
 
 	for i := range l.json.autoAbilities {
@@ -149,7 +150,7 @@ func (l *Lookup) completeAutoAbilities() error {
 			return err
 		}
 
-		l.AutoAbilities[Key(autoAbility)] = *autoAbility
+		l.AutoAbilities[seedtypes.Key(autoAbility)] = *autoAbility
 		l.AutoAbilitiesID[autoAbility.ID] = *autoAbility
 	}
 

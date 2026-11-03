@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop2SeedMonsterAmounts(qtx *database.Queries, ctx context.Context) error {
@@ -37,8 +38,8 @@ func (l *Lookup) loop2SeedMonsterAmounts(qtx *database.Queries, ctx context.Cont
 	return nil
 }
 
-func (l *Lookup) extractMonsterAmounts() ([]MonsterAmount, error) {
-	mas := []MonsterAmount{}
+func (l *Lookup) extractMonsterAmounts() ([]seedtypes.MonsterAmount, error) {
+	mas := []seedtypes.MonsterAmount{}
 	var err error
 
 	for i := range l.json.monsterFormations {
@@ -47,7 +48,7 @@ func (l *Lookup) extractMonsterAmounts() ([]MonsterAmount, error) {
 		for j := range mf.Monsters {
 			ma := &mf.Monsters[j]
 
-			key := Key(*ma)
+			key := seedtypes.Key(*ma)
 			ma.MonsterID, err = assignFK(key, l.Monsters)
 			if err != nil {
 				return nil, err

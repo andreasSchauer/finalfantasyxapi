@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedMonsterEquipmentSlots(qtx *database.Queries, ctx context.Context) error {
@@ -41,8 +42,8 @@ func (l *Lookup) loop3SeedMonsterEquipmentSlots(qtx *database.Queries, ctx conte
 	return nil
 }
 
-func (l *Lookup) extractMonsterEquipmentSlots() ([]MonsterEquipmentSlots, error) {
-	slots := []MonsterEquipmentSlots{}
+func (l *Lookup) extractMonsterEquipmentSlots() ([]seedtypes.MonsterEquipmentSlots, error) {
+	slots := []seedtypes.MonsterEquipmentSlots{}
 	var err error
 
 	for i := range l.json.monsters {
@@ -101,8 +102,8 @@ func (l *Lookup) loop1SeedEquipmentSlotsChances(qtx *database.Queries, ctx conte
 	return nil
 }
 
-func (l *Lookup) extractEquipmentSlotsChances() []EquipmentSlotsChance {
-	chances := []EquipmentSlotsChance{}
+func (l *Lookup) extractEquipmentSlotsChances() []seedtypes.EquipmentSlotsChance {
+	chances := []seedtypes.EquipmentSlotsChance{}
 
 	for _, m := range l.json.monsters {
 		if m.Equipment != nil {

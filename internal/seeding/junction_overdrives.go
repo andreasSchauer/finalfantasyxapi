@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getOverdriveOverdriveAbilities(o Overdrive) ([]OverdriveAbility, error) {
+func (l *Lookup) getOverdriveOverdriveAbilities(o seedtypes.Overdrive) ([]seedtypes.OverdriveAbility, error) {
 	return typedRefsToResources(o.OverdriveAbilities, l.OverdriveAbilities)
 }
 

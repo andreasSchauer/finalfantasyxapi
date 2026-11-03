@@ -6,11 +6,11 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 // checks for emptiness of id-list-queryParam and converts its input into a slice of valid ids.
-func (q QueryParam) parseIDList[F seeding.Lookupable](cfg *Config, r *http.Request, fLookup map[string]F) ([]int32, error) {
+func (q QueryParam) parseIDList[F seedtypes.Lookupable](cfg *Config, r *http.Request, fLookup map[string]F) ([]int32, error) {
 	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err
@@ -20,7 +20,7 @@ func (q QueryParam) parseIDList[F seeding.Lookupable](cfg *Config, r *http.Reque
 }
 
 // converts a list of unique query ids into a slice of valid ids.
-func (q QueryParam) sliceIDs[F seeding.Lookupable](cfg *Config, r *http.Request, query string, fLookup map[string]F) ([]int32, error) {
+func (q QueryParam) sliceIDs[F seedtypes.Lookupable](cfg *Config, r *http.Request, query string, fLookup map[string]F) ([]int32, error) {
 	idSegments, err := queryListSplit(cfg, query)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (q QueryParam) sliceIDs[F seeding.Lookupable](cfg *Config, r *http.Request,
 	return ids, nil
 }
 
-func (q QueryParam) checkIDRange[F seeding.Lookupable](segment string, fLookup map[string]F) ([]int32, error) {
+func (q QueryParam) checkIDRange[F seedtypes.Lookupable](segment string, fLookup map[string]F) ([]int32, error) {
 	idStrs := strings.Split(segment, "-")
 	ids := []int32{}
 
@@ -76,7 +76,7 @@ func (q QueryParam) checkIDRange[F seeding.Lookupable](segment string, fLookup m
 	return ids, nil
 }
 
-func (q QueryParam) sliceIDRange[F seeding.Lookupable](idStrs []string, fLookup map[string]F) ([]int32, error) {
+func (q QueryParam) sliceIDRange[F seedtypes.Lookupable](idStrs []string, fLookup map[string]F) ([]int32, error) {
 	minID, err := q.parseIDVal(idStrs[0], len(fLookup))
 	if err != nil {
 		return nil, err

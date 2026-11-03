@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getProperty(r *http.Request, i handlerInput[seeding.Property, Property, NamedAPIResource], id int32) (Property, error) {
+func (cfg *Config) getProperty(r *http.Request, i handlerInput[seedtypes.Property, Property, NamedAPIResource], id int32) (Property, error) {
 	property, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Property{}, err
@@ -31,6 +31,6 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seeding.Property,
 	return response, nil
 }
 
-func (cfg *Config) retrieveProperties(r *http.Request, i handlerInput[seeding.Property, Property, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveProperties(r *http.Request, i handlerInput[seedtypes.Property, Property, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

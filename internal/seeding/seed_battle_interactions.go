@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedBattleInteractions(qtx *database.Queries, ctx context.Context) error {
@@ -51,8 +52,8 @@ func (l *Lookup) loop3SeedBattleInteractions(qtx *database.Queries, ctx context.
 	return nil
 }
 
-func (l *Lookup) extractBattleInteractions() ([]BattleInteraction, error) {
-	bis := []BattleInteraction{}
+func (l *Lookup) extractBattleInteractions() ([]seedtypes.BattleInteraction, error) {
+	bis := []seedtypes.BattleInteraction{}
 
 	for i := range l.json.playerAbilities {
 		ability := &l.json.playerAbilities[i]
@@ -123,8 +124,8 @@ func (l *Lookup) extractBattleInteractions() ([]BattleInteraction, error) {
 	return dedupeRows(bis, l.Hashes), nil
 }
 
-func (l *Lookup) prepareBattleInteractions(bis []BattleInteraction) ([]BattleInteraction, error) {
-	bisNew := []BattleInteraction{}
+func (l *Lookup) prepareBattleInteractions(bis []seedtypes.BattleInteraction) ([]seedtypes.BattleInteraction, error) {
+	bisNew := []seedtypes.BattleInteraction{}
 	var err error
 
 	for j := range bis {
@@ -148,7 +149,7 @@ func (l *Lookup) prepareBattleInteractions(bis []BattleInteraction) ([]BattleInt
 	return bisNew, nil
 }
 
-func (l *Lookup) completeBattleInteractions(bis []BattleInteraction) error {
+func (l *Lookup) completeBattleInteractions(bis []seedtypes.BattleInteraction) error {
 	for i := range bis {
 		bi := &bis[i]
 

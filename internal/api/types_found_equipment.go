@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type FoundEquipment struct {
 	EquipmentName    NamedAPIResource   `json:"name"`
@@ -8,7 +8,7 @@ type FoundEquipment struct {
 	EmptySlotsAmount int32              `json:"empty_slots_amount"`
 }
 
-func convertFoundEquipment(cfg *Config, fe seeding.TreasureEquipment) FoundEquipment {
+func convertFoundEquipment(cfg *Config, fe seedtypes.TreasureEquipment) FoundEquipment {
 	return FoundEquipment{
 		EquipmentName:    nameToNamedAPIResource(cfg, cfg.E.Equipment, fe.Name, nil),
 		Abilities:        namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, fe.Abilities),

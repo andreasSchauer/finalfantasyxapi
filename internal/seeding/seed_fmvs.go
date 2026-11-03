@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop4SeedFMVs(qtx *database.Queries, ctx context.Context) error {
@@ -41,7 +42,7 @@ func (l *Lookup) loop4SeedFMVs(qtx *database.Queries, ctx context.Context) error
 	for i, row := range dbRows {
 		fmvs[i].ID = row.ID
 		l.json.fmvs[i].ID = row.ID
-		l.FMVs[Key(fmvs[i])] = fmvs[i]
+		l.FMVs[seedtypes.Key(fmvs[i])] = fmvs[i]
 		l.FMVsID[row.ID] = fmvs[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -49,8 +50,8 @@ func (l *Lookup) loop4SeedFMVs(qtx *database.Queries, ctx context.Context) error
 	return nil
 }
 
-func (l *Lookup) extractFMVs() ([]FMV, error) {
-	fmvs := []FMV{}
+func (l *Lookup) extractFMVs() ([]seedtypes.FMV, error) {
+	fmvs := []seedtypes.FMV{}
 	var err error
 
 	for i := range l.json.fmvs {

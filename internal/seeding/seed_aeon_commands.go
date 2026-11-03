@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedAeonCommands(qtx *database.Queries, ctx context.Context) error {
@@ -43,7 +44,7 @@ func (l *Lookup) loop3SeedAeonCommands(qtx *database.Queries, ctx context.Contex
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
 		l.json.aeonCommands[i].ID = row.ID
-		l.AeonCommands[Key(commands[i])] = commands[i]
+		l.AeonCommands[seedtypes.Key(commands[i])] = commands[i]
 		l.AeonCommandsID[row.ID] = commands[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -51,8 +52,8 @@ func (l *Lookup) loop3SeedAeonCommands(qtx *database.Queries, ctx context.Contex
 	return nil
 }
 
-func (l *Lookup) extractAeonCommands() ([]AeonCommand, error) {
-	commands := []AeonCommand{}
+func (l *Lookup) extractAeonCommands() ([]seedtypes.AeonCommand, error) {
+	commands := []seedtypes.AeonCommand{}
 	var err error
 
 	for i := range l.json.aeonCommands {

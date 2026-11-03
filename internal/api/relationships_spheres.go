@@ -4,9 +4,10 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getSphereRelationships(cfg *Config, r *http.Request, sphere seeding.Sphere) (Sphere, error) {
+func getSphereRelationships(cfg *Config, r *http.Request, sphere seedtypes.Sphere) (Sphere, error) {
 	item, _ := seeding.GetResourceByID(sphere.ItemID, cfg.L.ItemsID)
 
 	availabilityParams, err := cfg.E.Spheres.queryAvlRelGetParams(cfg, r, item.ID)

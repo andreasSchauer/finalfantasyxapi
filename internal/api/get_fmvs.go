@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getFMV(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource], id int32) (FMV, error) {
+func (cfg *Config) getFMV(r *http.Request, i handlerInput[seedtypes.FMV, FMV, NamedAPIResource], id int32) (FMV, error) {
 	fmv, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return FMV{}, err
@@ -24,7 +24,7 @@ func (cfg *Config) getFMV(r *http.Request, i handlerInput[seeding.FMV, FMV, Name
 	return response, nil
 }
 
-func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seeding.FMV, FMV, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seedtypes.FMV, FMV, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

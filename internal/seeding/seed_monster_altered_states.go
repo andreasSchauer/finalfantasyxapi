@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop2SeedAlteredStates(qtx *database.Queries, ctx context.Context) error {
@@ -36,8 +37,8 @@ func (l *Lookup) loop2SeedAlteredStates(qtx *database.Queries, ctx context.Conte
 	return nil
 }
 
-func (l *Lookup) extractMonsterAlteredStates() []AlteredState {
-	states := []AlteredState{}
+func (l *Lookup) extractMonsterAlteredStates() []seedtypes.AlteredState {
+	states := []seedtypes.AlteredState{}
 
 	for i := range l.json.monsters {
 		mon := &l.json.monsters[i]
@@ -52,7 +53,7 @@ func (l *Lookup) extractMonsterAlteredStates() []AlteredState {
 	return dedupeRows(states, l.Hashes)
 }
 
-func (l *Lookup) completeAlteredStates(states []AlteredState) error {
+func (l *Lookup) completeAlteredStates(states []seedtypes.AlteredState) error {
 	for i := range states {
 		state := &states[i]
 

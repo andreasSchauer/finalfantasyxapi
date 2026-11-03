@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop2SeedDamages(qtx *database.Queries, ctx context.Context) error {
@@ -17,11 +18,11 @@ func (l *Lookup) loop2SeedDamages(qtx *database.Queries, ctx context.Context) er
 
 	params := database.CreateDamageBulkParams{
 		DataHash:        make([]string, len(damages)),
-		AttackType: 	 make([]database.AttackType, len(damages)),
-		DamageType: 	 make([]database.DamageType, len(damages)),
-		HpClassID: 		 make([]sql.NullInt32, len(damages)),
-		MpClassID: 		 make([]sql.NullInt32, len(damages)),
-		CtbClassID: 	 make([]sql.NullInt32, len(damages)),
+		AttackType:      make([]database.AttackType, len(damages)),
+		DamageType:      make([]database.DamageType, len(damages)),
+		HpClassID:       make([]sql.NullInt32, len(damages)),
+		MpClassID:       make([]sql.NullInt32, len(damages)),
+		CtbClassID:      make([]sql.NullInt32, len(damages)),
 		Critical:        make([]database.NullCriticalType, len(damages)),
 		CriticalPlusVal: make([]sql.NullInt32, len(damages)),
 		IsPiercing:      make([]bool, len(damages)),
@@ -55,8 +56,8 @@ func (l *Lookup) loop2SeedDamages(qtx *database.Queries, ctx context.Context) er
 	return nil
 }
 
-func (l *Lookup) extractDamages() ([]Damage, error) {
-	damages := []Damage{}
+func (l *Lookup) extractDamages() ([]seedtypes.Damage, error) {
+	damages := []seedtypes.Damage{}
 
 	for i := range l.json.playerAbilities {
 		ability := &l.json.playerAbilities[i]
@@ -127,8 +128,8 @@ func (l *Lookup) extractDamages() ([]Damage, error) {
 	return dedupeRows(damages, l.Hashes), nil
 }
 
-func (l *Lookup) prepareDamages(battleInteractions []BattleInteraction) ([]Damage, error) {
-	damages := []Damage{}
+func (l *Lookup) prepareDamages(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.Damage, error) {
+	damages := []seedtypes.Damage{}
 	var err error
 
 	for i := range battleInteractions {
@@ -167,7 +168,7 @@ func (l *Lookup) prepareDamages(battleInteractions []BattleInteraction) ([]Damag
 	return damages, nil
 }
 
-func (l *Lookup) completeDamage(damage *Damage) error {
+func (l *Lookup) completeDamage(damage *seedtypes.Damage) error {
 	if damage == nil {
 		return nil
 	}

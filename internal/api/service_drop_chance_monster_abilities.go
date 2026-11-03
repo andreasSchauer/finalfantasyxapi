@@ -2,7 +2,7 @@ package api
 
 import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type DroppedAutoAbilities struct {
@@ -22,7 +22,7 @@ func (d DroppedAutoAbilities) Round(n int32) DroppedAutoAbilities {
 	return d
 }
 
-func getDroppedAutoAbilities(cfg *Config, abilities []seeding.EquipmentDrop) DroppedAutoAbilities {
+func getDroppedAutoAbilities(cfg *Config, abilities []seedtypes.EquipmentDrop) DroppedAutoAbilities {
 	if abilities[0].IsForced {
 		forcedAbility := convertEqAbilitySimple(abilities[0])
 
@@ -43,7 +43,7 @@ type EqAbilitySimple struct {
 	Characters []string `json:"characters"`
 }
 
-func convertEqAbilitySimple(ed seeding.EquipmentDrop) EqAbilitySimple {
+func convertEqAbilitySimple(ed seedtypes.EquipmentDrop) EqAbilitySimple {
 	return EqAbilitySimple{
 		ID:         ed.AutoAbilityID,
 		Name:       ed.Ability,
@@ -68,13 +68,13 @@ func (a EqAbilityChance) Round(n int32) EqAbilityChance {
 	return a
 }
 
-func convertEqAbilityChance(_ *Config, ed seeding.EquipmentDrop) EqAbilityChance {
+func convertEqAbilityChance(_ *Config, ed seedtypes.EquipmentDrop) EqAbilityChance {
 	return EqAbilityChance{
 		EqAbilitySimple: convertEqAbilitySimple(ed),
 		Chance:          calcAutoAbilityDropChance(ed),
 	}
 }
 
-func calcAutoAbilityDropChance(ed seeding.EquipmentDrop) float64 {
+func calcAutoAbilityDropChance(ed seedtypes.EquipmentDrop) float64 {
 	return float64(*ed.Probability) / 7
 }

@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type AeonCommand struct {
 	ID                int32                 `json:"id"`
@@ -19,7 +19,7 @@ type PossibleAbilityList struct {
 	Abilities []TypedAPIResource `json:"abilities"`
 }
 
-func convertPossibleAbilityList(cfg *Config, pa seeding.PossibleAbilityList) PossibleAbilityList {
+func convertPossibleAbilityList(cfg *Config, pa seedtypes.PossibleAbilityList) PossibleAbilityList {
 	return PossibleAbilityList{
 		User:      nameToNamedAPIResource(cfg, cfg.E.CharacterClasses, pa.User, nil),
 		Abilities: keysToTypedAPIResources(cfg, cfg.E.Abilities, pa.Abilities),

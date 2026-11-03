@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
@@ -43,8 +44,8 @@ func (l *Lookup) loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Cont
 	return nil
 }
 
-func (l *Lookup) extractEquipmentDrops() ([]EquipmentDrop, error) {
-	drops := []EquipmentDrop{}
+func (l *Lookup) extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
+	drops := []seedtypes.EquipmentDrop{}
 	var err error
 
 	for i := range l.json.monsters {

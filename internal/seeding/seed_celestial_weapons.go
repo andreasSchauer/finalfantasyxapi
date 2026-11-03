@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Context) error {
@@ -41,7 +42,7 @@ func (l *Lookup) loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Co
 	for i, row := range dbRows {
 		wpns[i].ID = row.ID
 		l.json.celestialWeapons[i].ID = row.ID
-		l.CelestialWeapons[Key(wpns[i])] = wpns[i]
+		l.CelestialWeapons[seedtypes.Key(wpns[i])] = wpns[i]
 		l.CelestialWeaponsID[row.ID] = wpns[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -49,8 +50,8 @@ func (l *Lookup) loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Co
 	return nil
 }
 
-func (l *Lookup) extractCelestialWeapons() ([]CelestialWeapon, error) {
-	wpns := []CelestialWeapon{}
+func (l *Lookup) extractCelestialWeapons() ([]seedtypes.CelestialWeapon, error) {
+	wpns := []seedtypes.CelestialWeapon{}
 	var err error
 
 	for i := range l.json.celestialWeapons {

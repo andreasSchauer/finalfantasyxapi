@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -35,7 +36,7 @@ func (l *Lookup) loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Cont
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.enemyAbilities[i].ID = row.ID
-		l.EnemyAbilities[Key(abilities[i])] = abilities[i]
+		l.EnemyAbilities[seedtypes.Key(abilities[i])] = abilities[i]
 		l.EnemyAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -43,8 +44,8 @@ func (l *Lookup) loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Cont
 	return nil
 }
 
-func (l *Lookup) extractEnemyAbilities() ([]EnemyAbility, error) {
-	abilities := []EnemyAbility{}
+func (l *Lookup) extractEnemyAbilities() ([]seedtypes.EnemyAbility, error) {
+	abilities := []seedtypes.EnemyAbility{}
 	var err error
 
 	for i := range l.json.enemyAbilities {
@@ -70,7 +71,7 @@ func (l *Lookup) completeEnemyAbilities() error {
 			return err
 		}
 
-		l.EnemyAbilities[Key(ability)] = *ability
+		l.EnemyAbilities[seedtypes.Key(ability)] = *ability
 		l.EnemyAbilitiesID[ability.ID] = *ability
 	}
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop6SeedTreasureEquipment(qtx *database.Queries, ctx context.Context) error {
@@ -39,8 +40,8 @@ func (l *Lookup) loop6SeedTreasureEquipment(qtx *database.Queries, ctx context.C
 	return nil
 }
 
-func (l *Lookup) extractTreasureEquipment() ([]TreasureEquipment, error) {
-	equipment := []TreasureEquipment{}
+func (l *Lookup) extractTreasureEquipment() ([]seedtypes.TreasureEquipment, error) {
+	equipment := []seedtypes.TreasureEquipment{}
 	var err error
 
 	for i := range l.json.treasureLists {

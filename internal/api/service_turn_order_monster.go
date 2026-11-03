@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func fetchFormationMons(cfg *Config, params TurnOrderParams) TurnOrderParams {
@@ -32,10 +33,10 @@ func fetchFormationMons(cfg *Config, params TurnOrderParams) TurnOrderParams {
 	return params
 }
 
-func assembleMonTurnOrder(cfg *Config, monID int32, altState *int32) (Monster, *seeding.AgilityTier) {
+func assembleMonTurnOrder(cfg *Config, monID int32, altState *int32) (Monster, *seedtypes.AgilityTier) {
 	penanceArmIDs := []int32{306, 307}
 	firstTurnAglIDs := []int32{167, 168, 215, 306, 307}
-	var firstTurnAglTier *seeding.AgilityTier
+	var firstTurnAglTier *seedtypes.AgilityTier
 
 	if slices.Contains(penanceArmIDs, monID) {
 		altState = h.GetInt32Ptr(2)
@@ -50,7 +51,7 @@ func assembleMonTurnOrder(cfg *Config, monID int32, altState *int32) (Monster, *
 	return monster, firstTurnAglTier
 }
 
-func getFirstTurnAglTier(cfg *Config, monID int32) *seeding.AgilityTier {
+func getFirstTurnAglTier(cfg *Config, monID int32) *seedtypes.AgilityTier {
 	mon, _ := quickAssembleMon(cfg, monID, nil)
 	altState := mon.AlteredStates[0]
 

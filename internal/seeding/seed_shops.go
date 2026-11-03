@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop4SeedShops(qtx *database.Queries, ctx context.Context) error {
@@ -41,7 +42,7 @@ func (l *Lookup) loop4SeedShops(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		shops[i].ID = row.ID
 		l.json.shops[i].ID = row.ID
-		l.Shops[Key(shops[i])] = shops[i]
+		l.Shops[seedtypes.Key(shops[i])] = shops[i]
 		l.ShopsID[row.ID] = shops[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -49,8 +50,8 @@ func (l *Lookup) loop4SeedShops(qtx *database.Queries, ctx context.Context) erro
 	return nil
 }
 
-func (l *Lookup) extractShops() ([]Shop, error) {
-	shops := []Shop{}
+func (l *Lookup) extractShops() ([]seedtypes.Shop, error) {
+	shops := []seedtypes.Shop{}
 	var err error
 
 	for i := range l.json.shops {
@@ -89,14 +90,14 @@ func (l *Lookup) completeShops() error {
 			return err
 		}
 
-		l.Shops[Key(*shop)] = *shop
+		l.Shops[seedtypes.Key(*shop)] = *shop
 		l.ShopsID[shop.ID] = *shop
 	}
 
 	return nil
 }
 
-func (l *Lookup) completeSubShop(subShop *SubShop) error {
+func (l *Lookup) completeSubShop(subShop *seedtypes.SubShop) error {
 	if subShop == nil {
 		return nil
 	}

@@ -1,5 +1,7 @@
 package seeding
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+
 type JunctionParams struct {
 	DataHashes          []string
 	GreatGrandParentIDs []int32 // probably not needed
@@ -8,7 +10,7 @@ type JunctionParams struct {
 	ChildIDs            []int32
 }
 
-func processJunctions[P, C Hashable](l *Lookup, desc string, parents []P, getChildren func(P) ([]C, error)) (JunctionParams, error) {
+func processJunctions[P, C seedtypes.Hashable](l *Lookup, desc string, parents []P, getChildren func(P) ([]C, error)) (JunctionParams, error) {
 	params := JunctionParams{
 		DataHashes: make([]string, 0),
 		ParentIDs:  make([]int32, 0),
@@ -47,7 +49,7 @@ func processJunctions[P, C Hashable](l *Lookup, desc string, parents []P, getChi
 	return params, nil
 }
 
-func processThreewayJunctions[GP, P, C Hashable](l *Lookup, desc string, grandParents []GP, getParents func(GP) ([]P, error), getChildren func(P) ([]C, error)) (JunctionParams, error) {
+func processThreewayJunctions[GP, P, C seedtypes.Hashable](l *Lookup, desc string, grandParents []GP, getParents func(GP) ([]P, error), getChildren func(P) ([]C, error)) (JunctionParams, error) {
 	params := JunctionParams{
 		DataHashes:     make([]string, 0),
 		GrandParentIDs: make([]int32, 0),

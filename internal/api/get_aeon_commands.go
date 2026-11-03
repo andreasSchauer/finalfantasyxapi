@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getAeonCommand(r *http.Request, i handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource], id int32) (AeonCommand, error) {
+func (cfg *Config) getAeonCommand(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonCommand, NamedAPIResource], id int32) (AeonCommand, error) {
 	command, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return AeonCommand{}, err
@@ -35,6 +35,6 @@ func (cfg *Config) getAeonCommand(r *http.Request, i handlerInput[seeding.AeonCo
 	return response, nil
 }
 
-func (cfg *Config) retrieveAeonCommands(r *http.Request, i handlerInput[seeding.AeonCommand, AeonCommand, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveAeonCommands(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonCommand, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

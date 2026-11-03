@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getAutoAbilityAddedStatusResists(a AutoAbility) ([]StatusResist, error) {
+func (l *Lookup) getAutoAbilityAddedStatusResists(a seedtypes.AutoAbility) ([]seedtypes.StatusResist, error) {
 	return a.AddedStatusResists, nil
 }
 
@@ -24,7 +25,7 @@ func (l *Lookup) seedJuncAutoAbilitiesAddedStatusResists(qtx *database.Queries, 
 	})
 }
 
-func (l *Lookup) getAutoAbilityAddedStatusses(a AutoAbility) ([]StatusCondition, error) {
+func (l *Lookup) getAutoAbilityAddedStatusses(a seedtypes.AutoAbility) ([]seedtypes.StatusCondition, error) {
 	return getResources(a.AddedStatusses, l.StatusConditions)
 }
 
@@ -42,7 +43,7 @@ func (l *Lookup) seedJuncAutoAbilitiesAddedStatusses(qtx *database.Queries, ctx 
 	})
 }
 
-func (l *Lookup) getAutoAbilityAutoItems(a AutoAbility) ([]Item, error) {
+func (l *Lookup) getAutoAbilityAutoItems(a seedtypes.AutoAbility) ([]seedtypes.Item, error) {
 	return getResources(a.AutoItemUse, l.Items)
 }
 
@@ -60,7 +61,7 @@ func (l *Lookup) seedJuncAutoAbilitiesAutoItems(qtx *database.Queries, ctx conte
 	})
 }
 
-func (l *Lookup) getAutoAbilityLockedOutAbilities(a AutoAbility) ([]AutoAbility, error) {
+func (l *Lookup) getAutoAbilityLockedOutAbilities(a seedtypes.AutoAbility) ([]seedtypes.AutoAbility, error) {
 	return getResources(a.LockedOutAbilities, l.AutoAbilities)
 }
 
@@ -78,7 +79,7 @@ func (l *Lookup) seedJuncAutoAbilitiesLockedOutAbilities(qtx *database.Queries, 
 	})
 }
 
-func (l *Lookup) getAutoAbilityModifierChanges(a AutoAbility) ([]ModifierChange, error) {
+func (l *Lookup) getAutoAbilityModifierChanges(a seedtypes.AutoAbility) ([]seedtypes.ModifierChange, error) {
 	return a.ModifierChanges, nil
 }
 
@@ -96,7 +97,7 @@ func (l *Lookup) seedJuncAutoAbilitiesModifierChanges(qtx *database.Queries, ctx
 	})
 }
 
-func (l *Lookup) getAutoAbilityRelatedStats(a AutoAbility) ([]Stat, error) {
+func (l *Lookup) getAutoAbilityRelatedStats(a seedtypes.AutoAbility) ([]seedtypes.Stat, error) {
 	return getResources(a.RelatedStats, l.Stats)
 }
 
@@ -114,7 +115,7 @@ func (l *Lookup) seedJuncAutoAbilitiesRelatedStats(qtx *database.Queries, ctx co
 	})
 }
 
-func (l *Lookup) getAutoAbilityStatChanges(a AutoAbility) ([]StatChange, error) {
+func (l *Lookup) getAutoAbilityStatChanges(a seedtypes.AutoAbility) ([]seedtypes.StatChange, error) {
 	return a.StatChanges, nil
 }
 

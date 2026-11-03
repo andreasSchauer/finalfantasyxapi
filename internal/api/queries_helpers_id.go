@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 // validates id-queryParam and checks emptiness.
-func (q QueryParam) parseID[F seeding.Lookupable](r *http.Request, fLookup map[string]F) (int32, error) {
+func (q QueryParam) parseID[F seedtypes.Lookupable](r *http.Request, fLookup map[string]F) (int32, error) {
 	query, err := q.checkEmpty(r)
 	if err != nil {
 		return 0, err
@@ -25,7 +25,7 @@ func (q QueryParam) parseID[F seeding.Lookupable](r *http.Request, fLookup map[s
 }
 
 // validates id-queryParam and checks emptiness. accepts "none" as input.
-func (q QueryParam) parseIDPtr[F seeding.Lookupable](r *http.Request, fLookup map[string]F) (*int32, error) {
+func (q QueryParam) parseIDPtr[F seedtypes.Lookupable](r *http.Request, fLookup map[string]F) (*int32, error) {
 	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err

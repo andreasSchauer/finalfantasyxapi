@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedMonsters(qtx *database.Queries, ctx context.Context) error {
@@ -86,7 +87,7 @@ func (l *Lookup) loop1SeedMonsters(qtx *database.Queries, ctx context.Context) e
 	for i, row := range dbRows {
 		monsters[i].ID = row.ID
 		l.json.monsters[i].ID = row.ID
-		l.Monsters[Key(monsters[i])] = monsters[i]
+		l.Monsters[seedtypes.Key(monsters[i])] = monsters[i]
 		l.MonstersID[row.ID] = monsters[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -133,7 +134,7 @@ func (l *Lookup) completeMonsters() error {
 			return err
 		}
 
-		l.Monsters[Key(*mon)] = *mon
+		l.Monsters[seedtypes.Key(*mon)] = *mon
 		l.MonstersID[mon.ID] = *mon
 	}
 
@@ -154,9 +155,9 @@ func (l *Lookup) completeMonstersElements() error {
 		for _, element := range elements {
 			_, found := elemResistLookup[element]
 			if !found {
-				elemResist := ElementalResist{
-					Element:  element,
-					Affinity: "neutral",
+				elemResist := seedtypes.ElementalResist{
+					Element: element,
+					Affinity:          "neutral",
 				}
 				resists = append(resists, elemResist)
 			}

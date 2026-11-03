@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type Shop struct {
 	ID          int32           `json:"id"`
@@ -16,7 +16,7 @@ type SubShop struct {
 	Equipment []ShopEquipment `json:"equipment"`
 }
 
-func convertSubShop(cfg *Config, ss seeding.SubShop) SubShop {
+func convertSubShop(cfg *Config, ss seedtypes.SubShop) SubShop {
 	return SubShop{
 		Items:     convertObjSlice(cfg, ss.Items, convertShopItem),
 		Equipment: convertObjSlice(cfg, ss.Equipment, convertShopEquipment),
@@ -28,7 +28,7 @@ type ShopItem struct {
 	Price int32            `json:"price"`
 }
 
-func convertShopItem(cfg *Config, si seeding.ShopItem) ShopItem {
+func convertShopItem(cfg *Config, si seedtypes.ShopItem) ShopItem {
 	return ShopItem{
 		Item:  nameToNamedAPIResource(cfg, cfg.E.Items, si.Name, nil),
 		Price: si.Price,
@@ -40,7 +40,7 @@ type ShopEquipment struct {
 	Price     int32          `json:"price"`
 }
 
-func convertShopEquipment(cfg *Config, se seeding.ShopEquipment) ShopEquipment {
+func convertShopEquipment(cfg *Config, se seedtypes.ShopEquipment) ShopEquipment {
 	return ShopEquipment{
 		Equipment: convertFoundEquipment(cfg, se.TreasureEquipment),
 		Price:     se.Price,

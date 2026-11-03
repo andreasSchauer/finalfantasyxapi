@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getShop(r *http.Request, i handlerInput[seeding.Shop, Shop, UnnamedAPIResource], id int32) (Shop, error) {
+func (cfg *Config) getShop(r *http.Request, i handlerInput[seedtypes.Shop, Shop, UnnamedAPIResource], id int32) (Shop, error) {
 	shop, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Shop{}, err
@@ -24,7 +24,7 @@ func (cfg *Config) getShop(r *http.Request, i handlerInput[seeding.Shop, Shop, U
 	return response, nil
 }
 
-func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seeding.Shop, Shop, UnnamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seedtypes.Shop, Shop, UnnamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

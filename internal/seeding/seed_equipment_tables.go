@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Context) error {
@@ -43,7 +44,7 @@ func (l *Lookup) loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Con
 	for i, row := range dbRows {
 		tables[i].ID = row.ID
 		l.json.equipment[i].ID = row.ID
-		l.EquipmentTables[Key(tables[i])] = tables[i]
+		l.EquipmentTables[seedtypes.Key(tables[i])] = tables[i]
 		l.EquipmentTablesID[row.ID] = tables[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -51,8 +52,8 @@ func (l *Lookup) loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractEquipmentTables() ([]EquipmentTable, error) {
-	tables := []EquipmentTable{}
+func (l *Lookup) extractEquipmentTables() ([]seedtypes.EquipmentTable, error) {
+	tables := []seedtypes.EquipmentTable{}
 	var err error
 
 	for i := range l.json.equipment {
@@ -82,7 +83,7 @@ func (l *Lookup) completeEquipment() error {
 			return err
 		}
 
-		l.EquipmentTables[Key(*table)] = *table
+		l.EquipmentTables[seedtypes.Key(*table)] = *table
 		l.EquipmentTablesID[table.ID] = *table
 	}
 
@@ -118,8 +119,8 @@ func (l *Lookup) loop6SeedAbilityPools(qtx *database.Queries, ctx context.Contex
 	return nil
 }
 
-func (l *Lookup) extractAbilityPools() []AbilityPool {
-	pools := []AbilityPool{}
+func (l *Lookup) extractAbilityPools() []seedtypes.AbilityPool {
+	pools := []seedtypes.AbilityPool{}
 
 	for i := range l.json.equipment {
 		table := &l.json.equipment[i]

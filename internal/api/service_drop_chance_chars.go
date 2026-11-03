@@ -5,12 +5,13 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type CharChanceParams struct {
 	monMaxSlots     int32
-	wantedAbilities []seeding.AutoAbility
-	monAbilities    []seeding.EquipmentDrop
+	wantedAbilities []seedtypes.AutoAbility
+	monAbilities    []seedtypes.EquipmentDrop
 }
 
 type CharacterChances struct {
@@ -109,8 +110,7 @@ func (p CharChanceParams) calcChances(cfg *Config, params DropChanceParams) Char
 	return chances
 }
 
-
-func (p CharChanceParams) charIsEligible(params DropChanceParams, char seeding.Character) bool {
+func (p CharChanceParams) charIsEligible(params DropChanceParams, char seedtypes.Character) bool {
 	if p.forcedAbilityEliminatesChar(params, char) {
 		return false
 	}
@@ -126,7 +126,7 @@ func (p CharChanceParams) charIsEligible(params DropChanceParams, char seeding.C
 	return true
 }
 
-func (p CharChanceParams) forcedAbilityEliminatesChar(params DropChanceParams, char seeding.Character) bool {
+func (p CharChanceParams) forcedAbilityEliminatesChar(params DropChanceParams, char seedtypes.Character) bool {
 	// the character gets the forced ability, but the ability wasn't specified in auto_abilities
 	charGetsUnwantedForced := p.charGetsUnwantedForced(char)
 	noLooseSlotLeft := p.noLooseSlotLeft(params) // there's no loose slot left to fill in with an optional ability
@@ -139,7 +139,7 @@ func (p CharChanceParams) forcedAbilityEliminatesChar(params DropChanceParams, c
 	return false
 }
 
-func (p CharChanceParams) charGetsUnwantedForced(char seeding.Character) bool {
+func (p CharChanceParams) charGetsUnwantedForced(char seedtypes.Character) bool {
 	return p.forcedSlotExists() &&
 		!p.forcedSlotWanted() &&
 		charGetsAbility(p.monAbilities[0], &char)
@@ -167,7 +167,7 @@ func (p CharChanceParams) forcedSlotWanted() bool {
 	return false
 }
 
-func charGetsAbility(ability seeding.EquipmentDrop, charPtr *seeding.Character) bool {
+func charGetsAbility(ability seedtypes.EquipmentDrop, charPtr *seedtypes.Character) bool {
 	chars := ability.Characters
 
 	if charPtr == nil || len(chars) == 0 {

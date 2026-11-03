@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type BattleInteractionSimple struct {
@@ -25,7 +26,7 @@ type BattleInteractionSimple struct {
 	ModChanges                []string      `json:"modifier_changes,omitempty"`
 }
 
-func convertBattleInteractionSimple(cfg *Config, bi seeding.BattleInteraction) BattleInteractionSimple {
+func convertBattleInteractionSimple(cfg *Config, bi seedtypes.BattleInteraction) BattleInteractionSimple {
 	biSimple := BattleInteractionSimple{
 		Target:                    bi.Target,
 		Range:                     bi.Range,
@@ -55,7 +56,7 @@ type DamageSimple struct {
 	Element       *string `json:"element,omitempty"`
 }
 
-func convertDamageSimple(cfg *Config, d seeding.Damage) DamageSimple {
+func convertDamageSimple(cfg *Config, d seedtypes.Damage) DamageSimple {
 	return DamageSimple{
 		AttackType:    d.AttackType,
 		DamageType:    d.DamageType,
@@ -68,7 +69,7 @@ func convertDamageSimple(cfg *Config, d seeding.Damage) DamageSimple {
 	}
 }
 
-func convertClassDamageSimple(cfg *Config, dc seeding.ClassDamage) string {
+func convertClassDamageSimple(cfg *Config, dc seedtypes.ClassDamage) string {
 	return fmt.Sprintf("formula: %s, power: %d", dc.DamageFormula, dc.DamageConstant)
 }
 
@@ -84,7 +85,7 @@ func convertBreakDmgLimitSimple(_ *Config, breakDmgLimit string) string {
 	return ""
 }
 
-func convertAccuracySimple(_ *Config, acc seeding.Accuracy) string {
+func convertAccuracySimple(_ *Config, acc seedtypes.Accuracy) string {
 	switch acc.AccSource {
 	case string(database.AccSourceTypeRate):
 		if *acc.HitChance == 255 {
@@ -99,11 +100,11 @@ func convertAccuracySimple(_ *Config, acc seeding.Accuracy) string {
 	return ""
 }
 
-func convertInflictedDelaySimple(_ *Config, id seeding.InflictedDelay) string {
+func convertInflictedDelaySimple(_ *Config, id seedtypes.InflictedDelay) string {
 	return id.DelayStrength
 }
 
-func convertInflictedStatusSimple(_ *Config, is seeding.InflictedStatus) string {
+func convertInflictedStatusSimple(_ *Config, is seedtypes.InflictedStatus) string {
 	var probabilityStr string
 
 	switch is.Probability {
@@ -120,11 +121,11 @@ func convertInflictedStatusSimple(_ *Config, is seeding.InflictedStatus) string 
 	return fmt.Sprintf("%s (%s)", is.StatusCondition, probabilityStr)
 }
 
-func convertStatChangeSimple(_ *Config, sc seeding.StatChange) string {
+func convertStatChangeSimple(_ *Config, sc seedtypes.StatChange) string {
 	return formatChange(sc.StatName, sc.CalculationType, sc.Value)
 }
 
-func convertModChangeSimple(cfg *Config, mc seeding.ModifierChange) string {
+func convertModChangeSimple(cfg *Config, mc seedtypes.ModifierChange) string {
 	formatted := formatChange(mc.ModifierName, mc.CalculationType, mc.Value)
 	modifier, _ := seeding.GetResource(mc.ModifierName, cfg.L.Modifiers)
 

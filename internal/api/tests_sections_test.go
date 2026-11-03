@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func TestAreaToLocAreaString(t *testing.T) {
@@ -44,18 +45,18 @@ func TestAreaToLocAreaString(t *testing.T) {
 
 func TestConvertStatusResistSimple(t *testing.T) {
 	tests := []struct {
-		input seeding.StatusResist
+		input seedtypes.StatusResist
 		exp   string
 	}{
 		{
-			input: seeding.StatusResist{
+			input: seedtypes.StatusResist{
 				StatusCondition: "darkness",
 				Resistance:      50,
 			},
 			exp: "darkness (50%)",
 		},
 		{
-			input: seeding.StatusResist{
+			input: seedtypes.StatusResist{
 				StatusCondition: "silence",
 				Resistance:      254,
 			},
@@ -74,11 +75,11 @@ func TestConvertStatusResistSimple(t *testing.T) {
 
 func TestConvertAccuracySimple(t *testing.T) {
 	tests := []struct {
-		input seeding.Accuracy
+		input seedtypes.Accuracy
 		exp   string
 	}{
 		{
-			input: seeding.Accuracy{
+			input: seedtypes.Accuracy{
 				AccSource:   string(database.AccSourceTypeRate),
 				HitChance:   h.GetInt32Ptr(80),
 				AccModifier: nil,
@@ -86,7 +87,7 @@ func TestConvertAccuracySimple(t *testing.T) {
 			exp: "80% base chance of hitting",
 		},
 		{
-			input: seeding.Accuracy{
+			input: seedtypes.Accuracy{
 				AccSource:   string(database.AccSourceTypeRate),
 				HitChance:   h.GetInt32Ptr(255),
 				AccModifier: nil,
@@ -94,7 +95,7 @@ func TestConvertAccuracySimple(t *testing.T) {
 			exp: "always hits",
 		},
 		{
-			input: seeding.Accuracy{
+			input: seedtypes.Accuracy{
 				AccSource:   string(database.AccSourceTypeAccuracy),
 				HitChance:   nil,
 				AccModifier: h.GetFloat32Ptr(2.5),
@@ -114,25 +115,25 @@ func TestConvertAccuracySimple(t *testing.T) {
 
 func TestConvertInflictedStatusSimple(t *testing.T) {
 	tests := []struct {
-		input seeding.InflictedStatus
+		input seedtypes.InflictedStatus
 		exp   string
 	}{
 		{
-			input: seeding.InflictedStatus{
+			input: seedtypes.InflictedStatus{
 				StatusCondition: "darkness",
 				Probability:     80,
 			},
 			exp: "darkness (80%)",
 		},
 		{
-			input: seeding.InflictedStatus{
+			input: seedtypes.InflictedStatus{
 				StatusCondition: "silence",
 				Probability:     254,
 			},
 			exp: "silence (infinite %)",
 		},
 		{
-			input: seeding.InflictedStatus{
+			input: seedtypes.InflictedStatus{
 				StatusCondition: "sleep",
 				Probability:     255,
 			},
@@ -205,11 +206,11 @@ func TestFormatChange(t *testing.T) {
 
 func TestConvertModChangeSimple(t *testing.T) {
 	tests := []struct {
-		input seeding.ModifierChange
+		input seedtypes.ModifierChange
 		exp   string
 	}{
 		{
-			input: seeding.ModifierChange{
+			input: seedtypes.ModifierChange{
 				ModifierName:    "ap-gain",
 				CalculationType: string(database.CalculationTypeMultiplyHighest),
 				Value:           2,
@@ -217,7 +218,7 @@ func TestConvertModChangeSimple(t *testing.T) {
 			exp: "ap-gain x2",
 		},
 		{
-			input: seeding.ModifierChange{
+			input: seedtypes.ModifierChange{
 				ModifierName:    "accuracy-percentage",
 				CalculationType: string(database.CalculationTypeSetValue),
 				Value:           10,
@@ -237,32 +238,32 @@ func TestConvertModChangeSimple(t *testing.T) {
 
 func TestFoundEquipmentAbilitiesStringPtr(t *testing.T) {
 	tests := []struct {
-		input seeding.TreasureEquipment
+		input seedtypes.TreasureEquipment
 		exp   *string
 	}{
 		{
-			input: seeding.TreasureEquipment{
+			input: seedtypes.TreasureEquipment{
 				Abilities:        []string{"firestrike", "triple overdrive"},
 				EmptySlotsAmount: 0,
 			},
 			exp: h.GetStrPtr("firestrike, triple overdrive"),
 		},
 		{
-			input: seeding.TreasureEquipment{
+			input: seedtypes.TreasureEquipment{
 				Abilities:        []string{"firestrike", "triple overdrive"},
 				EmptySlotsAmount: 2,
 			},
 			exp: h.GetStrPtr("firestrike, triple overdrive, (2)"),
 		},
 		{
-			input: seeding.TreasureEquipment{
+			input: seedtypes.TreasureEquipment{
 				Abilities:        []string{},
 				EmptySlotsAmount: 4,
 			},
 			exp: h.GetStrPtr("(4)"),
 		},
 		{
-			input: seeding.TreasureEquipment{
+			input: seedtypes.TreasureEquipment{
 				Abilities:        []string{},
 				EmptySlotsAmount: 0,
 			},

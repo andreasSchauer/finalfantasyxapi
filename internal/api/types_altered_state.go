@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type AlteredState struct {
@@ -50,7 +50,7 @@ func (c *Alt) IsZero() bool {
 		c.RemovedStatus == nil
 }
 
-func getMonsterAlteredStates(cfg *Config, r *http.Request, mon seeding.Monster) []AlteredState {
+func getMonsterAlteredStates(cfg *Config, r *http.Request, mon seedtypes.Monster) []AlteredState {
 	alteredStates := []AlteredState{}
 
 	for i, altState := range mon.AlteredStates {
@@ -76,7 +76,7 @@ func getMonsterAlteredStates(cfg *Config, r *http.Request, mon seeding.Monster) 
 	return alteredStates
 }
 
-func getAlts(cfg *Config, as seeding.AlteredState) []Alt {
+func getAlts(cfg *Config, as seedtypes.AlteredState) []Alt {
 	alts := []Alt{}
 
 	for _, change := range as.Changes {
@@ -89,7 +89,7 @@ func getAlts(cfg *Config, as seeding.AlteredState) []Alt {
 	return alts
 }
 
-func convertAlt(cfg *Config, asc seeding.Alt) Alt {
+func convertAlt(cfg *Config, asc seedtypes.Alt) Alt {
 	return Alt{
 		Properties:       h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.E.Properties, asc.Properties)),
 		AutoAbilities:    h.SliceOrNil(namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, asc.AutoAbilities)),

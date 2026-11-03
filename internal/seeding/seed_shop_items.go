@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedShopItems(qtx *database.Queries, ctx context.Context) error {
@@ -37,8 +38,8 @@ func (l *Lookup) loop3SeedShopItems(qtx *database.Queries, ctx context.Context) 
 	return nil
 }
 
-func (l *Lookup) extractShopItems() ([]ShopItem, error) {
-	items := []ShopItem{}
+func (l *Lookup) extractShopItems() ([]seedtypes.ShopItem, error) {
+	items := []seedtypes.ShopItem{}
 	var err error
 
 	for i := range l.json.shops {

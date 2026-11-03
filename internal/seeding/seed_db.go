@@ -8,6 +8,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"github.com/pressly/goose/v3"
 )
 
@@ -30,9 +31,9 @@ func LoadDatabase(db *database.Queries, dbConn *sql.DB) (*Lookup, error) {
 
 	dbHash, _ := db.GetDbState(ctx)
 	/*
-	if err != nil {
-		return nil, fmt.Errorf("couldn't get database state: %v", err)
-	}
+		if err != nil {
+			return nil, fmt.Errorf("couldn't get database state: %v", err)
+		}
 	*/
 
 	if dataHash == dbHash {
@@ -199,7 +200,7 @@ func (l *Lookup) completeLookups() error {
 	return nil
 }
 
-func dedupeRows[T Hashable](rows []T, hashes map[string]int32) []T {
+func dedupeRows[T seedtypes.Hashable](rows []T, hashes map[string]int32) []T {
 	seen := make(map[string]bool)
 	new := []T{}
 

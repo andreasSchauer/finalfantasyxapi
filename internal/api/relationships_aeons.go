@@ -4,10 +4,11 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getAeonRelationships(cfg *Config, r *http.Request, aeon seeding.Aeon) (Aeon, error) {
+func getAeonRelationships(cfg *Config, r *http.Request, aeon seedtypes.Aeon) (Aeon, error) {
 	var rel Aeon
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -49,7 +50,7 @@ func getAeonRelationships(cfg *Config, r *http.Request, aeon seeding.Aeon) (Aeon
 	return rel, nil
 }
 
-func getAeonBaseStats(cfg *Config, aeon seeding.Aeon) []BaseStat {
+func getAeonBaseStats(cfg *Config, aeon seedtypes.Aeon) []BaseStat {
 	baseStats := aeon.BaseStats.XVals[0].BaseStats
 	return cfg.E.Stats.toResAmtType(cfg, baseStats, newBaseStat)
 }

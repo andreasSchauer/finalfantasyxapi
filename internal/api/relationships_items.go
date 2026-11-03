@@ -4,11 +4,11 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item, error) {
+func getItemRelationships(cfg *Config, r *http.Request, item seedtypes.Item) (Item, error) {
 	availabilityParams, err := cfg.E.Items.queryAvlRelGetParams(cfg, r, item.ID)
 	if err != nil {
 		return Item{}, err
@@ -27,7 +27,7 @@ func getItemRelationships(cfg *Config, r *http.Request, item seeding.Item) (Item
 	return rel, nil
 }
 
-func runItemRelQueries(cfg *Config, r *http.Request, item seeding.Item, availabilityParams RelAvlParams) (Item, error) {
+func runItemRelQueries(cfg *Config, r *http.Request, item seedtypes.Item, availabilityParams RelAvlParams) (Item, error) {
 	var rel Item
 	g, ctx := errgroup.WithContext(r.Context())
 

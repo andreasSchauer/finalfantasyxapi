@@ -8,9 +8,10 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seeding.Monster) ([]seeding.AutoAbility, []seeding.EquipmentDrop, error) {
+func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seedtypes.Monster) ([]seedtypes.AutoAbility, []seedtypes.EquipmentDrop, error) {
 	if mon.Equipment == nil {
 		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' doesn't drop equipment", mon), nil)
 	}
@@ -37,11 +38,11 @@ func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seeding.Monster) 
 	return autoAbilities, monsterAbilities, nil
 }
 
-func getEquipMaxSlots(slotsChances []seeding.EquipmentSlotsChance) int32 {
+func getEquipMaxSlots(slotsChances []seedtypes.EquipmentSlotsChance) int32 {
 	return slotsChances[len(slotsChances)-1].Amount
 }
 
-func getMonMaxSlots(mon seeding.Monster) int32 {
+func getMonMaxSlots(mon seedtypes.Monster) int32 {
 	if mon.Equipment == nil {
 		return 0
 	}
@@ -50,8 +51,8 @@ func getMonMaxSlots(mon seeding.Monster) int32 {
 	return slotsChances[len(slotsChances)-1].Amount
 }
 
-func vfWantedAutoAbilities(cfg *Config, params DropChanceParams) (DropChanceParams, []seeding.AutoAbility, error) {
-	var autoAbilities []seeding.AutoAbility
+func vfWantedAutoAbilities(cfg *Config, params DropChanceParams) (DropChanceParams, []seedtypes.AutoAbility, error) {
+	var autoAbilities []seedtypes.AutoAbility
 
 	for _, id := range params.AutoAbilities {
 		ability, _ := seeding.GetResourceByID(id, cfg.L.AutoAbilitiesID)
@@ -74,7 +75,7 @@ func vfWantedAutoAbilities(cfg *Config, params DropChanceParams) (DropChancePara
 	return params, autoAbilities, nil
 }
 
-func getMonAutoAbilities(equipType string, mon seeding.Monster) []seeding.EquipmentDrop {
+func getMonAutoAbilities(equipType string, mon seedtypes.Monster) []seedtypes.EquipmentDrop {
 	switch equipType {
 	case string(database.EquipTypeWeapon):
 		return mon.Equipment.WeaponAbilities
@@ -86,7 +87,7 @@ func getMonAutoAbilities(equipType string, mon seeding.Monster) []seeding.Equipm
 	return nil
 }
 
-func vfAutoAbilitiesDropped(wantedAutoAbilities []seeding.AutoAbility, monsterAbilities []seeding.EquipmentDrop, mon seeding.Monster) error {
+func vfAutoAbilitiesDropped(wantedAutoAbilities []seedtypes.AutoAbility, monsterAbilities []seedtypes.EquipmentDrop, mon seedtypes.Monster) error {
 	for _, ability := range wantedAutoAbilities {
 		var isPresent bool
 
@@ -105,7 +106,7 @@ func vfAutoAbilitiesDropped(wantedAutoAbilities []seeding.AutoAbility, monsterAb
 	return nil
 }
 
-func formatMonAutoAbilities(mon seeding.Monster) string {
+func formatMonAutoAbilities(mon seedtypes.Monster) string {
 	if mon.Equipment == nil {
 		return ""
 	}
@@ -117,7 +118,7 @@ func formatMonAutoAbilities(mon seeding.Monster) string {
 	return formatEquipmentDrops(allAbilities)
 }
 
-func formatEquipmentDrops(monsterAbilities []seeding.EquipmentDrop) string {
+func formatEquipmentDrops(monsterAbilities []seedtypes.EquipmentDrop) string {
 	var names []string
 	var forcedName string
 

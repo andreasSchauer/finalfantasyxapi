@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type Sphere struct {
 	ID                 int32                                `json:"id"`
@@ -27,7 +27,7 @@ type CreatedNode struct {
 	Value int32  `json:"value"`
 }
 
-func convertCreatedNode(cfg *Config, n seeding.CreatedNode) CreatedNode {
+func convertCreatedNode(cfg *Config, n seedtypes.CreatedNode) CreatedNode {
 	return CreatedNode{
 		Node:  n.Node,
 		Value: n.Value,

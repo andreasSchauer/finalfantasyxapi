@@ -4,11 +4,11 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getCharClassRelationships(cfg *Config, r *http.Request, class seeding.CharacterClass) (CharacterClass, error) {
+func getCharClassRelationships(cfg *Config, r *http.Request, class seedtypes.CharacterClass) (CharacterClass, error) {
 	var rel CharacterClass
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -55,7 +55,7 @@ func getCharClassRelationships(cfg *Config, r *http.Request, class seeding.Chara
 	return rel, nil
 }
 
-func getClassLearnableAbilities(cfg *Config, ctx context.Context, class seeding.CharacterClass, defaultAbilities []TypedAPIResource) ([]TypedAPIResource, error) {
+func getClassLearnableAbilities(cfg *Config, ctx context.Context, class seedtypes.CharacterClass, defaultAbilities []TypedAPIResource) ([]TypedAPIResource, error) {
 	allAbilities, err := cfg.E.Abilities.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
 		return nil, err

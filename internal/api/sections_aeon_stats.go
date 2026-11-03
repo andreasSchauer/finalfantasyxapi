@@ -5,6 +5,7 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type AeonStatSimple struct {
@@ -25,7 +26,7 @@ type Xval struct {
 	Stats   AeonStatTable `json:"stats"`
 }
 
-func convertXVal(cfg *Config, x seeding.XVal) Xval {
+func convertXVal(cfg *Config, x seedtypes.XVal) Xval {
 	return Xval{
 		Battles: x.Battles,
 		Stats:   newAeonStatTable(cfg, x.BaseStats),
@@ -45,7 +46,7 @@ type AeonStatTable struct {
 	Accuracy     int32  `json:"accuracy"`
 }
 
-func newAeonStatTable(cfg *Config, baseStats []seeding.BaseStat) AeonStatTable {
+func newAeonStatTable(cfg *Config, baseStats []seedtypes.BaseStat) AeonStatTable {
 	stats := cfg.E.Stats.toResAmtType(cfg, baseStats, newBaseStat)
 	statMap := GetResAmtTypeMap(stats)
 	luckPtr := h.GetInt32Ptr(statMap["luck"])

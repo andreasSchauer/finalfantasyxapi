@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource], id int32) (Subquest, error) {
+func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, QuestAPIResource], id int32) (Subquest, error) {
 	subquest, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Subquest{}, err
@@ -29,7 +29,7 @@ func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seeding.Subquest,
 	return response, nil
 }
 
-func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seeding.Subquest, Subquest, QuestAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, QuestAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

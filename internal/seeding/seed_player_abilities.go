@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedPlayerAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -57,7 +58,7 @@ func (l *Lookup) loop5SeedPlayerAbilities(qtx *database.Queries, ctx context.Con
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		l.json.playerAbilities[i].ID = row.ID
-		l.PlayerAbilities[Key(abilities[i])] = abilities[i]
+		l.PlayerAbilities[seedtypes.Key(abilities[i])] = abilities[i]
 		l.PlayerAbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -65,8 +66,8 @@ func (l *Lookup) loop5SeedPlayerAbilities(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractPlayerAbilities() ([]PlayerAbility, error) {
-	abilities := []PlayerAbility{}
+func (l *Lookup) extractPlayerAbilities() ([]seedtypes.PlayerAbility, error) {
+	abilities := []seedtypes.PlayerAbility{}
 	var err error
 
 	for i := range l.json.playerAbilities {
@@ -124,14 +125,14 @@ func (l *Lookup) completePlayerAbilities() error {
 			return err
 		}
 
-		l.PlayerAbilities[Key(ability)] = *ability
+		l.PlayerAbilities[seedtypes.Key(ability)] = *ability
 		l.PlayerAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
-func (l *Lookup) getPlayerAbilityLearnedBy(pa PlayerAbility) ([]CharacterClass, error) {
+func (l *Lookup) getPlayerAbilityLearnedBy(pa seedtypes.PlayerAbility) ([]seedtypes.CharacterClass, error) {
 	return getResources(pa.LearnedBy, l.CharClasses)
 }
 
@@ -149,7 +150,7 @@ func (l *Lookup) seedJuncPlayerAbilitiesLearnedBy(qtx *database.Queries, ctx con
 	})
 }
 
-func (l *Lookup) getPlayerAbilityRelatedStats(pa PlayerAbility) ([]Stat, error) {
+func (l *Lookup) getPlayerAbilityRelatedStats(pa seedtypes.PlayerAbility) ([]seedtypes.Stat, error) {
 	return getResources(pa.RelatedStats, l.Stats)
 }
 

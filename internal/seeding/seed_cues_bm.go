@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
@@ -36,8 +37,8 @@ func (l *Lookup) loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractBackgroundMusic() []BackgroundMusic {
-	bgMusic := []BackgroundMusic{}
+func (l *Lookup) extractBackgroundMusic() []seedtypes.BackgroundMusic {
+	bgMusic := []seedtypes.BackgroundMusic{}
 
 	for _, song := range l.json.songs {
 		bgMusic = append(bgMusic, song.BackgroundMusic...)
@@ -84,8 +85,8 @@ func (l *Lookup) loop4SeedCues(qtx *database.Queries, ctx context.Context) error
 	return nil
 }
 
-func (l *Lookup) extractCues() ([]Cue, error) {
-	cues := []Cue{}
+func (l *Lookup) extractCues() ([]seedtypes.Cue, error) {
+	cues := []seedtypes.Cue{}
 	var err error
 
 	for i := range l.json.songs {
@@ -109,8 +110,8 @@ func (l *Lookup) extractCues() ([]Cue, error) {
 	return dedupeRows(cues, l.Hashes), nil
 }
 
-func (l *Lookup) getCues() []Cue {
-	cues := []Cue{}
+func (l *Lookup) getCues() []seedtypes.Cue {
+	cues := []seedtypes.Cue{}
 
 	for _, song := range l.json.songs {
 		cues = append(cues, song.Cues...)
@@ -119,7 +120,7 @@ func (l *Lookup) getCues() []Cue {
 	return cues
 }
 
-func (l *Lookup) getCueIncludedAreas(c Cue) ([]Area, error) {
+func (l *Lookup) getCueIncludedAreas(c seedtypes.Cue) ([]seedtypes.Area, error) {
 	return getResources(c.IncludedAreas, l.Areas)
 }
 

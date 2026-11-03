@@ -5,15 +5,16 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
 	locations := dedupeRows(l.json.locations, l.Hashes)
 
 	params := database.CreateLocationBulkParams{
-		DataHash: 		make([]string, len(locations)),
-		Name:     		make([]string, len(locations)),
-		Availability: 	make([]database.AvailabilityType, len(locations)),
+		DataHash:     make([]string, len(locations)),
+		Name:         make([]string, len(locations)),
+		Availability: make([]database.AvailabilityType, len(locations)),
 	}
 
 	for i, l := range locations {
@@ -30,7 +31,7 @@ func (l *Lookup) loop1SeedLocations(qtx *database.Queries, ctx context.Context) 
 	for i, row := range dbRows {
 		locations[i].ID = row.ID
 		l.json.locations[i].ID = row.ID
-		l.Locations[Key(locations[i])] = locations[i]
+		l.Locations[seedtypes.Key(locations[i])] = locations[i]
 		l.LocationsID[row.ID] = locations[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -47,7 +48,7 @@ func (l *Lookup) completeLocations() error {
 			return err
 		}
 
-		l.Locations[Key(location)] = *location
+		l.Locations[seedtypes.Key(location)] = *location
 		l.LocationsID[location.ID] = *location
 	}
 

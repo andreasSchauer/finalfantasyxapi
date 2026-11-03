@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type AgilityParams struct {
@@ -13,13 +14,13 @@ type AgilityParams struct {
 	MaxICV      *int32             `json:"max_icv"`
 }
 
-func getAgilityTierDB(cfg *Config, r *http.Request, stats []BaseStat) (seeding.AgilityTier, error) {
+func getAgilityTierDB(cfg *Config, r *http.Request, stats []BaseStat) (seedtypes.AgilityTier, error) {
 	agilityStat := getBaseStat(cfg, "agility", stats)
 	agility := agilityStat.Value
 
 	dbAgilityTier, err := cfg.db.GetAgilityTierByAgility(r.Context(), agility)
 	if err != nil {
-		return seeding.AgilityTier{}, newHTTPError(http.StatusInternalServerError, "couldn't extract agility parameters", err)
+		return seedtypes.AgilityTier{}, newHTTPError(http.StatusInternalServerError, "couldn't extract agility parameters", err)
 	}
 
 	agilityTier, _ := seeding.GetResourceByID(dbAgilityTier.ID, cfg.L.AgilityTiersID)

@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getModifier(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource], id int32) (Modifier, error) {
+func (cfg *Config) getModifier(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, NamedAPIResource], id int32) (Modifier, error) {
 	modifier, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Modifier{}, err
@@ -36,7 +36,7 @@ func (cfg *Config) getModifier(r *http.Request, i handlerInput[seeding.Modifier,
 	return response, nil
 }
 
-func (cfg *Config) retrieveModifiers(r *http.Request, i handlerInput[seeding.Modifier, Modifier, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveModifiers(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

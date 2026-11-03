@@ -4,10 +4,11 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getCelestialWeaponRelationships(cfg *Config, r *http.Request, cw seeding.CelestialWeapon) (CelestialWeapon, error) {
+func getCelestialWeaponRelationships(cfg *Config, r *http.Request, cw seedtypes.CelestialWeapon) (CelestialWeapon, error) {
 	crest, _ := seeding.GetResource(cw.KeyItemBase+" crest", cfg.L.KeyItems)
 	sigil, _ := seeding.GetResource(cw.KeyItemBase+" sigil", cfg.L.KeyItems)
 	equipment, _ := seeding.GetResource(cw, cfg.L.EquipmentNames)

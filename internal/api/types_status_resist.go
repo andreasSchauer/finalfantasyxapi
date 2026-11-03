@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type StatusResist struct {
@@ -13,7 +13,7 @@ func (sr StatusResist) GetAPIResource() APIResource {
 	return sr.StatusCondition
 }
 
-func convertStatusResist(cfg *Config, sr seeding.StatusResist) StatusResist {
+func convertStatusResist(cfg *Config, sr seedtypes.StatusResist) StatusResist {
 	return StatusResist{
 		StatusCondition: nameToNamedAPIResource(cfg, cfg.E.StatusConditions, sr.StatusCondition, nil),
 		Resistance:      sr.Resistance,

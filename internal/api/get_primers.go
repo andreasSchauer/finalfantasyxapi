@@ -4,9 +4,10 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seeding.Primer, Primer, NamedAPIResource], id int32) (Primer, error) {
+func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seedtypes.Primer, Primer, NamedAPIResource], id int32) (Primer, error) {
 	primer, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Primer{}, err
@@ -33,7 +34,7 @@ func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seeding.Primer, Pri
 	return response, nil
 }
 
-func (cfg *Config) retrievePrimers(r *http.Request, i handlerInput[seeding.Primer, Primer, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrievePrimers(r *http.Request, i handlerInput[seedtypes.Primer, Primer, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

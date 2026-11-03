@@ -4,9 +4,10 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getMix(r *http.Request, i handlerInput[seeding.Mix, Mix, NamedAPIResource], id int32) (Mix, error) {
+func (cfg *Config) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource], id int32) (Mix, error) {
 	mix, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Mix{}, err
@@ -32,7 +33,7 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seeding.Mix, Mix, Name
 	return response, nil
 }
 
-func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seeding.Mix, Mix, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

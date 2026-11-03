@@ -6,6 +6,7 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type MonsterSimple struct {
@@ -59,7 +60,7 @@ func createMonsterSimple(cfg *Config, r *http.Request, id int32, subsection Subs
 	return monSimple, nil
 }
 
-func getMonsterHP(mon seeding.Monster) int32 {
+func getMonsterHP(mon seedtypes.Monster) int32 {
 	for _, stat := range mon.BaseStats {
 		if stat.StatName == "hp" {
 			return stat.Value
@@ -69,16 +70,16 @@ func getMonsterHP(mon seeding.Monster) int32 {
 	return 0
 }
 
-func getMonsterSimpleHP(mon seeding.Monster) string {
+func getMonsterSimpleHP(mon seedtypes.Monster) string {
 	hp := getMonsterHP(mon)
 	return fmt.Sprintf("%d (%d)", hp, mon.OverkillDamage)
 }
 
-func getMonsterSimpleAP(mon seeding.Monster) string {
+func getMonsterSimpleAP(mon seedtypes.Monster) string {
 	return fmt.Sprintf("%d (%d)", mon.AP, mon.APOverkill)
 }
 
-func getMonsterSimpleBribeAmount(mon seeding.Monster, hp int32) *int32 {
+func getMonsterSimpleBribeAmount(mon seedtypes.Monster, hp int32) *int32 {
 	if mon.Items == nil || mon.Items.Bribe == nil {
 		return nil
 	}

@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop4SeedTreasures(qtx *database.Queries, ctx context.Context) error {
@@ -46,7 +47,7 @@ func (l *Lookup) loop4SeedTreasures(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		treasures[i].ID = row.ID
-		l.Treasures[Key(treasures[i])] = treasures[i]
+		l.Treasures[seedtypes.Key(treasures[i])] = treasures[i]
 		l.TreasuresID[row.ID] = treasures[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -54,8 +55,8 @@ func (l *Lookup) loop4SeedTreasures(qtx *database.Queries, ctx context.Context) 
 	return nil
 }
 
-func (l *Lookup) extractTreasures() ([]Treasure, error) {
-	treasures := []Treasure{}
+func (l *Lookup) extractTreasures() ([]seedtypes.Treasure, error) {
+	treasures := []seedtypes.Treasure{}
 	var err error
 
 	for i := range l.json.treasureLists {
@@ -91,7 +92,7 @@ func (l *Lookup) completeTreasureLists() error {
 	return nil
 }
 
-func (l *Lookup) completeTreasures(treasures []Treasure) error {
+func (l *Lookup) completeTreasures(treasures []seedtypes.Treasure) error {
 	for i := range treasures {
 		treasure := &treasures[i]
 
@@ -112,7 +113,7 @@ func (l *Lookup) completeTreasures(treasures []Treasure) error {
 			}
 		}
 
-		l.Treasures[Key(*treasure)] = *treasure
+		l.Treasures[seedtypes.Key(*treasure)] = *treasure
 		l.TreasuresID[treasure.ID] = *treasure
 	}
 

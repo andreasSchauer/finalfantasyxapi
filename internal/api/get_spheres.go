@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getSphere(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource], id int32) (Sphere, error) {
+func (cfg *Config) getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, NamedAPIResource], id int32) (Sphere, error) {
 	sphere, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Sphere{}, err
@@ -40,7 +40,7 @@ func (cfg *Config) getSphere(r *http.Request, i handlerInput[seeding.Sphere, Sph
 	return response, nil
 }
 
-func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seeding.Sphere, Sphere, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveSpheres(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

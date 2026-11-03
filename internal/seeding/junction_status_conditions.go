@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getStatusConditionModifierChanges(sc StatusCondition) ([]ModifierChange, error) {
+func (l *Lookup) getStatusConditionModifierChanges(sc seedtypes.StatusCondition) ([]seedtypes.ModifierChange, error) {
 	return sc.ModifierChanges, nil
 }
 
@@ -24,7 +25,7 @@ func (l *Lookup) seedJuncStatusConditionModifierChanges(qtx *database.Queries, c
 	})
 }
 
-func (l *Lookup) getStatusConditionRelatedStats(sc StatusCondition) ([]Stat, error) {
+func (l *Lookup) getStatusConditionRelatedStats(sc seedtypes.StatusCondition) ([]seedtypes.Stat, error) {
 	return getResources(sc.RelatedStats, l.Stats)
 }
 
@@ -42,7 +43,7 @@ func (l *Lookup) seedJuncStatusConditionRelatedStats(qtx *database.Queries, ctx 
 	})
 }
 
-func (l *Lookup) getStatusConditionRemovedConditions(sc StatusCondition) ([]StatusCondition, error) {
+func (l *Lookup) getStatusConditionRemovedConditions(sc seedtypes.StatusCondition) ([]seedtypes.StatusCondition, error) {
 	return getResources(sc.RemovedStatusConditions, l.StatusConditions)
 }
 
@@ -60,7 +61,7 @@ func (l *Lookup) seedJuncStatusConditionRemovedConditions(qtx *database.Queries,
 	})
 }
 
-func (l *Lookup) getStatusConditionStatChanges(sc StatusCondition) ([]StatChange, error) {
+func (l *Lookup) getStatusConditionStatChanges(sc seedtypes.StatusCondition) ([]seedtypes.StatChange, error) {
 	return sc.StatChanges, nil
 }
 

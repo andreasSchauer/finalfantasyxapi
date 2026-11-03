@@ -7,49 +7,50 @@ import (
 	"os"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type jsonLookup struct {
-	aeonCommands          []AeonCommand
-	aeonStats             []AeonStat
-	aeons                 []Aeon
-	agilityTiers          []AgilityTier
-	autoAbilities         []AutoAbility
-	blitzballPositions    []BlitzballPosition
-	celestialWeapons      []CelestialWeapon
-	characterClasses      []CharacterClass
-	characters            []Character
+	aeonCommands          []seedtypes.AeonCommand
+	aeonStats             []seedtypes.AeonStat
+	aeons                 []seedtypes.Aeon
+	agilityTiers          []seedtypes.AgilityTier
+	autoAbilities         []seedtypes.AutoAbility
+	blitzballPositions    []seedtypes.BlitzballPosition
+	celestialWeapons      []seedtypes.CelestialWeapon
+	characterClasses      []seedtypes.CharacterClass
+	characters            []seedtypes.Character
 	defaultAbilities      []DefaultAbilitiesEntry
-	elements              []Element
-	enemyAbilities        []EnemyAbility
-	equipment             []EquipmentTable
-	fmvs                  []FMV
-	items                 []Item
-	keyItems              []KeyItem
-	locations             []Location
-	mixes                 []Mix
-	modifiers             []Modifier
-	monsterArenaCreations []ArenaCreation
-	monsterFormations     []MonsterFormation
-	monsters              []Monster
-	overdriveAbilities    []OverdriveAbility
-	overdriveCommands     []OverdriveCommand
-	overdriveModes        []OverdriveMode
-	overdrives            []Overdrive
-	playerAbilities       []PlayerAbility
-	primers               []Primer
-	properties            []Property
-	shops                 []Shop
-	sidequests            []Sidequest
-	songs                 []Song
-	spheres               []Sphere
-	stats                 []Stat
-	statusConditions      []StatusCondition
-	submenus              []Submenu
-	topmenus              []Topmenu
-	treasureLists         []TreasureList
-	triggerCommands       []TriggerCommand
-	miscAbilities         []MiscAbility
+	elements              []seedtypes.Element
+	enemyAbilities        []seedtypes.EnemyAbility
+	equipment             []seedtypes.EquipmentTable
+	fmvs                  []seedtypes.FMV
+	items                 []seedtypes.Item
+	keyItems              []seedtypes.KeyItem
+	locations             []seedtypes.Location
+	mixes                 []seedtypes.Mix
+	modifiers             []seedtypes.Modifier
+	monsterArenaCreations []seedtypes.ArenaCreation
+	monsterFormations     []seedtypes.MonsterFormation
+	monsters              []seedtypes.Monster
+	overdriveAbilities    []seedtypes.OverdriveAbility
+	overdriveCommands     []seedtypes.OverdriveCommand
+	overdriveModes        []seedtypes.OverdriveMode
+	overdrives            []seedtypes.Overdrive
+	playerAbilities       []seedtypes.PlayerAbility
+	primers               []seedtypes.Primer
+	properties            []seedtypes.Property
+	shops                 []seedtypes.Shop
+	sidequests            []seedtypes.Sidequest
+	songs                 []seedtypes.Song
+	spheres               []seedtypes.Sphere
+	stats                 []seedtypes.Stat
+	statusConditions      []seedtypes.StatusCondition
+	submenus              []seedtypes.Submenu
+	topmenus              []seedtypes.Topmenu
+	treasureLists         []seedtypes.TreasureList
+	triggerCommands       []seedtypes.TriggerCommand
+	miscAbilities         []seedtypes.MiscAbility
 }
 
 func loadJSONFile[T any](path string, target *T) error {

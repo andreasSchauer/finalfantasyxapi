@@ -6,10 +6,11 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource], id int32) (ArenaCreation, error) {
+func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource], id int32) (ArenaCreation, error) {
 	creation, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return ArenaCreation{}, err
@@ -38,7 +39,7 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seeding.Aren
 	return response, nil
 }
 
-func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seeding.ArenaCreation, ArenaCreation, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
@@ -49,7 +50,7 @@ func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seedin
 	})
 }
 
-func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seeding.ArenaCreation) ([]NamedAPIResource, error) {
+func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seedtypes.ArenaCreation) ([]NamedAPIResource, error) {
 	mf := createMonsterFilter(creation)
 
 	if mf.IsZero() || mf.CreationsUnlockedCategory != nil {

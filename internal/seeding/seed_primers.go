@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedPrimers(qtx *database.Queries, ctx context.Context) error {
@@ -35,7 +36,7 @@ func (l *Lookup) loop3SeedPrimers(qtx *database.Queries, ctx context.Context) er
 	for i, row := range dbRows {
 		primers[i].ID = row.ID
 		l.json.primers[i].ID = row.ID
-		l.Primers[Key(primers[i])] = primers[i]
+		l.Primers[seedtypes.Key(primers[i])] = primers[i]
 		l.PrimersID[row.ID] = primers[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -43,8 +44,8 @@ func (l *Lookup) loop3SeedPrimers(qtx *database.Queries, ctx context.Context) er
 	return nil
 }
 
-func (l *Lookup) extractPrimers() ([]Primer, error) {
-	primers := []Primer{}
+func (l *Lookup) extractPrimers() ([]seedtypes.Primer, error) {
+	primers := []seedtypes.Primer{}
 	var err error
 
 	for i := range l.json.primers {

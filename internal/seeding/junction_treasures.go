@@ -4,10 +4,11 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getTreasures() []Treasure {
-	treasures := []Treasure{}
+func (l *Lookup) getTreasures() []seedtypes.Treasure {
+	treasures := []seedtypes.Treasure{}
 
 	for _, list := range l.json.treasureLists {
 		treasures = append(treasures, list.Treasures...)
@@ -16,7 +17,7 @@ func (l *Lookup) getTreasures() []Treasure {
 	return treasures
 }
 
-func (l *Lookup) getTreasureItems(t Treasure) ([]ItemAmount, error) {
+func (l *Lookup) getTreasureItems(t seedtypes.Treasure) ([]seedtypes.ItemAmount, error) {
 	return t.Items, nil
 }
 
@@ -34,8 +35,8 @@ func (l *Lookup) seedJuncTreasuresItems(qtx *database.Queries, ctx context.Conte
 	})
 }
 
-func (l *Lookup) getTreasureEquipment() []TreasureEquipment {
-	treasureEquipment := []TreasureEquipment{}
+func (l *Lookup) getTreasureEquipment() []seedtypes.TreasureEquipment {
+	treasureEquipment := []seedtypes.TreasureEquipment{}
 
 	for _, list := range l.json.treasureLists {
 		for _, treasure := range list.Treasures {
@@ -48,7 +49,7 @@ func (l *Lookup) getTreasureEquipment() []TreasureEquipment {
 	return treasureEquipment
 }
 
-func (l *Lookup) getTreasureEquipmentAutoAbilities(te TreasureEquipment) ([]AutoAbility, error) {
+func (l *Lookup) getTreasureEquipmentAutoAbilities(te seedtypes.TreasureEquipment) ([]seedtypes.AutoAbility, error) {
 	return getResources(te.Abilities, l.AutoAbilities)
 }
 

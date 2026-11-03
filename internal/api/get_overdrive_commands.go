@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource], id int32) (OverdriveCommand, error) {
+func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, NamedAPIResource], id int32) (OverdriveCommand, error) {
 	command, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return OverdriveCommand{}, err
@@ -31,6 +31,6 @@ func (cfg *Config) getOverdriveCommand(r *http.Request, i handlerInput[seeding.O
 	return response, nil
 }
 
-func (cfg *Config) retrieveOverdriveCommands(r *http.Request, i handlerInput[seeding.OverdriveCommand, OverdriveCommand, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveOverdriveCommands(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

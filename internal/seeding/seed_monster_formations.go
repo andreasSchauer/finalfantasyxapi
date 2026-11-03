@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop5SeedMonsterFormations(qtx *database.Queries, ctx context.Context) error {
@@ -37,7 +38,7 @@ func (l *Lookup) loop5SeedMonsterFormations(qtx *database.Queries, ctx context.C
 	for i, row := range dbRows {
 		formations[i].ID = row.ID
 		l.json.monsterFormations[i].ID = row.ID
-		l.MonsterFormations[Key(formations[i])] = formations[i]
+		l.MonsterFormations[seedtypes.Key(formations[i])] = formations[i]
 		l.MonsterFormationsID[row.ID] = formations[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -45,8 +46,8 @@ func (l *Lookup) loop5SeedMonsterFormations(qtx *database.Queries, ctx context.C
 	return nil
 }
 
-func (l *Lookup) extractMonsterFormations() ([]MonsterFormation, error) {
-	formations := []MonsterFormation{}
+func (l *Lookup) extractMonsterFormations() ([]seedtypes.MonsterFormation, error) {
+	formations := []seedtypes.MonsterFormation{}
 	var err error
 
 	for i := range l.json.monsterFormations {
@@ -87,7 +88,7 @@ func (l *Lookup) completeMonsterFormations() error {
 			return err
 		}
 
-		l.MonsterFormations[Key(*formation)] = *formation
+		l.MonsterFormations[seedtypes.Key(*formation)] = *formation
 		l.MonsterFormationsID[formation.ID] = *formation
 	}
 
@@ -118,8 +119,8 @@ func (l *Lookup) loop1SeedMonsterSelections(qtx *database.Queries, ctx context.C
 	return nil
 }
 
-func (l *Lookup) extractMonsterSelections() ([]MonsterSelection, error) {
-	selections := []MonsterSelection{}
+func (l *Lookup) extractMonsterSelections() ([]seedtypes.MonsterSelection, error) {
+	selections := []seedtypes.MonsterSelection{}
 	var err error
 
 	for i := range l.json.monsterFormations {
@@ -128,7 +129,7 @@ func (l *Lookup) extractMonsterSelections() ([]MonsterSelection, error) {
 		for j := range mf.MonsterSelection.Monsters {
 			ma := &mf.MonsterSelection.Monsters[j]
 
-			key := Key(*ma)
+			key := seedtypes.Key(*ma)
 			ma.MonsterID, err = assignFK(key, l.Monsters)
 			if err != nil {
 				return nil, err

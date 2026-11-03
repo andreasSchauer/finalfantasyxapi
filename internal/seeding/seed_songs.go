@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop2SeedSongs(qtx *database.Queries, ctx context.Context) error {
@@ -57,7 +58,7 @@ func (l *Lookup) loop2SeedSongs(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		songs[i].ID = row.ID
 		l.json.songs[i].ID = row.ID
-		l.Songs[Key(songs[i])] = songs[i]
+		l.Songs[seedtypes.Key(songs[i])] = songs[i]
 		l.SongsID[row.ID] = songs[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -65,8 +66,8 @@ func (l *Lookup) loop2SeedSongs(qtx *database.Queries, ctx context.Context) erro
 	return nil
 }
 
-func (l *Lookup) extractSongs() ([]Song, error) {
-	songs := []Song{}
+func (l *Lookup) extractSongs() ([]seedtypes.Song, error) {
+	songs := []seedtypes.Song{}
 	var err error
 
 	for i := range l.json.songs {
@@ -98,7 +99,7 @@ func (l *Lookup) completeSongs() error {
 			return err
 		}
 
-		l.Songs[Key(song)] = *song
+		l.Songs[seedtypes.Key(song)] = *song
 		l.SongsID[song.ID] = *song
 	}
 
@@ -136,8 +137,8 @@ func (l *Lookup) loop1SeedSongCredits(qtx *database.Queries, ctx context.Context
 	return nil
 }
 
-func (l *Lookup) extractSongCredits() []SongCredits {
-	credits := []SongCredits{}
+func (l *Lookup) extractSongCredits() []seedtypes.SongCredits {
+	credits := []seedtypes.SongCredits{}
 
 	for _, song := range l.json.songs {
 		if song.Credits != nil {
@@ -148,11 +149,11 @@ func (l *Lookup) extractSongCredits() []SongCredits {
 	return dedupeRows(credits, l.Hashes)
 }
 
-func (l *Lookup) getSongBackgroundMusic(s Song) ([]BackgroundMusic, error) {
+func (l *Lookup) getSongBackgroundMusic(s seedtypes.Song) ([]seedtypes.BackgroundMusic, error) {
 	return s.BackgroundMusic, nil
 }
 
-func (l *Lookup) getBackgroundMusicAreas(bm BackgroundMusic) ([]Area, error) {
+func (l *Lookup) getBackgroundMusicAreas(bm seedtypes.BackgroundMusic) ([]seedtypes.Area, error) {
 	return getResources(bm.LocationAreas, l.Areas)
 }
 

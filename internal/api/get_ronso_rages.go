@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource], id int32) (RonsoRage, error) {
+func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seedtypes.RonsoRage, RonsoRage, NamedAPIResource], id int32) (RonsoRage, error) {
 	ronsoRage, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return RonsoRage{}, err
@@ -29,6 +29,6 @@ func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seeding.RonsoRag
 	return response, nil
 }
 
-func (cfg *Config) retrieveRonsoRages(r *http.Request, i handlerInput[seeding.RonsoRage, RonsoRage, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveRonsoRages(r *http.Request, i handlerInput[seedtypes.RonsoRage, RonsoRage, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

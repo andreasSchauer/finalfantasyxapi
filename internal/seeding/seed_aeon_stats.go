@@ -1,5 +1,6 @@
 package seeding
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 func (l *Lookup) completeAeonStats() error {
 	for i := range l.json.aeonStats {
@@ -22,7 +23,7 @@ func (l *Lookup) completeAeonStats() error {
 		aeon := l.Aeons[as.Name]
 		as.AeonID = aeon.ID
 		aeon.BaseStats = *as
-		l.Aeons[Key(aeon)] = aeon
+		l.Aeons[seedtypes.Key(aeon)] = aeon
 		l.AeonsID[as.AeonID] = aeon
 		l.json.aeons[i].BaseStats = *as
 	}
@@ -30,7 +31,7 @@ func (l *Lookup) completeAeonStats() error {
 	return nil
 }
 
-func (l *Lookup) completeAeonXVals(xVals []XVal) error {
+func (l *Lookup) completeAeonXVals(xVals []seedtypes.XVal) error {
 	for i := range xVals {
 		xVal := &xVals[i]
 		err := assignIDs(l, xVal.BaseStats)

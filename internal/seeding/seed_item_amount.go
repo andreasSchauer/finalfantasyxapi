@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop2SeedItemAmounts(qtx *database.Queries, ctx context.Context) error {
@@ -37,8 +38,8 @@ func (l *Lookup) loop2SeedItemAmounts(qtx *database.Queries, ctx context.Context
 	return nil
 }
 
-func (l *Lookup) extractItemAmounts() ([]ItemAmount, error) {
-	itemAmounts := []ItemAmount{}
+func (l *Lookup) extractItemAmounts() ([]seedtypes.ItemAmount, error) {
+	itemAmounts := []seedtypes.ItemAmount{}
 	var err error
 
 	for i := range l.json.autoAbilities {
@@ -131,8 +132,8 @@ func (l *Lookup) extractItemAmounts() ([]ItemAmount, error) {
 	return dedupeRows(itemAmounts, l.Hashes), nil
 }
 
-func (l *Lookup) extractItemAmtsMonsters() ([]ItemAmount, error) {
-	itemAmounts := []ItemAmount{}
+func (l *Lookup) extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
+	itemAmounts := []seedtypes.ItemAmount{}
 	var err error
 
 	for i := range l.json.monsters {
@@ -218,7 +219,7 @@ func (l *Lookup) extractItemAmtsMonsters() ([]ItemAmount, error) {
 	return itemAmounts, nil
 }
 
-func (l *Lookup) prepareItemAmt(ia *ItemAmount) (*ItemAmount, error) {
+func (l *Lookup) prepareItemAmt(ia *seedtypes.ItemAmount) (*seedtypes.ItemAmount, error) {
 	var err error
 	ia.MasterItem.Name = ia.ItemName
 

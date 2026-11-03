@@ -5,10 +5,11 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getMonsterItems() []MonsterItems {
-	monsterItems := []MonsterItems{}
+func (l *Lookup) getMonsterItems() []seedtypes.MonsterItems {
+	monsterItems := []seedtypes.MonsterItems{}
 
 	for _, mon := range l.json.monsters {
 		if mon.Items != nil {
@@ -19,7 +20,7 @@ func (l *Lookup) getMonsterItems() []MonsterItems {
 	return monsterItems
 }
 
-func (l *Lookup) getMonsterItemsOtherItems(mi MonsterItems) ([]PossibleItem, error) {
+func (l *Lookup) getMonsterItemsOtherItems(mi seedtypes.MonsterItems) ([]seedtypes.PossibleItem, error) {
 	return mi.OtherItems, nil
 }
 
@@ -37,8 +38,8 @@ func (l *Lookup) seedJuncMonsterItemsOtherItems(qtx *database.Queries, ctx conte
 	})
 }
 
-func (l *Lookup) getMonsterEquipment() []MonsterEquipment {
-	monsterEquipment := []MonsterEquipment{}
+func (l *Lookup) getMonsterEquipment() []seedtypes.MonsterEquipment {
+	monsterEquipment := []seedtypes.MonsterEquipment{}
 
 	for _, mon := range l.json.monsters {
 		if mon.Equipment != nil {
@@ -49,7 +50,7 @@ func (l *Lookup) getMonsterEquipment() []MonsterEquipment {
 	return monsterEquipment
 }
 
-func (l *Lookup) getMonsterEquipmentEquipmentDrops(me MonsterEquipment) ([]EquipmentDrop, error) {
+func (l *Lookup) getMonsterEquipmentEquipmentDrops(me seedtypes.MonsterEquipment) ([]seedtypes.EquipmentDrop, error) {
 	return slices.Concat(me.WeaponAbilities, me.ArmorAbilities), nil
 }
 
@@ -67,11 +68,11 @@ func (l *Lookup) seedJuncMonsterEquipmentEquipmentDrops(qtx *database.Queries, c
 	})
 }
 
-func (l *Lookup) getMonsterEquipmentEquipmentSlots(me MonsterEquipment) ([]MonsterEquipmentSlots, error) {
-	return []MonsterEquipmentSlots{me.AbilitySlots, me.AttachedAbilities}, nil
+func (l *Lookup) getMonsterEquipmentEquipmentSlots(me seedtypes.MonsterEquipment) ([]seedtypes.MonsterEquipmentSlots, error) {
+	return []seedtypes.MonsterEquipmentSlots{me.AbilitySlots, me.AttachedAbilities}, nil
 }
 
-func (l *Lookup) getMonsterEquipmentSlotsSlotChances(mes MonsterEquipmentSlots) ([]EquipmentSlotsChance, error) {
+func (l *Lookup) getMonsterEquipmentSlotsSlotChances(mes seedtypes.MonsterEquipmentSlots) ([]seedtypes.EquipmentSlotsChance, error) {
 	return mes.Chances, nil
 }
 
@@ -90,7 +91,7 @@ func (l *Lookup) seedJuncMonsterEquipmentSlotChances(qtx *database.Queries, ctx 
 	})
 }
 
-func (l *Lookup) getEquipmentDropCharacters(ed EquipmentDrop) ([]Character, error) {
+func (l *Lookup) getEquipmentDropCharacters(ed seedtypes.EquipmentDrop) ([]seedtypes.Character, error) {
 	return getResources(ed.Characters, l.Characters)
 }
 

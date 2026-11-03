@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type Mix struct {
 	ID           int32            `json:"id"`
@@ -17,7 +17,7 @@ type MixCombination struct {
 	SecondItem NamedAPIResource `json:"second_item"`
 }
 
-func convertMixCombination(cfg *Config, mc seeding.MixCombination) MixCombination {
+func convertMixCombination(cfg *Config, mc seedtypes.MixCombination) MixCombination {
 	return MixCombination{
 		FirstItem:  nameToNamedAPIResource(cfg, cfg.E.Items, mc.FirstItem, nil),
 		SecondItem: nameToNamedAPIResource(cfg, cfg.E.Items, mc.SecondItem, nil),

@@ -5,6 +5,7 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 // s1 [1,2,3] s2 [2,3,4,5] => [1,2,3,4,5]
@@ -77,7 +78,7 @@ func getIDMap(s []int32) map[int32]bool {
 	return idMap
 }
 
-func sortNamesByID[T seeding.Lookupable](s []string, lookup map[string]T) []string {
+func sortNamesByID[T seedtypes.Lookupable](s []string, lookup map[string]T) []string {
 	slices.SortStableFunc(s, func(a, b string) int {
 		A, _ := seeding.GetResource(a, lookup)
 		B, _ := seeding.GetResource(b, lookup)

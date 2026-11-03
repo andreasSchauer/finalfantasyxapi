@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedProperties(qtx *database.Queries, ctx context.Context) error {
@@ -39,7 +40,7 @@ func (l *Lookup) loop3SeedProperties(qtx *database.Queries, ctx context.Context)
 	for i, row := range dbRows {
 		properties[i].ID = row.ID
 		l.json.properties[i].ID = row.ID
-		l.Properties[Key(properties[i])] = properties[i]
+		l.Properties[seedtypes.Key(properties[i])] = properties[i]
 		l.PropertiesID[row.ID] = properties[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -47,8 +48,8 @@ func (l *Lookup) loop3SeedProperties(qtx *database.Queries, ctx context.Context)
 	return nil
 }
 
-func (l *Lookup) extractProperties() ([]Property, error) {
-	properties := []Property{}
+func (l *Lookup) extractProperties() ([]seedtypes.Property, error) {
+	properties := []seedtypes.Property{}
 	var err error
 
 	for i := range l.json.properties {
@@ -67,7 +68,7 @@ func (l *Lookup) extractProperties() ([]Property, error) {
 	return dedupeRows(properties, l.Hashes), nil
 }
 
-func (l *Lookup) getPropertyRelatedStats(p Property) ([]Stat, error) {
+func (l *Lookup) getPropertyRelatedStats(p seedtypes.Property) ([]seedtypes.Stat, error) {
 	return getResources(p.RelatedStats, l.Stats)
 }
 

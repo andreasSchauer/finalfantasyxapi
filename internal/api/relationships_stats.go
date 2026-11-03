@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -17,7 +17,7 @@ type StatQueries struct {
 	Properties         DBQueryIntMany
 }
 
-func getStatRelationships(cfg *Config, r *http.Request, stat seeding.Stat) (Stat, error) {
+func getStatRelationships(cfg *Config, r *http.Request, stat seedtypes.Stat) (Stat, error) {
 	var rel Stat
 	g, ctx := errgroup.WithContext(r.Context())
 

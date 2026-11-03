@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedAreas(qtx *database.Queries, ctx context.Context) error {
@@ -48,7 +49,7 @@ func (l *Lookup) loop3SeedAreas(qtx *database.Queries, ctx context.Context) erro
 
 	for i, row := range dbRows {
 		areas[i].ID = row.ID
-		l.Areas[Key(areas[i])] = areas[i]
+		l.Areas[seedtypes.Key(areas[i])] = areas[i]
 		l.AreasID[row.ID] = areas[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -56,8 +57,8 @@ func (l *Lookup) loop3SeedAreas(qtx *database.Queries, ctx context.Context) erro
 	return nil
 }
 
-func (l *Lookup) extractAreas() ([]Area, error) {
-	areas := []Area{}
+func (l *Lookup) extractAreas() ([]seedtypes.Area, error) {
+	areas := []seedtypes.Area{}
 	var err error
 
 	for i := range l.json.locations {
@@ -85,7 +86,7 @@ func (l *Lookup) extractAreas() ([]Area, error) {
 	return dedupeRows(areas, l.Hashes), nil
 }
 
-func (l *Lookup) completeAreas(areas []Area) error {
+func (l *Lookup) completeAreas(areas []seedtypes.Area) error {
 	for i := range areas {
 		area := &areas[i]
 
@@ -99,7 +100,7 @@ func (l *Lookup) completeAreas(areas []Area) error {
 			return err
 		}
 
-		l.Areas[Key(area)] = *area
+		l.Areas[seedtypes.Key(area)] = *area
 		l.AreasID[area.ID] = *area
 	}
 
@@ -140,8 +141,8 @@ func (l *Lookup) loop4SeedAreaConnections(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractAreaConnections() ([]AreaConnection, error) {
-	areas := []AreaConnection{}
+func (l *Lookup) extractAreaConnections() ([]seedtypes.AreaConnection, error) {
+	areas := []seedtypes.AreaConnection{}
 
 	for i := range l.json.locations {
 		location := &l.json.locations[i]
@@ -161,8 +162,8 @@ func (l *Lookup) extractAreaConnections() ([]AreaConnection, error) {
 	return dedupeRows(areas, l.Hashes), nil
 }
 
-func (l *Lookup) prepareAreaConnections(areas []Area) ([]AreaConnection, error) {
-	connectedAreas := []AreaConnection{}
+func (l *Lookup) prepareAreaConnections(areas []seedtypes.Area) ([]seedtypes.AreaConnection, error) {
+	connectedAreas := []seedtypes.AreaConnection{}
 	var err error
 
 	for i := range areas {
@@ -183,8 +184,8 @@ func (l *Lookup) prepareAreaConnections(areas []Area) ([]AreaConnection, error) 
 	return connectedAreas, nil
 }
 
-func (l *Lookup) getAreas() []Area {
-	areas := []Area{}
+func (l *Lookup) getAreas() []seedtypes.Area {
+	areas := []seedtypes.Area{}
 
 	for _, location := range l.json.locations {
 		for _, sublocation := range location.Sublocations {
@@ -195,7 +196,7 @@ func (l *Lookup) getAreas() []Area {
 	return areas
 }
 
-func (l *Lookup) getAreaConnectedAreas(a Area) ([]AreaConnection, error) {
+func (l *Lookup) getAreaConnectedAreas(a seedtypes.Area) ([]seedtypes.AreaConnection, error) {
 	return a.ConnectedAreas, nil
 }
 

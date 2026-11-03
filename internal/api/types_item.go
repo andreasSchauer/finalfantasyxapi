@@ -1,6 +1,9 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+)
 
 type Item struct {
 	ID                 int32                                `json:"id"`
@@ -55,7 +58,7 @@ func createItemMonster(cfg *Config, itemName string, mon NamedAPIResource) MonIt
 	}
 }
 
-func getAmountMonItem(wantedItem string, ia *seeding.ItemAmount) int32 {
+func getAmountMonItem(wantedItem string, ia *seedtypes.ItemAmount) int32 {
 	if ia == nil || ia.ItemName != wantedItem {
 		return 0
 	}
@@ -63,7 +66,7 @@ func getAmountMonItem(wantedItem string, ia *seeding.ItemAmount) int32 {
 	return ia.Amount
 }
 
-func getAmountOther(wantedItem string, otherItems []seeding.PossibleItem) int32 {
+func getAmountOther(wantedItem string, otherItems []seedtypes.PossibleItem) int32 {
 	for _, otherItem := range otherItems {
 		if otherItem.ItemAmount.ItemName == wantedItem {
 			return otherItem.ItemAmount.Amount

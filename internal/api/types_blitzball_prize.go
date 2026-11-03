@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type BlitzballPrize struct {
 	ID       int32          `json:"id"`
@@ -10,6 +10,6 @@ type BlitzballPrize struct {
 	Items    []PossibleItem `json:"items"`
 }
 
-func convertBlitzballItem(cfg *Config, bi seeding.BlitzballItem) PossibleItem {
+func convertBlitzballItem(cfg *Config, bi seedtypes.BlitzballItem) PossibleItem {
 	return convertPossibleItem(cfg, bi.PossibleItem)
 }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Context) error {
@@ -17,7 +18,7 @@ func (l *Lookup) loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Co
 
 	params := database.CreateQuestCompletionBulkParams{
 		DataHash:     make([]string, len(completions)),
-		QuestID: 	  make([]int32, len(completions)),
+		QuestID:      make([]int32, len(completions)),
 		Condition:    make([]sql.NullString, len(completions)),
 		ItemAmountID: make([]int32, len(completions)),
 	}
@@ -42,8 +43,8 @@ func (l *Lookup) loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Co
 	return nil
 }
 
-func (l *Lookup) extractQuestCompletions() ([]QuestCompletion, error) {
-	completions := []QuestCompletion{}
+func (l *Lookup) extractQuestCompletions() ([]seedtypes.QuestCompletion, error) {
+	completions := []seedtypes.QuestCompletion{}
 	var err error
 
 	for i := range l.json.sidequests {
@@ -119,8 +120,8 @@ func (l *Lookup) loop4SeedCompletionAreas(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractCompletionAreas() ([]CompletionArea, error) {
-	areas := []CompletionArea{}
+func (l *Lookup) extractCompletionAreas() ([]seedtypes.CompletionArea, error) {
+	areas := []seedtypes.CompletionArea{}
 	var err error
 
 	for i := range l.json.sidequests {
@@ -162,8 +163,8 @@ func (l *Lookup) extractCompletionAreas() ([]CompletionArea, error) {
 	return dedupeRows(areas, l.Hashes), nil
 }
 
-func (l *Lookup) prepareCompletionAreas(areas []CompletionArea, completionID int32) ([]CompletionArea, error) {
-	areasNew := []CompletionArea{}
+func (l *Lookup) prepareCompletionAreas(areas []seedtypes.CompletionArea, completionID int32) ([]seedtypes.CompletionArea, error) {
+	areasNew := []seedtypes.CompletionArea{}
 	var err error
 
 	for i := range areas {

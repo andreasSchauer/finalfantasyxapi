@@ -6,11 +6,11 @@ import (
 	"sync/atomic"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type EquipmentMatchParams struct {
-	WantedAbilities   []seeding.AutoAbility
+	WantedAbilities   []seedtypes.AutoAbility
 	WantedIndices     [][]int32
 	OptionalAbilities bool
 	MinEmptySlots     *int32

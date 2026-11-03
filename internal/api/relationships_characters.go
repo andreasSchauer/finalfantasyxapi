@@ -6,10 +6,11 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getCharacterRelationships(cfg *Config, r *http.Request, char seeding.Character) (Character, error) {
+func getCharacterRelationships(cfg *Config, r *http.Request, char seedtypes.Character) (Character, error) {
 	rel := Character{
 		OverdriveModes: getCharacterModeAmts(cfg, char),
 	}
@@ -72,7 +73,7 @@ func getCharacterClstlFormula(cfg *Config, char Character) *string {
 	return &weapon.Formula
 }
 
-func getCharacterModeAmts(cfg *Config, char seeding.Character) []ResourceAmount[NamedAPIResource] {
+func getCharacterModeAmts(cfg *Config, char seedtypes.Character) []ResourceAmount[NamedAPIResource] {
 	resAmts := []ResourceAmount[NamedAPIResource]{}
 
 	if char.IsStoryBased {
@@ -91,7 +92,7 @@ func getCharacterModeAmts(cfg *Config, char seeding.Character) []ResourceAmount[
 	return resAmts
 }
 
-func getCharModeAmount(cfg *Config, char seeding.Character, id int32) (ResourceAmount[NamedAPIResource], error) {
+func getCharModeAmount(cfg *Config, char seedtypes.Character, id int32) (ResourceAmount[NamedAPIResource], error) {
 	i := cfg.E.OverdriveModes
 
 	mode, _ := seeding.GetResourceByID(id, i.objLookupID)

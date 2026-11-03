@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop4SeedOverdrives(qtx *database.Queries, ctx context.Context) error {
@@ -55,7 +56,7 @@ func (l *Lookup) loop4SeedOverdrives(qtx *database.Queries, ctx context.Context)
 	for i, row := range dbRows {
 		overdrives[i].ID = row.ID
 		l.json.overdrives[i].ID = row.ID
-		l.Overdrives[Key(overdrives[i])] = overdrives[i]
+		l.Overdrives[seedtypes.Key(overdrives[i])] = overdrives[i]
 		l.OverdrivesID[row.ID] = overdrives[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -63,8 +64,8 @@ func (l *Lookup) loop4SeedOverdrives(qtx *database.Queries, ctx context.Context)
 	return nil
 }
 
-func (l *Lookup) extractOverdrives() ([]Overdrive, error) {
-	overdrives := []Overdrive{}
+func (l *Lookup) extractOverdrives() ([]seedtypes.Overdrive, error) {
+	overdrives := []seedtypes.Overdrive{}
 	var err error
 
 	for i := range l.json.overdrives {

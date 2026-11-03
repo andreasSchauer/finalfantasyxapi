@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type MonsterEquipment struct {
@@ -14,7 +14,7 @@ type MonsterEquipment struct {
 	ArmorAbilities    []EquipmentDrop       `json:"armor_abilities"`
 }
 
-func convertMonsterEquipment(cfg *Config, equipment seeding.MonsterEquipment) MonsterEquipment {
+func convertMonsterEquipment(cfg *Config, equipment seedtypes.MonsterEquipment) MonsterEquipment {
 	monEquipment := MonsterEquipment{
 		DropChance:        equipment.DropChance,
 		Power:             equipment.Power,
@@ -38,7 +38,7 @@ type MonsterEquipmentSlots struct {
 	Chances   []EquipmentSlotsChance `json:"chances"`
 }
 
-func convertMonsterEquipmentSlots(cfg *Config, seedSlots seeding.MonsterEquipmentSlots) MonsterEquipmentSlots {
+func convertMonsterEquipmentSlots(cfg *Config, seedSlots seedtypes.MonsterEquipmentSlots) MonsterEquipmentSlots {
 	equipmentSlots := MonsterEquipmentSlots{
 		MinAmount: seedSlots.MinAmount,
 		MaxAmount: seedSlots.MaxAmount,
@@ -53,7 +53,7 @@ type EquipmentSlotsChance struct {
 	Chance int32 `json:"chance"`
 }
 
-func convertMonsterEquipmentSlotsChance(_ *Config, chance seeding.EquipmentSlotsChance) EquipmentSlotsChance {
+func convertMonsterEquipmentSlotsChance(_ *Config, chance seedtypes.EquipmentSlotsChance) EquipmentSlotsChance {
 	return EquipmentSlotsChance{
 		Amount: chance.Amount,
 		Chance: chance.Chance,
@@ -71,7 +71,7 @@ func (ed EquipmentDrop) GetAPIResource() APIResource {
 	return ed.AutoAbility.GetAPIResource()
 }
 
-func convertEquipmentDrop(cfg *Config, drop seeding.EquipmentDrop) EquipmentDrop {
+func convertEquipmentDrop(cfg *Config, drop seedtypes.EquipmentDrop) EquipmentDrop {
 	return EquipmentDrop{
 		AutoAbility: nameToNamedAPIResource(cfg, cfg.E.AutoAbilities, drop.Ability, nil),
 		ForcedChars: namesToNamedAPIResources(cfg, cfg.E.Characters, drop.Characters),

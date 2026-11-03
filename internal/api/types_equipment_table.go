@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type EquipmentTable struct {
 	ID                      int32              `json:"id"`
@@ -20,13 +20,13 @@ type AbilityPool struct {
 	ReqAmount     int32              `json:"required_amount"`
 }
 
-func convertAbilityPool(cfg *Config, p seeding.AbilityPool) AbilityPool {
+func convertAbilityPool(cfg *Config, p seedtypes.AbilityPool) AbilityPool {
 	return AbilityPool{
 		AutoAbilities: namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, p.AutoAbilities),
 		ReqAmount:     p.ReqAmount,
 	}
 }
 
-func convertEquipmentName(cfg *Config, n seeding.EquipmentName) NamedAPIResource {
+func convertEquipmentName(cfg *Config, n seedtypes.EquipmentName) NamedAPIResource {
 	return nameToNamedAPIResource(cfg, cfg.E.Equipment, n.Name, nil)
 }

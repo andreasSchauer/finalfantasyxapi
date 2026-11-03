@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type BattleInteraction struct {
@@ -24,7 +24,7 @@ type BattleInteraction struct {
 	ModifierChanges           []ModifierChange   `json:"modifier_changes"`
 }
 
-func convertBattleInteraction(cfg *Config, bi seeding.BattleInteraction) BattleInteraction {
+func convertBattleInteraction(cfg *Config, bi seedtypes.BattleInteraction) BattleInteraction {
 	battleInteraction := BattleInteraction{
 		Target:                    bi.Target,
 		BasedOnUserAttack:         bi.BasedOnUserAttack,
@@ -71,7 +71,7 @@ type Damage struct {
 	Element         *NamedAPIResource `json:"element"`
 }
 
-func convertDamage(cfg *Config, d seeding.Damage) Damage {
+func convertDamage(cfg *Config, d seedtypes.Damage) Damage {
 	return Damage{
 		AttackType:      d.AttackType,
 		DamageType:      d.DamageType,
@@ -92,7 +92,7 @@ type ClassDamage struct {
 	DamageConstant int32   `json:"damage_constant"`
 }
 
-func convertClassDamage(cfg *Config, ad seeding.ClassDamage) ClassDamage {
+func convertClassDamage(cfg *Config, ad seedtypes.ClassDamage) ClassDamage {
 	return ClassDamage{
 		Condition:      ad.Condition,
 		DamageFormula:  ad.DamageFormula,
@@ -106,7 +106,7 @@ type Accuracy struct {
 	AccModifier *float32 `json:"acc_modifier,omitempty"`
 }
 
-func convertAccuracy(_ *Config, a seeding.Accuracy) Accuracy {
+func convertAccuracy(_ *Config, a seedtypes.Accuracy) Accuracy {
 	return Accuracy{
 		AccSource:   a.AccSource,
 		HitChance:   a.HitChance,
@@ -119,7 +119,7 @@ type InflictedDelay struct {
 	DelayStrength string  `json:"delay_strength"`
 }
 
-func convertInflictedDelay(_ *Config, id seeding.InflictedDelay) InflictedDelay {
+func convertInflictedDelay(_ *Config, id seedtypes.InflictedDelay) InflictedDelay {
 	return InflictedDelay{
 		Condition:     id.Condition,
 		DelayStrength: id.DelayStrength,
@@ -141,7 +141,7 @@ func (is InflictedStatus) IsZero() bool {
 	return is.StatusCondition.Name == ""
 }
 
-func convertInflictedStatus(cfg *Config, status seeding.InflictedStatus) InflictedStatus {
+func convertInflictedStatus(cfg *Config, status seedtypes.InflictedStatus) InflictedStatus {
 	return InflictedStatus{
 		StatusCondition: nameToNamedAPIResource(cfg, cfg.E.StatusConditions, status.StatusCondition, nil),
 		Probability:     status.Probability,
@@ -164,7 +164,7 @@ func (sc StatChange) IsZero() bool {
 	return sc.Stat.Name == ""
 }
 
-func convertStatChange(cfg *Config, sc seeding.StatChange) StatChange {
+func convertStatChange(cfg *Config, sc seedtypes.StatChange) StatChange {
 	return StatChange{
 		Stat:            nameToNamedAPIResource(cfg, cfg.E.Stats, sc.StatName, nil),
 		CalculationType: sc.CalculationType,
@@ -186,7 +186,7 @@ func (mc ModifierChange) IsZero() bool {
 	return mc.Modifier.Name == ""
 }
 
-func convertModifierChange(cfg *Config, mc seeding.ModifierChange) ModifierChange {
+func convertModifierChange(cfg *Config, mc seedtypes.ModifierChange) ModifierChange {
 	return ModifierChange{
 		Modifier:        nameToNamedAPIResource(cfg, cfg.E.Modifiers, mc.ModifierName, nil),
 		CalculationType: mc.CalculationType,

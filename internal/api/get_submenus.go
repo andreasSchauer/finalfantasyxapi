@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, Submenu, NamedAPIResource], id int32) (Submenu, error) {
+func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource], id int32) (Submenu, error) {
 	submenu, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Submenu{}, err
@@ -31,7 +31,7 @@ func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seeding.Submenu, S
 	return response, nil
 }
 
-func (cfg *Config) retrieveSubmenus(r *http.Request, i handlerInput[seeding.Submenu, Submenu, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveSubmenus(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

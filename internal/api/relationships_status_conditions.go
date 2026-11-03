@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getStatusConditionRelationships(cfg *Config, r *http.Request, status seeding.StatusCondition) (StatusCondition, error) {
+func getStatusConditionRelationships(cfg *Config, r *http.Request, status seedtypes.StatusCondition) (StatusCondition, error) {
 	var rel StatusCondition
 	g, ctx := errgroup.WithContext(r.Context())
 

@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type QuestAPIResource struct {
@@ -44,7 +45,7 @@ func (r QuestAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func idToQuestAPIResource[T seeding.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) QuestAPIResource {
+func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) QuestAPIResource {
 	questLookup, _ := seeding.GetResourceByID(id, i.objLookupID)
 	params := questLookup.GetResParamsQuest()
 
@@ -74,7 +75,7 @@ func idToQuestAPIResource[T seeding.IsQuest, R any, A APIResource](cfg *Config, 
 	return QuestAPIResource{}
 }
 
-func questToQuestAPIResource(cfg *Config, quest seeding.Quest) QuestAPIResource {
+func questToQuestAPIResource(cfg *Config, quest seedtypes.Quest) QuestAPIResource {
 	switch quest.Type {
 	case database.QuestTypeSidequest:
 		return nameToQuestAPIResource(cfg, cfg.E.Sidequests, quest.Name)
@@ -86,12 +87,12 @@ func questToQuestAPIResource(cfg *Config, quest seeding.Quest) QuestAPIResource 
 	return QuestAPIResource{}
 }
 
-func nameToQuestAPIResource[T seeding.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], name string) QuestAPIResource {
+func nameToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], name string) QuestAPIResource {
 	quest, _ := seeding.GetResource(name, i.objLookup)
 	return idToQuestAPIResource(cfg, i, quest.GetID())
 }
 
-func namesToQuestAPIResources[T seeding.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], names []string) []QuestAPIResource {
+func namesToQuestAPIResources[T seedtypes.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], names []string) []QuestAPIResource {
 	resources := []QuestAPIResource{}
 
 	for _, name := range names {

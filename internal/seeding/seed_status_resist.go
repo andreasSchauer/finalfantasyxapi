@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop4SeedStatusResists(qtx *database.Queries, ctx context.Context) error {
@@ -37,8 +38,8 @@ func (l *Lookup) loop4SeedStatusResists(qtx *database.Queries, ctx context.Conte
 	return nil
 }
 
-func (l *Lookup) extractStatusResists() ([]StatusResist, error) {
-	resists := []StatusResist{}
+func (l *Lookup) extractStatusResists() ([]seedtypes.StatusResist, error) {
+	resists := []seedtypes.StatusResist{}
 	var err error
 
 	for i := range l.json.monsters {

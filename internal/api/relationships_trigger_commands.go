@@ -3,11 +3,11 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getTriggerCommandRelationships(cfg *Config, r *http.Request, command seeding.TriggerCommand) (TriggerCommand, error) {
+func getTriggerCommandRelationships(cfg *Config, r *http.Request, command seedtypes.TriggerCommand) (TriggerCommand, error) {
 	var rel TriggerCommand
 	g, ctx := errgroup.WithContext(r.Context())
 

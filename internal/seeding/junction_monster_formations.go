@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getMonsterFormationEncounterAreas(mf MonsterFormation) ([]EncounterArea, error) {
+func (l *Lookup) getMonsterFormationEncounterAreas(mf seedtypes.MonsterFormation) ([]seedtypes.EncounterArea, error) {
 	return mf.EncounterAreas, nil
 }
 
@@ -24,7 +25,7 @@ func (l *Lookup) seedJuncMonsterFormationsEncounterAreas(qtx *database.Queries, 
 	})
 }
 
-func (l *Lookup) getMonsterFormationTriggerCommands(mf MonsterFormation) ([]FormationTriggerCommand, error) {
+func (l *Lookup) getMonsterFormationTriggerCommands(mf seedtypes.MonsterFormation) ([]seedtypes.FormationTriggerCommand, error) {
 	return mf.TriggerCommands, nil
 }
 
@@ -42,8 +43,8 @@ func (l *Lookup) seedJuncMonsterFormationsTriggerCommands(qtx *database.Queries,
 	})
 }
 
-func (l *Lookup) getMonsterSelections() []MonsterSelection {
-	selections := []MonsterSelection{}
+func (l *Lookup) getMonsterSelections() []seedtypes.MonsterSelection {
+	selections := []seedtypes.MonsterSelection{}
 
 	for _, formation := range l.json.monsterFormations {
 		selections = append(selections, formation.MonsterSelection)
@@ -52,7 +53,7 @@ func (l *Lookup) getMonsterSelections() []MonsterSelection {
 	return selections
 }
 
-func (l *Lookup) getMonsterSelectionMonsterAmounts(ms MonsterSelection) ([]MonsterAmount, error) {
+func (l *Lookup) getMonsterSelectionMonsterAmounts(ms seedtypes.MonsterSelection) ([]seedtypes.MonsterAmount, error) {
 	return ms.Monsters, nil
 }
 

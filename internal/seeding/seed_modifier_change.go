@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop2SeedModifierChanges(qtx *database.Queries, ctx context.Context) error {
@@ -39,8 +40,8 @@ func (l *Lookup) loop2SeedModifierChanges(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractModifierChanges() ([]ModifierChange, error) {
-	changes := []ModifierChange{}
+func (l *Lookup) extractModifierChanges() ([]seedtypes.ModifierChange, error) {
+	changes := []seedtypes.ModifierChange{}
 
 	for i := range l.json.playerAbilities {
 		ability := &l.json.playerAbilities[i]
@@ -125,7 +126,7 @@ func (l *Lookup) extractModifierChanges() ([]ModifierChange, error) {
 		if property.ModifierChange == nil {
 			continue
 		}
-		
+
 		change, err := l.prepareModifierChange(property.ModifierChange)
 		if err != nil {
 			return nil, err
@@ -148,8 +149,8 @@ func (l *Lookup) extractModifierChanges() ([]ModifierChange, error) {
 	return dedupeRows(changes, l.Hashes), nil
 }
 
-func (l *Lookup) prepareAbilityModifierChanges(battleInteractions []BattleInteraction) ([]ModifierChange, error) {
-	changes := []ModifierChange{}
+func (l *Lookup) prepareAbilityModifierChanges(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.ModifierChange, error) {
+	changes := []seedtypes.ModifierChange{}
 
 	for i := range battleInteractions {
 		bi := &battleInteractions[i]
@@ -164,8 +165,8 @@ func (l *Lookup) prepareAbilityModifierChanges(battleInteractions []BattleIntera
 	return changes, nil
 }
 
-func (l *Lookup) prepareModifierChanges(changes []ModifierChange) ([]ModifierChange, error) {
-	changesNew := []ModifierChange{}
+func (l *Lookup) prepareModifierChanges(changes []seedtypes.ModifierChange) ([]seedtypes.ModifierChange, error) {
+	changesNew := []seedtypes.ModifierChange{}
 
 	for i := range changes {
 		change, err := l.prepareModifierChange(&changes[i])
@@ -179,7 +180,7 @@ func (l *Lookup) prepareModifierChanges(changes []ModifierChange) ([]ModifierCha
 	return changesNew, nil
 }
 
-func (l *Lookup) prepareModifierChange(mc *ModifierChange) (*ModifierChange, error) {
+func (l *Lookup) prepareModifierChange(mc *seedtypes.ModifierChange) (*seedtypes.ModifierChange, error) {
 	var err error
 
 	if mc == nil {

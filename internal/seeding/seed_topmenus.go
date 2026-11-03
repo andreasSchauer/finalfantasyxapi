@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) error {
@@ -28,7 +29,7 @@ func (l *Lookup) loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) e
 	for i, row := range dbRows {
 		topmenus[i].ID = row.ID
 		l.json.topmenus[i].ID = row.ID
-		l.Topmenus[Key(topmenus[i])] = topmenus[i]
+		l.Topmenus[seedtypes.Key(topmenus[i])] = topmenus[i]
 		l.TopmenusID[row.ID] = topmenus[i]
 		l.Hashes[row.DataHash] = row.ID
 	}

@@ -1,6 +1,6 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 
 type AgilityTier struct {
 	ID          int32            `json:"id"`
@@ -19,7 +19,7 @@ type AgilitySubtier struct {
 	CharMinICV  *int32 `json:"char_min_icv"`
 }
 
-func convertAgilitySubtier(_ *Config, st seeding.AgilitySubtier) AgilitySubtier {
+func convertAgilitySubtier(_ *Config, st seedtypes.AgilitySubtier) AgilitySubtier {
 	return AgilitySubtier{
 		FromAgility: st.MinAgility,
 		ToAgility:   st.MaxAgility,

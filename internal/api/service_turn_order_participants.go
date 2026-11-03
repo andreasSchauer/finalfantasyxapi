@@ -6,6 +6,7 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type Participant struct {
@@ -121,7 +122,7 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 	return monParty, nil
 }
 
-func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon) (Participant, *seeding.AgilityTier, error) {
+func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon) (Participant, *seedtypes.AgilityTier, error) {
 	var err error
 
 	if mon.MonsterID == nil {
@@ -144,7 +145,7 @@ func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon
 	return participant, firstTurnAglTier, nil
 }
 
-func populateParticipantMon(cfg *Config, params TurnOrderParams, participant Participant, mon turnOrderMon, firstTurnAglTier *seeding.AgilityTier) Participant {
+func populateParticipantMon(cfg *Config, params TurnOrderParams, participant Participant, mon turnOrderMon, firstTurnAglTier *seedtypes.AgilityTier) Participant {
 	if mon.Name != nil {
 		participant.Name = *mon.Name
 	}

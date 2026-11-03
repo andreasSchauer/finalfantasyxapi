@@ -3,11 +3,11 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getElementRelationships(cfg *Config, r *http.Request, element seeding.Element) (Element, error) {
+func getElementRelationships(cfg *Config, r *http.Request, element seedtypes.Element) (Element, error) {
 	var rel Element
 	g, ctx := errgroup.WithContext(r.Context())
 

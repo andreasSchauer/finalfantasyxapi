@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop2SeedAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -40,7 +41,7 @@ func (l *Lookup) loop2SeedAbilities(qtx *database.Queries, ctx context.Context) 
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		l.Abilities[Key(abilities[i])] = abilities[i]
+		l.Abilities[seedtypes.Key(abilities[i])] = abilities[i]
 		l.AbilitiesID[row.ID] = abilities[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -48,8 +49,8 @@ func (l *Lookup) loop2SeedAbilities(qtx *database.Queries, ctx context.Context) 
 	return nil
 }
 
-func (l *Lookup) extractAbilities() ([]Ability, error) {
-	abilities := []Ability{}
+func (l *Lookup) extractAbilities() ([]seedtypes.Ability, error) {
+	abilities := []seedtypes.Ability{}
 	var err error
 
 	for i := range l.json.playerAbilities {
@@ -155,8 +156,8 @@ func (l *Lookup) loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.C
 	return nil
 }
 
-func (l *Lookup) extractAbilityAttributes() []Attributes {
-	attributes := []Attributes{}
+func (l *Lookup) extractAbilityAttributes() []seedtypes.Attributes {
+	attributes := []seedtypes.Attributes{}
 
 	for _, ability := range l.json.enemyAbilities {
 		attributes = append(attributes, ability.Attributes)

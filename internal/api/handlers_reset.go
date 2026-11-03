@@ -32,7 +32,7 @@ func (cfg *Config) HandlerResetDatabase(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	// might simply put the seeding of the database here
+	// might simply put the seedtypes of the database here
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Database reset successfully"))

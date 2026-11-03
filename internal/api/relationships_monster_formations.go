@@ -1,8 +1,11 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+)
 
-func getFormationLoot(cfg *Config, formation seeding.MonsterFormation) FormationLoot {
+func getFormationLoot(cfg *Config, formation seedtypes.MonsterFormation) FormationLoot {
 	var loot FormationLoot
 
 	for _, monAmt := range formation.Monsters {

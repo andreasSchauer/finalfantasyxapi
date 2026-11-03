@@ -4,11 +4,11 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getAutoAbilityRelationships(cfg *Config, r *http.Request, autoAbility seeding.AutoAbility) (AutoAbility, error) {
+func getAutoAbilityRelationships(cfg *Config, r *http.Request, autoAbility seedtypes.AutoAbility) (AutoAbility, error) {
 	var rel AutoAbility
 	g, ctx := errgroup.WithContext(r.Context())
 	var monsterItems []NamedAPIResource

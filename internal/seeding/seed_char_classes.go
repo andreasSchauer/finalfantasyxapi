@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Context) error {
@@ -30,7 +31,7 @@ func (l *Lookup) loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Co
 	for i, row := range dbRows {
 		classes[i].ID = row.ID
 		l.json.characterClasses[i].ID = row.ID
-		l.CharClasses[Key(classes[i])] = classes[i]
+		l.CharClasses[seedtypes.Key(classes[i])] = classes[i]
 		l.CharClassesID[row.ID] = classes[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -38,7 +39,7 @@ func (l *Lookup) loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Co
 	return nil
 }
 
-func (l *Lookup) getCharacterClassPlayerUnits(c CharacterClass) ([]PlayerUnit, error) {
+func (l *Lookup) getCharacterClassPlayerUnits(c seedtypes.CharacterClass) ([]seedtypes.PlayerUnit, error) {
 	return getResources(c.Members, l.PlayerUnits)
 }
 

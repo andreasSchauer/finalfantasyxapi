@@ -5,9 +5,10 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource], id int32) (MasterItem, error) {
+func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seedtypes.MasterItem, MasterItem, TypedAPIResource], id int32) (MasterItem, error) {
 	masterItem, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return MasterItem{}, err
@@ -44,7 +45,7 @@ func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seeding.MasterI
 	return response, nil
 }
 
-func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seeding.MasterItem, MasterItem, TypedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seedtypes.MasterItem, MasterItem, TypedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

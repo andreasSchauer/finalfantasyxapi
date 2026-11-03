@@ -8,6 +8,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop4SeedAeons(qtx *database.Queries, ctx context.Context) error {
@@ -50,7 +51,7 @@ func (l *Lookup) loop4SeedAeons(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		aeons[i].ID = row.ID
 		l.json.aeons[i].ID = row.ID
-		l.Aeons[Key(aeons[i])] = aeons[i]
+		l.Aeons[seedtypes.Key(aeons[i])] = aeons[i]
 		l.AeonsID[row.ID] = aeons[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -58,8 +59,8 @@ func (l *Lookup) loop4SeedAeons(qtx *database.Queries, ctx context.Context) erro
 	return nil
 }
 
-func (l *Lookup) extractAeons() ([]Aeon, error) {
-	aeons := []Aeon{}
+func (l *Lookup) extractAeons() ([]seedtypes.Aeon, error) {
+	aeons := []seedtypes.Aeon{}
 	var err error
 
 	for i := range l.json.aeons {
@@ -101,14 +102,14 @@ func (l *Lookup) completeAeons() error {
 			return err
 		}
 
-		l.Aeons[Key(aeon)] = *aeon
+		l.Aeons[seedtypes.Key(aeon)] = *aeon
 		l.AeonsID[aeon.ID] = *aeon
 	}
 
 	return nil
 }
 
-func (l *Lookup) getAeonAeonEquipment(a Aeon) ([]AeonEquipment, error) {
+func (l *Lookup) getAeonAeonEquipment(a seedtypes.Aeon) ([]seedtypes.AeonEquipment, error) {
 	return slices.Concat(a.Weapon, a.Armor), nil
 }
 

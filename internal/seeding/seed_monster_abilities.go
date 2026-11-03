@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedMonsterAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -39,8 +40,8 @@ func (l *Lookup) loop3SeedMonsterAbilities(qtx *database.Queries, ctx context.Co
 	return nil
 }
 
-func (l *Lookup) extractMonsterAbilities() ([]MonsterAbility, error) {
-	abilities := []MonsterAbility{}
+func (l *Lookup) extractMonsterAbilities() ([]seedtypes.MonsterAbility, error) {
+	abilities := []seedtypes.MonsterAbility{}
 	var err error
 
 	for i := range l.json.monsters {

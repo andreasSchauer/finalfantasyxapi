@@ -4,10 +4,11 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (l *Lookup) getAbilities() []Ability {
-	abilities := []Ability{}
+func (l *Lookup) getAbilities() []seedtypes.Ability {
+	abilities := []seedtypes.Ability{}
 
 	for _, ability := range l.json.playerAbilities {
 		abilities = append(abilities, ability.Ability)
@@ -39,7 +40,7 @@ func (l *Lookup) getAbilities() []Ability {
 	return abilities
 }
 
-func (l *Lookup) getAbilityBattleInteractions(a Ability) ([]BattleInteraction, error) {
+func (l *Lookup) getAbilityBattleInteractions(a seedtypes.Ability) ([]seedtypes.BattleInteraction, error) {
 	return a.BattleInteractions, nil
 }
 

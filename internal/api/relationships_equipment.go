@@ -7,12 +7,13 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.EquipmentName) (EquipmentName, error) {
+func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seedtypes.EquipmentName) (EquipmentName, error) {
 	i := cfg.E.Equipment
-	var table seeding.EquipmentTable
+	var table seedtypes.EquipmentTable
 
 	rel := EquipmentName{
 		Character: nameToNamedAPIResource(cfg, cfg.E.Characters, equipment.CharacterName, nil),
@@ -69,7 +70,7 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seeding.E
 	return rel, nil
 }
 
-func getEquipmentTableRef(cfg *Config, r *http.Request, ctx context.Context, queryParam QueryParam, equipment seeding.EquipmentName) (UnnamedAPIResource, error) {
+func getEquipmentTableRef(cfg *Config, r *http.Request, ctx context.Context, queryParam QueryParam, equipment seedtypes.EquipmentName) (UnnamedAPIResource, error) {
 	tables, err := cfg.E.EquipmentTables.dbGetRelations(cfg, ctx, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
 	if err != nil {
 		return UnnamedAPIResource{}, err

@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop4SeedInflictedStatusses(qtx *database.Queries, ctx context.Context) error {
@@ -43,8 +44,8 @@ func (l *Lookup) loop4SeedInflictedStatusses(qtx *database.Queries, ctx context.
 	return nil
 }
 
-func (l *Lookup) extractInflictedStatusses() ([]InflictedStatus, error) {
-	statusses := []InflictedStatus{}
+func (l *Lookup) extractInflictedStatusses() ([]seedtypes.InflictedStatus, error) {
+	statusses := []seedtypes.InflictedStatus{}
 
 	for i := range l.json.autoAbilities {
 		autoAbility := &l.json.autoAbilities[i]
@@ -143,8 +144,8 @@ func (l *Lookup) extractInflictedStatusses() ([]InflictedStatus, error) {
 	return dedupeRows(statusses, l.Hashes), nil
 }
 
-func (l *Lookup) prepareAbilityInflictedStatusses(bis []BattleInteraction) ([]InflictedStatus, error) {
-	statusses := []InflictedStatus{}
+func (l *Lookup) prepareAbilityInflictedStatusses(bis []seedtypes.BattleInteraction) ([]seedtypes.InflictedStatus, error) {
+	statusses := []seedtypes.InflictedStatus{}
 
 	for i := range bis {
 		bi := &bis[i]
@@ -169,8 +170,8 @@ func (l *Lookup) prepareAbilityInflictedStatusses(bis []BattleInteraction) ([]In
 	return statusses, nil
 }
 
-func (l *Lookup) extractAltStateInflictedStatusses(state *AlteredState) ([]InflictedStatus, error) {
-	statusses := []InflictedStatus{}
+func (l *Lookup) extractAltStateInflictedStatusses(state *seedtypes.AlteredState) ([]seedtypes.InflictedStatus, error) {
+	statusses := []seedtypes.InflictedStatus{}
 
 	for i := range state.Changes {
 		change := &state.Changes[i]
@@ -190,7 +191,7 @@ func (l *Lookup) extractAltStateInflictedStatusses(state *AlteredState) ([]Infli
 	return statusses, nil
 }
 
-func (l *Lookup) prepareInflictedStatus(is *InflictedStatus) (*InflictedStatus, error) {
+func (l *Lookup) prepareInflictedStatus(is *seedtypes.InflictedStatus) (*seedtypes.InflictedStatus, error) {
 	var err error
 
 	is.StatusConditionID, err = assignFK(is.StatusCondition, l.StatusConditions)

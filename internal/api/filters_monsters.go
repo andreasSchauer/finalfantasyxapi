@@ -9,6 +9,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func getMonstersByElemResists(cfg *Config, r *http.Request, ctx context.Context, query string, queryParam QueryParam) ([]int32, error) {
@@ -53,12 +54,12 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			return nil, err
 		}
 
-		elemResist := seeding.ElementalResist{
+		elemResist := seedtypes.ElementalResist{
 			ElementID: elementID,
 			Affinity:  affinity.Name,
 		}
 
-		erLookup, err := seeding.GetResource(seeding.Key(elemResist), cfg.L.ElementalResists)
+		erLookup, err := seeding.GetResource(seedtypes.Key(elemResist), cfg.L.ElementalResists)
 		if err != nil {
 			return nil, nil
 		}

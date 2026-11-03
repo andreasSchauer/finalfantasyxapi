@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Context) error {
@@ -41,7 +42,7 @@ func (l *Lookup) loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Con
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
 		l.json.triggerCommands[i].ID = row.ID
-		l.TriggerCommands[Key(commands[i])] = commands[i]
+		l.TriggerCommands[seedtypes.Key(commands[i])] = commands[i]
 		l.TriggerCommandsID[row.ID] = commands[i]
 		l.Hashes[row.DataHash] = row.ID
 	}
@@ -49,8 +50,8 @@ func (l *Lookup) loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Con
 	return nil
 }
 
-func (l *Lookup) extractTriggerCommands() ([]TriggerCommand, error) {
-	commands := []TriggerCommand{}
+func (l *Lookup) extractTriggerCommands() ([]seedtypes.TriggerCommand, error) {
+	commands := []seedtypes.TriggerCommand{}
 	var err error
 
 	for i := range l.json.triggerCommands {
@@ -81,14 +82,14 @@ func (l *Lookup) completeTriggerCommands() error {
 			return err
 		}
 
-		l.TriggerCommands[Key(ability)] = *ability
+		l.TriggerCommands[seedtypes.Key(ability)] = *ability
 		l.TriggerCommandsID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
-func (l *Lookup) getTriggerCommandRelatedStats(tc TriggerCommand) ([]Stat, error) {
+func (l *Lookup) getTriggerCommandRelatedStats(tc seedtypes.TriggerCommand) ([]seedtypes.Stat, error) {
 	return getResources(tc.RelatedStats, l.Stats)
 }
 

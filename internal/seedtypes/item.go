@@ -1,0 +1,57 @@
+package seedtypes
+
+import (
+	"fmt"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+)
+
+type Item struct {
+	ID int32 `json:"id,omitempty"`
+	MasterItem
+	ItemAbility
+	Description           string   `json:"description"`
+	Effect                string   `json:"effect"`
+	RelatedStats          []string `json:"related_stats"`
+	SphereGridDescription *string  `json:"sphere_grid_description"`
+	Category              string   `json:"category"`
+	Usability             string   `json:"usability"`
+	AvailableMenus        []string `json:"available_menus"`
+	BasePrice             *int32   `json:"base_price"`
+	SellValue             int32    `json:"sell_value"`
+}
+
+func (i Item) ToHashFields() []any {
+	return []any{
+		fmt.Sprintf("%T", i),
+		i.MasterItem.ID,
+		i.Description,
+		i.Effect,
+		h.DerefOrNil(i.SphereGridDescription),
+		i.Category,
+		i.Usability,
+		h.DerefOrNil(i.BasePrice),
+		i.SellValue,
+	}
+}
+
+func (i Item) ToKeyFields() []any {
+	return []any{
+		i.Name,
+	}
+}
+
+func (i Item) GetID() int32 {
+	return i.ID
+}
+
+func (i Item) String() string {
+	return fmt.Sprintf("item %s", i.Name)
+}
+
+func (i Item) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
+		ID:   i.ID,
+		Name: i.Name,
+	}
+}

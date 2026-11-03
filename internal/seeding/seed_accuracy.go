@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func (l *Lookup) loop1SeedAccuracies(qtx *database.Queries, ctx context.Context) error {
@@ -38,8 +39,8 @@ func (l *Lookup) loop1SeedAccuracies(qtx *database.Queries, ctx context.Context)
 	return nil
 }
 
-func (l *Lookup) extractAccuracies() []Accuracy {
-	accuracies := []Accuracy{}
+func (l *Lookup) extractAccuracies() []seedtypes.Accuracy {
+	accuracies := []seedtypes.Accuracy{}
 
 	for _, ability := range l.json.enemyAbilities {
 		for _, bi := range ability.BattleInteractions {

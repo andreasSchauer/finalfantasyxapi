@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource], id int32) (CelestialWeapon, error) {
+func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seedtypes.CelestialWeapon, CelestialWeapon, NamedAPIResource], id int32) (CelestialWeapon, error) {
 	celestialWeapon, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return CelestialWeapon{}, err
@@ -35,7 +35,7 @@ func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seeding.Ce
 	return response, nil
 }
 
-func (cfg *Config) retrieveCelestialWeapons(r *http.Request, i handlerInput[seeding.CelestialWeapon, CelestialWeapon, NamedAPIResource]) ([]int32, error) {
+func (cfg *Config) retrieveCelestialWeapons(r *http.Request, i handlerInput[seedtypes.CelestialWeapon, CelestialWeapon, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
