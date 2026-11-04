@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -42,8 +43,8 @@ func loop4SeedShops(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		shops[i].ID = row.ID
 		rawJSON.shops[i].ID = row.ID
-		L.Shops[seedtypes.Key(shops[i])] = shops[i]
-		L.ShopsID[row.ID] = shops[i]
+		lookup.L.Shops[seedtypes.Key(shops[i])] = shops[i]
+		lookup.L.ShopsID[row.ID] = shops[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -65,7 +66,7 @@ func extractShops() ([]seedtypes.Shop, error) {
 			shop.PostAirship.Type = database.ShopTypePostAirship
 		}
 
-		shop.AreaID, err = assignFK(shop.LocationArea, L.Areas)
+		shop.AreaID, err = assignFK(shop.LocationArea, lookup.L.Areas)
 		if err != nil {
 			return nil, err
 		}
@@ -90,8 +91,8 @@ func completeShops() error {
 			return err
 		}
 
-		L.Shops[seedtypes.Key(*shop)] = *shop
-		L.ShopsID[shop.ID] = *shop
+		lookup.L.Shops[seedtypes.Key(*shop)] = *shop
+		lookup.L.ShopsID[shop.ID] = *shop
 	}
 
 	return nil

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -24,7 +24,7 @@ func getMixCombinations(cfg *Config, r *http.Request, mix seedtypes.Mix) ([]MixC
 		return nil, err
 	}
 	if itemID != 0 {
-		item, _ := seeding.GetResourceByID(itemID, cfg.L.ItemsID)
+		item, _ := lookup.GetResourceByID(itemID, lookup.L.ItemsID)
 
 		combinations = h.Filter(combinations, func(c seedtypes.MixCombination) bool {
 			return item.Name == c.FirstItem || item.Name == c.SecondItem

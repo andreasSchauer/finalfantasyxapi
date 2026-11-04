@@ -36,7 +36,7 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seedtypes.Item, availa
 		if err != nil {
 			return err
 		}
-		rel.Monsters = getMonItemAmts(cfg, monsters, item.Name)
+		rel.Monsters = getMonItemAmts(monsters, item.Name)
 		return nil
 	})
 
@@ -45,7 +45,7 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seedtypes.Item, availa
 		if err != nil {
 			return err
 		}
-		rel.Treasures = itemAmtsToChildResAmts2(cfg, cfg.E.Treasures, treasures, item.ID)
+		rel.Treasures = itemAmtsToChildResAmts2(cfg.E.Treasures, treasures, item.ID)
 		return nil
 	})
 
@@ -69,7 +69,7 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seedtypes.Item, availa
 		if err != nil {
 			return err
 		}
-		rel.BlitzballPrizes = itemAmtsToChildResAmts2(cfg, cfg.E.BlitzballPrizes, blitzballPrizes, item.ID)
+		rel.BlitzballPrizes = itemAmtsToChildResAmts2(cfg.E.BlitzballPrizes, blitzballPrizes, item.ID)
 		return nil
 	})
 
@@ -105,11 +105,11 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seedtypes.Item, availa
 	return rel, nil
 }
 
-func getMonItemAmts(cfg *Config, monsters []NamedAPIResource, itemName string) []MonItemAmts {
+func getMonItemAmts(monsters []NamedAPIResource, itemName string) []MonItemAmts {
 	monItemAmts := []MonItemAmts{}
 
 	for _, monster := range monsters {
-		monItemAmt := createItemMonster(cfg, itemName, monster)
+		monItemAmt := createItemMonster(itemName, monster)
 		monItemAmts = append(monItemAmts, monItemAmt)
 	}
 

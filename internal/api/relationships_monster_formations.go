@@ -1,15 +1,15 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getFormationLoot(cfg *Config, formation seedtypes.MonsterFormation) FormationLoot {
+func getFormationLoot(formation seedtypes.MonsterFormation) FormationLoot {
 	var loot FormationLoot
 
 	for _, monAmt := range formation.Monsters {
-		mon, _ := seeding.GetResourceByID(monAmt.MonsterID, cfg.L.MonstersID)
+		mon, _ := lookup.GetResourceByID(monAmt.MonsterID, lookup.L.MonstersID)
 
 		loot.AP += mon.AP * monAmt.Amount
 		loot.ApOverkill += mon.APOverkill * monAmt.Amount

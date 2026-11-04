@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -97,7 +98,7 @@ func extractCues() ([]seedtypes.Cue, error) {
 			cue.SongID = song.ID
 
 			if cue.TriggerLocationArea != nil {
-				cue.TriggerAreaID, err = assignFKPtr(cue.TriggerLocationArea, L.Areas)
+				cue.TriggerAreaID, err = assignFKPtr(cue.TriggerLocationArea, lookup.L.Areas)
 				if err != nil {
 					return nil, err
 				}
@@ -121,7 +122,7 @@ func getCues() []seedtypes.Cue {
 }
 
 func getCueIncludedAreas(c seedtypes.Cue) ([]seedtypes.Area, error) {
-	return GetResources(c.IncludedAreas, L.Areas)
+	return lookup.GetResources(c.IncludedAreas, lookup.L.Areas)
 }
 
 func seedJuncCuesIncludedAreas(qtx *database.Queries, ctx context.Context) error {

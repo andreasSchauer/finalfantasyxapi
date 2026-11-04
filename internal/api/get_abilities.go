@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -47,10 +48,10 @@ func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seedtypes.A
 		i.queryEnumList(cfg, r, cfg.T.TargetType, ids, QpnTargetType, cfg.db.GetAbilityIDsByTargetType),
 		i.queryEnum(r, cfg.T.DamageFormula, ids, QpnDamageFormula, cfg.db.GetAbilityIDsByDamageFormula),
 		i.queryIntList(cfg, r, ids, QpnRank, cfg.db.GetAbilityIDsByRank),
-		i.queryNameIDListNul(cfg, r, ids, QpnElement, cfg.E.Elements.resTypeSingle, cfg.L.Elements, cfg.db.GetAbilityIDsByElement),
-		i.queryIDNul(r, ids, QpnStatusInflict, cfg.L.StatusConditions, cfg.db.GetAbilityIDsByInflictedStatus),
-		i.queryIDNul(r, ids, QpnStatusRemove, cfg.L.StatusConditions, cfg.db.GetAbilityIDsByRemovedStatus),
-		i.queryID(r, ids, QpnMonster, cfg.L.MonsterFormations, cfg.db.GetAbilityIDsByMonster),
+		i.queryNameIDListNul(cfg, r, ids, QpnElement, cfg.E.Elements.resTypeSingle, lookup.L.Elements, cfg.db.GetAbilityIDsByElement),
+		i.queryIDNul(r, ids, QpnStatusInflict, lookup.L.StatusConditions, cfg.db.GetAbilityIDsByInflictedStatus),
+		i.queryIDNul(r, ids, QpnStatusRemove, lookup.L.StatusConditions, cfg.db.GetAbilityIDsByRemovedStatus),
+		i.queryID(r, ids, QpnMonster, lookup.L.MonsterFormations, cfg.db.GetAbilityIDsByMonster),
 		i.queryBool(r, ids, QpnCopycat, cfg.db.GetAbilityIDsByCanCopycat),
 		i.queryBool(r, ids, QpnHelpBar, cfg.db.GetAbilityIDsByAppearsInHelpBar),
 		i.queryBool2(r, ids, QpnCanCrit, cfg.db.GetAbilityIDsCanCrit),

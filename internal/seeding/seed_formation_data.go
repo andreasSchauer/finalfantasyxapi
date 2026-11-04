@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -109,7 +110,7 @@ func extractFormationBossSongs() ([]seedtypes.FormationBossSong, error) {
 			continue
 		}
 
-		data.BossMusic.SongID, err = assignFK(data.BossMusic.Song, L.Songs)
+		data.BossMusic.SongID, err = assignFK(data.BossMusic.Song, lookup.L.Songs)
 		if err != nil {
 			return nil, err
 		}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -38,8 +39,8 @@ func loop2SeedKeyItems(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		keyItems[i].ID = row.ID
 		rawJSON.keyItems[i].ID = row.ID
-		L.KeyItems[seedtypes.Key(keyItems[i])] = keyItems[i]
-		L.KeyItemsID[row.ID] = keyItems[i]
+		lookup.L.KeyItems[seedtypes.Key(keyItems[i])] = keyItems[i]
+		lookup.L.KeyItemsID[row.ID] = keyItems[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -53,7 +54,7 @@ func extractKeyItems() ([]seedtypes.KeyItem, error) {
 	for i := range rawJSON.keyItems {
 		keyItem := &rawJSON.keyItems[i]
 
-		keyItem.MasterItem.ID, err = assignFK(keyItem.Name, L.MasterItems)
+		keyItem.MasterItem.ID, err = assignFK(keyItem.Name, lookup.L.MasterItems)
 		if err != nil {
 			return nil, err
 		}

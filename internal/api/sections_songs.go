@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 type SongSimple struct {
@@ -25,7 +25,7 @@ func (s SongSimple) GetURL() string {
 
 func createSongSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.E.Songs
-	song, _ := seeding.GetResourceByID(id, i.objLookupID)
+	song, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	songSimple := SongSimple{
 		ID:                song.ID,

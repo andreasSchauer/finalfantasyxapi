@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -114,7 +115,7 @@ func extractAltStateBaseStats(state *seedtypes.AlteredState) ([]seedtypes.BaseSt
 		for j := range change.BaseStats {
 			bs := &change.BaseStats[j]
 
-			bs.StatID, err = assignFK(bs.StatName, L.Stats)
+			bs.StatID, err = assignFK(bs.StatName, lookup.L.Stats)
 			if err != nil {
 				return nil, err
 			}
@@ -133,7 +134,7 @@ func prepareBaseStats(stats []seedtypes.BaseStat) ([]seedtypes.BaseStat, error) 
 	for i := range stats {
 		bs := &stats[i]
 
-		bs.StatID, err = assignFK(bs.StatName, L.Stats)
+		bs.StatID, err = assignFK(bs.StatName, lookup.L.Stats)
 		if err != nil {
 			return nil, err
 		}

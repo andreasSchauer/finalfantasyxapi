@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -25,7 +25,7 @@ func (m MixSimple) GetURL() string {
 
 func createMixSimple(cfg *Config, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.E.Mixes
-	mix, _ := seeding.GetResourceByID(id, i.objLookupID)
+	mix, _ := lookup.GetResourceByID(id, i.objLookupID)
 	combinations := mix.PossibleCombinations
 
 	prefix := fmt.Sprintf("/api/%s", cfg.E.Items.Endpoint)
@@ -35,7 +35,7 @@ func createMixSimple(cfg *Config, r *http.Request, id int32, _ Subsection) (Simp
 
 	if isItemsSection {
 		itemID, _ := strconv.Atoi(segments[0])
-		item, _ := seeding.GetResourceByID(int32(itemID), cfg.L.ItemsID)
+		item, _ := lookup.GetResourceByID(int32(itemID), lookup.L.ItemsID)
 
 		combinations = h.Filter(combinations, func(c seedtypes.MixCombination) bool {
 			return item.Name == c.FirstItem || item.Name == c.SecondItem

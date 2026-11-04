@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -11,18 +12,18 @@ type AgilityVals struct {
 	MaxICV    *int32 `json:"max_icv"`
 }
 
-func getAllAgilityTiers(cfg *Config) []seedtypes.AgilityTier {
-	tiers := make([]seedtypes.AgilityTier, len(cfg.L.AgilityTiersID))
+func getAllAgilityTiers() []seedtypes.AgilityTier {
+	tiers := make([]seedtypes.AgilityTier, len(lookup.L.AgilityTiersID))
 
-	for _, tier := range cfg.L.AgilityTiersID {
+	for _, tier := range lookup.L.AgilityTiersID {
 		tiers = append(tiers, tier)
 	}
 
 	return tiers
 }
 
-func getAgilityTier(cfg *Config, agility int32) seedtypes.AgilityTier {
-	tiers := getAllAgilityTiers(cfg)
+func getAgilityTier(agility int32) seedtypes.AgilityTier {
+	tiers := getAllAgilityTiers()
 	var agilityTier seedtypes.AgilityTier
 
 	for _, tier := range tiers {
@@ -35,8 +36,8 @@ func getAgilityTier(cfg *Config, agility int32) seedtypes.AgilityTier {
 	return agilityTier
 }
 
-func extractAglTierChar(cfg *Config, participant Participant, params TurnOrderParams) AgilityVals {
-	agilityTier := getAgilityTier(cfg, participant.Agility)
+func extractAglTierChar(participant Participant, params TurnOrderParams) AgilityVals {
+	agilityTier := getAgilityTier(participant.Agility)
 	aglVals := AgilityVals{
 		TickSpeed: agilityTier.TickSpeed,
 		MaxICV:    agilityTier.CharacterMaxICV,
@@ -52,8 +53,8 @@ func extractAglTierChar(cfg *Config, participant Participant, params TurnOrderPa
 	return calcAgilityVals(aglVals, participant, params, nil)
 }
 
-func extractAglTierMon(cfg *Config, participant Participant, params TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) AgilityVals {
-	agilityTier := getAgilityTier(cfg, participant.Agility)
+func extractAglTierMon(participant Participant, params TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) AgilityVals {
+	agilityTier := getAgilityTier(participant.Agility)
 	aglVals := AgilityVals{
 		TickSpeed: agilityTier.TickSpeed,
 		MinICV:    agilityTier.MonsterMinICV,

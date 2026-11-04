@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -28,8 +29,8 @@ func loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		rages[i].ID = row.ID
-		L.RonsoRages[seedtypes.Key(rages[i])] = rages[i]
-		L.RonsoRagesID[row.ID] = rages[i]
+		lookup.L.RonsoRages[seedtypes.Key(rages[i])] = rages[i]
+		lookup.L.RonsoRagesID[row.ID] = rages[i]
 		hashes[row.DataHash] = row.ID
 	}
 

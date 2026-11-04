@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -21,13 +22,13 @@ func seedJuncDefaultAbilities(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for _, entry := range rawJSON.defaultAbilities {
-		class, err := GetResource(entry.Name, L.CharClasses)
+		class, err := lookup.GetResource(entry.Name, lookup.L.CharClasses)
 		if err != nil {
 			return err
 		}
 
 		for _, ref := range entry.DefaultAbilities {
-			ability, err := GetResource(ref, L.Abilities)
+			ability, err := lookup.GetResource(ref, lookup.L.Abilities)
 			if err != nil {
 				return err
 			}

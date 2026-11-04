@@ -16,7 +16,7 @@ import (
 type Config struct {
 	db          *database.Queries
 	DBConn      *sql.DB
-	L           *seeding.Lookup
+
 	T           *Enums
 	Q           *QueryLookup
 	E           *endpoints
@@ -62,7 +62,6 @@ func ConfigInit() (*Config, error) {
 		adminAPIKey: adminAPIKey,
 		host:        domain,
 		fetchLimit:  fetchLimit,
-		L: 			 &seeding.L,
 	}
 
 	err = seeding.LoadDatabase(apiCfg.db, apiCfg.DBConn)

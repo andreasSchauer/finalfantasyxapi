@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -35,10 +36,10 @@ func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seedtypes.T
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationTreasureIDs),
-		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationTreasureIDs),
-		i.queryID(r, ids, QpnArea, cfg.L.Areas, cfg.db.GetAreaTreasureIDs),
-		i.queryID(r, ids, QpnItem, cfg.L.Items, cfg.db.GetTreasureIDsByItem),
+		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetLocationTreasureIDs),
+		i.queryID(r, ids, QpnSublocation, lookup.L.Sublocations, cfg.db.GetSublocationTreasureIDs),
+		i.queryID(r, ids, QpnArea, lookup.L.Areas, cfg.db.GetAreaTreasureIDs),
+		i.queryID(r, ids, QpnItem, lookup.L.Items, cfg.db.GetTreasureIDsByItem),
 		i.queryJoined(cfg, r, ids, []QueryParamName{QpnAutoAbility, QpnEmptySlots, QpnCharacter}, filterTreasuresEquipment),
 		i.queryBool(r, ids, QpnAnima, cfg.db.GetTreasureIDsByIsAnimaTreasure),
 		i.queryEnum(r, cfg.T.LootType, ids, QpnLootType, cfg.db.GetTreasureIDsByLootType),

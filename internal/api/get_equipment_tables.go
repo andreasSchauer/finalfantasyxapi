@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -43,7 +44,7 @@ func (cfg *Config) retrieveEquipmentTables(r *http.Request, i handlerInput[seedt
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryIDList(cfg, r, ids, QpnAutoAbilities, cfg.L.AutoAbilities, cfg.db.GetEquipmentTableIDsByAutoAbility),
+		i.queryIDList(cfg, r, ids, QpnAutoAbilities, lookup.L.AutoAbilities, cfg.db.GetEquipmentTableIDsByAutoAbility),
 		i.queryEnum(r, cfg.T.EquipType, ids, QpnType, cfg.db.GetEquipmentTableIDsEquipType),
 		i.queryBool2(r, ids, QpnCelestialWeapon, cfg.db.GetEquipmentTableIDsCelestialWeapon),
 	})

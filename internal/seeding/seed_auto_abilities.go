@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -64,8 +65,8 @@ func loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		rawJSON.autoAbilities[i].ID = row.ID
-		L.AutoAbilities[seedtypes.Key(abilities[i])] = abilities[i]
-		L.AutoAbilitiesID[row.ID] = abilities[i]
+		lookup.L.AutoAbilities[seedtypes.Key(abilities[i])] = abilities[i]
+		lookup.L.AutoAbilitiesID[row.ID] = abilities[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -79,27 +80,27 @@ func extractAutoAbilities() ([]seedtypes.AutoAbility, error) {
 	for i := range rawJSON.autoAbilities {
 		ability := &rawJSON.autoAbilities[i]
 
-		ability.GradRecoveryStatID, err = assignFKPtr(ability.GradualRecovery, L.Stats)
+		ability.GradRecoveryStatID, err = assignFKPtr(ability.GradualRecovery, lookup.L.Stats)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.OnHitElementID, err = assignFKPtr(ability.OnHitElement, L.Elements)
+		ability.OnHitElementID, err = assignFKPtr(ability.OnHitElement, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.AddedPropertyID, err = assignFKPtr(ability.AddedProperty, L.Properties)
+		ability.AddedPropertyID, err = assignFKPtr(ability.AddedProperty, lookup.L.Properties)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.CnvrsnFromModID, err = assignFKPtr(ability.ConversionFrom, L.Modifiers)
+		ability.CnvrsnFromModID, err = assignFKPtr(ability.ConversionFrom, lookup.L.Modifiers)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.CnvrsnToModID, err = assignFKPtr(ability.ConversionTo, L.Modifiers)
+		ability.CnvrsnToModID, err = assignFKPtr(ability.ConversionTo, lookup.L.Modifiers)
 		if err != nil {
 			return nil, err
 		}
@@ -150,8 +151,8 @@ func completeAutoAbilities() error {
 			return err
 		}
 
-		L.AutoAbilities[seedtypes.Key(autoAbility)] = *autoAbility
-		L.AutoAbilitiesID[autoAbility.ID] = *autoAbility
+		lookup.L.AutoAbilities[seedtypes.Key(autoAbility)] = *autoAbility
+		lookup.L.AutoAbilitiesID[autoAbility.ID] = *autoAbility
 	}
 
 	return nil

@@ -5,6 +5,7 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -86,7 +87,7 @@ func getShopEquipment() []seedtypes.ShopEquipment {
 }
 
 func getShopEquipmentAutoAbilities(se seedtypes.ShopEquipment) ([]seedtypes.AutoAbility, error) {
-	return GetResources(se.Abilities, L.AutoAbilities)
+	return lookup.GetResources(se.Abilities, lookup.L.AutoAbilities)
 }
 
 func seedJuncShopEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {

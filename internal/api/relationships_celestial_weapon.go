@@ -3,15 +3,15 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
 func getCelestialWeaponRelationships(cfg *Config, r *http.Request, cw seedtypes.CelestialWeapon) (CelestialWeapon, error) {
-	crest, _ := seeding.GetResource(cw.KeyItemBase+" crest", cfg.L.KeyItems)
-	sigil, _ := seeding.GetResource(cw.KeyItemBase+" sigil", cfg.L.KeyItems)
-	equipment, _ := seeding.GetResource(cw, cfg.L.EquipmentNames)
+	crest, _ := lookup.GetResource(cw.KeyItemBase+" crest", lookup.L.KeyItems)
+	sigil, _ := lookup.GetResource(cw.KeyItemBase+" sigil", lookup.L.KeyItems)
+	equipment, _ := lookup.GetResource(cw, lookup.L.EquipmentNames)
 
 	rel := CelestialWeapon{
 		Equipment: nameToNamedAPIResource(cfg, cfg.E.Equipment, equipment.Name, nil),
@@ -25,7 +25,7 @@ func getCelestialWeaponRelationships(cfg *Config, r *http.Request, cw seedtypes.
 		if err != nil {
 			return err
 		}
-		table, _ := seeding.GetResourceByID(tables[0].ID, cfg.L.EquipmentTablesID)
+		table, _ := lookup.GetResourceByID(tables[0].ID, lookup.L.EquipmentTablesID)
 		rel.AutoAbilities = namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, table.RequiredAutoAbilities)
 		return nil
 	})

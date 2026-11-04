@@ -5,6 +5,7 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -92,7 +93,7 @@ func seedJuncMonsterEquipmentSlotChances(qtx *database.Queries, ctx context.Cont
 }
 
 func getEquipmentDropCharacters(ed seedtypes.EquipmentDrop) ([]seedtypes.Character, error) {
-	return GetResources(ed.Characters, L.Characters)
+	return lookup.GetResources(ed.Characters, lookup.L.Characters)
 }
 
 func seedJuncEquipmentDropsCharacters(qtx *database.Queries, ctx context.Context) error {

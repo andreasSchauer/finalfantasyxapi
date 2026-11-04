@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -33,8 +34,8 @@ func loop2SeedElementalResists(qtx *database.Queries, ctx context.Context) error
 
 	for i, row := range dbRows {
 		resists[i].ID = row.ID
-		L.ElementalResists[seedtypes.Key(resists[i])] = resists[i]
-		L.ElementalResistsID[row.ID] = resists[i]
+		lookup.L.ElementalResists[seedtypes.Key(resists[i])] = resists[i]
+		lookup.L.ElementalResistsID[row.ID] = resists[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -52,7 +53,7 @@ func extractElementalResists() ([]seedtypes.ElementalResist, error) {
 			continue
 		}
 
-		autoAbility.AddedElemResist.ElementID, err = assignFK(autoAbility.AddedElemResist.Element, L.Elements)
+		autoAbility.AddedElemResist.ElementID, err = assignFK(autoAbility.AddedElemResist.Element, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -66,7 +67,7 @@ func extractElementalResists() ([]seedtypes.ElementalResist, error) {
 		for j := range monster.ElemResists {
 			resist := &monster.ElemResists[j]
 
-			resist.ElementID, err = assignFK(resist.Element, L.Elements)
+			resist.ElementID, err = assignFK(resist.Element, lookup.L.Elements)
 			if err != nil {
 				return nil, err
 			}
@@ -91,7 +92,7 @@ func extractElementalResists() ([]seedtypes.ElementalResist, error) {
 			continue
 		}
 
-		condition.AddedElemResist.ElementID, err = assignFK(condition.AddedElemResist.Element, L.Elements)
+		condition.AddedElemResist.ElementID, err = assignFK(condition.AddedElemResist.Element, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -116,7 +117,7 @@ func extractAltStateElemResists(state *seedtypes.AlteredState) ([]seedtypes.Elem
 		for j := range change.ElemResists {
 			resist := &change.ElemResists[j]
 
-			resist.ElementID, err = assignFK(resist.Element, L.Elements)
+			resist.ElementID, err = assignFK(resist.Element, lookup.L.Elements)
 			if err != nil {
 				return nil, err
 			}

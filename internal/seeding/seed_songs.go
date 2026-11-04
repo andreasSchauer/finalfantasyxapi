@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -58,8 +59,8 @@ func loop2SeedSongs(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		songs[i].ID = row.ID
 		rawJSON.songs[i].ID = row.ID
-		L.Songs[seedtypes.Key(songs[i])] = songs[i]
-		L.SongsID[row.ID] = songs[i]
+		lookup.L.Songs[seedtypes.Key(songs[i])] = songs[i]
+		lookup.L.SongsID[row.ID] = songs[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -99,8 +100,8 @@ func completeSongs() error {
 			return err
 		}
 
-		L.Songs[seedtypes.Key(song)] = *song
-		L.SongsID[song.ID] = *song
+		lookup.L.Songs[seedtypes.Key(song)] = *song
+		lookup.L.SongsID[song.ID] = *song
 	}
 
 	return nil
@@ -154,7 +155,7 @@ func getSongBackgroundMusic(s seedtypes.Song) ([]seedtypes.BackgroundMusic, erro
 }
 
 func getBackgroundMusicAreas(bm seedtypes.BackgroundMusic) ([]seedtypes.Area, error) {
-	return GetResources(bm.LocationAreas, L.Areas)
+	return lookup.GetResources(bm.LocationAreas, lookup.L.Areas)
 }
 
 func seedJuncSongsBackgroundMusic(qtx *database.Queries, ctx context.Context) error {

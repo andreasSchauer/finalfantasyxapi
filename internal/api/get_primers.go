@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -18,7 +18,7 @@ func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seedtypes.Primer, P
 		return Primer{}, err
 	}
 
-	keyItem, _ := seeding.GetResource(primer, cfg.L.KeyItems)
+	keyItem, _ := lookup.GetResource(primer, lookup.L.KeyItems)
 
 	response := Primer{
 		ID:            primer.ID,

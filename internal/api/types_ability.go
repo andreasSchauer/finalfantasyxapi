@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 type Ability struct {
@@ -99,7 +99,7 @@ type PlayerAbility struct {
 
 func (a PlayerAbility) canUseAbility(cfg *Config, unitName string) bool {
 	for _, class := range a.LearnedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.L.CharClassesID)
+		classLookup, _ := lookup.GetResourceByID(class.ID, lookup.L.CharClassesID)
 
 		if slices.Contains(classLookup.Members, unitName) {
 			return true
@@ -138,7 +138,7 @@ type TriggerCommand struct {
 
 func (a TriggerCommand) canUseAbility(cfg *Config, unitName string) bool {
 	for _, class := range a.UsedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.L.CharClassesID)
+		classLookup, _ := lookup.GetResourceByID(class.ID, lookup.L.CharClassesID)
 
 		if slices.Contains(classLookup.Members, unitName) {
 			return true
@@ -177,7 +177,7 @@ type MiscAbility struct {
 
 func (a MiscAbility) canUseAbility(cfg *Config, unitName string) bool {
 	for _, class := range a.LearnedBy {
-		classLookup, _ := seeding.GetResourceByID(class.ID, cfg.L.CharClassesID)
+		classLookup, _ := lookup.GetResourceByID(class.ID, lookup.L.CharClassesID)
 
 		if slices.Contains(classLookup.Members, unitName) {
 			return true

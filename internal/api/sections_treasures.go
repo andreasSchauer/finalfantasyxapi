@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 type TreasureSimple struct {
@@ -25,7 +25,7 @@ func (t TreasureSimple) GetURL() string {
 
 func createTreasureSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.E.Treasures
-	treasure, _ := seeding.GetResourceByID(id, i.objLookupID)
+	treasure, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	treasureSimple := TreasureSimple{
 		ID:           treasure.ID,

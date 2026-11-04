@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 type TurnOrderParams struct {
@@ -120,7 +120,7 @@ func getTurnOrderParamsDoc(cfg *Config) ParamsDoc {
 				RequiredOr:    []FieldName{PfnParty, PfnMons},
 				ConflictsWith: []FieldName{PfnMons},
 				MinVal:        h.GetInt32Ptr(1),
-				MaxVal:        h.GetInt32Ptr(int32(len(cfg.L.MonsterFormations))),
+				MaxVal:        h.GetInt32Ptr(int32(len(lookup.L.MonsterFormations))),
 				Description:   "Instead of manually selecting monsters, you can look up a monster-formation via id. The monster(s) it contains will automatically get added as participants, along with their agility and first-strike values.",
 			},
 			{
@@ -151,7 +151,7 @@ func (cfg *Config) getFieldDocTurnOrderParty() []FieldDoc {
 			Type:        "int (id: playerUnit)",
 			Required:    true,
 			MinVal:      h.GetInt32Ptr(1),
-			MaxVal:      h.GetInt32Ptr(int32(len(cfg.L.PlayerUnits))),
+			MaxVal:      h.GetInt32Ptr(int32(len(lookup.L.PlayerUnits))),
 			Description: "Specifies the id of the party member to be looked up.",
 		},
 		{
@@ -184,7 +184,7 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 			RequiredOr:    []FieldName{PfnName},
 			ConflictsWith: []FieldName{PfnName},
 			MinVal:        h.GetInt32Ptr(1),
-			MaxVal:        h.GetInt32Ptr(int32(len(cfg.L.Monsters))),
+			MaxVal:        h.GetInt32Ptr(int32(len(lookup.L.Monsters))),
 			Description:   "To define a monster, you can specify an ID and look up the corresponding monster. Its agility stat, first strike, as well as its innate 'haste' status will be applied automatically. These values can be overridden however, through the use of the other fields.",
 		},
 		{
@@ -196,32 +196,32 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 				{
 					ID:     32,
 					Values: []int32{2, 3},
-					MaxVal: getLenMonAltStates(cfg, 32),
+					MaxVal: getLenMonAltStates(32),
 				},
 				{
 					ID:     139,
 					Values: []int32{1, 2, 3},
-					MaxVal: getLenMonAltStates(cfg, 139),
+					MaxVal: getLenMonAltStates(139),
 				},
 				{
 					ID:     160,
 					Values: []int32{1},
-					MaxVal: getLenMonAltStates(cfg, 160),
+					MaxVal: getLenMonAltStates(160),
 				},
 				{
 					ID:     198,
 					Values: []int32{1},
-					MaxVal: getLenMonAltStates(cfg, 198),
+					MaxVal: getLenMonAltStates(198),
 				},
 				{
 					ID:     285,
 					Values: []int32{1},
-					MaxVal: getLenMonAltStates(cfg, 285),
+					MaxVal: getLenMonAltStates(285),
 				},
 				{
 					ID:     287,
 					Values: []int32{2},
-					MaxVal: getLenMonAltStates(cfg, 287),
+					MaxVal: getLenMonAltStates(287),
 				},
 			},
 			Description: "If the looked up monster has altered states, they can be applied, but will only have an effect, if they change its agility stat, or apply 'haste'. If a monster has a different agility stat on only its first turn, this altered state is applied automatically, except when 'ign_first_turn' is true. Specifying that specific altered state won't have any effect, nor will it result in an error. The same is true for Penance's arms who get the 'haste' status only during their own turns. Returns an error, if the monster doesn't have as many altered states as given. The maxVal of this field is always the total amount of the monster's altered states.",
@@ -255,7 +255,7 @@ func (cfg *Config) getFieldDocTurnOrderMon() []FieldDoc {
 	}
 }
 
-func getLenMonAltStates(cfg *Config, id int32) int32 {
-	mon, _ := seeding.GetResourceByID(id, cfg.L.MonstersID)
+func getLenMonAltStates(id int32) int32 {
+	mon, _ := lookup.GetResourceByID(id, lookup.L.MonstersID)
 	return h.Len32(mon.AlteredStates)
 }

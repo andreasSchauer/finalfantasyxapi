@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 func (i handlerInput[T, R, A]) queryParamsVerifyGet(r *http.Request, id int32) (T, error) {
@@ -15,7 +15,7 @@ func (i handlerInput[T, R, A]) queryParamsVerifyGet(r *http.Request, id int32) (
 		return zeroType, err
 	}
 
-	resource, err := seeding.GetResourceByID(id, i.objLookupID)
+	resource, err := lookup.GetResourceByID(id, i.objLookupID)
 	if err != nil {
 		return zeroType, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with id '%d' doesn't exist", i.resTypeSingle, id), err)
 	}

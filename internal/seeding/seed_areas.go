@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -49,8 +50,8 @@ func loop3SeedAreas(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		areas[i].ID = row.ID
-		L.Areas[seedtypes.Key(areas[i])] = areas[i]
-		L.AreasID[row.ID] = areas[i]
+		lookup.L.Areas[seedtypes.Key(areas[i])] = areas[i]
+		lookup.L.AreasID[row.ID] = areas[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -100,8 +101,8 @@ func completeAreas(areas []seedtypes.Area) error {
 			return err
 		}
 
-		L.Areas[seedtypes.Key(area)] = *area
-		L.AreasID[area.ID] = *area
+		lookup.L.Areas[seedtypes.Key(area)] = *area
+		lookup.L.AreasID[area.ID] = *area
 	}
 
 	return nil
@@ -172,7 +173,7 @@ func prepareAreaConnections(areas []seedtypes.Area) ([]seedtypes.AreaConnection,
 		for j := range area.ConnectedAreas {
 			connArea := &area.ConnectedAreas[j]
 
-			connArea.AreaID, err = assignFK(connArea.LocationArea, L.Areas)
+			connArea.AreaID, err = assignFK(connArea.LocationArea, lookup.L.Areas)
 			if err != nil {
 				return nil, err
 			}

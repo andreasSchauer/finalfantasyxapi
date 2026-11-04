@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -47,7 +48,7 @@ func extractStatusResists() ([]seedtypes.StatusResist, error) {
 
 		for j := range mon.StatusResists {
 			resist := &mon.StatusResists[j]
-			resist.StatusConditionID, err = assignFK(resist.StatusCondition, L.StatusConditions)
+			resist.StatusConditionID, err = assignFK(resist.StatusCondition, lookup.L.StatusConditions)
 			if err != nil {
 				return nil, err
 			}
@@ -61,7 +62,7 @@ func extractStatusResists() ([]seedtypes.StatusResist, error) {
 
 		for j := range autoAbility.AddedStatusResists {
 			resist := &autoAbility.AddedStatusResists[j]
-			resist.StatusConditionID, err = assignFK(resist.StatusCondition, L.StatusConditions)
+			resist.StatusConditionID, err = assignFK(resist.StatusCondition, lookup.L.StatusConditions)
 			if err != nil {
 				return nil, err
 			}

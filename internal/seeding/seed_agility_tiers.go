@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -41,7 +42,7 @@ func loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		agilityTiers[i].ID = row.ID
 		rawJSON.agilityTiers[i].ID = row.ID
-		L.AgilityTiersID[row.ID] = agilityTiers[i]
+		lookup.L.AgilityTiersID[row.ID] = agilityTiers[i]
 		hashes[row.DataHash] = row.ID
 	}
 

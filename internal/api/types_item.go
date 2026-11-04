@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -42,8 +42,8 @@ type MonItemAmts struct {
 	Other               int32            `json:"other,omitempty"`
 }
 
-func createItemMonster(cfg *Config, itemName string, mon NamedAPIResource) MonItemAmts {
-	monster, _ := seeding.GetResourceByID(mon.ID, cfg.L.MonstersID)
+func createItemMonster(itemName string, mon NamedAPIResource) MonItemAmts {
+	monster, _ := lookup.GetResourceByID(mon.ID, lookup.L.MonstersID)
 
 	return MonItemAmts{
 		Monster:             mon,

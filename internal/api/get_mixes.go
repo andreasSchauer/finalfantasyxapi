@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -13,7 +13,7 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, Na
 		return Mix{}, err
 	}
 
-	overdrive, _ := seeding.GetResourceByID(mix.OverdriveID, cfg.L.OverdrivesID)
+	overdrive, _ := lookup.GetResourceByID(mix.OverdriveID, lookup.L.OverdrivesID)
 
 	combinations, err := getMixCombinations(cfg, r, mix)
 	if err != nil {
@@ -41,6 +41,6 @@ func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, 
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
 		i.queryEnumList(cfg, r, cfg.T.MixCategory, ids, QpnCategory, cfg.db.GetMixIDsByCategory),
-		i.queryIDWrapper(cfg, r, ids, QpnReqItem, cfg.L.Items, getMixesByItem),
+		i.queryIDWrapper(cfg, r, ids, QpnReqItem, lookup.L.Items, getMixesByItem),
 	})
 }

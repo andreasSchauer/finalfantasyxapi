@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -49,7 +50,7 @@ func extractMonsterAmounts() ([]seedtypes.MonsterAmount, error) {
 			ma := &mf.Monsters[j]
 
 			key := seedtypes.Key(*ma)
-			ma.MonsterID, err = assignFK(key, L.Monsters)
+			ma.MonsterID, err = assignFK(key, lookup.L.Monsters)
 			if err != nil {
 				return nil, err
 			}

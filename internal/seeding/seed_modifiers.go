@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -37,8 +38,8 @@ func loop1SeedModifiers(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		modifiers[i].ID = row.ID
 		rawJSON.modifiers[i].ID = row.ID
-		L.Modifiers[seedtypes.Key(modifiers[i])] = modifiers[i]
-		L.ModifiersID[row.ID] = modifiers[i]
+		lookup.L.Modifiers[seedtypes.Key(modifiers[i])] = modifiers[i]
+		lookup.L.ModifiersID[row.ID] = modifiers[i]
 		hashes[row.DataHash] = row.ID
 	}
 

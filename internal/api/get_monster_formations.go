@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -19,7 +20,7 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seedtypes
 		IsForcedAmbush:  formation.FormationData.IsForcedAmbush,
 		CanEscape:       formation.FormationData.CanEscape,
 		Notes:           formation.FormationData.Notes,
-		FormationLoot:   getFormationLoot(cfg, formation),
+		FormationLoot:   getFormationLoot(formation),
 		BossMusic:       convertObjPtr(cfg, formation.FormationData.BossMusic, convertFormationBossSong),
 		Monsters:        cfg.E.Monsters.toResAmtsFromNames(cfg, formation.Monsters),
 		Areas:           convertObjSlice(cfg, formation.EncounterAreas, convertEncounterArea),
@@ -36,10 +37,10 @@ func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[see
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetMonsterFormationIDsByMonster),
-		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetMonsterFormationIDsByLocation),
-		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetMonsterFormationIDsBySublocation),
-		i.queryID(r, ids, QpnArea, cfg.L.Areas, cfg.db.GetMonsterFormationIDsByArea),
+		i.queryID(r, ids, QpnMonster, lookup.L.Monsters, cfg.db.GetMonsterFormationIDsByMonster),
+		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetMonsterFormationIDsByLocation),
+		i.queryID(r, ids, QpnSublocation, lookup.L.Sublocations, cfg.db.GetMonsterFormationIDsBySublocation),
+		i.queryID(r, ids, QpnArea, lookup.L.Areas, cfg.db.GetMonsterFormationIDsByArea),
 		i.queryBool(r, ids, QpnAmbush, cfg.db.GetMonsterFormationIDsByForcedAmbush),
 		i.queryBool(r, ids, QpnEscape, cfg.db.GetMonsterFormationIDsByCanEscape),
 		i.queryEnumList(cfg, r, cfg.T.MonsterFormationCategory, ids, QpnCategory, cfg.db.GetMonsterFormationIDsByCategory),

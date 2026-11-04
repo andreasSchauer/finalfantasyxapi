@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -47,8 +48,8 @@ func loop4SeedTreasures(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		treasures[i].ID = row.ID
-		L.Treasures[seedtypes.Key(treasures[i])] = treasures[i]
-		L.TreasuresID[row.ID] = treasures[i]
+		lookup.L.Treasures[seedtypes.Key(treasures[i])] = treasures[i]
+		lookup.L.TreasuresID[row.ID] = treasures[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -66,7 +67,7 @@ func extractTreasures() ([]seedtypes.Treasure, error) {
 			treasure := &list.Treasures[j]
 			treasure.Version = int32(j + 1)
 
-			treasure.AreaID, err = assignFK(list.LocationArea, L.Areas)
+			treasure.AreaID, err = assignFK(list.LocationArea, lookup.L.Areas)
 			if err != nil {
 				return nil, err
 			}
@@ -113,8 +114,8 @@ func completeTreasures(treasures []seedtypes.Treasure) error {
 			}
 		}
 
-		L.Treasures[seedtypes.Key(*treasure)] = *treasure
-		L.TreasuresID[treasure.ID] = *treasure
+		lookup.L.Treasures[seedtypes.Key(*treasure)] = *treasure
+		lookup.L.TreasuresID[treasure.ID] = *treasure
 	}
 
 	return nil

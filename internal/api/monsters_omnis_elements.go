@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) ([]ElementalResist, error) {
@@ -33,7 +33,7 @@ func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName Que
 		}
 
 		// lookup element to find out the opposite element
-		elementLookup, err := seeding.GetResource(elementName, cfg.L.Elements)
+		elementLookup, err := lookup.GetResource(elementName, lookup.L.Elements)
 		if err != nil {
 			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get element '%s'", elementName), err)
 		}

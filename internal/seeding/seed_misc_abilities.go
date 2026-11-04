@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -46,8 +47,8 @@ func loop3SeedMiscAbilities(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		rawJSON.miscAbilities[i].ID = row.ID
-		L.MiscAbilities[seedtypes.Key(abilities[i])] = abilities[i]
-		L.MiscAbilitiesID[row.ID] = abilities[i]
+		lookup.L.MiscAbilities[seedtypes.Key(abilities[i])] = abilities[i]
+		lookup.L.MiscAbilitiesID[row.ID] = abilities[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -66,17 +67,17 @@ func extractMiscAbilities() ([]seedtypes.MiscAbility, error) {
 			return nil, err
 		}
 
-		ability.TopmenuID, err = assignFKPtr(ability.Topmenu, L.Topmenus)
+		ability.TopmenuID, err = assignFKPtr(ability.Topmenu, lookup.L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.SubmenuID, err = assignFKPtr(ability.Submenu, L.Submenus)
+		ability.SubmenuID, err = assignFKPtr(ability.Submenu, lookup.L.Submenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, L.Submenus)
+		ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, lookup.L.Submenus)
 		if err != nil {
 			return nil, err
 		}
@@ -96,15 +97,15 @@ func completeMiscAbilities() error {
 			return err
 		}
 
-		L.MiscAbilities[seedtypes.Key(ability)] = *ability
-		L.MiscAbilitiesID[ability.ID] = *ability
+		lookup.L.MiscAbilities[seedtypes.Key(ability)] = *ability
+		lookup.L.MiscAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
 func getMiscAbilityLearnedBy(ua seedtypes.MiscAbility) ([]seedtypes.CharacterClass, error) {
-	return GetResources(ua.LearnedBy, L.CharClasses)
+	return lookup.GetResources(ua.LearnedBy, lookup.L.CharClasses)
 }
 
 func seedJuncMiscAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {

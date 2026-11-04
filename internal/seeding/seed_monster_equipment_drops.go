@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -59,7 +60,7 @@ func extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
 			drop := &mon.Equipment.WeaponAbilities[j]
 			drop.Type = database.EquipTypeWeapon
 
-			drop.AutoAbilityID, err = assignFK(drop.Ability, L.AutoAbilities)
+			drop.AutoAbilityID, err = assignFK(drop.Ability, lookup.L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}
@@ -71,7 +72,7 @@ func extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
 			drop := &mon.Equipment.ArmorAbilities[j]
 			drop.Type = database.EquipTypeArmor
 
-			drop.AutoAbilityID, err = assignFK(drop.Ability, L.AutoAbilities)
+			drop.AutoAbilityID, err = assignFK(drop.Ability, lookup.L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}

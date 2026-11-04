@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -194,7 +195,7 @@ func extractAltStateInflictedStatusses(state *seedtypes.AlteredState) ([]seedtyp
 func prepareInflictedStatus(is *seedtypes.InflictedStatus) (*seedtypes.InflictedStatus, error) {
 	var err error
 
-	is.StatusConditionID, err = assignFK(is.StatusCondition, L.StatusConditions)
+	is.StatusConditionID, err = assignFK(is.StatusCondition, lookup.L.StatusConditions)
 	if err != nil {
 		return nil, err
 	}

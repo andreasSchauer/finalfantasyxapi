@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -48,9 +48,9 @@ func getParticipants(cfg *Config, params TurnOrderParams) (TurnOrderParams, []Pa
 		namesCurrent: make(map[string]int),
 		duplicates:   make(map[string]bool),
 	}
-	params = fetchFormationMons(cfg, params)
+	params = fetchFormationMons(params)
 
-	playerParty, err := getParticipantsParty(cfg, params, maps)
+	playerParty, err := getParticipantsParty(params, maps)
 	if err != nil {
 		return TurnOrderParams{}, nil, nil, err
 	}
@@ -65,7 +65,7 @@ func getParticipants(cfg *Config, params TurnOrderParams) (TurnOrderParams, []Pa
 	return params, playerParty, opponentParty, nil
 }
 
-func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participantMaps) ([]Participant, error) {
+func getParticipantsParty(params TurnOrderParams, maps *participantMaps) ([]Participant, error) {
 	const idFormationSpectral int32 = 253
 	playerParty := []Participant{}
 
@@ -75,7 +75,7 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(PfnParty, fmt.Sprintf("duplicate unit id found at index %d. each party member can only appear once", i)), nil)
 		}
 
-		unit, _ := seeding.GetResourceByID(partyMember.UnitID, cfg.L.PlayerUnitsID)
+		unit, _ := lookup.GetResourceByID(partyMember.UnitID, lookup.L.PlayerUnitsID)
 
 		participant := Participant{
 			Name:        unit.Name,
@@ -84,7 +84,7 @@ func getParticipantsParty(cfg *Config, params TurnOrderParams, maps *participant
 			FirstStrike: partyMember.FirstStrike,
 			Status:      partyMember.Status,
 		}
-		participant.AgilityVals = extractAglTierChar(cfg, participant, params)
+		participant.AgilityVals = extractAglTierChar(participant, params)
 
 		if params.FormationID != nil && *params.FormationID == idFormationSpectral {
 			participant.MinICV, participant.MaxICV = getEqualICVs(0)
@@ -112,7 +112,7 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 			return nil, err
 		}
 
-		participant = populateParticipantMon(cfg, params, participant, mon, firstTurnAglTier)
+		participant = populateParticipantMon(params, participant, mon, firstTurnAglTier)
 
 		monParty = append(monParty, participant)
 		maps.duplicates[mon.getDuplicateKey()] = true
@@ -132,7 +132,7 @@ func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon
 	monster, firstTurnAglTier := assembleMonTurnOrder(cfg, *mon.MonsterID, mon.AltState)
 	participant := Participant{
 		Name:        h.NameToString(monster.Name, monster.Version, nil),
-		Agility:     getTurnOrderMonAgility(cfg, *mon.MonsterID, monster),
+		Agility:     getTurnOrderMonAgility(*mon.MonsterID, monster),
 		FirstStrike: monsterHasFirstStrike(monster),
 		AltState:    mon.AltState,
 	}
@@ -145,7 +145,7 @@ func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon
 	return participant, firstTurnAglTier, nil
 }
 
-func populateParticipantMon(cfg *Config, params TurnOrderParams, participant Participant, mon turnOrderMon, firstTurnAglTier *seedtypes.AgilityTier) Participant {
+func populateParticipantMon(params TurnOrderParams, participant Participant, mon turnOrderMon, firstTurnAglTier *seedtypes.AgilityTier) Participant {
 	if mon.Name != nil {
 		participant.Name = *mon.Name
 	}
@@ -163,7 +163,7 @@ func populateParticipantMon(cfg *Config, params TurnOrderParams, participant Par
 	}
 
 	participant.Party = BattlePartyOpponent
-	participant.AgilityVals = extractAglTierMon(cfg, participant, params, firstTurnAglTier)
+	participant.AgilityVals = extractAglTierMon(participant, params, firstTurnAglTier)
 
 	if mon.MonsterID == nil {
 		return participant

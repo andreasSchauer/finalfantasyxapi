@@ -8,9 +8,10 @@ import (
 	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
-func (q QueryParam) parseStats(cfg *Config, r *http.Request, allowedStatIDs []int32) (map[string]int32, error) {
+func (q QueryParam) parseStats(r *http.Request, allowedStatIDs []int32) (map[string]int32, error) {
 	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err
@@ -20,7 +21,7 @@ func (q QueryParam) parseStats(cfg *Config, r *http.Request, allowedStatIDs []in
 	statKeyValuePairs := strings.SplitSeq(query, ",")
 
 	for pair := range statKeyValuePairs {
-		stat, value, err := q.parseStatPair(cfg, pair, allowedStatIDs)
+		stat, value, err := q.parseStatPair(pair, allowedStatIDs)
 		if err != nil {
 			return nil, err
 		}
@@ -32,13 +33,13 @@ func (q QueryParam) parseStats(cfg *Config, r *http.Request, allowedStatIDs []in
 	return statMap, nil
 }
 
-func (q QueryParam) parseStatPair(cfg *Config, pair string, allowedStatIDs []int32) (string, int, error) {
+func (q QueryParam) parseStatPair(pair string, allowedStatIDs []int32) (string, int, error) {
 	stat, valueStr, found := strings.Cut(pair, ":")
 	if !found {
 		return "", 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s' . usage: '%s'", q.Name, stat, q.Usage), nil)
 	}
 
-	err := q.validateStatName(cfg, stat, allowedStatIDs)
+	err := q.validateStatName(stat, allowedStatIDs)
 	if err != nil {
 		return "", 0, err
 	}
@@ -51,14 +52,14 @@ func (q QueryParam) parseStatPair(cfg *Config, pair string, allowedStatIDs []int
 	return stat, value, nil
 }
 
-func (q QueryParam) validateStatName(cfg *Config, stat string, allowedStatIDs []int32) error {
-	parseResp, err := checkUniqueName(stat, cfg.L.Stats)
+func (q QueryParam) validateStatName(stat string, allowedStatIDs []int32) error {
+	parseResp, err := checkUniqueName(stat, lookup.L.Stats)
 	if err != nil {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat: '%s' in '%s'. stat doesn't exist. use '/api/stats' to see existing stats", stat, q.Name), err)
 	}
 
 	if !slices.Contains(allowedStatIDs, parseResp.ID) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat '%s' in '%s'. '%s' only uses %s", stat, q.Name, q.Name, getAllowedStatString(cfg, allowedStatIDs)), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat '%s' in '%s'. '%s' only uses %s", stat, q.Name, q.Name, getAllowedStatString(allowedStatIDs)), nil)
 	}
 
 	return nil
@@ -88,11 +89,11 @@ func (q QueryParam) validateStatVal(statName string, valStr string) (int, error)
 	return val, nil
 }
 
-func getAllowedStatString(cfg *Config, allowedStatIDs []int32) string {
+func getAllowedStatString(allowedStatIDs []int32) string {
 	stats := []string{}
 
 	for _, id := range allowedStatIDs {
-		stat := cfg.L.StatsID[id]
+		stat := lookup.L.StatsID[id]
 		statFormatted := fmt.Sprintf("'%s'", stat.Name)
 		stats = append(stats, statFormatted)
 	}
@@ -101,12 +102,12 @@ func getAllowedStatString(cfg *Config, allowedStatIDs []int32) string {
 }
 
 // parses the given stats and generates a complete stat map where each given stat is compared to the entity's given stats, usually the default stats. the higher value will be preferred, since lower than the default isn't possible. if no value for a stat was given, the default stat will be used. the result of this function is usually used to calculate the stats of another entity, not to replace any stats of the given entity.
-func getStatCalcMap(cfg *Config, r *http.Request, queryParam QueryParam, baseStats []BaseStat, allowedStatIDs []int32) (map[string]int32, error) {
+func getStatCalcMap(r *http.Request, queryParam QueryParam, baseStats []BaseStat, allowedStatIDs []int32) (map[string]int32, error) {
 	if allowedStatIDs == nil {
-		allowedStatIDs = h.GetNumSlice(1, int32(len(cfg.L.Stats)))
+		allowedStatIDs = h.GetNumSlice(1, int32(len(lookup.L.Stats)))
 	}
 
-	statMap, err := queryParam.parseStats(cfg, r, allowedStatIDs)
+	statMap, err := queryParam.parseStats(r, allowedStatIDs)
 	if err != nil {
 		return nil, err
 	}

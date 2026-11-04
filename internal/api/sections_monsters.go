@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -34,7 +34,7 @@ func (m MonsterSimple) GetURL() string {
 
 func createMonsterSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := cfg.E.Monsters
-	mon, _ := seeding.GetResourceByID(id, i.objLookupID)
+	mon, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	areaIDs := subsection.relations[id][RelationAreas]
 

@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -16,7 +16,7 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seedtypes.Ar
 		return ArenaCreation{}, err
 	}
 
-	subquest, _ := seeding.GetResourceByID(creation.SubquestID, cfg.L.SubquestsID)
+	subquest, _ := lookup.GetResourceByID(creation.SubquestID, lookup.L.SubquestsID)
 	ia := subquest.Completion.Reward
 
 	monsters, err := getArenaCreationMonsters(cfg, r, creation)

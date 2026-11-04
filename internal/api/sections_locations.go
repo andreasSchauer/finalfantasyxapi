@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -22,7 +22,7 @@ func (l LocationSimple) GetURL() string {
 
 func createLocationSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := cfg.E.Locations
-	location, _ := seeding.GetResourceByID(id, i.objLookupID)
+	location, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	monsterIDs := subsection.relations[id][RelationMonsters]
 	shopIDs := subsection.relations[id][RelationShops]

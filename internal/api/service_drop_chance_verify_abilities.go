@@ -7,11 +7,11 @@ import (
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seedtypes.Monster) ([]seedtypes.AutoAbility, []seedtypes.EquipmentDrop, error) {
+func vfAutoAbilities(params DropChanceParams, mon seedtypes.Monster) ([]seedtypes.AutoAbility, []seedtypes.EquipmentDrop, error) {
 	if mon.Equipment == nil {
 		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' doesn't drop equipment", mon), nil)
 	}
@@ -23,7 +23,7 @@ func vfAutoAbilities(cfg *Config, params DropChanceParams, mon seedtypes.Monster
 		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("query requires %d slots, but the max amount of slots, monster '%s' can drop, is %d", reqSlots, mon, monMaxSlots), nil)
 	}
 
-	params, autoAbilities, err := vfWantedAutoAbilities(cfg, params)
+	params, autoAbilities, err := vfWantedAutoAbilities(params)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -51,11 +51,11 @@ func getMonMaxSlots(mon seedtypes.Monster) int32 {
 	return slotsChances[len(slotsChances)-1].Amount
 }
 
-func vfWantedAutoAbilities(cfg *Config, params DropChanceParams) (DropChanceParams, []seedtypes.AutoAbility, error) {
+func vfWantedAutoAbilities(params DropChanceParams) (DropChanceParams, []seedtypes.AutoAbility, error) {
 	var autoAbilities []seedtypes.AutoAbility
 
 	for _, id := range params.AutoAbilities {
-		ability, _ := seeding.GetResourceByID(id, cfg.L.AutoAbilitiesID)
+		ability, _ := lookup.GetResourceByID(id, lookup.L.AutoAbilitiesID)
 
 		if params.EquipType == nil {
 			params.EquipType = &ability.Type

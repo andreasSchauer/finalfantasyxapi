@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -35,7 +35,7 @@ func (a AutoAbilitySimple) GetURL() string {
 
 func createAutoAbilitySimple(cfg *Config, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.E.AutoAbilities
-	autoAbility, _ := seeding.GetResourceByID(id, i.objLookupID)
+	autoAbility, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	autoAbilitySimple := AutoAbilitySimple{
 		ID:                  autoAbility.ID,

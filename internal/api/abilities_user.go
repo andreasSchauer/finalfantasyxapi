@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -59,7 +59,7 @@ func getUnitRepl[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *h
 	if err != nil {
 		return unitRepl{}, err
 	}
-	unit, _ := seeding.GetResourceByID(unitID, cfg.L.PlayerUnitsID)
+	unit, _ := lookup.GetResourceByID(unitID, lookup.L.PlayerUnitsID)
 
 	bombWpn, err := queryParamBomb.parseBool(r)
 	if errExceptEmptyQuery(err) {
@@ -80,7 +80,7 @@ func getUnitRepl[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *h
 
 	switch repl.unit.Type {
 	case database.UnitTypeCharacter:
-		repl, err = populateReplCharacter(cfg, repl, queryParamUser)
+		repl, err = populateReplCharacter(repl, queryParamUser)
 		if err != nil {
 			return unitRepl{}, err
 		}
@@ -95,18 +95,18 @@ func getUnitRepl[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *h
 	return repl, nil
 }
 
-func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
+func populateReplCharacter(repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
 	charFormulas := map[string]database.DamageFormula{
 		string(database.CelestialFormulaHpHigh): database.DamageFormulaClstlHpHigh,
 		string(database.CelestialFormulaHpLow):  database.DamageFormulaClstlHpLow,
 		string(database.CelestialFormulaMpHigh): database.DamageFormulaClstlMpHigh,
 	}
 
-	id, err := queryParamUser.checkNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), cfg.L.Characters)
+	id, err := queryParamUser.checkNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), lookup.L.Characters)
 	if err != nil {
 		return unitRepl{}, err
 	}
-	character, _ := seeding.GetResourceByID(id, cfg.L.CharactersID)
+	character, _ := lookup.GetResourceByID(id, lookup.L.CharactersID)
 
 	repl.replVals.Range = &character.PhysAtkRange
 
@@ -115,7 +115,7 @@ func populateReplCharacter(cfg *Config, repl unitRepl, queryParamUser QueryParam
 	}
 
 	if repl.isCelestial {
-		clstlWpn, err := seeding.GetResourceByID(id, cfg.L.CelestialWeaponsID)
+		clstlWpn, err := lookup.GetResourceByID(id, lookup.L.CelestialWeaponsID)
 		if err != nil {
 			return unitRepl{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't have a celestial weapon", character), err)
 		}
@@ -132,11 +132,11 @@ func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (un
 		return unitRepl{}, newHTTPError(http.StatusBadRequest, "aeons don't use celestial weapons", nil)
 	}
 
-	id, err := queryParamUser.checkNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), cfg.L.Aeons)
+	id, err := queryParamUser.checkNameID(repl.unit.Name, ResTypeSingle(repl.unit.Type), lookup.L.Aeons)
 	if err != nil {
 		return unitRepl{}, err
 	}
-	aeon, _ := seeding.GetResourceByID(id, cfg.L.AeonsID)
+	aeon, _ := lookup.GetResourceByID(id, lookup.L.AeonsID)
 
 	repl.replVals.Range = aeon.PhysAtkRange
 	repl.replVals.ShatterRate = aeon.PhysAtkShatterRate

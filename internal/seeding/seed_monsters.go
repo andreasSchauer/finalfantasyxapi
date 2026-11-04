@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -87,8 +88,8 @@ func loop1SeedMonsters(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		monsters[i].ID = row.ID
 		rawJSON.monsters[i].ID = row.ID
-		L.Monsters[seedtypes.Key(monsters[i])] = monsters[i]
-		L.MonstersID[row.ID] = monsters[i]
+		lookup.L.Monsters[seedtypes.Key(monsters[i])] = monsters[i]
+		lookup.L.MonstersID[row.ID] = monsters[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -134,8 +135,8 @@ func completeMonsters() error {
 			return err
 		}
 
-		L.Monsters[seedtypes.Key(*mon)] = *mon
-		L.MonstersID[mon.ID] = *mon
+		lookup.L.Monsters[seedtypes.Key(*mon)] = *mon
+		lookup.L.MonstersID[mon.ID] = *mon
 	}
 
 	return nil

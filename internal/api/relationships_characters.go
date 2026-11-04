@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -64,12 +64,12 @@ func getCharacterRelationships(cfg *Config, r *http.Request, char seedtypes.Char
 	return rel, nil
 }
 
-func getCharacterClstlFormula(cfg *Config, char Character) *string {
+func getCharacterClstlFormula(char Character) *string {
 	if char.CelestialWeapon == nil {
 		return nil
 	}
 
-	weapon, _ := seeding.GetResource(char.CelestialWeapon.Name, cfg.L.CelestialWeapons)
+	weapon, _ := lookup.GetResource(char.CelestialWeapon.Name, lookup.L.CelestialWeapons)
 	return &weapon.Formula
 }
 
@@ -80,7 +80,7 @@ func getCharacterModeAmts(cfg *Config, char seedtypes.Character) []ResourceAmoun
 		return resAmts
 	}
 
-	for i := range len(cfg.L.OverdriveModes) {
+	for i := range len(lookup.L.OverdriveModes) {
 		id := int32(i + 1)
 		resAmt, err := getCharModeAmount(cfg, char, id)
 		if errors.Is(err, errContinue) {
@@ -95,7 +95,7 @@ func getCharacterModeAmts(cfg *Config, char seedtypes.Character) []ResourceAmoun
 func getCharModeAmount(cfg *Config, char seedtypes.Character, id int32) (ResourceAmount[NamedAPIResource], error) {
 	i := cfg.E.OverdriveModes
 
-	mode, _ := seeding.GetResourceByID(id, i.objLookupID)
+	mode, _ := lookup.GetResourceByID(id, i.objLookupID)
 	if len(mode.ActionsToLearn) == 0 {
 		return ResourceAmount[NamedAPIResource]{}, errContinue
 	}

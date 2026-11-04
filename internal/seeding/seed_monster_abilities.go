@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -50,7 +51,7 @@ func extractMonsterAbilities() ([]seedtypes.MonsterAbility, error) {
 		for j := range mon.Abilities {
 			ability := &mon.Abilities[j]
 
-			ability.AbilityID, err = assignFK(ability.AbilityReference, L.Abilities)
+			ability.AbilityID, err = assignFK(ability.AbilityReference, lookup.L.Abilities)
 			if err != nil {
 				return nil, err
 			}

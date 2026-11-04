@@ -5,16 +5,16 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func fetchFormationMons(cfg *Config, params TurnOrderParams) TurnOrderParams {
+func fetchFormationMons(params TurnOrderParams) TurnOrderParams {
 	if params.FormationID == nil {
 		return params
 	}
 
-	formation, _ := seeding.GetResourceByID(*params.FormationID, cfg.L.MonsterFormationsID)
+	formation, _ := lookup.GetResourceByID(*params.FormationID, lookup.L.MonsterFormationsID)
 
 	if formation.FormationData.IsForcedAmbush {
 		params.BattleStart = string(database.BattleStartAmbush)
@@ -61,14 +61,14 @@ func getFirstTurnAglTier(cfg *Config, monID int32) *seedtypes.AgilityTier {
 
 	baseStats := altState.Alts[0].BaseStats
 
-	aglBS := getBaseStat(cfg, "agility", baseStats)
-	tier := getAgilityTier(cfg, aglBS.Value)
+	aglBS := getBaseStat("agility", baseStats)
+	tier := getAgilityTier(aglBS.Value)
 
 	return &tier
 }
 
-func getTurnOrderMonAgility(cfg *Config, monID int32, monster Monster) int32 {
-	agility := getBaseStatVal(cfg, "agility", monster.BaseStats)
+func getTurnOrderMonAgility(monID int32, monster Monster) int32 {
+	agility := getBaseStatVal("agility", monster.BaseStats)
 
 	return handleNoTurnMons(monID, agility)
 }

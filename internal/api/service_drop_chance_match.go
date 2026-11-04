@@ -33,9 +33,9 @@ type MatchChanceParams struct {
 	characterChances CharacterChances
 }
 
-func (p MatchChanceParams) calcChances(cfg *Config, params DropChanceParams) EquipmentMatchChances {
+func (p MatchChanceParams) calcChances(params DropChanceParams) EquipmentMatchChances {
 	equipTypeChance := 0.5
-	wheels := createAbilityWheels(cfg, p.monAbilities, params)
+	wheels := createAbilityWheels(p.monAbilities, params)
 
 	var chanceFinBlow float64
 	var chanceNoFinBlow float64

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -43,7 +44,7 @@ func (cfg *Config) retrieveEquipment(r *http.Request, i handlerInput[seedtypes.E
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryIDList(cfg, r, ids, QpnAutoAbilities, cfg.L.AutoAbilities, cfg.db.GetEquipmentIDsByAutoAbility),
+		i.queryIDList(cfg, r, ids, QpnAutoAbilities, lookup.L.AutoAbilities, cfg.db.GetEquipmentIDsByAutoAbility),
 		i.queryNameID(r, ids, QpnCharacter, cfg.E.Characters.resTypeSingle, cfg.E.Characters.objLookup, cfg.db.GetEquipmentIDsByCharacter),
 		i.queryEnum(r, cfg.T.EquipType, ids, QpnType, cfg.db.GetEquipmentIDsByEquipType),
 		i.queryBool2(r, ids, QpnCelestialWeapon, cfg.db.GetEquipmentIDsCelestialWeapon),

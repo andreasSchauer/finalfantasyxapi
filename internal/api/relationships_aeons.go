@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -87,7 +87,7 @@ func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName Qu
 		i = 0
 	}
 
-	seedAeon, _ := seeding.GetResourceByID(aeon.ID, cfg.L.AeonsID)
+	seedAeon, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 	newBaseStats := seedAeon.BaseStats.XVals[i].BaseStats
 	baseStats := cfg.E.Stats.toResAmtType(cfg, newBaseStats, newBaseStat)
 
@@ -97,10 +97,10 @@ func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName Qu
 func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName QueryParamName, allowedStatIDs []int32) ([]BaseStat, error) {
 	queryParam := cfg.Q.aeons[queryName]
 
-	yuna := cfg.L.Characters["yuna"]
+	yuna := lookup.L.Characters["yuna"]
 	yunaBS := cfg.E.Stats.toResAmtType(cfg, yuna.BaseStats, newBaseStat)
 
-	yunaStatCalcMap, err := getStatCalcMap(cfg, r, queryParam, yunaBS, allowedStatIDs)
+	yunaStatCalcMap, err := getStatCalcMap(r, queryParam, yunaBS, allowedStatIDs)
 	if queryIsEmpty(err) {
 		return aeon.BaseStats, nil
 	}
@@ -132,7 +132,7 @@ func calcAeonStats(cfg *Config, aeon Aeon, yuna map[string]int32) []BaseStat {
 }
 
 func getAeonStatTables(cfg *Config, aeon Aeon) (map[string]float64, map[string]float64) {
-	aeonLookup, _ := seeding.GetResourceByID(aeon.ID, cfg.L.AeonsID)
+	aeonLookup, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 
 	aValsSlice := cfg.E.Stats.toResAmtType(cfg, aeonLookup.BaseStats.AVals, newBaseStat)
 	aValsInt := GetResAmtTypeMap(aValsSlice)
@@ -179,7 +179,7 @@ func getUnitAgilityParams(cfg *Config, r *http.Request, baseStats []BaseStat) (A
 	if err != nil {
 		return AgilityParams{}, err
 	}
-	agilityStat := getBaseStat(cfg, "agility", baseStats)
+	agilityStat := getBaseStat("agility", baseStats)
 	agility := agilityStat.Value
 
 	var minICV *int32

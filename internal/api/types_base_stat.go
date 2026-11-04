@@ -3,7 +3,7 @@ package api
 import (
 	"slices"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 type BaseStat struct {
@@ -41,15 +41,15 @@ func (bs BaseStat) ToResAmount() ResourceAmount[NamedAPIResource] {
 	}
 }
 
-func getBaseStat(cfg *Config, stat string, baseStats []BaseStat) BaseStat {
-	statLookup, _ := seeding.GetResource(stat, cfg.L.Stats)
+func getBaseStat(stat string, baseStats []BaseStat) BaseStat {
+	statLookup, _ := lookup.GetResource(stat, lookup.L.Stats)
 	statMap := getResourceMap(baseStats)
 
 	return statMap[statLookup.ID]
 }
 
-func getBaseStatVal(cfg *Config, stat string, baseStats []BaseStat) int32 {
-	bs := getBaseStat(cfg, stat, baseStats)
+func getBaseStatVal(stat string, baseStats []BaseStat) int32 {
+	bs := getBaseStat(stat, baseStats)
 	return bs.Value
 }
 

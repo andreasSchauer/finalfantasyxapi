@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -156,7 +157,7 @@ func prepareDamages(battleInteractions []seedtypes.BattleInteraction) ([]seedtyp
 				}
 			}
 
-			bi.Damage.ElementID, err = assignFKPtr(bi.Damage.Element, L.Elements)
+			bi.Damage.ElementID, err = assignFKPtr(bi.Damage.Element, lookup.L.Elements)
 			if err != nil {
 				return nil, err
 			}

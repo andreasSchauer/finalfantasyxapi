@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -20,7 +21,7 @@ func getAlts() []seedtypes.Alt {
 }
 
 func getAltAutoAbilities(c seedtypes.Alt) ([]seedtypes.AutoAbility, error) {
-	return GetResources(c.AutoAbilities, L.AutoAbilities)
+	return lookup.GetResources(c.AutoAbilities, lookup.L.AutoAbilities)
 }
 
 func seedJuncAltsAutoAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -74,7 +75,7 @@ func seedJuncAltsElementalResists(qtx *database.Queries, ctx context.Context) er
 }
 
 func getAltProperties(c seedtypes.Alt) ([]seedtypes.Property, error) {
-	return GetResources(c.Properties, L.Properties)
+	return lookup.GetResources(c.Properties, lookup.L.Properties)
 }
 
 func seedJuncAltsProperties(qtx *database.Queries, ctx context.Context) error {
@@ -92,7 +93,7 @@ func seedJuncAltsProperties(qtx *database.Queries, ctx context.Context) error {
 }
 
 func getAltStatusImmunities(c seedtypes.Alt) ([]seedtypes.StatusCondition, error) {
-	return GetResources(c.StatusImmunities, L.StatusConditions)
+	return lookup.GetResources(c.StatusImmunities, lookup.L.StatusConditions)
 }
 
 func seedJuncAltsStatusImmunities(qtx *database.Queries, ctx context.Context) error {

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -28,14 +28,14 @@ func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seedtypes.Maste
 
 	switch masterItem.Type {
 	case database.ItemTypeItem:
-		item, _ := seeding.GetResource(masterItem, cfg.L.Items)
+		item, _ := lookup.GetResource(masterItem, lookup.L.Items)
 
 		response.Description = item.Description
 		response.Effect = item.Effect
 		response.TypedItem = nameToNamedAPIResource(cfg, cfg.E.Items, item.Name, nil)
 
 	case database.ItemTypeKeyItem:
-		keyItem, _ := seeding.GetResource(masterItem, cfg.L.KeyItems)
+		keyItem, _ := lookup.GetResource(masterItem, lookup.L.KeyItems)
 
 		response.Description = keyItem.Description
 		response.Effect = keyItem.Effect

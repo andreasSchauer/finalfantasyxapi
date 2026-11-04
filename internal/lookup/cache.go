@@ -1,4 +1,4 @@
-package seeding
+package lookup
 
 import (
 	"path/filepath"
@@ -84,17 +84,7 @@ func lookupToSlice[T seedtypes.Lookupable](lookup map[int32]T) []T {
 		s = append(s, obj)
 	}
 
-	slices.SortStableFunc(s, func(a, b T) int {
-		if a.GetID() < b.GetID() {
-			return -1
-		}
-
-		if a.GetID() > b.GetID() {
-			return 1
-		}
-
-		return 0
-	})
+	slices.SortStableFunc(s, h.SortOnID)
 
 	return s
 }
@@ -169,7 +159,7 @@ func assignLookup[T seedtypes.Lookupable](fileName string, keyLookup *map[string
 	lookupPath := filepath.Join("data_lookups", fileName)
 
 	var dataSlice []T
-	err := loadJSONFile(lookupPath, &dataSlice)
+	err := h.LoadJSONFile(lookupPath, &dataSlice)
 	if err != nil {
 		return err
 	}

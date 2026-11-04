@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -34,8 +35,8 @@ func loop5SeedMixes(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		mixes[i].ID = row.ID
 		rawJSON.mixes[i].ID = row.ID
-		L.Mixes[seedtypes.Key(mixes[i])] = mixes[i]
-		L.MixesID[row.ID] = mixes[i]
+		lookup.L.Mixes[seedtypes.Key(mixes[i])] = mixes[i]
+		lookup.L.MixesID[row.ID] = mixes[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -53,7 +54,7 @@ func extractMixes() ([]seedtypes.Mix, error) {
 			Name: mix.Name,
 		}
 
-		mix.OverdriveID, err = assignFK(seedtypes.Key(obj), L.Overdrives)
+		mix.OverdriveID, err = assignFK(seedtypes.Key(obj), lookup.L.Overdrives)
 		if err != nil {
 			return nil, err
 		}
@@ -73,8 +74,8 @@ func completeMixes() error {
 			return err
 		}
 
-		L.Mixes[seedtypes.Key(mix)] = *mix
-		L.MixesID[mix.ID] = *mix
+		lookup.L.Mixes[seedtypes.Key(mix)] = *mix
+		lookup.L.MixesID[mix.ID] = *mix
 	}
 
 	return nil
@@ -129,12 +130,12 @@ func extractMixCombinations() ([]seedtypes.MixCombination, error) {
 			key := seedtypes.Key(combo)
 			combo.IsBestCombo = bestComboMap[key]
 
-			combo.FirstItemID, err = assignFK(combo.FirstItem, L.Items)
+			combo.FirstItemID, err = assignFK(combo.FirstItem, lookup.L.Items)
 			if err != nil {
 				return nil, err
 			}
 
-			combo.SecondItemID, err = assignFK(combo.SecondItem, L.Items)
+			combo.SecondItemID, err = assignFK(combo.SecondItem, lookup.L.Items)
 			if err != nil {
 				return nil, err
 			}

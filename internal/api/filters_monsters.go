@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -40,7 +40,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}
 
-		elementID, err := queryParam.checkNameID(elementStr, cfg.E.Elements.resTypeSingle, cfg.L.Elements)
+		elementID, err := queryParam.checkNameID(elementStr, cfg.E.Elements.resTypeSingle, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -59,7 +59,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			Affinity:  affinity.Name,
 		}
 
-		erLookup, err := seeding.GetResource(seedtypes.Key(elemResist), cfg.L.ElementalResists)
+		erLookup, err := lookup.GetResource(seedtypes.Key(elemResist), lookup.L.ElementalResists)
 		if err != nil {
 			return nil, nil
 		}

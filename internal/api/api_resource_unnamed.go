@@ -3,7 +3,7 @@ package api
 import (
 	"fmt"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -37,7 +37,7 @@ func (r UnnamedAPIResource) GetAPIResource() APIResource {
 }
 
 func idToUnnamedAPIResource[T seedtypes.IsUnnamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) UnnamedAPIResource {
-	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
+	res, _ := lookup.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
 	params := res.GetResParamsUnnamed()
 
 	return UnnamedAPIResource{

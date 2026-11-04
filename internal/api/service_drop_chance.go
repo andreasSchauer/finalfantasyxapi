@@ -2,7 +2,7 @@ package api
 
 import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 type DropChanceResponse struct {
@@ -37,9 +37,9 @@ func (r DropChanceResponse) Round(n int32) DropChanceResponse {
 }
 
 func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse, error) {
-	mon, _ := seeding.GetResourceByID(params.Monster, cfg.L.MonstersID)
+	mon, _ := lookup.GetResourceByID(params.Monster, lookup.L.MonstersID)
 
-	wantedAbilities, monAbilities, err := vfAutoAbilities(cfg, params, mon)
+	wantedAbilities, monAbilities, err := vfAutoAbilities(params, mon)
 	if err != nil {
 		return DropChanceResponse{}, err
 	}
@@ -52,7 +52,7 @@ func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse,
 		wantedAbilities: wantedAbilities,
 		monAbilities:    monAbilities,
 	}
-	characterChances := ccp.calcChances(cfg, params)
+	characterChances := ccp.calcChances(params)
 
 	mcp := MatchChanceParams{
 		mon:              mon,
@@ -62,7 +62,7 @@ func handleDropChance(cfg *Config, params DropChanceParams) (DropChanceResponse,
 		shotsTable:       mon.Equipment.AttachedAbilities.Chances,
 		characterChances: characterChances,
 	}
-	equipmentMatchChances := mcp.calcChances(cfg, params)
+	equipmentMatchChances := mcp.calcChances(params)
 
 	response := DropChanceResponse{
 		DropChanceFinBlow:     monDropChances.EquipmentDropChance * equipmentMatchChances.FinBlow,

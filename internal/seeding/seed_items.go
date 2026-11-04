@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -46,8 +47,8 @@ func loop2SeedItems(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		items[i].ID = row.ID
 		rawJSON.items[i].ID = row.ID
-		L.Items[seedtypes.Key(items[i])] = items[i]
-		L.ItemsID[row.ID] = items[i]
+		lookup.L.Items[seedtypes.Key(items[i])] = items[i]
+		lookup.L.ItemsID[row.ID] = items[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -61,7 +62,7 @@ func extractItems() ([]seedtypes.Item, error) {
 	for i := range rawJSON.items {
 		item := &rawJSON.items[i]
 
-		item.MasterItem.ID, err = assignFK(item.Name, L.MasterItems)
+		item.MasterItem.ID, err = assignFK(item.Name, lookup.L.MasterItems)
 		if err != nil {
 			return nil, err
 		}
@@ -85,19 +86,19 @@ func completeItems() error {
 				return err
 			}
 
-			L.ItemAbilities[seedtypes.Key(item.ItemAbility)] = item.ItemAbility
-			L.ItemAbilitiesID[item.ID] = item.ItemAbility
+			lookup.L.ItemAbilities[seedtypes.Key(item.ItemAbility)] = item.ItemAbility
+			lookup.L.ItemAbilitiesID[item.ID] = item.ItemAbility
 		}
 
-		L.Items[seedtypes.Key(item)] = *item
-		L.ItemsID[item.ID] = *item
+		lookup.L.Items[seedtypes.Key(item)] = *item
+		lookup.L.ItemsID[item.ID] = *item
 	}
 
 	return nil
 }
 
 func getItemAvailableMenus(i seedtypes.Item) ([]seedtypes.Submenu, error) {
-	return GetResources(i.AvailableMenus, L.Submenus)
+	return lookup.GetResources(i.AvailableMenus, lookup.L.Submenus)
 }
 
 func seedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.Context) error {
@@ -115,7 +116,7 @@ func seedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.Context) err
 }
 
 func getItemRelatedStats(i seedtypes.Item) ([]seedtypes.Stat, error) {
-	return GetResources(i.RelatedStats, L.Stats)
+	return lookup.GetResources(i.RelatedStats, lookup.L.Stats)
 }
 
 func seedJuncItemsRelatedStats(qtx *database.Queries, ctx context.Context) error {

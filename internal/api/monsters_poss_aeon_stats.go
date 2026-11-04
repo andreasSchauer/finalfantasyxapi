@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"slices"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 func applyPossessedAeonStats(cfg *Config, r *http.Request, mon Monster) ([]BaseStat, error) {
@@ -15,7 +15,7 @@ func applyPossessedAeonStats(cfg *Config, r *http.Request, mon Monster) ([]BaseS
 
 	allowedStatIDs := []int32{1, 3, 4, 5, 6, 7, 9, 10}
 
-	aeonLookup, _ := seeding.GetResource(mon.Name, cfg.L.Aeons)
+	aeonLookup, _ := lookup.GetResource(mon.Name, lookup.L.Aeons)
 	aeon := Aeon{
 		ID:        aeonLookup.ID,
 		Name:      aeonLookup.Name,

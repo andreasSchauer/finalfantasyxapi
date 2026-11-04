@@ -1,4 +1,5 @@
-package seeding
+// Package lookup is fresh
+package lookup
 
 import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"

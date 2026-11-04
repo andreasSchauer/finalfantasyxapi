@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -34,7 +34,7 @@ func TestAreaToLocAreaString(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		area, _ := seeding.GetResourceByID(tc.input, testCfg.L.AreasID)
+		area, _ := lookup.GetResourceByID(tc.input, lookup.L.AreasID)
 		got := areaToLocAreaString(area)
 
 		if !reflect.DeepEqual(got, tc.exp) {

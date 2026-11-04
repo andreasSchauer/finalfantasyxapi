@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -223,12 +224,12 @@ func prepareItemAmt(ia *seedtypes.ItemAmount) (*seedtypes.ItemAmount, error) {
 	var err error
 	ia.MasterItem.Name = ia.ItemName
 
-	ia.MasterItem.ID, err = assignFK(ia.MasterItem.Name, L.MasterItems)
+	ia.MasterItem.ID, err = assignFK(ia.MasterItem.Name, lookup.L.MasterItems)
 	if err != nil {
 		return nil, err
 	}
 
-	mi, err := GetResourceByID(ia.MasterItem.ID, L.MasterItemsID)
+	mi, err := lookup.GetResourceByID(ia.MasterItem.ID, lookup.L.MasterItemsID)
 	if err != nil {
 		return nil, err
 	}

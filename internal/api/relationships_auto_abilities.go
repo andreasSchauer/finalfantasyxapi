@@ -62,7 +62,7 @@ func getAutoAbilityRelationships(cfg *Config, r *http.Request, autoAbility seedt
 	}
 
 	if autoAbility.RequiredItem != nil {
-		rel.MonstersItems = getMonItemAmts(cfg, monsterItems, autoAbility.RequiredItem.ItemName)
+		rel.MonstersItems = getMonItemAmts(monsterItems, autoAbility.RequiredItem.ItemName)
 	}
 
 	return rel, nil

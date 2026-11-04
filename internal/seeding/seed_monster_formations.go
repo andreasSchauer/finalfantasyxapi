@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -38,8 +39,8 @@ func loop5SeedMonsterFormations(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		formations[i].ID = row.ID
 		rawJSON.monsterFormations[i].ID = row.ID
-		L.MonsterFormations[seedtypes.Key(formations[i])] = formations[i]
-		L.MonsterFormationsID[row.ID] = formations[i]
+		lookup.L.MonsterFormations[seedtypes.Key(formations[i])] = formations[i]
+		lookup.L.MonsterFormationsID[row.ID] = formations[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -88,8 +89,8 @@ func completeMonsterFormations() error {
 			return err
 		}
 
-		L.MonsterFormations[seedtypes.Key(*formation)] = *formation
-		L.MonsterFormationsID[formation.ID] = *formation
+		lookup.L.MonsterFormations[seedtypes.Key(*formation)] = *formation
+		lookup.L.MonsterFormationsID[formation.ID] = *formation
 	}
 
 	return nil
@@ -130,7 +131,7 @@ func extractMonsterSelections() ([]seedtypes.MonsterSelection, error) {
 			ma := &mf.MonsterSelection.Monsters[j]
 
 			key := seedtypes.Key(*ma)
-			ma.MonsterID, err = assignFK(key, L.Monsters)
+			ma.MonsterID, err = assignFK(key, lookup.L.Monsters)
 			if err != nil {
 				return nil, err
 			}

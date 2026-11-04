@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -37,11 +38,11 @@ func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seedtype
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationSublocationIDs),
-		i.queryID(r, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetSublocationIDsWithMonster),
-		i.queryIDWrapper(cfg, r, ids, QpnItem, cfg.L.Items, getSublocationsByItem),
-		i.queryID(r, ids, QpnKeyItem, cfg.L.KeyItems, cfg.db.GetSublocationIDsWithKeyItem),
-		i.queryID(r, ids, QpnAutoAbility, cfg.L.AutoAbilities, cfg.db.GetSublocationIDsWithAutoAbility),
+		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetLocationSublocationIDs),
+		i.queryID(r, ids, QpnMonster, lookup.L.Monsters, cfg.db.GetSublocationIDsWithMonster),
+		i.queryIDWrapper(cfg, r, ids, QpnItem, lookup.L.Items, getSublocationsByItem),
+		i.queryID(r, ids, QpnKeyItem, lookup.L.KeyItems, cfg.db.GetSublocationIDsWithKeyItem),
+		i.queryID(r, ids, QpnAutoAbility, lookup.L.AutoAbilities, cfg.db.GetSublocationIDsWithAutoAbility),
 		i.queryBool2(r, ids, QpnCharacters, cfg.db.GetSublocationIDsWithCharacters),
 		i.queryBool2(r, ids, QpnAeons, cfg.db.GetSublocationIDsWithAeons),
 		i.queryBool2(r, ids, QpnMonsters, cfg.db.GetSublocationIDsWithMonsters),

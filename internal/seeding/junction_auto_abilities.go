@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -26,7 +27,7 @@ func seedJuncAutoAbilitiesAddedStatusResists(qtx *database.Queries, ctx context.
 }
 
 func getAutoAbilityAddedStatusses(a seedtypes.AutoAbility) ([]seedtypes.StatusCondition, error) {
-	return GetResources(a.AddedStatusses, L.StatusConditions)
+	return lookup.GetResources(a.AddedStatusses, lookup.L.StatusConditions)
 }
 
 func seedJuncAutoAbilitiesAddedStatusses(qtx *database.Queries, ctx context.Context) error {
@@ -44,7 +45,7 @@ func seedJuncAutoAbilitiesAddedStatusses(qtx *database.Queries, ctx context.Cont
 }
 
 func getAutoAbilityAutoItems(a seedtypes.AutoAbility) ([]seedtypes.Item, error) {
-	return GetResources(a.AutoItemUse, L.Items)
+	return lookup.GetResources(a.AutoItemUse, lookup.L.Items)
 }
 
 func seedJuncAutoAbilitiesAutoItems(qtx *database.Queries, ctx context.Context) error {
@@ -62,7 +63,7 @@ func seedJuncAutoAbilitiesAutoItems(qtx *database.Queries, ctx context.Context) 
 }
 
 func getAutoAbilityLockedOutAbilities(a seedtypes.AutoAbility) ([]seedtypes.AutoAbility, error) {
-	return GetResources(a.LockedOutAbilities, L.AutoAbilities)
+	return lookup.GetResources(a.LockedOutAbilities, lookup.L.AutoAbilities)
 }
 
 func seedJuncAutoAbilitiesLockedOutAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -98,7 +99,7 @@ func seedJuncAutoAbilitiesModifierChanges(qtx *database.Queries, ctx context.Con
 }
 
 func getAutoAbilityRelatedStats(a seedtypes.AutoAbility) ([]seedtypes.Stat, error) {
-	return GetResources(a.RelatedStats, L.Stats)
+	return lookup.GetResources(a.RelatedStats, lookup.L.Stats)
 }
 
 func seedJuncAutoAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {

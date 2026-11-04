@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -44,8 +45,8 @@ func loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Context) error 
 	for i, row := range dbRows {
 		tables[i].ID = row.ID
 		rawJSON.equipment[i].ID = row.ID
-		L.EquipmentTables[seedtypes.Key(tables[i])] = tables[i]
-		L.EquipmentTablesID[row.ID] = tables[i]
+		lookup.L.EquipmentTables[seedtypes.Key(tables[i])] = tables[i]
+		lookup.L.EquipmentTablesID[row.ID] = tables[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -59,7 +60,7 @@ func extractEquipmentTables() ([]seedtypes.EquipmentTable, error) {
 	for i := range rawJSON.equipment {
 		table := &rawJSON.equipment[i]
 
-		table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, L.Characters)
+		table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, lookup.L.Characters)
 		if err != nil {
 			return nil, err
 		}
@@ -83,8 +84,8 @@ func completeEquipment() error {
 			return err
 		}
 
-		L.EquipmentTables[seedtypes.Key(*table)] = *table
-		L.EquipmentTablesID[table.ID] = *table
+		lookup.L.EquipmentTables[seedtypes.Key(*table)] = *table
+		lookup.L.EquipmentTablesID[table.ID] = *table
 	}
 
 	return nil

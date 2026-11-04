@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -28,7 +29,7 @@ func (j EquipmentTableNameJunction) ToHashFieldsJ(name string) []any {
 }
 
 func getEquipmentReqAutoAbilities(et seedtypes.EquipmentTable) ([]seedtypes.AutoAbility, error) {
-	return GetResources(et.RequiredAutoAbilities, L.AutoAbilities)
+	return lookup.GetResources(et.RequiredAutoAbilities, lookup.L.AutoAbilities)
 }
 
 func seedJuncEquipmentReqAutoAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -62,7 +63,7 @@ func seedJuncEquipmentTablesNames(qtx *database.Queries, ctx context.Context) er
 
 			if table.Classification == string(database.EquipClassCelestialWeapon) {
 				var err error
-				j.CelestialWeaponID, err = assignFKPtr(&name.Name, L.CelestialWeapons)
+				j.CelestialWeaponID, err = assignFKPtr(&name.Name, lookup.L.CelestialWeapons)
 				if err != nil {
 					return err
 				}
@@ -91,7 +92,7 @@ func getAbilityPools() []seedtypes.AbilityPool {
 }
 
 func getAbilityPoolAutoAbilities(ap seedtypes.AbilityPool) ([]seedtypes.AutoAbility, error) {
-	return GetResources(ap.AutoAbilities, L.AutoAbilities)
+	return lookup.GetResources(ap.AutoAbilities, lookup.L.AutoAbilities)
 }
 
 func seedJuncAbilityPoolsAutoAbilities(qtx *database.Queries, ctx context.Context) error {

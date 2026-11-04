@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -33,8 +34,8 @@ func loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		names[i].ID = row.ID
-		L.EquipmentNames[seedtypes.Key(names[i])] = names[i]
-		L.EquipmentNamesID[row.ID] = names[i]
+		lookup.L.EquipmentNames[seedtypes.Key(names[i])] = names[i]
+		lookup.L.EquipmentNamesID[row.ID] = names[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -51,7 +52,7 @@ func extractEquipmentNames() ([]seedtypes.EquipmentName, error) {
 		for j := range table.EquipmentNames {
 			name := &table.EquipmentNames[j]
 
-			name.CharacterID, err = assignFK(name.CharacterName, L.Characters)
+			name.CharacterID, err = assignFK(name.CharacterName, lookup.L.Characters)
 			if err != nil {
 				return nil, err
 			}

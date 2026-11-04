@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -40,8 +41,8 @@ func loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		submenus[i].ID = row.ID
 		rawJSON.submenus[i].ID = row.ID
-		L.Submenus[seedtypes.Key(submenus[i])] = submenus[i]
-		L.SubmenusID[row.ID] = submenus[i]
+		lookup.L.Submenus[seedtypes.Key(submenus[i])] = submenus[i]
+		lookup.L.SubmenusID[row.ID] = submenus[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -56,7 +57,7 @@ func extractSubmenus() ([]seedtypes.Submenu, error) {
 		submenu := &rawJSON.submenus[i]
 
 		if submenu.Topmenu != nil {
-			submenu.TopmenuID, err = assignFKPtr(submenu.Topmenu, L.Topmenus)
+			submenu.TopmenuID, err = assignFKPtr(submenu.Topmenu, lookup.L.Topmenus)
 			if err != nil {
 				return nil, err
 			}
@@ -68,7 +69,7 @@ func extractSubmenus() ([]seedtypes.Submenu, error) {
 }
 
 func getSubmenuUsers(s seedtypes.Submenu) ([]seedtypes.CharacterClass, error) {
-	return GetResources(s.Users, L.CharClasses)
+	return lookup.GetResources(s.Users, lookup.L.CharClasses)
 }
 
 func seedJuncSubmenusUsers(qtx *database.Queries, ctx context.Context) error {

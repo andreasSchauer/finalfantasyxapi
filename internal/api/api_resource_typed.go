@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -43,7 +43,7 @@ func (r TypedAPIResource) GetAPIResource() APIResource {
 }
 
 func idToTypedAPIResource[T seedtypes.IsTyped, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) TypedAPIResource {
-	res, _ := seeding.GetResourceByID(id, i.objLookupID)
+	res, _ := lookup.GetResourceByID(id, i.objLookupID)
 	params := res.GetResParamsTyped()
 
 	return TypedAPIResource{
@@ -57,7 +57,7 @@ func idToTypedAPIResource[T seedtypes.IsTyped, R any, A APIResource](cfg *Config
 }
 
 func keyToTypedAPIResource[T seedtypes.IsTyped, R, K any, A APIResource](cfg *Config, i handlerInput[T, R, A], key K) TypedAPIResource {
-	res, _ := seeding.GetResource(key, i.objLookup)
+	res, _ := lookup.GetResource(key, i.objLookup)
 	return idToTypedAPIResource(cfg, i, res.GetID())
 }
 

@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -44,8 +45,8 @@ func loop3SeedAeonCommands(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
 		rawJSON.aeonCommands[i].ID = row.ID
-		L.AeonCommands[seedtypes.Key(commands[i])] = commands[i]
-		L.AeonCommandsID[row.ID] = commands[i]
+		lookup.L.AeonCommands[seedtypes.Key(commands[i])] = commands[i]
+		lookup.L.AeonCommandsID[row.ID] = commands[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -59,12 +60,12 @@ func extractAeonCommands() ([]seedtypes.AeonCommand, error) {
 	for i := range rawJSON.aeonCommands {
 		command := &rawJSON.aeonCommands[i]
 
-		command.TopmenuID, err = assignFKPtr(command.Topmenu, L.Topmenus)
+		command.TopmenuID, err = assignFKPtr(command.Topmenu, lookup.L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, L.Submenus)
+		command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, lookup.L.Submenus)
 		if err != nil {
 			return nil, err
 		}

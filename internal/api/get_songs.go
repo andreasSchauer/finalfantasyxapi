@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -54,9 +55,9 @@ func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seedtypes.Song,
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationSongIDs),
-		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationSongIDs),
-		i.queryID(r, ids, QpnArea, cfg.L.Areas, cfg.db.GetAreaSongIDs),
+		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetLocationSongIDs),
+		i.queryID(r, ids, QpnSublocation, lookup.L.Sublocations, cfg.db.GetSublocationSongIDs),
+		i.queryID(r, ids, QpnArea, lookup.L.Areas, cfg.db.GetAreaSongIDs),
 		i.queryBool2(r, ids, QpnSpecialUse, cfg.db.GetSongIDsWithSpecialUseCase),
 		i.queryBool2(r, ids, QpnFMVs, cfg.db.GetSongIDsWithFMVs),
 		i.queryEnum(r, cfg.T.Composer, ids, QpnComposer, ToEnumQuery(cfg.T.Composer, cfg.db.GetSongIDsByComposer)),

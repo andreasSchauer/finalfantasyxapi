@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -52,7 +53,7 @@ func extractFormationTriggerCommands() ([]seedtypes.FormationTriggerCommand, err
 		for j := range mf.TriggerCommands {
 			command := &mf.TriggerCommands[j]
 
-			command.TriggerCommandID, err = assignFK(command.AbilityReference.Untyped(), L.TriggerCommands)
+			command.TriggerCommandID, err = assignFK(command.AbilityReference.Untyped(), lookup.L.TriggerCommands)
 			if err != nil {
 				return nil, err
 			}
@@ -75,7 +76,7 @@ func getFormationTriggerCommands() []seedtypes.FormationTriggerCommand {
 }
 
 func getFormationTriggerCommandUsers(tc seedtypes.FormationTriggerCommand) ([]seedtypes.CharacterClass, error) {
-	return GetResources(tc.Users, L.CharClasses)
+	return lookup.GetResources(tc.Users, lookup.L.CharClasses)
 }
 
 func seedJuncFormationTriggerCommandsUsers(qtx *database.Queries, ctx context.Context) error {

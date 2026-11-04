@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -18,7 +18,7 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seedtypes.Playe
 
 	switch unit.Type {
 	case database.UnitTypeCharacter:
-		character, _ := seeding.GetResource(unit, cfg.L.Characters)
+		character, _ := lookup.GetResource(unit, lookup.L.Characters)
 
 		rel, err := getCharacterRelationships(cfg, r, character)
 		if err != nil {
@@ -36,7 +36,7 @@ func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seedtypes.Playe
 		}
 
 	case database.UnitTypeAeon:
-		aeon, _ := seeding.GetResource(unit, cfg.L.Aeons)
+		aeon, _ := lookup.GetResource(unit, lookup.L.Aeons)
 
 		rel, err := getAeonRelationships(cfg, r, aeon)
 		if err != nil {

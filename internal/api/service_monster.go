@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 func quickAssembleMon(cfg *Config, monID int32, altStatePtr *int32) (Monster, error) {
-	monsterLookup, _ := seeding.GetResourceByID(monID, cfg.L.MonstersID)
+	monsterLookup, _ := lookup.GetResourceByID(monID, lookup.L.MonstersID)
 
 	monster := Monster{
 		ID:               monsterLookup.ID,

@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -46,7 +46,7 @@ func (r NamedAPIResource) NameIs(name string, version *int32) bool {
 }
 
 func idToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) NamedAPIResource {
-	res, _ := seeding.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
+	res, _ := lookup.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
 	params := res.GetResParamsNamed()
 
 	return NamedAPIResource{

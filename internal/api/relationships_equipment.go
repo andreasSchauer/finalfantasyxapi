@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -43,7 +43,7 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seedtypes
 		if err != nil {
 			return err
 		}
-		table, _ = seeding.GetResourceByID(rel.EquipmentTable.ID, cfg.L.EquipmentTablesID)
+		table, _ = lookup.GetResourceByID(rel.EquipmentTable.ID, lookup.L.EquipmentTablesID)
 		rel.Type = table.Type
 		rel.Classification = table.Classification
 		rel.Priority = table.Priority
@@ -59,7 +59,7 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seedtypes
 	}
 
 	if table.Classification == string(database.EquipClassCelestialWeapon) {
-		char, _ := seeding.GetResource(equipment.CharacterName, cfg.L.Characters)
+		char, _ := lookup.GetResource(equipment.CharacterName, lookup.L.Characters)
 		cwRes, err := cfg.E.CelestialWeapons.dbGetRelationPtr(cfg, r.Context(), char, cfg.db.GetCharacterCelestialWeaponID)
 		if err != nil {
 			return EquipmentName{}, err

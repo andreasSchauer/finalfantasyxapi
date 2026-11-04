@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -58,7 +59,7 @@ func extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 				equipment.ShopID = shop.ID
 				equipment.ShopType = database.ShopTypePreAirship
 
-				equipment.EquipmentNameID, err = assignFK(equipment.Name, L.EquipmentNames)
+				equipment.EquipmentNameID, err = assignFK(equipment.Name, lookup.L.EquipmentNames)
 				if err != nil {
 					return nil, err
 				}
@@ -74,7 +75,7 @@ func extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 				equipment.ShopID = shop.ID
 				equipment.ShopType = database.ShopTypePostAirship
 
-				equipment.EquipmentNameID, err = assignFK(equipment.Name, L.EquipmentNames)
+				equipment.EquipmentNameID, err = assignFK(equipment.Name, lookup.L.EquipmentNames)
 				if err != nil {
 					return nil, err
 				}

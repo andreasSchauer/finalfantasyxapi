@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -36,10 +37,10 @@ func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seedtypes.L
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetLocationIDsWithMonster),
-		i.queryIDWrapper(cfg, r, ids, QpnItem, cfg.L.Items, getLocationsByItem),
-		i.queryID(r, ids, QpnKeyItem, cfg.L.KeyItems, cfg.db.GetLocationIDsWithKeyItem),
-		i.queryID(r, ids, QpnAutoAbility, cfg.L.AutoAbilities, cfg.db.GetLocationIDsWithAutoAbility),
+		i.queryID(r, ids, QpnMonster, lookup.L.Monsters, cfg.db.GetLocationIDsWithMonster),
+		i.queryIDWrapper(cfg, r, ids, QpnItem, lookup.L.Items, getLocationsByItem),
+		i.queryID(r, ids, QpnKeyItem, lookup.L.KeyItems, cfg.db.GetLocationIDsWithKeyItem),
+		i.queryID(r, ids, QpnAutoAbility, lookup.L.AutoAbilities, cfg.db.GetLocationIDsWithAutoAbility),
 		i.queryBool2(r, ids, QpnCharacters, cfg.db.GetLocationIDsWithCharacters),
 		i.queryBool2(r, ids, QpnAeons, cfg.db.GetLocationIDsWithAeons),
 		i.queryBool2(r, ids, QpnMonsters, cfg.db.GetLocationIDsWithMonsters),

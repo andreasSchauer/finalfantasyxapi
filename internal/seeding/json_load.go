@@ -1,11 +1,6 @@
 package seeding
 
 import (
-	"encoding/json"
-	"fmt"
-	"io"
-	"os"
-
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -53,30 +48,6 @@ type jsonFiles struct {
 	miscAbilities         []seedtypes.MiscAbility
 }
 
-func loadJSONFile[T any](path string, target *[]T) error {
-	fullPath, err := h.GetAbsoluteFilepath(path)
-	if err != nil {
-		return err
-	}
-
-	file, err := os.Open(fullPath)
-	if err != nil {
-		return fmt.Errorf("couldn't open file: %v", err)
-	}
-	defer file.Close()
-
-	data, err := io.ReadAll(file)
-	if err != nil {
-		return fmt.Errorf("couldn't read file: %v", err)
-	}
-
-	err = json.Unmarshal(data, target)
-	if err != nil {
-		return fmt.Errorf("couldn't parse JSON: %v", err)
-	}
-
-	return nil
-}
 
 func (rawJSON *jsonFiles) loadFiles() error {
 	var err error
@@ -89,46 +60,46 @@ func (rawJSON *jsonFiles) loadFiles() error {
 		err = e
 	}
 
-	checkErr(loadJSONFile("data/aeon_commands.json", &rawJSON.aeonCommands))
-	checkErr(loadJSONFile("data/aeon_stats.json", &rawJSON.aeonStats))
-	checkErr(loadJSONFile("data/aeons.json", &rawJSON.aeons))
-	checkErr(loadJSONFile("data/agility_tiers.json", &rawJSON.agilityTiers))
-	checkErr(loadJSONFile("data/auto_abilities.json", &rawJSON.autoAbilities))
-	checkErr(loadJSONFile("data/blitzball_items.json", &rawJSON.blitzballPositions))
-	checkErr(loadJSONFile("data/celestial_weapons.json", &rawJSON.celestialWeapons))
-	checkErr(loadJSONFile("data/character_classes.json", &rawJSON.characterClasses))
-	checkErr(loadJSONFile("data/characters.json", &rawJSON.characters))
-	checkErr(loadJSONFile("data/default_abilities.json", &rawJSON.defaultAbilities))
-	checkErr(loadJSONFile("data/elements.json", &rawJSON.elements))
-	checkErr(loadJSONFile("data/enemy_abilities.json", &rawJSON.enemyAbilities))
-	checkErr(loadJSONFile("data/equipment.json", &rawJSON.equipment))
-	checkErr(loadJSONFile("data/fmvs.json", &rawJSON.fmvs))
-	checkErr(loadJSONFile("data/items.json", &rawJSON.items))
-	checkErr(loadJSONFile("data/key_items.json", &rawJSON.keyItems))
-	checkErr(loadJSONFile("data/locations.json", &rawJSON.locations))
-	checkErr(loadJSONFile("data/misc_abilities.json", &rawJSON.miscAbilities))
-	checkErr(loadJSONFile("data/mixes.json", &rawJSON.mixes))
-	checkErr(loadJSONFile("data/modifiers.json", &rawJSON.modifiers))
-	checkErr(loadJSONFile("data/monster_arena_creations.json", &rawJSON.monsterArenaCreations))
-	checkErr(loadJSONFile("data/monster_formations.json", &rawJSON.monsterFormations))
-	checkErr(loadJSONFile("data/monsters.json", &rawJSON.monsters))
-	checkErr(loadJSONFile("data/overdrive_abilities.json", &rawJSON.overdriveAbilities))
-	checkErr(loadJSONFile("data/overdrive_commands.json", &rawJSON.overdriveCommands))
-	checkErr(loadJSONFile("data/overdrive_modes.json", &rawJSON.overdriveModes))
-	checkErr(loadJSONFile("data/overdrives.json", &rawJSON.overdrives))
-	checkErr(loadJSONFile("data/player_abilities.json", &rawJSON.playerAbilities))
-	checkErr(loadJSONFile("data/primers.json", &rawJSON.primers))
-	checkErr(loadJSONFile("data/properties.json", &rawJSON.properties))
-	checkErr(loadJSONFile("data/shops.json", &rawJSON.shops))
-	checkErr(loadJSONFile("data/sidequests.json", &rawJSON.sidequests))
-	checkErr(loadJSONFile("data/songs.json", &rawJSON.songs))
-	checkErr(loadJSONFile("data/spheres.json", &rawJSON.spheres))
-	checkErr(loadJSONFile("data/stats.json", &rawJSON.stats))
-	checkErr(loadJSONFile("data/status_conditions.json", &rawJSON.statusConditions))
-	checkErr(loadJSONFile("data/submenus.json", &rawJSON.submenus))
-	checkErr(loadJSONFile("data/topmenus.json", &rawJSON.topmenus))
-	checkErr(loadJSONFile("data/treasures.json", &rawJSON.treasureLists))
-	checkErr(loadJSONFile("data/trigger_commands.json", &rawJSON.triggerCommands))
+	checkErr(h.LoadJSONFile("data/aeon_commands.json", &rawJSON.aeonCommands))
+	checkErr(h.LoadJSONFile("data/aeon_stats.json", &rawJSON.aeonStats))
+	checkErr(h.LoadJSONFile("data/aeons.json", &rawJSON.aeons))
+	checkErr(h.LoadJSONFile("data/agility_tiers.json", &rawJSON.agilityTiers))
+	checkErr(h.LoadJSONFile("data/auto_abilities.json", &rawJSON.autoAbilities))
+	checkErr(h.LoadJSONFile("data/blitzball_items.json", &rawJSON.blitzballPositions))
+	checkErr(h.LoadJSONFile("data/celestial_weapons.json", &rawJSON.celestialWeapons))
+	checkErr(h.LoadJSONFile("data/character_classes.json", &rawJSON.characterClasses))
+	checkErr(h.LoadJSONFile("data/characters.json", &rawJSON.characters))
+	checkErr(h.LoadJSONFile("data/default_abilities.json", &rawJSON.defaultAbilities))
+	checkErr(h.LoadJSONFile("data/elements.json", &rawJSON.elements))
+	checkErr(h.LoadJSONFile("data/enemy_abilities.json", &rawJSON.enemyAbilities))
+	checkErr(h.LoadJSONFile("data/equipment.json", &rawJSON.equipment))
+	checkErr(h.LoadJSONFile("data/fmvs.json", &rawJSON.fmvs))
+	checkErr(h.LoadJSONFile("data/items.json", &rawJSON.items))
+	checkErr(h.LoadJSONFile("data/key_items.json", &rawJSON.keyItems))
+	checkErr(h.LoadJSONFile("data/locations.json", &rawJSON.locations))
+	checkErr(h.LoadJSONFile("data/misc_abilities.json", &rawJSON.miscAbilities))
+	checkErr(h.LoadJSONFile("data/mixes.json", &rawJSON.mixes))
+	checkErr(h.LoadJSONFile("data/modifiers.json", &rawJSON.modifiers))
+	checkErr(h.LoadJSONFile("data/monster_arena_creations.json", &rawJSON.monsterArenaCreations))
+	checkErr(h.LoadJSONFile("data/monster_formations.json", &rawJSON.monsterFormations))
+	checkErr(h.LoadJSONFile("data/monsters.json", &rawJSON.monsters))
+	checkErr(h.LoadJSONFile("data/overdrive_abilities.json", &rawJSON.overdriveAbilities))
+	checkErr(h.LoadJSONFile("data/overdrive_commands.json", &rawJSON.overdriveCommands))
+	checkErr(h.LoadJSONFile("data/overdrive_modes.json", &rawJSON.overdriveModes))
+	checkErr(h.LoadJSONFile("data/overdrives.json", &rawJSON.overdrives))
+	checkErr(h.LoadJSONFile("data/player_abilities.json", &rawJSON.playerAbilities))
+	checkErr(h.LoadJSONFile("data/primers.json", &rawJSON.primers))
+	checkErr(h.LoadJSONFile("data/properties.json", &rawJSON.properties))
+	checkErr(h.LoadJSONFile("data/shops.json", &rawJSON.shops))
+	checkErr(h.LoadJSONFile("data/sidequests.json", &rawJSON.sidequests))
+	checkErr(h.LoadJSONFile("data/songs.json", &rawJSON.songs))
+	checkErr(h.LoadJSONFile("data/spheres.json", &rawJSON.spheres))
+	checkErr(h.LoadJSONFile("data/stats.json", &rawJSON.stats))
+	checkErr(h.LoadJSONFile("data/status_conditions.json", &rawJSON.statusConditions))
+	checkErr(h.LoadJSONFile("data/submenus.json", &rawJSON.submenus))
+	checkErr(h.LoadJSONFile("data/topmenus.json", &rawJSON.topmenus))
+	checkErr(h.LoadJSONFile("data/treasures.json", &rawJSON.treasureLists))
+	checkErr(h.LoadJSONFile("data/trigger_commands.json", &rawJSON.triggerCommands))
 
 	return err
 }

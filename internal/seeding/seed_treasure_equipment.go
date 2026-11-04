@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -59,7 +60,7 @@ func extractTreasureEquipment() ([]seedtypes.TreasureEquipment, error) {
 				return nil, err
 			}
 
-			treasure.Equipment.EquipmentNameID, err = assignFK(treasure.Equipment.Name, L.EquipmentNames)
+			treasure.Equipment.EquipmentNameID, err = assignFK(treasure.Equipment.Name, lookup.L.EquipmentNames)
 			if err != nil {
 				return nil, err
 			}

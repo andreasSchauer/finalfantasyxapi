@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -37,8 +38,8 @@ func loop1SeedQuests(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		quests[i].ID = row.ID
-		L.Quests[seedtypes.Key(quests[i])] = quests[i]
-		L.QuestsID[row.ID] = quests[i]
+		lookup.L.Quests[seedtypes.Key(quests[i])] = quests[i]
+		lookup.L.QuestsID[row.ID] = quests[i]
 		hashes[row.DataHash] = row.ID
 	}
 

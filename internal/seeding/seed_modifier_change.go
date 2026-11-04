@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -187,7 +188,7 @@ func prepareModifierChange(mc *seedtypes.ModifierChange) (*seedtypes.ModifierCha
 		return nil, nil
 	}
 
-	mc.ModifierID, err = assignFK(mc.ModifierName, L.Modifiers)
+	mc.ModifierID, err = assignFK(mc.ModifierName, lookup.L.Modifiers)
 	if err != nil {
 		return nil, err
 	}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -31,8 +32,8 @@ func loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		locations[i].ID = row.ID
 		rawJSON.locations[i].ID = row.ID
-		L.Locations[seedtypes.Key(locations[i])] = locations[i]
-		L.LocationsID[row.ID] = locations[i]
+		lookup.L.Locations[seedtypes.Key(locations[i])] = locations[i]
+		lookup.L.LocationsID[row.ID] = locations[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -48,8 +49,8 @@ func completeLocations() error {
 			return err
 		}
 
-		L.Locations[seedtypes.Key(location)] = *location
-		L.LocationsID[location.ID] = *location
+		lookup.L.Locations[seedtypes.Key(location)] = *location
+		lookup.L.LocationsID[location.ID] = *location
 	}
 
 	return nil

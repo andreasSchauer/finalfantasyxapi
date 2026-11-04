@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -71,14 +72,14 @@ func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seedt
 		i.queryInt(r, ids, QpnMpMin, cfg.db.GetPlayerAbilityIDsByMpCostMin),
 		i.queryInt(r, ids, QpnMpMax, cfg.db.GetPlayerAbilityIDsByMpCostMax),
 		i.queryIntList(cfg, r, ids, QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		i.queryNameIDListNul(cfg, r, ids, QpnElement, cfg.E.Elements.resTypeSingle, cfg.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
-		i.queryNameID(r, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, cfg.L.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass),
-		i.queryID(r, ids, QpnLearnItem, cfg.L.Items, cfg.db.GetPlayerAbilityIDsByLearnItem),
-		i.queryNameID(r, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, cfg.L.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat),
-		i.queryIDNul(r, ids, QpnStatusInflict, cfg.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
-		i.queryIDNul(r, ids, QpnStatusRemove, cfg.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
-		i.queryNameID(r, ids, QpnStdSg, cfg.E.Characters.resTypeSingle, cfg.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar)),
-		i.queryNameID(r, ids, QpnExpSg, cfg.E.Characters.resTypeSingle, cfg.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar)),
+		i.queryNameIDListNul(cfg, r, ids, QpnElement, cfg.E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
+		i.queryNameID(r, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass),
+		i.queryID(r, ids, QpnLearnItem, lookup.L.Items, cfg.db.GetPlayerAbilityIDsByLearnItem),
+		i.queryNameID(r, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat),
+		i.queryIDNul(r, ids, QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
+		i.queryIDNul(r, ids, QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
+		i.queryNameID(r, ids, QpnStdSg, cfg.E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar)),
+		i.queryNameID(r, ids, QpnExpSg, cfg.E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar)),
 		i.queryBool(r, ids, QpnOutsideBattle, cfg.db.GetPlayerAbilityIDsCanUseOutsideBattle),
 		i.queryBool(r, ids, QpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
 		i.queryBool(r, ids, QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),

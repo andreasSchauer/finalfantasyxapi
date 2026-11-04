@@ -3,12 +3,12 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func getSphereRelationships(cfg *Config, r *http.Request, sphere seedtypes.Sphere) (Sphere, error) {
-	item, _ := seeding.GetResourceByID(sphere.ItemID, cfg.L.ItemsID)
+	item, _ := lookup.GetResourceByID(sphere.ItemID, lookup.L.ItemsID)
 
 	availabilityParams, err := cfg.E.Spheres.queryAvlRelGetParams(cfg, r, item.ID)
 	if err != nil {

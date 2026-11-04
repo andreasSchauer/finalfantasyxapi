@@ -4,11 +4,12 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func getBattleInteractionAffectedBy(bi seedtypes.BattleInteraction) ([]seedtypes.StatusCondition, error) {
-	return GetResources(bi.AffectedBy, L.StatusConditions)
+	return lookup.GetResources(bi.AffectedBy, lookup.L.StatusConditions)
 }
 
 func seedJuncBattleInteractionsAffectedBy(qtx *database.Queries, ctx context.Context) error {
@@ -107,7 +108,7 @@ func seedJuncBattleInteractionsModifierChanges(qtx *database.Queries, ctx contex
 }
 
 func getBattleInteractionRemovedStatusConditions(bi seedtypes.BattleInteraction) ([]seedtypes.StatusCondition, error) {
-	return GetResources(bi.RemovedStatusConditions, L.StatusConditions)
+	return lookup.GetResources(bi.RemovedStatusConditions, lookup.L.StatusConditions)
 }
 
 func seedJuncBattleInteractionsRemovedStatusConditions(qtx *database.Queries, ctx context.Context) error {

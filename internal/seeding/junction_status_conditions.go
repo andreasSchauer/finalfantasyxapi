@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -26,7 +27,7 @@ func seedJuncStatusConditionModifierChanges(qtx *database.Queries, ctx context.C
 }
 
 func getStatusConditionRelatedStats(sc seedtypes.StatusCondition) ([]seedtypes.Stat, error) {
-	return GetResources(sc.RelatedStats, L.Stats)
+	return lookup.GetResources(sc.RelatedStats, lookup.L.Stats)
 }
 
 func seedJuncStatusConditionRelatedStats(qtx *database.Queries, ctx context.Context) error {
@@ -44,7 +45,7 @@ func seedJuncStatusConditionRelatedStats(qtx *database.Queries, ctx context.Cont
 }
 
 func getStatusConditionRemovedConditions(sc seedtypes.StatusCondition) ([]seedtypes.StatusCondition, error) {
-	return GetResources(sc.RemovedStatusConditions, L.StatusConditions)
+	return lookup.GetResources(sc.RemovedStatusConditions, lookup.L.StatusConditions)
 }
 
 func seedJuncStatusConditionRemovedConditions(qtx *database.Queries, ctx context.Context) error {

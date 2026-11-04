@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 func processAeonCommandsPossibleAbilities(desc string) (JunctionParams, error) {
@@ -16,13 +17,13 @@ func processAeonCommandsPossibleAbilities(desc string) (JunctionParams, error) {
 
 	for _, command := range rawJSON.aeonCommands {
 		for _, list := range command.PossibleAbilities {
-			class, err := GetResource(list.User, L.CharClasses)
+			class, err := lookup.GetResource(list.User, lookup.L.CharClasses)
 			if err != nil {
 				return JunctionParams{}, err
 			}
 
 			for _, ref := range list.Abilities {
-				ability, err := GetResource(ref, L.Abilities)
+				ability, err := lookup.GetResource(ref, lookup.L.Abilities)
 				if err != nil {
 					return JunctionParams{}, err
 				}

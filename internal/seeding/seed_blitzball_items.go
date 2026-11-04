@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -31,8 +32,8 @@ func loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.Context) err
 	for i, row := range dbRows {
 		positions[i].ID = row.ID
 		rawJSON.blitzballPositions[i].ID = row.ID
-		L.Positions[seedtypes.Key(positions[i])] = positions[i]
-		L.PositionsID[row.ID] = positions[i]
+		lookup.L.Positions[seedtypes.Key(positions[i])] = positions[i]
+		lookup.L.PositionsID[row.ID] = positions[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -100,8 +101,8 @@ func completeBlitzballPositions() error {
 			return err
 		}
 
-		L.Positions[seedtypes.Key(*pos)] = *pos
-		L.PositionsID[pos.ID] = *pos
+		lookup.L.Positions[seedtypes.Key(*pos)] = *pos
+		lookup.L.PositionsID[pos.ID] = *pos
 	}
 
 	return nil

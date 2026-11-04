@@ -8,6 +8,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -51,8 +52,8 @@ func loop4SeedAeons(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		aeons[i].ID = row.ID
 		rawJSON.aeons[i].ID = row.ID
-		L.Aeons[seedtypes.Key(aeons[i])] = aeons[i]
-		L.AeonsID[row.ID] = aeons[i]
+		lookup.L.Aeons[seedtypes.Key(aeons[i])] = aeons[i]
+		lookup.L.AeonsID[row.ID] = aeons[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -71,7 +72,7 @@ func extractAeons() ([]seedtypes.Aeon, error) {
 			return nil, err
 		}
 
-		aeon.AreaID, err = assignFKPtr(&aeon.LocationArea, L.Areas)
+		aeon.AreaID, err = assignFKPtr(&aeon.LocationArea, lookup.L.Areas)
 		if err != nil {
 			return nil, err
 		}
@@ -102,8 +103,8 @@ func completeAeons() error {
 			return err
 		}
 
-		L.Aeons[seedtypes.Key(aeon)] = *aeon
-		L.AeonsID[aeon.ID] = *aeon
+		lookup.L.Aeons[seedtypes.Key(aeon)] = *aeon
+		lookup.L.AeonsID[aeon.ID] = *aeon
 	}
 
 	return nil

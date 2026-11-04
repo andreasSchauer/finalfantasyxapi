@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -52,7 +53,7 @@ func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seedt
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryNameID(r, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, cfg.L.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
-		i.queryNameID(r, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, cfg.L.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
+		i.queryNameID(r, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
+		i.queryNameID(r, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
 	})
 }

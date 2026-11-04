@@ -42,8 +42,8 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seedtypes.Charac
 		return Character{}, err
 	}
 
-	response.RegenAmounts = calcRegenAmounts(cfg, response.BaseStats)
-	response.CelestialFormula = getCharacterClstlFormula(cfg, response)
+	response.RegenAmounts = calcRegenAmounts(response.BaseStats)
+	response.CelestialFormula = getCharacterClstlFormula(response)
 
 	response.AgilityParameters, err = getUnitAgilityParams(cfg, r, response.BaseStats)
 	if err != nil {

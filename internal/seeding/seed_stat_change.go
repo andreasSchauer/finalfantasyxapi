@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -157,7 +158,7 @@ func prepareStatChanges(changes []seedtypes.StatChange) ([]seedtypes.StatChange,
 	for i := range changes {
 		change := &changes[i]
 
-		change.StatID, err = assignFK(change.StatName, L.Stats)
+		change.StatID, err = assignFK(change.StatName, lookup.L.Stats)
 		if err != nil {
 			return nil, err
 		}

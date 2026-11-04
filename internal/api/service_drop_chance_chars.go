@@ -4,7 +4,7 @@ import (
 	"slices"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -65,14 +65,14 @@ func (c SpecificCharChances) Round(n int32) SpecificCharChances {
 	return c
 }
 
-func (p CharChanceParams) calcChances(cfg *Config, params DropChanceParams) CharacterChances {
+func (p CharChanceParams) calcChances(params DropChanceParams) CharacterChances {
 	eligibleChars := []string{}
 	baseRandomChance := 0.75 / h.FloatLen(params.PartyMembers)
 	var chances CharacterChances
 
 	if params.CharacterID != nil {
 		finBlowChance := baseRandomChance + 0.25
-		char, _ := seeding.GetResourceByID(*params.CharacterID, cfg.L.CharactersID)
+		char, _ := lookup.GetResourceByID(*params.CharacterID, lookup.L.CharactersID)
 
 		specificChar := SpecificCharChances{
 			NoFinBlow:  baseRandomChance,
@@ -84,7 +84,7 @@ func (p CharChanceParams) calcChances(cfg *Config, params DropChanceParams) Char
 	}
 
 	for _, charID := range params.PartyMembers {
-		char, _ := seeding.GetResourceByID(charID, cfg.L.CharactersID)
+		char, _ := lookup.GetResourceByID(charID, lookup.L.CharactersID)
 
 		if p.charIsEligible(params, char) {
 			eligibleChars = append(eligibleChars, char.Name)

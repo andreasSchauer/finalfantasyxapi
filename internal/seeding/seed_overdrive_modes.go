@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -39,8 +40,8 @@ func loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		modes[i].ID = row.ID
 		rawJSON.overdriveModes[i].ID = row.ID
-		L.OverdriveModes[seedtypes.Key(modes[i])] = modes[i]
-		L.OverdriveModesID[row.ID] = modes[i]
+		lookup.L.OverdriveModes[seedtypes.Key(modes[i])] = modes[i]
+		lookup.L.OverdriveModesID[row.ID] = modes[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -56,8 +57,8 @@ func completeOverdriveModes() error {
 			return err
 		}
 
-		L.OverdriveModes[seedtypes.Key(mode)] = *mode
-		L.OverdriveModesID[mode.ID] = *mode
+		lookup.L.OverdriveModes[seedtypes.Key(mode)] = *mode
+		lookup.L.OverdriveModesID[mode.ID] = *mode
 	}
 
 	return nil
@@ -103,7 +104,7 @@ func extractOdModeActions() ([]seedtypes.ActionToLearn, error) {
 		for j := range mode.ActionsToLearn {
 			action := &mode.ActionsToLearn[j]
 
-			action.UserID, err = assignFK(action.User, L.Characters)
+			action.UserID, err = assignFK(action.User, lookup.L.Characters)
 			if err != nil {
 				return nil, err
 			}

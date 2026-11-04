@@ -2,6 +2,7 @@ package api
 
 import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 type DropChanceParams struct {
@@ -28,14 +29,14 @@ func getDropChanceParamsDoc(cfg *Config) ParamsDoc {
 				Type:        "int (id: monster)",
 				Required:    true,
 				MinVal:      h.GetInt32Ptr(1),
-				MaxVal:      h.GetInt32Ptr(int32(len(cfg.L.Monsters))),
+				MaxVal:      h.GetInt32Ptr(int32(len(lookup.L.Monsters))),
 				Description: "The monster that drops the equipment.",
 			},
 			{
 				Field:       PfnCharacterID,
 				Type:        "int (id: character)",
 				MinVal:      h.GetInt32Ptr(1),
-				MaxVal:      h.GetInt32Ptr(int32(len(cfg.L.Characters) - 1)),
+				MaxVal:      h.GetInt32Ptr(int32(len(lookup.L.Characters) - 1)),
 				Description: "Specify a character to calculate the chance of them receiving equipment. Character-specific auto-abilities like 'Piercing' for Kimahri and Auron will be factored in, when calculating the drop chance.",
 			},
 			{
@@ -43,7 +44,7 @@ func getDropChanceParamsDoc(cfg *Config) ParamsDoc {
 				Type:        "array[int (id: character)]",
 				DefaultVal:  []int32{1, 2, 3, 4, 5, 6, 7},
 				ChildMinVal: h.GetInt32Ptr(1),
-				ChildMaxVal: h.GetInt32Ptr(int32(len(cfg.L.Characters) - 1)),
+				ChildMaxVal: h.GetInt32Ptr(int32(len(lookup.L.Characters) - 1)),
 				MaxArrayLen: h.GetIntPtr(7),
 				Description: "Specify the characters that are currently accessible in the menu. Only these characters can receive equipment. For example, in the Gagazet underwater section, only Tidus, Wakka and Rikku can get equipment. If you fight an underwater enemy in the Monster Arena however, everybody is eligible, even though you can only fight with these three.",
 			},
@@ -51,7 +52,7 @@ func getDropChanceParamsDoc(cfg *Config) ParamsDoc {
 				Field:       PfnAutoAbilities,
 				Type:        "array[int (id: auto-ability)]",
 				ChildMinVal: h.GetInt32Ptr(1),
-				ChildMaxVal: h.GetInt32Ptr(int32(len(cfg.L.AutoAbilities))),
+				ChildMaxVal: h.GetInt32Ptr(int32(len(lookup.L.AutoAbilities))),
 				MaxArrayLen: h.GetIntPtr(4),
 				RequiredOr:  []FieldName{PfnMinEmptySlots, PfnTotalSlots},
 				Description: "The auto-abilities the equipment must have. By default, the calculator is looking for exact matches of the given auto-abilities (order doesn't matter), while respecting, if a character can get those auto-abilities. Use null, if you don't care about auto-abilities at all. Throws an error, if the monster doesn't drop one of the stated auto-abilities, or if weapon- and armor-abilities are combined.",

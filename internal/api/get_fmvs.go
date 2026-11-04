@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -31,6 +32,6 @@ func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seedtypes.FMV, F
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationFmvIDs),
+		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetLocationFmvIDs),
 	})
 }

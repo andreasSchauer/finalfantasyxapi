@@ -5,6 +5,7 @@ import (
 	"unicode"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 type AlBhedResponse struct {
@@ -13,13 +14,13 @@ type AlBhedResponse struct {
 	Direction      string `json:"direction"`
 }
 
-func handleAlBhed(cfg *Config, params AlBhedParams) (AlBhedResponse, error) {
+func handleAlBhed(_ *Config, params AlBhedParams) (AlBhedResponse, error) {
 	response := AlBhedResponse{
 		OriginalText: params.Text,
 		Direction:    params.Direction,
 	}
 
-	charLookup := initCharLookup(cfg, params.Direction)
+	charLookup := initCharLookup(params.Direction)
 	translatedRunes := []rune{}
 	translate := true
 	var err error
@@ -82,10 +83,10 @@ func setTranslator(translate, newState bool) (bool, error) {
 	return newState, nil
 }
 
-func initCharLookup(cfg *Config, direction string) map[rune]rune {
+func initCharLookup(direction string) map[rune]rune {
 	charLookup := make(map[rune]rune)
 
-	for _, primer := range cfg.L.Primers {
+	for _, primer := range lookup.L.Primers {
 		alBhedChar := charToRune(primer.AlBhedLetter)
 		englishChar := charToRune(primer.EnglishLetter)
 

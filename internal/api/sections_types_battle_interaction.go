@@ -7,7 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -127,7 +127,7 @@ func convertStatChangeSimple(_ *Config, sc seedtypes.StatChange) string {
 
 func convertModChangeSimple(cfg *Config, mc seedtypes.ModifierChange) string {
 	formatted := formatChange(mc.ModifierName, mc.CalculationType, mc.Value)
-	modifier, _ := seeding.GetResource(mc.ModifierName, cfg.L.Modifiers)
+	modifier, _ := lookup.GetResource(mc.ModifierName, lookup.L.Modifiers)
 
 	if modifier.Category == string(database.ModifierCategoryPercentage) {
 		formatted += "%"

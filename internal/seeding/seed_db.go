@@ -8,6 +8,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"github.com/pressly/goose/v3"
 )
@@ -19,7 +20,7 @@ func LoadDatabase(db *database.Queries, dbConn *sql.DB) error {
 	defer fmt.Println()
 	defer h.MeasureTime("database seeding")()
 	ctx := context.Background()
-	L.Init()
+	lookup.L.Init()
 
 	err := rawJSON.loadFiles()
 	if err != nil {
@@ -56,7 +57,7 @@ func skipSeeding(db *database.Queries, ctx context.Context) error {
 	fmt.Println("database is up to date")
 	fmt.Println()
 
-	err := L.InitCached()
+	err := lookup.L.InitCached()
 	if err != nil {
 		return fmt.Errorf("couldn't assign lookups: %v", err)
 	}
@@ -109,7 +110,7 @@ func seedDatabase(db *database.Queries, dbConn *sql.DB, ctx context.Context, dat
 		return err
 	}
 
-	err = L.Cache()
+	err = lookup.L.Cache()
 	if err != nil {
 		return err
 	}

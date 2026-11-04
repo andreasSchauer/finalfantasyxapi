@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -15,7 +15,7 @@ type AgilityParams struct {
 }
 
 func getAgilityTierDB(cfg *Config, r *http.Request, stats []BaseStat) (seedtypes.AgilityTier, error) {
-	agilityStat := getBaseStat(cfg, "agility", stats)
+	agilityStat := getBaseStat("agility", stats)
 	agility := agilityStat.Value
 
 	dbAgilityTier, err := cfg.db.GetAgilityTierByAgility(r.Context(), agility)
@@ -23,7 +23,7 @@ func getAgilityTierDB(cfg *Config, r *http.Request, stats []BaseStat) (seedtypes
 		return seedtypes.AgilityTier{}, newHTTPError(http.StatusInternalServerError, "couldn't extract agility parameters", err)
 	}
 
-	agilityTier, _ := seeding.GetResourceByID(dbAgilityTier.ID, cfg.L.AgilityTiersID)
+	agilityTier, _ := lookup.GetResourceByID(dbAgilityTier.ID, lookup.L.AgilityTiersID)
 
 	return agilityTier, nil
 }

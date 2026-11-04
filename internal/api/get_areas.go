@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -49,13 +50,13 @@ func (cfg *Config) retrieveAreas(r *http.Request, i handlerInput[seedtypes.Area,
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetLocationAreaIDs),
-		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetSublocationAreaIDs),
-		i.queryID(r, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetAreaIDsWithMonster),
-		i.queryIDWrapper(cfg, r, ids, QpnItem, cfg.L.Items, getAreasByItem),
-		i.queryID(r, ids, QpnKeyItem, cfg.L.KeyItems, cfg.db.GetAreaIDsWithKeyItem),
-		i.queryID(r, ids, QpnMonster, cfg.L.Monsters, cfg.db.GetAreasByMonster),
-		i.queryID(r, ids, QpnAutoAbility, cfg.L.AutoAbilities, cfg.db.GetAreaIDsWithAutoAbility),
+		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetLocationAreaIDs),
+		i.queryID(r, ids, QpnSublocation, lookup.L.Sublocations, cfg.db.GetSublocationAreaIDs),
+		i.queryID(r, ids, QpnMonster, lookup.L.Monsters, cfg.db.GetAreaIDsWithMonster),
+		i.queryIDWrapper(cfg, r, ids, QpnItem, lookup.L.Items, getAreasByItem),
+		i.queryID(r, ids, QpnKeyItem, lookup.L.KeyItems, cfg.db.GetAreaIDsWithKeyItem),
+		i.queryID(r, ids, QpnMonster, lookup.L.Monsters, cfg.db.GetAreasByMonster),
+		i.queryID(r, ids, QpnAutoAbility, lookup.L.AutoAbilities, cfg.db.GetAreaIDsWithAutoAbility),
 		i.queryBool(r, ids, QpnSaveSphere, cfg.db.GetAreaIDsWithSaveSphere),
 		i.queryBool(r, ids, QpnCompSphere, cfg.db.GetAreaIDsWithCompSphere),
 		i.queryBool(r, ids, QpnAirship, cfg.db.GetAreaIDsWithDropOff),

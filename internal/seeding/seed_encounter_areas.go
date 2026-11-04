@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -52,7 +53,7 @@ func extractEncounterAreas() ([]seedtypes.EncounterArea, error) {
 		for j := range mf.EncounterAreas {
 			area := &mf.EncounterAreas[j]
 
-			area.AreaID, err = assignFK(area.LocationArea, L.Areas)
+			area.AreaID, err = assignFK(area.LocationArea, lookup.L.Areas)
 			if err != nil {
 				return nil, err
 			}

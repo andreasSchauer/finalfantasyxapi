@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -42,8 +43,8 @@ func loop4SeedFMVs(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		fmvs[i].ID = row.ID
 		rawJSON.fmvs[i].ID = row.ID
-		L.FMVs[seedtypes.Key(fmvs[i])] = fmvs[i]
-		L.FMVsID[row.ID] = fmvs[i]
+		lookup.L.FMVs[seedtypes.Key(fmvs[i])] = fmvs[i]
+		lookup.L.FMVsID[row.ID] = fmvs[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -57,12 +58,12 @@ func extractFMVs() ([]seedtypes.FMV, error) {
 	for i := range rawJSON.fmvs {
 		fmv := &rawJSON.fmvs[i]
 
-		fmv.SongID, err = assignFKPtr(fmv.SongName, L.Songs)
+		fmv.SongID, err = assignFKPtr(fmv.SongName, lookup.L.Songs)
 		if err != nil {
 			return nil, err
 		}
 
-		fmv.AreaID, err = assignFK(fmv.LocationArea, L.Areas)
+		fmv.AreaID, err = assignFK(fmv.LocationArea, lookup.L.Areas)
 		if err != nil {
 			return nil, err
 		}

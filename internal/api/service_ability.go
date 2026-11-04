@@ -5,12 +5,12 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func quickAssembleAbility(cfg *Config, abilityID int32, interactionPtr *int32) (seedtypes.Ability, seedtypes.BattleInteraction, error) {
-	ability, _ := seeding.GetResourceByID(abilityID, cfg.L.AbilitiesID)
+func quickAssembleAbility(abilityID int32, interactionPtr *int32) (seedtypes.Ability, seedtypes.BattleInteraction, error) {
+	ability, _ := lookup.GetResourceByID(abilityID, lookup.L.AbilitiesID)
 	abilityType := string(ability.Type)
 	abilityString := h.NameToString(ability.Name, ability.Version, &abilityType)
 	interactionsAmt := h.Len32(ability.BattleInteractions)

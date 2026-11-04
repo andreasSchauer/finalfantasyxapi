@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -51,7 +52,7 @@ func extractAeonEquipment() ([]seedtypes.AeonEquipment, error) {
 			ae := &aeon.Weapon[j]
 			ae.EquipType = string(database.EquipTypeWeapon)
 
-			ae.AutoAbilityID, err = assignFK(ae.AutoAbility, L.AutoAbilities)
+			ae.AutoAbilityID, err = assignFK(ae.AutoAbility, lookup.L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}
@@ -63,7 +64,7 @@ func extractAeonEquipment() ([]seedtypes.AeonEquipment, error) {
 			ae := &aeon.Armor[j]
 			ae.EquipType = string(database.EquipTypeArmor)
 
-			ae.AutoAbilityID, err = assignFK(ae.AutoAbility, L.AutoAbilities)
+			ae.AutoAbilityID, err = assignFK(ae.AutoAbility, lookup.L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}

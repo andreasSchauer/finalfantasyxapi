@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -50,7 +51,7 @@ func getTreasureEquipment() []seedtypes.TreasureEquipment {
 }
 
 func getTreasureEquipmentAutoAbilities(te seedtypes.TreasureEquipment) ([]seedtypes.AutoAbility, error) {
-	return GetResources(te.Abilities, L.AutoAbilities)
+	return lookup.GetResources(te.Abilities, lookup.L.AutoAbilities)
 }
 
 func seedJuncTreasureEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {

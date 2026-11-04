@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -44,8 +45,8 @@ func loop3SeedOverdriveCommands(qtx *database.Queries, ctx context.Context) erro
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
 		rawJSON.overdriveCommands[i].ID = row.ID
-		L.OverdriveCommands[seedtypes.Key(commands[i])] = commands[i]
-		L.OverdriveCommandsID[row.ID] = commands[i]
+		lookup.L.OverdriveCommands[seedtypes.Key(commands[i])] = commands[i]
+		lookup.L.OverdriveCommandsID[row.ID] = commands[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -59,17 +60,17 @@ func extractOverdriveCommands() ([]seedtypes.OverdriveCommand, error) {
 	for i := range rawJSON.overdriveCommands {
 		command := &rawJSON.overdriveCommands[i]
 
-		command.TopmenuID, err = assignFKPtr(command.Topmenu, L.Topmenus)
+		command.TopmenuID, err = assignFKPtr(command.Topmenu, lookup.L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, L.Submenus)
+		command.SubmenuID, err = assignFKPtr(&command.OpenSubmenu, lookup.L.Submenus)
 		if err != nil {
 			return nil, err
 		}
 
-		command.CharClassID, err = assignFKPtr(&command.User, L.CharClasses)
+		command.CharClassID, err = assignFKPtr(&command.User, lookup.L.CharClasses)
 		if err != nil {
 			return nil, err
 		}

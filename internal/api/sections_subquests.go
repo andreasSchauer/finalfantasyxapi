@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 type SubquestSimple struct {
@@ -21,14 +21,14 @@ func (s SubquestSimple) GetURL() string {
 
 func createSubquestSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.E.Subquests
-	subquest, _ := seeding.GetResourceByID(id, i.objLookupID)
+	subquest, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	subquestSimple := SubquestSimple{
 		ID:        subquest.ID,
 		URL:       CreateResourceURL(cfg, i.Endpoint, id),
 		Name:      subquest.Name,
 		Condition: subquest.Completion.Condition,
-		Areas:     locAreaStrings(cfg, subquest.Completion.Areas),
+		Areas:     locAreaStrings(subquest.Completion.Areas),
 		Reward:    convertItemAmountSimple(cfg, subquest.GetItemAmount()),
 	}
 

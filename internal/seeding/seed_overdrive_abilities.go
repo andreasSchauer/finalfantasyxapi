@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -32,8 +33,8 @@ func loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.Context) err
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		rawJSON.overdriveAbilities[i].ID = row.ID
-		L.OverdriveAbilities[seedtypes.Key(abilities[i])] = abilities[i]
-		L.OverdriveAbilitiesID[row.ID] = abilities[i]
+		lookup.L.OverdriveAbilities[seedtypes.Key(abilities[i])] = abilities[i]
+		lookup.L.OverdriveAbilitiesID[row.ID] = abilities[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -67,15 +68,15 @@ func completeOverdriveAbilities() error {
 			return err
 		}
 
-		L.OverdriveAbilities[seedtypes.Key(ability)] = *ability
-		L.OverdriveAbilitiesID[ability.ID] = *ability
+		lookup.L.OverdriveAbilities[seedtypes.Key(ability)] = *ability
+		lookup.L.OverdriveAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
 func getOverdriveAbilityRelatedStats(oa seedtypes.OverdriveAbility) ([]seedtypes.Stat, error) {
-	return GetResources(oa.RelatedStats, L.Stats)
+	return lookup.GetResources(oa.RelatedStats, lookup.L.Stats)
 }
 
 func seedJuncOverdriveAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {

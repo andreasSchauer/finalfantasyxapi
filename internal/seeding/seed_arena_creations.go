@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -48,8 +49,8 @@ func loop7SeedArenaCreations(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		creations[i].ID = row.ID
 		rawJSON.monsterArenaCreations[i].ID = row.ID
-		L.ArenaCreations[seedtypes.Key(creations[i])] = creations[i]
-		L.ArenaCreationsID[row.ID] = creations[i]
+		lookup.L.ArenaCreations[seedtypes.Key(creations[i])] = creations[i]
+		lookup.L.ArenaCreationsID[row.ID] = creations[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -63,7 +64,7 @@ func extractArenaCreations() ([]seedtypes.ArenaCreation, error) {
 	for i := range rawJSON.monsterArenaCreations {
 		creation := &rawJSON.monsterArenaCreations[i]
 
-		creation.SubquestID, err = assignFK(creation.Name, L.Subquests)
+		creation.SubquestID, err = assignFK(creation.Name, lookup.L.Subquests)
 		if err != nil {
 			return nil, err
 		}
@@ -72,7 +73,7 @@ func extractArenaCreations() ([]seedtypes.ArenaCreation, error) {
 			Name: creation.Name,
 		}
 
-		creation.MonsterID, err = assignFKPtr(&obj, L.Monsters)
+		creation.MonsterID, err = assignFKPtr(&obj, lookup.L.Monsters)
 		if err != nil {
 			return nil, err
 		}

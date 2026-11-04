@@ -44,7 +44,7 @@ func (cfg *Config) getAeon(r *http.Request, i handlerInput[seedtypes.Aeon, Aeon,
 		return Aeon{}, err
 	}
 
-	response.RegenAmounts = calcRegenAmounts(cfg, response.BaseStats)
+	response.RegenAmounts = calcRegenAmounts(response.BaseStats)
 
 	response.AgilityParameters, err = getUnitAgilityParams(cfg, r, response.BaseStats)
 	if err != nil {

@@ -1,4 +1,4 @@
-package seeding
+package lookup
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ func GetResourceByID[T seedtypes.LookupableID](id int32, lookup map[int32]T) (T,
 	resource, found := lookup[id]
 	if !found {
 		var zeroType T
-		return zeroType, fmt.Errorf("couldn't find %s with id '%d'", getTypeName[T](), id)
+		return zeroType, fmt.Errorf("couldn't find %s with id '%d'", h.GetTypeName[T](), id)
 	}
 
 	return resource, nil
@@ -33,7 +33,7 @@ func getResourceByName[T seedtypes.LookupableKey](key string, lookup map[string]
 	resource, found := lookup[key]
 	if !found {
 		var zeroType T
-		return zeroType, h.NewErr(key, fmt.Errorf("couldn't find %s '%s'", getTypeName[T](), key))
+		return zeroType, h.NewErr(key, fmt.Errorf("couldn't find %s '%s'", h.GetTypeName[T](), key))
 	}
 
 	return resource, nil
@@ -45,7 +45,7 @@ func getResourceByKey[T, K seedtypes.LookupableKey](obj K, lookup map[string]T) 
 	resource, err := GetResource(key, lookup)
 	if err != nil {
 		var zeroType T
-		return zeroType, h.NewErr(obj.String(), fmt.Errorf("couldn't find %s", getTypeName[T]()))
+		return zeroType, h.NewErr(obj.String(), fmt.Errorf("couldn't find %s", h.GetTypeName[T]()))
 	}
 
 	return resource, nil

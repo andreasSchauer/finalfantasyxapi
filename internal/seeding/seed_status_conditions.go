@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -46,8 +47,8 @@ func loop3SeedStatusConditions(qtx *database.Queries, ctx context.Context) error
 	for i, row := range dbRows {
 		statusses[i].ID = row.ID
 		rawJSON.statusConditions[i].ID = row.ID
-		L.StatusConditions[seedtypes.Key(statusses[i])] = statusses[i]
-		L.StatusConditionsID[row.ID] = statusses[i]
+		lookup.L.StatusConditions[seedtypes.Key(statusses[i])] = statusses[i]
+		lookup.L.StatusConditionsID[row.ID] = statusses[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -88,8 +89,8 @@ func completeStatusConditions() error {
 			return err
 		}
 
-		L.StatusConditions[seedtypes.Key(status)] = *status
-		L.StatusConditionsID[status.ID] = *status
+		lookup.L.StatusConditions[seedtypes.Key(status)] = *status
+		lookup.L.StatusConditionsID[status.ID] = *status
 	}
 
 	return nil

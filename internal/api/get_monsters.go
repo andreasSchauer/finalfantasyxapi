@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -72,14 +73,14 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seedtypes.Mo
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
 		i.queryBasicWrapper(cfg, r, ids, QpnElementalResists, getMonstersByElemResists),
-		i.queryIDListWrapper(cfg, r, ids, QpnStatusResists, cfg.L.StatusConditions, getMonstersByStatusResists),
+		i.queryIDListWrapper(cfg, r, ids, QpnStatusResists, lookup.L.StatusConditions, getMonstersByStatusResists),
 
-		i.queryIDWrapper(cfg, r, ids, QpnItem, cfg.L.Items, getMonstersByItem),
-		i.queryID(r, ids, QpnRonsoRage, cfg.L.RonsoRages, cfg.db.GetMonsterIDsByRonsoRage),
-		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetMonsterIDsByLocation),
-		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetMonsterIDsBySublocation),
-		i.queryID(r, ids, QpnArea, cfg.L.Areas, cfg.db.GetMonsterIDsByArea),
-		i.queryIDWrapper(cfg, r, ids, QpnAutoAbility, cfg.L.AutoAbilities, getMonstersByAutoAbility),
+		i.queryIDWrapper(cfg, r, ids, QpnItem, lookup.L.Items, getMonstersByItem),
+		i.queryID(r, ids, QpnRonsoRage, lookup.L.RonsoRages, cfg.db.GetMonsterIDsByRonsoRage),
+		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetMonsterIDsByLocation),
+		i.queryID(r, ids, QpnSublocation, lookup.L.Sublocations, cfg.db.GetMonsterIDsBySublocation),
+		i.queryID(r, ids, QpnArea, lookup.L.Areas, cfg.db.GetMonsterIDsByArea),
+		i.queryIDWrapper(cfg, r, ids, QpnAutoAbility, lookup.L.AutoAbilities, getMonstersByAutoAbility),
 
 		i.queryIntList(cfg, r, ids, QpnEmptySlots, cfg.db.GetMonsterIDsByEmptySlots),
 		i.queryIntList(cfg, r, ids, QpnDistance, cfg.db.GetMonsterIDsByDistance),

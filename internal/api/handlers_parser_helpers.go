@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -48,7 +48,7 @@ func checkID(idStr string, resourceType ResTypeSingle, maxID int) (parseResponse
 	return newParseResponse(int32(id), ""), nil
 }
 
-func checkUniqueName[T seedtypes.Lookupable](name string, lookup map[string]T) (parseResponse, error) {
+func checkUniqueName[T seedtypes.Lookupable](name string, l map[string]T) (parseResponse, error) {
 	nameWithSpaces := h.GetNameWithSpaces(name, "_")
 
 	lookupObj := seedtypes.LookupObject{
@@ -56,13 +56,13 @@ func checkUniqueName[T seedtypes.Lookupable](name string, lookup map[string]T) (
 	}
 
 	// check name/version resources with version = null
-	response, err := seeding.GetResource(lookupObj, lookup)
+	response, err := lookup.GetResource(lookupObj, l)
 	if err == nil {
 		return newParseResponse(response.GetID(), ""), nil
 	}
 
 	// check for unique names
-	response, err = seeding.GetResource(nameWithSpaces, lookup)
+	response, err = lookup.GetResource(nameWithSpaces, l)
 	if err == nil {
 		return newParseResponse(response.GetID(), ""), nil
 	}
@@ -70,7 +70,7 @@ func checkUniqueName[T seedtypes.Lookupable](name string, lookup map[string]T) (
 	return parseResponse{}, errNoResource
 }
 
-func checkNameMultiple[T seedtypes.Lookupable](name string, lookup map[string]T) (parseResponse, error) {
+func checkNameMultiple[T seedtypes.Lookupable](name string, l map[string]T) (parseResponse, error) {
 	nameWithSpaces := h.GetNameWithSpaces(name, "_")
 	var testVersion int32 = 1
 
@@ -79,14 +79,14 @@ func checkNameMultiple[T seedtypes.Lookupable](name string, lookup map[string]T)
 		Version: &testVersion,
 	}
 
-	_, err := seeding.GetResource(lookupObj, lookup)
+	_, err := lookup.GetResource(lookupObj, l)
 	if err == nil {
 		return newParseResponse(0, lookupObj.Name), nil
 	}
 	return parseResponse{}, errNoResource
 }
 
-func checkNameVersion[T seedtypes.Lookupable](name string, version *int32, lookup map[string]T) (parseResponse, error) {
+func checkNameVersion[T seedtypes.Lookupable](name string, version *int32, l map[string]T) (parseResponse, error) {
 	nameWithSpaces := h.GetNameWithSpaces(name, "_")
 
 	key := seedtypes.LookupObject{
@@ -94,7 +94,7 @@ func checkNameVersion[T seedtypes.Lookupable](name string, version *int32, looku
 		Version: version,
 	}
 
-	resource, err := seeding.GetResource(key, lookup)
+	resource, err := lookup.GetResource(key, l)
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}

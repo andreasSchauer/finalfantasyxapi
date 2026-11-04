@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -96,27 +96,27 @@ func populateStatusInfliction(cfg *Config, abilities []TypedAPIResource) StatusI
 		}
 		switch ability.Type {
 		case string(database.AbilityTypePlayerAbility):
-			playerAbility, _ := seeding.GetResource(obj, cfg.L.PlayerAbilities)
+			playerAbility, _ := lookup.GetResource(obj, lookup.L.PlayerAbilities)
 			res := nameToNamedAPIResource(cfg, cfg.E.PlayerAbilities, playerAbility.Name, playerAbility.Version)
 			infliction.PlayerAbilities = append(infliction.PlayerAbilities, res)
 
 		case string(database.AbilityTypeOverdriveAbility):
-			overdriveAbility, _ := seeding.GetResource(obj, cfg.L.OverdriveAbilities)
+			overdriveAbility, _ := lookup.GetResource(obj, lookup.L.OverdriveAbilities)
 			res := nameToNamedAPIResource(cfg, cfg.E.OverdriveAbilities, overdriveAbility.Name, overdriveAbility.Version)
 			infliction.OverdriveAbilities = append(infliction.OverdriveAbilities, res)
 
 		case string(database.AbilityTypeItemAbility):
-			itemAbility, _ := seeding.GetResource(ability.Name, cfg.L.ItemAbilities)
+			itemAbility, _ := lookup.GetResource(ability.Name, lookup.L.ItemAbilities)
 			res := nameToNamedAPIResource(cfg, cfg.E.ItemAbilities, itemAbility.Name, itemAbility.Version)
 			infliction.ItemAbilities = append(infliction.ItemAbilities, res)
 
 		case string(database.AbilityTypeMiscAbility):
-			miscAbility, _ := seeding.GetResource(obj, cfg.L.MiscAbilities)
+			miscAbility, _ := lookup.GetResource(obj, lookup.L.MiscAbilities)
 			res := nameToNamedAPIResource(cfg, cfg.E.MiscAbilities, miscAbility.Name, miscAbility.Version)
 			infliction.MiscAbilities = append(infliction.MiscAbilities, res)
 
 		case string(database.AbilityTypeEnemyAbility):
-			enemyAbility, _ := seeding.GetResource(obj, cfg.L.EnemyAbilities)
+			enemyAbility, _ := lookup.GetResource(obj, lookup.L.EnemyAbilities)
 			res := nameToNamedAPIResource(cfg, cfg.E.EnemyAbilities, enemyAbility.Name, enemyAbility.Version)
 			infliction.EnemyAbilities = append(infliction.EnemyAbilities, res)
 		}
@@ -140,22 +140,22 @@ func populateStatusRemoval(cfg *Config, abilities []TypedAPIResource) StatusRemo
 		}
 		switch ability.Type {
 		case string(database.AbilityTypePlayerAbility):
-			playerAbility, _ := seeding.GetResource(obj, cfg.L.PlayerAbilities)
+			playerAbility, _ := lookup.GetResource(obj, lookup.L.PlayerAbilities)
 			res := nameToNamedAPIResource(cfg, cfg.E.PlayerAbilities, playerAbility.Name, playerAbility.Version)
 			removal.PlayerAbilities = append(removal.PlayerAbilities, res)
 
 		case string(database.AbilityTypeOverdriveAbility):
-			overdriveAbility, _ := seeding.GetResource(obj, cfg.L.OverdriveAbilities)
+			overdriveAbility, _ := lookup.GetResource(obj, lookup.L.OverdriveAbilities)
 			res := nameToNamedAPIResource(cfg, cfg.E.OverdriveAbilities, overdriveAbility.Name, overdriveAbility.Version)
 			removal.OverdriveAbilities = append(removal.OverdriveAbilities, res)
 
 		case string(database.AbilityTypeItemAbility):
-			itemAbility, _ := seeding.GetResource(ability.Name, cfg.L.ItemAbilities)
+			itemAbility, _ := lookup.GetResource(ability.Name, lookup.L.ItemAbilities)
 			res := nameToNamedAPIResource(cfg, cfg.E.ItemAbilities, itemAbility.Name, itemAbility.Version)
 			removal.ItemAbilities = append(removal.ItemAbilities, res)
 
 		case string(database.AbilityTypeEnemyAbility):
-			enemyAbility, _ := seeding.GetResource(obj, cfg.L.EnemyAbilities)
+			enemyAbility, _ := lookup.GetResource(obj, lookup.L.EnemyAbilities)
 			res := nameToNamedAPIResource(cfg, cfg.E.EnemyAbilities, enemyAbility.Name, enemyAbility.Version)
 			removal.EnemyAbilities = append(removal.EnemyAbilities, res)
 		}

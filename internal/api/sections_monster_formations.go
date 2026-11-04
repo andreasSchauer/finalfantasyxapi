@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 type MonsterFormationSimple struct {
@@ -22,16 +22,16 @@ func (m MonsterFormationSimple) GetURL() string {
 
 func createMonsterFormationSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.E.MonsterFormations
-	formation, _ := seeding.GetResourceByID(id, i.objLookupID)
+	formation, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	formationSub := MonsterFormationSimple{
 		ID:             formation.ID,
 		URL:            CreateResourceURL(cfg, i.Endpoint, id),
 		Category:       formation.FormationData.Category,
 		IsForcedAmbush: formation.FormationData.IsForcedAmbush,
-		FormationLoot:  getFormationLoot(cfg, formation),
+		FormationLoot:  getFormationLoot(formation),
 		Monsters:       convertObjSlice(cfg, formation.Monsters, monsterAmountString),
-		Areas:          locAreaStrings(cfg, formation.EncounterAreas),
+		Areas:          locAreaStrings(formation.EncounterAreas),
 	}
 
 	return formationSub, nil

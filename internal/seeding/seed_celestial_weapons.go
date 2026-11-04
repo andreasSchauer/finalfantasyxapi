@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -42,8 +43,8 @@ func loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Context) error
 	for i, row := range dbRows {
 		wpns[i].ID = row.ID
 		rawJSON.celestialWeapons[i].ID = row.ID
-		L.CelestialWeapons[seedtypes.Key(wpns[i])] = wpns[i]
-		L.CelestialWeaponsID[row.ID] = wpns[i]
+		lookup.L.CelestialWeapons[seedtypes.Key(wpns[i])] = wpns[i]
+		lookup.L.CelestialWeaponsID[row.ID] = wpns[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -57,12 +58,12 @@ func extractCelestialWeapons() ([]seedtypes.CelestialWeapon, error) {
 	for i := range rawJSON.celestialWeapons {
 		wpn := &rawJSON.celestialWeapons[i]
 
-		wpn.CharacterID, err = assignFKPtr(&wpn.Character, L.Characters)
+		wpn.CharacterID, err = assignFKPtr(&wpn.Character, lookup.L.Characters)
 		if err != nil {
 			return nil, err
 		}
 
-		wpn.AeonID, err = assignFKPtr(wpn.Aeon, L.Aeons)
+		wpn.AeonID, err = assignFKPtr(wpn.Aeon, lookup.L.Aeons)
 		if err != nil {
 			return nil, err
 		}

@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -57,7 +58,7 @@ func extractQuestCompletions() ([]seedtypes.QuestCompletion, error) {
 				return nil, err
 			}
 
-			completion.QuestID, err = assignFK(sidequest.Quest, L.Quests)
+			completion.QuestID, err = assignFK(sidequest.Quest, lookup.L.Quests)
 			if err != nil {
 				return nil, err
 			}
@@ -75,7 +76,7 @@ func extractQuestCompletions() ([]seedtypes.QuestCompletion, error) {
 					return nil, err
 				}
 
-				completion.QuestID, err = assignFK(subquest.Quest, L.Quests)
+				completion.QuestID, err = assignFK(subquest.Quest, lookup.L.Quests)
 				if err != nil {
 					return nil, err
 				}
@@ -171,7 +172,7 @@ func prepareCompletionAreas(areas []seedtypes.CompletionArea, completionID int32
 		area := &areas[i]
 		area.CompletionID = completionID
 
-		area.AreaID, err = assignFK(area.LocationArea, L.Areas)
+		area.AreaID, err = assignFK(area.LocationArea, lookup.L.Areas)
 		if err != nil {
 			return nil, err
 		}

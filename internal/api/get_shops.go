@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -32,8 +33,8 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seedtypes.Shop,
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
 		i.queryJoined(cfg, r, ids, []QueryParamName{QpnAutoAbility, QpnEmptySlots, QpnCharacter}, filterShopsEquipment),
-		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetShopIDsByLocation),
-		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetShopIDsBySublocation),
+		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetShopIDsByLocation),
+		i.queryID(r, ids, QpnSublocation, lookup.L.Sublocations, cfg.db.GetShopIDsBySublocation),
 		i.queryBool2(r, ids, QpnItems, cfg.db.GetShopIDsWithItems),
 		i.queryBool2(r, ids, QpnEquipment, cfg.db.GetShopIDsWithEquipment),
 		i.queryEnumList(cfg, r, cfg.T.ShopCategory, ids, QpnCategory, cfg.db.GetShopIDsByCategory),

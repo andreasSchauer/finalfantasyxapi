@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -71,7 +71,7 @@ func newAeonStatTable(cfg *Config, baseStats []seedtypes.BaseStat) AeonStatTable
 
 func createAeonStatSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := cfg.E.Aeons
-	aeon, _ := seeding.GetResourceByID(id, cfg.L.AeonsID)
+	aeon, _ := lookup.GetResourceByID(id, lookup.L.AeonsID)
 
 	aeonStatSub := AeonStatSimple{
 		ID:    aeon.ID,

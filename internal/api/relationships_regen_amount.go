@@ -11,13 +11,13 @@ func calcRegenAmountsMonster(cfg *Config, mon Monster) []RegenAmount {
 		return nil
 	}
 
-	return calcRegenAmounts(cfg, mon.BaseStats)
+	return calcRegenAmounts(mon.BaseStats)
 }
 
-func calcRegenAmounts(cfg *Config, baseStats []BaseStat) []RegenAmount {
+func calcRegenAmounts(baseStats []BaseStat) []RegenAmount {
 	ticks := []int32{0, 1, 2, 3, 4, 5, 10, 15, 20, 30, 50}
 	regenAmounts := make([]RegenAmount, len(ticks))
-	hp := getBaseStatVal(cfg, "hp", baseStats)
+	hp := getBaseStatVal("hp", baseStats)
 
 	for i, tickAmt := range ticks {
 		regenAmounts[i] = getRegenAmount(hp, tickAmt)

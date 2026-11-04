@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -64,7 +65,7 @@ func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster
 		return Monster{}, err
 	}
 
-	mon.PoisonDamage, err = getMonsterPoisonDamage(cfg, mon)
+	mon.PoisonDamage, err = getMonsterPoisonDamage(mon)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -83,10 +84,10 @@ func getMonsterElemResists(cfg *Config, resists []seedtypes.ElementalResist) []E
 	elemResists := namesToElemResists(cfg, resists)
 	elemResistMap := getResourceMap(elemResists)
 
-	for key := range cfg.L.ElementsID {
+	for key := range lookup.L.ElementsID {
 		_, ok := elemResistMap[key]
 		if !ok {
-			element := cfg.L.ElementsID[key]
+			element := lookup.L.ElementsID[key]
 			elemResistMap[element.ID] = newElemResist(cfg, element.Name, "neutral")
 		}
 	}
@@ -94,12 +95,12 @@ func getMonsterElemResists(cfg *Config, resists []seedtypes.ElementalResist) []E
 	return resourceMapToSlice(elemResistMap)
 }
 
-func getMonsterPoisonDamage(cfg *Config, mon Monster) (*int32, error) {
+func getMonsterPoisonDamage(mon Monster) (*int32, error) {
 	if mon.PoisonRate == nil {
 		return nil, nil
 	}
 
-	hpStat := getBaseStat(cfg, "hp", mon.BaseStats)
+	hpStat := getBaseStat("hp", mon.BaseStats)
 
 	poisonDamageFloat := float32(hpStat.Value) * *mon.PoisonRate
 	poisonDamage := int32(poisonDamageFloat)
@@ -156,7 +157,7 @@ func getMonsterBribeChances(cfg *Config, mon Monster) ([]BribeChance, error) {
 		return nil, nil
 	}
 
-	hpStat := getBaseStat(cfg, "hp", mon.BaseStats)
+	hpStat := getBaseStat("hp", mon.BaseStats)
 	hp := hpStat.Value
 
 	bribeChances := []BribeChance{}

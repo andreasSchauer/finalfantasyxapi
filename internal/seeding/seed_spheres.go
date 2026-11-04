@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -46,8 +47,8 @@ func loop3SeedSpheres(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		spheres[i].ID = row.ID
 		rawJSON.spheres[i].ID = row.ID
-		L.Spheres[seedtypes.Key(spheres[i])] = spheres[i]
-		L.SpheresID[row.ID] = spheres[i]
+		lookup.L.Spheres[seedtypes.Key(spheres[i])] = spheres[i]
+		lookup.L.SpheresID[row.ID] = spheres[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -61,7 +62,7 @@ func extractSpheres() ([]seedtypes.Sphere, error) {
 	for i := range rawJSON.spheres {
 		sphere := &rawJSON.spheres[i]
 
-		sphere.ItemID, err = assignFK(sphere.Name, L.Items)
+		sphere.ItemID, err = assignFK(sphere.Name, lookup.L.Items)
 		if err != nil {
 			return nil, err
 		}

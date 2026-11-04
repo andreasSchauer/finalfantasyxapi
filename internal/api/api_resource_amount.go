@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -130,7 +130,7 @@ func itemAmtsToChildResAmts[T seedtypes.HasItemAmount, R any, A APIResource](i h
 	resAmts := []ResourceAmount[A]{}
 
 	for _, res := range resources {
-		lookup, _ := seeding.GetResourceByID(res.GetID(), i.objLookupID)
+		lookup, _ := lookup.GetResourceByID(res.GetID(), i.objLookupID)
 		itemAmount := lookup.GetItemAmount()
 		resAmt := newResourceAmount(res, itemAmount.Amount)
 		resAmts = append(resAmts, resAmt)
@@ -140,16 +140,16 @@ func itemAmtsToChildResAmts[T seedtypes.HasItemAmount, R any, A APIResource](i h
 }
 
 // takes a slice of parent resources and for each of them, searches the resource's seedtypes.ItemAmount slice for the target item and attaches its amount to the resource.
-func itemAmtsToChildResAmts2[T seedtypes.HasItemAmounts, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], resources []A, itemID int32) []ResourceAmount[A] {
+func itemAmtsToChildResAmts2[T seedtypes.HasItemAmounts, R any, A APIResource](i handlerInput[T, R, A], resources []A, itemID int32) []ResourceAmount[A] {
 	resAmts := []ResourceAmount[A]{}
 
 	for _, res := range resources {
-		lookup, _ := seeding.GetResourceByID(res.GetID(), i.objLookupID)
-		itemAmounts := lookup.GetItemAmounts()
+		item, _ := lookup.GetResourceByID(res.GetID(), i.objLookupID)
+		itemAmounts := item.GetItemAmounts()
 		var itemAmount seedtypes.ItemAmount
 
 		for _, ia := range itemAmounts {
-			item, _ := seeding.GetResource(ia.ItemName, cfg.L.Items)
+			item, _ := lookup.GetResource(ia.ItemName, lookup.L.Items)
 			if item.ID == itemID {
 				itemAmount = ia
 			}

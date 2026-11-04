@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName QueryParamName) ([]BaseStat, error) {
@@ -11,10 +12,10 @@ func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName QueryP
 	baseStats := mon.BaseStats
 	queryParam := cfg.Q.monsters[queryName]
 
-	kimahri, _ := cfg.L.Characters["kimahri"]
+	kimahri, _ := lookup.L.Characters["kimahri"]
 	kimahriBS := cfg.E.Stats.toResAmtType(cfg, kimahri.BaseStats, newBaseStat)
 
-	kimahriStatCalcMap, err := getStatCalcMap(cfg, r, queryParam, kimahriBS, allowedStatIDs)
+	kimahriStatCalcMap, err := getStatCalcMap(r, queryParam, kimahriBS, allowedStatIDs)
 	if queryIsEmpty(err) {
 		return baseStats, nil
 	}

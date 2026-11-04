@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -46,8 +47,8 @@ func loop4SeedCharacters(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		chars[i].ID = row.ID
 		rawJSON.characters[i].ID = row.ID
-		L.Characters[seedtypes.Key(chars[i])] = chars[i]
-		L.CharactersID[row.ID] = chars[i]
+		lookup.L.Characters[seedtypes.Key(chars[i])] = chars[i]
+		lookup.L.CharactersID[row.ID] = chars[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -66,7 +67,7 @@ func extractCharacters() ([]seedtypes.Character, error) {
 			return nil, err
 		}
 
-		char.AreaID, err = assignFKPtr(&char.LocationArea, L.Areas)
+		char.AreaID, err = assignFKPtr(&char.LocationArea, lookup.L.Areas)
 		if err != nil {
 			return nil, err
 		}
@@ -99,8 +100,8 @@ func completeCharacters() error {
 			return err
 		}
 
-		L.Characters[seedtypes.Key(character)] = *character
-		L.CharactersID[character.ID] = *character
+		lookup.L.Characters[seedtypes.Key(character)] = *character
+		lookup.L.CharactersID[character.ID] = *character
 	}
 
 	return nil

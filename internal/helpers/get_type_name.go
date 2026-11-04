@@ -1,11 +1,11 @@
-package seeding
+package helpers
 
 import (
 	"fmt"
 	"strings"
 )
 
-func getTypeName[T any]() string {
+func GetTypeName[T any]() string {
 	var zeroType T
 	typeString := fmt.Sprintf("%T", zeroType)
 	typeOnly := strings.Split(typeString, ".")

@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -40,8 +41,8 @@ func loop3SeedProperties(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		properties[i].ID = row.ID
 		rawJSON.properties[i].ID = row.ID
-		L.Properties[seedtypes.Key(properties[i])] = properties[i]
-		L.PropertiesID[row.ID] = properties[i]
+		lookup.L.Properties[seedtypes.Key(properties[i])] = properties[i]
+		lookup.L.PropertiesID[row.ID] = properties[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -69,7 +70,7 @@ func extractProperties() ([]seedtypes.Property, error) {
 }
 
 func getPropertyRelatedStats(p seedtypes.Property) ([]seedtypes.Stat, error) {
-	return GetResources(p.RelatedStats, L.Stats)
+	return lookup.GetResources(p.RelatedStats, lookup.L.Stats)
 }
 
 func seedJuncPropertiesRelatedStats(qtx *database.Queries, ctx context.Context) error {

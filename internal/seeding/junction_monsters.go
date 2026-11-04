@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -26,7 +27,7 @@ func seedJuncMonstersMonsterAbilities(qtx *database.Queries, ctx context.Context
 }
 
 func getMonsterAutoAbilities(m seedtypes.Monster) ([]seedtypes.AutoAbility, error) {
-	return GetResources(m.AutoAbilities, L.AutoAbilities)
+	return lookup.GetResources(m.AutoAbilities, lookup.L.AutoAbilities)
 }
 
 func seedJuncMonstersAutoAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -80,7 +81,7 @@ func seedJuncMonstersElementalResists(qtx *database.Queries, ctx context.Context
 }
 
 func getMonsterStatusImmunities(m seedtypes.Monster) ([]seedtypes.StatusCondition, error) {
-	return GetResources(m.StatusImmunities, L.StatusConditions)
+	return lookup.GetResources(m.StatusImmunities, lookup.L.StatusConditions)
 }
 
 func seedJuncMonstersStatusImmunities(qtx *database.Queries, ctx context.Context) error {
@@ -98,7 +99,7 @@ func seedJuncMonstersStatusImmunities(qtx *database.Queries, ctx context.Context
 }
 
 func getMonsterProperties(m seedtypes.Monster) ([]seedtypes.Property, error) {
-	return GetResources(m.Properties, L.Properties)
+	return lookup.GetResources(m.Properties, lookup.L.Properties)
 }
 
 func seedJuncMonstersProperties(qtx *database.Queries, ctx context.Context) error {
@@ -116,7 +117,7 @@ func seedJuncMonstersProperties(qtx *database.Queries, ctx context.Context) erro
 }
 
 func getMonsterRonsoRages(m seedtypes.Monster) ([]seedtypes.RonsoRage, error) {
-	return GetResources(m.RonsoRages, L.RonsoRages)
+	return lookup.GetResources(m.RonsoRages, lookup.L.RonsoRages)
 }
 
 func seedJuncMonstersRonsoRages(qtx *database.Queries, ctx context.Context) error {

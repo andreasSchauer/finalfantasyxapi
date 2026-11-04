@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -19,7 +19,7 @@ type ShopSummarySimple struct {
 }
 
 func idToShopLocSimple(cfg *Config, shopID int32) ShopLocSimple {
-	shopLookup, _ := seeding.GetResourceByID(shopID, cfg.L.ShopsID)
+	shopLookup, _ := lookup.GetResourceByID(shopID, lookup.L.ShopsID)
 	return ShopLocSimple{
 		ID:          shopID,
 		Category:    database.ShopCategory(shopLookup.Category),
@@ -68,7 +68,7 @@ func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSi
 	itemAmounts := []seedtypes.ItemAmount{}
 
 	for _, treasureID := range treasureIDs {
-		treasure, _ := seeding.GetResourceByID(treasureID, cfg.L.TreasuresID)
+		treasure, _ := lookup.GetResourceByID(treasureID, lookup.L.TreasuresID)
 
 		switch treasure.LootType {
 		case string(database.LootTypeGil):

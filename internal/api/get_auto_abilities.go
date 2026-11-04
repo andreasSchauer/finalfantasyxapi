@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -61,12 +62,12 @@ func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seedtyp
 	return i.filterIDs(cfg, r, ids, []IDFilter{
 		i.queryEnumList(cfg, r, cfg.T.AutoAbilityCategory, ids, QpnCategory, cfg.db.GetAutoAbilityIDsByCategory),
 		i.queryEnum(r, cfg.T.EquipType, ids, QpnType, cfg.db.GetAutoAbilityIDsByEquipType),
-		i.queryIDWrapper(cfg, r, ids, QpnMonster, cfg.L.Monsters, getAutoAbilitiesByMonster),
-		i.queryID(r, ids, "monster_items", cfg.L.Monsters, cfg.db.GetAutoAbilityIDsByMonsterItems),
-		i.queryIDWrapper(cfg, r, ids, QpnShop, cfg.L.Shops, getAutoAbilitiesByShop),
+		i.queryIDWrapper(cfg, r, ids, QpnMonster, lookup.L.Monsters, getAutoAbilitiesByMonster),
+		i.queryID(r, ids, "monster_items", lookup.L.Monsters, cfg.db.GetAutoAbilityIDsByMonsterItems),
+		i.queryIDWrapper(cfg, r, ids, QpnShop, lookup.L.Shops, getAutoAbilitiesByShop),
 		i.queryValueList(cfg, r, ids, QpnMethods, cfg.db.GetAutoAbilityIDsByMethods),
-		i.queryID(r, ids, QpnLocation, cfg.L.Locations, cfg.db.GetAutoAbilityIDsByLocation),
-		i.queryID(r, ids, QpnSublocation, cfg.L.Sublocations, cfg.db.GetAutoAbilityIDsBySublocation),
-		i.queryID(r, ids, "areas", cfg.L.Areas, cfg.db.GetAutoAbilityIDsByArea),
+		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetAutoAbilityIDsByLocation),
+		i.queryID(r, ids, QpnSublocation, lookup.L.Sublocations, cfg.db.GetAutoAbilityIDsBySublocation),
+		i.queryID(r, ids, "areas", lookup.L.Areas, cfg.db.GetAutoAbilityIDsByArea),
 	})
 }

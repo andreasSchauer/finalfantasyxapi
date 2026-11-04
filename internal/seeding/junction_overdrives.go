@@ -4,11 +4,12 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 func getOverdriveOverdriveAbilities(o seedtypes.Overdrive) ([]seedtypes.OverdriveAbility, error) {
-	return TypedRefsToResources(o.OverdriveAbilities, L.OverdriveAbilities)
+	return lookup.TypedRefsToResources(o.OverdriveAbilities, lookup.L.OverdriveAbilities)
 }
 
 func seedJuncOverdrivesOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -38,13 +39,13 @@ func seedJuncDefaultOverdriveAbilities(qtx *database.Queries, ctx context.Contex
 			continue
 		}
 
-		class, err := GetResource(overdrive.User, L.CharClasses)
+		class, err := lookup.GetResource(overdrive.User, lookup.L.CharClasses)
 		if err != nil {
 			return err
 		}
 
 		for _, ref := range overdrive.OverdriveAbilities {
-			oa, err := GetResource(ref.Untyped(), L.OverdriveAbilities)
+			oa, err := lookup.GetResource(ref.Untyped(), lookup.L.OverdriveAbilities)
 			if err != nil {
 				return err
 			}

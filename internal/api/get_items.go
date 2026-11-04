@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -59,7 +60,7 @@ func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seedtypes.Item,
 	return i.filterIDs(cfg, r, ids, []IDFilter{
 		i.queryEnumList(cfg, r, cfg.T.ItemCategory, ids, QpnCategory, cfg.db.GetItemIDsCategory),
 		i.queryBool2(r, ids, QpnHasAbility, cfg.db.GetItemIDsWithAbility),
-		i.queryNameID(r, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, cfg.L.Stats, cfg.db.GetItemIDsByRelatedStat),
+		i.queryNameID(r, ids, QpnRelatedStat, cfg.E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetItemIDsByRelatedStat),
 		i.queryValueList(cfg, r, ids, QpnMethods, cfg.db.GetItemIDsByMethods),
 		i.queryIDWrapper(cfg, r, ids, QpnLocation, cfg.E.Locations.objLookup, getItemsByLocation),
 		i.queryIDWrapper(cfg, r, ids, QpnSublocation, cfg.E.Sublocations.objLookup, getItemsBySublocation),

@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -36,8 +37,8 @@ func loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Context) error {
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		rawJSON.enemyAbilities[i].ID = row.ID
-		L.EnemyAbilities[seedtypes.Key(abilities[i])] = abilities[i]
-		L.EnemyAbilitiesID[row.ID] = abilities[i]
+		lookup.L.EnemyAbilities[seedtypes.Key(abilities[i])] = abilities[i]
+		lookup.L.EnemyAbilitiesID[row.ID] = abilities[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -71,8 +72,8 @@ func completeEnemyAbilities() error {
 			return err
 		}
 
-		L.EnemyAbilities[seedtypes.Key(ability)] = *ability
-		L.EnemyAbilitiesID[ability.ID] = *ability
+		lookup.L.EnemyAbilities[seedtypes.Key(ability)] = *ability
+		lookup.L.EnemyAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil

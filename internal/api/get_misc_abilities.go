@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -50,7 +51,7 @@ func (cfg *Config) retrieveMiscAbilities(r *http.Request, i handlerInput[seedtyp
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
 		i.queryIntList(cfg, r, ids, QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		i.queryNameID(r, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, cfg.L.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass),
+		i.queryNameID(r, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass),
 		i.queryBool(r, ids, QpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
 		i.queryBool(r, ids, QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
 		i.queryBool2(r, ids, QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType)),

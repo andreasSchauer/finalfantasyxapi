@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -28,7 +28,7 @@ func (a AreaSimple) GetURL() string {
 
 func createAreaSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := cfg.E.Areas
-	area, _ := seeding.GetResourceByID(id, i.objLookupID)
+	area, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	monsterIDs := subsection.relations[id][RelationMonsters]
 	shopIDs := subsection.relations[id][RelationShops]

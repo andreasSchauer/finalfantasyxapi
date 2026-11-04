@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -32,8 +33,8 @@ func loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		sublocations[i].ID = row.ID
-		L.Sublocations[seedtypes.Key(sublocations[i])] = sublocations[i]
-		L.SublocationsID[row.ID] = sublocations[i]
+		lookup.L.Sublocations[seedtypes.Key(sublocations[i])] = sublocations[i]
+		lookup.L.SublocationsID[row.ID] = sublocations[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -66,8 +67,8 @@ func completeSublocations(sublocations []seedtypes.Sublocation) error {
 			return err
 		}
 
-		L.Sublocations[seedtypes.Key(sublocation)] = *sublocation
-		L.SublocationsID[sublocation.ID] = *sublocation
+		lookup.L.Sublocations[seedtypes.Key(sublocation)] = *sublocation
+		lookup.L.SublocationsID[sublocation.ID] = *sublocation
 	}
 
 	return nil

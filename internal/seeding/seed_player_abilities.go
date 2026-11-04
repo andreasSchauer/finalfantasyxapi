@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -58,8 +59,8 @@ func loop5SeedPlayerAbilities(qtx *database.Queries, ctx context.Context) error 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
 		rawJSON.playerAbilities[i].ID = row.ID
-		L.PlayerAbilities[seedtypes.Key(abilities[i])] = abilities[i]
-		L.PlayerAbilitiesID[row.ID] = abilities[i]
+		lookup.L.PlayerAbilities[seedtypes.Key(abilities[i])] = abilities[i]
+		lookup.L.PlayerAbilitiesID[row.ID] = abilities[i]
 		hashes[row.DataHash] = row.ID
 	}
 
@@ -78,27 +79,27 @@ func extractPlayerAbilities() ([]seedtypes.PlayerAbility, error) {
 			return nil, err
 		}
 
-		ability.TopmenuID, err = assignFKPtr(ability.Topmenu, L.Topmenus)
+		ability.TopmenuID, err = assignFKPtr(ability.Topmenu, lookup.L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.SubmenuID, err = assignFKPtr(ability.Submenu, L.Submenus)
+		ability.SubmenuID, err = assignFKPtr(ability.Submenu, lookup.L.Submenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, L.Submenus)
+		ability.OpenSubmenuID, err = assignFKPtr(ability.OpenSubmenu, lookup.L.Submenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.StandardGridCharID, err = assignFKPtr(ability.StandardGridPos, L.Characters)
+		ability.StandardGridCharID, err = assignFKPtr(ability.StandardGridPos, lookup.L.Characters)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.ExpertGridCharID, err = assignFKPtr(ability.ExpertGridPos, L.Characters)
+		ability.ExpertGridCharID, err = assignFKPtr(ability.ExpertGridPos, lookup.L.Characters)
 		if err != nil {
 			return nil, err
 		}
@@ -125,15 +126,15 @@ func completePlayerAbilities() error {
 			return err
 		}
 
-		L.PlayerAbilities[seedtypes.Key(ability)] = *ability
-		L.PlayerAbilitiesID[ability.ID] = *ability
+		lookup.L.PlayerAbilities[seedtypes.Key(ability)] = *ability
+		lookup.L.PlayerAbilitiesID[ability.ID] = *ability
 	}
 
 	return nil
 }
 
 func getPlayerAbilityLearnedBy(pa seedtypes.PlayerAbility) ([]seedtypes.CharacterClass, error) {
-	return GetResources(pa.LearnedBy, L.CharClasses)
+	return lookup.GetResources(pa.LearnedBy, lookup.L.CharClasses)
 }
 
 func seedJuncPlayerAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
@@ -151,7 +152,7 @@ func seedJuncPlayerAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context
 }
 
 func getPlayerAbilityRelatedStats(pa seedtypes.PlayerAbility) ([]seedtypes.Stat, error) {
-	return GetResources(pa.RelatedStats, L.Stats)
+	return lookup.GetResources(pa.RelatedStats, lookup.L.Stats)
 }
 
 func seedJuncPlayerAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
