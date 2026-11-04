@@ -54,7 +54,7 @@ func verifyQueryParamsService(r *http.Request) error {
 }
 
 // verifies the correct usage of all query parameters of an alternative list that is used on an endpoint, like /endpoint/sections, or /endpoint/parameters
-func verifyQueryParamsAltList(cfg *Config, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam, listName *string) error {
+func verifyQueryParamsAltList(r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam, listName *string) error {
 	var err error
 	q := r.URL.Query()
 
@@ -66,7 +66,7 @@ func verifyQueryParamsAltList(cfg *Config, r *http.Request, endpoint ts.Endpoint
 			segment:     listName,
 		}
 
-		qv.param, err = qv.getParamAltList(cfg, queryName, listName)
+		qv.param, err = qv.getParamAltList(queryName, listName)
 		if err != nil {
 			return err
 		}

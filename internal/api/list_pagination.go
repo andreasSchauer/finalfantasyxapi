@@ -16,8 +16,8 @@ type ListParams struct {
 }
 
 func createPaginatedList[T any](cfg *Config, r *http.Request, items []T) (ListParams, []T, error) {
-	queryParamOffset := cfg.Q.defaultParams[ts.QpnOffset]
-	queryParamLimit := cfg.Q.defaultParams[ts.QpnLimit]
+	queryParamOffset := Q.defaultParams[ts.QpnOffset]
+	queryParamLimit := Q.defaultParams[ts.QpnLimit]
 
 	offset, err := queryParamOffset.parseInt(r)
 	if err != nil {

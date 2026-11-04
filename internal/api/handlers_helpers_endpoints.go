@@ -210,7 +210,7 @@ func (i handlerInputEndpoints) handleList(cfg *Config, w http.ResponseWriter, r 
 
 	endpoints := i.slice
 	resources := endpointsToNamedAPIResources(cfg, endpoints)
-	setLimitMax(cfg, r, r.URL.Query())
+	setLimitMax(r, r.URL.Query())
 
 	resourceList, err := newAPIResourceList(cfg, r, resources)
 	if handleHTTPError(w, err) {

@@ -13,7 +13,7 @@ func getStatusConditionRelationships(cfg *Config, r *http.Request, status seedty
 	var rel StatusCondition
 	g, ctx := errgroup.WithContext(r.Context())
 
-	res, err := getStatusQueryResistance(cfg, r)
+	res, err := getStatusQueryResistance(r)
 	if err != nil {
 		return StatusCondition{}, err
 	}
@@ -61,24 +61,24 @@ type StatusQueryResistance struct {
 	MaxRate    int32
 }
 
-func getStatusQueryResistance(cfg *Config, r *http.Request) (StatusQueryResistance, error) {
+func getStatusQueryResistance(r *http.Request) (StatusQueryResistance, error) {
 	var res StatusQueryResistance
 
-	queryParamResistance := cfg.Q.statusConditions[ts.QpnResistance]
+	queryParamResistance := Q.statusConditions[ts.QpnResistance]
 	resistance, err := queryParamResistance.parseInt(r)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.Resistance = int32(resistance)
 
-	queryParamMinRate := cfg.Q.statusConditions[ts.QpnInflictMin]
+	queryParamMinRate := Q.statusConditions[ts.QpnInflictMin]
 	minRate, err := queryParamMinRate.parseInt(r)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.MinRate = int32(minRate)
 
-	queryParamMaxRate := cfg.Q.statusConditions[ts.QpnInflictMax]
+	queryParamMaxRate := Q.statusConditions[ts.QpnInflictMax]
 	maxRate, err := queryParamMaxRate.parseInt(r)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err

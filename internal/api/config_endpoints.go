@@ -10,7 +10,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type endpoints struct {
+type Endpoints struct {
 	Locations          handlerInput[seedtypes.Location, Location, NamedAPIResource]
 	Sublocations       handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource]
 	Areas              handlerInput[seedtypes.Area, Area, AreaAPIResource]
@@ -67,10 +67,10 @@ type endpoints struct {
 	CritChance         handlerInputService[CritChanceParams, CritChanceResponse]
 }
 
-func (cfg *Config) EndpointsInit() {
-	e := endpoints{}
+var E Endpoints
 
-	e.Locations = handlerInput[seedtypes.Location, Location, NamedAPIResource]{
+func (E *Endpoints) EndpointsInit(cfg *Config) {
+	E.Locations = handlerInput[seedtypes.Location, Location, NamedAPIResource]{
 		Endpoint:      ts.EpLocations,
 		resTypeSingle: ts.RTSLocations,
 		resTypePlural: ts.RTPLocations,
@@ -125,7 +125,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Sublocations = handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource]{
+	E.Sublocations = handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource]{
 		Endpoint:      ts.EpSublocations,
 		resTypeSingle: ts.RTSSublocations,
 		resTypePlural: ts.RTPSublocations,
@@ -174,7 +174,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Areas = handlerInput[seedtypes.Area, Area, AreaAPIResource]{
+	E.Areas = handlerInput[seedtypes.Area, Area, AreaAPIResource]{
 		Endpoint:      ts.EpAreas,
 		resTypeSingle: ts.RTSAreas,
 		resTypePlural: ts.RTPAreas,
@@ -215,7 +215,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.MonsterFormations = handlerInput[seedtypes.MonsterFormation, MonsterFormation, UnnamedAPIResource]{
+	E.MonsterFormations = handlerInput[seedtypes.MonsterFormation, MonsterFormation, UnnamedAPIResource]{
 		Endpoint:      ts.EpMonsterFormations,
 		resTypeSingle: ts.RTSMonsterFormations,
 		resTypePlural: ts.RTPMonsterFormations,
@@ -238,7 +238,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Shops = handlerInput[seedtypes.Shop, Shop, UnnamedAPIResource]{
+	E.Shops = handlerInput[seedtypes.Shop, Shop, UnnamedAPIResource]{
 		Endpoint:      ts.EpShops,
 		resTypeSingle: ts.RTSShops,
 		resTypePlural: ts.RTPShops,
@@ -256,7 +256,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Treasures = handlerInput[seedtypes.Treasure, Treasure, UnnamedAPIResource]{
+	E.Treasures = handlerInput[seedtypes.Treasure, Treasure, UnnamedAPIResource]{
 		Endpoint:      ts.EpTreasures,
 		resTypeSingle: ts.RTSTreasures,
 		resTypePlural: ts.RTPTreasures,
@@ -269,7 +269,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveTreasures,
 	}
 
-	e.Quests = handlerInput[seedtypes.Quest, Quest, QuestAPIResource]{
+	E.Quests = handlerInput[seedtypes.Quest, Quest, QuestAPIResource]{
 		Endpoint:      ts.EpQuests,
 		resTypeSingle: ts.RTSQuests,
 		resTypePlural: ts.RTPQuests,
@@ -282,7 +282,7 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlQuests,
 	}
 
-	e.Sidequests = handlerInput[seedtypes.Sidequest, Sidequest, QuestAPIResource]{
+	E.Sidequests = handlerInput[seedtypes.Sidequest, Sidequest, QuestAPIResource]{
 		Endpoint:      ts.EpSidequests,
 		resTypeSingle: ts.RTSSidequests,
 		resTypePlural: ts.RTPSidequests,
@@ -301,7 +301,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Subquests = handlerInput[seedtypes.Subquest, Subquest, QuestAPIResource]{
+	E.Subquests = handlerInput[seedtypes.Subquest, Subquest, QuestAPIResource]{
 		Endpoint:      ts.EpSubquests,
 		resTypeSingle: ts.RTSSubquests,
 		resTypePlural: ts.RTPSubquests,
@@ -314,7 +314,7 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlSubquests,
 	}
 
-	e.ArenaCreations = handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource]{
+	E.ArenaCreations = handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource]{
 		Endpoint:      ts.EpArenaCreations,
 		resTypeSingle: ts.RTSArenaCreations,
 		resTypePlural: ts.RTPArenaCreations,
@@ -326,7 +326,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveArenaCreations,
 	}
 
-	e.BlitzballPrizes = handlerInput[seedtypes.BlitzballPosition, BlitzballPrize, NamedAPIResource]{
+	E.BlitzballPrizes = handlerInput[seedtypes.BlitzballPosition, BlitzballPrize, NamedAPIResource]{
 		Endpoint:      ts.EpBlitzballPrizes,
 		resTypeSingle: ts.RTSBlitzballPrizes,
 		resTypePlural: ts.RTPBlitzballPrizes,
@@ -338,7 +338,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveBlitzballPrizes,
 	}
 
-	e.Songs = handlerInput[seedtypes.Song, Song, NamedAPIResource]{
+	E.Songs = handlerInput[seedtypes.Song, Song, NamedAPIResource]{
 		Endpoint:      ts.EpSongs,
 		resTypeSingle: ts.RTSSongs,
 		resTypePlural: ts.RTPSongs,
@@ -350,7 +350,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveSongs,
 	}
 
-	e.FMVs = handlerInput[seedtypes.FMV, FMV, NamedAPIResource]{
+	E.FMVs = handlerInput[seedtypes.FMV, FMV, NamedAPIResource]{
 		Endpoint:      ts.EpFMVs,
 		resTypeSingle: ts.RTSFMVs,
 		resTypePlural: ts.RTPFMVs,
@@ -362,7 +362,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveFMVs,
 	}
 
-	e.PlayerUnits = handlerInput[seedtypes.PlayerUnit, PlayerUnit, TypedAPIResource]{
+	E.PlayerUnits = handlerInput[seedtypes.PlayerUnit, PlayerUnit, TypedAPIResource]{
 		Endpoint:      ts.EpPlayerUnits,
 		resTypeSingle: ts.RTSPlayerUnits,
 		resTypePlural: ts.RTPPlayerUnits,
@@ -374,7 +374,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrievePlayerUnits,
 	}
 
-	e.Characters = handlerInput[seedtypes.Character, Character, NamedAPIResource]{
+	E.Characters = handlerInput[seedtypes.Character, Character, NamedAPIResource]{
 		Endpoint:      ts.EpCharacters,
 		resTypeSingle: ts.RTSCharacters,
 		resTypePlural: ts.RTPCharacters,
@@ -408,7 +408,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Aeons = handlerInput[seedtypes.Aeon, Aeon, NamedAPIResource]{
+	E.Aeons = handlerInput[seedtypes.Aeon, Aeon, NamedAPIResource]{
 		Endpoint:      ts.EpAeons,
 		resTypeSingle: ts.RTSAeons,
 		resTypePlural: ts.RTPAeons,
@@ -437,7 +437,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.CharacterClasses = handlerInput[seedtypes.CharacterClass, CharacterClass, NamedAPIResource]{
+	E.CharacterClasses = handlerInput[seedtypes.CharacterClass, CharacterClass, NamedAPIResource]{
 		Endpoint:      ts.EpCharacterClasses,
 		resTypeSingle: ts.RTSCharacterClasses,
 		resTypePlural: ts.RTPCharacterClasses,
@@ -467,7 +467,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Monsters = handlerInput[seedtypes.Monster, Monster, NamedAPIResource]{
+	E.Monsters = handlerInput[seedtypes.Monster, Monster, NamedAPIResource]{
 		Endpoint:         ts.EpMonsters,
 		resTypeSingle:    ts.RTSMonsters,
 		resTypePlural:    ts.RTPMonsters,
@@ -500,7 +500,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Abilities = handlerInput[seedtypes.Ability, Ability, TypedAPIResource]{
+	E.Abilities = handlerInput[seedtypes.Ability, Ability, TypedAPIResource]{
 		Endpoint:      ts.EpAbilities,
 		resTypeSingle: ts.RTSAbilities,
 		resTypePlural: ts.RTPAbilities,
@@ -517,7 +517,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.PlayerAbilities = handlerInput[seedtypes.PlayerAbility, PlayerAbility, NamedAPIResource]{
+	E.PlayerAbilities = handlerInput[seedtypes.PlayerAbility, PlayerAbility, NamedAPIResource]{
 		Endpoint:         ts.EpPlayerAbilities,
 		resTypeSingle:    ts.RTSPlayerAbilities,
 		resTypePlural:    ts.RTPPlayerAbilities,
@@ -540,7 +540,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.OverdriveAbilities = handlerInput[seedtypes.OverdriveAbility, OverdriveAbility, NamedAPIResource]{
+	E.OverdriveAbilities = handlerInput[seedtypes.OverdriveAbility, OverdriveAbility, NamedAPIResource]{
 		Endpoint:         ts.EpOverdriveAbilities,
 		resTypeSingle:    ts.RTSOverdriveAbilities,
 		resTypePlural:    ts.RTPOverdriveAbilities,
@@ -558,7 +558,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.ItemAbilities = handlerInput[seedtypes.ItemAbility, ItemAbility, NamedAPIResource]{
+	E.ItemAbilities = handlerInput[seedtypes.ItemAbility, ItemAbility, NamedAPIResource]{
 		Endpoint:      ts.EpItemAbilities,
 		resTypeSingle: ts.RTSItemAbilities,
 		resTypePlural: ts.RTPItemAbilities,
@@ -575,7 +575,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.TriggerCommands = handlerInput[seedtypes.TriggerCommand, TriggerCommand, NamedAPIResource]{
+	E.TriggerCommands = handlerInput[seedtypes.TriggerCommand, TriggerCommand, NamedAPIResource]{
 		Endpoint:         ts.EpTriggerCommands,
 		resTypeSingle:    ts.RTSTriggerCommands,
 		resTypePlural:    ts.RTPTriggerCommands,
@@ -593,7 +593,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.MiscAbilities = handlerInput[seedtypes.MiscAbility, MiscAbility, NamedAPIResource]{
+	E.MiscAbilities = handlerInput[seedtypes.MiscAbility, MiscAbility, NamedAPIResource]{
 		Endpoint:         ts.EpMiscAbilities,
 		resTypeSingle:    ts.RTSMiscAbilities,
 		resTypePlural:    ts.RTPMiscAbilities,
@@ -611,7 +611,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.EnemyAbilities = handlerInput[seedtypes.EnemyAbility, EnemyAbility, NamedAPIResource]{
+	E.EnemyAbilities = handlerInput[seedtypes.EnemyAbility, EnemyAbility, NamedAPIResource]{
 		Endpoint:         ts.EpEnemyAbilities,
 		resTypeSingle:    ts.RTSEnemyAbilities,
 		resTypePlural:    ts.RTPEnemyAbilities,
@@ -634,7 +634,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.AeonCommands = handlerInput[seedtypes.AeonCommand, AeonCommand, NamedAPIResource]{
+	E.AeonCommands = handlerInput[seedtypes.AeonCommand, AeonCommand, NamedAPIResource]{
 		Endpoint:      ts.EpAeonCommands,
 		resTypeSingle: ts.RTSAeonCommands,
 		resTypePlural: ts.RTPAeonCommands,
@@ -646,7 +646,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveAeonCommands,
 	}
 
-	e.OverdriveCommands = handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, NamedAPIResource]{
+	E.OverdriveCommands = handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, NamedAPIResource]{
 		Endpoint:      ts.EpOverdriveCommands,
 		resTypeSingle: ts.RTSOverdriveCommands,
 		resTypePlural: ts.RTPOverdriveCommands,
@@ -668,7 +668,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Overdrives = handlerInput[seedtypes.Overdrive, Overdrive, NamedAPIResource]{
+	E.Overdrives = handlerInput[seedtypes.Overdrive, Overdrive, NamedAPIResource]{
 		Endpoint:      ts.EpOverdrives,
 		resTypeSingle: ts.RTSOverdrives,
 		resTypePlural: ts.RTPOverdrives,
@@ -689,7 +689,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.RonsoRages = handlerInput[seedtypes.RonsoRage, RonsoRage, NamedAPIResource]{
+	E.RonsoRages = handlerInput[seedtypes.RonsoRage, RonsoRage, NamedAPIResource]{
 		Endpoint:      ts.EpRonsoRages,
 		resTypeSingle: ts.RTSRonsoRages,
 		resTypePlural: ts.RTPRonsoRages,
@@ -708,7 +708,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Submenus = handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource]{
+	E.Submenus = handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource]{
 		Endpoint:      ts.EpSubmenus,
 		resTypeSingle: ts.RTSSubmenus,
 		resTypePlural: ts.RTPSubmenus,
@@ -726,7 +726,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Topmenus = handlerInput[seedtypes.Topmenu, Topmenu, NamedAPIResource]{
+	E.Topmenus = handlerInput[seedtypes.Topmenu, Topmenu, NamedAPIResource]{
 		Endpoint:      ts.EpTopmenus,
 		resTypeSingle: ts.RTSTopmenus,
 		resTypePlural: ts.RTPTopmenus,
@@ -744,7 +744,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.AllItems = handlerInput[seedtypes.MasterItem, MasterItem, TypedAPIResource]{
+	E.AllItems = handlerInput[seedtypes.MasterItem, MasterItem, TypedAPIResource]{
 		Endpoint:      ts.EpAllItems,
 		resTypeSingle: ts.RTSAllItems,
 		resTypePlural: ts.RTPAllItems,
@@ -757,7 +757,7 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlMasterItems,
 	}
 
-	e.Items = handlerInput[seedtypes.Item, Item, NamedAPIResource]{
+	E.Items = handlerInput[seedtypes.Item, Item, NamedAPIResource]{
 		Endpoint:      ts.EpItems,
 		resTypeSingle: ts.RTSItems,
 		resTypePlural: ts.RTPItems,
@@ -776,7 +776,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Spheres = handlerInput[seedtypes.Sphere, Sphere, NamedAPIResource]{
+	E.Spheres = handlerInput[seedtypes.Sphere, Sphere, NamedAPIResource]{
 		Endpoint:      ts.EpSpheres,
 		resTypeSingle: ts.RTSSpheres,
 		resTypePlural: ts.RTPSpheres,
@@ -789,7 +789,7 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlSpheres,
 	}
 
-	e.KeyItems = handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource]{
+	E.KeyItems = handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource]{
 		Endpoint:      ts.EpKeyItems,
 		resTypeSingle: ts.RTSKeyItems,
 		resTypePlural: ts.RTPKeyItems,
@@ -802,7 +802,7 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlKeyItems,
 	}
 
-	e.Primers = handlerInput[seedtypes.Primer, Primer, NamedAPIResource]{
+	E.Primers = handlerInput[seedtypes.Primer, Primer, NamedAPIResource]{
 		Endpoint:      ts.EpPrimers,
 		resTypeSingle: ts.RTSPrimers,
 		resTypePlural: ts.RTPPrimers,
@@ -815,7 +815,7 @@ func (cfg *Config) EndpointsInit() {
 		avlFunc:       filterAvlPrimers,
 	}
 
-	e.Mixes = handlerInput[seedtypes.Mix, Mix, NamedAPIResource]{
+	E.Mixes = handlerInput[seedtypes.Mix, Mix, NamedAPIResource]{
 		Endpoint:      ts.EpMixes,
 		resTypeSingle: ts.RTSMixes,
 		resTypePlural: ts.RTPMixes,
@@ -832,7 +832,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.AutoAbilities = handlerInput[seedtypes.AutoAbility, AutoAbility, NamedAPIResource]{
+	E.AutoAbilities = handlerInput[seedtypes.AutoAbility, AutoAbility, NamedAPIResource]{
 		Endpoint:      ts.EpAutoAbilities,
 		resTypeSingle: ts.RTSAutoAbilities,
 		resTypePlural: ts.RTPAutoAbilities,
@@ -850,7 +850,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.EquipmentTables = handlerInput[seedtypes.EquipmentTable, EquipmentTable, UnnamedAPIResource]{
+	E.EquipmentTables = handlerInput[seedtypes.EquipmentTable, EquipmentTable, UnnamedAPIResource]{
 		Endpoint:      ts.EpEquipmentTables,
 		resTypeSingle: ts.RTSEquipmentTables,
 		resTypePlural: ts.RTPEquipmentTables,
@@ -862,7 +862,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveEquipmentTables,
 	}
 
-	e.Equipment = handlerInput[seedtypes.EquipmentName, EquipmentName, NamedAPIResource]{
+	E.Equipment = handlerInput[seedtypes.EquipmentName, EquipmentName, NamedAPIResource]{
 		Endpoint:      ts.EpEquipment,
 		resTypeSingle: ts.RTSEquipment,
 		resTypePlural: ts.RTPEquipment,
@@ -874,7 +874,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveEquipment,
 	}
 
-	e.CelestialWeapons = handlerInput[seedtypes.CelestialWeapon, CelestialWeapon, NamedAPIResource]{
+	E.CelestialWeapons = handlerInput[seedtypes.CelestialWeapon, CelestialWeapon, NamedAPIResource]{
 		Endpoint:      ts.EpCelestialWeapons,
 		resTypeSingle: ts.RTSCelestialWeapons,
 		resTypePlural: ts.RTPCelestialWeapons,
@@ -892,7 +892,7 @@ func (cfg *Config) EndpointsInit() {
 		},
 	}
 
-	e.Stats = handlerInput[seedtypes.Stat, Stat, NamedAPIResource]{
+	E.Stats = handlerInput[seedtypes.Stat, Stat, NamedAPIResource]{
 		Endpoint:      ts.EpStats,
 		resTypeSingle: ts.RTSStats,
 		resTypePlural: ts.RTPStats,
@@ -904,7 +904,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveStats,
 	}
 
-	e.Properties = handlerInput[seedtypes.Property, Property, NamedAPIResource]{
+	E.Properties = handlerInput[seedtypes.Property, Property, NamedAPIResource]{
 		Endpoint:      ts.EpProperties,
 		resTypeSingle: ts.RTSProperties,
 		resTypePlural: ts.RTPProperties,
@@ -916,7 +916,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveProperties,
 	}
 
-	e.OverdriveModes = handlerInput[seedtypes.OverdriveMode, OverdriveMode, NamedAPIResource]{
+	E.OverdriveModes = handlerInput[seedtypes.OverdriveMode, OverdriveMode, NamedAPIResource]{
 		Endpoint:      ts.EpOverdriveModes,
 		resTypeSingle: ts.RTSOverdriveModes,
 		resTypePlural: ts.RTPOverdriveModes,
@@ -928,7 +928,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveOverdriveModes,
 	}
 
-	e.Elements = handlerInput[seedtypes.Element, Element, NamedAPIResource]{
+	E.Elements = handlerInput[seedtypes.Element, Element, NamedAPIResource]{
 		Endpoint:      ts.EpElements,
 		resTypeSingle: ts.RTSElements,
 		resTypePlural: ts.RTPElements,
@@ -940,7 +940,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveElements,
 	}
 
-	e.StatusConditions = handlerInput[seedtypes.StatusCondition, StatusCondition, NamedAPIResource]{
+	E.StatusConditions = handlerInput[seedtypes.StatusCondition, StatusCondition, NamedAPIResource]{
 		Endpoint:      ts.EpStatusConditions,
 		resTypeSingle: ts.RTSStatusConditions,
 		resTypePlural: ts.RTPStatusConditions,
@@ -952,7 +952,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveStatusConditions,
 	}
 
-	e.Modifiers = handlerInput[seedtypes.Modifier, Modifier, NamedAPIResource]{
+	E.Modifiers = handlerInput[seedtypes.Modifier, Modifier, NamedAPIResource]{
 		Endpoint:      ts.EpModifiers,
 		resTypeSingle: ts.RTSModifiers,
 		resTypePlural: ts.RTPModifiers,
@@ -964,7 +964,7 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveModifiers,
 	}
 
-	e.AgilityTiers = handlerInput[seedtypes.AgilityTier, AgilityTier, UnnamedAPIResource]{
+	E.AgilityTiers = handlerInput[seedtypes.AgilityTier, AgilityTier, UnnamedAPIResource]{
 		Endpoint:      ts.EpAgilityTiers,
 		resTypeSingle: ts.RTSAgilityTiers,
 		resTypePlural: ts.RTPAgilityTiers,
@@ -976,18 +976,18 @@ func (cfg *Config) EndpointsInit() {
 		retrieveFunc:  cfg.retrieveAgilityTiers,
 	}
 
-	e.Enums = handlerInputEnums{
+	E.Enums = handlerInputEnums{
 		Endpoint: ts.EpEnums,
 		usage:    []string{"/api/enums", "/api/enums/{enum_name}"},
 		lookup:   enums.T.Lookup,
 	}
 
-	e.Endpoints = handlerInputEndpoints{
+	E.Endpoints = handlerInputEndpoints{
 		Endpoint: ts.EpEndpoints,
 		usage:    []string{"/api/endpoints"},
 	}
 
-	e.AlBhed = handlerInputService[AlBhedParams, AlBhedResponse]{
+	E.AlBhed = handlerInputService[AlBhedParams, AlBhedResponse]{
 		Endpoint:  ts.EpAlBhed,
 		verifyFn:  verifyAlBhedParams,
 		executeFn: handleAlBhed,
@@ -995,7 +995,7 @@ func (cfg *Config) EndpointsInit() {
 		samplesFn: getAlBhedParamsSamples,
 	}
 
-	e.TurnOrder = handlerInputService[TurnOrderParams, TurnOrderResponse]{
+	E.TurnOrder = handlerInputService[TurnOrderParams, TurnOrderResponse]{
 		Endpoint:  ts.EpTurnOrder,
 		verifyFn:  verifyTurnOrderParams,
 		executeFn: handleTurnOrder,
@@ -1003,7 +1003,7 @@ func (cfg *Config) EndpointsInit() {
 		samplesFn: getTurnOrderParamsSamples,
 	}
 
-	e.DropChance = handlerInputService[DropChanceParams, DropChanceResponse]{
+	E.DropChance = handlerInputService[DropChanceParams, DropChanceResponse]{
 		Endpoint:  ts.EpDropChance,
 		verifyFn:  verifyDropChanceParams,
 		executeFn: handleDropChance,
@@ -1011,7 +1011,7 @@ func (cfg *Config) EndpointsInit() {
 		samplesFn: getDropChanceParamsSamples,
 	}
 
-	e.CritChance = handlerInputService[CritChanceParams, CritChanceResponse]{
+	E.CritChance = handlerInputService[CritChanceParams, CritChanceResponse]{
 		Endpoint:  ts.EpCritChance,
 		verifyFn:  verifyCritChanceParams,
 		executeFn: handleCritChance,
@@ -1019,67 +1019,65 @@ func (cfg *Config) EndpointsInit() {
 		samplesFn: getCritChanceParamsSamples,
 	}
 
-	cfg.E = &e
-	e.Endpoints.slice = e.InitializeEndpointSlice()
-
+	E.Endpoints.slice = E.InitializeEndpointSlice()
 }
 
-func (e endpoints) InitializeEndpointSlice() []ts.EndpointName {
+func (E Endpoints) InitializeEndpointSlice() []ts.EndpointName {
 	endpoints := []ts.EndpointName{
-		e.Locations.Endpoint,
-		e.Sublocations.Endpoint,
-		e.Areas.Endpoint,
-		e.MonsterFormations.Endpoint,
-		e.Shops.Endpoint,
-		e.Treasures.Endpoint,
-		e.Quests.Endpoint,
-		e.Sidequests.Endpoint,
-		e.Subquests.Endpoint,
-		e.ArenaCreations.Endpoint,
-		e.BlitzballPrizes.Endpoint,
-		e.Songs.Endpoint,
-		e.FMVs.Endpoint,
-		e.PlayerUnits.Endpoint,
-		e.Characters.Endpoint,
-		e.Aeons.Endpoint,
-		e.CharacterClasses.Endpoint,
-		e.Monsters.Endpoint,
-		e.Abilities.Endpoint,
-		e.PlayerAbilities.Endpoint,
-		e.OverdriveAbilities.Endpoint,
-		e.ItemAbilities.Endpoint,
-		e.TriggerCommands.Endpoint,
-		e.MiscAbilities.Endpoint,
-		e.EnemyAbilities.Endpoint,
-		e.AeonCommands.Endpoint,
-		e.OverdriveCommands.Endpoint,
-		e.Overdrives.Endpoint,
-		e.RonsoRages.Endpoint,
-		e.Submenus.Endpoint,
-		e.Topmenus.Endpoint,
-		e.AllItems.Endpoint,
-		e.Items.Endpoint,
-		e.Spheres.Endpoint,
-		e.KeyItems.Endpoint,
-		e.Primers.Endpoint,
-		e.Mixes.Endpoint,
-		e.AutoAbilities.Endpoint,
-		e.EquipmentTables.Endpoint,
-		e.Equipment.Endpoint,
-		e.CelestialWeapons.Endpoint,
-		e.Stats.Endpoint,
-		e.Properties.Endpoint,
-		e.OverdriveModes.Endpoint,
-		e.Elements.Endpoint,
-		e.StatusConditions.Endpoint,
-		e.Modifiers.Endpoint,
-		e.AgilityTiers.Endpoint,
-		e.Enums.Endpoint,
-		e.Endpoints.Endpoint,
-		e.AlBhed.Endpoint,
-		e.TurnOrder.Endpoint,
-		e.DropChance.Endpoint,
-		e.CritChance.Endpoint,
+		E.Locations.Endpoint,
+		E.Sublocations.Endpoint,
+		E.Areas.Endpoint,
+		E.MonsterFormations.Endpoint,
+		E.Shops.Endpoint,
+		E.Treasures.Endpoint,
+		E.Quests.Endpoint,
+		E.Sidequests.Endpoint,
+		E.Subquests.Endpoint,
+		E.ArenaCreations.Endpoint,
+		E.BlitzballPrizes.Endpoint,
+		E.Songs.Endpoint,
+		E.FMVs.Endpoint,
+		E.PlayerUnits.Endpoint,
+		E.Characters.Endpoint,
+		E.Aeons.Endpoint,
+		E.CharacterClasses.Endpoint,
+		E.Monsters.Endpoint,
+		E.Abilities.Endpoint,
+		E.PlayerAbilities.Endpoint,
+		E.OverdriveAbilities.Endpoint,
+		E.ItemAbilities.Endpoint,
+		E.TriggerCommands.Endpoint,
+		E.MiscAbilities.Endpoint,
+		E.EnemyAbilities.Endpoint,
+		E.AeonCommands.Endpoint,
+		E.OverdriveCommands.Endpoint,
+		E.Overdrives.Endpoint,
+		E.RonsoRages.Endpoint,
+		E.Submenus.Endpoint,
+		E.Topmenus.Endpoint,
+		E.AllItems.Endpoint,
+		E.Items.Endpoint,
+		E.Spheres.Endpoint,
+		E.KeyItems.Endpoint,
+		E.Primers.Endpoint,
+		E.Mixes.Endpoint,
+		E.AutoAbilities.Endpoint,
+		E.EquipmentTables.Endpoint,
+		E.Equipment.Endpoint,
+		E.CelestialWeapons.Endpoint,
+		E.Stats.Endpoint,
+		E.Properties.Endpoint,
+		E.OverdriveModes.Endpoint,
+		E.Elements.Endpoint,
+		E.StatusConditions.Endpoint,
+		E.Modifiers.Endpoint,
+		E.AgilityTiers.Endpoint,
+		E.Enums.Endpoint,
+		E.Endpoints.Endpoint,
+		E.AlBhed.Endpoint,
+		E.TurnOrder.Endpoint,
+		E.DropChance.Endpoint,
+		E.CritChance.Endpoint,
 	}
 
 	slices.Sort(endpoints)

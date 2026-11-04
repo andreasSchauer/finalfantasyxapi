@@ -33,15 +33,15 @@ func (q queryVerifyer[T]) getParam(queryName string) (QueryParam, error) {
 }
 
 // used for alternative lists like /endpoint/sections and /endpoint/parameters. simply looks up the query param and returns an error, if it doesn't exist. enforces the used parameter to be a default parameter.
-func (q queryVerifyer[T]) getParamAltList(cfg *Config, queryName string, listName *string) (QueryParam, error) {
+func (q queryVerifyer[T]) getParamAltList(queryName string, listName *string) (QueryParam, error) {
 	_, err := q.getParam(queryName)
 	if err != nil {
 		return QueryParam{}, err
 	}
 
-	queryParam, ok := cfg.Q.defaultParams[ts.QueryParamName(queryName)]
+	queryParam, ok := Q.defaultParams[ts.QueryParamName(queryName)]
 	if !ok {
-		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s", q.endpoint, *listName, queryMapToString(cfg.Q.defaultParams)), nil)
+		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s", q.endpoint, *listName, queryMapToString(Q.defaultParams)), nil)
 	}
 
 	return queryParam, nil

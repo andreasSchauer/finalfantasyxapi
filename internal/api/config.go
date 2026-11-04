@@ -17,8 +17,7 @@ import (
 type Config struct {
 	db          *database.Queries
 	DBConn      *sql.DB
-	Q           *QueryLookup
-	E           *endpoints
+	E           *Endpoints
 	platform    string
 	adminAPIKey string
 	host        string
@@ -69,8 +68,8 @@ func ConfigInit() (*Config, error) {
 	}
 
 	enums.T.EnumLookupInit()
-	apiCfg.EndpointsInit()
-	apiCfg.QueryLookupInit()
+	E.EndpointsInit(&apiCfg)
+	Q.Init(&apiCfg)
 
 	return &apiCfg, nil
 }

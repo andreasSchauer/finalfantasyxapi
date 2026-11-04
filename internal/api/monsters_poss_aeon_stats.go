@@ -9,7 +9,7 @@ import (
 )
 
 func applyPossessedAeonStats(cfg *Config, r *http.Request, mon Monster) ([]BaseStat, error) {
-	paramYunaStats := cfg.Q.monsters[ts.QpnYunaStats]
+	paramYunaStats := Q.monsters[ts.QpnYunaStats]
 	if !slices.Contains(paramYunaStats.AllowedIDs, mon.ID) {
 		return mon.BaseStats, nil
 	}

@@ -18,7 +18,7 @@ func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName ts.
 		4: string(database.ElementalAffinityAbsorb),
 	}
 
-	circleCounts, err := parseOmnisQuery(cfg, r, queryName)
+	circleCounts, err := parseOmnisQuery(r, queryName)
 	if queryIsEmpty(err) {
 		return mon.ElemResists, nil
 	}
@@ -57,8 +57,8 @@ func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName ts.
 }
 
 // verifies the input and counts the amounts of circles pointing to each element
-func parseOmnisQuery(cfg *Config, r *http.Request, queryName ts.QueryParamName) (map[string]int, error) {
-	queryParam := cfg.Q.monsters[queryName]
+func parseOmnisQuery(r *http.Request, queryName ts.QueryParamName) (map[string]int, error) {
+	queryParam := Q.monsters[queryName]
 	query, err := queryParam.checkEmpty(r)
 	if err != nil {
 		return nil, err

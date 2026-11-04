@@ -73,7 +73,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 }
 
 func getMonstersByStatusResists(cfg *Config, r *http.Request, ctx context.Context, ids []int32) ([]int32, error) {
-	resistance, err := verifyMonsterResistance(cfg, r)
+	resistance, err := verifyMonsterResistance(r)
 	if err != nil {
 		return nil, err
 	}
@@ -89,8 +89,8 @@ func getMonstersByStatusResists(cfg *Config, r *http.Request, ctx context.Contex
 	return dbIDs, nil
 }
 
-func verifyMonsterResistance(cfg *Config, r *http.Request) (int32, error) {
-	queryParam := cfg.Q.monsters[ts.QpnResistance]
+func verifyMonsterResistance(r *http.Request) (int32, error) {
+	queryParam := Q.monsters[ts.QpnResistance]
 
 	resistance, err := queryParam.parseInt(r)
 	if err != nil {

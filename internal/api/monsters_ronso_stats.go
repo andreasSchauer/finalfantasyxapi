@@ -11,7 +11,7 @@ import (
 func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName ts.QueryParamName) ([]BaseStat, error) {
 	allowedStatIDs := []int32{1, 3, 5, 7}
 	baseStats := mon.BaseStats
-	queryParam := cfg.Q.monsters[queryName]
+	queryParam := Q.monsters[queryName]
 
 	kimahri, _ := lookup.L.Characters["kimahri"]
 	kimahriBS := cfg.E.Stats.toResAmtType(cfg, kimahri.BaseStats, newBaseStat)

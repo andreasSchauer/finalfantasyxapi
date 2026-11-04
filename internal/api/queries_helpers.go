@@ -85,7 +85,7 @@ func queryIntMapToSlice(m map[string]int32) []int32 {
 }
 
 func getRawQueryLimit(cfg *Config, r *http.Request) (int, error) {
-	queryParamLimit := cfg.Q.defaultParams[ts.QpnLimit]
+	queryParamLimit := Q.defaultParams[ts.QpnLimit]
 	query, err := queryParamLimit.checkEmpty(r)
 	if err != nil {
 		return 0, err
@@ -105,8 +105,8 @@ func getRawQueryLimit(cfg *Config, r *http.Request) (int, error) {
 	return limit, nil
 }
 
-func getLimitMax(cfg *Config) string {
-	queryParamLimit := cfg.Q.defaultParams[ts.QpnLimit]
+func getLimitMax() string {
+	queryParamLimit := Q.defaultParams[ts.QpnLimit]
 
 	for _, input := range queryParamLimit.SpecialInputs {
 		if input.Key == ts.QsvMax {
@@ -117,12 +117,12 @@ func getLimitMax(cfg *Config) string {
 	return ""
 }
 
-func setLimitMax(cfg *Config, r *http.Request, q url.Values) {
+func setLimitMax(r *http.Request, q url.Values) {
 	limit := q.Get(string(ts.QpnLimit))
 	if limit != "" {
 		return
 	}
 
-	q.Set(string(ts.QpnLimit), getLimitMax(cfg))
+	q.Set(string(ts.QpnLimit), getLimitMax())
 	r.URL.RawQuery = q.Encode()
 }

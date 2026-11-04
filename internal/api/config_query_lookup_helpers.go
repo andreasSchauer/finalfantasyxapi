@@ -8,21 +8,21 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i handlerInput[T, R, A]) assignDefaultParams(cfg *Config) map[ts.QueryParamName]QueryParam {
-	return i.completeQueryParamsInit(cfg, []QueryParam{})
+func (i handlerInput[T, R, A]) assignDefaultParams() map[ts.QueryParamName]QueryParam {
+	return i.completeQueryParamsInit([]QueryParam{})
 }
 
-func (i handlerInputEndpoints) assignDefaultParams(cfg *Config) map[ts.QueryParamName]QueryParam {
-	return paramSliceToMap(cfg.Q.defaultParamSlice, &i.Endpoint)
+func (i handlerInputEndpoints) assignDefaultParams() map[ts.QueryParamName]QueryParam {
+	return paramSliceToMap(Q.defaultParamSlice, &i.Endpoint)
 }
 
-func (i handlerInputEnums) assignDefaultParams(cfg *Config) map[ts.QueryParamName]QueryParam {
-	return paramSliceToMap(cfg.Q.defaultParamSlice, &i.Endpoint)
+func (i handlerInputEnums) assignDefaultParams() map[ts.QueryParamName]QueryParam {
+	return paramSliceToMap(Q.defaultParamSlice, &i.Endpoint)
 }
 
 // make a wrapper method around this for each handlerInput?
-func (i handlerInput[T, R, A]) completeQueryParamsInit(cfg *Config, params []QueryParam) map[ts.QueryParamName]QueryParam {
-	params = slices.Concat(params, cfg.Q.defaultParamSlice)
+func (i handlerInput[T, R, A]) completeQueryParamsInit(params []QueryParam) map[ts.QueryParamName]QueryParam {
+	params = slices.Concat(params, Q.defaultParamSlice)
 
 	if hasSimpleView(i.subsections) {
 		queryParamIDs := QueryParam{
@@ -36,7 +36,7 @@ func (i handlerInput[T, R, A]) completeQueryParamsInit(cfg *Config, params []Que
 		params = append(params, queryParamIDs)
 	}
 
-	if hasFilters(cfg, params) {
+	if hasFilters(params) {
 		queryParamFlip := QueryParam{
 			Name:        ts.QpnFlip,
 			Description: "Flips the filtered results in a list response and returns the negative.",
@@ -58,9 +58,9 @@ func hasSimpleView(sections map[ts.SectionName]Subsection) bool {
 	return ok
 }
 
-func hasFilters(cfg *Config, params []QueryParam) bool {
+func hasFilters(params []QueryParam) bool {
 	for _, param := range params {
-		if param.ParamUse == puList && !hasParam(param, cfg.Q.defaultParamSlice) {
+		if param.ParamUse == puList && !hasParam(param, Q.defaultParamSlice) {
 			return true
 		}
 	}

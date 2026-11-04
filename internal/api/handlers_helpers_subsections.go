@@ -28,7 +28,7 @@ func (i handlerInput[T, R, A]) handleSubsection(cfg *Config, w http.ResponseWrit
 		return
 	}
 
-	setLimitMax(cfg, r, q)
+	setLimitMax(r, q)
 
 	// if a subsection refers to the resource itself (/endpoint/{id}/simple, or /aeons/{id}/stats),
 	// it doesn't need a db query and can create a SimpleResource with the given id,
@@ -71,12 +71,12 @@ func (i handlerInputEndpoints) handleParameters(cfg *Config, w http.ResponseWrit
 
 func handleParametersWrapper(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam) {
 	segment := string(ts.SnParameters)
-	err := verifyQueryParamsAltList(cfg, r, endpoint, queryLookup, &segment)
+	err := verifyQueryParamsAltList(r, endpoint, queryLookup, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	setLimitMax(cfg, r, r.URL.Query())
+	setLimitMax(r, r.URL.Query())
 
 	parameterList, err := getQueryParamList(cfg, r, endpoint, queryLookup)
 	if handleHTTPError(w, err) {
@@ -87,12 +87,12 @@ func handleParametersWrapper(cfg *Config, w http.ResponseWriter, r *http.Request
 
 func (i handlerInput[T, R, A]) handleSections(cfg *Config, w http.ResponseWriter, r *http.Request) {
 	segment := string(ts.SnSections)
-	err := verifyQueryParamsAltList(cfg, r, i.Endpoint, i.queryLookup, &segment)
+	err := verifyQueryParamsAltList(r, i.Endpoint, i.queryLookup, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	setLimitMax(cfg, r, r.URL.Query())
+	setLimitMax(r, r.URL.Query())
 
 	sectionList, err := getSectionList(cfg, r, i.subsections)
 	if handleHTTPError(w, err) {
@@ -151,7 +151,7 @@ func (i handlerInput[T, R, A]) queryIDsParam(cfg *Config, r *http.Request, segme
 		return nil, err
 	}
 
-	setLimitMax(cfg, r, r.URL.Query())
+	setLimitMax(r, r.URL.Query())
 
 	return ids, nil
 }

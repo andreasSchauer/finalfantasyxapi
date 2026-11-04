@@ -5,6 +5,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
+var Q QueryLookup
+
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
 	defaultParamSlice []QueryParam
@@ -70,9 +72,7 @@ type QueryLookup struct {
 	endpoints map[ts.QueryParamName]QueryParam
 }
 
-func (cfg *Config) QueryLookupInit() {
-	cfg.Q = &QueryLookup{}
-
+func (Q *QueryLookup) Init(cfg *Config) {
 	defaultParams := []QueryParam{
 		{
 			Name:        ts.QpnLimit,
@@ -96,8 +96,8 @@ func (cfg *Config) QueryLookupInit() {
 		},
 	}
 
-	cfg.Q.defaultParamSlice = defaultParams
-	cfg.Q.defaultParams = paramSliceToMap(defaultParams, nil)
+	Q.defaultParamSlice = defaultParams
+	Q.defaultParams = paramSliceToMap(defaultParams, nil)
 	cfg.initLocationsParams()
 	cfg.initSublocationsParams()
 	cfg.initAreasParams()
@@ -127,12 +127,12 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initMiscAbilitiesParams()
 	cfg.initEnemyAbilitiesParams()
 
-	cfg.Q.aeonCommands = cfg.E.AeonCommands.assignDefaultParams(cfg)
-	cfg.Q.overdriveCommands = cfg.E.OverdriveCommands.assignDefaultParams(cfg)
+	Q.aeonCommands = cfg.E.AeonCommands.assignDefaultParams()
+	Q.overdriveCommands = cfg.E.OverdriveCommands.assignDefaultParams()
 	cfg.initOverdrivesParams()
-	cfg.Q.ronsoRages = cfg.E.RonsoRages.assignDefaultParams(cfg)
+	Q.ronsoRages = cfg.E.RonsoRages.assignDefaultParams()
 	cfg.initSubmenusParams()
-	cfg.Q.topmenus = cfg.E.Topmenus.assignDefaultParams(cfg)
+	Q.topmenus = cfg.E.Topmenus.assignDefaultParams()
 
 	cfg.initAllItemsParams()
 	cfg.initItemsParams()
@@ -147,23 +147,23 @@ func (cfg *Config) QueryLookupInit() {
 	cfg.initCelestialWeaponsParams()
 
 	cfg.initStatsParams()
-	cfg.Q.properties = cfg.E.Properties.assignDefaultParams(cfg)
+	Q.properties = cfg.E.Properties.assignDefaultParams()
 	cfg.initOverdriveModesParams()
-	cfg.Q.elements = cfg.E.Elements.assignDefaultParams(cfg)
+	Q.elements = cfg.E.Elements.assignDefaultParams()
 	cfg.initStatusConditionsParams()
 	cfg.initModifiersParams()
 	cfg.initAgilityTierParams()
 
-	cfg.Q.enums = cfg.E.Enums.assignDefaultParams(cfg)
-	cfg.Q.endpoints = cfg.E.Endpoints.assignDefaultParams(cfg)
+	Q.enums = cfg.E.Enums.assignDefaultParams()
+	Q.endpoints = cfg.E.Endpoints.assignDefaultParams()
 
-	cfg.E.AeonCommands.queryLookup = cfg.Q.aeonCommands
-	cfg.E.OverdriveCommands.queryLookup = cfg.Q.overdriveCommands
-	cfg.E.RonsoRages.queryLookup = cfg.Q.ronsoRages
-	cfg.E.Topmenus.queryLookup = cfg.Q.topmenus
-	cfg.E.Properties.queryLookup = cfg.Q.properties
-	cfg.E.Elements.queryLookup = cfg.Q.elements
+	cfg.E.AeonCommands.queryLookup = Q.aeonCommands
+	cfg.E.OverdriveCommands.queryLookup = Q.overdriveCommands
+	cfg.E.RonsoRages.queryLookup = Q.ronsoRages
+	cfg.E.Topmenus.queryLookup = Q.topmenus
+	cfg.E.Properties.queryLookup = Q.properties
+	cfg.E.Elements.queryLookup = Q.elements
 
-	cfg.E.Enums.queryLookup = cfg.Q.enums
-	cfg.E.Endpoints.queryLookup = cfg.Q.endpoints
+	cfg.E.Enums.queryLookup = Q.enums
+	cfg.E.Endpoints.queryLookup = Q.endpoints
 }

@@ -109,13 +109,13 @@ func getCharModeAmount(cfg *Config, char seedtypes.Character, id int32) (Resourc
 	return modeAmount, nil
 }
 
-func applyOsgStats(cfg *Config, r *http.Request, char Character) ([]BaseStat, error) {
+func applyOsgStats(r *http.Request, char Character) ([]BaseStat, error) {
 	if char.IsStoryBased {
 		return char.BaseStats, nil
 	}
 
 	var statMap map[string]int32
-	queryParam := cfg.Q.characters[ts.QpnOsgStats]
+	queryParam := Q.characters[ts.QpnOsgStats]
 
 	sgType, err := queryParam.parseEnum(r, enums.T.SphereGridType)
 	if queryIsEmpty(err) {

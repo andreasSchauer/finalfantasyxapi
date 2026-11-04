@@ -109,7 +109,7 @@ func (q queryVerifyer[T]) requiresOne() error {
 }
 
 // checks, if the query param is a default param.
-func isDefaultParam(cfg *Config, queryName ts.QueryParamName) bool {
-	_, ok := cfg.Q.defaultParams[queryName]
+func isDefaultParam(queryName ts.QueryParamName) bool {
+	_, ok := Q.defaultParams[queryName]
 	return ok
 }
