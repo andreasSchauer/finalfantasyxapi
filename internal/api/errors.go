@@ -5,30 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
-
-var errNotAnID = errors.New("not an id")
-var errIDNotFound = errors.New("id doesn't exit")
-var errContinue = errors.New("loop that called the function should be continued")
-var errNoResource = errors.New("no resources found")
-var errEmptyQuery = errors.New("query parameter is empty")
-var errNullArray = errors.New("array field is empty")
-var errQueryNone = errors.New("'none' input in query")
-var errQueryRedirect = errors.New("query parameter is not empty, but will be dealt with else where")
-var errNoDefaultVal = errors.New("query parameter doesn't have a default value, or default value is unused")
-var errNoSpecialInput = errors.New("query parameter doesn't have special inputs, or no special input was found")
-var errNoIntRange = errors.New("query parameter doesn't have integer range")
-var errNoVal = errors.New("param has no value")
-
-func errExceptEmptyQuery(err error) bool {
-	return err != nil && !queryIsEmpty(err)
-}
-
-func queryIsEmpty(err error) bool {
-	return errors.Is(err, errEmptyQuery)
-}
 
 type HTTPError struct {
 	Code int
@@ -118,4 +98,12 @@ func getFieldRangeErrStart(val int32, fieldName ts.FieldName, intType string, is
 	errStart += " is out of range"
 
 	return errStart
+}
+
+func errExceptEmptyQuery(err error) bool {
+	return err != nil && !queryIsEmpty(err)
+}
+
+func queryIsEmpty(err error) bool {
+	return errors.Is(err, errs.ErrEmptyQuery)
 }

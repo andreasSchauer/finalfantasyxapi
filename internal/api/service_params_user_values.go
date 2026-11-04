@@ -1,6 +1,9 @@
 package api
 
-import ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+)
 
 func toUserValueMap(input map[string]any) map[ts.FieldName]any {
 	if input == nil {
@@ -49,7 +52,7 @@ func toUserValueSlice(input []any) []any {
 func getInt32FromUserVals(fieldName ts.FieldName, userValues map[ts.FieldName]any) (int32, error) {
 	raw, ok := userValues[fieldName]
 	if !ok {
-		return 0, errNoVal
+		return 0, errs.ErrNoVal
 	}
 	intVal := int32(raw.(float64))
 

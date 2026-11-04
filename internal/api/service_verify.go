@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -141,7 +142,7 @@ func (v paramsVerifyer) objPtr[T any](objPtr *T, fieldName ts.FieldName, verifyF
 // verifies, if an array-field fulfills all its conditions. the basic checks as well as a max length check are performed on the array itself. after that, a type-specific verification function can be performed on each of the array's items.
 func (v paramsVerifyer) array[T any](arr []T, fieldName ts.FieldName, verifyFn verifyFn[T]) ([]T, error) {
 	arr, err := v.arrayField(arr, fieldName)
-	if errors.Is(err, errNullArray) {
+	if errors.Is(err, errs.ErrNullArray) {
 		return arr, nil
 	}
 	if err != nil {
@@ -176,7 +177,7 @@ func (v paramsVerifyer) array[T any](arr []T, fieldName ts.FieldName, verifyFn v
 
 func (v paramsVerifyer) idArray(arr []int32, fieldName ts.FieldName) ([]int32, error) {
 	arr, err := v.arrayField(arr, fieldName)
-	if errors.Is(err, errNullArray) {
+	if errors.Is(err, errs.ErrNullArray) {
 		return arr, nil
 	}
 	if err != nil {

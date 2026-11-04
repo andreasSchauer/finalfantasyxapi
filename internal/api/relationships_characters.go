@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -85,7 +86,7 @@ func getCharacterModeAmts(cfg *Config, char seedtypes.Character) []ResourceAmoun
 	for i := range len(lookup.L.OverdriveModes) {
 		id := int32(i + 1)
 		resAmt, err := getCharModeAmount(cfg, char, id)
-		if errors.Is(err, errContinue) {
+		if errors.Is(err, errs.ErrContinue) {
 			continue
 		}
 		resAmts = append(resAmts, resAmt)
@@ -99,7 +100,7 @@ func getCharModeAmount(cfg *Config, char seedtypes.Character, id int32) (Resourc
 
 	mode, _ := lookup.GetResourceByID(id, i.objLookupID)
 	if len(mode.ActionsToLearn) == 0 {
-		return ResourceAmount[NamedAPIResource]{}, errContinue
+		return ResourceAmount[NamedAPIResource]{}, errs.ErrContinue
 	}
 
 	amount := mode.ActionsToLearn[char.GetID()-1].Amount

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -25,7 +26,7 @@ func (q QueryParam) checkNameID[P seedtypes.Lookupable](query string, pResType t
 	if err == nil {
 		return id, nil
 	}
-	if !errors.Is(err, errNotAnID) {
+	if !errors.Is(err, errs.ErrNotAnID) {
 		return 0, err
 	}
 

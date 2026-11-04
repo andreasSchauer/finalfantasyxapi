@@ -7,6 +7,7 @@ import (
 	"net/url"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
 // deals with a single segment path that is either a name or an id and returns a parseResponse with the id, if a single match is found, or a name, if multiple matches with that name were found.
@@ -20,7 +21,7 @@ func (i handlerInput[T, R, A]) parseSingleSegmentResource(segment string) (parse
 	if err == nil {
 		return response, nil
 	}
-	if !errors.Is(err, errNotAnID) {
+	if !errors.Is(err, errs.ErrNotAnID) {
 		return parseResponse{}, err
 	}
 

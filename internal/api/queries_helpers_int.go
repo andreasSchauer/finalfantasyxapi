@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
 // checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored. also checks for emptiness and replaces empty inputs with default values, if they exist.
@@ -14,7 +16,7 @@ func (q QueryParam) parseInt(r *http.Request) (int, error) {
 
 	val, err := q.checkInt(query)
 	if queryIsEmpty(err) {
-		return 0, errEmptyQuery
+		return 0, errs.ErrEmptyQuery
 	}
 	if err != nil {
 		return 0, err
@@ -27,19 +29,19 @@ func (q QueryParam) parseInt(r *http.Request) (int, error) {
 func (q QueryParam) checkInt(queryVal string) (int, error) {
 	defaultVal, err := q.checkIntDefaultVal(queryVal)
 	if queryIsEmpty(err) {
-		return 0, errEmptyQuery
+		return 0, errs.ErrEmptyQuery
 	}
-	if !errors.Is(err, errNoDefaultVal) {
+	if !errors.Is(err, errs.ErrNoDefaultVal) {
 		return defaultVal, nil
 	}
 
 	specialVal, err := q.checkIntSpecialVals(queryVal)
-	if !errors.Is(err, errNoSpecialInput) {
+	if !errors.Is(err, errs.ErrNoSpecialInput) {
 		return specialVal, nil
 	}
 
 	val, err := q.checkIntAllowedRange(queryVal)
-	if err != nil && !errors.Is(err, errNoIntRange) {
+	if err != nil && !errors.Is(err, errs.ErrNoIntRange) {
 		return 0, err
 	}
 
@@ -50,18 +52,18 @@ func (q QueryParam) checkInt(queryVal string) (int, error) {
 func (q QueryParam) checkIntDefaultVal(query string) (int, error) {
 	if query == "" {
 		if q.DefaultVal == nil {
-			return 0, errEmptyQuery
+			return 0, errs.ErrEmptyQuery
 		}
 		return *q.DefaultVal, nil
 	}
 
-	return 0, errNoDefaultVal
+	return 0, errs.ErrNoDefaultVal
 }
 
 // checks, if an int-queryParam uses special inputs. returns errNoSpecialInput, if it doesn't, and replaces the query value with the special input value, if it does.
 func (q QueryParam) checkIntSpecialVals(query string) (int, error) {
 	if q.SpecialInputs == nil {
-		return 0, errNoSpecialInput
+		return 0, errs.ErrNoSpecialInput
 	}
 
 	for _, input := range q.SpecialInputs {
@@ -70,7 +72,7 @@ func (q QueryParam) checkIntSpecialVals(query string) (int, error) {
 		}
 	}
 
-	return 0, errNoSpecialInput
+	return 0, errs.ErrNoSpecialInput
 }
 
 // checks if an int-queryParam input is valid, and within the allowed range. returns errNoIntRange, if the parameter doesn't use an integer range.
@@ -82,7 +84,7 @@ func (q QueryParam) checkIntAllowedRange(query string) (int, error) {
 
 	intRange := q.AllowedIntRange
 	if intRange == nil {
-		return val, errNoIntRange
+		return val, errs.ErrNoIntRange
 	}
 
 	min := intRange[0]

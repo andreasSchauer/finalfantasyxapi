@@ -17,7 +17,6 @@ import (
 type Config struct {
 	db          *database.Queries
 	DBConn      *sql.DB
-	T           *enums.Enums
 	Q           *QueryLookup
 	E           *endpoints
 	platform    string

@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -24,7 +25,7 @@ func (i handlerInput[T, R, A]) queryAvlGetParams(cfg *Config, r *http.Request) (
 		return avlParams{}, err
 	}
 	if queryIsEmpty(err) {
-		return avlParams{}, errEmptyQuery
+		return avlParams{}, errs.ErrEmptyQuery
 	}
 
 	var preAirship bool
@@ -64,7 +65,7 @@ func (i handlerInput[T, R, A]) queryAvlRepGetParams(cfg *Config, r *http.Request
 	}
 
 	if queryIsEmpty(errAvl) && queryIsEmpty(errRepl) {
-		return avlParams{}, errEmptyQuery
+		return avlParams{}, errs.ErrEmptyQuery
 	}
 
 	params.isRepeatable = isRepeatable

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -50,7 +51,7 @@ func (i handlerInput[T, R, A]) queryIntWrapper(cfg *Config, r *http.Request, inp
 		}
 
 		dbIDs, err := wrapperFn(cfg, r, ctx, int32(integer))
-		if errors.Is(err, errQueryRedirect) {
+		if errors.Is(err, errs.ErrQueryRedirect) {
 			return inputIDs, nil
 		}
 		if err != nil {

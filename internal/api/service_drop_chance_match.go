@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -131,7 +132,7 @@ func getWantedIndices(wantedAbilities []seedtypes.AutoAbility, wheel AbilityWhee
 		}
 
 		if len(abilityIdxGroup) == 0 {
-			return nil, errContinue
+			return nil, errs.ErrContinue
 		}
 
 		idxGroups = append(idxGroups, abilityIdxGroup)

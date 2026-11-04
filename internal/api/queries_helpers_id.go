@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -47,7 +48,7 @@ func (q QueryParam) parseIDPtr[F seedtypes.Lookupable](r *http.Request, fLookup 
 // checks if query ID is valid and within range. if it's invalid, it will return an httpError. if you want to soft-check the ID and do name checks afterwards, use checkQueryID()
 func (q QueryParam) parseIDVal(idStr string, maxID int) (int32, error) {
 	id, err := q.checkID(idStr, maxID)
-	if errors.Is(err, errNotAnID) {
+	if errors.Is(err, errs.ErrNotAnID) {
 		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s' used for parameter '%s'", idStr, q.Name), err)
 	}
 	if err != nil {
@@ -61,7 +62,7 @@ func (q QueryParam) parseIDVal(idStr string, maxID int) (int32, error) {
 func (q QueryParam) checkID(idStr string, maxID int) (int32, error) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		return 0, errNotAnID
+		return 0, errs.ErrNotAnID
 	}
 
 	if id > maxID || id <= 0 {

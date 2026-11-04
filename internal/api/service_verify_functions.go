@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"slices"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -27,7 +28,7 @@ func vfEnum(v paramsVerifyer, typedVal string, fieldName ts.FieldName) (string, 
 
 func vfArray[T any](v paramsVerifyer, arr []T, fieldName ts.FieldName) ([]T, error) {
 	if arr == nil {
-		return arr, errNullArray
+		return arr, errs.ErrNullArray
 	}
 
 	doc := v.paramsRules[fieldName].Doc

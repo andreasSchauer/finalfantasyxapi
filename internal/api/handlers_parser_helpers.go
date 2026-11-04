@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -26,7 +27,7 @@ func newParseResponse(id int32, name string) parseResponse {
 
 func parseID(idStr string, resourceType ts.ResTypeSingle, maxID int) (parseResponse, error) {
 	response, err := checkID(idStr, resourceType, maxID)
-	if errors.Is(err, errNotAnID) {
+	if errors.Is(err, errs.ErrNotAnID) {
 		return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s'", idStr), err)
 	}
 	if err != nil {
@@ -39,7 +40,7 @@ func parseID(idStr string, resourceType ts.ResTypeSingle, maxID int) (parseRespo
 func checkID(idStr string, resourceType ts.ResTypeSingle, maxID int) (parseResponse, error) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		return parseResponse{}, errNotAnID
+		return parseResponse{}, errs.ErrNotAnID
 	}
 
 	if id > maxID || id <= 0 {
@@ -68,7 +69,7 @@ func checkUniqueName[T seedtypes.Lookupable](name string, l map[string]T) (parse
 		return newParseResponse(response.GetID(), ""), nil
 	}
 
-	return parseResponse{}, errNoResource
+	return parseResponse{}, errs.ErrNoResource
 }
 
 func checkNameMultiple[T seedtypes.Lookupable](name string, l map[string]T) (parseResponse, error) {
@@ -84,7 +85,7 @@ func checkNameMultiple[T seedtypes.Lookupable](name string, l map[string]T) (par
 	if err == nil {
 		return newParseResponse(0, lookupObj.Name), nil
 	}
-	return parseResponse{}, errNoResource
+	return parseResponse{}, errs.ErrNoResource
 }
 
 func checkNameVersion[T seedtypes.Lookupable](name string, version *int32, l map[string]T) (parseResponse, error) {
@@ -99,7 +100,7 @@ func checkNameVersion[T seedtypes.Lookupable](name string, version *int32, l map
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}
-	return parseResponse{}, errNoResource
+	return parseResponse{}, errs.ErrNoResource
 }
 
 func parseVersionStr(versionStr string) (*int32, error) {
