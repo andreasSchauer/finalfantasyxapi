@@ -4,9 +4,11 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type NamedAPIResource struct {
@@ -91,14 +93,14 @@ func namesToNamedAPIResources[T seedtypes.IsNamed, R any, A APIResource](cfg *Co
 	return resources
 }
 
-func enumToNamedAPIResource(cfg *Config, e EnumResponse) NamedAPIResource {
+func enumToNamedAPIResource(cfg *Config, e enums.EnumResponse) NamedAPIResource {
 	return NamedAPIResource{
 		Name: string(e.Name),
 		URL:  createEnumURL(cfg, e.Name),
 	}
 }
 
-func enumsToNamedAPIResources(cfg *Config, enums []EnumResponse) []NamedAPIResource {
+func enumsToNamedAPIResources(cfg *Config, enums []enums.EnumResponse) []NamedAPIResource {
 	resources := make([]NamedAPIResource, 0, len(enums))
 
 	for _, enum := range enums {
@@ -109,14 +111,14 @@ func enumsToNamedAPIResources(cfg *Config, enums []EnumResponse) []NamedAPIResou
 	return resources
 }
 
-func endpointToNamedAPIResource(cfg *Config, e EndpointName) NamedAPIResource {
+func endpointToNamedAPIResource(cfg *Config, e typestrings.EndpointName) NamedAPIResource {
 	return NamedAPIResource{
 		Name: string(e),
 		URL:  createListURL(cfg, e),
 	}
 }
 
-func endpointsToNamedAPIResources(cfg *Config, endpoints []EndpointName) []NamedAPIResource {
+func endpointsToNamedAPIResources(cfg *Config, endpoints []typestrings.EndpointName) []NamedAPIResource {
 	resources := make([]NamedAPIResource, 0, len(endpoints))
 
 	for _, ep := range endpoints {

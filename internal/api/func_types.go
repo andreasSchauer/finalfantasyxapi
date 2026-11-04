@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -48,18 +49,18 @@ func ToIntOneNull(q DBQueryNullIntOne) DBQueryIntOne {
 	}
 }
 
-func ToEnumQuery[E, N any](et EnumType[E, N], q DBQueryNullEnum[N]) DBQueryEnum[E] {
+func ToEnumQuery[E, N any](et enums.EnumType[E, N], q DBQueryNullEnum[N]) DBQueryEnum[E] {
 	return func(ctx context.Context, enum E) ([]int32, error) {
-		return q(ctx, et.getNullEnum(&enum))
+		return q(ctx, et.GetNullEnum(&enum))
 	}
 }
 
-func ToEnumListQuery[E, N any](et EnumType[E, N], q DBQueryNullEnumList[N]) DBQueryEnumList[E] {
+func ToEnumListQuery[E, N any](et enums.EnumType[E, N], q DBQueryNullEnumList[N]) DBQueryEnumList[E] {
 	return func(ctx context.Context, enums []E) ([]int32, error) {
 		nullEnums := []N{}
 
 		for _, enum := range enums {
-			nullEnum := et.getNullEnum(&enum)
+			nullEnum := et.GetNullEnum(&enum)
 			nullEnums = append(nullEnums, nullEnum)
 		}
 

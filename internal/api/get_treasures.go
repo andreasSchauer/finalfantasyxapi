@@ -3,8 +3,10 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seedtypes.Treasure, Treasure, UnnamedAPIResource], id int32) (Treasure, error) {
@@ -36,13 +38,13 @@ func (cfg *Config) retrieveTreasures(r *http.Request, i handlerInput[seedtypes.T
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetLocationTreasureIDs),
-		i.queryID(r, ids, QpnSublocation, lookup.L.Sublocations, cfg.db.GetSublocationTreasureIDs),
-		i.queryID(r, ids, QpnArea, lookup.L.Areas, cfg.db.GetAreaTreasureIDs),
-		i.queryID(r, ids, QpnItem, lookup.L.Items, cfg.db.GetTreasureIDsByItem),
-		i.queryJoined(cfg, r, ids, []QueryParamName{QpnAutoAbility, QpnEmptySlots, QpnCharacter}, filterTreasuresEquipment),
-		i.queryBool(r, ids, QpnAnima, cfg.db.GetTreasureIDsByIsAnimaTreasure),
-		i.queryEnum(r, cfg.T.LootType, ids, QpnLootType, cfg.db.GetTreasureIDsByLootType),
-		i.queryEnum(r, cfg.T.TreasureType, ids, QpnTreasureType, cfg.db.GetTreasureIDsByTreasureType),
+		i.queryID(r, ids, typestrings.QpnLocation, lookup.L.Locations, cfg.db.GetLocationTreasureIDs),
+		i.queryID(r, ids, typestrings.QpnSublocation, lookup.L.Sublocations, cfg.db.GetSublocationTreasureIDs),
+		i.queryID(r, ids, typestrings.QpnArea, lookup.L.Areas, cfg.db.GetAreaTreasureIDs),
+		i.queryID(r, ids, typestrings.QpnItem, lookup.L.Items, cfg.db.GetTreasureIDsByItem),
+		i.queryJoined(cfg, r, ids, []typestrings.QueryParamName{typestrings.QpnAutoAbility, typestrings.QpnEmptySlots, typestrings.QpnCharacter}, filterTreasuresEquipment),
+		i.queryBool(r, ids, typestrings.QpnAnima, cfg.db.GetTreasureIDsByIsAnimaTreasure),
+		i.queryEnum(r, enums.T.LootType, ids, typestrings.QpnLootType, cfg.db.GetTreasureIDsByLootType),
+		i.queryEnum(r, enums.T.TreasureType, ids, typestrings.QpnTreasureType, cfg.db.GetTreasureIDsByTreasureType),
 	})
 }

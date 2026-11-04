@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getFMV(r *http.Request, i handlerInput[seedtypes.FMV, FMV, NamedAPIResource], id int32) (FMV, error) {
@@ -32,6 +33,6 @@ func (cfg *Config) retrieveFMVs(r *http.Request, i handlerInput[seedtypes.FMV, F
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetLocationFmvIDs),
+		i.queryID(r, ids, typestrings.QpnLocation, lookup.L.Locations, cfg.db.GetLocationFmvIDs),
 	})
 }

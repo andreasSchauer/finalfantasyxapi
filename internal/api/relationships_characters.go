@@ -5,8 +5,10 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -112,9 +114,9 @@ func applyOsgStats(cfg *Config, r *http.Request, char Character) ([]BaseStat, er
 	}
 
 	var statMap map[string]int32
-	queryParam := cfg.Q.characters[QpnOsgStats]
+	queryParam := cfg.Q.characters[typestrings.QpnOsgStats]
 
-	sgType, err := queryParam.parseEnum(r, cfg.T.SphereGridType)
+	sgType, err := queryParam.parseEnum(r, enums.T.SphereGridType)
 	if queryIsEmpty(err) {
 		return char.BaseStats, nil
 	}

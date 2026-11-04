@@ -3,8 +3,10 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seedtypes.MonsterFormation, MonsterFormation, UnnamedAPIResource], id int32) (MonsterFormation, error) {
@@ -37,12 +39,12 @@ func (cfg *Config) retrieveMonsterFormations(r *http.Request, i handlerInput[see
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, QpnMonster, lookup.L.Monsters, cfg.db.GetMonsterFormationIDsByMonster),
-		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetMonsterFormationIDsByLocation),
-		i.queryID(r, ids, QpnSublocation, lookup.L.Sublocations, cfg.db.GetMonsterFormationIDsBySublocation),
-		i.queryID(r, ids, QpnArea, lookup.L.Areas, cfg.db.GetMonsterFormationIDsByArea),
-		i.queryBool(r, ids, QpnAmbush, cfg.db.GetMonsterFormationIDsByForcedAmbush),
-		i.queryBool(r, ids, QpnEscape, cfg.db.GetMonsterFormationIDsByCanEscape),
-		i.queryEnumList(cfg, r, cfg.T.MonsterFormationCategory, ids, QpnCategory, cfg.db.GetMonsterFormationIDsByCategory),
+		i.queryID(r, ids, typestrings.QpnMonster, lookup.L.Monsters, cfg.db.GetMonsterFormationIDsByMonster),
+		i.queryID(r, ids, typestrings.QpnLocation, lookup.L.Locations, cfg.db.GetMonsterFormationIDsByLocation),
+		i.queryID(r, ids, typestrings.QpnSublocation, lookup.L.Sublocations, cfg.db.GetMonsterFormationIDsBySublocation),
+		i.queryID(r, ids, typestrings.QpnArea, lookup.L.Areas, cfg.db.GetMonsterFormationIDsByArea),
+		i.queryBool(r, ids, typestrings.QpnAmbush, cfg.db.GetMonsterFormationIDsByForcedAmbush),
+		i.queryBool(r, ids, typestrings.QpnEscape, cfg.db.GetMonsterFormationIDsByCanEscape),
+		i.queryEnumList(cfg, r, enums.T.MonsterFormationCategory, ids, typestrings.QpnCategory, cfg.db.GetMonsterFormationIDsByCategory),
 	})
 }

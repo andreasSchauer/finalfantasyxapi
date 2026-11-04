@@ -6,11 +6,12 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func getAreasByItem(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.Areas
-	queryParamMethods := i.queryLookup[QpnMethods]
+	queryParamMethods := i.queryLookup[typestrings.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -30,7 +31,7 @@ func getAreasByItem(cfg *Config, r *http.Request, ctx context.Context, id int32)
 
 func getSublocationsByItem(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.Sublocations
-	queryParamMethods := i.queryLookup[QpnMethods]
+	queryParamMethods := i.queryLookup[typestrings.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -50,7 +51,7 @@ func getSublocationsByItem(cfg *Config, r *http.Request, ctx context.Context, id
 
 func getLocationsByItem(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.Locations
-	queryParamMethods := i.queryLookup[QpnMethods]
+	queryParamMethods := i.queryLookup[typestrings.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {

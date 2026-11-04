@@ -1,4 +1,4 @@
-package api
+package typestrings
 
 import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -52,7 +52,7 @@ const (
 	PfnUser				 FieldName = "user"
 )
 
-func formatPfnSlice(pfns []FieldName) string {
+func FormatPfnSlice(pfns []FieldName) string {
 	if pfns == nil {
 		return ""
 	}
@@ -66,6 +66,6 @@ func formatPfnSlice(pfns []FieldName) string {
 	return h.FormatStringSlice(strings)
 }
 
-func pfnPtr(fieldName FieldName) *FieldName {
-	return &fieldName
+func PfnPtr(fieldName FieldName) *FieldName {
+	return new(fieldName)
 }

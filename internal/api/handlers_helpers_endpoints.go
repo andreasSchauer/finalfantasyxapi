@@ -3,6 +3,9 @@ package api
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (i handlerInput[T, R, A]) handleList(cfg *Config, w http.ResponseWriter, r *http.Request) {
@@ -22,17 +25,17 @@ func (i handlerInput[T, R, A]) handleList(cfg *Config, w http.ResponseWriter, r 
 func (i handlerInput[T, R, A]) handleIDOnly(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
-	if segment == string(SnParameters) {
+	if segment == string(typestrings.SnParameters) {
 		i.handleParameters(cfg, w, r)
 		return
 	}
 
-	if segment == string(SnSections) {
+	if segment == string(typestrings.SnSections) {
 		i.handleSections(cfg, w, r)
 		return
 	}
 
-	if segment == string(SnSimple) {
+	if segment == string(typestrings.SnSimple) {
 		i.handleSimple(cfg, w, r)
 		return
 	}
@@ -53,17 +56,17 @@ func (i handlerInput[T, R, A]) handleIDOnly(cfg *Config, w http.ResponseWriter, 
 func (i handlerInput[T, R, A]) handleNameID(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
-	if segment == string(SnParameters) {
+	if segment == string(typestrings.SnParameters) {
 		i.handleParameters(cfg, w, r)
 		return
 	}
 
-	if segment == string(SnSections) {
+	if segment == string(typestrings.SnSections) {
 		i.handleSections(cfg, w, r)
 		return
 	}
 
-	if segment == string(SnSimple) {
+	if segment == string(typestrings.SnSimple) {
 		i.handleSimple(cfg, w, r)
 		return
 	}
@@ -165,7 +168,7 @@ func (i handlerInputEnums) handleList(cfg *Config, w http.ResponseWriter, r *htt
 		return
 	}
 
-	enums := enumLookupToSlice(i.lookup)
+	enums := enums.EnumLookupToSlice(i.lookup)
 	resources := enumsToNamedAPIResources(cfg, enums)
 
 	resourceList, err := newAPIResourceList(cfg, r, resources)
@@ -179,7 +182,7 @@ func (i handlerInputEnums) handleList(cfg *Config, w http.ResponseWriter, r *htt
 func (i handlerInputEnums) handleSingle(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
-	if segment == string(SnParameters) {
+	if segment == string(typestrings.SnParameters) {
 		i.handleParameters(cfg, w, r)
 		return
 	}
@@ -220,7 +223,7 @@ func (i handlerInputEndpoints) handleList(cfg *Config, w http.ResponseWriter, r 
 func (i handlerInputEndpoints) handleSections(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
-	if segment == string(SnParameters) {
+	if segment == string(typestrings.SnParameters) {
 		i.handleParameters(cfg, w, r)
 		return
 	}
@@ -236,7 +239,7 @@ func (i handlerInputService[P, R]) handleBody(cfg *Config, w http.ResponseWriter
 
 	segment := segments[0]
 
-	if segment == string(SnBody) {
+	if segment == string(typestrings.SnBody) {
 		respondWithJSON(w, http.StatusOK, getBody(cfg, i.Endpoint))
 		return
 	}
@@ -250,17 +253,17 @@ func (i handlerInputService[P, R]) handleBodySections(cfg *Config, w http.Respon
 		return
 	}
 
-	if segments[0] != string(SnBody) {
+	if segments[0] != string(typestrings.SnBody) {
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'", i.Endpoint), nil)
 		return
 	}
 
 	switch segments[1] {
-	case string(SnDocs):
+	case string(typestrings.SnDocs):
 		respondWithJSON(w, http.StatusOK, i.docsFn(cfg))
 		return
 
-	case string(SnSamples):
+	case string(typestrings.SnSamples):
 		respondWithJSON(w, http.StatusOK, i.samplesFn())
 		return
 

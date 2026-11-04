@@ -3,8 +3,10 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, TypedAPIResource], id int32) (Ability, error) {
@@ -42,26 +44,26 @@ func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seedtypes.A
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, cfg.T.AbilityType, ids, QpnType, cfg.db.GetAbilityIDsByType),
-		i.queryEnumList(cfg, r, cfg.T.DamageType, ids, QpnDamageType, cfg.db.GetAbilityIDsByDamageType),
-		i.queryEnumList(cfg, r, cfg.T.AttackType, ids, QpnAttackType, cfg.db.GetAbilityIDsByAttackType),
-		i.queryEnumList(cfg, r, cfg.T.TargetType, ids, QpnTargetType, cfg.db.GetAbilityIDsByTargetType),
-		i.queryEnum(r, cfg.T.DamageFormula, ids, QpnDamageFormula, cfg.db.GetAbilityIDsByDamageFormula),
-		i.queryIntList(cfg, r, ids, QpnRank, cfg.db.GetAbilityIDsByRank),
-		i.queryNameIDListNul(cfg, r, ids, QpnElement, cfg.E.Elements.resTypeSingle, lookup.L.Elements, cfg.db.GetAbilityIDsByElement),
-		i.queryIDNul(r, ids, QpnStatusInflict, lookup.L.StatusConditions, cfg.db.GetAbilityIDsByInflictedStatus),
-		i.queryIDNul(r, ids, QpnStatusRemove, lookup.L.StatusConditions, cfg.db.GetAbilityIDsByRemovedStatus),
-		i.queryID(r, ids, QpnMonster, lookup.L.MonsterFormations, cfg.db.GetAbilityIDsByMonster),
-		i.queryBool(r, ids, QpnCopycat, cfg.db.GetAbilityIDsByCanCopycat),
-		i.queryBool(r, ids, QpnHelpBar, cfg.db.GetAbilityIDsByAppearsInHelpBar),
-		i.queryBool2(r, ids, QpnCanCrit, cfg.db.GetAbilityIDsCanCrit),
-		i.queryBool2(r, ids, QpnBDL, cfg.db.GetAbilityIDsBreakDmgLimit),
-		i.queryBool2(r, ids, QpnUserAtk, cfg.db.GetAbilityIDsBasedOnUserAttack),
-		i.queryBool2(r, ids, QpnDarkable, cfg.db.GetAbilityIDsDarkable),
-		i.queryBool2(r, ids, QpnSilenceable, cfg.db.GetAbilityIDsSilenceable),
-		i.queryBool2(r, ids, QpnReflectable, cfg.db.GetAbilityIDsReflectable),
-		i.queryBool2(r, ids, QpnDelay, cfg.db.GetAbilityIDsDealsDelay),
-		i.queryBool2(r, ids, QpnStatChanges, cfg.db.GetAbilityIDsWithStatChanges),
-		i.queryBool2(r, ids, QpnModChanges, cfg.db.GetAbilityIDsWithModifierChanges),
+		i.queryEnumList(cfg, r, enums.T.AbilityType, ids, typestrings.QpnType, cfg.db.GetAbilityIDsByType),
+		i.queryEnumList(cfg, r, enums.T.DamageType, ids, typestrings.QpnDamageType, cfg.db.GetAbilityIDsByDamageType),
+		i.queryEnumList(cfg, r, enums.T.AttackType, ids, typestrings.QpnAttackType, cfg.db.GetAbilityIDsByAttackType),
+		i.queryEnumList(cfg, r, enums.T.TargetType, ids, typestrings.QpnTargetType, cfg.db.GetAbilityIDsByTargetType),
+		i.queryEnum(r, enums.T.DamageFormula, ids, typestrings.QpnDamageFormula, cfg.db.GetAbilityIDsByDamageFormula),
+		i.queryIntList(cfg, r, ids, typestrings.QpnRank, cfg.db.GetAbilityIDsByRank),
+		i.queryNameIDListNul(cfg, r, ids, typestrings.QpnElement, cfg.E.Elements.resTypeSingle, lookup.L.Elements, cfg.db.GetAbilityIDsByElement),
+		i.queryIDNul(r, ids, typestrings.QpnStatusInflict, lookup.L.StatusConditions, cfg.db.GetAbilityIDsByInflictedStatus),
+		i.queryIDNul(r, ids, typestrings.QpnStatusRemove, lookup.L.StatusConditions, cfg.db.GetAbilityIDsByRemovedStatus),
+		i.queryID(r, ids, typestrings.QpnMonster, lookup.L.MonsterFormations, cfg.db.GetAbilityIDsByMonster),
+		i.queryBool(r, ids, typestrings.QpnCopycat, cfg.db.GetAbilityIDsByCanCopycat),
+		i.queryBool(r, ids, typestrings.QpnHelpBar, cfg.db.GetAbilityIDsByAppearsInHelpBar),
+		i.queryBool2(r, ids, typestrings.QpnCanCrit, cfg.db.GetAbilityIDsCanCrit),
+		i.queryBool2(r, ids, typestrings.QpnBDL, cfg.db.GetAbilityIDsBreakDmgLimit),
+		i.queryBool2(r, ids, typestrings.QpnUserAtk, cfg.db.GetAbilityIDsBasedOnUserAttack),
+		i.queryBool2(r, ids, typestrings.QpnDarkable, cfg.db.GetAbilityIDsDarkable),
+		i.queryBool2(r, ids, typestrings.QpnSilenceable, cfg.db.GetAbilityIDsSilenceable),
+		i.queryBool2(r, ids, typestrings.QpnReflectable, cfg.db.GetAbilityIDsReflectable),
+		i.queryBool2(r, ids, typestrings.QpnDelay, cfg.db.GetAbilityIDsDealsDelay),
+		i.queryBool2(r, ids, typestrings.QpnStatChanges, cfg.db.GetAbilityIDsWithStatChanges),
+		i.queryBool2(r, ids, typestrings.QpnModChanges, cfg.db.GetAbilityIDsWithModifierChanges),
 	})
 }

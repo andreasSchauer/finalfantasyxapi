@@ -6,12 +6,13 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func getMixCombinations(cfg *Config, r *http.Request, mix seedtypes.Mix) ([]MixCombination, error) {
 	combinations := mix.PossibleCombinations
 
-	best, err := cfg.Q.mixes[QpnBest].parseBool(r)
+	best, err := cfg.Q.mixes[typestrings.QpnBest].parseBool(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -19,7 +20,7 @@ func getMixCombinations(cfg *Config, r *http.Request, mix seedtypes.Mix) ([]MixC
 		combinations = mix.BestCombinations
 	}
 
-	itemID, err := cfg.Q.mixes[QpnContainsItem].parseNameID(r, cfg.E.Items.resTypeSingle, cfg.E.Items.objLookup)
+	itemID, err := cfg.Q.mixes[typestrings.QpnContainsItem].parseNameID(r, cfg.E.Items.resTypeSingle, cfg.E.Items.objLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

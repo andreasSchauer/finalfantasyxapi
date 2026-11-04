@@ -5,8 +5,10 @@ import (
 	"sync"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -46,7 +48,7 @@ func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seedty
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, cfg.T.ArenaCreationCategory, ids, QpnCategory, cfg.db.GetArenaCreationIDsByCategory),
+		i.queryEnumList(cfg, r, enums.T.ArenaCreationCategory, ids, typestrings.QpnCategory, cfg.db.GetArenaCreationIDsByCategory),
 	})
 }
 

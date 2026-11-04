@@ -3,8 +3,10 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getAutoAbility(r *http.Request, i handlerInput[seedtypes.AutoAbility, AutoAbility, NamedAPIResource], id int32) (AutoAbility, error) {
@@ -60,14 +62,14 @@ func (cfg *Config) retrieveAutoAbilities(r *http.Request, i handlerInput[seedtyp
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, cfg.T.AutoAbilityCategory, ids, QpnCategory, cfg.db.GetAutoAbilityIDsByCategory),
-		i.queryEnum(r, cfg.T.EquipType, ids, QpnType, cfg.db.GetAutoAbilityIDsByEquipType),
-		i.queryIDWrapper(cfg, r, ids, QpnMonster, lookup.L.Monsters, getAutoAbilitiesByMonster),
+		i.queryEnumList(cfg, r, enums.T.AutoAbilityCategory, ids, typestrings.QpnCategory, cfg.db.GetAutoAbilityIDsByCategory),
+		i.queryEnum(r, enums.T.EquipType, ids, typestrings.QpnType, cfg.db.GetAutoAbilityIDsByEquipType),
+		i.queryIDWrapper(cfg, r, ids, typestrings.QpnMonster, lookup.L.Monsters, getAutoAbilitiesByMonster),
 		i.queryID(r, ids, "monster_items", lookup.L.Monsters, cfg.db.GetAutoAbilityIDsByMonsterItems),
-		i.queryIDWrapper(cfg, r, ids, QpnShop, lookup.L.Shops, getAutoAbilitiesByShop),
-		i.queryValueList(cfg, r, ids, QpnMethods, cfg.db.GetAutoAbilityIDsByMethods),
-		i.queryID(r, ids, QpnLocation, lookup.L.Locations, cfg.db.GetAutoAbilityIDsByLocation),
-		i.queryID(r, ids, QpnSublocation, lookup.L.Sublocations, cfg.db.GetAutoAbilityIDsBySublocation),
+		i.queryIDWrapper(cfg, r, ids, typestrings.QpnShop, lookup.L.Shops, getAutoAbilitiesByShop),
+		i.queryValueList(cfg, r, ids, typestrings.QpnMethods, cfg.db.GetAutoAbilityIDsByMethods),
+		i.queryID(r, ids, typestrings.QpnLocation, lookup.L.Locations, cfg.db.GetAutoAbilityIDsByLocation),
+		i.queryID(r, ids, typestrings.QpnSublocation, lookup.L.Sublocations, cfg.db.GetAutoAbilityIDsBySublocation),
 		i.queryID(r, ids, "areas", lookup.L.Areas, cfg.db.GetAutoAbilityIDsByArea),
 	})
 }

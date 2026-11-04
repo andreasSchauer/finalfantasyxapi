@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getMiscAbility(r *http.Request, i handlerInput[seedtypes.MiscAbility, MiscAbility, NamedAPIResource], id int32) (MiscAbility, error) {
@@ -33,7 +34,7 @@ func (cfg *Config) getMiscAbility(r *http.Request, i handlerInput[seedtypes.Misc
 		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, i, response, QpnAbilityUser)
+	battleInteractions, err := applyUser(cfg, r, i, response, typestrings.QpnAbilityUser)
 	if err != nil {
 		return MiscAbility{}, err
 	}
@@ -50,10 +51,10 @@ func (cfg *Config) retrieveMiscAbilities(r *http.Request, i handlerInput[seedtyp
 	abilityType := database.AbilityTypeMiscAbility
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryIntList(cfg, r, ids, QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		i.queryNameID(r, ids, QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass),
-		i.queryBool(r, ids, QpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
-		i.queryBool(r, ids, QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
-		i.queryBool2(r, ids, QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType)),
+		i.queryIntList(cfg, r, ids, typestrings.QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
+		i.queryNameID(r, ids, typestrings.QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass),
+		i.queryBool(r, ids, typestrings.QpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
+		i.queryBool(r, ids, typestrings.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
+		i.queryBool2(r, ids, typestrings.QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType)),
 	})
 }

@@ -8,6 +8,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 /*
@@ -28,9 +29,9 @@ fields that are implicitly ignored by leaving them blank:
 - slices, structs, pointers to structs of some kind that have nil checks in the function body
 */
 
-type compFnVals[T any] func (string, T, T)
-type compFnEqual[T any] func (test, string, T, T)
-type compFnDifferent[E, G any] func (test, string, E, G)
+type compFnVals[T any] func(string, T, T)
+type compFnEqual[T any] func(test, string, T, T)
+type compFnDifferent[E, G any] func(test, string, E, G)
 
 type testStructIdx interface {
 	GetIndex() int
@@ -50,7 +51,7 @@ type testGeneral struct {
 	expectedErr    string
 	dontCheck      map[string]bool
 	expLengths     map[string]int
-	endpoint       api.EndpointName
+	endpoint       typestrings.EndpointName
 	handler        func(http.ResponseWriter, *http.Request)
 	method         string
 	requestBody    any
@@ -170,7 +171,7 @@ type expListNames struct {
 	count    int
 	previous *string
 	next     *string
-	results  []api.NamedParam
+	results  []typestrings.NamedParam
 }
 
 func (l expListNames) GetListParams() api.ListParams {

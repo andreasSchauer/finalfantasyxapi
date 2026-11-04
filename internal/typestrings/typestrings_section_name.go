@@ -1,11 +1,4 @@
-package api
-
-import (
-	"cmp"
-	"fmt"
-	"slices"
-	"strings"
-)
+package typestrings
 
 type SectionName NamedParam
 
@@ -54,21 +47,7 @@ func SnsToNamedParams(sns []SectionName) []NamedParam {
 	return nps
 }
 
-func getSnPtr(s SectionName) *SectionName {
-	return &s
+func GetSnPtr(s SectionName) *SectionName {
+	return new(s)
 }
 
-func formatSectionNames(itemMap map[SectionName]Subsection) string {
-	keys := []string{}
-
-	for key := range itemMap {
-		keyFormatted := fmt.Sprintf("'%s'", key)
-		keys = append(keys, keyFormatted)
-	}
-
-	slices.SortStableFunc(keys, func(a, b string) int {
-		return cmp.Compare(a, b)
-	})
-
-	return strings.Join(keys, ", ")
-}

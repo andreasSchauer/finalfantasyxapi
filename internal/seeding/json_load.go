@@ -5,6 +5,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
+var rawJSON jsonFiles
+
 type jsonFiles struct {
 	aeonCommands          []seedtypes.AeonCommand
 	aeonStats             []seedtypes.AeonStat

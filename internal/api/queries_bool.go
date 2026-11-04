@@ -3,10 +3,12 @@ package api
 import (
 	"context"
 	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // db query searches for resources with matching boolean db column value
-func (i handlerInput[T, R, A]) queryBool(r *http.Request, inputIDs []int32, queryName QueryParamName, dbQuery DBQueryBool) IDFilter {
+func (i handlerInput[T, R, A]) queryBool(r *http.Request, inputIDs []int32, queryName typestrings.QueryParamName, dbQuery DBQueryBool) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
@@ -31,7 +33,7 @@ func (i handlerInput[T, R, A]) queryBool(r *http.Request, inputIDs []int32, quer
 }
 
 // db query accumulates all resources that fulfill a certain condition. a false boolean flips these results.
-func (i handlerInput[T, R, A]) queryBool2(r *http.Request, inputIDs []int32, queryName QueryParamName, dbQuery DBQueryNoInput) IDFilter {
+func (i handlerInput[T, R, A]) queryBool2(r *http.Request, inputIDs []int32, queryName typestrings.QueryParamName, dbQuery DBQueryNoInput) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
@@ -59,7 +61,7 @@ func (i handlerInput[T, R, A]) queryBool2(r *http.Request, inputIDs []int32, que
 	}
 }
 
-func (i handlerInput[T, R, A]) queryBoolWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapBool) IDFilter {
+func (i handlerInput[T, R, A]) queryBoolWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName typestrings.QueryParamName, wrapperFn QueryWrapBool) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {

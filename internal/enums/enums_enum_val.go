@@ -1,4 +1,4 @@
-package api
+package enums
 
 type EnumVal struct {
 	ID          int32  `json:"id"`

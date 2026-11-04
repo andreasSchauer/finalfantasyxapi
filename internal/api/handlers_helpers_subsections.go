@@ -3,6 +3,8 @@ package api
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (i handlerInput[T, R, A]) handleSubsection(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
@@ -14,7 +16,7 @@ func (i handlerInput[T, R, A]) handleSubsection(cfg *Config, w http.ResponseWrit
 		return
 	}
 
-	subsection, ok := i.subsections[SectionName(sectionName)]
+	subsection, ok := i.subsections[typestrings.SectionName(sectionName)]
 	if !ok {
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s", sectionName, i.Endpoint, formatSectionNames(i.subsections)), nil)
 		return
@@ -67,8 +69,8 @@ func (i handlerInputEndpoints) handleParameters(cfg *Config, w http.ResponseWrit
 	handleParametersWrapper(cfg, w, r, i.Endpoint, i.queryLookup)
 }
 
-func handleParametersWrapper(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint EndpointName, queryLookup map[QueryParamName]QueryParam) {
-	segment := string(SnParameters)
+func handleParametersWrapper(cfg *Config, w http.ResponseWriter, r *http.Request, endpoint typestrings.EndpointName, queryLookup map[typestrings.QueryParamName]QueryParam) {
+	segment := string(typestrings.SnParameters)
 	err := verifyQueryParamsAltList(cfg, r, endpoint, queryLookup, &segment)
 	if handleHTTPError(w, err) {
 		return
@@ -84,7 +86,7 @@ func handleParametersWrapper(cfg *Config, w http.ResponseWriter, r *http.Request
 }
 
 func (i handlerInput[T, R, A]) handleSections(cfg *Config, w http.ResponseWriter, r *http.Request) {
-	segment := string(SnSections)
+	segment := string(typestrings.SnSections)
 	err := verifyQueryParamsAltList(cfg, r, i.Endpoint, i.queryLookup, &segment)
 	if handleHTTPError(w, err) {
 		return
@@ -100,9 +102,9 @@ func (i handlerInput[T, R, A]) handleSections(cfg *Config, w http.ResponseWriter
 }
 
 func (i handlerInput[T, R, A]) handleSimple(cfg *Config, w http.ResponseWriter, r *http.Request) {
-	segment := string(SnSimple)
+	segment := string(typestrings.SnSimple)
 
-	_, ok := i.subsections[SnSimple]
+	_, ok := i.subsections[typestrings.SnSimple]
 	if !ok {
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("simple view is not available for endpoint /%s", i.Endpoint), nil)
 		return
@@ -113,7 +115,7 @@ func (i handlerInput[T, R, A]) handleSimple(cfg *Config, w http.ResponseWriter, 
 		return
 	}
 
-	resources, err := createSimpleResources(cfg, r, ids, i.subsections[SectionName(segment)])
+	resources, err := createSimpleResources(cfg, r, ids, i.subsections[typestrings.SectionName(segment)])
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -138,7 +140,7 @@ func (i handlerInput[T, R, A]) queryIDsParam(cfg *Config, r *http.Request, segme
 	}
 
 	// ifs ids param is empty, just retrieve all ids
-	queryParamIDs := i.queryLookup[QpnIDs]
+	queryParamIDs := i.queryLookup[typestrings.QpnIDs]
 	_, err = queryParamIDs.checkEmpty(r)
 	if queryIsEmpty(err) {
 		return i.retrieveFunc(r, i)

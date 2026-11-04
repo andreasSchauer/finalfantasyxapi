@@ -5,10 +5,12 @@ import (
 	"errors"
 	"net/http"
 	"strings"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // used for query filters that can't really be generalized. this one simply checks, if it's empty and then calls the wrapperFn
-func (i handlerInput[T, R, A]) queryBasicWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, wrapperFn QueryWrapBasic) IDFilter {
+func (i handlerInput[T, R, A]) queryBasicWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName typestrings.QueryParamName, wrapperFn QueryWrapBasic) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		query, err := queryParam.basicChecks(r, i.queryLookup)
@@ -28,7 +30,7 @@ func (i handlerInput[T, R, A]) queryBasicWrapper(cfg *Config, r *http.Request, i
 	}
 }
 
-func (q QueryParam) basicChecks(r *http.Request, queryLookup map[QueryParamName]QueryParam) (string, error) {
+func (q QueryParam) basicChecks(r *http.Request, queryLookup map[typestrings.QueryParamName]QueryParam) (string, error) {
 	query, err := q.checkEmpty(r)
 	if err != nil {
 		return "", err
@@ -69,7 +71,7 @@ func checkNoneQuery(query string) error {
 	return nil
 }
 
-func (q QueryParam) replacingParamsPresent(r *http.Request, queryLookup map[QueryParamName]QueryParam) bool {
+func (q QueryParam) replacingParamsPresent(r *http.Request, queryLookup map[typestrings.QueryParamName]QueryParam) bool {
 	for _, param := range q.ReplacedBy {
 		p := queryLookup[param]
 		_, err := p.checkEmpty(r)

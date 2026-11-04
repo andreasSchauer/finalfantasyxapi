@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getParamsJSONBody[P any](r *http.Request) (P, map[FieldName]any, error) {
+func getParamsJSONBody[P any](r *http.Request) (P, map[typestrings.FieldName]any, error) {
 	var zero P
 	var params P
 
@@ -18,7 +20,7 @@ func getParamsJSONBody[P any](r *http.Request) (P, map[FieldName]any, error) {
 	return ReadJSONRequest(bodyBytes, params, "invalid or corrupt payload in request body")
 }
 
-func ReadJSONRequest[P any](data []byte, params P, errMsg string) (P, map[FieldName]any, error) {
+func ReadJSONRequest[P any](data []byte, params P, errMsg string) (P, map[typestrings.FieldName]any, error) {
 	var zero P
 
 	err := json.Unmarshal(data, &params)

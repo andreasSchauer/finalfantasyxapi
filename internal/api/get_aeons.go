@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getAeon(r *http.Request, i handlerInput[seedtypes.Aeon, Aeon, NamedAPIResource], id int32) (Aeon, error) {
@@ -61,6 +62,6 @@ func (cfg *Config) retrieveAeons(r *http.Request, i handlerInput[seedtypes.Aeon,
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryBool(r, ids, QpnOptional, cfg.db.GetAeonIDsOptional),
+		i.queryBool(r, ids, typestrings.QpnOptional, cfg.db.GetAeonIDsOptional),
 	})
 }

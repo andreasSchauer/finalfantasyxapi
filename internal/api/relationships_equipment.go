@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -39,7 +40,7 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seedtypes
 
 	g.Go(func() error {
 		var err error
-		rel.EquipmentTable, err = getEquipmentTableRef(cfg, r, ctx, i.queryLookup[QpnTable], equipment)
+		rel.EquipmentTable, err = getEquipmentTableRef(cfg, r, ctx, i.queryLookup[typestrings.QpnTable], equipment)
 		if err != nil {
 			return err
 		}

@@ -1,11 +1,15 @@
 package api
 
 import (
+	"cmp"
 	"fmt"
+	"slices"
+	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func idToLocAreaString(cfg *Config, areaID int32) string {
@@ -71,4 +75,19 @@ func monsterAutoAbilityString(_ *Config, drop seedtypes.EquipmentDrop) string {
 func abilityRefString(cfg *Config, ref seedtypes.AbilityReference) string {
 	ability, _ := lookup.GetResource(ref, lookup.L.Abilities)
 	return h.NameToString(ability.Name, ability.Version, ability.Specification)
+}
+
+func formatSectionNames(itemMap map[typestrings.SectionName]Subsection) string {
+	keys := []string{}
+
+	for key := range itemMap {
+		keyFormatted := fmt.Sprintf("'%s'", key)
+		keys = append(keys, keyFormatted)
+	}
+
+	slices.SortStableFunc(keys, func(a, b string) int {
+		return cmp.Compare(a, b)
+	})
+
+	return strings.Join(keys, ", ")
 }

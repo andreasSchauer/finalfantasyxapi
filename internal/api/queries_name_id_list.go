@@ -5,10 +5,11 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // query uses a list of names or ids as database input to filter for resources. alternatively, "none" can be used as input instead.
-func (i handlerInput[T, R, A]) queryNameIDListNul[P seedtypes.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName QueryParamName, pResType ResTypeSingle, pLookup map[string]P, dbQuery DBQueryIntList) IDFilter {
+func (i handlerInput[T, R, A]) queryNameIDListNul[P seedtypes.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName typestrings.QueryParamName, pResType typestrings.ResTypeSingle, pLookup map[string]P, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {

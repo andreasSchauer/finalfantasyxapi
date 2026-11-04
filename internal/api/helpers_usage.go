@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (i handlerInput[T, R, A]) compileUsage() string {
@@ -26,6 +27,6 @@ func (i handlerInput[T, R, A]) compileUsage() string {
 	return usage
 }
 
-func getUsagePath(usage string, endpoint EndpointName) string {
+func getUsagePath(usage string, endpoint typestrings.EndpointName) string {
 	return fmt.Sprintf("/api/%s%s", endpoint, usage)
 }

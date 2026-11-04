@@ -9,9 +9,10 @@ import (
 	"strings"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func paramMapToSlice(lookup map[QueryParamName]QueryParam) []QueryParam {
+func paramMapToSlice(lookup map[typestrings.QueryParamName]QueryParam) []QueryParam {
 	queryParams := []QueryParam{}
 
 	for key := range lookup {
@@ -25,8 +26,8 @@ func paramMapToSlice(lookup map[QueryParamName]QueryParam) []QueryParam {
 	return queryParams
 }
 
-func paramSliceToMap(params []QueryParam, endpoint *EndpointName) map[QueryParamName]QueryParam {
-	paramMap := make(map[QueryParamName]QueryParam, len(params))
+func paramSliceToMap(params []QueryParam, endpoint *typestrings.EndpointName) map[typestrings.QueryParamName]QueryParam {
+	paramMap := make(map[typestrings.QueryParamName]QueryParam, len(params))
 
 	for i, param := range params {
 		param.ID = i + 1
@@ -43,7 +44,7 @@ func paramSliceToMap(params []QueryParam, endpoint *EndpointName) map[QueryParam
 	return paramMap
 }
 
-func queryMapToString(lookup map[QueryParamName]QueryParam) string {
+func queryMapToString(lookup map[typestrings.QueryParamName]QueryParam) string {
 	params := paramMapToSlice(lookup)
 	names := []string{}
 
@@ -84,7 +85,7 @@ func queryIntMapToSlice(m map[string]int32) []int32 {
 }
 
 func getRawQueryLimit(cfg *Config, r *http.Request) (int, error) {
-	queryParamLimit := cfg.Q.defaultParams[QpnLimit]
+	queryParamLimit := cfg.Q.defaultParams[typestrings.QpnLimit]
 	query, err := queryParamLimit.checkEmpty(r)
 	if err != nil {
 		return 0, err
@@ -105,10 +106,10 @@ func getRawQueryLimit(cfg *Config, r *http.Request) (int, error) {
 }
 
 func getLimitMax(cfg *Config) string {
-	queryParamLimit := cfg.Q.defaultParams[QpnLimit]
+	queryParamLimit := cfg.Q.defaultParams[typestrings.QpnLimit]
 
 	for _, input := range queryParamLimit.SpecialInputs {
-		if input.Key == qsvMax {
+		if input.Key == typestrings.QsvMax {
 			return strconv.Itoa(input.Val)
 		}
 	}
@@ -117,11 +118,11 @@ func getLimitMax(cfg *Config) string {
 }
 
 func setLimitMax(cfg *Config, r *http.Request, q url.Values) {
-	limit := q.Get(string(QpnLimit))
+	limit := q.Get(string(typestrings.QpnLimit))
 	if limit != "" {
 		return
 	}
 
-	q.Set(string(QpnLimit), getLimitMax(cfg))
+	q.Set(string(typestrings.QpnLimit), getLimitMax(cfg))
 	r.URL.RawQuery = q.Encode()
 }

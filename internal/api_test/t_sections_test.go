@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func TestSubsections(t *testing.T) {
@@ -130,13 +130,13 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleAreas,
 			},
 			count: 6,
-			results: api.SnsToNamedParams([]api.SectionName{
-				api.SnSimple,
-				api.SnConnected,
-				api.SnMonsters,
-				api.SnMonsterFormations,
-				api.SnSongs,
-				api.SnTreasures,
+			results: typestrings.SnsToNamedParams([]typestrings.SectionName{
+				typestrings.SnSimple,
+				typestrings.SnConnected,
+				typestrings.SnMonsters,
+				typestrings.SnMonsterFormations,
+				typestrings.SnSongs,
+				typestrings.SnTreasures,
 			}),
 		},
 		{
@@ -147,15 +147,15 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleSublocations,
 			},
 			count: 8,
-			results: api.SnsToNamedParams([]api.SectionName{
-				api.SnSimple,
-				api.SnAreas,
-				api.SnConnected,
-				api.SnMonsters,
-				api.SnMonsterFormations,
-				api.SnShops,
-				api.SnSongs,
-				api.SnTreasures,
+			results: typestrings.SnsToNamedParams([]typestrings.SectionName{
+				typestrings.SnSimple,
+				typestrings.SnAreas,
+				typestrings.SnConnected,
+				typestrings.SnMonsters,
+				typestrings.SnMonsterFormations,
+				typestrings.SnShops,
+				typestrings.SnSongs,
+				typestrings.SnTreasures,
 			}),
 		},
 		{
@@ -166,16 +166,16 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleLocations,
 			},
 			count: 9,
-			results: api.SnsToNamedParams([]api.SectionName{
-				api.SnSimple,
-				api.SnAreas,
-				api.SnConnected,
-				api.SnMonsters,
-				api.SnMonsterFormations,
-				api.SnShops,
-				api.SnSongs,
-				api.SnSublocations,
-				api.SnTreasures,
+			results: typestrings.SnsToNamedParams([]typestrings.SectionName{
+				typestrings.SnSimple,
+				typestrings.SnAreas,
+				typestrings.SnConnected,
+				typestrings.SnMonsters,
+				typestrings.SnMonsterFormations,
+				typestrings.SnShops,
+				typestrings.SnSongs,
+				typestrings.SnSublocations,
+				typestrings.SnTreasures,
 			}),
 		},
 		{
@@ -186,11 +186,11 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleAeons,
 			},
 			count: 4,
-			results: api.SnsToNamedParams([]api.SectionName{
-				api.SnDefaultAbilities,
-				api.SnOverdriveAbilities,
-				api.SnOverdrives,
-				api.SnStats,
+			results: typestrings.SnsToNamedParams([]typestrings.SectionName{
+				typestrings.SnDefaultAbilities,
+				typestrings.SnOverdriveAbilities,
+				typestrings.SnOverdrives,
+				typestrings.SnStats,
 			}),
 		},
 		{
@@ -201,12 +201,12 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleCharacters,
 			},
 			count: 5,
-			results: api.SnsToNamedParams([]api.SectionName{
-				api.SnDefaultAbilities,
-				api.SnStdSgAbilities,
-				api.SnExpSgAbilities,
-				api.SnOverdriveAbilities,
-				api.SnOverdrives,
+			results: typestrings.SnsToNamedParams([]typestrings.SectionName{
+				typestrings.SnDefaultAbilities,
+				typestrings.SnStdSgAbilities,
+				typestrings.SnExpSgAbilities,
+				typestrings.SnOverdriveAbilities,
+				typestrings.SnOverdrives,
 			}),
 		},
 		{
@@ -217,11 +217,11 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleCharacterClasses,
 			},
 			count: 4,
-			results: api.SnsToNamedParams([]api.SectionName{
-				api.SnDefaultAbilities,
-				api.SnLearnableOverdrives,
-				api.SnDefaultOverdrives,
-				api.SnLearnableOverdrives,
+			results: typestrings.SnsToNamedParams([]typestrings.SectionName{
+				typestrings.SnDefaultAbilities,
+				typestrings.SnLearnableOverdrives,
+				typestrings.SnDefaultOverdrives,
+				typestrings.SnLearnableOverdrives,
 			}),
 		},
 		{
@@ -232,7 +232,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleArenaCreations,
 			},
 			count:   0,
-			results: []api.NamedParam{},
+			results: []typestrings.NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -242,7 +242,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleBlitzballPrizes,
 			},
 			count:   0,
-			results: []api.NamedParam{},
+			results: []typestrings.NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -252,7 +252,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleFMVs,
 			},
 			count:   0,
-			results: []api.NamedParam{},
+			results: []typestrings.NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -262,11 +262,11 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleMonsters,
 			},
 			count: 4,
-			results: api.SnsToNamedParams([]api.SectionName{
-				api.SnSimple,
-				api.SnAbilities,
-				api.SnAreas,
-				api.SnMonsterFormations,
+			results: typestrings.SnsToNamedParams([]typestrings.SectionName{
+				typestrings.SnSimple,
+				typestrings.SnAbilities,
+				typestrings.SnAreas,
+				typestrings.SnMonsterFormations,
 			}),
 		},
 		{
@@ -277,9 +277,9 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleMonsterFormations,
 			},
 			count: 2,
-			results: api.SnsToNamedParams([]api.SectionName{
-				api.SnSimple,
-				api.SnMonsters,
+			results: typestrings.SnsToNamedParams([]typestrings.SectionName{
+				typestrings.SnSimple,
+				typestrings.SnMonsters,
 			}),
 		},
 		{
@@ -290,7 +290,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleOverdriveModes,
 			},
 			count:   0,
-			results: []api.NamedParam{},
+			results: []typestrings.NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -300,8 +300,8 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleShops,
 			},
 			count: 1,
-			results: api.SnsToNamedParams([]api.SectionName{
-				api.SnSimple,
+			results: typestrings.SnsToNamedParams([]typestrings.SectionName{
+				typestrings.SnSimple,
 			}),
 		},
 		{
@@ -312,7 +312,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleSongs,
 			},
 			count:   0,
-			results: []api.NamedParam{},
+			results: []typestrings.NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -322,8 +322,8 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleSidequests,
 			},
 			count: 1,
-			results: api.SnsToNamedParams([]api.SectionName{
-				api.SnSubquests,
+			results: typestrings.SnsToNamedParams([]typestrings.SectionName{
+				typestrings.SnSubquests,
 			}),
 		},
 		{
@@ -334,7 +334,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleSubquests,
 			},
 			count:   0,
-			results: []api.NamedParam{},
+			results: []typestrings.NamedParam{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -344,7 +344,7 @@ func TestSections(t *testing.T) {
 				handler:        testCfg.HandleTreasures,
 			},
 			count:   0,
-			results: []api.NamedParam{},
+			results: []typestrings.NamedParam{},
 		},
 	}
 

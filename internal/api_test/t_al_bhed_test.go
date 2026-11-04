@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func TestAlBhed(t *testing.T) {
@@ -27,8 +28,8 @@ func TestAlBhed(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "field 'text' can't be empty",
-				requestBody: map[api.FieldName]any{
-					api.PfnDirection: "to-english",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnDirection: "to-english",
 				},
 			},
 		},
@@ -38,9 +39,9 @@ func TestAlBhed(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "value 'bla' of field 'direction' is not a valid enum value. allowed values: 'to-al-bhed', 'to-english'",
-				requestBody: map[api.FieldName]any{
-					api.PfnText:      "father",
-					api.PfnDirection: "bla",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText:      "father",
+					typestrings.PfnDirection: "bla",
 				},
 			},
 		},
@@ -50,8 +51,8 @@ func TestAlBhed(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. all brackets must be closed",
-				requestBody: map[api.FieldName]any{
-					api.PfnText: "v[ath",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText: "v[ath",
 				},
 			},
 		},
@@ -61,8 +62,8 @@ func TestAlBhed(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket",
-				requestBody: map[api.FieldName]any{
-					api.PfnText: "v]ath",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText: "v]ath",
 				},
 			},
 		},
@@ -72,8 +73,8 @@ func TestAlBhed(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket",
-				requestBody: map[api.FieldName]any{
-					api.PfnText: "v[a[th",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText: "v[a[th",
 				},
 			},
 		},
@@ -83,8 +84,8 @@ func TestAlBhed(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. all brackets must be closed",
-				requestBody: map[api.FieldName]any{
-					api.PfnText: "v[ath",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText: "v[ath",
 				},
 			},
 		},
@@ -94,8 +95,8 @@ func TestAlBhed(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid field: 'monster_id'",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID: 1,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID: 1,
 				},
 			},
 		},
@@ -104,8 +105,8 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[api.FieldName]any{
-					api.PfnText: "I am cool",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText: "I am cool",
 				},
 			},
 			AlBhedResponse: api.AlBhedResponse{
@@ -119,8 +120,8 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[api.FieldName]any{
-					api.PfnText: "father",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText: "father",
 				},
 			},
 			AlBhedResponse: api.AlBhedResponse{
@@ -134,8 +135,8 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[api.FieldName]any{
-					api.PfnText: "f[y]the[n]",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText: "f[y]the[n]",
 				},
 			},
 			AlBhedResponse: api.AlBhedResponse{
@@ -149,8 +150,8 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[api.FieldName]any{
-					api.PfnText: "f[Ydr]er",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText: "f[Ydr]er",
 				},
 			},
 			AlBhedResponse: api.AlBhedResponse{
@@ -164,9 +165,9 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[api.FieldName]any{
-					api.PfnText:      "v[ath]an",
-					api.PfnDirection: "to-english",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText:      "v[ath]an",
+					typestrings.PfnDirection: "to-english",
 				},
 			},
 			AlBhedResponse: api.AlBhedResponse{
@@ -180,8 +181,8 @@ func TestAlBhed(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[api.FieldName]any{
-					api.PfnText: "!?,. 1234567890",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText: "!?,. 1234567890",
 				},
 			},
 			AlBhedResponse: api.AlBhedResponse{

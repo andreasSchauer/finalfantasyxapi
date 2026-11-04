@@ -7,10 +7,11 @@ import (
 	"slices"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type fieldVerifyer[T any] struct {
-	fieldName    FieldName
+	fieldName    typestrings.FieldName
 	val          T
 	doc          FieldDoc
 	valIsPresent bool
@@ -50,7 +51,7 @@ func (v fieldVerifyer[T]) requiredOr() error {
 
 	requiredFields := append(v.doc.RequiredOr, v.fieldName)
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: %s", formatPfnSlice(requiredFields)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("at least one of these fields must have a value: %s", typestrings.FormatPfnSlice(requiredFields)), nil)
 }
 
 func (v fieldVerifyer[T]) requiresAll() error {
@@ -59,7 +60,7 @@ func (v fieldVerifyer[T]) requiresAll() error {
 	}
 
 	if slices.ContainsFunc(v.doc.RequiresAll, v.pv.hasNoVal) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires the following fields to have a value: %s", v.fieldName, formatPfnSlice(v.doc.RequiresAll)), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires the following fields to have a value: %s", v.fieldName, typestrings.FormatPfnSlice(v.doc.RequiresAll)), nil)
 	}
 
 	return nil
@@ -74,7 +75,7 @@ func (v fieldVerifyer[T]) requiresOne() error {
 		return nil
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires one of the following fields to have a value: %s", v.fieldName, formatPfnSlice(v.doc.RequiresOne)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires one of the following fields to have a value: %s", v.fieldName, typestrings.FormatPfnSlice(v.doc.RequiresOne)), nil)
 }
 
 func (v fieldVerifyer[T]) allowedIDs() error {
@@ -82,7 +83,7 @@ func (v fieldVerifyer[T]) allowedIDs() error {
 		return nil
 	}
 
-	id, err := getInt32FromUserVals(PfnUnitID, v.pv.userValues)
+	id, err := getInt32FromUserVals(typestrings.PfnUnitID, v.pv.userValues)
 	if err != nil {
 		return nil
 	}

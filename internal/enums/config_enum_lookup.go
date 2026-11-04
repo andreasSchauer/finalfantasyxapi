@@ -1,4 +1,5 @@
-package api
+// Package enums bla bla
+package enums
 
 import (
 	"cmp"
@@ -6,6 +7,23 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
+
+
+func EnumLookupToSlice(lookup map[string]EnumResponse) []EnumResponse {
+	enums := make([]EnumResponse, 0, len(lookup))
+
+	for key := range lookup {
+		enums = append(enums, lookup[key])
+	}
+
+	slices.SortFunc(enums, func(a, b EnumResponse) int {
+		return cmp.Compare(a.Name, b.Name)
+	})
+	return enums
+}
+
+
+var T = Enums{}
 
 // Enums holds all the enum types for the application that are either used as endpoint or query param
 type Enums struct {
@@ -78,89 +96,74 @@ type Enums struct {
 	// ShopType                    EnumType[database.ShopType, database.NullShopType]
 }
 
-func (cfg *Config) EnumLookupInit() {
-	cfg.T = &Enums{
-		Lookup: make(map[string]EnumResponse),
-	}
+func (T *Enums) EnumLookupInit() {
+	T.Lookup = make(map[string]EnumResponse)
 
-	cfg.T.initAbilityType()
-	cfg.T.initUnitType()
-	cfg.T.initItemType()
-	cfg.T.initQuestType()
+	T.initAbilityType()
+	T.initUnitType()
+	T.initItemType()
+	T.initQuestType()
 
-	cfg.T.initAaActivationCondition()
-	//cfg.t.initAlterationType()
-	cfg.T.initAreaConnectionType()
-	cfg.T.initArenaCreationCategory()
-	cfg.T.initArmorType()
-	cfg.T.initArranger()
-	cfg.T.initAutoAbilityCategory()
-	cfg.T.initAvailabilityType()
-	cfg.T.initBgReplacementType()
-	cfg.T.initBlitzballPositionSlot()
-	cfg.T.initBlitzballTournamentCategory()
-	cfg.T.initCelestialFormula()
-	cfg.T.initCharacterClassCategory()
-	cfg.T.initComposer()
-	cfg.T.initCounterType()
-	cfg.T.initCreationArea()
-	cfg.T.initCreationsUnlockedCategory()
-	cfg.T.initCTBIconType()
-	cfg.T.initElementalAffinity()
-	cfg.T.initEquipClass()
-	cfg.T.initEquipType()
-	cfg.T.initItemCategory()
-	cfg.T.initItemUsability()
-	cfg.T.initKeyItemCategory()
-	cfg.T.initLootType()
-	cfg.T.initMixCategory()
-	cfg.T.initModifierCategory()
-	cfg.T.initMonsterCategory()
-	cfg.T.initMonsterFormationCategory()
-	cfg.T.initMonsterSpecies()
-	cfg.T.initMusicUseCase()
-	cfg.T.initNodePosition()
-	cfg.T.initNodeState()
-	cfg.T.initNodeType()
-	cfg.T.initNullifyArmored()
-	cfg.T.initOverdriveModeType()
-	cfg.T.initPlayerAbilityCategory()
-	cfg.T.initShopCategory()
-	//cfg.t.initShopType()
-	cfg.T.initSpecialActionType()
-	cfg.T.initSphereColor()
-	cfg.T.initSphereEffect()
-	cfg.T.initSphereGridType()
-	cfg.T.initStatusConditionCategory()
-	cfg.T.initTreasureType()
-	cfg.T.initWeaponType()
+	T.initAaActivationCondition()
+	//t.initAlterationType()
+	T.initAreaConnectionType()
+	T.initArenaCreationCategory()
+	T.initArmorType()
+	T.initArranger()
+	T.initAutoAbilityCategory()
+	T.initAvailabilityType()
+	T.initBgReplacementType()
+	T.initBlitzballPositionSlot()
+	T.initBlitzballTournamentCategory()
+	T.initCelestialFormula()
+	T.initCharacterClassCategory()
+	T.initComposer()
+	T.initCounterType()
+	T.initCreationArea()
+	T.initCreationsUnlockedCategory()
+	T.initCTBIconType()
+	T.initElementalAffinity()
+	T.initEquipClass()
+	T.initEquipType()
+	T.initItemCategory()
+	T.initItemUsability()
+	T.initKeyItemCategory()
+	T.initLootType()
+	T.initMixCategory()
+	T.initModifierCategory()
+	T.initMonsterCategory()
+	T.initMonsterFormationCategory()
+	T.initMonsterSpecies()
+	T.initMusicUseCase()
+	T.initNodePosition()
+	T.initNodeState()
+	T.initNodeType()
+	T.initNullifyArmored()
+	T.initOverdriveModeType()
+	T.initPlayerAbilityCategory()
+	T.initShopCategory()
+	//t.initShopType()
+	T.initSpecialActionType()
+	T.initSphereColor()
+	T.initSphereEffect()
+	T.initSphereGridType()
+	T.initStatusConditionCategory()
+	T.initTreasureType()
+	T.initWeaponType()
 
-	cfg.T.initAccSourceType()
-	cfg.T.initAttackType()
-	cfg.T.initBreakDmgLimitType()
-	cfg.T.initCalculationType()
-	cfg.T.initCriticalType()
-	cfg.T.initDamageFormula()
-	cfg.T.initDamageType()
-	cfg.T.initDelayStrength()
-	cfg.T.initDurationType()
-	cfg.T.initTargetType()
+	T.initAccSourceType()
+	T.initAttackType()
+	T.initBreakDmgLimitType()
+	T.initCalculationType()
+	T.initCriticalType()
+	T.initDamageFormula()
+	T.initDamageType()
+	T.initDelayStrength()
+	T.initDurationType()
+	T.initTargetType()
 
-	cfg.T.initBattleStart()
-	cfg.T.initHasteStatus()
-	cfg.T.initTranslationDirection()
-	cfg.T.initTurnOrderRNG()
-}
-
-func enumLookupToSlice(lookup map[string]EnumResponse) []EnumResponse {
-	enums := make([]EnumResponse, 0, len(lookup))
-
-	for key := range lookup {
-		enums = append(enums, lookup[key])
-	}
-
-	slices.SortFunc(enums, func(a, b EnumResponse) int {
-		return cmp.Compare(a.Name, b.Name)
-	})
-	return enums
+	T.initBattleStart()
+	T.initHasteStatus()
+	T.initTranslationDirection()
+	T.initTurnOrderRNG()
 }

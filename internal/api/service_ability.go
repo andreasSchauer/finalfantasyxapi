@@ -7,6 +7,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func quickAssembleAbility(abilityID int32, interactionPtr *int32) (seedtypes.Ability, seedtypes.BattleInteraction, error) {
@@ -17,7 +18,7 @@ func quickAssembleAbility(abilityID int32, interactionPtr *int32) (seedtypes.Abi
 
 	if interactionPtr == nil {
 		if interactionsAmt > 1 {
-			return seedtypes.Ability{}, seedtypes.BattleInteraction{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("ability '%s' has multiple battle interactions. use '%s.%s.%s' to specify the interaction", abilityString, PfnAbility, PfnLookup, PfnInteraction), nil)
+			return seedtypes.Ability{}, seedtypes.BattleInteraction{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("ability '%s' has multiple battle interactions. use '%s.%s.%s' to specify the interaction", abilityString, typestrings.PfnAbility, typestrings.PfnLookup, typestrings.PfnInteraction), nil)
 		}
 		return ability, ability.BattleInteractions[0], nil
 	}

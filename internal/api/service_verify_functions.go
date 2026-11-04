@@ -6,11 +6,12 @@ import (
 	"slices"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type verifyFn[T any] func(paramsVerifyer, T, FieldName) (T, error)
+type verifyFn[T any] func(paramsVerifyer, T, typestrings.FieldName) (T, error)
 
-func vfEnum(v paramsVerifyer, typedVal string, fieldName FieldName) (string, error) {
+func vfEnum(v paramsVerifyer, typedVal string, fieldName typestrings.FieldName) (string, error) {
 	doc := v.paramsRules[fieldName].Doc
 
 	if doc.EnumValues == nil {
@@ -24,7 +25,7 @@ func vfEnum(v paramsVerifyer, typedVal string, fieldName FieldName) (string, err
 	return typedVal, nil
 }
 
-func vfArray[T any](v paramsVerifyer, arr []T, fieldName FieldName) ([]T, error) {
+func vfArray[T any](v paramsVerifyer, arr []T, fieldName typestrings.FieldName) ([]T, error) {
 	if arr == nil {
 		return arr, errNullArray
 	}
@@ -46,25 +47,25 @@ func vfArray[T any](v paramsVerifyer, arr []T, fieldName FieldName) ([]T, error)
 	return arr, nil
 }
 
-func vfID(v paramsVerifyer, val int32, fieldName FieldName) (int32, error) {
+func vfID(v paramsVerifyer, val int32, fieldName typestrings.FieldName) (int32, error) {
 	doc := v.paramsRules[fieldName].Doc
 
 	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "id", false)
 }
 
-func vfInt(v paramsVerifyer, val int32, fieldName FieldName) (int32, error) {
+func vfInt(v paramsVerifyer, val int32, fieldName typestrings.FieldName) (int32, error) {
 	doc := v.paramsRules[fieldName].Doc
 
 	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "value", false)
 }
 
-func vfArrayChildID(v paramsVerifyer, val int32, fieldName FieldName) (int32, error) {
+func vfArrayChildID(v paramsVerifyer, val int32, fieldName typestrings.FieldName) (int32, error) {
 	doc := v.paramsRules[fieldName].Doc
 
 	return vfIntRange(val, doc.ChildMinVal, doc.ChildMaxVal, fieldName, "id", true)
 }
 
-func vfIntRange(val int32, minVal, maxVal *int32, fieldName FieldName, intType string, isArray bool) (int32, error) {
+func vfIntRange(val int32, minVal, maxVal *int32, fieldName typestrings.FieldName, intType string, isArray bool) (int32, error) {
 	errStart := getFieldRangeErrStart(val, fieldName, intType, isArray)
 
 	if minVal != nil && maxVal != nil && (val < *minVal || val > *maxVal) {

@@ -3,7 +3,9 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getModifier(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, NamedAPIResource], id int32) (Modifier, error) {
@@ -43,6 +45,6 @@ func (cfg *Config) retrieveModifiers(r *http.Request, i handlerInput[seedtypes.M
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, cfg.T.ModifierCategory, ids, QpnCategory, cfg.db.GetModifierIDsByCategory),
+		i.queryEnumList(cfg, r, enums.T.ModifierCategory, ids, typestrings.QpnCategory, cfg.db.GetModifierIDsByCategory),
 	})
 }

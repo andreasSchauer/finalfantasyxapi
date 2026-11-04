@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource], id int32) (Submenu, error) {
@@ -39,6 +40,6 @@ func (cfg *Config) retrieveSubmenus(r *http.Request, i handlerInput[seedtypes.Su
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryNameID(r, ids, QpnTopmenu, cfg.E.Topmenus.resTypeSingle, lookup.L.Topmenus, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs)),
+		i.queryNameID(r, ids, typestrings.QpnTopmenu, cfg.E.Topmenus.resTypeSingle, lookup.L.Topmenus, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs)),
 	})
 }

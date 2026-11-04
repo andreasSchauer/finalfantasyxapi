@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 	_ "github.com/lib/pq"
 )
@@ -16,8 +17,7 @@ import (
 type Config struct {
 	db          *database.Queries
 	DBConn      *sql.DB
-
-	T           *Enums
+	T           *enums.Enums
 	Q           *QueryLookup
 	E           *endpoints
 	platform    string
@@ -69,7 +69,7 @@ func ConfigInit() (*Config, error) {
 		return nil, err
 	}
 
-	apiCfg.EnumLookupInit()
+	enums.T.EnumLookupInit()
 	apiCfg.EndpointsInit()
 	apiCfg.QueryLookupInit()
 

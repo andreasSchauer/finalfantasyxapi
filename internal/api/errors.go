@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 var errNotAnID = errors.New("not an id")
@@ -50,19 +51,19 @@ func newHTTPError(code int, msg string, err error) HTTPError {
 	}
 }
 
-func newHTTPErrorDB(fetchType ResTypePlural, parentItem seedtypes.Lookupable, err error) HTTPError {
+func newHTTPErrorDB(fetchType typestrings.ResTypePlural, parentItem seedtypes.Lookupable, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
 }
 
-func newHTTPErrorDBPairs(childResType, parentResType ResTypeSingle, err error) HTTPError {
+func newHTTPErrorDBPairs(childResType, parentResType typestrings.ResTypeSingle, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs", childResType, parentResType), err)
 }
 
-func newHTTPErrorDBOne(fetchType ResTypeSingle, parentItem seedtypes.Lookupable, err error) HTTPError {
+func newHTTPErrorDBOne(fetchType typestrings.ResTypeSingle, parentItem seedtypes.Lookupable, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
 }
 
-func newHTTPErrorDBFilter(fetchType ResTypePlural, queryParam QueryParam, err error) HTTPError {
+func newHTTPErrorDBFilter(fetchType typestrings.ResTypePlural, queryParam QueryParam, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s for parameter '%s'", fetchType, queryParam.Name), err)
 }
 
@@ -70,7 +71,7 @@ func newHTTPErrorFetchLimit(fetchLimit int) HTTPError {
 	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of inputs is %d", fetchLimit), nil)
 }
 
-func newHTTPErrorAvailability(fetchType ResTypePlural, err error) HTTPError {
+func newHTTPErrorAvailability(fetchType typestrings.ResTypePlural, err error) HTTPError {
 	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by availability", fetchType), err)
 }
 
@@ -103,11 +104,11 @@ func cascadeHTTPError(msg string, err error) error {
 	return nil
 }
 
-func fieldErrorMsg(fieldName FieldName, msg string) string {
+func fieldErrorMsg(fieldName typestrings.FieldName, msg string) string {
 	return fmt.Sprintf("field '%s': %s", fieldName, msg)
 }
 
-func getFieldRangeErrStart(val int32, fieldName FieldName, intType string, isArray bool) string {
+func getFieldRangeErrStart(val int32, fieldName typestrings.FieldName, intType string, isArray bool) string {
 	errStart := fmt.Sprintf("%s '%d'", intType, val)
 
 	if !isArray {

@@ -1,6 +1,8 @@
 package api
 
-type ParamsRules map[FieldName]FieldRules
+import "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+
+type ParamsRules map[typestrings.FieldName]FieldRules
 
 type FieldRules struct {
 	Doc      FieldDoc

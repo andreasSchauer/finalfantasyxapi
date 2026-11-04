@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func TestDropChance(t *testing.T) {
@@ -20,8 +21,8 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "field 'monster_id' can't be empty",
-				requestBody: map[api.FieldName]any{
-					api.PfnMinEmptySlots: 2,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMinEmptySlots: 2,
 				},
 			},
 		},
@@ -31,10 +32,10 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "id '10' of field 'character_id' is out of range. allowed range: 1 to 7",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnCharacterID:   10,
-					api.PfnMinEmptySlots: 1,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnCharacterID:   10,
+					typestrings.PfnMinEmptySlots: 1,
 				},
 			},
 		},
@@ -44,10 +45,10 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "id '0' of field 'character_id' is out of range. allowed range: 1 to 7",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnCharacterID:   0,
-					api.PfnMinEmptySlots: 1,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnCharacterID:   0,
+					typestrings.PfnMinEmptySlots: 1,
 				},
 			},
 		},
@@ -57,10 +58,10 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "array of field 'party_members' can't have duplicate ids",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnPartyMembers:  []any{2, 2, 2, 2, 2},
-					api.PfnMinEmptySlots: 1,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnPartyMembers:  []any{2, 2, 2, 2, 2},
+					typestrings.PfnMinEmptySlots: 1,
 				},
 			},
 		},
@@ -70,11 +71,11 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "character must be in the party to be eligible for receiving equipment",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnCharacterID:   4,
-					api.PfnPartyMembers:  []any{1, 2, 3},
-					api.PfnMinEmptySlots: 1,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnCharacterID:   4,
+					typestrings.PfnPartyMembers:  []any{1, 2, 3},
+					typestrings.PfnMinEmptySlots: 1,
 				},
 			},
 		},
@@ -84,11 +85,11 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "too many items in array of field 'party_members'. got: 8, maximum allowed: 7",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnCharacterID:   4,
-					api.PfnPartyMembers:  []any{1, 2, 3, 4, 5, 6, 7, 8},
-					api.PfnMinEmptySlots: 1,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnCharacterID:   4,
+					typestrings.PfnPartyMembers:  []any{1, 2, 3, 4, 5, 6, 7, 8},
+					typestrings.PfnMinEmptySlots: 1,
 				},
 			},
 		},
@@ -98,9 +99,9 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 0 of array at field 'auto_abilities': id '131' is out of range. allowed range: 1 to 130",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnAutoAbilities: []any{131},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnAutoAbilities: []any{131},
 				},
 			},
 		},
@@ -110,9 +111,9 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "too many items in array of field 'auto_abilities'. got: 5, maximum allowed: 4",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnAutoAbilities: []any{13, 14, 15, 16, 17},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnAutoAbilities: []any{13, 14, 15, 16, 17},
 				},
 			},
 		},
@@ -122,9 +123,9 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "value '5' of field 'min_empty_slots' is out of range. allowed range: 0 to 4",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnMinEmptySlots: 5,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnMinEmptySlots: 5,
 				},
 			},
 		},
@@ -134,9 +135,9 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "value '5' of field 'total_slots' is out of range. allowed range: 0 to 4",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:  13,
-					api.PfnTotalSlots: 5,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:  13,
+					typestrings.PfnTotalSlots: 5,
 				},
 			},
 		},
@@ -146,9 +147,9 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "value '-1' of field 'min_empty_slots' is out of range. allowed range: 0 to 4",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnMinEmptySlots: -1,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnMinEmptySlots: -1,
 				},
 			},
 		},
@@ -158,9 +159,9 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "can't discern equipment's type. use 'auto_abilities' to discern the type, or set it manually by using 'equip_type'",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnMinEmptySlots: 2,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnMinEmptySlots: 2,
 				},
 			},
 		},
@@ -170,10 +171,10 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "the amount of auto-abilities and empty slots combined (1) can't exceed the given total amount of slots (0)",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnAutoAbilities: []any{2},
-					api.PfnTotalSlots:    0,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnAutoAbilities: []any{2},
+					typestrings.PfnTotalSlots:    0,
 				},
 			},
 		},
@@ -183,10 +184,10 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "the amount of auto-abilities and empty slots combined can't exceed 4",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnAutoAbilities: []any{2, 7, 22},
-					api.PfnMinEmptySlots: 2,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnAutoAbilities: []any{2, 7, 22},
+					typestrings.PfnMinEmptySlots: 2,
 				},
 			},
 		},
@@ -196,9 +197,9 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "weapon- and armor-abilities can't be combined",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnAutoAbilities: []any{2, 129},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnAutoAbilities: []any{2, 129},
 				},
 			},
 		},
@@ -208,10 +209,10 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "weapon- and armor-abilities can't be combined",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnAutoAbilities: []any{2},
-					api.PfnEquipType:     string(database.EquipTypeArmor),
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnAutoAbilities: []any{2},
+					typestrings.PfnEquipType:     string(database.EquipTypeArmor),
 				},
 			},
 		},
@@ -221,10 +222,10 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "weapon- and armor-abilities can't be combined",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnAutoAbilities: []any{129},
-					api.PfnEquipType:     string(database.EquipTypeWeapon),
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnAutoAbilities: []any{129},
+					typestrings.PfnEquipType:     string(database.EquipTypeWeapon),
 				},
 			},
 		},
@@ -234,10 +235,10 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "value 'weaponf' of field 'equip_type' is not a valid enum value. allowed values: 'weapon', 'armor'",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnMinEmptySlots: 1,
-					api.PfnEquipType:     "weaponf",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnMinEmptySlots: 1,
+					typestrings.PfnEquipType:     "weaponf",
 				},
 			},
 		},
@@ -247,9 +248,9 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "monster 'sinscale - 1 (dream zanarkand)' doesn't drop equipment",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     1,
-					api.PfnAutoAbilities: []any{2},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     1,
+					typestrings.PfnAutoAbilities: []any{2},
 				},
 			},
 		},
@@ -259,9 +260,9 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "water flan - 1 (tutorial) doesn't drop auto-ability 'zombiestrike' (22). it only drops the following auto-abilities: 'piercing' (2), 'waterstrike' (7), 'distill mana' (26), 'water ward' (61), 'waterproof' (62)",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnAutoAbilities: []any{7, 22},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnAutoAbilities: []any{7, 22},
 				},
 			},
 		},
@@ -271,9 +272,9 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "kottos doesn't drop auto-ability 'piercing' (2). it only drops the following auto-abilities: 'counterattack' (37), 'evade & counter' (38), 'magic counter' (39), 'hp +30%' (114), 'hp +20%' (113), 'hp +10%' (112)",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     258,
-					api.PfnAutoAbilities: []any{2},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     258,
+					typestrings.PfnAutoAbilities: []any{2},
 				},
 			},
 		},
@@ -283,8 +284,8 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "at least one of these fields must have a value: 'min_empty_slots', 'total_slots', 'auto_abilities'",
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID: 13,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID: 13,
 				},
 			},
 		},
@@ -294,8 +295,8 @@ func TestDropChance(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid field: 'text'",
-				requestBody: map[api.FieldName]any{
-					api.PfnText: "this won't work",
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnText: "this won't work",
 				},
 			},
 		},
@@ -304,11 +305,11 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     27,
-					api.PfnPartyMembers:  []any{1, 2, 3, 4, 5},
-					api.PfnAutoAbilities: []any{2},
-					api.PfnTotalSlots:    1,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     27,
+					typestrings.PfnPartyMembers:  []any{1, 2, 3, 4, 5},
+					typestrings.PfnAutoAbilities: []any{2},
+					typestrings.PfnTotalSlots:    1,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -392,10 +393,10 @@ func TestDropChance(t *testing.T) {
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     27,
-					api.PfnAutoAbilities: []any{2},
-					api.PfnCharacterID:   5,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     27,
+					typestrings.PfnAutoAbilities: []any{2},
+					typestrings.PfnCharacterID:   5,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -431,11 +432,11 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     50,
-					api.PfnAutoAbilities: []any{9},
-					api.PfnCharacterID:   5,
-					api.PfnDecimals:      true,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     50,
+					typestrings.PfnAutoAbilities: []any{9},
+					typestrings.PfnCharacterID:   5,
+					typestrings.PfnDecimals:      true,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -533,10 +534,10 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     50,
-					api.PfnAutoAbilities: []any{9},
-					api.PfnCharacterID:   5,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     50,
+					typestrings.PfnAutoAbilities: []any{9},
+					typestrings.PfnCharacterID:   5,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -567,11 +568,11 @@ func TestDropChance(t *testing.T) {
 					"character chances":    true,
 					"monster drop chances": true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         50,
-					api.PfnAutoAbilities:     []any{9},
-					api.PfnOptionalAbilities: true,
-					api.PfnCharacterID:       5,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         50,
+					typestrings.PfnAutoAbilities:     []any{9},
+					typestrings.PfnOptionalAbilities: true,
+					typestrings.PfnCharacterID:       5,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -601,11 +602,11 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     50,
-					api.PfnAutoAbilities: []any{9},
-					api.PfnMinEmptySlots: 1,
-					api.PfnCharacterID:   5,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     50,
+					typestrings.PfnAutoAbilities: []any{9},
+					typestrings.PfnMinEmptySlots: 1,
+					typestrings.PfnCharacterID:   5,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -637,11 +638,11 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     50,
-					api.PfnAutoAbilities: []any{9},
-					api.PfnTotalSlots:    2,
-					api.PfnCharacterID:   5,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     50,
+					typestrings.PfnAutoAbilities: []any{9},
+					typestrings.PfnTotalSlots:    2,
+					typestrings.PfnCharacterID:   5,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -662,12 +663,12 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         50,
-					api.PfnAutoAbilities:     []any{2},
-					api.PfnOptionalAbilities: true,
-					api.PfnTotalSlots:        2,
-					api.PfnCharacterID:       5,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         50,
+					typestrings.PfnAutoAbilities:     []any{2},
+					typestrings.PfnOptionalAbilities: true,
+					typestrings.PfnTotalSlots:        2,
+					typestrings.PfnCharacterID:       5,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -694,10 +695,10 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         258,
-					api.PfnAutoAbilities:     []any{38},
-					api.PfnOptionalAbilities: true,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         258,
+					typestrings.PfnAutoAbilities:     []any{38},
+					typestrings.PfnOptionalAbilities: true,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -790,10 +791,10 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         258,
-					api.PfnAutoAbilities:     []any{38},
-					api.PfnOptionalAbilities: false,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         258,
+					typestrings.PfnAutoAbilities:     []any{38},
+					typestrings.PfnOptionalAbilities: false,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -819,10 +820,10 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         258,
-					api.PfnAutoAbilities:     []any{37},
-					api.PfnOptionalAbilities: true,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         258,
+					typestrings.PfnAutoAbilities:     []any{37},
+					typestrings.PfnOptionalAbilities: true,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -848,9 +849,9 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     243,
-					api.PfnAutoAbilities: []any{30, 19},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     243,
+					typestrings.PfnAutoAbilities: []any{30, 19},
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -876,10 +877,10 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     243,
-					api.PfnPartyMembers:  []any{1, 3, 7},
-					api.PfnAutoAbilities: []any{30, 19},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     243,
+					typestrings.PfnPartyMembers:  []any{1, 3, 7},
+					typestrings.PfnAutoAbilities: []any{30, 19},
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -905,9 +906,9 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     243,
-					api.PfnAutoAbilities: []any{34, 19},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     243,
+					typestrings.PfnAutoAbilities: []any{34, 19},
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -933,11 +934,11 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         243,
-					api.PfnAutoAbilities:     []any{30, 19},
-					api.PfnCharacterID:       5,
-					api.PfnOptionalAbilities: false,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         243,
+					typestrings.PfnAutoAbilities:     []any{30, 19},
+					typestrings.PfnCharacterID:       5,
+					typestrings.PfnOptionalAbilities: false,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -968,11 +969,11 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         243,
-					api.PfnAutoAbilities:     []any{30, 19},
-					api.PfnCharacterID:       3,
-					api.PfnOptionalAbilities: false,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         243,
+					typestrings.PfnAutoAbilities:     []any{30, 19},
+					typestrings.PfnCharacterID:       3,
+					typestrings.PfnOptionalAbilities: false,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1002,10 +1003,10 @@ func TestDropChance(t *testing.T) {
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:  247,
-					api.PfnTotalSlots: 4,
-					api.PfnEquipType:  string(database.EquipTypeWeapon),
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:  247,
+					typestrings.PfnTotalSlots: 4,
+					typestrings.PfnEquipType:  string(database.EquipTypeWeapon),
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1039,10 +1040,10 @@ func TestDropChance(t *testing.T) {
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     247,
-					api.PfnMinEmptySlots: 4,
-					api.PfnEquipType:     string(database.EquipTypeWeapon),
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     247,
+					typestrings.PfnMinEmptySlots: 4,
+					typestrings.PfnEquipType:     string(database.EquipTypeWeapon),
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1073,9 +1074,9 @@ func TestDropChance(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     305,
-					api.PfnAutoAbilities: []any{129},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     305,
+					typestrings.PfnAutoAbilities: []any{129},
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1138,9 +1139,9 @@ func TestDropChance(t *testing.T) {
 				dontCheck: map[string]bool{
 					"wanted equipment": true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     305,
-					api.PfnAutoAbilities: []any{51},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     305,
+					typestrings.PfnAutoAbilities: []any{51},
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1195,10 +1196,10 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     305,
-					api.PfnAutoAbilities: []any{51},
-					api.PfnCharacterID:   1,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     305,
+					typestrings.PfnAutoAbilities: []any{51},
+					typestrings.PfnCharacterID:   1,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1228,10 +1229,10 @@ func TestDropChance(t *testing.T) {
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         13,
-					api.PfnAutoAbilities:     []any{61},
-					api.PfnOptionalAbilities: true,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         13,
+					typestrings.PfnAutoAbilities:     []any{61},
+					typestrings.PfnOptionalAbilities: true,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1266,10 +1267,10 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         13,
-					api.PfnAutoAbilities:     []any{62},
-					api.PfnOptionalAbilities: true,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         13,
+					typestrings.PfnAutoAbilities:     []any{62},
+					typestrings.PfnOptionalAbilities: true,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1295,10 +1296,10 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         13,
-					api.PfnAutoAbilities:     []any{61},
-					api.PfnOptionalAbilities: false,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         13,
+					typestrings.PfnAutoAbilities:     []any{61},
+					typestrings.PfnOptionalAbilities: false,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1324,10 +1325,10 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         13,
-					api.PfnAutoAbilities:     []any{62},
-					api.PfnOptionalAbilities: false,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         13,
+					typestrings.PfnAutoAbilities:     []any{62},
+					typestrings.PfnOptionalAbilities: false,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1353,9 +1354,9 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:     13,
-					api.PfnAutoAbilities: []any{62, 61},
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:     13,
+					typestrings.PfnAutoAbilities: []any{62, 61},
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1380,10 +1381,10 @@ func TestDropChance(t *testing.T) {
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         256,
-					api.PfnAutoAbilities:     []any{113, 112},
-					api.PfnOptionalAbilities: false,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         256,
+					typestrings.PfnAutoAbilities:     []any{113, 112},
+					typestrings.PfnOptionalAbilities: false,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1418,10 +1419,10 @@ func TestDropChance(t *testing.T) {
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         256,
-					api.PfnAutoAbilities:     []any{113, 112},
-					api.PfnOptionalAbilities: true,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         256,
+					typestrings.PfnAutoAbilities:     []any{113, 112},
+					typestrings.PfnOptionalAbilities: true,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1446,11 +1447,11 @@ func TestDropChance(t *testing.T) {
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         191,
-					api.PfnMinEmptySlots:     4,
-					api.PfnEquipType:         string(database.EquipTypeWeapon),
-					api.PfnOptionalAbilities: false,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         191,
+					typestrings.PfnMinEmptySlots:     4,
+					typestrings.PfnEquipType:         string(database.EquipTypeWeapon),
+					typestrings.PfnOptionalAbilities: false,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1484,11 +1485,11 @@ func TestDropChance(t *testing.T) {
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         191,
-					api.PfnMinEmptySlots:     4,
-					api.PfnEquipType:         string(database.EquipTypeWeapon),
-					api.PfnOptionalAbilities: true,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         191,
+					typestrings.PfnMinEmptySlots:     4,
+					typestrings.PfnEquipType:         string(database.EquipTypeWeapon),
+					typestrings.PfnOptionalAbilities: true,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1522,11 +1523,11 @@ func TestDropChance(t *testing.T) {
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         191,
-					api.PfnTotalSlots:        4,
-					api.PfnEquipType:         string(database.EquipTypeWeapon),
-					api.PfnOptionalAbilities: false,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         191,
+					typestrings.PfnTotalSlots:        4,
+					typestrings.PfnEquipType:         string(database.EquipTypeWeapon),
+					typestrings.PfnOptionalAbilities: false,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{
@@ -1560,11 +1561,11 @@ func TestDropChance(t *testing.T) {
 				dontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[api.FieldName]any{
-					api.PfnMonsterID:         191,
-					api.PfnTotalSlots:        4,
-					api.PfnEquipType:         string(database.EquipTypeWeapon),
-					api.PfnOptionalAbilities: true,
+				requestBody: map[typestrings.FieldName]any{
+					typestrings.PfnMonsterID:         191,
+					typestrings.PfnTotalSlots:        4,
+					typestrings.PfnEquipType:         string(database.EquipTypeWeapon),
+					typestrings.PfnOptionalAbilities: true,
 				},
 			},
 			DropChanceResponse: api.DropChanceResponse{

@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -38,7 +39,7 @@ func getMonsterRelationships(cfg *Config, r *http.Request, monster seedtypes.Mon
 }
 
 func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster, error) {
-	mon, err := applyAlteredStateFromQuery(cfg, r, mon, QpnAlteredState)
+	mon, err := applyAlteredStateFromQuery(cfg, r, mon, typestrings.QpnAlteredState)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -48,14 +49,14 @@ func completeMonsterResponse(cfg *Config, r *http.Request, mon Monster) (Monster
 		return Monster{}, err
 	}
 
-	mon.BaseStats, err = applyRonsoStats(cfg, r, mon, QpnKimahriStats)
+	mon.BaseStats, err = applyRonsoStats(cfg, r, mon, typestrings.QpnKimahriStats)
 	if err != nil {
 		return Monster{}, err
 	}
 
 	mon.RegenAmounts = calcRegenAmountsMonster(cfg, mon)
 
-	mon.ElemResists, err = applyOmnisElements(cfg, r, mon, QpnOmnisElements)
+	mon.ElemResists, err = applyOmnisElements(cfg, r, mon, typestrings.QpnOmnisElements)
 	if err != nil {
 		return Monster{}, err
 	}

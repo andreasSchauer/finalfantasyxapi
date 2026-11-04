@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getAgilityTier(r *http.Request, i handlerInput[seedtypes.AgilityTier, AgilityTier, UnnamedAPIResource], id int32) (AgilityTier, error) {
@@ -33,6 +34,6 @@ func (cfg *Config) retrieveAgilityTiers(r *http.Request, i handlerInput[seedtype
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryInt(r, ids, QpnAgility, cfg.db.GetAgilityTierIDsByAgility),
+		i.queryInt(r, ids, typestrings.QpnAgility, cfg.db.GetAgilityTierIDsByAgility),
 	})
 }

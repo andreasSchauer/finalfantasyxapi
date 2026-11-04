@@ -1,4 +1,4 @@
-package api
+package typestrings
 
 import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -136,7 +136,7 @@ func QpnsToNamedParams(qpns []QueryParamName) []NamedParam {
 	return nps
 }
 
-func formatQpnSlice(qpns []QueryParamName) string {
+func FormatQpnSlice(qpns []QueryParamName) string {
 	if qpns == nil {
 		return ""
 	}
@@ -153,42 +153,42 @@ func formatQpnSlice(qpns []QueryParamName) string {
 type QueryParamType string
 
 const (
-	qptBool          QueryParamType = "bool"
-	qptEnum          QueryParamType = "enum"
-	qptEnumList      QueryParamType = "enum-list"
-	qptID            QueryParamType = "id"
-	qptIDNul         QueryParamType = "id-nul"
-	qptIDList        QueryParamType = "id-list"
-	qptInt           QueryParamType = "int"
-	qptIntList       QueryParamType = "int-list"
-	qptNameID        QueryParamType = "name/id"
-	qptNameIDList    QueryParamType = "name/id-list"
-	qptNameIDListNul QueryParamType = "name/id-list-nul"
-	qptOther         QueryParamType = "other"
-	qptStat          QueryParamType = "stat"
-	qptValue         QueryParamType = "value"
-	qptValueList     QueryParamType = "value-list"
+	QptBool          QueryParamType = "bool"
+	QptEnum          QueryParamType = "enum"
+	QptEnumList      QueryParamType = "enum-list"
+	QptID            QueryParamType = "id"
+	QptIDNul         QueryParamType = "id-nul"
+	QptIDList        QueryParamType = "id-list"
+	QptInt           QueryParamType = "int"
+	QptIntList       QueryParamType = "int-list"
+	QptNameID        QueryParamType = "name/id"
+	QptNameIDList    QueryParamType = "name/id-list"
+	QptNameIDListNul QueryParamType = "name/id-list-nul"
+	QptOther         QueryParamType = "other"
+	QptStat          QueryParamType = "stat"
+	QptValue         QueryParamType = "value"
+	QptValueList     QueryParamType = "value-list"
 )
 
 type QueryValue string
 
 const (
-	qvBlitzball QueryValue = "blitzball"
-	qvMonster   QueryValue = "monster"
-	qvQuest     QueryValue = "quest"
-	qvShop      QueryValue = "shop"
-	qvTreasure  QueryValue = "treasure"
-	qvSteal     QueryValue = "steal"
-	qvDrop      QueryValue = "drop"
-	qvBribe     QueryValue = "bribe"
-	qvOther     QueryValue = "other"
-	qvF         QueryValue = "f"
-	qvL         QueryValue = "l"
-	qvW         QueryValue = "w"
-	qvI         QueryValue = "i"
+	QvBlitzball QueryValue = "blitzball"
+	QvMonster   QueryValue = "monster"
+	QvQuest     QueryValue = "quest"
+	QvShop      QueryValue = "shop"
+	QvTreasure  QueryValue = "treasure"
+	QvSteal     QueryValue = "steal"
+	QvDrop      QueryValue = "drop"
+	QvBribe     QueryValue = "bribe"
+	QvOther     QueryValue = "other"
+	QvF         QueryValue = "f"
+	QvL         QueryValue = "l"
+	QvW         QueryValue = "w"
+	QvI         QueryValue = "i"
 )
 
-func qvsToStrings(qvs []QueryValue) []string {
+func QVsToStrings(qvs []QueryValue) []string {
 	if qvs == nil {
 		return nil
 	}
@@ -202,19 +202,19 @@ func qvsToStrings(qvs []QueryValue) []string {
 	return strings
 }
 
-func formatQvSlice(qvs []QueryValue) string {
+func FormatQvSlice(qvs []QueryValue) string {
 	if qvs == nil {
 		return ""
 	}
-	strings := qvsToStrings(qvs)
+	strings := QVsToStrings(qvs)
 	return h.FormatStringSlice(strings)
 }
 
 type QuerySpecialVal string
 
 const (
-	qsvMax      QuerySpecialVal = "max"
-	qsvImmune   QuerySpecialVal = "immune"
-	qsvInfinite QuerySpecialVal = "infinite"
-	qsvAlways   QuerySpecialVal = "always"
+	QsvMax      QuerySpecialVal = "max"
+	QsvImmune   QuerySpecialVal = "immune"
+	QsvInfinite QuerySpecialVal = "infinite"
+	QsvAlways   QuerySpecialVal = "always"
 )

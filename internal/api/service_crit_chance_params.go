@@ -1,8 +1,10 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type CritChanceParams struct {
@@ -83,21 +85,21 @@ func getCritChanceParamsDoc(cfg *Config) ParamsDoc {
 		GeneralRules: h.GetStrPtr(""),
 		Fields: []FieldDoc{
 			{
-				Field:       PfnAbility,
+				Field:       typestrings.PfnAbility,
 				Type:        "obj (abilityCritChance)",
 				Required:    true,
 				Description: "Define the ability that is being used for the attack.",
 				ChildProps:  cfg.getFieldDocAbilityCritChance(),
 			},
 			{
-				Field:       PfnUser,
+				Field:       typestrings.PfnUser,
 				Type:        "obj (userCritChance)",
 				Required:    true,
 				Description: "Define the unit that uses the ability.",
 				ChildProps:  cfg.getFieldDocUserCritChance(),
 			},
 			{
-				Field:       PfnTarget,
+				Field:       typestrings.PfnTarget,
 				Type:        "obj (targetCritChance)",
 				Required:    true,
 				Description: "Define the unit that gets hit by the ability.",
@@ -110,16 +112,16 @@ func getCritChanceParamsDoc(cfg *Config) ParamsDoc {
 func (cfg *Config) getFieldDocAbilityCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:       PfnLookup,
+			Field:       typestrings.PfnLookup,
 			Type:        "obj (abilityLookupCritChance)",
-			RequiredOr:  []FieldName{PfnCustom},
+			RequiredOr:  []typestrings.FieldName{typestrings.PfnCustom},
 			Description: "Define the ability via lookup. You can override calculation-relevant values as well.",
 			ChildProps:  cfg.getFieldDocAbilityLookupCritChance(),
 		},
 		{
-			Field:       PfnCustom,
+			Field:       typestrings.PfnCustom,
 			Type:        "obj (abilityCustomCritChance)",
-			RequiredOr:  []FieldName{PfnLookup},
+			RequiredOr:  []typestrings.FieldName{typestrings.PfnLookup},
 			Description: "Define a custom ability.",
 			ChildProps:  cfg.getFieldDocAbilityCustomCritChance(),
 		},
@@ -129,7 +131,7 @@ func (cfg *Config) getFieldDocAbilityCritChance() []FieldDoc {
 func (cfg *Config) getFieldDocAbilityLookupCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:       PfnAbilityID,
+			Field:       typestrings.PfnAbilityID,
 			Type:        "int (id: ability)",
 			Required:    true,
 			MinVal:      h.GetInt32Ptr(1),
@@ -137,13 +139,13 @@ func (cfg *Config) getFieldDocAbilityLookupCritChance() []FieldDoc {
 			Description: "To define an ability, you can specify an ability ID and look up the corresponding ability. Its calculation-relevant values will be applied automatically. These values can be overridden however, through the use of the 'overrides' field.",
 		},
 		{
-			Field:       PfnInteraction,
+			Field:       typestrings.PfnInteraction,
 			Type:        "int (idx +1: ability battle interactions)",
-			RequiresAll: []FieldName{PfnAbilityID},
+			RequiresAll: []typestrings.FieldName{typestrings.PfnAbilityID},
 			Description: "The calculator can only take one battle interaction into account. If an ability has more than one battle interaction, this field lets you specify the battle interaction to perform the calculation on.",
 		},
 		{
-			Field:       PfnOverrides,
+			Field:       typestrings.PfnOverrides,
 			Type:        "obj (abilityOverridesCritChance)",
 			Description: "Override the looked up ability's calculation-relevant values.",
 			ChildProps:  cfg.getFieldDocAbilityOverridesCritChance(),
@@ -155,13 +157,13 @@ func (cfg *Config) getFieldDocAbilityOverridesCritChance() []FieldDoc {
 	return []FieldDoc{
 
 		{
-			Field:       PfnCritical,
+			Field:       typestrings.PfnCritical,
 			Type:        "string (enum: criticalType)",
-			EnumValues:  cfg.T.CriticalType.Strings(),
+			EnumValues:  enums.T.CriticalType.Strings(),
 			Description: "Override the critical-type of the looked up ability.",
 		},
 		{
-			Field:       PfnCriticalPlusVal,
+			Field:       typestrings.PfnCriticalPlusVal,
 			Type:        "int",
 			MinVal:      h.GetInt32Ptr(0),
 			MaxVal:      h.GetInt32Ptr(100),
@@ -174,14 +176,14 @@ func (cfg *Config) getFieldDocAbilityCustomCritChance() []FieldDoc {
 	return []FieldDoc{
 
 		{
-			Field:       PfnCritical,
+			Field:       typestrings.PfnCritical,
 			Type:        "string (enum: criticalType)",
 			Required:    true,
-			EnumValues:  cfg.T.CriticalType.Strings(),
+			EnumValues:  enums.T.CriticalType.Strings(),
 			Description: "Specify the critical-type of the ability.",
 		},
 		{
-			Field:       PfnCriticalPlusVal,
+			Field:       typestrings.PfnCriticalPlusVal,
 			Type:        "int",
 			DefaultVal:  int32(0),
 			MinVal:      h.GetInt32Ptr(0),
@@ -194,21 +196,21 @@ func (cfg *Config) getFieldDocAbilityCustomCritChance() []FieldDoc {
 func (cfg *Config) getFieldDocUserCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:       PfnLookup,
+			Field:       typestrings.PfnLookup,
 			Type:        "obj (userLookupCritChance)",
-			RequiredOr:  []FieldName{PfnCustom},
+			RequiredOr:  []typestrings.FieldName{typestrings.PfnCustom},
 			Description: "Define the ability's user via monster-lookup. You can override calculation-relevant values as well.",
 			ChildProps:  cfg.getFieldDocUserLookupCritChance(),
 		},
 		{
-			Field:       PfnCustom,
+			Field:       typestrings.PfnCustom,
 			Type:        "obj (userCustomCritChance)",
-			RequiredOr:  []FieldName{PfnLookup},
+			RequiredOr:  []typestrings.FieldName{typestrings.PfnLookup},
 			Description: "Define a custom ability user.",
 			ChildProps:  cfg.getFieldDocUserCustomCritChance(),
 		},
 		{
-			Field:       PfnLuckStacks,
+			Field:       typestrings.PfnLuckStacks,
 			Type:        "int",
 			DefaultVal:  int32(0),
 			MinVal:      h.GetInt32Ptr(0),
@@ -221,7 +223,7 @@ func (cfg *Config) getFieldDocUserCritChance() []FieldDoc {
 func (cfg *Config) getFieldDocUserLookupCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:       PfnMonsterID,
+			Field:       typestrings.PfnMonsterID,
 			Type:        "int (id: monster)",
 			Required:    true,
 			MinVal:      h.GetInt32Ptr(1),
@@ -229,7 +231,7 @@ func (cfg *Config) getFieldDocUserLookupCritChance() []FieldDoc {
 			Description: "To define a user, you can specify a monster ID and look up the corresponding monster. Its luck stat, as well as its innate critical+ value will be applied automatically. These values can be overridden however, through the use of the 'overrides field. Note: I haven't found out the innate critical+ values of monsters so far, so for now, I'm assuming that it's the same as a monster's equipment drops would have (usually +3). But in general, there's only a handful of abilities that make use of a monster's critical+ value. Most of the time, enemy abilities rely on the ability's own critical+ value.",
 		},
 		{
-			Field:       PfnOverrides,
+			Field:       typestrings.PfnOverrides,
 			Type:        "obj (userOverridesCritChance)",
 			Description: "Override the monster's calculation-relevant values.",
 			ChildProps:  cfg.getFieldDocUserOverridesCritChance(),
@@ -240,14 +242,14 @@ func (cfg *Config) getFieldDocUserLookupCritChance() []FieldDoc {
 func (cfg *Config) getFieldDocUserOverridesCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:       PfnLuck,
+			Field:       typestrings.PfnLuck,
 			Type:        "int",
 			MinVal:      h.GetInt32Ptr(1),
 			MaxVal:      h.GetInt32Ptr(255),
 			Description: "Override the luck stat of the looked up monster (user).",
 		},
 		{
-			Field:       PfnCriticalPlusVal,
+			Field:       typestrings.PfnCriticalPlusVal,
 			Type:        "int",
 			MinVal:      h.GetInt32Ptr(0),
 			MaxVal:      h.GetInt32Ptr(100),
@@ -259,7 +261,7 @@ func (cfg *Config) getFieldDocUserOverridesCritChance() []FieldDoc {
 func (cfg *Config) getFieldDocUserCustomCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:       PfnLuck,
+			Field:       typestrings.PfnLuck,
 			Type:        "int",
 			Required:    true,
 			MinVal:      h.GetInt32Ptr(1),
@@ -267,7 +269,7 @@ func (cfg *Config) getFieldDocUserCustomCritChance() []FieldDoc {
 			Description: "The user's luck stat.",
 		},
 		{
-			Field:       PfnCriticalPlusVal,
+			Field:       typestrings.PfnCriticalPlusVal,
 			Type:        "int",
 			DefaultVal:  int32(6),
 			MinVal:      h.GetInt32Ptr(0),
@@ -280,21 +282,21 @@ func (cfg *Config) getFieldDocUserCustomCritChance() []FieldDoc {
 func (cfg *Config) getFieldDocTargetCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:       PfnLookup,
+			Field:       typestrings.PfnLookup,
 			Type:        "obj (targetLookupCritChance)",
-			RequiredOr:  []FieldName{PfnCustom},
+			RequiredOr:  []typestrings.FieldName{typestrings.PfnCustom},
 			Description: "Define the ability's target via monster-lookup. You can override calculation-relevant values as well.",
 			ChildProps:  cfg.getFieldDocTargetLookupCritChance(),
 		},
 		{
-			Field:       PfnCustom,
+			Field:       typestrings.PfnCustom,
 			Type:        "obj (targetCustomCritChance)",
-			RequiredOr:  []FieldName{PfnLookup},
+			RequiredOr:  []typestrings.FieldName{typestrings.PfnLookup},
 			Description: "Define a custom target.",
 			ChildProps:  cfg.getFieldDocTargetCustomCritChance(),
 		},
 		{
-			Field:       PfnJinxStacks,
+			Field:       typestrings.PfnJinxStacks,
 			Type:        "int",
 			DefaultVal:  int32(0),
 			MinVal:      h.GetInt32Ptr(0),
@@ -307,15 +309,15 @@ func (cfg *Config) getFieldDocTargetCritChance() []FieldDoc {
 func (cfg *Config) getFieldDocTargetLookupCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:       PfnMonsterID,
+			Field:       typestrings.PfnMonsterID,
 			Type:        "int (id: monster)",
-			RequiredOr:  []FieldName{PfnLuck},
+			RequiredOr:  []typestrings.FieldName{typestrings.PfnLuck},
 			MinVal:      h.GetInt32Ptr(1),
 			MaxVal:      h.GetInt32Ptr(int32(len(lookup.L.Monsters))),
 			Description: "To define a target, you can specify a monster ID and look up the corresponding monster. Its luck stat will be applied automatically. This value can be overridden however, through the use of the 'luck' field.",
 		},
 		{
-			Field:       PfnOverrides,
+			Field:       typestrings.PfnOverrides,
 			Type:        "obj (targetOverridesCritChance)",
 			Description: "Override the monster's calculation-relevant values.",
 			ChildProps:  cfg.getFieldDocTargetOverridesCritChance(),
@@ -326,7 +328,7 @@ func (cfg *Config) getFieldDocTargetLookupCritChance() []FieldDoc {
 func (cfg *Config) getFieldDocTargetOverridesCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:       PfnLuck,
+			Field:       typestrings.PfnLuck,
 			Type:        "int",
 			MinVal:      h.GetInt32Ptr(1),
 			MaxVal:      h.GetInt32Ptr(255),
@@ -338,7 +340,7 @@ func (cfg *Config) getFieldDocTargetOverridesCritChance() []FieldDoc {
 func (cfg *Config) getFieldDocTargetCustomCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
-			Field:       PfnLuck,
+			Field:       typestrings.PfnLuck,
 			Type:        "int",
 			Required:    true,
 			MinVal:      h.GetInt32Ptr(1),

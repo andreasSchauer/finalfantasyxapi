@@ -13,8 +13,6 @@ import (
 	"github.com/pressly/goose/v3"
 )
 
-var rawJSON jsonFiles
-var hashes = make(map[string]int32)
 
 func LoadDatabase(db *database.Queries, dbConn *sql.DB) error {
 	defer fmt.Println()

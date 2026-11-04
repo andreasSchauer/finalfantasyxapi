@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func TestParameters(t *testing.T) {
@@ -46,7 +46,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleAreas,
 			},
 			count:   28,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnLimit, api.QpnOffset, api.QpnItem, api.QpnSaveSphere, api.QpnSublocation, api.QpnIDs}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnLimit, typestrings.QpnOffset, typestrings.QpnItem, typestrings.QpnSaveSphere, typestrings.QpnSublocation, typestrings.QpnIDs}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -56,7 +56,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleSublocations,
 			},
 			count:   23,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnLocation, api.QpnItem, api.QpnMethods, api.QpnAeons, api.QpnShops, api.QpnFMVs, api.QpnIDs}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnLocation, typestrings.QpnItem, typestrings.QpnMethods, typestrings.QpnAeons, typestrings.QpnShops, typestrings.QpnFMVs, typestrings.QpnIDs}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -66,7 +66,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleLocations,
 			},
 			count:   22,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnKeyItem, api.QpnCharacters, api.QpnAeons, api.QpnTreasures, api.QpnSidequests, api.QpnIDs, api.QpnFlip}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnKeyItem, typestrings.QpnCharacters, typestrings.QpnAeons, typestrings.QpnTreasures, typestrings.QpnSidequests, typestrings.QpnIDs, typestrings.QpnFlip}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -76,7 +76,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleArenaCreations,
 			},
 			count:   4,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnLimit, api.QpnOffset, api.QpnCategory}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnLimit, typestrings.QpnOffset, typestrings.QpnCategory}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -86,7 +86,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleBlitzballPrizes,
 			},
 			count:   4,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnLimit, api.QpnOffset, api.QpnCategory}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnLimit, typestrings.QpnOffset, typestrings.QpnCategory}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -96,7 +96,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleFMVs,
 			},
 			count:   4,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnLimit, api.QpnOffset, api.QpnLocation}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnLimit, typestrings.QpnOffset, typestrings.QpnLocation}),
 		},
 
 		{
@@ -107,7 +107,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleMonsters,
 			},
 			count:   34,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnKimahriStats, api.QpnAlteredState, api.QpnOmnisElements, api.QpnStatusResists, api.QpnAutoAbility, api.QpnArea, api.QpnDistance, api.QpnUnderwater, api.QpnSpecies, api.QpnIDs, api.QpnYunaStats}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnKimahriStats, typestrings.QpnAlteredState, typestrings.QpnOmnisElements, typestrings.QpnStatusResists, typestrings.QpnAutoAbility, typestrings.QpnArea, typestrings.QpnDistance, typestrings.QpnUnderwater, typestrings.QpnSpecies, typestrings.QpnIDs, typestrings.QpnYunaStats}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -117,7 +117,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleMonsterFormations,
 			},
 			count:   14,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnMonster, api.QpnLocation, api.QpnAmbush, api.QpnCategory, api.QpnIDs}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnMonster, typestrings.QpnLocation, typestrings.QpnAmbush, typestrings.QpnCategory, typestrings.QpnIDs}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -127,7 +127,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleOverdriveModes,
 			},
 			count:   4,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnLimit, api.QpnOffset, api.QpnType}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnLimit, typestrings.QpnOffset, typestrings.QpnType}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -137,7 +137,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleShops,
 			},
 			count:   13,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnLocation, api.QpnAutoAbility, api.QpnItems, api.QpnEquipment, api.QpnAvailability, api.QpnIDs}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnLocation, typestrings.QpnAutoAbility, typestrings.QpnItems, typestrings.QpnEquipment, typestrings.QpnAvailability, typestrings.QpnIDs}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -147,7 +147,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleSongs,
 			},
 			count:   10,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnArea, api.QpnFMVs, api.QpnComposer, api.QpnSpecialUse}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnArea, typestrings.QpnFMVs, typestrings.QpnComposer, typestrings.QpnSpecialUse}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -157,7 +157,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleSidequests,
 			},
 			count:   4,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnLimit, api.QpnOffset, api.QpnAvailability}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnLimit, typestrings.QpnOffset, typestrings.QpnAvailability}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -167,7 +167,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleSubquests,
 			},
 			count:   5,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnLimit, api.QpnOffset, api.QpnAvailability, api.QpnRepeatable}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnLimit, typestrings.QpnOffset, typestrings.QpnAvailability, typestrings.QpnRepeatable}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -177,7 +177,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleTreasures,
 			},
 			count:   14,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnSublocation, api.QpnLootType, api.QpnTreasureType, api.QpnAnima, api.QpnAvailability}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnSublocation, typestrings.QpnLootType, typestrings.QpnTreasureType, typestrings.QpnAnima, typestrings.QpnAvailability}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -187,7 +187,7 @@ func TestParameters(t *testing.T) {
 				handler:        testCfg.HandleEnums,
 			},
 			count:   2,
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnLimit, api.QpnOffset}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnLimit, typestrings.QpnOffset}),
 		},
 		{
 			testGeneral: testGeneral{
@@ -198,7 +198,7 @@ func TestParameters(t *testing.T) {
 			},
 			count:   2,
 			next:    h.GetStrPtr("/enums/parameters?limit=1&offset=1"),
-			results: api.QpnsToNamedParams([]api.QueryParamName{api.QpnLimit}),
+			results: typestrings.QpnsToNamedParams([]typestrings.QueryParamName{typestrings.QpnLimit}),
 		},
 	}
 

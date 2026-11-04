@@ -6,8 +6,10 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type RelAvlParams struct {
@@ -17,18 +19,18 @@ type RelAvlParams struct {
 }
 
 func (i handlerInput[T, R, A]) queryAvlRelGetParams(cfg *Config, r *http.Request, parentID int32) (RelAvlParams, error) {
-	queryParam := i.queryLookup[QpnRelAvailability]
+	queryParam := i.queryLookup[typestrings.QpnRelAvailability]
 
-	availabilities, err := queryParam.parseEnumList(cfg, r, cfg.T.AvailabilityType)
+	availabilities, err := queryParam.parseEnumList(cfg, r, enums.T.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return RelAvlParams{}, err
 	}
 
 	var repeatable sql.NullBool
 
-	_, ok := i.queryLookup[QpnRelRepeatable]
+	_, ok := i.queryLookup[typestrings.QpnRelRepeatable]
 	if ok {
-		repeatable, err = nullBool(r, QpnRelRepeatable, i.queryLookup)
+		repeatable, err = nullBool(r, typestrings.QpnRelRepeatable, i.queryLookup)
 		if errExceptEmptyQuery(err) {
 			return RelAvlParams{}, err
 		}

@@ -7,6 +7,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
+var hashes = make(map[string]int32)
+
 func generateDataHash(hs seedtypes.Hashable) string {
 	return h.CombineFields(hs.ToHashFields())
 }
