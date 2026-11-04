@@ -11,9 +11,8 @@ type Server struct {
 }
 
 func (srv *Server) Init() error {
-	var err error
-
-	srv.Cfg, err = config.ConfigInit()
+	srv.Cfg = &config.Config{}
+	err := srv.Cfg.Init()
 	if err != nil {
 		return err
 	}

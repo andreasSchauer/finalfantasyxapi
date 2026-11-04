@@ -22,48 +22,46 @@ type Config struct {
 	FetchLimit  int
 }
 
-func ConfigInit() (*Config, error) {
+func (cfg *Config) Init() error {
 	const domain = "localhost:8080"
 	const fetchLimit = 1000
 	const connLimit = 25
 
 	dbURL := os.Getenv("DB_URL")
 	if dbURL == "" {
-		return nil, errors.New("DB_URL must be set")
+		return errors.New("DB_URL must be set")
 	}
 
 	platform := os.Getenv("PLATFORM")
 	if platform == "" {
-		return nil, errors.New("PLATFORM must be set")
+		return errors.New("PLATFORM must be set")
 	}
 
 	adminAPIKey := os.Getenv("ADMIN_API_KEY")
 	if adminAPIKey == "" {
-		return nil, errors.New("ADMIN_API_KEY must be set")
+		return errors.New("ADMIN_API_KEY must be set")
 	}
 
 	dbConn, err := sql.Open("postgres", dbURL)
 	if err != nil {
-		return nil, fmt.Errorf("error opening database: %v", err)
+		return fmt.Errorf("error opening database: %v", err)
 	}
 	dbConn.SetMaxOpenConns(connLimit)
 	dbConn.SetMaxIdleConns(connLimit)
 	dbConn.SetConnMaxLifetime(time.Hour)
 	dbQueries := database.New(dbConn)
 
-	cfg := Config{
-		DB:          dbQueries,
-		DBConn:      dbConn,
-		Platform:    platform,
-		AdminAPIKey: adminAPIKey,
-		Host:        domain,
-		FetchLimit:  fetchLimit,
-	}
+	cfg.DB = dbQueries
+	cfg.DBConn = dbConn
+	cfg.Platform = platform
+	cfg.AdminAPIKey = adminAPIKey
+	cfg.Host = domain
+	cfg.FetchLimit = fetchLimit
 
 	err = seeding.LoadDatabase(cfg.DB, cfg.DBConn)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &cfg, nil
+	return nil
 }
