@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func getMonstersByElemResists(cfg *Config, r *http.Request, ctx context.Context, query string, queryParam QueryParam) ([]int32, error) {
@@ -90,7 +90,7 @@ func getMonstersByStatusResists(cfg *Config, r *http.Request, ctx context.Contex
 }
 
 func verifyMonsterResistance(cfg *Config, r *http.Request) (int32, error) {
-	queryParam := cfg.Q.monsters[typestrings.QpnResistance]
+	queryParam := cfg.Q.monsters[ts.QpnResistance]
 
 	resistance, err := queryParam.parseInt(r)
 	if err != nil {
@@ -103,7 +103,7 @@ func verifyMonsterResistance(cfg *Config, r *http.Request) (int32, error) {
 func getMonstersByAutoAbility(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.Monsters
 
-	queryParam := i.queryLookup[typestrings.QpnIsForced]
+	queryParam := i.queryLookup[ts.QpnIsForced]
 
 	isForced, err := queryParam.parseBool(r)
 	if queryIsEmpty(err) {
@@ -134,7 +134,7 @@ func getMonstersByItem(cfg *Config, r *http.Request, ctx context.Context, id int
 		Methods: methods,
 	})
 	if err != nil {
-		return nil, newHTTPErrorDBFilter(i.resTypePlural, i.queryLookup[typestrings.QpnItem], err)
+		return nil, newHTTPErrorDBFilter(i.resTypePlural, i.queryLookup[ts.QpnItem], err)
 	}
 
 	return dbIDs, nil
@@ -142,7 +142,7 @@ func getMonstersByItem(cfg *Config, r *http.Request, ctx context.Context, id int
 
 func getMonsterItemMethods(cfg *Config, r *http.Request) ([]string, error) {
 	i := cfg.E.Monsters
-	paramMethods := i.queryLookup[typestrings.QpnMethods]
+	paramMethods := i.queryLookup[ts.QpnMethods]
 	aliasses := map[string][]string{
 		"steal": {"steal_common", "steal_rare"},
 		"drop":  {"drop_common", "drop_rare", "drop_secondary_common", "drop_secondary_rare"},
@@ -153,7 +153,7 @@ func getMonsterItemMethods(cfg *Config, r *http.Request) ([]string, error) {
 		return nil, err
 	}
 	if queryIsEmpty(err) {
-		queryMethods = typestrings.QVsToStrings(paramMethods.AllowedValues)
+		queryMethods = ts.QVsToStrings(paramMethods.AllowedValues)
 	}
 
 	methods := []string{}

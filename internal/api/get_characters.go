@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seedtypes.Character, Character, NamedAPIResource], id int32) (Character, error) {
@@ -61,7 +61,7 @@ func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seedtypes.
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryBool(r, ids, typestrings.QpnStoryBased, cfg.db.GetCharacterIDsStoryBased),
-		i.queryBool(r, ids, typestrings.QpnUnderwater, cfg.db.GetCharacterIDsCanFightUnderwater),
+		i.queryBool(r, ids, ts.QpnStoryBased, cfg.db.GetCharacterIDsStoryBased),
+		i.queryBool(r, ids, ts.QpnUnderwater, cfg.db.GetCharacterIDsCanFightUnderwater),
 	})
 }

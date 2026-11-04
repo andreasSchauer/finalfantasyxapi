@@ -6,10 +6,10 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName typestrings.QueryParamName) ([]ElementalResist, error) {
+func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName ts.QueryParamName) ([]ElementalResist, error) {
 	circlesAffinity := map[int]string{
 		0: string(database.ElementalAffinityNeutral),
 		1: string(database.ElementalAffinityHalved),
@@ -57,7 +57,7 @@ func applyOmnisElements(cfg *Config, r *http.Request, mon Monster, queryName typ
 }
 
 // verifies the input and counts the amounts of circles pointing to each element
-func parseOmnisQuery(cfg *Config, r *http.Request, queryName typestrings.QueryParamName) (map[string]int, error) {
+func parseOmnisQuery(cfg *Config, r *http.Request, queryName ts.QueryParamName) (map[string]int, error) {
 	queryParam := cfg.Q.monsters[queryName]
 	query, err := queryParam.checkEmpty(r)
 	if err != nil {

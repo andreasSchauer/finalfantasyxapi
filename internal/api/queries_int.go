@@ -5,11 +5,11 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // query uses an integer value as input.
-func (i handlerInput[T, R, A]) queryInt(r *http.Request, inputIDs []int32, queryName typestrings.QueryParamName, dbQuery DBQueryIntMany) IDFilter {
+func (i handlerInput[T, R, A]) queryInt(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
@@ -34,7 +34,7 @@ func (i handlerInput[T, R, A]) queryInt(r *http.Request, inputIDs []int32, query
 }
 
 // query uses an integer value as input.
-func (i handlerInput[T, R, A]) queryIntWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName typestrings.QueryParamName, wrapperFn QueryWrapInt) IDFilter {
+func (i handlerInput[T, R, A]) queryIntWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {

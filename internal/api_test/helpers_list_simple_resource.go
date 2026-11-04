@@ -2,7 +2,7 @@ package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type gotSimpleResourceList[T api.APIResource, S api.SimpleResource] struct {
@@ -19,7 +19,7 @@ func (l gotSimpleResourceList[T, S]) GetResults() []S {
 	return l.Results
 }
 
-func compareSimpleResourceLists[T api.APIResource, S api.SimpleResource](test test, endpoint typestrings.EndpointName, expList expListIDs, gotList gotSimpleResourceList[T, S]) {
+func compareSimpleResourceLists[T api.APIResource, S api.SimpleResource](test test, endpoint ts.EndpointName, expList expListIDs, gotList gotSimpleResourceList[T, S]) {
 	test.t.Helper()
 	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
 
@@ -29,7 +29,7 @@ func compareSimpleResourceLists[T api.APIResource, S api.SimpleResource](test te
 	test.checkSubResIDsInSlice("results", endpoint, expList.results, gotList.GetResults())
 }
 
-func (test test) checkSubResIDsInSlice[T api.SimpleResource](fieldName string, endpoint typestrings.EndpointName, expIDs []int32, gotRes []T) {
+func (test test) checkSubResIDsInSlice[T api.SimpleResource](fieldName string, endpoint ts.EndpointName, expIDs []int32, gotRes []T) {
 	test.t.Helper()
 	test.checkSliceBasic(fieldName, expIDs, gotRes)
 

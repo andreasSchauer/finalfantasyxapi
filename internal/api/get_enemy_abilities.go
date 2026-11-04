@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getEnemyAbility(r *http.Request, i handlerInput[seedtypes.EnemyAbility, EnemyAbility, NamedAPIResource], id int32) (EnemyAbility, error) {
@@ -46,21 +46,21 @@ func (cfg *Config) retrieveEnemyAbilities(r *http.Request, i handlerInput[seedty
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, typestrings.QpnMonster, lookup.L.Monsters, cfg.db.GetEnemyAbilityIDsByMonster),
-		i.queryEnumList(cfg, r, enums.T.DamageType, ids, typestrings.QpnDamageType, getTypedAbilityIDsByDamageType(cfg, abilityType)),
-		i.queryEnumList(cfg, r, enums.T.AttackType, ids, typestrings.QpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType)),
-		i.queryEnumList(cfg, r, enums.T.TargetType, ids, typestrings.QpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType)),
-		i.queryEnum(r, enums.T.DamageFormula, ids, typestrings.QpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType)),
-		i.queryIntList(cfg, r, ids, typestrings.QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		i.queryNameIDListNul(cfg, r, ids, typestrings.QpnElement, cfg.E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
-		i.queryIDNul(r, ids, typestrings.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
-		i.queryIDNul(r, ids, typestrings.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
-		i.queryBool(r, ids, typestrings.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnCanCrit, getTypedAbilityIDsCanCrit(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnBDL, getTypedAbilityIDsBreakDmgLimit(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnDarkable, getTypedAbilityIDsDarkable(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnSilenceable, getTypedAbilityIDsSilenceable(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnReflectable, getTypedAbilityIDsReflectable(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnDelay, getTypedAbilityIDsDealsDelay(cfg, abilityType)),
+		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, cfg.db.GetEnemyAbilityIDsByMonster),
+		i.queryEnumList(cfg, r, enums.T.DamageType, ids, ts.QpnDamageType, getTypedAbilityIDsByDamageType(cfg, abilityType)),
+		i.queryEnumList(cfg, r, enums.T.AttackType, ids, ts.QpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType)),
+		i.queryEnumList(cfg, r, enums.T.TargetType, ids, ts.QpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType)),
+		i.queryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType)),
+		i.queryIntList(cfg, r, ids, ts.QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
+		i.queryNameIDListNul(cfg, r, ids, ts.QpnElement, cfg.E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
+		i.queryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
+		i.queryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
+		i.queryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnCanCrit, getTypedAbilityIDsCanCrit(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnBDL, getTypedAbilityIDsBreakDmgLimit(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnDarkable, getTypedAbilityIDsDarkable(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnSilenceable, getTypedAbilityIDsSilenceable(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnReflectable, getTypedAbilityIDsReflectable(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnDelay, getTypedAbilityIDsDealsDelay(cfg, abilityType)),
 	})
 }

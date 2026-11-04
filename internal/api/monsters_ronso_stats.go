@@ -5,10 +5,10 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName typestrings.QueryParamName) ([]BaseStat, error) {
+func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName ts.QueryParamName) ([]BaseStat, error) {
 	allowedStatIDs := []int32{1, 3, 5, 7}
 	baseStats := mon.BaseStats
 	queryParam := cfg.Q.monsters[queryName]

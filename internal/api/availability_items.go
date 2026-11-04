@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func filterAvlMasterItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
@@ -24,7 +24,7 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[typestrings.QpnMethods].parseValueList(cfg, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func filterAvlItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[typestrings.QpnMethods].parseValueList(cfg, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -100,7 +100,7 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[typestrings.QpnMethods].parseValueList(cfg, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -136,7 +136,7 @@ func filterAvlSpheres(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, 
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[typestrings.QpnMethods].parseValueList(cfg, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

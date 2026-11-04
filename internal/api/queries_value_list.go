@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i handlerInput[T, R, A]) queryValueList(cfg *Config, r *http.Request, inputIDs []int32, queryName typestrings.QueryParamName, dbQuery DBQueryStringList) IDFilter {
+func (i handlerInput[T, R, A]) queryValueList(cfg *Config, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryStringList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {

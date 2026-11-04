@@ -2,72 +2,72 @@ package api
 
 import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
 	defaultParamSlice []QueryParam
-	defaultParams     map[typestrings.QueryParamName]QueryParam
+	defaultParams     map[ts.QueryParamName]QueryParam
 
-	locations    map[typestrings.QueryParamName]QueryParam
-	sublocations map[typestrings.QueryParamName]QueryParam
-	areas        map[typestrings.QueryParamName]QueryParam
+	locations    map[ts.QueryParamName]QueryParam
+	sublocations map[ts.QueryParamName]QueryParam
+	areas        map[ts.QueryParamName]QueryParam
 
-	monsterFormations map[typestrings.QueryParamName]QueryParam
-	shops             map[typestrings.QueryParamName]QueryParam
-	treasures         map[typestrings.QueryParamName]QueryParam
-	quests            map[typestrings.QueryParamName]QueryParam
-	sidequests        map[typestrings.QueryParamName]QueryParam
-	subquests         map[typestrings.QueryParamName]QueryParam
-	arenaCreations    map[typestrings.QueryParamName]QueryParam
-	blitzballPrizes   map[typestrings.QueryParamName]QueryParam
-	songs             map[typestrings.QueryParamName]QueryParam
-	fmvs              map[typestrings.QueryParamName]QueryParam
+	monsterFormations map[ts.QueryParamName]QueryParam
+	shops             map[ts.QueryParamName]QueryParam
+	treasures         map[ts.QueryParamName]QueryParam
+	quests            map[ts.QueryParamName]QueryParam
+	sidequests        map[ts.QueryParamName]QueryParam
+	subquests         map[ts.QueryParamName]QueryParam
+	arenaCreations    map[ts.QueryParamName]QueryParam
+	blitzballPrizes   map[ts.QueryParamName]QueryParam
+	songs             map[ts.QueryParamName]QueryParam
+	fmvs              map[ts.QueryParamName]QueryParam
 
-	playerUnits      map[typestrings.QueryParamName]QueryParam
-	characters       map[typestrings.QueryParamName]QueryParam
-	aeons            map[typestrings.QueryParamName]QueryParam
-	characterClasses map[typestrings.QueryParamName]QueryParam
-	monsters         map[typestrings.QueryParamName]QueryParam
+	playerUnits      map[ts.QueryParamName]QueryParam
+	characters       map[ts.QueryParamName]QueryParam
+	aeons            map[ts.QueryParamName]QueryParam
+	characterClasses map[ts.QueryParamName]QueryParam
+	monsters         map[ts.QueryParamName]QueryParam
 
-	abilities          map[typestrings.QueryParamName]QueryParam
-	playerAbilities    map[typestrings.QueryParamName]QueryParam
-	overdriveAbilities map[typestrings.QueryParamName]QueryParam
-	itemAbilities      map[typestrings.QueryParamName]QueryParam
-	triggerCommands    map[typestrings.QueryParamName]QueryParam
-	miscAbilities      map[typestrings.QueryParamName]QueryParam
-	enemyAbilities     map[typestrings.QueryParamName]QueryParam
+	abilities          map[ts.QueryParamName]QueryParam
+	playerAbilities    map[ts.QueryParamName]QueryParam
+	overdriveAbilities map[ts.QueryParamName]QueryParam
+	itemAbilities      map[ts.QueryParamName]QueryParam
+	triggerCommands    map[ts.QueryParamName]QueryParam
+	miscAbilities      map[ts.QueryParamName]QueryParam
+	enemyAbilities     map[ts.QueryParamName]QueryParam
 
-	aeonCommands      map[typestrings.QueryParamName]QueryParam
-	overdriveCommands map[typestrings.QueryParamName]QueryParam
-	overdrives        map[typestrings.QueryParamName]QueryParam
-	ronsoRages        map[typestrings.QueryParamName]QueryParam
-	submenus          map[typestrings.QueryParamName]QueryParam
-	topmenus          map[typestrings.QueryParamName]QueryParam
+	aeonCommands      map[ts.QueryParamName]QueryParam
+	overdriveCommands map[ts.QueryParamName]QueryParam
+	overdrives        map[ts.QueryParamName]QueryParam
+	ronsoRages        map[ts.QueryParamName]QueryParam
+	submenus          map[ts.QueryParamName]QueryParam
+	topmenus          map[ts.QueryParamName]QueryParam
 
-	allItems map[typestrings.QueryParamName]QueryParam
-	items    map[typestrings.QueryParamName]QueryParam
-	keyItems map[typestrings.QueryParamName]QueryParam
-	spheres  map[typestrings.QueryParamName]QueryParam
-	primers  map[typestrings.QueryParamName]QueryParam
-	mixes    map[typestrings.QueryParamName]QueryParam
+	allItems map[ts.QueryParamName]QueryParam
+	items    map[ts.QueryParamName]QueryParam
+	keyItems map[ts.QueryParamName]QueryParam
+	spheres  map[ts.QueryParamName]QueryParam
+	primers  map[ts.QueryParamName]QueryParam
+	mixes    map[ts.QueryParamName]QueryParam
 
-	autoAbilities    map[typestrings.QueryParamName]QueryParam
-	equipmentTables  map[typestrings.QueryParamName]QueryParam
-	equipment        map[typestrings.QueryParamName]QueryParam
-	celestialWeapons map[typestrings.QueryParamName]QueryParam
+	autoAbilities    map[ts.QueryParamName]QueryParam
+	equipmentTables  map[ts.QueryParamName]QueryParam
+	equipment        map[ts.QueryParamName]QueryParam
+	celestialWeapons map[ts.QueryParamName]QueryParam
 
-	stats            map[typestrings.QueryParamName]QueryParam
-	properties       map[typestrings.QueryParamName]QueryParam
-	overdriveModes   map[typestrings.QueryParamName]QueryParam
-	elements         map[typestrings.QueryParamName]QueryParam
-	statusConditions map[typestrings.QueryParamName]QueryParam
-	modifiers        map[typestrings.QueryParamName]QueryParam
-	agilityTiers     map[typestrings.QueryParamName]QueryParam
+	stats            map[ts.QueryParamName]QueryParam
+	properties       map[ts.QueryParamName]QueryParam
+	overdriveModes   map[ts.QueryParamName]QueryParam
+	elements         map[ts.QueryParamName]QueryParam
+	statusConditions map[ts.QueryParamName]QueryParam
+	modifiers        map[ts.QueryParamName]QueryParam
+	agilityTiers     map[ts.QueryParamName]QueryParam
 
-	enums     map[typestrings.QueryParamName]QueryParam
-	endpoints map[typestrings.QueryParamName]QueryParam
+	enums     map[ts.QueryParamName]QueryParam
+	endpoints map[ts.QueryParamName]QueryParam
 }
 
 func (cfg *Config) QueryLookupInit() {
@@ -75,22 +75,22 @@ func (cfg *Config) QueryLookupInit() {
 
 	defaultParams := []QueryParam{
 		{
-			Name:        typestrings.QpnLimit,
+			Name:        ts.QpnLimit,
 			Description: "Sets the amount of displayed entries in a list response. If not set manually, the default is 20. The value 'max' can also be used to forgo pagination of lists entirely.",
-			Type:        typestrings.QptInt,
+			Type:        ts.QptInt,
 			ParamUse:    puList,
 			SpecialInputs: []SpecialQueryInput{
 				{
-					Key: typestrings.QsvMax,
+					Key: ts.QsvMax,
 					Val: 9999,
 				},
 			},
 			DefaultVal: h.GetIntPtr(20),
 		},
 		{
-			Name:        typestrings.QpnOffset,
+			Name:        ts.QpnOffset,
 			Description: "Sets the offset from where to start the displayed entries in a list response. If not set manually, the default is 0.",
-			Type:        typestrings.QptInt,
+			Type:        ts.QptInt,
 			ParamUse:    puList,
 			DefaultVal:  h.GetIntPtr(0),
 		},

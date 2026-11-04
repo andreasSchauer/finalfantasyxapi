@@ -5,11 +5,11 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func applyPossessedAeonStats(cfg *Config, r *http.Request, mon Monster) ([]BaseStat, error) {
-	paramYunaStats := cfg.Q.monsters[typestrings.QpnYunaStats]
+	paramYunaStats := cfg.Q.monsters[ts.QpnYunaStats]
 	if !slices.Contains(paramYunaStats.AllowedIDs, mon.ID) {
 		return mon.BaseStats, nil
 	}

@@ -7,7 +7,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func TestTurnOrder(t *testing.T) {
@@ -21,7 +22,7 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "at least one of these fields must have a value: 'party', 'mons', 'formation_id'",
-				requestBody:    map[typestrings.FieldName]any{},
+				requestBody:    map[ts.FieldName]any{},
 			},
 		},
 		{
@@ -30,8 +31,8 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "value '0' of field 'turns_amt' is out of range. allowed range: 1 to 1000",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnTurnsAmt: 0,
+				requestBody: map[ts.FieldName]any{
+					ts.PfnTurnsAmt: 0,
 				},
 			},
 		},
@@ -41,8 +42,8 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "id '0' of field 'formation_id' is out of range. allowed range: 1 to 331",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnFormationID: 0,
+				requestBody: map[ts.FieldName]any{
+					ts.PfnFormationID: 0,
 				},
 			},
 		},
@@ -52,8 +53,8 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "empty array used for field 'party'. the use of empty arrays is not supported by this API. omit the field, or use 'null' instead",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnParty: []map[typestrings.FieldName]any{},
+				requestBody: map[ts.FieldName]any{
+					ts.PfnParty: []map[ts.FieldName]any{},
 				},
 			},
 		},
@@ -63,8 +64,8 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "empty array used for field 'mons'. the use of empty arrays is not supported by this API. omit the field, or use 'null' instead",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{},
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{},
 				},
 			},
 		},
@@ -74,8 +75,8 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "too many items in array of field 'party'. got: 4, maximum allowed: 3",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnParty: []map[typestrings.FieldName]any{{}, {}, {}, {}},
+				requestBody: map[ts.FieldName]any{
+					ts.PfnParty: []map[ts.FieldName]any{{}, {}, {}, {}},
 				},
 			},
 		},
@@ -85,9 +86,9 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "field 'formation_id' can't be used in combination with field 'mons'",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnFormationID: 0,
-					typestrings.PfnMons:        []map[typestrings.FieldName]any{{}, {}, {}, {}},
+				requestBody: map[ts.FieldName]any{
+					ts.PfnFormationID: 0,
+					ts.PfnMons:        []map[ts.FieldName]any{{}, {}, {}, {}},
 				},
 			},
 		},
@@ -97,10 +98,10 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 0 of array at field 'party': id '0' of field 'unit_id' is out of range. allowed range: 1 to 18",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID: 0,
+							ts.PfnUnitID: 0,
 						},
 					},
 				},
@@ -112,14 +113,14 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 1 of array at field 'party': field 'unit_id' can't be empty",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 0,
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 0,
 						},
 						{
-							typestrings.PfnAgility: 0,
+							ts.PfnAgility: 0,
 						},
 					},
 				},
@@ -131,15 +132,15 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 1 of array at field 'party': id '0' of field 'unit_id' is out of range. allowed range: 1 to 18",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 0,
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 0,
 						},
 						{
-							typestrings.PfnUnitID:  0,
-							typestrings.PfnAgility: 0,
+							ts.PfnUnitID:  0,
+							ts.PfnAgility: 0,
 						},
 					},
 				},
@@ -151,14 +152,14 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 1 of array at field 'party': field 'agility' can't be empty",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 255,
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 255,
 						},
 						{
-							typestrings.PfnUnitID: 2,
+							ts.PfnUnitID: 2,
 						},
 					},
 				},
@@ -170,15 +171,15 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "field 'party': duplicate unit id found at index 1. each party member can only appear once",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 255,
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 255,
 						},
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 25,
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 25,
 						},
 					},
 				},
@@ -190,16 +191,16 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 0 of array at field 'party': value 'hapfte' of field 'status' is not a valid enum value. allowed values: 'haste', 'slow', 'auto-haste'",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 255,
-							typestrings.PfnStatus:  "hapfte",
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 255,
+							ts.PfnStatus:  "hapfte",
 						},
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 25,
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 25,
 						},
 					},
 				},
@@ -211,15 +212,15 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 1 of array at field 'party': invalid field: 'text'",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 255,
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 255,
 						},
 						{
-							typestrings.PfnText:    1,
-							typestrings.PfnAgility: 25,
+							ts.PfnText:    1,
+							ts.PfnAgility: 25,
 						},
 					},
 				},
@@ -231,10 +232,10 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 0 of array at field 'mons': at least one of these fields must have a value: 'monster_id', 'name'",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnAgility: 25,
+							ts.PfnAgility: 25,
 						},
 					},
 				},
@@ -246,10 +247,10 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 0 of array at field 'mons': field 'name' requires the following fields to have a value: 'agility'",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnName: "frank",
+							ts.PfnName: "frank",
 						},
 					},
 				},
@@ -261,14 +262,14 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 1 of array at field 'mons': field 'name' can't be used in combination with field 'monster_id'",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 23,
+							ts.PfnMonsterID: 23,
 						},
 						{
-							typestrings.PfnName:      "frank",
-							typestrings.PfnMonsterID: 23,
+							ts.PfnName:      "frank",
+							ts.PfnMonsterID: 23,
 						},
 					},
 				},
@@ -280,14 +281,14 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 1 of array at field 'mons': field 'alt_state' requires the following fields to have a value: 'monster_id'",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 23,
+							ts.PfnMonsterID: 23,
 						},
 						{
-							typestrings.PfnName:     "frank",
-							typestrings.PfnAltState: 2,
+							ts.PfnName:     "frank",
+							ts.PfnAltState: 2,
 						},
 					},
 				},
@@ -299,20 +300,20 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 2 of array at field 'mons': field 'alt_state' can only be used with the following id-value pairs: id: 32, vals: 2, 3 | id: 139, vals: 1, 2, 3 | id: 160, vals: 1 | id: 198, vals: 1 | id: 285, vals: 1 | id: 287, vals: 2",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 23,
+							ts.PfnMonsterID: 23,
 						},
 						{
-							typestrings.PfnMonsterID: 15,
+							ts.PfnMonsterID: 15,
 						},
 						{
-							typestrings.PfnMonsterID: 12,
-							typestrings.PfnAltState:  2,
+							ts.PfnMonsterID: 12,
+							ts.PfnAltState:  2,
 						},
 						{
-							typestrings.PfnMonsterID: 15,
+							ts.PfnMonsterID: 15,
 						},
 					},
 				},
@@ -324,11 +325,11 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 0 of array at field 'mons': provided value '1' used for 'alt_state' is not available for id '32'. allowed vals: 2, 3",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 32,
-							typestrings.PfnAltState:  1,
+							ts.PfnMonsterID: 32,
+							ts.PfnAltState:  1,
 						},
 					},
 				},
@@ -340,11 +341,11 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 0 of array at field 'mons': provided value '0' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 32,
-							typestrings.PfnAltState:  0,
+							ts.PfnMonsterID: 32,
+							ts.PfnAltState:  0,
 						},
 					},
 				},
@@ -356,11 +357,11 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "index 0 of array at field 'mons': provided value '4' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 32,
-							typestrings.PfnAltState:  4,
+							ts.PfnMonsterID: 32,
+							ts.PfnAltState:  4,
 						},
 					},
 				},
@@ -372,13 +373,13 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "field 'mons': duplicate monster found at index 1. exact duplicate monsters are not allowed",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 32,
+							ts.PfnMonsterID: 32,
 						},
 						{
-							typestrings.PfnMonsterID: 32,
+							ts.PfnMonsterID: 32,
 						},
 					},
 				},
@@ -390,11 +391,11 @@ func TestTurnOrder(t *testing.T) {
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "monster 'penance' is immune to 'slow'",
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 305,
-							typestrings.PfnStatus:    string(database.HasteStatusSlow),
+							ts.PfnMonsterID: 305,
+							ts.PfnStatus:    string(database.HasteStatusSlow),
 						},
 					},
 				},
@@ -410,11 +411,11 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   1,
 					"opponent party": 0,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 50,
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 50,
 						},
 					},
 				},
@@ -476,20 +477,20 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   1,
 					"opponent party": 1,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnTurnsAmt: 20,
-					typestrings.PfnRNG:      string(database.TurnOrderRngWorst),
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnTurnsAmt: 20,
+					ts.PfnRNG:      string(database.TurnOrderRngWorst),
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 50,
-							typestrings.PfnStatus:  string(database.HasteStatusHaste),
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 50,
+							ts.PfnStatus:  string(database.HasteStatusHaste),
 						},
 					},
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 27,
-							typestrings.PfnStatus:    string(database.HasteStatusSlow),
+							ts.PfnMonsterID: 27,
+							ts.PfnStatus:    string(database.HasteStatusSlow),
 						},
 					},
 				},
@@ -572,21 +573,21 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   1,
 					"opponent party": 1,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnTurnsAmt:      10,
-					typestrings.PfnIgnImmunities: true,
-					typestrings.PfnRNG:           string(database.TurnOrderRngBest),
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnTurnsAmt:      10,
+					ts.PfnIgnImmunities: true,
+					ts.PfnRNG:           string(database.TurnOrderRngBest),
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 50,
-							typestrings.PfnStatus:  string(database.HasteStatusAutoHaste),
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 50,
+							ts.PfnStatus:  string(database.HasteStatusAutoHaste),
 						},
 					},
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 261,
-							typestrings.PfnStatus:    string(database.HasteStatusSlow),
+							ts.PfnMonsterID: 261,
+							ts.PfnStatus:    string(database.HasteStatusSlow),
 						},
 					},
 				},
@@ -669,29 +670,29 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   1,
 					"opponent party": 2,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnTurnsAmt:      10,
-					typestrings.PfnIgnImmunities: true,
-					typestrings.PfnRNG:           string(database.TurnOrderRngBest),
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnTurnsAmt:      10,
+					ts.PfnIgnImmunities: true,
+					ts.PfnRNG:           string(database.TurnOrderRngBest),
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:      1,
-							typestrings.PfnAgility:     50,
-							typestrings.PfnFirstStrike: true,
-							typestrings.PfnStatus:      string(database.HasteStatusAutoHaste),
+							ts.PfnUnitID:      1,
+							ts.PfnAgility:     50,
+							ts.PfnFirstStrike: true,
+							ts.PfnStatus:      string(database.HasteStatusAutoHaste),
 						},
 					},
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnName:        "frank",
-							typestrings.PfnAgility:     50,
-							typestrings.PfnFirstStrike: true,
-							typestrings.PfnStatus:      string(database.HasteStatusSlow),
+							ts.PfnName:        "frank",
+							ts.PfnAgility:     50,
+							ts.PfnFirstStrike: true,
+							ts.PfnStatus:      string(database.HasteStatusSlow),
 						},
 						{
-							typestrings.PfnName:    "frank",
-							typestrings.PfnAgility: 80,
-							typestrings.PfnStatus:  string(database.HasteStatusHaste),
+							ts.PfnName:    "frank",
+							ts.PfnAgility: 80,
+							ts.PfnStatus:  string(database.HasteStatusHaste),
 						},
 					},
 				},
@@ -787,30 +788,30 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   3,
 					"opponent party": 1,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnTurnsAmt:    10,
-					typestrings.PfnBattleStart: string(database.BattleStartAmbush),
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnTurnsAmt:    10,
+					ts.PfnBattleStart: string(database.BattleStartAmbush),
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  5,
-							typestrings.PfnAgility: 255,
-							typestrings.PfnStatus:  string(database.HasteStatusAutoHaste),
+							ts.PfnUnitID:  5,
+							ts.PfnAgility: 255,
+							ts.PfnStatus:  string(database.HasteStatusAutoHaste),
 						},
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 255,
-							typestrings.PfnStatus:  string(database.HasteStatusAutoHaste),
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 255,
+							ts.PfnStatus:  string(database.HasteStatusAutoHaste),
 						},
 						{
-							typestrings.PfnUnitID:  7,
-							typestrings.PfnAgility: 255,
-							typestrings.PfnStatus:  string(database.HasteStatusAutoHaste),
+							ts.PfnUnitID:  7,
+							ts.PfnAgility: 255,
+							ts.PfnStatus:  string(database.HasteStatusAutoHaste),
 						},
 					},
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnName:    "frank",
-							typestrings.PfnAgility: 255,
+							ts.PfnName:    "frank",
+							ts.PfnAgility: 255,
 						},
 					},
 				},
@@ -925,14 +926,14 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   1,
 					"opponent party": 2,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnTurnsAmt:    10,
-					typestrings.PfnBattleStart: string(database.BattleStartNormal),
-					typestrings.PfnFormationID: 88,
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnTurnsAmt:    10,
+					ts.PfnBattleStart: string(database.BattleStartNormal),
+					ts.PfnFormationID: 88,
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  14,
-							typestrings.PfnAgility: 10,
+							ts.PfnUnitID:  14,
+							ts.PfnAgility: 10,
 						},
 					},
 				},
@@ -1025,14 +1026,14 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   1,
 					"opponent party": 2,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnTurnsAmt:    10,
-					typestrings.PfnBattleStart: string(database.BattleStartPreemptive),
-					typestrings.PfnFormationID: 88,
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnTurnsAmt:    10,
+					ts.PfnBattleStart: string(database.BattleStartPreemptive),
+					ts.PfnFormationID: 88,
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  14,
-							typestrings.PfnAgility: 10,
+							ts.PfnUnitID:  14,
+							ts.PfnAgility: 10,
 						},
 					},
 				},
@@ -1132,20 +1133,20 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   1,
 					"opponent party": 1,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnTurnsAmt:      10,
-					typestrings.PfnIgnFirstTurn:  true,
-					typestrings.PfnIgnImmunities: true,
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnTurnsAmt:      10,
+					ts.PfnIgnFirstTurn:  true,
+					ts.PfnIgnImmunities: true,
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  2,
-							typestrings.PfnAgility: 24,
+							ts.PfnUnitID:  2,
+							ts.PfnAgility: 24,
 						},
 					},
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 19,
-							typestrings.PfnStatus:    string(database.HasteStatusHaste),
+							ts.PfnMonsterID: 19,
+							ts.PfnStatus:    string(database.HasteStatusHaste),
 						},
 					},
 				},
@@ -1234,19 +1235,19 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   0,
 					"opponent party": 3,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnTurnsAmt: 10,
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnTurnsAmt: 10,
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 32,
+							ts.PfnMonsterID: 32,
 						},
 						{
-							typestrings.PfnMonsterID: 32,
-							typestrings.PfnAltState:  2,
+							ts.PfnMonsterID: 32,
+							ts.PfnAltState:  2,
 						},
 						{
-							typestrings.PfnMonsterID: 32,
-							typestrings.PfnAltState:  3,
+							ts.PfnMonsterID: 32,
+							ts.PfnAltState:  3,
 						},
 					},
 				},
@@ -1350,12 +1351,12 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   0,
 					"opponent party": 1,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID:   93,
-							typestrings.PfnAgility:     55,
-							typestrings.PfnFirstStrike: false,
+							ts.PfnMonsterID:   93,
+							ts.PfnAgility:     55,
+							ts.PfnFirstStrike: false,
 						},
 					},
 				},
@@ -1396,12 +1397,12 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   0,
 					"opponent party": 1,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnIgnImmunities: true,
-					typestrings.PfnMons: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnIgnImmunities: true,
+					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							typestrings.PfnMonsterID: 306,
-							typestrings.PfnStatus:    string(database.HasteStatusSlow),
+							ts.PfnMonsterID: 306,
+							ts.PfnStatus:    string(database.HasteStatusSlow),
 						},
 					},
 				},
@@ -1443,8 +1444,8 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   0,
 					"opponent party": 2,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnFormationID: 226,
+				requestBody: map[ts.FieldName]any{
+					ts.PfnFormationID: 226,
 				},
 			},
 			TurnOrderResponse: api.TurnOrderResponse{
@@ -1492,11 +1493,11 @@ func TestTurnOrder(t *testing.T) {
 					"player party":   1,
 					"opponent party": 0,
 				},
-				requestBody: map[typestrings.FieldName]any{
-					typestrings.PfnParty: []map[typestrings.FieldName]any{
+				requestBody: map[ts.FieldName]any{
+					ts.PfnParty: []map[ts.FieldName]any{
 						{
-							typestrings.PfnUnitID:  1,
-							typestrings.PfnAgility: 0,
+							ts.PfnUnitID:  1,
+							ts.PfnAgility: 0,
 						},
 					},
 				},

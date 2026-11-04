@@ -7,10 +7,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func nullBool(r *http.Request, queryName typestrings.QueryParamName, queryLookup map[typestrings.QueryParamName]QueryParam) (sql.NullBool, error) {
+func nullBool(r *http.Request, queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]QueryParam) (sql.NullBool, error) {
 	queryParam := queryLookup[queryName]
 
 	b, err := queryParam.parseBool(r)
@@ -21,7 +21,7 @@ func nullBool(r *http.Request, queryName typestrings.QueryParamName, queryLookup
 	return h.GetNullBool(&b), nil
 }
 
-func nullInt32(r *http.Request, queryName typestrings.QueryParamName, queryLookup map[typestrings.QueryParamName]QueryParam) (sql.NullInt32, error) {
+func nullInt32(r *http.Request, queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
 	integer, err := queryParam.parseInt(r)
@@ -33,7 +33,7 @@ func nullInt32(r *http.Request, queryName typestrings.QueryParamName, queryLooku
 	return h.GetNullInt32(&integer32), nil
 }
 
-func nullValue(r *http.Request, queryName typestrings.QueryParamName, queryLookup map[typestrings.QueryParamName]QueryParam) (sql.NullString, error) {
+func nullValue(r *http.Request, queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]QueryParam) (sql.NullString, error) {
 	queryParam := queryLookup[queryName]
 
 	value, err := queryParam.parseValue(r)
@@ -44,7 +44,7 @@ func nullValue(r *http.Request, queryName typestrings.QueryParamName, queryLooku
 	return h.GetNullString(&value), nil
 }
 
-func nullID[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName typestrings.QueryParamName, queryLookup map[typestrings.QueryParamName]QueryParam) (sql.NullInt32, error) {
+func nullID[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := queryParam.parseID(r, i.objLookup)
@@ -55,7 +55,7 @@ func nullID[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i han
 	return h.GetNullInt32(&id), nil
 }
 
-func nullNameID[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName typestrings.QueryParamName, queryLookup map[typestrings.QueryParamName]QueryParam) (sql.NullInt32, error) {
+func nullNameID[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := queryParam.parseNameID(r, i.resTypeSingle, i.objLookup)
@@ -66,7 +66,7 @@ func nullNameID[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i
 	return h.GetNullInt32(&id), nil
 }
 
-func nullEnum[E, N any](r *http.Request, queryName typestrings.QueryParamName, et enums.EnumType[E, N], queryLookup map[typestrings.QueryParamName]QueryParam) (sql.NullString, error) {
+func nullEnum[E, N any](r *http.Request, queryName ts.QueryParamName, et enums.EnumType[E, N], queryLookup map[ts.QueryParamName]QueryParam) (sql.NullString, error) {
 	queryParam := queryLookup[queryName]
 
 	enumRes, err := queryParam.parseEnum(r, et)

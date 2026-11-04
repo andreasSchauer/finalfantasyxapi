@@ -1,8 +1,8 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+import ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 
-func (v paramsVerifyer) fieldWrapper[T any](val T, fieldName typestrings.FieldName, verifyFn verifyFn[T]) (T, error) {
+func (v paramsVerifyer) fieldWrapper[T any](val T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
 	var zero T
 
 	val, err := v.field(val, fieldName)
@@ -14,7 +14,7 @@ func (v paramsVerifyer) fieldWrapper[T any](val T, fieldName typestrings.FieldNa
 }
 
 // verifies, if a pointer-field fulfills all its conditions. the basic checks are performed on the pointer itself. after that, the pointer is safely dereferenced and a type-specific verification function can be performed on the pointer's typed value. a pointer will never have a default value since it's optional.
-func (v paramsVerifyer) fieldPtrWrapper[T any](ptr *T, fieldName typestrings.FieldName, verifyFn verifyFn[T]) (*T, error) {
+func (v paramsVerifyer) fieldPtrWrapper[T any](ptr *T, fieldName ts.FieldName, verifyFn verifyFn[T]) (*T, error) {
 	ptr, err := v.field(ptr, fieldName)
 	if err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func (v paramsVerifyer) fieldPtrWrapper[T any](ptr *T, fieldName typestrings.Fie
 	return ptr, nil
 }
 
-func (v paramsVerifyer) objFieldWrapper[T any](val T, fieldName typestrings.FieldName, verifyFn verifyFn[T]) (T, error) {
+func (v paramsVerifyer) objFieldWrapper[T any](val T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
 	var zero T
 
 	err := v.checkFields()
@@ -43,7 +43,7 @@ func (v paramsVerifyer) objFieldWrapper[T any](val T, fieldName typestrings.Fiel
 	return v.fieldWrapper(val, fieldName, verifyFn)
 }
 
-func (v paramsVerifyer) arrItemWrapper[T any](val T, fieldName typestrings.FieldName, verifyFn verifyFn[T]) (T, error) {
+func (v paramsVerifyer) arrItemWrapper[T any](val T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
 	var zero T
 
 	err := v.checkFields()

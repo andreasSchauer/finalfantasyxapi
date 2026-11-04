@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getStatusCondition(r *http.Request, i handlerInput[seedtypes.StatusCondition, StatusCondition, NamedAPIResource], id int32) (StatusCondition, error) {
@@ -48,6 +48,6 @@ func (cfg *Config) retrieveStatusConditions(r *http.Request, i handlerInput[seed
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, enums.T.StatusConditionCategory, ids, typestrings.QpnCategory, cfg.db.GetStatusConditionIDsByCategory),
+		i.queryEnumList(cfg, r, enums.T.StatusConditionCategory, ids, ts.QpnCategory, cfg.db.GetStatusConditionIDsByCategory),
 	})
 }

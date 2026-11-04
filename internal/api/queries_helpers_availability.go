@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type avlParams struct {
@@ -17,7 +17,7 @@ type avlParams struct {
 }
 
 func (i handlerInput[T, R, A]) queryAvlGetParams(cfg *Config, r *http.Request) (avlParams, error) {
-	queryParamAvl := i.queryLookup[typestrings.QpnAvailability]
+	queryParamAvl := i.queryLookup[ts.QpnAvailability]
 
 	availabilities, err := queryParamAvl.parseEnumList(cfg, r, enums.T.AvailabilityType)
 	if errExceptEmptyQuery(err) {
@@ -29,9 +29,9 @@ func (i handlerInput[T, R, A]) queryAvlGetParams(cfg *Config, r *http.Request) (
 
 	var preAirship bool
 
-	_, ok := i.queryLookup[typestrings.QpnPreAirship]
+	_, ok := i.queryLookup[ts.QpnPreAirship]
 	if ok {
-		preAirship, err = i.queryLookup[typestrings.QpnPreAirship].parseBool(r)
+		preAirship, err = i.queryLookup[ts.QpnPreAirship].parseBool(r)
 		if errExceptEmptyQuery(err) {
 			return avlParams{}, err
 		}
@@ -58,7 +58,7 @@ func (i handlerInput[T, R, A]) queryAvlRepGetParams(cfg *Config, r *http.Request
 		return avlParams{}, errAvl
 	}
 
-	isRepeatable, errRepl := nullBool(r, typestrings.QpnRepeatable, i.queryLookup)
+	isRepeatable, errRepl := nullBool(r, ts.QpnRepeatable, i.queryLookup)
 	if errExceptEmptyQuery(errRepl) {
 		return avlParams{}, errRepl
 	}

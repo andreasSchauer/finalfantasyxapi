@@ -1,16 +1,16 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+import ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 
-func toUserValueMap(input map[string]any) map[typestrings.FieldName]any {
+func toUserValueMap(input map[string]any) map[ts.FieldName]any {
 	if input == nil {
 		return nil
 	}
 
-	output := make(map[typestrings.FieldName]any, len(input))
+	output := make(map[ts.FieldName]any, len(input))
 
 	for k, v := range input {
-		typedKey := typestrings.FieldName(k)
+		typedKey := ts.FieldName(k)
 
 		switch value := v.(type) {
 		case map[string]any:
@@ -46,7 +46,7 @@ func toUserValueSlice(input []any) []any {
 	return output
 }
 
-func getInt32FromUserVals(fieldName typestrings.FieldName, userValues map[typestrings.FieldName]any) (int32, error) {
+func getInt32FromUserVals(fieldName ts.FieldName, userValues map[ts.FieldName]any) (int32, error) {
 	raw, ok := userValues[fieldName]
 	if !ok {
 		return 0, errNoVal

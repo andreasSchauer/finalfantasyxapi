@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getOverdrive(r *http.Request, i handlerInput[seedtypes.Overdrive, Overdrive, NamedAPIResource], id int32) (Overdrive, error) {
@@ -42,7 +42,7 @@ func (cfg *Config) retrieveOverdrives(r *http.Request, i handlerInput[seedtypes.
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryIntList(cfg, r, ids, typestrings.QpnRank, cfg.db.GetOverdriveIDsByRank),
-		i.queryNameID(r, ids, typestrings.QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(cfg.db.GetOverdriveIDsByUser)),
+		i.queryIntList(cfg, r, ids, ts.QpnRank, cfg.db.GetOverdriveIDsByRank),
+		i.queryNameID(r, ids, ts.QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(cfg.db.GetOverdriveIDsByUser)),
 	})
 }

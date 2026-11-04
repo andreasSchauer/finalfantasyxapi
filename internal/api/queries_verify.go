@@ -4,20 +4,20 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type queryVerifyer[T any] struct {
 	usedNames   url.Values
 	param       QueryParam
-	endpoint    typestrings.EndpointName
-	queryLookup map[typestrings.QueryParamName]QueryParam
+	endpoint    ts.EndpointName
+	queryLookup map[ts.QueryParamName]QueryParam
 	segment     *string
 	key         *T
 }
 
 // verifies the correct usage of all query parameters of an endpoint
-func verifyQueryParams[T any](r *http.Request, endpoint typestrings.EndpointName, queryLookup map[typestrings.QueryParamName]QueryParam, key *T, segment *string) error {
+func verifyQueryParams[T any](r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam, key *T, segment *string) error {
 	var err error
 	q := r.URL.Query()
 
@@ -54,7 +54,7 @@ func verifyQueryParamsService(r *http.Request) error {
 }
 
 // verifies the correct usage of all query parameters of an alternative list that is used on an endpoint, like /endpoint/sections, or /endpoint/parameters
-func verifyQueryParamsAltList(cfg *Config, r *http.Request, endpoint typestrings.EndpointName, queryLookup map[typestrings.QueryParamName]QueryParam, listName *string) error {
+func verifyQueryParamsAltList(cfg *Config, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam, listName *string) error {
 	var err error
 	q := r.URL.Query()
 

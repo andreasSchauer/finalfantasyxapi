@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getPathSegments(path string, endpoint typestrings.EndpointName) []string {
+func getPathSegments(path string, endpoint ts.EndpointName) []string {
 	prefix := fmt.Sprintf("/api/%s", endpoint)
 	pathLower := strings.ToLower(path)
 	pathTrimmed := strings.TrimPrefix(pathLower, prefix)

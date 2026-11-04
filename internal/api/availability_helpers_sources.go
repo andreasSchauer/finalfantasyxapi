@@ -6,7 +6,7 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type locBasedSources struct {
@@ -37,7 +37,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Confi
 	reqs := []string{string(srcType)}
 	excls := []string{}
 
-	monID, err := nullID(r, cfg.E.Monsters, typestrings.QpnMonster, i.queryLookup)
+	monID, err := nullID(r, cfg.E.Monsters, ts.QpnMonster, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -45,7 +45,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Confi
 		reqs = append(reqs, "monster-single")
 	}
 
-	itemID, err := nullID(r, cfg.E.Items, typestrings.QpnItem, i.queryLookup)
+	itemID, err := nullID(r, cfg.E.Items, ts.QpnItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -53,7 +53,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Confi
 		reqs = append(reqs, string(ViewSourceTypeItem))
 	}
 
-	keyItemID, err := nullID(r, cfg.E.KeyItems, typestrings.QpnKeyItem, i.queryLookup)
+	keyItemID, err := nullID(r, cfg.E.KeyItems, ts.QpnKeyItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -61,7 +61,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Confi
 		reqs = append(reqs, string(ViewSourceTypeKeyItem))
 	}
 
-	autoAbilityID, err := nullID(r, cfg.E.AutoAbilities, typestrings.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := nullID(r, cfg.E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -69,17 +69,17 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Confi
 		reqs = append(reqs, string(ViewSourceTypeAutoAbility))
 	}
 
-	methods, err := i.queryLookup[typestrings.QpnMethods].parseValueList(cfg, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
 
-	reqs, excls, err = parseBoolSources(r, i, reqs, excls, map[typestrings.QueryParamName]string{
-		typestrings.QpnMonsters:   string(ViewSourceTypeMonster),
-		typestrings.QpnBossFights: string(ViewSourceTypeBoss),
-		typestrings.QpnShops:      string(ViewSourceTypeShop),
-		typestrings.QpnTreasures:  string(ViewSourceTypeTreasure),
-		typestrings.QpnSidequests: string(ViewSourceTypeQuest),
+	reqs, excls, err = parseBoolSources(r, i, reqs, excls, map[ts.QueryParamName]string{
+		ts.QpnMonsters:   string(ViewSourceTypeMonster),
+		ts.QpnBossFights: string(ViewSourceTypeBoss),
+		ts.QpnShops:      string(ViewSourceTypeShop),
+		ts.QpnTreasures:  string(ViewSourceTypeTreasure),
+		ts.QpnSidequests: string(ViewSourceTypeQuest),
 	})
 	if err != nil {
 		return locBasedSources{}, err
@@ -113,7 +113,7 @@ func getShopSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r
 	reqs := []string{}
 	excls := []string{}
 
-	autoAbilityID, err := nullID(r, cfg.E.AutoAbilities, typestrings.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := nullID(r, cfg.E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
@@ -122,7 +122,7 @@ func getShopSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r
 		reqs = append(reqs, "equip-filter")
 	}
 
-	emptySlots, err := i.queryLookup[typestrings.QpnEmptySlots].parseIntList(cfg, r)
+	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
@@ -131,7 +131,7 @@ func getShopSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r
 		reqs = append(reqs, "equip-filter")
 	}
 
-	charID, err := nullNameID(r, cfg.E.Characters, typestrings.QpnCharacter, i.queryLookup)
+	charID, err := nullNameID(r, cfg.E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
@@ -140,9 +140,9 @@ func getShopSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r
 		reqs = append(reqs, "equip-filter")
 	}
 
-	reqs, excls, err = parseBoolSources(r, i, reqs, excls, map[typestrings.QueryParamName]string{
-		typestrings.QpnItems:     string(ViewSourceTypeItem),
-		typestrings.QpnEquipment: string(ViewSourceTypeEquipment),
+	reqs, excls, err = parseBoolSources(r, i, reqs, excls, map[ts.QueryParamName]string{
+		ts.QpnItems:     string(ViewSourceTypeItem),
+		ts.QpnEquipment: string(ViewSourceTypeEquipment),
 	})
 	if err != nil {
 		return shopSources{}, err
@@ -163,7 +163,7 @@ func getShopSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r
 	return sources, nil
 }
 
-func parseBoolSources[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], reqs, excls []string, sourceMap map[typestrings.QueryParamName]string) ([]string, []string, error) {
+func parseBoolSources[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], reqs, excls []string, sourceMap map[ts.QueryParamName]string) ([]string, []string, error) {
 	for queryName := range sourceMap {
 		b, err := i.queryLookup[queryName].parseBool(r)
 		if errExceptEmptyQuery(err) {

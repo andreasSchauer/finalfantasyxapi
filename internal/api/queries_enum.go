@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // query uses an enum type (id or string possible) that needs to be checked for validity and then returns all resources matching that type
-func (i handlerInput[T, R, A]) queryEnum[E, N any](r *http.Request, et enums.EnumType[E, N], inputIDs []int32, queryName typestrings.QueryParamName, dbQuery DBQueryEnum[E]) IDFilter {
+func (i handlerInput[T, R, A]) queryEnum[E, N any](r *http.Request, et enums.EnumType[E, N], inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryEnum[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
@@ -36,7 +36,7 @@ func (i handlerInput[T, R, A]) queryEnum[E, N any](r *http.Request, et enums.Enu
 }
 
 // like enum query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
-func (i handlerInput[T, R, A]) queryEnumWrapper[E, N any](cfg *Config, r *http.Request, et enums.EnumType[E, N], inputIDs []int32, queryName typestrings.QueryParamName, wrapperFn QueryWrapEnum[E]) IDFilter {
+func (i handlerInput[T, R, A]) queryEnumWrapper[E, N any](cfg *Config, r *http.Request, et enums.EnumType[E, N], inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapEnum[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		enum, err := queryParam.parseEnum(r, et)

@@ -6,11 +6,11 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // query uses an id of another resource type to filter resources
-func (i handlerInput[T, R, A]) queryID[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName typestrings.QueryParamName, fLookup map[string]F, dbQuery DBQueryIntMany) IDFilter {
+func (i handlerInput[T, R, A]) queryID[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
@@ -35,7 +35,7 @@ func (i handlerInput[T, R, A]) queryID[F seedtypes.Lookupable](r *http.Request, 
 }
 
 // like idOnlyQuery, but with more specialized logic in between (wrapperFn)
-func (i handlerInput[T, R, A]) queryIDWrapper[F seedtypes.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName typestrings.QueryParamName, fLookup map[string]F, wrapperFn QueryWrapInt) IDFilter {
+func (i handlerInput[T, R, A]) queryIDWrapper[F seedtypes.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
@@ -54,7 +54,7 @@ func (i handlerInput[T, R, A]) queryIDWrapper[F seedtypes.Lookupable](cfg *Confi
 	}
 }
 
-func (i handlerInput[T, R, A]) queryIDNul[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName typestrings.QueryParamName, fLookup map[string]F, dbQuery DBQueryNullIntMany) IDFilter {
+func (i handlerInput[T, R, A]) queryIDNul[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, dbQuery DBQueryNullIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {

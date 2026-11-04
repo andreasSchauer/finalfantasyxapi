@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource], id int32) (Sublocation, error) {
@@ -39,18 +39,18 @@ func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seedtype
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, typestrings.QpnLocation, lookup.L.Locations, cfg.db.GetLocationSublocationIDs),
-		i.queryID(r, ids, typestrings.QpnMonster, lookup.L.Monsters, cfg.db.GetSublocationIDsWithMonster),
-		i.queryIDWrapper(cfg, r, ids, typestrings.QpnItem, lookup.L.Items, getSublocationsByItem),
-		i.queryID(r, ids, typestrings.QpnKeyItem, lookup.L.KeyItems, cfg.db.GetSublocationIDsWithKeyItem),
-		i.queryID(r, ids, typestrings.QpnAutoAbility, lookup.L.AutoAbilities, cfg.db.GetSublocationIDsWithAutoAbility),
-		i.queryBool2(r, ids, typestrings.QpnCharacters, cfg.db.GetSublocationIDsWithCharacters),
-		i.queryBool2(r, ids, typestrings.QpnAeons, cfg.db.GetSublocationIDsWithAeons),
-		i.queryBool2(r, ids, typestrings.QpnMonsters, cfg.db.GetSublocationIDsWithMonsters),
-		i.queryBool2(r, ids, typestrings.QpnBossFights, cfg.db.GetSublocationIDsWithBosses),
-		i.queryBool2(r, ids, typestrings.QpnShops, cfg.db.GetSublocationIDsWithShops),
-		i.queryBool2(r, ids, typestrings.QpnTreasures, cfg.db.GetSublocationIDsWithTreasures),
-		i.queryBool2(r, ids, typestrings.QpnSidequests, cfg.db.GetSublocationIDsWithSidequests),
-		i.queryBool2(r, ids, typestrings.QpnFMVs, cfg.db.GetSublocationIDsWithFMVs),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, cfg.db.GetLocationSublocationIDs),
+		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, cfg.db.GetSublocationIDsWithMonster),
+		i.queryIDWrapper(cfg, r, ids, ts.QpnItem, lookup.L.Items, getSublocationsByItem),
+		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, cfg.db.GetSublocationIDsWithKeyItem),
+		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, cfg.db.GetSublocationIDsWithAutoAbility),
+		i.queryBool2(r, ids, ts.QpnCharacters, cfg.db.GetSublocationIDsWithCharacters),
+		i.queryBool2(r, ids, ts.QpnAeons, cfg.db.GetSublocationIDsWithAeons),
+		i.queryBool2(r, ids, ts.QpnMonsters, cfg.db.GetSublocationIDsWithMonsters),
+		i.queryBool2(r, ids, ts.QpnBossFights, cfg.db.GetSublocationIDsWithBosses),
+		i.queryBool2(r, ids, ts.QpnShops, cfg.db.GetSublocationIDsWithShops),
+		i.queryBool2(r, ids, ts.QpnTreasures, cfg.db.GetSublocationIDsWithTreasures),
+		i.queryBool2(r, ids, ts.QpnSidequests, cfg.db.GetSublocationIDsWithSidequests),
+		i.queryBool2(r, ids, ts.QpnFMVs, cfg.db.GetSublocationIDsWithFMVs),
 	})
 }

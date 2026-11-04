@@ -6,13 +6,13 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func getMixesByItem(cfg *Config, r *http.Request, ctx context.Context, firstItemID int32) ([]int32, error) {
 	i := cfg.E.Mixes
 
-	secondItemIDPtr, err := nullID(r, cfg.E.Items, typestrings.QpnSecondItem, i.queryLookup)
+	secondItemIDPtr, err := nullID(r, cfg.E.Items, ts.QpnSecondItem, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

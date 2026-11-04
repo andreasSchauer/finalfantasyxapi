@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerUnit, TypedAPIResource], id int32) (PlayerUnit, error) {
@@ -66,6 +66,6 @@ func (cfg *Config) retrievePlayerUnits(r *http.Request, i handlerInput[seedtypes
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnum(r, enums.T.UnitType, ids, typestrings.QpnType, cfg.db.GetPlayerUnitIDsByType),
+		i.queryEnum(r, enums.T.UnitType, ids, ts.QpnType, cfg.db.GetPlayerUnitIDsByType),
 	})
 }

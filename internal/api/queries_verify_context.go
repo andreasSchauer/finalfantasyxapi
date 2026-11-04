@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // verifies, if the query param is used in the correct context (the relationships with the parameters it is combined with are correct (exclusive, required, forbidden, usable with))
@@ -44,7 +44,7 @@ func (q queryVerifyer[T]) exclusive() error {
 // checks, if only one exclusive query param is used. returns false, if the query param doesn't exist, or if an exclusive query param is combined with any other query param (len > 1).
 func (q queryVerifyer[T]) canUseExclusiveParam() bool {
 	for query := range q.usedNames {
-		queryParam, ok := q.queryLookup[typestrings.QueryParamName(query)]
+		queryParam, ok := q.queryLookup[ts.QueryParamName(query)]
 		if !ok {
 			return false
 		}
@@ -67,7 +67,7 @@ func (q queryVerifyer[T]) requiresAll() error {
 		reqParamVal := q.usedNames.Get(string(reqParam))
 
 		if reqParamVal == "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. when using parameter '%s', the following parameter(s) must be present: %s", q.param.Name, q.param.Name, typestrings.FormatQpnSlice(q.param.RequiresAll)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. when using parameter '%s', the following parameter(s) must be present: %s", q.param.Name, q.param.Name, ts.FormatQpnSlice(q.param.RequiresAll)), nil)
 		}
 	}
 
@@ -84,7 +84,7 @@ func (q queryVerifyer[T]) conflictsWith() error {
 		fbParamVal := q.usedNames.Get(string(conflictParam))
 
 		if fbParamVal != "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can't be used in combination with the following parameter(s): %s", q.param.Name, q.param.Name, typestrings.FormatQpnSlice(q.param.ConflictsWith)), nil)
+			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can't be used in combination with the following parameter(s): %s", q.param.Name, q.param.Name, ts.FormatQpnSlice(q.param.ConflictsWith)), nil)
 		}
 	}
 
@@ -105,11 +105,11 @@ func (q queryVerifyer[T]) requiresOne() error {
 		}
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in combination with at least one of the following parameters: %s", q.param.Name, q.param.Name, typestrings.FormatQpnSlice(q.param.RequiresOne)), nil)
+	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in combination with at least one of the following parameters: %s", q.param.Name, q.param.Name, ts.FormatQpnSlice(q.param.RequiresOne)), nil)
 }
 
 // checks, if the query param is a default param.
-func isDefaultParam(cfg *Config, queryName typestrings.QueryParamName) bool {
+func isDefaultParam(cfg *Config, queryName ts.QueryParamName) bool {
 	_, ok := cfg.Q.defaultParams[queryName]
 	return ok
 }

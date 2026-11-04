@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type testCase interface {
@@ -103,7 +103,7 @@ func testServiceResponsesPost[E testCase, G any](t *testing.T, tests []E, testFu
 
 // compareAPIResourceLists for normal API Resources
 // compareSimpleResourceLists for Subsections
-func testIDList[G any](t *testing.T, tests []expListIDs, endpoint typestrings.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, typestrings.EndpointName, expListIDs, G)) {
+func testIDList[G any](t *testing.T, tests []expListIDs, endpoint ts.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, ts.EndpointName, expListIDs, G)) {
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()
@@ -159,7 +159,7 @@ func testPathList[G any](t *testing.T, tests []expListPaths, testFuncName string
 
 // compareParameterLists for /parameters lists
 // compareSectionLists for /sections lists
-func testNameList[G any](t *testing.T, tests []expListNames, testFuncName string, compFunc func(test, typestrings.EndpointName, expListNames, G)) {
+func testNameList[G any](t *testing.T, tests []expListNames, testFuncName string, compFunc func(test, ts.EndpointName, expListNames, G)) {
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.testGeneral

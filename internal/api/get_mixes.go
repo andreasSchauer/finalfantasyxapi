@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource], id int32) (Mix, error) {
@@ -42,7 +42,7 @@ func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, 
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, enums.T.MixCategory, ids, typestrings.QpnCategory, cfg.db.GetMixIDsByCategory),
-		i.queryIDWrapper(cfg, r, ids, typestrings.QpnReqItem, lookup.L.Items, getMixesByItem),
+		i.queryEnumList(cfg, r, enums.T.MixCategory, ids, ts.QpnCategory, cfg.db.GetMixIDsByCategory),
+		i.queryIDWrapper(cfg, r, ids, ts.QpnReqItem, lookup.L.Items, getMixesByItem),
 	})
 }

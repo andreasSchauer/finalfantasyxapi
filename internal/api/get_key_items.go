@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource], id int32) (KeyItem, error) {
@@ -43,10 +43,10 @@ func (cfg *Config) retrieveKeyItems(r *http.Request, i handlerInput[seedtypes.Ke
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, enums.T.KeyItemCategory, ids, typestrings.QpnCategory, cfg.db.GetKeyItemIDsCategory),
-		i.queryValueList(cfg, r, ids, typestrings.QpnMethods, cfg.db.GetKeyItemIDsByMethods),
-		i.queryID(r, ids, typestrings.QpnLocation, cfg.E.Locations.objLookup, cfg.db.GetKeyItemIDsByLocation),
-		i.queryID(r, ids, typestrings.QpnSublocation, cfg.E.Sublocations.objLookup, cfg.db.GetKeyItemIDsBySublocation),
-		i.queryID(r, ids, typestrings.QpnArea, cfg.E.Areas.objLookup, cfg.db.GetKeyItemIDsByArea),
+		i.queryEnumList(cfg, r, enums.T.KeyItemCategory, ids, ts.QpnCategory, cfg.db.GetKeyItemIDsCategory),
+		i.queryValueList(cfg, r, ids, ts.QpnMethods, cfg.db.GetKeyItemIDsByMethods),
+		i.queryID(r, ids, ts.QpnLocation, cfg.E.Locations.objLookup, cfg.db.GetKeyItemIDsByLocation),
+		i.queryID(r, ids, ts.QpnSublocation, cfg.E.Sublocations.objLookup, cfg.db.GetKeyItemIDsBySublocation),
+		i.queryID(r, ids, ts.QpnArea, cfg.E.Areas.objLookup, cfg.db.GetKeyItemIDsByArea),
 	})
 }

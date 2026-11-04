@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // verifies, if the query param is used in the correct type of request.
@@ -86,7 +86,7 @@ func (q queryVerifyer[T]) subsection() error {
 }
 
 // checks if a requested segment matches with the intended segment. returns false, if the segments don't match.
-func segmentsMatch(sParam *typestrings.SectionName, sRequest *string) bool {
+func segmentsMatch(sParam *ts.SectionName, sRequest *string) bool {
 	switch {
 	case sParam == nil && sRequest == nil:
 		return true

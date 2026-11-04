@@ -5,53 +5,53 @@ import (
 	"net/http"
 	"slices"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func verifyDropChanceParams(v paramsVerifyer, params DropChanceParams) (DropChanceParams, error) {
 	var err error
 
-	params.Monster, err = v.id(params.Monster, typestrings.PfnMonsterID)
+	params.Monster, err = v.id(params.Monster, ts.PfnMonsterID)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.CharacterID, err = v.idPtr(params.CharacterID, typestrings.PfnCharacterID)
+	params.CharacterID, err = v.idPtr(params.CharacterID, ts.PfnCharacterID)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.PartyMembers, err = v.idArray(params.PartyMembers, typestrings.PfnPartyMembers)
+	params.PartyMembers, err = v.idArray(params.PartyMembers, ts.PfnPartyMembers)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.AutoAbilities, err = v.idArray(params.AutoAbilities, typestrings.PfnAutoAbilities)
+	params.AutoAbilities, err = v.idArray(params.AutoAbilities, ts.PfnAutoAbilities)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.OptionalAbilities, err = v.field(params.OptionalAbilities, typestrings.PfnOptionalAbilities)
+	params.OptionalAbilities, err = v.field(params.OptionalAbilities, ts.PfnOptionalAbilities)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.EquipType, err = v.enumPtr(params.EquipType, typestrings.PfnEquipType)
+	params.EquipType, err = v.enumPtr(params.EquipType, ts.PfnEquipType)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.MinEmptySlots, err = v.intPtr(params.MinEmptySlots, typestrings.PfnMinEmptySlots)
+	params.MinEmptySlots, err = v.intPtr(params.MinEmptySlots, ts.PfnMinEmptySlots)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.TotalSlots, err = v.intPtr(params.TotalSlots, typestrings.PfnTotalSlots)
+	params.TotalSlots, err = v.intPtr(params.TotalSlots, ts.PfnTotalSlots)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
 
-	params.Decimals, err = v.field(params.Decimals, typestrings.PfnDecimals)
+	params.Decimals, err = v.field(params.Decimals, ts.PfnDecimals)
 	if err != nil {
 		return DropChanceParams{}, err
 	}

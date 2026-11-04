@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getMonster(r *http.Request, i handlerInput[seedtypes.Monster, Monster, NamedAPIResource], id int32) (Monster, error) {
@@ -74,27 +74,27 @@ func (cfg *Config) retrieveMonsters(r *http.Request, i handlerInput[seedtypes.Mo
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryBasicWrapper(cfg, r, ids, typestrings.QpnElementalResists, getMonstersByElemResists),
-		i.queryIDListWrapper(cfg, r, ids, typestrings.QpnStatusResists, lookup.L.StatusConditions, getMonstersByStatusResists),
+		i.queryBasicWrapper(cfg, r, ids, ts.QpnElementalResists, getMonstersByElemResists),
+		i.queryIDListWrapper(cfg, r, ids, ts.QpnStatusResists, lookup.L.StatusConditions, getMonstersByStatusResists),
 
-		i.queryIDWrapper(cfg, r, ids, typestrings.QpnItem, lookup.L.Items, getMonstersByItem),
-		i.queryID(r, ids, typestrings.QpnRonsoRage, lookup.L.RonsoRages, cfg.db.GetMonsterIDsByRonsoRage),
-		i.queryID(r, ids, typestrings.QpnLocation, lookup.L.Locations, cfg.db.GetMonsterIDsByLocation),
-		i.queryID(r, ids, typestrings.QpnSublocation, lookup.L.Sublocations, cfg.db.GetMonsterIDsBySublocation),
-		i.queryID(r, ids, typestrings.QpnArea, lookup.L.Areas, cfg.db.GetMonsterIDsByArea),
-		i.queryIDWrapper(cfg, r, ids, typestrings.QpnAutoAbility, lookup.L.AutoAbilities, getMonstersByAutoAbility),
+		i.queryIDWrapper(cfg, r, ids, ts.QpnItem, lookup.L.Items, getMonstersByItem),
+		i.queryID(r, ids, ts.QpnRonsoRage, lookup.L.RonsoRages, cfg.db.GetMonsterIDsByRonsoRage),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, cfg.db.GetMonsterIDsByLocation),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, cfg.db.GetMonsterIDsBySublocation),
+		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, cfg.db.GetMonsterIDsByArea),
+		i.queryIDWrapper(cfg, r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, getMonstersByAutoAbility),
 
-		i.queryIntList(cfg, r, ids, typestrings.QpnEmptySlots, cfg.db.GetMonsterIDsByEmptySlots),
-		i.queryIntList(cfg, r, ids, typestrings.QpnDistance, cfg.db.GetMonsterIDsByDistance),
+		i.queryIntList(cfg, r, ids, ts.QpnEmptySlots, cfg.db.GetMonsterIDsByEmptySlots),
+		i.queryIntList(cfg, r, ids, ts.QpnDistance, cfg.db.GetMonsterIDsByDistance),
 
-		i.queryEnumList(cfg, r, enums.T.MonsterCategory, ids, typestrings.QpnCategory, cfg.db.GetMonsterIDsByCategory),
-		i.queryEnum(r, enums.T.MonsterSpecies, ids, typestrings.QpnSpecies, cfg.db.GetMonsterIDsBySpecies),
-		i.queryEnum(r, enums.T.CreationArea, ids, typestrings.QpnCreationArea, ToEnumQuery(enums.T.CreationArea, cfg.db.GetMonsterIDsByMaCreationArea)),
+		i.queryEnumList(cfg, r, enums.T.MonsterCategory, ids, ts.QpnCategory, cfg.db.GetMonsterIDsByCategory),
+		i.queryEnum(r, enums.T.MonsterSpecies, ids, ts.QpnSpecies, cfg.db.GetMonsterIDsBySpecies),
+		i.queryEnum(r, enums.T.CreationArea, ids, ts.QpnCreationArea, ToEnumQuery(enums.T.CreationArea, cfg.db.GetMonsterIDsByMaCreationArea)),
 
-		i.queryBool(r, ids, typestrings.QpnRepeatable, cfg.db.GetMonsterIDsByIsRepeatable),
-		i.queryBool(r, ids, typestrings.QpnCapture, cfg.db.GetMonsterIDsByCanBeCaptured),
-		i.queryBool(r, ids, typestrings.QpnHasOverdrive, cfg.db.GetMonsterIDsByHasOverdrive),
-		i.queryBool(r, ids, typestrings.QpnUnderwater, cfg.db.GetMonsterIDsByIsUnderwater),
-		i.queryBool(r, ids, typestrings.QpnZombie, cfg.db.GetMonsterIDsByIsZombie),
+		i.queryBool(r, ids, ts.QpnRepeatable, cfg.db.GetMonsterIDsByIsRepeatable),
+		i.queryBool(r, ids, ts.QpnCapture, cfg.db.GetMonsterIDsByCanBeCaptured),
+		i.queryBool(r, ids, ts.QpnHasOverdrive, cfg.db.GetMonsterIDsByHasOverdrive),
+		i.queryBool(r, ids, ts.QpnUnderwater, cfg.db.GetMonsterIDsByIsUnderwater),
+		i.queryBool(r, ids, ts.QpnZombie, cfg.db.GetMonsterIDsByIsZombie),
 	})
 }

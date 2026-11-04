@@ -7,7 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type AppliedState struct {
@@ -20,7 +20,7 @@ func (as AppliedState) IsZero() bool {
 	return as.Condition == ""
 }
 
-func applyAlteredStateFromQuery(cfg *Config, r *http.Request, mon Monster, queryName typestrings.QueryParamName) (Monster, error) {
+func applyAlteredStateFromQuery(cfg *Config, r *http.Request, mon Monster, queryName ts.QueryParamName) (Monster, error) {
 	altStateID, err := getAltStateID(cfg, r, mon, queryName)
 	if queryIsEmpty(err) {
 		return mon, nil
@@ -83,7 +83,7 @@ func applyAlteredState(cfg *Config, mon Monster, altStateID int) Monster {
 	return mon
 }
 
-func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName typestrings.QueryParamName) (int, error) {
+func getAltStateID(cfg *Config, r *http.Request, mon Monster, queryName ts.QueryParamName) (int, error) {
 	queryParam := cfg.Q.monsters[queryName]
 	query, err := queryParam.checkEmpty(r)
 	if err != nil {

@@ -7,11 +7,11 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type EnumType[E, N any] struct {
-	Name         typestrings.EnumName
+	Name         ts.EnumName
 	Lookup       map[string]EnumVal
 	ConvFunc     func(string) E
 	NullConvFunc func(*string) N
@@ -72,11 +72,11 @@ func (e EnumType[E, N]) Strings() []string {
 }
 
 type EnumResponse struct {
-	Name               typestrings.EnumName       `json:"name"`
-	Description        string                     `json:"description"`
-	UsedByEndpointsInt []typestrings.EndpointName `json:"-"`
-	UsedByEndpoints    []string                   `json:"used_by_endpoints"`
-	Values             []EnumVal                  `json:"values"`
+	Name               ts.EnumName       `json:"name"`
+	Description        string            `json:"description"`
+	UsedByEndpointsInt []ts.EndpointName `json:"-"`
+	UsedByEndpoints    []string          `json:"used_by_endpoints"`
+	Values             []EnumVal         `json:"values"`
 }
 
 func (T *Enums) initAbilityType() {
@@ -110,17 +110,17 @@ func (T *Enums) initAbilityType() {
 	}
 
 	T.AbilityType = EnumType[database.AbilityType, any]{
-		Name:         typestrings.EnumNameAbilityType,
+		Name:         ts.EnumNameAbilityType,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.AbilityType { return database.AbilityType(s) },
 		NullConvFunc: nil,
 		GetNullEnum:  nil,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameAbilityType)] = EnumResponse{
-		Name:               typestrings.EnumNameAbilityType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameAbilityType)] = EnumResponse{
+		Name:               ts.EnumNameAbilityType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities, typestrings.EpAeonCommands, typestrings.EpCharacterClasses, typestrings.EpTopmenus, typestrings.EpSubmenus, typestrings.EpMonsters},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities, ts.EpAeonCommands, ts.EpCharacterClasses, ts.EpTopmenus, ts.EpSubmenus, ts.EpMonsters},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -140,17 +140,17 @@ func (T *Enums) initUnitType() {
 	}
 
 	T.UnitType = EnumType[database.UnitType, any]{
-		Name:         typestrings.EnumNameUnitType,
+		Name:         ts.EnumNameUnitType,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.UnitType { return database.UnitType(s) },
 		NullConvFunc: nil,
 		GetNullEnum:  nil,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameUnitType)] = EnumResponse{
-		Name:               typestrings.EnumNameUnitType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameUnitType)] = EnumResponse{
+		Name:               ts.EnumNameUnitType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAeons, typestrings.EpCharacterClasses, typestrings.EpCharacters, typestrings.EpPlayerUnits},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAeons, ts.EpCharacterClasses, ts.EpCharacters, ts.EpPlayerUnits},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -170,17 +170,17 @@ func (T *Enums) initItemType() {
 	}
 
 	T.ItemType = EnumType[database.ItemType, any]{
-		Name:         typestrings.EnumNameItemType,
+		Name:         ts.EnumNameItemType,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.ItemType { return database.ItemType(s) },
 		NullConvFunc: nil,
 		GetNullEnum:  nil,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameItemType)] = EnumResponse{
-		Name:               typestrings.EnumNameItemType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameItemType)] = EnumResponse{
+		Name:               ts.EnumNameItemType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpArenaCreations, typestrings.EpAutoAbilities, typestrings.EpBlitzballPrizes, typestrings.EpItems, typestrings.EpKeyItems, typestrings.EpAllItems, typestrings.EpMonsters, typestrings.EpQuests, typestrings.EpSidequests, typestrings.EpSubquests, typestrings.EpTreasures, typestrings.EpShops},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpArenaCreations, ts.EpAutoAbilities, ts.EpBlitzballPrizes, ts.EpItems, ts.EpKeyItems, ts.EpAllItems, ts.EpMonsters, ts.EpQuests, ts.EpSidequests, ts.EpSubquests, ts.EpTreasures, ts.EpShops},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -200,17 +200,17 @@ func (T *Enums) initQuestType() {
 	}
 
 	T.QuestType = EnumType[database.QuestType, any]{
-		Name:         typestrings.EnumNameQuestType,
+		Name:         ts.EnumNameQuestType,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.QuestType { return database.QuestType(s) },
 		NullConvFunc: nil,
 		GetNullEnum:  nil,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameQuestType)] = EnumResponse{
-		Name:               typestrings.EnumNameQuestType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameQuestType)] = EnumResponse{
+		Name:               ts.EnumNameQuestType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpQuests, typestrings.EpSidequests, typestrings.EpSubquests},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpQuests, ts.EpSidequests, ts.EpSubquests},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -238,15 +238,15 @@ func (T *Enums) initAaActivationCondition() {
 	}
 
 	T.AaActivationCondition = EnumType[database.AaActivationCondition, any]{
-		Name:     typestrings.EnumNameAaActivationCondition,
+		Name:     ts.EnumNameAaActivationCondition,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.AaActivationCondition { return database.AaActivationCondition(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameAaActivationCondition)] = EnumResponse{
-		Name:               typestrings.EnumNameAaActivationCondition,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameAaActivationCondition)] = EnumResponse{
+		Name:               ts.EnumNameAaActivationCondition,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAutoAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAutoAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -270,15 +270,15 @@ func (T *Enums) initAreaConnectionType() {
 	}
 
 	T.AreaConnectionType = EnumType[database.AreaConnectionType, any]{
-		Name:     typestrings.EnumNameAreaConnectionType,
+		Name:     ts.EnumNameAreaConnectionType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.AreaConnectionType { return database.AreaConnectionType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameAreaConnectionType)] = EnumResponse{
-		Name:               typestrings.EnumNameAreaConnectionType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameAreaConnectionType)] = EnumResponse{
+		Name:               ts.EnumNameAreaConnectionType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAreas},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAreas},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -299,17 +299,17 @@ func (T *Enums) initArenaCreationCategory() {
 	}
 
 	T.ArenaCreationCategory = EnumType[database.MaCreationCategory, database.NullMaCreationCategory]{
-		Name:         typestrings.EnumNameArenaCreationCategory,
+		Name:         ts.EnumNameArenaCreationCategory,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.MaCreationCategory { return database.MaCreationCategory(s) },
 		NullConvFunc: database.ToNullMaCreationCategory,
 		GetNullEnum:  database.GetNullMaCreationCategory,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameArenaCreationCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameArenaCreationCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameArenaCreationCategory)] = EnumResponse{
+		Name:               ts.EnumNameArenaCreationCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpArenaCreations},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpArenaCreations},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -345,15 +345,15 @@ func (T *Enums) initArmorType() {
 	}
 
 	T.ArmorType = EnumType[database.ArmorType, any]{
-		Name:     typestrings.EnumNameArmorType,
+		Name:     ts.EnumNameArmorType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.ArmorType { return database.ArmorType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameArmorType)] = EnumResponse{
-		Name:               typestrings.EnumNameArmorType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameArmorType)] = EnumResponse{
+		Name:               ts.EnumNameArmorType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpCharacters},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpCharacters},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -377,17 +377,17 @@ func (T *Enums) initArranger() {
 	}
 
 	T.Arranger = EnumType[database.Arranger, database.NullArranger]{
-		Name:         typestrings.EnumNameArranger,
+		Name:         ts.EnumNameArranger,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.Arranger { return database.Arranger(s) },
 		NullConvFunc: database.ToNullArranger,
 		GetNullEnum:  database.GetNullArranger,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameArranger)] = EnumResponse{
-		Name:               typestrings.EnumNameArranger,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameArranger)] = EnumResponse{
+		Name:               ts.EnumNameArranger,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpSongs},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpSongs},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -447,15 +447,15 @@ func (T *Enums) initAutoAbilityCategory() {
 	}
 
 	T.AutoAbilityCategory = EnumType[database.AutoAbilityCategory, any]{
-		Name:     typestrings.EnumNameAutoAbilityCategory,
+		Name:     ts.EnumNameAutoAbilityCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.AutoAbilityCategory { return database.AutoAbilityCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameAutoAbilityCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameAutoAbilityCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameAutoAbilityCategory)] = EnumResponse{
+		Name:               ts.EnumNameAutoAbilityCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAutoAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAutoAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -499,7 +499,7 @@ func (T *Enums) initAvailabilityType() {
 	}
 
 	T.AvailabilityType = EnumType[database.AvailabilityType, any]{
-		Name:     typestrings.EnumNameAvailabilityType,
+		Name:     ts.EnumNameAvailabilityType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.AvailabilityType { return database.AvailabilityType(s) },
 		Aliasses: map[string][]database.AvailabilityType{
@@ -525,10 +525,10 @@ func (T *Enums) initAvailabilityType() {
 		},
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameAvailabilityType)] = EnumResponse{
-		Name:               typestrings.EnumNameAvailabilityType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameAvailabilityType)] = EnumResponse{
+		Name:               ts.EnumNameAvailabilityType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAutoAbilities, typestrings.EpEquipment, typestrings.EpItems, typestrings.EpKeyItems, typestrings.EpLocations, typestrings.EpSublocations, typestrings.EpAreas, typestrings.EpAllItems, typestrings.EpMonsterFormations, typestrings.EpMonsters, typestrings.EpPrimers, typestrings.EpQuests, typestrings.EpSidequests, typestrings.EpSubquests, typestrings.EpShops, typestrings.EpSpheres, typestrings.EpTreasures},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAutoAbilities, ts.EpEquipment, ts.EpItems, ts.EpKeyItems, ts.EpLocations, ts.EpSublocations, ts.EpAreas, ts.EpAllItems, ts.EpMonsterFormations, ts.EpMonsters, ts.EpPrimers, ts.EpQuests, ts.EpSidequests, ts.EpSubquests, ts.EpShops, ts.EpSpheres, ts.EpTreasures},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -548,17 +548,17 @@ func (T *Enums) initBgReplacementType() {
 	}
 
 	T.BgReplacementType = EnumType[database.BgReplacementType, database.NullBgReplacementType]{
-		Name:         typestrings.EnumNameBgReplacementType,
+		Name:         ts.EnumNameBgReplacementType,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.BgReplacementType { return database.BgReplacementType(s) },
 		NullConvFunc: database.ToNullBgReplacementType,
 		GetNullEnum:  database.GetNullBgReplacementType,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameBgReplacementType)] = EnumResponse{
-		Name:               typestrings.EnumNameBgReplacementType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameBgReplacementType)] = EnumResponse{
+		Name:               ts.EnumNameBgReplacementType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpSongs},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpSongs},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -582,15 +582,15 @@ func (T *Enums) initBlitzballPositionSlot() {
 	}
 
 	T.BlitzballPositionSlot = EnumType[database.BlitzballPositionSlot, any]{
-		Name:     typestrings.EnumNameBlitzballPositionSlot,
+		Name:     ts.EnumNameBlitzballPositionSlot,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.BlitzballPositionSlot { return database.BlitzballPositionSlot(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameBlitzballPositionSlot)] = EnumResponse{
-		Name:               typestrings.EnumNameBlitzballPositionSlot,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameBlitzballPositionSlot)] = EnumResponse{
+		Name:               ts.EnumNameBlitzballPositionSlot,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpBlitzballPrizes},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpBlitzballPrizes},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -608,15 +608,15 @@ func (T *Enums) initBlitzballTournamentCategory() {
 	}
 
 	T.BlitzballTournamentCategory = EnumType[database.BlitzballTournamentCategory, any]{
-		Name:     typestrings.EnumNameBlitzballTournamentCategory,
+		Name:     ts.EnumNameBlitzballTournamentCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.BlitzballTournamentCategory { return database.BlitzballTournamentCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameBlitzballTournamentCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameBlitzballTournamentCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameBlitzballTournamentCategory)] = EnumResponse{
+		Name:               ts.EnumNameBlitzballTournamentCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpBlitzballPrizes},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpBlitzballPrizes},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -640,15 +640,15 @@ func (T *Enums) initCelestialFormula() {
 	}
 
 	T.CelestialFormula = EnumType[database.CelestialFormula, any]{
-		Name:     typestrings.EnumNameCelestialFormula,
+		Name:     ts.EnumNameCelestialFormula,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.CelestialFormula { return database.CelestialFormula(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameCelestialFormula)] = EnumResponse{
-		Name:               typestrings.EnumNameCelestialFormula,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameCelestialFormula)] = EnumResponse{
+		Name:               ts.EnumNameCelestialFormula,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpCelestialWeapons},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpCelestialWeapons},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -669,15 +669,15 @@ func (T *Enums) initCharacterClassCategory() {
 	}
 
 	T.CharacterClassCategory = EnumType[database.CharacterClassCategory, any]{
-		Name:     typestrings.EnumNameCharacterClassCategory,
+		Name:     ts.EnumNameCharacterClassCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.CharacterClassCategory { return database.CharacterClassCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameCharacterClassCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameCharacterClassCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameCharacterClassCategory)] = EnumResponse{
+		Name:               ts.EnumNameCharacterClassCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpCharacterClasses},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpCharacterClasses},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -698,17 +698,17 @@ func (T *Enums) initComposer() {
 	}
 
 	T.Composer = EnumType[database.Composer, database.NullComposer]{
-		Name:         typestrings.EnumNameComposer,
+		Name:         ts.EnumNameComposer,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.Composer { return database.Composer(s) },
 		NullConvFunc: database.ToNullComposer,
 		GetNullEnum:  database.GetNullComposer,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameComposer)] = EnumResponse{
-		Name:               typestrings.EnumNameComposer,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameComposer)] = EnumResponse{
+		Name:               ts.EnumNameComposer,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpSongs},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpSongs},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -728,17 +728,17 @@ func (T *Enums) initCounterType() {
 	}
 
 	T.CounterType = EnumType[database.CounterType, database.NullCounterType]{
-		Name:         typestrings.EnumNameCounterType,
+		Name:         ts.EnumNameCounterType,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.CounterType { return database.CounterType(s) },
 		NullConvFunc: database.ToNullCounterType,
 		GetNullEnum:  database.GetNullCounterType,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameCounterType)] = EnumResponse{
-		Name:               typestrings.EnumNameCounterType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameCounterType)] = EnumResponse{
+		Name:               ts.EnumNameCounterType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAutoAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAutoAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -770,15 +770,15 @@ func (T *Enums) initCTBIconType() {
 	}
 
 	T.CTBIconType = EnumType[database.CtbIconType, any]{
-		Name:     typestrings.EnumNameCTBIconType,
+		Name:     ts.EnumNameCTBIconType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.CtbIconType { return database.CtbIconType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameCTBIconType)] = EnumResponse{
-		Name:               typestrings.EnumNameCTBIconType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameCTBIconType)] = EnumResponse{
+		Name:               ts.EnumNameCTBIconType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpMonsters},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpMonsters},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -829,17 +829,17 @@ func (T *Enums) initCreationArea() {
 	}
 
 	T.CreationArea = EnumType[database.MaCreationArea, database.NullMaCreationArea]{
-		Name:         typestrings.EnumNameCreationArea,
+		Name:         ts.EnumNameCreationArea,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.MaCreationArea { return database.MaCreationArea(s) },
 		NullConvFunc: database.ToNullMaCreationArea,
 		GetNullEnum:  database.GetNullMaCreationArea,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameCreationArea)] = EnumResponse{
-		Name:               typestrings.EnumNameCreationArea,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameCreationArea)] = EnumResponse{
+		Name:               ts.EnumNameCreationArea,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpMonsters},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpMonsters},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -857,17 +857,17 @@ func (T *Enums) initCreationsUnlockedCategory() {
 	}
 
 	T.CreationsUnlockedCategory = EnumType[database.CreationsUnlockedCategory, database.NullCreationsUnlockedCategory]{
-		Name:         typestrings.EnumNameCreationsUnlockedCategory,
+		Name:         ts.EnumNameCreationsUnlockedCategory,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.CreationsUnlockedCategory { return database.CreationsUnlockedCategory(s) },
 		NullConvFunc: database.ToNullCreationsUnlockedCategory,
 		GetNullEnum:  database.GetNullCreationsUnlockedCategory,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameCreationsUnlockedCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameCreationsUnlockedCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameCreationsUnlockedCategory)] = EnumResponse{
+		Name:               ts.EnumNameCreationsUnlockedCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpArenaCreations},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpArenaCreations},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -903,15 +903,15 @@ func (T *Enums) initElementalAffinity() {
 	}
 
 	T.ElementalAffinity = EnumType[database.ElementalAffinity, any]{
-		Name:     typestrings.EnumNameElementalAffinity,
+		Name:     ts.EnumNameElementalAffinity,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.ElementalAffinity { return database.ElementalAffinity(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameElementalAffinity)] = EnumResponse{
-		Name:               typestrings.EnumNameElementalAffinity,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameElementalAffinity)] = EnumResponse{
+		Name:               ts.EnumNameElementalAffinity,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAutoAbilities, typestrings.EpMonsters, typestrings.EpStatusConditions},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAutoAbilities, ts.EpMonsters, ts.EpStatusConditions},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -935,15 +935,15 @@ func (T *Enums) initEquipClass() {
 	}
 
 	T.EquipClass = EnumType[database.EquipClass, any]{
-		Name:     typestrings.EnumNameEquipClass,
+		Name:     ts.EnumNameEquipClass,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.EquipClass { return database.EquipClass(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameEquipClass)] = EnumResponse{
-		Name:               typestrings.EnumNameEquipClass,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameEquipClass)] = EnumResponse{
+		Name:               ts.EnumNameEquipClass,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpEquipment, typestrings.EpEquipmentTables},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpEquipment, ts.EpEquipmentTables},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -961,15 +961,15 @@ func (T *Enums) initEquipType() {
 	}
 
 	T.EquipType = EnumType[database.EquipType, any]{
-		Name:     typestrings.EnumNameEquipType,
+		Name:     ts.EnumNameEquipType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.EquipType { return database.EquipType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameEquipType)] = EnumResponse{
-		Name:               typestrings.EnumNameEquipType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameEquipType)] = EnumResponse{
+		Name:               ts.EnumNameEquipType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAutoAbilities, typestrings.EpEquipment, typestrings.EpEquipmentTables},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAutoAbilities, ts.EpEquipment, ts.EpEquipmentTables},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1005,15 +1005,15 @@ func (T *Enums) initItemCategory() {
 	}
 
 	T.ItemCategory = EnumType[database.ItemCategory, any]{
-		Name:     typestrings.EnumNameItemCategory,
+		Name:     ts.EnumNameItemCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.ItemCategory { return database.ItemCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameItemCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameItemCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameItemCategory)] = EnumResponse{
+		Name:               ts.EnumNameItemCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpItems, typestrings.EpItemAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpItems, ts.EpItemAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1041,15 +1041,15 @@ func (T *Enums) initItemUsability() {
 	}
 
 	T.ItemUsability = EnumType[database.ItemUsability, any]{
-		Name:     typestrings.EnumNameItemUsability,
+		Name:     ts.EnumNameItemUsability,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.ItemUsability { return database.ItemUsability(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameItemUsability)] = EnumResponse{
-		Name:               typestrings.EnumNameItemUsability,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameItemUsability)] = EnumResponse{
+		Name:               ts.EnumNameItemUsability,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpItems},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpItems},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1081,15 +1081,15 @@ func (T *Enums) initKeyItemCategory() {
 	}
 
 	T.KeyItemCategory = EnumType[database.KeyItemCategory, any]{
-		Name:     typestrings.EnumNameKeyItemCategory,
+		Name:     ts.EnumNameKeyItemCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.KeyItemCategory { return database.KeyItemCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameKeyItemCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameKeyItemCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameKeyItemCategory)] = EnumResponse{
+		Name:               ts.EnumNameKeyItemCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpKeyItems},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpKeyItems},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1111,15 +1111,15 @@ func (T *Enums) initLootType() {
 	}
 
 	T.LootType = EnumType[database.LootType, any]{
-		Name:     typestrings.EnumNameLootType,
+		Name:     ts.EnumNameLootType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.LootType { return database.LootType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameLootType)] = EnumResponse{
-		Name:               typestrings.EnumNameLootType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameLootType)] = EnumResponse{
+		Name:               ts.EnumNameLootType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpTreasures},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpTreasures},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1179,15 +1179,15 @@ func (T *Enums) initMixCategory() {
 	}
 
 	T.MixCategory = EnumType[database.MixCategory, any]{
-		Name:     typestrings.EnumNameMixCategory,
+		Name:     ts.EnumNameMixCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.MixCategory { return database.MixCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameMixCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameMixCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameMixCategory)] = EnumResponse{
+		Name:               ts.EnumNameMixCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpMixes},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpMixes},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1215,15 +1215,15 @@ func (T *Enums) initModifierCategory() {
 	}
 
 	T.ModifierCategory = EnumType[database.ModifierCategory, any]{
-		Name:     typestrings.EnumNameModifierCategory,
+		Name:     ts.EnumNameModifierCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.ModifierCategory { return database.ModifierCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameModifierCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameModifierCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameModifierCategory)] = EnumResponse{
+		Name:               ts.EnumNameModifierCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpModifiers},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpModifiers},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1259,15 +1259,15 @@ func (T *Enums) initMonsterFormationCategory() {
 	}
 
 	T.MonsterFormationCategory = EnumType[database.MonsterFormationCategory, any]{
-		Name:     typestrings.EnumNameMonsterFormationCategory,
+		Name:     ts.EnumNameMonsterFormationCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.MonsterFormationCategory { return database.MonsterFormationCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameMonsterFormationCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameMonsterFormationCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameMonsterFormationCategory)] = EnumResponse{
+		Name:               ts.EnumNameMonsterFormationCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpMonsterFormations},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpMonsterFormations},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1447,15 +1447,15 @@ func (T *Enums) initMonsterSpecies() {
 	}
 
 	T.MonsterSpecies = EnumType[database.MonsterSpecies, any]{
-		Name:     typestrings.EnumNameMonsterSpecies,
+		Name:     ts.EnumNameMonsterSpecies,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.MonsterSpecies { return database.MonsterSpecies(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameMonsterSpecies)] = EnumResponse{
-		Name:               typestrings.EnumNameMonsterSpecies,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameMonsterSpecies)] = EnumResponse{
+		Name:               ts.EnumNameMonsterSpecies,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpMonsters},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpMonsters},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1476,15 +1476,15 @@ func (T *Enums) initMonsterCategory() {
 	}
 
 	T.MonsterCategory = EnumType[database.MonsterCategory, any]{
-		Name:     typestrings.EnumNameMonsterCategory,
+		Name:     ts.EnumNameMonsterCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.MonsterCategory { return database.MonsterCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameMonsterCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameMonsterCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameMonsterCategory)] = EnumResponse{
+		Name:               ts.EnumNameMonsterCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpMonsters},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpMonsters},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1520,17 +1520,17 @@ func (T *Enums) initMusicUseCase() {
 	}
 
 	T.MusicUseCase = EnumType[database.MusicUseCase, database.NullMusicUseCase]{
-		Name:         typestrings.EnumNameMusicUseCase,
+		Name:         ts.EnumNameMusicUseCase,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.MusicUseCase { return database.MusicUseCase(s) },
 		NullConvFunc: database.ToNullMusicUseCase,
 		GetNullEnum:  database.GetNullMusicUseCase,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameMusicUseCase)] = EnumResponse{
-		Name:               typestrings.EnumNameMusicUseCase,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameMusicUseCase)] = EnumResponse{
+		Name:               ts.EnumNameMusicUseCase,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpSongs},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpSongs},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1554,15 +1554,15 @@ func (T *Enums) initNodePosition() {
 	}
 
 	T.NodePosition = EnumType[database.NodePosition, any]{
-		Name:     typestrings.EnumNameNodePosition,
+		Name:     ts.EnumNameNodePosition,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.NodePosition { return database.NodePosition(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameNodePosition)] = EnumResponse{
-		Name:               typestrings.EnumNameNodePosition,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameNodePosition)] = EnumResponse{
+		Name:               ts.EnumNameNodePosition,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpSpheres},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpSpheres},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1594,17 +1594,17 @@ func (T *Enums) initNodeState() {
 	}
 
 	T.NodeState = EnumType[database.NodeState, database.NullNodeState]{
-		Name:         typestrings.EnumNameNodeState,
+		Name:         ts.EnumNameNodeState,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.NodeState { return database.NodeState(s) },
 		NullConvFunc: database.ToNullNodeState,
 		GetNullEnum:  database.GetNullNodeState,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameNodeState)] = EnumResponse{
-		Name:               typestrings.EnumNameNodeState,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameNodeState)] = EnumResponse{
+		Name:               ts.EnumNameNodeState,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpSpheres},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpSpheres},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1673,15 +1673,15 @@ func (T *Enums) initNodeType() {
 	}
 
 	T.NodeType = EnumType[database.NodeType, any]{
-		Name:     typestrings.EnumNameNodeType,
+		Name:     ts.EnumNameNodeType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.NodeType { return database.NodeType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameNodeType)] = EnumResponse{
-		Name:               typestrings.EnumNameNodeType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameNodeType)] = EnumResponse{
+		Name:               ts.EnumNameNodeType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpSpheres},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpSpheres},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1699,17 +1699,17 @@ func (T *Enums) initNullifyArmored() {
 	}
 
 	T.NullifyArmored = EnumType[database.NullifyArmored, database.NullNullifyArmored]{
-		Name:         typestrings.EnumNameNullifyArmored,
+		Name:         ts.EnumNameNullifyArmored,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.NullifyArmored { return database.NullifyArmored(s) },
 		NullConvFunc: database.ToNullNullifyArmored,
 		GetNullEnum:  database.GetNullNullifyArmored,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameNullifyArmored)] = EnumResponse{
-		Name:               typestrings.EnumNameNullifyArmored,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameNullifyArmored)] = EnumResponse{
+		Name:               ts.EnumNameNullifyArmored,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpProperties, typestrings.EpStatusConditions},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpProperties, ts.EpStatusConditions},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1729,15 +1729,15 @@ func (T *Enums) initOverdriveModeType() {
 	}
 
 	T.OverdriveModeType = EnumType[database.OverdriveModeType, any]{
-		Name:     typestrings.EnumNameOverdriveModeType,
+		Name:     ts.EnumNameOverdriveModeType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.OverdriveModeType { return database.OverdriveModeType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameOverdriveModeType)] = EnumResponse{
-		Name:               typestrings.EnumNameOverdriveModeType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameOverdriveModeType)] = EnumResponse{
+		Name:               ts.EnumNameOverdriveModeType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpOverdriveModes},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpOverdriveModes},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1764,15 +1764,15 @@ func (T *Enums) initPlayerAbilityCategory() {
 	}
 
 	T.PlayerAbilityCategory = EnumType[database.PlayerAbilityCategory, any]{
-		Name:     typestrings.EnumNamePlayerAbilityCategory,
+		Name:     ts.EnumNamePlayerAbilityCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.PlayerAbilityCategory { return database.PlayerAbilityCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNamePlayerAbilityCategory)] = EnumResponse{
-		Name:               typestrings.EnumNamePlayerAbilityCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNamePlayerAbilityCategory)] = EnumResponse{
+		Name:               ts.EnumNamePlayerAbilityCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpPlayerAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpPlayerAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1796,15 +1796,15 @@ func (T *Enums) initShopCategory() {
 	}
 
 	T.ShopCategory = EnumType[database.ShopCategory, any]{
-		Name:     typestrings.EnumNameShopCategory,
+		Name:     ts.EnumNameShopCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.ShopCategory { return database.ShopCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameShopCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameShopCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameShopCategory)] = EnumResponse{
+		Name:               ts.EnumNameShopCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpShops},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpShops},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1840,15 +1840,15 @@ func (T *Enums) initSphereColor() {
 	}
 
 	T.SphereColor = EnumType[database.SphereColor, any]{
-		Name:     typestrings.EnumNameSphereColor,
+		Name:     ts.EnumNameSphereColor,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.SphereColor { return database.SphereColor(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameSphereColor)] = EnumResponse{
-		Name:               typestrings.EnumNameSphereColor,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameSphereColor)] = EnumResponse{
+		Name:               ts.EnumNameSphereColor,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpSpheres},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpSpheres},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1872,15 +1872,15 @@ func (T *Enums) initSphereEffect() {
 	}
 
 	T.SphereEffect = EnumType[database.SphereEffect, any]{
-		Name:     typestrings.EnumNameSphereEffect,
+		Name:     ts.EnumNameSphereEffect,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.SphereEffect { return database.SphereEffect(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameSphereEffect)] = EnumResponse{
-		Name:               typestrings.EnumNameSphereEffect,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameSphereEffect)] = EnumResponse{
+		Name:               ts.EnumNameSphereEffect,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpSpheres},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpSpheres},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1898,15 +1898,15 @@ func (T *Enums) initSphereGridType() {
 	}
 
 	T.SphereGridType = EnumType[database.SphereGridType, any]{
-		Name:     typestrings.EnumNameSphereGridType,
+		Name:     ts.EnumNameSphereGridType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.SphereGridType { return database.SphereGridType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameSphereGridType)] = EnumResponse{
-		Name:               typestrings.EnumNameSphereGridType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameSphereGridType)] = EnumResponse{
+		Name:               ts.EnumNameSphereGridType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpCharacters},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpCharacters},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1927,15 +1927,15 @@ func (T *Enums) initStatusConditionCategory() {
 	}
 
 	T.StatusConditionCategory = EnumType[database.StatusConditionCategory, any]{
-		Name:     typestrings.EnumNameStatusConditionCategory,
+		Name:     ts.EnumNameStatusConditionCategory,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.StatusConditionCategory { return database.StatusConditionCategory(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameStatusConditionCategory)] = EnumResponse{
-		Name:               typestrings.EnumNameStatusConditionCategory,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameStatusConditionCategory)] = EnumResponse{
+		Name:               ts.EnumNameStatusConditionCategory,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpStatusConditions},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpStatusConditions},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -1959,15 +1959,15 @@ func (T *Enums) initTreasureType() {
 	}
 
 	T.TreasureType = EnumType[database.TreasureType, any]{
-		Name:     typestrings.EnumNameTreasureType,
+		Name:     ts.EnumNameTreasureType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.TreasureType { return database.TreasureType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameTreasureType)] = EnumResponse{
-		Name:               typestrings.EnumNameTreasureType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameTreasureType)] = EnumResponse{
+		Name:               ts.EnumNameTreasureType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpTreasures},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpTreasures},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2003,15 +2003,15 @@ func (T *Enums) initWeaponType() {
 	}
 
 	T.WeaponType = EnumType[database.WeaponType, any]{
-		Name:     typestrings.EnumNameWeaponType,
+		Name:     ts.EnumNameWeaponType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.WeaponType { return database.WeaponType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameWeaponType)] = EnumResponse{
-		Name:               typestrings.EnumNameWeaponType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameWeaponType)] = EnumResponse{
+		Name:               ts.EnumNameWeaponType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpCharacters},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpCharacters},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2031,15 +2031,15 @@ func (T *Enums) initAccSourceType() {
 	}
 
 	T.AccSourceType = EnumType[database.AccSourceType, any]{
-		Name:     typestrings.EnumNameAccSourceType,
+		Name:     ts.EnumNameAccSourceType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.AccSourceType { return database.AccSourceType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameAccSourceType)] = EnumResponse{
-		Name:               typestrings.EnumNameAccSourceType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameAccSourceType)] = EnumResponse{
+		Name:               ts.EnumNameAccSourceType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities, typestrings.EpAeons},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities, ts.EpAeons},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2063,15 +2063,15 @@ func (T *Enums) initAttackType() {
 	}
 
 	T.AttackType = EnumType[database.AttackType, any]{
-		Name:     typestrings.EnumNameAttackType,
+		Name:     ts.EnumNameAttackType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.AttackType { return database.AttackType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameAttackType)] = EnumResponse{
-		Name:               typestrings.EnumNameAttackType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameAttackType)] = EnumResponse{
+		Name:               ts.EnumNameAttackType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2091,17 +2091,17 @@ func (T *Enums) initBreakDmgLimitType() {
 	}
 
 	T.BreakDmgLimitType = EnumType[database.BreakDmgLmtType, database.NullBreakDmgLmtType]{
-		Name:         typestrings.EnumNameBreakDmgLimitType,
+		Name:         ts.EnumNameBreakDmgLimitType,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.BreakDmgLmtType { return database.BreakDmgLmtType(s) },
 		NullConvFunc: database.ToNullBreakDmgLmtType,
 		GetNullEnum:  database.GetNullBreakDmgLmtType,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameBreakDmgLimitType)] = EnumResponse{
-		Name:               typestrings.EnumNameBreakDmgLimitType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameBreakDmgLimitType)] = EnumResponse{
+		Name:               ts.EnumNameBreakDmgLimitType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2133,15 +2133,15 @@ func (T *Enums) initCalculationType() {
 	}
 
 	T.CalculationType = EnumType[database.CalculationType, any]{
-		Name:     typestrings.EnumNameCalculationType,
+		Name:     ts.EnumNameCalculationType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.CalculationType { return database.CalculationType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameCalculationType)] = EnumResponse{
-		Name:               typestrings.EnumNameCalculationType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameCalculationType)] = EnumResponse{
+		Name:               ts.EnumNameCalculationType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities, typestrings.EpAutoAbilities, typestrings.EpProperties, typestrings.EpStatusConditions},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities, ts.EpAutoAbilities, ts.EpProperties, ts.EpStatusConditions},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2165,17 +2165,17 @@ func (T *Enums) initCriticalType() {
 	}
 
 	T.CriticalType = EnumType[database.CriticalType, database.NullCriticalType]{
-		Name:         typestrings.EnumNameCriticalType,
+		Name:         ts.EnumNameCriticalType,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.CriticalType { return database.CriticalType(s) },
 		NullConvFunc: database.ToNullCriticalType,
 		GetNullEnum:  database.GetNullCriticalType,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameCriticalType)] = EnumResponse{
-		Name:               typestrings.EnumNameCriticalType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameCriticalType)] = EnumResponse{
+		Name:               ts.EnumNameCriticalType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2271,15 +2271,15 @@ func (T *Enums) initDamageFormula() {
 	}
 
 	T.DamageFormula = EnumType[database.DamageFormula, any]{
-		Name:     typestrings.EnumNameDamageFormula,
+		Name:     ts.EnumNameDamageFormula,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.DamageFormula { return database.DamageFormula(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameDamageFormula)] = EnumResponse{
-		Name:               typestrings.EnumNameDamageFormula,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameDamageFormula)] = EnumResponse{
+		Name:               ts.EnumNameDamageFormula,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2303,15 +2303,15 @@ func (T *Enums) initDamageType() {
 	}
 
 	T.DamageType = EnumType[database.DamageType, any]{
-		Name:     typestrings.EnumNameDamageType,
+		Name:     ts.EnumNameDamageType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.DamageType { return database.DamageType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameDamageType)] = EnumResponse{
-		Name:               typestrings.EnumNameDamageType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameDamageType)] = EnumResponse{
+		Name:               ts.EnumNameDamageType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2331,15 +2331,15 @@ func (T *Enums) initDelayStrength() {
 	}
 
 	T.DelayStrength = EnumType[database.DelayStrength, any]{
-		Name:     typestrings.EnumNameDelayStrength,
+		Name:     ts.EnumNameDelayStrength,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.DelayStrength { return database.DelayStrength(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameDelayStrength)] = EnumResponse{
-		Name:               typestrings.EnumNameDelayStrength,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameDelayStrength)] = EnumResponse{
+		Name:               ts.EnumNameDelayStrength,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2375,15 +2375,15 @@ func (T *Enums) initDurationType() {
 	}
 
 	T.DurationType = EnumType[database.DurationType, any]{
-		Name:     typestrings.EnumNameDurationType,
+		Name:     ts.EnumNameDurationType,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.DurationType { return database.DurationType(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameDurationType)] = EnumResponse{
-		Name:               typestrings.EnumNameDurationType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameDurationType)] = EnumResponse{
+		Name:               ts.EnumNameDurationType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities, typestrings.EpAutoAbilities, typestrings.EpMonsters},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities, ts.EpAutoAbilities, ts.EpMonsters},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2410,17 +2410,17 @@ func (T *Enums) initSpecialActionType() {
 	}
 
 	T.SpecialActionType = EnumType[database.SpecialActionType, database.NullSpecialActionType]{
-		Name:         typestrings.EnumNameSpecialActionType,
+		Name:         ts.EnumNameSpecialActionType,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.SpecialActionType { return database.SpecialActionType(s) },
 		NullConvFunc: database.ToNullSpecialActionType,
 		GetNullEnum:  database.GetNullSpecialActionType,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameSpecialActionType)] = EnumResponse{
-		Name:               typestrings.EnumNameSpecialActionType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameSpecialActionType)] = EnumResponse{
+		Name:               ts.EnumNameSpecialActionType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
@@ -2484,23 +2484,23 @@ func (T *Enums) initTargetType() {
 	}
 
 	T.TargetType = EnumType[database.TargetType, database.NullTargetType]{
-		Name:         typestrings.EnumNameTargetType,
+		Name:         ts.EnumNameTargetType,
 		Lookup:       enumSliceToMap(typeSlice),
 		ConvFunc:     func(s string) database.TargetType { return database.TargetType(s) },
 		NullConvFunc: database.ToNullTargetType,
 		GetNullEnum:  database.GetNullTargetType,
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameTargetType)] = EnumResponse{
-		Name:               typestrings.EnumNameTargetType,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameTargetType)] = EnumResponse{
+		Name:               ts.EnumNameTargetType,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAbilities, typestrings.EpPlayerAbilities, typestrings.EpOverdriveAbilities, typestrings.EpItemAbilities, typestrings.EpTriggerCommands, typestrings.EpMiscAbilities, typestrings.EpEnemyAbilities, typestrings.EpAeonCommands, typestrings.EpOverdrives},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAbilities, ts.EpPlayerAbilities, ts.EpOverdriveAbilities, ts.EpItemAbilities, ts.EpTriggerCommands, ts.EpMiscAbilities, ts.EpEnemyAbilities, ts.EpAeonCommands, ts.EpOverdrives},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
 func (T *Enums) initBattleStart() {
-	enumDescription := fmt.Sprintf("Determines  for the /%s endpoint.", typestrings.EpTurnOrder)
+	enumDescription := fmt.Sprintf("Determines  for the /%s endpoint.", ts.EpTurnOrder)
 
 	typeSlice := []EnumVal{
 		{
@@ -2518,21 +2518,21 @@ func (T *Enums) initBattleStart() {
 	}
 
 	T.BattleStart = EnumType[database.BattleStart, any]{
-		Name:     typestrings.EnumNameBattleStart,
+		Name:     ts.EnumNameBattleStart,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.BattleStart { return database.BattleStart(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameBattleStart)] = EnumResponse{
-		Name:               typestrings.EnumNameBattleStart,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameBattleStart)] = EnumResponse{
+		Name:               ts.EnumNameBattleStart,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpTurnOrder},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpTurnOrder},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
 func (T *Enums) initHasteStatus() {
-	enumDescription := fmt.Sprintf("Determines  for the /%s endpoint.", typestrings.EpTurnOrder)
+	enumDescription := fmt.Sprintf("Determines  for the /%s endpoint.", ts.EpTurnOrder)
 
 	typeSlice := []EnumVal{
 		{
@@ -2550,21 +2550,21 @@ func (T *Enums) initHasteStatus() {
 	}
 
 	T.HasteStatus = EnumType[database.HasteStatus, any]{
-		Name:     typestrings.EnumNameTranslationDirection,
+		Name:     ts.EnumNameTranslationDirection,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.HasteStatus { return database.HasteStatus(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameHasteStatus)] = EnumResponse{
-		Name:               typestrings.EnumNameHasteStatus,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameHasteStatus)] = EnumResponse{
+		Name:               ts.EnumNameHasteStatus,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpTurnOrder},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpTurnOrder},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
 func (T *Enums) initTranslationDirection() {
-	enumDescription := fmt.Sprintf("Determines the direction of translation for the /%s endpoint.", typestrings.EpAlBhed)
+	enumDescription := fmt.Sprintf("Determines the direction of translation for the /%s endpoint.", ts.EpAlBhed)
 
 	typeSlice := []EnumVal{
 		{
@@ -2578,21 +2578,21 @@ func (T *Enums) initTranslationDirection() {
 	}
 
 	T.TranslationDirection = EnumType[database.TranslationDirection, any]{
-		Name:     typestrings.EnumNameTranslationDirection,
+		Name:     ts.EnumNameTranslationDirection,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.TranslationDirection { return database.TranslationDirection(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameTranslationDirection)] = EnumResponse{
-		Name:               typestrings.EnumNameTranslationDirection,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameTranslationDirection)] = EnumResponse{
+		Name:               ts.EnumNameTranslationDirection,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpAlBhed},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpAlBhed},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }
 
 func (T *Enums) initTurnOrderRNG() {
-	enumDescription := fmt.Sprintf("Determines the RNG for the /%s endpoint.", typestrings.EpTurnOrder)
+	enumDescription := fmt.Sprintf("Determines the RNG for the /%s endpoint.", ts.EpTurnOrder)
 
 	typeSlice := []EnumVal{
 		{
@@ -2610,15 +2610,15 @@ func (T *Enums) initTurnOrderRNG() {
 	}
 
 	T.TurnOrderRNG = EnumType[database.TurnOrderRng, any]{
-		Name:     typestrings.EnumNameTurnOrderRNG,
+		Name:     ts.EnumNameTurnOrderRNG,
 		Lookup:   enumSliceToMap(typeSlice),
 		ConvFunc: func(s string) database.TurnOrderRng { return database.TurnOrderRng(s) },
 	}
 
-	T.Lookup[typestrings.GetEnumKey(typestrings.EnumNameTurnOrderRNG)] = EnumResponse{
-		Name:               typestrings.EnumNameTurnOrderRNG,
+	T.Lookup[ts.GetEnumKey(ts.EnumNameTurnOrderRNG)] = EnumResponse{
+		Name:               ts.EnumNameTurnOrderRNG,
 		Description:        enumDescription,
-		UsedByEndpointsInt: []typestrings.EndpointName{typestrings.EpTurnOrder},
+		UsedByEndpointsInt: []ts.EndpointName{ts.EpTurnOrder},
 		Values:             getEnumValIDs(typeSlice),
 	}
 }

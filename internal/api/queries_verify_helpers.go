@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // verifies the correct usage of a query parameter
@@ -24,7 +24,7 @@ func (q queryVerifyer[T]) usage() error {
 
 // used for normal endpoints like /endpoint and /endpoint/{id|key}. simply looks up the query param and returns an error, if it doesn't exist.
 func (q queryVerifyer[T]) getParam(queryName string) (QueryParam, error) {
-	queryParam, ok := q.queryLookup[typestrings.QueryParamName(queryName)]
+	queryParam, ok := q.queryLookup[ts.QueryParamName(queryName)]
 	if !ok {
 		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s. use /api/%s/parameters for available parameters", queryName, q.endpoint, q.endpoint), nil)
 	}
@@ -39,7 +39,7 @@ func (q queryVerifyer[T]) getParamAltList(cfg *Config, queryName string, listNam
 		return QueryParam{}, err
 	}
 
-	queryParam, ok := cfg.Q.defaultParams[typestrings.QueryParamName(queryName)]
+	queryParam, ok := cfg.Q.defaultParams[ts.QueryParamName(queryName)]
 	if !ok {
 		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s", q.endpoint, *listName, queryMapToString(cfg.Q.defaultParams)), nil)
 	}

@@ -6,12 +6,12 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func getMasterItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.AllItems
-	queryParamMethods := i.queryLookup[typestrings.QpnMethods]
+	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -31,7 +31,7 @@ func getMasterItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id 
 
 func getMasterItemsBySublocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.AllItems
-	queryParamMethods := i.queryLookup[typestrings.QpnMethods]
+	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -51,7 +51,7 @@ func getMasterItemsBySublocation(cfg *Config, r *http.Request, ctx context.Conte
 
 func getMasterItemsByLocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.AllItems
-	queryParamMethods := i.queryLookup[typestrings.QpnMethods]
+	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -71,7 +71,7 @@ func getMasterItemsByLocation(cfg *Config, r *http.Request, ctx context.Context,
 
 func getItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.Items
-	queryParamMethods := i.queryLookup[typestrings.QpnMethods]
+	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -91,7 +91,7 @@ func getItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id int32)
 
 func getItemsBySublocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.Items
-	queryParamMethods := i.queryLookup[typestrings.QpnMethods]
+	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -111,7 +111,7 @@ func getItemsBySublocation(cfg *Config, r *http.Request, ctx context.Context, id
 
 func getItemsByLocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := cfg.E.Items
-	queryParamMethods := i.queryLookup[typestrings.QpnMethods]
+	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
 	if errExceptEmptyQuery(err) {

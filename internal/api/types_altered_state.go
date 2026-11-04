@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type AlteredState struct {
@@ -60,7 +60,7 @@ func getMonsterAlteredStates(cfg *Config, r *http.Request, mon seedtypes.Monster
 		// if this function is triggered via a jsonParam
 		if r != nil {
 			q := r.URL.Query()
-			q.Set(string(typestrings.QpnAlteredState), strconv.Itoa(i+1))
+			q.Set(string(ts.QpnAlteredState), strconv.Itoa(i+1))
 			url = CreateResourceURLQuery(cfg, cfg.E.Monsters.Endpoint, mon.ID, q)
 		}
 

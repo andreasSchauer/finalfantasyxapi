@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getItem(r *http.Request, i handlerInput[seedtypes.Item, Item, NamedAPIResource], id int32) (Item, error) {
@@ -60,12 +60,12 @@ func (cfg *Config) retrieveItems(r *http.Request, i handlerInput[seedtypes.Item,
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, enums.T.ItemCategory, ids, typestrings.QpnCategory, cfg.db.GetItemIDsCategory),
-		i.queryBool2(r, ids, typestrings.QpnHasAbility, cfg.db.GetItemIDsWithAbility),
-		i.queryNameID(r, ids, typestrings.QpnRelatedStat, cfg.E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetItemIDsByRelatedStat),
-		i.queryValueList(cfg, r, ids, typestrings.QpnMethods, cfg.db.GetItemIDsByMethods),
-		i.queryIDWrapper(cfg, r, ids, typestrings.QpnLocation, cfg.E.Locations.objLookup, getItemsByLocation),
-		i.queryIDWrapper(cfg, r, ids, typestrings.QpnSublocation, cfg.E.Sublocations.objLookup, getItemsBySublocation),
-		i.queryIDWrapper(cfg, r, ids, typestrings.QpnArea, cfg.E.Areas.objLookup, getItemsByArea),
+		i.queryEnumList(cfg, r, enums.T.ItemCategory, ids, ts.QpnCategory, cfg.db.GetItemIDsCategory),
+		i.queryBool2(r, ids, ts.QpnHasAbility, cfg.db.GetItemIDsWithAbility),
+		i.queryNameID(r, ids, ts.QpnRelatedStat, cfg.E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetItemIDsByRelatedStat),
+		i.queryValueList(cfg, r, ids, ts.QpnMethods, cfg.db.GetItemIDsByMethods),
+		i.queryIDWrapper(cfg, r, ids, ts.QpnLocation, cfg.E.Locations.objLookup, getItemsByLocation),
+		i.queryIDWrapper(cfg, r, ids, ts.QpnSublocation, cfg.E.Sublocations.objLookup, getItemsBySublocation),
+		i.queryIDWrapper(cfg, r, ids, ts.QpnArea, cfg.E.Areas.objLookup, getItemsByArea),
 	})
 }

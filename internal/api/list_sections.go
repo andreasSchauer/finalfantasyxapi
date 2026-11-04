@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"slices"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type SectionList struct {
@@ -16,7 +16,7 @@ func (l SectionList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func getSectionList(cfg *Config, r *http.Request, sectionMap map[typestrings.SectionName]Subsection) (SectionList, error) {
+func getSectionList(cfg *Config, r *http.Request, sectionMap map[ts.SectionName]Subsection) (SectionList, error) {
 	sectionNames := []string{}
 
 	for section := range sectionMap {

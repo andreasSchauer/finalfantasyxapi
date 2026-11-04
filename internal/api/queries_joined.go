@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i handlerInput[T, R, A]) queryJoined(cfg *Config, r *http.Request, inputIDs []int32, queryNames []typestrings.QueryParamName, wrapperFn QueryWrapJoined) IDFilter {
+func (i handlerInput[T, R, A]) queryJoined(cfg *Config, r *http.Request, inputIDs []int32, queryNames []ts.QueryParamName, wrapperFn QueryWrapJoined) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		allEmpty := true
 

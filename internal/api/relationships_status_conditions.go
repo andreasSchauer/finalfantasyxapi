@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -64,21 +64,21 @@ type StatusQueryResistance struct {
 func getStatusQueryResistance(cfg *Config, r *http.Request) (StatusQueryResistance, error) {
 	var res StatusQueryResistance
 
-	queryParamResistance := cfg.Q.statusConditions[typestrings.QpnResistance]
+	queryParamResistance := cfg.Q.statusConditions[ts.QpnResistance]
 	resistance, err := queryParamResistance.parseInt(r)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.Resistance = int32(resistance)
 
-	queryParamMinRate := cfg.Q.statusConditions[typestrings.QpnInflictMin]
+	queryParamMinRate := cfg.Q.statusConditions[ts.QpnInflictMin]
 	minRate, err := queryParamMinRate.parseInt(r)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.MinRate = int32(minRate)
 
-	queryParamMaxRate := cfg.Q.statusConditions[typestrings.QpnInflictMax]
+	queryParamMaxRate := cfg.Q.statusConditions[ts.QpnInflictMax]
 	maxRate, err := queryParamMaxRate.parseInt(r)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err

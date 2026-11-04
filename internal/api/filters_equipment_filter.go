@@ -7,23 +7,23 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func filterShopsEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]int32, error) {
 	i := cfg.E.Shops
 
-	autoAbilityID, err := nullID(r, cfg.E.AutoAbilities, typestrings.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := nullID(r, cfg.E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	emptySlots, err := i.queryLookup[typestrings.QpnEmptySlots].parseIntList(cfg, r)
+	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	charID, err := nullNameID(r, cfg.E.Characters, typestrings.QpnCharacter, i.queryLookup)
+	charID, err := nullNameID(r, cfg.E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -43,17 +43,17 @@ func filterShopsEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]
 func filterTreasuresEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]int32, error) {
 	i := cfg.E.Treasures
 
-	autoAbilityID, err := nullID(r, cfg.E.AutoAbilities, typestrings.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := nullID(r, cfg.E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	emptySlots, err := i.queryLookup[typestrings.QpnEmptySlots].parseIntList(cfg, r)
+	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(cfg, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	charID, err := nullNameID(r, cfg.E.Characters, typestrings.QpnCharacter, i.queryLookup)
+	charID, err := nullNameID(r, cfg.E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

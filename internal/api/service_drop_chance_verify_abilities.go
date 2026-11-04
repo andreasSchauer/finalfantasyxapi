@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func vfAutoAbilities(params DropChanceParams, mon seedtypes.Monster) ([]seedtypes.AutoAbility, []seedtypes.EquipmentDrop, error) {
@@ -70,7 +70,7 @@ func vfWantedAutoAbilities(params DropChanceParams) (DropChanceParams, []seedtyp
 	}
 
 	if params.EquipType == nil {
-		return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("can't discern equipment's type. use '%s' to discern the type, or set it manually by using '%s'", typestrings.PfnAutoAbilities, typestrings.PfnEquipType), nil)
+		return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("can't discern equipment's type. use '%s' to discern the type, or set it manually by using '%s'", ts.PfnAutoAbilities, ts.PfnEquipType), nil)
 	}
 
 	return params, autoAbilities, nil

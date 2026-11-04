@@ -9,7 +9,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type parseResponse struct {
@@ -24,7 +24,7 @@ func newParseResponse(id int32, name string) parseResponse {
 	}
 }
 
-func parseID(idStr string, resourceType typestrings.ResTypeSingle, maxID int) (parseResponse, error) {
+func parseID(idStr string, resourceType ts.ResTypeSingle, maxID int) (parseResponse, error) {
 	response, err := checkID(idStr, resourceType, maxID)
 	if errors.Is(err, errNotAnID) {
 		return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s'", idStr), err)
@@ -36,7 +36,7 @@ func parseID(idStr string, resourceType typestrings.ResTypeSingle, maxID int) (p
 	return response, nil
 }
 
-func checkID(idStr string, resourceType typestrings.ResTypeSingle, maxID int) (parseResponse, error) {
+func checkID(idStr string, resourceType ts.ResTypeSingle, maxID int) (parseResponse, error) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		return parseResponse{}, errNotAnID

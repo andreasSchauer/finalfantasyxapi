@@ -8,7 +8,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 /*
@@ -51,7 +51,7 @@ type testGeneral struct {
 	expectedErr    string
 	dontCheck      map[string]bool
 	expLengths     map[string]int
-	endpoint       typestrings.EndpointName
+	endpoint       ts.EndpointName
 	handler        func(http.ResponseWriter, *http.Request)
 	method         string
 	requestBody    any
@@ -171,7 +171,7 @@ type expListNames struct {
 	count    int
 	previous *string
 	next     *string
-	results  []typestrings.NamedParam
+	results  []ts.NamedParam
 }
 
 func (l expListNames) GetListParams() api.ListParams {

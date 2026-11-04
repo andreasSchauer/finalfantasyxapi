@@ -6,7 +6,7 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type locContextParams struct {
@@ -20,7 +20,7 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A APIResource](cfg *Conf
 	var locContextID sql.NullInt32
 	var locContextType string
 
-	locID, err := nullID(r, cfg.E.Locations, typestrings.QpnLocation, i.queryLookup)
+	locID, err := nullID(r, cfg.E.Locations, ts.QpnLocation, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -30,7 +30,7 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A APIResource](cfg *Conf
 		locContextType = string(ViewSourceTypeLocation)
 	}
 
-	subLocID, err := nullID(r, cfg.E.Sublocations, typestrings.QpnSublocation, i.queryLookup)
+	subLocID, err := nullID(r, cfg.E.Sublocations, ts.QpnSublocation, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -40,7 +40,7 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A APIResource](cfg *Conf
 		locContextType = string(ViewSourceTypeSublocation)
 	}
 
-	areaID, err := nullID(r, cfg.E.Areas, typestrings.QpnArea, i.queryLookup)
+	areaID, err := nullID(r, cfg.E.Areas, ts.QpnArea, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}

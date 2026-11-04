@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seedtypes.PlayerAbility, PlayerAbility, NamedAPIResource], id int32) (PlayerAbility, error) {
@@ -48,7 +48,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seedtypes.Pl
 		BattleInteractions:    convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, i, response, typestrings.QpnAbilityUser)
+	battleInteractions, err := applyUser(cfg, r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return PlayerAbility{}, err
 	}
@@ -65,32 +65,32 @@ func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seedt
 	abilityType := database.AbilityTypePlayerAbility
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, enums.T.PlayerAbilityCategory, ids, typestrings.QpnCategory, cfg.db.GetPlayerAbilityIDsByCategory),
-		i.queryEnumList(cfg, r, enums.T.DamageType, ids, typestrings.QpnDamageType, getTypedAbilityIDsByDamageType(cfg, abilityType)),
-		i.queryEnumList(cfg, r, enums.T.AttackType, ids, typestrings.QpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType)),
-		i.queryEnumList(cfg, r, enums.T.TargetType, ids, typestrings.QpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType)),
-		i.queryEnum(r, enums.T.DamageFormula, ids, typestrings.QpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType)),
-		i.queryIntList(cfg, r, ids, typestrings.QpnMp, cfg.db.GetPlayerAbilityIDsByMpCost),
-		i.queryInt(r, ids, typestrings.QpnMpMin, cfg.db.GetPlayerAbilityIDsByMpCostMin),
-		i.queryInt(r, ids, typestrings.QpnMpMax, cfg.db.GetPlayerAbilityIDsByMpCostMax),
-		i.queryIntList(cfg, r, ids, typestrings.QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		i.queryNameIDListNul(cfg, r, ids, typestrings.QpnElement, cfg.E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
-		i.queryNameID(r, ids, typestrings.QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass),
-		i.queryID(r, ids, typestrings.QpnLearnItem, lookup.L.Items, cfg.db.GetPlayerAbilityIDsByLearnItem),
-		i.queryNameID(r, ids, typestrings.QpnRelatedStat, cfg.E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat),
-		i.queryIDNul(r, ids, typestrings.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
-		i.queryIDNul(r, ids, typestrings.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
-		i.queryNameID(r, ids, typestrings.QpnStdSg, cfg.E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar)),
-		i.queryNameID(r, ids, typestrings.QpnExpSg, cfg.E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar)),
-		i.queryBool(r, ids, typestrings.QpnOutsideBattle, cfg.db.GetPlayerAbilityIDsCanUseOutsideBattle),
-		i.queryBool(r, ids, typestrings.QpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
-		i.queryBool(r, ids, typestrings.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnDarkable, getTypedAbilityIDsDarkable(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnSilenceable, getTypedAbilityIDsSilenceable(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnReflectable, getTypedAbilityIDsReflectable(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnDelay, getTypedAbilityIDsDealsDelay(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnStatChanges, getTypedAbilityIDsWithStatChanges(cfg, abilityType)),
-		i.queryBool2(r, ids, typestrings.QpnModChanges, getTypedAbilityIDsWithModifierChanges(cfg, abilityType)),
+		i.queryEnumList(cfg, r, enums.T.PlayerAbilityCategory, ids, ts.QpnCategory, cfg.db.GetPlayerAbilityIDsByCategory),
+		i.queryEnumList(cfg, r, enums.T.DamageType, ids, ts.QpnDamageType, getTypedAbilityIDsByDamageType(cfg, abilityType)),
+		i.queryEnumList(cfg, r, enums.T.AttackType, ids, ts.QpnAttackType, getTypedAbilityIDsByAttackType(cfg, abilityType)),
+		i.queryEnumList(cfg, r, enums.T.TargetType, ids, ts.QpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType)),
+		i.queryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType)),
+		i.queryIntList(cfg, r, ids, ts.QpnMp, cfg.db.GetPlayerAbilityIDsByMpCost),
+		i.queryInt(r, ids, ts.QpnMpMin, cfg.db.GetPlayerAbilityIDsByMpCostMin),
+		i.queryInt(r, ids, ts.QpnMpMax, cfg.db.GetPlayerAbilityIDsByMpCostMax),
+		i.queryIntList(cfg, r, ids, ts.QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
+		i.queryNameIDListNul(cfg, r, ids, ts.QpnElement, cfg.E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
+		i.queryNameID(r, ids, ts.QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass),
+		i.queryID(r, ids, ts.QpnLearnItem, lookup.L.Items, cfg.db.GetPlayerAbilityIDsByLearnItem),
+		i.queryNameID(r, ids, ts.QpnRelatedStat, cfg.E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat),
+		i.queryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
+		i.queryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
+		i.queryNameID(r, ids, ts.QpnStdSg, cfg.E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar)),
+		i.queryNameID(r, ids, ts.QpnExpSg, cfg.E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar)),
+		i.queryBool(r, ids, ts.QpnOutsideBattle, cfg.db.GetPlayerAbilityIDsCanUseOutsideBattle),
+		i.queryBool(r, ids, ts.QpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
+		i.queryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnDarkable, getTypedAbilityIDsDarkable(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnSilenceable, getTypedAbilityIDsSilenceable(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnReflectable, getTypedAbilityIDsReflectable(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnDelay, getTypedAbilityIDsDealsDelay(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnStatChanges, getTypedAbilityIDsWithStatChanges(cfg, abilityType)),
+		i.queryBool2(r, ids, ts.QpnModChanges, getTypedAbilityIDsWithModifierChanges(cfg, abilityType)),
 	})
 }

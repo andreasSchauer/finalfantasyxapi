@@ -2,8 +2,7 @@ package api
 
 import (
 	"net/http"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type QueryParameterList struct {
@@ -15,7 +14,7 @@ func (l QueryParameterList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func getQueryParamList(cfg *Config, r *http.Request, endpoint typestrings.EndpointName, queryLookup map[typestrings.QueryParamName]QueryParam) (QueryParameterList, error) {
+func getQueryParamList(cfg *Config, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam) (QueryParameterList, error) {
 
 	queryParams := paramMapToSlice(queryLookup)
 	queryParams = getAllowedResources(cfg, endpoint, queryParams)
@@ -45,7 +44,7 @@ func createQueryParamRefResURLs(cfg *Config, params []QueryParam) []QueryParam {
 		param.References = make([]string, len(param.ReferencesInt))
 
 		for j := range param.ReferencesInt {
-			if param.Type == typestrings.QptEnum || param.Type == typestrings.QptEnumList {
+			if param.Type == ts.QptEnum || param.Type == ts.QptEnumList {
 				ref := param.ReferencesEnumsInt[j]
 				param.References[j] = createEnumURL(cfg, ref)
 				continue
@@ -60,7 +59,7 @@ func createQueryParamRefResURLs(cfg *Config, params []QueryParam) []QueryParam {
 	return paramsNew
 }
 
-func getAllowedResources(cfg *Config, endpoint typestrings.EndpointName, params []QueryParam) []QueryParam {
+func getAllowedResources(cfg *Config, endpoint ts.EndpointName, params []QueryParam) []QueryParam {
 	for idx, param := range params {
 		for _, id := range param.AllowedIDs {
 			allowedRes := CreateResourceURL(cfg, endpoint, id)
@@ -75,7 +74,7 @@ func getAllowedResources(cfg *Config, endpoint typestrings.EndpointName, params 
 func getAllowedValuesFromTypes(params []QueryParam) []QueryParam {
 	for idx, param := range params {
 		for _, typeRes := range param.EnumVals {
-			param.AllowedValues = append(param.AllowedValues, typestrings.QueryValue(typeRes.Name))
+			param.AllowedValues = append(param.AllowedValues, ts.QueryValue(typeRes.Name))
 		}
 		params[idx] = param
 	}

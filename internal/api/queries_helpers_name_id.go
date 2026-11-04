@@ -6,11 +6,11 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // validates name/id-queryParam and checks emptiness. returns the corresponding id.
-func (q QueryParam) parseNameID[P seedtypes.Lookupable](r *http.Request, pResType typestrings.ResTypeSingle, pLookup map[string]P) (int32, error) {
+func (q QueryParam) parseNameID[P seedtypes.Lookupable](r *http.Request, pResType ts.ResTypeSingle, pLookup map[string]P) (int32, error) {
 	query, err := q.checkEmpty(r)
 	if err != nil {
 		return 0, err
@@ -20,7 +20,7 @@ func (q QueryParam) parseNameID[P seedtypes.Lookupable](r *http.Request, pResTyp
 }
 
 // validates an id or single-segment-resource name, checks emptiness, and returns the corresponding id.
-func (q QueryParam) checkNameID[P seedtypes.Lookupable](query string, pResType typestrings.ResTypeSingle, pLookup map[string]P) (int32, error) {
+func (q QueryParam) checkNameID[P seedtypes.Lookupable](query string, pResType ts.ResTypeSingle, pLookup map[string]P) (int32, error) {
 	id, err := q.checkID(query, len(pLookup))
 	if err == nil {
 		return id, nil

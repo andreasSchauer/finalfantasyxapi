@@ -9,7 +9,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func idToLocAreaString(cfg *Config, areaID int32) string {
@@ -77,7 +77,7 @@ func abilityRefString(cfg *Config, ref seedtypes.AbilityReference) string {
 	return h.NameToString(ability.Name, ability.Version, ability.Specification)
 }
 
-func formatSectionNames(itemMap map[typestrings.SectionName]Subsection) string {
+func formatSectionNames(itemMap map[ts.SectionName]Subsection) string {
 	keys := []string{}
 
 	for key := range itemMap {

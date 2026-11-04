@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, QuestAPIResource], id int32) (Subquest, error) {
@@ -37,6 +37,6 @@ func (cfg *Config) retrieveSubquests(r *http.Request, i handlerInput[seedtypes.S
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryBool(r, ids, typestrings.QpnRepeatable, cfg.db.GetSubquestIDsByRepeatable),
+		i.queryBool(r, ids, ts.QpnRepeatable, cfg.db.GetSubquestIDsByRepeatable),
 	})
 }

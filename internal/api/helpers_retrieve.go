@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -51,7 +51,7 @@ func (i handlerInput[T, R, A]) filterIDs(cfg *Config, r *http.Request, IDs []int
 		}
 	}
 
-	flip, err := i.queryLookup[typestrings.QpnFlip].parseBool(r)
+	flip, err := i.queryLookup[ts.QpnFlip].parseBool(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

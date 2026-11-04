@@ -8,7 +8,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type NamedAPIResource struct {
@@ -111,14 +111,14 @@ func enumsToNamedAPIResources(cfg *Config, enums []enums.EnumResponse) []NamedAP
 	return resources
 }
 
-func endpointToNamedAPIResource(cfg *Config, e typestrings.EndpointName) NamedAPIResource {
+func endpointToNamedAPIResource(cfg *Config, e ts.EndpointName) NamedAPIResource {
 	return NamedAPIResource{
 		Name: string(e),
 		URL:  createListURL(cfg, e),
 	}
 }
 
-func endpointsToNamedAPIResources(cfg *Config, endpoints []typestrings.EndpointName) []NamedAPIResource {
+func endpointsToNamedAPIResources(cfg *Config, endpoints []ts.EndpointName) []NamedAPIResource {
 	resources := make([]NamedAPIResource, 0, len(endpoints))
 
 	for _, ep := range endpoints {

@@ -1,16 +1,16 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+import ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 
 func verifyAlBhedParams(v paramsVerifyer, params AlBhedParams) (AlBhedParams, error) {
 	var err error
 
-	params.Text, err = v.field(params.Text, typestrings.PfnText)
+	params.Text, err = v.field(params.Text, ts.PfnText)
 	if err != nil {
 		return AlBhedParams{}, err
 	}
 
-	params.Direction, err = v.enum(params.Direction, typestrings.PfnDirection)
+	params.Direction, err = v.enum(params.Direction, ts.PfnDirection)
 	if err != nil {
 		return AlBhedParams{}, err
 	}

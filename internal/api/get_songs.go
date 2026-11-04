@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getSong(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResource], id int32) (Song, error) {
@@ -57,12 +57,12 @@ func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seedtypes.Song,
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, typestrings.QpnLocation, lookup.L.Locations, cfg.db.GetLocationSongIDs),
-		i.queryID(r, ids, typestrings.QpnSublocation, lookup.L.Sublocations, cfg.db.GetSublocationSongIDs),
-		i.queryID(r, ids, typestrings.QpnArea, lookup.L.Areas, cfg.db.GetAreaSongIDs),
-		i.queryBool2(r, ids, typestrings.QpnSpecialUse, cfg.db.GetSongIDsWithSpecialUseCase),
-		i.queryBool2(r, ids, typestrings.QpnFMVs, cfg.db.GetSongIDsWithFMVs),
-		i.queryEnum(r, enums.T.Composer, ids, typestrings.QpnComposer, ToEnumQuery(enums.T.Composer, cfg.db.GetSongIDsByComposer)),
-		i.queryEnum(r, enums.T.Arranger, ids, typestrings.QpnArranger, ToEnumQuery(enums.T.Arranger, cfg.db.GetSongIDsByArranger)),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, cfg.db.GetLocationSongIDs),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, cfg.db.GetSublocationSongIDs),
+		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, cfg.db.GetAreaSongIDs),
+		i.queryBool2(r, ids, ts.QpnSpecialUse, cfg.db.GetSongIDsWithSpecialUseCase),
+		i.queryBool2(r, ids, ts.QpnFMVs, cfg.db.GetSongIDsWithFMVs),
+		i.queryEnum(r, enums.T.Composer, ids, ts.QpnComposer, ToEnumQuery(enums.T.Composer, cfg.db.GetSongIDsByComposer)),
+		i.queryEnum(r, enums.T.Arranger, ids, ts.QpnArranger, ToEnumQuery(enums.T.Arranger, cfg.db.GetSongIDsByArranger)),
 	})
 }

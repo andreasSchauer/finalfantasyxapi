@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getCharacterClass(r *http.Request, i handlerInput[seedtypes.CharacterClass, CharacterClass, NamedAPIResource], id int32) (CharacterClass, error) {
@@ -41,6 +41,6 @@ func (cfg *Config) retrieveCharacterClasses(r *http.Request, i handlerInput[seed
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, enums.T.CharacterClassCategory, ids, typestrings.QpnCategory, cfg.db.GetCharacterClassesIDsByCategory),
+		i.queryEnumList(cfg, r, enums.T.CharacterClassCategory, ids, ts.QpnCategory, cfg.db.GetCharacterClassesIDsByCategory),
 	})
 }

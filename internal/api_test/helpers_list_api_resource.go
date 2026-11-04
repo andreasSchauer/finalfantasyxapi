@@ -2,11 +2,11 @@ package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 // checks the basic fields of an APIResourceList (count, pagination urls) and then checks for the stated resources
-func compareAPIResourceLists[A api.APIResource](test test, endpoint typestrings.EndpointName, expList expListIDs, gotList api.APIResourceList[A]) {
+func compareAPIResourceLists[A api.APIResource](test test, endpoint ts.EndpointName, expList expListIDs, gotList api.APIResourceList[A]) {
 	test.t.Helper()
 	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
 	test.checkResIDsInSlice("results", endpoint, expList.results, gotList.GetResults())
@@ -38,7 +38,7 @@ func (test test) checkResPathsInSlice[T api.HasAPIResource](fieldName string, ex
 	}
 }
 
-func (test test) checkResIDsInSlice[T api.HasAPIResource](fieldName string, endpoint typestrings.EndpointName, expIDs []int32, gotRes []T) {
+func (test test) checkResIDsInSlice[T api.HasAPIResource](fieldName string, endpoint ts.EndpointName, expIDs []int32, gotRes []T) {
 	test.t.Helper()
 	test.checkSliceBasic(fieldName, expIDs, gotRes)
 

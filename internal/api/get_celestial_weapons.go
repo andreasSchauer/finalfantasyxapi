@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getCelestialWeapon(r *http.Request, i handlerInput[seedtypes.CelestialWeapon, CelestialWeapon, NamedAPIResource], id int32) (CelestialWeapon, error) {
@@ -44,6 +44,6 @@ func (cfg *Config) retrieveCelestialWeapons(r *http.Request, i handlerInput[seed
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnum(r, enums.T.CelestialFormula, ids, typestrings.QpnFormula, cfg.db.GetCelestialWeaponIDsByFormula),
+		i.queryEnum(r, enums.T.CelestialFormula, ids, ts.QpnFormula, cfg.db.GetCelestialWeaponIDsByFormula),
 	})
 }

@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -59,12 +59,12 @@ func getAeonBaseStats(cfg *Config, aeon seedtypes.Aeon) []BaseStat {
 func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon, allowedStatIDs []int32) (Aeon, error) {
 	var err error
 
-	aeon.BaseStats, err = applyAeonStatsBattles(cfg, r, aeon, typestrings.QpnBattles)
+	aeon.BaseStats, err = applyAeonStatsBattles(cfg, r, aeon, ts.QpnBattles)
 	if err != nil {
 		return Aeon{}, err
 	}
 
-	aeon.BaseStats, err = applyYunaStats(cfg, r, aeon, typestrings.QpnYunaStats, allowedStatIDs)
+	aeon.BaseStats, err = applyYunaStats(cfg, r, aeon, ts.QpnYunaStats, allowedStatIDs)
 	if err != nil {
 		return Aeon{}, err
 	}
@@ -72,7 +72,7 @@ func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon, allowedStatIDs []in
 	return aeon, nil
 }
 
-func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName typestrings.QueryParamName) ([]BaseStat, error) {
+func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName ts.QueryParamName) ([]BaseStat, error) {
 	queryParam := cfg.Q.aeons[queryName]
 	battles, err := queryParam.parseInt(r)
 	if queryIsEmpty(err) {
@@ -95,7 +95,7 @@ func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName ty
 	return baseStats, nil
 }
 
-func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName typestrings.QueryParamName, allowedStatIDs []int32) ([]BaseStat, error) {
+func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName ts.QueryParamName, allowedStatIDs []int32) ([]BaseStat, error) {
 	queryParam := cfg.Q.aeons[queryName]
 
 	yuna := lookup.L.Characters["yuna"]

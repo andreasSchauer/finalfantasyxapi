@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seedtypes.TriggerCommand, TriggerCommand, NamedAPIResource], id int32) (TriggerCommand, error) {
@@ -38,7 +38,7 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seedtypes.T
 		BattleInteractions: convertObjSlice(cfg, command.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, i, response, typestrings.QpnAbilityUser)
+	battleInteractions, err := applyUser(cfg, r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
@@ -54,7 +54,7 @@ func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seedt
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryNameID(r, ids, typestrings.QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
-		i.queryNameID(r, ids, typestrings.QpnRelatedStat, cfg.E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
+		i.queryNameID(r, ids, ts.QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
+		i.queryNameID(r, ids, ts.QpnRelatedStat, cfg.E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
 	})
 }

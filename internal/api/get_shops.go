@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (cfg *Config) getShop(r *http.Request, i handlerInput[seedtypes.Shop, Shop, UnnamedAPIResource], id int32) (Shop, error) {
@@ -34,11 +34,11 @@ func (cfg *Config) retrieveShops(r *http.Request, i handlerInput[seedtypes.Shop,
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryJoined(cfg, r, ids, []typestrings.QueryParamName{typestrings.QpnAutoAbility, typestrings.QpnEmptySlots, typestrings.QpnCharacter}, filterShopsEquipment),
-		i.queryID(r, ids, typestrings.QpnLocation, lookup.L.Locations, cfg.db.GetShopIDsByLocation),
-		i.queryID(r, ids, typestrings.QpnSublocation, lookup.L.Sublocations, cfg.db.GetShopIDsBySublocation),
-		i.queryBool2(r, ids, typestrings.QpnItems, cfg.db.GetShopIDsWithItems),
-		i.queryBool2(r, ids, typestrings.QpnEquipment, cfg.db.GetShopIDsWithEquipment),
-		i.queryEnumList(cfg, r, enums.T.ShopCategory, ids, typestrings.QpnCategory, cfg.db.GetShopIDsByCategory),
+		i.queryJoined(cfg, r, ids, []ts.QueryParamName{ts.QpnAutoAbility, ts.QpnEmptySlots, ts.QpnCharacter}, filterShopsEquipment),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, cfg.db.GetShopIDsByLocation),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, cfg.db.GetShopIDsBySublocation),
+		i.queryBool2(r, ids, ts.QpnItems, cfg.db.GetShopIDsWithItems),
+		i.queryBool2(r, ids, ts.QpnEquipment, cfg.db.GetShopIDsWithEquipment),
+		i.queryEnumList(cfg, r, enums.T.ShopCategory, ids, ts.QpnCategory, cfg.db.GetShopIDsByCategory),
 	})
 }

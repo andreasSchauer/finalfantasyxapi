@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (i handlerInput[T, R, A]) handleList(cfg *Config, w http.ResponseWriter, r *http.Request) {
@@ -25,17 +25,17 @@ func (i handlerInput[T, R, A]) handleList(cfg *Config, w http.ResponseWriter, r 
 func (i handlerInput[T, R, A]) handleIDOnly(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
-	if segment == string(typestrings.SnParameters) {
+	if segment == string(ts.SnParameters) {
 		i.handleParameters(cfg, w, r)
 		return
 	}
 
-	if segment == string(typestrings.SnSections) {
+	if segment == string(ts.SnSections) {
 		i.handleSections(cfg, w, r)
 		return
 	}
 
-	if segment == string(typestrings.SnSimple) {
+	if segment == string(ts.SnSimple) {
 		i.handleSimple(cfg, w, r)
 		return
 	}
@@ -56,17 +56,17 @@ func (i handlerInput[T, R, A]) handleIDOnly(cfg *Config, w http.ResponseWriter, 
 func (i handlerInput[T, R, A]) handleNameID(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
-	if segment == string(typestrings.SnParameters) {
+	if segment == string(ts.SnParameters) {
 		i.handleParameters(cfg, w, r)
 		return
 	}
 
-	if segment == string(typestrings.SnSections) {
+	if segment == string(ts.SnSections) {
 		i.handleSections(cfg, w, r)
 		return
 	}
 
-	if segment == string(typestrings.SnSimple) {
+	if segment == string(ts.SnSimple) {
 		i.handleSimple(cfg, w, r)
 		return
 	}
@@ -182,7 +182,7 @@ func (i handlerInputEnums) handleList(cfg *Config, w http.ResponseWriter, r *htt
 func (i handlerInputEnums) handleSingle(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
-	if segment == string(typestrings.SnParameters) {
+	if segment == string(ts.SnParameters) {
 		i.handleParameters(cfg, w, r)
 		return
 	}
@@ -223,7 +223,7 @@ func (i handlerInputEndpoints) handleList(cfg *Config, w http.ResponseWriter, r 
 func (i handlerInputEndpoints) handleSections(cfg *Config, w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
-	if segment == string(typestrings.SnParameters) {
+	if segment == string(ts.SnParameters) {
 		i.handleParameters(cfg, w, r)
 		return
 	}
@@ -239,7 +239,7 @@ func (i handlerInputService[P, R]) handleBody(cfg *Config, w http.ResponseWriter
 
 	segment := segments[0]
 
-	if segment == string(typestrings.SnBody) {
+	if segment == string(ts.SnBody) {
 		respondWithJSON(w, http.StatusOK, getBody(cfg, i.Endpoint))
 		return
 	}
@@ -253,17 +253,17 @@ func (i handlerInputService[P, R]) handleBodySections(cfg *Config, w http.Respon
 		return
 	}
 
-	if segments[0] != string(typestrings.SnBody) {
+	if segments[0] != string(ts.SnBody) {
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'", i.Endpoint), nil)
 		return
 	}
 
 	switch segments[1] {
-	case string(typestrings.SnDocs):
+	case string(ts.SnDocs):
 		respondWithJSON(w, http.StatusOK, i.docsFn(cfg))
 		return
 
-	case string(typestrings.SnSamples):
+	case string(ts.SnSamples):
 		respondWithJSON(w, http.StatusOK, i.samplesFn())
 		return
 
