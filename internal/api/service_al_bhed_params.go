@@ -11,7 +11,7 @@ type AlBhedParams struct {
 	Direction string `json:"direction,omitempty"`
 }
 
-func getAlBhedParamsDoc(server *Server) ParamsDoc {
+func getAlBhedParamsDoc(srv *Server) ParamsDoc {
 	return ParamsDoc{
 		Fields: []FieldDoc{
 			{

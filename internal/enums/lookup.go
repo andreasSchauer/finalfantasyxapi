@@ -78,7 +78,7 @@ type Enums struct {
 	// ShopType                    EnumType[database.ShopType, database.NullShopType]
 }
 
-func (T *Enums) EnumLookupInit() {
+func (T *Enums) Init() {
 	T.Lookup = make(map[string]EnumResponse)
 
 	T.initAbilityType()

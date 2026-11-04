@@ -27,7 +27,7 @@ type CreatedNode struct {
 	Value int32  `json:"value"`
 }
 
-func convertCreatedNode(server *Server, n seedtypes.CreatedNode) CreatedNode {
+func convertCreatedNode(srv *Server, n seedtypes.CreatedNode) CreatedNode {
 	return CreatedNode{
 		Node:  n.Node,
 		Value: n.Value,

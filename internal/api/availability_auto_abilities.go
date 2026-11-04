@@ -7,10 +7,10 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func filterAvlAutoAbilities(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlAutoAbilities(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.AutoAbilities
 
-	avlParams, err := i.queryAvlRepGetParams(server, r)
+	avlParams, err := i.queryAvlRepGetParams(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -33,12 +33,12 @@ func filterAvlAutoAbilities(server *Server, r *http.Request, inputIDs []int32) (
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(server, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.FilterAutoAbilityIDsByAvailability(r.Context(), database.FilterAutoAbilityIDsByAvailabilityParams{
+	dbIDs, err := srv.Cfg.DB.FilterAutoAbilityIDsByAvailability(r.Context(), database.FilterAutoAbilityIDsByAvailabilityParams{
 		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,

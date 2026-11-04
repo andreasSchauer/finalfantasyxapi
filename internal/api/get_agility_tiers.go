@@ -7,7 +7,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (s *Server) getAgilityTier(r *http.Request, i handlerInput[seedtypes.AgilityTier, AgilityTier, UnnamedAPIResource], id int32) (AgilityTier, error) {
+func (srv *Server) getAgilityTier(r *http.Request, i handlerInput[seedtypes.AgilityTier, AgilityTier, UnnamedAPIResource], id int32) (AgilityTier, error) {
 	agilityTier, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return AgilityTier{}, err
@@ -21,19 +21,19 @@ func (s *Server) getAgilityTier(r *http.Request, i handlerInput[seedtypes.Agilit
 		MonMinICV:   agilityTier.MonsterMinICV,
 		MonMaxICV:   agilityTier.MonsterMaxICV,
 		CharMaxICV:  agilityTier.CharacterMaxICV,
-		CharMinICVs: convertObjSlice(s, agilityTier.CharacterMinICVs, convertAgilitySubtier),
+		CharMinICVs: convertObjSlice(srv, agilityTier.CharacterMinICVs, convertAgilitySubtier),
 	}
 
 	return response, nil
 }
 
-func (s *Server) retrieveAgilityTiers(r *http.Request, i handlerInput[seedtypes.AgilityTier, AgilityTier, UnnamedAPIResource]) ([]int32, error) {
+func (srv *Server) retrieveAgilityTiers(r *http.Request, i handlerInput[seedtypes.AgilityTier, AgilityTier, UnnamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(s, r, ids, []IDFilter{
-		i.queryInt(r, ids, ts.QpnAgility, s.Cfg.DB.GetAgilityTierIDsByAgility),
+	return i.filterIDs(srv, r, ids, []IDFilter{
+		i.queryInt(r, ids, ts.QpnAgility, srv.Cfg.DB.GetAgilityTierIDsByAgility),
 	})
 }

@@ -18,13 +18,13 @@ type ShopSummarySimple struct {
 	HasEquipment bool `json:"has_equipment"`
 }
 
-func idToShopLocSimple(server *Server, shopID int32) ShopLocSimple {
+func idToShopLocSimple(srv *Server, shopID int32) ShopLocSimple {
 	shopLookup, _ := lookup.GetResourceByID(shopID, lookup.L.ShopsID)
 	return ShopLocSimple{
 		ID:          shopID,
 		Category:    database.ShopCategory(shopLookup.Category),
-		PreAirship:  convertObjPtr(server, shopLookup.PreAirship, convertShopSummarySimple),
-		PostAirship: convertObjPtr(server, shopLookup.PostAirship, convertShopSummarySimple),
+		PreAirship:  convertObjPtr(srv, shopLookup.PreAirship, convertShopSummarySimple),
+		PostAirship: convertObjPtr(srv, shopLookup.PostAirship, convertShopSummarySimple),
 	}
 }
 
@@ -49,18 +49,18 @@ type TreasuresLocSimple struct {
 	Equipment     []EquipmentSimple `json:"equipment"`
 }
 
-func getTreasuresLocSimple(server *Server, id int32, subsection Subsection) *TreasuresLocSimple {
+func getTreasuresLocSimple(srv *Server, id int32, subsection Subsection) *TreasuresLocSimple {
 	treasureIDs := subsection.relations[id][RelationTreasures]
 
 	if len(treasureIDs) == 0 {
 		return nil
 	}
 
-	treasures := populateTreasuresLocSimple(server, treasureIDs)
+	treasures := populateTreasuresLocSimple(srv, treasureIDs)
 	return &treasures
 }
 
-func populateTreasuresLocSimple(server *Server, treasureIDs []int32) TreasuresLocSimple {
+func populateTreasuresLocSimple(srv *Server, treasureIDs []int32) TreasuresLocSimple {
 	treasures := TreasuresLocSimple{
 		TreasureCount: len(treasureIDs),
 	}
@@ -79,13 +79,13 @@ func populateTreasuresLocSimple(server *Server, treasureIDs []int32) TreasuresLo
 
 		case string(database.LootTypeEquipment):
 			equipment := treasure.Equipment
-			es := convertEquipmentSimple(server, *equipment)
+			es := convertEquipmentSimple(srv, *equipment)
 			treasures.Equipment = append(treasures.Equipment, es)
 		}
 	}
 
 	itemAmounts = sortItemAmountsByID(itemAmounts)
-	treasures.Items = convertObjSlice(server, itemAmounts, convertItemAmountSimple)
+	treasures.Items = convertObjSlice(srv, itemAmounts, convertItemAmountSimple)
 	return treasures
 }
 

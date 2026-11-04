@@ -13,25 +13,25 @@ func (er ElementalResist) GetAPIResource() APIResource {
 	return er.Element
 }
 
-func convertElemResist(server *Server, er seedtypes.ElementalResist) ElementalResist {
+func convertElemResist(srv *Server, er seedtypes.ElementalResist) ElementalResist {
 	return ElementalResist{
-		Element:  nameToNamedAPIResource(server, E.Elements, er.Element, nil),
+		Element:  nameToNamedAPIResource(srv, E.Elements, er.Element, nil),
 		Affinity: er.Affinity,
 	}
 }
 
-func newElemResist(server *Server, element, affinity string) ElementalResist {
+func newElemResist(srv *Server, element, affinity string) ElementalResist {
 	return ElementalResist{
-		Element:  nameToNamedAPIResource(server, E.Elements, element, nil),
+		Element:  nameToNamedAPIResource(srv, E.Elements, element, nil),
 		Affinity: affinity,
 	}
 }
 
-func namesToElemResists(server *Server, resists []seedtypes.ElementalResist) []ElementalResist {
+func namesToElemResists(srv *Server, resists []seedtypes.ElementalResist) []ElementalResist {
 	elemResists := []ElementalResist{}
 
 	for _, seedResist := range resists {
-		elemResist := newElemResist(server, seedResist.Element, seedResist.Affinity)
+		elemResist := newElemResist(srv, seedResist.Element, seedResist.Affinity)
 		elemResists = append(elemResists, elemResist)
 	}
 

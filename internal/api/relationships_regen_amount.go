@@ -5,8 +5,8 @@ type RegenAmount struct {
 	HealedHP int32 `json:"healed_hp"`
 }
 
-func calcRegenAmountsMonster(server *Server, mon Monster) []RegenAmount {
-	regenRes := nameToNamedAPIResource(server, E.StatusConditions, "regen", nil)
+func calcRegenAmountsMonster(srv *Server, mon Monster) []RegenAmount {
+	regenRes := nameToNamedAPIResource(srv, E.StatusConditions, "regen", nil)
 	if resourcesContain(mon.StatusImmunities, regenRes) {
 		return nil
 	}

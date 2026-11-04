@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (s *Server) getItem(r *http.Request, i handlerInput[seedtypes.Item, Item, NamedAPIResource], id int32) (Item, error) {
+func (srv *Server) getItem(r *http.Request, i handlerInput[seedtypes.Item, Item, NamedAPIResource], id int32) (Item, error) {
 	item, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Item{}, err
@@ -20,7 +20,7 @@ func (s *Server) getItem(r *http.Request, i handlerInput[seedtypes.Item, Item, N
 		itemAbilityNamePtr = &item.Name
 	}
 
-	rel, err := getItemRelationships(s, r, item)
+	rel, err := getItemRelationships(srv, r, item)
 	if err != nil {
 		return Item{}, err
 	}
@@ -28,7 +28,7 @@ func (s *Server) getItem(r *http.Request, i handlerInput[seedtypes.Item, Item, N
 	response := Item{
 		ID:                 item.ID,
 		Name:               item.Name,
-		UntypedItem:        idToTypedAPIResource(s, E.AllItems, item.MasterItem.ID),
+		UntypedItem:        idToTypedAPIResource(srv, E.AllItems, item.MasterItem.ID),
 		Category:           item.Category,
 		Description:        item.Description,
 		SgDescription:      item.SphereGridDescription,
@@ -36,10 +36,10 @@ func (s *Server) getItem(r *http.Request, i handlerInput[seedtypes.Item, Item, N
 		Usability:          item.Usability,
 		BasePrice:          item.BasePrice,
 		SellValue:          item.SellValue,
-		ItemAbility:        namePtrToNamedAPIResPtr(s, E.ItemAbilities, itemAbilityNamePtr, nil),
+		ItemAbility:        namePtrToNamedAPIResPtr(srv, E.ItemAbilities, itemAbilityNamePtr, nil),
 		Sphere:             rel.Sphere,
-		AvailableMenus:     namesToNamedAPIResources(s, E.Submenus, item.AvailableMenus),
-		RelatedStats:       namesToNamedAPIResources(s, E.Stats, item.RelatedStats),
+		AvailableMenus:     namesToNamedAPIResources(srv, E.Submenus, item.AvailableMenus),
+		RelatedStats:       namesToNamedAPIResources(srv, E.Stats, item.RelatedStats),
 		Monsters:           rel.Monsters,
 		Treasures:          rel.Treasures,
 		Shops:              rel.Shops,
@@ -53,19 +53,19 @@ func (s *Server) getItem(r *http.Request, i handlerInput[seedtypes.Item, Item, N
 	return response, nil
 }
 
-func (s *Server) retrieveItems(r *http.Request, i handlerInput[seedtypes.Item, Item, NamedAPIResource]) ([]int32, error) {
+func (srv *Server) retrieveItems(r *http.Request, i handlerInput[seedtypes.Item, Item, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(s, r, ids, []IDFilter{
-		i.queryEnumList(s, r, enums.T.ItemCategory, ids, ts.QpnCategory, s.Cfg.DB.GetItemIDsCategory),
-		i.queryBool2(r, ids, ts.QpnHasAbility, s.Cfg.DB.GetItemIDsWithAbility),
-		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, s.Cfg.DB.GetItemIDsByRelatedStat),
-		i.queryValueList(s, r, ids, ts.QpnMethods, s.Cfg.DB.GetItemIDsByMethods),
-		i.queryIDWrapper(s, r, ids, ts.QpnLocation, E.Locations.objLookup, getItemsByLocation),
-		i.queryIDWrapper(s, r, ids, ts.QpnSublocation, E.Sublocations.objLookup, getItemsBySublocation),
-		i.queryIDWrapper(s, r, ids, ts.QpnArea, E.Areas.objLookup, getItemsByArea),
+	return i.filterIDs(srv, r, ids, []IDFilter{
+		i.queryEnumList(srv, r, enums.T.ItemCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetItemIDsCategory),
+		i.queryBool2(r, ids, ts.QpnHasAbility, srv.Cfg.DB.GetItemIDsWithAbility),
+		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, srv.Cfg.DB.GetItemIDsByRelatedStat),
+		i.queryValueList(srv, r, ids, ts.QpnMethods, srv.Cfg.DB.GetItemIDsByMethods),
+		i.queryIDWrapper(srv, r, ids, ts.QpnLocation, E.Locations.objLookup, getItemsByLocation),
+		i.queryIDWrapper(srv, r, ids, ts.QpnSublocation, E.Sublocations.objLookup, getItemsBySublocation),
+		i.queryIDWrapper(srv, r, ids, ts.QpnArea, E.Areas.objLookup, getItemsByArea),
 	})
 }

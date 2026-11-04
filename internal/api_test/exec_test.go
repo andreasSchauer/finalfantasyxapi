@@ -231,7 +231,7 @@ func setupTest[G any](t *testing.T, tc testGeneral, testName string, handlerFunc
 
 	test := test{
 		t:          t,
-		server:     &testSrv,
+		srv:        &testSrv,
 		name:       testName,
 		expLengths: tc.expLengths,
 		dontCheck:  tc.dontCheck,

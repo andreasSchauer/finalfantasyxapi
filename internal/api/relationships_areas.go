@@ -19,71 +19,71 @@ func (ac AreaConnection) GetAPIResource() APIResource {
 	return ac.Area
 }
 
-func getAreaRelationships(server *Server, r *http.Request, area seedtypes.Area) (LocRel, error) {
+func getAreaRelationships(srv *Server, r *http.Request, area seedtypes.Area) (LocRel, error) {
 	var rel LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := E.Areas.queryAvlRelGetParams(server, r, area.ID)
+	availabilityParams, err := E.Areas.queryAvlRelGetParams(srv, r, area.ID)
 	if err != nil {
 		return LocRel{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Characters, err = E.Characters.dbGetRelations(server, ctx, area, ToIntManyNull(server.Cfg.DB.GetAreaCharacterIDs))
+		rel.Characters, err = E.Characters.dbGetRelations(srv, ctx, area, ToIntManyNull(srv.Cfg.DB.GetAreaCharacterIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Aeons, err = E.Aeons.dbGetRelations(server, ctx, area, ToIntManyNull(server.Cfg.DB.GetAreaAeonIDs))
+		rel.Aeons, err = E.Aeons.dbGetRelations(srv, ctx, area, ToIntManyNull(srv.Cfg.DB.GetAreaAeonIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = E.Shops.queryAvlRelRun(server, ctx, area, availabilityParams, getAreaRelSourceIDs(server, ViewSourceTypeShop))
+		rel.Shops, err = E.Shops.queryAvlRelRun(srv, ctx, area, availabilityParams, getAreaRelSourceIDs(srv, ViewSourceTypeShop))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = E.Treasures.queryAvlRelRun(server, ctx, area, availabilityParams, getAreaRelSourceIDs(server, ViewSourceTypeTreasure))
+		rel.Treasures, err = E.Treasures.queryAvlRelRun(srv, ctx, area, availabilityParams, getAreaRelSourceIDs(srv, ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Monsters, err = E.Monsters.queryAvlRelRun(server, ctx, area, availabilityParams, getAreaRelSourceIDs(server, ViewSourceTypeMonster))
+		rel.Monsters, err = E.Monsters.queryAvlRelRun(srv, ctx, area, availabilityParams, getAreaRelSourceIDs(srv, ViewSourceTypeMonster))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Formations, err = E.MonsterFormations.queryAvlRelRun(server, ctx, area, availabilityParams, getAreaRelSourceIDs(server, ViewSourceTypeMonsterFormation))
+		rel.Formations, err = E.MonsterFormations.queryAvlRelRun(srv, ctx, area, availabilityParams, getAreaRelSourceIDs(srv, ViewSourceTypeMonsterFormation))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Quests, err = E.Quests.queryAvlRelRun(server, ctx, area, availabilityParams, getAreaRelSourceIDs(server, ViewSourceTypeQuest))
+		rel.Quests, err = E.Quests.queryAvlRelRun(srv, ctx, area, availabilityParams, getAreaRelSourceIDs(srv, ViewSourceTypeQuest))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Music, err = getMusicLocBased(server, ctx, area, LocBasedMusicQueries{
-			CueSongs:  ToIntManyNull(server.Cfg.DB.GetAreaCueSongIDs),
-			BmSongs:   server.Cfg.DB.GetAreaBackgroundMusicSongIDs,
-			FMVSongs:  server.Cfg.DB.GetAreaFMVSongIDs,
-			BossMusic: server.Cfg.DB.GetAreaBossSongIDs,
+		rel.Music, err = getMusicLocBased(srv, ctx, area, LocBasedMusicQueries{
+			CueSongs:  ToIntManyNull(srv.Cfg.DB.GetAreaCueSongIDs),
+			BmSongs:   srv.Cfg.DB.GetAreaBackgroundMusicSongIDs,
+			FMVSongs:  srv.Cfg.DB.GetAreaFMVSongIDs,
+			BossMusic: srv.Cfg.DB.GetAreaBossSongIDs,
 		})
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.FMVs, err = E.FMVs.dbGetRelations(server, ctx, area, server.Cfg.DB.GetAreaFmvIDs)
+		rel.FMVs, err = E.FMVs.dbGetRelations(srv, ctx, area, srv.Cfg.DB.GetAreaFmvIDs)
 		return err
 	})
 
@@ -95,13 +95,13 @@ func getAreaRelationships(server *Server, r *http.Request, area seedtypes.Area) 
 	return rel, nil
 }
 
-func getAreaConnectedAreas(server *Server, area seedtypes.Area) ([]AreaConnection, error) {
+func getAreaConnectedAreas(srv *Server, area seedtypes.Area) ([]AreaConnection, error) {
 	i := E.Areas
 	connectedAreas := []AreaConnection{}
 
 	for _, connArea := range area.ConnectedAreas {
 		connection := AreaConnection{
-			Area:           locAreaToAreaAPIResource(server, i, connArea.LocationArea),
+			Area:           locAreaToAreaAPIResource(srv, i, connArea.LocationArea),
 			ConnectionType: connArea.ConnectionType,
 			IsStoryBased:   connArea.IsStoryBased,
 			Notes:          connArea.Notes,

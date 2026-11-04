@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (s *Server) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource], id int32) (Mix, error) {
+func (srv *Server) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource], id int32) (Mix, error) {
 	mix, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Mix{}, err
@@ -17,7 +17,7 @@ func (s *Server) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, Name
 
 	overdrive, _ := lookup.GetResourceByID(mix.OverdriveID, lookup.L.OverdrivesID)
 
-	combinations, err := getMixCombinations(s, r, mix)
+	combinations, err := getMixCombinations(srv, r, mix)
 	if err != nil {
 		return Mix{}, err
 	}
@@ -26,7 +26,7 @@ func (s *Server) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, Name
 		ID:           mix.ID,
 		Name:         mix.Name,
 		Category:     mix.Category,
-		Overdrive:    nameToNamedAPIResource(s, E.Overdrives, overdrive.Name, nil),
+		Overdrive:    nameToNamedAPIResource(srv, E.Overdrives, overdrive.Name, nil),
 		Description:  overdrive.Description,
 		Effect:       overdrive.Effect,
 		Combinations: combinations,
@@ -35,14 +35,14 @@ func (s *Server) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, Name
 	return response, nil
 }
 
-func (s *Server) retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource]) ([]int32, error) {
+func (srv *Server) retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(s, r, ids, []IDFilter{
-		i.queryEnumList(s, r, enums.T.MixCategory, ids, ts.QpnCategory, s.Cfg.DB.GetMixIDsByCategory),
-		i.queryIDWrapper(s, r, ids, ts.QpnReqItem, lookup.L.Items, getMixesByItem),
+	return i.filterIDs(srv, r, ids, []IDFilter{
+		i.queryEnumList(srv, r, enums.T.MixCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetMixIDsByCategory),
+		i.queryIDWrapper(srv, r, ids, ts.QpnReqItem, lookup.L.Items, getMixesByItem),
 	})
 }

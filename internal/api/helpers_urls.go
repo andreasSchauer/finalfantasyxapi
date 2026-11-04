@@ -10,35 +10,35 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getBaseURL(server *Server) string {
-	return fmt.Sprintf("http://%s/api", server.Cfg.Host)
+func getBaseURL(srv *Server) string {
+	return fmt.Sprintf("http://%s/api", srv.Cfg.Host)
 }
 
-func createListURL(server *Server, endpoint ts.EndpointName) string {
-	return appendToURL(getBaseURL(server), string(endpoint))
+func createListURL(srv *Server, endpoint ts.EndpointName) string {
+	return appendToURL(getBaseURL(srv), string(endpoint))
 }
 
-func createEnumURL(server *Server, e ts.EnumName) string {
-	return fmt.Sprintf("%s/%s/%s", getBaseURL(server), ts.EpEnums, ts.GetEnumKey(e))
+func createEnumURL(srv *Server, e ts.EnumName) string {
+	return fmt.Sprintf("%s/%s/%s", getBaseURL(srv), ts.EpEnums, ts.GetEnumKey(e))
 }
 
-func URLToPath(server *Server, url string) string {
-	prefix := getBaseURL(server)
+func URLToPath(srv *Server, url string) string {
+	prefix := getBaseURL(srv)
 	return strings.TrimPrefix(url, prefix)
 }
 
-func CreateResourceURL(server *Server, endpoint ts.EndpointName, id int32) string {
-	url := createListURL(server, endpoint)
+func CreateResourceURL(srv *Server, endpoint ts.EndpointName, id int32) string {
+	url := createListURL(srv, endpoint)
 	return fmt.Sprintf("%s/%d", url, id)
 }
 
-func CreateResourceURLQuery(server *Server, endpoint ts.EndpointName, id int32, q url.Values) string {
-	url := CreateResourceURL(server, endpoint, id)
+func CreateResourceURLQuery(srv *Server, endpoint ts.EndpointName, id int32, q url.Values) string {
+	url := CreateResourceURL(srv, endpoint, id)
 	return fmt.Sprintf("%s?%s", url, q.Encode())
 }
 
-func CompleteTestURL(server *Server, path string) string {
-	return fmt.Sprintf("%s%s", getBaseURL(server), path)
+func CompleteTestURL(srv *Server, path string) string {
+	return fmt.Sprintf("%s%s", getBaseURL(srv), path)
 }
 
 func CompleteTestPath(endpoint ts.EndpointName, id int32) string {
@@ -54,19 +54,19 @@ func getIDFromURL(url string) int32 {
 	return int32(id)
 }
 
-func getSectionURL(server *Server, endpoint ts.EndpointName, section ts.SectionName) string {
-	return fmt.Sprintf("%s/%s/%s", getBaseURL(server), endpoint, section)
+func getSectionURL(srv *Server, endpoint ts.EndpointName, section ts.SectionName) string {
+	return fmt.Sprintf("%s/%s/%s", getBaseURL(srv), endpoint, section)
 }
 
 func appendToURL(url, segment string) string {
 	return fmt.Sprintf("%s/%s", url, segment)
 }
 
-func endpointsToURLs(server *Server, source []ts.EndpointName) []string {
+func endpointsToURLs(srv *Server, source []ts.EndpointName) []string {
 	urls := make([]string, 0, len(source))
 
 	for _, ep := range source {
-		url := createListURL(server, ep)
+		url := createListURL(srv, ep)
 		urls = append(urls, url)
 	}
 

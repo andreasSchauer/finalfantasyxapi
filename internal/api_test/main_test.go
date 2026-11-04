@@ -23,7 +23,6 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	testSrv.InitGlobals()
 
 	code := m.Run()
 	_ = testSrv.Cfg.DBConn.Close()

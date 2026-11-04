@@ -19,44 +19,44 @@ func (l SimpleResourceList) GetResults() []SimpleResource {
 	return l.Results
 }
 
-func (i handlerInput[T, R, A]) toSimpleResourceList(server *Server, r *http.Request, id int32, sectionName string, subsection Subsection) (SimpleResourceList, error) {
+func (i handlerInput[T, R, A]) toSimpleResourceList(srv *Server, r *http.Request, id int32, sectionName string, subsection Subsection) (SimpleResourceList, error) {
 	dbIDs, err := subsection.dbQuery(r.Context(), id)
 	if err != nil {
 		return SimpleResourceList{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, i.resTypeSingle, id), err)
 	}
 
-	results, err := createSimpleResources(server, r, dbIDs, subsection)
+	results, err := createSimpleResources(srv, r, dbIDs, subsection)
 	if err != nil {
 		return SimpleResourceList{}, err
 	}
 
-	listParams, shownResults, err := createPaginatedList(server, r, results)
+	listParams, shownResults, err := createPaginatedList(srv, r, results)
 	if err != nil {
 		return SimpleResourceList{}, err
 	}
 
 	subResList := SimpleResourceList{
 		ListParams:     listParams,
-		ParentResource: i.idToResFunc(server, i, id),
+		ParentResource: i.idToResFunc(srv, i, id),
 		Results:        shownResults,
 	}
 
 	return subResList, nil
 }
 
-func createSimpleResources(server *Server, r *http.Request, dbIDs []int32, subsection Subsection) ([]SimpleResource, error) {
+func createSimpleResources(srv *Server, r *http.Request, dbIDs []int32, subsection Subsection) ([]SimpleResource, error) {
 	subs := []SimpleResource{}
 
 	if subsection.relationsFn != nil {
 		var err error
-		subsection.relations, err = subsection.relationsFn(server, r, dbIDs)
+		subsection.relations, err = subsection.relationsFn(srv, r, dbIDs)
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	for _, id := range dbIDs {
-		subRes, err := subsection.createSubFn(server, r, id, subsection)
+		subRes, err := subsection.createSubFn(srv, r, id, subsection)
 		if err != nil {
 			return nil, err
 		}

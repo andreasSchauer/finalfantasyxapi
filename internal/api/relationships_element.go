@@ -7,67 +7,67 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getElementRelationships(server *Server, r *http.Request, element seedtypes.Element) (Element, error) {
+func getElementRelationships(srv *Server, r *http.Request, element seedtypes.Element) (Element, error) {
 	var rel Element
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.StatusProtection, err = E.StatusConditions.dbGetRelationPtr(server, ctx, element, server.Cfg.DB.GetElementStatusConditionID)
+		rel.StatusProtection, err = E.StatusConditions.dbGetRelationPtr(srv, ctx, element, srv.Cfg.DB.GetElementStatusConditionID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(server, ctx, element, server.Cfg.DB.GetElementAutoAbilityIDs)
+		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(srv, ctx, element, srv.Cfg.DB.GetElementAutoAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(server, ctx, element, ToIntManyNull(server.Cfg.DB.GetElementPlayerAbilityIDs))
+		rel.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, element, ToIntManyNull(srv.Cfg.DB.GetElementPlayerAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = E.OverdriveAbilities.dbGetRelations(server, ctx, element, ToIntManyNull(server.Cfg.DB.GetElementOverdriveAbilityIDs))
+		rel.OverdriveAbilities, err = E.OverdriveAbilities.dbGetRelations(srv, ctx, element, ToIntManyNull(srv.Cfg.DB.GetElementOverdriveAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = E.ItemAbilities.dbGetRelations(server, ctx, element, ToIntManyNull(server.Cfg.DB.GetElementItemAbilityIDs))
+		rel.ItemAbilities, err = E.ItemAbilities.dbGetRelations(srv, ctx, element, ToIntManyNull(srv.Cfg.DB.GetElementItemAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.EnemyAbilities, err = E.EnemyAbilities.dbGetRelations(server, ctx, element, ToIntManyNull(server.Cfg.DB.GetElementEnemyAbilityIDs))
+		rel.EnemyAbilities, err = E.EnemyAbilities.dbGetRelations(srv, ctx, element, ToIntManyNull(srv.Cfg.DB.GetElementEnemyAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersWeak, err = E.Monsters.dbGetRelations(server, ctx, element, server.Cfg.DB.GetElementMonsterIDsWeak)
+		rel.MonstersWeak, err = E.Monsters.dbGetRelations(srv, ctx, element, srv.Cfg.DB.GetElementMonsterIDsWeak)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersHalved, err = E.Monsters.dbGetRelations(server, ctx, element, server.Cfg.DB.GetElementMonsterIDsHalved)
+		rel.MonstersHalved, err = E.Monsters.dbGetRelations(srv, ctx, element, srv.Cfg.DB.GetElementMonsterIDsHalved)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersImmune, err = E.Monsters.dbGetRelations(server, ctx, element, server.Cfg.DB.GetElementMonsterIDsImmune)
+		rel.MonstersImmune, err = E.Monsters.dbGetRelations(srv, ctx, element, srv.Cfg.DB.GetElementMonsterIDsImmune)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersAbsorb, err = E.Monsters.dbGetRelations(server, ctx, element, server.Cfg.DB.GetElementMonsterIDsAbsorb)
+		rel.MonstersAbsorb, err = E.Monsters.dbGetRelations(srv, ctx, element, srv.Cfg.DB.GetElementMonsterIDsAbsorb)
 		return err
 	})
 

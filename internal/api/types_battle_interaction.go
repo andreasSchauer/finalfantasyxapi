@@ -24,22 +24,22 @@ type BattleInteraction struct {
 	ModifierChanges           []ModifierChange   `json:"modifier_changes"`
 }
 
-func convertBattleInteraction(server *Server, bi seedtypes.BattleInteraction) BattleInteraction {
+func convertBattleInteraction(srv *Server, bi seedtypes.BattleInteraction) BattleInteraction {
 	battleInteraction := BattleInteraction{
 		Target:                    bi.Target,
 		BasedOnUserAttack:         bi.BasedOnUserAttack,
 		Range:                     bi.Range,
-		Damage:                    convertObjPtr(server, bi.Damage, convertDamage),
+		Damage:                    convertObjPtr(srv, bi.Damage, convertDamage),
 		ShatterRate:               bi.ShatterRate,
-		Accuracy:                  convertAccuracy(server, bi.Accuracy),
+		Accuracy:                  convertAccuracy(srv, bi.Accuracy),
 		HitAmount:                 bi.HitAmount,
 		SpecialAction:             bi.SpecialAction,
-		InflictedDelay:            convertObjPtr(server, bi.InflictedDelay, convertInflictedDelay),
-		InflictedStatusConditions: convertObjSlice(server, bi.InflictedStatusConditions, convertInflictedStatus),
-		RemovedStatusConditions:   namesToNamedAPIResources(server, E.StatusConditions, bi.RemovedStatusConditions),
-		CopiedStatusConditions:    convertObjSlice(server, bi.CopiedStatusConditions, convertInflictedStatus),
-		StatChanges:               convertObjSlice(server, bi.StatChanges, convertStatChange),
-		ModifierChanges:           convertObjSlice(server, bi.ModifierChanges, convertModifierChange),
+		InflictedDelay:            convertObjPtr(srv, bi.InflictedDelay, convertInflictedDelay),
+		InflictedStatusConditions: convertObjSlice(srv, bi.InflictedStatusConditions, convertInflictedStatus),
+		RemovedStatusConditions:   namesToNamedAPIResources(srv, E.StatusConditions, bi.RemovedStatusConditions),
+		CopiedStatusConditions:    convertObjSlice(srv, bi.CopiedStatusConditions, convertInflictedStatus),
+		StatChanges:               convertObjSlice(srv, bi.StatChanges, convertStatChange),
+		ModifierChanges:           convertObjSlice(srv, bi.ModifierChanges, convertModifierChange),
 	}
 
 	for _, status := range bi.AffectedBy {
@@ -71,18 +71,18 @@ type Damage struct {
 	Element         *NamedAPIResource `json:"element"`
 }
 
-func convertDamage(server *Server, d seedtypes.Damage) Damage {
+func convertDamage(srv *Server, d seedtypes.Damage) Damage {
 	return Damage{
 		AttackType:      d.AttackType,
 		DamageType:      d.DamageType,
-		HP:              convertObjPtr(server, d.HP, convertClassDamage),
-		MP:              convertObjPtr(server, d.MP, convertClassDamage),
-		CTB:             convertObjPtr(server, d.CTB, convertClassDamage),
+		HP:              convertObjPtr(srv, d.HP, convertClassDamage),
+		MP:              convertObjPtr(srv, d.MP, convertClassDamage),
+		CTB:             convertObjPtr(srv, d.CTB, convertClassDamage),
 		Critical:        d.Critical,
 		CriticalPlusVal: d.CriticalPlusVal,
 		IsPiercing:      d.IsPiercing,
 		BreakDmgLimit:   d.BreakDmgLimit,
-		Element:         namePtrToNamedAPIResPtr(server, E.Elements, d.Element, nil),
+		Element:         namePtrToNamedAPIResPtr(srv, E.Elements, d.Element, nil),
 	}
 }
 
@@ -92,7 +92,7 @@ type ClassDamage struct {
 	DamageConstant int32   `json:"damage_constant"`
 }
 
-func convertClassDamage(server *Server, ad seedtypes.ClassDamage) ClassDamage {
+func convertClassDamage(srv *Server, ad seedtypes.ClassDamage) ClassDamage {
 	return ClassDamage{
 		Condition:      ad.Condition,
 		DamageFormula:  ad.DamageFormula,
@@ -141,9 +141,9 @@ func (is InflictedStatus) IsZero() bool {
 	return is.StatusCondition.Name == ""
 }
 
-func convertInflictedStatus(server *Server, status seedtypes.InflictedStatus) InflictedStatus {
+func convertInflictedStatus(srv *Server, status seedtypes.InflictedStatus) InflictedStatus {
 	return InflictedStatus{
-		StatusCondition: nameToNamedAPIResource(server, E.StatusConditions, status.StatusCondition, nil),
+		StatusCondition: nameToNamedAPIResource(srv, E.StatusConditions, status.StatusCondition, nil),
 		Probability:     status.Probability,
 		DurationType:    status.DurationType,
 		Amount:          status.Amount,
@@ -164,9 +164,9 @@ func (sc StatChange) IsZero() bool {
 	return sc.Stat.Name == ""
 }
 
-func convertStatChange(server *Server, sc seedtypes.StatChange) StatChange {
+func convertStatChange(srv *Server, sc seedtypes.StatChange) StatChange {
 	return StatChange{
-		Stat:            nameToNamedAPIResource(server, E.Stats, sc.StatName, nil),
+		Stat:            nameToNamedAPIResource(srv, E.Stats, sc.StatName, nil),
 		CalculationType: sc.CalculationType,
 		Value:           sc.Value,
 	}
@@ -186,9 +186,9 @@ func (mc ModifierChange) IsZero() bool {
 	return mc.Modifier.Name == ""
 }
 
-func convertModifierChange(server *Server, mc seedtypes.ModifierChange) ModifierChange {
+func convertModifierChange(srv *Server, mc seedtypes.ModifierChange) ModifierChange {
 	return ModifierChange{
-		Modifier:        nameToNamedAPIResource(server, E.Modifiers, mc.ModifierName, nil),
+		Modifier:        nameToNamedAPIResource(srv, E.Modifiers, mc.ModifierName, nil),
 		CalculationType: mc.CalculationType,
 		Value:           mc.Value,
 	}

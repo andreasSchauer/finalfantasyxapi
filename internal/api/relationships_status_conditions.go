@@ -9,7 +9,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getStatusConditionRelationships(server *Server, r *http.Request, status seedtypes.StatusCondition) (StatusCondition, error) {
+func getStatusConditionRelationships(srv *Server, r *http.Request, status seedtypes.StatusCondition) (StatusCondition, error) {
 	var rel StatusCondition
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -20,29 +20,29 @@ func getStatusConditionRelationships(server *Server, r *http.Request, status see
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(server, ctx, status, server.Cfg.DB.GetStatusConditionAutoAbilityIDs)
+		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(srv, ctx, status, srv.Cfg.DB.GetStatusConditionAutoAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersResistance, err = E.Monsters.dbGetRelations(server, ctx, status, convGetStatusConditionResistingMonsterIDs(server, res.Resistance))
+		rel.MonstersResistance, err = E.Monsters.dbGetRelations(srv, ctx, status, convGetStatusConditionResistingMonsterIDs(srv, res.Resistance))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.InflictedBy, err = getStatusInfliction(server, ctx, status, StatusInteractionQueries{
-			Abilities: convGetStatusConditionAbilityIDsInflicted(server, res.MinRate, res.MaxRate),
+		rel.InflictedBy, err = getStatusInfliction(srv, ctx, status, StatusInteractionQueries{
+			Abilities: convGetStatusConditionAbilityIDsInflicted(srv, res.MinRate, res.MaxRate),
 		})
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.RemovedBy, err = getStatusRemoval(server, ctx, status, StatusInteractionQueries{
-			Abilities:        server.Cfg.DB.GetStatusConditionAbilityIDsRemoved,
-			StatusConditions: server.Cfg.DB.GetStatusConditionRemovedConditionIDs,
+		rel.RemovedBy, err = getStatusRemoval(srv, ctx, status, StatusInteractionQueries{
+			Abilities:        srv.Cfg.DB.GetStatusConditionAbilityIDsRemoved,
+			StatusConditions: srv.Cfg.DB.GetStatusConditionRemovedConditionIDs,
 		})
 		return err
 	})

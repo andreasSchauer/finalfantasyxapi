@@ -51,7 +51,7 @@ func (c *Alt) IsZero() bool {
 		c.RemovedStatus == nil
 }
 
-func getMonsterAlteredStates(server *Server, r *http.Request, mon seedtypes.Monster) []AlteredState {
+func getMonsterAlteredStates(srv *Server, r *http.Request, mon seedtypes.Monster) []AlteredState {
 	alteredStates := []AlteredState{}
 
 	for i, altState := range mon.AlteredStates {
@@ -61,14 +61,14 @@ func getMonsterAlteredStates(server *Server, r *http.Request, mon seedtypes.Mons
 		if r != nil {
 			q := r.URL.Query()
 			q.Set(string(ts.QpnAlteredState), strconv.Itoa(i+1))
-			url = CreateResourceURLQuery(server, E.Monsters.Endpoint, mon.ID, q)
+			url = CreateResourceURLQuery(srv, E.Monsters.Endpoint, mon.ID, q)
 		}
 
 		alteredState := AlteredState{
 			URL:         url,
 			Condition:   altState.Condition,
 			IsTemporary: altState.IsTemporary,
-			Alts:        getAlts(server, altState),
+			Alts:        getAlts(srv, altState),
 		}
 
 		alteredStates = append(alteredStates, alteredState)
@@ -77,11 +77,11 @@ func getMonsterAlteredStates(server *Server, r *http.Request, mon seedtypes.Mons
 	return alteredStates
 }
 
-func getAlts(server *Server, as seedtypes.AlteredState) []Alt {
+func getAlts(srv *Server, as seedtypes.AlteredState) []Alt {
 	alts := []Alt{}
 
 	for _, change := range as.Changes {
-		altStateChange := convertAlt(server, change)
+		altStateChange := convertAlt(srv, change)
 		altStateChange.AlterationType = database.AlterationType(change.AlterationType)
 		altStateChange.Distance = change.Distance
 		alts = append(alts, altStateChange)
@@ -90,13 +90,13 @@ func getAlts(server *Server, as seedtypes.AlteredState) []Alt {
 	return alts
 }
 
-func convertAlt(server *Server, asc seedtypes.Alt) Alt {
+func convertAlt(srv *Server, asc seedtypes.Alt) Alt {
 	return Alt{
-		Properties:       h.SliceOrNil(namesToNamedAPIResources(server, E.Properties, asc.Properties)),
-		AutoAbilities:    h.SliceOrNil(namesToNamedAPIResources(server, E.AutoAbilities, asc.AutoAbilities)),
-		BaseStats:        h.SliceOrNil(E.Stats.toResAmtType(server, asc.BaseStats, newBaseStat)),
-		ElemResists:      h.SliceOrNil(namesToElemResists(server, asc.ElemResists)),
-		StatusImmunities: h.SliceOrNil(namesToNamedAPIResources(server, E.StatusConditions, asc.StatusImmunities)),
-		AddedStatus:      convertObjPtr(server, asc.AddedStatus, convertInflictedStatus),
+		Properties:       h.SliceOrNil(namesToNamedAPIResources(srv, E.Properties, asc.Properties)),
+		AutoAbilities:    h.SliceOrNil(namesToNamedAPIResources(srv, E.AutoAbilities, asc.AutoAbilities)),
+		BaseStats:        h.SliceOrNil(E.Stats.toResAmtType(srv, asc.BaseStats, newBaseStat)),
+		ElemResists:      h.SliceOrNil(namesToElemResists(srv, asc.ElemResists)),
+		StatusImmunities: h.SliceOrNil(namesToNamedAPIResources(srv, E.StatusConditions, asc.StatusImmunities)),
+		AddedStatus:      convertObjPtr(srv, asc.AddedStatus, convertInflictedStatus),
 	}
 }

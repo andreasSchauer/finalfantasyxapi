@@ -36,7 +36,7 @@ func (i handlerInput[T, R, A]) queryEnum[E, N any](r *http.Request, et enums.Enu
 }
 
 // like enum query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
-func (i handlerInput[T, R, A]) queryEnumWrapper[E, N any](server *Server, r *http.Request, et enums.EnumType[E, N], inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapEnum[E]) IDFilter {
+func (i handlerInput[T, R, A]) queryEnumWrapper[E, N any](srv *Server, r *http.Request, et enums.EnumType[E, N], inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapEnum[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		enum, err := queryParam.parseEnum(r, et)
@@ -49,6 +49,6 @@ func (i handlerInput[T, R, A]) queryEnumWrapper[E, N any](server *Server, r *htt
 
 		typedStr := et.ConvFunc(enum.Name)
 
-		return wrapperFn(server, r, ctx, typedStr)
+		return wrapperFn(srv, r, ctx, typedStr)
 	}
 }

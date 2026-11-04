@@ -19,9 +19,9 @@ type PossibleAbilityList struct {
 	Abilities []TypedAPIResource `json:"abilities"`
 }
 
-func convertPossibleAbilityList(server *Server, pa seedtypes.PossibleAbilityList) PossibleAbilityList {
+func convertPossibleAbilityList(srv *Server, pa seedtypes.PossibleAbilityList) PossibleAbilityList {
 	return PossibleAbilityList{
-		User:      nameToNamedAPIResource(server, E.CharacterClasses, pa.User, nil),
-		Abilities: keysToTypedAPIResources(server, E.Abilities, pa.Abilities),
+		User:      nameToNamedAPIResource(srv, E.CharacterClasses, pa.User, nil),
+		Abilities: keysToTypedAPIResources(srv, E.Abilities, pa.Abilities),
 	}
 }

@@ -39,7 +39,7 @@ type handlerInputEndpoints struct {
 	queryLookup map[ts.QueryParamName]QueryParam
 }
 
-type handlerInputService[P serviceParams, R serviceResponse] struct {
+type handlerInputService[P ServiceParams, R ServiceResponse] struct {
 	Endpoint  ts.EndpointName
 	usage     []string
 	verifyFn  func(paramsVerifyer, P) (P, error)

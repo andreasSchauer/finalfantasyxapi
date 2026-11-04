@@ -9,37 +9,37 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getAeonRelationships(server *Server, r *http.Request, aeon seedtypes.Aeon) (Aeon, error) {
+func getAeonRelationships(srv *Server, r *http.Request, aeon seedtypes.Aeon) (Aeon, error) {
 	var rel Aeon
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = E.CelestialWeapons.dbGetRelationPtr(server, ctx, aeon, server.Cfg.DB.GetAeonCelestialWeaponID)
+		rel.CelestialWeapon, err = E.CelestialWeapons.dbGetRelationPtr(srv, ctx, aeon, srv.Cfg.DB.GetAeonCelestialWeaponID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = E.CharacterClasses.dbGetRelations(server, ctx, aeon, server.Cfg.DB.GetAeonCharClassIDs)
+		rel.CharacterClasses, err = E.CharacterClasses.dbGetRelations(srv, ctx, aeon, srv.Cfg.DB.GetAeonCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AeonCommands, err = E.AeonCommands.dbGetRelations(server, ctx, aeon, server.Cfg.DB.GetAeonAeonCommandIDs)
+		rel.AeonCommands, err = E.AeonCommands.dbGetRelations(srv, ctx, aeon, srv.Cfg.DB.GetAeonAeonCommandIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Overdrives, err = E.Overdrives.dbGetRelations(server, ctx, aeon, server.Cfg.DB.GetAeonOverdriveIDs)
+		rel.Overdrives, err = E.Overdrives.dbGetRelations(srv, ctx, aeon, srv.Cfg.DB.GetAeonOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.dbGetRelations(server, ctx, aeon, server.Cfg.DB.GetAeonDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, aeon, srv.Cfg.DB.GetAeonDefaultAbilityIDs)
 		return err
 	})
 
@@ -51,20 +51,20 @@ func getAeonRelationships(server *Server, r *http.Request, aeon seedtypes.Aeon) 
 	return rel, nil
 }
 
-func getAeonBaseStats(server *Server, aeon seedtypes.Aeon) []BaseStat {
+func getAeonBaseStats(srv *Server, aeon seedtypes.Aeon) []BaseStat {
 	baseStats := aeon.BaseStats.XVals[0].BaseStats
-	return E.Stats.toResAmtType(server, baseStats, newBaseStat)
+	return E.Stats.toResAmtType(srv, baseStats, newBaseStat)
 }
 
-func applyAeonStats(server *Server, r *http.Request, aeon Aeon, allowedStatIDs []int32) (Aeon, error) {
+func applyAeonStats(srv *Server, r *http.Request, aeon Aeon, allowedStatIDs []int32) (Aeon, error) {
 	var err error
 
-	aeon.BaseStats, err = applyAeonStatsBattles(server, r, aeon, ts.QpnBattles)
+	aeon.BaseStats, err = applyAeonStatsBattles(srv, r, aeon, ts.QpnBattles)
 	if err != nil {
 		return Aeon{}, err
 	}
 
-	aeon.BaseStats, err = applyYunaStats(server, r, aeon, ts.QpnYunaStats, allowedStatIDs)
+	aeon.BaseStats, err = applyYunaStats(srv, r, aeon, ts.QpnYunaStats, allowedStatIDs)
 	if err != nil {
 		return Aeon{}, err
 	}
@@ -72,7 +72,7 @@ func applyAeonStats(server *Server, r *http.Request, aeon Aeon, allowedStatIDs [
 	return aeon, nil
 }
 
-func applyAeonStatsBattles(server *Server, r *http.Request, aeon Aeon, queryName ts.QueryParamName) ([]BaseStat, error) {
+func applyAeonStatsBattles(srv *Server, r *http.Request, aeon Aeon, queryName ts.QueryParamName) ([]BaseStat, error) {
 	queryParam := Q.aeons[queryName]
 	battles, err := queryParam.parseInt(r)
 	if queryIsEmpty(err) {
@@ -90,16 +90,16 @@ func applyAeonStatsBattles(server *Server, r *http.Request, aeon Aeon, queryName
 
 	seedAeon, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 	newBaseStats := seedAeon.BaseStats.XVals[i].BaseStats
-	baseStats := E.Stats.toResAmtType(server, newBaseStats, newBaseStat)
+	baseStats := E.Stats.toResAmtType(srv, newBaseStats, newBaseStat)
 
 	return baseStats, nil
 }
 
-func applyYunaStats(server *Server, r *http.Request, aeon Aeon, queryName ts.QueryParamName, allowedStatIDs []int32) ([]BaseStat, error) {
+func applyYunaStats(srv *Server, r *http.Request, aeon Aeon, queryName ts.QueryParamName, allowedStatIDs []int32) ([]BaseStat, error) {
 	queryParam := Q.aeons[queryName]
 
 	yuna := lookup.L.Characters["yuna"]
-	yunaBS := E.Stats.toResAmtType(server, yuna.BaseStats, newBaseStat)
+	yunaBS := E.Stats.toResAmtType(srv, yuna.BaseStats, newBaseStat)
 
 	yunaStatCalcMap, err := getStatCalcMap(r, queryParam, yunaBS, allowedStatIDs)
 	if queryIsEmpty(err) {
@@ -112,14 +112,14 @@ func applyYunaStats(server *Server, r *http.Request, aeon Aeon, queryName ts.Que
 	yunaStatCalcMap["hp"] = min(yunaStatCalcMap["hp"], 9999)
 	yunaStatCalcMap["mp"] = min(yunaStatCalcMap["mp"], 999)
 
-	aeonStats := calcAeonStats(server, aeon, yunaStatCalcMap)
+	aeonStats := calcAeonStats(srv, aeon, yunaStatCalcMap)
 
 	return aeonStats, nil
 }
 
-func calcAeonStats(server *Server, aeon Aeon, yuna map[string]int32) []BaseStat {
+func calcAeonStats(srv *Server, aeon Aeon, yuna map[string]int32) []BaseStat {
 	baseStats := aeon.BaseStats
-	aVals, bVals := getAeonStatTables(server, aeon)
+	aVals, bVals := getAeonStatTables(srv, aeon)
 	yunaFloat := resAmtMapToFloat(yuna)
 	yParameter := yParamCalc(yuna)
 
@@ -132,14 +132,14 @@ func calcAeonStats(server *Server, aeon Aeon, yuna map[string]int32) []BaseStat 
 	return baseStats
 }
 
-func getAeonStatTables(server *Server, aeon Aeon) (map[string]float64, map[string]float64) {
+func getAeonStatTables(srv *Server, aeon Aeon) (map[string]float64, map[string]float64) {
 	aeonLookup, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 
-	aValsSlice := E.Stats.toResAmtType(server, aeonLookup.BaseStats.AVals, newBaseStat)
+	aValsSlice := E.Stats.toResAmtType(srv, aeonLookup.BaseStats.AVals, newBaseStat)
 	aValsInt := GetResAmtTypeMap(aValsSlice)
 	aVals := resAmtMapToFloat(aValsInt)
 
-	bValsSlice := E.Stats.toResAmtType(server, aeonLookup.BaseStats.BVals, newBaseStat)
+	bValsSlice := E.Stats.toResAmtType(srv, aeonLookup.BaseStats.BVals, newBaseStat)
 	bValsInt := GetResAmtTypeMap(bValsSlice)
 	bVals := resAmtMapToFloat(bValsInt)
 
@@ -175,8 +175,8 @@ func yStatCalc(stat string, yParameter float64, aVals, bVals, yuna map[string]fl
 	}
 }
 
-func getUnitAgilityParams(server *Server, r *http.Request, baseStats []BaseStat) (AgilityParams, error) {
-	agilityTier, err := getAgilityTierDB(server, r, baseStats)
+func getUnitAgilityParams(srv *Server, r *http.Request, baseStats []BaseStat) (AgilityParams, error) {
+	agilityTier, err := getAgilityTierDB(srv, r, baseStats)
 	if err != nil {
 		return AgilityParams{}, err
 	}
@@ -193,7 +193,7 @@ func getUnitAgilityParams(server *Server, r *http.Request, baseStats []BaseStat)
 	}
 
 	agilityParams := AgilityParams{
-		AgilityTier: idToUnnamedAPIResource(server, E.AgilityTiers, agilityTier.ID),
+		AgilityTier: idToUnnamedAPIResource(srv, E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   agilityTier.TickSpeed,
 		MinICV:      minICV,
 		MaxICV:      agilityTier.CharacterMaxICV,

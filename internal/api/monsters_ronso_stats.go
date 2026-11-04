@@ -8,13 +8,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func applyRonsoStats(server *Server, r *http.Request, mon Monster, queryName ts.QueryParamName) ([]BaseStat, error) {
+func applyRonsoStats(srv *Server, r *http.Request, mon Monster, queryName ts.QueryParamName) ([]BaseStat, error) {
 	allowedStatIDs := []int32{1, 3, 5, 7}
 	baseStats := mon.BaseStats
 	queryParam := Q.monsters[queryName]
 
 	kimahri, _ := lookup.L.Characters["kimahri"]
-	kimahriBS := E.Stats.toResAmtType(server, kimahri.BaseStats, newBaseStat)
+	kimahriBS := E.Stats.toResAmtType(srv, kimahri.BaseStats, newBaseStat)
 
 	kimahriStatCalcMap, err := getStatCalcMap(r, queryParam, kimahriBS, allowedStatIDs)
 	if queryIsEmpty(err) {

@@ -9,18 +9,18 @@ import (
 )
 
 // checks for emptiness of int-list-queryParam and converts its input into a slice of valid integers
-func (q QueryParam) parseIntList(server *Server, r *http.Request) ([]int32, error) {
+func (q QueryParam) parseIntList(srv *Server, r *http.Request) ([]int32, error) {
 	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return q.sliceInts(server, r, query)
+	return q.sliceInts(srv, r, query)
 }
 
 // converts a list of unique query ints into a slice of valid integers. also deals with ranged inputs.
-func (q QueryParam) sliceInts(server *Server, r *http.Request, query string) ([]int32, error) {
-	intSegments, err := queryListSplit(server, query)
+func (q QueryParam) sliceInts(srv *Server, r *http.Request, query string) ([]int32, error) {
+	intSegments, err := queryListSplit(srv, query)
 	if err != nil {
 		return nil, err
 	}
@@ -33,12 +33,12 @@ func (q QueryParam) sliceInts(server *Server, r *http.Request, query string) ([]
 		}
 		ints = slices.Concat(ints, intsNew)
 
-		if len(ints) > server.Cfg.FetchLimit {
-			return nil, newHTTPErrorFetchLimit(server.Cfg.FetchLimit)
+		if len(ints) > srv.Cfg.FetchLimit {
+			return nil, newHTTPErrorFetchLimit(srv.Cfg.FetchLimit)
 		}
 	}
 
-	ints, err = cleanUpIntList(server, r, ints)
+	ints, err = cleanUpIntList(srv, r, ints)
 	if err != nil {
 		return nil, err
 	}
@@ -109,10 +109,10 @@ func sliceFromIntRange(min, max int32) []int32 {
 	return ints
 }
 
-func cleanUpIntList(server *Server, r *http.Request, ints []int32) ([]int32, error) {
+func cleanUpIntList(srv *Server, r *http.Request, ints []int32) ([]int32, error) {
 	ints = removeIntListDuplicates(ints)
 
-	limit, err := getRawQueryLimit(server, r)
+	limit, err := getRawQueryLimit(srv, r)
 	if queryIsEmpty(err) {
 		return ints, nil
 	}

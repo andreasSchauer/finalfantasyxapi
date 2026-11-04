@@ -17,9 +17,9 @@ type MixCombination struct {
 	SecondItem NamedAPIResource `json:"second_item"`
 }
 
-func convertMixCombination(server *Server, mc seedtypes.MixCombination) MixCombination {
+func convertMixCombination(srv *Server, mc seedtypes.MixCombination) MixCombination {
 	return MixCombination{
-		FirstItem:  nameToNamedAPIResource(server, E.Items, mc.FirstItem, nil),
-		SecondItem: nameToNamedAPIResource(server, E.Items, mc.SecondItem, nil),
+		FirstItem:  nameToNamedAPIResource(srv, E.Items, mc.FirstItem, nil),
+		SecondItem: nameToNamedAPIResource(srv, E.Items, mc.SecondItem, nil),
 	}
 }

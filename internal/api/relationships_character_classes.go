@@ -8,42 +8,42 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getCharClassRelationships(server *Server, r *http.Request, class seedtypes.CharacterClass) (CharacterClass, error) {
+func getCharClassRelationships(srv *Server, r *http.Request, class seedtypes.CharacterClass) (CharacterClass, error) {
 	var rel CharacterClass
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.Members, err = E.PlayerUnits.dbGetRelations(server, ctx, class, server.Cfg.DB.GetCharacterClassUnitIDs)
+		rel.Members, err = E.PlayerUnits.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassUnitIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultAbilities, err = E.Abilities.dbGetRelations(server, ctx, class, server.Cfg.DB.GetCharacterClassDefaultAbilityIDs)
+		rel.DefaultAbilities, err = E.Abilities.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassDefaultAbilityIDs)
 		if err != nil {
 			return err
 		}
 
-		rel.LearnableAbilities, err = getClassLearnableAbilities(server, ctx, class, rel.DefaultAbilities)
+		rel.LearnableAbilities, err = getClassLearnableAbilities(srv, ctx, class, rel.DefaultAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultOverdrives, err = E.Overdrives.dbGetRelations(server, ctx, class, server.Cfg.DB.GetCharacterClassDefaultOverdriveIDs)
+		rel.DefaultOverdrives, err = E.Overdrives.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassDefaultOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.LearnableOverdrives, err = E.Overdrives.dbGetRelations(server, ctx, class, server.Cfg.DB.GetCharacterClassLearnableOverdriveIDs)
+		rel.LearnableOverdrives, err = E.Overdrives.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassLearnableOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Submenus, err = E.Submenus.dbGetRelations(server, ctx, class, server.Cfg.DB.GetCharacterClassSubmenuIDs)
+		rel.Submenus, err = E.Submenus.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassSubmenuIDs)
 		return err
 	})
 
@@ -55,8 +55,8 @@ func getCharClassRelationships(server *Server, r *http.Request, class seedtypes.
 	return rel, nil
 }
 
-func getClassLearnableAbilities(server *Server, ctx context.Context, class seedtypes.CharacterClass, defaultAbilities []TypedAPIResource) ([]TypedAPIResource, error) {
-	allAbilities, err := E.Abilities.dbGetRelations(server, ctx, class, server.Cfg.DB.GetCharacterClassLearnableAbilityIDs)
+func getClassLearnableAbilities(srv *Server, ctx context.Context, class seedtypes.CharacterClass, defaultAbilities []TypedAPIResource) ([]TypedAPIResource, error) {
+	allAbilities, err := E.Abilities.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
 		return nil, err
 	}

@@ -17,10 +17,10 @@ type avlParams struct {
 	preAirship     bool
 }
 
-func (i handlerInput[T, R, A]) queryAvlGetParams(server *Server, r *http.Request) (avlParams, error) {
+func (i handlerInput[T, R, A]) queryAvlGetParams(srv *Server, r *http.Request) (avlParams, error) {
 	queryParamAvl := i.queryLookup[ts.QpnAvailability]
 
-	availabilities, err := queryParamAvl.parseEnumList(server, r, enums.T.AvailabilityType)
+	availabilities, err := queryParamAvl.parseEnumList(srv, r, enums.T.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return avlParams{}, err
 	}
@@ -53,8 +53,8 @@ func (i handlerInput[T, R, A]) queryAvlGetParams(server *Server, r *http.Request
 	return params, nil
 }
 
-func (i handlerInput[T, R, A]) queryAvlRepGetParams(server *Server, r *http.Request) (avlParams, error) {
-	params, errAvl := i.queryAvlGetParams(server, r)
+func (i handlerInput[T, R, A]) queryAvlRepGetParams(srv *Server, r *http.Request) (avlParams, error) {
+	params, errAvl := i.queryAvlGetParams(srv, r)
 	if errExceptEmptyQuery(errAvl) {
 		return avlParams{}, errAvl
 	}

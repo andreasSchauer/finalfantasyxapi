@@ -28,10 +28,10 @@ type SubShopSimple struct {
 	Equipment []ShopEquipmentSimple `json:"equipment"`
 }
 
-func convertSubShopSimple(server *Server, ss seedtypes.SubShop) SubShopSimple {
+func convertSubShopSimple(srv *Server, ss seedtypes.SubShop) SubShopSimple {
 	return SubShopSimple{
-		Items:     convertObjSlice(server, ss.Items, shopItemNameString),
-		Equipment: convertObjSlice(server, ss.Equipment, convertShopEquipmentSimple),
+		Items:     convertObjSlice(srv, ss.Items, shopItemNameString),
+		Equipment: convertObjSlice(srv, ss.Equipment, convertShopEquipmentSimple),
 	}
 }
 
@@ -40,9 +40,9 @@ type ShopEquipmentSimple struct {
 	Abilities     *string `json:"abilities"`
 }
 
-func convertShopEquipmentSimple(server *Server, se seedtypes.ShopEquipment) ShopEquipmentSimple {
+func convertShopEquipmentSimple(srv *Server, se seedtypes.ShopEquipment) ShopEquipmentSimple {
 	return ShopEquipmentSimple{
-		EquipmentName: shopEquipmentNameString(server, se),
+		EquipmentName: shopEquipmentNameString(srv, se),
 		Abilities:     foundEquipmentAbilitiesStringPtr(se.TreasureEquipment),
 	}
 }
@@ -77,18 +77,18 @@ func foundEquipmentAbilitiesStringPtr(fe seedtypes.TreasureEquipment) *string {
 	}
 }
 
-func createShopSimple(server *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createShopSimple(srv *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.Shops
 	shop, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	shopSimple := ShopSimple{
 		ID:          shop.ID,
-		URL:         CreateResourceURL(server, i.Endpoint, id),
-		Area:        idToLocAreaString(server, shop.AreaID),
+		URL:         CreateResourceURL(srv, i.Endpoint, id),
+		Area:        idToLocAreaString(srv, shop.AreaID),
 		Category:    shop.Category,
 		Notes:       shop.Notes,
-		PreAirship:  convertObjPtr(server, shop.PreAirship, convertSubShopSimple),
-		PostAirship: convertObjPtr(server, shop.PostAirship, convertSubShopSimple),
+		PreAirship:  convertObjPtr(srv, shop.PreAirship, convertSubShopSimple),
+		PostAirship: convertObjPtr(srv, shop.PostAirship, convertSubShopSimple),
 	}
 
 	return shopSimple, nil

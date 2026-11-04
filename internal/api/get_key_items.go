@@ -8,13 +8,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (s *Server) getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource], id int32) (KeyItem, error) {
+func (srv *Server) getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource], id int32) (KeyItem, error) {
 	keyItem, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return KeyItem{}, err
 	}
 
-	rel, err := getKeyItemRelationships(s, r, keyItem)
+	rel, err := getKeyItemRelationships(srv, r, keyItem)
 	if err != nil {
 		return KeyItem{}, err
 	}
@@ -22,7 +22,7 @@ func (s *Server) getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, K
 	response := KeyItem{
 		ID:              keyItem.ID,
 		Name:            keyItem.Name,
-		UntypedItem:     idToTypedAPIResource(s, E.AllItems, keyItem.MasterItem.ID),
+		UntypedItem:     idToTypedAPIResource(srv, E.AllItems, keyItem.MasterItem.ID),
 		Category:        keyItem.Category,
 		Description:     keyItem.Description,
 		Effect:          keyItem.Effect,
@@ -36,17 +36,17 @@ func (s *Server) getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, K
 	return response, nil
 }
 
-func (s *Server) retrieveKeyItems(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource]) ([]int32, error) {
+func (srv *Server) retrieveKeyItems(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(s, r, ids, []IDFilter{
-		i.queryEnumList(s, r, enums.T.KeyItemCategory, ids, ts.QpnCategory, s.Cfg.DB.GetKeyItemIDsCategory),
-		i.queryValueList(s, r, ids, ts.QpnMethods, s.Cfg.DB.GetKeyItemIDsByMethods),
-		i.queryID(r, ids, ts.QpnLocation, E.Locations.objLookup, s.Cfg.DB.GetKeyItemIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, E.Sublocations.objLookup, s.Cfg.DB.GetKeyItemIDsBySublocation),
-		i.queryID(r, ids, ts.QpnArea, E.Areas.objLookup, s.Cfg.DB.GetKeyItemIDsByArea),
+	return i.filterIDs(srv, r, ids, []IDFilter{
+		i.queryEnumList(srv, r, enums.T.KeyItemCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetKeyItemIDsCategory),
+		i.queryValueList(srv, r, ids, ts.QpnMethods, srv.Cfg.DB.GetKeyItemIDsByMethods),
+		i.queryID(r, ids, ts.QpnLocation, E.Locations.objLookup, srv.Cfg.DB.GetKeyItemIDsByLocation),
+		i.queryID(r, ids, ts.QpnSublocation, E.Sublocations.objLookup, srv.Cfg.DB.GetKeyItemIDsBySublocation),
+		i.queryID(r, ids, ts.QpnArea, E.Areas.objLookup, srv.Cfg.DB.GetKeyItemIDsByArea),
 	})
 }

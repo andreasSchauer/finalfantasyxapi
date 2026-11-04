@@ -6,13 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (s *Server) getStat(r *http.Request, i handlerInput[seedtypes.Stat, Stat, NamedAPIResource], id int32) (Stat, error) {
+func (srv *Server) getStat(r *http.Request, i handlerInput[seedtypes.Stat, Stat, NamedAPIResource], id int32) (Stat, error) {
 	stat, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Stat{}, err
 	}
 
-	rel, err := getStatRelationships(s, r, stat)
+	rel, err := getStatRelationships(srv, r, stat)
 	if err != nil {
 		return Stat{}, err
 	}
@@ -24,7 +24,7 @@ func (s *Server) getStat(r *http.Request, i handlerInput[seedtypes.Stat, Stat, N
 		MinVal:             stat.MinVal,
 		MaxVal:             stat.MaxVal,
 		MaxVal2:            stat.MaxVal2,
-		ActivationSphere:   nameToNamedAPIResource(s, E.Spheres, stat.ActivationSphere, nil),
+		ActivationSphere:   nameToNamedAPIResource(srv, E.Spheres, stat.ActivationSphere, nil),
 		Spheres:            rel.Spheres,
 		AutoAbilities:      rel.AutoAbilities,
 		PlayerAbilities:    rel.PlayerAbilities,
@@ -38,6 +38,6 @@ func (s *Server) getStat(r *http.Request, i handlerInput[seedtypes.Stat, Stat, N
 	return response, nil
 }
 
-func (s *Server) retrieveStats(r *http.Request, i handlerInput[seedtypes.Stat, Stat, NamedAPIResource]) ([]int32, error) {
+func (srv *Server) retrieveStats(r *http.Request, i handlerInput[seedtypes.Stat, Stat, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

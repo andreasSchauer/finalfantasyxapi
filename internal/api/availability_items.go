@@ -8,10 +8,10 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func filterAvlMasterItems(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlMasterItems(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.AllItems
 
-	avlParams, err := i.queryAvlRepGetParams(server, r)
+	avlParams, err := i.queryAvlRepGetParams(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -24,12 +24,12 @@ func filterAvlMasterItems(server *Server, r *http.Request, inputIDs []int32) ([]
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(server, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.FilterMasterItemIDsByAvailability(r.Context(), database.FilterMasterItemIDsByAvailabilityParams{
+	dbIDs, err := srv.Cfg.DB.FilterMasterItemIDsByAvailability(r.Context(), database.FilterMasterItemIDsByAvailabilityParams{
 		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,
@@ -46,10 +46,10 @@ func filterAvlMasterItems(server *Server, r *http.Request, inputIDs []int32) ([]
 	return dbIDs, nil
 }
 
-func filterAvlItems(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlItems(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Items
 
-	avlParams, err := i.queryAvlRepGetParams(server, r)
+	avlParams, err := i.queryAvlRepGetParams(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -62,12 +62,12 @@ func filterAvlItems(server *Server, r *http.Request, inputIDs []int32) ([]int32,
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(server, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.FilterItemIDsByAvailability(r.Context(), database.FilterItemIDsByAvailabilityParams{
+	dbIDs, err := srv.Cfg.DB.FilterItemIDsByAvailability(r.Context(), database.FilterItemIDsByAvailabilityParams{
 		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,
@@ -84,10 +84,10 @@ func filterAvlItems(server *Server, r *http.Request, inputIDs []int32) ([]int32,
 	return dbIDs, nil
 }
 
-func filterAvlKeyItems(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlKeyItems(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.KeyItems
 
-	avlParams, err := i.queryAvlGetParams(server, r)
+	avlParams, err := i.queryAvlGetParams(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -100,12 +100,12 @@ func filterAvlKeyItems(server *Server, r *http.Request, inputIDs []int32) ([]int
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(server, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.FilterKeyItemIDsByAvailability(r.Context(), database.FilterKeyItemIDsByAvailabilityParams{
+	dbIDs, err := srv.Cfg.DB.FilterKeyItemIDsByAvailability(r.Context(), database.FilterKeyItemIDsByAvailabilityParams{
 		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		PreAirship:     avlParams.preAirship,
@@ -120,10 +120,10 @@ func filterAvlKeyItems(server *Server, r *http.Request, inputIDs []int32) ([]int
 	return dbIDs, nil
 }
 
-func filterAvlSpheres(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlSpheres(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Spheres
 
-	avlParams, err := i.queryAvlRepGetParams(server, r)
+	avlParams, err := i.queryAvlRepGetParams(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -136,12 +136,12 @@ func filterAvlSpheres(server *Server, r *http.Request, inputIDs []int32) ([]int3
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(server, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.FilterSphereIDsByAvailability(r.Context(), database.FilterSphereIDsByAvailabilityParams{
+	dbIDs, err := srv.Cfg.DB.FilterSphereIDsByAvailability(r.Context(), database.FilterSphereIDsByAvailabilityParams{
 		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,
@@ -158,10 +158,10 @@ func filterAvlSpheres(server *Server, r *http.Request, inputIDs []int32) ([]int3
 	return dbIDs, nil
 }
 
-func filterAvlPrimers(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlPrimers(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Primers
 
-	avlParams, err := i.queryAvlGetParams(server, r)
+	avlParams, err := i.queryAvlGetParams(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -169,7 +169,7 @@ func filterAvlPrimers(server *Server, r *http.Request, inputIDs []int32) ([]int3
 		return inputIDs, nil
 	}
 
-	dbIDs, err := server.Cfg.DB.FilterPrimerIDsByAvailability(r.Context(), database.FilterPrimerIDsByAvailabilityParams{
+	dbIDs, err := srv.Cfg.DB.FilterPrimerIDsByAvailability(r.Context(), database.FilterPrimerIDsByAvailabilityParams{
 		Ids:          inputIDs,
 		Availability: avlParams.availabilities,
 		PreAirship:   avlParams.preAirship,

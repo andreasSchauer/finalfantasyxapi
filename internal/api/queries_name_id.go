@@ -33,7 +33,7 @@ func (i handlerInput[T, R, A]) queryNameID[P seedtypes.Lookupable](r *http.Reque
 	}
 }
 
-func (i handlerInput[T, R, A]) queryNameIDWrapper[P seedtypes.Lookupable](server *Server, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, pResType ts.ResTypeSingle, pLookup map[string]P, wrapperFn QueryWrapInt) IDFilter {
+func (i handlerInput[T, R, A]) queryNameIDWrapper[P seedtypes.Lookupable](srv *Server, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, pResType ts.ResTypeSingle, pLookup map[string]P, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
@@ -48,6 +48,6 @@ func (i handlerInput[T, R, A]) queryNameIDWrapper[P seedtypes.Lookupable](server
 			return nil, err
 		}
 
-		return wrapperFn(server, r, ctx, id)
+		return wrapperFn(srv, r, ctx, id)
 	}
 }

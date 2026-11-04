@@ -4,20 +4,20 @@ import (
 	"net/http"
 )
 
-func (i handlerInput[T, R, A]) toResources(server *Server, IDs []int32) []A {
+func (i handlerInput[T, R, A]) toResources(srv *Server, IDs []int32) []A {
 	resources := make([]A, len(IDs))
 
 	for idx, id := range IDs {
-		resources[idx] = i.idToResFunc(server, i, id)
+		resources[idx] = i.idToResFunc(srv, i, id)
 	}
 
 	return resources
 }
 
-func (i handlerInput[T, R, A]) toResList(server *Server, r *http.Request, IDs []int32) (APIResourceList[A], error) {
-	resources := i.toResources(server, IDs)
+func (i handlerInput[T, R, A]) toResList(srv *Server, r *http.Request, IDs []int32) (APIResourceList[A], error) {
+	resources := i.toResources(srv, IDs)
 
-	resourceList, err := newAPIResourceList(server, r, resources)
+	resourceList, err := newAPIResourceList(srv, r, resources)
 	if err != nil {
 		return APIResourceList[A]{}, err
 	}

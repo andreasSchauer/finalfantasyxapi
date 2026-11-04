@@ -36,7 +36,7 @@ func (r DropChanceResponse) Round(n int32) DropChanceResponse {
 	}
 }
 
-func handleDropChance(server *Server, params DropChanceParams) (DropChanceResponse, error) {
+func handleDropChance(srv *Server, params DropChanceParams) (DropChanceResponse, error) {
 	mon, _ := lookup.GetResourceByID(params.Monster, lookup.L.MonstersID)
 
 	wantedAbilities, monAbilities, err := vfAutoAbilities(params, mon)
@@ -45,7 +45,7 @@ func handleDropChance(server *Server, params DropChanceParams) (DropChanceRespon
 	}
 
 	slotsTable := extractAbilitySlots(params, mon)
-	monDropChances := getMonsterDropChances(server, mon, monAbilities)
+	monDropChances := getMonsterDropChances(srv, mon, monAbilities)
 
 	ccp := CharChanceParams{
 		monMaxSlots:     getEquipMaxSlots(slotsTable),

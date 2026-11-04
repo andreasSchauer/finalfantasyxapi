@@ -21,7 +21,7 @@ func (s SublocationSimple) GetURL() string {
 	return s.URL
 }
 
-func createSublocationSimple(server *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createSublocationSimple(srv *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := E.Sublocations
 	sublocation, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -30,18 +30,18 @@ func createSublocationSimple(server *Server, r *http.Request, id int32, subsecti
 
 	sublocationSimple := SublocationSimple{
 		ID:             sublocation.ID,
-		URL:            CreateResourceURL(server, i.Endpoint, id),
+		URL:            CreateResourceURL(srv, i.Endpoint, id),
 		ParentLocation: createSimpleRef(sublocation.LocationID, sublocation.Location, nil, nil),
 		Name:           sublocation.Name,
-		Shops:          convertObjSlice(server, shopIDs, idToShopLocSimple),
-		Treasures:      getTreasuresLocSimple(server, id, subsection),
-		Monsters:       convertObjSlice(server, monsterIDs, idToMonsterSimpleString),
+		Shops:          convertObjSlice(srv, shopIDs, idToShopLocSimple),
+		Treasures:      getTreasuresLocSimple(srv, id, subsection),
+		Monsters:       convertObjSlice(srv, monsterIDs, idToMonsterSimpleString),
 	}
 
 	return sublocationSimple, nil
 }
 
-func getSublocationSectionRelations(server *Server, r *http.Request, subLocIDs []int32) (map[int32]map[Relation][]int32, error) {
+func getSublocationSectionRelations(srv *Server, r *http.Request, subLocIDs []int32) (map[int32]map[Relation][]int32, error) {
 	i := E.Sublocations
 	relations := make(map[int32]map[Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())
@@ -49,21 +49,21 @@ func getSublocationSectionRelations(server *Server, r *http.Request, subLocIDs [
 	var treasureJunctions []Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Treasures.resTypeSingle, server.Cfg.DB.GetSublocationTreasureIdPairs, juncSublocationTreasure)
+		treasureJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Treasures.resTypeSingle, srv.Cfg.DB.GetSublocationTreasureIdPairs, juncSublocationTreasure)
 		return err
 	})
 
 	var shopJunctions []Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Shops.resTypeSingle, server.Cfg.DB.GetSublocationShopIdPairs, juncSublocationShop)
+		shopJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Shops.resTypeSingle, srv.Cfg.DB.GetSublocationShopIdPairs, juncSublocationShop)
 		return err
 	})
 
 	var monsterJunctions []Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Monsters.resTypeSingle, server.Cfg.DB.GetSublocationMonsterIdPairs, juncSublocationMonster)
+		monsterJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Monsters.resTypeSingle, srv.Cfg.DB.GetSublocationMonsterIdPairs, juncSublocationMonster)
 		return err
 	})
 

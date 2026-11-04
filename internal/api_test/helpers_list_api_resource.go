@@ -30,7 +30,7 @@ func (test test) checkResPathsInSlice[T api.HasAPIResource](fieldName string, ex
 	}
 
 	for _, expPath := range expPaths {
-		expURL := api.CompleteTestURL(test.server, expPath)
+		expURL := api.CompleteTestURL(test.srv, expPath)
 		_, ok := gotMap[expURL]
 		if !ok {
 			test.t.Errorf("'%s' doesn't contain all wanted resources. missing '%s'.\n\n", fieldName, expPath)
@@ -48,7 +48,7 @@ func (test test) checkResIDsInSlice[T api.HasAPIResource](fieldName string, endp
 	}
 
 	for _, expID := range expIDs {
-		expURL := api.CreateResourceURL(test.server, endpoint, expID)
+		expURL := api.CreateResourceURL(test.srv, endpoint, expID)
 		_, ok := gotMap[expURL]
 		if !ok {
 			test.t.Errorf("'%s' doesn't contain all wanted resources. missing '%s'.\n\n", fieldName, api.CompleteTestPath(endpoint, expID))

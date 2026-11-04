@@ -9,16 +9,16 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAreasByItem(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getAreasByItem(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Areas
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(server, r)
+	methods, err := queryParamMethods.parseValueList(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.GetAreaIDsWithItemFromMethods(ctx, database.GetAreaIDsWithItemFromMethodsParams{
+	dbIDs, err := srv.Cfg.DB.GetAreaIDsWithItemFromMethods(ctx, database.GetAreaIDsWithItemFromMethodsParams{
 		ItemID:  id,
 		Methods: h.SliceOrNil(methods),
 	})
@@ -29,16 +29,16 @@ func getAreasByItem(server *Server, r *http.Request, ctx context.Context, id int
 	return dbIDs, nil
 }
 
-func getSublocationsByItem(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getSublocationsByItem(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Sublocations
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(server, r)
+	methods, err := queryParamMethods.parseValueList(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.GetSublocationIDsWithItemFromMethods(ctx, database.GetSublocationIDsWithItemFromMethodsParams{
+	dbIDs, err := srv.Cfg.DB.GetSublocationIDsWithItemFromMethods(ctx, database.GetSublocationIDsWithItemFromMethodsParams{
 		ItemID:  id,
 		Methods: h.SliceOrNil(methods),
 	})
@@ -49,16 +49,16 @@ func getSublocationsByItem(server *Server, r *http.Request, ctx context.Context,
 	return dbIDs, nil
 }
 
-func getLocationsByItem(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getLocationsByItem(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Locations
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(server, r)
+	methods, err := queryParamMethods.parseValueList(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.GetLocationIDsWithItemFromMethods(ctx, database.GetLocationIDsWithItemFromMethodsParams{
+	dbIDs, err := srv.Cfg.DB.GetLocationIDsWithItemFromMethods(ctx, database.GetLocationIDsWithItemFromMethodsParams{
 		ItemID:  id,
 		Methods: h.SliceOrNil(methods),
 	})

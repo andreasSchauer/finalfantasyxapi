@@ -8,13 +8,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (s *Server) getCharacterClass(r *http.Request, i handlerInput[seedtypes.CharacterClass, CharacterClass, NamedAPIResource], id int32) (CharacterClass, error) {
+func (srv *Server) getCharacterClass(r *http.Request, i handlerInput[seedtypes.CharacterClass, CharacterClass, NamedAPIResource], id int32) (CharacterClass, error) {
 	class, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return CharacterClass{}, err
 	}
 
-	rel, err := getCharClassRelationships(s, r, class)
+	rel, err := getCharClassRelationships(srv, r, class)
 	if err != nil {
 		return CharacterClass{}, err
 	}
@@ -34,13 +34,13 @@ func (s *Server) getCharacterClass(r *http.Request, i handlerInput[seedtypes.Cha
 	return response, nil
 }
 
-func (s *Server) retrieveCharacterClasses(r *http.Request, i handlerInput[seedtypes.CharacterClass, CharacterClass, NamedAPIResource]) ([]int32, error) {
+func (srv *Server) retrieveCharacterClasses(r *http.Request, i handlerInput[seedtypes.CharacterClass, CharacterClass, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(s, r, ids, []IDFilter{
-		i.queryEnumList(s, r, enums.T.CharacterClassCategory, ids, ts.QpnCategory, s.Cfg.DB.GetCharacterClassesIDsByCategory),
+	return i.filterIDs(srv, r, ids, []IDFilter{
+		i.queryEnumList(srv, r, enums.T.CharacterClassCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetCharacterClassesIDsByCategory),
 	})
 }

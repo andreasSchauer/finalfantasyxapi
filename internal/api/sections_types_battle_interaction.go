@@ -26,20 +26,20 @@ type BattleInteractionSimple struct {
 	ModChanges                []string      `json:"modifier_changes,omitempty"`
 }
 
-func convertBattleInteractionSimple(server *Server, bi seedtypes.BattleInteraction) BattleInteractionSimple {
+func convertBattleInteractionSimple(srv *Server, bi seedtypes.BattleInteraction) BattleInteractionSimple {
 	biSimple := BattleInteractionSimple{
 		Target:                    bi.Target,
 		Range:                     bi.Range,
 		HitAmount:                 bi.HitAmount,
-		Accuracy:                  convertAccuracySimple(server, bi.Accuracy),
+		Accuracy:                  convertAccuracySimple(srv, bi.Accuracy),
 		AffectedBy:                h.SliceOrNil(bi.AffectedBy),
-		Damage:                    convertObjPtr(server, bi.Damage, convertDamageSimple),
-		Delay:                     convertObjPtr(server, bi.InflictedDelay, convertInflictedDelaySimple),
-		InflictedStatusConditions: convertObjSliceOrNil(server, bi.InflictedStatusConditions, convertInflictedStatusSimple),
+		Damage:                    convertObjPtr(srv, bi.Damage, convertDamageSimple),
+		Delay:                     convertObjPtr(srv, bi.InflictedDelay, convertInflictedDelaySimple),
+		InflictedStatusConditions: convertObjSliceOrNil(srv, bi.InflictedStatusConditions, convertInflictedStatusSimple),
 		RemovedStatusConditions:   h.SliceOrNil(bi.RemovedStatusConditions),
-		CopiedStatusConditions:    convertObjSliceOrNil(server, bi.CopiedStatusConditions, convertInflictedStatusSimple),
-		StatChanges:               convertObjSliceOrNil(server, bi.StatChanges, convertStatChangeSimple),
-		ModChanges:                convertObjSliceOrNil(server, bi.ModifierChanges, convertModChangeSimple),
+		CopiedStatusConditions:    convertObjSliceOrNil(srv, bi.CopiedStatusConditions, convertInflictedStatusSimple),
+		StatChanges:               convertObjSliceOrNil(srv, bi.StatChanges, convertStatChangeSimple),
+		ModChanges:                convertObjSliceOrNil(srv, bi.ModifierChanges, convertModChangeSimple),
 	}
 
 	return biSimple
@@ -56,20 +56,20 @@ type DamageSimple struct {
 	Element       *string `json:"element,omitempty"`
 }
 
-func convertDamageSimple(server *Server, d seedtypes.Damage) DamageSimple {
+func convertDamageSimple(srv *Server, d seedtypes.Damage) DamageSimple {
 	return DamageSimple{
 		AttackType:    d.AttackType,
 		DamageType:    d.DamageType,
-		HP:            convertObjPtr(server, d.HP, convertClassDamageSimple),
-		MP:            convertObjPtr(server, d.MP, convertClassDamageSimple),
-		CTB:           convertObjPtr(server, d.CTB, convertClassDamageSimple),
+		HP:            convertObjPtr(srv, d.HP, convertClassDamageSimple),
+		MP:            convertObjPtr(srv, d.MP, convertClassDamageSimple),
+		CTB:           convertObjPtr(srv, d.CTB, convertClassDamageSimple),
 		CanCritical:   h.PtrIsNotNil(d.Critical),
-		BreakDmgLimit: convertObjPtr(server, d.BreakDmgLimit, convertBreakDmgLimitSimple),
+		BreakDmgLimit: convertObjPtr(srv, d.BreakDmgLimit, convertBreakDmgLimitSimple),
 		Element:       d.Element,
 	}
 }
 
-func convertClassDamageSimple(server *Server, dc seedtypes.ClassDamage) string {
+func convertClassDamageSimple(srv *Server, dc seedtypes.ClassDamage) string {
 	return fmt.Sprintf("formula: %s, power: %d", dc.DamageFormula, dc.DamageConstant)
 }
 
@@ -125,7 +125,7 @@ func convertStatChangeSimple(_ *Server, sc seedtypes.StatChange) string {
 	return formatChange(sc.StatName, sc.CalculationType, sc.Value)
 }
 
-func convertModChangeSimple(server *Server, mc seedtypes.ModifierChange) string {
+func convertModChangeSimple(srv *Server, mc seedtypes.ModifierChange) string {
 	formatted := formatChange(mc.ModifierName, mc.CalculationType, mc.Value)
 	modifier, _ := lookup.GetResource(mc.ModifierName, lookup.L.Modifiers)
 

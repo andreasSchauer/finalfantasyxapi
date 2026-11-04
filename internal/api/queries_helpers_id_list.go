@@ -10,18 +10,18 @@ import (
 )
 
 // checks for emptiness of id-list-queryParam and converts its input into a slice of valid ids.
-func (q QueryParam) parseIDList[F seedtypes.Lookupable](server *Server, r *http.Request, fLookup map[string]F) ([]int32, error) {
+func (q QueryParam) parseIDList[F seedtypes.Lookupable](srv *Server, r *http.Request, fLookup map[string]F) ([]int32, error) {
 	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return q.sliceIDs(server, r, query, fLookup)
+	return q.sliceIDs(srv, r, query, fLookup)
 }
 
 // converts a list of unique query ids into a slice of valid ids.
-func (q QueryParam) sliceIDs[F seedtypes.Lookupable](server *Server, r *http.Request, query string, fLookup map[string]F) ([]int32, error) {
-	idSegments, err := queryListSplit(server, query)
+func (q QueryParam) sliceIDs[F seedtypes.Lookupable](srv *Server, r *http.Request, query string, fLookup map[string]F) ([]int32, error) {
+	idSegments, err := queryListSplit(srv, query)
 	if err != nil {
 		return nil, err
 	}
@@ -34,12 +34,12 @@ func (q QueryParam) sliceIDs[F seedtypes.Lookupable](server *Server, r *http.Req
 		}
 		ids = slices.Concat(ids, idsNew)
 
-		if len(ids) > server.Cfg.FetchLimit {
-			return nil, newHTTPErrorFetchLimit(server.Cfg.FetchLimit)
+		if len(ids) > srv.Cfg.FetchLimit {
+			return nil, newHTTPErrorFetchLimit(srv.Cfg.FetchLimit)
 		}
 	}
 
-	ids, err = cleanUpIntList(server, r, ids)
+	ids, err = cleanUpIntList(srv, r, ids)
 	if err != nil {
 		return nil, err
 	}

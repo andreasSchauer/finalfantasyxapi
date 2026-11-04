@@ -31,9 +31,9 @@ type AeonEquipment struct {
 	CelestialWeapon bool             `json:"celestial_weapon"`
 }
 
-func convertAeonEquipment(server *Server, ae seedtypes.AeonEquipment) AeonEquipment {
+func convertAeonEquipment(srv *Server, ae seedtypes.AeonEquipment) AeonEquipment {
 	return AeonEquipment{
-		AutoAbility:     nameToNamedAPIResource(server, E.AutoAbilities, ae.AutoAbility, nil),
+		AutoAbility:     nameToNamedAPIResource(srv, E.AutoAbilities, ae.AutoAbility, nil),
 		CelestialWeapon: ae.CelestialWeapon,
 	}
 }

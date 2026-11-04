@@ -35,7 +35,7 @@ func (i handlerInput[T, R, A]) queryInt(r *http.Request, inputIDs []int32, query
 }
 
 // query uses an integer value as input.
-func (i handlerInput[T, R, A]) queryIntWrapper(server *Server, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapInt) IDFilter {
+func (i handlerInput[T, R, A]) queryIntWrapper(srv *Server, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
@@ -50,7 +50,7 @@ func (i handlerInput[T, R, A]) queryIntWrapper(server *Server, r *http.Request, 
 			return nil, err
 		}
 
-		dbIDs, err := wrapperFn(server, r, ctx, int32(integer))
+		dbIDs, err := wrapperFn(srv, r, ctx, int32(integer))
 		if errors.Is(err, errs.ErrQueryRedirect) {
 			return inputIDs, nil
 		}

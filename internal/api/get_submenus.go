@@ -8,13 +8,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (s *Server) getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource], id int32) (Submenu, error) {
+func (srv *Server) getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource], id int32) (Submenu, error) {
 	submenu, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Submenu{}, err
 	}
 
-	rel, err := getSubmenuRelationships(s, r, submenu)
+	rel, err := getSubmenuRelationships(srv, r, submenu)
 	if err != nil {
 		return Submenu{}, err
 	}
@@ -24,8 +24,8 @@ func (s *Server) getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, S
 		Name:        submenu.Name,
 		Description: submenu.Description,
 		Effect:      submenu.Effect,
-		Topmenu:     namePtrToNamedAPIResPtr(s, E.Topmenus, submenu.Topmenu, nil),
-		Users:       namesToNamedAPIResources(s, E.CharacterClasses, submenu.Users),
+		Topmenu:     namePtrToNamedAPIResPtr(srv, E.Topmenus, submenu.Topmenu, nil),
+		Users:       namesToNamedAPIResources(srv, E.CharacterClasses, submenu.Users),
 		OpenedBy:    rel.OpenedBy,
 		Abilities:   rel.Abilities,
 	}
@@ -33,13 +33,13 @@ func (s *Server) getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, S
 	return response, nil
 }
 
-func (s *Server) retrieveSubmenus(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource]) ([]int32, error) {
+func (srv *Server) retrieveSubmenus(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(s, r, ids, []IDFilter{
-		i.queryNameID(r, ids, ts.QpnTopmenu, E.Topmenus.resTypeSingle, lookup.L.Topmenus, ToIntManyNull(s.Cfg.DB.GetTopmenuSubmenuIDs)),
+	return i.filterIDs(srv, r, ids, []IDFilter{
+		i.queryNameID(r, ids, ts.QpnTopmenu, E.Topmenus.resTypeSingle, lookup.L.Topmenus, ToIntManyNull(srv.Cfg.DB.GetTopmenuSubmenuIDs)),
 	})
 }

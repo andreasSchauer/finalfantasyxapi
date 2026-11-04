@@ -1,9 +1,9 @@
 package api
 
-type serviceParams interface {
+type ServiceParams interface {
 	AlBhedParams | TurnOrderParams | DropChanceParams | CritChanceParams
 }
 
-type serviceResponse interface {
+type ServiceResponse interface {
 	AlBhedResponse | TurnOrderResponse | DropChanceResponse | CritChanceResponse
 }

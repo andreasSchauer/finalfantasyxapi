@@ -8,7 +8,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAutoAbilitiesByMonster(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getAutoAbilitiesByMonster(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AutoAbilities
 
 	charIDPtr, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
@@ -16,7 +16,7 @@ func getAutoAbilitiesByMonster(server *Server, r *http.Request, ctx context.Cont
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.GetAutoAbilityIDsByMonster(ctx, database.GetAutoAbilityIDsByMonsterParams{
+	dbIDs, err := srv.Cfg.DB.GetAutoAbilityIDsByMonster(ctx, database.GetAutoAbilityIDsByMonsterParams{
 		MonsterID:   id,
 		CharacterID: charIDPtr,
 	})
@@ -27,7 +27,7 @@ func getAutoAbilitiesByMonster(server *Server, r *http.Request, ctx context.Cont
 	return dbIDs, nil
 }
 
-func getAutoAbilitiesByShop(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getAutoAbilitiesByShop(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AutoAbilities
 
 	charIDPtr, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
@@ -35,7 +35,7 @@ func getAutoAbilitiesByShop(server *Server, r *http.Request, ctx context.Context
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.GetAutoAbilityIDsByShop(ctx, database.GetAutoAbilityIDsByShopParams{
+	dbIDs, err := srv.Cfg.DB.GetAutoAbilityIDsByShop(ctx, database.GetAutoAbilityIDsByShopParams{
 		ShopID:      id,
 		CharacterID: charIDPtr,
 	})

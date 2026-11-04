@@ -36,12 +36,12 @@ func (r UnnamedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func idToUnnamedAPIResource[T seedtypes.IsUnnamed, R any, A APIResource](server *Server, i handlerInput[T, R, A], id int32) UnnamedAPIResource {
+func idToUnnamedAPIResource[T seedtypes.IsUnnamed, R any, A APIResource](srv *Server, i handlerInput[T, R, A], id int32) UnnamedAPIResource {
 	res, _ := lookup.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
 	params := res.GetResParamsUnnamed()
 
 	return UnnamedAPIResource{
 		ID:  params.ID,
-		URL: CreateResourceURL(server, i.Endpoint, params.ID),
+		URL: CreateResourceURL(srv, i.Endpoint, params.ID),
 	}
 }

@@ -7,14 +7,14 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i handlerInput[T, R, A]) queryIntList(server *Server, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryIntList) IDFilter {
+func (i handlerInput[T, R, A]) queryIntList(srv *Server, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		ints, err := queryParam.parseIntList(server, r)
+		ints, err := queryParam.parseIntList(srv, r)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}

@@ -80,7 +80,7 @@ func (p turnOrderMon) getDuplicateKey() string {
 	})
 }
 
-func getTurnOrderParamsDoc(server *Server) ParamsDoc {
+func getTurnOrderParamsDoc(srv *Server) ParamsDoc {
 	return ParamsDoc{
 		GeneralRules: h.GetStrPtr(""),
 		Fields: []FieldDoc{
@@ -131,7 +131,7 @@ func getTurnOrderParamsDoc(server *Server) ParamsDoc {
 				RequiredOr:  []ts.FieldName{ts.PfnFormationID, ts.PfnMons},
 				MaxArrayLen: h.GetIntPtr(3),
 				Description: "Defines the participants of the player party.",
-				ChildProps:  server.getFieldDocTurnOrderParty(),
+				ChildProps:  srv.getFieldDocTurnOrderParty(),
 			},
 			{
 				Field:         ts.PfnMons,
@@ -140,13 +140,13 @@ func getTurnOrderParamsDoc(server *Server) ParamsDoc {
 				ConflictsWith: []ts.FieldName{ts.PfnFormationID},
 				MaxArrayLen:   h.GetIntPtr(10),
 				Description:   "Defines the participants of the opponent party by looking up monsters via id or defining custom monsters.",
-				ChildProps:    server.getFieldDocTurnOrderMon(),
+				ChildProps:    srv.getFieldDocTurnOrderMon(),
 			},
 		},
 	}
 }
 
-func (s *Server) getFieldDocTurnOrderParty() []FieldDoc {
+func (srv *Server) getFieldDocTurnOrderParty() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:       ts.PfnUnitID,
@@ -178,7 +178,7 @@ func (s *Server) getFieldDocTurnOrderParty() []FieldDoc {
 	}
 }
 
-func (s *Server) getFieldDocTurnOrderMon() []FieldDoc {
+func (srv *Server) getFieldDocTurnOrderMon() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:         ts.PfnMonsterID,

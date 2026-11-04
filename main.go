@@ -21,8 +21,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	server.InitGlobals()
-
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /api/healthz", server.HandlerReadiness)

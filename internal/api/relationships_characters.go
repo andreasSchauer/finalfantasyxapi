@@ -13,48 +13,48 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getCharacterRelationships(server *Server, r *http.Request, char seedtypes.Character) (Character, error) {
+func getCharacterRelationships(srv *Server, r *http.Request, char seedtypes.Character) (Character, error) {
 	rel := Character{
-		OverdriveModes: getCharacterModeAmts(server, char),
+		OverdriveModes: getCharacterModeAmts(srv, char),
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = E.CelestialWeapons.dbGetRelationPtr(server, ctx, char, server.Cfg.DB.GetCharacterCelestialWeaponID)
+		rel.CelestialWeapon, err = E.CelestialWeapons.dbGetRelationPtr(srv, ctx, char, srv.Cfg.DB.GetCharacterCelestialWeaponID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveCommand, err = E.OverdriveCommands.dbGetRelationPtr(server, ctx, char, server.Cfg.DB.GetCharacterOverdriveCommandID)
+		rel.OverdriveCommand, err = E.OverdriveCommands.dbGetRelationPtr(srv, ctx, char, srv.Cfg.DB.GetCharacterOverdriveCommandID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = E.CharacterClasses.dbGetRelations(server, ctx, char, server.Cfg.DB.GetCharacterCharClassIDs)
+		rel.CharacterClasses, err = E.CharacterClasses.dbGetRelations(srv, ctx, char, srv.Cfg.DB.GetCharacterCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.dbGetRelations(server, ctx, char, server.Cfg.DB.GetCharacterDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, char, srv.Cfg.DB.GetCharacterDefaultAbilityIDs)
 		return err
 	})
 
 	if !char.IsStoryBased {
 		g.Go(func() error {
 			var err error
-			rel.StdSphereGrid = convertObjPtr(server, char.StdSphereGrid, convertSphereGrid)
-			rel.StdSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(server, ctx, char, server.Cfg.DB.GetCharacterSgAbilityIDs)
+			rel.StdSphereGrid = convertObjPtr(srv, char.StdSphereGrid, convertSphereGrid)
+			rel.StdSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, char, srv.Cfg.DB.GetCharacterSgAbilityIDs)
 			return err
 		})
 
 		g.Go(func() error {
 			var err error
-			rel.ExpSphereGrid = convertObjPtr(server, char.ExpSphereGrid, convertSphereGrid)
-			rel.ExpSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(server, ctx, char, server.Cfg.DB.GetCharacterEgAbilityIDs)
+			rel.ExpSphereGrid = convertObjPtr(srv, char.ExpSphereGrid, convertSphereGrid)
+			rel.ExpSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, char, srv.Cfg.DB.GetCharacterEgAbilityIDs)
 			return err
 		})
 	}
@@ -76,7 +76,7 @@ func getCharacterClstlFormula(char Character) *string {
 	return &weapon.Formula
 }
 
-func getCharacterModeAmts(server *Server, char seedtypes.Character) []ResourceAmount[NamedAPIResource] {
+func getCharacterModeAmts(srv *Server, char seedtypes.Character) []ResourceAmount[NamedAPIResource] {
 	resAmts := []ResourceAmount[NamedAPIResource]{}
 
 	if char.IsStoryBased {
@@ -85,7 +85,7 @@ func getCharacterModeAmts(server *Server, char seedtypes.Character) []ResourceAm
 
 	for i := range len(lookup.L.OverdriveModes) {
 		id := int32(i + 1)
-		resAmt, err := getCharModeAmount(server, char, id)
+		resAmt, err := getCharModeAmount(srv, char, id)
 		if errors.Is(err, errs.ErrContinue) {
 			continue
 		}
@@ -95,7 +95,7 @@ func getCharacterModeAmts(server *Server, char seedtypes.Character) []ResourceAm
 	return resAmts
 }
 
-func getCharModeAmount(server *Server, char seedtypes.Character, id int32) (ResourceAmount[NamedAPIResource], error) {
+func getCharModeAmount(srv *Server, char seedtypes.Character, id int32) (ResourceAmount[NamedAPIResource], error) {
 	i := E.OverdriveModes
 
 	mode, _ := lookup.GetResourceByID(id, i.objLookupID)
@@ -104,7 +104,7 @@ func getCharModeAmount(server *Server, char seedtypes.Character, id int32) (Reso
 	}
 
 	amount := mode.ActionsToLearn[char.GetID()-1].Amount
-	modeAmount := i.toResAmt(server, id, amount)
+	modeAmount := i.toResAmt(srv, id, amount)
 
 	return modeAmount, nil
 }

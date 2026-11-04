@@ -20,7 +20,7 @@ func (l LocationSimple) GetURL() string {
 	return l.URL
 }
 
-func createLocationSimple(server *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createLocationSimple(srv *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := E.Locations
 	location, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -29,17 +29,17 @@ func createLocationSimple(server *Server, r *http.Request, id int32, subsection 
 
 	locationSimple := LocationSimple{
 		ID:        location.ID,
-		URL:       CreateResourceURL(server, i.Endpoint, id),
+		URL:       CreateResourceURL(srv, i.Endpoint, id),
 		Name:      location.Name,
-		Shops:     convertObjSlice(server, shopIDs, idToShopLocSimple),
-		Treasures: getTreasuresLocSimple(server, id, subsection),
-		Monsters:  convertObjSlice(server, monsterIDs, idToMonsterSimpleString),
+		Shops:     convertObjSlice(srv, shopIDs, idToShopLocSimple),
+		Treasures: getTreasuresLocSimple(srv, id, subsection),
+		Monsters:  convertObjSlice(srv, monsterIDs, idToMonsterSimpleString),
 	}
 
 	return locationSimple, nil
 }
 
-func getLocationSectionRelations(server *Server, r *http.Request, locIDs []int32) (map[int32]map[Relation][]int32, error) {
+func getLocationSectionRelations(srv *Server, r *http.Request, locIDs []int32) (map[int32]map[Relation][]int32, error) {
 	i := E.Locations
 	relations := make(map[int32]map[Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())
@@ -47,21 +47,21 @@ func getLocationSectionRelations(server *Server, r *http.Request, locIDs []int32
 	var treasureJunctions []Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Treasures.resTypeSingle, server.Cfg.DB.GetLocationTreasureIdPairs, juncLocationTreasure)
+		treasureJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Treasures.resTypeSingle, srv.Cfg.DB.GetLocationTreasureIdPairs, juncLocationTreasure)
 		return err
 	})
 
 	var shopJunctions []Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Shops.resTypeSingle, server.Cfg.DB.GetLocationShopIdPairs, juncLocationShop)
+		shopJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Shops.resTypeSingle, srv.Cfg.DB.GetLocationShopIdPairs, juncLocationShop)
 		return err
 	})
 
 	var monsterJunctions []Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Monsters.resTypeSingle, server.Cfg.DB.GetLocationMonsterIdPairs, juncLocationMonster)
+		monsterJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Monsters.resTypeSingle, srv.Cfg.DB.GetLocationMonsterIdPairs, juncLocationMonster)
 		return err
 	})
 

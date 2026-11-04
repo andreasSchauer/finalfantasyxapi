@@ -20,13 +20,13 @@ type AbilityPool struct {
 	ReqAmount     int32              `json:"required_amount"`
 }
 
-func convertAbilityPool(server *Server, p seedtypes.AbilityPool) AbilityPool {
+func convertAbilityPool(srv *Server, p seedtypes.AbilityPool) AbilityPool {
 	return AbilityPool{
-		AutoAbilities: namesToNamedAPIResources(server, E.AutoAbilities, p.AutoAbilities),
+		AutoAbilities: namesToNamedAPIResources(srv, E.AutoAbilities, p.AutoAbilities),
 		ReqAmount:     p.ReqAmount,
 	}
 }
 
-func convertEquipmentName(server *Server, n seedtypes.EquipmentName) NamedAPIResource {
-	return nameToNamedAPIResource(server, E.Equipment, n.Name, nil)
+func convertEquipmentName(srv *Server, n seedtypes.EquipmentName) NamedAPIResource {
+	return nameToNamedAPIResource(srv, E.Equipment, n.Name, nil)
 }

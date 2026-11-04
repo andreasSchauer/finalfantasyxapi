@@ -8,7 +8,7 @@ import (
 )
 
 // checks for emptiness of name/id-list-queryParam and converts its input into a slice of valid ids. accepts "none" as input.
-func (q QueryParam) parseNameIDList[P seedtypes.Lookupable](server *Server, r *http.Request, pResType ts.ResTypeSingle, pLookup map[string]P) ([]int32, error) {
+func (q QueryParam) parseNameIDList[P seedtypes.Lookupable](srv *Server, r *http.Request, pResType ts.ResTypeSingle, pLookup map[string]P) ([]int32, error) {
 	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err
@@ -19,12 +19,12 @@ func (q QueryParam) parseNameIDList[P seedtypes.Lookupable](server *Server, r *h
 		return nil, nil
 	}
 
-	return q.sliceNamesIDs(server, query, pResType, pLookup)
+	return q.sliceNamesIDs(srv, query, pResType, pLookup)
 }
 
 // converts a list of unique query ids or single-resource names into a slice of valid ids.
-func (q QueryParam) sliceNamesIDs[P seedtypes.Lookupable](server *Server, query string, pResType ts.ResTypeSingle, pLookup map[string]P) ([]int32, error) {
-	queryStrs, err := queryListSplit(server, query)
+func (q QueryParam) sliceNamesIDs[P seedtypes.Lookupable](srv *Server, query string, pResType ts.ResTypeSingle, pLookup map[string]P) ([]int32, error) {
+	queryStrs, err := queryListSplit(srv, query)
 	if err != nil {
 		return nil, err
 	}

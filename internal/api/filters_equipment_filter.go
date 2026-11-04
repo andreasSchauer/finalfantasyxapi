@@ -10,7 +10,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func filterShopsEquipment(server *Server, r *http.Request, ctx context.Context) ([]int32, error) {
+func filterShopsEquipment(srv *Server, r *http.Request, ctx context.Context) ([]int32, error) {
 	i := E.Shops
 
 	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
@@ -18,7 +18,7 @@ func filterShopsEquipment(server *Server, r *http.Request, ctx context.Context) 
 		return nil, err
 	}
 
-	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(server, r)
+	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -28,7 +28,7 @@ func filterShopsEquipment(server *Server, r *http.Request, ctx context.Context) 
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.GetShopIDsEquipmentFilter(ctx, database.GetShopIDsEquipmentFilterParams{
+	dbIDs, err := srv.Cfg.DB.GetShopIDsEquipmentFilter(ctx, database.GetShopIDsEquipmentFilterParams{
 		AutoAbilityID: autoAbilityID,
 		CharacterID:   charID,
 		EmptySlots:    h.SliceOrNil(emptySlots),
@@ -40,7 +40,7 @@ func filterShopsEquipment(server *Server, r *http.Request, ctx context.Context) 
 	return dbIDs, nil
 }
 
-func filterTreasuresEquipment(server *Server, r *http.Request, ctx context.Context) ([]int32, error) {
+func filterTreasuresEquipment(srv *Server, r *http.Request, ctx context.Context) ([]int32, error) {
 	i := E.Treasures
 
 	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
@@ -48,7 +48,7 @@ func filterTreasuresEquipment(server *Server, r *http.Request, ctx context.Conte
 		return nil, err
 	}
 
-	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(server, r)
+	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(srv, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func filterTreasuresEquipment(server *Server, r *http.Request, ctx context.Conte
 		return nil, err
 	}
 
-	dbIDs, err := server.Cfg.DB.GetTreasureIDsEquipmentFilter(ctx, database.GetTreasureIDsEquipmentFilterParams{
+	dbIDs, err := srv.Cfg.DB.GetTreasureIDsEquipmentFilter(ctx, database.GetTreasureIDsEquipmentFilterParams{
 		AutoAbilityID: autoAbilityID,
 		CharacterID:   charID,
 		EmptySlots:    h.SliceOrNil(emptySlots),

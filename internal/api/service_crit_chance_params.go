@@ -80,7 +80,7 @@ type TargetCustomCritChance struct {
 	Luck int32 `json:"luck"`
 }
 
-func getCritChanceParamsDoc(server *Server) ParamsDoc {
+func getCritChanceParamsDoc(srv *Server) ParamsDoc {
 	return ParamsDoc{
 		GeneralRules: h.GetStrPtr(""),
 		Fields: []FieldDoc{
@@ -89,46 +89,46 @@ func getCritChanceParamsDoc(server *Server) ParamsDoc {
 				Type:        "obj (abilityCritChance)",
 				Required:    true,
 				Description: "Define the ability that is being used for the attack.",
-				ChildProps:  server.getFieldDocAbilityCritChance(),
+				ChildProps:  srv.getFieldDocAbilityCritChance(),
 			},
 			{
 				Field:       ts.PfnUser,
 				Type:        "obj (userCritChance)",
 				Required:    true,
 				Description: "Define the unit that uses the ability.",
-				ChildProps:  server.getFieldDocUserCritChance(),
+				ChildProps:  srv.getFieldDocUserCritChance(),
 			},
 			{
 				Field:       ts.PfnTarget,
 				Type:        "obj (targetCritChance)",
 				Required:    true,
 				Description: "Define the unit that gets hit by the ability.",
-				ChildProps:  server.getFieldDocTargetCritChance(),
+				ChildProps:  srv.getFieldDocTargetCritChance(),
 			},
 		},
 	}
 }
 
-func (s *Server) getFieldDocAbilityCritChance() []FieldDoc {
+func (srv *Server) getFieldDocAbilityCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:       ts.PfnLookup,
 			Type:        "obj (abilityLookupCritChance)",
 			RequiredOr:  []ts.FieldName{ts.PfnCustom},
 			Description: "Define the ability via lookup. You can override calculation-relevant values as well.",
-			ChildProps:  s.getFieldDocAbilityLookupCritChance(),
+			ChildProps:  srv.getFieldDocAbilityLookupCritChance(),
 		},
 		{
 			Field:       ts.PfnCustom,
 			Type:        "obj (abilityCustomCritChance)",
 			RequiredOr:  []ts.FieldName{ts.PfnLookup},
 			Description: "Define a custom ability.",
-			ChildProps:  s.getFieldDocAbilityCustomCritChance(),
+			ChildProps:  srv.getFieldDocAbilityCustomCritChance(),
 		},
 	}
 }
 
-func (s *Server) getFieldDocAbilityLookupCritChance() []FieldDoc {
+func (srv *Server) getFieldDocAbilityLookupCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:       ts.PfnAbilityID,
@@ -148,12 +148,12 @@ func (s *Server) getFieldDocAbilityLookupCritChance() []FieldDoc {
 			Field:       ts.PfnOverrides,
 			Type:        "obj (abilityOverridesCritChance)",
 			Description: "Override the looked up ability's calculation-relevant values.",
-			ChildProps:  s.getFieldDocAbilityOverridesCritChance(),
+			ChildProps:  srv.getFieldDocAbilityOverridesCritChance(),
 		},
 	}
 }
 
-func (s *Server) getFieldDocAbilityOverridesCritChance() []FieldDoc {
+func (srv *Server) getFieldDocAbilityOverridesCritChance() []FieldDoc {
 	return []FieldDoc{
 
 		{
@@ -172,7 +172,7 @@ func (s *Server) getFieldDocAbilityOverridesCritChance() []FieldDoc {
 	}
 }
 
-func (s *Server) getFieldDocAbilityCustomCritChance() []FieldDoc {
+func (srv *Server) getFieldDocAbilityCustomCritChance() []FieldDoc {
 	return []FieldDoc{
 
 		{
@@ -193,21 +193,21 @@ func (s *Server) getFieldDocAbilityCustomCritChance() []FieldDoc {
 	}
 }
 
-func (s *Server) getFieldDocUserCritChance() []FieldDoc {
+func (srv *Server) getFieldDocUserCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:       ts.PfnLookup,
 			Type:        "obj (userLookupCritChance)",
 			RequiredOr:  []ts.FieldName{ts.PfnCustom},
 			Description: "Define the ability's user via monster-lookup. You can override calculation-relevant values as well.",
-			ChildProps:  s.getFieldDocUserLookupCritChance(),
+			ChildProps:  srv.getFieldDocUserLookupCritChance(),
 		},
 		{
 			Field:       ts.PfnCustom,
 			Type:        "obj (userCustomCritChance)",
 			RequiredOr:  []ts.FieldName{ts.PfnLookup},
 			Description: "Define a custom ability user.",
-			ChildProps:  s.getFieldDocUserCustomCritChance(),
+			ChildProps:  srv.getFieldDocUserCustomCritChance(),
 		},
 		{
 			Field:       ts.PfnLuckStacks,
@@ -220,7 +220,7 @@ func (s *Server) getFieldDocUserCritChance() []FieldDoc {
 	}
 }
 
-func (s *Server) getFieldDocUserLookupCritChance() []FieldDoc {
+func (srv *Server) getFieldDocUserLookupCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:       ts.PfnMonsterID,
@@ -234,12 +234,12 @@ func (s *Server) getFieldDocUserLookupCritChance() []FieldDoc {
 			Field:       ts.PfnOverrides,
 			Type:        "obj (userOverridesCritChance)",
 			Description: "Override the monster's calculation-relevant values.",
-			ChildProps:  s.getFieldDocUserOverridesCritChance(),
+			ChildProps:  srv.getFieldDocUserOverridesCritChance(),
 		},
 	}
 }
 
-func (s *Server) getFieldDocUserOverridesCritChance() []FieldDoc {
+func (srv *Server) getFieldDocUserOverridesCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:       ts.PfnLuck,
@@ -258,7 +258,7 @@ func (s *Server) getFieldDocUserOverridesCritChance() []FieldDoc {
 	}
 }
 
-func (s *Server) getFieldDocUserCustomCritChance() []FieldDoc {
+func (srv *Server) getFieldDocUserCustomCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:       ts.PfnLuck,
@@ -279,21 +279,21 @@ func (s *Server) getFieldDocUserCustomCritChance() []FieldDoc {
 	}
 }
 
-func (s *Server) getFieldDocTargetCritChance() []FieldDoc {
+func (srv *Server) getFieldDocTargetCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:       ts.PfnLookup,
 			Type:        "obj (targetLookupCritChance)",
 			RequiredOr:  []ts.FieldName{ts.PfnCustom},
 			Description: "Define the ability's target via monster-lookup. You can override calculation-relevant values as well.",
-			ChildProps:  s.getFieldDocTargetLookupCritChance(),
+			ChildProps:  srv.getFieldDocTargetLookupCritChance(),
 		},
 		{
 			Field:       ts.PfnCustom,
 			Type:        "obj (targetCustomCritChance)",
 			RequiredOr:  []ts.FieldName{ts.PfnLookup},
 			Description: "Define a custom target.",
-			ChildProps:  s.getFieldDocTargetCustomCritChance(),
+			ChildProps:  srv.getFieldDocTargetCustomCritChance(),
 		},
 		{
 			Field:       ts.PfnJinxStacks,
@@ -306,7 +306,7 @@ func (s *Server) getFieldDocTargetCritChance() []FieldDoc {
 	}
 }
 
-func (s *Server) getFieldDocTargetLookupCritChance() []FieldDoc {
+func (srv *Server) getFieldDocTargetLookupCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:       ts.PfnMonsterID,
@@ -320,12 +320,12 @@ func (s *Server) getFieldDocTargetLookupCritChance() []FieldDoc {
 			Field:       ts.PfnOverrides,
 			Type:        "obj (targetOverridesCritChance)",
 			Description: "Override the monster's calculation-relevant values.",
-			ChildProps:  s.getFieldDocTargetOverridesCritChance(),
+			ChildProps:  srv.getFieldDocTargetOverridesCritChance(),
 		},
 	}
 }
 
-func (s *Server) getFieldDocTargetOverridesCritChance() []FieldDoc {
+func (srv *Server) getFieldDocTargetOverridesCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:       ts.PfnLuck,
@@ -337,7 +337,7 @@ func (s *Server) getFieldDocTargetOverridesCritChance() []FieldDoc {
 	}
 }
 
-func (s *Server) getFieldDocTargetCustomCritChance() []FieldDoc {
+func (srv *Server) getFieldDocTargetCustomCritChance() []FieldDoc {
 	return []FieldDoc{
 		{
 			Field:       ts.PfnLuck,

@@ -66,9 +66,9 @@ type MonsterAbility struct {
 	IsUnused bool             `json:"is_unused"`
 }
 
-func convertMonsterAbility(server *Server, ability seedtypes.MonsterAbility) MonsterAbility {
+func convertMonsterAbility(srv *Server, ability seedtypes.MonsterAbility) MonsterAbility {
 	return MonsterAbility{
-		Ability:  keyToTypedAPIResource(server, E.Abilities, ability.AbilityReference),
+		Ability:  keyToTypedAPIResource(srv, E.Abilities, ability.AbilityReference),
 		IsForced: ability.IsForced,
 		IsUnused: ability.IsUnused,
 	}

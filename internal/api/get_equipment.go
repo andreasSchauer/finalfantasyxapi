@@ -9,13 +9,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (s *Server) getEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, NamedAPIResource], id int32) (EquipmentName, error) {
+func (srv *Server) getEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, NamedAPIResource], id int32) (EquipmentName, error) {
 	equipment, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return EquipmentName{}, err
 	}
 
-	rel, err := getEquipmentRelationships(s, r, equipment)
+	rel, err := getEquipmentRelationships(srv, r, equipment)
 	if err != nil {
 		return EquipmentName{}, err
 	}
@@ -39,16 +39,16 @@ func (s *Server) getEquipment(r *http.Request, i handlerInput[seedtypes.Equipmen
 	return response, nil
 }
 
-func (s *Server) retrieveEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, NamedAPIResource]) ([]int32, error) {
+func (srv *Server) retrieveEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(s, r, ids, []IDFilter{
-		i.queryIDList(s, r, ids, ts.QpnAutoAbilities, lookup.L.AutoAbilities, s.Cfg.DB.GetEquipmentIDsByAutoAbility),
-		i.queryNameID(r, ids, ts.QpnCharacter, E.Characters.resTypeSingle, E.Characters.objLookup, s.Cfg.DB.GetEquipmentIDsByCharacter),
-		i.queryEnum(r, enums.T.EquipType, ids, ts.QpnType, s.Cfg.DB.GetEquipmentIDsByEquipType),
-		i.queryBool2(r, ids, ts.QpnCelestialWeapon, s.Cfg.DB.GetEquipmentIDsCelestialWeapon),
+	return i.filterIDs(srv, r, ids, []IDFilter{
+		i.queryIDList(srv, r, ids, ts.QpnAutoAbilities, lookup.L.AutoAbilities, srv.Cfg.DB.GetEquipmentIDsByAutoAbility),
+		i.queryNameID(r, ids, ts.QpnCharacter, E.Characters.resTypeSingle, E.Characters.objLookup, srv.Cfg.DB.GetEquipmentIDsByCharacter),
+		i.queryEnum(r, enums.T.EquipType, ids, ts.QpnType, srv.Cfg.DB.GetEquipmentIDsByEquipType),
+		i.queryBool2(r, ids, ts.QpnCelestialWeapon, srv.Cfg.DB.GetEquipmentIDsCelestialWeapon),
 	})
 }

@@ -8,7 +8,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (s *Server) getFMV(r *http.Request, i handlerInput[seedtypes.FMV, FMV, NamedAPIResource], id int32) (FMV, error) {
+func (srv *Server) getFMV(r *http.Request, i handlerInput[seedtypes.FMV, FMV, NamedAPIResource], id int32) (FMV, error) {
 	fmv, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return FMV{}, err
@@ -19,20 +19,20 @@ func (s *Server) getFMV(r *http.Request, i handlerInput[seedtypes.FMV, FMV, Name
 		Name:                fmv.Name,
 		Translation:         fmv.Translation,
 		CutsceneDescription: fmv.CutsceneDescription,
-		Area:                locAreaToAreaAPIResource(s, E.Areas, fmv.LocationArea),
-		Song:                namePtrToNamedAPIResPtr(s, E.Songs, fmv.SongName, nil),
+		Area:                locAreaToAreaAPIResource(srv, E.Areas, fmv.LocationArea),
+		Song:                namePtrToNamedAPIResPtr(srv, E.Songs, fmv.SongName, nil),
 	}
 
 	return response, nil
 }
 
-func (s *Server) retrieveFMVs(r *http.Request, i handlerInput[seedtypes.FMV, FMV, NamedAPIResource]) ([]int32, error) {
+func (srv *Server) retrieveFMVs(r *http.Request, i handlerInput[seedtypes.FMV, FMV, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(s, r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, s.Cfg.DB.GetLocationFmvIDs),
+	return i.filterIDs(srv, r, ids, []IDFilter{
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, srv.Cfg.DB.GetLocationFmvIDs),
 	})
 }

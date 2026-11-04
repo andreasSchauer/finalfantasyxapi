@@ -32,11 +32,11 @@ type BackgroundMusic struct {
 	Areas                  []AreaAPIResource `json:"areas"`
 }
 
-func convertBackgroundMusic(server *Server, bm seedtypes.BackgroundMusic) BackgroundMusic {
+func convertBackgroundMusic(srv *Server, bm seedtypes.BackgroundMusic) BackgroundMusic {
 	return BackgroundMusic{
 		Condition:              bm.Condition,
 		ReplacesEncounterMusic: bm.ReplacesEncounterMusic,
-		Areas:                  locAreasToAreaAPIResources(server, E.Areas, bm.LocationAreas),
+		Areas:                  locAreasToAreaAPIResources(srv, E.Areas, bm.LocationAreas),
 	}
 }
 
@@ -49,18 +49,18 @@ type Cue struct {
 	EndTrigger             *string           `json:"end_trigger,omitempty"`
 }
 
-func convertCue(server *Server, cue seedtypes.Cue) Cue {
+func convertCue(srv *Server, cue seedtypes.Cue) Cue {
 	var triggerAreaPtr *AreaAPIResource
 
 	if cue.TriggerLocationArea != nil {
-		triggerArea := locAreaToAreaAPIResource(server, E.Areas, *cue.TriggerLocationArea)
+		triggerArea := locAreaToAreaAPIResource(srv, E.Areas, *cue.TriggerLocationArea)
 		triggerAreaPtr = &triggerArea
 	}
 
 	return Cue{
 		SceneDescription:       cue.SceneDescription,
 		TriggerArea:            triggerAreaPtr,
-		IncludedAreas:          locAreasToAreaAPIResources(server, E.Areas, cue.IncludedAreas),
+		IncludedAreas:          locAreasToAreaAPIResources(srv, E.Areas, cue.IncludedAreas),
 		ReplacesEncounterMusic: cue.ReplacesEncounterMusic,
 		ReplacesBGMusic:        cue.ReplacesBGMusic,
 		EndTrigger:             cue.EndTrigger,

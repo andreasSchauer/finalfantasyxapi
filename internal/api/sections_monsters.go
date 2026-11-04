@@ -32,7 +32,7 @@ func (m MonsterSimple) GetURL() string {
 	return m.URL
 }
 
-func createMonsterSimple(server *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createMonsterSimple(srv *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := E.Monsters
 	mon, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -40,7 +40,7 @@ func createMonsterSimple(server *Server, r *http.Request, id int32, subsection S
 
 	monSimple := MonsterSimple{
 		ID:             mon.ID,
-		URL:            CreateResourceURL(server, i.Endpoint, id),
+		URL:            CreateResourceURL(srv, i.Endpoint, id),
 		Name:           mon.Name,
 		Version:        mon.Version,
 		Specification:  mon.Specification,
@@ -52,9 +52,9 @@ func createMonsterSimple(server *Server, r *http.Request, id int32, subsection S
 		IsRepeatable:   mon.IsRepeatable,
 		CanBeCaptured:  mon.CanBeCaptured,
 		RonsoRages:     h.SliceOrNil(mon.RonsoRages),
-		Areas:          convertObjSlice(server, areaIDs, idToLocAreaString),
-		Items:          convertObjPtr(server, mon.Items, convertMonsterItemsSimple),
-		Equipment:      convertObjPtr(server, mon.Equipment, convertMonsterEquipmentSimple),
+		Areas:          convertObjSlice(srv, areaIDs, idToLocAreaString),
+		Items:          convertObjPtr(srv, mon.Items, convertMonsterItemsSimple),
+		Equipment:      convertObjPtr(srv, mon.Equipment, convertMonsterEquipmentSimple),
 	}
 
 	return monSimple, nil
@@ -88,11 +88,11 @@ func getMonsterSimpleBribeAmount(mon seedtypes.Monster, hp int32) *int32 {
 	return &bribeAmount
 }
 
-func getMonsterSectionRelations(server *Server, r *http.Request, monIDs []int32) (map[int32]map[Relation][]int32, error) {
+func getMonsterSectionRelations(srv *Server, r *http.Request, monIDs []int32) (map[int32]map[Relation][]int32, error) {
 	i := E.Monsters
 	relations := make(map[int32]map[Relation][]int32)
 
-	monsterJunctions, err := getDBJunctions(r.Context(), monIDs, i.resTypeSingle, E.Areas.resTypeSingle, server.Cfg.DB.GetMonsterAreaIdPairs, juncMonsterArea)
+	monsterJunctions, err := getDBJunctions(r.Context(), monIDs, i.resTypeSingle, E.Areas.resTypeSingle, srv.Cfg.DB.GetMonsterAreaIdPairs, juncMonsterArea)
 	if err != nil {
 		return nil, err
 	}

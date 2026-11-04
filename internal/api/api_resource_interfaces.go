@@ -34,8 +34,8 @@ func (l APIResourceList[A]) GetResults() []A {
 	return l.Results
 }
 
-func newAPIResourceList[A APIResource](server *Server, r *http.Request, resources []A) (APIResourceList[A], error) {
-	listParams, shownResources, err := createPaginatedList(server, r, resources)
+func newAPIResourceList[A APIResource](srv *Server, r *http.Request, resources []A) (APIResourceList[A], error) {
+	listParams, shownResources, err := createPaginatedList(srv, r, resources)
 	if err != nil {
 		return APIResourceList[A]{}, err
 	}

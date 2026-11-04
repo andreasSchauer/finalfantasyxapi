@@ -10,19 +10,21 @@ type Server struct {
 	Cfg *config.Config
 }
 
-func (s *Server) Init() error {
+func (srv *Server) Init() error {
 	var err error
 
-	s.Cfg, err = config.ConfigInit()
+	srv.Cfg, err = config.ConfigInit()
 	if err != nil {
 		return err
 	}
 
+	srv.InitGlobals()
+
 	return nil
 }
 
-func (s *Server) InitGlobals() {
-	enums.T.EnumLookupInit()
-	E.EndpointsInit(s)
+func (srv *Server) InitGlobals() {
+	enums.T.Init()
+	E.Init(srv)
 	Q.Init()
 }

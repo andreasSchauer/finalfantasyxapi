@@ -16,8 +16,8 @@ func (f Folder) GetURL() string {
 	return f.URL
 }
 
-func getBody(server *Server, endpoint ts.EndpointName) Folder {
-	bodyURL := getSectionURL(server, endpoint, ts.SnBody)
+func getBody(srv *Server, endpoint ts.EndpointName) Folder {
+	bodyURL := getSectionURL(srv, endpoint, ts.SnBody)
 	return Folder{
 		URL:         bodyURL,
 		Description: fmt.Sprintf("holds resources that explain how the json request body for the '/%s' endpoint is formed.", endpoint),

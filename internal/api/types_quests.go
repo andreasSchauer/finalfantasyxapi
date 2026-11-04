@@ -42,11 +42,11 @@ type QuestCompletion struct {
 	Reward    ResourceAmount[TypedAPIResource] `json:"reward"`
 }
 
-func convertQuestCompletion(server *Server, qc seedtypes.QuestCompletion) QuestCompletion {
+func convertQuestCompletion(srv *Server, qc seedtypes.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
 		Condition: qc.Condition,
-		Areas:     convertObjSlice(server, qc.Areas, convertCompletionArea),
-		Reward:    E.AllItems.toResAmtFromName(server, qc.Reward),
+		Areas:     convertObjSlice(srv, qc.Areas, convertCompletionArea),
+		Reward:    E.AllItems.toResAmtFromName(srv, qc.Reward),
 	}
 }
 
@@ -59,9 +59,9 @@ func (ca CompletionArea) GetAPIResource() APIResource {
 	return ca.Area
 }
 
-func convertCompletionArea(server *Server, cl seedtypes.CompletionArea) CompletionArea {
+func convertCompletionArea(srv *Server, cl seedtypes.CompletionArea) CompletionArea {
 	return CompletionArea{
-		Area:  locAreaToAreaAPIResource(server, E.Areas, cl.LocationArea),
+		Area:  locAreaToAreaAPIResource(srv, E.Areas, cl.LocationArea),
 		Notes: cl.Notes,
 	}
 }

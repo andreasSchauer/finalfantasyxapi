@@ -10,13 +10,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (s *Server) getEnemyAbility(r *http.Request, i handlerInput[seedtypes.EnemyAbility, EnemyAbility, NamedAPIResource], id int32) (EnemyAbility, error) {
+func (srv *Server) getEnemyAbility(r *http.Request, i handlerInput[seedtypes.EnemyAbility, EnemyAbility, NamedAPIResource], id int32) (EnemyAbility, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return EnemyAbility{}, err
 	}
 
-	monsters, err := E.Monsters.dbGetRelations(s, r.Context(), ability, s.Cfg.DB.GetEnemyAbilityMonsterIDs)
+	monsters, err := E.Monsters.dbGetRelations(srv, r.Context(), ability, srv.Cfg.DB.GetEnemyAbilityMonsterIDs)
 	if err != nil {
 		return EnemyAbility{}, err
 	}
@@ -26,41 +26,41 @@ func (s *Server) getEnemyAbility(r *http.Request, i handlerInput[seedtypes.Enemy
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		UntypedAbility:     idToTypedAPIResource(s, E.Abilities, ability.Ability.ID),
+		UntypedAbility:     idToTypedAPIResource(srv, E.Abilities, ability.Ability.ID),
 		Effect:             ability.Effect,
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
 		Monsters:           monsters,
-		BattleInteractions: convertObjSlice(s, ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: convertObjSlice(srv, ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	return response, nil
 }
 
-func (s *Server) retrieveEnemyAbilities(r *http.Request, i handlerInput[seedtypes.EnemyAbility, EnemyAbility, NamedAPIResource]) ([]int32, error) {
+func (srv *Server) retrieveEnemyAbilities(r *http.Request, i handlerInput[seedtypes.EnemyAbility, EnemyAbility, NamedAPIResource]) ([]int32, error) {
 	abilityType := database.AbilityTypeEnemyAbility
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(s, r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, s.Cfg.DB.GetEnemyAbilityIDsByMonster),
-		i.queryEnumList(s, r, enums.T.DamageType, ids, ts.QpnDamageType, getTypedAbilityIDsByDamageType(s, abilityType)),
-		i.queryEnumList(s, r, enums.T.AttackType, ids, ts.QpnAttackType, getTypedAbilityIDsByAttackType(s, abilityType)),
-		i.queryEnumList(s, r, enums.T.TargetType, ids, ts.QpnTargetType, getTypedAbilityIDsByTargetType(s, abilityType)),
-		i.queryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, getTypedAbilityIDsByDamageFormula(s, abilityType)),
-		i.queryIntList(s, r, ids, ts.QpnRank, getTypedAbilityIDsByRank(s, abilityType)),
-		i.queryNameIDListNul(s, r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(s, abilityType)),
-		i.queryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(s, abilityType)),
-		i.queryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(s, abilityType)),
-		i.queryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(s, abilityType)),
-		i.queryBool2(r, ids, ts.QpnCanCrit, getTypedAbilityIDsCanCrit(s, abilityType)),
-		i.queryBool2(r, ids, ts.QpnBDL, getTypedAbilityIDsBreakDmgLimit(s, abilityType)),
-		i.queryBool2(r, ids, ts.QpnDarkable, getTypedAbilityIDsDarkable(s, abilityType)),
-		i.queryBool2(r, ids, ts.QpnSilenceable, getTypedAbilityIDsSilenceable(s, abilityType)),
-		i.queryBool2(r, ids, ts.QpnReflectable, getTypedAbilityIDsReflectable(s, abilityType)),
-		i.queryBool2(r, ids, ts.QpnDelay, getTypedAbilityIDsDealsDelay(s, abilityType)),
+	return i.filterIDs(srv, r, ids, []IDFilter{
+		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, srv.Cfg.DB.GetEnemyAbilityIDsByMonster),
+		i.queryEnumList(srv, r, enums.T.DamageType, ids, ts.QpnDamageType, getTypedAbilityIDsByDamageType(srv, abilityType)),
+		i.queryEnumList(srv, r, enums.T.AttackType, ids, ts.QpnAttackType, getTypedAbilityIDsByAttackType(srv, abilityType)),
+		i.queryEnumList(srv, r, enums.T.TargetType, ids, ts.QpnTargetType, getTypedAbilityIDsByTargetType(srv, abilityType)),
+		i.queryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, getTypedAbilityIDsByDamageFormula(srv, abilityType)),
+		i.queryIntList(srv, r, ids, ts.QpnRank, getTypedAbilityIDsByRank(srv, abilityType)),
+		i.queryNameIDListNul(srv, r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(srv, abilityType)),
+		i.queryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(srv, abilityType)),
+		i.queryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(srv, abilityType)),
+		i.queryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(srv, abilityType)),
+		i.queryBool2(r, ids, ts.QpnCanCrit, getTypedAbilityIDsCanCrit(srv, abilityType)),
+		i.queryBool2(r, ids, ts.QpnBDL, getTypedAbilityIDsBreakDmgLimit(srv, abilityType)),
+		i.queryBool2(r, ids, ts.QpnDarkable, getTypedAbilityIDsDarkable(srv, abilityType)),
+		i.queryBool2(r, ids, ts.QpnSilenceable, getTypedAbilityIDsSilenceable(srv, abilityType)),
+		i.queryBool2(r, ids, ts.QpnReflectable, getTypedAbilityIDsReflectable(srv, abilityType)),
+		i.queryBool2(r, ids, ts.QpnDelay, getTypedAbilityIDsDealsDelay(srv, abilityType)),
 	})
 }

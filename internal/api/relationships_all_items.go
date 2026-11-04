@@ -7,13 +7,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getMasterItemObtainable(server *Server, r *http.Request, masterItem seedtypes.MasterItem) (ObtainableFrom, error) {
-	availabilityParams, err := E.AllItems.queryAvlRelGetParams(server, r, masterItem.ID)
+func getMasterItemObtainable(srv *Server, r *http.Request, masterItem seedtypes.MasterItem) (ObtainableFrom, error) {
+	availabilityParams, err := E.AllItems.queryAvlRelGetParams(srv, r, masterItem.ID)
 	if err != nil {
 		return ObtainableFrom{}, err
 	}
 
-	bools, err := server.Cfg.DB.GetMasterItemObtainableBools(r.Context(), database.GetMasterItemObtainableBoolsParams{
+	bools, err := srv.Cfg.DB.GetMasterItemObtainableBools(r.Context(), database.GetMasterItemObtainableBoolsParams{
 		MasterItemID: availabilityParams.ParentID,
 		Availability: availabilityParams.Availability,
 		Repeatable:   availabilityParams.Repeatable,

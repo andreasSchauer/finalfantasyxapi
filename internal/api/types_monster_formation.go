@@ -32,9 +32,9 @@ func (ec EncounterArea) GetAPIResource() APIResource {
 	return ec.Area
 }
 
-func convertEncounterArea(server *Server, ea seedtypes.EncounterArea) EncounterArea {
+func convertEncounterArea(srv *Server, ea seedtypes.EncounterArea) EncounterArea {
 	return EncounterArea{
-		Area:          locAreaToAreaAPIResource(server, E.Areas, ea.LocationArea),
+		Area:          locAreaToAreaAPIResource(srv, E.Areas, ea.LocationArea),
 		Specification: ea.Specification,
 		Availability:  ea.Availability,
 	}
@@ -51,12 +51,12 @@ func (tc FormationTriggerCommand) GetAPIResource() APIResource {
 	return tc.Ability
 }
 
-func convertFormationTriggerCommand(server *Server, tc seedtypes.FormationTriggerCommand) FormationTriggerCommand {
+func convertFormationTriggerCommand(srv *Server, tc seedtypes.FormationTriggerCommand) FormationTriggerCommand {
 	return FormationTriggerCommand{
-		Ability:   nameToNamedAPIResource(server, E.TriggerCommands, tc.Name, tc.Version),
+		Ability:   nameToNamedAPIResource(srv, E.TriggerCommands, tc.Name, tc.Version),
 		Condition: tc.Condition,
 		UseAmount: tc.UseAmount,
-		Users:     namesToNamedAPIResources(server, E.CharacterClasses, tc.Users),
+		Users:     namesToNamedAPIResources(srv, E.CharacterClasses, tc.Users),
 	}
 }
 
@@ -69,9 +69,9 @@ func (bs FormationBossSong) GetAPIResource() APIResource {
 	return bs.Song
 }
 
-func convertFormationBossSong(server *Server, bossMusic seedtypes.FormationBossSong) FormationBossSong {
+func convertFormationBossSong(srv *Server, bossMusic seedtypes.FormationBossSong) FormationBossSong {
 	return FormationBossSong{
-		Song:             nameToNamedAPIResource(server, E.Songs, bossMusic.Song, nil),
+		Song:             nameToNamedAPIResource(srv, E.Songs, bossMusic.Song, nil),
 		CelebrateVictory: bossMusic.CelebrateVictory,
 	}
 }

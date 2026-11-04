@@ -33,28 +33,28 @@ func (a AutoAbilitySimple) GetURL() string {
 	return a.URL
 }
 
-func createAutoAbilitySimple(server *Server, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createAutoAbilitySimple(srv *Server, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.AutoAbilities
 	autoAbility, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	autoAbilitySimple := AutoAbilitySimple{
 		ID:                  autoAbility.ID,
-		URL:                 CreateResourceURL(server, i.Endpoint, id),
+		URL:                 CreateResourceURL(srv, i.Endpoint, id),
 		Name:                autoAbility.Name,
-		RequiredItem:        convertObjPtr(server, autoAbility.RequiredItem, convertItemAmountSimple),
+		RequiredItem:        convertObjPtr(srv, autoAbility.RequiredItem, convertItemAmountSimple),
 		ActivationCondition: autoAbility.ActivationCondition,
 		Counter:             autoAbility.Counter,
 		GradualRecovery:     autoAbility.GradualRecovery,
 		AutoItemUse:         h.SliceOrNil(autoAbility.AutoItemUse),
 		OnHitElement:        autoAbility.OnHitElement,
-		AddedElemResist:     convertObjPtr(server, autoAbility.AddedElemResist, convertElemResistSimple),
-		OnHitStatus:         convertObjPtr(server, autoAbility.OnHitStatus, convertInflictedStatusSimple),
+		AddedElemResist:     convertObjPtr(srv, autoAbility.AddedElemResist, convertElemResistSimple),
+		OnHitStatus:         convertObjPtr(srv, autoAbility.OnHitStatus, convertInflictedStatusSimple),
 		AddedStatusses:      h.SliceOrNil(autoAbility.AddedStatusses),
-		AddedStatusResists:  convertObjSliceOrNil(server, autoAbility.AddedStatusResists, convertStatusResistSimple),
+		AddedStatusResists:  convertObjSliceOrNil(srv, autoAbility.AddedStatusResists, convertStatusResistSimple),
 		AddedProperty:       autoAbility.AddedProperty,
 		ConversionTo:        autoAbility.ConversionTo,
-		StatChanges:         convertObjSliceOrNil(server, autoAbility.StatChanges, convertStatChangeSimple),
-		ModifierChanges:     convertObjSliceOrNil(server, autoAbility.ModifierChanges, convertModChangeSimple),
+		StatChanges:         convertObjSliceOrNil(srv, autoAbility.StatChanges, convertStatChangeSimple),
+		ModifierChanges:     convertObjSliceOrNil(srv, autoAbility.ModifierChanges, convertModChangeSimple),
 	}
 
 	return autoAbilitySimple, nil

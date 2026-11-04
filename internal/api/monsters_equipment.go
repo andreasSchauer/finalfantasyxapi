@@ -14,15 +14,15 @@ type MonsterEquipment struct {
 	ArmorAbilities    []EquipmentDrop       `json:"armor_abilities"`
 }
 
-func convertMonsterEquipment(server *Server, equipment seedtypes.MonsterEquipment) MonsterEquipment {
+func convertMonsterEquipment(srv *Server, equipment seedtypes.MonsterEquipment) MonsterEquipment {
 	monEquipment := MonsterEquipment{
 		DropChance:        equipment.DropChance,
 		Power:             equipment.Power,
 		CriticalPlus:      equipment.CriticalPlus,
-		AbilitySlots:      convertMonsterEquipmentSlots(server, equipment.AbilitySlots),
-		AttachedAbilities: convertMonsterEquipmentSlots(server, equipment.AttachedAbilities),
-		WeaponAbilities:   convertObjSlice(server, equipment.WeaponAbilities, convertEquipmentDrop),
-		ArmorAbilities:    convertObjSlice(server, equipment.ArmorAbilities, convertEquipmentDrop),
+		AbilitySlots:      convertMonsterEquipmentSlots(srv, equipment.AbilitySlots),
+		AttachedAbilities: convertMonsterEquipmentSlots(srv, equipment.AttachedAbilities),
+		WeaponAbilities:   convertObjSlice(srv, equipment.WeaponAbilities, convertEquipmentDrop),
+		ArmorAbilities:    convertObjSlice(srv, equipment.ArmorAbilities, convertEquipmentDrop),
 	}
 
 	return monEquipment
@@ -38,11 +38,11 @@ type MonsterEquipmentSlots struct {
 	Chances   []EquipmentSlotsChance `json:"chances"`
 }
 
-func convertMonsterEquipmentSlots(server *Server, seedSlots seedtypes.MonsterEquipmentSlots) MonsterEquipmentSlots {
+func convertMonsterEquipmentSlots(srv *Server, seedSlots seedtypes.MonsterEquipmentSlots) MonsterEquipmentSlots {
 	equipmentSlots := MonsterEquipmentSlots{
 		MinAmount: seedSlots.MinAmount,
 		MaxAmount: seedSlots.MaxAmount,
-		Chances:   convertObjSlice(server, seedSlots.Chances, convertMonsterEquipmentSlotsChance),
+		Chances:   convertObjSlice(srv, seedSlots.Chances, convertMonsterEquipmentSlotsChance),
 	}
 
 	return equipmentSlots
@@ -71,10 +71,10 @@ func (ed EquipmentDrop) GetAPIResource() APIResource {
 	return ed.AutoAbility.GetAPIResource()
 }
 
-func convertEquipmentDrop(server *Server, drop seedtypes.EquipmentDrop) EquipmentDrop {
+func convertEquipmentDrop(srv *Server, drop seedtypes.EquipmentDrop) EquipmentDrop {
 	return EquipmentDrop{
-		AutoAbility: nameToNamedAPIResource(server, E.AutoAbilities, drop.Ability, nil),
-		ForcedChars: namesToNamedAPIResources(server, E.Characters, drop.Characters),
+		AutoAbility: nameToNamedAPIResource(srv, E.AutoAbilities, drop.Ability, nil),
+		ForcedChars: namesToNamedAPIResources(srv, E.Characters, drop.Characters),
 		IsForced:    drop.IsForced,
 		Probability: drop.Probability,
 	}

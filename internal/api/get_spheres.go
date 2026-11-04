@@ -9,13 +9,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (s *Server) getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, NamedAPIResource], id int32) (Sphere, error) {
+func (srv *Server) getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, NamedAPIResource], id int32) (Sphere, error) {
 	sphere, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Sphere{}, err
 	}
 
-	rel, err := getSphereRelationships(s, r, sphere)
+	rel, err := getSphereRelationships(srv, r, sphere)
 	if err != nil {
 		return Sphere{}, err
 	}
@@ -32,7 +32,7 @@ func (s *Server) getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, Sph
 		TargetNodePosition: sphere.TargetNodePosition,
 		TargetNodeState:    sphere.TargetNodeState,
 		TargetableNodes:    sphere.TargetableNodes,
-		CreatedNode:        convertObjPtr(s, sphere.CreatedNode, convertCreatedNode),
+		CreatedNode:        convertObjPtr(srv, sphere.CreatedNode, convertCreatedNode),
 		Monsters:           rel.Monsters,
 		Treasures:          rel.Treasures,
 		Shops:              rel.Shops,
@@ -43,17 +43,17 @@ func (s *Server) getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, Sph
 	return response, nil
 }
 
-func (s *Server) retrieveSpheres(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, NamedAPIResource]) ([]int32, error) {
+func (srv *Server) retrieveSpheres(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(s, r, ids, []IDFilter{
-		i.queryEnumList(s, r, enums.T.SphereColor, ids, ts.QpnColor, s.Cfg.DB.GetSphereIDsByColor),
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, s.Cfg.DB.GetSphereIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, s.Cfg.DB.GetSphereIDsBySublocation),
-		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, s.Cfg.DB.GetSphereIDsByArea),
-		i.queryValueList(s, r, ids, ts.QpnMethods, s.Cfg.DB.GetSphereIDsByMethods),
+	return i.filterIDs(srv, r, ids, []IDFilter{
+		i.queryEnumList(srv, r, enums.T.SphereColor, ids, ts.QpnColor, srv.Cfg.DB.GetSphereIDsByColor),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, srv.Cfg.DB.GetSphereIDsByLocation),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, srv.Cfg.DB.GetSphereIDsBySublocation),
+		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, srv.Cfg.DB.GetSphereIDsByArea),
+		i.queryValueList(srv, r, ids, ts.QpnMethods, srv.Cfg.DB.GetSphereIDsByMethods),
 	})
 }

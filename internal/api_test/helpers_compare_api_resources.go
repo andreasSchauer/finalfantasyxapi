@@ -15,7 +15,7 @@ func (test test) compPathAPIResource[T api.HasAPIResource](fieldName, expPath st
 	}
 
 	gotURL := gotRes.GetAPIResource().GetURL()
-	gotPath := api.URLToPath(test.server, gotURL)
+	gotPath := api.URLToPath(test.srv, gotURL)
 
 	test.compare(fieldName, expPath, gotPath)
 }

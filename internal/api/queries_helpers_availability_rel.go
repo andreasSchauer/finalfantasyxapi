@@ -18,10 +18,10 @@ type RelAvlParams struct {
 	Repeatable   sql.NullBool
 }
 
-func (i handlerInput[T, R, A]) queryAvlRelGetParams(server *Server, r *http.Request, parentID int32) (RelAvlParams, error) {
+func (i handlerInput[T, R, A]) queryAvlRelGetParams(srv *Server, r *http.Request, parentID int32) (RelAvlParams, error) {
 	queryParam := i.queryLookup[ts.QpnRelAvailability]
 
-	availabilities, err := queryParam.parseEnumList(server, r, enums.T.AvailabilityType)
+	availabilities, err := queryParam.parseEnumList(srv, r, enums.T.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return RelAvlParams{}, err
 	}
@@ -45,12 +45,12 @@ func (i handlerInput[T, R, A]) queryAvlRelGetParams(server *Server, r *http.Requ
 	return availabilityParams, nil
 }
 
-func (i handlerInput[T, R, A]) queryAvlRelRun[K seedtypes.Lookupable](server *Server, ctx context.Context, item K, params RelAvlParams, dbQuery RelAvailabilityDBQuery) ([]A, error) {
+func (i handlerInput[T, R, A]) queryAvlRelRun[K seedtypes.Lookupable](srv *Server, ctx context.Context, item K, params RelAvlParams, dbQuery RelAvailabilityDBQuery) ([]A, error) {
 	dbIDs, err := dbQuery(ctx, params)
 	if err != nil {
 		return nil, newHTTPErrorDB(i.resTypePlural, item, err)
 	}
 
-	resources := i.toResources(server, dbIDs)
+	resources := i.toResources(srv, dbIDs)
 	return resources, nil
 }
