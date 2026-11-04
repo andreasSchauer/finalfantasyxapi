@@ -15,7 +15,7 @@ type testAppliedState struct {
 func compareMonsterAppliedStates(test test, _ string, exp testAppliedState, got api.AppliedState) {
 	test.compare("applied state condition", exp.condition, got.Condition)
 	test.compare("applied state isTemporary", exp.isTemporary, got.IsTemporary)
-	test.compIDAPIResourcePtrs("applied status", test.cfg.E.StatusConditions.Endpoint, exp.appliedStatus, got.AppliedStatus)
+	test.compIDAPIResourcePtrs("applied status", api.E.StatusConditions.Endpoint, exp.appliedStatus, got.AppliedStatus)
 }
 
 type testDefaultState struct {
@@ -72,9 +72,9 @@ type testAltStateGain struct {
 func compareAltStateGains(test test, fieldName string, exp testAltStateGain, got api.AltStateGain) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
-	test.checkResIDsInSlice(desc+"properties", test.cfg.E.Properties.Endpoint, exp.Properties, got.Properties)
-	test.checkResIDsInSlice(desc+"auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.AutoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice(desc+"status immunities", test.cfg.E.StatusConditions.Endpoint, exp.StatusImmunities, got.StatusImmunities)
+	test.checkResIDsInSlice(desc+"properties", api.E.Properties.Endpoint, exp.Properties, got.Properties)
+	test.checkResIDsInSlice(desc+"auto-abilities", api.E.AutoAbilities.Endpoint, exp.AutoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice(desc+"status immunities", api.E.StatusConditions.Endpoint, exp.StatusImmunities, got.StatusImmunities)
 	test.checkResAmtTypes(desc+"status resists", exp.StatusResists, got.StatusResists)
 	test.compStructPtrs(desc+"added status", exp.Status, got.Status)
 }
@@ -89,8 +89,8 @@ type testAltStateLoss struct {
 func compareAltStateLosses(test test, fieldName string, exp testAltStateLoss, got api.AltStateLoss) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
-	test.checkResIDsInSlice(desc+"properties", test.cfg.E.Properties.Endpoint, exp.Properties, got.Properties)
-	test.checkResIDsInSlice(desc+"auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.AutoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice(desc+"status immunities", test.cfg.E.StatusConditions.Endpoint, exp.StatusImmunities, got.StatusImmunities)
-	test.compIDAPIResourcePtrs(desc+"removed status", test.cfg.E.StatusConditions.Endpoint, exp.Status, got.Status)
+	test.checkResIDsInSlice(desc+"properties", api.E.Properties.Endpoint, exp.Properties, got.Properties)
+	test.checkResIDsInSlice(desc+"auto-abilities", api.E.AutoAbilities.Endpoint, exp.AutoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice(desc+"status immunities", api.E.StatusConditions.Endpoint, exp.StatusImmunities, got.StatusImmunities)
+	test.compIDAPIResourcePtrs(desc+"removed status", api.E.StatusConditions.Endpoint, exp.Status, got.Status)
 }

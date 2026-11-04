@@ -7,7 +7,7 @@ import (
 )
 
 func filterAvlMonsters(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.Monsters
+	i := E.Monsters
 
 	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -17,7 +17,7 @@ func filterAvlMonsters(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 		return inputIDs, nil
 	}
 
-	locContext, err := getLocContextParams(cfg, r, i)
+	locContext, err := getLocContextParams(r, i)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func filterAvlMonsters(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 }
 
 func filterAvlMonsterFormations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.MonsterFormations
+	i := E.MonsterFormations
 
 	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -49,7 +49,7 @@ func filterAvlMonsterFormations(cfg *Config, r *http.Request, inputIDs []int32) 
 		return inputIDs, nil
 	}
 
-	locContext, err := getLocContextParams(cfg, r, i)
+	locContext, err := getLocContextParams(r, i)
 	if err != nil {
 		return nil, err
 	}

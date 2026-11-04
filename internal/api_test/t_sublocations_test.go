@@ -444,7 +444,7 @@ func TestRetrieveSublocations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.Sublocations.Endpoint, "RetrieveSublocations", testCfg.HandleSublocations, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Sublocations.Endpoint, "RetrieveSublocations", testCfg.HandleSublocations, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionSublocations(t *testing.T) {
@@ -536,5 +536,5 @@ func TestSubsectionSublocations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.Sublocations.Endpoint, "SubsectionSublocations", nil, compareSimpleResourceLists[api.NamedAPIResource, api.SublocationSimple])
+	testIDList(t, tests, api.E.Sublocations.Endpoint, "SubsectionSublocations", nil, compareSimpleResourceLists[api.NamedAPIResource, api.SublocationSimple])
 }

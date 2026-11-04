@@ -23,50 +23,50 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seedtypes.Area) (Lo
 	var rel LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := cfg.E.Areas.queryAvlRelGetParams(cfg, r, area.ID)
+	availabilityParams, err := E.Areas.queryAvlRelGetParams(cfg, r, area.ID)
 	if err != nil {
 		return LocRel{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Characters, err = cfg.E.Characters.dbGetRelations(cfg, ctx, area, ToIntManyNull(cfg.db.GetAreaCharacterIDs))
+		rel.Characters, err = E.Characters.dbGetRelations(cfg, ctx, area, ToIntManyNull(cfg.db.GetAreaCharacterIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Aeons, err = cfg.E.Aeons.dbGetRelations(cfg, ctx, area, ToIntManyNull(cfg.db.GetAreaAeonIDs))
+		rel.Aeons, err = E.Aeons.dbGetRelations(cfg, ctx, area, ToIntManyNull(cfg.db.GetAreaAeonIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = cfg.E.Shops.queryAvlRelRun(cfg, ctx, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeShop))
+		rel.Shops, err = E.Shops.queryAvlRelRun(cfg, ctx, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeShop))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = cfg.E.Treasures.queryAvlRelRun(cfg, ctx, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeTreasure))
+		rel.Treasures, err = E.Treasures.queryAvlRelRun(cfg, ctx, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Monsters, err = cfg.E.Monsters.queryAvlRelRun(cfg, ctx, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeMonster))
+		rel.Monsters, err = E.Monsters.queryAvlRelRun(cfg, ctx, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeMonster))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Formations, err = cfg.E.MonsterFormations.queryAvlRelRun(cfg, ctx, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
+		rel.Formations, err = E.MonsterFormations.queryAvlRelRun(cfg, ctx, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Quests, err = cfg.E.Quests.queryAvlRelRun(cfg, ctx, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeQuest))
+		rel.Quests, err = E.Quests.queryAvlRelRun(cfg, ctx, area, availabilityParams, getAreaRelSourceIDs(cfg, ViewSourceTypeQuest))
 		return err
 	})
 
@@ -83,7 +83,7 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seedtypes.Area) (Lo
 
 	g.Go(func() error {
 		var err error
-		rel.FMVs, err = cfg.E.FMVs.dbGetRelations(cfg, ctx, area, cfg.db.GetAreaFmvIDs)
+		rel.FMVs, err = E.FMVs.dbGetRelations(cfg, ctx, area, cfg.db.GetAreaFmvIDs)
 		return err
 	})
 
@@ -96,7 +96,7 @@ func getAreaRelationships(cfg *Config, r *http.Request, area seedtypes.Area) (Lo
 }
 
 func getAreaConnectedAreas(cfg *Config, area seedtypes.Area) ([]AreaConnection, error) {
-	i := cfg.E.Areas
+	i := E.Areas
 	connectedAreas := []AreaConnection{}
 
 	for _, connArea := range area.ConnectedAreas {

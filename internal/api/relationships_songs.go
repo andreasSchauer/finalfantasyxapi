@@ -13,13 +13,13 @@ func getSongRelationships(cfg *Config, r *http.Request, song seedtypes.Song) (So
 
 	g.Go(func() error {
 		var err error
-		rel.BossFights, err = cfg.E.MonsterFormations.dbGetRelations(cfg, ctx, song, ToIntManyNull(cfg.db.GetSongMonsterFormationIDs))
+		rel.BossFights, err = E.MonsterFormations.dbGetRelations(cfg, ctx, song, ToIntManyNull(cfg.db.GetSongMonsterFormationIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.FMVs, err = cfg.E.FMVs.dbGetRelations(cfg, ctx, song, ToIntManyNull(cfg.db.GetSongFmvIDs))
+		rel.FMVs, err = E.FMVs.dbGetRelations(cfg, ctx, song, ToIntManyNull(cfg.db.GetSongFmvIDs))
 		return err
 	})
 

@@ -30,10 +30,10 @@ func compareMonsterFormations(test test, exp expMonsterFormation, got api.Monste
 	test.compare("ap", exp.ap, got.AP)
 	test.compare("ap overkill", exp.apOverkill, got.ApOverkill)
 	test.compare("gil", exp.gil, got.Gil)
-	test.compIDAPIResourcePtrs("boss song", test.cfg.E.Songs.Endpoint, exp.bossMusic, got.BossMusic)
+	test.compIDAPIResourcePtrs("boss song", api.E.Songs.Endpoint, exp.bossMusic, got.BossMusic)
 	test.checkResAmts("monsters", exp.monsters, got.Monsters)
 	test.compTestStructSlices("trigger commands", exp.triggerCommands, got.TriggerCommands, compareFormationTCs)
-	test.checkResIDsInSlice("areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.checkResIDsInSlice("areas", api.E.Areas.Endpoint, exp.areas, got.Areas)
 }
 
 type testFormationTC struct {
@@ -43,8 +43,8 @@ type testFormationTC struct {
 
 func compareFormationTCs(test test, fieldName string, exp testFormationTC, got api.FormationTriggerCommand) {
 	test.t.Helper()
-	tcEndpoint := test.cfg.E.TriggerCommands.Endpoint
-	charClassesEndpoint := test.cfg.E.CharacterClasses.Endpoint
+	tcEndpoint := api.E.TriggerCommands.Endpoint
+	charClassesEndpoint := api.E.CharacterClasses.Endpoint
 
 	test.compIDAPIResource(fieldName+" - tc ability", tcEndpoint, exp.Ability, got.Ability)
 	test.checkResIDsInSlice(fieldName+" - tc users", charClassesEndpoint, exp.Users, got.Users)

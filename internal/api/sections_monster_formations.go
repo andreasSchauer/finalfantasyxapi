@@ -21,7 +21,7 @@ func (m MonsterFormationSimple) GetURL() string {
 }
 
 func createMonsterFormationSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.MonsterFormations
+	i := E.MonsterFormations
 	formation, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	formationSub := MonsterFormationSimple{

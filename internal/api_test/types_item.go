@@ -27,16 +27,16 @@ func (e expItem) GetTestGeneral() testGeneral {
 func compareItems(test test, exp expItem, got api.Item) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
-	test.compIDAPIResource("untyped item", test.cfg.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
+	test.compIDAPIResource("untyped item", api.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
 	test.compare("category", string(exp.category), got.Category)
 	test.checkTestStructsInSlice("monsters", exp.monsters, got.Monsters, compareMonItemAmts)
 	test.checkResAmtsID("treasures", exp.treasures, got.Treasures)
-	test.checkResIDsInSlice("shops", test.cfg.E.Shops.Endpoint, exp.shops, got.Shops)
+	test.checkResIDsInSlice("shops", api.E.Shops.Endpoint, exp.shops, got.Shops)
 	test.checkResAmtsID("quests", exp.quests, got.Quests)
 	test.checkResAmtsID("blitzball prizes", exp.blitzballPrizes, got.BlitzballPrizes)
 	test.checkResAmtsID("aeon learn abilities", exp.aeonLearnAbilities, got.AeonLearnAbilities)
 	test.checkResAmts("auto abilities", exp.autoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice("mixes", test.cfg.E.Mixes.Endpoint, exp.mixes, got.Mixes)
+	test.checkResIDsInSlice("mixes", api.E.Mixes.Endpoint, exp.mixes, got.Mixes)
 }
 
 type testMonItemAmts struct {
@@ -58,7 +58,7 @@ func (t testMonItemAmts) GetIndex() int {
 
 func compareMonItemAmts(test test, fieldName string, exp testMonItemAmts, got api.MonItemAmts) {
 	test.t.Helper()
-	test.compIDAPIResource(fieldName+" - monster", test.cfg.E.Monsters.Endpoint, exp.monster, got.Monster)
+	test.compIDAPIResource(fieldName+" - monster", api.E.Monsters.Endpoint, exp.monster, got.Monster)
 	test.compare(fieldName+" - steal common", exp.stealCommon, got.StealCommon)
 	test.compare(fieldName+" - steal rare", exp.stealRare, got.StealRare)
 	test.compare(fieldName+" - drop common", exp.dropCommon, got.DropCommon)

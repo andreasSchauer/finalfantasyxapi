@@ -13,13 +13,13 @@ func getPropertyRelationships(cfg *Config, r *http.Request, property seedtypes.P
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = cfg.E.AutoAbilities.dbGetRelations(cfg, ctx, property, ToIntManyNull(cfg.db.GetPropertyAutoAbilityIDs))
+		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(cfg, ctx, property, ToIntManyNull(cfg.db.GetPropertyAutoAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Monsters, err = cfg.E.Monsters.dbGetRelations(cfg, ctx, property, cfg.db.GetPropertyMonsterIDs)
+		rel.Monsters, err = E.Monsters.dbGetRelations(cfg, ctx, property, cfg.db.GetPropertyMonsterIDs)
 		return err
 	})
 

@@ -20,8 +20,8 @@ func compareOverdriveCommands(test test, exp expOverdriveCommand, got api.Overdr
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("rank", exp.rank, got.Rank)
-	test.compIDAPIResource("user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
-	test.compIDAPIResourcePtrs("topmenu", test.cfg.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	test.compIDAPIResource("open submenu", test.cfg.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
-	test.checkResIDsInSlice("overdrives", test.cfg.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
+	test.compIDAPIResource("user", api.E.CharacterClasses.Endpoint, exp.user, got.User)
+	test.compIDAPIResourcePtrs("topmenu", api.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
+	test.compIDAPIResource("open submenu", api.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
+	test.checkResIDsInSlice("overdrives", api.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
 }

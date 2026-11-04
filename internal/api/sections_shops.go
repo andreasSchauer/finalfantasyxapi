@@ -78,7 +78,7 @@ func foundEquipmentAbilitiesStringPtr(fe seedtypes.TreasureEquipment) *string {
 }
 
 func createShopSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.Shops
+	i := E.Shops
 	shop, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	shopSimple := ShopSimple{

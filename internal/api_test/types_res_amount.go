@@ -9,7 +9,7 @@ type testResAmount[A api.APIResource] struct {
 
 func compareResAmounts[A api.APIResource](test test, fieldName string, exp testResAmount[A], got api.ResourceAmount[A]) {
 	test.t.Helper()
-	test.compIDAPIResource(fieldName+" - resource", test.cfg.E.AllItems.Endpoint, exp.item, got)
+	test.compIDAPIResource(fieldName+" - resource", api.E.AllItems.Endpoint, exp.item, got)
 	test.compare(fieldName+" - amount", exp.amount, got.Amount)
 }
 

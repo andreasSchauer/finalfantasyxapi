@@ -21,7 +21,7 @@ type PossibleAbilityList struct {
 
 func convertPossibleAbilityList(cfg *Config, pa seedtypes.PossibleAbilityList) PossibleAbilityList {
 	return PossibleAbilityList{
-		User:      nameToNamedAPIResource(cfg, cfg.E.CharacterClasses, pa.User, nil),
-		Abilities: keysToTypedAPIResources(cfg, cfg.E.Abilities, pa.Abilities),
+		User:      nameToNamedAPIResource(cfg, E.CharacterClasses, pa.User, nil),
+		Abilities: keysToTypedAPIResources(cfg, E.Abilities, pa.Abilities),
 	}
 }

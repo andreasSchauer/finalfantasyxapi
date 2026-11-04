@@ -8,7 +8,7 @@ import (
 )
 
 func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.AutoAbilities
+	i := E.AutoAbilities
 
 	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -23,12 +23,12 @@ func filterAvlAutoAbilities(cfg *Config, r *http.Request, inputIDs []int32) ([]i
 		return nil, err
 	}
 
-	locContext, err := getLocContextParams(cfg, r, i)
+	locContext, err := getLocContextParams(r, i)
 	if err != nil {
 		return nil, err
 	}
 
-	charID, err := nullID(r, cfg.E.Characters, ts.QpnCharacter, i.queryLookup)
+	charID, err := nullID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

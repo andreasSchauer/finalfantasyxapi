@@ -17,14 +17,14 @@ func (cfg *Config) getTreasure(r *http.Request, i handlerInput[seedtypes.Treasur
 
 	response := Treasure{
 		ID:              treasure.ID,
-		Area:            idToAreaAPIResource(cfg, cfg.E.Areas, treasure.AreaID),
+		Area:            idToAreaAPIResource(cfg, E.Areas, treasure.AreaID),
 		Availability:    treasure.Availability,
 		IsAnimaTreasure: treasure.IsAnimaTreasure,
 		Notes:           treasure.Notes,
 		TreasureType:    treasure.TreasureType,
 		LootType:        treasure.LootType,
 		GilAmount:       treasure.GilAmount,
-		Items:           cfg.E.AllItems.toResAmtsFromNames(cfg, treasure.Items),
+		Items:           E.AllItems.toResAmtsFromNames(cfg, treasure.Items),
 		Equipment:       convertObjPtr(cfg, treasure.Equipment, convertFoundEquipment),
 	}
 

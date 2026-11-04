@@ -55,7 +55,7 @@ func applyAlteredState(cfg *Config, mon Monster, altStateID int) Monster {
 	}
 
 	defaultState := AlteredState{
-		URL:         CreateResourceURL(cfg, cfg.E.Monsters.Endpoint, mon.ID),
+		URL:         CreateResourceURL(cfg, E.Monsters.Endpoint, mon.ID),
 		Condition:   "default",
 		IsTemporary: false,
 	}

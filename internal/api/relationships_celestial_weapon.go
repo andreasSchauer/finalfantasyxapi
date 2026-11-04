@@ -14,30 +14,30 @@ func getCelestialWeaponRelationships(cfg *Config, r *http.Request, cw seedtypes.
 	equipment, _ := lookup.GetResource(cw, lookup.L.EquipmentNames)
 
 	rel := CelestialWeapon{
-		Equipment: nameToNamedAPIResource(cfg, cfg.E.Equipment, equipment.Name, nil),
-		Crest:     nameToNamedAPIResource(cfg, cfg.E.KeyItems, crest.Name, nil),
-		Sigil:     nameToNamedAPIResource(cfg, cfg.E.KeyItems, sigil.Name, nil),
+		Equipment: nameToNamedAPIResource(cfg, E.Equipment, equipment.Name, nil),
+		Crest:     nameToNamedAPIResource(cfg, E.KeyItems, crest.Name, nil),
+		Sigil:     nameToNamedAPIResource(cfg, E.KeyItems, sigil.Name, nil),
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
-		tables, err := cfg.E.EquipmentTables.dbGetRelations(cfg, ctx, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
+		tables, err := E.EquipmentTables.dbGetRelations(cfg, ctx, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
 		if err != nil {
 			return err
 		}
 		table, _ := lookup.GetResourceByID(tables[0].ID, lookup.L.EquipmentTablesID)
-		rel.AutoAbilities = namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, table.RequiredAutoAbilities)
+		rel.AutoAbilities = namesToNamedAPIResources(cfg, E.AutoAbilities, table.RequiredAutoAbilities)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.WpnTreasure, err = cfg.E.Treasures.dbGetRelation(cfg, ctx, cw, ToIntOneNull(cfg.db.GetCelestialWeaponTreasureID))
+		rel.WpnTreasure, err = E.Treasures.dbGetRelation(cfg, ctx, cw, ToIntOneNull(cfg.db.GetCelestialWeaponTreasureID))
 		return err
 	})
 
 	g.Go(func() error {
-		crestTreasures, err := cfg.E.Treasures.dbGetRelations(cfg, ctx, crest, cfg.db.GetKeyItemTreasureIDs)
+		crestTreasures, err := E.Treasures.dbGetRelations(cfg, ctx, crest, cfg.db.GetKeyItemTreasureIDs)
 		if err != nil {
 			return err
 		}
@@ -46,7 +46,7 @@ func getCelestialWeaponRelationships(cfg *Config, r *http.Request, cw seedtypes.
 	})
 
 	g.Go(func() error {
-		sigilQuests, err := cfg.E.Quests.dbGetRelations(cfg, ctx, sigil, cfg.db.GetKeyItemQuestIDs)
+		sigilQuests, err := E.Quests.dbGetRelations(cfg, ctx, sigil, cfg.db.GetKeyItemQuestIDs)
 		if err != nil {
 			return err
 		}

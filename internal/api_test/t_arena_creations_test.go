@@ -117,5 +117,5 @@ func TestRetrieveArenaCreations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.ArenaCreations.Endpoint, "RetrieveArenaCreations", testCfg.HandleArenaCreations, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.ArenaCreations.Endpoint, "RetrieveArenaCreations", testCfg.HandleArenaCreations, compareAPIResourceLists[api.NamedAPIResource])
 }

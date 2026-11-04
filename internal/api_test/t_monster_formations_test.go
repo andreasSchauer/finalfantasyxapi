@@ -282,7 +282,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.MonsterFormations.Endpoint, "RetrieveMonsterFormations", testCfg.HandleMonsterFormations, compareAPIResourceLists[api.UnnamedAPIResource])
+	testIDList(t, tests, api.E.MonsterFormations.Endpoint, "RetrieveMonsterFormations", testCfg.HandleMonsterFormations, compareAPIResourceLists[api.UnnamedAPIResource])
 }
 
 func TestSubsectionMonsterFormations(t *testing.T) {
@@ -370,5 +370,5 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.MonsterFormations.Endpoint, "SubsectionMonsterFormations", nil, compareSimpleResourceLists[api.UnnamedAPIResource, api.MonsterFormationSimple])
+	testIDList(t, tests, api.E.MonsterFormations.Endpoint, "SubsectionMonsterFormations", nil, compareSimpleResourceLists[api.UnnamedAPIResource, api.MonsterFormationSimple])
 }

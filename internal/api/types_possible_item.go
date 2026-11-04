@@ -15,7 +15,7 @@ func (ps PossibleItem) GetAPIResource() APIResource {
 
 func newPossibleItem(cfg *Config, item seedtypes.ItemAmount, chance int32) PossibleItem {
 	return PossibleItem{
-		ResourceAmount: cfg.E.AllItems.toResAmtFromName(cfg, item),
+		ResourceAmount: E.AllItems.toResAmtFromName(cfg, item),
 		Chance:         chance,
 	}
 }

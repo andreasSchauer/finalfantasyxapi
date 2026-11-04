@@ -24,7 +24,7 @@ func (t TreasureSimple) GetURL() string {
 }
 
 func createTreasureSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.Treasures
+	i := E.Treasures
 	treasure, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	treasureSimple := TreasureSimple{

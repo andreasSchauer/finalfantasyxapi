@@ -15,12 +15,12 @@ type locContextParams struct {
 	Type    sql.NullString
 }
 
-func getLocContextParams[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A]) (locContextParams, error) {
+func getLocContextParams[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A]) (locContextParams, error) {
 	avlType := AvlTypeSelf
 	var locContextID sql.NullInt32
 	var locContextType string
 
-	locID, err := nullID(r, cfg.E.Locations, ts.QpnLocation, i.queryLookup)
+	locID, err := nullID(r, E.Locations, ts.QpnLocation, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -30,7 +30,7 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A APIResource](cfg *Conf
 		locContextType = string(ViewSourceTypeLocation)
 	}
 
-	subLocID, err := nullID(r, cfg.E.Sublocations, ts.QpnSublocation, i.queryLookup)
+	subLocID, err := nullID(r, E.Sublocations, ts.QpnSublocation, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -40,7 +40,7 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A APIResource](cfg *Conf
 		locContextType = string(ViewSourceTypeSublocation)
 	}
 
-	areaID, err := nullID(r, cfg.E.Areas, ts.QpnArea, i.queryLookup)
+	areaID, err := nullID(r, E.Areas, ts.QpnArea, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}

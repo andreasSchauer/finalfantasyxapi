@@ -38,7 +38,7 @@ func (a PlayerAbilitySimple) GetURL() string {
 }
 
 func createAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
-	i := cfg.E.Abilities
+	i := E.Abilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 	typeStr := string(ability.Type)
 
@@ -57,7 +57,7 @@ func createAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subs
 }
 
 func createEnemyAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.EnemyAbilities
+	i := E.EnemyAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
@@ -74,7 +74,7 @@ func createEnemyAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsecti
 }
 
 func createItemAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.ItemAbilities
+	i := E.ItemAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
@@ -91,7 +91,7 @@ func createItemAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsectio
 }
 
 func createOverdriveAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
-	i := cfg.E.OverdriveAbilities
+	i := E.OverdriveAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
@@ -108,7 +108,7 @@ func createOverdriveAbilitySimple(cfg *Config, r *http.Request, id int32, subsec
 }
 
 func createPlayerAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.PlayerAbilities
+	i := E.PlayerAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	playerAbilitySimple := PlayerAbilitySimple{
@@ -126,7 +126,7 @@ func createPlayerAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsect
 }
 
 func createTriggerCommandSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.TriggerCommands
+	i := E.TriggerCommands
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
@@ -143,7 +143,7 @@ func createTriggerCommandSimple(cfg *Config, _ *http.Request, id int32, _ Subsec
 }
 
 func createMiscAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.MiscAbilities
+	i := E.MiscAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{

@@ -25,7 +25,7 @@ func (e expTreasure) GetTestGeneral() testGeneral {
 func compareTreasures(test test, exp expTreasure, got api.Treasure) {
 	test.t.Helper()
 	test.compareExpIDOnly(exp.expIDOnly, got.ID)
-	test.compIDAPIResource("area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
+	test.compIDAPIResource("area", api.E.Areas.Endpoint, exp.area, got.Area)
 	test.compare("availability", string(exp.availability), got.Availability)
 	test.compare("is anima treasure", exp.isAnimaTreasure, got.IsAnimaTreasure)
 	test.compare("treasure type", string(exp.treasureType), got.TreasureType)
@@ -43,8 +43,8 @@ type testFoundEquipment struct {
 
 func compareFoundEquipment(test test, fieldName string, exp testFoundEquipment, got api.FoundEquipment) {
 	test.t.Helper()
-	enEndpoint := test.cfg.E.Equipment.Endpoint
-	aaEndpoint := test.cfg.E.AutoAbilities.Endpoint
+	enEndpoint := api.E.Equipment.Endpoint
+	aaEndpoint := api.E.AutoAbilities.Endpoint
 
 	test.compIDAPIResource(fieldName+" - equipment name", enEndpoint, exp.equipmentName, got.EquipmentName)
 	test.checkResIDsInSlice(fieldName+" - abilities", aaEndpoint, exp.abilities, got.Abilities)

@@ -18,7 +18,7 @@ func compareLocations(test test, exp expLocation, got api.Location) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)
-	test.checkResIDsInSlice("connected locations", test.cfg.E.Locations.Endpoint, exp.connectedLocations, got.ConnectedLocations)
-	test.checkResIDsInSlice("sublocations", test.cfg.E.Sublocations.Endpoint, exp.sublocations, got.Sublocations)
+	test.checkResIDsInSlice("connected locations", api.E.Locations.Endpoint, exp.connectedLocations, got.ConnectedLocations)
+	test.checkResIDsInSlice("sublocations", api.E.Sublocations.Endpoint, exp.sublocations, got.Sublocations)
 	compareLocRel(test, exp.expLocRel, got.LocRel)
 }

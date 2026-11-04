@@ -33,7 +33,7 @@ type AeonEquipment struct {
 
 func convertAeonEquipment(cfg *Config, ae seedtypes.AeonEquipment) AeonEquipment {
 	return AeonEquipment{
-		AutoAbility:     nameToNamedAPIResource(cfg, cfg.E.AutoAbilities, ae.AutoAbility, nil),
+		AutoAbility:     nameToNamedAPIResource(cfg, E.AutoAbilities, ae.AutoAbility, nil),
 		CelestialWeapon: ae.CelestialWeapon,
 	}
 }

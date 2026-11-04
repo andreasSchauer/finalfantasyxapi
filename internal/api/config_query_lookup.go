@@ -72,7 +72,7 @@ type QueryLookup struct {
 	endpoints map[ts.QueryParamName]QueryParam
 }
 
-func (Q *QueryLookup) Init(cfg *Config) {
+func (Q *QueryLookup) Init() {
 	defaultParams := []QueryParam{
 		{
 			Name:        ts.QpnLimit,
@@ -98,72 +98,72 @@ func (Q *QueryLookup) Init(cfg *Config) {
 
 	Q.defaultParamSlice = defaultParams
 	Q.defaultParams = paramSliceToMap(defaultParams, nil)
-	cfg.initLocationsParams()
-	cfg.initSublocationsParams()
-	cfg.initAreasParams()
+	initLocationsParams()
+	initSublocationsParams()
+	initAreasParams()
 
-	cfg.initMonsterFormationsParams()
-	cfg.initShopsParams()
-	cfg.initTreasuresParams()
-	cfg.initQuestsParams()
-	cfg.initSidequestsParams()
-	cfg.initSubquestsParams()
-	cfg.initArenaCreationsParams()
-	cfg.initBlitzballPrizesParams()
-	cfg.initSongsParams()
-	cfg.initFMVsParams()
+	initMonsterFormationsParams()
+	initShopsParams()
+	initTreasuresParams()
+	initQuestsParams()
+	initSidequestsParams()
+	initSubquestsParams()
+	initArenaCreationsParams()
+	initBlitzballPrizesParams()
+	initSongsParams()
+	initFMVsParams()
 
-	cfg.initPlayerUnitsParams()
-	cfg.initCharactersParams()
-	cfg.initAeonsParams()
-	cfg.initCharacterClassesParams()
-	cfg.initMonstersParams()
+	initPlayerUnitsParams()
+	initCharactersParams()
+	initAeonsParams()
+	initCharacterClassesParams()
+	initMonstersParams()
 
-	cfg.initAbilitiesParams()
-	cfg.initPlayerAbilitiesParams()
-	cfg.initOverdriveAbilitiesParams()
-	cfg.initItemAbilitiesParams()
-	cfg.initTriggerCommandsParams()
-	cfg.initMiscAbilitiesParams()
-	cfg.initEnemyAbilitiesParams()
+	initAbilitiesParams()
+	initPlayerAbilitiesParams()
+	initOverdriveAbilitiesParams()
+	initItemAbilitiesParams()
+	initTriggerCommandsParams()
+	initMiscAbilitiesParams()
+	initEnemyAbilitiesParams()
 
-	Q.aeonCommands = cfg.E.AeonCommands.assignDefaultParams()
-	Q.overdriveCommands = cfg.E.OverdriveCommands.assignDefaultParams()
-	cfg.initOverdrivesParams()
-	Q.ronsoRages = cfg.E.RonsoRages.assignDefaultParams()
-	cfg.initSubmenusParams()
-	Q.topmenus = cfg.E.Topmenus.assignDefaultParams()
+	Q.aeonCommands = E.AeonCommands.assignDefaultParams()
+	Q.overdriveCommands = E.OverdriveCommands.assignDefaultParams()
+	initOverdrivesParams()
+	Q.ronsoRages = E.RonsoRages.assignDefaultParams()
+	initSubmenusParams()
+	Q.topmenus = E.Topmenus.assignDefaultParams()
 
-	cfg.initAllItemsParams()
-	cfg.initItemsParams()
-	cfg.initKeyItemsParams()
-	cfg.initSpheresParams()
-	cfg.initPrimersParams()
-	cfg.initMixesParams()
+	initAllItemsParams()
+	initItemsParams()
+	initKeyItemsParams()
+	initSpheresParams()
+	initPrimersParams()
+	initMixesParams()
 
-	cfg.initAutoAbilitiesParams()
-	cfg.initEquipmentTablesParams()
-	cfg.initEquipmentParams()
-	cfg.initCelestialWeaponsParams()
+	initAutoAbilitiesParams()
+	initEquipmentTablesParams()
+	initEquipmentParams()
+	initCelestialWeaponsParams()
 
-	cfg.initStatsParams()
-	Q.properties = cfg.E.Properties.assignDefaultParams()
-	cfg.initOverdriveModesParams()
-	Q.elements = cfg.E.Elements.assignDefaultParams()
-	cfg.initStatusConditionsParams()
-	cfg.initModifiersParams()
-	cfg.initAgilityTierParams()
+	initStatsParams()
+	Q.properties = E.Properties.assignDefaultParams()
+	initOverdriveModesParams()
+	Q.elements = E.Elements.assignDefaultParams()
+	initStatusConditionsParams()
+	initModifiersParams()
+	initAgilityTierParams()
 
-	Q.enums = cfg.E.Enums.assignDefaultParams()
-	Q.endpoints = cfg.E.Endpoints.assignDefaultParams()
+	Q.enums = E.Enums.assignDefaultParams()
+	Q.endpoints = E.Endpoints.assignDefaultParams()
 
-	cfg.E.AeonCommands.queryLookup = Q.aeonCommands
-	cfg.E.OverdriveCommands.queryLookup = Q.overdriveCommands
-	cfg.E.RonsoRages.queryLookup = Q.ronsoRages
-	cfg.E.Topmenus.queryLookup = Q.topmenus
-	cfg.E.Properties.queryLookup = Q.properties
-	cfg.E.Elements.queryLookup = Q.elements
+	E.AeonCommands.queryLookup = Q.aeonCommands
+	E.OverdriveCommands.queryLookup = Q.overdriveCommands
+	E.RonsoRages.queryLookup = Q.ronsoRages
+	E.Topmenus.queryLookup = Q.topmenus
+	E.Properties.queryLookup = Q.properties
+	E.Elements.queryLookup = Q.elements
 
-	cfg.E.Enums.queryLookup = Q.enums
-	cfg.E.Endpoints.queryLookup = Q.endpoints
+	E.Enums.queryLookup = Q.enums
+	E.Endpoints.queryLookup = Q.endpoints
 }

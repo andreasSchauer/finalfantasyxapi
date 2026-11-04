@@ -27,8 +27,8 @@ func (cfg *Config) getOverdrive(r *http.Request, i handlerInput[seedtypes.Overdr
 		UnlockCondition:    overdrive.UnlockCondition,
 		CountdownInSec:     overdrive.CountdownInSec,
 		Cursor:             overdrive.Cursor,
-		User:               nameToNamedAPIResource(cfg, cfg.E.CharacterClasses, overdrive.User, nil),
-		OverdriveCommand:   namePtrToNamedAPIResPtr(cfg, cfg.E.OverdriveCommands, overdrive.OverdriveCommand, nil),
+		User:               nameToNamedAPIResource(cfg, E.CharacterClasses, overdrive.User, nil),
+		OverdriveCommand:   namePtrToNamedAPIResPtr(cfg, E.OverdriveCommands, overdrive.OverdriveCommand, nil),
 		OverdriveAbilities: refsToNamedAPIResources(cfg, overdrive.OverdriveAbilities),
 	}
 
@@ -43,6 +43,6 @@ func (cfg *Config) retrieveOverdrives(r *http.Request, i handlerInput[seedtypes.
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
 		i.queryIntList(cfg, r, ids, ts.QpnRank, cfg.db.GetOverdriveIDsByRank),
-		i.queryNameID(r, ids, ts.QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(cfg.db.GetOverdriveIDsByUser)),
+		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(cfg.db.GetOverdriveIDsByUser)),
 	})
 }

@@ -29,50 +29,50 @@ func getStatRelationships(cfg *Config, r *http.Request, stat seedtypes.Stat) (St
 
 	g.Go(func() error {
 		var err error
-		rel.Spheres, err = cfg.E.Spheres.dbGetRelations(cfg, ctx, stat, cfg.db.GetStatSphereIDs)
+		rel.Spheres, err = E.Spheres.dbGetRelations(cfg, ctx, stat, cfg.db.GetStatSphereIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = cfg.E.AutoAbilities.dbGetRelations(cfg, ctx, stat, queries.AutoAbilities)
+		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(cfg, ctx, stat, queries.AutoAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = cfg.E.PlayerAbilities.dbGetRelations(cfg, ctx, stat, queries.PlayerAbilities)
+		rel.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(cfg, ctx, stat, queries.PlayerAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = cfg.E.OverdriveAbilities.dbGetRelations(cfg, ctx, stat, queries.OverdriveAbilities)
+		rel.OverdriveAbilities, err = E.OverdriveAbilities.dbGetRelations(cfg, ctx, stat, queries.OverdriveAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = cfg.E.ItemAbilities.dbGetRelations(cfg, ctx, stat, queries.ItemAbilities)
+		rel.ItemAbilities, err = E.ItemAbilities.dbGetRelations(cfg, ctx, stat, queries.ItemAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.TriggerCommands, err = cfg.E.TriggerCommands.dbGetRelations(cfg, ctx, stat, queries.TriggerCommands)
+		rel.TriggerCommands, err = E.TriggerCommands.dbGetRelations(cfg, ctx, stat, queries.TriggerCommands)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.StatusConditions, err = cfg.E.StatusConditions.dbGetRelations(cfg, ctx, stat, queries.StatusConditions)
+		rel.StatusConditions, err = E.StatusConditions.dbGetRelations(cfg, ctx, stat, queries.StatusConditions)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		if queries.Properties != nil {
-			rel.Properties, err = cfg.E.Properties.dbGetRelations(cfg, ctx, stat, queries.Properties)
+			rel.Properties, err = E.Properties.dbGetRelations(cfg, ctx, stat, queries.Properties)
 			return err
 		}
 		return nil

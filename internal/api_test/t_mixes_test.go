@@ -145,5 +145,5 @@ func TestRetrieveMixes(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.Mixes.Endpoint, "RetrieveMixes", testCfg.HandleMixes, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Mixes.Endpoint, "RetrieveMixes", testCfg.HandleMixes, compareAPIResourceLists[api.NamedAPIResource])
 }

@@ -145,22 +145,22 @@ func refToNamedAPIResource(cfg *Config, ref seedtypes.AbilityReference) NamedAPI
 
 	switch database.AbilityType(ref.AbilityType) {
 	case database.AbilityTypeMiscAbility:
-		res = nameToNamedAPIResource(cfg, cfg.E.MiscAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, E.MiscAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypePlayerAbility:
-		res = nameToNamedAPIResource(cfg, cfg.E.PlayerAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, E.PlayerAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeEnemyAbility:
-		res = nameToNamedAPIResource(cfg, cfg.E.EnemyAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, E.EnemyAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeOverdriveAbility:
-		res = nameToNamedAPIResource(cfg, cfg.E.OverdriveAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, E.OverdriveAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeItemAbility:
-		res = nameToNamedAPIResource(cfg, cfg.E.ItemAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, E.ItemAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeTriggerCommand:
-		res = nameToNamedAPIResource(cfg, cfg.E.TriggerCommands, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(cfg, E.TriggerCommands, ref.Name, ref.Version)
 
 	}
 	return res

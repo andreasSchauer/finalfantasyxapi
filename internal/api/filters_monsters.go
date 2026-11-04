@@ -42,7 +42,7 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}
 
-		elementID, err := queryParam.checkNameID(elementStr, cfg.E.Elements.resTypeSingle, lookup.L.Elements)
+		elementID, err := queryParam.checkNameID(elementStr, E.Elements.resTypeSingle, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -101,7 +101,7 @@ func verifyMonsterResistance(r *http.Request) (int32, error) {
 }
 
 func getMonstersByAutoAbility(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.E.Monsters
+	i := E.Monsters
 
 	queryParam := i.queryLookup[ts.QpnIsForced]
 
@@ -122,7 +122,7 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, ctx context.Context,
 }
 
 func getMonstersByItem(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.E.Monsters
+	i := E.Monsters
 
 	methods, err := getMonsterItemMethods(cfg, r)
 	if err != nil {
@@ -141,7 +141,7 @@ func getMonstersByItem(cfg *Config, r *http.Request, ctx context.Context, id int
 }
 
 func getMonsterItemMethods(cfg *Config, r *http.Request) ([]string, error) {
-	i := cfg.E.Monsters
+	i := E.Monsters
 	paramMethods := i.queryLookup[ts.QpnMethods]
 	aliasses := map[string][]string{
 		"steal": {"steal_common", "steal_rare"},

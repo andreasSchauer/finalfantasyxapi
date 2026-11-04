@@ -34,7 +34,7 @@ func (a AutoAbilitySimple) GetURL() string {
 }
 
 func createAutoAbilitySimple(cfg *Config, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.AutoAbilities
+	i := E.AutoAbilities
 	autoAbility, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	autoAbilitySimple := AutoAbilitySimple{

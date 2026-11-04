@@ -18,10 +18,10 @@ func (e expStatusCondition) GetTestGeneral() testGeneral {
 func compareStatusConditions(test test, exp expStatusCondition, got api.StatusCondition) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
-	test.checkResIDsInSlice("auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice("auto-abilities", api.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
 	test.compTestStructPtrs("inflicted by", exp.inflictedBy, got.InflictedBy, compareStatusInflictions)
 	test.compTestStructPtrs("removed by", exp.removedBy, got.RemovedBy, compareStatusRemovals)
-	test.checkResIDsInSlice("monsters", test.cfg.E.Monsters.Endpoint, exp.monstersResistance, got.MonstersResistance)
+	test.checkResIDsInSlice("monsters", api.E.Monsters.Endpoint, exp.monstersResistance, got.MonstersResistance)
 }
 
 type testStatusInfliction struct {
@@ -34,11 +34,11 @@ type testStatusInfliction struct {
 
 func compareStatusInflictions(test test, fieldName string, exp testStatusInfliction, got api.StatusInfliction) {
 	test.t.Helper()
-	test.checkResIDsInSlice(fieldName+" - player abilities", test.cfg.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
-	test.checkResIDsInSlice(fieldName+" - overdrive abilities", test.cfg.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
-	test.checkResIDsInSlice(fieldName+" - item abilities", test.cfg.E.ItemAbilities.Endpoint, exp.itemAbilities, got.ItemAbilities)
-	test.checkResIDsInSlice(fieldName+" - misc abilities", test.cfg.E.MiscAbilities.Endpoint, exp.miscAbilities, got.MiscAbilities)
-	test.checkResIDsInSlice(fieldName+" - enemy abilities", test.cfg.E.EnemyAbilities.Endpoint, exp.enemyAbilities, got.EnemyAbilities)
+	test.checkResIDsInSlice(fieldName+" - player abilities", api.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
+	test.checkResIDsInSlice(fieldName+" - overdrive abilities", api.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
+	test.checkResIDsInSlice(fieldName+" - item abilities", api.E.ItemAbilities.Endpoint, exp.itemAbilities, got.ItemAbilities)
+	test.checkResIDsInSlice(fieldName+" - misc abilities", api.E.MiscAbilities.Endpoint, exp.miscAbilities, got.MiscAbilities)
+	test.checkResIDsInSlice(fieldName+" - enemy abilities", api.E.EnemyAbilities.Endpoint, exp.enemyAbilities, got.EnemyAbilities)
 }
 
 type testStatusRemoval struct {
@@ -51,9 +51,9 @@ type testStatusRemoval struct {
 
 func compareStatusRemovals(test test, fieldName string, exp testStatusRemoval, got api.StatusRemoval) {
 	test.t.Helper()
-	test.checkResIDsInSlice(fieldName+" - player abilities", test.cfg.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
-	test.checkResIDsInSlice(fieldName+" - overdrive abilities", test.cfg.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
-	test.checkResIDsInSlice(fieldName+" - item abilities", test.cfg.E.ItemAbilities.Endpoint, exp.itemAbilities, got.ItemAbilities)
-	test.checkResIDsInSlice(fieldName+" - enemy abilities", test.cfg.E.EnemyAbilities.Endpoint, exp.enemyAbilities, got.EnemyAbilities)
-	test.checkResIDsInSlice(fieldName+" - status conditions", test.cfg.E.StatusConditions.Endpoint, exp.statusConditions, got.StatusConditions)
+	test.checkResIDsInSlice(fieldName+" - player abilities", api.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
+	test.checkResIDsInSlice(fieldName+" - overdrive abilities", api.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
+	test.checkResIDsInSlice(fieldName+" - item abilities", api.E.ItemAbilities.Endpoint, exp.itemAbilities, got.ItemAbilities)
+	test.checkResIDsInSlice(fieldName+" - enemy abilities", api.E.EnemyAbilities.Endpoint, exp.enemyAbilities, got.EnemyAbilities)
+	test.checkResIDsInSlice(fieldName+" - status conditions", api.E.StatusConditions.Endpoint, exp.statusConditions, got.StatusConditions)
 }

@@ -14,7 +14,7 @@ func applyRonsoStats(cfg *Config, r *http.Request, mon Monster, queryName ts.Que
 	queryParam := Q.monsters[queryName]
 
 	kimahri, _ := lookup.L.Characters["kimahri"]
-	kimahriBS := cfg.E.Stats.toResAmtType(cfg, kimahri.BaseStats, newBaseStat)
+	kimahriBS := E.Stats.toResAmtType(cfg, kimahri.BaseStats, newBaseStat)
 
 	kimahriStatCalcMap, err := getStatCalcMap(r, queryParam, kimahriBS, allowedStatIDs)
 	if queryIsEmpty(err) {

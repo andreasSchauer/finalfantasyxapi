@@ -15,31 +15,31 @@ func getAeonRelationships(cfg *Config, r *http.Request, aeon seedtypes.Aeon) (Ae
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = cfg.E.CelestialWeapons.dbGetRelationPtr(cfg, ctx, aeon, cfg.db.GetAeonCelestialWeaponID)
+		rel.CelestialWeapon, err = E.CelestialWeapons.dbGetRelationPtr(cfg, ctx, aeon, cfg.db.GetAeonCelestialWeaponID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = cfg.E.CharacterClasses.dbGetRelations(cfg, ctx, aeon, cfg.db.GetAeonCharClassIDs)
+		rel.CharacterClasses, err = E.CharacterClasses.dbGetRelations(cfg, ctx, aeon, cfg.db.GetAeonCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AeonCommands, err = cfg.E.AeonCommands.dbGetRelations(cfg, ctx, aeon, cfg.db.GetAeonAeonCommandIDs)
+		rel.AeonCommands, err = E.AeonCommands.dbGetRelations(cfg, ctx, aeon, cfg.db.GetAeonAeonCommandIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Overdrives, err = cfg.E.Overdrives.dbGetRelations(cfg, ctx, aeon, cfg.db.GetAeonOverdriveIDs)
+		rel.Overdrives, err = E.Overdrives.dbGetRelations(cfg, ctx, aeon, cfg.db.GetAeonOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = cfg.E.PlayerAbilities.dbGetRelations(cfg, ctx, aeon, cfg.db.GetAeonDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.dbGetRelations(cfg, ctx, aeon, cfg.db.GetAeonDefaultAbilityIDs)
 		return err
 	})
 
@@ -53,7 +53,7 @@ func getAeonRelationships(cfg *Config, r *http.Request, aeon seedtypes.Aeon) (Ae
 
 func getAeonBaseStats(cfg *Config, aeon seedtypes.Aeon) []BaseStat {
 	baseStats := aeon.BaseStats.XVals[0].BaseStats
-	return cfg.E.Stats.toResAmtType(cfg, baseStats, newBaseStat)
+	return E.Stats.toResAmtType(cfg, baseStats, newBaseStat)
 }
 
 func applyAeonStats(cfg *Config, r *http.Request, aeon Aeon, allowedStatIDs []int32) (Aeon, error) {
@@ -90,7 +90,7 @@ func applyAeonStatsBattles(cfg *Config, r *http.Request, aeon Aeon, queryName ts
 
 	seedAeon, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 	newBaseStats := seedAeon.BaseStats.XVals[i].BaseStats
-	baseStats := cfg.E.Stats.toResAmtType(cfg, newBaseStats, newBaseStat)
+	baseStats := E.Stats.toResAmtType(cfg, newBaseStats, newBaseStat)
 
 	return baseStats, nil
 }
@@ -99,7 +99,7 @@ func applyYunaStats(cfg *Config, r *http.Request, aeon Aeon, queryName ts.QueryP
 	queryParam := Q.aeons[queryName]
 
 	yuna := lookup.L.Characters["yuna"]
-	yunaBS := cfg.E.Stats.toResAmtType(cfg, yuna.BaseStats, newBaseStat)
+	yunaBS := E.Stats.toResAmtType(cfg, yuna.BaseStats, newBaseStat)
 
 	yunaStatCalcMap, err := getStatCalcMap(r, queryParam, yunaBS, allowedStatIDs)
 	if queryIsEmpty(err) {
@@ -135,11 +135,11 @@ func calcAeonStats(cfg *Config, aeon Aeon, yuna map[string]int32) []BaseStat {
 func getAeonStatTables(cfg *Config, aeon Aeon) (map[string]float64, map[string]float64) {
 	aeonLookup, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 
-	aValsSlice := cfg.E.Stats.toResAmtType(cfg, aeonLookup.BaseStats.AVals, newBaseStat)
+	aValsSlice := E.Stats.toResAmtType(cfg, aeonLookup.BaseStats.AVals, newBaseStat)
 	aValsInt := GetResAmtTypeMap(aValsSlice)
 	aVals := resAmtMapToFloat(aValsInt)
 
-	bValsSlice := cfg.E.Stats.toResAmtType(cfg, aeonLookup.BaseStats.BVals, newBaseStat)
+	bValsSlice := E.Stats.toResAmtType(cfg, aeonLookup.BaseStats.BVals, newBaseStat)
 	bValsInt := GetResAmtTypeMap(bValsSlice)
 	bVals := resAmtMapToFloat(bValsInt)
 
@@ -193,7 +193,7 @@ func getUnitAgilityParams(cfg *Config, r *http.Request, baseStats []BaseStat) (A
 	}
 
 	agilityParams := AgilityParams{
-		AgilityTier: idToUnnamedAPIResource(cfg, cfg.E.AgilityTiers, agilityTier.ID),
+		AgilityTier: idToUnnamedAPIResource(cfg, E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   agilityTier.TickSpeed,
 		MinICV:      minICV,
 		MaxICV:      agilityTier.CharacterMaxICV,

@@ -21,7 +21,7 @@ func (cfg *Config) getOverdriveMode(r *http.Request, i handlerInput[seedtypes.Ov
 		Effect:      mode.Effect,
 		Type:        mode.Type,
 		FillRate:    mode.FillRate,
-		Actions:     cfg.E.Characters.toResAmtsFromNames(cfg, mode.ActionsToLearn),
+		Actions:     E.Characters.toResAmtsFromNames(cfg, mode.ActionsToLearn),
 	}
 
 	return response, nil

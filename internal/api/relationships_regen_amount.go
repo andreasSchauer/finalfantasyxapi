@@ -6,7 +6,7 @@ type RegenAmount struct {
 }
 
 func calcRegenAmountsMonster(cfg *Config, mon Monster) []RegenAmount {
-	regenRes := nameToNamedAPIResource(cfg, cfg.E.StatusConditions, "regen", nil)
+	regenRes := nameToNamedAPIResource(cfg, E.StatusConditions, "regen", nil)
 	if resourcesContain(mon.StatusImmunities, regenRes) {
 		return nil
 	}

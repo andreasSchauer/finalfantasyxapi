@@ -27,7 +27,7 @@ func (a AreaSimple) GetURL() string {
 }
 
 func createAreaSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
-	i := cfg.E.Areas
+	i := E.Areas
 	area, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	monsterIDs := subsection.relations[id][RelationMonsters]
@@ -52,28 +52,28 @@ func createAreaSimple(cfg *Config, r *http.Request, id int32, subsection Subsect
 }
 
 func getAreaSectionRelations(cfg *Config, r *http.Request, areaIDs []int32) (map[int32]map[Relation][]int32, error) {
-	i := cfg.E.Areas
+	i := E.Areas
 	relations := make(map[int32]map[Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())
 
 	var treasureJunctions []Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = getDBJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Treasures.resTypeSingle, cfg.db.GetAreaTreasureIdPairs, juncAreaTreasure)
+		treasureJunctions, err = getDBJunctions(ctx, areaIDs, i.resTypeSingle, E.Treasures.resTypeSingle, cfg.db.GetAreaTreasureIdPairs, juncAreaTreasure)
 		return err
 	})
 
 	var shopJunctions []Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = getDBJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Shops.resTypeSingle, cfg.db.GetAreaShopIdPairs, juncAreaShop)
+		shopJunctions, err = getDBJunctions(ctx, areaIDs, i.resTypeSingle, E.Shops.resTypeSingle, cfg.db.GetAreaShopIdPairs, juncAreaShop)
 		return err
 	})
 
 	var monsterJunctions []Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = getDBJunctions(ctx, areaIDs, i.resTypeSingle, cfg.E.Monsters.resTypeSingle, cfg.db.GetAreaMonsterIdPairs, juncAreaMonster)
+		monsterJunctions, err = getDBJunctions(ctx, areaIDs, i.resTypeSingle, E.Monsters.resTypeSingle, cfg.db.GetAreaMonsterIdPairs, juncAreaMonster)
 		return err
 	})
 

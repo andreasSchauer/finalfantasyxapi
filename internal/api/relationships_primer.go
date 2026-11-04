@@ -13,13 +13,13 @@ func getPrimerRelationships(cfg *Config, r *http.Request, primer seedtypes.Prime
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = cfg.E.Treasures.dbGetRelations(cfg, ctx, primer, cfg.db.GetPrimerTreasureIDs)
+		rel.Treasures, err = E.Treasures.dbGetRelations(cfg, ctx, primer, cfg.db.GetPrimerTreasureIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = cfg.E.Areas.dbGetRelations(cfg, ctx, primer, cfg.db.GetPrimerAreaIDs)
+		rel.Areas, err = E.Areas.dbGetRelations(cfg, ctx, primer, cfg.db.GetPrimerAreaIDs)
 		return err
 	})
 

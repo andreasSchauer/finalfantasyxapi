@@ -24,7 +24,7 @@ func (s SongSimple) GetURL() string {
 }
 
 func createSongSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.Songs
+	i := E.Songs
 	song, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	songSimple := SongSimple{

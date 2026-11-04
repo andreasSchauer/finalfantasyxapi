@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -15,7 +16,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/parameters?ass=max",
 				expectedStatus: http.StatusBadRequest,
-				endpoint:       testCfg.E.Areas.Endpoint,
+				endpoint:       api.E.Areas.Endpoint,
 				handler:        testCfg.HandleAreas,
 				expectedErr:    "parameter 'ass' does not exist for endpoint /areas. use /api/areas/parameters for available parameters",
 			},
@@ -24,7 +25,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/parameters?treasures=true",
 				expectedStatus: http.StatusBadRequest,
-				endpoint:       testCfg.E.Areas.Endpoint,
+				endpoint:       api.E.Areas.Endpoint,
 				handler:        testCfg.HandleAreas,
 				expectedErr:    "only the following default parameters are allowed when using /api/areas/parameters: 'limit', 'offset'",
 			},
@@ -33,7 +34,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/enums/parameters?ass=max",
 				expectedStatus: http.StatusBadRequest,
-				endpoint:       testCfg.E.Enums.Endpoint,
+				endpoint:       api.E.Enums.Endpoint,
 				handler:        testCfg.HandleEnums,
 				expectedErr:    "parameter 'ass' does not exist for endpoint /enums. use /api/enums/parameters for available parameters",
 			},
@@ -42,7 +43,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Areas.Endpoint,
+				endpoint:       api.E.Areas.Endpoint,
 				handler:        testCfg.HandleAreas,
 			},
 			count:   28,
@@ -52,7 +53,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Sublocations.Endpoint,
+				endpoint:       api.E.Sublocations.Endpoint,
 				handler:        testCfg.HandleSublocations,
 			},
 			count:   23,
@@ -62,7 +63,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Locations.Endpoint,
+				endpoint:       api.E.Locations.Endpoint,
 				handler:        testCfg.HandleLocations,
 			},
 			count:   22,
@@ -72,7 +73,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.ArenaCreations.Endpoint,
+				endpoint:       api.E.ArenaCreations.Endpoint,
 				handler:        testCfg.HandleArenaCreations,
 			},
 			count:   4,
@@ -82,7 +83,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.BlitzballPrizes.Endpoint,
+				endpoint:       api.E.BlitzballPrizes.Endpoint,
 				handler:        testCfg.HandleBlitzballPrizes,
 			},
 			count:   4,
@@ -92,7 +93,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/fmvs/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.FMVs.Endpoint,
+				endpoint:       api.E.FMVs.Endpoint,
 				handler:        testCfg.HandleFMVs,
 			},
 			count:   4,
@@ -103,7 +104,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Monsters.Endpoint,
+				endpoint:       api.E.Monsters.Endpoint,
 				handler:        testCfg.HandleMonsters,
 			},
 			count:   34,
@@ -113,7 +114,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.MonsterFormations.Endpoint,
+				endpoint:       api.E.MonsterFormations.Endpoint,
 				handler:        testCfg.HandleMonsterFormations,
 			},
 			count:   14,
@@ -123,7 +124,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.OverdriveModes.Endpoint,
+				endpoint:       api.E.OverdriveModes.Endpoint,
 				handler:        testCfg.HandleOverdriveModes,
 			},
 			count:   4,
@@ -133,7 +134,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/shops/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Shops.Endpoint,
+				endpoint:       api.E.Shops.Endpoint,
 				handler:        testCfg.HandleShops,
 			},
 			count:   13,
@@ -143,7 +144,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/songs/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Songs.Endpoint,
+				endpoint:       api.E.Songs.Endpoint,
 				handler:        testCfg.HandleSongs,
 			},
 			count:   10,
@@ -153,7 +154,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Sidequests.Endpoint,
+				endpoint:       api.E.Sidequests.Endpoint,
 				handler:        testCfg.HandleSidequests,
 			},
 			count:   4,
@@ -163,7 +164,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Subquests.Endpoint,
+				endpoint:       api.E.Subquests.Endpoint,
 				handler:        testCfg.HandleSubquests,
 			},
 			count:   5,
@@ -173,7 +174,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/parameters?limit=max",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Treasures.Endpoint,
+				endpoint:       api.E.Treasures.Endpoint,
 				handler:        testCfg.HandleTreasures,
 			},
 			count:   14,
@@ -183,7 +184,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/enums/parameters",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Enums.Endpoint,
+				endpoint:       api.E.Enums.Endpoint,
 				handler:        testCfg.HandleEnums,
 			},
 			count:   2,
@@ -193,7 +194,7 @@ func TestParameters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/enums/parameters?limit=1",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Enums.Endpoint,
+				endpoint:       api.E.Enums.Endpoint,
 				handler:        testCfg.HandleEnums,
 			},
 			count:   2,

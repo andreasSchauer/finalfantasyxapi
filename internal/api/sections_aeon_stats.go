@@ -47,7 +47,7 @@ type AeonStatTable struct {
 }
 
 func newAeonStatTable(cfg *Config, baseStats []seedtypes.BaseStat) AeonStatTable {
-	stats := cfg.E.Stats.toResAmtType(cfg, baseStats, newBaseStat)
+	stats := E.Stats.toResAmtType(cfg, baseStats, newBaseStat)
 	statMap := GetResAmtTypeMap(stats)
 	luckPtr := h.GetInt32Ptr(statMap["luck"])
 
@@ -70,7 +70,7 @@ func newAeonStatTable(cfg *Config, baseStats []seedtypes.BaseStat) AeonStatTable
 }
 
 func createAeonStatSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.Aeons
+	i := E.Aeons
 	aeon, _ := lookup.GetResourceByID(id, lookup.L.AeonsID)
 
 	aeonStatSub := AeonStatSimple{

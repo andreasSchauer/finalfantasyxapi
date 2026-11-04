@@ -34,14 +34,14 @@ func (cfg *Config) getMasterItem(r *http.Request, i handlerInput[seedtypes.Maste
 
 		response.Description = item.Description
 		response.Effect = item.Effect
-		response.TypedItem = nameToNamedAPIResource(cfg, cfg.E.Items, item.Name, nil)
+		response.TypedItem = nameToNamedAPIResource(cfg, E.Items, item.Name, nil)
 
 	case database.ItemTypeKeyItem:
 		keyItem, _ := lookup.GetResource(masterItem, lookup.L.KeyItems)
 
 		response.Description = keyItem.Description
 		response.Effect = keyItem.Effect
-		response.TypedItem = nameToNamedAPIResource(cfg, cfg.E.KeyItems, keyItem.Name, nil)
+		response.TypedItem = nameToNamedAPIResource(cfg, E.KeyItems, keyItem.Name, nil)
 	}
 
 	return response, nil
@@ -56,8 +56,8 @@ func (cfg *Config) retrieveMasterItems(r *http.Request, i handlerInput[seedtypes
 	return i.filterIDs(cfg, r, ids, []IDFilter{
 		i.queryEnumList(cfg, r, enums.T.ItemType, ids, ts.QpnType, cfg.db.GetMasterItemIDsByType),
 		i.queryValueList(cfg, r, ids, ts.QpnMethods, cfg.db.GetMasterItemIDsByMethods),
-		i.queryIDWrapper(cfg, r, ids, ts.QpnLocation, cfg.E.Locations.objLookup, getMasterItemsByLocation),
-		i.queryIDWrapper(cfg, r, ids, ts.QpnSublocation, cfg.E.Sublocations.objLookup, getMasterItemsBySublocation),
-		i.queryIDWrapper(cfg, r, ids, ts.QpnArea, cfg.E.Areas.objLookup, getMasterItemsByArea),
+		i.queryIDWrapper(cfg, r, ids, ts.QpnLocation, E.Locations.objLookup, getMasterItemsByLocation),
+		i.queryIDWrapper(cfg, r, ids, ts.QpnSublocation, E.Sublocations.objLookup, getMasterItemsBySublocation),
+		i.queryIDWrapper(cfg, r, ids, ts.QpnArea, E.Areas.objLookup, getMasterItemsByArea),
 	})
 }

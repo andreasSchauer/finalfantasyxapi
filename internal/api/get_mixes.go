@@ -26,7 +26,7 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, Na
 		ID:           mix.ID,
 		Name:         mix.Name,
 		Category:     mix.Category,
-		Overdrive:    nameToNamedAPIResource(cfg, cfg.E.Overdrives, overdrive.Name, nil),
+		Overdrive:    nameToNamedAPIResource(cfg, E.Overdrives, overdrive.Name, nil),
 		Description:  overdrive.Description,
 		Effect:       overdrive.Effect,
 		Combinations: combinations,

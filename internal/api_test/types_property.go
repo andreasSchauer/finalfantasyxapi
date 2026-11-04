@@ -16,6 +16,6 @@ func (e expProperty) GetTestGeneral() testGeneral {
 func compareProperties(test test, exp expProperty, got api.Property) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
-	test.checkResIDsInSlice("auto-abilities", test.cfg.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice("monsters", test.cfg.E.Monsters.Endpoint, exp.monsters, got.Monsters)
+	test.checkResIDsInSlice("auto-abilities", api.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice("monsters", api.E.Monsters.Endpoint, exp.monsters, got.Monsters)
 }

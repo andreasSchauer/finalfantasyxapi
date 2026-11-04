@@ -13,61 +13,61 @@ func getElementRelationships(cfg *Config, r *http.Request, element seedtypes.Ele
 
 	g.Go(func() error {
 		var err error
-		rel.StatusProtection, err = cfg.E.StatusConditions.dbGetRelationPtr(cfg, ctx, element, cfg.db.GetElementStatusConditionID)
+		rel.StatusProtection, err = E.StatusConditions.dbGetRelationPtr(cfg, ctx, element, cfg.db.GetElementStatusConditionID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = cfg.E.AutoAbilities.dbGetRelations(cfg, ctx, element, cfg.db.GetElementAutoAbilityIDs)
+		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(cfg, ctx, element, cfg.db.GetElementAutoAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = cfg.E.PlayerAbilities.dbGetRelations(cfg, ctx, element, ToIntManyNull(cfg.db.GetElementPlayerAbilityIDs))
+		rel.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(cfg, ctx, element, ToIntManyNull(cfg.db.GetElementPlayerAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = cfg.E.OverdriveAbilities.dbGetRelations(cfg, ctx, element, ToIntManyNull(cfg.db.GetElementOverdriveAbilityIDs))
+		rel.OverdriveAbilities, err = E.OverdriveAbilities.dbGetRelations(cfg, ctx, element, ToIntManyNull(cfg.db.GetElementOverdriveAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = cfg.E.ItemAbilities.dbGetRelations(cfg, ctx, element, ToIntManyNull(cfg.db.GetElementItemAbilityIDs))
+		rel.ItemAbilities, err = E.ItemAbilities.dbGetRelations(cfg, ctx, element, ToIntManyNull(cfg.db.GetElementItemAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.EnemyAbilities, err = cfg.E.EnemyAbilities.dbGetRelations(cfg, ctx, element, ToIntManyNull(cfg.db.GetElementEnemyAbilityIDs))
+		rel.EnemyAbilities, err = E.EnemyAbilities.dbGetRelations(cfg, ctx, element, ToIntManyNull(cfg.db.GetElementEnemyAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersWeak, err = cfg.E.Monsters.dbGetRelations(cfg, ctx, element, cfg.db.GetElementMonsterIDsWeak)
+		rel.MonstersWeak, err = E.Monsters.dbGetRelations(cfg, ctx, element, cfg.db.GetElementMonsterIDsWeak)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersHalved, err = cfg.E.Monsters.dbGetRelations(cfg, ctx, element, cfg.db.GetElementMonsterIDsHalved)
+		rel.MonstersHalved, err = E.Monsters.dbGetRelations(cfg, ctx, element, cfg.db.GetElementMonsterIDsHalved)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersImmune, err = cfg.E.Monsters.dbGetRelations(cfg, ctx, element, cfg.db.GetElementMonsterIDsImmune)
+		rel.MonstersImmune, err = E.Monsters.dbGetRelations(cfg, ctx, element, cfg.db.GetElementMonsterIDsImmune)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersAbsorb, err = cfg.E.Monsters.dbGetRelations(cfg, ctx, element, cfg.db.GetElementMonsterIDsAbsorb)
+		rel.MonstersAbsorb, err = E.Monsters.dbGetRelations(cfg, ctx, element, cfg.db.GetElementMonsterIDsAbsorb)
 		return err
 	})
 

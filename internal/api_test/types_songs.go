@@ -28,8 +28,8 @@ func compareSongs(test test, exp expSong, got api.Song) {
 	test.compare("can loop", exp.canLoop, got.CanLoop)
 	test.checkTestStructsInSlice("background music", exp.backgroundMusic, got.BackgroundMusic, compareBackgroundMusic)
 	test.checkTestStructsInSlice("cues", exp.cues, got.Cues, compareCues)
-	test.checkResIDsInSlice("boss fights", test.cfg.E.MonsterFormations.Endpoint, exp.bossFights, got.BossFights)
-	test.checkResIDsInSlice("fmvs", test.cfg.E.FMVs.Endpoint, exp.fmvs, got.FMVs)
+	test.checkResIDsInSlice("boss fights", api.E.MonsterFormations.Endpoint, exp.bossFights, got.BossFights)
+	test.checkResIDsInSlice("fmvs", api.E.FMVs.Endpoint, exp.fmvs, got.FMVs)
 }
 
 type testBackgroundMusic struct {
@@ -45,7 +45,7 @@ func (t testBackgroundMusic) GetIndex() int {
 func compareBackgroundMusic(test test, _ string, exp testBackgroundMusic, got api.BackgroundMusic) {
 	test.t.Helper()
 	test.compare("bg music - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
-	test.checkResIDsInSlice("bg music - areas", test.cfg.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.checkResIDsInSlice("bg music - areas", api.E.Areas.Endpoint, exp.areas, got.Areas)
 }
 
 type testCue struct {
@@ -62,8 +62,8 @@ func (t testCue) GetIndex() int {
 
 func compareCues(test test, fieldName string, exp testCue, got api.Cue) {
 	test.t.Helper()
-	test.compIDAPIResourcePtrs(fieldName+" - trigger area", test.cfg.E.Areas.Endpoint, exp.triggerArea, got.TriggerArea)
-	test.checkResIDsInSlice(fieldName+" - included areas", test.cfg.E.Areas.Endpoint, exp.includedAreas, got.IncludedAreas)
+	test.compIDAPIResourcePtrs(fieldName+" - trigger area", api.E.Areas.Endpoint, exp.triggerArea, got.TriggerArea)
+	test.checkResIDsInSlice(fieldName+" - included areas", api.E.Areas.Endpoint, exp.includedAreas, got.IncludedAreas)
 	test.compare(fieldName+" - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
 	test.compare(fieldName+" - replaces bg music", exp.replacesBGMusic, got.ReplacesBGMusic)
 }

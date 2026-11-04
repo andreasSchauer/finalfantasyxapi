@@ -78,10 +78,10 @@ func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](cfg *Config
 func questToQuestAPIResource(cfg *Config, quest seedtypes.Quest) QuestAPIResource {
 	switch quest.Type {
 	case database.QuestTypeSidequest:
-		return nameToQuestAPIResource(cfg, cfg.E.Sidequests, quest.Name)
+		return nameToQuestAPIResource(cfg, E.Sidequests, quest.Name)
 
 	case database.QuestTypeSubquest:
-		return nameToQuestAPIResource(cfg, cfg.E.Subquests, quest.Name)
+		return nameToQuestAPIResource(cfg, E.Subquests, quest.Name)
 	}
 
 	return QuestAPIResource{}

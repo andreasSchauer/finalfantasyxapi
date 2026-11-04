@@ -20,7 +20,7 @@ func getMixCombinations(cfg *Config, r *http.Request, mix seedtypes.Mix) ([]MixC
 		combinations = mix.BestCombinations
 	}
 
-	itemID, err := Q.mixes[ts.QpnContainsItem].parseNameID(r, cfg.E.Items.resTypeSingle, cfg.E.Items.objLookup)
+	itemID, err := Q.mixes[ts.QpnContainsItem].parseNameID(r, E.Items.resTypeSingle, E.Items.objLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

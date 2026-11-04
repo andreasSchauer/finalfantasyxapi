@@ -30,9 +30,9 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seedtypes.Ar
 		ID:                        creation.ID,
 		Name:                      creation.Name,
 		Category:                  creation.Category,
-		Monster:                   idToNamedAPIResource(cfg, cfg.E.Monsters, *creation.MonsterID),
-		ParentSubquest:            idToQuestAPIResource(cfg, cfg.E.Subquests, creation.SubquestID),
-		Reward:                    cfg.E.AllItems.toResAmtFromName(cfg, ia),
+		Monster:                   idToNamedAPIResource(cfg, E.Monsters, *creation.MonsterID),
+		ParentSubquest:            idToQuestAPIResource(cfg, E.Subquests, creation.SubquestID),
+		Reward:                    E.AllItems.toResAmtFromName(cfg, ia),
 		RequiredCatchAmount:       creation.Amount,
 		UnlockedCreationsCategory: creation.CreationsUnlockedCategory,
 		RequiredMonsters:          monsters,
@@ -117,6 +117,6 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seedtypes.A
 		return nil, err
 	}
 
-	monsters := cfg.E.Monsters.toResources(cfg, monsterIDs)
+	monsters := E.Monsters.toResources(cfg, monsterIDs)
 	return monsters, nil
 }

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -126,7 +127,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Areas.Endpoint,
+				endpoint:       api.E.Areas.Endpoint,
 				handler:        testCfg.HandleAreas,
 			},
 			count: 6,
@@ -143,7 +144,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Sublocations.Endpoint,
+				endpoint:       api.E.Sublocations.Endpoint,
 				handler:        testCfg.HandleSublocations,
 			},
 			count: 8,
@@ -162,7 +163,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Locations.Endpoint,
+				endpoint:       api.E.Locations.Endpoint,
 				handler:        testCfg.HandleLocations,
 			},
 			count: 9,
@@ -182,7 +183,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Aeons.Endpoint,
+				endpoint:       api.E.Aeons.Endpoint,
 				handler:        testCfg.HandleAeons,
 			},
 			count: 4,
@@ -197,7 +198,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/characters/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Characters.Endpoint,
+				endpoint:       api.E.Characters.Endpoint,
 				handler:        testCfg.HandleCharacters,
 			},
 			count: 5,
@@ -213,7 +214,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/character-classes/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.CharacterClasses.Endpoint,
+				endpoint:       api.E.CharacterClasses.Endpoint,
 				handler:        testCfg.HandleCharacterClasses,
 			},
 			count: 4,
@@ -228,7 +229,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.ArenaCreations.Endpoint,
+				endpoint:       api.E.ArenaCreations.Endpoint,
 				handler:        testCfg.HandleArenaCreations,
 			},
 			count:   0,
@@ -238,7 +239,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.BlitzballPrizes.Endpoint,
+				endpoint:       api.E.BlitzballPrizes.Endpoint,
 				handler:        testCfg.HandleBlitzballPrizes,
 			},
 			count:   0,
@@ -248,7 +249,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/fmvs/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.FMVs.Endpoint,
+				endpoint:       api.E.FMVs.Endpoint,
 				handler:        testCfg.HandleFMVs,
 			},
 			count:   0,
@@ -258,7 +259,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Monsters.Endpoint,
+				endpoint:       api.E.Monsters.Endpoint,
 				handler:        testCfg.HandleMonsters,
 			},
 			count: 4,
@@ -273,7 +274,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.MonsterFormations.Endpoint,
+				endpoint:       api.E.MonsterFormations.Endpoint,
 				handler:        testCfg.HandleMonsterFormations,
 			},
 			count: 2,
@@ -286,7 +287,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.OverdriveModes.Endpoint,
+				endpoint:       api.E.OverdriveModes.Endpoint,
 				handler:        testCfg.HandleOverdriveModes,
 			},
 			count:   0,
@@ -296,7 +297,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/shops/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Shops.Endpoint,
+				endpoint:       api.E.Shops.Endpoint,
 				handler:        testCfg.HandleShops,
 			},
 			count: 1,
@@ -308,7 +309,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/songs/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Songs.Endpoint,
+				endpoint:       api.E.Songs.Endpoint,
 				handler:        testCfg.HandleSongs,
 			},
 			count:   0,
@@ -318,7 +319,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Sidequests.Endpoint,
+				endpoint:       api.E.Sidequests.Endpoint,
 				handler:        testCfg.HandleSidequests,
 			},
 			count: 1,
@@ -330,7 +331,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Subquests.Endpoint,
+				endpoint:       api.E.Subquests.Endpoint,
 				handler:        testCfg.HandleSubquests,
 			},
 			count:   0,
@@ -340,7 +341,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       testCfg.E.Treasures.Endpoint,
+				endpoint:       api.E.Treasures.Endpoint,
 				handler:        testCfg.HandleTreasures,
 			},
 			count:   0,

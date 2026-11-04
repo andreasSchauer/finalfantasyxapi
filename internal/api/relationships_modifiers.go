@@ -13,49 +13,49 @@ func getModifierRelationships(cfg *Config, r *http.Request, modifier seedtypes.M
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = cfg.E.AutoAbilities.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierAutoAbilityIDs)
+		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierAutoAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = cfg.E.PlayerAbilities.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierPlayerAbilityIDs)
+		rel.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierPlayerAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = cfg.E.OverdriveAbilities.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierOverdriveAbilityIDs)
+		rel.OverdriveAbilities, err = E.OverdriveAbilities.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierOverdriveAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = cfg.E.ItemAbilities.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierItemAbilityIDs)
+		rel.ItemAbilities, err = E.ItemAbilities.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierItemAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.TriggerCommands, err = cfg.E.TriggerCommands.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierTriggerCommandIDs)
+		rel.TriggerCommands, err = E.TriggerCommands.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierTriggerCommandIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.EnemyAbilities, err = cfg.E.EnemyAbilities.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierEnemyAbilityIDs)
+		rel.EnemyAbilities, err = E.EnemyAbilities.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierEnemyAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.StatusConditions, err = cfg.E.StatusConditions.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierStatusConditionIDs)
+		rel.StatusConditions, err = E.StatusConditions.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierStatusConditionIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Properties, err = cfg.E.Properties.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierPropertyIDs)
+		rel.Properties, err = E.Properties.dbGetRelations(cfg, ctx, modifier, cfg.db.GetModifierPropertyIDs)
 		return err
 	})
 

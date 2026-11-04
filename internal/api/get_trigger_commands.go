@@ -24,15 +24,15 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seedtypes.T
 		Name:               command.Name,
 		Version:            command.Version,
 		Specification:      command.Specification,
-		UntypedAbility:     idToTypedAPIResource(cfg, cfg.E.Abilities, command.Ability.ID),
+		UntypedAbility:     idToTypedAPIResource(cfg, E.Abilities, command.Ability.ID),
 		Description:        command.Description,
 		Effect:             command.Effect,
 		Rank:               command.Rank,
 		AppearsInHelpBar:   command.AppearsInHelpBar,
 		CanCopycat:         command.CanCopycat,
 		UsedBy:             rel.UsedBy,
-		RelatedStats:       namesToNamedAPIResources(cfg, cfg.E.Stats, command.RelatedStats),
-		Topmenu:            namePtrToNamedAPIResPtr(cfg, cfg.E.Topmenus, command.Topmenu, nil),
+		RelatedStats:       namesToNamedAPIResources(cfg, E.Stats, command.RelatedStats),
+		Topmenu:            namePtrToNamedAPIResPtr(cfg, E.Topmenus, command.Topmenu, nil),
 		Cursor:             command.Cursor,
 		MonsterFormations:  rel.MonsterFormations,
 		BattleInteractions: convertObjSlice(cfg, command.BattleInteractions, convertBattleInteraction),
@@ -54,7 +54,7 @@ func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seedt
 	}
 
 	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryNameID(r, ids, ts.QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
-		i.queryNameID(r, ids, ts.QpnRelatedStat, cfg.E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
+		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
+		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
 	})
 }

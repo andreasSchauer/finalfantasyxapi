@@ -22,7 +22,7 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seedtypes.Propert
 		Name:           property.Name,
 		Effect:         property.Effect,
 		NullifyArmored: property.NullifyArmored,
-		RelatedStats:   namesToNamedAPIResources(cfg, cfg.E.Stats, property.RelatedStats),
+		RelatedStats:   namesToNamedAPIResources(cfg, E.Stats, property.RelatedStats),
 		ModifierChange: convertObjPtr(cfg, property.ModifierChange, convertModifierChange),
 		AutoAbilities:  rel.AutoAbilities,
 		Monsters:       rel.Monsters,

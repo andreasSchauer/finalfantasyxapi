@@ -21,7 +21,7 @@ func (o OverdriveSimple) GetURL() string {
 }
 
 func createOverdriveSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.Overdrives
+	i := E.Overdrives
 	overdrive, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	overdriveSimple := OverdriveSimple{

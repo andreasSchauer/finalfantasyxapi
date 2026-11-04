@@ -17,7 +17,7 @@ func (cfg *Config) getShop(r *http.Request, i handlerInput[seedtypes.Shop, Shop,
 
 	response := Shop{
 		ID:          shop.ID,
-		Area:        idToAreaAPIResource(cfg, cfg.E.Areas, shop.AreaID),
+		Area:        idToAreaAPIResource(cfg, E.Areas, shop.AreaID),
 		Notes:       shop.Notes,
 		Category:    shop.Category,
 		PreAirship:  convertObjPtr(cfg, shop.PreAirship, convertSubShop),

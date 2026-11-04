@@ -22,7 +22,7 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seedtypes.Subl
 	response := Sublocation{
 		ID:                    sublocation.ID,
 		Name:                  sublocation.Name,
-		ParentLocation:        nameToNamedAPIResource(cfg, cfg.E.Locations, sublocation.Location, nil),
+		ParentLocation:        nameToNamedAPIResource(cfg, E.Locations, sublocation.Location, nil),
 		Availability:          sublocation.Availability,
 		ConnectedSublocations: rel.ConnectedSublocations,
 		Areas:                 rel.Areas,

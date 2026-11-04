@@ -19,8 +19,8 @@ func (cfg *Config) getFMV(r *http.Request, i handlerInput[seedtypes.FMV, FMV, Na
 		Name:                fmv.Name,
 		Translation:         fmv.Translation,
 		CutsceneDescription: fmv.CutsceneDescription,
-		Area:                locAreaToAreaAPIResource(cfg, cfg.E.Areas, fmv.LocationArea),
-		Song:                namePtrToNamedAPIResPtr(cfg, cfg.E.Songs, fmv.SongName, nil),
+		Area:                locAreaToAreaAPIResource(cfg, E.Areas, fmv.LocationArea),
+		Song:                namePtrToNamedAPIResPtr(cfg, E.Songs, fmv.SongName, nil),
 	}
 
 	return response, nil

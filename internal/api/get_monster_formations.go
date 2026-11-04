@@ -24,7 +24,7 @@ func (cfg *Config) getMonsterFormation(r *http.Request, i handlerInput[seedtypes
 		Notes:           formation.FormationData.Notes,
 		FormationLoot:   getFormationLoot(formation),
 		BossMusic:       convertObjPtr(cfg, formation.FormationData.BossMusic, convertFormationBossSong),
-		Monsters:        cfg.E.Monsters.toResAmtsFromNames(cfg, formation.Monsters),
+		Monsters:        E.Monsters.toResAmtsFromNames(cfg, formation.Monsters),
 		Areas:           convertObjSlice(cfg, formation.EncounterAreas, convertEncounterArea),
 		TriggerCommands: convertObjSlice(cfg, formation.TriggerCommands, convertFormationTriggerCommand),
 	}

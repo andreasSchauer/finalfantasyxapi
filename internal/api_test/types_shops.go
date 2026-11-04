@@ -21,7 +21,7 @@ func (e expShop) GetTestGeneral() testGeneral {
 func compareShops(test test, exp expShop, got api.Shop) {
 	test.t.Helper()
 	test.compareExpIDOnly(exp.expIDOnly, got.ID)
-	test.compIDAPIResource("area", test.cfg.E.Areas.Endpoint, exp.area, got.Area)
+	test.compIDAPIResource("area", api.E.Areas.Endpoint, exp.area, got.Area)
 	test.compare("category", string(exp.category), got.Category)
 	test.compTestStructPtrs("pre airship", exp.preAirship, got.PreAirship, compareSubShops)
 	test.compTestStructPtrs("post airship", exp.postAirship, got.PostAirship, compareSubShops)
@@ -58,7 +58,7 @@ func newTestShopItem(idx int, itemID, price int32) testShopItem {
 
 func compareShopItems(test test, fieldName string, exp testShopItem, got api.ShopItem) {
 	test.t.Helper()
-	test.compIDAPIResource(fieldName+" - item", test.cfg.E.Items.Endpoint, exp.item, got.Item)
+	test.compIDAPIResource(fieldName+" - item", api.E.Items.Endpoint, exp.item, got.Item)
 	test.compare(fieldName+" - price", exp.price, got.Price)
 }
 

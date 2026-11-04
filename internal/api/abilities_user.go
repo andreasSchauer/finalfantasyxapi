@@ -56,7 +56,7 @@ func getUnitRepl[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *h
 	queryParamBomb := i.queryLookup[ts.QpnBombWpn]
 	queryParamCelestialWpn := i.queryLookup[ts.QpnCelestialWeapon]
 
-	unitID, err := queryParamUser.parseNameID(r, cfg.E.PlayerUnits.resTypeSingle, cfg.E.PlayerUnits.objLookup)
+	unitID, err := queryParamUser.parseNameID(r, E.PlayerUnits.resTypeSingle, E.PlayerUnits.objLookup)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -149,7 +149,7 @@ func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (un
 
 func verifyAbilityUsage(cfg *Config, ability userAbility, repl unitRepl, queryName ts.QueryParamName) error {
 	if !ability.canUseAbility(cfg, repl.unit.Name) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, cfg.E.PlayerUnits.resTypeSingle, repl.unit.Name, ability), nil)
+		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, E.PlayerUnits.resTypeSingle, repl.unit.Name, ability), nil)
 	}
 
 	return nil

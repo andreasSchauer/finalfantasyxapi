@@ -9,9 +9,9 @@ import (
 )
 
 func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.E.AutoAbilities
+	i := E.AutoAbilities
 
-	charIDPtr, err := nullNameID(r, cfg.E.Characters, ts.QpnCharacter, i.queryLookup)
+	charIDPtr, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -28,9 +28,9 @@ func getAutoAbilitiesByMonster(cfg *Config, r *http.Request, ctx context.Context
 }
 
 func getAutoAbilitiesByShop(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.E.AutoAbilities
+	i := E.AutoAbilities
 
-	charIDPtr, err := nullNameID(r, cfg.E.Characters, ts.QpnCharacter, i.queryLookup)
+	charIDPtr, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

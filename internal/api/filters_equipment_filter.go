@@ -11,9 +11,9 @@ import (
 )
 
 func filterShopsEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]int32, error) {
-	i := cfg.E.Shops
+	i := E.Shops
 
-	autoAbilityID, err := nullID(r, cfg.E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -23,7 +23,7 @@ func filterShopsEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]
 		return nil, err
 	}
 
-	charID, err := nullNameID(r, cfg.E.Characters, ts.QpnCharacter, i.queryLookup)
+	charID, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -41,9 +41,9 @@ func filterShopsEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]
 }
 
 func filterTreasuresEquipment(cfg *Config, r *http.Request, ctx context.Context) ([]int32, error) {
-	i := cfg.E.Treasures
+	i := E.Treasures
 
-	autoAbilityID, err := nullID(r, cfg.E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func filterTreasuresEquipment(cfg *Config, r *http.Request, ctx context.Context)
 		return nil, err
 	}
 
-	charID, err := nullNameID(r, cfg.E.Characters, ts.QpnCharacter, i.queryLookup)
+	charID, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

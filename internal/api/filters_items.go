@@ -10,7 +10,7 @@ import (
 )
 
 func getMasterItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.E.AllItems
+	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
@@ -30,7 +30,7 @@ func getMasterItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id 
 }
 
 func getMasterItemsBySublocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.E.AllItems
+	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
@@ -50,7 +50,7 @@ func getMasterItemsBySublocation(cfg *Config, r *http.Request, ctx context.Conte
 }
 
 func getMasterItemsByLocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.E.AllItems
+	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
@@ -70,7 +70,7 @@ func getMasterItemsByLocation(cfg *Config, r *http.Request, ctx context.Context,
 }
 
 func getItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.E.Items
+	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
@@ -90,7 +90,7 @@ func getItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id int32)
 }
 
 func getItemsBySublocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.E.Items
+	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)
@@ -110,7 +110,7 @@ func getItemsBySublocation(cfg *Config, r *http.Request, ctx context.Context, id
 }
 
 func getItemsByLocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := cfg.E.Items
+	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.parseValueList(cfg, r)

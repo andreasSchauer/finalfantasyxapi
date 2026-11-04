@@ -19,7 +19,7 @@ type MixCombination struct {
 
 func convertMixCombination(cfg *Config, mc seedtypes.MixCombination) MixCombination {
 	return MixCombination{
-		FirstItem:  nameToNamedAPIResource(cfg, cfg.E.Items, mc.FirstItem, nil),
-		SecondItem: nameToNamedAPIResource(cfg, cfg.E.Items, mc.SecondItem, nil),
+		FirstItem:  nameToNamedAPIResource(cfg, E.Items, mc.FirstItem, nil),
+		SecondItem: nameToNamedAPIResource(cfg, E.Items, mc.SecondItem, nil),
 	}
 }

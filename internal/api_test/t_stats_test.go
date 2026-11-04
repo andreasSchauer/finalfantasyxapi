@@ -105,5 +105,5 @@ func TestRetrieveStats(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.Stats.Endpoint, "RetrieveStats", testCfg.HandleStats, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Stats.Endpoint, "RetrieveStats", testCfg.HandleStats, compareAPIResourceLists[api.NamedAPIResource])
 }

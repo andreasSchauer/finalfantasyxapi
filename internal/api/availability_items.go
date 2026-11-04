@@ -9,7 +9,7 @@ import (
 )
 
 func filterAvlMasterItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.AllItems
+	i := E.AllItems
 
 	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -19,7 +19,7 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int
 		return inputIDs, nil
 	}
 
-	locContext, err := getLocContextParams(cfg, r, i)
+	locContext, err := getLocContextParams(r, i)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func filterAvlMasterItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int
 }
 
 func filterAvlItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.Items
+	i := E.Items
 
 	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -57,7 +57,7 @@ func filterAvlItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 		return inputIDs, nil
 	}
 
-	locContext, err := getLocContextParams(cfg, r, i)
+	locContext, err := getLocContextParams(r, i)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func filterAvlItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 }
 
 func filterAvlKeyItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.KeyItems
+	i := E.KeyItems
 
 	avlParams, err := i.queryAvlGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -95,7 +95,7 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 		return inputIDs, nil
 	}
 
-	locContext, err := getLocContextParams(cfg, r, i)
+	locContext, err := getLocContextParams(r, i)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +121,7 @@ func filterAvlKeyItems(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 }
 
 func filterAvlSpheres(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.Spheres
+	i := E.Spheres
 
 	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -131,7 +131,7 @@ func filterAvlSpheres(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, 
 		return inputIDs, nil
 	}
 
-	locContext, err := getLocContextParams(cfg, r, i)
+	locContext, err := getLocContextParams(r, i)
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +159,7 @@ func filterAvlSpheres(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, 
 }
 
 func filterAvlPrimers(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.Primers
+	i := E.Primers
 
 	avlParams, err := i.queryAvlGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {

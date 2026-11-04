@@ -15,7 +15,7 @@ func getSubmenuRelationships(cfg *Config, r *http.Request, submenu seedtypes.Sub
 
 	g.Go(func() error {
 		var err error
-		rel.Abilities, err = cfg.E.Abilities.dbGetRelations(cfg, ctx, submenu, ToIntManyNull(cfg.db.GetSubmenuAbilityIDs))
+		rel.Abilities, err = E.Abilities.dbGetRelations(cfg, ctx, submenu, ToIntManyNull(cfg.db.GetSubmenuAbilityIDs))
 		return err
 	})
 
@@ -39,18 +39,18 @@ func createSubmenuOpenedBy(cfg *Config, ctx context.Context, submenu seedtypes.S
 
 	g.Go(func() error {
 		var err error
-		menuOpen.Ability, err = cfg.E.Abilities.dbGetRelationPtr(cfg, ctx, submenu, ToIntOneNull(cfg.db.GetSubmenuOpenedByAbilityID))
+		menuOpen.Ability, err = E.Abilities.dbGetRelationPtr(cfg, ctx, submenu, ToIntOneNull(cfg.db.GetSubmenuOpenedByAbilityID))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		menuOpen.AeonCommand, err = cfg.E.AeonCommands.dbGetRelationPtr(cfg, ctx, submenu, ToIntOneNull(cfg.db.GetSubmenuOpenedByAeonCommandID))
+		menuOpen.AeonCommand, err = E.AeonCommands.dbGetRelationPtr(cfg, ctx, submenu, ToIntOneNull(cfg.db.GetSubmenuOpenedByAeonCommandID))
 		return err
 	})
 
 	g.Go(func() error {
-		overdriveCommands, err := cfg.E.OverdriveCommands.dbGetRelations(cfg, ctx, submenu, ToIntManyNull(cfg.db.GetSubmenuOpenedByOverdriveCommandIDs))
+		overdriveCommands, err := E.OverdriveCommands.dbGetRelations(cfg, ctx, submenu, ToIntManyNull(cfg.db.GetSubmenuOpenedByOverdriveCommandIDs))
 		if err != nil {
 			return err
 		}

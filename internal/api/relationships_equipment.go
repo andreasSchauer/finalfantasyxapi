@@ -13,11 +13,11 @@ import (
 )
 
 func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seedtypes.EquipmentName) (EquipmentName, error) {
-	i := cfg.E.Equipment
+	i := E.Equipment
 	var table seedtypes.EquipmentTable
 
 	rel := EquipmentName{
-		Character: nameToNamedAPIResource(cfg, cfg.E.Characters, equipment.CharacterName, nil),
+		Character: nameToNamedAPIResource(cfg, E.Characters, equipment.CharacterName, nil),
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -28,13 +28,13 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seedtypes
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = cfg.E.Treasures.queryAvlRelRun(cfg, ctx, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeTreasure))
+		rel.Treasures, err = E.Treasures.queryAvlRelRun(cfg, ctx, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = cfg.E.Shops.queryAvlRelRun(cfg, ctx, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeShop))
+		rel.Shops, err = E.Shops.queryAvlRelRun(cfg, ctx, equipment, availabilityParams, getEquipmentSourceIDs(cfg, ViewSourceTypeShop))
 		return err
 	})
 
@@ -49,7 +49,7 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seedtypes
 		rel.Classification = table.Classification
 		rel.Priority = table.Priority
 		rel.RequiredSlots = table.RequiredSlots
-		rel.RequiredAutoAbilities = namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, table.RequiredAutoAbilities)
+		rel.RequiredAutoAbilities = namesToNamedAPIResources(cfg, E.AutoAbilities, table.RequiredAutoAbilities)
 		rel.SelectableAutoAbilities = convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool)
 		return nil
 	})
@@ -61,7 +61,7 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seedtypes
 
 	if table.Classification == string(database.EquipClassCelestialWeapon) {
 		char, _ := lookup.GetResource(equipment.CharacterName, lookup.L.Characters)
-		cwRes, err := cfg.E.CelestialWeapons.dbGetRelationPtr(cfg, r.Context(), char, cfg.db.GetCharacterCelestialWeaponID)
+		cwRes, err := E.CelestialWeapons.dbGetRelationPtr(cfg, r.Context(), char, cfg.db.GetCharacterCelestialWeaponID)
 		if err != nil {
 			return EquipmentName{}, err
 		}
@@ -72,7 +72,7 @@ func getEquipmentRelationships(cfg *Config, r *http.Request, equipment seedtypes
 }
 
 func getEquipmentTableRef(cfg *Config, r *http.Request, ctx context.Context, queryParam QueryParam, equipment seedtypes.EquipmentName) (UnnamedAPIResource, error) {
-	tables, err := cfg.E.EquipmentTables.dbGetRelations(cfg, ctx, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
+	tables, err := E.EquipmentTables.dbGetRelations(cfg, ctx, equipment, cfg.db.GetEquipmentEquipmentTableIDs)
 	if err != nil {
 		return UnnamedAPIResource{}, err
 	}

@@ -68,7 +68,7 @@ type MonsterAbility struct {
 
 func convertMonsterAbility(cfg *Config, ability seedtypes.MonsterAbility) MonsterAbility {
 	return MonsterAbility{
-		Ability:  keyToTypedAPIResource(cfg, cfg.E.Abilities, ability.AbilityReference),
+		Ability:  keyToTypedAPIResource(cfg, E.Abilities, ability.AbilityReference),
 		IsForced: ability.IsForced,
 		IsUnused: ability.IsUnused,
 	}

@@ -33,7 +33,7 @@ func (m MonsterSimple) GetURL() string {
 }
 
 func createMonsterSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
-	i := cfg.E.Monsters
+	i := E.Monsters
 	mon, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	areaIDs := subsection.relations[id][RelationAreas]
@@ -89,10 +89,10 @@ func getMonsterSimpleBribeAmount(mon seedtypes.Monster, hp int32) *int32 {
 }
 
 func getMonsterSectionRelations(cfg *Config, r *http.Request, monIDs []int32) (map[int32]map[Relation][]int32, error) {
-	i := cfg.E.Monsters
+	i := E.Monsters
 	relations := make(map[int32]map[Relation][]int32)
 
-	monsterJunctions, err := getDBJunctions(r.Context(), monIDs, i.resTypeSingle, cfg.E.Areas.resTypeSingle, cfg.db.GetMonsterAreaIdPairs, juncMonsterArea)
+	monsterJunctions, err := getDBJunctions(r.Context(), monIDs, i.resTypeSingle, E.Areas.resTypeSingle, cfg.db.GetMonsterAreaIdPairs, juncMonsterArea)
 	if err != nil {
 		return nil, err
 	}

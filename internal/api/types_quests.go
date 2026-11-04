@@ -46,7 +46,7 @@ func convertQuestCompletion(cfg *Config, qc seedtypes.QuestCompletion) QuestComp
 	return QuestCompletion{
 		Condition: qc.Condition,
 		Areas:     convertObjSlice(cfg, qc.Areas, convertCompletionArea),
-		Reward:    cfg.E.AllItems.toResAmtFromName(cfg, qc.Reward),
+		Reward:    E.AllItems.toResAmtFromName(cfg, qc.Reward),
 	}
 }
 
@@ -61,7 +61,7 @@ func (ca CompletionArea) GetAPIResource() APIResource {
 
 func convertCompletionArea(cfg *Config, cl seedtypes.CompletionArea) CompletionArea {
 	return CompletionArea{
-		Area:  locAreaToAreaAPIResource(cfg, cfg.E.Areas, cl.LocationArea),
+		Area:  locAreaToAreaAPIResource(cfg, E.Areas, cl.LocationArea),
 		Notes: cl.Notes,
 	}
 }

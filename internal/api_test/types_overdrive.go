@@ -21,7 +21,7 @@ func compareOverdrives(test test, exp expOverdrive, got api.Overdrive) {
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("rank", exp.rank, got.Rank)
 	test.compare("countdown in sec", exp.countdownInSec, got.CountdownInSec)
-	test.compIDAPIResource("user", test.cfg.E.CharacterClasses.Endpoint, exp.user, got.User)
-	test.compIDAPIResourcePtrs("overdrive command", test.cfg.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
-	test.checkResIDsInSlice("overdrive abilities", test.cfg.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
+	test.compIDAPIResource("user", api.E.CharacterClasses.Endpoint, exp.user, got.User)
+	test.compIDAPIResourcePtrs("overdrive command", api.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
+	test.checkResIDsInSlice("overdrive abilities", api.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
 }

@@ -16,7 +16,7 @@ func (cfg *Config) getEnemyAbility(r *http.Request, i handlerInput[seedtypes.Ene
 		return EnemyAbility{}, err
 	}
 
-	monsters, err := cfg.E.Monsters.dbGetRelations(cfg, r.Context(), ability, cfg.db.GetEnemyAbilityMonsterIDs)
+	monsters, err := E.Monsters.dbGetRelations(cfg, r.Context(), ability, cfg.db.GetEnemyAbilityMonsterIDs)
 	if err != nil {
 		return EnemyAbility{}, err
 	}
@@ -26,7 +26,7 @@ func (cfg *Config) getEnemyAbility(r *http.Request, i handlerInput[seedtypes.Ene
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		UntypedAbility:     idToTypedAPIResource(cfg, cfg.E.Abilities, ability.Ability.ID),
+		UntypedAbility:     idToTypedAPIResource(cfg, E.Abilities, ability.Ability.ID),
 		Effect:             ability.Effect,
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
@@ -52,7 +52,7 @@ func (cfg *Config) retrieveEnemyAbilities(r *http.Request, i handlerInput[seedty
 		i.queryEnumList(cfg, r, enums.T.TargetType, ids, ts.QpnTargetType, getTypedAbilityIDsByTargetType(cfg, abilityType)),
 		i.queryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, getTypedAbilityIDsByDamageFormula(cfg, abilityType)),
 		i.queryIntList(cfg, r, ids, ts.QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		i.queryNameIDListNul(cfg, r, ids, ts.QpnElement, cfg.E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
+		i.queryNameIDListNul(cfg, r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
 		i.queryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
 		i.queryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
 		i.queryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),

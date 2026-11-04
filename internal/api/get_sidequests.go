@@ -12,7 +12,7 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seedtypes.Sidequ
 		return Sidequest{}, err
 	}
 
-	subquests, err := cfg.E.Subquests.dbGetRelations(cfg, r.Context(), sidequest, cfg.db.GetSidequestSubquestIDs)
+	subquests, err := E.Subquests.dbGetRelations(cfg, r.Context(), sidequest, cfg.db.GetSidequestSubquestIDs)
 	if err != nil {
 		return Sidequest{}, err
 	}
@@ -20,7 +20,7 @@ func (cfg *Config) getSidequest(r *http.Request, i handlerInput[seedtypes.Sidequ
 	response := Sidequest{
 		ID:           sidequest.ID,
 		Name:         sidequest.Name,
-		UntypedQuest: idToQuestAPIResource(cfg, cfg.E.Quests, sidequest.Quest.ID),
+		UntypedQuest: idToQuestAPIResource(cfg, E.Quests, sidequest.Quest.ID),
 		Availability: sidequest.Availability,
 		IsRepeatable: sidequest.IsRepeatable,
 		Completion:   convertObjPtr(cfg, sidequest.Completion, convertQuestCompletion),

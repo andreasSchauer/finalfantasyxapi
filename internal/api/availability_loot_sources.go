@@ -7,7 +7,7 @@ import (
 )
 
 func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.Shops
+	i := E.Shops
 
 	avlParams, err := i.queryAvlGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -22,7 +22,7 @@ func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 		return nil, err
 	}
 
-	locContext, err := getLocContextParams(cfg, r, i)
+	locContext, err := getLocContextParams(r, i)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 }
 
 func filterAvlTreasures(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.Treasures
+	i := E.Treasures
 
 	avlParams, err := i.queryAvlGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -70,7 +70,7 @@ func filterAvlTreasures(cfg *Config, r *http.Request, inputIDs []int32) ([]int32
 }
 
 func filterAvlQuests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.Quests
+	i := E.Quests
 
 	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -94,7 +94,7 @@ func filterAvlQuests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, e
 }
 
 func filterAvlSidequests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.Sidequests
+	i := E.Sidequests
 
 	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {
@@ -117,7 +117,7 @@ func filterAvlSidequests(cfg *Config, r *http.Request, inputIDs []int32) ([]int3
 }
 
 func filterAvlSubquests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := cfg.E.Subquests
+	i := E.Subquests
 
 	avlParams, err := i.queryAvlRepGetParams(cfg, r)
 	if errExceptEmptyQuery(err) {

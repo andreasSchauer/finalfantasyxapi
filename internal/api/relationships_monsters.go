@@ -13,20 +13,20 @@ func getMonsterRelationships(cfg *Config, r *http.Request, monster seedtypes.Mon
 	var rel Monster
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := cfg.E.Monsters.queryAvlRelGetParams(cfg, r, monster.ID)
+	availabilityParams, err := E.Monsters.queryAvlRelGetParams(cfg, r, monster.ID)
 	if err != nil {
 		return Monster{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = cfg.E.Areas.queryAvlRelRun(cfg, ctx, monster, availabilityParams, getMonsterAreaIDs(cfg))
+		rel.Areas, err = E.Areas.queryAvlRelRun(cfg, ctx, monster, availabilityParams, getMonsterAreaIDs(cfg))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Formations, err = cfg.E.MonsterFormations.queryAvlRelRun(cfg, ctx, monster, availabilityParams, getMonsterMonsterFormationIDs(cfg))
+		rel.Formations, err = E.MonsterFormations.queryAvlRelRun(cfg, ctx, monster, availabilityParams, getMonsterMonsterFormationIDs(cfg))
 		return err
 	})
 
@@ -125,13 +125,13 @@ func getMonsterAgilityParams(cfg *Config, r *http.Request, mon Monster) (*Agilit
 	}
 
 	agilityParams := AgilityParams{
-		AgilityTier: idToUnnamedAPIResource(cfg, cfg.E.AgilityTiers, agilityTier.ID),
+		AgilityTier: idToUnnamedAPIResource(cfg, E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   tickspeed,
 		MinICV:      agilityTier.MonsterMinICV,
 		MaxICV:      agilityTier.MonsterMaxICV,
 	}
 
-	fs := nameToNamedAPIResource(cfg, cfg.E.AutoAbilities, "first strike", nil)
+	fs := nameToNamedAPIResource(cfg, E.AutoAbilities, "first strike", nil)
 	if resourcesContain(mon.AutoAbilities, fs) {
 		agilityParams.MinICV, agilityParams.MaxICV = getEqualICVs(-1)
 	}
@@ -153,7 +153,7 @@ func appliedStateHaste(mon Monster) bool {
 
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
 func getMonsterBribeChances(cfg *Config, mon Monster) ([]BribeChance, error) {
-	bribe := nameToNamedAPIResource(cfg, cfg.E.StatusConditions, "bribe", nil)
+	bribe := nameToNamedAPIResource(cfg, E.StatusConditions, "bribe", nil)
 	if resourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
 		return nil, nil
 	}

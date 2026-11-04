@@ -31,37 +31,37 @@ func convertMonsterItems(cfg *Config, items seedtypes.MonsterItems) MonsterItems
 	}
 
 	if items.StealCommon != nil {
-		stealCommon := cfg.E.AllItems.toResAmtFromName(cfg, *items.StealCommon)
+		stealCommon := E.AllItems.toResAmtFromName(cfg, *items.StealCommon)
 		monItems.StealCommon = &stealCommon
 	}
 
 	if items.StealRare != nil {
-		stealRare := cfg.E.AllItems.toResAmtFromName(cfg, *items.StealRare)
+		stealRare := E.AllItems.toResAmtFromName(cfg, *items.StealRare)
 		monItems.StealRare = &stealRare
 	}
 
 	if items.DropCommon != nil {
-		dropCommon := cfg.E.AllItems.toResAmtFromName(cfg, *items.DropCommon)
+		dropCommon := E.AllItems.toResAmtFromName(cfg, *items.DropCommon)
 		monItems.DropCommon = &dropCommon
 	}
 
 	if items.DropRare != nil {
-		dropRare := cfg.E.AllItems.toResAmtFromName(cfg, *items.DropRare)
+		dropRare := E.AllItems.toResAmtFromName(cfg, *items.DropRare)
 		monItems.DropRare = &dropRare
 	}
 
 	if items.SecondaryDropCommon != nil {
-		secDropCommon := cfg.E.AllItems.toResAmtFromName(cfg, *items.SecondaryDropCommon)
+		secDropCommon := E.AllItems.toResAmtFromName(cfg, *items.SecondaryDropCommon)
 		monItems.SecondaryDropCommon = &secDropCommon
 	}
 
 	if items.SecondaryDropRare != nil {
-		secDropRare := cfg.E.AllItems.toResAmtFromName(cfg, *items.SecondaryDropRare)
+		secDropRare := E.AllItems.toResAmtFromName(cfg, *items.SecondaryDropRare)
 		monItems.SecondaryDropRare = &secDropRare
 	}
 
 	if items.Bribe != nil {
-		bribe := cfg.E.AllItems.toResAmtFromName(cfg, *items.Bribe)
+		bribe := E.AllItems.toResAmtFromName(cfg, *items.Bribe)
 		monItems.Bribe = &bribe
 	}
 

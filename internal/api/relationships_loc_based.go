@@ -41,7 +41,7 @@ type LocBasedMusicQueries struct {
 }
 
 func getMusicLocBased(cfg *Config, ctx context.Context, item seedtypes.Lookupable, queries LocBasedMusicQueries) (*LocBasedMusic, error) {
-	i := cfg.E.Songs
+	i := E.Songs
 	var music LocBasedMusic
 	g, ctx := errgroup.WithContext(ctx)
 

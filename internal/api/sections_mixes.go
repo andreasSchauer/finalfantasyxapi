@@ -24,13 +24,13 @@ func (m MixSimple) GetURL() string {
 }
 
 func createMixSimple(cfg *Config, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
-	i := cfg.E.Mixes
+	i := E.Mixes
 	mix, _ := lookup.GetResourceByID(id, i.objLookupID)
 	combinations := mix.PossibleCombinations
 
-	prefix := fmt.Sprintf("/api/%s", cfg.E.Items.Endpoint)
+	prefix := fmt.Sprintf("/api/%s", E.Items.Endpoint)
 	path := strings.ToLower(r.URL.Path)
-	segments := getPathSegments(path, cfg.E.Items.Endpoint)
+	segments := getPathSegments(path, E.Items.Endpoint)
 	isItemsSection := len(segments) == 2 && strings.HasPrefix(path, prefix)
 
 	if isItemsSection {

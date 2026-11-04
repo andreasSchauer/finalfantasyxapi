@@ -130,5 +130,5 @@ func TestRetrieveSidequests(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.Sidequests.Endpoint, "RetrieveSidequests", testCfg.HandleSidequests, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Sidequests.Endpoint, "RetrieveSidequests", testCfg.HandleSidequests, compareAPIResourceLists[api.NamedAPIResource])
 }

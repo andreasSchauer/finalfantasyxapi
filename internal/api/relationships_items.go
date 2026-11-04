@@ -9,7 +9,7 @@ import (
 )
 
 func getItemRelationships(cfg *Config, r *http.Request, item seedtypes.Item) (Item, error) {
-	availabilityParams, err := cfg.E.Items.queryAvlRelGetParams(cfg, r, item.ID)
+	availabilityParams, err := E.Items.queryAvlRelGetParams(cfg, r, item.ID)
 	if err != nil {
 		return Item{}, err
 	}
@@ -20,7 +20,7 @@ func getItemRelationships(cfg *Config, r *http.Request, item seedtypes.Item) (It
 	}
 
 	if item.Category == string(database.ItemCategorySphere) {
-		sphereRes := nameToNamedAPIResource(cfg, cfg.E.Spheres, item.Name, nil)
+		sphereRes := nameToNamedAPIResource(cfg, E.Spheres, item.Name, nil)
 		rel.Sphere = &sphereRes
 	}
 
@@ -32,7 +32,7 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seedtypes.Item, availa
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
-		monsters, err := cfg.E.Monsters.queryAvlRelRun(cfg, ctx, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeMonster))
+		monsters, err := E.Monsters.queryAvlRelRun(cfg, ctx, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeMonster))
 		if err != nil {
 			return err
 		}
@@ -41,59 +41,59 @@ func runItemRelQueries(cfg *Config, r *http.Request, item seedtypes.Item, availa
 	})
 
 	g.Go(func() error {
-		treasures, err := cfg.E.Treasures.queryAvlRelRun(cfg, ctx, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeTreasure))
+		treasures, err := E.Treasures.queryAvlRelRun(cfg, ctx, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeTreasure))
 		if err != nil {
 			return err
 		}
-		rel.Treasures = itemAmtsToChildResAmts2(cfg.E.Treasures, treasures, item.ID)
+		rel.Treasures = itemAmtsToChildResAmts2(E.Treasures, treasures, item.ID)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = cfg.E.Shops.queryAvlRelRun(cfg, ctx, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeShop))
+		rel.Shops, err = E.Shops.queryAvlRelRun(cfg, ctx, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeShop))
 		return err
 	})
 
 	g.Go(func() error {
-		quests, err := cfg.E.Quests.queryAvlRelRun(cfg, ctx, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeQuest))
+		quests, err := E.Quests.queryAvlRelRun(cfg, ctx, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeQuest))
 		if err != nil {
 			return err
 		}
-		rel.Quests = itemAmtsToChildResAmts(cfg.E.Quests, quests)
+		rel.Quests = itemAmtsToChildResAmts(E.Quests, quests)
 		return nil
 	})
 
 	g.Go(func() error {
-		blitzballPrizes, err := cfg.E.BlitzballPrizes.queryAvlRelRun(cfg, ctx, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeBlitzball))
+		blitzballPrizes, err := E.BlitzballPrizes.queryAvlRelRun(cfg, ctx, item, availabilityParams, getItemSourceIDs(cfg, ViewSourceTypeBlitzball))
 		if err != nil {
 			return err
 		}
-		rel.BlitzballPrizes = itemAmtsToChildResAmts2(cfg.E.BlitzballPrizes, blitzballPrizes, item.ID)
+		rel.BlitzballPrizes = itemAmtsToChildResAmts2(E.BlitzballPrizes, blitzballPrizes, item.ID)
 		return nil
 	})
 
 	g.Go(func() error {
-		playerAbilities, err := cfg.E.PlayerAbilities.dbGetRelations(cfg, ctx, item, cfg.db.GetItemPlayerAbilityIDs)
+		playerAbilities, err := E.PlayerAbilities.dbGetRelations(cfg, ctx, item, cfg.db.GetItemPlayerAbilityIDs)
 		if err != nil {
 			return err
 		}
-		rel.AeonLearnAbilities = itemAmtsToChildResAmts(cfg.E.PlayerAbilities, playerAbilities)
+		rel.AeonLearnAbilities = itemAmtsToChildResAmts(E.PlayerAbilities, playerAbilities)
 		return nil
 	})
 
 	g.Go(func() error {
-		autoAbilities, err := cfg.E.AutoAbilities.dbGetRelations(cfg, ctx, item, cfg.db.GetItemAutoAbilityIDs)
+		autoAbilities, err := E.AutoAbilities.dbGetRelations(cfg, ctx, item, cfg.db.GetItemAutoAbilityIDs)
 		if err != nil {
 			return err
 		}
-		rel.AutoAbilities = itemAmtsToChildResAmts(cfg.E.AutoAbilities, autoAbilities)
+		rel.AutoAbilities = itemAmtsToChildResAmts(E.AutoAbilities, autoAbilities)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Mixes, err = cfg.E.Mixes.dbGetRelations(cfg, ctx, item, cfg.db.GetItemMixIDs)
+		rel.Mixes, err = E.Mixes.dbGetRelations(cfg, ctx, item, cfg.db.GetItemMixIDs)
 		return err
 	})
 

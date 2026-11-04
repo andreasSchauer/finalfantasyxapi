@@ -16,7 +16,7 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seedtypes.Ability,
 		return Ability{}, err
 	}
 
-	monsters, err := cfg.E.Monsters.dbGetRelations(cfg, r.Context(), ability, cfg.db.GetAbilityMonsterIDs)
+	monsters, err := E.Monsters.dbGetRelations(cfg, r.Context(), ability, cfg.db.GetAbilityMonsterIDs)
 	if err != nil {
 		return Ability{}, err
 	}
@@ -51,7 +51,7 @@ func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seedtypes.A
 		i.queryEnumList(cfg, r, enums.T.TargetType, ids, ts.QpnTargetType, cfg.db.GetAbilityIDsByTargetType),
 		i.queryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, cfg.db.GetAbilityIDsByDamageFormula),
 		i.queryIntList(cfg, r, ids, ts.QpnRank, cfg.db.GetAbilityIDsByRank),
-		i.queryNameIDListNul(cfg, r, ids, ts.QpnElement, cfg.E.Elements.resTypeSingle, lookup.L.Elements, cfg.db.GetAbilityIDsByElement),
+		i.queryNameIDListNul(cfg, r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, cfg.db.GetAbilityIDsByElement),
 		i.queryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, cfg.db.GetAbilityIDsByInflictedStatus),
 		i.queryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, cfg.db.GetAbilityIDsByRemovedStatus),
 		i.queryID(r, ids, ts.QpnMonster, lookup.L.MonsterFormations, cfg.db.GetAbilityIDsByMonster),

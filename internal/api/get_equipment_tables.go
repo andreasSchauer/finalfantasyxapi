@@ -20,16 +20,16 @@ func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seedtypes.E
 		ID:                      table.ID,
 		Type:                    table.Type,
 		Classification:          table.Classification,
-		SpecificCharacter:       namePtrToNamedAPIResPtr(cfg, cfg.E.Characters, table.SpecificCharacter, nil),
+		SpecificCharacter:       namePtrToNamedAPIResPtr(cfg, E.Characters, table.SpecificCharacter, nil),
 		Priority:                table.Priority,
-		RequiredAutoAbilities:   namesToNamedAPIResources(cfg, cfg.E.AutoAbilities, table.RequiredAutoAbilities),
+		RequiredAutoAbilities:   namesToNamedAPIResources(cfg, E.AutoAbilities, table.RequiredAutoAbilities),
 		SelectableAutoAbilities: convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool),
 		RequiredSlots:           table.RequiredSlots,
 		Equipment:               convertObjSlice(cfg, table.EquipmentNames, convertEquipmentName),
 	}
 
 	if table.SpecificCharacter != nil && table.Classification == string(database.EquipClassCelestialWeapon) {
-		classRes, err := cfg.E.CelestialWeapons.dbGetRelationPtr(cfg, r.Context(), table, cfg.db.GetEquipmentTableCelestialWeaponID)
+		classRes, err := E.CelestialWeapons.dbGetRelationPtr(cfg, r.Context(), table, cfg.db.GetEquipmentTableCelestialWeaponID)
 		if err != nil {
 			return EquipmentTable{}, err
 		}

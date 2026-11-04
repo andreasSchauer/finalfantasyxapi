@@ -13,6 +13,6 @@ type testElemResist struct {
 func compareElemResists(test test, fieldName string, exp testElemResist, got api.ElementalResist) {
 	test.t.Helper()
 
-	test.compIDAPIResource(fieldName+" - elements", test.cfg.E.Elements.Endpoint, exp.element, got.Element)
+	test.compIDAPIResource(fieldName+" - elements", api.E.Elements.Endpoint, exp.element, got.Element)
 	test.compare(fieldName+" - affinities", string(exp.affinity), got.Affinity)
 }

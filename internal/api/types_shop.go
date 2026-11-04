@@ -30,7 +30,7 @@ type ShopItem struct {
 
 func convertShopItem(cfg *Config, si seedtypes.ShopItem) ShopItem {
 	return ShopItem{
-		Item:  nameToNamedAPIResource(cfg, cfg.E.Items, si.Name, nil),
+		Item:  nameToNamedAPIResource(cfg, E.Items, si.Name, nil),
 		Price: si.Price,
 	}
 }

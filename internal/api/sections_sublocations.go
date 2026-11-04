@@ -22,7 +22,7 @@ func (s SublocationSimple) GetURL() string {
 }
 
 func createSublocationSimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
-	i := cfg.E.Sublocations
+	i := E.Sublocations
 	sublocation, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	monsterIDs := subsection.relations[id][RelationMonsters]
@@ -42,28 +42,28 @@ func createSublocationSimple(cfg *Config, r *http.Request, id int32, subsection 
 }
 
 func getSublocationSectionRelations(cfg *Config, r *http.Request, subLocIDs []int32) (map[int32]map[Relation][]int32, error) {
-	i := cfg.E.Sublocations
+	i := E.Sublocations
 	relations := make(map[int32]map[Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())
 
 	var treasureJunctions []Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, cfg.E.Treasures.resTypeSingle, cfg.db.GetSublocationTreasureIdPairs, juncSublocationTreasure)
+		treasureJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Treasures.resTypeSingle, cfg.db.GetSublocationTreasureIdPairs, juncSublocationTreasure)
 		return err
 	})
 
 	var shopJunctions []Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, cfg.E.Shops.resTypeSingle, cfg.db.GetSublocationShopIdPairs, juncSublocationShop)
+		shopJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Shops.resTypeSingle, cfg.db.GetSublocationShopIdPairs, juncSublocationShop)
 		return err
 	})
 
 	var monsterJunctions []Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, cfg.E.Monsters.resTypeSingle, cfg.db.GetSublocationMonsterIdPairs, juncSublocationMonster)
+		monsterJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Monsters.resTypeSingle, cfg.db.GetSublocationMonsterIdPairs, juncSublocationMonster)
 		return err
 	})
 

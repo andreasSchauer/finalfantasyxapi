@@ -16,7 +16,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seedtypes.Pl
 		return PlayerAbility{}, err
 	}
 
-	monsters, err := cfg.E.Monsters.dbGetRelations(cfg, r.Context(), ability, cfg.db.GetPlayerAbilityMonsterIDs)
+	monsters, err := E.Monsters.dbGetRelations(cfg, r.Context(), ability, cfg.db.GetPlayerAbilityMonsterIDs)
 	if err != nil {
 		return PlayerAbility{}, err
 	}
@@ -26,7 +26,7 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seedtypes.Pl
 		Name:                  ability.Name,
 		Version:               ability.Version,
 		Specification:         ability.Specification,
-		UntypedAbility:        idToTypedAPIResource(cfg, cfg.E.Abilities, ability.Ability.ID),
+		UntypedAbility:        idToTypedAPIResource(cfg, E.Abilities, ability.Ability.ID),
 		Description:           ability.Description,
 		Effect:                ability.Effect,
 		Rank:                  ability.Rank,
@@ -35,14 +35,14 @@ func (cfg *Config) getPlayerAbility(r *http.Request, i handlerInput[seedtypes.Pl
 		CanUseOutsideBattle:   ability.CanUseOutsideBattle,
 		MpCost:                ability.MPCost,
 		Category:              ability.Category,
-		AeonLearnItem:         cfg.E.AllItems.toResAmtFromNamePtr(cfg, ability.AeonLearnItem),
-		LearnedBy:             namesToNamedAPIResources(cfg, cfg.E.CharacterClasses, ability.LearnedBy),
-		RelatedStats:          namesToNamedAPIResources(cfg, cfg.E.Stats, ability.RelatedStats),
-		StandardGridCharacter: namePtrToNamedAPIResPtr(cfg, cfg.E.Characters, ability.StandardGridPos, nil),
-		ExpertGridCharacter:   namePtrToNamedAPIResPtr(cfg, cfg.E.Characters, ability.ExpertGridPos, nil),
-		Topmenu:               namePtrToNamedAPIResPtr(cfg, cfg.E.Topmenus, ability.Topmenu, nil),
-		Submenu:               namePtrToNamedAPIResPtr(cfg, cfg.E.Submenus, ability.Submenu, nil),
-		OpenSubmenu:           namePtrToNamedAPIResPtr(cfg, cfg.E.Submenus, ability.OpenSubmenu, nil),
+		AeonLearnItem:         E.AllItems.toResAmtFromNamePtr(cfg, ability.AeonLearnItem),
+		LearnedBy:             namesToNamedAPIResources(cfg, E.CharacterClasses, ability.LearnedBy),
+		RelatedStats:          namesToNamedAPIResources(cfg, E.Stats, ability.RelatedStats),
+		StandardGridCharacter: namePtrToNamedAPIResPtr(cfg, E.Characters, ability.StandardGridPos, nil),
+		ExpertGridCharacter:   namePtrToNamedAPIResPtr(cfg, E.Characters, ability.ExpertGridPos, nil),
+		Topmenu:               namePtrToNamedAPIResPtr(cfg, E.Topmenus, ability.Topmenu, nil),
+		Submenu:               namePtrToNamedAPIResPtr(cfg, E.Submenus, ability.Submenu, nil),
+		OpenSubmenu:           namePtrToNamedAPIResPtr(cfg, E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:                ability.Cursor,
 		Monsters:              monsters,
 		BattleInteractions:    convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
@@ -74,14 +74,14 @@ func (cfg *Config) retrievePlayerAbilities(r *http.Request, i handlerInput[seedt
 		i.queryInt(r, ids, ts.QpnMpMin, cfg.db.GetPlayerAbilityIDsByMpCostMin),
 		i.queryInt(r, ids, ts.QpnMpMax, cfg.db.GetPlayerAbilityIDsByMpCostMax),
 		i.queryIntList(cfg, r, ids, ts.QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		i.queryNameIDListNul(cfg, r, ids, ts.QpnElement, cfg.E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
-		i.queryNameID(r, ids, ts.QpnUser, cfg.E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass),
+		i.queryNameIDListNul(cfg, r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(cfg, abilityType)),
+		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetPlayerAbilityIDsByCharClass),
 		i.queryID(r, ids, ts.QpnLearnItem, lookup.L.Items, cfg.db.GetPlayerAbilityIDsByLearnItem),
-		i.queryNameID(r, ids, ts.QpnRelatedStat, cfg.E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat),
+		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetPlayerAbilityIDsByRelatedStat),
 		i.queryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(cfg, abilityType)),
 		i.queryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(cfg, abilityType)),
-		i.queryNameID(r, ids, ts.QpnStdSg, cfg.E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar)),
-		i.queryNameID(r, ids, ts.QpnExpSg, cfg.E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar)),
+		i.queryNameID(r, ids, ts.QpnStdSg, E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsStdSgChar)),
+		i.queryNameID(r, ids, ts.QpnExpSg, E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(cfg.db.GetPlayerAbilityIDsExpSgChar)),
 		i.queryBool(r, ids, ts.QpnOutsideBattle, cfg.db.GetPlayerAbilityIDsCanUseOutsideBattle),
 		i.queryBool(r, ids, ts.QpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
 		i.queryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),

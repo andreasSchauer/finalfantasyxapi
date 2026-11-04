@@ -14,13 +14,13 @@ func getCharClassRelationships(cfg *Config, r *http.Request, class seedtypes.Cha
 
 	g.Go(func() error {
 		var err error
-		rel.Members, err = cfg.E.PlayerUnits.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassUnitIDs)
+		rel.Members, err = E.PlayerUnits.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassUnitIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultAbilities, err = cfg.E.Abilities.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassDefaultAbilityIDs)
+		rel.DefaultAbilities, err = E.Abilities.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassDefaultAbilityIDs)
 		if err != nil {
 			return err
 		}
@@ -31,19 +31,19 @@ func getCharClassRelationships(cfg *Config, r *http.Request, class seedtypes.Cha
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultOverdrives, err = cfg.E.Overdrives.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassDefaultOverdriveIDs)
+		rel.DefaultOverdrives, err = E.Overdrives.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassDefaultOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.LearnableOverdrives, err = cfg.E.Overdrives.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassLearnableOverdriveIDs)
+		rel.LearnableOverdrives, err = E.Overdrives.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassLearnableOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Submenus, err = cfg.E.Submenus.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassSubmenuIDs)
+		rel.Submenus, err = E.Submenus.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassSubmenuIDs)
 		return err
 	})
 
@@ -56,7 +56,7 @@ func getCharClassRelationships(cfg *Config, r *http.Request, class seedtypes.Cha
 }
 
 func getClassLearnableAbilities(cfg *Config, ctx context.Context, class seedtypes.CharacterClass, defaultAbilities []TypedAPIResource) ([]TypedAPIResource, error) {
-	allAbilities, err := cfg.E.Abilities.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassLearnableAbilityIDs)
+	allAbilities, err := E.Abilities.dbGetRelations(cfg, ctx, class, cfg.db.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
 		return nil, err
 	}

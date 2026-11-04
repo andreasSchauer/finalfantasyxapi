@@ -10,7 +10,7 @@ import (
 func getSphereRelationships(cfg *Config, r *http.Request, sphere seedtypes.Sphere) (Sphere, error) {
 	item, _ := lookup.GetResourceByID(sphere.ItemID, lookup.L.ItemsID)
 
-	availabilityParams, err := cfg.E.Spheres.queryAvlRelGetParams(cfg, r, item.ID)
+	availabilityParams, err := E.Spheres.queryAvlRelGetParams(cfg, r, item.ID)
 	if err != nil {
 		return Sphere{}, err
 	}
@@ -21,7 +21,7 @@ func getSphereRelationships(cfg *Config, r *http.Request, sphere seedtypes.Spher
 	}
 
 	rel := Sphere{
-		Item:            nameToNamedAPIResource(cfg, cfg.E.Items, item.Name, nil),
+		Item:            nameToNamedAPIResource(cfg, E.Items, item.Name, nil),
 		Description:     item.Description,
 		Effect:          item.Effect,
 		Monsters:        itemRel.Monsters,

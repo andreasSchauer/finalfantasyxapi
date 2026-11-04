@@ -26,9 +26,9 @@ func (cfg *Config) getAeonCommand(r *http.Request, i handlerInput[seedtypes.Aeon
 		Description:       command.Description,
 		Effect:            command.Effect,
 		Cursor:            command.Cursor,
-		User:              nameToNamedAPIResource(cfg, cfg.E.CharacterClasses, userName, nil),
-		Topmenu:           namePtrToNamedAPIResPtr(cfg, cfg.E.Topmenus, command.Topmenu, nil),
-		OpenSubmenu:       namePtrToNamedAPIResPtr(cfg, cfg.E.Submenus, command.OpenSubmenu, nil),
+		User:              nameToNamedAPIResource(cfg, E.CharacterClasses, userName, nil),
+		Topmenu:           namePtrToNamedAPIResPtr(cfg, E.Topmenus, command.Topmenu, nil),
+		OpenSubmenu:       namePtrToNamedAPIResPtr(cfg, E.Submenus, command.OpenSubmenu, nil),
 		PossibleAbilities: convertObjSlice(cfg, command.PossibleAbilities, convertPossibleAbilityList),
 	}
 

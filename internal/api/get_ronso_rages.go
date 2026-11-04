@@ -12,7 +12,7 @@ func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seedtypes.RonsoR
 		return RonsoRage{}, err
 	}
 
-	monsters, err := cfg.E.Monsters.dbGetRelations(cfg, r.Context(), ronsoRage, cfg.db.GetRonsoRageMonsterIDs)
+	monsters, err := E.Monsters.dbGetRelations(cfg, r.Context(), ronsoRage, cfg.db.GetRonsoRageMonsterIDs)
 	if err != nil {
 		return RonsoRage{}, err
 	}
@@ -22,7 +22,7 @@ func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seedtypes.RonsoR
 		Name:        ronsoRage.Name,
 		Description: ronsoRage.Description,
 		Effect:      ronsoRage.Effect,
-		Overdrive:   nameToNamedAPIResource(cfg, cfg.E.Overdrives, ronsoRage.Name, nil),
+		Overdrive:   nameToNamedAPIResource(cfg, E.Overdrives, ronsoRage.Name, nil),
 		Monsters:    monsters,
 	}
 

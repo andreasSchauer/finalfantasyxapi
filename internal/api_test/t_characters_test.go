@@ -313,5 +313,5 @@ func TestRetrieveCharacters(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.Characters.Endpoint, "RetrieveCharacters", testCfg.HandleCharacters, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Characters.Endpoint, "RetrieveCharacters", testCfg.HandleCharacters, compareAPIResourceLists[api.NamedAPIResource])
 }

@@ -81,5 +81,5 @@ func TestRetrieveOverdriveCommands(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, testCfg.E.OverdriveCommands.Endpoint, "RetrieveOverdriveCommands", testCfg.HandleOverdriveCommands, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.OverdriveCommands.Endpoint, "RetrieveOverdriveCommands", testCfg.HandleOverdriveCommands, compareAPIResourceLists[api.NamedAPIResource])
 }

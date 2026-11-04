@@ -23,7 +23,7 @@ func (cfg *Config) getPrimer(r *http.Request, i handlerInput[seedtypes.Primer, P
 	response := Primer{
 		ID:            primer.ID,
 		Name:          primer.Name,
-		KeyItem:       nameToNamedAPIResource(cfg, cfg.E.KeyItems, keyItem.Name, nil),
+		KeyItem:       nameToNamedAPIResource(cfg, E.KeyItems, keyItem.Name, nil),
 		Description:   keyItem.Description,
 		AlBhedLetter:  primer.AlBhedLetter,
 		EnglishLetter: primer.EnglishLetter,
