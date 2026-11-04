@@ -105,7 +105,7 @@ func TestGetMix(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetMix", testCfg.HandleMixes, compareMixes)
+	testSingleResources(t, tests, "GetMix", testSrv.Cfg.HandleMixes, compareMixes)
 }
 
 func TestRetrieveMixes(t *testing.T) {
@@ -145,5 +145,5 @@ func TestRetrieveMixes(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Mixes.Endpoint, "RetrieveMixes", testCfg.HandleMixes, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Mixes.Endpoint, "RetrieveMixes", testSrv.Cfg.HandleMixes, compareAPIResourceLists[api.NamedAPIResource])
 }

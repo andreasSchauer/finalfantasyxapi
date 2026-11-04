@@ -55,7 +55,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetCelestialWeapon", testCfg.HandleCelestialWeapons, compareCelestialWeapons)
+	testSingleResources(t, tests, "GetCelestialWeapon", testSrv.Cfg.HandleCelestialWeapons, compareCelestialWeapons)
 }
 
 func TestRetrieveCelestialWeapons(t *testing.T) {
@@ -79,5 +79,5 @@ func TestRetrieveCelestialWeapons(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.CelestialWeapons.Endpoint, "RetrieveCelestialWeapons", testCfg.HandleCelestialWeapons, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.CelestialWeapons.Endpoint, "RetrieveCelestialWeapons", testSrv.Cfg.HandleCelestialWeapons, compareAPIResourceLists[api.NamedAPIResource])
 }

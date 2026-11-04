@@ -64,7 +64,7 @@ func TestGetQuest(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetQuests", testCfg.HandleQuests, compareQuests)
+	testSingleResources(t, tests, "GetQuests", testSrv.Cfg.HandleQuests, compareQuests)
 }
 
 func TestRetrieveQuests(t *testing.T) {
@@ -136,5 +136,5 @@ func TestRetrieveQuests(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Quests.Endpoint, "RetrieveQuests", testCfg.HandleQuests, compareAPIResourceLists[api.TypedAPIResource])
+	testIDList(t, tests, api.E.Quests.Endpoint, "RetrieveQuests", testSrv.Cfg.HandleQuests, compareAPIResourceLists[api.TypedAPIResource])
 }

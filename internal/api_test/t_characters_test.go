@@ -281,7 +281,7 @@ func TestGetCharacter(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetCharacter", testCfg.HandleCharacters, compareCharacters)
+	testSingleResources(t, tests, "GetCharacter", testSrv.Cfg.HandleCharacters, compareCharacters)
 }
 
 func TestRetrieveCharacters(t *testing.T) {
@@ -313,5 +313,5 @@ func TestRetrieveCharacters(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Characters.Endpoint, "RetrieveCharacters", testCfg.HandleCharacters, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Characters.Endpoint, "RetrieveCharacters", testSrv.Cfg.HandleCharacters, compareAPIResourceLists[api.NamedAPIResource])
 }

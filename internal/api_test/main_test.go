@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 )
 
-var testCfg *api.Config
+var testSrv api.Server
 
 func TestMain(m *testing.M) {
 	log.SetOutput(io.Discard)
@@ -19,14 +19,13 @@ func TestMain(m *testing.M) {
 		panic(err)
 	}
 
-	cfg, err := api.ConfigInit()
+	err = testSrv.Init()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-
-	testCfg = cfg
+	testSrv.InitGlobals()
 
 	code := m.Run()
-	_ = testCfg.DBConn.Close()
+	_ = testSrv.Cfg.DBConn.Close()
 	os.Exit(code)
 }

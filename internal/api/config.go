@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding"
 	_ "github.com/lib/pq"
 )
@@ -52,7 +51,7 @@ func ConfigInit() (*Config, error) {
 	dbConn.SetConnMaxLifetime(time.Hour)
 	dbQueries := database.New(dbConn)
 
-	apiCfg := Config{
+	cfg := Config{
 		db:          dbQueries,
 		DBConn:      dbConn,
 		platform:    platform,
@@ -61,14 +60,10 @@ func ConfigInit() (*Config, error) {
 		fetchLimit:  fetchLimit,
 	}
 
-	err = seeding.LoadDatabase(apiCfg.db, apiCfg.DBConn)
+	err = seeding.LoadDatabase(cfg.db, cfg.DBConn)
 	if err != nil {
 		return nil, err
 	}
 
-	enums.T.EnumLookupInit()
-	E.EndpointsInit(&apiCfg)
-	Q.Init()
-
-	return &apiCfg, nil
+	return &cfg, nil
 }

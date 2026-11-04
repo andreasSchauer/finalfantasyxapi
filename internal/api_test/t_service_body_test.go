@@ -14,47 +14,47 @@ func TestServiceBody(t *testing.T) {
 		{
 			requestURL:     "/api/al-bhed/body",
 			expectedStatus: http.StatusOK,
-			handler:        testCfg.HandleAlBhedGet,
+			handler:        testSrv.Cfg.HandleAlBhedGet,
 		},
 		{
 			requestURL:     "/api/turn-order/body",
 			expectedStatus: http.StatusOK,
-			handler:        testCfg.HandleTurnOrderGet,
+			handler:        testSrv.Cfg.HandleTurnOrderGet,
 		},
 		{
 			requestURL:     "/api/drop-chance/body",
 			expectedStatus: http.StatusOK,
-			handler:        testCfg.HandleDropChanceGet,
+			handler:        testSrv.Cfg.HandleDropChanceGet,
 		},
 		{
 			requestURL:     "/api/al-bhed/",
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    "wrong format. usage: 'GET /api/al-bhed/body', 'POST /api/al-bhed'",
-			handler:        testCfg.HandleAlBhedGet,
+			handler:        testSrv.Cfg.HandleAlBhedGet,
 		},
 		{
 			requestURL:     "/api/al-bhed/body/2/2",
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    "wrong format. usage: 'GET /api/al-bhed/body', 'POST /api/al-bhed'",
-			handler:        testCfg.HandleAlBhedGet,
+			handler:        testSrv.Cfg.HandleAlBhedGet,
 		},
 		{
 			requestURL:     "/api/al-bhed/body/asd",
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    "'GET api/al-bhed/body' only supports the following sections: 'docs', 'samples'",
-			handler:        testCfg.HandleAlBhedGet,
+			handler:        testSrv.Cfg.HandleAlBhedGet,
 		},
 		{
 			requestURL:     "/api/al-bhed/bodsa",
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    "'GET api/al-bhed' only supports '/body'",
-			handler:        testCfg.HandleAlBhedGet,
+			handler:        testSrv.Cfg.HandleAlBhedGet,
 		},
 		{
 			requestURL:     "/api/al-bhed/body?limit=23",
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    "computational endpoints don't have any query parameters",
-			handler:        testCfg.HandleAlBhedGet,
+			handler:        testSrv.Cfg.HandleAlBhedGet,
 		},
 	}
 
@@ -68,17 +68,17 @@ func TestServiceBodyDocs(t *testing.T) {
 		{
 			requestURL:     "/api/al-bhed/body/docs",
 			expectedStatus: http.StatusOK,
-			handler:        testCfg.HandleAlBhedGet,
+			handler:        testSrv.Cfg.HandleAlBhedGet,
 		},
 		{
 			requestURL:     "/api/turn-order/body/docs",
 			expectedStatus: http.StatusOK,
-			handler:        testCfg.HandleTurnOrderGet,
+			handler:        testSrv.Cfg.HandleTurnOrderGet,
 		},
 		{
 			requestURL:     "/api/drop-chance/body/docs",
 			expectedStatus: http.StatusOK,
-			handler:        testCfg.HandleDropChanceGet,
+			handler:        testSrv.Cfg.HandleDropChanceGet,
 		},
 	}
 
@@ -92,7 +92,7 @@ func TestAlBhedBodySamples(t *testing.T) {
 		{
 			requestURL:     "/api/al-bhed/body/samples",
 			expectedStatus: http.StatusOK,
-			handler:        testCfg.HandleAlBhedGet,
+			handler:        testSrv.Cfg.HandleAlBhedGet,
 		},
 	}
 
@@ -106,7 +106,7 @@ func TestTurnOrderBodySamples(t *testing.T) {
 		{
 			requestURL:     "/api/turn-order/body/samples",
 			expectedStatus: http.StatusOK,
-			handler:        testCfg.HandleTurnOrderGet,
+			handler:        testSrv.Cfg.HandleTurnOrderGet,
 		},
 	}
 
@@ -120,7 +120,7 @@ func TestDropChanceBodySamples(t *testing.T) {
 		{
 			requestURL:     "/api/drop-chance/body/samples",
 			expectedStatus: http.StatusOK,
-			handler:        testCfg.HandleDropChanceGet,
+			handler:        testSrv.Cfg.HandleDropChanceGet,
 		},
 	}
 

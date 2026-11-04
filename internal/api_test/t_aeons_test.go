@@ -258,7 +258,7 @@ func TestGetAeon(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetAeon", testCfg.HandleAeons, compareAeons)
+	testSingleResources(t, tests, "GetAeon", testSrv.Cfg.HandleAeons, compareAeons)
 }
 
 func TestRetrieveAeons(t *testing.T) {
@@ -290,5 +290,5 @@ func TestRetrieveAeons(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Aeons.Endpoint, "RetrieveAeons", testCfg.HandleAeons, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Aeons.Endpoint, "RetrieveAeons", testSrv.Cfg.HandleAeons, compareAPIResourceLists[api.NamedAPIResource])
 }

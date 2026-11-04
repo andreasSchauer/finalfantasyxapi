@@ -193,5 +193,5 @@ func TestAlBhed(t *testing.T) {
 		},
 	}
 
-	testServiceResponsesPost(t, tests, "AlBhed", testCfg.HandleAlBhedPost, compareAlBhedResponses)
+	testServiceResponsesPost(t, tests, "AlBhed", testSrv.Cfg.HandleAlBhedPost, compareAlBhedResponses)
 }

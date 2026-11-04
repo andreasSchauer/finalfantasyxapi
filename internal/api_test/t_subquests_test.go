@@ -88,7 +88,7 @@ func TestGetSubquest(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetSubquest", testCfg.HandleSubquests, compareSubquests)
+	testSingleResources(t, tests, "GetSubquest", testSrv.Cfg.HandleSubquests, compareSubquests)
 }
 
 func TestRetrieveSubquests(t *testing.T) {
@@ -152,7 +152,7 @@ func TestRetrieveSubquests(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Subquests.Endpoint, "RetrieveSubquests", testCfg.HandleSubquests, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Subquests.Endpoint, "RetrieveSubquests", testSrv.Cfg.HandleSubquests, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionSubquests(t *testing.T) {
@@ -196,5 +196,5 @@ func TestSubsectionSubquests(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Subquests.Endpoint, "SubsectionSubquests", testCfg.HandleSidequests, compareSimpleResourceLists[api.NamedAPIResource, api.SubquestSimple])
+	testIDList(t, tests, api.E.Subquests.Endpoint, "SubsectionSubquests", testSrv.Cfg.HandleSidequests, compareSimpleResourceLists[api.NamedAPIResource, api.SubquestSimple])
 }

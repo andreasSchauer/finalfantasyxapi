@@ -131,7 +131,7 @@ func TestGetMonsterFormation(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetMonsterFormation", testCfg.HandleMonsterFormations, compareMonsterFormations)
+	testSingleResources(t, tests, "GetMonsterFormation", testSrv.Cfg.HandleMonsterFormations, compareMonsterFormations)
 }
 
 func TestRetrieveMonsterFormations(t *testing.T) {
@@ -282,7 +282,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.MonsterFormations.Endpoint, "RetrieveMonsterFormations", testCfg.HandleMonsterFormations, compareAPIResourceLists[api.UnnamedAPIResource])
+	testIDList(t, tests, api.E.MonsterFormations.Endpoint, "RetrieveMonsterFormations", testSrv.Cfg.HandleMonsterFormations, compareAPIResourceLists[api.UnnamedAPIResource])
 }
 
 func TestSubsectionMonsterFormations(t *testing.T) {
@@ -292,7 +292,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/23/monster-formations",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleLocations,
+				handler:        testSrv.Cfg.HandleLocations,
 			},
 			count:          18,
 			parentResource: h.GetStrPtr("/locations/23"),
@@ -302,7 +302,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/4/monster-formations",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleLocations,
+				handler:        testSrv.Cfg.HandleLocations,
 			},
 			count:          14,
 			parentResource: h.GetStrPtr("/locations/4"),
@@ -312,7 +312,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/38/monster-formations",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleSublocations,
+				handler:        testSrv.Cfg.HandleSublocations,
 			},
 			count:          14,
 			parentResource: h.GetStrPtr("/sublocations/38"),
@@ -322,7 +322,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/18/monster-formations",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleSublocations,
+				handler:        testSrv.Cfg.HandleSublocations,
 			},
 			count:          10,
 			parentResource: h.GetStrPtr("/sublocations/18"),
@@ -332,7 +332,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/89/monster-formations",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleAreas,
+				handler:        testSrv.Cfg.HandleAreas,
 			},
 			count:          10,
 			parentResource: h.GetStrPtr("/areas/89"),
@@ -342,7 +342,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/170/monster-formations",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleAreas,
+				handler:        testSrv.Cfg.HandleAreas,
 			},
 			count:          12,
 			parentResource: h.GetStrPtr("/areas/170"),
@@ -352,7 +352,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/200/monster-formations",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleMonsters,
+				handler:        testSrv.Cfg.HandleMonsters,
 			},
 			count:          1,
 			parentResource: h.GetStrPtr("/monsters/200"),
@@ -362,7 +362,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/155/monster-formations",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleMonsters,
+				handler:        testSrv.Cfg.HandleMonsters,
 			},
 			count:          2,
 			parentResource: h.GetStrPtr("/monsters/155"),

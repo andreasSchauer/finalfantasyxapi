@@ -288,7 +288,7 @@ func TestGetItemAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetItemAbility", testCfg.HandleItemAbilities, compareItemAbilities)
+	testSingleResources(t, tests, "GetItemAbility", testSrv.Cfg.HandleItemAbilities, compareItemAbilities)
 }
 
 func TestRetrieveItemAbilities(t *testing.T) {
@@ -336,5 +336,5 @@ func TestRetrieveItemAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.ItemAbilities.Endpoint, "RetrieveItemAbilities", testCfg.HandleItemAbilities, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.ItemAbilities.Endpoint, "RetrieveItemAbilities", testSrv.Cfg.HandleItemAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }

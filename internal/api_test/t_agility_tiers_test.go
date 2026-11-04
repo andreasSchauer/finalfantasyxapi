@@ -84,7 +84,7 @@ func TestGetAgilityTier(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetAgilityTier", testCfg.HandleAgilityTiers, compareAgilityTiers)
+	testSingleResources(t, tests, "GetAgilityTier", testSrv.Cfg.HandleAgilityTiers, compareAgilityTiers)
 }
 
 func TestRetrieveAgilityTiers(t *testing.T) {
@@ -108,5 +108,5 @@ func TestRetrieveAgilityTiers(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.AgilityTiers.Endpoint, "RetrieveAgilityTiers", testCfg.HandleAgilityTiers, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.AgilityTiers.Endpoint, "RetrieveAgilityTiers", testSrv.Cfg.HandleAgilityTiers, compareAPIResourceLists[api.NamedAPIResource])
 }

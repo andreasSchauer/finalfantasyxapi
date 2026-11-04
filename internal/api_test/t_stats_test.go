@@ -89,7 +89,7 @@ func TestGetStat(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetStat", testCfg.HandleStats, compareStats)
+	testSingleResources(t, tests, "GetStat", testSrv.Cfg.HandleStats, compareStats)
 }
 
 func TestRetrieveStats(t *testing.T) {
@@ -105,5 +105,5 @@ func TestRetrieveStats(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Stats.Endpoint, "RetrieveStats", testCfg.HandleStats, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Stats.Endpoint, "RetrieveStats", testSrv.Cfg.HandleStats, compareAPIResourceLists[api.NamedAPIResource])
 }

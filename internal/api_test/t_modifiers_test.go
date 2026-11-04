@@ -123,7 +123,7 @@ func TestGetModifier(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetModifier", testCfg.HandleModifiers, compareModifiers)
+	testSingleResources(t, tests, "GetModifier", testSrv.Cfg.HandleModifiers, compareModifiers)
 }
 
 func TestRetrieveModifiers(t *testing.T) {
@@ -147,5 +147,5 @@ func TestRetrieveModifiers(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Modifiers.Endpoint, "RetrieveModifiers", testCfg.HandleModifiers, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Modifiers.Endpoint, "RetrieveModifiers", testSrv.Cfg.HandleModifiers, compareAPIResourceLists[api.NamedAPIResource])
 }

@@ -46,7 +46,7 @@ func TestGetEnum(t *testing.T) {
 		},
 	}
 
-	testStatusses(t, tests, "GetEnum", testCfg.HandleEnums)
+	testStatusses(t, tests, "GetEnum", testSrv.Cfg.HandleEnums)
 }
 
 func TestRetrieveEnums(t *testing.T) {
@@ -78,5 +78,5 @@ func TestRetrieveEnums(t *testing.T) {
 		},
 	}
 
-	testPathList(t, tests, "RetrieveEnums", testCfg.HandleEnums, compareAPIResourceListPaths[api.NamedAPIResource])
+	testPathList(t, tests, "RetrieveEnums", testSrv.Cfg.HandleEnums, compareAPIResourceListPaths[api.NamedAPIResource])
 }

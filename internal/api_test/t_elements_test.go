@@ -49,7 +49,7 @@ func TestGetElement(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetElement", testCfg.HandleElements, compareElements)
+	testSingleResources(t, tests, "GetElement", testSrv.Cfg.HandleElements, compareElements)
 }
 
 func TestRetrieveElements(t *testing.T) {
@@ -65,5 +65,5 @@ func TestRetrieveElements(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Elements.Endpoint, "RetrieveElements", testCfg.HandleElements, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Elements.Endpoint, "RetrieveElements", testSrv.Cfg.HandleElements, compareAPIResourceLists[api.NamedAPIResource])
 }

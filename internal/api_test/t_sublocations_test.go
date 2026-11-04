@@ -268,7 +268,7 @@ func TestGetSublocation(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetSublocation", testCfg.HandleSublocations, compareSublocations)
+	testSingleResources(t, tests, "GetSublocation", testSrv.Cfg.HandleSublocations, compareSublocations)
 }
 
 func TestRetrieveSublocations(t *testing.T) {
@@ -444,7 +444,7 @@ func TestRetrieveSublocations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Sublocations.Endpoint, "RetrieveSublocations", testCfg.HandleSublocations, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Sublocations.Endpoint, "RetrieveSublocations", testSrv.Cfg.HandleSublocations, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionSublocations(t *testing.T) {
@@ -454,7 +454,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/5/connected/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleSublocations,
+				handler:        testSrv.Cfg.HandleSublocations,
 			},
 			count:          2,
 			parentResource: h.GetStrPtr("/sublocations/5"),
@@ -464,7 +464,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/12/connected/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleSublocations,
+				handler:        testSrv.Cfg.HandleSublocations,
 			},
 			count:          1,
 			parentResource: h.GetStrPtr("/sublocations/12"),
@@ -474,7 +474,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/27/connected/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleSublocations,
+				handler:        testSrv.Cfg.HandleSublocations,
 			},
 			count:          3,
 			parentResource: h.GetStrPtr("/sublocations/27"),
@@ -484,7 +484,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/35/connected/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleSublocations,
+				handler:        testSrv.Cfg.HandleSublocations,
 			},
 			count:          4,
 			parentResource: h.GetStrPtr("/sublocations/35"),
@@ -494,7 +494,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/simple?availability=pre-story",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleSublocations,
+				handler:        testSrv.Cfg.HandleSublocations,
 				dontCheck: map[string]bool{
 					"parent resource": true,
 				},
@@ -506,7 +506,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/simple?availability=post&sidequests=true&boss_fights=true",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleSublocations,
+				handler:        testSrv.Cfg.HandleSublocations,
 				dontCheck: map[string]bool{
 					"parent resource": true,
 				},
@@ -518,7 +518,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/15/sublocations/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleLocations,
+				handler:        testSrv.Cfg.HandleLocations,
 			},
 			count:          3,
 			parentResource: h.GetStrPtr("/locations/15"),
@@ -528,7 +528,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/8/sublocations/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleLocations,
+				handler:        testSrv.Cfg.HandleLocations,
 			},
 			count:          2,
 			parentResource: h.GetStrPtr("/locations/8"),

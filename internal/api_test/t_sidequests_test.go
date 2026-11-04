@@ -90,7 +90,7 @@ func TestGetSidequest(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetSidequest", testCfg.HandleSidequests, compareSidequests)
+	testSingleResources(t, tests, "GetSidequest", testSrv.Cfg.HandleSidequests, compareSidequests)
 }
 
 func TestRetrieveSidequests(t *testing.T) {
@@ -130,5 +130,5 @@ func TestRetrieveSidequests(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Sidequests.Endpoint, "RetrieveSidequests", testCfg.HandleSidequests, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Sidequests.Endpoint, "RetrieveSidequests", testSrv.Cfg.HandleSidequests, compareAPIResourceLists[api.NamedAPIResource])
 }

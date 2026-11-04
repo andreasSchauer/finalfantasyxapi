@@ -157,7 +157,7 @@ func TestGetSong(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetSongs", testCfg.HandleSongs, compareSongs)
+	testSingleResources(t, tests, "GetSongs", testSrv.Cfg.HandleSongs, compareSongs)
 }
 
 func TestRetrieveSongs(t *testing.T) {
@@ -229,7 +229,7 @@ func TestRetrieveSongs(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Songs.Endpoint, "RetrieveSongs", testCfg.HandleSongs, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Songs.Endpoint, "RetrieveSongs", testSrv.Cfg.HandleSongs, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionSongs(t *testing.T) {
@@ -239,7 +239,7 @@ func TestSubsectionSongs(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/25/songs",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleLocations,
+				handler:        testSrv.Cfg.HandleLocations,
 			},
 			count:          11,
 			parentResource: h.GetStrPtr("/locations/25"),
@@ -249,7 +249,7 @@ func TestSubsectionSongs(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/31/songs",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleSublocations,
+				handler:        testSrv.Cfg.HandleSublocations,
 			},
 			count:          4,
 			parentResource: h.GetStrPtr("/sublocations/31"),
@@ -259,7 +259,7 @@ func TestSubsectionSongs(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/148/songs",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleAreas,
+				handler:        testSrv.Cfg.HandleAreas,
 			},
 			count:          4,
 			parentResource: h.GetStrPtr("/areas/148"),

@@ -52,7 +52,7 @@ func TestGetFMV(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetFMV", testCfg.HandleFMVs, compareFMVs)
+	testSingleResources(t, tests, "GetFMV", testSrv.Cfg.HandleFMVs, compareFMVs)
 }
 
 func TestRetrieveFMVs(t *testing.T) {
@@ -84,5 +84,5 @@ func TestRetrieveFMVs(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.FMVs.Endpoint, "RetrieveFMVs", testCfg.HandleFMVs, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.FMVs.Endpoint, "RetrieveFMVs", testSrv.Cfg.HandleFMVs, compareAPIResourceLists[api.NamedAPIResource])
 }

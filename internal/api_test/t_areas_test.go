@@ -400,7 +400,7 @@ func TestGetArea(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetArea", testCfg.HandleAreas, compareAreas)
+	testSingleResources(t, tests, "GetArea", testSrv.Cfg.HandleAreas, compareAreas)
 }
 
 func TestRetrieveAreas(t *testing.T) {
@@ -663,7 +663,7 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Areas.Endpoint, "RetrieveAreas", testCfg.HandleAreas, compareAPIResourceLists[api.AreaAPIResource])
+	testIDList(t, tests, api.E.Areas.Endpoint, "RetrieveAreas", testSrv.Cfg.HandleAreas, compareAPIResourceLists[api.AreaAPIResource])
 }
 
 func TestSubsectionAreas(t *testing.T) {
@@ -673,7 +673,7 @@ func TestSubsectionAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/36/connected/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleAreas,
+				handler:        testSrv.Cfg.HandleAreas,
 			},
 			count:          7,
 			parentResource: h.GetStrPtr("/areas/36"),
@@ -683,7 +683,7 @@ func TestSubsectionAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/209/connected/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleAreas,
+				handler:        testSrv.Cfg.HandleAreas,
 			},
 			count:          2,
 			parentResource: h.GetStrPtr("/areas/209"),
@@ -693,7 +693,7 @@ func TestSubsectionAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/9/connected/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleAreas,
+				handler:        testSrv.Cfg.HandleAreas,
 			},
 			count:          4,
 			parentResource: h.GetStrPtr("/areas/9"),
@@ -703,7 +703,7 @@ func TestSubsectionAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/235/connected/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleAreas,
+				handler:        testSrv.Cfg.HandleAreas,
 			},
 			count:          0,
 			parentResource: h.GetStrPtr("/areas/235"),
@@ -713,7 +713,7 @@ func TestSubsectionAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/149/connected/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleAreas,
+				handler:        testSrv.Cfg.HandleAreas,
 			},
 			count:          3,
 			parentResource: h.GetStrPtr("/areas/149"),
@@ -723,7 +723,7 @@ func TestSubsectionAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/45/areas/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleMonsters,
+				handler:        testSrv.Cfg.HandleMonsters,
 			},
 			count:          5,
 			parentResource: h.GetStrPtr("/monsters/45"),
@@ -733,7 +733,7 @@ func TestSubsectionAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/140/areas/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleMonsters,
+				handler:        testSrv.Cfg.HandleMonsters,
 			},
 			count:          4,
 			parentResource: h.GetStrPtr("/monsters/140"),
@@ -743,7 +743,7 @@ func TestSubsectionAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/66/areas/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleMonsters,
+				handler:        testSrv.Cfg.HandleMonsters,
 			},
 			count:          1,
 			parentResource: h.GetStrPtr("/monsters/66"),
@@ -753,7 +753,7 @@ func TestSubsectionAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/42/areas/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleSublocations,
+				handler:        testSrv.Cfg.HandleSublocations,
 			},
 			count:          7,
 			parentResource: h.GetStrPtr("/sublocations/42"),
@@ -763,7 +763,7 @@ func TestSubsectionAreas(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/10/areas/",
 				expectedStatus: http.StatusOK,
-				handler:        testCfg.HandleLocations,
+				handler:        testSrv.Cfg.HandleLocations,
 			},
 			count:          9,
 			parentResource: h.GetStrPtr("/locations/10"),

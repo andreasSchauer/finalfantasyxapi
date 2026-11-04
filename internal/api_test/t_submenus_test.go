@@ -93,7 +93,7 @@ func TestGetSubmenu(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetSubmenu", testCfg.HandleSubmenus, compareSubmenus)
+	testSingleResources(t, tests, "GetSubmenu", testSrv.Cfg.HandleSubmenus, compareSubmenus)
 }
 
 func TestRetrieveSubmenus(t *testing.T) {
@@ -117,5 +117,5 @@ func TestRetrieveSubmenus(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Submenus.Endpoint, "RetrieveSubmenus", testCfg.HandleSubmenus, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Submenus.Endpoint, "RetrieveSubmenus", testSrv.Cfg.HandleSubmenus, compareAPIResourceLists[api.NamedAPIResource])
 }

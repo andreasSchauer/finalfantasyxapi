@@ -90,7 +90,7 @@ func TestGetEquipmentTable(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetEquipmentTable", testCfg.HandleEquipmentTables, compareEquipmentTables)
+	testSingleResources(t, tests, "GetEquipmentTable", testSrv.Cfg.HandleEquipmentTables, compareEquipmentTables)
 }
 
 func TestRetrieveEquipmentTables(t *testing.T) {
@@ -130,5 +130,5 @@ func TestRetrieveEquipmentTables(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.EquipmentTables.Endpoint, "RetrieveEquipmentTables", testCfg.HandleEquipmentTables, compareAPIResourceLists[api.UnnamedAPIResource])
+	testIDList(t, tests, api.E.EquipmentTables.Endpoint, "RetrieveEquipmentTables", testSrv.Cfg.HandleEquipmentTables, compareAPIResourceLists[api.UnnamedAPIResource])
 }

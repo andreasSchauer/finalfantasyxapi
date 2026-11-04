@@ -90,7 +90,7 @@ func TestGetAeonCommand(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetAeonCommand", testCfg.HandleAeonCommands, compareAeonCommands)
+	testSingleResources(t, tests, "GetAeonCommand", testSrv.Cfg.HandleAeonCommands, compareAeonCommands)
 }
 
 func TestRetrieveAeonCommands(t *testing.T) {
@@ -106,5 +106,5 @@ func TestRetrieveAeonCommands(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.AeonCommands.Endpoint, "RetrieveAeonCommands", testCfg.HandleAeonCommands, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.AeonCommands.Endpoint, "RetrieveAeonCommands", testSrv.Cfg.HandleAeonCommands, compareAPIResourceLists[api.NamedAPIResource])
 }
