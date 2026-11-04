@@ -577,7 +577,7 @@ func TestGetItem(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetItem", testSrv.Cfg.HandleItems, compareItems)
+	testSingleResources(t, tests, "GetItem", testSrv.HandleItems, compareItems)
 }
 
 func TestRetrieveItems(t *testing.T) {
@@ -760,5 +760,5 @@ func TestRetrieveItems(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Items.Endpoint, "RetrieveItems", testSrv.Cfg.HandleItems, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Items.Endpoint, "RetrieveItems", testSrv.HandleItems, compareAPIResourceLists[api.NamedAPIResource])
 }

@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getMiscAbility(r *http.Request, i handlerInput[seedtypes.MiscAbility, MiscAbility, NamedAPIResource], id int32) (MiscAbility, error) {
+func (s *Server) getMiscAbility(r *http.Request, i handlerInput[seedtypes.MiscAbility, MiscAbility, NamedAPIResource], id int32) (MiscAbility, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return MiscAbility{}, err
@@ -20,21 +20,21 @@ func (cfg *Config) getMiscAbility(r *http.Request, i handlerInput[seedtypes.Misc
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		UntypedAbility:     idToTypedAPIResource(cfg, E.Abilities, ability.Ability.ID),
+		UntypedAbility:     idToTypedAPIResource(s, E.Abilities, ability.Ability.ID),
 		Description:        ability.Description,
 		Effect:             ability.Effect,
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
-		LearnedBy:          namesToNamedAPIResources(cfg, E.CharacterClasses, ability.LearnedBy),
-		Topmenu:            namePtrToNamedAPIResPtr(cfg, E.Topmenus, ability.Topmenu, nil),
-		Submenu:            namePtrToNamedAPIResPtr(cfg, E.Submenus, ability.Submenu, nil),
-		OpenSubmenu:        namePtrToNamedAPIResPtr(cfg, E.Submenus, ability.OpenSubmenu, nil),
+		LearnedBy:          namesToNamedAPIResources(s, E.CharacterClasses, ability.LearnedBy),
+		Topmenu:            namePtrToNamedAPIResPtr(s, E.Topmenus, ability.Topmenu, nil),
+		Submenu:            namePtrToNamedAPIResPtr(s, E.Submenus, ability.Submenu, nil),
+		OpenSubmenu:        namePtrToNamedAPIResPtr(s, E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:             ability.Cursor,
-		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: convertObjSlice(s, ability.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, i, response, ts.QpnAbilityUser)
+	battleInteractions, err := applyUser(s, r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return MiscAbility{}, err
 	}
@@ -43,18 +43,18 @@ func (cfg *Config) getMiscAbility(r *http.Request, i handlerInput[seedtypes.Misc
 	return response, nil
 }
 
-func (cfg *Config) retrieveMiscAbilities(r *http.Request, i handlerInput[seedtypes.MiscAbility, MiscAbility, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveMiscAbilities(r *http.Request, i handlerInput[seedtypes.MiscAbility, MiscAbility, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 	abilityType := database.AbilityTypeMiscAbility
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryIntList(cfg, r, ids, ts.QpnRank, getTypedAbilityIDsByRank(cfg, abilityType)),
-		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetMiscAbilityIDsByCharClass),
-		i.queryBool(r, ids, ts.QpnCopycat, getTypedAbilityIDsByCanCopycat(cfg, abilityType)),
-		i.queryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(cfg, abilityType)),
-		i.queryBool2(r, ids, ts.QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(cfg, abilityType)),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryIntList(s, r, ids, ts.QpnRank, getTypedAbilityIDsByRank(s, abilityType)),
+		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, s.Cfg.DB.GetMiscAbilityIDsByCharClass),
+		i.queryBool(r, ids, ts.QpnCopycat, getTypedAbilityIDsByCanCopycat(s, abilityType)),
+		i.queryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(s, abilityType)),
+		i.queryBool2(r, ids, ts.QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(s, abilityType)),
 	})
 }

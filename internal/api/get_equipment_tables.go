@@ -10,7 +10,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seedtypes.EquipmentTable, EquipmentTable, UnnamedAPIResource], id int32) (EquipmentTable, error) {
+func (s *Server) getEquipmentTable(r *http.Request, i handlerInput[seedtypes.EquipmentTable, EquipmentTable, UnnamedAPIResource], id int32) (EquipmentTable, error) {
 	table, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return EquipmentTable{}, err
@@ -20,16 +20,16 @@ func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seedtypes.E
 		ID:                      table.ID,
 		Type:                    table.Type,
 		Classification:          table.Classification,
-		SpecificCharacter:       namePtrToNamedAPIResPtr(cfg, E.Characters, table.SpecificCharacter, nil),
+		SpecificCharacter:       namePtrToNamedAPIResPtr(s, E.Characters, table.SpecificCharacter, nil),
 		Priority:                table.Priority,
-		RequiredAutoAbilities:   namesToNamedAPIResources(cfg, E.AutoAbilities, table.RequiredAutoAbilities),
-		SelectableAutoAbilities: convertObjSlice(cfg, table.SelectableAutoAbilities, convertAbilityPool),
+		RequiredAutoAbilities:   namesToNamedAPIResources(s, E.AutoAbilities, table.RequiredAutoAbilities),
+		SelectableAutoAbilities: convertObjSlice(s, table.SelectableAutoAbilities, convertAbilityPool),
 		RequiredSlots:           table.RequiredSlots,
-		Equipment:               convertObjSlice(cfg, table.EquipmentNames, convertEquipmentName),
+		Equipment:               convertObjSlice(s, table.EquipmentNames, convertEquipmentName),
 	}
 
 	if table.SpecificCharacter != nil && table.Classification == string(database.EquipClassCelestialWeapon) {
-		classRes, err := E.CelestialWeapons.dbGetRelationPtr(cfg, r.Context(), table, cfg.db.GetEquipmentTableCelestialWeaponID)
+		classRes, err := E.CelestialWeapons.dbGetRelationPtr(s, r.Context(), table, s.Cfg.DB.GetEquipmentTableCelestialWeaponID)
 		if err != nil {
 			return EquipmentTable{}, err
 		}
@@ -39,15 +39,15 @@ func (cfg *Config) getEquipmentTable(r *http.Request, i handlerInput[seedtypes.E
 	return response, nil
 }
 
-func (cfg *Config) retrieveEquipmentTables(r *http.Request, i handlerInput[seedtypes.EquipmentTable, EquipmentTable, UnnamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveEquipmentTables(r *http.Request, i handlerInput[seedtypes.EquipmentTable, EquipmentTable, UnnamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryIDList(cfg, r, ids, ts.QpnAutoAbilities, lookup.L.AutoAbilities, cfg.db.GetEquipmentTableIDsByAutoAbility),
-		i.queryEnum(r, enums.T.EquipType, ids, ts.QpnType, cfg.db.GetEquipmentTableIDsEquipType),
-		i.queryBool2(r, ids, ts.QpnCelestialWeapon, cfg.db.GetEquipmentTableIDsCelestialWeapon),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryIDList(s, r, ids, ts.QpnAutoAbilities, lookup.L.AutoAbilities, s.Cfg.DB.GetEquipmentTableIDsByAutoAbility),
+		i.queryEnum(r, enums.T.EquipType, ids, ts.QpnType, s.Cfg.DB.GetEquipmentTableIDsEquipType),
+		i.queryBool2(r, ids, ts.QpnCelestialWeapon, s.Cfg.DB.GetEquipmentTableIDsCelestialWeapon),
 	})
 }

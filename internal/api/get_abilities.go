@@ -10,13 +10,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, TypedAPIResource], id int32) (Ability, error) {
+func (s *Server) getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, TypedAPIResource], id int32) (Ability, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Ability{}, err
 	}
 
-	monsters, err := E.Monsters.dbGetRelations(cfg, r.Context(), ability, cfg.db.GetAbilityMonsterIDs)
+	monsters, err := E.Monsters.dbGetRelations(s, r.Context(), ability, s.Cfg.DB.GetAbilityMonsterIDs)
 	if err != nil {
 		return Ability{}, err
 	}
@@ -30,41 +30,41 @@ func (cfg *Config) getAbility(r *http.Request, i handlerInput[seedtypes.Ability,
 		Rank:               ability.Rank,
 		CanCopycat:         ability.CanCopycat,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
-		TypedAbility:       refToNamedAPIResource(cfg, ability.GetAbilityRef()),
+		TypedAbility:       refToNamedAPIResource(s, ability.GetAbilityRef()),
 		Monsters:           monsters,
-		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: convertObjSlice(s, ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	return response, nil
 }
 
-func (cfg *Config) retrieveAbilities(r *http.Request, i handlerInput[seedtypes.Ability, Ability, TypedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveAbilities(r *http.Request, i handlerInput[seedtypes.Ability, Ability, TypedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, enums.T.AbilityType, ids, ts.QpnType, cfg.db.GetAbilityIDsByType),
-		i.queryEnumList(cfg, r, enums.T.DamageType, ids, ts.QpnDamageType, cfg.db.GetAbilityIDsByDamageType),
-		i.queryEnumList(cfg, r, enums.T.AttackType, ids, ts.QpnAttackType, cfg.db.GetAbilityIDsByAttackType),
-		i.queryEnumList(cfg, r, enums.T.TargetType, ids, ts.QpnTargetType, cfg.db.GetAbilityIDsByTargetType),
-		i.queryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, cfg.db.GetAbilityIDsByDamageFormula),
-		i.queryIntList(cfg, r, ids, ts.QpnRank, cfg.db.GetAbilityIDsByRank),
-		i.queryNameIDListNul(cfg, r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, cfg.db.GetAbilityIDsByElement),
-		i.queryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, cfg.db.GetAbilityIDsByInflictedStatus),
-		i.queryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, cfg.db.GetAbilityIDsByRemovedStatus),
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.MonsterFormations, cfg.db.GetAbilityIDsByMonster),
-		i.queryBool(r, ids, ts.QpnCopycat, cfg.db.GetAbilityIDsByCanCopycat),
-		i.queryBool(r, ids, ts.QpnHelpBar, cfg.db.GetAbilityIDsByAppearsInHelpBar),
-		i.queryBool2(r, ids, ts.QpnCanCrit, cfg.db.GetAbilityIDsCanCrit),
-		i.queryBool2(r, ids, ts.QpnBDL, cfg.db.GetAbilityIDsBreakDmgLimit),
-		i.queryBool2(r, ids, ts.QpnUserAtk, cfg.db.GetAbilityIDsBasedOnUserAttack),
-		i.queryBool2(r, ids, ts.QpnDarkable, cfg.db.GetAbilityIDsDarkable),
-		i.queryBool2(r, ids, ts.QpnSilenceable, cfg.db.GetAbilityIDsSilenceable),
-		i.queryBool2(r, ids, ts.QpnReflectable, cfg.db.GetAbilityIDsReflectable),
-		i.queryBool2(r, ids, ts.QpnDelay, cfg.db.GetAbilityIDsDealsDelay),
-		i.queryBool2(r, ids, ts.QpnStatChanges, cfg.db.GetAbilityIDsWithStatChanges),
-		i.queryBool2(r, ids, ts.QpnModChanges, cfg.db.GetAbilityIDsWithModifierChanges),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryEnumList(s, r, enums.T.AbilityType, ids, ts.QpnType, s.Cfg.DB.GetAbilityIDsByType),
+		i.queryEnumList(s, r, enums.T.DamageType, ids, ts.QpnDamageType, s.Cfg.DB.GetAbilityIDsByDamageType),
+		i.queryEnumList(s, r, enums.T.AttackType, ids, ts.QpnAttackType, s.Cfg.DB.GetAbilityIDsByAttackType),
+		i.queryEnumList(s, r, enums.T.TargetType, ids, ts.QpnTargetType, s.Cfg.DB.GetAbilityIDsByTargetType),
+		i.queryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, s.Cfg.DB.GetAbilityIDsByDamageFormula),
+		i.queryIntList(s, r, ids, ts.QpnRank, s.Cfg.DB.GetAbilityIDsByRank),
+		i.queryNameIDListNul(s, r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, s.Cfg.DB.GetAbilityIDsByElement),
+		i.queryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, s.Cfg.DB.GetAbilityIDsByInflictedStatus),
+		i.queryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, s.Cfg.DB.GetAbilityIDsByRemovedStatus),
+		i.queryID(r, ids, ts.QpnMonster, lookup.L.MonsterFormations, s.Cfg.DB.GetAbilityIDsByMonster),
+		i.queryBool(r, ids, ts.QpnCopycat, s.Cfg.DB.GetAbilityIDsByCanCopycat),
+		i.queryBool(r, ids, ts.QpnHelpBar, s.Cfg.DB.GetAbilityIDsByAppearsInHelpBar),
+		i.queryBool2(r, ids, ts.QpnCanCrit, s.Cfg.DB.GetAbilityIDsCanCrit),
+		i.queryBool2(r, ids, ts.QpnBDL, s.Cfg.DB.GetAbilityIDsBreakDmgLimit),
+		i.queryBool2(r, ids, ts.QpnUserAtk, s.Cfg.DB.GetAbilityIDsBasedOnUserAttack),
+		i.queryBool2(r, ids, ts.QpnDarkable, s.Cfg.DB.GetAbilityIDsDarkable),
+		i.queryBool2(r, ids, ts.QpnSilenceable, s.Cfg.DB.GetAbilityIDsSilenceable),
+		i.queryBool2(r, ids, ts.QpnReflectable, s.Cfg.DB.GetAbilityIDsReflectable),
+		i.queryBool2(r, ids, ts.QpnDelay, s.Cfg.DB.GetAbilityIDsDealsDelay),
+		i.queryBool2(r, ids, ts.QpnStatChanges, s.Cfg.DB.GetAbilityIDsWithStatChanges),
+		i.queryBool2(r, ids, ts.QpnModChanges, s.Cfg.DB.GetAbilityIDsWithModifierChanges),
 	})
 }

@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource], id int32) (Mix, error) {
+func (s *Server) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource], id int32) (Mix, error) {
 	mix, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Mix{}, err
@@ -17,7 +17,7 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, Na
 
 	overdrive, _ := lookup.GetResourceByID(mix.OverdriveID, lookup.L.OverdrivesID)
 
-	combinations, err := getMixCombinations(cfg, r, mix)
+	combinations, err := getMixCombinations(s, r, mix)
 	if err != nil {
 		return Mix{}, err
 	}
@@ -26,7 +26,7 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, Na
 		ID:           mix.ID,
 		Name:         mix.Name,
 		Category:     mix.Category,
-		Overdrive:    nameToNamedAPIResource(cfg, E.Overdrives, overdrive.Name, nil),
+		Overdrive:    nameToNamedAPIResource(s, E.Overdrives, overdrive.Name, nil),
 		Description:  overdrive.Description,
 		Effect:       overdrive.Effect,
 		Combinations: combinations,
@@ -35,14 +35,14 @@ func (cfg *Config) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, Na
 	return response, nil
 }
 
-func (cfg *Config) retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, enums.T.MixCategory, ids, ts.QpnCategory, cfg.db.GetMixIDsByCategory),
-		i.queryIDWrapper(cfg, r, ids, ts.QpnReqItem, lookup.L.Items, getMixesByItem),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryEnumList(s, r, enums.T.MixCategory, ids, ts.QpnCategory, s.Cfg.DB.GetMixIDsByCategory),
+		i.queryIDWrapper(s, r, ids, ts.QpnReqItem, lookup.L.Items, getMixesByItem),
 	})
 }

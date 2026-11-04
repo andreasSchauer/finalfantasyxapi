@@ -252,7 +252,7 @@ func TestGetSphere(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetSphere", testSrv.Cfg.HandleSpheres, compareSpheres)
+	testSingleResources(t, tests, "GetSphere", testSrv.HandleSpheres, compareSpheres)
 }
 
 func TestRetrieveSpheres(t *testing.T) {
@@ -364,5 +364,5 @@ func TestRetrieveSpheres(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Spheres.Endpoint, "RetrieveSpheres", testSrv.Cfg.HandleSpheres, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Spheres.Endpoint, "RetrieveSpheres", testSrv.HandleSpheres, compareAPIResourceLists[api.NamedAPIResource])
 }

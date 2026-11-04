@@ -23,7 +23,7 @@ func (p DropChanceParams) GetRequiredSlots() int32 {
 	return h.Len32(p.AutoAbilities) + h.DerefInt32Ptr(p.MinEmptySlots)
 }
 
-func getDropChanceParamsDoc(cfg *Config) ParamsDoc {
+func getDropChanceParamsDoc(server *Server) ParamsDoc {
 	return ParamsDoc{
 		Fields: []FieldDoc{
 			{

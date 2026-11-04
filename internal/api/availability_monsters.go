@@ -6,10 +6,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-func filterAvlMonsters(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlMonsters(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Monsters
 
-	avlParams, err := i.queryAvlRepGetParams(cfg, r)
+	avlParams, err := i.queryAvlRepGetParams(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -22,7 +22,7 @@ func filterAvlMonsters(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.FilterMonsterIDsByAvailability(r.Context(), database.FilterMonsterIDsByAvailabilityParams{
+	dbIDs, err := server.Cfg.DB.FilterMonsterIDsByAvailability(r.Context(), database.FilterMonsterIDsByAvailabilityParams{
 		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,
@@ -38,10 +38,10 @@ func filterAvlMonsters(cfg *Config, r *http.Request, inputIDs []int32) ([]int32,
 	return dbIDs, nil
 }
 
-func filterAvlMonsterFormations(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlMonsterFormations(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.MonsterFormations
 
-	avlParams, err := i.queryAvlRepGetParams(cfg, r)
+	avlParams, err := i.queryAvlRepGetParams(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func filterAvlMonsterFormations(cfg *Config, r *http.Request, inputIDs []int32) 
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.FilterMonsterFormationIDsByAvailability(r.Context(), database.FilterMonsterFormationIDsByAvailabilityParams{
+	dbIDs, err := server.Cfg.DB.FilterMonsterFormationIDsByAvailability(r.Context(), database.FilterMonsterFormationIDsByAvailabilityParams{
 		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,

@@ -7,84 +7,84 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getLocationRelationships(cfg *Config, r *http.Request, location seedtypes.Location) (Location, error) {
+func getLocationRelationships(server *Server, r *http.Request, location seedtypes.Location) (Location, error) {
 	var rel Location
 	var locRel LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := E.Locations.queryAvlRelGetParams(cfg, r, location.ID)
+	availabilityParams, err := E.Locations.queryAvlRelGetParams(server, r, location.ID)
 	if err != nil {
 		return Location{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.ConnectedLocations, err = E.Locations.dbGetRelations(cfg, ctx, location, cfg.db.GetConnectedLocationIDs)
+		rel.ConnectedLocations, err = E.Locations.dbGetRelations(server, ctx, location, server.Cfg.DB.GetConnectedLocationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Sublocations, err = E.Sublocations.dbGetRelations(cfg, ctx, location, cfg.db.GetLocationSublocationIDs)
+		rel.Sublocations, err = E.Sublocations.dbGetRelations(server, ctx, location, server.Cfg.DB.GetLocationSublocationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Characters, err = E.Characters.dbGetRelations(cfg, ctx, location, cfg.db.GetLocationCharacterIDs)
+		locRel.Characters, err = E.Characters.dbGetRelations(server, ctx, location, server.Cfg.DB.GetLocationCharacterIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Aeons, err = E.Aeons.dbGetRelations(cfg, ctx, location, cfg.db.GetLocationAeonIDs)
+		locRel.Aeons, err = E.Aeons.dbGetRelations(server, ctx, location, server.Cfg.DB.GetLocationAeonIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Shops, err = E.Shops.queryAvlRelRun(cfg, ctx, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeShop))
+		locRel.Shops, err = E.Shops.queryAvlRelRun(server, ctx, location, availabilityParams, getLocationRelSourceIDs(server, ViewSourceTypeShop))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Treasures, err = E.Treasures.queryAvlRelRun(cfg, ctx, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeTreasure))
+		locRel.Treasures, err = E.Treasures.queryAvlRelRun(server, ctx, location, availabilityParams, getLocationRelSourceIDs(server, ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Monsters, err = E.Monsters.queryAvlRelRun(cfg, ctx, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeMonster))
+		locRel.Monsters, err = E.Monsters.queryAvlRelRun(server, ctx, location, availabilityParams, getLocationRelSourceIDs(server, ViewSourceTypeMonster))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Formations, err = E.MonsterFormations.queryAvlRelRun(cfg, ctx, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeMonsterFormation))
+		locRel.Formations, err = E.MonsterFormations.queryAvlRelRun(server, ctx, location, availabilityParams, getLocationRelSourceIDs(server, ViewSourceTypeMonsterFormation))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Quests, err = E.Quests.queryAvlRelRun(cfg, ctx, location, availabilityParams, getLocationRelSourceIDs(cfg, ViewSourceTypeQuest))
+		locRel.Quests, err = E.Quests.queryAvlRelRun(server, ctx, location, availabilityParams, getLocationRelSourceIDs(server, ViewSourceTypeQuest))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Music, err = getMusicLocBased(cfg, ctx, location, LocBasedMusicQueries{
-			CueSongs:  cfg.db.GetLocationCueSongIDs,
-			BmSongs:   cfg.db.GetLocationBackgroundMusicSongIDs,
-			FMVSongs:  cfg.db.GetLocationFMVSongIDs,
-			BossMusic: cfg.db.GetLocationBossSongIDs,
+		locRel.Music, err = getMusicLocBased(server, ctx, location, LocBasedMusicQueries{
+			CueSongs:  server.Cfg.DB.GetLocationCueSongIDs,
+			BmSongs:   server.Cfg.DB.GetLocationBackgroundMusicSongIDs,
+			FMVSongs:  server.Cfg.DB.GetLocationFMVSongIDs,
+			BossMusic: server.Cfg.DB.GetLocationBossSongIDs,
 		})
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.FMVs, err = E.FMVs.dbGetRelations(cfg, ctx, location, cfg.db.GetLocationFmvIDs)
+		locRel.FMVs, err = E.FMVs.dbGetRelations(server, ctx, location, server.Cfg.DB.GetLocationFmvIDs)
 		return err
 	})
 

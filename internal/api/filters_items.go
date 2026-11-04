@@ -9,16 +9,16 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMasterItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getMasterItemsByArea(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(cfg, r)
+	methods, err := queryParamMethods.parseValueList(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetMasterItemIDsByArea(ctx, database.GetMasterItemIDsByAreaParams{
+	dbIDs, err := server.Cfg.DB.GetMasterItemIDsByArea(ctx, database.GetMasterItemIDsByAreaParams{
 		AreaID:  id,
 		Methods: h.SliceOrNil(methods),
 	})
@@ -29,16 +29,16 @@ func getMasterItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id 
 	return dbIDs, nil
 }
 
-func getMasterItemsBySublocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getMasterItemsBySublocation(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(cfg, r)
+	methods, err := queryParamMethods.parseValueList(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetMasterItemIDsBySublocation(ctx, database.GetMasterItemIDsBySublocationParams{
+	dbIDs, err := server.Cfg.DB.GetMasterItemIDsBySublocation(ctx, database.GetMasterItemIDsBySublocationParams{
 		SublocationID: id,
 		Methods:       h.SliceOrNil(methods),
 	})
@@ -49,16 +49,16 @@ func getMasterItemsBySublocation(cfg *Config, r *http.Request, ctx context.Conte
 	return dbIDs, nil
 }
 
-func getMasterItemsByLocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getMasterItemsByLocation(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(cfg, r)
+	methods, err := queryParamMethods.parseValueList(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetMasterItemIDsByLocation(ctx, database.GetMasterItemIDsByLocationParams{
+	dbIDs, err := server.Cfg.DB.GetMasterItemIDsByLocation(ctx, database.GetMasterItemIDsByLocationParams{
 		LocationID: id,
 		Methods:    h.SliceOrNil(methods),
 	})
@@ -69,16 +69,16 @@ func getMasterItemsByLocation(cfg *Config, r *http.Request, ctx context.Context,
 	return dbIDs, nil
 }
 
-func getItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getItemsByArea(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(cfg, r)
+	methods, err := queryParamMethods.parseValueList(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetItemIDsByArea(ctx, database.GetItemIDsByAreaParams{
+	dbIDs, err := server.Cfg.DB.GetItemIDsByArea(ctx, database.GetItemIDsByAreaParams{
 		AreaID:  id,
 		Methods: h.SliceOrNil(methods),
 	})
@@ -89,16 +89,16 @@ func getItemsByArea(cfg *Config, r *http.Request, ctx context.Context, id int32)
 	return dbIDs, nil
 }
 
-func getItemsBySublocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getItemsBySublocation(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(cfg, r)
+	methods, err := queryParamMethods.parseValueList(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetItemIDsBySublocation(ctx, database.GetItemIDsBySublocationParams{
+	dbIDs, err := server.Cfg.DB.GetItemIDsBySublocation(ctx, database.GetItemIDsBySublocationParams{
 		SublocationID: id,
 		Methods:       h.SliceOrNil(methods),
 	})
@@ -109,16 +109,16 @@ func getItemsBySublocation(cfg *Config, r *http.Request, ctx context.Context, id
 	return dbIDs, nil
 }
 
-func getItemsByLocation(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getItemsByLocation(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(cfg, r)
+	methods, err := queryParamMethods.parseValueList(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetItemIDsByLocation(ctx, database.GetItemIDsByLocationParams{
+	dbIDs, err := server.Cfg.DB.GetItemIDsByLocation(ctx, database.GetItemIDsByLocationParams{
 		LocationID: id,
 		Methods:    h.SliceOrNil(methods),
 	})

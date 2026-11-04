@@ -256,7 +256,7 @@ func TestGetEquipment(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetEquipment", testSrv.Cfg.HandleEquipment, compareEquipment)
+	testSingleResources(t, tests, "GetEquipment", testSrv.HandleEquipment, compareEquipment)
 }
 
 func TestRetrieveEquipment(t *testing.T) {
@@ -296,5 +296,5 @@ func TestRetrieveEquipment(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Equipment.Endpoint, "RetrieveEquipment", testSrv.Cfg.HandleEquipment, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Equipment.Endpoint, "RetrieveEquipment", testSrv.HandleEquipment, compareAPIResourceLists[api.NamedAPIResource])
 }

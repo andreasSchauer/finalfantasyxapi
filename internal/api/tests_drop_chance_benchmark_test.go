@@ -18,7 +18,7 @@ func BenchmarkHandleDropChance(b *testing.B) {
 	b.ResetTimer()
 
 	for b.Loop() {
-		res, err := handleDropChance(testCfg, params)
+		res, err := handleDropChance(&testSrv, params)
 		if err != nil {
 			b.Fatalf("Calculation failed during benchmark: %v", err)
 		}

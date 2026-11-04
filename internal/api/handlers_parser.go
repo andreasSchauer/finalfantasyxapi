@@ -58,7 +58,7 @@ func (i handlerInput[T, R, A]) parseNameVersionResource(name, versionStr string)
 	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s', version '%s'", i.resTypeSingle, name, versionStr), err)
 }
 
-func (i handlerInputEnums) parseSegment(cfg *Config, segment string) (enums.EnumResponse, string, error) {
+func (i handlerInputEnums) parseSegment(server *Server, segment string) (enums.EnumResponse, string, error) {
 	key, err := url.PathUnescape(segment)
 	if err != nil {
 		return enums.EnumResponse{}, "", newHTTPError(http.StatusBadRequest, "invalid url encoding", err)
@@ -68,7 +68,7 @@ func (i handlerInputEnums) parseSegment(cfg *Config, segment string) (enums.Enum
 	if !ok {
 		return enums.EnumResponse{}, "", newHTTPError(http.StatusNotFound, fmt.Sprintf("enum '%s' not found", key), nil)
 	}
-	enum.UsedByEndpoints = endpointsToURLs(cfg, enum.UsedByEndpointsInt)
+	enum.UsedByEndpoints = endpointsToURLs(server, enum.UsedByEndpointsInt)
 
 	return enum, key, nil
 }

@@ -8,13 +8,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getLocation(r *http.Request, i handlerInput[seedtypes.Location, Location, NamedAPIResource], id int32) (Location, error) {
+func (s *Server) getLocation(r *http.Request, i handlerInput[seedtypes.Location, Location, NamedAPIResource], id int32) (Location, error) {
 	location, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Location{}, err
 	}
 
-	rel, err := getLocationRelationships(cfg, r, location)
+	rel, err := getLocationRelationships(s, r, location)
 	if err != nil {
 		return Location{}, err
 	}
@@ -31,24 +31,24 @@ func (cfg *Config) getLocation(r *http.Request, i handlerInput[seedtypes.Locatio
 	return response, nil
 }
 
-func (cfg *Config) retrieveLocations(r *http.Request, i handlerInput[seedtypes.Location, Location, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveLocations(r *http.Request, i handlerInput[seedtypes.Location, Location, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, cfg.db.GetLocationIDsWithMonster),
-		i.queryIDWrapper(cfg, r, ids, ts.QpnItem, lookup.L.Items, getLocationsByItem),
-		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, cfg.db.GetLocationIDsWithKeyItem),
-		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, cfg.db.GetLocationIDsWithAutoAbility),
-		i.queryBool2(r, ids, ts.QpnCharacters, cfg.db.GetLocationIDsWithCharacters),
-		i.queryBool2(r, ids, ts.QpnAeons, cfg.db.GetLocationIDsWithAeons),
-		i.queryBool2(r, ids, ts.QpnMonsters, cfg.db.GetLocationIDsWithMonsters),
-		i.queryBool2(r, ids, ts.QpnBossFights, cfg.db.GetLocationIDsWithBosses),
-		i.queryBool2(r, ids, ts.QpnShops, cfg.db.GetLocationIDsWithShops),
-		i.queryBool2(r, ids, ts.QpnTreasures, cfg.db.GetLocationIDsWithTreasures),
-		i.queryBool2(r, ids, ts.QpnSidequests, cfg.db.GetLocationIDsWithSidequests),
-		i.queryBool2(r, ids, ts.QpnFMVs, cfg.db.GetLocationIDsWithFMVs),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, s.Cfg.DB.GetLocationIDsWithMonster),
+		i.queryIDWrapper(s, r, ids, ts.QpnItem, lookup.L.Items, getLocationsByItem),
+		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, s.Cfg.DB.GetLocationIDsWithKeyItem),
+		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, s.Cfg.DB.GetLocationIDsWithAutoAbility),
+		i.queryBool2(r, ids, ts.QpnCharacters, s.Cfg.DB.GetLocationIDsWithCharacters),
+		i.queryBool2(r, ids, ts.QpnAeons, s.Cfg.DB.GetLocationIDsWithAeons),
+		i.queryBool2(r, ids, ts.QpnMonsters, s.Cfg.DB.GetLocationIDsWithMonsters),
+		i.queryBool2(r, ids, ts.QpnBossFights, s.Cfg.DB.GetLocationIDsWithBosses),
+		i.queryBool2(r, ids, ts.QpnShops, s.Cfg.DB.GetLocationIDsWithShops),
+		i.queryBool2(r, ids, ts.QpnTreasures, s.Cfg.DB.GetLocationIDsWithTreasures),
+		i.queryBool2(r, ids, ts.QpnSidequests, s.Cfg.DB.GetLocationIDsWithSidequests),
+		i.queryBool2(r, ids, ts.QpnFMVs, s.Cfg.DB.GetLocationIDsWithFMVs),
 	})
 }

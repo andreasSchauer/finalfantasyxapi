@@ -19,7 +19,7 @@ type AgilitySubtier struct {
 	CharMinICV  *int32 `json:"char_min_icv"`
 }
 
-func convertAgilitySubtier(_ *Config, st seedtypes.AgilitySubtier) AgilitySubtier {
+func convertAgilitySubtier(_ *Server, st seedtypes.AgilitySubtier) AgilitySubtier {
 	return AgilitySubtier{
 		FromAgility: st.MinAgility,
 		ToAgility:   st.MaxAgility,

@@ -18,17 +18,17 @@ type ShopSummarySimple struct {
 	HasEquipment bool `json:"has_equipment"`
 }
 
-func idToShopLocSimple(cfg *Config, shopID int32) ShopLocSimple {
+func idToShopLocSimple(server *Server, shopID int32) ShopLocSimple {
 	shopLookup, _ := lookup.GetResourceByID(shopID, lookup.L.ShopsID)
 	return ShopLocSimple{
 		ID:          shopID,
 		Category:    database.ShopCategory(shopLookup.Category),
-		PreAirship:  convertObjPtr(cfg, shopLookup.PreAirship, convertShopSummarySimple),
-		PostAirship: convertObjPtr(cfg, shopLookup.PostAirship, convertShopSummarySimple),
+		PreAirship:  convertObjPtr(server, shopLookup.PreAirship, convertShopSummarySimple),
+		PostAirship: convertObjPtr(server, shopLookup.PostAirship, convertShopSummarySimple),
 	}
 }
 
-func convertShopSummarySimple(_ *Config, shop seedtypes.SubShop) ShopSummarySimple {
+func convertShopSummarySimple(_ *Server, shop seedtypes.SubShop) ShopSummarySimple {
 	shopLoc := ShopSummarySimple{}
 
 	if len(shop.Items) != 0 {
@@ -49,18 +49,18 @@ type TreasuresLocSimple struct {
 	Equipment     []EquipmentSimple `json:"equipment"`
 }
 
-func getTreasuresLocSimple(cfg *Config, id int32, subsection Subsection) *TreasuresLocSimple {
+func getTreasuresLocSimple(server *Server, id int32, subsection Subsection) *TreasuresLocSimple {
 	treasureIDs := subsection.relations[id][RelationTreasures]
 
 	if len(treasureIDs) == 0 {
 		return nil
 	}
 
-	treasures := populateTreasuresLocSimple(cfg, treasureIDs)
+	treasures := populateTreasuresLocSimple(server, treasureIDs)
 	return &treasures
 }
 
-func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSimple {
+func populateTreasuresLocSimple(server *Server, treasureIDs []int32) TreasuresLocSimple {
 	treasures := TreasuresLocSimple{
 		TreasureCount: len(treasureIDs),
 	}
@@ -79,13 +79,13 @@ func populateTreasuresLocSimple(cfg *Config, treasureIDs []int32) TreasuresLocSi
 
 		case string(database.LootTypeEquipment):
 			equipment := treasure.Equipment
-			es := convertEquipmentSimple(cfg, *equipment)
+			es := convertEquipmentSimple(server, *equipment)
 			treasures.Equipment = append(treasures.Equipment, es)
 		}
 	}
 
 	itemAmounts = sortItemAmountsByID(itemAmounts)
-	treasures.Items = convertObjSlice(cfg, itemAmounts, convertItemAmountSimple)
+	treasures.Items = convertObjSlice(server, itemAmounts, convertItemAmountSimple)
 	return treasures
 }
 
@@ -94,7 +94,7 @@ type EquipmentSimple struct {
 	AutoAbilities *string `json:"auto_abilities"`
 }
 
-func convertEquipmentSimple(_ *Config, equipment seedtypes.TreasureEquipment) EquipmentSimple {
+func convertEquipmentSimple(_ *Server, equipment seedtypes.TreasureEquipment) EquipmentSimple {
 	return EquipmentSimple{
 		Name:          equipment.Name,
 		AutoAbilities: foundEquipmentAbilitiesStringPtr(equipment),

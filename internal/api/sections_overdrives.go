@@ -20,18 +20,18 @@ func (o OverdriveSimple) GetURL() string {
 	return o.URL
 }
 
-func createOverdriveSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createOverdriveSimple(server *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.Overdrives
 	overdrive, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	overdriveSimple := OverdriveSimple{
 		ID:                 overdrive.ID,
-		URL:                CreateResourceURL(cfg, i.Endpoint, id),
+		URL:                CreateResourceURL(server, i.Endpoint, id),
 		Name:               overdrive.Name,
 		Version:            overdrive.Version,
 		Specification:      overdrive.Specification,
 		Rank:               overdrive.Rank,
-		OverdriveAbilities: convertObjSlice(cfg, overdrive.OverdriveAbilities, abilityRefString),
+		OverdriveAbilities: convertObjSlice(server, overdrive.OverdriveAbilities, abilityRefString),
 	}
 
 	return overdriveSimple, nil

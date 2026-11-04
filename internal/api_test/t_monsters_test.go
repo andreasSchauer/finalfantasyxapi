@@ -1248,7 +1248,7 @@ func TestGetMonster(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetMonster", testSrv.Cfg.HandleMonsters, compareMonsters)
+	testSingleResources(t, tests, "GetMonster", testSrv.HandleMonsters, compareMonsters)
 }
 
 func TestGetMultipleMonsters(t *testing.T) {
@@ -1288,7 +1288,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Monsters.Endpoint, "GetMultipleMonsters", testSrv.Cfg.HandleMonsters, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Monsters.Endpoint, "GetMultipleMonsters", testSrv.HandleMonsters, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestRetrieveMonsters(t *testing.T) {
@@ -1652,7 +1652,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Monsters.Endpoint, "RetrieveMonsters", testSrv.Cfg.HandleMonsters, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Monsters.Endpoint, "RetrieveMonsters", testSrv.HandleMonsters, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionMonsters(t *testing.T) {
@@ -1662,7 +1662,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/?ids=1&location=15",
 				expectedStatus: http.StatusBadRequest,
-				handler:        testSrv.Cfg.HandleMonsters,
+				handler:        testSrv.HandleMonsters,
 				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'",
 			},
 		},
@@ -1670,7 +1670,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/simple?limit=max",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleMonsters,
+				handler:        testSrv.HandleMonsters,
 				dontCheck: map[string]bool{
 					"parent resource": true,
 				},
@@ -1682,7 +1682,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/simple?ids=1-21",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleMonsters,
+				handler:        testSrv.HandleMonsters,
 				dontCheck: map[string]bool{
 					"parent resource": true,
 				},
@@ -1694,7 +1694,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/simple?ids=1,33,22,22,22,22,68,",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleMonsters,
+				handler:        testSrv.HandleMonsters,
 				dontCheck: map[string]bool{
 					"parent resource": true,
 				},
@@ -1706,7 +1706,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/simple?ids=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleMonsters,
+				handler:        testSrv.HandleMonsters,
 				dontCheck: map[string]bool{
 					"parent resource": true,
 				},
@@ -1718,7 +1718,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/89/monsters/",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleAreas,
+				handler:        testSrv.HandleAreas,
 			},
 			count:          6,
 			parentResource: h.GetStrPtr("/areas/89"),
@@ -1728,7 +1728,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/23/monsters/",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleAreas,
+				handler:        testSrv.HandleAreas,
 			},
 			count:          4,
 			parentResource: h.GetStrPtr("/areas/23"),
@@ -1738,7 +1738,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/236/monsters/",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleAreas,
+				handler:        testSrv.HandleAreas,
 			},
 			count:          21,
 			next:           nil,
@@ -1749,7 +1749,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/193/monsters/",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleMonsterFormations,
+				handler:        testSrv.HandleMonsterFormations,
 			},
 			count:          3,
 			parentResource: h.GetStrPtr("/monster-formations/193"),
@@ -1759,7 +1759,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/140/monsters/",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleMonsterFormations,
+				handler:        testSrv.HandleMonsterFormations,
 			},
 			count:          3,
 			parentResource: h.GetStrPtr("/monster-formations/140"),
@@ -1769,7 +1769,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/simple?ids=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1",
 				expectedStatus: http.StatusBadRequest,
-				handler:        testSrv.Cfg.HandleMonsters,
+				handler:        testSrv.HandleMonsters,
 				expectedErr:    "fetch limit exceeded. the maximum amount of inputs is 1000",
 			},
 		},

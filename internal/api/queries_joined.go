@@ -7,7 +7,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i handlerInput[T, R, A]) queryJoined(cfg *Config, r *http.Request, inputIDs []int32, queryNames []ts.QueryParamName, wrapperFn QueryWrapJoined) IDFilter {
+func (i handlerInput[T, R, A]) queryJoined(server *Server, r *http.Request, inputIDs []int32, queryNames []ts.QueryParamName, wrapperFn QueryWrapJoined) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		allEmpty := true
 
@@ -28,6 +28,6 @@ func (i handlerInput[T, R, A]) queryJoined(cfg *Config, r *http.Request, inputID
 			return inputIDs, nil
 		}
 
-		return wrapperFn(cfg, r, ctx)
+		return wrapperFn(server, r, ctx)
 	}
 }

@@ -144,7 +144,7 @@ func TestGetTreasure(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetTreasure", testSrv.Cfg.HandleTreasures, compareTreasures)
+	testSingleResources(t, tests, "GetTreasure", testSrv.HandleTreasures, compareTreasures)
 }
 
 func TestRetrieveTreasures(t *testing.T) {
@@ -232,7 +232,7 @@ func TestRetrieveTreasures(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Treasures.Endpoint, "RetrieveTreasures", testSrv.Cfg.HandleTreasures, compareAPIResourceLists[api.UnnamedAPIResource])
+	testIDList(t, tests, api.E.Treasures.Endpoint, "RetrieveTreasures", testSrv.HandleTreasures, compareAPIResourceLists[api.UnnamedAPIResource])
 }
 
 func TestSubsectionTreasures(t *testing.T) {
@@ -242,7 +242,7 @@ func TestSubsectionTreasures(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/6/treasures",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleLocations,
+				handler:        testSrv.HandleLocations,
 			},
 			count:          17,
 			parentResource: h.GetStrPtr("/locations/6"),
@@ -252,7 +252,7 @@ func TestSubsectionTreasures(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/21/treasures",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleSublocations,
+				handler:        testSrv.HandleSublocations,
 			},
 			count:          5,
 			parentResource: h.GetStrPtr("/sublocations/21"),
@@ -262,7 +262,7 @@ func TestSubsectionTreasures(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/223/treasures",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleAreas,
+				handler:        testSrv.HandleAreas,
 			},
 			count:          3,
 			parentResource: h.GetStrPtr("/areas/223"),

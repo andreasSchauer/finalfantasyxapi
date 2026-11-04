@@ -12,7 +12,7 @@ import (
 )
 
 type userAbility interface {
-	canUseAbility(*Config, string) bool
+	canUseAbility(*Server, string) bool
 	getBattleInteractions() []BattleInteraction
 	fmt.Stringer
 }
@@ -32,8 +32,8 @@ type biReplacement struct {
 	DamageFormula  *string
 }
 
-func applyUser[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A], ability userAbility, queryName ts.QueryParamName) ([]BattleInteraction, error) {
-	repl, err := getUnitRepl(cfg, r, i, queryName)
+func applyUser[T seedtypes.Lookupable, R any, A APIResource](server *Server, r *http.Request, i handlerInput[T, R, A], ability userAbility, queryName ts.QueryParamName) ([]BattleInteraction, error) {
+	repl, err := getUnitRepl(server, r, i, queryName)
 	if queryIsEmpty(err) {
 		return ability.getBattleInteractions(), nil
 	}
@@ -41,7 +41,7 @@ func applyUser[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *htt
 		return nil, err
 	}
 
-	err = verifyAbilityUsage(cfg, ability, repl, queryName)
+	err = verifyAbilityUsage(server, ability, repl, queryName)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func applyUser[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *htt
 	return battleInteractions, nil
 }
 
-func getUnitRepl[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A], queryName ts.QueryParamName) (unitRepl, error) {
+func getUnitRepl[T seedtypes.Lookupable, R any, A APIResource](server *Server, r *http.Request, i handlerInput[T, R, A], queryName ts.QueryParamName) (unitRepl, error) {
 	queryParamUser := i.queryLookup[queryName]
 	queryParamBomb := i.queryLookup[ts.QpnBombWpn]
 	queryParamCelestialWpn := i.queryLookup[ts.QpnCelestialWeapon]
@@ -87,7 +87,7 @@ func getUnitRepl[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *h
 		}
 
 	case database.UnitTypeAeon:
-		repl, err = populateReplAeon(cfg, repl, queryParamUser)
+		repl, err = populateReplAeon(server, repl, queryParamUser)
 		if err != nil {
 			return unitRepl{}, err
 		}
@@ -128,7 +128,7 @@ func populateReplCharacter(repl unitRepl, queryParamUser QueryParam) (unitRepl, 
 	return repl, nil
 }
 
-func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
+func populateReplAeon(server *Server, repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
 	if repl.isCelestial {
 		return unitRepl{}, newHTTPError(http.StatusBadRequest, "aeons don't use celestial weapons", nil)
 	}
@@ -141,14 +141,14 @@ func populateReplAeon(cfg *Config, repl unitRepl, queryParamUser QueryParam) (un
 
 	repl.replVals.Range = aeon.PhysAtkRange
 	repl.replVals.ShatterRate = aeon.PhysAtkShatterRate
-	repl.replVals.Accuracy = convertObjPtr(cfg, aeon.PhysAtkAccuracy, convertAccuracy)
+	repl.replVals.Accuracy = convertObjPtr(server, aeon.PhysAtkAccuracy, convertAccuracy)
 	repl.replVals.DamageConstant = aeon.PhysAtkDmgConstant
 
 	return repl, nil
 }
 
-func verifyAbilityUsage(cfg *Config, ability userAbility, repl unitRepl, queryName ts.QueryParamName) error {
-	if !ability.canUseAbility(cfg, repl.unit.Name) {
+func verifyAbilityUsage(server *Server, ability userAbility, repl unitRepl, queryName ts.QueryParamName) error {
+	if !ability.canUseAbility(server, repl.unit.Name) {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, E.PlayerUnits.resTypeSingle, repl.unit.Name, ability), nil)
 	}
 

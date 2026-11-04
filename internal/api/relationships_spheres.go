@@ -7,21 +7,21 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getSphereRelationships(cfg *Config, r *http.Request, sphere seedtypes.Sphere) (Sphere, error) {
+func getSphereRelationships(server *Server, r *http.Request, sphere seedtypes.Sphere) (Sphere, error) {
 	item, _ := lookup.GetResourceByID(sphere.ItemID, lookup.L.ItemsID)
 
-	availabilityParams, err := E.Spheres.queryAvlRelGetParams(cfg, r, item.ID)
+	availabilityParams, err := E.Spheres.queryAvlRelGetParams(server, r, item.ID)
 	if err != nil {
 		return Sphere{}, err
 	}
 
-	itemRel, err := runItemRelQueries(cfg, r, item, availabilityParams)
+	itemRel, err := runItemRelQueries(server, r, item, availabilityParams)
 	if err != nil {
 		return Sphere{}, err
 	}
 
 	rel := Sphere{
-		Item:            nameToNamedAPIResource(cfg, E.Items, item.Name, nil),
+		Item:            nameToNamedAPIResource(server, E.Items, item.Name, nil),
 		Description:     item.Description,
 		Effect:          item.Effect,
 		Monsters:        itemRel.Monsters,

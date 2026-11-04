@@ -76,7 +76,7 @@ func TestGetTopmenu(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetTopmenu", testSrv.Cfg.HandleTopmenus, compareTopmenus)
+	testSingleResources(t, tests, "GetTopmenu", testSrv.HandleTopmenus, compareTopmenus)
 }
 
 func TestRetrieveTopmenus(t *testing.T) {
@@ -92,5 +92,5 @@ func TestRetrieveTopmenus(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Topmenus.Endpoint, "RetrieveTopmenus", testSrv.Cfg.HandleTopmenus, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Topmenus.Endpoint, "RetrieveTopmenus", testSrv.HandleTopmenus, compareAPIResourceLists[api.NamedAPIResource])
 }

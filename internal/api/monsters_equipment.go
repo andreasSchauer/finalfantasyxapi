@@ -14,15 +14,15 @@ type MonsterEquipment struct {
 	ArmorAbilities    []EquipmentDrop       `json:"armor_abilities"`
 }
 
-func convertMonsterEquipment(cfg *Config, equipment seedtypes.MonsterEquipment) MonsterEquipment {
+func convertMonsterEquipment(server *Server, equipment seedtypes.MonsterEquipment) MonsterEquipment {
 	monEquipment := MonsterEquipment{
 		DropChance:        equipment.DropChance,
 		Power:             equipment.Power,
 		CriticalPlus:      equipment.CriticalPlus,
-		AbilitySlots:      convertMonsterEquipmentSlots(cfg, equipment.AbilitySlots),
-		AttachedAbilities: convertMonsterEquipmentSlots(cfg, equipment.AttachedAbilities),
-		WeaponAbilities:   convertObjSlice(cfg, equipment.WeaponAbilities, convertEquipmentDrop),
-		ArmorAbilities:    convertObjSlice(cfg, equipment.ArmorAbilities, convertEquipmentDrop),
+		AbilitySlots:      convertMonsterEquipmentSlots(server, equipment.AbilitySlots),
+		AttachedAbilities: convertMonsterEquipmentSlots(server, equipment.AttachedAbilities),
+		WeaponAbilities:   convertObjSlice(server, equipment.WeaponAbilities, convertEquipmentDrop),
+		ArmorAbilities:    convertObjSlice(server, equipment.ArmorAbilities, convertEquipmentDrop),
 	}
 
 	return monEquipment
@@ -38,11 +38,11 @@ type MonsterEquipmentSlots struct {
 	Chances   []EquipmentSlotsChance `json:"chances"`
 }
 
-func convertMonsterEquipmentSlots(cfg *Config, seedSlots seedtypes.MonsterEquipmentSlots) MonsterEquipmentSlots {
+func convertMonsterEquipmentSlots(server *Server, seedSlots seedtypes.MonsterEquipmentSlots) MonsterEquipmentSlots {
 	equipmentSlots := MonsterEquipmentSlots{
 		MinAmount: seedSlots.MinAmount,
 		MaxAmount: seedSlots.MaxAmount,
-		Chances:   convertObjSlice(cfg, seedSlots.Chances, convertMonsterEquipmentSlotsChance),
+		Chances:   convertObjSlice(server, seedSlots.Chances, convertMonsterEquipmentSlotsChance),
 	}
 
 	return equipmentSlots
@@ -53,7 +53,7 @@ type EquipmentSlotsChance struct {
 	Chance int32 `json:"chance"`
 }
 
-func convertMonsterEquipmentSlotsChance(_ *Config, chance seedtypes.EquipmentSlotsChance) EquipmentSlotsChance {
+func convertMonsterEquipmentSlotsChance(_ *Server, chance seedtypes.EquipmentSlotsChance) EquipmentSlotsChance {
 	return EquipmentSlotsChance{
 		Amount: chance.Amount,
 		Chance: chance.Chance,
@@ -71,10 +71,10 @@ func (ed EquipmentDrop) GetAPIResource() APIResource {
 	return ed.AutoAbility.GetAPIResource()
 }
 
-func convertEquipmentDrop(cfg *Config, drop seedtypes.EquipmentDrop) EquipmentDrop {
+func convertEquipmentDrop(server *Server, drop seedtypes.EquipmentDrop) EquipmentDrop {
 	return EquipmentDrop{
-		AutoAbility: nameToNamedAPIResource(cfg, E.AutoAbilities, drop.Ability, nil),
-		ForcedChars: namesToNamedAPIResources(cfg, E.Characters, drop.Characters),
+		AutoAbility: nameToNamedAPIResource(server, E.AutoAbilities, drop.Ability, nil),
+		ForcedChars: namesToNamedAPIResources(server, E.Characters, drop.Characters),
 		IsForced:    drop.IsForced,
 		Probability: drop.Probability,
 	}

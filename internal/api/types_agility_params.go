@@ -14,11 +14,11 @@ type AgilityParams struct {
 	MaxICV      *int32             `json:"max_icv"`
 }
 
-func getAgilityTierDB(cfg *Config, r *http.Request, stats []BaseStat) (seedtypes.AgilityTier, error) {
+func getAgilityTierDB(server *Server, r *http.Request, stats []BaseStat) (seedtypes.AgilityTier, error) {
 	agilityStat := getBaseStat("agility", stats)
 	agility := agilityStat.Value
 
-	dbAgilityTier, err := cfg.db.GetAgilityTierByAgility(r.Context(), agility)
+	dbAgilityTier, err := server.Cfg.DB.GetAgilityTierByAgility(r.Context(), agility)
 	if err != nil {
 		return seedtypes.AgilityTier{}, newHTTPError(http.StatusInternalServerError, "couldn't extract agility parameters", err)
 	}

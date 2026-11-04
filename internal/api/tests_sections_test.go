@@ -65,7 +65,7 @@ func TestConvertStatusResistSimple(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := convertStatusResistSimple(testCfg, tc.input)
+		got := convertStatusResistSimple(&testSrv, tc.input)
 
 		if !reflect.DeepEqual(got, tc.exp) {
 			t.Errorf("convertStatusResistSimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
@@ -105,7 +105,7 @@ func TestConvertAccuracySimple(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := convertAccuracySimple(testCfg, tc.input)
+		got := convertAccuracySimple(&testSrv, tc.input)
 
 		if !reflect.DeepEqual(got, tc.exp) {
 			t.Errorf("convertStatusResistSimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
@@ -142,7 +142,7 @@ func TestConvertInflictedStatusSimple(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := convertInflictedStatusSimple(testCfg, tc.input)
+		got := convertInflictedStatusSimple(&testSrv, tc.input)
 
 		if !reflect.DeepEqual(got, tc.exp) {
 			t.Errorf("convertStatusResistSimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
@@ -228,7 +228,7 @@ func TestConvertModChangeSimple(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := convertModChangeSimple(testCfg, tc.input)
+		got := convertModChangeSimple(&testSrv, tc.input)
 
 		if !reflect.DeepEqual(got, tc.exp) {
 			t.Errorf("convertStatusResistSimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
@@ -318,7 +318,7 @@ func TestPopulateTreasuresLocSimple(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := populateTreasuresLocSimple(testCfg, tc.input)
+		got := populateTreasuresLocSimple(&testSrv, tc.input)
 
 		if !reflect.DeepEqual(got.TreasureCount, tc.expTreasureCount) {
 			t.Errorf("convertStatusResistSimple: Testcase %d: input: %s. expected treasure count: %d, got: %d", i+1, h.FormatIntSlice(tc.input), tc.expTreasureCount, got.TreasureCount)

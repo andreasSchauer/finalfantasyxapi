@@ -179,7 +179,7 @@ func TestGetTriggerCommand(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetTriggerCommand", testSrv.Cfg.HandleTriggerCommands, compareTriggerCommands)
+	testSingleResources(t, tests, "GetTriggerCommand", testSrv.HandleTriggerCommands, compareTriggerCommands)
 }
 
 func TestGetMultipleTriggerCommands(t *testing.T) {
@@ -195,7 +195,7 @@ func TestGetMultipleTriggerCommands(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.TriggerCommands.Endpoint, "GetMultipleTriggerCommands", testSrv.Cfg.HandleTriggerCommands, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.TriggerCommands.Endpoint, "GetMultipleTriggerCommands", testSrv.HandleTriggerCommands, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestRetrieveTriggerCommands(t *testing.T) {
@@ -233,5 +233,5 @@ func TestRetrieveTriggerCommands(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.TriggerCommands.Endpoint, "RetrieveTriggerCommands", testSrv.Cfg.HandleTriggerCommands, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.TriggerCommands.Endpoint, "RetrieveTriggerCommands", testSrv.HandleTriggerCommands, compareAPIResourceLists[api.NamedAPIResource])
 }

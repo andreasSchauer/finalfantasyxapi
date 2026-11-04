@@ -34,17 +34,17 @@ type BattleTurn struct {
 	PriorityKey string      `json:"-"`
 }
 
-func handleTurnOrder(cfg *Config, params TurnOrderParams) (TurnOrderResponse, error) {
+func handleTurnOrder(server *Server, params TurnOrderParams) (TurnOrderResponse, error) {
 	var err error
 
 	response := TurnOrderResponse{
-		TurnsAmt:     	params.TurnsAmt,
-		IgnFirstTurn: 	params.IgnFirstTurn,
-		IgnImmunities: 	params.IgnImmunities,
-		RNG:          	params.RNG,
+		TurnsAmt:      params.TurnsAmt,
+		IgnFirstTurn:  params.IgnFirstTurn,
+		IgnImmunities: params.IgnImmunities,
+		RNG:           params.RNG,
 	}
 
-	params, response.PlayerParty, response.OpponentParty, err = getParticipants(cfg, params)
+	params, response.PlayerParty, response.OpponentParty, err = getParticipants(server, params)
 	if err != nil {
 		return TurnOrderResponse{}, err
 	}
@@ -100,7 +100,6 @@ func calcTurnOrder(params TurnOrderParams, participants []Participant) []BattleT
 
 	return turns
 }
-
 
 func completeTurnOrderResponse(response TurnOrderResponse, participantsAmt int, turnsAmt int32) TurnOrderResponse {
 	turnCounter := make(map[string]int32, participantsAmt)

@@ -23,13 +23,13 @@ func (s SongSimple) GetURL() string {
 	return s.URL
 }
 
-func createSongSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createSongSimple(server *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.Songs
 	song, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	songSimple := SongSimple{
 		ID:                song.ID,
-		URL:               CreateResourceURL(cfg, i.Endpoint, id),
+		URL:               CreateResourceURL(server, i.Endpoint, id),
 		Name:              song.Name,
 		DurationInSeconds: song.DurationInSeconds,
 		CanLoop:           song.CanLoop,
@@ -45,23 +45,23 @@ func createSongSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (Sim
 	return songSimple, nil
 }
 
-func (cfg *Config) getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	bgSongIDs, err := cfg.db.GetLocationBackgroundMusicSongIDs(ctx, id)
+func (s *Server) getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
+	bgSongIDs, err := s.Cfg.DB.GetLocationBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of location with id '%d'", err)
 	}
 
-	cueSongIDs, err := cfg.db.GetLocationCueSongIDs(ctx, id)
+	cueSongIDs, err := s.Cfg.DB.GetLocationCueSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of location with id '%d'", err)
 	}
 
-	bossSongIDs, err := cfg.db.GetLocationBossSongIDs(ctx, id)
+	bossSongIDs, err := s.Cfg.DB.GetLocationBossSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get boss song of location with id '%d'", err)
 	}
 
-	fmvSongIDs, err := cfg.db.GetLocationFMVSongIDs(ctx, id)
+	fmvSongIDs, err := s.Cfg.DB.GetLocationFMVSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of location with id '%d'", err)
 	}
@@ -70,23 +70,23 @@ func (cfg *Config) getLocationSongIDs(ctx context.Context, id int32) ([]int32, e
 	return ids, nil
 }
 
-func (cfg *Config) getSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	bgSongIDs, err := cfg.db.GetSublocationBackgroundMusicSongIDs(ctx, id)
+func (s *Server) getSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
+	bgSongIDs, err := s.Cfg.DB.GetSublocationBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of sublocation with id '%d'", err)
 	}
 
-	cueSongIDs, err := cfg.db.GetSublocationCueSongIDs(ctx, id)
+	cueSongIDs, err := s.Cfg.DB.GetSublocationCueSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of sublocation with id '%d'", err)
 	}
 
-	bossSongIDs, err := cfg.db.GetSublocationBossSongIDs(ctx, id)
+	bossSongIDs, err := s.Cfg.DB.GetSublocationBossSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get boss song of sublocation with id '%d'", err)
 	}
 
-	fmvSongIDs, err := cfg.db.GetSublocationFMVSongIDs(ctx, id)
+	fmvSongIDs, err := s.Cfg.DB.GetSublocationFMVSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of sublocation with id '%d'", err)
 	}
@@ -95,23 +95,23 @@ func (cfg *Config) getSublocationSongIDs(ctx context.Context, id int32) ([]int32
 	return ids, nil
 }
 
-func (cfg *Config) getAreaSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	bgSongIDs, err := cfg.db.GetAreaBackgroundMusicSongIDs(ctx, id)
+func (s *Server) getAreaSongIDs(ctx context.Context, id int32) ([]int32, error) {
+	bgSongIDs, err := s.Cfg.DB.GetAreaBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of area with id '%d'", err)
 	}
 
-	cueSongIDs, err := ToIntManyNull(cfg.db.GetAreaCueSongIDs)(ctx, id)
+	cueSongIDs, err := ToIntManyNull(s.Cfg.DB.GetAreaCueSongIDs)(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of area with id '%d'", err)
 	}
 
-	bossSongIDs, err := cfg.db.GetAreaBossSongIDs(ctx, id)
+	bossSongIDs, err := s.Cfg.DB.GetAreaBossSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get boss song of area with id '%d'", err)
 	}
 
-	fmvSongIDs, err := cfg.db.GetAreaFMVSongIDs(ctx, id)
+	fmvSongIDs, err := s.Cfg.DB.GetAreaFMVSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of area with id '%d'", err)
 	}

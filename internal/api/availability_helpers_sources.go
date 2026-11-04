@@ -33,7 +33,7 @@ func reqsAreZero(reqs []string, srcType ViewSourceType) bool {
 	return len(reqs) == 1 && reqs[0] == string(srcType)
 }
 
-func getLocBasedSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A], srcType ViewSourceType) (locBasedSources, error) {
+func getLocBasedSources[T seedtypes.Lookupable, R any, A APIResource](server *Server, r *http.Request, i handlerInput[T, R, A], srcType ViewSourceType) (locBasedSources, error) {
 	reqs := []string{string(srcType)}
 	excls := []string{}
 
@@ -69,7 +69,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Confi
 		reqs = append(reqs, string(ViewSourceTypeAutoAbility))
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(cfg, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(server, r)
 	if errExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -108,7 +108,7 @@ type shopSources struct {
 	EmptySlots      []int32
 }
 
-func getShopSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r *http.Request, i handlerInput[T, R, A]) (shopSources, error) {
+func getShopSources[T seedtypes.Lookupable, R any, A APIResource](server *Server, r *http.Request, i handlerInput[T, R, A]) (shopSources, error) {
 	avlType := AvlTypeSelf
 	reqs := []string{}
 	excls := []string{}
@@ -122,7 +122,7 @@ func getShopSources[T seedtypes.Lookupable, R any, A APIResource](cfg *Config, r
 		reqs = append(reqs, "equip-filter")
 	}
 
-	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(cfg, r)
+	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(server, r)
 	if errExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}

@@ -44,5 +44,5 @@ func TestRetrieveEndpoints(t *testing.T) {
 		},
 	}
 
-	testPathList(t, tests, "RetrieveEndpoints", testSrv.Cfg.HandleEndpoints, compareAPIResourceListPaths[api.NamedAPIResource])
+	testPathList(t, tests, "RetrieveEndpoints", testSrv.HandleEndpoints, compareAPIResourceListPaths[api.NamedAPIResource])
 }

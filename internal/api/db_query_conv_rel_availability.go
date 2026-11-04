@@ -8,9 +8,9 @@ import (
 
 type RelAvailabilityDBQuery func(ctx context.Context, p RelAvlParams) ([]int32, error)
 
-func getItemSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailabilityDBQuery {
+func getItemSourceIDs(server *Server, sourceType ViewSourceType) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
-		return cfg.db.GetItemSourceIDs(ctx, database.GetItemSourceIDsParams{
+		return server.Cfg.DB.GetItemSourceIDs(ctx, database.GetItemSourceIDsParams{
 			ItemID:       p.ParentID,
 			SourceType:   string(sourceType),
 			Availability: p.Availability,
@@ -19,9 +19,9 @@ func getItemSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailabilityDBQ
 	}
 }
 
-func getKeyItemSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailabilityDBQuery {
+func getKeyItemSourceIDs(server *Server, sourceType ViewSourceType) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
-		return cfg.db.GetKeyItemSourceIDs(ctx, database.GetKeyItemSourceIDsParams{
+		return server.Cfg.DB.GetKeyItemSourceIDs(ctx, database.GetKeyItemSourceIDsParams{
 			KeyItemID:    p.ParentID,
 			SourceType:   string(sourceType),
 			Availability: p.Availability,
@@ -29,18 +29,18 @@ func getKeyItemSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailability
 	}
 }
 
-func getKeyItemAreaIDs(cfg *Config) RelAvailabilityDBQuery {
+func getKeyItemAreaIDs(server *Server) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
-		return cfg.db.GetKeyItemAreaIDs(ctx, database.GetKeyItemAreaIDsParams{
+		return server.Cfg.DB.GetKeyItemAreaIDs(ctx, database.GetKeyItemAreaIDsParams{
 			KeyItemID:    p.ParentID,
 			Availability: p.Availability,
 		})
 	}
 }
 
-func getAutoAbilitySourceIDs(cfg *Config, sourceType ViewSourceType, shopType *database.ShopType) RelAvailabilityDBQuery {
+func getAutoAbilitySourceIDs(server *Server, sourceType ViewSourceType, shopType *database.ShopType) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
-		return cfg.db.GetAutoAbilitySourceIDs(ctx, database.GetAutoAbilitySourceIDsParams{
+		return server.Cfg.DB.GetAutoAbilitySourceIDs(ctx, database.GetAutoAbilitySourceIDsParams{
 			AutoAbilityID: p.ParentID,
 			SourceType:    string(sourceType),
 			ShopType:      database.GetNullShopType(shopType),
@@ -50,9 +50,9 @@ func getAutoAbilitySourceIDs(cfg *Config, sourceType ViewSourceType, shopType *d
 	}
 }
 
-func getAutoAbilityItemMonsterIDs(cfg *Config) RelAvailabilityDBQuery {
+func getAutoAbilityItemMonsterIDs(server *Server) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
-		return cfg.db.GetAutoAbilityItemMonsterIDs(ctx, database.GetAutoAbilityItemMonsterIDsParams{
+		return server.Cfg.DB.GetAutoAbilityItemMonsterIDs(ctx, database.GetAutoAbilityItemMonsterIDsParams{
 			AutoAbilityID: p.ParentID,
 			Availability:  p.Availability,
 			Repeatable:    p.Repeatable,
@@ -60,9 +60,9 @@ func getAutoAbilityItemMonsterIDs(cfg *Config) RelAvailabilityDBQuery {
 	}
 }
 
-func getEquipmentSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailabilityDBQuery {
+func getEquipmentSourceIDs(server *Server, sourceType ViewSourceType) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
-		return cfg.db.GetEquipmentSourceIDs(ctx, database.GetEquipmentSourceIDsParams{
+		return server.Cfg.DB.GetEquipmentSourceIDs(ctx, database.GetEquipmentSourceIDsParams{
 			EquipmentNameID: p.ParentID,
 			SourceType:      string(sourceType),
 			Availability:    p.Availability,
@@ -70,9 +70,9 @@ func getEquipmentSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailabili
 	}
 }
 
-func getAreaRelSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailabilityDBQuery {
+func getAreaRelSourceIDs(server *Server, sourceType ViewSourceType) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
-		return cfg.db.GetAreaRelSourceIDs(ctx, database.GetAreaRelSourceIDsParams{
+		return server.Cfg.DB.GetAreaRelSourceIDs(ctx, database.GetAreaRelSourceIDsParams{
 			AreaID:       p.ParentID,
 			SourceType:   string(sourceType),
 			Availability: p.Availability,
@@ -81,9 +81,9 @@ func getAreaRelSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailability
 	}
 }
 
-func getSublocationRelSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailabilityDBQuery {
+func getSublocationRelSourceIDs(server *Server, sourceType ViewSourceType) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
-		return cfg.db.GetSublocationRelSourceIDs(ctx, database.GetSublocationRelSourceIDsParams{
+		return server.Cfg.DB.GetSublocationRelSourceIDs(ctx, database.GetSublocationRelSourceIDsParams{
 			SublocationID: p.ParentID,
 			SourceType:    string(sourceType),
 			Availability:  p.Availability,
@@ -92,9 +92,9 @@ func getSublocationRelSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvail
 	}
 }
 
-func getLocationRelSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailabilityDBQuery {
+func getLocationRelSourceIDs(server *Server, sourceType ViewSourceType) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
-		return cfg.db.GetLocationRelSourceIDs(ctx, database.GetLocationRelSourceIDsParams{
+		return server.Cfg.DB.GetLocationRelSourceIDs(ctx, database.GetLocationRelSourceIDsParams{
 			LocationID:   p.ParentID,
 			SourceType:   string(sourceType),
 			Availability: p.Availability,
@@ -103,9 +103,9 @@ func getLocationRelSourceIDs(cfg *Config, sourceType ViewSourceType) RelAvailabi
 	}
 }
 
-func getMonsterAreaIDs(cfg *Config) RelAvailabilityDBQuery {
+func getMonsterAreaIDs(server *Server) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
-		return cfg.db.GetMonsterAreaIDsRel(ctx, database.GetMonsterAreaIDsRelParams{
+		return server.Cfg.DB.GetMonsterAreaIDsRel(ctx, database.GetMonsterAreaIDsRelParams{
 			MonsterID:    p.ParentID,
 			Availability: p.Availability,
 			Repeatable:   p.Repeatable,
@@ -113,9 +113,9 @@ func getMonsterAreaIDs(cfg *Config) RelAvailabilityDBQuery {
 	}
 }
 
-func getMonsterMonsterFormationIDs(cfg *Config) RelAvailabilityDBQuery {
+func getMonsterMonsterFormationIDs(server *Server) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {
-		return cfg.db.GetMonsterMonsterFormationIDsRel(ctx, database.GetMonsterMonsterFormationIDsRelParams{
+		return server.Cfg.DB.GetMonsterMonsterFormationIDsRel(ctx, database.GetMonsterMonsterFormationIDsRelParams{
 			MonsterID:    p.ParentID,
 			Availability: p.Availability,
 			Repeatable:   p.Repeatable,

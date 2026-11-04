@@ -21,24 +21,24 @@ func newResourceAmount[A APIResource](resource A, amount int32) ResourceAmount[A
 	}
 }
 
-func (i handlerInput[T, R, A]) toResAmt(cfg *Config, id, amount int32) ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmt(server *Server, id, amount int32) ResourceAmount[A] {
 	return ResourceAmount[A]{
-		Resource: i.idToResFunc(cfg, i, id),
+		Resource: i.idToResFunc(server, i, id),
 		Amount:   amount,
 	}
 }
 
-func (i handlerInput[T, R, A]) toResAmtFromNamePtr[NA NameAmount](cfg *Config, itemPtr *NA) *ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmtFromNamePtr[NA NameAmount](server *Server, itemPtr *NA) *ResourceAmount[A] {
 	if itemPtr == nil {
 		return nil
 	}
 
-	resAmt := i.toResAmtFromName(cfg, *itemPtr)
+	resAmt := i.toResAmtFromName(server, *itemPtr)
 
 	return &resAmt
 }
 
-func (i handlerInput[T, R, A]) toResAmtFromName[NA NameAmount](cfg *Config, item NA) ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmtFromName[NA NameAmount](server *Server, item NA) ResourceAmount[A] {
 	var parseResp parseResponse
 	switch item.GetVersion() {
 	case nil:
@@ -48,27 +48,27 @@ func (i handlerInput[T, R, A]) toResAmtFromName[NA NameAmount](cfg *Config, item
 	}
 
 	return ResourceAmount[A]{
-		Resource: i.idToResFunc(cfg, i, parseResp.ID),
+		Resource: i.idToResFunc(server, i, parseResp.ID),
 		Amount:   item.GetVal(),
 	}
 }
 
-func (i handlerInput[T, R, A]) toResAmtsFromNames[NA NameAmount](cfg *Config, items []NA) []ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmtsFromNames[NA NameAmount](server *Server, items []NA) []ResourceAmount[A] {
 	results := []ResourceAmount[A]{}
 
 	for _, item := range items {
-		ra := i.toResAmtFromName(cfg, item)
+		ra := i.toResAmtFromName(server, item)
 		results = append(results, ra)
 	}
 
 	return results
 }
 
-func (i handlerInput[T, R, A]) toResAmtType[NA NameAmount, RA ResourceAmountType[A]](cfg *Config, old []NA, fn func(A, int32) RA) []RA {
+func (i handlerInput[T, R, A]) toResAmtType[NA NameAmount, RA ResourceAmountType[A]](server *Server, old []NA, fn func(A, int32) RA) []RA {
 	resAmts := []RA{}
 
 	for _, item := range old {
-		ra := i.toResAmtFromName(cfg, item)
+		ra := i.toResAmtFromName(server, item)
 		resAmtType := fn(ra.Resource, ra.Amount)
 		resAmts = append(resAmts, resAmtType)
 	}

@@ -49,7 +49,7 @@ func TestGetPrimer(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetPrimer", testSrv.Cfg.HandlePrimers, comparePrimers)
+	testSingleResources(t, tests, "GetPrimer", testSrv.HandlePrimers, comparePrimers)
 }
 
 func TestRetrievePrimers(t *testing.T) {
@@ -97,5 +97,5 @@ func TestRetrievePrimers(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Primers.Endpoint, "RetrievePrimers", testSrv.Cfg.HandlePrimers, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Primers.Endpoint, "RetrievePrimers", testSrv.HandlePrimers, compareAPIResourceLists[api.NamedAPIResource])
 }

@@ -13,16 +13,16 @@ type MonsterItemsSimple struct {
 	OtherItems          []string `json:"other_items,omitempty"`
 }
 
-func convertMonsterItemsSimple(cfg *Config, items seedtypes.MonsterItems) MonsterItemsSimple {
+func convertMonsterItemsSimple(server *Server, items seedtypes.MonsterItems) MonsterItemsSimple {
 	return MonsterItemsSimple{
-		StealCommon:         convertObjPtr(cfg, items.StealCommon, convertItemAmountSimple),
-		StealRare:           convertObjPtr(cfg, items.StealRare, convertItemAmountSimple),
-		DropCommon:          convertObjPtr(cfg, items.DropCommon, convertItemAmountSimple),
-		DropRare:            convertObjPtr(cfg, items.DropRare, convertItemAmountSimple),
-		SecondaryDropCommon: convertObjPtr(cfg, items.SecondaryDropCommon, convertItemAmountSimple),
-		SecondaryDropRare:   convertObjPtr(cfg, items.SecondaryDropRare, convertItemAmountSimple),
-		Bribe:               convertObjPtr(cfg, items.Bribe, convertItemAmountSimple),
-		OtherItems:          convertObjSliceOrNil(cfg, items.OtherItems, posItemToItemAmtSimple),
+		StealCommon:         convertObjPtr(server, items.StealCommon, convertItemAmountSimple),
+		StealRare:           convertObjPtr(server, items.StealRare, convertItemAmountSimple),
+		DropCommon:          convertObjPtr(server, items.DropCommon, convertItemAmountSimple),
+		DropRare:            convertObjPtr(server, items.DropRare, convertItemAmountSimple),
+		SecondaryDropCommon: convertObjPtr(server, items.SecondaryDropCommon, convertItemAmountSimple),
+		SecondaryDropRare:   convertObjPtr(server, items.SecondaryDropRare, convertItemAmountSimple),
+		Bribe:               convertObjPtr(server, items.Bribe, convertItemAmountSimple),
+		OtherItems:          convertObjSliceOrNil(server, items.OtherItems, posItemToItemAmtSimple),
 	}
 }
 
@@ -31,9 +31,9 @@ type MonsterEquipmentSimple struct {
 	ArmorAbilities  []string `json:"armor_abilities"`
 }
 
-func convertMonsterEquipmentSimple(cfg *Config, equipment seedtypes.MonsterEquipment) MonsterEquipmentSimple {
+func convertMonsterEquipmentSimple(server *Server, equipment seedtypes.MonsterEquipment) MonsterEquipmentSimple {
 	return MonsterEquipmentSimple{
-		WeaponAbilities: convertObjSlice(cfg, equipment.WeaponAbilities, monsterAutoAbilityString),
-		ArmorAbilities:  convertObjSlice(cfg, equipment.ArmorAbilities, monsterAutoAbilityString),
+		WeaponAbilities: convertObjSlice(server, equipment.WeaponAbilities, monsterAutoAbilityString),
+		ArmorAbilities:  convertObjSlice(server, equipment.ArmorAbilities, monsterAutoAbilityString),
 	}
 }

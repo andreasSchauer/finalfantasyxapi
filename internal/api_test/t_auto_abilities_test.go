@@ -504,7 +504,7 @@ func TestGetAutoAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetAutoAbility", testSrv.Cfg.HandleAutoAbilities, compareAutoAbilities)
+	testSingleResources(t, tests, "GetAutoAbility", testSrv.HandleAutoAbilities, compareAutoAbilities)
 }
 
 func TestRetrieveAutoAbilities(t *testing.T) {
@@ -600,5 +600,5 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.AutoAbilities.Endpoint, "RetrieveAutoAbilities", testSrv.Cfg.HandleAutoAbilities, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.AutoAbilities.Endpoint, "RetrieveAutoAbilities", testSrv.HandleAutoAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }

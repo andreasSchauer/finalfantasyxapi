@@ -7,13 +7,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seedtypes.Character, Character, NamedAPIResource], id int32) (Character, error) {
+func (s *Server) getCharacter(r *http.Request, i handlerInput[seedtypes.Character, Character, NamedAPIResource], id int32) (Character, error) {
 	character, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Character{}, err
 	}
 
-	rel, err := getCharacterRelationships(cfg, r, character)
+	rel, err := getCharacterRelationships(s, r, character)
 	if err != nil {
 		return Character{}, err
 	}
@@ -21,8 +21,8 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seedtypes.Charac
 	response := Character{
 		ID:                     character.ID,
 		Name:                   character.Name,
-		UntypedUnit:            idToTypedAPIResource(cfg, E.PlayerUnits, character.PlayerUnit.ID),
-		Area:                   locAreaToAreaAPIResource(cfg, E.Areas, character.LocationArea),
+		UntypedUnit:            idToTypedAPIResource(s, E.PlayerUnits, character.PlayerUnit.ID),
+		Area:                   locAreaToAreaAPIResource(s, E.Areas, character.LocationArea),
 		IsStoryBased:           character.IsStoryBased,
 		CanFightUnderwater:     character.CanFightUnderwater,
 		PhysAtkRange:           character.PhysAtkRange,
@@ -31,7 +31,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seedtypes.Charac
 		CelestialWeapon:        rel.CelestialWeapon,
 		OverdriveCommand:       rel.OverdriveCommand,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              E.Stats.toResAmtType(cfg, character.BaseStats, newBaseStat),
+		BaseStats:              E.Stats.toResAmtType(s, character.BaseStats, newBaseStat),
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		StdSphereGrid:          rel.StdSphereGrid,
 		ExpSphereGrid:          rel.ExpSphereGrid,
@@ -46,7 +46,7 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seedtypes.Charac
 	response.RegenAmounts = calcRegenAmounts(response.BaseStats)
 	response.CelestialFormula = getCharacterClstlFormula(response)
 
-	response.AgilityParameters, err = getUnitAgilityParams(cfg, r, response.BaseStats)
+	response.AgilityParameters, err = getUnitAgilityParams(s, r, response.BaseStats)
 	if err != nil {
 		return Character{}, err
 	}
@@ -54,14 +54,14 @@ func (cfg *Config) getCharacter(r *http.Request, i handlerInput[seedtypes.Charac
 	return response, nil
 }
 
-func (cfg *Config) retrieveCharacters(r *http.Request, i handlerInput[seedtypes.Character, Character, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveCharacters(r *http.Request, i handlerInput[seedtypes.Character, Character, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryBool(r, ids, ts.QpnStoryBased, cfg.db.GetCharacterIDsStoryBased),
-		i.queryBool(r, ids, ts.QpnUnderwater, cfg.db.GetCharacterIDsCanFightUnderwater),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryBool(r, ids, ts.QpnStoryBased, s.Cfg.DB.GetCharacterIDsStoryBased),
+		i.queryBool(r, ids, ts.QpnUnderwater, s.Cfg.DB.GetCharacterIDsCanFightUnderwater),
 	})
 }

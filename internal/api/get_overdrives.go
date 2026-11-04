@@ -8,7 +8,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getOverdrive(r *http.Request, i handlerInput[seedtypes.Overdrive, Overdrive, NamedAPIResource], id int32) (Overdrive, error) {
+func (s *Server) getOverdrive(r *http.Request, i handlerInput[seedtypes.Overdrive, Overdrive, NamedAPIResource], id int32) (Overdrive, error) {
 	overdrive, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Overdrive{}, err
@@ -27,22 +27,22 @@ func (cfg *Config) getOverdrive(r *http.Request, i handlerInput[seedtypes.Overdr
 		UnlockCondition:    overdrive.UnlockCondition,
 		CountdownInSec:     overdrive.CountdownInSec,
 		Cursor:             overdrive.Cursor,
-		User:               nameToNamedAPIResource(cfg, E.CharacterClasses, overdrive.User, nil),
-		OverdriveCommand:   namePtrToNamedAPIResPtr(cfg, E.OverdriveCommands, overdrive.OverdriveCommand, nil),
-		OverdriveAbilities: refsToNamedAPIResources(cfg, overdrive.OverdriveAbilities),
+		User:               nameToNamedAPIResource(s, E.CharacterClasses, overdrive.User, nil),
+		OverdriveCommand:   namePtrToNamedAPIResPtr(s, E.OverdriveCommands, overdrive.OverdriveCommand, nil),
+		OverdriveAbilities: refsToNamedAPIResources(s, overdrive.OverdriveAbilities),
 	}
 
 	return response, nil
 }
 
-func (cfg *Config) retrieveOverdrives(r *http.Request, i handlerInput[seedtypes.Overdrive, Overdrive, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveOverdrives(r *http.Request, i handlerInput[seedtypes.Overdrive, Overdrive, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryIntList(cfg, r, ids, ts.QpnRank, cfg.db.GetOverdriveIDsByRank),
-		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(cfg.db.GetOverdriveIDsByUser)),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryIntList(s, r, ids, ts.QpnRank, s.Cfg.DB.GetOverdriveIDsByRank),
+		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(s.Cfg.DB.GetOverdriveIDsByUser)),
 	})
 }

@@ -86,7 +86,7 @@ func TestGetArenaCreation(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetArenaCreation", testSrv.Cfg.HandleArenaCreations, compareArenaCreations)
+	testSingleResources(t, tests, "GetArenaCreation", testSrv.HandleArenaCreations, compareArenaCreations)
 }
 
 func TestRetrieveArenaCreations(t *testing.T) {
@@ -117,5 +117,5 @@ func TestRetrieveArenaCreations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.ArenaCreations.Endpoint, "RetrieveArenaCreations", testSrv.Cfg.HandleArenaCreations, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.ArenaCreations.Endpoint, "RetrieveArenaCreations", testSrv.HandleArenaCreations, compareAPIResourceLists[api.NamedAPIResource])
 }

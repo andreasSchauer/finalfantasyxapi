@@ -6,13 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seedtypes.RonsoRage, RonsoRage, NamedAPIResource], id int32) (RonsoRage, error) {
+func (s *Server) getRonsoRage(r *http.Request, i handlerInput[seedtypes.RonsoRage, RonsoRage, NamedAPIResource], id int32) (RonsoRage, error) {
 	ronsoRage, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return RonsoRage{}, err
 	}
 
-	monsters, err := E.Monsters.dbGetRelations(cfg, r.Context(), ronsoRage, cfg.db.GetRonsoRageMonsterIDs)
+	monsters, err := E.Monsters.dbGetRelations(s, r.Context(), ronsoRage, s.Cfg.DB.GetRonsoRageMonsterIDs)
 	if err != nil {
 		return RonsoRage{}, err
 	}
@@ -22,13 +22,13 @@ func (cfg *Config) getRonsoRage(r *http.Request, i handlerInput[seedtypes.RonsoR
 		Name:        ronsoRage.Name,
 		Description: ronsoRage.Description,
 		Effect:      ronsoRage.Effect,
-		Overdrive:   nameToNamedAPIResource(cfg, E.Overdrives, ronsoRage.Name, nil),
+		Overdrive:   nameToNamedAPIResource(s, E.Overdrives, ronsoRage.Name, nil),
 		Monsters:    monsters,
 	}
 
 	return response, nil
 }
 
-func (cfg *Config) retrieveRonsoRages(r *http.Request, i handlerInput[seedtypes.RonsoRage, RonsoRage, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveRonsoRages(r *http.Request, i handlerInput[seedtypes.RonsoRage, RonsoRage, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

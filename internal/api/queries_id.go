@@ -35,7 +35,7 @@ func (i handlerInput[T, R, A]) queryID[F seedtypes.Lookupable](r *http.Request, 
 }
 
 // like idOnlyQuery, but with more specialized logic in between (wrapperFn)
-func (i handlerInput[T, R, A]) queryIDWrapper[F seedtypes.Lookupable](cfg *Config, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, wrapperFn QueryWrapInt) IDFilter {
+func (i handlerInput[T, R, A]) queryIDWrapper[F seedtypes.Lookupable](server *Server, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
@@ -50,7 +50,7 @@ func (i handlerInput[T, R, A]) queryIDWrapper[F seedtypes.Lookupable](cfg *Confi
 			return nil, err
 		}
 
-		return wrapperFn(cfg, r, ctx, id)
+		return wrapperFn(server, r, ctx, id)
 	}
 }
 

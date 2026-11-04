@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func idToLocAreaString(cfg *Config, areaID int32) string {
+func idToLocAreaString(server *Server, areaID int32) string {
 	area, _ := lookup.GetResourceByID(areaID, lookup.L.AreasID)
 	return areaToLocAreaString(area)
 }
@@ -53,17 +53,17 @@ func locAreaStrings[T seedtypes.HasLocArea](items []T) []string {
 	return strings
 }
 
-func monsterAmountString(cfg *Config, ma seedtypes.MonsterAmount) string {
+func monsterAmountString(server *Server, ma seedtypes.MonsterAmount) string {
 	mon, _ := lookup.GetResource(ma, lookup.L.Monsters)
 	return h.NameAmountString(mon.Name, mon.Version, mon.Specification, ma.Amount)
 }
 
-func idToMonsterSimpleString(cfg *Config, monID int32) string {
+func idToMonsterSimpleString(server *Server, monID int32) string {
 	mon, _ := lookup.GetResourceByID(monID, lookup.L.MonstersID)
 	return h.NameToString(mon.Name, mon.Version, mon.Specification)
 }
 
-func monsterAutoAbilityString(_ *Config, drop seedtypes.EquipmentDrop) string {
+func monsterAutoAbilityString(_ *Server, drop seedtypes.EquipmentDrop) string {
 	if len(drop.Characters) == 0 {
 		return drop.Ability
 	}
@@ -72,7 +72,7 @@ func monsterAutoAbilityString(_ *Config, drop seedtypes.EquipmentDrop) string {
 	return fmt.Sprintf("%s (%s)", drop.Ability, formattedChars)
 }
 
-func abilityRefString(cfg *Config, ref seedtypes.AbilityReference) string {
+func abilityRefString(server *Server, ref seedtypes.AbilityReference) string {
 	ability, _ := lookup.GetResource(ref, lookup.L.Abilities)
 	return h.NameToString(ability.Name, ability.Version, ability.Specification)
 }

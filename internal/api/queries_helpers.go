@@ -60,11 +60,11 @@ func querySplit(query, sep string) []string {
 	return strings.Split(queryTrimmed, sep)
 }
 
-func queryListSplit(cfg *Config, query string) ([]string, error) {
+func queryListSplit(server *Server, query string) ([]string, error) {
 	segments := querySplit(query, ",")
 
-	if len(segments) > cfg.fetchLimit {
-		return nil, newHTTPErrorFetchLimit(cfg.fetchLimit)
+	if len(segments) > server.Cfg.FetchLimit {
+		return nil, newHTTPErrorFetchLimit(server.Cfg.FetchLimit)
 	}
 
 	return segments, nil
@@ -84,7 +84,7 @@ func queryIntMapToSlice(m map[string]int32) []int32 {
 	return items
 }
 
-func getRawQueryLimit(cfg *Config, r *http.Request) (int, error) {
+func getRawQueryLimit(server *Server, r *http.Request) (int, error) {
 	queryParamLimit := Q.defaultParams[ts.QpnLimit]
 	query, err := queryParamLimit.checkEmpty(r)
 	if err != nil {
@@ -98,8 +98,8 @@ func getRawQueryLimit(cfg *Config, r *http.Request) (int, error) {
 	if limit == 0 {
 		limit = *queryParamLimit.DefaultVal
 	}
-	if limit > cfg.fetchLimit {
-		return cfg.fetchLimit, nil
+	if limit > server.Cfg.FetchLimit {
+		return server.Cfg.FetchLimit, nil
 	}
 
 	return limit, nil

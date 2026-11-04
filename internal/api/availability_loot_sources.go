@@ -6,10 +6,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlShops(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Shops
 
-	avlParams, err := i.queryAvlGetParams(cfg, r)
+	avlParams, err := i.queryAvlGetParams(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -17,7 +17,7 @@ func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 		return inputIDs, nil
 	}
 
-	sources, err := getShopSources(cfg, r, i)
+	sources, err := getShopSources(server, r, i)
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.FilterShopIDsByAvailability(r.Context(), database.FilterShopIDsByAvailabilityParams{
+	dbIDs, err := server.Cfg.DB.FilterShopIDsByAvailability(r.Context(), database.FilterShopIDsByAvailabilityParams{
 		Ids:             inputIDs,
 		Availability:    avlParams.availabilities,
 		AvlType:         sources.AvlType,
@@ -46,10 +46,10 @@ func filterAvlShops(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, er
 	return dbIDs, nil
 }
 
-func filterAvlTreasures(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlTreasures(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Treasures
 
-	avlParams, err := i.queryAvlGetParams(cfg, r)
+	avlParams, err := i.queryAvlGetParams(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func filterAvlTreasures(cfg *Config, r *http.Request, inputIDs []int32) ([]int32
 		return inputIDs, nil
 	}
 
-	dbIDs, err := cfg.db.FilterTreasureIDsByAvailability(r.Context(), database.FilterTreasureIDsByAvailabilityParams{
+	dbIDs, err := server.Cfg.DB.FilterTreasureIDsByAvailability(r.Context(), database.FilterTreasureIDsByAvailabilityParams{
 		Ids:          inputIDs,
 		Availability: avlParams.availabilities,
 		PreAirship:   avlParams.preAirship,
@@ -69,10 +69,10 @@ func filterAvlTreasures(cfg *Config, r *http.Request, inputIDs []int32) ([]int32
 	return dbIDs, nil
 }
 
-func filterAvlQuests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlQuests(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Quests
 
-	avlParams, err := i.queryAvlRepGetParams(cfg, r)
+	avlParams, err := i.queryAvlRepGetParams(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func filterAvlQuests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, e
 		return inputIDs, nil
 	}
 
-	dbIDs, err := cfg.db.FilterQuestIDsByAvailability(r.Context(), database.FilterQuestIDsByAvailabilityParams{
+	dbIDs, err := server.Cfg.DB.FilterQuestIDsByAvailability(r.Context(), database.FilterQuestIDsByAvailabilityParams{
 		Ids:          inputIDs,
 		Availability: avlParams.availabilities,
 		IsRepeatable: avlParams.isRepeatable,
@@ -93,10 +93,10 @@ func filterAvlQuests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, e
 	return dbIDs, nil
 }
 
-func filterAvlSidequests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlSidequests(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Sidequests
 
-	avlParams, err := i.queryAvlRepGetParams(cfg, r)
+	avlParams, err := i.queryAvlRepGetParams(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func filterAvlSidequests(cfg *Config, r *http.Request, inputIDs []int32) ([]int3
 		return inputIDs, nil
 	}
 
-	dbIDs, err := cfg.db.FilterSidequestIDsByAvailability(r.Context(), database.FilterSidequestIDsByAvailabilityParams{
+	dbIDs, err := server.Cfg.DB.FilterSidequestIDsByAvailability(r.Context(), database.FilterSidequestIDsByAvailabilityParams{
 		Ids:          inputIDs,
 		Availability: avlParams.availabilities,
 		PreAirship:   avlParams.preAirship,
@@ -116,10 +116,10 @@ func filterAvlSidequests(cfg *Config, r *http.Request, inputIDs []int32) ([]int3
 	return dbIDs, nil
 }
 
-func filterAvlSubquests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlSubquests(server *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Subquests
 
-	avlParams, err := i.queryAvlRepGetParams(cfg, r)
+	avlParams, err := i.queryAvlRepGetParams(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -127,7 +127,7 @@ func filterAvlSubquests(cfg *Config, r *http.Request, inputIDs []int32) ([]int32
 		return inputIDs, nil
 	}
 
-	dbIDs, err := cfg.db.FilterSubquestIDsByAvailability(r.Context(), database.FilterSubquestIDsByAvailabilityParams{
+	dbIDs, err := server.Cfg.DB.FilterSubquestIDsByAvailability(r.Context(), database.FilterSubquestIDsByAvailabilityParams{
 		Ids:          inputIDs,
 		Availability: avlParams.availabilities,
 		IsRepeatable: avlParams.isRepeatable,

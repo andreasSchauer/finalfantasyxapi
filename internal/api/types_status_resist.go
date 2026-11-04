@@ -13,9 +13,9 @@ func (sr StatusResist) GetAPIResource() APIResource {
 	return sr.StatusCondition
 }
 
-func convertStatusResist(cfg *Config, sr seedtypes.StatusResist) StatusResist {
+func convertStatusResist(server *Server, sr seedtypes.StatusResist) StatusResist {
 	return StatusResist{
-		StatusCondition: nameToNamedAPIResource(cfg, E.StatusConditions, sr.StatusCondition, nil),
+		StatusCondition: nameToNamedAPIResource(server, E.StatusConditions, sr.StatusCondition, nil),
 		Resistance:      sr.Resistance,
 	}
 }

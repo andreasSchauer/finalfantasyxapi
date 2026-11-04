@@ -23,21 +23,21 @@ func (t TreasureSimple) GetURL() string {
 	return t.URL
 }
 
-func createTreasureSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createTreasureSimple(server *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.Treasures
 	treasure, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	treasureSimple := TreasureSimple{
 		ID:           treasure.ID,
-		URL:          CreateResourceURL(cfg, i.Endpoint, id),
-		Area:         idToLocAreaString(cfg, treasure.AreaID),
+		URL:          CreateResourceURL(server, i.Endpoint, id),
+		Area:         idToLocAreaString(server, treasure.AreaID),
 		Availability: treasure.Availability,
 		Notes:        treasure.Notes,
 		TreasureType: treasure.TreasureType,
 		LootType:     treasure.LootType,
 		GilAmount:    treasure.GilAmount,
-		Items:        convertObjSliceOrNil(cfg, treasure.Items, convertItemAmountSimple),
-		Equipment:    convertObjPtr(cfg, treasure.Equipment, convertEquipmentSimple),
+		Items:        convertObjSliceOrNil(server, treasure.Items, convertItemAmountSimple),
+		Equipment:    convertObjPtr(server, treasure.Equipment, convertEquipmentSimple),
 	}
 
 	return treasureSimple, nil

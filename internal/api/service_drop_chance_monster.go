@@ -32,14 +32,14 @@ func (c MonsterDropChances) Round(n int32) MonsterDropChances {
 	return c
 }
 
-func getMonsterDropChances(cfg *Config, mon seedtypes.Monster, wantedAbilities []seedtypes.EquipmentDrop) MonsterDropChances {
+func getMonsterDropChances(server *Server, mon seedtypes.Monster, wantedAbilities []seedtypes.EquipmentDrop) MonsterDropChances {
 	return MonsterDropChances{
 		MonsterID:           mon.ID,
 		MonsterName:         h.NameToString(mon.Name, mon.Version, mon.Specification),
 		EquipmentDropChance: calcMonDropChance(mon),
-		SlotsChances:        convertObjSlice(cfg, mon.Equipment.AbilitySlots.Chances, convertChanceAmount),
-		ShotsChances:        convertObjSlice(cfg, mon.Equipment.AttachedAbilities.Chances, convertChanceAmount),
-		AutoAbilities:       getDroppedAutoAbilities(cfg, wantedAbilities),
+		SlotsChances:        convertObjSlice(server, mon.Equipment.AbilitySlots.Chances, convertChanceAmount),
+		ShotsChances:        convertObjSlice(server, mon.Equipment.AttachedAbilities.Chances, convertChanceAmount),
+		AutoAbilities:       getDroppedAutoAbilities(server, wantedAbilities),
 	}
 }
 
@@ -64,7 +64,7 @@ func (c ChanceAmount) Round(n int32) ChanceAmount {
 	return c
 }
 
-func convertChanceAmount(_ *Config, c seedtypes.EquipmentSlotsChance) ChanceAmount {
+func convertChanceAmount(_ *Server, c seedtypes.EquipmentSlotsChance) ChanceAmount {
 	return ChanceAmount{
 		Amount: c.Amount,
 		Chance: h.PercentToDecimal(float64(c.Chance)),

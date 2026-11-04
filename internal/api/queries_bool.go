@@ -61,7 +61,7 @@ func (i handlerInput[T, R, A]) queryBool2(r *http.Request, inputIDs []int32, que
 	}
 }
 
-func (i handlerInput[T, R, A]) queryBoolWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapBool) IDFilter {
+func (i handlerInput[T, R, A]) queryBoolWrapper(server *Server, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapBool) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.replacingParamsPresent(r, i.queryLookup) {
@@ -76,6 +76,6 @@ func (i handlerInput[T, R, A]) queryBoolWrapper(cfg *Config, r *http.Request, in
 			return nil, err
 		}
 
-		return wrapperFn(cfg, r, ctx, b)
+		return wrapperFn(server, r, ctx, b)
 	}
 }

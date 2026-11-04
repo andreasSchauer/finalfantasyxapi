@@ -14,12 +14,12 @@ type ItemAmountSimple struct {
 	ItemType      database.ItemType    `json:"item_type"`
 }
 
-func convertItemAmountSimple(cfg *Config, ia seedtypes.ItemAmount) string {
+func convertItemAmountSimple(server *Server, ia seedtypes.ItemAmount) string {
 	return h.NameAmountString(ia.ItemName, nil, nil, ia.Amount)
 }
 
-func posItemToItemAmtSimple(cfg *Config, posItem seedtypes.PossibleItem) string {
-	return convertItemAmountSimple(cfg, posItem.ItemAmount)
+func posItemToItemAmtSimple(server *Server, posItem seedtypes.PossibleItem) string {
+	return convertItemAmountSimple(server, posItem.ItemAmount)
 }
 
 func sortItemAmountsByID(s []seedtypes.ItemAmount) []seedtypes.ItemAmount {

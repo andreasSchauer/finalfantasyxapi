@@ -28,10 +28,10 @@ type SubShopSimple struct {
 	Equipment []ShopEquipmentSimple `json:"equipment"`
 }
 
-func convertSubShopSimple(cfg *Config, ss seedtypes.SubShop) SubShopSimple {
+func convertSubShopSimple(server *Server, ss seedtypes.SubShop) SubShopSimple {
 	return SubShopSimple{
-		Items:     convertObjSlice(cfg, ss.Items, shopItemNameString),
-		Equipment: convertObjSlice(cfg, ss.Equipment, convertShopEquipmentSimple),
+		Items:     convertObjSlice(server, ss.Items, shopItemNameString),
+		Equipment: convertObjSlice(server, ss.Equipment, convertShopEquipmentSimple),
 	}
 }
 
@@ -40,18 +40,18 @@ type ShopEquipmentSimple struct {
 	Abilities     *string `json:"abilities"`
 }
 
-func convertShopEquipmentSimple(cfg *Config, se seedtypes.ShopEquipment) ShopEquipmentSimple {
+func convertShopEquipmentSimple(server *Server, se seedtypes.ShopEquipment) ShopEquipmentSimple {
 	return ShopEquipmentSimple{
-		EquipmentName: shopEquipmentNameString(cfg, se),
+		EquipmentName: shopEquipmentNameString(server, se),
 		Abilities:     foundEquipmentAbilitiesStringPtr(se.TreasureEquipment),
 	}
 }
 
-func shopItemNameString(_ *Config, si seedtypes.ShopItem) string {
+func shopItemNameString(_ *Server, si seedtypes.ShopItem) string {
 	return fmt.Sprintf("%s - %d Gil", si.Name, si.Price)
 }
 
-func shopEquipmentNameString(_ *Config, se seedtypes.ShopEquipment) string {
+func shopEquipmentNameString(_ *Server, se seedtypes.ShopEquipment) string {
 	return fmt.Sprintf("%s - %d Gil", se.Name, se.Price)
 }
 
@@ -77,18 +77,18 @@ func foundEquipmentAbilitiesStringPtr(fe seedtypes.TreasureEquipment) *string {
 	}
 }
 
-func createShopSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createShopSimple(server *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.Shops
 	shop, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	shopSimple := ShopSimple{
 		ID:          shop.ID,
-		URL:         CreateResourceURL(cfg, i.Endpoint, id),
-		Area:        idToLocAreaString(cfg, shop.AreaID),
+		URL:         CreateResourceURL(server, i.Endpoint, id),
+		Area:        idToLocAreaString(server, shop.AreaID),
 		Category:    shop.Category,
 		Notes:       shop.Notes,
-		PreAirship:  convertObjPtr(cfg, shop.PreAirship, convertSubShopSimple),
-		PostAirship: convertObjPtr(cfg, shop.PostAirship, convertSubShopSimple),
+		PreAirship:  convertObjPtr(server, shop.PreAirship, convertSubShopSimple),
+		PostAirship: convertObjPtr(server, shop.PostAirship, convertSubShopSimple),
 	}
 
 	return shopSimple, nil

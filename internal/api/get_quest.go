@@ -8,7 +8,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getQuest(r *http.Request, i handlerInput[seedtypes.Quest, Quest, QuestAPIResource], id int32) (Quest, error) {
+func (s *Server) getQuest(r *http.Request, i handlerInput[seedtypes.Quest, Quest, QuestAPIResource], id int32) (Quest, error) {
 	quest, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Quest{}, err
@@ -18,23 +18,23 @@ func (cfg *Config) getQuest(r *http.Request, i handlerInput[seedtypes.Quest, Que
 		ID:           quest.ID,
 		Name:         quest.Name,
 		Type:         quest.Type,
-		TypedQuest:   questToQuestAPIResource(cfg, quest),
+		TypedQuest:   questToQuestAPIResource(s, quest),
 		Availability: quest.Availability,
 		IsRepeatable: quest.IsRepeatable,
-		Completion:   convertObjPtr(cfg, quest.Completion, convertQuestCompletion),
+		Completion:   convertObjPtr(s, quest.Completion, convertQuestCompletion),
 	}
 
 	return response, nil
 }
 
-func (cfg *Config) retrieveQuests(r *http.Request, i handlerInput[seedtypes.Quest, Quest, QuestAPIResource]) ([]int32, error) {
+func (s *Server) retrieveQuests(r *http.Request, i handlerInput[seedtypes.Quest, Quest, QuestAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnum(r, enums.T.QuestType, ids, ts.QpnType, cfg.db.GetQuestIDsByType),
-		i.queryBool(r, ids, ts.QpnRepeatable, cfg.db.GetQuestIDsByRepeatable),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryEnum(r, enums.T.QuestType, ids, ts.QpnType, s.Cfg.DB.GetQuestIDsByType),
+		i.queryBool(r, ids, ts.QpnRepeatable, s.Cfg.DB.GetQuestIDsByRepeatable),
 	})
 }

@@ -7,21 +7,21 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func (i handlerInput[T, R, A]) routerIDOnly(cfg *Config, w http.ResponseWriter, r *http.Request) {
+func (i handlerInput[T, R, A]) routerIDOnly(server *Server, w http.ResponseWriter, r *http.Request) {
 	i.usage = []string{"/{id}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		i.handleList(cfg, w, r)
+		i.handleList(server, w, r)
 		return
 
 	case 1:
-		i.handleIDOnly(cfg, w, r, segments)
+		i.handleIDOnly(server, w, r, segments)
 		return
 
 	case 2:
-		i.handleSubsections(cfg, w, r, segments)
+		i.handleSubsections(server, w, r, segments)
 		return
 
 	default:
@@ -30,21 +30,21 @@ func (i handlerInput[T, R, A]) routerIDOnly(cfg *Config, w http.ResponseWriter, 
 	}
 }
 
-func (i handlerInput[T, R, A]) routerNameID(cfg *Config, w http.ResponseWriter, r *http.Request) {
+func (i handlerInput[T, R, A]) routerNameID(server *Server, w http.ResponseWriter, r *http.Request) {
 	i.usage = []string{"/{id}", "/{name}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		i.handleList(cfg, w, r)
+		i.handleList(server, w, r)
 		return
 
 	case 1:
-		i.handleNameID(cfg, w, r, segments)
+		i.handleNameID(server, w, r, segments)
 		return
 
 	case 2:
-		i.handleSubsections(cfg, w, r, segments)
+		i.handleSubsections(server, w, r, segments)
 		return
 
 	default:
@@ -53,21 +53,21 @@ func (i handlerInput[T, R, A]) routerNameID(cfg *Config, w http.ResponseWriter, 
 	}
 }
 
-func (i handlerInput[T, R, A]) routerNameVersion(cfg *Config, w http.ResponseWriter, r *http.Request) {
+func (i handlerInput[T, R, A]) routerNameVersion(server *Server, w http.ResponseWriter, r *http.Request) {
 	i.usage = []string{"/{id}", "/{name}", "/{name}/{version}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		i.handleList(cfg, w, r)
+		i.handleList(server, w, r)
 		return
 
 	case 1:
-		i.handleNameID(cfg, w, r, segments)
+		i.handleNameID(server, w, r, segments)
 		return
 
 	case 2:
-		i.handleSubOrNameVer(cfg, w, r, segments)
+		i.handleSubOrNameVer(server, w, r, segments)
 		return
 
 	default:
@@ -76,16 +76,16 @@ func (i handlerInput[T, R, A]) routerNameVersion(cfg *Config, w http.ResponseWri
 	}
 }
 
-func (i handlerInputEnums) router(cfg *Config, w http.ResponseWriter, r *http.Request) {
+func (i handlerInputEnums) router(server *Server, w http.ResponseWriter, r *http.Request) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		i.handleList(cfg, w, r)
+		i.handleList(server, w, r)
 		return
 
 	case 1:
-		i.handleSingle(cfg, w, r, segments)
+		i.handleSingle(server, w, r, segments)
 		return
 
 	default:
@@ -94,16 +94,16 @@ func (i handlerInputEnums) router(cfg *Config, w http.ResponseWriter, r *http.Re
 	}
 }
 
-func (i handlerInputEndpoints) router(cfg *Config, w http.ResponseWriter, r *http.Request) {
+func (i handlerInputEndpoints) router(server *Server, w http.ResponseWriter, r *http.Request) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		i.handleList(cfg, w, r)
+		i.handleList(server, w, r)
 		return
 
 	case 1:
-		i.handleSections(cfg, w, r, segments)
+		i.handleSections(server, w, r, segments)
 		return
 
 	default:
@@ -112,16 +112,16 @@ func (i handlerInputEndpoints) router(cfg *Config, w http.ResponseWriter, r *htt
 	}
 }
 
-func (i handlerInputService[P, R]) routerGet(cfg *Config, w http.ResponseWriter, r *http.Request) {
+func (i handlerInputService[P, R]) routerGet(server *Server, w http.ResponseWriter, r *http.Request) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 1:
-		i.handleBody(cfg, w, r, segments)
+		i.handleBody(server, w, r, segments)
 		return
 
 	case 2:
-		i.handleBodySections(cfg, w, r, segments)
+		i.handleBodySections(server, w, r, segments)
 		return
 
 	default:
@@ -130,12 +130,12 @@ func (i handlerInputService[P, R]) routerGet(cfg *Config, w http.ResponseWriter,
 	}
 }
 
-func (i handlerInputService[P, R]) routerPost(cfg *Config, w http.ResponseWriter, r *http.Request) {
+func (i handlerInputService[P, R]) routerPost(server *Server, w http.ResponseWriter, r *http.Request) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
 	case 0:
-		i.handlePost(cfg, w, r)
+		i.handlePost(server, w, r)
 		return
 
 	default:

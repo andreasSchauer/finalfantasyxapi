@@ -116,7 +116,7 @@ func TestGetPlayerUnit(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetPlayerUnits", testSrv.Cfg.HandlePlayerUnits, comparePlayerUnits)
+	testSingleResources(t, tests, "GetPlayerUnits", testSrv.HandlePlayerUnits, comparePlayerUnits)
 }
 
 func TestRetrievePlayerUnits(t *testing.T) {
@@ -140,5 +140,5 @@ func TestRetrievePlayerUnits(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.PlayerUnits.Endpoint, "RetrievePlayerUnits", testSrv.Cfg.HandlePlayerUnits, compareAPIResourceLists[api.TypedAPIResource])
+	testIDList(t, tests, api.E.PlayerUnits.Endpoint, "RetrievePlayerUnits", testSrv.HandlePlayerUnits, compareAPIResourceLists[api.TypedAPIResource])
 }

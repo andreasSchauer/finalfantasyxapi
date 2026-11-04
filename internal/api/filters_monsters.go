@@ -14,13 +14,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMonstersByElemResists(cfg *Config, r *http.Request, ctx context.Context, query string, queryParam QueryParam) ([]int32, error) {
-	ids, err := getElemResistIDs(cfg, query, queryParam)
+func getMonstersByElemResists(server *Server, r *http.Request, ctx context.Context, query string, queryParam QueryParam) ([]int32, error) {
+	ids, err := getElemResistIDs(server, query, queryParam)
 	if err != nil {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetMonsterIDsByElemResistIDs(ctx, ids)
+	dbIDs, err := server.Cfg.DB.GetMonsterIDsByElemResistIDs(ctx, ids)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by elemental affinities", err)
 	}
@@ -28,8 +28,8 @@ func getMonstersByElemResists(cfg *Config, r *http.Request, ctx context.Context,
 	return dbIDs, nil
 }
 
-func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32, error) {
-	eaPairs, err := queryListSplit(cfg, query)
+func getElemResistIDs(server *Server, query string, queryParam QueryParam) ([]int32, error) {
+	eaPairs, err := queryListSplit(server, query)
 	if err != nil {
 		return nil, err
 	}
@@ -72,13 +72,13 @@ func getElemResistIDs(cfg *Config, query string, queryParam QueryParam) ([]int32
 	return ids, nil
 }
 
-func getMonstersByStatusResists(cfg *Config, r *http.Request, ctx context.Context, ids []int32) ([]int32, error) {
+func getMonstersByStatusResists(server *Server, r *http.Request, ctx context.Context, ids []int32) ([]int32, error) {
 	resistance, err := verifyMonsterResistance(r)
 	if err != nil {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetMonsterIDsByStatusResists(ctx, database.GetMonsterIDsByStatusResistsParams{
+	dbIDs, err := server.Cfg.DB.GetMonsterIDsByStatusResists(ctx, database.GetMonsterIDsByStatusResistsParams{
 		StatusConditionIds: ids,
 		MinResistance:      resistance,
 	})
@@ -100,17 +100,17 @@ func verifyMonsterResistance(r *http.Request) (int32, error) {
 	return int32(resistance), nil
 }
 
-func getMonstersByAutoAbility(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getMonstersByAutoAbility(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Monsters
 
 	queryParam := i.queryLookup[ts.QpnIsForced]
 
 	isForced, err := queryParam.parseBool(r)
 	if queryIsEmpty(err) {
-		return cfg.db.GetMonsterIDsByAutoAbility(ctx, id)
+		return server.Cfg.DB.GetMonsterIDsByAutoAbility(ctx, id)
 	}
 
-	dbIDs, err := cfg.db.GetMonsterIDsByAutoAbilityIsForced(ctx, database.GetMonsterIDsByAutoAbilityIsForcedParams{
+	dbIDs, err := server.Cfg.DB.GetMonsterIDsByAutoAbilityIsForced(ctx, database.GetMonsterIDsByAutoAbilityIsForcedParams{
 		AutoAbilityID: id,
 		IsForced:      isForced,
 	})
@@ -121,15 +121,15 @@ func getMonstersByAutoAbility(cfg *Config, r *http.Request, ctx context.Context,
 	return dbIDs, nil
 }
 
-func getMonstersByItem(cfg *Config, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getMonstersByItem(server *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Monsters
 
-	methods, err := getMonsterItemMethods(cfg, r)
+	methods, err := getMonsterItemMethods(server, r)
 	if err != nil {
 		return nil, err
 	}
 
-	dbIDs, err := cfg.db.GetMonsterIDsByItem(ctx, database.GetMonsterIDsByItemParams{
+	dbIDs, err := server.Cfg.DB.GetMonsterIDsByItem(ctx, database.GetMonsterIDsByItemParams{
 		ItemID:  id,
 		Methods: methods,
 	})
@@ -140,7 +140,7 @@ func getMonstersByItem(cfg *Config, r *http.Request, ctx context.Context, id int
 	return dbIDs, nil
 }
 
-func getMonsterItemMethods(cfg *Config, r *http.Request) ([]string, error) {
+func getMonsterItemMethods(server *Server, r *http.Request) ([]string, error) {
 	i := E.Monsters
 	paramMethods := i.queryLookup[ts.QpnMethods]
 	aliasses := map[string][]string{
@@ -148,7 +148,7 @@ func getMonsterItemMethods(cfg *Config, r *http.Request) ([]string, error) {
 		"drop":  {"drop_common", "drop_rare", "drop_secondary_common", "drop_secondary_rare"},
 	}
 
-	queryMethods, err := paramMethods.parseValueList(cfg, r)
+	queryMethods, err := paramMethods.parseValueList(server, r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

@@ -256,7 +256,7 @@ func TestGetMiscAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetMiscAbility", testSrv.Cfg.HandleMiscAbilities, compareMiscAbilities)
+	testSingleResources(t, tests, "GetMiscAbility", testSrv.HandleMiscAbilities, compareMiscAbilities)
 }
 
 func TestGetMultipleMiscAbilities(t *testing.T) {
@@ -288,7 +288,7 @@ func TestGetMultipleMiscAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.MiscAbilities.Endpoint, "GetMultipleMiscAbilities", testSrv.Cfg.HandleMiscAbilities, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.MiscAbilities.Endpoint, "GetMultipleMiscAbilities", testSrv.HandleMiscAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestRetrieveMiscAbilities(t *testing.T) {
@@ -336,5 +336,5 @@ func TestRetrieveMiscAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.MiscAbilities.Endpoint, "RetrieveMiscAbilities", testSrv.Cfg.HandleMiscAbilities, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.MiscAbilities.Endpoint, "RetrieveMiscAbilities", testSrv.HandleMiscAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }

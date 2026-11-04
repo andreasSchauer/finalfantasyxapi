@@ -61,7 +61,7 @@ func TestGetProperty(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetProperty", testSrv.Cfg.HandleProperties, compareProperties)
+	testSingleResources(t, tests, "GetProperty", testSrv.HandleProperties, compareProperties)
 }
 
 func TestRetrieveProperties(t *testing.T) {
@@ -77,5 +77,5 @@ func TestRetrieveProperties(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Properties.Endpoint, "RetrieveProperties", testSrv.Cfg.HandleProperties, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Properties.Endpoint, "RetrieveProperties", testSrv.HandleProperties, compareAPIResourceLists[api.NamedAPIResource])
 }

@@ -8,10 +8,10 @@ type FoundEquipment struct {
 	EmptySlotsAmount int32              `json:"empty_slots_amount"`
 }
 
-func convertFoundEquipment(cfg *Config, fe seedtypes.TreasureEquipment) FoundEquipment {
+func convertFoundEquipment(server *Server, fe seedtypes.TreasureEquipment) FoundEquipment {
 	return FoundEquipment{
-		EquipmentName:    nameToNamedAPIResource(cfg, E.Equipment, fe.Name, nil),
-		Abilities:        namesToNamedAPIResources(cfg, E.AutoAbilities, fe.Abilities),
+		EquipmentName:    nameToNamedAPIResource(server, E.Equipment, fe.Name, nil),
+		Abilities:        namesToNamedAPIResources(server, E.AutoAbilities, fe.Abilities),
 		EmptySlotsAmount: fe.EmptySlotsAmount,
 	}
 }

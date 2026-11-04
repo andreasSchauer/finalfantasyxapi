@@ -45,14 +45,14 @@ type StatusInteractionQueries struct {
 	StatusConditions DBQueryIntMany
 }
 
-func getStatusInfliction(cfg *Config, ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*StatusInfliction, error) {
+func getStatusInfliction(server *Server, ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*StatusInfliction, error) {
 	var statusInfliction StatusInfliction
 
-	abilities, err := E.Abilities.dbGetRelations(cfg, ctx, status, queries.Abilities)
+	abilities, err := E.Abilities.dbGetRelations(server, ctx, status, queries.Abilities)
 	if err != nil {
 		return nil, err
 	}
-	statusInfliction = populateStatusInfliction(cfg, abilities)
+	statusInfliction = populateStatusInfliction(server, abilities)
 
 	if statusInfliction.IsZero() {
 		return nil, nil
@@ -61,14 +61,14 @@ func getStatusInfliction(cfg *Config, ctx context.Context, status seedtypes.Stat
 	return &statusInfliction, nil
 }
 
-func getStatusRemoval(cfg *Config, ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*StatusRemoval, error) {
-	abilities, err := E.Abilities.dbGetRelations(cfg, ctx, status, queries.Abilities)
+func getStatusRemoval(server *Server, ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*StatusRemoval, error) {
+	abilities, err := E.Abilities.dbGetRelations(server, ctx, status, queries.Abilities)
 	if err != nil {
 		return nil, err
 	}
-	statusRemoval := populateStatusRemoval(cfg, abilities)
+	statusRemoval := populateStatusRemoval(server, abilities)
 
-	statusRemoval.StatusConditions, err = E.StatusConditions.dbGetRelations(cfg, ctx, status, queries.StatusConditions)
+	statusRemoval.StatusConditions, err = E.StatusConditions.dbGetRelations(server, ctx, status, queries.StatusConditions)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func getStatusRemoval(cfg *Config, ctx context.Context, status seedtypes.StatusC
 	return &statusRemoval, nil
 }
 
-func populateStatusInfliction(cfg *Config, abilities []TypedAPIResource) StatusInfliction {
+func populateStatusInfliction(server *Server, abilities []TypedAPIResource) StatusInfliction {
 	infliction := StatusInfliction{
 		PlayerAbilities:    []NamedAPIResource{},
 		OverdriveAbilities: []NamedAPIResource{},
@@ -97,27 +97,27 @@ func populateStatusInfliction(cfg *Config, abilities []TypedAPIResource) StatusI
 		switch ability.Type {
 		case string(database.AbilityTypePlayerAbility):
 			playerAbility, _ := lookup.GetResource(obj, lookup.L.PlayerAbilities)
-			res := nameToNamedAPIResource(cfg, E.PlayerAbilities, playerAbility.Name, playerAbility.Version)
+			res := nameToNamedAPIResource(server, E.PlayerAbilities, playerAbility.Name, playerAbility.Version)
 			infliction.PlayerAbilities = append(infliction.PlayerAbilities, res)
 
 		case string(database.AbilityTypeOverdriveAbility):
 			overdriveAbility, _ := lookup.GetResource(obj, lookup.L.OverdriveAbilities)
-			res := nameToNamedAPIResource(cfg, E.OverdriveAbilities, overdriveAbility.Name, overdriveAbility.Version)
+			res := nameToNamedAPIResource(server, E.OverdriveAbilities, overdriveAbility.Name, overdriveAbility.Version)
 			infliction.OverdriveAbilities = append(infliction.OverdriveAbilities, res)
 
 		case string(database.AbilityTypeItemAbility):
 			itemAbility, _ := lookup.GetResource(ability.Name, lookup.L.ItemAbilities)
-			res := nameToNamedAPIResource(cfg, E.ItemAbilities, itemAbility.Name, itemAbility.Version)
+			res := nameToNamedAPIResource(server, E.ItemAbilities, itemAbility.Name, itemAbility.Version)
 			infliction.ItemAbilities = append(infliction.ItemAbilities, res)
 
 		case string(database.AbilityTypeMiscAbility):
 			miscAbility, _ := lookup.GetResource(obj, lookup.L.MiscAbilities)
-			res := nameToNamedAPIResource(cfg, E.MiscAbilities, miscAbility.Name, miscAbility.Version)
+			res := nameToNamedAPIResource(server, E.MiscAbilities, miscAbility.Name, miscAbility.Version)
 			infliction.MiscAbilities = append(infliction.MiscAbilities, res)
 
 		case string(database.AbilityTypeEnemyAbility):
 			enemyAbility, _ := lookup.GetResource(obj, lookup.L.EnemyAbilities)
-			res := nameToNamedAPIResource(cfg, E.EnemyAbilities, enemyAbility.Name, enemyAbility.Version)
+			res := nameToNamedAPIResource(server, E.EnemyAbilities, enemyAbility.Name, enemyAbility.Version)
 			infliction.EnemyAbilities = append(infliction.EnemyAbilities, res)
 		}
 	}
@@ -125,7 +125,7 @@ func populateStatusInfliction(cfg *Config, abilities []TypedAPIResource) StatusI
 	return infliction
 }
 
-func populateStatusRemoval(cfg *Config, abilities []TypedAPIResource) StatusRemoval {
+func populateStatusRemoval(server *Server, abilities []TypedAPIResource) StatusRemoval {
 	removal := StatusRemoval{
 		PlayerAbilities:    []NamedAPIResource{},
 		OverdriveAbilities: []NamedAPIResource{},
@@ -141,22 +141,22 @@ func populateStatusRemoval(cfg *Config, abilities []TypedAPIResource) StatusRemo
 		switch ability.Type {
 		case string(database.AbilityTypePlayerAbility):
 			playerAbility, _ := lookup.GetResource(obj, lookup.L.PlayerAbilities)
-			res := nameToNamedAPIResource(cfg, E.PlayerAbilities, playerAbility.Name, playerAbility.Version)
+			res := nameToNamedAPIResource(server, E.PlayerAbilities, playerAbility.Name, playerAbility.Version)
 			removal.PlayerAbilities = append(removal.PlayerAbilities, res)
 
 		case string(database.AbilityTypeOverdriveAbility):
 			overdriveAbility, _ := lookup.GetResource(obj, lookup.L.OverdriveAbilities)
-			res := nameToNamedAPIResource(cfg, E.OverdriveAbilities, overdriveAbility.Name, overdriveAbility.Version)
+			res := nameToNamedAPIResource(server, E.OverdriveAbilities, overdriveAbility.Name, overdriveAbility.Version)
 			removal.OverdriveAbilities = append(removal.OverdriveAbilities, res)
 
 		case string(database.AbilityTypeItemAbility):
 			itemAbility, _ := lookup.GetResource(ability.Name, lookup.L.ItemAbilities)
-			res := nameToNamedAPIResource(cfg, E.ItemAbilities, itemAbility.Name, itemAbility.Version)
+			res := nameToNamedAPIResource(server, E.ItemAbilities, itemAbility.Name, itemAbility.Version)
 			removal.ItemAbilities = append(removal.ItemAbilities, res)
 
 		case string(database.AbilityTypeEnemyAbility):
 			enemyAbility, _ := lookup.GetResource(obj, lookup.L.EnemyAbilities)
-			res := nameToNamedAPIResource(cfg, E.EnemyAbilities, enemyAbility.Name, enemyAbility.Version)
+			res := nameToNamedAPIResource(server, E.EnemyAbilities, enemyAbility.Name, enemyAbility.Version)
 			removal.EnemyAbilities = append(removal.EnemyAbilities, res)
 		}
 	}

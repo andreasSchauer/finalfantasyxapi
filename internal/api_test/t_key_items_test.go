@@ -121,7 +121,7 @@ func TestGetKeyItem(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetKeyItem", testSrv.Cfg.HandleKeyItems, compareKeyItems)
+	testSingleResources(t, tests, "GetKeyItem", testSrv.HandleKeyItems, compareKeyItems)
 }
 
 func TestRetrieveKeyItems(t *testing.T) {
@@ -240,5 +240,5 @@ func TestRetrieveKeyItems(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.KeyItems.Endpoint, "RetrieveKeyItems", testSrv.Cfg.HandleKeyItems, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.KeyItems.Endpoint, "RetrieveKeyItems", testSrv.HandleKeyItems, compareAPIResourceLists[api.NamedAPIResource])
 }

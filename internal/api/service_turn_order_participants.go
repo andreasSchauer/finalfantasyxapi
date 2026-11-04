@@ -43,7 +43,7 @@ type participantMaps struct {
 	namesCurrent map[string]int
 }
 
-func getParticipants(cfg *Config, params TurnOrderParams) (TurnOrderParams, []Participant, []Participant, error) {
+func getParticipants(server *Server, params TurnOrderParams) (TurnOrderParams, []Participant, []Participant, error) {
 	maps := &participantMaps{
 		namesTotal:   make(map[string]int),
 		namesCurrent: make(map[string]int),
@@ -56,7 +56,7 @@ func getParticipants(cfg *Config, params TurnOrderParams) (TurnOrderParams, []Pa
 		return TurnOrderParams{}, nil, nil, err
 	}
 
-	mons, err := getParticipantsMons(cfg, params, maps)
+	mons, err := getParticipantsMons(server, params, maps)
 	if err != nil {
 		return TurnOrderParams{}, nil, nil, err
 	}
@@ -99,7 +99,7 @@ func getParticipantsParty(params TurnOrderParams, maps *participantMaps) ([]Part
 	return playerParty, nil
 }
 
-func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantMaps) ([]Participant, error) {
+func getParticipantsMons(server *Server, params TurnOrderParams, maps *participantMaps) ([]Participant, error) {
 	monParty := []Participant{}
 
 	for i, mon := range params.Mons {
@@ -108,7 +108,7 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(ts.PfnMons, fmt.Sprintf("duplicate monster found at index %d. exact duplicate monsters are not allowed", i)), nil)
 		}
 
-		participant, firstTurnAglTier, err := fetchTurnOrderMonster(cfg, params, mon)
+		participant, firstTurnAglTier, err := fetchTurnOrderMonster(server, params, mon)
 		if err != nil {
 			return nil, err
 		}
@@ -123,14 +123,14 @@ func getParticipantsMons(cfg *Config, params TurnOrderParams, maps *participantM
 	return monParty, nil
 }
 
-func fetchTurnOrderMonster(cfg *Config, params TurnOrderParams, mon turnOrderMon) (Participant, *seedtypes.AgilityTier, error) {
+func fetchTurnOrderMonster(server *Server, params TurnOrderParams, mon turnOrderMon) (Participant, *seedtypes.AgilityTier, error) {
 	var err error
 
 	if mon.MonsterID == nil {
 		return Participant{}, nil, nil
 	}
 
-	monster, firstTurnAglTier := assembleMonTurnOrder(cfg, *mon.MonsterID, mon.AltState)
+	monster, firstTurnAglTier := assembleMonTurnOrder(server, *mon.MonsterID, mon.AltState)
 	participant := Participant{
 		Name:        h.NameToString(monster.Name, monster.Version, nil),
 		Agility:     getTurnOrderMonAgility(*mon.MonsterID, monster),

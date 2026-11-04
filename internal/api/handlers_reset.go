@@ -6,27 +6,27 @@ import (
 	goose "github.com/pressly/goose/v3"
 )
 
-func (cfg *Config) HandlerResetDatabase(w http.ResponseWriter, r *http.Request) {
+func (s *Server) HandlerResetDatabase(w http.ResponseWriter, r *http.Request) {
 	providedKey := r.Header.Get("X-Admin-Key")
-	if providedKey != cfg.adminAPIKey {
+	if providedKey != s.Cfg.AdminAPIKey {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
-	if cfg.platform != "dev" {
+	if s.Cfg.Platform != "dev" {
 		http.Error(w, "Reset is only allowed in dev environment", http.StatusForbidden)
 		return
 	}
 
 	goose.SetDialect("postgres")
 
-	err := goose.DownTo(cfg.DBConn, "./sql/schema", 0)
+	err := goose.DownTo(s.Cfg.DBConn, "./sql/schema", 0)
 	if err != nil {
 		http.Error(w, "Failed to reset database", http.StatusInternalServerError)
 		return
 	}
 
-	err = goose.Up(cfg.DBConn, "./sql/schema")
+	err = goose.Up(s.Cfg.DBConn, "./sql/schema")
 	if err != nil {
 		http.Error(w, "Failed to rebuild database", http.StatusInternalServerError)
 		return

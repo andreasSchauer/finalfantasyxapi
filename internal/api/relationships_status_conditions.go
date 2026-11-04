@@ -9,7 +9,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getStatusConditionRelationships(cfg *Config, r *http.Request, status seedtypes.StatusCondition) (StatusCondition, error) {
+func getStatusConditionRelationships(server *Server, r *http.Request, status seedtypes.StatusCondition) (StatusCondition, error) {
 	var rel StatusCondition
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -20,29 +20,29 @@ func getStatusConditionRelationships(cfg *Config, r *http.Request, status seedty
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(cfg, ctx, status, cfg.db.GetStatusConditionAutoAbilityIDs)
+		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(server, ctx, status, server.Cfg.DB.GetStatusConditionAutoAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersResistance, err = E.Monsters.dbGetRelations(cfg, ctx, status, convGetStatusConditionResistingMonsterIDs(cfg, res.Resistance))
+		rel.MonstersResistance, err = E.Monsters.dbGetRelations(server, ctx, status, convGetStatusConditionResistingMonsterIDs(server, res.Resistance))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.InflictedBy, err = getStatusInfliction(cfg, ctx, status, StatusInteractionQueries{
-			Abilities: convGetStatusConditionAbilityIDsInflicted(cfg, res.MinRate, res.MaxRate),
+		rel.InflictedBy, err = getStatusInfliction(server, ctx, status, StatusInteractionQueries{
+			Abilities: convGetStatusConditionAbilityIDsInflicted(server, res.MinRate, res.MaxRate),
 		})
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.RemovedBy, err = getStatusRemoval(cfg, ctx, status, StatusInteractionQueries{
-			Abilities:        cfg.db.GetStatusConditionAbilityIDsRemoved,
-			StatusConditions: cfg.db.GetStatusConditionRemovedConditionIDs,
+		rel.RemovedBy, err = getStatusRemoval(server, ctx, status, StatusInteractionQueries{
+			Abilities:        server.Cfg.DB.GetStatusConditionAbilityIDsRemoved,
+			StatusConditions: server.Cfg.DB.GetStatusConditionRemovedConditionIDs,
 		})
 		return err
 	})

@@ -45,7 +45,7 @@ func (r QuestAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) QuestAPIResource {
+func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](server *Server, i handlerInput[T, R, A], id int32) QuestAPIResource {
 	questLookup, _ := lookup.GetResourceByID(id, i.objLookupID)
 	params := questLookup.GetResParamsQuest()
 
@@ -57,7 +57,7 @@ func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](cfg *Config
 			ID:        params.ID,
 			Sidequest: sidequest.Name,
 			Subquest:  nil,
-			URL:       CreateResourceURL(cfg, i.Endpoint, params.ID),
+			URL:       CreateResourceURL(server, i.Endpoint, params.ID),
 		}
 
 	case string(database.QuestTypeSubquest):
@@ -68,35 +68,35 @@ func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](cfg *Config
 			ID:        params.ID,
 			Sidequest: sidequest.Name,
 			Subquest:  &subquest.Name,
-			URL:       CreateResourceURL(cfg, i.Endpoint, params.ID),
+			URL:       CreateResourceURL(server, i.Endpoint, params.ID),
 		}
 	}
 
 	return QuestAPIResource{}
 }
 
-func questToQuestAPIResource(cfg *Config, quest seedtypes.Quest) QuestAPIResource {
+func questToQuestAPIResource(server *Server, quest seedtypes.Quest) QuestAPIResource {
 	switch quest.Type {
 	case database.QuestTypeSidequest:
-		return nameToQuestAPIResource(cfg, E.Sidequests, quest.Name)
+		return nameToQuestAPIResource(server, E.Sidequests, quest.Name)
 
 	case database.QuestTypeSubquest:
-		return nameToQuestAPIResource(cfg, E.Subquests, quest.Name)
+		return nameToQuestAPIResource(server, E.Subquests, quest.Name)
 	}
 
 	return QuestAPIResource{}
 }
 
-func nameToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], name string) QuestAPIResource {
+func nameToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](server *Server, i handlerInput[T, R, A], name string) QuestAPIResource {
 	quest, _ := lookup.GetResource(name, i.objLookup)
-	return idToQuestAPIResource(cfg, i, quest.GetID())
+	return idToQuestAPIResource(server, i, quest.GetID())
 }
 
-func namesToQuestAPIResources[T seedtypes.IsQuest, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], names []string) []QuestAPIResource {
+func namesToQuestAPIResources[T seedtypes.IsQuest, R any, A APIResource](server *Server, i handlerInput[T, R, A], names []string) []QuestAPIResource {
 	resources := []QuestAPIResource{}
 
 	for _, name := range names {
-		resource := nameToQuestAPIResource(cfg, i, name)
+		resource := nameToQuestAPIResource(server, i, name)
 		resources = append(resources, resource)
 	}
 

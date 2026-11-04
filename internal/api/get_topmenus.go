@@ -6,13 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seedtypes.Topmenu, Topmenu, NamedAPIResource], id int32) (Topmenu, error) {
+func (s *Server) getTopmenu(r *http.Request, i handlerInput[seedtypes.Topmenu, Topmenu, NamedAPIResource], id int32) (Topmenu, error) {
 	topmenu, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Topmenu{}, err
 	}
 
-	rel, err := getTopmenuRelationships(cfg, r, topmenu)
+	rel, err := getTopmenuRelationships(s, r, topmenu)
 	if err != nil {
 		return Topmenu{}, err
 	}
@@ -30,6 +30,6 @@ func (cfg *Config) getTopmenu(r *http.Request, i handlerInput[seedtypes.Topmenu,
 	return response, nil
 }
 
-func (cfg *Config) retrieveTopmenus(r *http.Request, i handlerInput[seedtypes.Topmenu, Topmenu, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveTopmenus(r *http.Request, i handlerInput[seedtypes.Topmenu, Topmenu, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

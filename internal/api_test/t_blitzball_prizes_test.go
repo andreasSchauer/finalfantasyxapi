@@ -68,7 +68,7 @@ func TestGetBlitzballPrize(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetBlitzballPrize", testSrv.Cfg.HandleBlitzballPrizes, compareBlitzballPrizes)
+	testSingleResources(t, tests, "GetBlitzballPrize", testSrv.HandleBlitzballPrizes, compareBlitzballPrizes)
 }
 
 func TestRetrieveBlitzballPrizes(t *testing.T) {
@@ -99,5 +99,5 @@ func TestRetrieveBlitzballPrizes(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.BlitzballPrizes.Endpoint, "RetrieveBlitzballPositions", testSrv.Cfg.HandleBlitzballPrizes, compareAPIResourceLists[api.UnnamedAPIResource])
+	testIDList(t, tests, api.E.BlitzballPrizes.Endpoint, "RetrieveBlitzballPositions", testSrv.HandleBlitzballPrizes, compareAPIResourceLists[api.UnnamedAPIResource])
 }

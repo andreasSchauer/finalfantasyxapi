@@ -9,13 +9,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getSong(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResource], id int32) (Song, error) {
+func (s *Server) getSong(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResource], id int32) (Song, error) {
 	song, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Song{}, err
 	}
 
-	rel, err := getSongRelationships(cfg, r, song)
+	rel, err := getSongRelationships(s, r, song)
 	if err != nil {
 		return Song{}, err
 	}
@@ -34,8 +34,8 @@ func (cfg *Config) getSong(r *http.Request, i handlerInput[seedtypes.Song, Song,
 		MusicSphereID:        song.MusicSphereID,
 		OstDisc:              song.OSTDisc,
 		OstTrackNumber:       song.OSTTrackNumber,
-		BackgroundMusic:      convertObjSlice(cfg, song.BackgroundMusic, convertBackgroundMusic),
-		Cues:                 convertObjSlice(cfg, song.Cues, convertCue),
+		BackgroundMusic:      convertObjSlice(s, song.BackgroundMusic, convertBackgroundMusic),
+		Cues:                 convertObjSlice(s, song.Cues, convertCue),
 		BossFights:           rel.BossFights,
 		FMVs:                 rel.FMVs,
 	}
@@ -50,19 +50,19 @@ func (cfg *Config) getSong(r *http.Request, i handlerInput[seedtypes.Song, Song,
 	return response, nil
 }
 
-func (cfg *Config) retrieveSongs(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveSongs(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, cfg.db.GetLocationSongIDs),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, cfg.db.GetSublocationSongIDs),
-		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, cfg.db.GetAreaSongIDs),
-		i.queryBool2(r, ids, ts.QpnSpecialUse, cfg.db.GetSongIDsWithSpecialUseCase),
-		i.queryBool2(r, ids, ts.QpnFMVs, cfg.db.GetSongIDsWithFMVs),
-		i.queryEnum(r, enums.T.Composer, ids, ts.QpnComposer, ToEnumQuery(enums.T.Composer, cfg.db.GetSongIDsByComposer)),
-		i.queryEnum(r, enums.T.Arranger, ids, ts.QpnArranger, ToEnumQuery(enums.T.Arranger, cfg.db.GetSongIDsByArranger)),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, s.Cfg.DB.GetLocationSongIDs),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, s.Cfg.DB.GetSublocationSongIDs),
+		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, s.Cfg.DB.GetAreaSongIDs),
+		i.queryBool2(r, ids, ts.QpnSpecialUse, s.Cfg.DB.GetSongIDsWithSpecialUseCase),
+		i.queryBool2(r, ids, ts.QpnFMVs, s.Cfg.DB.GetSongIDsWithFMVs),
+		i.queryEnum(r, enums.T.Composer, ids, ts.QpnComposer, ToEnumQuery(enums.T.Composer, s.Cfg.DB.GetSongIDsByComposer)),
+		i.queryEnum(r, enums.T.Arranger, ids, ts.QpnArranger, ToEnumQuery(enums.T.Arranger, s.Cfg.DB.GetSongIDsByArranger)),
 	})
 }

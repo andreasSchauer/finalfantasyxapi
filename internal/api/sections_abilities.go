@@ -37,123 +37,123 @@ func (a PlayerAbilitySimple) GetURL() string {
 	return a.URL
 }
 
-func createAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createAbilitySimple(server *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := E.Abilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 	typeStr := string(ability.Type)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(cfg, i.Endpoint, id),
+		URL:                CreateResourceURL(server, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
 		Type:               &typeStr,
-		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: convertObjSlice(server, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
 }
 
-func createEnemyAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createEnemyAbilitySimple(server *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.EnemyAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(cfg, i.Endpoint, id),
+		URL:                CreateResourceURL(server, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: convertObjSlice(server, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
 }
 
-func createItemAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createItemAbilitySimple(server *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.ItemAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(cfg, i.Endpoint, id),
+		URL:                CreateResourceURL(server, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: convertObjSlice(server, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
 }
 
-func createOverdriveAbilitySimple(cfg *Config, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createOverdriveAbilitySimple(server *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := E.OverdriveAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(cfg, i.Endpoint, id),
+		URL:                CreateResourceURL(server, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: convertObjSlice(server, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
 }
 
-func createPlayerAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createPlayerAbilitySimple(server *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.PlayerAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	playerAbilitySimple := PlayerAbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(cfg, i.Endpoint, id),
+		URL:                CreateResourceURL(server, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
 		MpCost:             ability.MPCost,
-		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: convertObjSlice(server, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return playerAbilitySimple, nil
 }
 
-func createTriggerCommandSimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createTriggerCommandSimple(server *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.TriggerCommands
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(cfg, i.Endpoint, id),
+		URL:                CreateResourceURL(server, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: convertObjSlice(server, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
 }
 
-func createMiscAbilitySimple(cfg *Config, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createMiscAbilitySimple(server *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.MiscAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(cfg, i.Endpoint, id),
+		URL:                CreateResourceURL(server, i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: convertObjSlice(cfg, ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: convertObjSlice(server, ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil

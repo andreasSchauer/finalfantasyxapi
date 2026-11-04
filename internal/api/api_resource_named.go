@@ -47,7 +47,7 @@ func (r NamedAPIResource) NameIs(name string, version *int32) bool {
 	return r.Name == name && h.PtrsEqual(r.Version, version, h.DerefInt32Ptr)
 }
 
-func idToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], id int32) NamedAPIResource {
+func idToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](server *Server, i handlerInput[T, R, A], id int32) NamedAPIResource {
 	res, _ := lookup.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
 	params := res.GetResParamsNamed()
 
@@ -56,12 +56,12 @@ func idToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](cfg *Config
 		Name:          params.Name,
 		Version:       params.Version,
 		Specification: params.Specification,
-		URL:           CreateResourceURL(cfg, i.Endpoint, params.ID),
+		URL:           CreateResourceURL(server, i.Endpoint, params.ID),
 	}
 }
 
 // essentially parses name or name/version like a handler and then converts the id to a NamedAPIResource
-func nameToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], name string, version *int32) NamedAPIResource {
+func nameToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](server *Server, i handlerInput[T, R, A], name string, version *int32) NamedAPIResource {
 	var parseResp parseResponse
 	switch version {
 	case nil:
@@ -70,97 +70,97 @@ func nameToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](cfg *Conf
 		parseResp, _ = checkNameVersion(name, version, i.objLookup)
 	}
 
-	return idToNamedAPIResource(cfg, i, parseResp.ID)
+	return idToNamedAPIResource(server, i, parseResp.ID)
 }
 
-func namePtrToNamedAPIResPtr[T seedtypes.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], namePtr *string, version *int32) *NamedAPIResource {
+func namePtrToNamedAPIResPtr[T seedtypes.IsNamed, R any, A APIResource](server *Server, i handlerInput[T, R, A], namePtr *string, version *int32) *NamedAPIResource {
 	if namePtr == nil {
 		return nil
 	}
 
-	res := nameToNamedAPIResource(cfg, i, *namePtr, version)
+	res := nameToNamedAPIResource(server, i, *namePtr, version)
 	return &res
 }
 
-func namesToNamedAPIResources[T seedtypes.IsNamed, R any, A APIResource](cfg *Config, i handlerInput[T, R, A], names []string) []NamedAPIResource {
+func namesToNamedAPIResources[T seedtypes.IsNamed, R any, A APIResource](server *Server, i handlerInput[T, R, A], names []string) []NamedAPIResource {
 	resources := make([]NamedAPIResource, 0, len(names)) // put this into more high frequency places
 
 	for _, name := range names {
-		resource := nameToNamedAPIResource(cfg, i, name, nil)
+		resource := nameToNamedAPIResource(server, i, name, nil)
 		resources = append(resources, resource)
 	}
 
 	return resources
 }
 
-func enumToNamedAPIResource(cfg *Config, e enums.EnumResponse) NamedAPIResource {
+func enumToNamedAPIResource(server *Server, e enums.EnumResponse) NamedAPIResource {
 	return NamedAPIResource{
 		Name: string(e.Name),
-		URL:  createEnumURL(cfg, e.Name),
+		URL:  createEnumURL(server, e.Name),
 	}
 }
 
-func enumsToNamedAPIResources(cfg *Config, enums []enums.EnumResponse) []NamedAPIResource {
+func enumsToNamedAPIResources(server *Server, enums []enums.EnumResponse) []NamedAPIResource {
 	resources := make([]NamedAPIResource, 0, len(enums))
 
 	for _, enum := range enums {
-		resource := enumToNamedAPIResource(cfg, enum)
+		resource := enumToNamedAPIResource(server, enum)
 		resources = append(resources, resource)
 	}
 
 	return resources
 }
 
-func endpointToNamedAPIResource(cfg *Config, e ts.EndpointName) NamedAPIResource {
+func endpointToNamedAPIResource(server *Server, e ts.EndpointName) NamedAPIResource {
 	return NamedAPIResource{
 		Name: string(e),
-		URL:  createListURL(cfg, e),
+		URL:  createListURL(server, e),
 	}
 }
 
-func endpointsToNamedAPIResources(cfg *Config, endpoints []ts.EndpointName) []NamedAPIResource {
+func endpointsToNamedAPIResources(server *Server, endpoints []ts.EndpointName) []NamedAPIResource {
 	resources := make([]NamedAPIResource, 0, len(endpoints))
 
 	for _, ep := range endpoints {
-		resource := endpointToNamedAPIResource(cfg, ep)
+		resource := endpointToNamedAPIResource(server, ep)
 		resources = append(resources, resource)
 	}
 
 	return resources
 }
 
-func refsToNamedAPIResources(cfg *Config, refs []seedtypes.AbilityReference) []NamedAPIResource {
+func refsToNamedAPIResources(server *Server, refs []seedtypes.AbilityReference) []NamedAPIResource {
 	abilities := []NamedAPIResource{}
 
 	for _, ref := range refs {
-		abilityRes := refToNamedAPIResource(cfg, ref)
+		abilityRes := refToNamedAPIResource(server, ref)
 		abilities = append(abilities, abilityRes)
 	}
 
 	return abilities
 }
 
-func refToNamedAPIResource(cfg *Config, ref seedtypes.AbilityReference) NamedAPIResource {
+func refToNamedAPIResource(server *Server, ref seedtypes.AbilityReference) NamedAPIResource {
 	var res NamedAPIResource
 
 	switch database.AbilityType(ref.AbilityType) {
 	case database.AbilityTypeMiscAbility:
-		res = nameToNamedAPIResource(cfg, E.MiscAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(server, E.MiscAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypePlayerAbility:
-		res = nameToNamedAPIResource(cfg, E.PlayerAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(server, E.PlayerAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeEnemyAbility:
-		res = nameToNamedAPIResource(cfg, E.EnemyAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(server, E.EnemyAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeOverdriveAbility:
-		res = nameToNamedAPIResource(cfg, E.OverdriveAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(server, E.OverdriveAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeItemAbility:
-		res = nameToNamedAPIResource(cfg, E.ItemAbilities, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(server, E.ItemAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeTriggerCommand:
-		res = nameToNamedAPIResource(cfg, E.TriggerCommands, ref.Name, ref.Version)
+		res = nameToNamedAPIResource(server, E.TriggerCommands, ref.Name, ref.Version)
 
 	}
 	return res

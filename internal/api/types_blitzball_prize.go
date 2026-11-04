@@ -10,6 +10,6 @@ type BlitzballPrize struct {
 	Items    []PossibleItem `json:"items"`
 }
 
-func convertBlitzballItem(cfg *Config, bi seedtypes.BlitzballItem) PossibleItem {
-	return convertPossibleItem(cfg, bi.PossibleItem)
+func convertBlitzballItem(server *Server, bi seedtypes.BlitzballItem) PossibleItem {
+	return convertPossibleItem(server, bi.PossibleItem)
 }

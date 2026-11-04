@@ -11,7 +11,7 @@ import (
 )
 
 // used for query filters that can't really be generalized. this one simply checks, if it's empty and then calls the wrapperFn
-func (i handlerInput[T, R, A]) queryBasicWrapper(cfg *Config, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapBasic) IDFilter {
+func (i handlerInput[T, R, A]) queryBasicWrapper(server *Server, r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapBasic) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		query, err := queryParam.basicChecks(r, i.queryLookup)
@@ -19,7 +19,7 @@ func (i handlerInput[T, R, A]) queryBasicWrapper(cfg *Config, r *http.Request, i
 			return inputIDs, nil
 		}
 
-		dbIDs, err := wrapperFn(cfg, r, ctx, query, queryParam)
+		dbIDs, err := wrapperFn(server, r, ctx, query, queryParam)
 		if errors.Is(err, errs.ErrQueryRedirect) {
 			return inputIDs, nil
 		}

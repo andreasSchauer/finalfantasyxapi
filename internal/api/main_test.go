@@ -1,14 +1,13 @@
 package api
 
 import (
-	// "filepath"
 	"io"
 	"log"
 	"os"
 	"testing"
 )
 
-var testCfg *Config
+var testSrv Server
 
 func TestMain(m *testing.M) {
 	log.SetOutput(io.Discard)
@@ -18,14 +17,13 @@ func TestMain(m *testing.M) {
 		panic(err)
 	}
 
-	cfg, err := ConfigInit()
+	err = testSrv.Init()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-
-	testCfg = cfg
+	testSrv.InitGlobals()
 
 	code := m.Run()
-	_ = testCfg.DBConn.Close()
+	_ = testSrv.Cfg.DBConn.Close()
 	os.Exit(code)
 }

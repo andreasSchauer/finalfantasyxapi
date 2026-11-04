@@ -6,13 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getProperty(r *http.Request, i handlerInput[seedtypes.Property, Property, NamedAPIResource], id int32) (Property, error) {
+func (s *Server) getProperty(r *http.Request, i handlerInput[seedtypes.Property, Property, NamedAPIResource], id int32) (Property, error) {
 	property, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Property{}, err
 	}
 
-	rel, err := getPropertyRelationships(cfg, r, property)
+	rel, err := getPropertyRelationships(s, r, property)
 	if err != nil {
 		return Property{}, err
 	}
@@ -22,8 +22,8 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seedtypes.Propert
 		Name:           property.Name,
 		Effect:         property.Effect,
 		NullifyArmored: property.NullifyArmored,
-		RelatedStats:   namesToNamedAPIResources(cfg, E.Stats, property.RelatedStats),
-		ModifierChange: convertObjPtr(cfg, property.ModifierChange, convertModifierChange),
+		RelatedStats:   namesToNamedAPIResources(s, E.Stats, property.RelatedStats),
+		ModifierChange: convertObjPtr(s, property.ModifierChange, convertModifierChange),
 		AutoAbilities:  rel.AutoAbilities,
 		Monsters:       rel.Monsters,
 	}
@@ -31,6 +31,6 @@ func (cfg *Config) getProperty(r *http.Request, i handlerInput[seedtypes.Propert
 	return response, nil
 }
 
-func (cfg *Config) retrieveProperties(r *http.Request, i handlerInput[seedtypes.Property, Property, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveProperties(r *http.Request, i handlerInput[seedtypes.Property, Property, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

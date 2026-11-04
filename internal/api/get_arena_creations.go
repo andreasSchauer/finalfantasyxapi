@@ -12,7 +12,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource], id int32) (ArenaCreation, error) {
+func (s *Server) getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource], id int32) (ArenaCreation, error) {
 	creation, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return ArenaCreation{}, err
@@ -21,7 +21,7 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seedtypes.Ar
 	subquest, _ := lookup.GetResourceByID(creation.SubquestID, lookup.L.SubquestsID)
 	ia := subquest.Completion.Reward
 
-	monsters, err := getArenaCreationMonsters(cfg, r, creation)
+	monsters, err := getArenaCreationMonsters(s, r, creation)
 	if err != nil {
 		return ArenaCreation{}, err
 	}
@@ -30,9 +30,9 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seedtypes.Ar
 		ID:                        creation.ID,
 		Name:                      creation.Name,
 		Category:                  creation.Category,
-		Monster:                   idToNamedAPIResource(cfg, E.Monsters, *creation.MonsterID),
-		ParentSubquest:            idToQuestAPIResource(cfg, E.Subquests, creation.SubquestID),
-		Reward:                    E.AllItems.toResAmtFromName(cfg, ia),
+		Monster:                   idToNamedAPIResource(s, E.Monsters, *creation.MonsterID),
+		ParentSubquest:            idToQuestAPIResource(s, E.Subquests, creation.SubquestID),
+		Reward:                    E.AllItems.toResAmtFromName(s, ia),
 		RequiredCatchAmount:       creation.Amount,
 		UnlockedCreationsCategory: creation.CreationsUnlockedCategory,
 		RequiredMonsters:          monsters,
@@ -41,18 +41,18 @@ func (cfg *Config) getArenaCreation(r *http.Request, i handlerInput[seedtypes.Ar
 	return response, nil
 }
 
-func (cfg *Config) retrieveArenaCreations(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveArenaCreations(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, enums.T.ArenaCreationCategory, ids, ts.QpnCategory, cfg.db.GetArenaCreationIDsByCategory),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryEnumList(s, r, enums.T.ArenaCreationCategory, ids, ts.QpnCategory, s.Cfg.DB.GetArenaCreationIDsByCategory),
 	})
 }
 
-func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seedtypes.ArenaCreation) ([]NamedAPIResource, error) {
+func getArenaCreationMonsters(server *Server, r *http.Request, creation seedtypes.ArenaCreation) ([]NamedAPIResource, error) {
 	mf := createMonsterFilter(creation)
 
 	if mf.IsZero() || mf.CreationsUnlockedCategory != nil {
@@ -66,7 +66,7 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seedtypes.A
 	if mf.RequiredArea != nil {
 		g.Go(func() error {
 			area := database.ToNullMaCreationArea(mf.RequiredArea)
-			idSlice, err := cfg.db.GetCaptureMonsterIDsByMaCreationArea(ctx, area)
+			idSlice, err := server.Cfg.DB.GetCaptureMonsterIDsByMaCreationArea(ctx, area)
 			if err != nil {
 				return err
 			}
@@ -81,7 +81,7 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seedtypes.A
 	if mf.RequiredSpecies != nil {
 		g.Go(func() error {
 			species := database.MonsterSpecies(*mf.RequiredSpecies)
-			idSlice, err := cfg.db.GetCaptureMonsterIDsBySpecies(ctx, species)
+			idSlice, err := server.Cfg.DB.GetCaptureMonsterIDsBySpecies(ctx, species)
 			if err != nil {
 				return err
 			}
@@ -95,7 +95,7 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seedtypes.A
 
 	if mf.UnderwaterOnly {
 		g.Go(func() error {
-			idSlice, err := cfg.db.GetCaptureMonsterIDsByIsUnderwater(ctx)
+			idSlice, err := server.Cfg.DB.GetCaptureMonsterIDsByIsUnderwater(ctx)
 			if err != nil {
 				return err
 			}
@@ -117,6 +117,6 @@ func getArenaCreationMonsters(cfg *Config, r *http.Request, creation seedtypes.A
 		return nil, err
 	}
 
-	monsters := E.Monsters.toResources(cfg, monsterIDs)
+	monsters := E.Monsters.toResources(server, monsterIDs)
 	return monsters, nil
 }

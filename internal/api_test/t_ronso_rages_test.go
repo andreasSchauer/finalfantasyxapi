@@ -43,7 +43,7 @@ func TestGetRonsoRage(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetRonsoRage", testSrv.Cfg.HandleRonsoRages, compareRonsoRages)
+	testSingleResources(t, tests, "GetRonsoRage", testSrv.HandleRonsoRages, compareRonsoRages)
 }
 
 func TestRetrieveRonsoRages(t *testing.T) {
@@ -59,5 +59,5 @@ func TestRetrieveRonsoRages(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.RonsoRages.Endpoint, "RetrieveRonsoRages", testSrv.Cfg.HandleRonsoRages, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.RonsoRages.Endpoint, "RetrieveRonsoRages", testSrv.HandleRonsoRages, compareAPIResourceLists[api.NamedAPIResource])
 }

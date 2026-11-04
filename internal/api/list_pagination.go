@@ -15,7 +15,7 @@ type ListParams struct {
 	Next     *string `json:"next"`
 }
 
-func createPaginatedList[T any](cfg *Config, r *http.Request, items []T) (ListParams, []T, error) {
+func createPaginatedList[T any](server *Server, r *http.Request, items []T) (ListParams, []T, error) {
 	queryParamOffset := Q.defaultParams[ts.QpnOffset]
 	queryParamLimit := Q.defaultParams[ts.QpnLimit]
 
@@ -36,8 +36,8 @@ func createPaginatedList[T any](cfg *Config, r *http.Request, items []T) (ListPa
 
 	listParams := ListParams{
 		Count:    size,
-		Previous: createPreviousURL(cfg, r, offset, limit),
-		Next:     createNextURL(cfg, r, offset, limit, len(items)),
+		Previous: createPreviousURL(server, r, offset, limit),
+		Next:     createNextURL(server, r, offset, limit, len(items)),
 	}
 
 	if size == 0 {
@@ -54,7 +54,7 @@ func createPaginatedList[T any](cfg *Config, r *http.Request, items []T) (ListPa
 	return listParams, shownResources, nil
 }
 
-func createPreviousURL(cfg *Config, r *http.Request, offset, limit int) *string {
+func createPreviousURL(server *Server, r *http.Request, offset, limit int) *string {
 	if offset == 0 {
 		return nil
 	}
@@ -70,11 +70,11 @@ func createPreviousURL(cfg *Config, r *http.Request, offset, limit int) *string 
 	q.Set(string(ts.QpnLimit), strconv.Itoa(limit))
 	q.Set(string(ts.QpnOffset), strconv.Itoa(previousOffset))
 
-	previousURL := fmt.Sprintf("http://%s%s?%s", cfg.host, path, q.Encode())
+	previousURL := fmt.Sprintf("http://%s%s?%s", server.Cfg.Host, path, q.Encode())
 	return &previousURL
 }
 
-func createNextURL(cfg *Config, r *http.Request, offset, limit, size int) *string {
+func createNextURL(server *Server, r *http.Request, offset, limit, size int) *string {
 	nextOffset := offset + limit
 
 	if nextOffset >= size {
@@ -86,6 +86,6 @@ func createNextURL(cfg *Config, r *http.Request, offset, limit, size int) *strin
 	q.Set(string(ts.QpnLimit), strconv.Itoa(limit))
 	q.Set(string(ts.QpnOffset), strconv.Itoa(nextOffset))
 
-	nextURL := fmt.Sprintf("http://%s%s?%s", cfg.host, path, q.Encode())
+	nextURL := fmt.Sprintf("http://%s%s?%s", server.Cfg.Host, path, q.Encode())
 	return &nextURL
 }

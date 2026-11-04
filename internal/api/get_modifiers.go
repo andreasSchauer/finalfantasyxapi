@@ -8,13 +8,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getModifier(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, NamedAPIResource], id int32) (Modifier, error) {
+func (s *Server) getModifier(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, NamedAPIResource], id int32) (Modifier, error) {
 	modifier, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Modifier{}, err
 	}
 
-	rel, err := getModifierRelationships(cfg, r, modifier)
+	rel, err := getModifierRelationships(s, r, modifier)
 	if err != nil {
 		return Modifier{}, err
 	}
@@ -38,13 +38,13 @@ func (cfg *Config) getModifier(r *http.Request, i handlerInput[seedtypes.Modifie
 	return response, nil
 }
 
-func (cfg *Config) retrieveModifiers(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveModifiers(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryEnumList(cfg, r, enums.T.ModifierCategory, ids, ts.QpnCategory, cfg.db.GetModifierIDsByCategory),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryEnumList(s, r, enums.T.ModifierCategory, ids, ts.QpnCategory, s.Cfg.DB.GetModifierIDsByCategory),
 	})
 }

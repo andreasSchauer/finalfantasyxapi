@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMixCombinations(cfg *Config, r *http.Request, mix seedtypes.Mix) ([]MixCombination, error) {
+func getMixCombinations(server *Server, r *http.Request, mix seedtypes.Mix) ([]MixCombination, error) {
 	combinations := mix.PossibleCombinations
 
 	best, err := Q.mixes[ts.QpnBest].parseBool(r)
@@ -32,5 +32,5 @@ func getMixCombinations(cfg *Config, r *http.Request, mix seedtypes.Mix) ([]MixC
 		})
 	}
 
-	return convertObjSlice(cfg, combinations, convertMixCombination), nil
+	return convertObjSlice(server, combinations, convertMixCombination), nil
 }

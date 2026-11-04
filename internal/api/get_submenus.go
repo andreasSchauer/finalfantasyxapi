@@ -8,13 +8,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource], id int32) (Submenu, error) {
+func (s *Server) getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource], id int32) (Submenu, error) {
 	submenu, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Submenu{}, err
 	}
 
-	rel, err := getSubmenuRelationships(cfg, r, submenu)
+	rel, err := getSubmenuRelationships(s, r, submenu)
 	if err != nil {
 		return Submenu{}, err
 	}
@@ -24,8 +24,8 @@ func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu,
 		Name:        submenu.Name,
 		Description: submenu.Description,
 		Effect:      submenu.Effect,
-		Topmenu:     namePtrToNamedAPIResPtr(cfg, E.Topmenus, submenu.Topmenu, nil),
-		Users:       namesToNamedAPIResources(cfg, E.CharacterClasses, submenu.Users),
+		Topmenu:     namePtrToNamedAPIResPtr(s, E.Topmenus, submenu.Topmenu, nil),
+		Users:       namesToNamedAPIResources(s, E.CharacterClasses, submenu.Users),
 		OpenedBy:    rel.OpenedBy,
 		Abilities:   rel.Abilities,
 	}
@@ -33,13 +33,13 @@ func (cfg *Config) getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu,
 	return response, nil
 }
 
-func (cfg *Config) retrieveSubmenus(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveSubmenus(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryNameID(r, ids, ts.QpnTopmenu, E.Topmenus.resTypeSingle, lookup.L.Topmenus, ToIntManyNull(cfg.db.GetTopmenuSubmenuIDs)),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryNameID(r, ids, ts.QpnTopmenu, E.Topmenus.resTypeSingle, lookup.L.Topmenus, ToIntManyNull(s.Cfg.DB.GetTopmenuSubmenuIDs)),
 	})
 }

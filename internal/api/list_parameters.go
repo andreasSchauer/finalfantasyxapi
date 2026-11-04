@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -14,26 +15,26 @@ func (l QueryParameterList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func getQueryParamList(cfg *Config, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam) (QueryParameterList, error) {
+func getQueryParamList(server *Server, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam) (QueryParameterList, error) {
 
 	queryParams := paramMapToSlice(queryLookup)
-	queryParams = getAllowedResources(cfg, endpoint, queryParams)
+	queryParams = getAllowedResources(server, endpoint, queryParams)
 	queryParams = getAllowedValuesFromTypes(queryParams)
 
-	listParams, shownResources, err := createPaginatedList(cfg, r, queryParams)
+	listParams, shownResources, err := createPaginatedList(server, r, queryParams)
 	if err != nil {
 		return QueryParameterList{}, err
 	}
 
 	list := QueryParameterList{
 		ListParams: listParams,
-		Results:    createQueryParamRefResURLs(cfg, shownResources),
+		Results:    createQueryParamRefResURLs(server, shownResources),
 	}
 
 	return list, nil
 }
 
-func createQueryParamRefResURLs(cfg *Config, params []QueryParam) []QueryParam {
+func createQueryParamRefResURLs(server *Server, params []QueryParam) []QueryParam {
 	paramsNew := params
 
 	for i := range paramsNew {
@@ -46,12 +47,12 @@ func createQueryParamRefResURLs(cfg *Config, params []QueryParam) []QueryParam {
 		for j := range param.ReferencesInt {
 			if param.Type == ts.QptEnum || param.Type == ts.QptEnumList {
 				ref := param.ReferencesEnumsInt[j]
-				param.References[j] = createEnumURL(cfg, ref)
+				param.References[j] = createEnumURL(server, ref)
 				continue
 			}
 
 			ref := param.ReferencesInt[j]
-			param.References[j] = createListURL(cfg, ref)
+			param.References[j] = createListURL(server, ref)
 		}
 		paramsNew[i] = param
 	}
@@ -59,10 +60,10 @@ func createQueryParamRefResURLs(cfg *Config, params []QueryParam) []QueryParam {
 	return paramsNew
 }
 
-func getAllowedResources(cfg *Config, endpoint ts.EndpointName, params []QueryParam) []QueryParam {
+func getAllowedResources(server *Server, endpoint ts.EndpointName, params []QueryParam) []QueryParam {
 	for idx, param := range params {
 		for _, id := range param.AllowedIDs {
-			allowedRes := CreateResourceURL(cfg, endpoint, id)
+			allowedRes := CreateResourceURL(server, endpoint, id)
 			param.AllowedResources = append(param.AllowedResources, allowedRes)
 		}
 		params[idx] = param

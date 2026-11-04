@@ -2,234 +2,234 @@ package api
 
 import "net/http"
 
-func (cfg *Config) HandleLocations(w http.ResponseWriter, r *http.Request) {
-	E.Locations.routerNameID(cfg, w, r)
+func (s *Server) HandleLocations(w http.ResponseWriter, r *http.Request) {
+	E.Locations.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleSublocations(w http.ResponseWriter, r *http.Request) {
-	E.Sublocations.routerNameID(cfg, w, r)
+func (s *Server) HandleSublocations(w http.ResponseWriter, r *http.Request) {
+	E.Sublocations.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleAreas(w http.ResponseWriter, r *http.Request) {
-	E.Areas.routerIDOnly(cfg, w, r)
+func (s *Server) HandleAreas(w http.ResponseWriter, r *http.Request) {
+	E.Areas.routerIDOnly(s, w, r)
 }
 
-func (cfg *Config) HandleMonsterFormations(w http.ResponseWriter, r *http.Request) {
-	E.MonsterFormations.routerIDOnly(cfg, w, r)
+func (s *Server) HandleMonsterFormations(w http.ResponseWriter, r *http.Request) {
+	E.MonsterFormations.routerIDOnly(s, w, r)
 }
 
-func (cfg *Config) HandleShops(w http.ResponseWriter, r *http.Request) {
-	E.Shops.routerIDOnly(cfg, w, r)
+func (s *Server) HandleShops(w http.ResponseWriter, r *http.Request) {
+	E.Shops.routerIDOnly(s, w, r)
 }
 
-func (cfg *Config) HandleTreasures(w http.ResponseWriter, r *http.Request) {
-	E.Treasures.routerIDOnly(cfg, w, r)
+func (s *Server) HandleTreasures(w http.ResponseWriter, r *http.Request) {
+	E.Treasures.routerIDOnly(s, w, r)
 }
 
-func (cfg *Config) HandleQuests(w http.ResponseWriter, r *http.Request) {
-	E.Quests.routerIDOnly(cfg, w, r)
+func (s *Server) HandleQuests(w http.ResponseWriter, r *http.Request) {
+	E.Quests.routerIDOnly(s, w, r)
 }
 
-func (cfg *Config) HandleSidequests(w http.ResponseWriter, r *http.Request) {
-	E.Sidequests.routerNameID(cfg, w, r)
+func (s *Server) HandleSidequests(w http.ResponseWriter, r *http.Request) {
+	E.Sidequests.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleSubquests(w http.ResponseWriter, r *http.Request) {
-	E.Subquests.routerIDOnly(cfg, w, r)
+func (s *Server) HandleSubquests(w http.ResponseWriter, r *http.Request) {
+	E.Subquests.routerIDOnly(s, w, r)
 }
 
-func (cfg *Config) HandleArenaCreations(w http.ResponseWriter, r *http.Request) {
-	E.ArenaCreations.routerNameID(cfg, w, r)
+func (s *Server) HandleArenaCreations(w http.ResponseWriter, r *http.Request) {
+	E.ArenaCreations.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleBlitzballPrizes(w http.ResponseWriter, r *http.Request) {
-	E.BlitzballPrizes.routerIDOnly(cfg, w, r)
+func (s *Server) HandleBlitzballPrizes(w http.ResponseWriter, r *http.Request) {
+	E.BlitzballPrizes.routerIDOnly(s, w, r)
 }
 
-func (cfg *Config) HandleSongs(w http.ResponseWriter, r *http.Request) {
-	E.Songs.routerNameID(cfg, w, r)
+func (s *Server) HandleSongs(w http.ResponseWriter, r *http.Request) {
+	E.Songs.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleFMVs(w http.ResponseWriter, r *http.Request) {
-	E.FMVs.routerNameID(cfg, w, r)
+func (s *Server) HandleFMVs(w http.ResponseWriter, r *http.Request) {
+	E.FMVs.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandlePlayerUnits(w http.ResponseWriter, r *http.Request) {
-	E.PlayerUnits.routerNameID(cfg, w, r)
+func (s *Server) HandlePlayerUnits(w http.ResponseWriter, r *http.Request) {
+	E.PlayerUnits.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleCharacters(w http.ResponseWriter, r *http.Request) {
-	E.Characters.routerNameID(cfg, w, r)
+func (s *Server) HandleCharacters(w http.ResponseWriter, r *http.Request) {
+	E.Characters.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleAeons(w http.ResponseWriter, r *http.Request) {
-	E.Aeons.routerNameID(cfg, w, r)
+func (s *Server) HandleAeons(w http.ResponseWriter, r *http.Request) {
+	E.Aeons.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleCharacterClasses(w http.ResponseWriter, r *http.Request) {
-	E.CharacterClasses.routerNameID(cfg, w, r)
+func (s *Server) HandleCharacterClasses(w http.ResponseWriter, r *http.Request) {
+	E.CharacterClasses.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleMonsters(w http.ResponseWriter, r *http.Request) {
-	E.Monsters.routerNameVersion(cfg, w, r)
+func (s *Server) HandleMonsters(w http.ResponseWriter, r *http.Request) {
+	E.Monsters.routerNameVersion(s, w, r)
 }
 
-func (cfg *Config) HandleAbilities(w http.ResponseWriter, r *http.Request) {
-	E.Abilities.routerIDOnly(cfg, w, r)
+func (s *Server) HandleAbilities(w http.ResponseWriter, r *http.Request) {
+	E.Abilities.routerIDOnly(s, w, r)
 }
 
-func (cfg *Config) HandlePlayerAbilities(w http.ResponseWriter, r *http.Request) {
-	E.PlayerAbilities.routerNameVersion(cfg, w, r)
+func (s *Server) HandlePlayerAbilities(w http.ResponseWriter, r *http.Request) {
+	E.PlayerAbilities.routerNameVersion(s, w, r)
 }
 
-func (cfg *Config) HandleOverdriveAbilities(w http.ResponseWriter, r *http.Request) {
-	E.OverdriveAbilities.routerNameVersion(cfg, w, r)
+func (s *Server) HandleOverdriveAbilities(w http.ResponseWriter, r *http.Request) {
+	E.OverdriveAbilities.routerNameVersion(s, w, r)
 }
 
-func (cfg *Config) HandleItemAbilities(w http.ResponseWriter, r *http.Request) {
-	E.ItemAbilities.routerNameID(cfg, w, r)
+func (s *Server) HandleItemAbilities(w http.ResponseWriter, r *http.Request) {
+	E.ItemAbilities.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleTriggerCommands(w http.ResponseWriter, r *http.Request) {
-	E.TriggerCommands.routerNameVersion(cfg, w, r)
+func (s *Server) HandleTriggerCommands(w http.ResponseWriter, r *http.Request) {
+	E.TriggerCommands.routerNameVersion(s, w, r)
 }
 
-func (cfg *Config) HandleMiscAbilities(w http.ResponseWriter, r *http.Request) {
-	E.MiscAbilities.routerNameVersion(cfg, w, r)
+func (s *Server) HandleMiscAbilities(w http.ResponseWriter, r *http.Request) {
+	E.MiscAbilities.routerNameVersion(s, w, r)
 }
 
-func (cfg *Config) HandleEnemyAbilities(w http.ResponseWriter, r *http.Request) {
-	E.EnemyAbilities.routerNameVersion(cfg, w, r)
+func (s *Server) HandleEnemyAbilities(w http.ResponseWriter, r *http.Request) {
+	E.EnemyAbilities.routerNameVersion(s, w, r)
 }
 
-func (cfg *Config) HandleAeonCommands(w http.ResponseWriter, r *http.Request) {
-	E.AeonCommands.routerNameID(cfg, w, r)
+func (s *Server) HandleAeonCommands(w http.ResponseWriter, r *http.Request) {
+	E.AeonCommands.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleOverdriveCommands(w http.ResponseWriter, r *http.Request) {
-	E.OverdriveCommands.routerNameID(cfg, w, r)
+func (s *Server) HandleOverdriveCommands(w http.ResponseWriter, r *http.Request) {
+	E.OverdriveCommands.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleOverdrives(w http.ResponseWriter, r *http.Request) {
-	E.Overdrives.routerNameID(cfg, w, r)
+func (s *Server) HandleOverdrives(w http.ResponseWriter, r *http.Request) {
+	E.Overdrives.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleRonsoRages(w http.ResponseWriter, r *http.Request) {
-	E.RonsoRages.routerNameID(cfg, w, r)
+func (s *Server) HandleRonsoRages(w http.ResponseWriter, r *http.Request) {
+	E.RonsoRages.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleSubmenus(w http.ResponseWriter, r *http.Request) {
-	E.Submenus.routerNameID(cfg, w, r)
+func (s *Server) HandleSubmenus(w http.ResponseWriter, r *http.Request) {
+	E.Submenus.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleTopmenus(w http.ResponseWriter, r *http.Request) {
-	E.Topmenus.routerNameID(cfg, w, r)
+func (s *Server) HandleTopmenus(w http.ResponseWriter, r *http.Request) {
+	E.Topmenus.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleAllItems(w http.ResponseWriter, r *http.Request) {
-	E.AllItems.routerNameID(cfg, w, r)
+func (s *Server) HandleAllItems(w http.ResponseWriter, r *http.Request) {
+	E.AllItems.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleItems(w http.ResponseWriter, r *http.Request) {
-	E.Items.routerNameID(cfg, w, r)
+func (s *Server) HandleItems(w http.ResponseWriter, r *http.Request) {
+	E.Items.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleKeyItems(w http.ResponseWriter, r *http.Request) {
-	E.KeyItems.routerNameID(cfg, w, r)
+func (s *Server) HandleKeyItems(w http.ResponseWriter, r *http.Request) {
+	E.KeyItems.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleSpheres(w http.ResponseWriter, r *http.Request) {
-	E.Spheres.routerNameID(cfg, w, r)
+func (s *Server) HandleSpheres(w http.ResponseWriter, r *http.Request) {
+	E.Spheres.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandlePrimers(w http.ResponseWriter, r *http.Request) {
-	E.Primers.routerNameID(cfg, w, r)
+func (s *Server) HandlePrimers(w http.ResponseWriter, r *http.Request) {
+	E.Primers.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleMixes(w http.ResponseWriter, r *http.Request) {
-	E.Mixes.routerNameID(cfg, w, r)
+func (s *Server) HandleMixes(w http.ResponseWriter, r *http.Request) {
+	E.Mixes.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleAutoAbilities(w http.ResponseWriter, r *http.Request) {
-	E.AutoAbilities.routerNameID(cfg, w, r)
+func (s *Server) HandleAutoAbilities(w http.ResponseWriter, r *http.Request) {
+	E.AutoAbilities.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleEquipmentTables(w http.ResponseWriter, r *http.Request) {
-	E.EquipmentTables.routerIDOnly(cfg, w, r)
+func (s *Server) HandleEquipmentTables(w http.ResponseWriter, r *http.Request) {
+	E.EquipmentTables.routerIDOnly(s, w, r)
 }
 
-func (cfg *Config) HandleEquipment(w http.ResponseWriter, r *http.Request) {
-	E.Equipment.routerNameID(cfg, w, r)
+func (s *Server) HandleEquipment(w http.ResponseWriter, r *http.Request) {
+	E.Equipment.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleCelestialWeapons(w http.ResponseWriter, r *http.Request) {
-	E.CelestialWeapons.routerNameID(cfg, w, r)
+func (s *Server) HandleCelestialWeapons(w http.ResponseWriter, r *http.Request) {
+	E.CelestialWeapons.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleStats(w http.ResponseWriter, r *http.Request) {
-	E.Stats.routerNameID(cfg, w, r)
+func (s *Server) HandleStats(w http.ResponseWriter, r *http.Request) {
+	E.Stats.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleProperties(w http.ResponseWriter, r *http.Request) {
-	E.Properties.routerNameID(cfg, w, r)
+func (s *Server) HandleProperties(w http.ResponseWriter, r *http.Request) {
+	E.Properties.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) {
-	E.OverdriveModes.routerNameID(cfg, w, r)
+func (s *Server) HandleOverdriveModes(w http.ResponseWriter, r *http.Request) {
+	E.OverdriveModes.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleElements(w http.ResponseWriter, r *http.Request) {
-	E.Elements.routerNameID(cfg, w, r)
+func (s *Server) HandleElements(w http.ResponseWriter, r *http.Request) {
+	E.Elements.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleStatusConditions(w http.ResponseWriter, r *http.Request) {
-	E.StatusConditions.routerNameID(cfg, w, r)
+func (s *Server) HandleStatusConditions(w http.ResponseWriter, r *http.Request) {
+	E.StatusConditions.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleModifiers(w http.ResponseWriter, r *http.Request) {
-	E.Modifiers.routerNameID(cfg, w, r)
+func (s *Server) HandleModifiers(w http.ResponseWriter, r *http.Request) {
+	E.Modifiers.routerNameID(s, w, r)
 }
 
-func (cfg *Config) HandleAgilityTiers(w http.ResponseWriter, r *http.Request) {
-	E.AgilityTiers.routerIDOnly(cfg, w, r)
+func (s *Server) HandleAgilityTiers(w http.ResponseWriter, r *http.Request) {
+	E.AgilityTiers.routerIDOnly(s, w, r)
 }
 
-func (cfg *Config) HandleEnums(w http.ResponseWriter, r *http.Request) {
-	E.Enums.router(cfg, w, r)
+func (s *Server) HandleEnums(w http.ResponseWriter, r *http.Request) {
+	E.Enums.router(s, w, r)
 }
 
-func (cfg *Config) HandleEndpoints(w http.ResponseWriter, r *http.Request) {
-	E.Endpoints.router(cfg, w, r)
+func (s *Server) HandleEndpoints(w http.ResponseWriter, r *http.Request) {
+	E.Endpoints.router(s, w, r)
 }
 
-func (cfg *Config) HandleAlBhedGet(w http.ResponseWriter, r *http.Request) {
-	E.AlBhed.routerGet(cfg, w, r)
+func (s *Server) HandleAlBhedGet(w http.ResponseWriter, r *http.Request) {
+	E.AlBhed.routerGet(s, w, r)
 }
 
-func (cfg *Config) HandleAlBhedPost(w http.ResponseWriter, r *http.Request) {
-	E.AlBhed.routerPost(cfg, w, r)
+func (s *Server) HandleAlBhedPost(w http.ResponseWriter, r *http.Request) {
+	E.AlBhed.routerPost(s, w, r)
 }
 
-func (cfg *Config) HandleTurnOrderGet(w http.ResponseWriter, r *http.Request) {
-	E.TurnOrder.routerGet(cfg, w, r)
+func (s *Server) HandleTurnOrderGet(w http.ResponseWriter, r *http.Request) {
+	E.TurnOrder.routerGet(s, w, r)
 }
 
-func (cfg *Config) HandleTurnOrderPost(w http.ResponseWriter, r *http.Request) {
-	E.TurnOrder.routerPost(cfg, w, r)
+func (s *Server) HandleTurnOrderPost(w http.ResponseWriter, r *http.Request) {
+	E.TurnOrder.routerPost(s, w, r)
 }
 
-func (cfg *Config) HandleDropChanceGet(w http.ResponseWriter, r *http.Request) {
-	E.DropChance.routerGet(cfg, w, r)
+func (s *Server) HandleDropChanceGet(w http.ResponseWriter, r *http.Request) {
+	E.DropChance.routerGet(s, w, r)
 }
 
-func (cfg *Config) HandleDropChancePost(w http.ResponseWriter, r *http.Request) {
-	E.DropChance.routerPost(cfg, w, r)
+func (s *Server) HandleDropChancePost(w http.ResponseWriter, r *http.Request) {
+	E.DropChance.routerPost(s, w, r)
 }
 
-func (cfg *Config) HandleCritChanceGet(w http.ResponseWriter, r *http.Request) {
-	E.CritChance.routerGet(cfg, w, r)
+func (s *Server) HandleCritChanceGet(w http.ResponseWriter, r *http.Request) {
+	E.CritChance.routerGet(s, w, r)
 }
 
-func (cfg *Config) HandleCritChancePost(w http.ResponseWriter, r *http.Request) {
-	E.CritChance.routerPost(cfg, w, r)
+func (s *Server) HandleCritChancePost(w http.ResponseWriter, r *http.Request) {
+	E.CritChance.routerPost(s, w, r)
 }

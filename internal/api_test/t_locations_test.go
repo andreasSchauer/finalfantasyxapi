@@ -242,7 +242,7 @@ func TestGetLocation(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetLocation", testSrv.Cfg.HandleLocations, compareLocations)
+	testSingleResources(t, tests, "GetLocation", testSrv.HandleLocations, compareLocations)
 }
 
 func TestRetrieveLocations(t *testing.T) {
@@ -410,7 +410,7 @@ func TestRetrieveLocations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Locations.Endpoint, "RetrieveLocations", testSrv.Cfg.HandleLocations, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Locations.Endpoint, "RetrieveLocations", testSrv.HandleLocations, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionLocations(t *testing.T) {
@@ -445,5 +445,5 @@ func TestSubsectionLocations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Locations.Endpoint, "SubsectionLocations", testSrv.Cfg.HandleLocations, compareSimpleResourceLists[api.NamedAPIResource, api.LocationSimple])
+	testIDList(t, tests, api.E.Locations.Endpoint, "SubsectionLocations", testSrv.HandleLocations, compareSimpleResourceLists[api.NamedAPIResource, api.LocationSimple])
 }

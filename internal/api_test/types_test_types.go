@@ -39,7 +39,7 @@ type testStructIdx interface {
 
 type test struct {
 	t          *testing.T
-	cfg        *api.Config
+	server     *api.Server
 	name       string
 	expLengths map[string]int
 	dontCheck  map[string]bool

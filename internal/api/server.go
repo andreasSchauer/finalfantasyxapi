@@ -1,15 +1,19 @@
+// Package api includes all the api routers, handlers, and their logic
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+)
 
 type Server struct {
-	Cfg		*Config
+	Cfg *config.Config
 }
 
 func (s *Server) Init() error {
 	var err error
 
-	s.Cfg, err = ConfigInit()
+	s.Cfg, err = config.ConfigInit()
 	if err != nil {
 		return err
 	}
@@ -19,6 +23,6 @@ func (s *Server) Init() error {
 
 func (s *Server) InitGlobals() {
 	enums.T.EnumLookupInit()
-	E.EndpointsInit(s.Cfg)
+	E.EndpointsInit(s)
 	Q.Init()
 }

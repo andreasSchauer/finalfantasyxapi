@@ -22,46 +22,46 @@ func (mi MonsterItems) IsZero() bool {
 	return mi.DropChance == 0 && mi.OtherItemsCondition == nil
 }
 
-func convertMonsterItems(cfg *Config, items seedtypes.MonsterItems) MonsterItems {
+func convertMonsterItems(server *Server, items seedtypes.MonsterItems) MonsterItems {
 	monItems := MonsterItems{
 		DropChance:          items.DropChance,
 		DropCondition:       items.DropCondition,
 		OtherItemsCondition: items.OtherItemsCondition,
-		OtherItems:          convertObjSlice(cfg, items.OtherItems, convertPossibleItem),
+		OtherItems:          convertObjSlice(server, items.OtherItems, convertPossibleItem),
 	}
 
 	if items.StealCommon != nil {
-		stealCommon := E.AllItems.toResAmtFromName(cfg, *items.StealCommon)
+		stealCommon := E.AllItems.toResAmtFromName(server, *items.StealCommon)
 		monItems.StealCommon = &stealCommon
 	}
 
 	if items.StealRare != nil {
-		stealRare := E.AllItems.toResAmtFromName(cfg, *items.StealRare)
+		stealRare := E.AllItems.toResAmtFromName(server, *items.StealRare)
 		monItems.StealRare = &stealRare
 	}
 
 	if items.DropCommon != nil {
-		dropCommon := E.AllItems.toResAmtFromName(cfg, *items.DropCommon)
+		dropCommon := E.AllItems.toResAmtFromName(server, *items.DropCommon)
 		monItems.DropCommon = &dropCommon
 	}
 
 	if items.DropRare != nil {
-		dropRare := E.AllItems.toResAmtFromName(cfg, *items.DropRare)
+		dropRare := E.AllItems.toResAmtFromName(server, *items.DropRare)
 		monItems.DropRare = &dropRare
 	}
 
 	if items.SecondaryDropCommon != nil {
-		secDropCommon := E.AllItems.toResAmtFromName(cfg, *items.SecondaryDropCommon)
+		secDropCommon := E.AllItems.toResAmtFromName(server, *items.SecondaryDropCommon)
 		monItems.SecondaryDropCommon = &secDropCommon
 	}
 
 	if items.SecondaryDropRare != nil {
-		secDropRare := E.AllItems.toResAmtFromName(cfg, *items.SecondaryDropRare)
+		secDropRare := E.AllItems.toResAmtFromName(server, *items.SecondaryDropRare)
 		monItems.SecondaryDropRare = &secDropRare
 	}
 
 	if items.Bribe != nil {
-		bribe := E.AllItems.toResAmtFromName(cfg, *items.Bribe)
+		bribe := E.AllItems.toResAmtFromName(server, *items.Bribe)
 		monItems.Bribe = &bribe
 	}
 

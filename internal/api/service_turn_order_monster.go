@@ -33,7 +33,7 @@ func fetchFormationMons(params TurnOrderParams) TurnOrderParams {
 	return params
 }
 
-func assembleMonTurnOrder(cfg *Config, monID int32, altState *int32) (Monster, *seedtypes.AgilityTier) {
+func assembleMonTurnOrder(server *Server, monID int32, altState *int32) (Monster, *seedtypes.AgilityTier) {
 	penanceArmIDs := []int32{306, 307}
 	firstTurnAglIDs := []int32{167, 168, 215, 306, 307}
 	var firstTurnAglTier *seedtypes.AgilityTier
@@ -42,17 +42,17 @@ func assembleMonTurnOrder(cfg *Config, monID int32, altState *int32) (Monster, *
 		altState = h.GetInt32Ptr(2)
 	}
 
-	monster, _ := quickAssembleMon(cfg, monID, altState)
+	monster, _ := quickAssembleMon(server, monID, altState)
 
 	if slices.Contains(firstTurnAglIDs, monID) {
-		firstTurnAglTier = getFirstTurnAglTier(cfg, monID)
+		firstTurnAglTier = getFirstTurnAglTier(server, monID)
 	}
 
 	return monster, firstTurnAglTier
 }
 
-func getFirstTurnAglTier(cfg *Config, monID int32) *seedtypes.AgilityTier {
-	mon, _ := quickAssembleMon(cfg, monID, nil)
+func getFirstTurnAglTier(server *Server, monID int32) *seedtypes.AgilityTier {
+	mon, _ := quickAssembleMon(server, monID, nil)
 	altState := mon.AlteredStates[0]
 
 	if len(altState.Alts) == 0 {

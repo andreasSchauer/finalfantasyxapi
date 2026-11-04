@@ -230,7 +230,7 @@ func TestGetShop(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetShop", testSrv.Cfg.HandleShops, compareShops)
+	testSingleResources(t, tests, "GetShop", testSrv.HandleShops, compareShops)
 }
 
 func TestRetrieveShops(t *testing.T) {
@@ -366,7 +366,7 @@ func TestRetrieveShops(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Shops.Endpoint, "RetrieveShops", testSrv.Cfg.HandleShops, compareAPIResourceLists[api.UnnamedAPIResource])
+	testIDList(t, tests, api.E.Shops.Endpoint, "RetrieveShops", testSrv.HandleShops, compareAPIResourceLists[api.UnnamedAPIResource])
 }
 
 func TestSubsectionShops(t *testing.T) {
@@ -376,7 +376,7 @@ func TestSubsectionShops(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/8/shops/",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleLocations,
+				handler:        testSrv.HandleLocations,
 			},
 			count:          3,
 			parentResource: h.GetStrPtr("/locations/8"),
@@ -386,7 +386,7 @@ func TestSubsectionShops(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/26/shops/",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleSublocations,
+				handler:        testSrv.HandleSublocations,
 			},
 			count:          2,
 			parentResource: h.GetStrPtr("/sublocations/26"),

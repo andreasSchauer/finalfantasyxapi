@@ -8,13 +8,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource], id int32) (Sublocation, error) {
+func (s *Server) getSublocation(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource], id int32) (Sublocation, error) {
 	sublocation, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Sublocation{}, err
 	}
 
-	rel, err := getSublocationRelationships(cfg, r, sublocation)
+	rel, err := getSublocationRelationships(s, r, sublocation)
 	if err != nil {
 		return Sublocation{}, err
 	}
@@ -22,7 +22,7 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seedtypes.Subl
 	response := Sublocation{
 		ID:                    sublocation.ID,
 		Name:                  sublocation.Name,
-		ParentLocation:        nameToNamedAPIResource(cfg, E.Locations, sublocation.Location, nil),
+		ParentLocation:        nameToNamedAPIResource(s, E.Locations, sublocation.Location, nil),
 		Availability:          sublocation.Availability,
 		ConnectedSublocations: rel.ConnectedSublocations,
 		Areas:                 rel.Areas,
@@ -32,25 +32,25 @@ func (cfg *Config) getSublocation(r *http.Request, i handlerInput[seedtypes.Subl
 	return response, nil
 }
 
-func (cfg *Config) retrieveSublocations(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveSublocations(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, cfg.db.GetLocationSublocationIDs),
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, cfg.db.GetSublocationIDsWithMonster),
-		i.queryIDWrapper(cfg, r, ids, ts.QpnItem, lookup.L.Items, getSublocationsByItem),
-		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, cfg.db.GetSublocationIDsWithKeyItem),
-		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, cfg.db.GetSublocationIDsWithAutoAbility),
-		i.queryBool2(r, ids, ts.QpnCharacters, cfg.db.GetSublocationIDsWithCharacters),
-		i.queryBool2(r, ids, ts.QpnAeons, cfg.db.GetSublocationIDsWithAeons),
-		i.queryBool2(r, ids, ts.QpnMonsters, cfg.db.GetSublocationIDsWithMonsters),
-		i.queryBool2(r, ids, ts.QpnBossFights, cfg.db.GetSublocationIDsWithBosses),
-		i.queryBool2(r, ids, ts.QpnShops, cfg.db.GetSublocationIDsWithShops),
-		i.queryBool2(r, ids, ts.QpnTreasures, cfg.db.GetSublocationIDsWithTreasures),
-		i.queryBool2(r, ids, ts.QpnSidequests, cfg.db.GetSublocationIDsWithSidequests),
-		i.queryBool2(r, ids, ts.QpnFMVs, cfg.db.GetSublocationIDsWithFMVs),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, s.Cfg.DB.GetLocationSublocationIDs),
+		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, s.Cfg.DB.GetSublocationIDsWithMonster),
+		i.queryIDWrapper(s, r, ids, ts.QpnItem, lookup.L.Items, getSublocationsByItem),
+		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, s.Cfg.DB.GetSublocationIDsWithKeyItem),
+		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, s.Cfg.DB.GetSublocationIDsWithAutoAbility),
+		i.queryBool2(r, ids, ts.QpnCharacters, s.Cfg.DB.GetSublocationIDsWithCharacters),
+		i.queryBool2(r, ids, ts.QpnAeons, s.Cfg.DB.GetSublocationIDsWithAeons),
+		i.queryBool2(r, ids, ts.QpnMonsters, s.Cfg.DB.GetSublocationIDsWithMonsters),
+		i.queryBool2(r, ids, ts.QpnBossFights, s.Cfg.DB.GetSublocationIDsWithBosses),
+		i.queryBool2(r, ids, ts.QpnShops, s.Cfg.DB.GetSublocationIDsWithShops),
+		i.queryBool2(r, ids, ts.QpnTreasures, s.Cfg.DB.GetSublocationIDsWithTreasures),
+		i.queryBool2(r, ids, ts.QpnSidequests, s.Cfg.DB.GetSublocationIDsWithSidequests),
+		i.queryBool2(r, ids, ts.QpnFMVs, s.Cfg.DB.GetSublocationIDsWithFMVs),
 	})
 }

@@ -39,7 +39,7 @@ func (test test) checkSubResIDsInSlice[T api.SimpleResource](fieldName string, e
 	}
 
 	for _, expID := range expIDs {
-		expURL := api.CreateResourceURL(test.cfg, endpoint, expID)
+		expURL := api.CreateResourceURL(test.server, endpoint, expID)
 		_, ok := gotMap[expURL]
 		if !ok {
 			test.t.Errorf("'%s' doesn't contain all wanted resources. missing '%s'\n\n", fieldName, api.CompleteTestPath(endpoint, expID))

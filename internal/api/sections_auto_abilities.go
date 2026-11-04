@@ -33,38 +33,38 @@ func (a AutoAbilitySimple) GetURL() string {
 	return a.URL
 }
 
-func createAutoAbilitySimple(cfg *Config, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createAutoAbilitySimple(server *Server, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.AutoAbilities
 	autoAbility, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	autoAbilitySimple := AutoAbilitySimple{
 		ID:                  autoAbility.ID,
-		URL:                 CreateResourceURL(cfg, i.Endpoint, id),
+		URL:                 CreateResourceURL(server, i.Endpoint, id),
 		Name:                autoAbility.Name,
-		RequiredItem:        convertObjPtr(cfg, autoAbility.RequiredItem, convertItemAmountSimple),
+		RequiredItem:        convertObjPtr(server, autoAbility.RequiredItem, convertItemAmountSimple),
 		ActivationCondition: autoAbility.ActivationCondition,
 		Counter:             autoAbility.Counter,
 		GradualRecovery:     autoAbility.GradualRecovery,
 		AutoItemUse:         h.SliceOrNil(autoAbility.AutoItemUse),
 		OnHitElement:        autoAbility.OnHitElement,
-		AddedElemResist:     convertObjPtr(cfg, autoAbility.AddedElemResist, convertElemResistSimple),
-		OnHitStatus:         convertObjPtr(cfg, autoAbility.OnHitStatus, convertInflictedStatusSimple),
+		AddedElemResist:     convertObjPtr(server, autoAbility.AddedElemResist, convertElemResistSimple),
+		OnHitStatus:         convertObjPtr(server, autoAbility.OnHitStatus, convertInflictedStatusSimple),
 		AddedStatusses:      h.SliceOrNil(autoAbility.AddedStatusses),
-		AddedStatusResists:  convertObjSliceOrNil(cfg, autoAbility.AddedStatusResists, convertStatusResistSimple),
+		AddedStatusResists:  convertObjSliceOrNil(server, autoAbility.AddedStatusResists, convertStatusResistSimple),
 		AddedProperty:       autoAbility.AddedProperty,
 		ConversionTo:        autoAbility.ConversionTo,
-		StatChanges:         convertObjSliceOrNil(cfg, autoAbility.StatChanges, convertStatChangeSimple),
-		ModifierChanges:     convertObjSliceOrNil(cfg, autoAbility.ModifierChanges, convertModChangeSimple),
+		StatChanges:         convertObjSliceOrNil(server, autoAbility.StatChanges, convertStatChangeSimple),
+		ModifierChanges:     convertObjSliceOrNil(server, autoAbility.ModifierChanges, convertModChangeSimple),
 	}
 
 	return autoAbilitySimple, nil
 }
 
-func convertElemResistSimple(_ *Config, er seedtypes.ElementalResist) string {
+func convertElemResistSimple(_ *Server, er seedtypes.ElementalResist) string {
 	return fmt.Sprintf("%s: %s", er.Element, er.Affinity)
 }
 
-func convertStatusResistSimple(_ *Config, sr seedtypes.StatusResist) string {
+func convertStatusResistSimple(_ *Server, sr seedtypes.StatusResist) string {
 	if sr.Resistance == 254 {
 		return fmt.Sprintf("%s (immune)", sr.StatusCondition)
 	}

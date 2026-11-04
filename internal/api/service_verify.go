@@ -10,14 +10,14 @@ import (
 )
 
 type paramsVerifyer struct {
-	cfg         *Config
+	server		*Server
 	paramsRules ParamsRules
 	userValues  map[ts.FieldName]any
 }
 
-func createParamsVerifyer(cfg *Config, paramsRules ParamsRules, userValues map[ts.FieldName]any) paramsVerifyer {
+func createParamsVerifyer(server *Server, paramsRules ParamsRules, userValues map[ts.FieldName]any) paramsVerifyer {
 	return paramsVerifyer{
-		cfg:         cfg,
+		server:         server,
 		paramsRules: paramsRules,
 		userValues:  userValues,
 	}
@@ -210,7 +210,7 @@ func (v paramsVerifyer) objChildVerifyer(fieldName ts.FieldName) (paramsVerifyer
 		return paramsVerifyer{}, newHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
 	}
 
-	cv := createParamsVerifyer(v.cfg, v.paramsRules[fieldName].Children, childUserVals)
+	cv := createParamsVerifyer(v.server, v.paramsRules[fieldName].Children, childUserVals)
 
 	return cv, nil
 }
@@ -221,7 +221,7 @@ func (v paramsVerifyer) arrChildVerifyer(rawItem any, fieldName ts.FieldName) (p
 		return paramsVerifyer{}, newHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
 	}
 
-	cv := createParamsVerifyer(v.cfg, v.paramsRules[fieldName].Children, childUserVals)
+	cv := createParamsVerifyer(v.server, v.paramsRules[fieldName].Children, childUserVals)
 
 	return cv, nil
 }

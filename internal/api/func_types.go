@@ -10,12 +10,12 @@ import (
 )
 
 type IDFilter func(context.Context) ([]int32, error)
-type QueryWrapBasic func(*Config, *http.Request, context.Context, string, QueryParam) ([]int32, error)
-type QueryWrapBool func(*Config, *http.Request, context.Context, bool) ([]int32, error)
-type QueryWrapEnum[E any] func(*Config, *http.Request, context.Context, E) ([]int32, error)
-type QueryWrapIntSlice func(*Config, *http.Request, context.Context, []int32) ([]int32, error)
-type QueryWrapInt func(*Config, *http.Request, context.Context, int32) ([]int32, error)
-type QueryWrapJoined func(*Config, *http.Request, context.Context) ([]int32, error)
+type QueryWrapBasic func(*Server, *http.Request, context.Context, string, QueryParam) ([]int32, error)
+type QueryWrapBool func(*Server, *http.Request, context.Context, bool) ([]int32, error)
+type QueryWrapEnum[E any] func(*Server, *http.Request, context.Context, E) ([]int32, error)
+type QueryWrapIntSlice func(*Server, *http.Request, context.Context, []int32) ([]int32, error)
+type QueryWrapInt func(*Server, *http.Request, context.Context, int32) ([]int32, error)
+type QueryWrapJoined func(*Server, *http.Request, context.Context) ([]int32, error)
 
 type DBQueryNoInput func(context.Context) ([]int32, error)
 type DBQueryIntOne func(context.Context, int32) (int32, error)

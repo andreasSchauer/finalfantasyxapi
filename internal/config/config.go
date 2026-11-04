@@ -1,5 +1,5 @@
-// Package api includes all the api routers, handlers, and their logic
-package api
+// Package config asdoasd
+package config
 
 import (
 	"database/sql"
@@ -14,12 +14,12 @@ import (
 )
 
 type Config struct {
-	db          *database.Queries
+	DB          *database.Queries
 	DBConn      *sql.DB
-	platform    string
-	adminAPIKey string
-	host        string
-	fetchLimit  int
+	Platform    string
+	AdminAPIKey string
+	Host        string
+	FetchLimit  int
 }
 
 func ConfigInit() (*Config, error) {
@@ -44,7 +44,7 @@ func ConfigInit() (*Config, error) {
 
 	dbConn, err := sql.Open("postgres", dbURL)
 	if err != nil {
-		return nil, fmt.Errorf("Error opening database: %v", err)
+		return nil, fmt.Errorf("error opening database: %v", err)
 	}
 	dbConn.SetMaxOpenConns(connLimit)
 	dbConn.SetMaxIdleConns(connLimit)
@@ -52,15 +52,15 @@ func ConfigInit() (*Config, error) {
 	dbQueries := database.New(dbConn)
 
 	cfg := Config{
-		db:          dbQueries,
+		DB:          dbQueries,
 		DBConn:      dbConn,
-		platform:    platform,
-		adminAPIKey: adminAPIKey,
-		host:        domain,
-		fetchLimit:  fetchLimit,
+		Platform:    platform,
+		AdminAPIKey: adminAPIKey,
+		Host:        domain,
+		FetchLimit:  fetchLimit,
 	}
 
-	err = seeding.LoadDatabase(cfg.db, cfg.DBConn)
+	err = seeding.LoadDatabase(cfg.DB, cfg.DBConn)
 	if err != nil {
 		return nil, err
 	}

@@ -6,18 +6,18 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-func convGetStatusConditionResistingMonsterIDs(cfg *Config, resistance int32) DBQueryIntMany {
+func convGetStatusConditionResistingMonsterIDs(server *Server, resistance int32) DBQueryIntMany {
 	return func(ctx context.Context, id int32) ([]int32, error) {
-		return cfg.db.GetStatusConditionResistingMonsterIDs(ctx, database.GetStatusConditionResistingMonsterIDsParams{
+		return server.Cfg.DB.GetStatusConditionResistingMonsterIDs(ctx, database.GetStatusConditionResistingMonsterIDsParams{
 			StatusConditionID: id,
 			MinResistance:     resistance,
 		})
 	}
 }
 
-func convGetStatusConditionAbilityIDsInflicted(cfg *Config, minRate, maxRate int32) DBQueryIntMany {
+func convGetStatusConditionAbilityIDsInflicted(server *Server, minRate, maxRate int32) DBQueryIntMany {
 	return func(ctx context.Context, id int32) ([]int32, error) {
-		return cfg.db.GetStatusConditionAbilityIDsInflicted(ctx, database.GetStatusConditionAbilityIDsInflictedParams{
+		return server.Cfg.DB.GetStatusConditionAbilityIDsInflicted(ctx, database.GetStatusConditionAbilityIDsInflictedParams{
 			StatusConditionID: id,
 			MinRate:           minRate,
 			MaxRate:           maxRate,

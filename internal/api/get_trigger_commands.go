@@ -8,13 +8,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seedtypes.TriggerCommand, TriggerCommand, NamedAPIResource], id int32) (TriggerCommand, error) {
+func (s *Server) getTriggerCommand(r *http.Request, i handlerInput[seedtypes.TriggerCommand, TriggerCommand, NamedAPIResource], id int32) (TriggerCommand, error) {
 	command, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
 
-	rel, err := getTriggerCommandRelationships(cfg, r, command)
+	rel, err := getTriggerCommandRelationships(s, r, command)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
@@ -24,21 +24,21 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seedtypes.T
 		Name:               command.Name,
 		Version:            command.Version,
 		Specification:      command.Specification,
-		UntypedAbility:     idToTypedAPIResource(cfg, E.Abilities, command.Ability.ID),
+		UntypedAbility:     idToTypedAPIResource(s, E.Abilities, command.Ability.ID),
 		Description:        command.Description,
 		Effect:             command.Effect,
 		Rank:               command.Rank,
 		AppearsInHelpBar:   command.AppearsInHelpBar,
 		CanCopycat:         command.CanCopycat,
 		UsedBy:             rel.UsedBy,
-		RelatedStats:       namesToNamedAPIResources(cfg, E.Stats, command.RelatedStats),
-		Topmenu:            namePtrToNamedAPIResPtr(cfg, E.Topmenus, command.Topmenu, nil),
+		RelatedStats:       namesToNamedAPIResources(s, E.Stats, command.RelatedStats),
+		Topmenu:            namePtrToNamedAPIResPtr(s, E.Topmenus, command.Topmenu, nil),
 		Cursor:             command.Cursor,
 		MonsterFormations:  rel.MonsterFormations,
-		BattleInteractions: convertObjSlice(cfg, command.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: convertObjSlice(s, command.BattleInteractions, convertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(cfg, r, i, response, ts.QpnAbilityUser)
+	battleInteractions, err := applyUser(s, r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return TriggerCommand{}, err
 	}
@@ -47,14 +47,14 @@ func (cfg *Config) getTriggerCommand(r *http.Request, i handlerInput[seedtypes.T
 	return response, nil
 }
 
-func (cfg *Config) retrieveTriggerCommands(r *http.Request, i handlerInput[seedtypes.TriggerCommand, TriggerCommand, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveTriggerCommands(r *http.Request, i handlerInput[seedtypes.TriggerCommand, TriggerCommand, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(cfg, r, ids, []IDFilter{
-		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, cfg.db.GetTriggerCommandIDsByCharClass),
-		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, cfg.db.GetTriggerCommandIDsByRelatedStat),
+	return i.filterIDs(s, r, ids, []IDFilter{
+		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, s.Cfg.DB.GetTriggerCommandIDsByCharClass),
+		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, s.Cfg.DB.GetTriggerCommandIDsByRelatedStat),
 	})
 }

@@ -6,13 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (cfg *Config) getElement(r *http.Request, i handlerInput[seedtypes.Element, Element, NamedAPIResource], id int32) (Element, error) {
+func (s *Server) getElement(r *http.Request, i handlerInput[seedtypes.Element, Element, NamedAPIResource], id int32) (Element, error) {
 	element, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Element{}, err
 	}
 
-	rel, err := getElementRelationships(cfg, r, element)
+	rel, err := getElementRelationships(s, r, element)
 	if err != nil {
 		return Element{}, err
 	}
@@ -20,7 +20,7 @@ func (cfg *Config) getElement(r *http.Request, i handlerInput[seedtypes.Element,
 	response := Element{
 		ID:                 element.ID,
 		Name:               element.Name,
-		OppositeElement:    namePtrToNamedAPIResPtr(cfg, i, element.OppositeElement, nil),
+		OppositeElement:    namePtrToNamedAPIResPtr(s, i, element.OppositeElement, nil),
 		StatusProtection:   rel.StatusProtection,
 		AutoAbilities:      rel.AutoAbilities,
 		PlayerAbilities:    rel.PlayerAbilities,
@@ -36,6 +36,6 @@ func (cfg *Config) getElement(r *http.Request, i handlerInput[seedtypes.Element,
 	return response, nil
 }
 
-func (cfg *Config) retrieveElements(r *http.Request, i handlerInput[seedtypes.Element, Element, NamedAPIResource]) ([]int32, error) {
+func (s *Server) retrieveElements(r *http.Request, i handlerInput[seedtypes.Element, Element, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

@@ -20,7 +20,7 @@ func (as AppliedState) IsZero() bool {
 	return as.Condition == ""
 }
 
-func applyAlteredStateFromQuery(cfg *Config, r *http.Request, mon Monster, queryName ts.QueryParamName) (Monster, error) {
+func applyAlteredStateFromQuery(server *Server, r *http.Request, mon Monster, queryName ts.QueryParamName) (Monster, error) {
 	altStateID, err := getAltStateID(r, mon, queryName)
 	if queryIsEmpty(err) {
 		return mon, nil
@@ -29,10 +29,10 @@ func applyAlteredStateFromQuery(cfg *Config, r *http.Request, mon Monster, query
 		return Monster{}, err
 	}
 
-	return applyAlteredState(cfg, mon, altStateID), nil
+	return applyAlteredState(server, mon, altStateID), nil
 }
 
-func applyAlteredStateFromJSON(cfg *Config, mon Monster, altStatePtr *int32) (Monster, error) {
+func applyAlteredStateFromJSON(server *Server, mon Monster, altStatePtr *int32) (Monster, error) {
 	if altStatePtr == nil {
 		return mon, nil
 	}
@@ -44,10 +44,10 @@ func applyAlteredStateFromJSON(cfg *Config, mon Monster, altStatePtr *int32) (Mo
 		return Monster{}, err
 	}
 
-	return applyAlteredState(cfg, mon, altStateID), nil
+	return applyAlteredState(server, mon, altStateID), nil
 }
 
-func applyAlteredState(cfg *Config, mon Monster, altStateID int) Monster {
+func applyAlteredState(server *Server, mon Monster, altStateID int) Monster {
 	altState := mon.AlteredStates[altStateID-1]
 	appliedState := AppliedState{
 		Condition:   altState.Condition,
@@ -55,7 +55,7 @@ func applyAlteredState(cfg *Config, mon Monster, altStateID int) Monster {
 	}
 
 	defaultState := AlteredState{
-		URL:         CreateResourceURL(cfg, E.Monsters.Endpoint, mon.ID),
+		URL:         CreateResourceURL(server, E.Monsters.Endpoint, mon.ID),
 		Condition:   "default",
 		IsTemporary: false,
 	}

@@ -291,7 +291,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetOverdriveAbility", testSrv.Cfg.HandleOverdriveAbilities, compareOverdriveAbilities)
+	testSingleResources(t, tests, "GetOverdriveAbility", testSrv.HandleOverdriveAbilities, compareOverdriveAbilities)
 }
 
 func TestGetMultipleOverdriveAbilities(t *testing.T) {
@@ -323,7 +323,7 @@ func TestGetMultipleOverdriveAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.OverdriveAbilities.Endpoint, "GetMultipleOverdriveAbilities", testSrv.Cfg.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.OverdriveAbilities.Endpoint, "GetMultipleOverdriveAbilities", testSrv.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestRetrieveOverdriveAbilities(t *testing.T) {
@@ -391,7 +391,7 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.OverdriveAbilities.Endpoint, "RetrieveOverdriveAbilities", testSrv.Cfg.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.OverdriveAbilities.Endpoint, "RetrieveOverdriveAbilities", testSrv.HandleOverdriveAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionOverdriveAbilities(t *testing.T) {
@@ -401,7 +401,7 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrives/14/overdrive-abilities",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleOverdrives,
+				handler:        testSrv.HandleOverdrives,
 			},
 			count:          6,
 			parentResource: h.GetStrPtr("/overdrives/14"),
@@ -411,7 +411,7 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-commands/1/overdrive-abilities",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleOverdriveCommands,
+				handler:        testSrv.HandleOverdriveCommands,
 			},
 			count:          8,
 			parentResource: h.GetStrPtr("/overdrive-commands/1"),
@@ -421,7 +421,7 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/characters/1/overdrive-abilities",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleCharacters,
+				handler:        testSrv.HandleCharacters,
 			},
 			count:          8,
 			parentResource: h.GetStrPtr("/characters/1"),
@@ -431,7 +431,7 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/1/overdrive-abilities",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleAeons,
+				handler:        testSrv.HandleAeons,
 			},
 			count:          2,
 			parentResource: h.GetStrPtr("/aeons/1"),

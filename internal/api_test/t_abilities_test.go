@@ -204,7 +204,7 @@ func TestGetAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetAbility", testSrv.Cfg.HandleAbilities, compareAbilities)
+	testSingleResources(t, tests, "GetAbility", testSrv.HandleAbilities, compareAbilities)
 }
 
 func TestRetrieveAbilities(t *testing.T) {
@@ -344,7 +344,7 @@ func TestRetrieveAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Abilities.Endpoint, "RetrieveAbilities", testSrv.Cfg.HandleAbilities, compareAPIResourceLists[api.NamedAPIResource])
+	testIDList(t, tests, api.E.Abilities.Endpoint, "RetrieveAbilities", testSrv.HandleAbilities, compareAPIResourceLists[api.NamedAPIResource])
 }
 
 func TestSubsectionAbilities(t *testing.T) {
@@ -354,7 +354,7 @@ func TestSubsectionAbilities(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/character-classes/1/default-abilities",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleCharacterClasses,
+				handler:        testSrv.HandleCharacterClasses,
 			},
 			count:          5,
 			parentResource: h.GetStrPtr("/character-classes/1"),
@@ -364,7 +364,7 @@ func TestSubsectionAbilities(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/character-classes/1/learnable-abilities",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleCharacterClasses,
+				handler:        testSrv.HandleCharacterClasses,
 			},
 			count:          90,
 			parentResource: h.GetStrPtr("/character-classes/1"),
@@ -374,7 +374,7 @@ func TestSubsectionAbilities(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/submenus/2/abilities",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleSubmenus,
+				handler:        testSrv.HandleSubmenus,
 			},
 			count:          22,
 			parentResource: h.GetStrPtr("/submenus/2"),
@@ -384,7 +384,7 @@ func TestSubsectionAbilities(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/topmenus/2/abilities",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleTopmenus,
+				handler:        testSrv.HandleTopmenus,
 			},
 			count:          6,
 			parentResource: h.GetStrPtr("/topmenus/2"),
@@ -394,7 +394,7 @@ func TestSubsectionAbilities(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/185/abilities",
 				expectedStatus: http.StatusOK,
-				handler:        testSrv.Cfg.HandleMonsters,
+				handler:        testSrv.HandleMonsters,
 			},
 			count:          6,
 			parentResource: h.GetStrPtr("/monsters/185"),
