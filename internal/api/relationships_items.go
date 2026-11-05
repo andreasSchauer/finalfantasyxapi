@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
@@ -74,7 +75,7 @@ func runItemRelQueries(srv *Server, r *http.Request, item seedtypes.Item, availa
 	})
 
 	g.Go(func() error {
-		playerAbilities, err := E.PlayerAbilities.dbGetRelations(srv, ctx, item, srv.Cfg.DB.GetItemPlayerAbilityIDs)
+		playerAbilities, err := E.PlayerAbilities.dbGetRelations(srv, ctx, item, config.Cfg.DB.GetItemPlayerAbilityIDs)
 		if err != nil {
 			return err
 		}
@@ -83,7 +84,7 @@ func runItemRelQueries(srv *Server, r *http.Request, item seedtypes.Item, availa
 	})
 
 	g.Go(func() error {
-		autoAbilities, err := E.AutoAbilities.dbGetRelations(srv, ctx, item, srv.Cfg.DB.GetItemAutoAbilityIDs)
+		autoAbilities, err := E.AutoAbilities.dbGetRelations(srv, ctx, item, config.Cfg.DB.GetItemAutoAbilityIDs)
 		if err != nil {
 			return err
 		}
@@ -93,7 +94,7 @@ func runItemRelQueries(srv *Server, r *http.Request, item seedtypes.Item, availa
 
 	g.Go(func() error {
 		var err error
-		rel.Mixes, err = E.Mixes.dbGetRelations(srv, ctx, item, srv.Cfg.DB.GetItemMixIDs)
+		rel.Mixes, err = E.Mixes.dbGetRelations(srv, ctx, item, config.Cfg.DB.GetItemMixIDs)
 		return err
 	})
 

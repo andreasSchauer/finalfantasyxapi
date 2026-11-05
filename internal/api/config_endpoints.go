@@ -3,6 +3,7 @@ package api
 import (
 	"slices"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -77,7 +78,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Locations,
 		objLookupID:   lookup.L.LocationsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Location, Location, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetLocationIDs,
+		retrieveQuery: config.Cfg.DB.GetLocationIDs,
 		getSingleFunc: srv.getLocation,
 		retrieveFunc:  srv.retrieveLocations,
 		avlFunc:       filterAvlLocations,
@@ -87,31 +88,31 @@ func (E *Endpoints) Init(srv *Server) {
 				relationsFn: getLocationSectionRelations,
 			},
 			ts.SnConnected: {
-				dbQuery:     srv.Cfg.DB.GetConnectedLocationIDs,
+				dbQuery:     config.Cfg.DB.GetConnectedLocationIDs,
 				createSubFn: createLocationSimple,
 				relationsFn: getLocationSectionRelations,
 			},
 			ts.SnSublocations: {
-				dbQuery:     srv.Cfg.DB.GetLocationSublocationIDs,
+				dbQuery:     config.Cfg.DB.GetLocationSublocationIDs,
 				createSubFn: createSublocationSimple,
 				relationsFn: getSublocationSectionRelations,
 			},
 			ts.SnAreas: {
-				dbQuery:     srv.Cfg.DB.GetLocationAreaIDs,
+				dbQuery:     config.Cfg.DB.GetLocationAreaIDs,
 				createSubFn: createAreaSimple,
 				relationsFn: getAreaSectionRelations,
 			},
 			ts.SnMonsterFormations: {
-				dbQuery:     srv.Cfg.DB.GetLocationMonsterFormationIDs,
+				dbQuery:     config.Cfg.DB.GetLocationMonsterFormationIDs,
 				createSubFn: createMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     srv.Cfg.DB.GetLocationMonsterIDs,
+				dbQuery:     config.Cfg.DB.GetLocationMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
 			},
 			ts.SnShops: {
-				dbQuery:     srv.Cfg.DB.GetLocationShopIDs,
+				dbQuery:     config.Cfg.DB.GetLocationShopIDs,
 				createSubFn: createShopSimple,
 			},
 			ts.SnSongs: {
@@ -119,7 +120,7 @@ func (E *Endpoints) Init(srv *Server) {
 				createSubFn: createSongSimple,
 			},
 			ts.SnTreasures: {
-				dbQuery:     srv.Cfg.DB.GetLocationTreasureIDs,
+				dbQuery:     config.Cfg.DB.GetLocationTreasureIDs,
 				createSubFn: createTreasureSimple,
 			},
 		},
@@ -132,7 +133,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Sublocations,
 		objLookupID:   lookup.L.SublocationsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Sublocation, Sublocation, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetSublocationIDs,
+		retrieveQuery: config.Cfg.DB.GetSublocationIDs,
 		getSingleFunc: srv.getSublocation,
 		retrieveFunc:  srv.retrieveSublocations,
 		avlFunc:       filterAvlSublocations,
@@ -142,25 +143,25 @@ func (E *Endpoints) Init(srv *Server) {
 				relationsFn: getSublocationSectionRelations,
 			},
 			ts.SnConnected: {
-				dbQuery:     srv.Cfg.DB.GetConnectedSublocationIDs,
+				dbQuery:     config.Cfg.DB.GetConnectedSublocationIDs,
 				createSubFn: createSublocationSimple,
 				relationsFn: getSublocationSectionRelations,
 			},
 			ts.SnAreas: {
-				dbQuery:     srv.Cfg.DB.GetSublocationAreaIDs,
+				dbQuery:     config.Cfg.DB.GetSublocationAreaIDs,
 				createSubFn: createAreaSimple,
 			},
 			ts.SnMonsterFormations: {
-				dbQuery:     srv.Cfg.DB.GetSublocationMonsterFormationIDs,
+				dbQuery:     config.Cfg.DB.GetSublocationMonsterFormationIDs,
 				createSubFn: createMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     srv.Cfg.DB.GetSublocationMonsterIDs,
+				dbQuery:     config.Cfg.DB.GetSublocationMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
 			},
 			ts.SnShops: {
-				dbQuery:     srv.Cfg.DB.GetSublocationShopIDs,
+				dbQuery:     config.Cfg.DB.GetSublocationShopIDs,
 				createSubFn: createShopSimple,
 			},
 			ts.SnSongs: {
@@ -168,7 +169,7 @@ func (E *Endpoints) Init(srv *Server) {
 				createSubFn: createSongSimple,
 			},
 			ts.SnTreasures: {
-				dbQuery:     srv.Cfg.DB.GetSublocationTreasureIDs,
+				dbQuery:     config.Cfg.DB.GetSublocationTreasureIDs,
 				createSubFn: createTreasureSimple,
 			},
 		},
@@ -181,7 +182,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Areas,
 		objLookupID:   lookup.L.AreasID,
 		idToResFunc:   idToAreaAPIResource,
-		retrieveQuery: srv.Cfg.DB.GetAreaIDs,
+		retrieveQuery: config.Cfg.DB.GetAreaIDs,
 		getSingleFunc: srv.getArea,
 		retrieveFunc:  srv.retrieveAreas,
 		avlFunc:       filterAvlAreas,
@@ -191,16 +192,16 @@ func (E *Endpoints) Init(srv *Server) {
 				relationsFn: getAreaSectionRelations,
 			},
 			ts.SnConnected: {
-				dbQuery:     srv.Cfg.DB.GetAreaConnectionIDs,
+				dbQuery:     config.Cfg.DB.GetAreaConnectionIDs,
 				createSubFn: createAreaSimple,
 				relationsFn: getAreaSectionRelations,
 			},
 			ts.SnMonsterFormations: {
-				dbQuery:     srv.Cfg.DB.GetAreaMonsterFormationIDs,
+				dbQuery:     config.Cfg.DB.GetAreaMonsterFormationIDs,
 				createSubFn: createMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     srv.Cfg.DB.GetAreaMonsterIDs,
+				dbQuery:     config.Cfg.DB.GetAreaMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
 			},
@@ -209,7 +210,7 @@ func (E *Endpoints) Init(srv *Server) {
 				createSubFn: createSongSimple,
 			},
 			ts.SnTreasures: {
-				dbQuery:     srv.Cfg.DB.GetAreaTreasureIDs,
+				dbQuery:     config.Cfg.DB.GetAreaTreasureIDs,
 				createSubFn: createTreasureSimple,
 			},
 		},
@@ -222,7 +223,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.MonsterFormations,
 		objLookupID:   lookup.L.MonsterFormationsID,
 		idToResFunc:   idToUnnamedAPIResource[seedtypes.MonsterFormation, MonsterFormation, UnnamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetMonsterFormationIDs,
+		retrieveQuery: config.Cfg.DB.GetMonsterFormationIDs,
 		getSingleFunc: srv.getMonsterFormation,
 		retrieveFunc:  srv.retrieveMonsterFormations,
 		avlFunc:       filterAvlMonsterFormations,
@@ -231,7 +232,7 @@ func (E *Endpoints) Init(srv *Server) {
 				createSubFn: createMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     srv.Cfg.DB.GetMonsterFormationMonsterIDs,
+				dbQuery:     config.Cfg.DB.GetMonsterFormationMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
 			},
@@ -245,7 +246,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Shops,
 		objLookupID:   lookup.L.ShopsID,
 		idToResFunc:   idToUnnamedAPIResource[seedtypes.Shop, Shop, UnnamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetShopIDs,
+		retrieveQuery: config.Cfg.DB.GetShopIDs,
 		getSingleFunc: srv.getShop,
 		retrieveFunc:  srv.retrieveShops,
 		avlFunc:       filterAvlShops,
@@ -263,7 +264,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Treasures,
 		objLookupID:   lookup.L.TreasuresID,
 		idToResFunc:   idToUnnamedAPIResource[seedtypes.Treasure, Treasure, UnnamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetTreasureIDs,
+		retrieveQuery: config.Cfg.DB.GetTreasureIDs,
 		getSingleFunc: srv.getTreasure,
 		avlFunc:       filterAvlTreasures,
 		retrieveFunc:  srv.retrieveTreasures,
@@ -276,7 +277,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Quests,
 		objLookupID:   lookup.L.QuestsID,
 		idToResFunc:   idToQuestAPIResource[seedtypes.Quest, Quest, QuestAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetQuestIDs,
+		retrieveQuery: config.Cfg.DB.GetQuestIDs,
 		getSingleFunc: srv.getQuest,
 		retrieveFunc:  srv.retrieveQuests,
 		avlFunc:       filterAvlQuests,
@@ -289,13 +290,13 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Sidequests,
 		objLookupID:   lookup.L.SidequestsID,
 		idToResFunc:   idToQuestAPIResource[seedtypes.Sidequest, Sidequest, QuestAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetSidequestIDs,
+		retrieveQuery: config.Cfg.DB.GetSidequestIDs,
 		getSingleFunc: srv.getSidequest,
 		retrieveFunc:  srv.retrieveSidequests,
 		avlFunc:       filterAvlSidequests,
 		subsections: map[ts.SectionName]Subsection{
 			ts.SnSubquests: {
-				dbQuery:     srv.Cfg.DB.GetSidequestSubquestIDs,
+				dbQuery:     config.Cfg.DB.GetSidequestSubquestIDs,
 				createSubFn: createSubquestSimple,
 			},
 		},
@@ -308,7 +309,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Subquests,
 		objLookupID:   lookup.L.SubquestsID,
 		idToResFunc:   idToQuestAPIResource[seedtypes.Subquest, Subquest, QuestAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetSubquestIDs,
+		retrieveQuery: config.Cfg.DB.GetSubquestIDs,
 		getSingleFunc: srv.getSubquest,
 		retrieveFunc:  srv.retrieveSubquests,
 		avlFunc:       filterAvlSubquests,
@@ -321,7 +322,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.ArenaCreations,
 		objLookupID:   lookup.L.ArenaCreationsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetArenaCreationIDs,
+		retrieveQuery: config.Cfg.DB.GetArenaCreationIDs,
 		getSingleFunc: srv.getArenaCreation,
 		retrieveFunc:  srv.retrieveArenaCreations,
 	}
@@ -333,7 +334,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Positions,
 		objLookupID:   lookup.L.PositionsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.BlitzballPosition, BlitzballPrize, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetBlitzballPrizeIDs,
+		retrieveQuery: config.Cfg.DB.GetBlitzballPrizeIDs,
 		getSingleFunc: srv.getBlitzballPrize,
 		retrieveFunc:  srv.retrieveBlitzballPrizes,
 	}
@@ -345,7 +346,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Songs,
 		objLookupID:   lookup.L.SongsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Song, Song, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetSongIDs,
+		retrieveQuery: config.Cfg.DB.GetSongIDs,
 		getSingleFunc: srv.getSong,
 		retrieveFunc:  srv.retrieveSongs,
 	}
@@ -357,7 +358,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.FMVs,
 		objLookupID:   lookup.L.FMVsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.FMV, FMV, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetFmvIDs,
+		retrieveQuery: config.Cfg.DB.GetFmvIDs,
 		getSingleFunc: srv.getFMV,
 		retrieveFunc:  srv.retrieveFMVs,
 	}
@@ -369,7 +370,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.PlayerUnits,
 		objLookupID:   lookup.L.PlayerUnitsID,
 		idToResFunc:   idToTypedAPIResource[seedtypes.PlayerUnit, PlayerUnit, TypedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetPlayerUnitIDs,
+		retrieveQuery: config.Cfg.DB.GetPlayerUnitIDs,
 		getSingleFunc: srv.getPlayerUnit,
 		retrieveFunc:  srv.retrievePlayerUnits,
 	}
@@ -381,28 +382,28 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Characters,
 		objLookupID:   lookup.L.CharactersID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Character, Character, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetCharacterIDs,
+		retrieveQuery: config.Cfg.DB.GetCharacterIDs,
 		getSingleFunc: srv.getCharacter,
 		retrieveFunc:  srv.retrieveCharacters,
 		subsections: map[ts.SectionName]Subsection{
 			ts.SnDefaultAbilities: {
-				dbQuery:     srv.Cfg.DB.GetCharacterDefaultAbilityIDs,
+				dbQuery:     config.Cfg.DB.GetCharacterDefaultAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
 			},
 			ts.SnStdSgAbilities: {
-				dbQuery:     srv.Cfg.DB.GetCharacterSgAbilityIDs,
+				dbQuery:     config.Cfg.DB.GetCharacterSgAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
 			},
 			ts.SnExpSgAbilities: {
-				dbQuery:     srv.Cfg.DB.GetCharacterEgAbilityIDs,
+				dbQuery:     config.Cfg.DB.GetCharacterEgAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
 			},
 			ts.SnOverdriveAbilities: {
-				dbQuery:     srv.Cfg.DB.GetCharacterOverdriveAbilityIDs,
+				dbQuery:     config.Cfg.DB.GetCharacterOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
 			},
 			ts.SnOverdrives: {
-				dbQuery:     srv.Cfg.DB.GetCharacterOverdriveIDs,
+				dbQuery:     config.Cfg.DB.GetCharacterOverdriveIDs,
 				createSubFn: createOverdriveSimple,
 			},
 		},
@@ -415,20 +416,20 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Aeons,
 		objLookupID:   lookup.L.AeonsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Aeon, Aeon, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetAeonIDs,
+		retrieveQuery: config.Cfg.DB.GetAeonIDs,
 		getSingleFunc: srv.getAeon,
 		retrieveFunc:  srv.retrieveAeons,
 		subsections: map[ts.SectionName]Subsection{
 			ts.SnDefaultAbilities: {
-				dbQuery:     srv.Cfg.DB.GetAeonDefaultAbilityIDs,
+				dbQuery:     config.Cfg.DB.GetAeonDefaultAbilityIDs,
 				createSubFn: createPlayerAbilitySimple,
 			},
 			ts.SnOverdriveAbilities: {
-				dbQuery:     srv.Cfg.DB.GetAeonOverdriveAbilityIDs,
+				dbQuery:     config.Cfg.DB.GetAeonOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
 			},
 			ts.SnOverdrives: {
-				dbQuery:     srv.Cfg.DB.GetAeonOverdriveIDs,
+				dbQuery:     config.Cfg.DB.GetAeonOverdriveIDs,
 				createSubFn: createOverdriveSimple,
 			},
 			ts.SnStats: {
@@ -444,24 +445,24 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.CharClasses,
 		objLookupID:   lookup.L.CharClassesID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.CharacterClass, CharacterClass, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetCharacterClassesIDs,
+		retrieveQuery: config.Cfg.DB.GetCharacterClassesIDs,
 		getSingleFunc: srv.getCharacterClass,
 		retrieveFunc:  srv.retrieveCharacterClasses,
 		subsections: map[ts.SectionName]Subsection{
 			ts.SnDefaultAbilities: {
-				dbQuery:     srv.Cfg.DB.GetCharacterClassDefaultAbilityIDs,
+				dbQuery:     config.Cfg.DB.GetCharacterClassDefaultAbilityIDs,
 				createSubFn: createAbilitySimple,
 			},
 			ts.SnLearnableAbilities: {
-				dbQuery:     srv.Cfg.DB.GetCharacterClassLearnableAbilityIDs,
+				dbQuery:     config.Cfg.DB.GetCharacterClassLearnableAbilityIDs,
 				createSubFn: createAbilitySimple,
 			},
 			ts.SnDefaultOverdrives: {
-				dbQuery:     srv.Cfg.DB.GetCharacterClassDefaultOverdriveIDs,
+				dbQuery:     config.Cfg.DB.GetCharacterClassDefaultOverdriveIDs,
 				createSubFn: createOverdriveSimple,
 			},
 			ts.SnLearnableOverdrives: {
-				dbQuery:     srv.Cfg.DB.GetCharacterClassLearnableOverdriveIDs,
+				dbQuery:     config.Cfg.DB.GetCharacterClassLearnableOverdriveIDs,
 				createSubFn: createOverdriveSimple,
 			},
 		},
@@ -474,8 +475,8 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:        lookup.L.Monsters,
 		objLookupID:      lookup.L.MonstersID,
 		idToResFunc:      idToNamedAPIResource[seedtypes.Monster, Monster, NamedAPIResource],
-		getMultipleQuery: srv.Cfg.DB.GetMonsterIDsByName,
-		retrieveQuery:    srv.Cfg.DB.GetMonsterIDs,
+		getMultipleQuery: config.Cfg.DB.GetMonsterIDsByName,
+		retrieveQuery:    config.Cfg.DB.GetMonsterIDs,
 		getSingleFunc:    srv.getMonster,
 		retrieveFunc:     srv.retrieveMonsters,
 		avlFunc:          filterAvlMonsters,
@@ -485,16 +486,16 @@ func (E *Endpoints) Init(srv *Server) {
 				relationsFn: getMonsterSectionRelations,
 			},
 			ts.SnAbilities: {
-				dbQuery:     srv.Cfg.DB.GetMonsterAbilityIDs,
+				dbQuery:     config.Cfg.DB.GetMonsterAbilityIDs,
 				createSubFn: createAbilitySimple,
 			},
 			ts.SnAreas: {
-				dbQuery:     srv.Cfg.DB.GetMonsterAreaIDs,
+				dbQuery:     config.Cfg.DB.GetMonsterAreaIDs,
 				createSubFn: createAreaSimple,
 				relationsFn: getAreaSectionRelations,
 			},
 			ts.SnMonsterFormations: {
-				dbQuery:     srv.Cfg.DB.GetMonsterMonsterFormationIDs,
+				dbQuery:     config.Cfg.DB.GetMonsterMonsterFormationIDs,
 				createSubFn: createMonsterFormationSimple,
 			},
 		},
@@ -507,7 +508,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Abilities,
 		objLookupID:   lookup.L.AbilitiesID,
 		idToResFunc:   idToTypedAPIResource[seedtypes.Ability, Ability, TypedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetAbilityIDs,
+		retrieveQuery: config.Cfg.DB.GetAbilityIDs,
 		getSingleFunc: srv.getAbility,
 		retrieveFunc:  srv.retrieveAbilities,
 		subsections: map[ts.SectionName]Subsection{
@@ -525,7 +526,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookupID:      lookup.L.PlayerAbilitiesID,
 		idToResFunc:      idToNamedAPIResource[seedtypes.PlayerAbility, PlayerAbility, NamedAPIResource],
 		getMultipleQuery: getTypedAbilityIDsByName(srv, database.AbilityTypePlayerAbility),
-		retrieveQuery:    srv.Cfg.DB.GetPlayerAbilityIDs,
+		retrieveQuery:    config.Cfg.DB.GetPlayerAbilityIDs,
 		getSingleFunc:    srv.getPlayerAbility,
 		retrieveFunc:     srv.retrievePlayerAbilities,
 		subsections: map[ts.SectionName]Subsection{
@@ -533,7 +534,7 @@ func (E *Endpoints) Init(srv *Server) {
 				createSubFn: createPlayerAbilitySimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     srv.Cfg.DB.GetPlayerAbilityMonsterIDs,
+				dbQuery:     config.Cfg.DB.GetPlayerAbilityMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
 			},
@@ -548,7 +549,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookupID:      lookup.L.OverdriveAbilitiesID,
 		idToResFunc:      idToNamedAPIResource[seedtypes.OverdriveAbility, OverdriveAbility, NamedAPIResource],
 		getMultipleQuery: getTypedAbilityIDsByName(srv, database.AbilityTypeOverdriveAbility),
-		retrieveQuery:    srv.Cfg.DB.GetOverdriveAbilityIDs,
+		retrieveQuery:    config.Cfg.DB.GetOverdriveAbilityIDs,
 		getSingleFunc:    srv.getOverdriveAbility,
 		retrieveFunc:     srv.retrieveOverdriveAbilities,
 		subsections: map[ts.SectionName]Subsection{
@@ -565,7 +566,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.ItemAbilities,
 		objLookupID:   lookup.L.ItemAbilitiesID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.ItemAbility, ItemAbility, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetItemAbilityIDs,
+		retrieveQuery: config.Cfg.DB.GetItemAbilityIDs,
 		getSingleFunc: srv.getItemAbility,
 		retrieveFunc:  srv.retrieveItemAbilities,
 		subsections: map[ts.SectionName]Subsection{
@@ -583,7 +584,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookupID:      lookup.L.TriggerCommandsID,
 		idToResFunc:      idToNamedAPIResource[seedtypes.TriggerCommand, TriggerCommand, NamedAPIResource],
 		getMultipleQuery: getTypedAbilityIDsByName(srv, database.AbilityTypeTriggerCommand),
-		retrieveQuery:    srv.Cfg.DB.GetTriggerCommandIDs,
+		retrieveQuery:    config.Cfg.DB.GetTriggerCommandIDs,
 		getSingleFunc:    srv.getTriggerCommand,
 		retrieveFunc:     srv.retrieveTriggerCommands,
 		subsections: map[ts.SectionName]Subsection{
@@ -601,7 +602,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookupID:      lookup.L.MiscAbilitiesID,
 		idToResFunc:      idToNamedAPIResource[seedtypes.MiscAbility, MiscAbility, NamedAPIResource],
 		getMultipleQuery: getTypedAbilityIDsByName(srv, database.AbilityTypeMiscAbility),
-		retrieveQuery:    srv.Cfg.DB.GetMiscAbilityIDs,
+		retrieveQuery:    config.Cfg.DB.GetMiscAbilityIDs,
 		getSingleFunc:    srv.getMiscAbility,
 		retrieveFunc:     srv.retrieveMiscAbilities,
 		subsections: map[ts.SectionName]Subsection{
@@ -619,7 +620,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookupID:      lookup.L.EnemyAbilitiesID,
 		idToResFunc:      idToNamedAPIResource[seedtypes.EnemyAbility, EnemyAbility, NamedAPIResource],
 		getMultipleQuery: getTypedAbilityIDsByName(srv, database.AbilityTypeEnemyAbility),
-		retrieveQuery:    srv.Cfg.DB.GetEnemyAbilityIDs,
+		retrieveQuery:    config.Cfg.DB.GetEnemyAbilityIDs,
 		getSingleFunc:    srv.getEnemyAbility,
 		retrieveFunc:     srv.retrieveEnemyAbilities,
 		subsections: map[ts.SectionName]Subsection{
@@ -627,7 +628,7 @@ func (E *Endpoints) Init(srv *Server) {
 				createSubFn: createEnemyAbilitySimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     srv.Cfg.DB.GetEnemyAbilityMonsterIDs,
+				dbQuery:     config.Cfg.DB.GetEnemyAbilityMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
 			},
@@ -641,7 +642,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.AeonCommands,
 		objLookupID:   lookup.L.AeonCommandsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.AeonCommand, AeonCommand, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetAeonCommandIDs,
+		retrieveQuery: config.Cfg.DB.GetAeonCommandIDs,
 		getSingleFunc: srv.getAeonCommand,
 		retrieveFunc:  srv.retrieveAeonCommands,
 	}
@@ -653,16 +654,16 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.OverdriveCommands,
 		objLookupID:   lookup.L.OverdriveCommandsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.OverdriveCommand, OverdriveCommand, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetOverdriveCommandIDs,
+		retrieveQuery: config.Cfg.DB.GetOverdriveCommandIDs,
 		getSingleFunc: srv.getOverdriveCommand,
 		retrieveFunc:  srv.retrieveOverdriveCommands,
 		subsections: map[ts.SectionName]Subsection{
 			ts.SnOverdriveAbilities: {
-				dbQuery:     ToIntManyNull(srv.Cfg.DB.GetOverdriveCommandOverdriveAbilityIDs),
+				dbQuery:     ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveAbilityIDs),
 				createSubFn: createOverdriveAbilitySimple,
 			},
 			ts.SnOverdrives: {
-				dbQuery:     ToIntManyNull(srv.Cfg.DB.GetOverdriveCommandOverdriveIDs),
+				dbQuery:     ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveIDs),
 				createSubFn: createOverdriveSimple,
 			},
 		},
@@ -675,7 +676,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Overdrives,
 		objLookupID:   lookup.L.OverdrivesID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Overdrive, Overdrive, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetOverdriveIDs,
+		retrieveQuery: config.Cfg.DB.GetOverdriveIDs,
 		getSingleFunc: srv.getOverdrive,
 		retrieveFunc:  srv.retrieveOverdrives,
 		subsections: map[ts.SectionName]Subsection{
@@ -683,7 +684,7 @@ func (E *Endpoints) Init(srv *Server) {
 				createSubFn: createOverdriveSimple,
 			},
 			ts.SnOverdriveAbilities: {
-				dbQuery:     srv.Cfg.DB.GetOverdriveOverdriveAbilityIDs,
+				dbQuery:     config.Cfg.DB.GetOverdriveOverdriveAbilityIDs,
 				createSubFn: createOverdriveAbilitySimple,
 			},
 		},
@@ -696,12 +697,12 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.RonsoRages,
 		objLookupID:   lookup.L.RonsoRagesID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.RonsoRage, RonsoRage, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetRonsoRageIDs,
+		retrieveQuery: config.Cfg.DB.GetRonsoRageIDs,
 		getSingleFunc: srv.getRonsoRage,
 		retrieveFunc:  srv.retrieveRonsoRages,
 		subsections: map[ts.SectionName]Subsection{
 			ts.SnMonsters: {
-				dbQuery:     srv.Cfg.DB.GetRonsoRageMonsterIDs,
+				dbQuery:     config.Cfg.DB.GetRonsoRageMonsterIDs,
 				createSubFn: createMonsterSimple,
 				relationsFn: getMonsterSectionRelations,
 			},
@@ -715,12 +716,12 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Submenus,
 		objLookupID:   lookup.L.SubmenusID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Submenu, Submenu, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetSubmenuIDs,
+		retrieveQuery: config.Cfg.DB.GetSubmenuIDs,
 		getSingleFunc: srv.getSubmenu,
 		retrieveFunc:  srv.retrieveSubmenus,
 		subsections: map[ts.SectionName]Subsection{
 			ts.SnAbilities: {
-				dbQuery:     ToIntManyNull(srv.Cfg.DB.GetSubmenuAbilityIDs),
+				dbQuery:     ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
 			},
 		},
@@ -733,12 +734,12 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Topmenus,
 		objLookupID:   lookup.L.TopmenusID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Topmenu, Topmenu, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetTopmenuIDs,
+		retrieveQuery: config.Cfg.DB.GetTopmenuIDs,
 		getSingleFunc: srv.getTopmenu,
 		retrieveFunc:  srv.retrieveTopmenus,
 		subsections: map[ts.SectionName]Subsection{
 			ts.SnAbilities: {
-				dbQuery:     ToIntManyNull(srv.Cfg.DB.GetTopmenuAbilityIDs),
+				dbQuery:     ToIntManyNull(config.Cfg.DB.GetTopmenuAbilityIDs),
 				createSubFn: createAbilitySimple,
 			},
 		},
@@ -751,7 +752,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.MasterItems,
 		objLookupID:   lookup.L.MasterItemsID,
 		idToResFunc:   idToTypedAPIResource[seedtypes.MasterItem, MasterItem, TypedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetMasterItemIDs,
+		retrieveQuery: config.Cfg.DB.GetMasterItemIDs,
 		getSingleFunc: srv.getMasterItem,
 		retrieveFunc:  srv.retrieveMasterItems,
 		avlFunc:       filterAvlMasterItems,
@@ -764,13 +765,13 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Items,
 		objLookupID:   lookup.L.ItemsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Item, Item, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetItemIDs,
+		retrieveQuery: config.Cfg.DB.GetItemIDs,
 		getSingleFunc: srv.getItem,
 		retrieveFunc:  srv.retrieveItems,
 		avlFunc:       filterAvlItems,
 		subsections: map[ts.SectionName]Subsection{
 			ts.SnMixes: {
-				dbQuery:     srv.Cfg.DB.GetItemMixIDs,
+				dbQuery:     config.Cfg.DB.GetItemMixIDs,
 				createSubFn: createMixSimple,
 			},
 		},
@@ -783,7 +784,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Spheres,
 		objLookupID:   lookup.L.SpheresID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Sphere, Sphere, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetSphereIDs,
+		retrieveQuery: config.Cfg.DB.GetSphereIDs,
 		getSingleFunc: srv.getSphere,
 		retrieveFunc:  srv.retrieveSpheres,
 		avlFunc:       filterAvlSpheres,
@@ -796,7 +797,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.KeyItems,
 		objLookupID:   lookup.L.KeyItemsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.KeyItem, KeyItem, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetKeyItemIDs,
+		retrieveQuery: config.Cfg.DB.GetKeyItemIDs,
 		getSingleFunc: srv.getKeyItem,
 		retrieveFunc:  srv.retrieveKeyItems,
 		avlFunc:       filterAvlKeyItems,
@@ -809,7 +810,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Primers,
 		objLookupID:   lookup.L.PrimersID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Primer, Primer, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetPrimerIDs,
+		retrieveQuery: config.Cfg.DB.GetPrimerIDs,
 		getSingleFunc: srv.getPrimer,
 		retrieveFunc:  srv.retrievePrimers,
 		avlFunc:       filterAvlPrimers,
@@ -822,7 +823,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Mixes,
 		objLookupID:   lookup.L.MixesID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Mix, Mix, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetMixIDs,
+		retrieveQuery: config.Cfg.DB.GetMixIDs,
 		getSingleFunc: srv.getMix,
 		retrieveFunc:  srv.retrieveMixes,
 		subsections: map[ts.SectionName]Subsection{
@@ -839,7 +840,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.AutoAbilities,
 		objLookupID:   lookup.L.AutoAbilitiesID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.AutoAbility, AutoAbility, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetAutoAbilityIDs,
+		retrieveQuery: config.Cfg.DB.GetAutoAbilityIDs,
 		getSingleFunc: srv.getAutoAbility,
 		retrieveFunc:  srv.retrieveAutoAbilities,
 		avlFunc:       filterAvlAutoAbilities,
@@ -857,7 +858,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.EquipmentTables,
 		objLookupID:   lookup.L.EquipmentTablesID,
 		idToResFunc:   idToUnnamedAPIResource[seedtypes.EquipmentTable, EquipmentTable, UnnamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetEquipmentTableIDs,
+		retrieveQuery: config.Cfg.DB.GetEquipmentTableIDs,
 		getSingleFunc: srv.getEquipmentTable,
 		retrieveFunc:  srv.retrieveEquipmentTables,
 	}
@@ -869,7 +870,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.EquipmentNames,
 		objLookupID:   lookup.L.EquipmentNamesID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.EquipmentName, EquipmentName, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetEquipmentIDs,
+		retrieveQuery: config.Cfg.DB.GetEquipmentIDs,
 		getSingleFunc: srv.getEquipment,
 		retrieveFunc:  srv.retrieveEquipment,
 	}
@@ -881,7 +882,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.CelestialWeapons,
 		objLookupID:   lookup.L.CelestialWeaponsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.CelestialWeapon, CelestialWeapon, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetCelestialWeaponIDs,
+		retrieveQuery: config.Cfg.DB.GetCelestialWeaponIDs,
 		getSingleFunc: srv.getCelestialWeapon,
 		retrieveFunc:  srv.retrieveCelestialWeapons,
 		subsections: map[ts.SectionName]Subsection{
@@ -899,7 +900,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Stats,
 		objLookupID:   lookup.L.StatsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Stat, Stat, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetStatIDs,
+		retrieveQuery: config.Cfg.DB.GetStatIDs,
 		getSingleFunc: srv.getStat,
 		retrieveFunc:  srv.retrieveStats,
 	}
@@ -911,7 +912,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Properties,
 		objLookupID:   lookup.L.PropertiesID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Property, Property, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetPropertyIDs,
+		retrieveQuery: config.Cfg.DB.GetPropertyIDs,
 		getSingleFunc: srv.getProperty,
 		retrieveFunc:  srv.retrieveProperties,
 	}
@@ -923,7 +924,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.OverdriveModes,
 		objLookupID:   lookup.L.OverdriveModesID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.OverdriveMode, OverdriveMode, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetOverdriveModeIDs,
+		retrieveQuery: config.Cfg.DB.GetOverdriveModeIDs,
 		getSingleFunc: srv.getOverdriveMode,
 		retrieveFunc:  srv.retrieveOverdriveModes,
 	}
@@ -935,7 +936,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Elements,
 		objLookupID:   lookup.L.ElementsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Element, Element, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetElementIDs,
+		retrieveQuery: config.Cfg.DB.GetElementIDs,
 		getSingleFunc: srv.getElement,
 		retrieveFunc:  srv.retrieveElements,
 	}
@@ -947,7 +948,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.StatusConditions,
 		objLookupID:   lookup.L.StatusConditionsID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.StatusCondition, StatusCondition, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetStatusConditionIDs,
+		retrieveQuery: config.Cfg.DB.GetStatusConditionIDs,
 		getSingleFunc: srv.getStatusCondition,
 		retrieveFunc:  srv.retrieveStatusConditions,
 	}
@@ -959,7 +960,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     lookup.L.Modifiers,
 		objLookupID:   lookup.L.ModifiersID,
 		idToResFunc:   idToNamedAPIResource[seedtypes.Modifier, Modifier, NamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetModifierIDs,
+		retrieveQuery: config.Cfg.DB.GetModifierIDs,
 		getSingleFunc: srv.getModifier,
 		retrieveFunc:  srv.retrieveModifiers,
 	}
@@ -971,7 +972,7 @@ func (E *Endpoints) Init(srv *Server) {
 		objLookup:     nil,
 		objLookupID:   lookup.L.AgilityTiersID,
 		idToResFunc:   idToUnnamedAPIResource[seedtypes.AgilityTier, AgilityTier, UnnamedAPIResource],
-		retrieveQuery: srv.Cfg.DB.GetAgilityTierIDs,
+		retrieveQuery: config.Cfg.DB.GetAgilityTierIDs,
 		getSingleFunc: srv.getAgilityTier,
 		retrieveFunc:  srv.retrieveAgilityTiers,
 	}

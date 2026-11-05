@@ -6,6 +6,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -34,8 +35,8 @@ func (q QueryParam) sliceIDs[F seedtypes.Lookupable](srv *Server, r *http.Reques
 		}
 		ids = slices.Concat(ids, idsNew)
 
-		if len(ids) > srv.Cfg.FetchLimit {
-			return nil, newHTTPErrorFetchLimit(srv.Cfg.FetchLimit)
+		if len(ids) > config.Cfg.FetchLimit {
+			return nil, newHTTPErrorFetchLimit(config.Cfg.FetchLimit)
 		}
 	}
 

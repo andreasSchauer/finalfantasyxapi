@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -14,11 +15,11 @@ type AgilityParams struct {
 	MaxICV      *int32             `json:"max_icv"`
 }
 
-func getAgilityTierDB(srv *Server, r *http.Request, stats []BaseStat) (seedtypes.AgilityTier, error) {
+func getAgilityTierDB(r *http.Request, stats []BaseStat) (seedtypes.AgilityTier, error) {
 	agilityStat := getBaseStat("agility", stats)
 	agility := agilityStat.Value
 
-	dbAgilityTier, err := srv.Cfg.DB.GetAgilityTierByAgility(r.Context(), agility)
+	dbAgilityTier, err := config.Cfg.DB.GetAgilityTierByAgility(r.Context(), agility)
 	if err != nil {
 		return seedtypes.AgilityTier{}, newHTTPError(http.StatusInternalServerError, "couldn't extract agility parameters", err)
 	}

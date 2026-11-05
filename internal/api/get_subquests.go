@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -37,6 +38,6 @@ func (srv *Server) retrieveSubquests(r *http.Request, i handlerInput[seedtypes.S
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryBool(r, ids, ts.QpnRepeatable, srv.Cfg.DB.GetSubquestIDsByRepeatable),
+		i.queryBool(r, ids, ts.QpnRepeatable, config.Cfg.DB.GetSubquestIDsByRepeatable),
 	})
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -61,7 +62,7 @@ func getEquipmentRelationships(srv *Server, r *http.Request, equipment seedtypes
 
 	if table.Classification == string(database.EquipClassCelestialWeapon) {
 		char, _ := lookup.GetResource(equipment.CharacterName, lookup.L.Characters)
-		cwRes, err := E.CelestialWeapons.dbGetRelationPtr(srv, r.Context(), char, srv.Cfg.DB.GetCharacterCelestialWeaponID)
+		cwRes, err := E.CelestialWeapons.dbGetRelationPtr(srv, r.Context(), char, config.Cfg.DB.GetCharacterCelestialWeaponID)
 		if err != nil {
 			return EquipmentName{}, err
 		}
@@ -72,7 +73,7 @@ func getEquipmentRelationships(srv *Server, r *http.Request, equipment seedtypes
 }
 
 func getEquipmentTableRef(srv *Server, r *http.Request, ctx context.Context, queryParam QueryParam, equipment seedtypes.EquipmentName) (UnnamedAPIResource, error) {
-	tables, err := E.EquipmentTables.dbGetRelations(srv, ctx, equipment, srv.Cfg.DB.GetEquipmentEquipmentTableIDs)
+	tables, err := E.EquipmentTables.dbGetRelations(srv, ctx, equipment, config.Cfg.DB.GetEquipmentEquipmentTableIDs)
 	if err != nil {
 		return UnnamedAPIResource{}, err
 	}

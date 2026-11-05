@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -42,7 +43,7 @@ func (srv *Server) retrieveOverdrives(r *http.Request, i handlerInput[seedtypes.
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryIntList(srv, r, ids, ts.QpnRank, srv.Cfg.DB.GetOverdriveIDsByRank),
-		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(srv.Cfg.DB.GetOverdriveIDsByUser)),
+		i.queryIntList(srv, r, ids, ts.QpnRank, config.Cfg.DB.GetOverdriveIDsByRank),
+		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(config.Cfg.DB.GetOverdriveIDsByUser)),
 	})
 }

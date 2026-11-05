@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
@@ -20,7 +21,7 @@ func getStatusConditionRelationships(srv *Server, r *http.Request, status seedty
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(srv, ctx, status, srv.Cfg.DB.GetStatusConditionAutoAbilityIDs)
+		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(srv, ctx, status, config.Cfg.DB.GetStatusConditionAutoAbilityIDs)
 		return err
 	})
 
@@ -41,8 +42,8 @@ func getStatusConditionRelationships(srv *Server, r *http.Request, status seedty
 	g.Go(func() error {
 		var err error
 		rel.RemovedBy, err = getStatusRemoval(srv, ctx, status, StatusInteractionQueries{
-			Abilities:        srv.Cfg.DB.GetStatusConditionAbilityIDsRemoved,
-			StatusConditions: srv.Cfg.DB.GetStatusConditionRemovedConditionIDs,
+			Abilities:        config.Cfg.DB.GetStatusConditionAbilityIDsRemoved,
+			StatusConditions: config.Cfg.DB.GetStatusConditionRemovedConditionIDs,
 		})
 		return err
 	})

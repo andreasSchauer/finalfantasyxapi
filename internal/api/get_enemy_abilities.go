@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -16,7 +17,7 @@ func (srv *Server) getEnemyAbility(r *http.Request, i handlerInput[seedtypes.Ene
 		return EnemyAbility{}, err
 	}
 
-	monsters, err := E.Monsters.dbGetRelations(srv, r.Context(), ability, srv.Cfg.DB.GetEnemyAbilityMonsterIDs)
+	monsters, err := E.Monsters.dbGetRelations(srv, r.Context(), ability, config.Cfg.DB.GetEnemyAbilityMonsterIDs)
 	if err != nil {
 		return EnemyAbility{}, err
 	}
@@ -46,7 +47,7 @@ func (srv *Server) retrieveEnemyAbilities(r *http.Request, i handlerInput[seedty
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, srv.Cfg.DB.GetEnemyAbilityIDsByMonster),
+		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetEnemyAbilityIDsByMonster),
 		i.queryEnumList(srv, r, enums.T.DamageType, ids, ts.QpnDamageType, getTypedAbilityIDsByDamageType(srv, abilityType)),
 		i.queryEnumList(srv, r, enums.T.AttackType, ids, ts.QpnAttackType, getTypedAbilityIDsByAttackType(srv, abilityType)),
 		i.queryEnumList(srv, r, enums.T.TargetType, ids, ts.QpnTargetType, getTypedAbilityIDsByTargetType(srv, abilityType)),

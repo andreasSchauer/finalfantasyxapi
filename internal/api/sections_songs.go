@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -46,22 +47,22 @@ func createSongSimple(srv *Server, _ *http.Request, id int32, _ Subsection) (Sim
 }
 
 func (srv *Server) getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	bgSongIDs, err := srv.Cfg.DB.GetLocationBackgroundMusicSongIDs(ctx, id)
+	bgSongIDs, err := config.Cfg.DB.GetLocationBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of location with id '%d'", err)
 	}
 
-	cueSongIDs, err := srv.Cfg.DB.GetLocationCueSongIDs(ctx, id)
+	cueSongIDs, err := config.Cfg.DB.GetLocationCueSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of location with id '%d'", err)
 	}
 
-	bossSongIDs, err := srv.Cfg.DB.GetLocationBossSongIDs(ctx, id)
+	bossSongIDs, err := config.Cfg.DB.GetLocationBossSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get boss song of location with id '%d'", err)
 	}
 
-	fmvSongIDs, err := srv.Cfg.DB.GetLocationFMVSongIDs(ctx, id)
+	fmvSongIDs, err := config.Cfg.DB.GetLocationFMVSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of location with id '%d'", err)
 	}
@@ -71,22 +72,22 @@ func (srv *Server) getLocationSongIDs(ctx context.Context, id int32) ([]int32, e
 }
 
 func (srv *Server) getSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	bgSongIDs, err := srv.Cfg.DB.GetSublocationBackgroundMusicSongIDs(ctx, id)
+	bgSongIDs, err := config.Cfg.DB.GetSublocationBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of sublocation with id '%d'", err)
 	}
 
-	cueSongIDs, err := srv.Cfg.DB.GetSublocationCueSongIDs(ctx, id)
+	cueSongIDs, err := config.Cfg.DB.GetSublocationCueSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of sublocation with id '%d'", err)
 	}
 
-	bossSongIDs, err := srv.Cfg.DB.GetSublocationBossSongIDs(ctx, id)
+	bossSongIDs, err := config.Cfg.DB.GetSublocationBossSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get boss song of sublocation with id '%d'", err)
 	}
 
-	fmvSongIDs, err := srv.Cfg.DB.GetSublocationFMVSongIDs(ctx, id)
+	fmvSongIDs, err := config.Cfg.DB.GetSublocationFMVSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of sublocation with id '%d'", err)
 	}
@@ -96,22 +97,22 @@ func (srv *Server) getSublocationSongIDs(ctx context.Context, id int32) ([]int32
 }
 
 func (srv *Server) getAreaSongIDs(ctx context.Context, id int32) ([]int32, error) {
-	bgSongIDs, err := srv.Cfg.DB.GetAreaBackgroundMusicSongIDs(ctx, id)
+	bgSongIDs, err := config.Cfg.DB.GetAreaBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of area with id '%d'", err)
 	}
 
-	cueSongIDs, err := ToIntManyNull(srv.Cfg.DB.GetAreaCueSongIDs)(ctx, id)
+	cueSongIDs, err := ToIntManyNull(config.Cfg.DB.GetAreaCueSongIDs)(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of area with id '%d'", err)
 	}
 
-	bossSongIDs, err := srv.Cfg.DB.GetAreaBossSongIDs(ctx, id)
+	bossSongIDs, err := config.Cfg.DB.GetAreaBossSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get boss song of area with id '%d'", err)
 	}
 
-	fmvSongIDs, err := srv.Cfg.DB.GetAreaFMVSongIDs(ctx, id)
+	fmvSongIDs, err := config.Cfg.DB.GetAreaFMVSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of area with id '%d'", err)
 	}

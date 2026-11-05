@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -13,13 +14,13 @@ func getPrimerRelationships(srv *Server, r *http.Request, primer seedtypes.Prime
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = E.Treasures.dbGetRelations(srv, ctx, primer, srv.Cfg.DB.GetPrimerTreasureIDs)
+		rel.Treasures, err = E.Treasures.dbGetRelations(srv, ctx, primer, config.Cfg.DB.GetPrimerTreasureIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = E.Areas.dbGetRelations(srv, ctx, primer, srv.Cfg.DB.GetPrimerAreaIDs)
+		rel.Areas, err = E.Areas.dbGetRelations(srv, ctx, primer, config.Cfg.DB.GetPrimerAreaIDs)
 		return err
 	})
 

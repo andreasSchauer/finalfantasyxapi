@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"slices"
 	"strings"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 )
 
 // checks for emptiness of int-list-queryParam and converts its input into a slice of valid integers
@@ -33,8 +35,8 @@ func (q QueryParam) sliceInts(srv *Server, r *http.Request, query string) ([]int
 		}
 		ints = slices.Concat(ints, intsNew)
 
-		if len(ints) > srv.Cfg.FetchLimit {
-			return nil, newHTTPErrorFetchLimit(srv.Cfg.FetchLimit)
+		if len(ints) > config.Cfg.FetchLimit {
+			return nil, newHTTPErrorFetchLimit(config.Cfg.FetchLimit)
 		}
 	}
 

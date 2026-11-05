@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -48,6 +49,6 @@ func (srv *Server) retrieveStatusConditions(r *http.Request, i handlerInput[seed
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.StatusConditionCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetStatusConditionIDsByCategory),
+		i.queryEnumList(srv, r, enums.T.StatusConditionCategory, ids, ts.QpnCategory, config.Cfg.DB.GetStatusConditionIDsByCategory),
 	})
 }

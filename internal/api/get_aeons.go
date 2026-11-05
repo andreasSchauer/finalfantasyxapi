@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -62,6 +63,6 @@ func (srv *Server) retrieveAeons(r *http.Request, i handlerInput[seedtypes.Aeon,
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryBool(r, ids, ts.QpnOptional, srv.Cfg.DB.GetAeonIDsOptional),
+		i.queryBool(r, ids, ts.QpnOptional, config.Cfg.DB.GetAeonIDsOptional),
 	})
 }

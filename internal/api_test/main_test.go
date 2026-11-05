@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 )
 
 var testSrv api.Server
@@ -25,6 +26,6 @@ func TestMain(m *testing.M) {
 	}
 
 	code := m.Run()
-	_ = testSrv.Cfg.DBConn.Close()
+	_ = config.Cfg.DBConn.Close()
 	os.Exit(code)
 }

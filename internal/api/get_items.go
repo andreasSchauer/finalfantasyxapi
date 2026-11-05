@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -60,10 +61,10 @@ func (srv *Server) retrieveItems(r *http.Request, i handlerInput[seedtypes.Item,
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.ItemCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetItemIDsCategory),
-		i.queryBool2(r, ids, ts.QpnHasAbility, srv.Cfg.DB.GetItemIDsWithAbility),
-		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, srv.Cfg.DB.GetItemIDsByRelatedStat),
-		i.queryValueList(srv, r, ids, ts.QpnMethods, srv.Cfg.DB.GetItemIDsByMethods),
+		i.queryEnumList(srv, r, enums.T.ItemCategory, ids, ts.QpnCategory, config.Cfg.DB.GetItemIDsCategory),
+		i.queryBool2(r, ids, ts.QpnHasAbility, config.Cfg.DB.GetItemIDsWithAbility),
+		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, config.Cfg.DB.GetItemIDsByRelatedStat),
+		i.queryValueList(srv, r, ids, ts.QpnMethods, config.Cfg.DB.GetItemIDsByMethods),
 		i.queryIDWrapper(srv, r, ids, ts.QpnLocation, E.Locations.objLookup, getItemsByLocation),
 		i.queryIDWrapper(srv, r, ids, ts.QpnSublocation, E.Sublocations.objLookup, getItemsBySublocation),
 		i.queryIDWrapper(srv, r, ids, ts.QpnArea, E.Areas.objLookup, getItemsByArea),

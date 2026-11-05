@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
@@ -21,7 +22,7 @@ func getCelestialWeaponRelationships(srv *Server, r *http.Request, cw seedtypes.
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
-		tables, err := E.EquipmentTables.dbGetRelations(srv, ctx, equipment, srv.Cfg.DB.GetEquipmentEquipmentTableIDs)
+		tables, err := E.EquipmentTables.dbGetRelations(srv, ctx, equipment, config.Cfg.DB.GetEquipmentEquipmentTableIDs)
 		if err != nil {
 			return err
 		}
@@ -32,12 +33,12 @@ func getCelestialWeaponRelationships(srv *Server, r *http.Request, cw seedtypes.
 
 	g.Go(func() error {
 		var err error
-		rel.WpnTreasure, err = E.Treasures.dbGetRelation(srv, ctx, cw, ToIntOneNull(srv.Cfg.DB.GetCelestialWeaponTreasureID))
+		rel.WpnTreasure, err = E.Treasures.dbGetRelation(srv, ctx, cw, ToIntOneNull(config.Cfg.DB.GetCelestialWeaponTreasureID))
 		return err
 	})
 
 	g.Go(func() error {
-		crestTreasures, err := E.Treasures.dbGetRelations(srv, ctx, crest, srv.Cfg.DB.GetKeyItemTreasureIDs)
+		crestTreasures, err := E.Treasures.dbGetRelations(srv, ctx, crest, config.Cfg.DB.GetKeyItemTreasureIDs)
 		if err != nil {
 			return err
 		}
@@ -46,7 +47,7 @@ func getCelestialWeaponRelationships(srv *Server, r *http.Request, cw seedtypes.
 	})
 
 	g.Go(func() error {
-		sigilQuests, err := E.Quests.dbGetRelations(srv, ctx, sigil, srv.Cfg.DB.GetKeyItemQuestIDs)
+		sigilQuests, err := E.Quests.dbGetRelations(srv, ctx, sigil, config.Cfg.DB.GetKeyItemQuestIDs)
 		if err != nil {
 			return err
 		}

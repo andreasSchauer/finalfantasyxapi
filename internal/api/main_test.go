@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 )
 
 var testSrv Server
@@ -24,6 +26,6 @@ func TestMain(m *testing.M) {
 	testSrv.InitGlobals()
 
 	code := m.Run()
-	_ = testSrv.Cfg.DBConn.Close()
+	_ = config.Cfg.DBConn.Close()
 	os.Exit(code)
 }

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -34,7 +35,7 @@ func (srv *Server) retrieveQuests(r *http.Request, i handlerInput[seedtypes.Ques
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnum(r, enums.T.QuestType, ids, ts.QpnType, srv.Cfg.DB.GetQuestIDsByType),
-		i.queryBool(r, ids, ts.QpnRepeatable, srv.Cfg.DB.GetQuestIDsByRepeatable),
+		i.queryEnum(r, enums.T.QuestType, ids, ts.QpnType, config.Cfg.DB.GetQuestIDsByType),
+		i.queryBool(r, ids, ts.QpnRepeatable, config.Cfg.DB.GetQuestIDsByRepeatable),
 	})
 }

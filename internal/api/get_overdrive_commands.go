@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -12,7 +13,7 @@ func (srv *Server) getOverdriveCommand(r *http.Request, i handlerInput[seedtypes
 		return OverdriveCommand{}, err
 	}
 
-	overdrives, err := E.Overdrives.dbGetRelations(srv, r.Context(), command, ToIntManyNull(srv.Cfg.DB.GetOverdriveCommandOverdriveIDs))
+	overdrives, err := E.Overdrives.dbGetRelations(srv, r.Context(), command, ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveIDs))
 	if err != nil {
 		return OverdriveCommand{}, err
 	}

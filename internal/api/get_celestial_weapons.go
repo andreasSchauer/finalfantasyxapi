@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -44,6 +45,6 @@ func (srv *Server) retrieveCelestialWeapons(r *http.Request, i handlerInput[seed
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnum(r, enums.T.CelestialFormula, ids, ts.QpnFormula, srv.Cfg.DB.GetCelestialWeaponIDsByFormula),
+		i.queryEnum(r, enums.T.CelestialFormula, ids, ts.QpnFormula, config.Cfg.DB.GetCelestialWeaponIDsByFormula),
 	})
 }

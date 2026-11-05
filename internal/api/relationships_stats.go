@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
@@ -29,7 +30,7 @@ func getStatRelationships(srv *Server, r *http.Request, stat seedtypes.Stat) (St
 
 	g.Go(func() error {
 		var err error
-		rel.Spheres, err = E.Spheres.dbGetRelations(srv, ctx, stat, srv.Cfg.DB.GetStatSphereIDs)
+		rel.Spheres, err = E.Spheres.dbGetRelations(srv, ctx, stat, config.Cfg.DB.GetStatSphereIDs)
 		return err
 	})
 
@@ -96,23 +97,23 @@ func getStatQueries(srv *Server, r *http.Request) (StatQueries, error) {
 
 	if changesOnly {
 		queries = StatQueries{
-			AutoAbilities:      srv.Cfg.DB.GetStatAutoAbilityIDsStatChange,
-			PlayerAbilities:    srv.Cfg.DB.GetStatPlayerAbilityIDsStatChange,
-			OverdriveAbilities: srv.Cfg.DB.GetStatOverdriveAbilityIDsStatChange,
-			ItemAbilities:      srv.Cfg.DB.GetStatItemAbilityIDsStatChange,
-			TriggerCommands:    srv.Cfg.DB.GetStatTriggerCommandIDsStatChange,
-			StatusConditions:   srv.Cfg.DB.GetStatStatusConditionIDsStatChange,
+			AutoAbilities:      config.Cfg.DB.GetStatAutoAbilityIDsStatChange,
+			PlayerAbilities:    config.Cfg.DB.GetStatPlayerAbilityIDsStatChange,
+			OverdriveAbilities: config.Cfg.DB.GetStatOverdriveAbilityIDsStatChange,
+			ItemAbilities:      config.Cfg.DB.GetStatItemAbilityIDsStatChange,
+			TriggerCommands:    config.Cfg.DB.GetStatTriggerCommandIDsStatChange,
+			StatusConditions:   config.Cfg.DB.GetStatStatusConditionIDsStatChange,
 			Properties:         nil,
 		}
 	} else {
 		queries = StatQueries{
-			AutoAbilities:      srv.Cfg.DB.GetStatAutoAbilityIDs,
-			PlayerAbilities:    srv.Cfg.DB.GetStatPlayerAbilityIDs,
-			OverdriveAbilities: srv.Cfg.DB.GetStatOverdriveAbilityIDs,
-			ItemAbilities:      srv.Cfg.DB.GetStatItemAbilityIDs,
-			TriggerCommands:    srv.Cfg.DB.GetStatTriggerCommandIDs,
-			StatusConditions:   srv.Cfg.DB.GetStatStatusConditionIDs,
-			Properties:         srv.Cfg.DB.GetStatPropertyIDs,
+			AutoAbilities:      config.Cfg.DB.GetStatAutoAbilityIDs,
+			PlayerAbilities:    config.Cfg.DB.GetStatPlayerAbilityIDs,
+			OverdriveAbilities: config.Cfg.DB.GetStatOverdriveAbilityIDs,
+			ItemAbilities:      config.Cfg.DB.GetStatItemAbilityIDs,
+			TriggerCommands:    config.Cfg.DB.GetStatTriggerCommandIDs,
+			StatusConditions:   config.Cfg.DB.GetStatStatusConditionIDs,
+			Properties:         config.Cfg.DB.GetStatPropertyIDs,
 		}
 	}
 

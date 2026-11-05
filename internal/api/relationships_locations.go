@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -19,25 +20,25 @@ func getLocationRelationships(srv *Server, r *http.Request, location seedtypes.L
 
 	g.Go(func() error {
 		var err error
-		rel.ConnectedLocations, err = E.Locations.dbGetRelations(srv, ctx, location, srv.Cfg.DB.GetConnectedLocationIDs)
+		rel.ConnectedLocations, err = E.Locations.dbGetRelations(srv, ctx, location, config.Cfg.DB.GetConnectedLocationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Sublocations, err = E.Sublocations.dbGetRelations(srv, ctx, location, srv.Cfg.DB.GetLocationSublocationIDs)
+		rel.Sublocations, err = E.Sublocations.dbGetRelations(srv, ctx, location, config.Cfg.DB.GetLocationSublocationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Characters, err = E.Characters.dbGetRelations(srv, ctx, location, srv.Cfg.DB.GetLocationCharacterIDs)
+		locRel.Characters, err = E.Characters.dbGetRelations(srv, ctx, location, config.Cfg.DB.GetLocationCharacterIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Aeons, err = E.Aeons.dbGetRelations(srv, ctx, location, srv.Cfg.DB.GetLocationAeonIDs)
+		locRel.Aeons, err = E.Aeons.dbGetRelations(srv, ctx, location, config.Cfg.DB.GetLocationAeonIDs)
 		return err
 	})
 
@@ -74,17 +75,17 @@ func getLocationRelationships(srv *Server, r *http.Request, location seedtypes.L
 	g.Go(func() error {
 		var err error
 		locRel.Music, err = getMusicLocBased(srv, ctx, location, LocBasedMusicQueries{
-			CueSongs:  srv.Cfg.DB.GetLocationCueSongIDs,
-			BmSongs:   srv.Cfg.DB.GetLocationBackgroundMusicSongIDs,
-			FMVSongs:  srv.Cfg.DB.GetLocationFMVSongIDs,
-			BossMusic: srv.Cfg.DB.GetLocationBossSongIDs,
+			CueSongs:  config.Cfg.DB.GetLocationCueSongIDs,
+			BmSongs:   config.Cfg.DB.GetLocationBackgroundMusicSongIDs,
+			FMVSongs:  config.Cfg.DB.GetLocationFMVSongIDs,
+			BossMusic: config.Cfg.DB.GetLocationBossSongIDs,
 		})
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.FMVs, err = E.FMVs.dbGetRelations(srv, ctx, location, srv.Cfg.DB.GetLocationFmvIDs)
+		locRel.FMVs, err = E.FMVs.dbGetRelations(srv, ctx, location, config.Cfg.DB.GetLocationFmvIDs)
 		return err
 	})
 

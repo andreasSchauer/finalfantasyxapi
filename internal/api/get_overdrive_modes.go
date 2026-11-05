@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -34,6 +35,6 @@ func (srv *Server) retrieveOverdriveModes(r *http.Request, i handlerInput[seedty
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnum(r, enums.T.OverdriveModeType, ids, ts.QpnType, srv.Cfg.DB.GetOverdriveModeIDsByType),
+		i.queryEnum(r, enums.T.OverdriveModeType, ids, ts.QpnType, config.Cfg.DB.GetOverdriveModeIDsByType),
 	})
 }

@@ -13,6 +13,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var Cfg Config
+
 type Config struct {
 	DB          *database.Queries
 	DBConn      *sql.DB

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -46,9 +47,9 @@ func (srv *Server) retrieveEquipment(r *http.Request, i handlerInput[seedtypes.E
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryIDList(srv, r, ids, ts.QpnAutoAbilities, lookup.L.AutoAbilities, srv.Cfg.DB.GetEquipmentIDsByAutoAbility),
-		i.queryNameID(r, ids, ts.QpnCharacter, E.Characters.resTypeSingle, E.Characters.objLookup, srv.Cfg.DB.GetEquipmentIDsByCharacter),
-		i.queryEnum(r, enums.T.EquipType, ids, ts.QpnType, srv.Cfg.DB.GetEquipmentIDsByEquipType),
-		i.queryBool2(r, ids, ts.QpnCelestialWeapon, srv.Cfg.DB.GetEquipmentIDsCelestialWeapon),
+		i.queryIDList(srv, r, ids, ts.QpnAutoAbilities, lookup.L.AutoAbilities, config.Cfg.DB.GetEquipmentIDsByAutoAbility),
+		i.queryNameID(r, ids, ts.QpnCharacter, E.Characters.resTypeSingle, E.Characters.objLookup, config.Cfg.DB.GetEquipmentIDsByCharacter),
+		i.queryEnum(r, enums.T.EquipType, ids, ts.QpnType, config.Cfg.DB.GetEquipmentIDsByEquipType),
+		i.queryBool2(r, ids, ts.QpnCelestialWeapon, config.Cfg.DB.GetEquipmentIDsCelestialWeapon),
 	})
 }

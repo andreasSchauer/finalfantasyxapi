@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -54,8 +55,8 @@ func (srv *Server) retrieveMasterItems(r *http.Request, i handlerInput[seedtypes
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.ItemType, ids, ts.QpnType, srv.Cfg.DB.GetMasterItemIDsByType),
-		i.queryValueList(srv, r, ids, ts.QpnMethods, srv.Cfg.DB.GetMasterItemIDsByMethods),
+		i.queryEnumList(srv, r, enums.T.ItemType, ids, ts.QpnType, config.Cfg.DB.GetMasterItemIDsByType),
+		i.queryValueList(srv, r, ids, ts.QpnMethods, config.Cfg.DB.GetMasterItemIDsByMethods),
 		i.queryIDWrapper(srv, r, ids, ts.QpnLocation, E.Locations.objLookup, getMasterItemsByLocation),
 		i.queryIDWrapper(srv, r, ids, ts.QpnSublocation, E.Sublocations.objLookup, getMasterItemsBySublocation),
 		i.queryIDWrapper(srv, r, ids, ts.QpnArea, E.Areas.objLookup, getMasterItemsByArea),

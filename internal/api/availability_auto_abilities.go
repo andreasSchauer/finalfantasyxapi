@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -38,7 +39,7 @@ func filterAvlAutoAbilities(srv *Server, r *http.Request, inputIDs []int32) ([]i
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.FilterAutoAbilityIDsByAvailability(r.Context(), database.FilterAutoAbilityIDsByAvailabilityParams{
+	dbIDs, err := config.Cfg.DB.FilterAutoAbilityIDsByAvailability(r.Context(), database.FilterAutoAbilityIDsByAvailabilityParams{
 		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,

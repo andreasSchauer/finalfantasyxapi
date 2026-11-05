@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -21,25 +22,25 @@ func getCharacterRelationships(srv *Server, r *http.Request, char seedtypes.Char
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = E.CelestialWeapons.dbGetRelationPtr(srv, ctx, char, srv.Cfg.DB.GetCharacterCelestialWeaponID)
+		rel.CelestialWeapon, err = E.CelestialWeapons.dbGetRelationPtr(srv, ctx, char, config.Cfg.DB.GetCharacterCelestialWeaponID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveCommand, err = E.OverdriveCommands.dbGetRelationPtr(srv, ctx, char, srv.Cfg.DB.GetCharacterOverdriveCommandID)
+		rel.OverdriveCommand, err = E.OverdriveCommands.dbGetRelationPtr(srv, ctx, char, config.Cfg.DB.GetCharacterOverdriveCommandID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = E.CharacterClasses.dbGetRelations(srv, ctx, char, srv.Cfg.DB.GetCharacterCharClassIDs)
+		rel.CharacterClasses, err = E.CharacterClasses.dbGetRelations(srv, ctx, char, config.Cfg.DB.GetCharacterCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, char, srv.Cfg.DB.GetCharacterDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, char, config.Cfg.DB.GetCharacterDefaultAbilityIDs)
 		return err
 	})
 
@@ -47,14 +48,14 @@ func getCharacterRelationships(srv *Server, r *http.Request, char seedtypes.Char
 		g.Go(func() error {
 			var err error
 			rel.StdSphereGrid = convertObjPtr(srv, char.StdSphereGrid, convertSphereGrid)
-			rel.StdSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, char, srv.Cfg.DB.GetCharacterSgAbilityIDs)
+			rel.StdSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, char, config.Cfg.DB.GetCharacterSgAbilityIDs)
 			return err
 		})
 
 		g.Go(func() error {
 			var err error
 			rel.ExpSphereGrid = convertObjPtr(srv, char.ExpSphereGrid, convertSphereGrid)
-			rel.ExpSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, char, srv.Cfg.DB.GetCharacterEgAbilityIDs)
+			rel.ExpSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, char, config.Cfg.DB.GetCharacterEgAbilityIDs)
 			return err
 		})
 	}

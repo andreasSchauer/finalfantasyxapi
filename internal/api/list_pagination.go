@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -70,7 +71,7 @@ func createPreviousURL(srv *Server, r *http.Request, offset, limit int) *string 
 	q.Set(string(ts.QpnLimit), strconv.Itoa(limit))
 	q.Set(string(ts.QpnOffset), strconv.Itoa(previousOffset))
 
-	previousURL := fmt.Sprintf("http://%s%s?%s", srv.Cfg.Host, path, q.Encode())
+	previousURL := fmt.Sprintf("http://%s%s?%s", config.Cfg.Host, path, q.Encode())
 	return &previousURL
 }
 
@@ -86,6 +87,6 @@ func createNextURL(srv *Server, r *http.Request, offset, limit, size int) *strin
 	q.Set(string(ts.QpnLimit), strconv.Itoa(limit))
 	q.Set(string(ts.QpnOffset), strconv.Itoa(nextOffset))
 
-	nextURL := fmt.Sprintf("http://%s%s?%s", srv.Cfg.Host, path, q.Encode())
+	nextURL := fmt.Sprintf("http://%s%s?%s", config.Cfg.Host, path, q.Encode())
 	return &nextURL
 }

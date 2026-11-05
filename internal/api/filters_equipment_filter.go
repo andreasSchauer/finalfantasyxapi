@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -28,7 +29,7 @@ func filterShopsEquipment(srv *Server, r *http.Request, ctx context.Context) ([]
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetShopIDsEquipmentFilter(ctx, database.GetShopIDsEquipmentFilterParams{
+	dbIDs, err := config.Cfg.DB.GetShopIDsEquipmentFilter(ctx, database.GetShopIDsEquipmentFilterParams{
 		AutoAbilityID: autoAbilityID,
 		CharacterID:   charID,
 		EmptySlots:    h.SliceOrNil(emptySlots),
@@ -58,7 +59,7 @@ func filterTreasuresEquipment(srv *Server, r *http.Request, ctx context.Context)
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetTreasureIDsEquipmentFilter(ctx, database.GetTreasureIDsEquipmentFilterParams{
+	dbIDs, err := config.Cfg.DB.GetTreasureIDsEquipmentFilter(ctx, database.GetTreasureIDsEquipmentFilterParams{
 		AutoAbilityID: autoAbilityID,
 		CharacterID:   charID,
 		EmptySlots:    h.SliceOrNil(emptySlots),

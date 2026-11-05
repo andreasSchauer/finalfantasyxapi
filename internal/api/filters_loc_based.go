@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -18,7 +19,7 @@ func getAreasByItem(srv *Server, r *http.Request, ctx context.Context, id int32)
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetAreaIDsWithItemFromMethods(ctx, database.GetAreaIDsWithItemFromMethodsParams{
+	dbIDs, err := config.Cfg.DB.GetAreaIDsWithItemFromMethods(ctx, database.GetAreaIDsWithItemFromMethodsParams{
 		ItemID:  id,
 		Methods: h.SliceOrNil(methods),
 	})
@@ -38,7 +39,7 @@ func getSublocationsByItem(srv *Server, r *http.Request, ctx context.Context, id
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetSublocationIDsWithItemFromMethods(ctx, database.GetSublocationIDsWithItemFromMethodsParams{
+	dbIDs, err := config.Cfg.DB.GetSublocationIDsWithItemFromMethods(ctx, database.GetSublocationIDsWithItemFromMethodsParams{
 		ItemID:  id,
 		Methods: h.SliceOrNil(methods),
 	})
@@ -58,7 +59,7 @@ func getLocationsByItem(srv *Server, r *http.Request, ctx context.Context, id in
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetLocationIDsWithItemFromMethods(ctx, database.GetLocationIDsWithItemFromMethodsParams{
+	dbIDs, err := config.Cfg.DB.GetLocationIDsWithItemFromMethods(ctx, database.GetLocationIDsWithItemFromMethodsParams{
 		ItemID:  id,
 		Methods: h.SliceOrNil(methods),
 	})

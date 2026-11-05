@@ -6,13 +6,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 )
 
-type Server struct {
-	Cfg *config.Config
-}
+type Server struct {}
 
 func (srv *Server) Init() error {
-	srv.Cfg = &config.Config{}
-	err := srv.Cfg.Init()
+	err := config.Cfg.Init()
 	if err != nil {
 		return err
 	}

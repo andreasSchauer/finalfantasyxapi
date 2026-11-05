@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -34,6 +35,6 @@ func (srv *Server) retrieveAgilityTiers(r *http.Request, i handlerInput[seedtype
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryInt(r, ids, ts.QpnAgility, srv.Cfg.DB.GetAgilityTierIDsByAgility),
+		i.queryInt(r, ids, ts.QpnAgility, config.Cfg.DB.GetAgilityTierIDsByAgility),
 	})
 }

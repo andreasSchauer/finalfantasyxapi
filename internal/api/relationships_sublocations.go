@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -19,25 +20,25 @@ func getSublocationRelationships(srv *Server, r *http.Request, sublocation seedt
 
 	g.Go(func() error {
 		var err error
-		rel.ConnectedSublocations, err = E.Sublocations.dbGetRelations(srv, r.Context(), sublocation, srv.Cfg.DB.GetConnectedSublocationIDs)
+		rel.ConnectedSublocations, err = E.Sublocations.dbGetRelations(srv, r.Context(), sublocation, config.Cfg.DB.GetConnectedSublocationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = E.Areas.dbGetRelations(srv, r.Context(), sublocation, srv.Cfg.DB.GetSublocationAreaIDs)
+		rel.Areas, err = E.Areas.dbGetRelations(srv, r.Context(), sublocation, config.Cfg.DB.GetSublocationAreaIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Characters, err = E.Characters.dbGetRelations(srv, ctx, sublocation, srv.Cfg.DB.GetSublocationCharacterIDs)
+		locRel.Characters, err = E.Characters.dbGetRelations(srv, ctx, sublocation, config.Cfg.DB.GetSublocationCharacterIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Aeons, err = E.Aeons.dbGetRelations(srv, ctx, sublocation, srv.Cfg.DB.GetSublocationAeonIDs)
+		locRel.Aeons, err = E.Aeons.dbGetRelations(srv, ctx, sublocation, config.Cfg.DB.GetSublocationAeonIDs)
 		return err
 	})
 
@@ -74,17 +75,17 @@ func getSublocationRelationships(srv *Server, r *http.Request, sublocation seedt
 	g.Go(func() error {
 		var err error
 		locRel.Music, err = getMusicLocBased(srv, ctx, sublocation, LocBasedMusicQueries{
-			CueSongs:  srv.Cfg.DB.GetSublocationCueSongIDs,
-			BmSongs:   srv.Cfg.DB.GetSublocationBackgroundMusicSongIDs,
-			FMVSongs:  srv.Cfg.DB.GetSublocationFMVSongIDs,
-			BossMusic: srv.Cfg.DB.GetSublocationBossSongIDs,
+			CueSongs:  config.Cfg.DB.GetSublocationCueSongIDs,
+			BmSongs:   config.Cfg.DB.GetSublocationBackgroundMusicSongIDs,
+			FMVSongs:  config.Cfg.DB.GetSublocationFMVSongIDs,
+			BossMusic: config.Cfg.DB.GetSublocationBossSongIDs,
 		})
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.FMVs, err = E.FMVs.dbGetRelations(srv, ctx, sublocation, srv.Cfg.DB.GetSublocationFmvIDs)
+		locRel.FMVs, err = E.FMVs.dbGetRelations(srv, ctx, sublocation, config.Cfg.DB.GetSublocationFmvIDs)
 		return err
 	})
 

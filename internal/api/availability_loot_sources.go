@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -27,7 +28,7 @@ func filterAvlShops(srv *Server, r *http.Request, inputIDs []int32) ([]int32, er
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.FilterShopIDsByAvailability(r.Context(), database.FilterShopIDsByAvailabilityParams{
+	dbIDs, err := config.Cfg.DB.FilterShopIDsByAvailability(r.Context(), database.FilterShopIDsByAvailabilityParams{
 		Ids:             inputIDs,
 		Availability:    avlParams.availabilities,
 		AvlType:         sources.AvlType,
@@ -57,7 +58,7 @@ func filterAvlTreasures(srv *Server, r *http.Request, inputIDs []int32) ([]int32
 		return inputIDs, nil
 	}
 
-	dbIDs, err := srv.Cfg.DB.FilterTreasureIDsByAvailability(r.Context(), database.FilterTreasureIDsByAvailabilityParams{
+	dbIDs, err := config.Cfg.DB.FilterTreasureIDsByAvailability(r.Context(), database.FilterTreasureIDsByAvailabilityParams{
 		Ids:          inputIDs,
 		Availability: avlParams.availabilities,
 		PreAirship:   avlParams.preAirship,
@@ -80,7 +81,7 @@ func filterAvlQuests(srv *Server, r *http.Request, inputIDs []int32) ([]int32, e
 		return inputIDs, nil
 	}
 
-	dbIDs, err := srv.Cfg.DB.FilterQuestIDsByAvailability(r.Context(), database.FilterQuestIDsByAvailabilityParams{
+	dbIDs, err := config.Cfg.DB.FilterQuestIDsByAvailability(r.Context(), database.FilterQuestIDsByAvailabilityParams{
 		Ids:          inputIDs,
 		Availability: avlParams.availabilities,
 		IsRepeatable: avlParams.isRepeatable,
@@ -104,7 +105,7 @@ func filterAvlSidequests(srv *Server, r *http.Request, inputIDs []int32) ([]int3
 		return inputIDs, nil
 	}
 
-	dbIDs, err := srv.Cfg.DB.FilterSidequestIDsByAvailability(r.Context(), database.FilterSidequestIDsByAvailabilityParams{
+	dbIDs, err := config.Cfg.DB.FilterSidequestIDsByAvailability(r.Context(), database.FilterSidequestIDsByAvailabilityParams{
 		Ids:          inputIDs,
 		Availability: avlParams.availabilities,
 		PreAirship:   avlParams.preAirship,
@@ -127,7 +128,7 @@ func filterAvlSubquests(srv *Server, r *http.Request, inputIDs []int32) ([]int32
 		return inputIDs, nil
 	}
 
-	dbIDs, err := srv.Cfg.DB.FilterSubquestIDsByAvailability(r.Context(), database.FilterSubquestIDsByAvailabilityParams{
+	dbIDs, err := config.Cfg.DB.FilterSubquestIDsByAvailability(r.Context(), database.FilterSubquestIDsByAvailabilityParams{
 		Ids:          inputIDs,
 		Availability: avlParams.availabilities,
 		IsRepeatable: avlParams.isRepeatable,

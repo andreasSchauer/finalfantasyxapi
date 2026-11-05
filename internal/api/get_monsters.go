@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -78,23 +79,23 @@ func (srv *Server) retrieveMonsters(r *http.Request, i handlerInput[seedtypes.Mo
 		i.queryIDListWrapper(srv, r, ids, ts.QpnStatusResists, lookup.L.StatusConditions, getMonstersByStatusResists),
 
 		i.queryIDWrapper(srv, r, ids, ts.QpnItem, lookup.L.Items, getMonstersByItem),
-		i.queryID(r, ids, ts.QpnRonsoRage, lookup.L.RonsoRages, srv.Cfg.DB.GetMonsterIDsByRonsoRage),
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, srv.Cfg.DB.GetMonsterIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, srv.Cfg.DB.GetMonsterIDsBySublocation),
-		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, srv.Cfg.DB.GetMonsterIDsByArea),
+		i.queryID(r, ids, ts.QpnRonsoRage, lookup.L.RonsoRages, config.Cfg.DB.GetMonsterIDsByRonsoRage),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetMonsterIDsByLocation),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetMonsterIDsBySublocation),
+		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetMonsterIDsByArea),
 		i.queryIDWrapper(srv, r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, getMonstersByAutoAbility),
 
-		i.queryIntList(srv, r, ids, ts.QpnEmptySlots, srv.Cfg.DB.GetMonsterIDsByEmptySlots),
-		i.queryIntList(srv, r, ids, ts.QpnDistance, srv.Cfg.DB.GetMonsterIDsByDistance),
+		i.queryIntList(srv, r, ids, ts.QpnEmptySlots, config.Cfg.DB.GetMonsterIDsByEmptySlots),
+		i.queryIntList(srv, r, ids, ts.QpnDistance, config.Cfg.DB.GetMonsterIDsByDistance),
 
-		i.queryEnumList(srv, r, enums.T.MonsterCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetMonsterIDsByCategory),
-		i.queryEnum(r, enums.T.MonsterSpecies, ids, ts.QpnSpecies, srv.Cfg.DB.GetMonsterIDsBySpecies),
-		i.queryEnum(r, enums.T.CreationArea, ids, ts.QpnCreationArea, ToEnumQuery(enums.T.CreationArea, srv.Cfg.DB.GetMonsterIDsByMaCreationArea)),
+		i.queryEnumList(srv, r, enums.T.MonsterCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMonsterIDsByCategory),
+		i.queryEnum(r, enums.T.MonsterSpecies, ids, ts.QpnSpecies, config.Cfg.DB.GetMonsterIDsBySpecies),
+		i.queryEnum(r, enums.T.CreationArea, ids, ts.QpnCreationArea, ToEnumQuery(enums.T.CreationArea, config.Cfg.DB.GetMonsterIDsByMaCreationArea)),
 
-		i.queryBool(r, ids, ts.QpnRepeatable, srv.Cfg.DB.GetMonsterIDsByIsRepeatable),
-		i.queryBool(r, ids, ts.QpnCapture, srv.Cfg.DB.GetMonsterIDsByCanBeCaptured),
-		i.queryBool(r, ids, ts.QpnHasOverdrive, srv.Cfg.DB.GetMonsterIDsByHasOverdrive),
-		i.queryBool(r, ids, ts.QpnUnderwater, srv.Cfg.DB.GetMonsterIDsByIsUnderwater),
-		i.queryBool(r, ids, ts.QpnZombie, srv.Cfg.DB.GetMonsterIDsByIsZombie),
+		i.queryBool(r, ids, ts.QpnRepeatable, config.Cfg.DB.GetMonsterIDsByIsRepeatable),
+		i.queryBool(r, ids, ts.QpnCapture, config.Cfg.DB.GetMonsterIDsByCanBeCaptured),
+		i.queryBool(r, ids, ts.QpnHasOverdrive, config.Cfg.DB.GetMonsterIDsByHasOverdrive),
+		i.queryBool(r, ids, ts.QpnUnderwater, config.Cfg.DB.GetMonsterIDsByIsUnderwater),
+		i.queryBool(r, ids, ts.QpnZombie, config.Cfg.DB.GetMonsterIDsByIsZombie),
 	})
 }

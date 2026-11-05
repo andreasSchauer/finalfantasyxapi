@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"golang.org/x/sync/errgroup"
 )
@@ -47,21 +48,21 @@ func getLocationSectionRelations(srv *Server, r *http.Request, locIDs []int32) (
 	var treasureJunctions []Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Treasures.resTypeSingle, srv.Cfg.DB.GetLocationTreasureIdPairs, juncLocationTreasure)
+		treasureJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Treasures.resTypeSingle, config.Cfg.DB.GetLocationTreasureIdPairs, juncLocationTreasure)
 		return err
 	})
 
 	var shopJunctions []Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Shops.resTypeSingle, srv.Cfg.DB.GetLocationShopIdPairs, juncLocationShop)
+		shopJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Shops.resTypeSingle, config.Cfg.DB.GetLocationShopIdPairs, juncLocationShop)
 		return err
 	})
 
 	var monsterJunctions []Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Monsters.resTypeSingle, srv.Cfg.DB.GetLocationMonsterIdPairs, juncLocationMonster)
+		monsterJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Monsters.resTypeSingle, config.Cfg.DB.GetLocationMonsterIdPairs, juncLocationMonster)
 		return err
 	})
 

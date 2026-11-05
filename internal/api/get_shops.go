@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -35,10 +36,10 @@ func (srv *Server) retrieveShops(r *http.Request, i handlerInput[seedtypes.Shop,
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
 		i.queryJoined(srv, r, ids, []ts.QueryParamName{ts.QpnAutoAbility, ts.QpnEmptySlots, ts.QpnCharacter}, filterShopsEquipment),
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, srv.Cfg.DB.GetShopIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, srv.Cfg.DB.GetShopIDsBySublocation),
-		i.queryBool2(r, ids, ts.QpnItems, srv.Cfg.DB.GetShopIDsWithItems),
-		i.queryBool2(r, ids, ts.QpnEquipment, srv.Cfg.DB.GetShopIDsWithEquipment),
-		i.queryEnumList(srv, r, enums.T.ShopCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetShopIDsByCategory),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetShopIDsByLocation),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetShopIDsBySublocation),
+		i.queryBool2(r, ids, ts.QpnItems, config.Cfg.DB.GetShopIDsWithItems),
+		i.queryBool2(r, ids, ts.QpnEquipment, config.Cfg.DB.GetShopIDsWithEquipment),
+		i.queryEnumList(srv, r, enums.T.ShopCategory, ids, ts.QpnCategory, config.Cfg.DB.GetShopIDsByCategory),
 	})
 }

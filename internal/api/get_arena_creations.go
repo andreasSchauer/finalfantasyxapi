@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"sync"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -48,7 +49,7 @@ func (srv *Server) retrieveArenaCreations(r *http.Request, i handlerInput[seedty
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.ArenaCreationCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetArenaCreationIDsByCategory),
+		i.queryEnumList(srv, r, enums.T.ArenaCreationCategory, ids, ts.QpnCategory, config.Cfg.DB.GetArenaCreationIDsByCategory),
 	})
 }
 
@@ -66,7 +67,7 @@ func getArenaCreationMonsters(srv *Server, r *http.Request, creation seedtypes.A
 	if mf.RequiredArea != nil {
 		g.Go(func() error {
 			area := database.ToNullMaCreationArea(mf.RequiredArea)
-			idSlice, err := srv.Cfg.DB.GetCaptureMonsterIDsByMaCreationArea(ctx, area)
+			idSlice, err := config.Cfg.DB.GetCaptureMonsterIDsByMaCreationArea(ctx, area)
 			if err != nil {
 				return err
 			}
@@ -81,7 +82,7 @@ func getArenaCreationMonsters(srv *Server, r *http.Request, creation seedtypes.A
 	if mf.RequiredSpecies != nil {
 		g.Go(func() error {
 			species := database.MonsterSpecies(*mf.RequiredSpecies)
-			idSlice, err := srv.Cfg.DB.GetCaptureMonsterIDsBySpecies(ctx, species)
+			idSlice, err := config.Cfg.DB.GetCaptureMonsterIDsBySpecies(ctx, species)
 			if err != nil {
 				return err
 			}
@@ -95,7 +96,7 @@ func getArenaCreationMonsters(srv *Server, r *http.Request, creation seedtypes.A
 
 	if mf.UnderwaterOnly {
 		g.Go(func() error {
-			idSlice, err := srv.Cfg.DB.GetCaptureMonsterIDsByIsUnderwater(ctx)
+			idSlice, err := config.Cfg.DB.GetCaptureMonsterIDsByIsUnderwater(ctx)
 			if err != nil {
 				return err
 			}

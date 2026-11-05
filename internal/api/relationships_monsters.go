@@ -110,7 +110,7 @@ func getMonsterPoisonDamage(mon Monster) (*int32, error) {
 }
 
 func getMonsterAgilityParams(srv *Server, r *http.Request, mon Monster) (*AgilityParams, error) {
-	agilityTier, err := getAgilityTierDB(srv, r, mon.BaseStats)
+	agilityTier, err := getAgilityTierDB(r, mon.BaseStats)
 	if err != nil {
 		return nil, err
 	}

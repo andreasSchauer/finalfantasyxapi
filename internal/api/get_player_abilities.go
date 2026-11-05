@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -16,7 +17,7 @@ func (srv *Server) getPlayerAbility(r *http.Request, i handlerInput[seedtypes.Pl
 		return PlayerAbility{}, err
 	}
 
-	monsters, err := E.Monsters.dbGetRelations(srv, r.Context(), ability, srv.Cfg.DB.GetPlayerAbilityMonsterIDs)
+	monsters, err := E.Monsters.dbGetRelations(srv, r.Context(), ability, config.Cfg.DB.GetPlayerAbilityMonsterIDs)
 	if err != nil {
 		return PlayerAbility{}, err
 	}
@@ -65,24 +66,24 @@ func (srv *Server) retrievePlayerAbilities(r *http.Request, i handlerInput[seedt
 	abilityType := database.AbilityTypePlayerAbility
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.PlayerAbilityCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetPlayerAbilityIDsByCategory),
+		i.queryEnumList(srv, r, enums.T.PlayerAbilityCategory, ids, ts.QpnCategory, config.Cfg.DB.GetPlayerAbilityIDsByCategory),
 		i.queryEnumList(srv, r, enums.T.DamageType, ids, ts.QpnDamageType, getTypedAbilityIDsByDamageType(srv, abilityType)),
 		i.queryEnumList(srv, r, enums.T.AttackType, ids, ts.QpnAttackType, getTypedAbilityIDsByAttackType(srv, abilityType)),
 		i.queryEnumList(srv, r, enums.T.TargetType, ids, ts.QpnTargetType, getTypedAbilityIDsByTargetType(srv, abilityType)),
 		i.queryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, getTypedAbilityIDsByDamageFormula(srv, abilityType)),
-		i.queryIntList(srv, r, ids, ts.QpnMp, srv.Cfg.DB.GetPlayerAbilityIDsByMpCost),
-		i.queryInt(r, ids, ts.QpnMpMin, srv.Cfg.DB.GetPlayerAbilityIDsByMpCostMin),
-		i.queryInt(r, ids, ts.QpnMpMax, srv.Cfg.DB.GetPlayerAbilityIDsByMpCostMax),
+		i.queryIntList(srv, r, ids, ts.QpnMp, config.Cfg.DB.GetPlayerAbilityIDsByMpCost),
+		i.queryInt(r, ids, ts.QpnMpMin, config.Cfg.DB.GetPlayerAbilityIDsByMpCostMin),
+		i.queryInt(r, ids, ts.QpnMpMax, config.Cfg.DB.GetPlayerAbilityIDsByMpCostMax),
 		i.queryIntList(srv, r, ids, ts.QpnRank, getTypedAbilityIDsByRank(srv, abilityType)),
 		i.queryNameIDListNul(srv, r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(srv, abilityType)),
-		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, srv.Cfg.DB.GetPlayerAbilityIDsByCharClass),
-		i.queryID(r, ids, ts.QpnLearnItem, lookup.L.Items, srv.Cfg.DB.GetPlayerAbilityIDsByLearnItem),
-		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, srv.Cfg.DB.GetPlayerAbilityIDsByRelatedStat),
+		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetPlayerAbilityIDsByCharClass),
+		i.queryID(r, ids, ts.QpnLearnItem, lookup.L.Items, config.Cfg.DB.GetPlayerAbilityIDsByLearnItem),
+		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, config.Cfg.DB.GetPlayerAbilityIDsByRelatedStat),
 		i.queryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(srv, abilityType)),
 		i.queryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(srv, abilityType)),
-		i.queryNameID(r, ids, ts.QpnStdSg, E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(srv.Cfg.DB.GetPlayerAbilityIDsStdSgChar)),
-		i.queryNameID(r, ids, ts.QpnExpSg, E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(srv.Cfg.DB.GetPlayerAbilityIDsExpSgChar)),
-		i.queryBool(r, ids, ts.QpnOutsideBattle, srv.Cfg.DB.GetPlayerAbilityIDsCanUseOutsideBattle),
+		i.queryNameID(r, ids, ts.QpnStdSg, E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(config.Cfg.DB.GetPlayerAbilityIDsStdSgChar)),
+		i.queryNameID(r, ids, ts.QpnExpSg, E.Characters.resTypeSingle, lookup.L.Characters, ToIntManyNull(config.Cfg.DB.GetPlayerAbilityIDsExpSgChar)),
+		i.queryBool(r, ids, ts.QpnOutsideBattle, config.Cfg.DB.GetPlayerAbilityIDsCanUseOutsideBattle),
 		i.queryBool(r, ids, ts.QpnCopycat, getTypedAbilityIDsByCanCopycat(srv, abilityType)),
 		i.queryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(srv, abilityType)),
 		i.queryBool2(r, ids, ts.QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(srv, abilityType)),

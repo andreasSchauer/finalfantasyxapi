@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -15,31 +16,31 @@ func getAeonRelationships(srv *Server, r *http.Request, aeon seedtypes.Aeon) (Ae
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = E.CelestialWeapons.dbGetRelationPtr(srv, ctx, aeon, srv.Cfg.DB.GetAeonCelestialWeaponID)
+		rel.CelestialWeapon, err = E.CelestialWeapons.dbGetRelationPtr(srv, ctx, aeon, config.Cfg.DB.GetAeonCelestialWeaponID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = E.CharacterClasses.dbGetRelations(srv, ctx, aeon, srv.Cfg.DB.GetAeonCharClassIDs)
+		rel.CharacterClasses, err = E.CharacterClasses.dbGetRelations(srv, ctx, aeon, config.Cfg.DB.GetAeonCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AeonCommands, err = E.AeonCommands.dbGetRelations(srv, ctx, aeon, srv.Cfg.DB.GetAeonAeonCommandIDs)
+		rel.AeonCommands, err = E.AeonCommands.dbGetRelations(srv, ctx, aeon, config.Cfg.DB.GetAeonAeonCommandIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Overdrives, err = E.Overdrives.dbGetRelations(srv, ctx, aeon, srv.Cfg.DB.GetAeonOverdriveIDs)
+		rel.Overdrives, err = E.Overdrives.dbGetRelations(srv, ctx, aeon, config.Cfg.DB.GetAeonOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, aeon, srv.Cfg.DB.GetAeonDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, aeon, config.Cfg.DB.GetAeonDefaultAbilityIDs)
 		return err
 	})
 
@@ -176,7 +177,7 @@ func yStatCalc(stat string, yParameter float64, aVals, bVals, yuna map[string]fl
 }
 
 func getUnitAgilityParams(srv *Server, r *http.Request, baseStats []BaseStat) (AgilityParams, error) {
-	agilityTier, err := getAgilityTierDB(srv, r, baseStats)
+	agilityTier, err := getAgilityTierDB(r, baseStats)
 	if err != nil {
 		return AgilityParams{}, err
 	}

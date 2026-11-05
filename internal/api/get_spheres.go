@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -50,10 +51,10 @@ func (srv *Server) retrieveSpheres(r *http.Request, i handlerInput[seedtypes.Sph
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.SphereColor, ids, ts.QpnColor, srv.Cfg.DB.GetSphereIDsByColor),
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, srv.Cfg.DB.GetSphereIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, srv.Cfg.DB.GetSphereIDsBySublocation),
-		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, srv.Cfg.DB.GetSphereIDsByArea),
-		i.queryValueList(srv, r, ids, ts.QpnMethods, srv.Cfg.DB.GetSphereIDsByMethods),
+		i.queryEnumList(srv, r, enums.T.SphereColor, ids, ts.QpnColor, config.Cfg.DB.GetSphereIDsByColor),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetSphereIDsByLocation),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSphereIDsBySublocation),
+		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetSphereIDsByArea),
+		i.queryValueList(srv, r, ids, ts.QpnMethods, config.Cfg.DB.GetSphereIDsByMethods),
 	})
 }

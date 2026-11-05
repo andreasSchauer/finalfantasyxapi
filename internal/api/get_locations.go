@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -38,17 +39,17 @@ func (srv *Server) retrieveLocations(r *http.Request, i handlerInput[seedtypes.L
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, srv.Cfg.DB.GetLocationIDsWithMonster),
+		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetLocationIDsWithMonster),
 		i.queryIDWrapper(srv, r, ids, ts.QpnItem, lookup.L.Items, getLocationsByItem),
-		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, srv.Cfg.DB.GetLocationIDsWithKeyItem),
-		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, srv.Cfg.DB.GetLocationIDsWithAutoAbility),
-		i.queryBool2(r, ids, ts.QpnCharacters, srv.Cfg.DB.GetLocationIDsWithCharacters),
-		i.queryBool2(r, ids, ts.QpnAeons, srv.Cfg.DB.GetLocationIDsWithAeons),
-		i.queryBool2(r, ids, ts.QpnMonsters, srv.Cfg.DB.GetLocationIDsWithMonsters),
-		i.queryBool2(r, ids, ts.QpnBossFights, srv.Cfg.DB.GetLocationIDsWithBosses),
-		i.queryBool2(r, ids, ts.QpnShops, srv.Cfg.DB.GetLocationIDsWithShops),
-		i.queryBool2(r, ids, ts.QpnTreasures, srv.Cfg.DB.GetLocationIDsWithTreasures),
-		i.queryBool2(r, ids, ts.QpnSidequests, srv.Cfg.DB.GetLocationIDsWithSidequests),
-		i.queryBool2(r, ids, ts.QpnFMVs, srv.Cfg.DB.GetLocationIDsWithFMVs),
+		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, config.Cfg.DB.GetLocationIDsWithKeyItem),
+		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, config.Cfg.DB.GetLocationIDsWithAutoAbility),
+		i.queryBool2(r, ids, ts.QpnCharacters, config.Cfg.DB.GetLocationIDsWithCharacters),
+		i.queryBool2(r, ids, ts.QpnAeons, config.Cfg.DB.GetLocationIDsWithAeons),
+		i.queryBool2(r, ids, ts.QpnMonsters, config.Cfg.DB.GetLocationIDsWithMonsters),
+		i.queryBool2(r, ids, ts.QpnBossFights, config.Cfg.DB.GetLocationIDsWithBosses),
+		i.queryBool2(r, ids, ts.QpnShops, config.Cfg.DB.GetLocationIDsWithShops),
+		i.queryBool2(r, ids, ts.QpnTreasures, config.Cfg.DB.GetLocationIDsWithTreasures),
+		i.queryBool2(r, ids, ts.QpnSidequests, config.Cfg.DB.GetLocationIDsWithSidequests),
+		i.queryBool2(r, ids, ts.QpnFMVs, config.Cfg.DB.GetLocationIDsWithFMVs),
 	})
 }

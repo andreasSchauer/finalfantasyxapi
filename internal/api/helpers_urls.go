@@ -7,11 +7,12 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func getBaseURL(srv *Server) string {
-	return fmt.Sprintf("http://%s/api", srv.Cfg.Host)
+	return fmt.Sprintf("http://%s/api", config.Cfg.Host)
 }
 
 func createListURL(srv *Server, endpoint ts.EndpointName) string {

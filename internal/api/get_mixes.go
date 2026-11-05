@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -42,7 +43,7 @@ func (srv *Server) retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, 
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.MixCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetMixIDsByCategory),
+		i.queryEnumList(srv, r, enums.T.MixCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMixIDsByCategory),
 		i.queryIDWrapper(srv, r, ids, ts.QpnReqItem, lookup.L.Items, getMixesByItem),
 	})
 }

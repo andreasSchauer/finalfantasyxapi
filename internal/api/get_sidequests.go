@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -12,7 +13,7 @@ func (srv *Server) getSidequest(r *http.Request, i handlerInput[seedtypes.Sidequ
 		return Sidequest{}, err
 	}
 
-	subquests, err := E.Subquests.dbGetRelations(srv, r.Context(), sidequest, srv.Cfg.DB.GetSidequestSubquestIDs)
+	subquests, err := E.Subquests.dbGetRelations(srv, r.Context(), sidequest, config.Cfg.DB.GetSidequestSubquestIDs)
 	if err != nil {
 		return Sidequest{}, err
 	}

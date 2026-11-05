@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -39,12 +40,12 @@ func (srv *Server) retrieveMonsterFormations(r *http.Request, i handlerInput[see
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, srv.Cfg.DB.GetMonsterFormationIDsByMonster),
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, srv.Cfg.DB.GetMonsterFormationIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, srv.Cfg.DB.GetMonsterFormationIDsBySublocation),
-		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, srv.Cfg.DB.GetMonsterFormationIDsByArea),
-		i.queryBool(r, ids, ts.QpnAmbush, srv.Cfg.DB.GetMonsterFormationIDsByForcedAmbush),
-		i.queryBool(r, ids, ts.QpnEscape, srv.Cfg.DB.GetMonsterFormationIDsByCanEscape),
-		i.queryEnumList(srv, r, enums.T.MonsterFormationCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetMonsterFormationIDsByCategory),
+		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetMonsterFormationIDsByMonster),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetMonsterFormationIDsByLocation),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetMonsterFormationIDsBySublocation),
+		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetMonsterFormationIDsByArea),
+		i.queryBool(r, ids, ts.QpnAmbush, config.Cfg.DB.GetMonsterFormationIDsByForcedAmbush),
+		i.queryBool(r, ids, ts.QpnEscape, config.Cfg.DB.GetMonsterFormationIDsByCanEscape),
+		i.queryEnumList(srv, r, enums.T.MonsterFormationCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMonsterFormationIDsByCategory),
 	})
 }

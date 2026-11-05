@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -40,6 +41,6 @@ func (srv *Server) retrieveSubmenus(r *http.Request, i handlerInput[seedtypes.Su
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryNameID(r, ids, ts.QpnTopmenu, E.Topmenus.resTypeSingle, lookup.L.Topmenus, ToIntManyNull(srv.Cfg.DB.GetTopmenuSubmenuIDs)),
+		i.queryNameID(r, ids, ts.QpnTopmenu, E.Topmenus.resTypeSingle, lookup.L.Topmenus, ToIntManyNull(config.Cfg.DB.GetTopmenuSubmenuIDs)),
 	})
 }

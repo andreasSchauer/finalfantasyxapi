@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -24,7 +25,7 @@ func filterAvlAreas(srv *Server, r *http.Request, inputIDs []int32) ([]int32, er
 	}
 
 	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
-		dbIDs, err := srv.Cfg.DB.FilterAreaIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
+		dbIDs, err := config.Cfg.DB.FilterAreaIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
 			return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 		}
@@ -32,7 +33,7 @@ func filterAvlAreas(srv *Server, r *http.Request, inputIDs []int32) ([]int32, er
 		return dbIDs, nil
 	}
 
-	dbIDs, err := srv.Cfg.DB.FilterAreaIDsByAvailability(r.Context(), database.FilterAreaIDsByAvailabilityParams{
+	dbIDs, err := config.Cfg.DB.FilterAreaIDsByAvailability(r.Context(), database.FilterAreaIDsByAvailabilityParams{
 		Ids:             inputIDs,
 		Availability:    avlParams.availabilities,
 		IsRepeatable:    avlParams.isRepeatable,
@@ -69,7 +70,7 @@ func filterAvlSublocations(srv *Server, r *http.Request, inputIDs []int32) ([]in
 	}
 
 	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
-		dbIDs, err := srv.Cfg.DB.FilterSublocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
+		dbIDs, err := config.Cfg.DB.FilterSublocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
 			return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 		}
@@ -77,7 +78,7 @@ func filterAvlSublocations(srv *Server, r *http.Request, inputIDs []int32) ([]in
 		return dbIDs, nil
 	}
 
-	dbIDs, err := srv.Cfg.DB.FilterSublocationIDsByAvailability(r.Context(), database.FilterSublocationIDsByAvailabilityParams{
+	dbIDs, err := config.Cfg.DB.FilterSublocationIDsByAvailability(r.Context(), database.FilterSublocationIDsByAvailabilityParams{
 		Ids:             inputIDs,
 		Availability:    avlParams.availabilities,
 		IsRepeatable:    avlParams.isRepeatable,
@@ -114,7 +115,7 @@ func filterAvlLocations(srv *Server, r *http.Request, inputIDs []int32) ([]int32
 	}
 
 	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
-		dbIDs, err := srv.Cfg.DB.FilterLocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
+		dbIDs, err := config.Cfg.DB.FilterLocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
 			return nil, newHTTPErrorAvailability(i.resTypePlural, err)
 		}
@@ -122,7 +123,7 @@ func filterAvlLocations(srv *Server, r *http.Request, inputIDs []int32) ([]int32
 		return dbIDs, nil
 	}
 
-	dbIDs, err := srv.Cfg.DB.FilterLocationIDsByAvailability(r.Context(), database.FilterLocationIDsByAvailabilityParams{
+	dbIDs, err := config.Cfg.DB.FilterLocationIDsByAvailability(r.Context(), database.FilterLocationIDsByAvailabilityParams{
 		Ids:             inputIDs,
 		Availability:    avlParams.availabilities,
 		IsRepeatable:    avlParams.isRepeatable,

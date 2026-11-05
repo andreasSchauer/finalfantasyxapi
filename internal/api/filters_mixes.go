@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -17,7 +18,7 @@ func getMixesByItem(srv *Server, r *http.Request, ctx context.Context, firstItem
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetMixIDsByItems(ctx, database.GetMixIDsByItemsParams{
+	dbIDs, err := config.Cfg.DB.GetMixIDsByItems(ctx, database.GetMixIDsByItemsParams{
 		FirstItemID:  firstItemID,
 		SecondItemID: secondItemIDPtr,
 	})

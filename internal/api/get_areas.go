@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -51,24 +52,24 @@ func (srv *Server) retrieveAreas(r *http.Request, i handlerInput[seedtypes.Area,
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, srv.Cfg.DB.GetLocationAreaIDs),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, srv.Cfg.DB.GetSublocationAreaIDs),
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, srv.Cfg.DB.GetAreaIDsWithMonster),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationAreaIDs),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationAreaIDs),
+		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreaIDsWithMonster),
 		i.queryIDWrapper(srv, r, ids, ts.QpnItem, lookup.L.Items, getAreasByItem),
-		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, srv.Cfg.DB.GetAreaIDsWithKeyItem),
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, srv.Cfg.DB.GetAreasByMonster),
-		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, srv.Cfg.DB.GetAreaIDsWithAutoAbility),
-		i.queryBool(r, ids, ts.QpnSaveSphere, srv.Cfg.DB.GetAreaIDsWithSaveSphere),
-		i.queryBool(r, ids, ts.QpnCompSphere, srv.Cfg.DB.GetAreaIDsWithCompSphere),
-		i.queryBool(r, ids, ts.QpnAirship, srv.Cfg.DB.GetAreaIDsWithDropOff),
-		i.queryBool(r, ids, ts.QpnChocobo, srv.Cfg.DB.GetAreaIDsChocobo),
-		i.queryBool2(r, ids, ts.QpnCharacters, srv.Cfg.DB.GetAreaIDsWithCharacters),
-		i.queryBool2(r, ids, ts.QpnAeons, srv.Cfg.DB.GetAreaIDsWithAeons),
-		i.queryBool2(r, ids, ts.QpnMonsters, srv.Cfg.DB.GetAreaIDsWithMonsters),
-		i.queryBool2(r, ids, ts.QpnBossFights, srv.Cfg.DB.GetAreaIDsWithBosses),
-		i.queryBool2(r, ids, ts.QpnShops, srv.Cfg.DB.GetAreaIDsWithShops),
-		i.queryBool2(r, ids, ts.QpnTreasures, srv.Cfg.DB.GetAreaIDsWithTreasures),
-		i.queryBool2(r, ids, ts.QpnSidequests, srv.Cfg.DB.GetAreaIDsWithSidequests),
-		i.queryBool2(r, ids, ts.QpnFMVs, srv.Cfg.DB.GetAreaIDsWithFMVs),
+		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, config.Cfg.DB.GetAreaIDsWithKeyItem),
+		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreasByMonster),
+		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, config.Cfg.DB.GetAreaIDsWithAutoAbility),
+		i.queryBool(r, ids, ts.QpnSaveSphere, config.Cfg.DB.GetAreaIDsWithSaveSphere),
+		i.queryBool(r, ids, ts.QpnCompSphere, config.Cfg.DB.GetAreaIDsWithCompSphere),
+		i.queryBool(r, ids, ts.QpnAirship, config.Cfg.DB.GetAreaIDsWithDropOff),
+		i.queryBool(r, ids, ts.QpnChocobo, config.Cfg.DB.GetAreaIDsChocobo),
+		i.queryBool2(r, ids, ts.QpnCharacters, config.Cfg.DB.GetAreaIDsWithCharacters),
+		i.queryBool2(r, ids, ts.QpnAeons, config.Cfg.DB.GetAreaIDsWithAeons),
+		i.queryBool2(r, ids, ts.QpnMonsters, config.Cfg.DB.GetAreaIDsWithMonsters),
+		i.queryBool2(r, ids, ts.QpnBossFights, config.Cfg.DB.GetAreaIDsWithBosses),
+		i.queryBool2(r, ids, ts.QpnShops, config.Cfg.DB.GetAreaIDsWithShops),
+		i.queryBool2(r, ids, ts.QpnTreasures, config.Cfg.DB.GetAreaIDsWithTreasures),
+		i.queryBool2(r, ids, ts.QpnSidequests, config.Cfg.DB.GetAreaIDsWithSidequests),
+		i.queryBool2(r, ids, ts.QpnFMVs, config.Cfg.DB.GetAreaIDsWithFMVs),
 	})
 }

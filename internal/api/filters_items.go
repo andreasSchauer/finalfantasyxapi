@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -18,7 +19,7 @@ func getMasterItemsByArea(srv *Server, r *http.Request, ctx context.Context, id 
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetMasterItemIDsByArea(ctx, database.GetMasterItemIDsByAreaParams{
+	dbIDs, err := config.Cfg.DB.GetMasterItemIDsByArea(ctx, database.GetMasterItemIDsByAreaParams{
 		AreaID:  id,
 		Methods: h.SliceOrNil(methods),
 	})
@@ -38,7 +39,7 @@ func getMasterItemsBySublocation(srv *Server, r *http.Request, ctx context.Conte
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetMasterItemIDsBySublocation(ctx, database.GetMasterItemIDsBySublocationParams{
+	dbIDs, err := config.Cfg.DB.GetMasterItemIDsBySublocation(ctx, database.GetMasterItemIDsBySublocationParams{
 		SublocationID: id,
 		Methods:       h.SliceOrNil(methods),
 	})
@@ -58,7 +59,7 @@ func getMasterItemsByLocation(srv *Server, r *http.Request, ctx context.Context,
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetMasterItemIDsByLocation(ctx, database.GetMasterItemIDsByLocationParams{
+	dbIDs, err := config.Cfg.DB.GetMasterItemIDsByLocation(ctx, database.GetMasterItemIDsByLocationParams{
 		LocationID: id,
 		Methods:    h.SliceOrNil(methods),
 	})
@@ -78,7 +79,7 @@ func getItemsByArea(srv *Server, r *http.Request, ctx context.Context, id int32)
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetItemIDsByArea(ctx, database.GetItemIDsByAreaParams{
+	dbIDs, err := config.Cfg.DB.GetItemIDsByArea(ctx, database.GetItemIDsByAreaParams{
 		AreaID:  id,
 		Methods: h.SliceOrNil(methods),
 	})
@@ -98,7 +99,7 @@ func getItemsBySublocation(srv *Server, r *http.Request, ctx context.Context, id
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetItemIDsBySublocation(ctx, database.GetItemIDsBySublocationParams{
+	dbIDs, err := config.Cfg.DB.GetItemIDsBySublocation(ctx, database.GetItemIDsBySublocationParams{
 		SublocationID: id,
 		Methods:       h.SliceOrNil(methods),
 	})
@@ -118,7 +119,7 @@ func getItemsByLocation(srv *Server, r *http.Request, ctx context.Context, id in
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetItemIDsByLocation(ctx, database.GetItemIDsByLocationParams{
+	dbIDs, err := config.Cfg.DB.GetItemIDsByLocation(ctx, database.GetItemIDsByLocationParams{
 		LocationID: id,
 		Methods:    h.SliceOrNil(methods),
 	})

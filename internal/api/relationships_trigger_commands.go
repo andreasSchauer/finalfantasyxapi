@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -13,13 +14,13 @@ func getTriggerCommandRelationships(srv *Server, r *http.Request, command seedty
 
 	g.Go(func() error {
 		var err error
-		rel.MonsterFormations, err = E.MonsterFormations.dbGetRelations(srv, ctx, command, srv.Cfg.DB.GetTriggerCommandMonsterFormationIDs)
+		rel.MonsterFormations, err = E.MonsterFormations.dbGetRelations(srv, ctx, command, config.Cfg.DB.GetTriggerCommandMonsterFormationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.UsedBy, err = E.CharacterClasses.dbGetRelations(srv, ctx, command, srv.Cfg.DB.GetTriggerCommandCharClassIDs)
+		rel.UsedBy, err = E.CharacterClasses.dbGetRelations(srv, ctx, command, config.Cfg.DB.GetTriggerCommandCharClassIDs)
 		return err
 	})
 

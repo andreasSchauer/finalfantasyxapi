@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -63,8 +64,8 @@ func querySplit(query, sep string) []string {
 func queryListSplit(srv *Server, query string) ([]string, error) {
 	segments := querySplit(query, ",")
 
-	if len(segments) > srv.Cfg.FetchLimit {
-		return nil, newHTTPErrorFetchLimit(srv.Cfg.FetchLimit)
+	if len(segments) > config.Cfg.FetchLimit {
+		return nil, newHTTPErrorFetchLimit(config.Cfg.FetchLimit)
 	}
 
 	return segments, nil
@@ -98,8 +99,8 @@ func getRawQueryLimit(srv *Server, r *http.Request) (int, error) {
 	if limit == 0 {
 		limit = *queryParamLimit.DefaultVal
 	}
-	if limit > srv.Cfg.FetchLimit {
-		return srv.Cfg.FetchLimit, nil
+	if limit > config.Cfg.FetchLimit {
+		return config.Cfg.FetchLimit, nil
 	}
 
 	return limit, nil

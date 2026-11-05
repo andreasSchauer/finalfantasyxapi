@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
@@ -52,7 +53,7 @@ func getAutoAbilityRelationships(srv *Server, r *http.Request, autoAbility seedt
 
 	g.Go(func() error {
 		var err error
-		rel.EquipmentTables, err = E.EquipmentTables.dbGetRelations(srv, ctx, autoAbility, srv.Cfg.DB.GetAutoAbilityEquipmentTableIDs)
+		rel.EquipmentTables, err = E.EquipmentTables.dbGetRelations(srv, ctx, autoAbility, config.Cfg.DB.GetAutoAbilityEquipmentTableIDs)
 		return err
 	})
 

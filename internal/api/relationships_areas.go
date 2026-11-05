@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -30,13 +31,13 @@ func getAreaRelationships(srv *Server, r *http.Request, area seedtypes.Area) (Lo
 
 	g.Go(func() error {
 		var err error
-		rel.Characters, err = E.Characters.dbGetRelations(srv, ctx, area, ToIntManyNull(srv.Cfg.DB.GetAreaCharacterIDs))
+		rel.Characters, err = E.Characters.dbGetRelations(srv, ctx, area, ToIntManyNull(config.Cfg.DB.GetAreaCharacterIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Aeons, err = E.Aeons.dbGetRelations(srv, ctx, area, ToIntManyNull(srv.Cfg.DB.GetAreaAeonIDs))
+		rel.Aeons, err = E.Aeons.dbGetRelations(srv, ctx, area, ToIntManyNull(config.Cfg.DB.GetAreaAeonIDs))
 		return err
 	})
 
@@ -73,17 +74,17 @@ func getAreaRelationships(srv *Server, r *http.Request, area seedtypes.Area) (Lo
 	g.Go(func() error {
 		var err error
 		rel.Music, err = getMusicLocBased(srv, ctx, area, LocBasedMusicQueries{
-			CueSongs:  ToIntManyNull(srv.Cfg.DB.GetAreaCueSongIDs),
-			BmSongs:   srv.Cfg.DB.GetAreaBackgroundMusicSongIDs,
-			FMVSongs:  srv.Cfg.DB.GetAreaFMVSongIDs,
-			BossMusic: srv.Cfg.DB.GetAreaBossSongIDs,
+			CueSongs:  ToIntManyNull(config.Cfg.DB.GetAreaCueSongIDs),
+			BmSongs:   config.Cfg.DB.GetAreaBackgroundMusicSongIDs,
+			FMVSongs:  config.Cfg.DB.GetAreaFMVSongIDs,
+			BossMusic: config.Cfg.DB.GetAreaBossSongIDs,
 		})
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.FMVs, err = E.FMVs.dbGetRelations(srv, ctx, area, srv.Cfg.DB.GetAreaFmvIDs)
+		rel.FMVs, err = E.FMVs.dbGetRelations(srv, ctx, area, config.Cfg.DB.GetAreaFmvIDs)
 		return err
 	})
 

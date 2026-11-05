@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -33,6 +34,6 @@ func (srv *Server) retrieveBlitzballPrizes(r *http.Request, i handlerInput[seedt
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnum(r, enums.T.BlitzballTournamentCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetBlitzballPrizeIDsByCategory),
+		i.queryEnum(r, enums.T.BlitzballTournamentCategory, ids, ts.QpnCategory, config.Cfg.DB.GetBlitzballPrizeIDsByCategory),
 	})
 }

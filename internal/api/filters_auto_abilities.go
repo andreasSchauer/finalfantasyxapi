@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -16,7 +17,7 @@ func getAutoAbilitiesByMonster(srv *Server, r *http.Request, ctx context.Context
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetAutoAbilityIDsByMonster(ctx, database.GetAutoAbilityIDsByMonsterParams{
+	dbIDs, err := config.Cfg.DB.GetAutoAbilityIDsByMonster(ctx, database.GetAutoAbilityIDsByMonsterParams{
 		MonsterID:   id,
 		CharacterID: charIDPtr,
 	})
@@ -35,7 +36,7 @@ func getAutoAbilitiesByShop(srv *Server, r *http.Request, ctx context.Context, i
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetAutoAbilityIDsByShop(ctx, database.GetAutoAbilityIDsByShopParams{
+	dbIDs, err := config.Cfg.DB.GetAutoAbilityIDsByShop(ctx, database.GetAutoAbilityIDsByShopParams{
 		ShopID:      id,
 		CharacterID: charIDPtr,
 	})

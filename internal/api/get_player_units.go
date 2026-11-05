@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -66,6 +67,6 @@ func (srv *Server) retrievePlayerUnits(r *http.Request, i handlerInput[seedtypes
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnum(r, enums.T.UnitType, ids, ts.QpnType, srv.Cfg.DB.GetPlayerUnitIDsByType),
+		i.queryEnum(r, enums.T.UnitType, ids, ts.QpnType, config.Cfg.DB.GetPlayerUnitIDsByType),
 	})
 }

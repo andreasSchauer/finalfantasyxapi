@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
@@ -65,7 +66,7 @@ func getKeyItemCelestialWeapon(srv *Server, ctx context.Context, keyItem seedtyp
 
 	keyItemBase := strings.Split(keyItem.Name, " ")[0]
 
-	celestialID, err := srv.Cfg.DB.GetKeyItemCelestialWeapon(ctx, database.KeyItemBase(keyItemBase))
+	celestialID, err := config.Cfg.DB.GetKeyItemCelestialWeapon(ctx, database.KeyItemBase(keyItemBase))
 	if err != nil {
 		return nil, newHTTPErrorDBOne(E.CelestialWeapons.resTypeSingle, keyItem, err)
 	}

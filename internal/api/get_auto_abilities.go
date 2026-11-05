@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -62,14 +63,14 @@ func (srv *Server) retrieveAutoAbilities(r *http.Request, i handlerInput[seedtyp
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.AutoAbilityCategory, ids, ts.QpnCategory, srv.Cfg.DB.GetAutoAbilityIDsByCategory),
-		i.queryEnum(r, enums.T.EquipType, ids, ts.QpnType, srv.Cfg.DB.GetAutoAbilityIDsByEquipType),
+		i.queryEnumList(srv, r, enums.T.AutoAbilityCategory, ids, ts.QpnCategory, config.Cfg.DB.GetAutoAbilityIDsByCategory),
+		i.queryEnum(r, enums.T.EquipType, ids, ts.QpnType, config.Cfg.DB.GetAutoAbilityIDsByEquipType),
 		i.queryIDWrapper(srv, r, ids, ts.QpnMonster, lookup.L.Monsters, getAutoAbilitiesByMonster),
-		i.queryID(r, ids, "monster_items", lookup.L.Monsters, srv.Cfg.DB.GetAutoAbilityIDsByMonsterItems),
+		i.queryID(r, ids, "monster_items", lookup.L.Monsters, config.Cfg.DB.GetAutoAbilityIDsByMonsterItems),
 		i.queryIDWrapper(srv, r, ids, ts.QpnShop, lookup.L.Shops, getAutoAbilitiesByShop),
-		i.queryValueList(srv, r, ids, ts.QpnMethods, srv.Cfg.DB.GetAutoAbilityIDsByMethods),
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, srv.Cfg.DB.GetAutoAbilityIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, srv.Cfg.DB.GetAutoAbilityIDsBySublocation),
-		i.queryID(r, ids, "areas", lookup.L.Areas, srv.Cfg.DB.GetAutoAbilityIDsByArea),
+		i.queryValueList(srv, r, ids, ts.QpnMethods, config.Cfg.DB.GetAutoAbilityIDsByMethods),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetAutoAbilityIDsByLocation),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetAutoAbilityIDsBySublocation),
+		i.queryID(r, ids, "areas", lookup.L.Areas, config.Cfg.DB.GetAutoAbilityIDsByArea),
 	})
 }

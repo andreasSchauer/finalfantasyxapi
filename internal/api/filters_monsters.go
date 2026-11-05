@@ -7,6 +7,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -20,7 +21,7 @@ func getMonstersByElemResists(srv *Server, r *http.Request, ctx context.Context,
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetMonsterIDsByElemResistIDs(ctx, ids)
+	dbIDs, err := config.Cfg.DB.GetMonsterIDsByElemResistIDs(ctx, ids)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't retrieve monsters by elemental affinities", err)
 	}
@@ -78,7 +79,7 @@ func getMonstersByStatusResists(srv *Server, r *http.Request, ctx context.Contex
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetMonsterIDsByStatusResists(ctx, database.GetMonsterIDsByStatusResistsParams{
+	dbIDs, err := config.Cfg.DB.GetMonsterIDsByStatusResists(ctx, database.GetMonsterIDsByStatusResistsParams{
 		StatusConditionIds: ids,
 		MinResistance:      resistance,
 	})
@@ -107,10 +108,10 @@ func getMonstersByAutoAbility(srv *Server, r *http.Request, ctx context.Context,
 
 	isForced, err := queryParam.parseBool(r)
 	if queryIsEmpty(err) {
-		return srv.Cfg.DB.GetMonsterIDsByAutoAbility(ctx, id)
+		return config.Cfg.DB.GetMonsterIDsByAutoAbility(ctx, id)
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetMonsterIDsByAutoAbilityIsForced(ctx, database.GetMonsterIDsByAutoAbilityIsForcedParams{
+	dbIDs, err := config.Cfg.DB.GetMonsterIDsByAutoAbilityIsForced(ctx, database.GetMonsterIDsByAutoAbilityIsForcedParams{
 		AutoAbilityID: id,
 		IsForced:      isForced,
 	})
@@ -129,7 +130,7 @@ func getMonstersByItem(srv *Server, r *http.Request, ctx context.Context, id int
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.GetMonsterIDsByItem(ctx, database.GetMonsterIDsByItemParams{
+	dbIDs, err := config.Cfg.DB.GetMonsterIDsByItem(ctx, database.GetMonsterIDsByItemParams{
 		ItemID:  id,
 		Methods: methods,
 	})

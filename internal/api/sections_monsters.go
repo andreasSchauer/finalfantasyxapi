@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -92,7 +93,7 @@ func getMonsterSectionRelations(srv *Server, r *http.Request, monIDs []int32) (m
 	i := E.Monsters
 	relations := make(map[int32]map[Relation][]int32)
 
-	monsterJunctions, err := getDBJunctions(r.Context(), monIDs, i.resTypeSingle, E.Areas.resTypeSingle, srv.Cfg.DB.GetMonsterAreaIdPairs, juncMonsterArea)
+	monsterJunctions, err := getDBJunctions(r.Context(), monIDs, i.resTypeSingle, E.Areas.resTypeSingle, config.Cfg.DB.GetMonsterAreaIdPairs, juncMonsterArea)
 	if err != nil {
 		return nil, err
 	}

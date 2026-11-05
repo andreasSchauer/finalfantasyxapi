@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -22,7 +23,7 @@ func filterAvlMonsters(srv *Server, r *http.Request, inputIDs []int32) ([]int32,
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.FilterMonsterIDsByAvailability(r.Context(), database.FilterMonsterIDsByAvailabilityParams{
+	dbIDs, err := config.Cfg.DB.FilterMonsterIDsByAvailability(r.Context(), database.FilterMonsterIDsByAvailabilityParams{
 		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,
@@ -54,7 +55,7 @@ func filterAvlMonsterFormations(srv *Server, r *http.Request, inputIDs []int32) 
 		return nil, err
 	}
 
-	dbIDs, err := srv.Cfg.DB.FilterMonsterFormationIDsByAvailability(r.Context(), database.FilterMonsterFormationIDsByAvailabilityParams{
+	dbIDs, err := config.Cfg.DB.FilterMonsterFormationIDsByAvailability(r.Context(), database.FilterMonsterFormationIDsByAvailabilityParams{
 		Ids:            inputIDs,
 		Availability:   avlParams.availabilities,
 		IsRepeatable:   avlParams.isRepeatable,

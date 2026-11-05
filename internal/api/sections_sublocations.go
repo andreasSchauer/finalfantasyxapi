@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"golang.org/x/sync/errgroup"
 )
@@ -49,21 +50,21 @@ func getSublocationSectionRelations(srv *Server, r *http.Request, subLocIDs []in
 	var treasureJunctions []Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Treasures.resTypeSingle, srv.Cfg.DB.GetSublocationTreasureIdPairs, juncSublocationTreasure)
+		treasureJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Treasures.resTypeSingle, config.Cfg.DB.GetSublocationTreasureIdPairs, juncSublocationTreasure)
 		return err
 	})
 
 	var shopJunctions []Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Shops.resTypeSingle, srv.Cfg.DB.GetSublocationShopIdPairs, juncSublocationShop)
+		shopJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Shops.resTypeSingle, config.Cfg.DB.GetSublocationShopIdPairs, juncSublocationShop)
 		return err
 	})
 
 	var monsterJunctions []Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Monsters.resTypeSingle, srv.Cfg.DB.GetSublocationMonsterIdPairs, juncSublocationMonster)
+		monsterJunctions, err = getDBJunctions(ctx, subLocIDs, i.resTypeSingle, E.Monsters.resTypeSingle, config.Cfg.DB.GetSublocationMonsterIdPairs, juncSublocationMonster)
 		return err
 	})
 

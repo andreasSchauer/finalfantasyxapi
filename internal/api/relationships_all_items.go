@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -13,7 +14,7 @@ func getMasterItemObtainable(srv *Server, r *http.Request, masterItem seedtypes.
 		return ObtainableFrom{}, err
 	}
 
-	bools, err := srv.Cfg.DB.GetMasterItemObtainableBools(r.Context(), database.GetMasterItemObtainableBoolsParams{
+	bools, err := config.Cfg.DB.GetMasterItemObtainableBools(r.Context(), database.GetMasterItemObtainableBoolsParams{
 		MasterItemID: availabilityParams.ParentID,
 		Availability: availabilityParams.Availability,
 		Repeatable:   availabilityParams.Repeatable,

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -38,13 +39,13 @@ func (srv *Server) retrieveTreasures(r *http.Request, i handlerInput[seedtypes.T
 	}
 
 	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, srv.Cfg.DB.GetLocationTreasureIDs),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, srv.Cfg.DB.GetSublocationTreasureIDs),
-		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, srv.Cfg.DB.GetAreaTreasureIDs),
-		i.queryID(r, ids, ts.QpnItem, lookup.L.Items, srv.Cfg.DB.GetTreasureIDsByItem),
+		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationTreasureIDs),
+		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationTreasureIDs),
+		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetAreaTreasureIDs),
+		i.queryID(r, ids, ts.QpnItem, lookup.L.Items, config.Cfg.DB.GetTreasureIDsByItem),
 		i.queryJoined(srv, r, ids, []ts.QueryParamName{ts.QpnAutoAbility, ts.QpnEmptySlots, ts.QpnCharacter}, filterTreasuresEquipment),
-		i.queryBool(r, ids, ts.QpnAnima, srv.Cfg.DB.GetTreasureIDsByIsAnimaTreasure),
-		i.queryEnum(r, enums.T.LootType, ids, ts.QpnLootType, srv.Cfg.DB.GetTreasureIDsByLootType),
-		i.queryEnum(r, enums.T.TreasureType, ids, ts.QpnTreasureType, srv.Cfg.DB.GetTreasureIDsByTreasureType),
+		i.queryBool(r, ids, ts.QpnAnima, config.Cfg.DB.GetTreasureIDsByIsAnimaTreasure),
+		i.queryEnum(r, enums.T.LootType, ids, ts.QpnLootType, config.Cfg.DB.GetTreasureIDsByLootType),
+		i.queryEnum(r, enums.T.TreasureType, ids, ts.QpnTreasureType, config.Cfg.DB.GetTreasureIDsByTreasureType),
 	})
 }

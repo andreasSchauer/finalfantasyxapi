@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -14,13 +15,13 @@ func getCharClassRelationships(srv *Server, r *http.Request, class seedtypes.Cha
 
 	g.Go(func() error {
 		var err error
-		rel.Members, err = E.PlayerUnits.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassUnitIDs)
+		rel.Members, err = E.PlayerUnits.dbGetRelations(srv, ctx, class, config.Cfg.DB.GetCharacterClassUnitIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultAbilities, err = E.Abilities.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassDefaultAbilityIDs)
+		rel.DefaultAbilities, err = E.Abilities.dbGetRelations(srv, ctx, class, config.Cfg.DB.GetCharacterClassDefaultAbilityIDs)
 		if err != nil {
 			return err
 		}
@@ -31,19 +32,19 @@ func getCharClassRelationships(srv *Server, r *http.Request, class seedtypes.Cha
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultOverdrives, err = E.Overdrives.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassDefaultOverdriveIDs)
+		rel.DefaultOverdrives, err = E.Overdrives.dbGetRelations(srv, ctx, class, config.Cfg.DB.GetCharacterClassDefaultOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.LearnableOverdrives, err = E.Overdrives.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassLearnableOverdriveIDs)
+		rel.LearnableOverdrives, err = E.Overdrives.dbGetRelations(srv, ctx, class, config.Cfg.DB.GetCharacterClassLearnableOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Submenus, err = E.Submenus.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassSubmenuIDs)
+		rel.Submenus, err = E.Submenus.dbGetRelations(srv, ctx, class, config.Cfg.DB.GetCharacterClassSubmenuIDs)
 		return err
 	})
 
@@ -56,7 +57,7 @@ func getCharClassRelationships(srv *Server, r *http.Request, class seedtypes.Cha
 }
 
 func getClassLearnableAbilities(srv *Server, ctx context.Context, class seedtypes.CharacterClass, defaultAbilities []TypedAPIResource) ([]TypedAPIResource, error) {
-	allAbilities, err := E.Abilities.dbGetRelations(srv, ctx, class, srv.Cfg.DB.GetCharacterClassLearnableAbilityIDs)
+	allAbilities, err := E.Abilities.dbGetRelations(srv, ctx, class, config.Cfg.DB.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
 		return nil, err
 	}
