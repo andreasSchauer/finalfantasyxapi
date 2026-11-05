@@ -10,13 +10,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getSong(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResource], id int32) (Song, error) {
+func getSong(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResource], id int32) (Song, error) {
 	song, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Song{}, err
 	}
 
-	rel, err := getSongRelationships(srv, r, song)
+	rel, err := getSongRelationships(r, song)
 	if err != nil {
 		return Song{}, err
 	}
@@ -35,8 +35,8 @@ func (srv *Server) getSong(r *http.Request, i handlerInput[seedtypes.Song, Song,
 		MusicSphereID:        song.MusicSphereID,
 		OstDisc:              song.OSTDisc,
 		OstTrackNumber:       song.OSTTrackNumber,
-		BackgroundMusic:      convertObjSlice(srv, song.BackgroundMusic, convertBackgroundMusic),
-		Cues:                 convertObjSlice(srv, song.Cues, convertCue),
+		BackgroundMusic:      convertObjSlice(song.BackgroundMusic, convertBackgroundMusic),
+		Cues:                 convertObjSlice(song.Cues, convertCue),
 		BossFights:           rel.BossFights,
 		FMVs:                 rel.FMVs,
 	}
@@ -51,13 +51,13 @@ func (srv *Server) getSong(r *http.Request, i handlerInput[seedtypes.Song, Song,
 	return response, nil
 }
 
-func (srv *Server) retrieveSongs(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResource]) ([]int32, error) {
+func retrieveSongs(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
+	return i.filterIDs(r, ids, []IDFilter{
 		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationSongIDs),
 		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationSongIDs),
 		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetAreaSongIDs),

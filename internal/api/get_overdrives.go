@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getOverdrive(r *http.Request, i handlerInput[seedtypes.Overdrive, Overdrive, NamedAPIResource], id int32) (Overdrive, error) {
+func getOverdrive(r *http.Request, i handlerInput[seedtypes.Overdrive, Overdrive, NamedAPIResource], id int32) (Overdrive, error) {
 	overdrive, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Overdrive{}, err
@@ -28,22 +28,22 @@ func (srv *Server) getOverdrive(r *http.Request, i handlerInput[seedtypes.Overdr
 		UnlockCondition:    overdrive.UnlockCondition,
 		CountdownInSec:     overdrive.CountdownInSec,
 		Cursor:             overdrive.Cursor,
-		User:               nameToNamedAPIResource(srv, E.CharacterClasses, overdrive.User, nil),
-		OverdriveCommand:   namePtrToNamedAPIResPtr(srv, E.OverdriveCommands, overdrive.OverdriveCommand, nil),
-		OverdriveAbilities: refsToNamedAPIResources(srv, overdrive.OverdriveAbilities),
+		User:               nameToNamedAPIResource(E.CharacterClasses, overdrive.User, nil),
+		OverdriveCommand:   namePtrToNamedAPIResPtr(E.OverdriveCommands, overdrive.OverdriveCommand, nil),
+		OverdriveAbilities: refsToNamedAPIResources(overdrive.OverdriveAbilities),
 	}
 
 	return response, nil
 }
 
-func (srv *Server) retrieveOverdrives(r *http.Request, i handlerInput[seedtypes.Overdrive, Overdrive, NamedAPIResource]) ([]int32, error) {
+func retrieveOverdrives(r *http.Request, i handlerInput[seedtypes.Overdrive, Overdrive, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryIntList(srv, r, ids, ts.QpnRank, config.Cfg.DB.GetOverdriveIDsByRank),
+	return i.filterIDs(r, ids, []IDFilter{
+		i.queryIntList(r, ids, ts.QpnRank, config.Cfg.DB.GetOverdriveIDsByRank),
 		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(config.Cfg.DB.GetOverdriveIDsByUser)),
 	})
 }

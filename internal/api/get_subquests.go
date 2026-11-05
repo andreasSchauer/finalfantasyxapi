@@ -8,7 +8,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, QuestAPIResource], id int32) (Subquest, error) {
+func getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, QuestAPIResource], id int32) (Subquest, error) {
 	subquest, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Subquest{}, err
@@ -17,27 +17,27 @@ func (srv *Server) getSubquest(r *http.Request, i handlerInput[seedtypes.Subques
 	response := Subquest{
 		ID:              subquest.ID,
 		Name:            subquest.Name,
-		UntypedQuest:    idToQuestAPIResource(srv, E.Quests, subquest.Quest.ID),
-		ParentSidequest: idToQuestAPIResource(srv, E.Sidequests, subquest.SidequestID),
+		UntypedQuest:    idToQuestAPIResource(E.Quests, subquest.Quest.ID),
+		ParentSidequest: idToQuestAPIResource(E.Sidequests, subquest.SidequestID),
 		Availability:    subquest.Availability,
 		IsRepeatable:    subquest.IsRepeatable,
-		Completion:      convertQuestCompletion(srv, *subquest.Completion),
+		Completion:      convertQuestCompletion(*subquest.Completion),
 	}
 
 	if response.ParentSidequest.Sidequest == "monster arena" {
-		response.ArenaCreation = namePtrToNamedAPIResPtr(srv, E.ArenaCreations, &subquest.Name, nil)
+		response.ArenaCreation = namePtrToNamedAPIResPtr(E.ArenaCreations, &subquest.Name, nil)
 	}
 
 	return response, nil
 }
 
-func (srv *Server) retrieveSubquests(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, QuestAPIResource]) ([]int32, error) {
+func retrieveSubquests(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, QuestAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
+	return i.filterIDs(r, ids, []IDFilter{
 		i.queryBool(r, ids, ts.QpnRepeatable, config.Cfg.DB.GetSubquestIDsByRepeatable),
 	})
 }

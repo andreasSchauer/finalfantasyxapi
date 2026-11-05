@@ -9,13 +9,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getSublocation(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource], id int32) (Sublocation, error) {
+func getSublocation(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource], id int32) (Sublocation, error) {
 	sublocation, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Sublocation{}, err
 	}
 
-	rel, err := getSublocationRelationships(srv, r, sublocation)
+	rel, err := getSublocationRelationships(r, sublocation)
 	if err != nil {
 		return Sublocation{}, err
 	}
@@ -23,7 +23,7 @@ func (srv *Server) getSublocation(r *http.Request, i handlerInput[seedtypes.Subl
 	response := Sublocation{
 		ID:                    sublocation.ID,
 		Name:                  sublocation.Name,
-		ParentLocation:        nameToNamedAPIResource(srv, E.Locations, sublocation.Location, nil),
+		ParentLocation:        nameToNamedAPIResource(E.Locations, sublocation.Location, nil),
 		Availability:          sublocation.Availability,
 		ConnectedSublocations: rel.ConnectedSublocations,
 		Areas:                 rel.Areas,
@@ -33,16 +33,16 @@ func (srv *Server) getSublocation(r *http.Request, i handlerInput[seedtypes.Subl
 	return response, nil
 }
 
-func (srv *Server) retrieveSublocations(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource]) ([]int32, error) {
+func retrieveSublocations(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
+	return i.filterIDs(r, ids, []IDFilter{
 		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationSublocationIDs),
 		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetSublocationIDsWithMonster),
-		i.queryIDWrapper(srv, r, ids, ts.QpnItem, lookup.L.Items, getSublocationsByItem),
+		i.queryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getSublocationsByItem),
 		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, config.Cfg.DB.GetSublocationIDsWithKeyItem),
 		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, config.Cfg.DB.GetSublocationIDsWithAutoAbility),
 		i.queryBool2(r, ids, ts.QpnCharacters, config.Cfg.DB.GetSublocationIDsWithCharacters),

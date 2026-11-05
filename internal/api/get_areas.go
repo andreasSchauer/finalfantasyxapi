@@ -9,18 +9,18 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getArea(r *http.Request, i handlerInput[seedtypes.Area, Area, AreaAPIResource], id int32) (Area, error) {
+func getArea(r *http.Request, i handlerInput[seedtypes.Area, Area, AreaAPIResource], id int32) (Area, error) {
 	area, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Area{}, err
 	}
 
-	connections, err := getAreaConnectedAreas(srv, area)
+	connections, err := getAreaConnectedAreas(area)
 	if err != nil {
 		return Area{}, err
 	}
 
-	rel, err := getAreaRelationships(srv, r, area)
+	rel, err := getAreaRelationships(r, area)
 	if err != nil {
 		return Area{}, err
 	}
@@ -31,8 +31,8 @@ func (srv *Server) getArea(r *http.Request, i handlerInput[seedtypes.Area, Area,
 		Version:           area.Version,
 		Specification:     area.Specification,
 		DisplayName:       getAreaDisplayName(area),
-		ParentLocation:    nameToNamedAPIResource(srv, E.Locations, area.Location, nil),
-		ParentSublocation: nameToNamedAPIResource(srv, E.Sublocations, area.Sublocation, nil),
+		ParentLocation:    nameToNamedAPIResource(E.Locations, area.Location, nil),
+		ParentSublocation: nameToNamedAPIResource(E.Sublocations, area.Sublocation, nil),
 		Availability:      area.Availability,
 		HasSaveSphere:     area.HasSaveSphere,
 		AirshipDropOff:    area.AirshipDropOff,
@@ -45,17 +45,17 @@ func (srv *Server) getArea(r *http.Request, i handlerInput[seedtypes.Area, Area,
 	return response, nil
 }
 
-func (srv *Server) retrieveAreas(r *http.Request, i handlerInput[seedtypes.Area, Area, AreaAPIResource]) ([]int32, error) {
+func retrieveAreas(r *http.Request, i handlerInput[seedtypes.Area, Area, AreaAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
+	return i.filterIDs(r, ids, []IDFilter{
 		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationAreaIDs),
 		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationAreaIDs),
 		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreaIDsWithMonster),
-		i.queryIDWrapper(srv, r, ids, ts.QpnItem, lookup.L.Items, getAreasByItem),
+		i.queryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getAreasByItem),
 		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, config.Cfg.DB.GetAreaIDsWithKeyItem),
 		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreasByMonster),
 		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, config.Cfg.DB.GetAreaIDsWithAutoAbility),

@@ -19,17 +19,17 @@ func (s SubquestSimple) GetURL() string {
 	return s.URL
 }
 
-func createSubquestSimple(srv *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createSubquestSimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.Subquests
 	subquest, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	subquestSimple := SubquestSimple{
 		ID:        subquest.ID,
-		URL:       CreateResourceURL(srv, i.Endpoint, id),
+		URL:       CreateResourceURL(i.Endpoint, id),
 		Name:      subquest.Name,
 		Condition: subquest.Completion.Condition,
 		Areas:     locAreaStrings(subquest.Completion.Areas),
-		Reward:    convertItemAmountSimple(srv, subquest.GetItemAmount()),
+		Reward:    convertItemAmountSimple(subquest.GetItemAmount()),
 	}
 
 	return subquestSimple, nil

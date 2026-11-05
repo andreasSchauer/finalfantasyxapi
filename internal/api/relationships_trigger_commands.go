@@ -8,19 +8,19 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getTriggerCommandRelationships(srv *Server, r *http.Request, command seedtypes.TriggerCommand) (TriggerCommand, error) {
+func getTriggerCommandRelationships(r *http.Request, command seedtypes.TriggerCommand) (TriggerCommand, error) {
 	var rel TriggerCommand
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.MonsterFormations, err = E.MonsterFormations.dbGetRelations(srv, ctx, command, config.Cfg.DB.GetTriggerCommandMonsterFormationIDs)
+		rel.MonsterFormations, err = E.MonsterFormations.dbGetRelations(ctx, command, config.Cfg.DB.GetTriggerCommandMonsterFormationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.UsedBy, err = E.CharacterClasses.dbGetRelations(srv, ctx, command, config.Cfg.DB.GetTriggerCommandCharClassIDs)
+		rel.UsedBy, err = E.CharacterClasses.dbGetRelations(ctx, command, config.Cfg.DB.GetTriggerCommandCharClassIDs)
 		return err
 	})
 

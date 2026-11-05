@@ -7,7 +7,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i handlerInput[T, R, A]) handleSubsection(srv *Server, w http.ResponseWriter, r *http.Request, segments []string) {
+func (i handlerInput[T, R, A]) handleSubsection(w http.ResponseWriter, r *http.Request, segments []string) {
 	idStr := segments[0]
 	sectionName := segments[1]
 
@@ -36,13 +36,13 @@ func (i handlerInput[T, R, A]) handleSubsection(srv *Server, w http.ResponseWrit
 	if subsection.dbQuery == nil {
 		if subsection.relationsFn != nil {
 			var err error
-			subsection.relations, err = subsection.relationsFn(srv, r, []int32{parseRes.ID})
+			subsection.relations, err = subsection.relationsFn(r, []int32{parseRes.ID})
 			if handleHTTPError(w, err) {
 				return
 			}
 		}
 
-		simpleRes, err := subsection.createSubFn(srv, r, parseRes.ID, subsection)
+		simpleRes, err := subsection.createSubFn(r, parseRes.ID, subsection)
 		if handleHTTPError(w, err) {
 			return
 		}
@@ -50,26 +50,26 @@ func (i handlerInput[T, R, A]) handleSubsection(srv *Server, w http.ResponseWrit
 		return
 	}
 
-	list, err := i.toSimpleResourceList(srv, r, parseRes.ID, sectionName, subsection)
+	list, err := i.toSimpleResourceList(r, parseRes.ID, sectionName, subsection)
 	if handleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, list)
 }
 
-func (i handlerInput[T, R, A]) handleParameters(srv *Server, w http.ResponseWriter, r *http.Request) {
-	handleParametersWrapper(srv, w, r, i.Endpoint, i.queryLookup)
+func (i handlerInput[T, R, A]) handleParameters(w http.ResponseWriter, r *http.Request) {
+	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
 }
 
-func (i handlerInputEnums) handleParameters(srv *Server, w http.ResponseWriter, r *http.Request) {
-	handleParametersWrapper(srv, w, r, i.Endpoint, i.queryLookup)
+func (i handlerInputEnums) handleParameters(w http.ResponseWriter, r *http.Request) {
+	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
 }
 
-func (i handlerInputEndpoints) handleParameters(srv *Server, w http.ResponseWriter, r *http.Request) {
-	handleParametersWrapper(srv, w, r, i.Endpoint, i.queryLookup)
+func (i handlerInputEndpoints) handleParameters(w http.ResponseWriter, r *http.Request) {
+	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
 }
 
-func handleParametersWrapper(srv *Server, w http.ResponseWriter, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam) {
+func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam) {
 	segment := string(ts.SnParameters)
 	err := verifyQueryParamsAltList(r, endpoint, queryLookup, &segment)
 	if handleHTTPError(w, err) {
@@ -78,14 +78,14 @@ func handleParametersWrapper(srv *Server, w http.ResponseWriter, r *http.Request
 
 	setLimitMax(r, r.URL.Query())
 
-	parameterList, err := getQueryParamList(srv, r, endpoint, queryLookup)
+	parameterList, err := getQueryParamList(r, endpoint, queryLookup)
 	if handleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
-func (i handlerInput[T, R, A]) handleSections(srv *Server, w http.ResponseWriter, r *http.Request) {
+func (i handlerInput[T, R, A]) handleSections(w http.ResponseWriter, r *http.Request) {
 	segment := string(ts.SnSections)
 	err := verifyQueryParamsAltList(r, i.Endpoint, i.queryLookup, &segment)
 	if handleHTTPError(w, err) {
@@ -94,14 +94,14 @@ func (i handlerInput[T, R, A]) handleSections(srv *Server, w http.ResponseWriter
 
 	setLimitMax(r, r.URL.Query())
 
-	sectionList, err := getSectionList(srv, r, i.subsections)
+	sectionList, err := getSectionList(r, i.subsections)
 	if handleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, sectionList)
 }
 
-func (i handlerInput[T, R, A]) handleSimple(srv *Server, w http.ResponseWriter, r *http.Request) {
+func (i handlerInput[T, R, A]) handleSimple(w http.ResponseWriter, r *http.Request) {
 	segment := string(ts.SnSimple)
 
 	_, ok := i.subsections[ts.SnSimple]
@@ -110,17 +110,17 @@ func (i handlerInput[T, R, A]) handleSimple(srv *Server, w http.ResponseWriter, 
 		return
 	}
 
-	ids, err := i.queryIDsParam(srv, r, &segment)
+	ids, err := i.queryIDsParam(r, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	resources, err := createSimpleResources(srv, r, ids, i.subsections[ts.SectionName(segment)])
+	resources, err := createSimpleResources(r, ids, i.subsections[ts.SectionName(segment)])
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	listParams, shownResources, err := createPaginatedList(srv, r, resources)
+	listParams, shownResources, err := createPaginatedList(r, resources)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -133,7 +133,7 @@ func (i handlerInput[T, R, A]) handleSimple(srv *Server, w http.ResponseWriter, 
 	respondWithJSON(w, http.StatusOK, subResList)
 }
 
-func (i handlerInput[T, R, A]) queryIDsParam(srv *Server, r *http.Request, segment *string) ([]int32, error) {
+func (i handlerInput[T, R, A]) queryIDsParam(r *http.Request, segment *string) ([]int32, error) {
 	err := verifyQueryParams[any](r, i.Endpoint, i.queryLookup, nil, segment)
 	if err != nil {
 		return nil, err
@@ -146,7 +146,7 @@ func (i handlerInput[T, R, A]) queryIDsParam(srv *Server, r *http.Request, segme
 		return i.retrieveFunc(r, i)
 	}
 
-	ids, err := queryParamIDs.parseIDList(srv, r, i.objLookup)
+	ids, err := queryParamIDs.parseIDList(r, i.objLookup)
 	if err != nil {
 		return nil, err
 	}

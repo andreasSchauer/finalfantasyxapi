@@ -16,7 +16,7 @@ func (l SectionList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func getSectionList(srv *Server, r *http.Request, sectionMap map[ts.SectionName]Subsection) (SectionList, error) {
+func getSectionList(r *http.Request, sectionMap map[ts.SectionName]Subsection) (SectionList, error) {
 	sectionNames := []string{}
 
 	for section := range sectionMap {
@@ -24,7 +24,7 @@ func getSectionList(srv *Server, r *http.Request, sectionMap map[ts.SectionName]
 	}
 	slices.Sort(sectionNames)
 
-	listParams, sections, err := createPaginatedList(srv, r, sectionNames)
+	listParams, sections, err := createPaginatedList(r, sectionNames)
 	if err != nil {
 		return SectionList{}, err
 	}

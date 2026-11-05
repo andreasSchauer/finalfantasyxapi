@@ -5,7 +5,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-var Q QueryLookup
+var Q = &QueryLookup{}
 
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {

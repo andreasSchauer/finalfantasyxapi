@@ -21,7 +21,7 @@ func (l LocationSimple) GetURL() string {
 	return l.URL
 }
 
-func createLocationSimple(srv *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createLocationSimple(r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := E.Locations
 	location, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -30,17 +30,17 @@ func createLocationSimple(srv *Server, r *http.Request, id int32, subsection Sub
 
 	locationSimple := LocationSimple{
 		ID:        location.ID,
-		URL:       CreateResourceURL(srv, i.Endpoint, id),
+		URL:       CreateResourceURL(i.Endpoint, id),
 		Name:      location.Name,
-		Shops:     convertObjSlice(srv, shopIDs, idToShopLocSimple),
-		Treasures: getTreasuresLocSimple(srv, id, subsection),
-		Monsters:  convertObjSlice(srv, monsterIDs, idToMonsterSimpleString),
+		Shops:     convertObjSlice(shopIDs, idToShopLocSimple),
+		Treasures: getTreasuresLocSimple(id, subsection),
+		Monsters:  convertObjSlice(monsterIDs, idToMonsterSimpleString),
 	}
 
 	return locationSimple, nil
 }
 
-func getLocationSectionRelations(srv *Server, r *http.Request, locIDs []int32) (map[int32]map[Relation][]int32, error) {
+func getLocationSectionRelations(r *http.Request, locIDs []int32) (map[int32]map[Relation][]int32, error) {
 	i := E.Locations
 	relations := make(map[int32]map[Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())

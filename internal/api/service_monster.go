@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
-func quickAssembleMon(srv *Server, monID int32, altStatePtr *int32) (Monster, error) {
+func quickAssembleMon(monID int32, altStatePtr *int32) (Monster, error) {
 	monsterLookup, _ := lookup.GetResourceByID(monID, lookup.L.MonstersID)
 
 	monster := Monster{
@@ -20,22 +20,22 @@ func quickAssembleMon(srv *Server, monID int32, altStatePtr *int32) (Monster, er
 		IsUnderwater:     monsterLookup.IsUnderwater,
 		IsZombie:         monsterLookup.IsZombie,
 		Distance:         monsterLookup.Distance,
-		Properties:       namesToNamedAPIResources(srv, E.Properties, monsterLookup.Properties),
-		AutoAbilities:    namesToNamedAPIResources(srv, E.AutoAbilities, monsterLookup.AutoAbilities),
+		Properties:       namesToNamedAPIResources(E.Properties, monsterLookup.Properties),
+		AutoAbilities:    namesToNamedAPIResources(E.AutoAbilities, monsterLookup.AutoAbilities),
 		StealGil:         monsterLookup.StealGil,
 		DoomCountdown:    monsterLookup.DoomCountdown,
 		PoisonRate:       monsterLookup.PoisonRate,
 		ThreatenChance:   monsterLookup.ThreatenChance,
 		ZanmatoLevel:     monsterLookup.ZanmatoLevel,
-		BaseStats:        E.Stats.toResAmtType(srv, monsterLookup.BaseStats, newBaseStat),
-		ElemResists:      getMonsterElemResists(srv, monsterLookup.ElemResists),
-		StatusImmunities: namesToNamedAPIResources(srv, E.StatusConditions, monsterLookup.StatusImmunities),
-		StatusResists:    E.StatusConditions.toResAmtType(srv, monsterLookup.StatusResists, newStatusResist),
-		Abilities:        convertObjSlice(srv, monsterLookup.Abilities, convertMonsterAbility),
-		AlteredStates:    getMonsterAlteredStates(srv, nil, monsterLookup),
+		BaseStats:        E.Stats.toResAmtType(monsterLookup.BaseStats, newBaseStat),
+		ElemResists:      getMonsterElemResists(monsterLookup.ElemResists),
+		StatusImmunities: namesToNamedAPIResources(E.StatusConditions, monsterLookup.StatusImmunities),
+		StatusResists:    E.StatusConditions.toResAmtType(monsterLookup.StatusResists, newStatusResist),
+		Abilities:        convertObjSlice(monsterLookup.Abilities, convertMonsterAbility),
+		AlteredStates:    getMonsterAlteredStates(nil, monsterLookup),
 	}
 
-	monster, err := applyAlteredStateFromJSON(srv, monster, altStatePtr)
+	monster, err := applyAlteredStateFromJSON(monster, altStatePtr)
 	if err != nil {
 		return Monster{}, err
 	}

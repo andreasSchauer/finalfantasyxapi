@@ -13,13 +13,13 @@ func (ps PossibleItem) GetAPIResource() APIResource {
 	return ps.Resource.GetAPIResource()
 }
 
-func newPossibleItem(srv *Server, item seedtypes.ItemAmount, chance int32) PossibleItem {
+func newPossibleItem(item seedtypes.ItemAmount, chance int32) PossibleItem {
 	return PossibleItem{
-		ResourceAmount: E.AllItems.toResAmtFromName(srv, item),
+		ResourceAmount: E.AllItems.toResAmtFromName(item),
 		Chance:         chance,
 	}
 }
 
-func convertPossibleItem(srv *Server, item seedtypes.PossibleItem) PossibleItem {
-	return newPossibleItem(srv, item.ItemAmount, item.Chance)
+func convertPossibleItem(item seedtypes.PossibleItem) PossibleItem {
+	return newPossibleItem(item.ItemAmount, item.Chance)
 }

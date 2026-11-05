@@ -7,13 +7,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (srv *Server) getPrimer(r *http.Request, i handlerInput[seedtypes.Primer, Primer, NamedAPIResource], id int32) (Primer, error) {
+func getPrimer(r *http.Request, i handlerInput[seedtypes.Primer, Primer, NamedAPIResource], id int32) (Primer, error) {
 	primer, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Primer{}, err
 	}
 
-	rel, err := getPrimerRelationships(srv, r, primer)
+	rel, err := getPrimerRelationships(r, primer)
 	if err != nil {
 		return Primer{}, err
 	}
@@ -23,7 +23,7 @@ func (srv *Server) getPrimer(r *http.Request, i handlerInput[seedtypes.Primer, P
 	response := Primer{
 		ID:            primer.ID,
 		Name:          primer.Name,
-		KeyItem:       nameToNamedAPIResource(srv, E.KeyItems, keyItem.Name, nil),
+		KeyItem:       nameToNamedAPIResource(E.KeyItems, keyItem.Name, nil),
 		Description:   keyItem.Description,
 		AlBhedLetter:  primer.AlBhedLetter,
 		EnglishLetter: primer.EnglishLetter,
@@ -34,11 +34,11 @@ func (srv *Server) getPrimer(r *http.Request, i handlerInput[seedtypes.Primer, P
 	return response, nil
 }
 
-func (srv *Server) retrievePrimers(r *http.Request, i handlerInput[seedtypes.Primer, Primer, NamedAPIResource]) ([]int32, error) {
+func retrievePrimers(r *http.Request, i handlerInput[seedtypes.Primer, Primer, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{})
+	return i.filterIDs(r, ids, []IDFilter{})
 }

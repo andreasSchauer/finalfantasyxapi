@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func applyOmnisElements(srv *Server, r *http.Request, mon Monster, queryName ts.QueryParamName) ([]ElementalResist, error) {
+func applyOmnisElements(r *http.Request, mon Monster, queryName ts.QueryParamName) ([]ElementalResist, error) {
 	circlesAffinity := map[int]string{
 		0: string(database.ElementalAffinityNeutral),
 		1: string(database.ElementalAffinityHalved),
@@ -45,12 +45,12 @@ func applyOmnisElements(srv *Server, r *http.Request, mon Monster, queryName ts.
 
 		// if the opposite element has 4 circles, seymour omnis is weak to this element
 		if circleCountOpposite == 4 {
-			mon.ElemResists[i] = newElemResist(srv, elementName, string(database.ElementalAffinityWeak))
+			mon.ElemResists[i] = newElemResist(elementName, string(database.ElementalAffinityWeak))
 			continue
 		}
 
 		// else, change the affinity based on the count of the circles
-		mon.ElemResists[i] = newElemResist(srv, elementName, circlesAffinity[circleCount])
+		mon.ElemResists[i] = newElemResist(elementName, circlesAffinity[circleCount])
 	}
 
 	return mon.ElemResists, nil

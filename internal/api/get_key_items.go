@@ -9,13 +9,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource], id int32) (KeyItem, error) {
+func getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource], id int32) (KeyItem, error) {
 	keyItem, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return KeyItem{}, err
 	}
 
-	rel, err := getKeyItemRelationships(srv, r, keyItem)
+	rel, err := getKeyItemRelationships(r, keyItem)
 	if err != nil {
 		return KeyItem{}, err
 	}
@@ -23,7 +23,7 @@ func (srv *Server) getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem,
 	response := KeyItem{
 		ID:              keyItem.ID,
 		Name:            keyItem.Name,
-		UntypedItem:     idToTypedAPIResource(srv, E.AllItems, keyItem.MasterItem.ID),
+		UntypedItem:     idToTypedAPIResource(E.AllItems, keyItem.MasterItem.ID),
 		Category:        keyItem.Category,
 		Description:     keyItem.Description,
 		Effect:          keyItem.Effect,
@@ -37,15 +37,15 @@ func (srv *Server) getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem,
 	return response, nil
 }
 
-func (srv *Server) retrieveKeyItems(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource]) ([]int32, error) {
+func retrieveKeyItems(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.KeyItemCategory, ids, ts.QpnCategory, config.Cfg.DB.GetKeyItemIDsCategory),
-		i.queryValueList(srv, r, ids, ts.QpnMethods, config.Cfg.DB.GetKeyItemIDsByMethods),
+	return i.filterIDs(r, ids, []IDFilter{
+		i.queryEnumList(r, enums.T.KeyItemCategory, ids, ts.QpnCategory, config.Cfg.DB.GetKeyItemIDsCategory),
+		i.queryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetKeyItemIDsByMethods),
 		i.queryID(r, ids, ts.QpnLocation, E.Locations.objLookup, config.Cfg.DB.GetKeyItemIDsByLocation),
 		i.queryID(r, ids, ts.QpnSublocation, E.Sublocations.objLookup, config.Cfg.DB.GetKeyItemIDsBySublocation),
 		i.queryID(r, ids, ts.QpnArea, E.Areas.objLookup, config.Cfg.DB.GetKeyItemIDsByArea),

@@ -13,16 +13,16 @@ type MonsterItemsSimple struct {
 	OtherItems          []string `json:"other_items,omitempty"`
 }
 
-func convertMonsterItemsSimple(srv *Server, items seedtypes.MonsterItems) MonsterItemsSimple {
+func convertMonsterItemsSimple(items seedtypes.MonsterItems) MonsterItemsSimple {
 	return MonsterItemsSimple{
-		StealCommon:         convertObjPtr(srv, items.StealCommon, convertItemAmountSimple),
-		StealRare:           convertObjPtr(srv, items.StealRare, convertItemAmountSimple),
-		DropCommon:          convertObjPtr(srv, items.DropCommon, convertItemAmountSimple),
-		DropRare:            convertObjPtr(srv, items.DropRare, convertItemAmountSimple),
-		SecondaryDropCommon: convertObjPtr(srv, items.SecondaryDropCommon, convertItemAmountSimple),
-		SecondaryDropRare:   convertObjPtr(srv, items.SecondaryDropRare, convertItemAmountSimple),
-		Bribe:               convertObjPtr(srv, items.Bribe, convertItemAmountSimple),
-		OtherItems:          convertObjSliceOrNil(srv, items.OtherItems, posItemToItemAmtSimple),
+		StealCommon:         convertObjPtr(items.StealCommon, convertItemAmountSimple),
+		StealRare:           convertObjPtr(items.StealRare, convertItemAmountSimple),
+		DropCommon:          convertObjPtr(items.DropCommon, convertItemAmountSimple),
+		DropRare:            convertObjPtr(items.DropRare, convertItemAmountSimple),
+		SecondaryDropCommon: convertObjPtr(items.SecondaryDropCommon, convertItemAmountSimple),
+		SecondaryDropRare:   convertObjPtr(items.SecondaryDropRare, convertItemAmountSimple),
+		Bribe:               convertObjPtr(items.Bribe, convertItemAmountSimple),
+		OtherItems:          convertObjSliceOrNil(items.OtherItems, posItemToItemAmtSimple),
 	}
 }
 
@@ -31,9 +31,9 @@ type MonsterEquipmentSimple struct {
 	ArmorAbilities  []string `json:"armor_abilities"`
 }
 
-func convertMonsterEquipmentSimple(srv *Server, equipment seedtypes.MonsterEquipment) MonsterEquipmentSimple {
+func convertMonsterEquipmentSimple(equipment seedtypes.MonsterEquipment) MonsterEquipmentSimple {
 	return MonsterEquipmentSimple{
-		WeaponAbilities: convertObjSlice(srv, equipment.WeaponAbilities, monsterAutoAbilityString),
-		ArmorAbilities:  convertObjSlice(srv, equipment.ArmorAbilities, monsterAutoAbilityString),
+		WeaponAbilities: convertObjSlice(equipment.WeaponAbilities, monsterAutoAbilityString),
+		ArmorAbilities:  convertObjSlice(equipment.ArmorAbilities, monsterAutoAbilityString),
 	}
 }

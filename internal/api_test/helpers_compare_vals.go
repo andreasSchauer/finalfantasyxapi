@@ -183,7 +183,7 @@ func (test test) compPageURL(fieldName string, expPathPtr, gotURLPtr *string) {
 
 	if expPathPtr != nil {
 		expPath := *expPathPtr
-		expURL := api.CompleteTestURL(test.srv, expPath)
+		expURL := api.CompleteTestURL(expPath)
 		expURLPtr = &expURL
 	}
 

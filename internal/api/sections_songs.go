@@ -24,13 +24,13 @@ func (s SongSimple) GetURL() string {
 	return s.URL
 }
 
-func createSongSimple(srv *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createSongSimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.Songs
 	song, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	songSimple := SongSimple{
 		ID:                song.ID,
-		URL:               CreateResourceURL(srv, i.Endpoint, id),
+		URL:               CreateResourceURL(i.Endpoint, id),
 		Name:              song.Name,
 		DurationInSeconds: song.DurationInSeconds,
 		CanLoop:           song.CanLoop,
@@ -46,7 +46,7 @@ func createSongSimple(srv *Server, _ *http.Request, id int32, _ Subsection) (Sim
 	return songSimple, nil
 }
 
-func (srv *Server) getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
+func getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := config.Cfg.DB.GetLocationBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of location with id '%d'", err)
@@ -71,7 +71,7 @@ func (srv *Server) getLocationSongIDs(ctx context.Context, id int32) ([]int32, e
 	return ids, nil
 }
 
-func (srv *Server) getSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
+func getSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := config.Cfg.DB.GetSublocationBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of sublocation with id '%d'", err)
@@ -96,7 +96,7 @@ func (srv *Server) getSublocationSongIDs(ctx context.Context, id int32) ([]int32
 	return ids, nil
 }
 
-func (srv *Server) getAreaSongIDs(ctx context.Context, id int32) ([]int32, error) {
+func getAreaSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := config.Cfg.DB.GetAreaBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of area with id '%d'", err)

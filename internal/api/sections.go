@@ -4,8 +4,8 @@ import "net/http"
 
 type Subsection struct {
 	dbQuery     DBQueryIntMany
-	createSubFn func(*Server, *http.Request, int32, Subsection) (SimpleResource, error)
-	relationsFn func(*Server, *http.Request, []int32) (map[int32]map[Relation][]int32, error)
+	createSubFn func(*http.Request, int32, Subsection) (SimpleResource, error)
+	relationsFn func(*http.Request, []int32) (map[int32]map[Relation][]int32, error)
 	relations   map[int32]map[Relation][]int32
 }
 

@@ -15,8 +15,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMonstersByElemResists(srv *Server, r *http.Request, ctx context.Context, query string, queryParam QueryParam) ([]int32, error) {
-	ids, err := getElemResistIDs(srv, query, queryParam)
+func getMonstersByElemResists(r *http.Request, ctx context.Context, query string, queryParam QueryParam) ([]int32, error) {
+	ids, err := getElemResistIDs(query, queryParam)
 	if err != nil {
 		return nil, err
 	}
@@ -29,8 +29,8 @@ func getMonstersByElemResists(srv *Server, r *http.Request, ctx context.Context,
 	return dbIDs, nil
 }
 
-func getElemResistIDs(srv *Server, query string, queryParam QueryParam) ([]int32, error) {
-	eaPairs, err := queryListSplit(srv, query)
+func getElemResistIDs(query string, queryParam QueryParam) ([]int32, error) {
+	eaPairs, err := queryListSplit(query)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +73,7 @@ func getElemResistIDs(srv *Server, query string, queryParam QueryParam) ([]int32
 	return ids, nil
 }
 
-func getMonstersByStatusResists(srv *Server, r *http.Request, ctx context.Context, ids []int32) ([]int32, error) {
+func getMonstersByStatusResists(r *http.Request, ctx context.Context, ids []int32) ([]int32, error) {
 	resistance, err := verifyMonsterResistance(r)
 	if err != nil {
 		return nil, err
@@ -101,7 +101,7 @@ func verifyMonsterResistance(r *http.Request) (int32, error) {
 	return int32(resistance), nil
 }
 
-func getMonstersByAutoAbility(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getMonstersByAutoAbility(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Monsters
 
 	queryParam := i.queryLookup[ts.QpnIsForced]
@@ -122,10 +122,10 @@ func getMonstersByAutoAbility(srv *Server, r *http.Request, ctx context.Context,
 	return dbIDs, nil
 }
 
-func getMonstersByItem(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getMonstersByItem(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Monsters
 
-	methods, err := getMonsterItemMethods(srv, r)
+	methods, err := getMonsterItemMethods(r)
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +141,7 @@ func getMonstersByItem(srv *Server, r *http.Request, ctx context.Context, id int
 	return dbIDs, nil
 }
 
-func getMonsterItemMethods(srv *Server, r *http.Request) ([]string, error) {
+func getMonsterItemMethods(r *http.Request) ([]string, error) {
 	i := E.Monsters
 	paramMethods := i.queryLookup[ts.QpnMethods]
 	aliasses := map[string][]string{
@@ -149,7 +149,7 @@ func getMonsterItemMethods(srv *Server, r *http.Request) ([]string, error) {
 		"drop":  {"drop_common", "drop_rare", "drop_secondary_common", "drop_secondary_rare"},
 	}
 
-	queryMethods, err := paramMethods.parseValueList(srv, r)
+	queryMethods, err := paramMethods.parseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

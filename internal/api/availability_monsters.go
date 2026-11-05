@@ -7,10 +7,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-func filterAvlMonsters(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Monsters
 
-	avlParams, err := i.queryAvlRepGetParams(srv, r)
+	avlParams, err := i.queryAvlRepGetParams(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -39,10 +39,10 @@ func filterAvlMonsters(srv *Server, r *http.Request, inputIDs []int32) ([]int32,
 	return dbIDs, nil
 }
 
-func filterAvlMonsterFormations(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlMonsterFormations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.MonsterFormations
 
-	avlParams, err := i.queryAvlRepGetParams(srv, r)
+	avlParams, err := i.queryAvlRepGetParams(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

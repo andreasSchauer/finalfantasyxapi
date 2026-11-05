@@ -11,7 +11,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func filterShopsEquipment(srv *Server, r *http.Request, ctx context.Context) ([]int32, error) {
+func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
 	i := E.Shops
 
 	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
@@ -19,7 +19,7 @@ func filterShopsEquipment(srv *Server, r *http.Request, ctx context.Context) ([]
 		return nil, err
 	}
 
-	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(srv, r)
+	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func filterShopsEquipment(srv *Server, r *http.Request, ctx context.Context) ([]
 	return dbIDs, nil
 }
 
-func filterTreasuresEquipment(srv *Server, r *http.Request, ctx context.Context) ([]int32, error) {
+func filterTreasuresEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
 	i := E.Treasures
 
 	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
@@ -49,7 +49,7 @@ func filterTreasuresEquipment(srv *Server, r *http.Request, ctx context.Context)
 		return nil, err
 	}
 
-	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(srv, r)
+	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

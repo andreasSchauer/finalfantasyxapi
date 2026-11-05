@@ -8,7 +8,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func applyPossessedAeonStats(srv *Server, r *http.Request, mon Monster) ([]BaseStat, error) {
+func applyPossessedAeonStats(r *http.Request, mon Monster) ([]BaseStat, error) {
 	paramYunaStats := Q.monsters[ts.QpnYunaStats]
 	if !slices.Contains(paramYunaStats.AllowedIDs, mon.ID) {
 		return mon.BaseStats, nil
@@ -20,10 +20,10 @@ func applyPossessedAeonStats(srv *Server, r *http.Request, mon Monster) ([]BaseS
 	aeon := Aeon{
 		ID:        aeonLookup.ID,
 		Name:      aeonLookup.Name,
-		BaseStats: getAeonBaseStats(srv, aeonLookup),
+		BaseStats: getAeonBaseStats(aeonLookup),
 	}
 
-	aeon, err := applyAeonStats(srv, r, aeon, nil)
+	aeon, err := applyAeonStats(r, aeon, nil)
 	if err != nil {
 		return nil, err
 	}

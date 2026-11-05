@@ -10,11 +10,11 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMasterItemsByArea(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getMasterItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(srv, r)
+	methods, err := queryParamMethods.parseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -30,11 +30,11 @@ func getMasterItemsByArea(srv *Server, r *http.Request, ctx context.Context, id 
 	return dbIDs, nil
 }
 
-func getMasterItemsBySublocation(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getMasterItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(srv, r)
+	methods, err := queryParamMethods.parseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -50,11 +50,11 @@ func getMasterItemsBySublocation(srv *Server, r *http.Request, ctx context.Conte
 	return dbIDs, nil
 }
 
-func getMasterItemsByLocation(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getMasterItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(srv, r)
+	methods, err := queryParamMethods.parseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -70,11 +70,11 @@ func getMasterItemsByLocation(srv *Server, r *http.Request, ctx context.Context,
 	return dbIDs, nil
 }
 
-func getItemsByArea(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(srv, r)
+	methods, err := queryParamMethods.parseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -90,11 +90,11 @@ func getItemsByArea(srv *Server, r *http.Request, ctx context.Context, id int32)
 	return dbIDs, nil
 }
 
-func getItemsBySublocation(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(srv, r)
+	methods, err := queryParamMethods.parseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -110,11 +110,11 @@ func getItemsBySublocation(srv *Server, r *http.Request, ctx context.Context, id
 	return dbIDs, nil
 }
 
-func getItemsByLocation(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(srv, r)
+	methods, err := queryParamMethods.parseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

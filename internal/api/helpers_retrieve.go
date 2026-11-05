@@ -9,16 +9,16 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func (i handlerInput[T, R, A]) handleMultiple(srv *Server, r *http.Request, name string) (APIResourceList[A], error) {
+func (i handlerInput[T, R, A]) handleMultiple(r *http.Request, name string) (APIResourceList[A], error) {
 	dbIDs, err := i.getMultipleQuery(r.Context(), name)
 	if err != nil {
 		return APIResourceList[A]{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'", i.resTypeSingle, name), err)
 	}
 
-	return i.toResList(srv, r, dbIDs)
+	return i.toResList(r, dbIDs)
 }
 
-func (i handlerInput[T, R, A]) filterIDs(srv *Server, r *http.Request, IDs []int32, queryFns []IDFilter) ([]int32, error) {
+func (i handlerInput[T, R, A]) filterIDs(r *http.Request, IDs []int32, queryFns []IDFilter) ([]int32, error) {
 	filteredIDs := IDs
 	g, ctx := errgroup.WithContext(r.Context())
 	var mu sync.Mutex
@@ -45,7 +45,7 @@ func (i handlerInput[T, R, A]) filterIDs(srv *Server, r *http.Request, IDs []int
 
 	if i.avlFunc != nil {
 		var err error
-		filteredIDs, err = i.avlFunc(srv, r, filteredIDs)
+		filteredIDs, err = i.avlFunc(r, filteredIDs)
 		if err != nil {
 			return nil, err
 		}

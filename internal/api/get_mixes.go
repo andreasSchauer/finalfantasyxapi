@@ -10,7 +10,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource], id int32) (Mix, error) {
+func getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource], id int32) (Mix, error) {
 	mix, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Mix{}, err
@@ -18,7 +18,7 @@ func (srv *Server) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, Na
 
 	overdrive, _ := lookup.GetResourceByID(mix.OverdriveID, lookup.L.OverdrivesID)
 
-	combinations, err := getMixCombinations(srv, r, mix)
+	combinations, err := getMixCombinations(r, mix)
 	if err != nil {
 		return Mix{}, err
 	}
@@ -27,7 +27,7 @@ func (srv *Server) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, Na
 		ID:           mix.ID,
 		Name:         mix.Name,
 		Category:     mix.Category,
-		Overdrive:    nameToNamedAPIResource(srv, E.Overdrives, overdrive.Name, nil),
+		Overdrive:    nameToNamedAPIResource(E.Overdrives, overdrive.Name, nil),
 		Description:  overdrive.Description,
 		Effect:       overdrive.Effect,
 		Combinations: combinations,
@@ -36,14 +36,14 @@ func (srv *Server) getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, Na
 	return response, nil
 }
 
-func (srv *Server) retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource]) ([]int32, error) {
+func retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.MixCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMixIDsByCategory),
-		i.queryIDWrapper(srv, r, ids, ts.QpnReqItem, lookup.L.Items, getMixesByItem),
+	return i.filterIDs(r, ids, []IDFilter{
+		i.queryEnumList(r, enums.T.MixCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMixIDsByCategory),
+		i.queryIDWrapper(r, ids, ts.QpnReqItem, lookup.L.Items, getMixesByItem),
 	})
 }

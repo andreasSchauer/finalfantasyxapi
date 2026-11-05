@@ -21,6 +21,6 @@ func (srv *Server) Init() error {
 
 func (srv *Server) InitGlobals() {
 	enums.T.Init()
-	E.Init(srv)
+	E.Init()
 	Q.Init()
 }

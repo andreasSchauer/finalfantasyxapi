@@ -10,7 +10,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMixesByItem(srv *Server, r *http.Request, ctx context.Context, firstItemID int32) ([]int32, error) {
+func getMixesByItem(r *http.Request, ctx context.Context, firstItemID int32) ([]int32, error) {
 	i := E.Mixes
 
 	secondItemIDPtr, err := nullID(r, E.Items, ts.QpnSecondItem, i.queryLookup)

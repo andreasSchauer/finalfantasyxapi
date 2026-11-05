@@ -8,10 +8,10 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func filterAvlAutoAbilities(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.AutoAbilities
 
-	avlParams, err := i.queryAvlRepGetParams(srv, r)
+	avlParams, err := i.queryAvlRepGetParams(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func filterAvlAutoAbilities(srv *Server, r *http.Request, inputIDs []int32) ([]i
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(srv, r)
+	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

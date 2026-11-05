@@ -16,10 +16,10 @@ type SubShop struct {
 	Equipment []ShopEquipment `json:"equipment"`
 }
 
-func convertSubShop(srv *Server, ss seedtypes.SubShop) SubShop {
+func convertSubShop(ss seedtypes.SubShop) SubShop {
 	return SubShop{
-		Items:     convertObjSlice(srv, ss.Items, convertShopItem),
-		Equipment: convertObjSlice(srv, ss.Equipment, convertShopEquipment),
+		Items:     convertObjSlice(ss.Items, convertShopItem),
+		Equipment: convertObjSlice(ss.Equipment, convertShopEquipment),
 	}
 }
 
@@ -28,9 +28,9 @@ type ShopItem struct {
 	Price int32            `json:"price"`
 }
 
-func convertShopItem(srv *Server, si seedtypes.ShopItem) ShopItem {
+func convertShopItem(si seedtypes.ShopItem) ShopItem {
 	return ShopItem{
-		Item:  nameToNamedAPIResource(srv, E.Items, si.Name, nil),
+		Item:  nameToNamedAPIResource(E.Items, si.Name, nil),
 		Price: si.Price,
 	}
 }
@@ -40,9 +40,9 @@ type ShopEquipment struct {
 	Price     int32          `json:"price"`
 }
 
-func convertShopEquipment(srv *Server, se seedtypes.ShopEquipment) ShopEquipment {
+func convertShopEquipment(se seedtypes.ShopEquipment) ShopEquipment {
 	return ShopEquipment{
-		Equipment: convertFoundEquipment(srv, se.TreasureEquipment),
+		Equipment: convertFoundEquipment(se.TreasureEquipment),
 		Price:     se.Price,
 	}
 }

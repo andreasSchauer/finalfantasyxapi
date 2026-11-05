@@ -23,7 +23,7 @@ func (m MixSimple) GetURL() string {
 	return m.URL
 }
 
-func createMixSimple(srv *Server, r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createMixSimple(r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.Mixes
 	mix, _ := lookup.GetResourceByID(id, i.objLookupID)
 	combinations := mix.PossibleCombinations
@@ -45,14 +45,14 @@ func createMixSimple(srv *Server, r *http.Request, id int32, _ Subsection) (Simp
 	mixSimple := MixSimple{
 		ID:           mix.ID,
 		Name:         mix.Name,
-		URL:          CreateResourceURL(srv, i.Endpoint, id),
+		URL:          CreateResourceURL(i.Endpoint, id),
 		Category:     mix.Category,
-		Combinations: convertObjSlice(srv, combinations, convertMixCombinationSimple),
+		Combinations: convertObjSlice(combinations, convertMixCombinationSimple),
 	}
 
 	return mixSimple, nil
 }
 
-func convertMixCombinationSimple(srv *Server, mc seedtypes.MixCombination) string {
+func convertMixCombinationSimple(mc seedtypes.MixCombination) string {
 	return fmt.Sprintf("%s + %s", mc.FirstItem, mc.SecondItem)
 }

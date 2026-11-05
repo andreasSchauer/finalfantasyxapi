@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-func getTypedAbilityIDsByName(srv *Server, abilityType database.AbilityType) DBQueryStringMany {
+func getTypedAbilityIDsByName(abilityType database.AbilityType) DBQueryStringMany {
 	return func(ctx context.Context, name string) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsByName(ctx, database.GetTypedAbilityIDsByNameParams{
 			Name: name,
@@ -17,7 +17,7 @@ func getTypedAbilityIDsByName(srv *Server, abilityType database.AbilityType) DBQ
 	}
 }
 
-func getTypedAbilityIDsByRank(srv *Server, abilityType database.AbilityType) DBQueryIntList {
+func getTypedAbilityIDsByRank(abilityType database.AbilityType) DBQueryIntList {
 	return func(ctx context.Context, ranks []int32) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsByRank(ctx, database.GetTypedAbilityIDsByRankParams{
 			Rank: ranks,
@@ -26,7 +26,7 @@ func getTypedAbilityIDsByRank(srv *Server, abilityType database.AbilityType) DBQ
 	}
 }
 
-func getTypedAbilityIDsByCanCopycat(srv *Server, abilityType database.AbilityType) DBQueryBool {
+func getTypedAbilityIDsByCanCopycat(abilityType database.AbilityType) DBQueryBool {
 	return func(ctx context.Context, canCopycat bool) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsByCanCopycat(ctx, database.GetTypedAbilityIDsByCanCopycatParams{
 			CanCopycat: canCopycat,
@@ -35,7 +35,7 @@ func getTypedAbilityIDsByCanCopycat(srv *Server, abilityType database.AbilityTyp
 	}
 }
 
-func getTypedAbilityIDsByAppearsInHelpBar(srv *Server, abilityType database.AbilityType) DBQueryBool {
+func getTypedAbilityIDsByAppearsInHelpBar(abilityType database.AbilityType) DBQueryBool {
 	return func(ctx context.Context, inHelpBar bool) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsByAppearsInHelpBar(ctx, database.GetTypedAbilityIDsByAppearsInHelpBarParams{
 			AppearsInHelpBar: inHelpBar,
@@ -44,13 +44,13 @@ func getTypedAbilityIDsByAppearsInHelpBar(srv *Server, abilityType database.Abil
 	}
 }
 
-func getTypedAbilityIDsBasedOnUserAttack(srv *Server, abilityType database.AbilityType) DBQueryNoInput {
+func getTypedAbilityIDsBasedOnUserAttack(abilityType database.AbilityType) DBQueryNoInput {
 	return func(ctx context.Context) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsBasedOnUserAttack(ctx, abilityType)
 	}
 }
 
-func getTypedAbilityIDsByTargetType(srv *Server, abilityType database.AbilityType) DBQueryEnumList[database.TargetType] {
+func getTypedAbilityIDsByTargetType(abilityType database.AbilityType) DBQueryEnumList[database.TargetType] {
 	return func(ctx context.Context, targetTypes []database.TargetType) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsByTargetType(ctx, database.GetTypedAbilityIDsByTargetTypeParams{
 			TargetType: targetTypes,
@@ -59,55 +59,55 @@ func getTypedAbilityIDsByTargetType(srv *Server, abilityType database.AbilityTyp
 	}
 }
 
-func getTypedAbilityIDsDarkable(srv *Server, abilityType database.AbilityType) DBQueryNoInput {
+func getTypedAbilityIDsDarkable(abilityType database.AbilityType) DBQueryNoInput {
 	return func(ctx context.Context) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsDarkable(ctx, abilityType)
 	}
 }
 
-func getTypedAbilityIDsSilenceable(srv *Server, abilityType database.AbilityType) DBQueryNoInput {
+func getTypedAbilityIDsSilenceable(abilityType database.AbilityType) DBQueryNoInput {
 	return func(ctx context.Context) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsSilenceable(ctx, abilityType)
 	}
 }
 
-func getTypedAbilityIDsReflectable(srv *Server, abilityType database.AbilityType) DBQueryNoInput {
+func getTypedAbilityIDsReflectable(abilityType database.AbilityType) DBQueryNoInput {
 	return func(ctx context.Context) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsReflectable(ctx, abilityType)
 	}
 }
 
-func getTypedAbilityIDsDealsDelay(srv *Server, abilityType database.AbilityType) DBQueryNoInput {
+func getTypedAbilityIDsDealsDelay(abilityType database.AbilityType) DBQueryNoInput {
 	return func(ctx context.Context) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsDealsDelay(ctx, abilityType)
 	}
 }
 
-func getTypedAbilityIDsWithStatChanges(srv *Server, abilityType database.AbilityType) DBQueryNoInput {
+func getTypedAbilityIDsWithStatChanges(abilityType database.AbilityType) DBQueryNoInput {
 	return func(ctx context.Context) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsWithStatChanges(ctx, abilityType)
 	}
 }
 
-func getTypedAbilityIDsWithModifierChanges(srv *Server, abilityType database.AbilityType) DBQueryNoInput {
+func getTypedAbilityIDsWithModifierChanges(abilityType database.AbilityType) DBQueryNoInput {
 	return func(ctx context.Context) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsWithModifierChanges(ctx, abilityType)
 	}
 }
 
-func getTypedAbilityIDsCanCrit(srv *Server, abilityType database.AbilityType) DBQueryNoInput {
+func getTypedAbilityIDsCanCrit(abilityType database.AbilityType) DBQueryNoInput {
 	return func(ctx context.Context) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsCanCrit(ctx, abilityType)
 	}
 }
 
-func getTypedAbilityIDsBreakDmgLimit(srv *Server, abilityType database.AbilityType) DBQueryNoInput {
+func getTypedAbilityIDsBreakDmgLimit(abilityType database.AbilityType) DBQueryNoInput {
 	return func(ctx context.Context) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsBreakDmgLimit(ctx, abilityType)
 	}
 }
 
-func getTypedAbilityIDsByDamageType(srv *Server, abilityType database.AbilityType) DBQueryEnumList[database.DamageType] {
+func getTypedAbilityIDsByDamageType(abilityType database.AbilityType) DBQueryEnumList[database.DamageType] {
 	return func(ctx context.Context, damageTypes []database.DamageType) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsByDamageType(ctx, database.GetTypedAbilityIDsByDamageTypeParams{
 			DamageType: damageTypes,
@@ -116,7 +116,7 @@ func getTypedAbilityIDsByDamageType(srv *Server, abilityType database.AbilityTyp
 	}
 }
 
-func getTypedAbilityIDsByAttackType(srv *Server, abilityType database.AbilityType) DBQueryEnumList[database.AttackType] {
+func getTypedAbilityIDsByAttackType(abilityType database.AbilityType) DBQueryEnumList[database.AttackType] {
 	return func(ctx context.Context, attackTypes []database.AttackType) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsByAttackType(ctx, database.GetTypedAbilityIDsByAttackTypeParams{
 			AttackType: attackTypes,
@@ -125,7 +125,7 @@ func getTypedAbilityIDsByAttackType(srv *Server, abilityType database.AbilityTyp
 	}
 }
 
-func getTypedAbilityIDsByDamageFormula(srv *Server, abilityType database.AbilityType) DBQueryEnum[database.DamageFormula] {
+func getTypedAbilityIDsByDamageFormula(abilityType database.AbilityType) DBQueryEnum[database.DamageFormula] {
 	return func(ctx context.Context, formula database.DamageFormula) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsByDamageFormula(ctx, database.GetTypedAbilityIDsByDamageFormulaParams{
 			DamageFormula: formula,
@@ -134,7 +134,7 @@ func getTypedAbilityIDsByDamageFormula(srv *Server, abilityType database.Ability
 	}
 }
 
-func getTypedAbilityIDsByInflictedStatus(srv *Server, abilityType database.AbilityType) DBQueryNullIntMany {
+func getTypedAbilityIDsByInflictedStatus(abilityType database.AbilityType) DBQueryNullIntMany {
 	return func(ctx context.Context, status sql.NullInt32) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsByInflictedStatus(ctx, database.GetTypedAbilityIDsByInflictedStatusParams{
 			StatusID: status,
@@ -143,7 +143,7 @@ func getTypedAbilityIDsByInflictedStatus(srv *Server, abilityType database.Abili
 	}
 }
 
-func getTypedAbilityIDsByRemovedStatus(srv *Server, abilityType database.AbilityType) DBQueryNullIntMany {
+func getTypedAbilityIDsByRemovedStatus(abilityType database.AbilityType) DBQueryNullIntMany {
 	return func(ctx context.Context, status sql.NullInt32) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsByRemovedStatus(ctx, database.GetTypedAbilityIDsByRemovedStatusParams{
 			StatusID: status,
@@ -152,7 +152,7 @@ func getTypedAbilityIDsByRemovedStatus(srv *Server, abilityType database.Ability
 	}
 }
 
-func getTypedAbilityIDsByElement(srv *Server, abilityType database.AbilityType) DBQueryIntList {
+func getTypedAbilityIDsByElement(abilityType database.AbilityType) DBQueryIntList {
 	return func(ctx context.Context, elements []int32) ([]int32, error) {
 		return config.Cfg.DB.GetTypedAbilityIDsByElement(ctx, database.GetTypedAbilityIDsByElementParams{
 			ElementID: elements,

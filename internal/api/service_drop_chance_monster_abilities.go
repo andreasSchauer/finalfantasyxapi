@@ -22,18 +22,18 @@ func (d DroppedAutoAbilities) Round(n int32) DroppedAutoAbilities {
 	return d
 }
 
-func getDroppedAutoAbilities(srv *Server, abilities []seedtypes.EquipmentDrop) DroppedAutoAbilities {
+func getDroppedAutoAbilities(abilities []seedtypes.EquipmentDrop) DroppedAutoAbilities {
 	if abilities[0].IsForced {
 		forcedAbility := convertEqAbilitySimple(abilities[0])
 
 		return DroppedAutoAbilities{
 			Forced:  &forcedAbility,
-			Dropped: convertObjSlice(srv, abilities[1:], convertEqAbilityChance),
+			Dropped: convertObjSlice(abilities[1:], convertEqAbilityChance),
 		}
 	}
 
 	return DroppedAutoAbilities{
-		Dropped: convertObjSlice(srv, abilities, convertEqAbilityChance),
+		Dropped: convertObjSlice(abilities, convertEqAbilityChance),
 	}
 }
 
@@ -68,7 +68,7 @@ func (a EqAbilityChance) Round(n int32) EqAbilityChance {
 	return a
 }
 
-func convertEqAbilityChance(_ *Server, ed seedtypes.EquipmentDrop) EqAbilityChance {
+func convertEqAbilityChance(ed seedtypes.EquipmentDrop) EqAbilityChance {
 	return EqAbilityChance{
 		EqAbilitySimple: convertEqAbilitySimple(ed),
 		Chance:          calcAutoAbilityDropChance(ed),

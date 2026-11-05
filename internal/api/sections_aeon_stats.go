@@ -26,10 +26,10 @@ type Xval struct {
 	Stats   AeonStatTable `json:"stats"`
 }
 
-func convertXVal(srv *Server, x seedtypes.XVal) Xval {
+func convertXVal(x seedtypes.XVal) Xval {
 	return Xval{
 		Battles: x.Battles,
-		Stats:   newAeonStatTable(srv, x.BaseStats),
+		Stats:   newAeonStatTable(x.BaseStats),
 	}
 }
 
@@ -46,8 +46,8 @@ type AeonStatTable struct {
 	Accuracy     int32  `json:"accuracy"`
 }
 
-func newAeonStatTable(srv *Server, baseStats []seedtypes.BaseStat) AeonStatTable {
-	stats := E.Stats.toResAmtType(srv, baseStats, newBaseStat)
+func newAeonStatTable(baseStats []seedtypes.BaseStat) AeonStatTable {
+	stats := E.Stats.toResAmtType(baseStats, newBaseStat)
 	statMap := GetResAmtTypeMap(stats)
 	luckPtr := h.GetInt32Ptr(statMap["luck"])
 
@@ -69,17 +69,17 @@ func newAeonStatTable(srv *Server, baseStats []seedtypes.BaseStat) AeonStatTable
 	}
 }
 
-func createAeonStatSimple(srv *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createAeonStatSimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.Aeons
 	aeon, _ := lookup.GetResourceByID(id, lookup.L.AeonsID)
 
 	aeonStatSub := AeonStatSimple{
 		ID:    aeon.ID,
-		URL:   CreateResourceURL(srv, i.Endpoint, id),
+		URL:   CreateResourceURL(i.Endpoint, id),
 		Name:  aeon.Name,
-		AVals: newAeonStatTable(srv, aeon.BaseStats.AVals),
-		BVals: newAeonStatTable(srv, aeon.BaseStats.BVals),
-		XVals: convertObjSlice(srv, aeon.BaseStats.XVals, convertXVal),
+		AVals: newAeonStatTable(aeon.BaseStats.AVals),
+		BVals: newAeonStatTable(aeon.BaseStats.BVals),
+		XVals: convertObjSlice(aeon.BaseStats.XVals, convertXVal),
 	}
 
 	return aeonStatSub, nil

@@ -8,35 +8,35 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i handlerInput[T, R, A]) handleList(srv *Server, w http.ResponseWriter, r *http.Request) {
+func (i handlerInput[T, R, A]) handleList(w http.ResponseWriter, r *http.Request) {
 	ids, err := i.retrieveFunc(r, i)
 	if handleHTTPError(w, err) {
 		return
 	}
-	resources := i.toResources(srv, ids)
+	resources := i.toResources(ids)
 
-	resourceList, err := newAPIResourceList(srv, r, resources)
+	resourceList, err := newAPIResourceList(r, resources)
 	if handleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, resourceList)
 }
 
-func (i handlerInput[T, R, A]) handleIDOnly(srv *Server, w http.ResponseWriter, r *http.Request, segments []string) {
+func (i handlerInput[T, R, A]) handleIDOnly(w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
 	if segment == string(ts.SnParameters) {
-		i.handleParameters(srv, w, r)
+		i.handleParameters(w, r)
 		return
 	}
 
 	if segment == string(ts.SnSections) {
-		i.handleSections(srv, w, r)
+		i.handleSections(w, r)
 		return
 	}
 
 	if segment == string(ts.SnSimple) {
-		i.handleSimple(srv, w, r)
+		i.handleSimple(w, r)
 		return
 	}
 
@@ -53,21 +53,21 @@ func (i handlerInput[T, R, A]) handleIDOnly(srv *Server, w http.ResponseWriter, 
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-func (i handlerInput[T, R, A]) handleNameID(srv *Server, w http.ResponseWriter, r *http.Request, segments []string) {
+func (i handlerInput[T, R, A]) handleNameID(w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
 	if segment == string(ts.SnParameters) {
-		i.handleParameters(srv, w, r)
+		i.handleParameters(w, r)
 		return
 	}
 
 	if segment == string(ts.SnSections) {
-		i.handleSections(srv, w, r)
+		i.handleSections(w, r)
 		return
 	}
 
 	if segment == string(ts.SnSimple) {
-		i.handleSimple(srv, w, r)
+		i.handleSimple(w, r)
 		return
 	}
 
@@ -77,7 +77,7 @@ func (i handlerInput[T, R, A]) handleNameID(srv *Server, w http.ResponseWriter, 
 	}
 
 	if i.getMultipleQuery != nil && parseRes.Name != "" {
-		resources, err := i.handleMultiple(srv, r, parseRes.Name)
+		resources, err := i.handleMultiple(r, parseRes.Name)
 		if handleHTTPError(w, err) {
 			return
 		}
@@ -110,7 +110,7 @@ func (i handlerInput[T, R, A]) handleNameVersion(w http.ResponseWriter, r *http.
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-func (i handlerInput[T, R, A]) handleSubsections(srv *Server, w http.ResponseWriter, r *http.Request, segments []string) {
+func (i handlerInput[T, R, A]) handleSubsections(w http.ResponseWriter, r *http.Request, segments []string) {
 	posIDStr := segments[0]
 	idIsValid := isValidInt(posIDStr)
 	posSection := segments[1]
@@ -134,17 +134,17 @@ func (i handlerInput[T, R, A]) handleSubsections(srv *Server, w http.ResponseWri
 
 	// /ep/2/a (subsections)
 	case i.subsections != nil:
-		i.handleSubsection(srv, w, r, segments)
+		i.handleSubsection(w, r, segments)
 		return
 	}
 }
 
-func (i handlerInput[T, R, A]) handleSubOrNameVer(srv *Server, w http.ResponseWriter, r *http.Request, segments []string) {
+func (i handlerInput[T, R, A]) handleSubOrNameVer(w http.ResponseWriter, r *http.Request, segments []string) {
 	isSubsection, isNameVersion, subsectionIsInt := getSegmentCases(segments)
 
 	switch {
 	case isSubsection:
-		i.handleSubsection(srv, w, r, segments)
+		i.handleSubsection(w, r, segments)
 		return
 
 	case isNameVersion:
@@ -162,16 +162,16 @@ func (i handlerInput[T, R, A]) handleSubOrNameVer(srv *Server, w http.ResponseWr
 }
 
 // if len(segments) is 0, this function crafts the response for /enums
-func (i handlerInputEnums) handleList(srv *Server, w http.ResponseWriter, r *http.Request) {
+func (i handlerInputEnums) handleList(w http.ResponseWriter, r *http.Request) {
 	err := verifyQueryParams[string](r, i.Endpoint, i.queryLookup, nil, nil)
 	if handleHTTPError(w, err) {
 		return
 	}
 
 	enums := enums.EnumLookupToSlice(i.lookup)
-	resources := enumsToNamedAPIResources(srv, enums)
+	resources := enumsToNamedAPIResources(enums)
 
-	resourceList, err := newAPIResourceList(srv, r, resources)
+	resourceList, err := newAPIResourceList(r, resources)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -179,15 +179,15 @@ func (i handlerInputEnums) handleList(srv *Server, w http.ResponseWriter, r *htt
 }
 
 // if len(segments) is 1, this function crafts the response for /enums/{enum_name} and /enums/parameters
-func (i handlerInputEnums) handleSingle(srv *Server, w http.ResponseWriter, r *http.Request, segments []string) {
+func (i handlerInputEnums) handleSingle(w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
 	if segment == string(ts.SnParameters) {
-		i.handleParameters(srv, w, r)
+		i.handleParameters(w, r)
 		return
 	}
 
-	enum, key, err := i.parseSegment(srv, segment)
+	enum, key, err := i.parseSegment(segment)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -202,17 +202,17 @@ func (i handlerInputEnums) handleSingle(srv *Server, w http.ResponseWriter, r *h
 }
 
 // if len(segments) is 0, this function crafts the response for /endpoints
-func (i handlerInputEndpoints) handleList(srv *Server, w http.ResponseWriter, r *http.Request) {
+func (i handlerInputEndpoints) handleList(w http.ResponseWriter, r *http.Request) {
 	err := verifyQueryParams[string](r, i.Endpoint, i.queryLookup, nil, nil)
 	if handleHTTPError(w, err) {
 		return
 	}
 
 	endpoints := i.slice
-	resources := endpointsToNamedAPIResources(srv, endpoints)
+	resources := endpointsToNamedAPIResources(endpoints)
 	setLimitMax(r, r.URL.Query())
 
-	resourceList, err := newAPIResourceList(srv, r, resources)
+	resourceList, err := newAPIResourceList(r, resources)
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -220,18 +220,18 @@ func (i handlerInputEndpoints) handleList(srv *Server, w http.ResponseWriter, r 
 }
 
 // if len(segments) is 1, this function checks if /endpoints was combined with 'parameters'. returns an error, if it wasn't
-func (i handlerInputEndpoints) handleSections(srv *Server, w http.ResponseWriter, r *http.Request, segments []string) {
+func (i handlerInputEndpoints) handleSections(w http.ResponseWriter, r *http.Request, segments []string) {
 	segment := segments[0]
 
 	if segment == string(ts.SnParameters) {
-		i.handleParameters(srv, w, r)
+		i.handleParameters(w, r)
 		return
 	}
 
 	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests", nil)
 }
 
-func (i handlerInputService[P, R]) handleBody(srv *Server, w http.ResponseWriter, r *http.Request, segments []string) {
+func (i handlerInputService[P, R]) handleBody(w http.ResponseWriter, r *http.Request, segments []string) {
 	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return
@@ -240,14 +240,14 @@ func (i handlerInputService[P, R]) handleBody(srv *Server, w http.ResponseWriter
 	segment := segments[0]
 
 	if segment == string(ts.SnBody) {
-		respondWithJSON(w, http.StatusOK, getBody(srv, i.Endpoint))
+		respondWithJSON(w, http.StatusOK, getBody(i.Endpoint))
 		return
 	}
 
 	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'", i.Endpoint), nil)
 }
 
-func (i handlerInputService[P, R]) handleBodySections(srv *Server, w http.ResponseWriter, r *http.Request, segments []string) {
+func (i handlerInputService[P, R]) handleBodySections(w http.ResponseWriter, r *http.Request, segments []string) {
 	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return
@@ -260,7 +260,7 @@ func (i handlerInputService[P, R]) handleBodySections(srv *Server, w http.Respon
 
 	switch segments[1] {
 	case string(ts.SnDocs):
-		respondWithJSON(w, http.StatusOK, i.docsFn(srv))
+		respondWithJSON(w, http.StatusOK, i.docsFn())
 		return
 
 	case string(ts.SnSamples):
@@ -273,13 +273,13 @@ func (i handlerInputService[P, R]) handleBodySections(srv *Server, w http.Respon
 	}
 }
 
-func (i handlerInputService[P, R]) handlePost(srv *Server, w http.ResponseWriter, r *http.Request) {
+func (i handlerInputService[P, R]) handlePost(w http.ResponseWriter, r *http.Request) {
 	err := verifyQueryParamsService(r)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	response, err := servicePost(srv, r, i)
+	response, err := servicePost(r, i)
 	if handleHTTPError(w, err) {
 		return
 	}

@@ -10,19 +10,19 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getSubmenuRelationships(srv *Server, r *http.Request, submenu seedtypes.Submenu) (Submenu, error) {
+func getSubmenuRelationships(r *http.Request, submenu seedtypes.Submenu) (Submenu, error) {
 	var rel Submenu
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.Abilities, err = E.Abilities.dbGetRelations(srv, ctx, submenu, ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs))
+		rel.Abilities, err = E.Abilities.dbGetRelations(ctx, submenu, ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OpenedBy, err = createSubmenuOpenedBy(srv, ctx, submenu)
+		rel.OpenedBy, err = createSubmenuOpenedBy(ctx, submenu)
 		return err
 	})
 
@@ -34,24 +34,24 @@ func getSubmenuRelationships(srv *Server, r *http.Request, submenu seedtypes.Sub
 	return rel, nil
 }
 
-func createSubmenuOpenedBy(srv *Server, ctx context.Context, submenu seedtypes.Submenu) (*MenuOpen, error) {
+func createSubmenuOpenedBy(ctx context.Context, submenu seedtypes.Submenu) (*MenuOpen, error) {
 	var menuOpen MenuOpen
 	g, ctx := errgroup.WithContext(ctx)
 
 	g.Go(func() error {
 		var err error
-		menuOpen.Ability, err = E.Abilities.dbGetRelationPtr(srv, ctx, submenu, ToIntOneNull(config.Cfg.DB.GetSubmenuOpenedByAbilityID))
+		menuOpen.Ability, err = E.Abilities.dbGetRelationPtr(ctx, submenu, ToIntOneNull(config.Cfg.DB.GetSubmenuOpenedByAbilityID))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		menuOpen.AeonCommand, err = E.AeonCommands.dbGetRelationPtr(srv, ctx, submenu, ToIntOneNull(config.Cfg.DB.GetSubmenuOpenedByAeonCommandID))
+		menuOpen.AeonCommand, err = E.AeonCommands.dbGetRelationPtr(ctx, submenu, ToIntOneNull(config.Cfg.DB.GetSubmenuOpenedByAeonCommandID))
 		return err
 	})
 
 	g.Go(func() error {
-		overdriveCommands, err := E.OverdriveCommands.dbGetRelations(srv, ctx, submenu, ToIntManyNull(config.Cfg.DB.GetSubmenuOpenedByOverdriveCommandIDs))
+		overdriveCommands, err := E.OverdriveCommands.dbGetRelations(ctx, submenu, ToIntManyNull(config.Cfg.DB.GetSubmenuOpenedByOverdriveCommandIDs))
 		if err != nil {
 			return err
 		}

@@ -9,24 +9,24 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getMonsterRelationships(srv *Server, r *http.Request, monster seedtypes.Monster) (Monster, error) {
+func getMonsterRelationships(r *http.Request, monster seedtypes.Monster) (Monster, error) {
 	var rel Monster
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := E.Monsters.queryAvlRelGetParams(srv, r, monster.ID)
+	availabilityParams, err := E.Monsters.queryAvlRelGetParams(r, monster.ID)
 	if err != nil {
 		return Monster{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = E.Areas.queryAvlRelRun(srv, ctx, monster, availabilityParams, getMonsterAreaIDs(srv))
+		rel.Areas, err = E.Areas.queryAvlRelRun(ctx, monster, availabilityParams, getMonsterAreaIDs())
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Formations, err = E.MonsterFormations.queryAvlRelRun(srv, ctx, monster, availabilityParams, getMonsterMonsterFormationIDs(srv))
+		rel.Formations, err = E.MonsterFormations.queryAvlRelRun(ctx, monster, availabilityParams, getMonsterMonsterFormationIDs())
 		return err
 	})
 
@@ -38,30 +38,30 @@ func getMonsterRelationships(srv *Server, r *http.Request, monster seedtypes.Mon
 	return rel, nil
 }
 
-func completeMonsterResponse(srv *Server, r *http.Request, mon Monster) (Monster, error) {
-	mon, err := applyAlteredStateFromQuery(srv, r, mon, ts.QpnAlteredState)
+func completeMonsterResponse(r *http.Request, mon Monster) (Monster, error) {
+	mon, err := applyAlteredStateFromQuery(r, mon, ts.QpnAlteredState)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	mon.BaseStats, err = applyPossessedAeonStats(srv, r, mon)
+	mon.BaseStats, err = applyPossessedAeonStats(r, mon)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	mon.BaseStats, err = applyRonsoStats(srv, r, mon, ts.QpnKimahriStats)
+	mon.BaseStats, err = applyRonsoStats(r, mon, ts.QpnKimahriStats)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	mon.RegenAmounts = calcRegenAmountsMonster(srv, mon)
+	mon.RegenAmounts = calcRegenAmountsMonster(mon)
 
-	mon.ElemResists, err = applyOmnisElements(srv, r, mon, ts.QpnOmnisElements)
+	mon.ElemResists, err = applyOmnisElements(r, mon, ts.QpnOmnisElements)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	mon.BribeChances, err = getMonsterBribeChances(srv, mon)
+	mon.BribeChances, err = getMonsterBribeChances(mon)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -71,7 +71,7 @@ func completeMonsterResponse(srv *Server, r *http.Request, mon Monster) (Monster
 		return Monster{}, err
 	}
 
-	mon.AgilityParameters, err = getMonsterAgilityParams(srv, r, mon)
+	mon.AgilityParameters, err = getMonsterAgilityParams(r, mon)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -81,15 +81,15 @@ func completeMonsterResponse(srv *Server, r *http.Request, mon Monster) (Monster
 	return mon, nil
 }
 
-func getMonsterElemResists(srv *Server, resists []seedtypes.ElementalResist) []ElementalResist {
-	elemResists := namesToElemResists(srv, resists)
+func getMonsterElemResists(resists []seedtypes.ElementalResist) []ElementalResist {
+	elemResists := namesToElemResists(resists)
 	elemResistMap := getResourceMap(elemResists)
 
 	for key := range lookup.L.ElementsID {
 		_, ok := elemResistMap[key]
 		if !ok {
 			element := lookup.L.ElementsID[key]
-			elemResistMap[element.ID] = newElemResist(srv, element.Name, "neutral")
+			elemResistMap[element.ID] = newElemResist(element.Name, "neutral")
 		}
 	}
 
@@ -109,7 +109,7 @@ func getMonsterPoisonDamage(mon Monster) (*int32, error) {
 	return &poisonDamage, nil
 }
 
-func getMonsterAgilityParams(srv *Server, r *http.Request, mon Monster) (*AgilityParams, error) {
+func getMonsterAgilityParams(r *http.Request, mon Monster) (*AgilityParams, error) {
 	agilityTier, err := getAgilityTierDB(r, mon.BaseStats)
 	if err != nil {
 		return nil, err
@@ -125,13 +125,13 @@ func getMonsterAgilityParams(srv *Server, r *http.Request, mon Monster) (*Agilit
 	}
 
 	agilityParams := AgilityParams{
-		AgilityTier: idToUnnamedAPIResource(srv, E.AgilityTiers, agilityTier.ID),
+		AgilityTier: idToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   tickspeed,
 		MinICV:      agilityTier.MonsterMinICV,
 		MaxICV:      agilityTier.MonsterMaxICV,
 	}
 
-	fs := nameToNamedAPIResource(srv, E.AutoAbilities, "first strike", nil)
+	fs := nameToNamedAPIResource(E.AutoAbilities, "first strike", nil)
 	if resourcesContain(mon.AutoAbilities, fs) {
 		agilityParams.MinICV, agilityParams.MaxICV = getEqualICVs(-1)
 	}
@@ -152,8 +152,8 @@ func appliedStateHaste(mon Monster) bool {
 }
 
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
-func getMonsterBribeChances(srv *Server, mon Monster) ([]BribeChance, error) {
-	bribe := nameToNamedAPIResource(srv, E.StatusConditions, "bribe", nil)
+func getMonsterBribeChances(mon Monster) ([]BribeChance, error) {
+	bribe := nameToNamedAPIResource(E.StatusConditions, "bribe", nil)
 	if resourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
 		return nil, nil
 	}

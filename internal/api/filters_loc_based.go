@@ -10,11 +10,11 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAreasByItem(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getAreasByItem(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Areas
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(srv, r)
+	methods, err := queryParamMethods.parseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -30,11 +30,11 @@ func getAreasByItem(srv *Server, r *http.Request, ctx context.Context, id int32)
 	return dbIDs, nil
 }
 
-func getSublocationsByItem(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getSublocationsByItem(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Sublocations
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(srv, r)
+	methods, err := queryParamMethods.parseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -50,11 +50,11 @@ func getSublocationsByItem(srv *Server, r *http.Request, ctx context.Context, id
 	return dbIDs, nil
 }
 
-func getLocationsByItem(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getLocationsByItem(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Locations
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(srv, r)
+	methods, err := queryParamMethods.parseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

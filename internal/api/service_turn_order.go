@@ -34,7 +34,7 @@ type BattleTurn struct {
 	PriorityKey string      `json:"-"`
 }
 
-func handleTurnOrder(srv *Server, params TurnOrderParams) (TurnOrderResponse, error) {
+func handleTurnOrder(params TurnOrderParams) (TurnOrderResponse, error) {
 	var err error
 
 	response := TurnOrderResponse{
@@ -44,7 +44,7 @@ func handleTurnOrder(srv *Server, params TurnOrderParams) (TurnOrderResponse, er
 		RNG:           params.RNG,
 	}
 
-	params, response.PlayerParty, response.OpponentParty, err = getParticipants(srv, params)
+	params, response.PlayerParty, response.OpponentParty, err = getParticipants(params)
 	if err != nil {
 		return TurnOrderResponse{}, err
 	}

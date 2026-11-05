@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (srv *Server) getAeonCommand(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonCommand, NamedAPIResource], id int32) (AeonCommand, error) {
+func getAeonCommand(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonCommand, NamedAPIResource], id int32) (AeonCommand, error) {
 	command, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return AeonCommand{}, err
@@ -26,15 +26,15 @@ func (srv *Server) getAeonCommand(r *http.Request, i handlerInput[seedtypes.Aeon
 		Description:       command.Description,
 		Effect:            command.Effect,
 		Cursor:            command.Cursor,
-		User:              nameToNamedAPIResource(srv, E.CharacterClasses, userName, nil),
-		Topmenu:           namePtrToNamedAPIResPtr(srv, E.Topmenus, command.Topmenu, nil),
-		OpenSubmenu:       namePtrToNamedAPIResPtr(srv, E.Submenus, command.OpenSubmenu, nil),
-		PossibleAbilities: convertObjSlice(srv, command.PossibleAbilities, convertPossibleAbilityList),
+		User:              nameToNamedAPIResource(E.CharacterClasses, userName, nil),
+		Topmenu:           namePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
+		OpenSubmenu:       namePtrToNamedAPIResPtr(E.Submenus, command.OpenSubmenu, nil),
+		PossibleAbilities: convertObjSlice(command.PossibleAbilities, convertPossibleAbilityList),
 	}
 
 	return response, nil
 }
 
-func (srv *Server) retrieveAeonCommands(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonCommand, NamedAPIResource]) ([]int32, error) {
+func retrieveAeonCommands(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonCommand, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

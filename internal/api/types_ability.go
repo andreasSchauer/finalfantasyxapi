@@ -97,7 +97,7 @@ type PlayerAbility struct {
 	BattleInteractions    []BattleInteraction               `json:"battle_interactions"`
 }
 
-func (a PlayerAbility) canUseAbility(srv *Server, unitName string) bool {
+func (a PlayerAbility) canUseAbility(unitName string) bool {
 	for _, class := range a.LearnedBy {
 		classLookup, _ := lookup.GetResourceByID(class.ID, lookup.L.CharClassesID)
 
@@ -136,7 +136,7 @@ type TriggerCommand struct {
 	BattleInteractions []BattleInteraction  `json:"battle_interactions"`
 }
 
-func (a TriggerCommand) canUseAbility(srv *Server, unitName string) bool {
+func (a TriggerCommand) canUseAbility(unitName string) bool {
 	for _, class := range a.UsedBy {
 		classLookup, _ := lookup.GetResourceByID(class.ID, lookup.L.CharClassesID)
 
@@ -175,7 +175,7 @@ type MiscAbility struct {
 	BattleInteractions []BattleInteraction `json:"battle_interactions"`
 }
 
-func (a MiscAbility) canUseAbility(srv *Server, unitName string) bool {
+func (a MiscAbility) canUseAbility(unitName string) bool {
 	for _, class := range a.LearnedBy {
 		classLookup, _ := lookup.GetResourceByID(class.ID, lookup.L.CharClassesID)
 

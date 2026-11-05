@@ -21,24 +21,24 @@ func newResourceAmount[A APIResource](resource A, amount int32) ResourceAmount[A
 	}
 }
 
-func (i handlerInput[T, R, A]) toResAmt(srv *Server, id, amount int32) ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmt(id, amount int32) ResourceAmount[A] {
 	return ResourceAmount[A]{
-		Resource: i.idToResFunc(srv, i, id),
+		Resource: i.idToResFunc(i, id),
 		Amount:   amount,
 	}
 }
 
-func (i handlerInput[T, R, A]) toResAmtFromNamePtr[NA NameAmount](srv *Server, itemPtr *NA) *ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmtFromNamePtr[NA NameAmount](itemPtr *NA) *ResourceAmount[A] {
 	if itemPtr == nil {
 		return nil
 	}
 
-	resAmt := i.toResAmtFromName(srv, *itemPtr)
+	resAmt := i.toResAmtFromName(*itemPtr)
 
 	return &resAmt
 }
 
-func (i handlerInput[T, R, A]) toResAmtFromName[NA NameAmount](srv *Server, item NA) ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmtFromName[NA NameAmount](item NA) ResourceAmount[A] {
 	var parseResp parseResponse
 	switch item.GetVersion() {
 	case nil:
@@ -48,27 +48,27 @@ func (i handlerInput[T, R, A]) toResAmtFromName[NA NameAmount](srv *Server, item
 	}
 
 	return ResourceAmount[A]{
-		Resource: i.idToResFunc(srv, i, parseResp.ID),
+		Resource: i.idToResFunc(i, parseResp.ID),
 		Amount:   item.GetVal(),
 	}
 }
 
-func (i handlerInput[T, R, A]) toResAmtsFromNames[NA NameAmount](srv *Server, items []NA) []ResourceAmount[A] {
+func (i handlerInput[T, R, A]) toResAmtsFromNames[NA NameAmount](items []NA) []ResourceAmount[A] {
 	results := []ResourceAmount[A]{}
 
 	for _, item := range items {
-		ra := i.toResAmtFromName(srv, item)
+		ra := i.toResAmtFromName(item)
 		results = append(results, ra)
 	}
 
 	return results
 }
 
-func (i handlerInput[T, R, A]) toResAmtType[NA NameAmount, RA ResourceAmountType[A]](srv *Server, old []NA, fn func(A, int32) RA) []RA {
+func (i handlerInput[T, R, A]) toResAmtType[NA NameAmount, RA ResourceAmountType[A]](old []NA, fn func(A, int32) RA) []RA {
 	resAmts := []RA{}
 
 	for _, item := range old {
-		ra := i.toResAmtFromName(srv, item)
+		ra := i.toResAmtFromName(item)
 		resAmtType := fn(ra.Resource, ra.Amount)
 		resAmts = append(resAmts, resAmtType)
 	}

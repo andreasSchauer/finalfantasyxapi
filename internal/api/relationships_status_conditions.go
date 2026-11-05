@@ -10,7 +10,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getStatusConditionRelationships(srv *Server, r *http.Request, status seedtypes.StatusCondition) (StatusCondition, error) {
+func getStatusConditionRelationships(r *http.Request, status seedtypes.StatusCondition) (StatusCondition, error) {
 	var rel StatusCondition
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -21,27 +21,27 @@ func getStatusConditionRelationships(srv *Server, r *http.Request, status seedty
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(srv, ctx, status, config.Cfg.DB.GetStatusConditionAutoAbilityIDs)
+		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(ctx, status, config.Cfg.DB.GetStatusConditionAutoAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersResistance, err = E.Monsters.dbGetRelations(srv, ctx, status, convGetStatusConditionResistingMonsterIDs(srv, res.Resistance))
+		rel.MonstersResistance, err = E.Monsters.dbGetRelations(ctx, status, convGetStatusConditionResistingMonsterIDs(res.Resistance))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.InflictedBy, err = getStatusInfliction(srv, ctx, status, StatusInteractionQueries{
-			Abilities: convGetStatusConditionAbilityIDsInflicted(srv, res.MinRate, res.MaxRate),
+		rel.InflictedBy, err = getStatusInfliction(ctx, status, StatusInteractionQueries{
+			Abilities: convGetStatusConditionAbilityIDsInflicted(res.MinRate, res.MaxRate),
 		})
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.RemovedBy, err = getStatusRemoval(srv, ctx, status, StatusInteractionQueries{
+		rel.RemovedBy, err = getStatusRemoval(ctx, status, StatusInteractionQueries{
 			Abilities:        config.Cfg.DB.GetStatusConditionAbilityIDsRemoved,
 			StatusConditions: config.Cfg.DB.GetStatusConditionRemovedConditionIDs,
 		})

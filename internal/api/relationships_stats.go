@@ -19,61 +19,61 @@ type StatQueries struct {
 	Properties         DBQueryIntMany
 }
 
-func getStatRelationships(srv *Server, r *http.Request, stat seedtypes.Stat) (Stat, error) {
+func getStatRelationships(r *http.Request, stat seedtypes.Stat) (Stat, error) {
 	var rel Stat
 	g, ctx := errgroup.WithContext(r.Context())
 
-	queries, err := getStatQueries(srv, r)
+	queries, err := getStatQueries(r)
 	if err != nil {
 		return Stat{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Spheres, err = E.Spheres.dbGetRelations(srv, ctx, stat, config.Cfg.DB.GetStatSphereIDs)
+		rel.Spheres, err = E.Spheres.dbGetRelations(ctx, stat, config.Cfg.DB.GetStatSphereIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(srv, ctx, stat, queries.AutoAbilities)
+		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(ctx, stat, queries.AutoAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(srv, ctx, stat, queries.PlayerAbilities)
+		rel.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(ctx, stat, queries.PlayerAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = E.OverdriveAbilities.dbGetRelations(srv, ctx, stat, queries.OverdriveAbilities)
+		rel.OverdriveAbilities, err = E.OverdriveAbilities.dbGetRelations(ctx, stat, queries.OverdriveAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = E.ItemAbilities.dbGetRelations(srv, ctx, stat, queries.ItemAbilities)
+		rel.ItemAbilities, err = E.ItemAbilities.dbGetRelations(ctx, stat, queries.ItemAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.TriggerCommands, err = E.TriggerCommands.dbGetRelations(srv, ctx, stat, queries.TriggerCommands)
+		rel.TriggerCommands, err = E.TriggerCommands.dbGetRelations(ctx, stat, queries.TriggerCommands)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.StatusConditions, err = E.StatusConditions.dbGetRelations(srv, ctx, stat, queries.StatusConditions)
+		rel.StatusConditions, err = E.StatusConditions.dbGetRelations(ctx, stat, queries.StatusConditions)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		if queries.Properties != nil {
-			rel.Properties, err = E.Properties.dbGetRelations(srv, ctx, stat, queries.Properties)
+			rel.Properties, err = E.Properties.dbGetRelations(ctx, stat, queries.Properties)
 			return err
 		}
 		return nil
@@ -87,7 +87,7 @@ func getStatRelationships(srv *Server, r *http.Request, stat seedtypes.Stat) (St
 	return rel, nil
 }
 
-func getStatQueries(srv *Server, r *http.Request) (StatQueries, error) {
+func getStatQueries(r *http.Request) (StatQueries, error) {
 	changesOnly, err := Q.stats[ts.QpnChangesOnly].parseBool(r)
 	if errExceptEmptyQuery(err) {
 		return StatQueries{}, err

@@ -9,13 +9,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getStatusCondition(r *http.Request, i handlerInput[seedtypes.StatusCondition, StatusCondition, NamedAPIResource], id int32) (StatusCondition, error) {
+func getStatusCondition(r *http.Request, i handlerInput[seedtypes.StatusCondition, StatusCondition, NamedAPIResource], id int32) (StatusCondition, error) {
 	status, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return StatusCondition{}, err
 	}
 
-	rel, err := getStatusConditionRelationships(srv, r, status)
+	rel, err := getStatusConditionRelationships(r, status)
 	if err != nil {
 		return StatusCondition{}, err
 	}
@@ -28,11 +28,11 @@ func (srv *Server) getStatusCondition(r *http.Request, i handlerInput[seedtypes.
 		Visualization:           status.Visualization,
 		Effect:                  status.Effect,
 		NullifyArmored:          status.NullifyArmored,
-		RelatedStats:            namesToNamedAPIResources(srv, E.Stats, status.RelatedStats),
-		RemovedStatusConditions: namesToNamedAPIResources(srv, E.StatusConditions, status.RemovedStatusConditions),
-		AddedElemResist:         convertObjPtr(srv, status.AddedElemResist, convertElemResist),
-		StatChanges:             convertObjSlice(srv, status.StatChanges, convertStatChange),
-		ModifierChanges:         convertObjSlice(srv, status.ModifierChanges, convertModifierChange),
+		RelatedStats:            namesToNamedAPIResources(E.Stats, status.RelatedStats),
+		RemovedStatusConditions: namesToNamedAPIResources(E.StatusConditions, status.RemovedStatusConditions),
+		AddedElemResist:         convertObjPtr(status.AddedElemResist, convertElemResist),
+		StatChanges:             convertObjSlice(status.StatChanges, convertStatChange),
+		ModifierChanges:         convertObjSlice(status.ModifierChanges, convertModifierChange),
 		AutoAbilities:           rel.AutoAbilities,
 		InflictedBy:             rel.InflictedBy,
 		RemovedBy:               rel.RemovedBy,
@@ -42,13 +42,13 @@ func (srv *Server) getStatusCondition(r *http.Request, i handlerInput[seedtypes.
 	return response, nil
 }
 
-func (srv *Server) retrieveStatusConditions(r *http.Request, i handlerInput[seedtypes.StatusCondition, StatusCondition, NamedAPIResource]) ([]int32, error) {
+func retrieveStatusConditions(r *http.Request, i handlerInput[seedtypes.StatusCondition, StatusCondition, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.StatusConditionCategory, ids, ts.QpnCategory, config.Cfg.DB.GetStatusConditionIDsByCategory),
+	return i.filterIDs(r, ids, []IDFilter{
+		i.queryEnumList(r, enums.T.StatusConditionCategory, ids, ts.QpnCategory, config.Cfg.DB.GetStatusConditionIDsByCategory),
 	})
 }

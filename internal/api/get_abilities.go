@@ -11,13 +11,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, TypedAPIResource], id int32) (Ability, error) {
+func getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, TypedAPIResource], id int32) (Ability, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Ability{}, err
 	}
 
-	monsters, err := E.Monsters.dbGetRelations(srv, r.Context(), ability, config.Cfg.DB.GetAbilityMonsterIDs)
+	monsters, err := E.Monsters.dbGetRelations(r.Context(), ability, config.Cfg.DB.GetAbilityMonsterIDs)
 	if err != nil {
 		return Ability{}, err
 	}
@@ -31,28 +31,28 @@ func (srv *Server) getAbility(r *http.Request, i handlerInput[seedtypes.Ability,
 		Rank:               ability.Rank,
 		CanCopycat:         ability.CanCopycat,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
-		TypedAbility:       refToNamedAPIResource(srv, ability.GetAbilityRef()),
+		TypedAbility:       refToNamedAPIResource(ability.GetAbilityRef()),
 		Monsters:           monsters,
-		BattleInteractions: convertObjSlice(srv, ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	return response, nil
 }
 
-func (srv *Server) retrieveAbilities(r *http.Request, i handlerInput[seedtypes.Ability, Ability, TypedAPIResource]) ([]int32, error) {
+func retrieveAbilities(r *http.Request, i handlerInput[seedtypes.Ability, Ability, TypedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.AbilityType, ids, ts.QpnType, config.Cfg.DB.GetAbilityIDsByType),
-		i.queryEnumList(srv, r, enums.T.DamageType, ids, ts.QpnDamageType, config.Cfg.DB.GetAbilityIDsByDamageType),
-		i.queryEnumList(srv, r, enums.T.AttackType, ids, ts.QpnAttackType, config.Cfg.DB.GetAbilityIDsByAttackType),
-		i.queryEnumList(srv, r, enums.T.TargetType, ids, ts.QpnTargetType, config.Cfg.DB.GetAbilityIDsByTargetType),
+	return i.filterIDs(r, ids, []IDFilter{
+		i.queryEnumList(r, enums.T.AbilityType, ids, ts.QpnType, config.Cfg.DB.GetAbilityIDsByType),
+		i.queryEnumList(r, enums.T.DamageType, ids, ts.QpnDamageType, config.Cfg.DB.GetAbilityIDsByDamageType),
+		i.queryEnumList(r, enums.T.AttackType, ids, ts.QpnAttackType, config.Cfg.DB.GetAbilityIDsByAttackType),
+		i.queryEnumList(r, enums.T.TargetType, ids, ts.QpnTargetType, config.Cfg.DB.GetAbilityIDsByTargetType),
 		i.queryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, config.Cfg.DB.GetAbilityIDsByDamageFormula),
-		i.queryIntList(srv, r, ids, ts.QpnRank, config.Cfg.DB.GetAbilityIDsByRank),
-		i.queryNameIDListNul(srv, r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, config.Cfg.DB.GetAbilityIDsByElement),
+		i.queryIntList(r, ids, ts.QpnRank, config.Cfg.DB.GetAbilityIDsByRank),
+		i.queryNameIDListNul(r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, config.Cfg.DB.GetAbilityIDsByElement),
 		i.queryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, config.Cfg.DB.GetAbilityIDsByInflictedStatus),
 		i.queryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, config.Cfg.DB.GetAbilityIDsByRemovedStatus),
 		i.queryID(r, ids, ts.QpnMonster, lookup.L.MonsterFormations, config.Cfg.DB.GetAbilityIDsByMonster),

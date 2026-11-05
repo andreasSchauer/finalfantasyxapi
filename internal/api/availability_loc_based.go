@@ -8,10 +8,10 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func filterAvlAreas(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Areas
 
-	avlParams, err := i.queryAvlRepGetParams(srv, r)
+	avlParams, err := i.queryAvlRepGetParams(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -19,7 +19,7 @@ func filterAvlAreas(srv *Server, r *http.Request, inputIDs []int32) ([]int32, er
 		return inputIDs, nil
 	}
 
-	sources, err := getLocBasedSources(srv, r, i, ViewSourceTypeArea)
+	sources, err := getLocBasedSources(r, i, ViewSourceTypeArea)
 	if err != nil {
 		return nil, err
 	}
@@ -53,10 +53,10 @@ func filterAvlAreas(srv *Server, r *http.Request, inputIDs []int32) ([]int32, er
 	return dbIDs, nil
 }
 
-func filterAvlSublocations(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Sublocations
 
-	avlParams, err := i.queryAvlRepGetParams(srv, r)
+	avlParams, err := i.queryAvlRepGetParams(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func filterAvlSublocations(srv *Server, r *http.Request, inputIDs []int32) ([]in
 		return inputIDs, nil
 	}
 
-	sources, err := getLocBasedSources(srv, r, i, ViewSourceTypeSublocation)
+	sources, err := getLocBasedSources(r, i, ViewSourceTypeSublocation)
 	if err != nil {
 		return nil, err
 	}
@@ -98,10 +98,10 @@ func filterAvlSublocations(srv *Server, r *http.Request, inputIDs []int32) ([]in
 	return dbIDs, nil
 }
 
-func filterAvlLocations(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlLocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Locations
 
-	avlParams, err := i.queryAvlRepGetParams(srv, r)
+	avlParams, err := i.queryAvlRepGetParams(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func filterAvlLocations(srv *Server, r *http.Request, inputIDs []int32) ([]int32
 		return inputIDs, nil
 	}
 
-	sources, err := getLocBasedSources(srv, r, i, ViewSourceTypeLocation)
+	sources, err := getLocBasedSources(r, i, ViewSourceTypeLocation)
 	if err != nil {
 		return nil, err
 	}

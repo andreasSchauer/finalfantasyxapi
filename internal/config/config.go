@@ -13,7 +13,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var Cfg Config
+var Cfg = &Config{}
 
 type Config struct {
 	DB          *database.Queries

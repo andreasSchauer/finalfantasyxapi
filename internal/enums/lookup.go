@@ -5,7 +5,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-var T Enums
+var T = &Enums{}
 
 // Enums holds all the enum types for the application that are either used as endpoint or query param
 type Enums struct {

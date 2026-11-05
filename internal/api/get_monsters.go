@@ -10,13 +10,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getMonster(r *http.Request, i handlerInput[seedtypes.Monster, Monster, NamedAPIResource], id int32) (Monster, error) {
+func getMonster(r *http.Request, i handlerInput[seedtypes.Monster, Monster, NamedAPIResource], id int32) (Monster, error) {
 	monster, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Monster{}, err
 	}
 
-	rel, err := getMonsterRelationships(srv, r, monster)
+	rel, err := getMonsterRelationships(r, monster)
 	if err != nil {
 		return Monster{}, err
 	}
@@ -38,14 +38,14 @@ func (srv *Server) getMonster(r *http.Request, i handlerInput[seedtypes.Monster,
 		IsUnderwater:         monster.IsUnderwater,
 		IsZombie:             monster.IsZombie,
 		Distance:             monster.Distance,
-		Properties:           namesToNamedAPIResources(srv, E.Properties, monster.Properties),
-		AutoAbilities:        namesToNamedAPIResources(srv, E.AutoAbilities, monster.AutoAbilities),
+		Properties:           namesToNamedAPIResources(E.Properties, monster.Properties),
+		AutoAbilities:        namesToNamedAPIResources(E.AutoAbilities, monster.AutoAbilities),
 		AP:                   monster.AP,
 		APOverkill:           monster.APOverkill,
 		OverkillDamage:       monster.OverkillDamage,
 		Gil:                  monster.Gil,
 		StealGil:             monster.StealGil,
-		RonsoRages:           namesToNamedAPIResources(srv, E.RonsoRages, monster.RonsoRages),
+		RonsoRages:           namesToNamedAPIResources(E.RonsoRages, monster.RonsoRages),
 		DoomCountdown:        monster.DoomCountdown,
 		PoisonRate:           monster.PoisonRate,
 		ThreatenChance:       monster.ThreatenChance,
@@ -55,40 +55,40 @@ func (srv *Server) getMonster(r *http.Request, i handlerInput[seedtypes.Monster,
 		ScanText:             monster.ScanText,
 		Areas:                rel.Areas,
 		Formations:           rel.Formations,
-		BaseStats:            E.Stats.toResAmtType(srv, monster.BaseStats, newBaseStat),
-		Items:                convertObjPtr(srv, monster.Items, convertMonsterItems),
-		Equipment:            convertObjPtr(srv, monster.Equipment, convertMonsterEquipment),
-		ElemResists:          getMonsterElemResists(srv, monster.ElemResists),
-		StatusImmunities:     namesToNamedAPIResources(srv, E.StatusConditions, monster.StatusImmunities),
-		StatusResists:        E.StatusConditions.toResAmtType(srv, monster.StatusResists, newStatusResist),
-		Abilities:            convertObjSlice(srv, monster.Abilities, convertMonsterAbility),
-		AlteredStates:        getMonsterAlteredStates(srv, r, monster),
+		BaseStats:            E.Stats.toResAmtType(monster.BaseStats, newBaseStat),
+		Items:                convertObjPtr(monster.Items, convertMonsterItems),
+		Equipment:            convertObjPtr(monster.Equipment, convertMonsterEquipment),
+		ElemResists:          getMonsterElemResists(monster.ElemResists),
+		StatusImmunities:     namesToNamedAPIResources(E.StatusConditions, monster.StatusImmunities),
+		StatusResists:        E.StatusConditions.toResAmtType(monster.StatusResists, newStatusResist),
+		Abilities:            convertObjSlice(monster.Abilities, convertMonsterAbility),
+		AlteredStates:        getMonsterAlteredStates(r, monster),
 	}
 
-	return completeMonsterResponse(srv, r, response)
+	return completeMonsterResponse(r, response)
 }
 
-func (srv *Server) retrieveMonsters(r *http.Request, i handlerInput[seedtypes.Monster, Monster, NamedAPIResource]) ([]int32, error) {
+func retrieveMonsters(r *http.Request, i handlerInput[seedtypes.Monster, Monster, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryBasicWrapper(srv, r, ids, ts.QpnElementalResists, getMonstersByElemResists),
-		i.queryIDListWrapper(srv, r, ids, ts.QpnStatusResists, lookup.L.StatusConditions, getMonstersByStatusResists),
+	return i.filterIDs(r, ids, []IDFilter{
+		i.queryBasicWrapper(r, ids, ts.QpnElementalResists, getMonstersByElemResists),
+		i.queryIDListWrapper(r, ids, ts.QpnStatusResists, lookup.L.StatusConditions, getMonstersByStatusResists),
 
-		i.queryIDWrapper(srv, r, ids, ts.QpnItem, lookup.L.Items, getMonstersByItem),
+		i.queryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getMonstersByItem),
 		i.queryID(r, ids, ts.QpnRonsoRage, lookup.L.RonsoRages, config.Cfg.DB.GetMonsterIDsByRonsoRage),
 		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetMonsterIDsByLocation),
 		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetMonsterIDsBySublocation),
 		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetMonsterIDsByArea),
-		i.queryIDWrapper(srv, r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, getMonstersByAutoAbility),
+		i.queryIDWrapper(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, getMonstersByAutoAbility),
 
-		i.queryIntList(srv, r, ids, ts.QpnEmptySlots, config.Cfg.DB.GetMonsterIDsByEmptySlots),
-		i.queryIntList(srv, r, ids, ts.QpnDistance, config.Cfg.DB.GetMonsterIDsByDistance),
+		i.queryIntList(r, ids, ts.QpnEmptySlots, config.Cfg.DB.GetMonsterIDsByEmptySlots),
+		i.queryIntList(r, ids, ts.QpnDistance, config.Cfg.DB.GetMonsterIDsByDistance),
 
-		i.queryEnumList(srv, r, enums.T.MonsterCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMonsterIDsByCategory),
+		i.queryEnumList(r, enums.T.MonsterCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMonsterIDsByCategory),
 		i.queryEnum(r, enums.T.MonsterSpecies, ids, ts.QpnSpecies, config.Cfg.DB.GetMonsterIDsBySpecies),
 		i.queryEnum(r, enums.T.CreationArea, ids, ts.QpnCreationArea, ToEnumQuery(enums.T.CreationArea, config.Cfg.DB.GetMonsterIDsByMaCreationArea)),
 

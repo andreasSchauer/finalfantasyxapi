@@ -22,7 +22,7 @@ func (s SublocationSimple) GetURL() string {
 	return s.URL
 }
 
-func createSublocationSimple(srv *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createSublocationSimple(r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := E.Sublocations
 	sublocation, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -31,18 +31,18 @@ func createSublocationSimple(srv *Server, r *http.Request, id int32, subsection 
 
 	sublocationSimple := SublocationSimple{
 		ID:             sublocation.ID,
-		URL:            CreateResourceURL(srv, i.Endpoint, id),
+		URL:            CreateResourceURL(i.Endpoint, id),
 		ParentLocation: createSimpleRef(sublocation.LocationID, sublocation.Location, nil, nil),
 		Name:           sublocation.Name,
-		Shops:          convertObjSlice(srv, shopIDs, idToShopLocSimple),
-		Treasures:      getTreasuresLocSimple(srv, id, subsection),
-		Monsters:       convertObjSlice(srv, monsterIDs, idToMonsterSimpleString),
+		Shops:          convertObjSlice(shopIDs, idToShopLocSimple),
+		Treasures:      getTreasuresLocSimple(id, subsection),
+		Monsters:       convertObjSlice(monsterIDs, idToMonsterSimpleString),
 	}
 
 	return sublocationSimple, nil
 }
 
-func getSublocationSectionRelations(srv *Server, r *http.Request, subLocIDs []int32) (map[int32]map[Relation][]int32, error) {
+func getSublocationSectionRelations(r *http.Request, subLocIDs []int32) (map[int32]map[Relation][]int32, error) {
 	i := E.Sublocations
 	relations := make(map[int32]map[Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())

@@ -26,20 +26,20 @@ type BattleInteractionSimple struct {
 	ModChanges                []string      `json:"modifier_changes,omitempty"`
 }
 
-func convertBattleInteractionSimple(srv *Server, bi seedtypes.BattleInteraction) BattleInteractionSimple {
+func convertBattleInteractionSimple(bi seedtypes.BattleInteraction) BattleInteractionSimple {
 	biSimple := BattleInteractionSimple{
 		Target:                    bi.Target,
 		Range:                     bi.Range,
 		HitAmount:                 bi.HitAmount,
-		Accuracy:                  convertAccuracySimple(srv, bi.Accuracy),
+		Accuracy:                  convertAccuracySimple(bi.Accuracy),
 		AffectedBy:                h.SliceOrNil(bi.AffectedBy),
-		Damage:                    convertObjPtr(srv, bi.Damage, convertDamageSimple),
-		Delay:                     convertObjPtr(srv, bi.InflictedDelay, convertInflictedDelaySimple),
-		InflictedStatusConditions: convertObjSliceOrNil(srv, bi.InflictedStatusConditions, convertInflictedStatusSimple),
+		Damage:                    convertObjPtr(bi.Damage, convertDamageSimple),
+		Delay:                     convertObjPtr(bi.InflictedDelay, convertInflictedDelaySimple),
+		InflictedStatusConditions: convertObjSliceOrNil(bi.InflictedStatusConditions, convertInflictedStatusSimple),
 		RemovedStatusConditions:   h.SliceOrNil(bi.RemovedStatusConditions),
-		CopiedStatusConditions:    convertObjSliceOrNil(srv, bi.CopiedStatusConditions, convertInflictedStatusSimple),
-		StatChanges:               convertObjSliceOrNil(srv, bi.StatChanges, convertStatChangeSimple),
-		ModChanges:                convertObjSliceOrNil(srv, bi.ModifierChanges, convertModChangeSimple),
+		CopiedStatusConditions:    convertObjSliceOrNil(bi.CopiedStatusConditions, convertInflictedStatusSimple),
+		StatChanges:               convertObjSliceOrNil(bi.StatChanges, convertStatChangeSimple),
+		ModChanges:                convertObjSliceOrNil(bi.ModifierChanges, convertModChangeSimple),
 	}
 
 	return biSimple
@@ -56,24 +56,24 @@ type DamageSimple struct {
 	Element       *string `json:"element,omitempty"`
 }
 
-func convertDamageSimple(srv *Server, d seedtypes.Damage) DamageSimple {
+func convertDamageSimple(d seedtypes.Damage) DamageSimple {
 	return DamageSimple{
 		AttackType:    d.AttackType,
 		DamageType:    d.DamageType,
-		HP:            convertObjPtr(srv, d.HP, convertClassDamageSimple),
-		MP:            convertObjPtr(srv, d.MP, convertClassDamageSimple),
-		CTB:           convertObjPtr(srv, d.CTB, convertClassDamageSimple),
+		HP:            convertObjPtr(d.HP, convertClassDamageSimple),
+		MP:            convertObjPtr(d.MP, convertClassDamageSimple),
+		CTB:           convertObjPtr(d.CTB, convertClassDamageSimple),
 		CanCritical:   h.PtrIsNotNil(d.Critical),
-		BreakDmgLimit: convertObjPtr(srv, d.BreakDmgLimit, convertBreakDmgLimitSimple),
+		BreakDmgLimit: convertObjPtr(d.BreakDmgLimit, convertBreakDmgLimitSimple),
 		Element:       d.Element,
 	}
 }
 
-func convertClassDamageSimple(srv *Server, dc seedtypes.ClassDamage) string {
+func convertClassDamageSimple(dc seedtypes.ClassDamage) string {
 	return fmt.Sprintf("formula: %s, power: %d", dc.DamageFormula, dc.DamageConstant)
 }
 
-func convertBreakDmgLimitSimple(_ *Server, breakDmgLimit string) string {
+func convertBreakDmgLimitSimple(breakDmgLimit string) string {
 	switch breakDmgLimit {
 	case string(database.BreakDmgLmtTypeAlways):
 		return "always"
@@ -85,7 +85,7 @@ func convertBreakDmgLimitSimple(_ *Server, breakDmgLimit string) string {
 	return ""
 }
 
-func convertAccuracySimple(_ *Server, acc seedtypes.Accuracy) string {
+func convertAccuracySimple(acc seedtypes.Accuracy) string {
 	switch acc.AccSource {
 	case string(database.AccSourceTypeRate):
 		if *acc.HitChance == 255 {
@@ -100,11 +100,11 @@ func convertAccuracySimple(_ *Server, acc seedtypes.Accuracy) string {
 	return ""
 }
 
-func convertInflictedDelaySimple(_ *Server, id seedtypes.InflictedDelay) string {
+func convertInflictedDelaySimple(id seedtypes.InflictedDelay) string {
 	return id.DelayStrength
 }
 
-func convertInflictedStatusSimple(_ *Server, is seedtypes.InflictedStatus) string {
+func convertInflictedStatusSimple(is seedtypes.InflictedStatus) string {
 	var probabilityStr string
 
 	switch is.Probability {
@@ -121,11 +121,11 @@ func convertInflictedStatusSimple(_ *Server, is seedtypes.InflictedStatus) strin
 	return fmt.Sprintf("%s (%s)", is.StatusCondition, probabilityStr)
 }
 
-func convertStatChangeSimple(_ *Server, sc seedtypes.StatChange) string {
+func convertStatChangeSimple(sc seedtypes.StatChange) string {
 	return formatChange(sc.StatName, sc.CalculationType, sc.Value)
 }
 
-func convertModChangeSimple(srv *Server, mc seedtypes.ModifierChange) string {
+func convertModChangeSimple(mc seedtypes.ModifierChange) string {
 	formatted := formatChange(mc.ModifierName, mc.CalculationType, mc.Value)
 	modifier, _ := lookup.GetResource(mc.ModifierName, lookup.L.Modifiers)
 

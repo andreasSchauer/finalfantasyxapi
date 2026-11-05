@@ -39,30 +39,30 @@ func (r AreaAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func idToAreaAPIResource(srv *Server, i handlerInput[seedtypes.Area, Area, AreaAPIResource], id int32) AreaAPIResource {
+func idToAreaAPIResource(i handlerInput[seedtypes.Area, Area, AreaAPIResource], id int32) AreaAPIResource {
 	res, _ := lookup.GetResourceByID(id, i.objLookupID)
-	return areaToAreaAPIResource(srv, i, res)
+	return areaToAreaAPIResource(i, res)
 }
 
-func idPtrToAreaAPIResPtr(srv *Server, i handlerInput[seedtypes.Area, Area, AreaAPIResource], idPtr *int32) *AreaAPIResource {
+func idPtrToAreaAPIResPtr(i handlerInput[seedtypes.Area, Area, AreaAPIResource], idPtr *int32) *AreaAPIResource {
 	if idPtr == nil {
 		return nil
 	}
 
-	res := idToAreaAPIResource(srv, i, *idPtr)
+	res := idToAreaAPIResource(i, *idPtr)
 	return &res
 }
 
-func locAreaToAreaAPIResource(srv *Server, i handlerInput[seedtypes.Area, Area, AreaAPIResource], area seedtypes.LocationArea) AreaAPIResource {
+func locAreaToAreaAPIResource(i handlerInput[seedtypes.Area, Area, AreaAPIResource], area seedtypes.LocationArea) AreaAPIResource {
 	res, _ := lookup.GetResource(area, i.objLookup)
-	return areaToAreaAPIResource(srv, i, res)
+	return areaToAreaAPIResource(i, res)
 }
 
-func locAreasToAreaAPIResources(srv *Server, i handlerInput[seedtypes.Area, Area, AreaAPIResource], areas []seedtypes.LocationArea) []AreaAPIResource {
+func locAreasToAreaAPIResources(i handlerInput[seedtypes.Area, Area, AreaAPIResource], areas []seedtypes.LocationArea) []AreaAPIResource {
 	resources := []AreaAPIResource{}
 
 	for _, area := range areas {
-		res := locAreaToAreaAPIResource(srv, i, area)
+		res := locAreaToAreaAPIResource(i, area)
 		resources = append(resources, res)
 	}
 
@@ -70,7 +70,7 @@ func locAreasToAreaAPIResources(srv *Server, i handlerInput[seedtypes.Area, Area
 }
 
 // shared logic. not indended to be called directly
-func areaToAreaAPIResource(srv *Server, i handlerInput[seedtypes.Area, Area, AreaAPIResource], area seedtypes.Area) AreaAPIResource {
+func areaToAreaAPIResource(i handlerInput[seedtypes.Area, Area, AreaAPIResource], area seedtypes.Area) AreaAPIResource {
 	params := area.GetResParamsLocation()
 
 	return AreaAPIResource{
@@ -82,6 +82,6 @@ func areaToAreaAPIResource(srv *Server, i handlerInput[seedtypes.Area, Area, Are
 			Version:     params.Version,
 		},
 		Specification: params.Specification,
-		URL:           CreateResourceURL(srv, i.Endpoint, params.AreaID),
+		URL:           CreateResourceURL(i.Endpoint, params.AreaID),
 	}
 }

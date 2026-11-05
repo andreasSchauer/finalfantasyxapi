@@ -33,7 +33,7 @@ func (m MonsterSimple) GetURL() string {
 	return m.URL
 }
 
-func createMonsterSimple(srv *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createMonsterSimple(r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := E.Monsters
 	mon, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -41,7 +41,7 @@ func createMonsterSimple(srv *Server, r *http.Request, id int32, subsection Subs
 
 	monSimple := MonsterSimple{
 		ID:             mon.ID,
-		URL:            CreateResourceURL(srv, i.Endpoint, id),
+		URL:            CreateResourceURL(i.Endpoint, id),
 		Name:           mon.Name,
 		Version:        mon.Version,
 		Specification:  mon.Specification,
@@ -53,9 +53,9 @@ func createMonsterSimple(srv *Server, r *http.Request, id int32, subsection Subs
 		IsRepeatable:   mon.IsRepeatable,
 		CanBeCaptured:  mon.CanBeCaptured,
 		RonsoRages:     h.SliceOrNil(mon.RonsoRages),
-		Areas:          convertObjSlice(srv, areaIDs, idToLocAreaString),
-		Items:          convertObjPtr(srv, mon.Items, convertMonsterItemsSimple),
-		Equipment:      convertObjPtr(srv, mon.Equipment, convertMonsterEquipmentSimple),
+		Areas:          convertObjSlice(areaIDs, idToLocAreaString),
+		Items:          convertObjPtr(mon.Items, convertMonsterItemsSimple),
+		Equipment:      convertObjPtr(mon.Equipment, convertMonsterEquipmentSimple),
 	}
 
 	return monSimple, nil
@@ -89,7 +89,7 @@ func getMonsterSimpleBribeAmount(mon seedtypes.Monster, hp int32) *int32 {
 	return &bribeAmount
 }
 
-func getMonsterSectionRelations(srv *Server, r *http.Request, monIDs []int32) (map[int32]map[Relation][]int32, error) {
+func getMonsterSectionRelations(r *http.Request, monIDs []int32) (map[int32]map[Relation][]int32, error) {
 	i := E.Monsters
 	relations := make(map[int32]map[Relation][]int32)
 

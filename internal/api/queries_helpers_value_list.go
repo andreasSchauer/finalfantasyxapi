@@ -4,17 +4,17 @@ import (
 	"net/http"
 )
 
-func (q QueryParam) parseValueList(srv *Server, r *http.Request) ([]string, error) {
+func (q QueryParam) parseValueList(r *http.Request) ([]string, error) {
 	query, err := q.checkEmpty(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return q.sliceValues(srv, query)
+	return q.sliceValues(query)
 }
 
-func (q QueryParam) sliceValues(srv *Server, query string) ([]string, error) {
-	values, err := queryListSplit(srv, query)
+func (q QueryParam) sliceValues(query string) ([]string, error) {
+	values, err := queryListSplit(query)
 	if err != nil {
 		return nil, err
 	}

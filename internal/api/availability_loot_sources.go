@@ -7,10 +7,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-func filterAvlShops(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlShops(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Shops
 
-	avlParams, err := i.queryAvlGetParams(srv, r)
+	avlParams, err := i.queryAvlGetParams(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -18,7 +18,7 @@ func filterAvlShops(srv *Server, r *http.Request, inputIDs []int32) ([]int32, er
 		return inputIDs, nil
 	}
 
-	sources, err := getShopSources(srv, r, i)
+	sources, err := getShopSources(r, i)
 	if err != nil {
 		return nil, err
 	}
@@ -47,10 +47,10 @@ func filterAvlShops(srv *Server, r *http.Request, inputIDs []int32) ([]int32, er
 	return dbIDs, nil
 }
 
-func filterAvlTreasures(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlTreasures(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Treasures
 
-	avlParams, err := i.queryAvlGetParams(srv, r)
+	avlParams, err := i.queryAvlGetParams(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -70,10 +70,10 @@ func filterAvlTreasures(srv *Server, r *http.Request, inputIDs []int32) ([]int32
 	return dbIDs, nil
 }
 
-func filterAvlQuests(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlQuests(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Quests
 
-	avlParams, err := i.queryAvlRepGetParams(srv, r)
+	avlParams, err := i.queryAvlRepGetParams(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -94,10 +94,10 @@ func filterAvlQuests(srv *Server, r *http.Request, inputIDs []int32) ([]int32, e
 	return dbIDs, nil
 }
 
-func filterAvlSidequests(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlSidequests(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Sidequests
 
-	avlParams, err := i.queryAvlRepGetParams(srv, r)
+	avlParams, err := i.queryAvlRepGetParams(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -117,10 +117,10 @@ func filterAvlSidequests(srv *Server, r *http.Request, inputIDs []int32) ([]int3
 	return dbIDs, nil
 }
 
-func filterAvlSubquests(srv *Server, r *http.Request, inputIDs []int32) ([]int32, error) {
+func filterAvlSubquests(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Subquests
 
-	avlParams, err := i.queryAvlRepGetParams(srv, r)
+	avlParams, err := i.queryAvlRepGetParams(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

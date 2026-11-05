@@ -28,10 +28,10 @@ type SubShopSimple struct {
 	Equipment []ShopEquipmentSimple `json:"equipment"`
 }
 
-func convertSubShopSimple(srv *Server, ss seedtypes.SubShop) SubShopSimple {
+func convertSubShopSimple(ss seedtypes.SubShop) SubShopSimple {
 	return SubShopSimple{
-		Items:     convertObjSlice(srv, ss.Items, shopItemNameString),
-		Equipment: convertObjSlice(srv, ss.Equipment, convertShopEquipmentSimple),
+		Items:     convertObjSlice(ss.Items, shopItemNameString),
+		Equipment: convertObjSlice(ss.Equipment, convertShopEquipmentSimple),
 	}
 }
 
@@ -40,18 +40,18 @@ type ShopEquipmentSimple struct {
 	Abilities     *string `json:"abilities"`
 }
 
-func convertShopEquipmentSimple(srv *Server, se seedtypes.ShopEquipment) ShopEquipmentSimple {
+func convertShopEquipmentSimple(se seedtypes.ShopEquipment) ShopEquipmentSimple {
 	return ShopEquipmentSimple{
-		EquipmentName: shopEquipmentNameString(srv, se),
+		EquipmentName: shopEquipmentNameString(se),
 		Abilities:     foundEquipmentAbilitiesStringPtr(se.TreasureEquipment),
 	}
 }
 
-func shopItemNameString(_ *Server, si seedtypes.ShopItem) string {
+func shopItemNameString(si seedtypes.ShopItem) string {
 	return fmt.Sprintf("%s - %d Gil", si.Name, si.Price)
 }
 
-func shopEquipmentNameString(_ *Server, se seedtypes.ShopEquipment) string {
+func shopEquipmentNameString(se seedtypes.ShopEquipment) string {
 	return fmt.Sprintf("%s - %d Gil", se.Name, se.Price)
 }
 
@@ -77,18 +77,18 @@ func foundEquipmentAbilitiesStringPtr(fe seedtypes.TreasureEquipment) *string {
 	}
 }
 
-func createShopSimple(srv *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createShopSimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.Shops
 	shop, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	shopSimple := ShopSimple{
 		ID:          shop.ID,
-		URL:         CreateResourceURL(srv, i.Endpoint, id),
-		Area:        idToLocAreaString(srv, shop.AreaID),
+		URL:         CreateResourceURL(i.Endpoint, id),
+		Area:        idToLocAreaString(shop.AreaID),
 		Category:    shop.Category,
 		Notes:       shop.Notes,
-		PreAirship:  convertObjPtr(srv, shop.PreAirship, convertSubShopSimple),
-		PostAirship: convertObjPtr(srv, shop.PostAirship, convertSubShopSimple),
+		PreAirship:  convertObjPtr(shop.PreAirship, convertSubShopSimple),
+		PostAirship: convertObjPtr(shop.PostAirship, convertSubShopSimple),
 	}
 
 	return shopSimple, nil

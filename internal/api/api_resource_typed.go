@@ -42,7 +42,7 @@ func (r TypedAPIResource) GetAPIResource() APIResource {
 	return r
 }
 
-func idToTypedAPIResource[T seedtypes.IsTyped, R any, A APIResource](srv *Server, i handlerInput[T, R, A], id int32) TypedAPIResource {
+func idToTypedAPIResource[T seedtypes.IsTyped, R any, A APIResource](i handlerInput[T, R, A], id int32) TypedAPIResource {
 	res, _ := lookup.GetResourceByID(id, i.objLookupID)
 	params := res.GetResParamsTyped()
 
@@ -52,29 +52,29 @@ func idToTypedAPIResource[T seedtypes.IsTyped, R any, A APIResource](srv *Server
 		Version:       params.Version,
 		Specification: params.Specification,
 		Type:          params.Type,
-		URL:           CreateResourceURL(srv, i.Endpoint, params.ID),
+		URL:           CreateResourceURL(i.Endpoint, params.ID),
 	}
 }
 
-func keyToTypedAPIResource[T seedtypes.IsTyped, R, K any, A APIResource](srv *Server, i handlerInput[T, R, A], key K) TypedAPIResource {
+func keyToTypedAPIResource[T seedtypes.IsTyped, R, K any, A APIResource](i handlerInput[T, R, A], key K) TypedAPIResource {
 	res, _ := lookup.GetResource(key, i.objLookup)
-	return idToTypedAPIResource(srv, i, res.GetID())
+	return idToTypedAPIResource(i, res.GetID())
 }
 
-func keyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A APIResource](srv *Server, i handlerInput[T, R, A], keyPtr *K) *TypedAPIResource {
+func keyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A APIResource](i handlerInput[T, R, A], keyPtr *K) *TypedAPIResource {
 	if keyPtr == nil {
 		return nil
 	}
 
-	res := keyToTypedAPIResource(srv, i, *keyPtr)
+	res := keyToTypedAPIResource(i, *keyPtr)
 	return &res
 }
 
-func keysToTypedAPIResources[T seedtypes.IsTyped, R, K any, A APIResource](srv *Server, i handlerInput[T, R, A], refs []K) []TypedAPIResource {
+func keysToTypedAPIResources[T seedtypes.IsTyped, R, K any, A APIResource](i handlerInput[T, R, A], refs []K) []TypedAPIResource {
 	resources := []TypedAPIResource{}
 
 	for _, ref := range refs {
-		resource := keyToTypedAPIResource(srv, i, ref)
+		resource := keyToTypedAPIResource(i, ref)
 		resources = append(resources, resource)
 	}
 

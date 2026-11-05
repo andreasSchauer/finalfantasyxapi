@@ -20,17 +20,17 @@ func (m MonsterFormationSimple) GetURL() string {
 	return m.URL
 }
 
-func createMonsterFormationSimple(srv *Server, _ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createMonsterFormationSimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
 	i := E.MonsterFormations
 	formation, _ := lookup.GetResourceByID(id, i.objLookupID)
 
 	formationSub := MonsterFormationSimple{
 		ID:             formation.ID,
-		URL:            CreateResourceURL(srv, i.Endpoint, id),
+		URL:            CreateResourceURL(i.Endpoint, id),
 		Category:       formation.FormationData.Category,
 		IsForcedAmbush: formation.FormationData.IsForcedAmbush,
 		FormationLoot:  getFormationLoot(formation),
-		Monsters:       convertObjSlice(srv, formation.Monsters, monsterAmountString),
+		Monsters:       convertObjSlice(formation.Monsters, monsterAmountString),
 		Areas:          locAreaStrings(formation.EncounterAreas),
 	}
 

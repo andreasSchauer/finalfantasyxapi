@@ -7,13 +7,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (srv *Server) getOverdriveCommand(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, NamedAPIResource], id int32) (OverdriveCommand, error) {
+func getOverdriveCommand(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, NamedAPIResource], id int32) (OverdriveCommand, error) {
 	command, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return OverdriveCommand{}, err
 	}
 
-	overdrives, err := E.Overdrives.dbGetRelations(srv, r.Context(), command, ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveIDs))
+	overdrives, err := E.Overdrives.dbGetRelations(r.Context(), command, ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveIDs))
 	if err != nil {
 		return OverdriveCommand{}, err
 	}
@@ -23,15 +23,15 @@ func (srv *Server) getOverdriveCommand(r *http.Request, i handlerInput[seedtypes
 		Name:        command.Name,
 		Description: command.Description,
 		Rank:        command.Rank,
-		User:        nameToNamedAPIResource(srv, E.CharacterClasses, command.User, nil),
-		Topmenu:     namePtrToNamedAPIResPtr(srv, E.Topmenus, command.Topmenu, nil),
-		OpenSubmenu: nameToNamedAPIResource(srv, E.Submenus, command.OpenSubmenu, nil),
+		User:        nameToNamedAPIResource(E.CharacterClasses, command.User, nil),
+		Topmenu:     namePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
+		OpenSubmenu: nameToNamedAPIResource(E.Submenus, command.OpenSubmenu, nil),
 		Overdrives:  overdrives,
 	}
 
 	return response, nil
 }
 
-func (srv *Server) retrieveOverdriveCommands(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, NamedAPIResource]) ([]int32, error) {
+func retrieveOverdriveCommands(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

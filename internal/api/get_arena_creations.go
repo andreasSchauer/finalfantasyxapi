@@ -13,7 +13,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func (srv *Server) getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource], id int32) (ArenaCreation, error) {
+func getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource], id int32) (ArenaCreation, error) {
 	creation, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return ArenaCreation{}, err
@@ -22,7 +22,7 @@ func (srv *Server) getArenaCreation(r *http.Request, i handlerInput[seedtypes.Ar
 	subquest, _ := lookup.GetResourceByID(creation.SubquestID, lookup.L.SubquestsID)
 	ia := subquest.Completion.Reward
 
-	monsters, err := getArenaCreationMonsters(srv, r, creation)
+	monsters, err := getArenaCreationMonsters(r, creation)
 	if err != nil {
 		return ArenaCreation{}, err
 	}
@@ -31,9 +31,9 @@ func (srv *Server) getArenaCreation(r *http.Request, i handlerInput[seedtypes.Ar
 		ID:                        creation.ID,
 		Name:                      creation.Name,
 		Category:                  creation.Category,
-		Monster:                   idToNamedAPIResource(srv, E.Monsters, *creation.MonsterID),
-		ParentSubquest:            idToQuestAPIResource(srv, E.Subquests, creation.SubquestID),
-		Reward:                    E.AllItems.toResAmtFromName(srv, ia),
+		Monster:                   idToNamedAPIResource(E.Monsters, *creation.MonsterID),
+		ParentSubquest:            idToQuestAPIResource(E.Subquests, creation.SubquestID),
+		Reward:                    E.AllItems.toResAmtFromName(ia),
 		RequiredCatchAmount:       creation.Amount,
 		UnlockedCreationsCategory: creation.CreationsUnlockedCategory,
 		RequiredMonsters:          monsters,
@@ -42,18 +42,18 @@ func (srv *Server) getArenaCreation(r *http.Request, i handlerInput[seedtypes.Ar
 	return response, nil
 }
 
-func (srv *Server) retrieveArenaCreations(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource]) ([]int32, error) {
+func retrieveArenaCreations(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
-		i.queryEnumList(srv, r, enums.T.ArenaCreationCategory, ids, ts.QpnCategory, config.Cfg.DB.GetArenaCreationIDsByCategory),
+	return i.filterIDs(r, ids, []IDFilter{
+		i.queryEnumList(r, enums.T.ArenaCreationCategory, ids, ts.QpnCategory, config.Cfg.DB.GetArenaCreationIDsByCategory),
 	})
 }
 
-func getArenaCreationMonsters(srv *Server, r *http.Request, creation seedtypes.ArenaCreation) ([]NamedAPIResource, error) {
+func getArenaCreationMonsters(r *http.Request, creation seedtypes.ArenaCreation) ([]NamedAPIResource, error) {
 	mf := createMonsterFilter(creation)
 
 	if mf.IsZero() || mf.CreationsUnlockedCategory != nil {
@@ -118,6 +118,6 @@ func getArenaCreationMonsters(srv *Server, r *http.Request, creation seedtypes.A
 		return nil, err
 	}
 
-	monsters := E.Monsters.toResources(srv, monsterIDs)
+	monsters := E.Monsters.toResources(monsterIDs)
 	return monsters, nil
 }

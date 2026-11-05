@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getOverdriveMode(r *http.Request, i handlerInput[seedtypes.OverdriveMode, OverdriveMode, NamedAPIResource], id int32) (OverdriveMode, error) {
+func getOverdriveMode(r *http.Request, i handlerInput[seedtypes.OverdriveMode, OverdriveMode, NamedAPIResource], id int32) (OverdriveMode, error) {
 	mode, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return OverdriveMode{}, err
@@ -22,19 +22,19 @@ func (srv *Server) getOverdriveMode(r *http.Request, i handlerInput[seedtypes.Ov
 		Effect:      mode.Effect,
 		Type:        mode.Type,
 		FillRate:    mode.FillRate,
-		Actions:     E.Characters.toResAmtsFromNames(srv, mode.ActionsToLearn),
+		Actions:     E.Characters.toResAmtsFromNames(mode.ActionsToLearn),
 	}
 
 	return response, nil
 }
 
-func (srv *Server) retrieveOverdriveModes(r *http.Request, i handlerInput[seedtypes.OverdriveMode, OverdriveMode, NamedAPIResource]) ([]int32, error) {
+func retrieveOverdriveModes(r *http.Request, i handlerInput[seedtypes.OverdriveMode, OverdriveMode, NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
+	return i.filterIDs(r, ids, []IDFilter{
 		i.queryEnum(r, enums.T.OverdriveModeType, ids, ts.QpnType, config.Cfg.DB.GetOverdriveModeIDsByType),
 	})
 }

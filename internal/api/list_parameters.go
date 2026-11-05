@@ -15,26 +15,26 @@ func (l QueryParameterList) GetListParams() ListParams {
 	return l.ListParams
 }
 
-func getQueryParamList(srv *Server, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam) (QueryParameterList, error) {
+func getQueryParamList(r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam) (QueryParameterList, error) {
 
 	queryParams := paramMapToSlice(queryLookup)
-	queryParams = getAllowedResources(srv, endpoint, queryParams)
+	queryParams = getAllowedResources(endpoint, queryParams)
 	queryParams = getAllowedValuesFromTypes(queryParams)
 
-	listParams, shownResources, err := createPaginatedList(srv, r, queryParams)
+	listParams, shownResources, err := createPaginatedList(r, queryParams)
 	if err != nil {
 		return QueryParameterList{}, err
 	}
 
 	list := QueryParameterList{
 		ListParams: listParams,
-		Results:    createQueryParamRefResURLs(srv, shownResources),
+		Results:    createQueryParamRefResURLs(shownResources),
 	}
 
 	return list, nil
 }
 
-func createQueryParamRefResURLs(srv *Server, params []QueryParam) []QueryParam {
+func createQueryParamRefResURLs(params []QueryParam) []QueryParam {
 	paramsNew := params
 
 	for i := range paramsNew {
@@ -47,12 +47,12 @@ func createQueryParamRefResURLs(srv *Server, params []QueryParam) []QueryParam {
 		for j := range param.ReferencesInt {
 			if param.Type == ts.QptEnum || param.Type == ts.QptEnumList {
 				ref := param.ReferencesEnumsInt[j]
-				param.References[j] = createEnumURL(srv, ref)
+				param.References[j] = createEnumURL(ref)
 				continue
 			}
 
 			ref := param.ReferencesInt[j]
-			param.References[j] = createListURL(srv, ref)
+			param.References[j] = createListURL(ref)
 		}
 		paramsNew[i] = param
 	}
@@ -60,10 +60,10 @@ func createQueryParamRefResURLs(srv *Server, params []QueryParam) []QueryParam {
 	return paramsNew
 }
 
-func getAllowedResources(srv *Server, endpoint ts.EndpointName, params []QueryParam) []QueryParam {
+func getAllowedResources(endpoint ts.EndpointName, params []QueryParam) []QueryParam {
 	for idx, param := range params {
 		for _, id := range param.AllowedIDs {
-			allowedRes := CreateResourceURL(srv, endpoint, id)
+			allowedRes := CreateResourceURL(endpoint, id)
 			param.AllowedResources = append(param.AllowedResources, allowedRes)
 		}
 		params[idx] = param

@@ -22,7 +22,7 @@ func getAllAgilityTiers() []seedtypes.AgilityTier {
 	return tiers
 }
 
-func getAgilityTier(agility int32) seedtypes.AgilityTier {
+func getTierByAgility(agility int32) seedtypes.AgilityTier {
 	tiers := getAllAgilityTiers()
 	var agilityTier seedtypes.AgilityTier
 
@@ -37,7 +37,7 @@ func getAgilityTier(agility int32) seedtypes.AgilityTier {
 }
 
 func extractAglTierChar(participant Participant, params TurnOrderParams) AgilityVals {
-	agilityTier := getAgilityTier(participant.Agility)
+	agilityTier := getTierByAgility(participant.Agility)
 	aglVals := AgilityVals{
 		TickSpeed: agilityTier.TickSpeed,
 		MaxICV:    agilityTier.CharacterMaxICV,
@@ -54,7 +54,7 @@ func extractAglTierChar(participant Participant, params TurnOrderParams) Agility
 }
 
 func extractAglTierMon(participant Participant, params TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) AgilityVals {
-	agilityTier := getAgilityTier(participant.Agility)
+	agilityTier := getTierByAgility(participant.Agility)
 	aglVals := AgilityVals{
 		TickSpeed: agilityTier.TickSpeed,
 		MinICV:    agilityTier.MonsterMinICV,

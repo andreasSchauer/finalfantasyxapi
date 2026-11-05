@@ -8,73 +8,73 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getSublocationRelationships(srv *Server, r *http.Request, sublocation seedtypes.Sublocation) (Sublocation, error) {
+func getSublocationRelationships(r *http.Request, sublocation seedtypes.Sublocation) (Sublocation, error) {
 	var rel Sublocation
 	var locRel LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := E.Sublocations.queryAvlRelGetParams(srv, r, sublocation.ID)
+	availabilityParams, err := E.Sublocations.queryAvlRelGetParams(r, sublocation.ID)
 	if err != nil {
 		return Sublocation{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.ConnectedSublocations, err = E.Sublocations.dbGetRelations(srv, r.Context(), sublocation, config.Cfg.DB.GetConnectedSublocationIDs)
+		rel.ConnectedSublocations, err = E.Sublocations.dbGetRelations(r.Context(), sublocation, config.Cfg.DB.GetConnectedSublocationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = E.Areas.dbGetRelations(srv, r.Context(), sublocation, config.Cfg.DB.GetSublocationAreaIDs)
+		rel.Areas, err = E.Areas.dbGetRelations(r.Context(), sublocation, config.Cfg.DB.GetSublocationAreaIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Characters, err = E.Characters.dbGetRelations(srv, ctx, sublocation, config.Cfg.DB.GetSublocationCharacterIDs)
+		locRel.Characters, err = E.Characters.dbGetRelations(ctx, sublocation, config.Cfg.DB.GetSublocationCharacterIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Aeons, err = E.Aeons.dbGetRelations(srv, ctx, sublocation, config.Cfg.DB.GetSublocationAeonIDs)
+		locRel.Aeons, err = E.Aeons.dbGetRelations(ctx, sublocation, config.Cfg.DB.GetSublocationAeonIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Shops, err = E.Shops.queryAvlRelRun(srv, ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(srv, ViewSourceTypeShop))
+		locRel.Shops, err = E.Shops.queryAvlRelRun(ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(ViewSourceTypeShop))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Treasures, err = E.Treasures.queryAvlRelRun(srv, ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(srv, ViewSourceTypeTreasure))
+		locRel.Treasures, err = E.Treasures.queryAvlRelRun(ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Monsters, err = E.Monsters.queryAvlRelRun(srv, ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(srv, ViewSourceTypeMonster))
+		locRel.Monsters, err = E.Monsters.queryAvlRelRun(ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(ViewSourceTypeMonster))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Formations, err = E.MonsterFormations.queryAvlRelRun(srv, ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(srv, ViewSourceTypeMonsterFormation))
+		locRel.Formations, err = E.MonsterFormations.queryAvlRelRun(ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(ViewSourceTypeMonsterFormation))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Quests, err = E.Quests.queryAvlRelRun(srv, ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(srv, ViewSourceTypeQuest))
+		locRel.Quests, err = E.Quests.queryAvlRelRun(ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(ViewSourceTypeQuest))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		locRel.Music, err = getMusicLocBased(srv, ctx, sublocation, LocBasedMusicQueries{
+		locRel.Music, err = getMusicLocBased(ctx, sublocation, LocBasedMusicQueries{
 			CueSongs:  config.Cfg.DB.GetSublocationCueSongIDs,
 			BmSongs:   config.Cfg.DB.GetSublocationBackgroundMusicSongIDs,
 			FMVSongs:  config.Cfg.DB.GetSublocationFMVSongIDs,
@@ -85,7 +85,7 @@ func getSublocationRelationships(srv *Server, r *http.Request, sublocation seedt
 
 	g.Go(func() error {
 		var err error
-		locRel.FMVs, err = E.FMVs.dbGetRelations(srv, ctx, sublocation, config.Cfg.DB.GetSublocationFmvIDs)
+		locRel.FMVs, err = E.FMVs.dbGetRelations(ctx, sublocation, config.Cfg.DB.GetSublocationFmvIDs)
 		return err
 	})
 

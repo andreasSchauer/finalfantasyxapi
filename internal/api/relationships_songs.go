@@ -8,19 +8,19 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getSongRelationships(srv *Server, r *http.Request, song seedtypes.Song) (Song, error) {
+func getSongRelationships(r *http.Request, song seedtypes.Song) (Song, error) {
 	var rel Song
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.BossFights, err = E.MonsterFormations.dbGetRelations(srv, ctx, song, ToIntManyNull(config.Cfg.DB.GetSongMonsterFormationIDs))
+		rel.BossFights, err = E.MonsterFormations.dbGetRelations(ctx, song, ToIntManyNull(config.Cfg.DB.GetSongMonsterFormationIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.FMVs, err = E.FMVs.dbGetRelations(srv, ctx, song, ToIntManyNull(config.Cfg.DB.GetSongFmvIDs))
+		rel.FMVs, err = E.FMVs.dbGetRelations(ctx, song, ToIntManyNull(config.Cfg.DB.GetSongFmvIDs))
 		return err
 	})
 

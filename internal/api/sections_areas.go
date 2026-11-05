@@ -27,7 +27,7 @@ func (a AreaSimple) GetURL() string {
 	return a.URL
 }
 
-func createAreaSimple(srv *Server, r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createAreaSimple(r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
 	i := E.Areas
 	area, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -36,7 +36,7 @@ func createAreaSimple(srv *Server, r *http.Request, id int32, subsection Subsect
 
 	areaSimple := AreaSimple{
 		ID:                area.ID,
-		URL:               CreateResourceURL(srv, i.Endpoint, id),
+		URL:               CreateResourceURL(i.Endpoint, id),
 		ParentLocation:    createSimpleRef(area.LocationID, area.Location, nil, nil),
 		ParentSublocation: createSimpleRef(area.SublocationID, area.Sublocation, nil, nil),
 		Name:              area.Name,
@@ -44,15 +44,15 @@ func createAreaSimple(srv *Server, r *http.Request, id int32, subsection Subsect
 		Specification:     area.Specification,
 		HasSaveSphere:     area.HasSaveSphere,
 		Availability:      area.Availability,
-		Shops:             convertObjSlice(srv, shopIDs, idToShopLocSimple),
-		Treasures:         getTreasuresLocSimple(srv, id, subsection),
-		Monsters:          convertObjSlice(srv, monsterIDs, idToMonsterSimpleString),
+		Shops:             convertObjSlice(shopIDs, idToShopLocSimple),
+		Treasures:         getTreasuresLocSimple(id, subsection),
+		Monsters:          convertObjSlice(monsterIDs, idToMonsterSimpleString),
 	}
 
 	return areaSimple, nil
 }
 
-func getAreaSectionRelations(srv *Server, r *http.Request, areaIDs []int32) (map[int32]map[Relation][]int32, error) {
+func getAreaSectionRelations(r *http.Request, areaIDs []int32) (map[int32]map[Relation][]int32, error) {
 	i := E.Areas
 	relations := make(map[int32]map[Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())

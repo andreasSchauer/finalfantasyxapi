@@ -11,7 +11,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (srv *Server) getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerUnit, TypedAPIResource], id int32) (PlayerUnit, error) {
+func getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerUnit, TypedAPIResource], id int32) (PlayerUnit, error) {
 	unit, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return PlayerUnit{}, err
@@ -23,7 +23,7 @@ func (srv *Server) getPlayerUnit(r *http.Request, i handlerInput[seedtypes.Playe
 	case database.UnitTypeCharacter:
 		character, _ := lookup.GetResource(unit, lookup.L.Characters)
 
-		rel, err := getCharacterRelationships(srv, r, character)
+		rel, err := getCharacterRelationships(r, character)
 		if err != nil {
 			return PlayerUnit{}, err
 		}
@@ -32,8 +32,8 @@ func (srv *Server) getPlayerUnit(r *http.Request, i handlerInput[seedtypes.Playe
 			ID:               unit.ID,
 			Name:             unit.Name,
 			Type:             unit.Type,
-			TypedUnit:        nameToNamedAPIResource(srv, E.Characters, unit.Name, nil),
-			Area:             locAreaToAreaAPIResource(srv, E.Areas, character.LocationArea),
+			TypedUnit:        nameToNamedAPIResource(E.Characters, unit.Name, nil),
+			Area:             locAreaToAreaAPIResource(E.Areas, character.LocationArea),
 			CelestialWeapon:  rel.CelestialWeapon,
 			CharacterClasses: rel.CharacterClasses,
 		}
@@ -41,7 +41,7 @@ func (srv *Server) getPlayerUnit(r *http.Request, i handlerInput[seedtypes.Playe
 	case database.UnitTypeAeon:
 		aeon, _ := lookup.GetResource(unit, lookup.L.Aeons)
 
-		rel, err := getAeonRelationships(srv, r, aeon)
+		rel, err := getAeonRelationships(r, aeon)
 		if err != nil {
 			return PlayerUnit{}, err
 		}
@@ -50,8 +50,8 @@ func (srv *Server) getPlayerUnit(r *http.Request, i handlerInput[seedtypes.Playe
 			ID:               unit.ID,
 			Name:             unit.Name,
 			Type:             unit.Type,
-			TypedUnit:        nameToNamedAPIResource(srv, E.Aeons, unit.Name, nil),
-			Area:             locAreaToAreaAPIResource(srv, E.Areas, aeon.LocationArea),
+			TypedUnit:        nameToNamedAPIResource(E.Aeons, unit.Name, nil),
+			Area:             locAreaToAreaAPIResource(E.Areas, aeon.LocationArea),
 			CelestialWeapon:  rel.CelestialWeapon,
 			CharacterClasses: rel.CharacterClasses,
 		}
@@ -60,13 +60,13 @@ func (srv *Server) getPlayerUnit(r *http.Request, i handlerInput[seedtypes.Playe
 	return response, nil
 }
 
-func (srv *Server) retrievePlayerUnits(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerUnit, TypedAPIResource]) ([]int32, error) {
+func retrievePlayerUnits(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerUnit, TypedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(srv, r, ids, []IDFilter{
+	return i.filterIDs(r, ids, []IDFilter{
 		i.queryEnum(r, enums.T.UnitType, ids, ts.QpnType, config.Cfg.DB.GetPlayerUnitIDsByType),
 	})
 }

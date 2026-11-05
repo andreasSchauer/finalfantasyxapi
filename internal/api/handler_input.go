@@ -18,10 +18,10 @@ type handlerInput[T seedtypes.Lookupable, R any, A APIResource] struct {
 	queryLookup      map[ts.QueryParamName]QueryParam
 	getMultipleQuery DBQueryStringMany
 	retrieveQuery    DBQueryNoInput
-	idToResFunc      func(*Server, handlerInput[T, R, A], int32) A
+	idToResFunc      func(handlerInput[T, R, A], int32) A
 	getSingleFunc    func(*http.Request, handlerInput[T, R, A], int32) (R, error)
 	retrieveFunc     func(*http.Request, handlerInput[T, R, A]) ([]int32, error)
-	avlFunc          func(*Server, *http.Request, []int32) ([]int32, error)
+	avlFunc          func(*http.Request, []int32) ([]int32, error)
 	subsections      map[ts.SectionName]Subsection
 }
 
@@ -43,7 +43,7 @@ type handlerInputService[P ServiceParams, R ServiceResponse] struct {
 	Endpoint  ts.EndpointName
 	usage     []string
 	verifyFn  func(paramsVerifyer, P) (P, error)
-	executeFn func(*Server, P) (R, error)
-	docsFn    func(*Server) ParamsDoc
+	executeFn func(P) (R, error)
+	docsFn    func() ParamsDoc
 	samplesFn func() []SampleParams[P]
 }

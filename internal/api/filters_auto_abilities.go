@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAutoAbilitiesByMonster(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AutoAbilities
 
 	charIDPtr, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
@@ -28,7 +28,7 @@ func getAutoAbilitiesByMonster(srv *Server, r *http.Request, ctx context.Context
 	return dbIDs, nil
 }
 
-func getAutoAbilitiesByShop(srv *Server, r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getAutoAbilitiesByShop(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AutoAbilities
 
 	charIDPtr, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)

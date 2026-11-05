@@ -35,7 +35,7 @@ type SphereGrid struct {
 	PlayerAbilities []NamedAPIResource `json:"player_abilities"`
 }
 
-func convertSphereGrid(_ *Server, sg seedtypes.SphereGrid) SphereGrid {
+func convertSphereGrid(sg seedtypes.SphereGrid) SphereGrid {
 	return SphereGrid{
 		StatTable:  sg.StatTable,
 		Lv1Locks:   sg.Lv1Locks,

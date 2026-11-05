@@ -14,7 +14,7 @@ type AlBhedResponse struct {
 	Direction      string `json:"direction"`
 }
 
-func handleAlBhed(_ *Server, params AlBhedParams) (AlBhedResponse, error) {
+func handleAlBhed(params AlBhedParams) (AlBhedResponse, error) {
 	response := AlBhedResponse{
 		OriginalText: params.Text,
 		Direction:    params.Direction,

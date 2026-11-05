@@ -40,32 +40,32 @@ type LocBasedMusicQueries struct {
 	BossMusic DBQueryIntMany
 }
 
-func getMusicLocBased(srv *Server, ctx context.Context, item seedtypes.Lookupable, queries LocBasedMusicQueries) (*LocBasedMusic, error) {
+func getMusicLocBased(ctx context.Context, item seedtypes.Lookupable, queries LocBasedMusicQueries) (*LocBasedMusic, error) {
 	i := E.Songs
 	var music LocBasedMusic
 	g, ctx := errgroup.WithContext(ctx)
 
 	g.Go(func() error {
 		var err error
-		music.Cues, err = i.dbGetRelations(srv, ctx, item, queries.CueSongs)
+		music.Cues, err = i.dbGetRelations(ctx, item, queries.CueSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.BackgroundMusic, err = i.dbGetRelations(srv, ctx, item, queries.BmSongs)
+		music.BackgroundMusic, err = i.dbGetRelations(ctx, item, queries.BmSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.FMVs, err = i.dbGetRelations(srv, ctx, item, queries.FMVSongs)
+		music.FMVs, err = i.dbGetRelations(ctx, item, queries.FMVSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.BossMusic, err = i.dbGetRelations(srv, ctx, item, queries.BossMusic)
+		music.BossMusic, err = i.dbGetRelations(ctx, item, queries.BossMusic)
 		return err
 	})
 
