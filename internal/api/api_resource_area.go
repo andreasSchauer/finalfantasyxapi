@@ -3,9 +3,7 @@ package api
 import (
 	"fmt"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -38,51 +36,4 @@ func (r AreaAPIResource) String() string {
 
 func (r AreaAPIResource) GetAPIResource() APIResource {
 	return r
-}
-
-func idToAreaAPIResource(i handlerInput[seedtypes.Area, Area, AreaAPIResource], id int32) AreaAPIResource {
-	res, _ := lookup.GetResourceByID(id, i.objLookupID)
-	return areaToAreaAPIResource(i, res)
-}
-
-func idPtrToAreaAPIResPtr(i handlerInput[seedtypes.Area, Area, AreaAPIResource], idPtr *int32) *AreaAPIResource {
-	if idPtr == nil {
-		return nil
-	}
-
-	res := idToAreaAPIResource(i, *idPtr)
-	return &res
-}
-
-func locAreaToAreaAPIResource(i handlerInput[seedtypes.Area, Area, AreaAPIResource], area seedtypes.LocationArea) AreaAPIResource {
-	res, _ := lookup.GetResource(area, i.objLookup)
-	return areaToAreaAPIResource(i, res)
-}
-
-func locAreasToAreaAPIResources(i handlerInput[seedtypes.Area, Area, AreaAPIResource], areas []seedtypes.LocationArea) []AreaAPIResource {
-	resources := []AreaAPIResource{}
-
-	for _, area := range areas {
-		res := locAreaToAreaAPIResource(i, area)
-		resources = append(resources, res)
-	}
-
-	return resources
-}
-
-// shared logic. not indended to be called directly
-func areaToAreaAPIResource(i handlerInput[seedtypes.Area, Area, AreaAPIResource], area seedtypes.Area) AreaAPIResource {
-	params := area.GetResParamsLocation()
-
-	return AreaAPIResource{
-		AreaID: params.AreaID,
-		LocationArea: seedtypes.LocationArea{
-			Location:    params.Location,
-			Sublocation: params.Sublocation,
-			Area:        params.Area,
-			Version:     params.Version,
-		},
-		Specification: params.Specification,
-		URL:           ah.CreateResourceURL(i.Endpoint, params.AreaID),
-	}
 }
