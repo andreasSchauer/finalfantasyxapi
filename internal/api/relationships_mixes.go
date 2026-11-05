@@ -12,7 +12,7 @@ import (
 func getMixCombinations(r *http.Request, mix seedtypes.Mix) ([]MixCombination, error) {
 	combinations := mix.PossibleCombinations
 
-	best, err := Q.mixes[ts.QpnBest].parseBool(r)
+	best, err := Q.Mixes[ts.QpnBest].parseBool(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -20,7 +20,7 @@ func getMixCombinations(r *http.Request, mix seedtypes.Mix) ([]MixCombination, e
 		combinations = mix.BestCombinations
 	}
 
-	itemID, err := Q.mixes[ts.QpnContainsItem].parseNameID(r, E.Items.resTypeSingle, E.Items.objLookup)
+	itemID, err := Q.Mixes[ts.QpnContainsItem].parseNameID(r, E.Items.resTypeSingle, E.Items.objLookup)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

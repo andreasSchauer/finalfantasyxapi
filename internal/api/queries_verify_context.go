@@ -110,6 +110,6 @@ func (q queryVerifyer[T]) requiresOne() error {
 
 // checks, if the query param is a default param.
 func isDefaultParam(queryName ts.QueryParamName) bool {
-	_, ok := Q.defaultParams[queryName]
+	_, ok := Q.DefaultParams[queryName]
 	return ok
 }

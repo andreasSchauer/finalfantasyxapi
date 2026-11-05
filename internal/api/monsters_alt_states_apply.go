@@ -84,7 +84,7 @@ func applyAlteredState(mon Monster, altStateID int) Monster {
 }
 
 func getAltStateID(r *http.Request, mon Monster, queryName ts.QueryParamName) (int, error) {
-	queryParam := Q.monsters[queryName]
+	queryParam := Q.Monsters[queryName]
 	query, err := queryParam.checkEmpty(r)
 	if err != nil {
 		return 0, err

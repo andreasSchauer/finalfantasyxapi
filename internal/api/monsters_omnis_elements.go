@@ -58,7 +58,7 @@ func applyOmnisElements(r *http.Request, mon Monster, queryName ts.QueryParamNam
 
 // verifies the input and counts the amounts of circles pointing to each element
 func parseOmnisQuery(r *http.Request, queryName ts.QueryParamName) (map[string]int, error) {
-	queryParam := Q.monsters[queryName]
+	queryParam := Q.Monsters[queryName]
 	query, err := queryParam.checkEmpty(r)
 	if err != nil {
 		return nil, err

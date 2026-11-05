@@ -91,7 +91,7 @@ func getMonstersByStatusResists(r *http.Request, ctx context.Context, ids []int3
 }
 
 func verifyMonsterResistance(r *http.Request) (int32, error) {
-	queryParam := Q.monsters[ts.QpnResistance]
+	queryParam := Q.Monsters[ts.QpnResistance]
 
 	resistance, err := queryParam.parseInt(r)
 	if err != nil {

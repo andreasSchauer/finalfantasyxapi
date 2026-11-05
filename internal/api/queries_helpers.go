@@ -27,18 +27,25 @@ func paramMapToSlice(lookup map[ts.QueryParamName]QueryParam) []QueryParam {
 	return queryParams
 }
 
-func paramSliceToMap(params []QueryParam, endpoint *ts.EndpointName) map[ts.QueryParamName]QueryParam {
+func paramSliceToMap(params []QueryParam, endpoint ts.EndpointName) map[ts.QueryParamName]QueryParam {
 	paramMap := make(map[ts.QueryParamName]QueryParam, len(params))
 
 	for i, param := range params {
 		param.ID = i + 1
-
 		param = param.assignParamUsage()
+		param.Endpoint = endpoint
+		paramMap[param.Name] = param
+	}
 
-		if endpoint != nil {
-			param.Endpoint = *endpoint
-		}
+	return paramMap
+}
 
+func defaultParamSliceToMap(params []QueryParam) map[ts.QueryParamName]QueryParam {
+	paramMap := make(map[ts.QueryParamName]QueryParam, len(params))
+
+	for i, param := range params {
+		param.ID = i + 1
+		param = param.assignParamUsage()
 		paramMap[param.Name] = param
 	}
 
@@ -86,7 +93,7 @@ func queryIntMapToSlice(m map[string]int32) []int32 {
 }
 
 func getRawQueryLimit(r *http.Request) (int, error) {
-	queryParamLimit := Q.defaultParams[ts.QpnLimit]
+	queryParamLimit := Q.DefaultParams[ts.QpnLimit]
 	query, err := queryParamLimit.checkEmpty(r)
 	if err != nil {
 		return 0, err
@@ -107,7 +114,7 @@ func getRawQueryLimit(r *http.Request) (int, error) {
 }
 
 func getLimitMax() string {
-	queryParamLimit := Q.defaultParams[ts.QpnLimit]
+	queryParamLimit := Q.DefaultParams[ts.QpnLimit]
 
 	for _, input := range queryParamLimit.SpecialInputs {
 		if input.Key == ts.QsvMax {

@@ -49,8 +49,10 @@ type SpecialQueryInput struct {
 	Val int                `json:"value"`
 }
 
-func initLocationsParams() {
-	params := []QueryParam{
+// change functions to return the param
+
+func GetLocationsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnRelAvailability,
 			Description:        "Only displays a location's related resources with the given availabilities. This affects shops, treasures, quests, monsters, and monster-formations.",
@@ -181,12 +183,10 @@ func initLocationsParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.locations = E.Locations.completeQueryParamsInit(params)
 }
 
-func initSublocationsParams() {
-	params := []QueryParam{
+func GetSublocationsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnRelAvailability,
 			Description:        "Only displays a sublocation's related resources with the given availabilities. This affects shops, treasures, quests, monsters, and monster-formations.",
@@ -324,12 +324,10 @@ func initSublocationsParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.sublocations = E.Sublocations.completeQueryParamsInit(params)
 }
 
-func initAreasParams() {
-	params := []QueryParam{
+func GetAreasParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnRelAvailability,
 			Description:        "Only displays an area's related resources with the given availabilities. This affects shops, treasures, quests, monsters, and monster-formations.",
@@ -499,12 +497,10 @@ func initAreasParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.areas = E.Areas.completeQueryParamsInit(params)
 }
 
-func initMonsterFormationsParams() {
-	params := []QueryParam{
+func GetMonsterFormationsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:          ts.QpnMonster,
 			Description:   "Searches for monster-formations that feature the specified monster.",
@@ -578,12 +574,10 @@ func initMonsterFormationsParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.monsterFormations = E.MonsterFormations.completeQueryParamsInit(params)
 }
 
-func initShopsParams() {
-	params := []QueryParam{
+func GetShopsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnCategory,
 			Description:        "Searches for shops with the specified shop categories.",
@@ -661,12 +655,10 @@ func initShopsParams() {
 			ReplacedBy:    []ts.QueryParamName{ts.QpnAvailability},
 		},
 	}
-
-	Q.shops = E.Shops.completeQueryParamsInit(params)
 }
 
-func initTreasuresParams() {
-	params := []QueryParam{
+func GetTreasuresParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:          ts.QpnLocation,
 			Description:   "Searches for treasures that appear within the specified location.",
@@ -750,12 +742,10 @@ func initTreasuresParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameAvailabilityType},
 		},
 	}
-
-	Q.treasures = E.Treasures.completeQueryParamsInit(params)
 }
 
-func initQuestsParams() {
-	params := []QueryParam{
+func GetQuestsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnType,
 			Description:        "Searches for quests that are of the specified quest type.",
@@ -779,12 +769,10 @@ func initQuestsParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.quests = E.Quests.completeQueryParamsInit(params)
 }
 
-func initSidequestsParams() {
-	params := []QueryParam{
+func GetSidequestsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnAvailability,
 			Description:        "Searches for sidequests with the given availabilities.",
@@ -794,12 +782,10 @@ func initSidequestsParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameAvailabilityType},
 		},
 	}
-
-	Q.sidequests = E.Sidequests.completeQueryParamsInit(params)
 }
 
-func initSubquestsParams() {
-	params := []QueryParam{
+func GetSubquestsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnAvailability,
 			Description:        "Searches for subquests with the given availabilities.",
@@ -815,12 +801,10 @@ func initSubquestsParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.subquests = E.Subquests.completeQueryParamsInit(params)
 }
 
-func initArenaCreationsParams() {
-	params := []QueryParam{
+func GetArenaCreationsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnCategory,
 			Description:        "Searches for monster-formations with the specified arena-creation-categories.",
@@ -830,12 +814,10 @@ func initArenaCreationsParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameArenaCreationCategory},
 		},
 	}
-
-	Q.arenaCreations = E.ArenaCreations.completeQueryParamsInit(params)
 }
 
-func initBlitzballPrizesParams() {
-	params := []QueryParam{
+func GetBlitzballPrizesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnCategory,
 			Description:        "Searches for blitzball prize tables with the specified blitzball-tournament-category.",
@@ -845,12 +827,10 @@ func initBlitzballPrizesParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameBlitzballTournamentCategory},
 		},
 	}
-
-	Q.blitzballPrizes = E.BlitzballPrizes.completeQueryParamsInit(params)
 }
 
-func initSongsParams() {
-	params := []QueryParam{
+func GetSongsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:          ts.QpnLocation,
 			Description:   "Searches for songs that are played within the specified location. Songs with special use cases are not included.",
@@ -903,12 +883,10 @@ func initSongsParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameArranger},
 		},
 	}
-
-	Q.songs = E.Songs.completeQueryParamsInit(params)
 }
 
-func initFMVsParams() {
-	params := []QueryParam{
+func GetFMVsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:          ts.QpnLocation,
 			Description:   "Searches for fmvs that are played within the specified location.",
@@ -917,12 +895,10 @@ func initFMVsParams() {
 			ReferencesInt: []ts.EndpointName{ts.EpLocations},
 		},
 	}
-
-	Q.fmvs = E.FMVs.completeQueryParamsInit(params)
 }
 
-func initPlayerUnitsParams() {
-	params := []QueryParam{
+func GetPlayerUnitsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnType,
 			Description:        "Searches for player units that are of the specified unit type.",
@@ -932,12 +908,10 @@ func initPlayerUnitsParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameUnitType},
 		},
 	}
-
-	Q.playerUnits = E.PlayerUnits.completeQueryParamsInit(params)
 }
 
-func initCharactersParams() {
-	params := []QueryParam{
+func GetCharactersParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnOsgStats,
 			Description:        "Adds all stat gains within the character's stated sphere grid to their base stats. This includes stat nodes behind sphere locks.",
@@ -959,12 +933,10 @@ func initCharactersParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.characters = E.Characters.completeQueryParamsInit(params)
 }
 
-func initAeonsParams() {
-	params := []QueryParam{
+func GetAeonsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:            ts.QpnBattles,
 			Description:     "Specifies the amount of battles the player has taken part in and takes them into account when calculating the aeon's stats. An aeon's stats increase for the first time after 60 battles and then every 30 additional battles with the final increase being at 600. Can be used in combination with the 'yuna_stats' parameter.",
@@ -987,12 +959,10 @@ func initAeonsParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.aeons = E.Aeons.completeQueryParamsInit(params)
 }
 
-func initCharacterClassesParams() {
-	params := []QueryParam{
+func GetCharacterClassesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnCategory,
 			Description:        "Searches for character classes with the specified categories.",
@@ -1002,12 +972,10 @@ func initCharacterClassesParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameCharacterClassCategory},
 		},
 	}
-
-	Q.characterClasses = E.CharacterClasses.completeQueryParamsInit(params)
 }
 
-func initMonstersParams() {
-	params := []QueryParam{
+func GetMonstersParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnRelAvailability,
 			Description:        "Only displays a monster's related resources with the given availabilities. This affects areas and monster-formations.",
@@ -1239,12 +1207,10 @@ func initMonstersParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameMonsterCategory},
 		},
 	}
-
-	Q.monsters = E.Monsters.completeQueryParamsInit(params)
 }
 
-func initAbilitiesParams() {
-	params := []QueryParam{
+func GetAbilitiesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnType,
 			Description:        "Searches for abilities that are of the specified ability types.",
@@ -1387,12 +1353,10 @@ func initAbilitiesParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.abilities = E.Abilities.completeQueryParamsInit(params)
 }
 
-func initPlayerAbilitiesParams() {
-	params := []QueryParam{
+func GetPlayerAbilitiesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:          ts.QpnAbilityUser,
 			Description:   "If a player ability is based on a user's attack, this parameter modifies its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
@@ -1601,12 +1565,10 @@ func initPlayerAbilitiesParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.playerAbilities = E.PlayerAbilities.completeQueryParamsInit(params)
 }
 
-func initOverdriveAbilitiesParams() {
-	params := []QueryParam{
+func GetOverdriveAbilitiesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:        ts.QpnRank,
 			Description: "Searches for overdrive abilities with the specified ranks.",
@@ -1700,12 +1662,10 @@ func initOverdriveAbilitiesParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.overdriveAbilities = E.OverdriveAbilities.completeQueryParamsInit(params)
 }
 
-func initItemAbilitiesParams() {
-	params := []QueryParam{
+func GetItemAbilitiesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnCategory,
 			Description:        "Searches for item abilities that are of the specified item categories.",
@@ -1793,12 +1753,10 @@ func initItemAbilitiesParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.itemAbilities = E.ItemAbilities.completeQueryParamsInit(params)
 }
 
-func initTriggerCommandsParams() {
-	params := []QueryParam{
+func GetTriggerCommandsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:          ts.QpnAbilityUser,
 			Description:   "If a trigger command is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this command.",
@@ -1838,12 +1796,10 @@ func initTriggerCommandsParams() {
 			ReferencesInt: []ts.EndpointName{ts.EpCharacterClasses},
 		},
 	}
-
-	Q.triggerCommands = E.TriggerCommands.completeQueryParamsInit(params)
 }
 
-func initMiscAbilitiesParams() {
-	params := []QueryParam{
+func GetMiscAbilitiesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:          ts.QpnAbilityUser,
 			Description:   "If a misc ability is based on a user's attack, this parameter modifies the its accuracy, range, shatter rate and power based on the given user. For characters, only the range is modified in the case of Wakka. Responds with an error, if the specified user can't learn this ability.",
@@ -1899,12 +1855,10 @@ func initMiscAbilitiesParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.miscAbilities = E.MiscAbilities.completeQueryParamsInit(params)
 }
 
-func initEnemyAbilitiesParams() {
-	params := []QueryParam{
+func GetEnemyAbilitiesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:        ts.QpnRank,
 			Description: "Searches for enemy abilities with the specified ranks.",
@@ -2015,12 +1969,10 @@ func initEnemyAbilitiesParams() {
 			ReferencesInt: []ts.EndpointName{ts.EpStatusConditions},
 		},
 	}
-
-	Q.enemyAbilities = E.EnemyAbilities.completeQueryParamsInit(params)
 }
 
-func initOverdrivesParams() {
-	params := []QueryParam{
+func GetOverdrivesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:        ts.QpnRank,
 			Description: "Searches for overdrives with the specified ranks.",
@@ -2036,12 +1988,10 @@ func initOverdrivesParams() {
 			ReferencesInt: []ts.EndpointName{ts.EpCharacterClasses},
 		},
 	}
-
-	Q.overdrives = E.Overdrives.completeQueryParamsInit(params)
 }
 
-func initSubmenusParams() {
-	params := []QueryParam{
+func GetSubmenusParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:          ts.QpnTopmenu,
 			Description:   "Searches for submenus that are found within the specified topmenu.",
@@ -2051,12 +2001,10 @@ func initSubmenusParams() {
 			ReferencesInt: []ts.EndpointName{ts.EpTopmenus},
 		},
 	}
-
-	Q.submenus = E.Submenus.completeQueryParamsInit(params)
 }
 
-func initAllItemsParams() {
-	params := []QueryParam{
+func GetAllItemsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnRelAvailability,
 			Description:        "Only considers an item's related resources with the given availabilities when calculating the boolean fields. This affects monsters, treasures, shops, quests, and blitzball prizes.",
@@ -2133,12 +2081,10 @@ func initAllItemsParams() {
 			ReferencesInt: []ts.EndpointName{ts.EpAreas},
 		},
 	}
-
-	Q.allItems = E.AllItems.completeQueryParamsInit(params)
 }
 
-func initItemsParams() {
-	params := []QueryParam{
+func GetItemsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnRelAvailability,
 			Description:        "Only displays an item's related resources with the given availabilities. This affects monsters, treasures, shops, quests, and blitzball prizes.",
@@ -2229,12 +2175,10 @@ func initItemsParams() {
 			ReferencesInt: []ts.EndpointName{ts.EpAreas},
 		},
 	}
-
-	Q.items = E.Items.completeQueryParamsInit(params)
 }
 
-func initKeyItemsParams() {
-	params := []QueryParam{
+func GetKeyItemsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnRelAvailability,
 			Description:        "Only displays a key-item's related resources with the given availabilities. This affects areas, treasures and quests.",
@@ -2292,12 +2236,10 @@ func initKeyItemsParams() {
 			ReferencesInt: []ts.EndpointName{ts.EpAreas},
 		},
 	}
-
-	Q.keyItems = E.KeyItems.completeQueryParamsInit(params)
 }
 
-func initSpheresParams() {
-	params := []QueryParam{
+func GetSpheresParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnRelAvailability,
 			Description:        "Only displays a sphere's related resources with the given availabilities. This affects monsters, treasures, shops, quests, and blitzball prizes.",
@@ -2374,12 +2316,10 @@ func initSpheresParams() {
 			ReferencesInt: []ts.EndpointName{ts.EpAreas},
 		},
 	}
-
-	Q.spheres = E.Spheres.completeQueryParamsInit(params)
 }
 
-func initPrimersParams() {
-	params := []QueryParam{
+func GetPrimersParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnAvailability,
 			Description:        "Searches for primers with the given availabilities. The availability of a primer is always taken from its sources. The most accessible availability among those sources is the one that is assigned to the primer. The primer won't show up for the other availability types, even if it technically can have that availability, since it can be received easier. It is recommended to use the joined availability values ('story', 'post-game', 'pre-airship', 'post-airship') to get a full picture of your options.",
@@ -2389,12 +2329,10 @@ func initPrimersParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameAvailabilityType},
 		},
 	}
-
-	Q.primers = E.Primers.completeQueryParamsInit(params)
 }
 
-func initMixesParams() {
-	params := []QueryParam{
+func GetMixesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:          ts.QpnContainsItem,
 			Description:   "Modifies combinations to only display item combinations that include the specified item.",
@@ -2437,12 +2375,10 @@ func initMixesParams() {
 			ReferencesInt: []ts.EndpointName{ts.EpItems},
 		},
 	}
-
-	Q.mixes = E.Mixes.completeQueryParamsInit(params)
 }
 
-func initAutoAbilitiesParams() {
-	params := []QueryParam{
+func GetAutoAbilitiesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnRelAvailability,
 			Description:        "Only displays an auto-ability's related resources with the given availabilities. This affects shops, treasures, and monsters.",
@@ -2565,12 +2501,10 @@ func initAutoAbilitiesParams() {
 			ReferencesInt: []ts.EndpointName{ts.EpAreas},
 		},
 	}
-
-	Q.autoAbilities = E.AutoAbilities.completeQueryParamsInit(params)
 }
 
-func initEquipmentTablesParams() {
-	params := []QueryParam{
+func GetEquipmentTablesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:          ts.QpnAutoAbilities,
 			Description:   "Searches for equipment tables with all of the given auto-abilities.",
@@ -2593,12 +2527,10 @@ func initEquipmentTablesParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.equipmentTables = E.EquipmentTables.completeQueryParamsInit(params)
 }
 
-func initEquipmentParams() {
-	params := []QueryParam{
+func GetEquipmentParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:        ts.QpnTable,
 			Description: "Selects the equipment table whose data should be displayed for celestial weapons and the brotherhood. The default is set to the fully-upgraded table (1). For the brotherhood, only 1 and 2 are available. For celestial weapons, 1 equals the fully-upgraded table, 2 is the table with just the crest, and 3 is the table with no upgrades.",
@@ -2645,12 +2577,10 @@ func initEquipmentParams() {
 			ParamUse:    puList,
 		},
 	}
-
-	Q.equipment = E.Equipment.completeQueryParamsInit(params)
 }
 
-func initCelestialWeaponsParams() {
-	params := []QueryParam{
+func GetCelestialWeaponsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnFormula,
 			Description:        "Searches for celestial-weapons that are of the specified celestial formula.",
@@ -2660,12 +2590,10 @@ func initCelestialWeaponsParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameCelestialFormula},
 		},
 	}
-
-	Q.celestialWeapons = E.CelestialWeapons.completeQueryParamsInit(params)
 }
 
-func initStatsParams() {
-	params := []QueryParam{
+func GetStatsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:        ts.QpnChangesOnly,
 			Description: "Only includes a stat's related auto-abilities, abilities, status conditions, and properties that cause stat changes.",
@@ -2673,12 +2601,10 @@ func initStatsParams() {
 			ParamUse:    puSingle,
 		},
 	}
-
-	Q.stats = E.Stats.completeQueryParamsInit(params)
 }
 
-func initOverdriveModesParams() {
-	params := []QueryParam{
+func GetOverdriveModesParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnType,
 			Description:        "Searches for overdrive modes that are of the specified overdrive-mode-type.",
@@ -2688,12 +2614,10 @@ func initOverdriveModesParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameOverdriveModeType},
 		},
 	}
-
-	Q.overdriveModes = E.OverdriveModes.completeQueryParamsInit(params)
 }
 
-func initStatusConditionsParams() {
-	params := []QueryParam{
+func GetStatusConditionsParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:            ts.QpnInflictMin,
 			Description:     "Only shows a status condition's related abilities with an infliction rate higher than or equal to the given amount. The default value is '1'. Can be combined with 'inflict_max', but can't be higher. Special values are 'infinite' (=254) and 'always' (=255).",
@@ -2753,12 +2677,10 @@ func initStatusConditionsParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameStatusConditionCategory},
 		},
 	}
-
-	Q.statusConditions = E.StatusConditions.completeQueryParamsInit(params)
 }
 
-func initModifiersParams() {
-	params := []QueryParam{
+func GetModifiersParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:               ts.QpnCategory,
 			Description:        "Searches for modifiers that are of the specified modifier categories.",
@@ -2768,12 +2690,10 @@ func initModifiersParams() {
 			ReferencesEnumsInt: []ts.EnumName{ts.EnumNameModifierCategory},
 		},
 	}
-
-	Q.modifiers = E.Modifiers.completeQueryParamsInit(params)
 }
 
-func initAgilityTierParams() {
-	params := []QueryParam{
+func GetAgilityTierParams() []QueryParam {
+	return []QueryParam{
 		{
 			Name:            ts.QpnAgility,
 			Description:     "Searches for the agility tier that the given agility value belongs to.",
@@ -2782,6 +2702,4 @@ func initAgilityTierParams() {
 			AllowedIntRange: []int{0, 255},
 		},
 	}
-
-	Q.agilityTiers = E.AgilityTiers.completeQueryParamsInit(params)
 }

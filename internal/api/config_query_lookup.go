@@ -9,67 +9,67 @@ var Q = &QueryLookup{}
 
 // QueryLookup holds all the Query Parameters for the application
 type QueryLookup struct {
-	defaultParamSlice []QueryParam
-	defaultParams     map[ts.QueryParamName]QueryParam
+	DefaultParamSlice []QueryParam
+	DefaultParams     map[ts.QueryParamName]QueryParam
 
-	locations    map[ts.QueryParamName]QueryParam
-	sublocations map[ts.QueryParamName]QueryParam
-	areas        map[ts.QueryParamName]QueryParam
+	Locations    map[ts.QueryParamName]QueryParam
+	Sublocations map[ts.QueryParamName]QueryParam
+	Areas        map[ts.QueryParamName]QueryParam
 
-	monsterFormations map[ts.QueryParamName]QueryParam
-	shops             map[ts.QueryParamName]QueryParam
-	treasures         map[ts.QueryParamName]QueryParam
-	quests            map[ts.QueryParamName]QueryParam
-	sidequests        map[ts.QueryParamName]QueryParam
-	subquests         map[ts.QueryParamName]QueryParam
-	arenaCreations    map[ts.QueryParamName]QueryParam
-	blitzballPrizes   map[ts.QueryParamName]QueryParam
-	songs             map[ts.QueryParamName]QueryParam
-	fmvs              map[ts.QueryParamName]QueryParam
+	MonsterFormations map[ts.QueryParamName]QueryParam
+	Shops             map[ts.QueryParamName]QueryParam
+	Treasures         map[ts.QueryParamName]QueryParam
+	Quests            map[ts.QueryParamName]QueryParam
+	Sidequests        map[ts.QueryParamName]QueryParam
+	Subquests         map[ts.QueryParamName]QueryParam
+	ArenaCreations    map[ts.QueryParamName]QueryParam
+	BlitzballPrizes   map[ts.QueryParamName]QueryParam
+	Songs             map[ts.QueryParamName]QueryParam
+	FMVs              map[ts.QueryParamName]QueryParam
 
-	playerUnits      map[ts.QueryParamName]QueryParam
-	characters       map[ts.QueryParamName]QueryParam
-	aeons            map[ts.QueryParamName]QueryParam
-	characterClasses map[ts.QueryParamName]QueryParam
-	monsters         map[ts.QueryParamName]QueryParam
+	PlayerUnits      map[ts.QueryParamName]QueryParam
+	Characters       map[ts.QueryParamName]QueryParam
+	Aeons            map[ts.QueryParamName]QueryParam
+	CharacterClasses map[ts.QueryParamName]QueryParam
+	Monsters         map[ts.QueryParamName]QueryParam
 
-	abilities          map[ts.QueryParamName]QueryParam
-	playerAbilities    map[ts.QueryParamName]QueryParam
-	overdriveAbilities map[ts.QueryParamName]QueryParam
-	itemAbilities      map[ts.QueryParamName]QueryParam
-	triggerCommands    map[ts.QueryParamName]QueryParam
-	miscAbilities      map[ts.QueryParamName]QueryParam
-	enemyAbilities     map[ts.QueryParamName]QueryParam
+	Abilities          map[ts.QueryParamName]QueryParam
+	PlayerAbilities    map[ts.QueryParamName]QueryParam
+	OverdriveAbilities map[ts.QueryParamName]QueryParam
+	ItemAbilities      map[ts.QueryParamName]QueryParam
+	TriggerCommands    map[ts.QueryParamName]QueryParam
+	MiscAbilities      map[ts.QueryParamName]QueryParam
+	EnemyAbilities     map[ts.QueryParamName]QueryParam
 
-	aeonCommands      map[ts.QueryParamName]QueryParam
-	overdriveCommands map[ts.QueryParamName]QueryParam
-	overdrives        map[ts.QueryParamName]QueryParam
-	ronsoRages        map[ts.QueryParamName]QueryParam
-	submenus          map[ts.QueryParamName]QueryParam
-	topmenus          map[ts.QueryParamName]QueryParam
+	AeonCommands      map[ts.QueryParamName]QueryParam
+	OverdriveCommands map[ts.QueryParamName]QueryParam
+	Overdrives        map[ts.QueryParamName]QueryParam
+	RonsoRages        map[ts.QueryParamName]QueryParam
+	Submenus          map[ts.QueryParamName]QueryParam
+	Topmenus          map[ts.QueryParamName]QueryParam
 
-	allItems map[ts.QueryParamName]QueryParam
-	items    map[ts.QueryParamName]QueryParam
-	keyItems map[ts.QueryParamName]QueryParam
-	spheres  map[ts.QueryParamName]QueryParam
-	primers  map[ts.QueryParamName]QueryParam
-	mixes    map[ts.QueryParamName]QueryParam
+	AllItems map[ts.QueryParamName]QueryParam
+	Items    map[ts.QueryParamName]QueryParam
+	KeyItems map[ts.QueryParamName]QueryParam
+	Spheres  map[ts.QueryParamName]QueryParam
+	Primers  map[ts.QueryParamName]QueryParam
+	Mixes    map[ts.QueryParamName]QueryParam
 
-	autoAbilities    map[ts.QueryParamName]QueryParam
-	equipmentTables  map[ts.QueryParamName]QueryParam
-	equipment        map[ts.QueryParamName]QueryParam
-	celestialWeapons map[ts.QueryParamName]QueryParam
+	AutoAbilities    map[ts.QueryParamName]QueryParam
+	EquipmentTables  map[ts.QueryParamName]QueryParam
+	Equipment        map[ts.QueryParamName]QueryParam
+	CelestialWeapons map[ts.QueryParamName]QueryParam
 
-	stats            map[ts.QueryParamName]QueryParam
-	properties       map[ts.QueryParamName]QueryParam
-	overdriveModes   map[ts.QueryParamName]QueryParam
-	elements         map[ts.QueryParamName]QueryParam
-	statusConditions map[ts.QueryParamName]QueryParam
-	modifiers        map[ts.QueryParamName]QueryParam
-	agilityTiers     map[ts.QueryParamName]QueryParam
+	Stats            map[ts.QueryParamName]QueryParam
+	Properties       map[ts.QueryParamName]QueryParam
+	OverdriveModes   map[ts.QueryParamName]QueryParam
+	Elements         map[ts.QueryParamName]QueryParam
+	StatusConditions map[ts.QueryParamName]QueryParam
+	Modifiers        map[ts.QueryParamName]QueryParam
+	AgilityTiers     map[ts.QueryParamName]QueryParam
 
-	enums     map[ts.QueryParamName]QueryParam
-	endpoints map[ts.QueryParamName]QueryParam
+	Enums     map[ts.QueryParamName]QueryParam
+	Endpoints map[ts.QueryParamName]QueryParam
 }
 
 func (Q *QueryLookup) Init() {
@@ -96,74 +96,64 @@ func (Q *QueryLookup) Init() {
 		},
 	}
 
-	Q.defaultParamSlice = defaultParams
-	Q.defaultParams = paramSliceToMap(defaultParams, nil)
-	initLocationsParams()
-	initSublocationsParams()
-	initAreasParams()
+	Q.DefaultParamSlice = defaultParams
+	Q.DefaultParams = defaultParamSliceToMap(defaultParams)
+	AssignQueryParams(GetLocationsParams(), &E.Locations, &Q.Locations)
+	AssignQueryParams(GetSublocationsParams(), &E.Sublocations, &Q.Sublocations)
+	AssignQueryParams(GetAreasParams(), &E.Areas, &Q.Areas)
 
-	initMonsterFormationsParams()
-	initShopsParams()
-	initTreasuresParams()
-	initQuestsParams()
-	initSidequestsParams()
-	initSubquestsParams()
-	initArenaCreationsParams()
-	initBlitzballPrizesParams()
-	initSongsParams()
-	initFMVsParams()
+	AssignQueryParams(GetMonsterFormationsParams(), &E.MonsterFormations, &Q.MonsterFormations)
+	AssignQueryParams(GetShopsParams(), &E.Shops, &Q.Shops)
+	AssignQueryParams(GetTreasuresParams(), &E.Treasures, &Q.Treasures)
+	AssignQueryParams(GetQuestsParams(), &E.Quests, &Q.Quests)
+	AssignQueryParams(GetSidequestsParams(), &E.Sidequests, &Q.Sidequests)
+	AssignQueryParams(GetSubquestsParams(), &E.Subquests, &Q.Subquests)
+	AssignQueryParams(GetArenaCreationsParams(), &E.ArenaCreations, &Q.ArenaCreations)
+	AssignQueryParams(GetBlitzballPrizesParams(), &E.BlitzballPrizes, &Q.BlitzballPrizes)
+	AssignQueryParams(GetSongsParams(), &E.Songs, &Q.Songs)
+	AssignQueryParams(GetFMVsParams(), &E.FMVs, &Q.FMVs)
 
-	initPlayerUnitsParams()
-	initCharactersParams()
-	initAeonsParams()
-	initCharacterClassesParams()
-	initMonstersParams()
+	AssignQueryParams(GetPlayerUnitsParams(), &E.PlayerUnits, &Q.PlayerUnits)
+	AssignQueryParams(GetCharactersParams(), &E.Characters, &Q.Characters)
+	AssignQueryParams(GetAeonsParams(), &E.Aeons, &Q.Aeons)
+	AssignQueryParams(GetCharacterClassesParams(), &E.CharacterClasses, &Q.CharacterClasses)
+	AssignQueryParams(GetMonstersParams(), &E.Monsters, &Q.Monsters)
 
-	initAbilitiesParams()
-	initPlayerAbilitiesParams()
-	initOverdriveAbilitiesParams()
-	initItemAbilitiesParams()
-	initTriggerCommandsParams()
-	initMiscAbilitiesParams()
-	initEnemyAbilitiesParams()
+	AssignQueryParams(GetAbilitiesParams(), &E.Abilities, &Q.Abilities)
+	AssignQueryParams(GetPlayerAbilitiesParams(), &E.PlayerAbilities, &Q.PlayerAbilities)
+	AssignQueryParams(GetOverdriveAbilitiesParams(), &E.OverdriveAbilities, &Q.OverdriveAbilities)
+	AssignQueryParams(GetItemAbilitiesParams(), &E.ItemAbilities, &Q.ItemAbilities)
+	AssignQueryParams(GetTriggerCommandsParams(), &E.TriggerCommands, &Q.TriggerCommands)
+	AssignQueryParams(GetMiscAbilitiesParams(), &E.MiscAbilities, &Q.MiscAbilities)
+	AssignQueryParams(GetEnemyAbilitiesParams(), &E.EnemyAbilities, &Q.EnemyAbilities)
 
-	Q.aeonCommands = E.AeonCommands.assignDefaultParams()
-	Q.overdriveCommands = E.OverdriveCommands.assignDefaultParams()
-	initOverdrivesParams()
-	Q.ronsoRages = E.RonsoRages.assignDefaultParams()
-	initSubmenusParams()
-	Q.topmenus = E.Topmenus.assignDefaultParams()
+	AssignDefaultParams(E.AeonCommands.Endpoint, &E.AeonCommands.queryLookup, &Q.AeonCommands)
+	AssignDefaultParams(E.OverdriveCommands.Endpoint, &E.OverdriveCommands.queryLookup, &Q.OverdriveCommands)
+	AssignQueryParams(GetOverdrivesParams(), &E.Overdrives, &Q.Overdrives)
+	AssignDefaultParams(E.RonsoRages.Endpoint, &E.RonsoRages.queryLookup, &Q.RonsoRages)
+	AssignQueryParams(GetSubmenusParams(), &E.Submenus, &Q.Submenus)
+	AssignDefaultParams(E.Topmenus.Endpoint, &E.Topmenus.queryLookup, &Q.Topmenus)
 
-	initAllItemsParams()
-	initItemsParams()
-	initKeyItemsParams()
-	initSpheresParams()
-	initPrimersParams()
-	initMixesParams()
+	AssignQueryParams(GetAllItemsParams(), &E.AllItems, &Q.AllItems)
+	AssignQueryParams(GetItemsParams(), &E.Items, &Q.Items)
+	AssignQueryParams(GetKeyItemsParams(), &E.KeyItems, &Q.KeyItems)
+	AssignQueryParams(GetSpheresParams(), &E.Spheres, &Q.Spheres)
+	AssignQueryParams(GetPrimersParams(), &E.Primers, &Q.Primers)
+	AssignQueryParams(GetMixesParams(), &E.Mixes, &Q.Mixes)
 
-	initAutoAbilitiesParams()
-	initEquipmentTablesParams()
-	initEquipmentParams()
-	initCelestialWeaponsParams()
+	AssignQueryParams(GetAutoAbilitiesParams(), &E.AutoAbilities, &Q.AutoAbilities)
+	AssignQueryParams(GetEquipmentTablesParams(), &E.EquipmentTables, &Q.EquipmentTables)
+	AssignQueryParams(GetEquipmentParams(), &E.Equipment, &Q.Equipment)
+	AssignQueryParams(GetCelestialWeaponsParams(), &E.CelestialWeapons, &Q.CelestialWeapons)
 
-	initStatsParams()
-	Q.properties = E.Properties.assignDefaultParams()
-	initOverdriveModesParams()
-	Q.elements = E.Elements.assignDefaultParams()
-	initStatusConditionsParams()
-	initModifiersParams()
-	initAgilityTierParams()
+	AssignQueryParams(GetStatsParams(), &E.Stats, &Q.Stats)
+	AssignDefaultParams(E.Properties.Endpoint, &E.Properties.queryLookup, &Q.Properties)
+	AssignQueryParams(GetOverdriveModesParams(), &E.OverdriveModes, &Q.OverdriveModes)
+	AssignDefaultParams(E.Elements.Endpoint, &E.Elements.queryLookup, &Q.Elements)
+	AssignQueryParams(GetStatusConditionsParams(), &E.StatusConditions, &Q.StatusConditions)
+	AssignQueryParams(GetModifiersParams(), &E.Modifiers, &Q.Modifiers)
+	AssignQueryParams(GetAgilityTierParams(), &E.AgilityTiers, &Q.AgilityTiers)
 
-	Q.enums = E.Enums.assignDefaultParams()
-	Q.endpoints = E.Endpoints.assignDefaultParams()
-
-	E.AeonCommands.queryLookup = Q.aeonCommands
-	E.OverdriveCommands.queryLookup = Q.overdriveCommands
-	E.RonsoRages.queryLookup = Q.ronsoRages
-	E.Topmenus.queryLookup = Q.topmenus
-	E.Properties.queryLookup = Q.properties
-	E.Elements.queryLookup = Q.elements
-
-	E.Enums.queryLookup = Q.enums
-	E.Endpoints.queryLookup = Q.endpoints
+	AssignDefaultParams(E.Enums.Endpoint, &E.Enums.queryLookup, &Q.Enums)
+	AssignDefaultParams(E.Endpoints.Endpoint, &E.Endpoints.queryLookup, &Q.Endpoints)
 }

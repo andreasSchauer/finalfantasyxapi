@@ -116,7 +116,7 @@ func applyOsgStats(r *http.Request, char Character) ([]BaseStat, error) {
 	}
 
 	var statMap map[string]int32
-	queryParam := Q.characters[ts.QpnOsgStats]
+	queryParam := Q.Characters[ts.QpnOsgStats]
 
 	sgType, err := queryParam.parseEnum(r, enums.T.SphereGridType)
 	if queryIsEmpty(err) {

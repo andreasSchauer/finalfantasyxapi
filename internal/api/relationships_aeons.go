@@ -74,7 +74,7 @@ func applyAeonStats(r *http.Request, aeon Aeon, allowedStatIDs []int32) (Aeon, e
 }
 
 func applyAeonStatsBattles(r *http.Request, aeon Aeon, queryName ts.QueryParamName) ([]BaseStat, error) {
-	queryParam := Q.aeons[queryName]
+	queryParam := Q.Aeons[queryName]
 	battles, err := queryParam.parseInt(r)
 	if queryIsEmpty(err) {
 		return aeon.BaseStats, nil
@@ -97,7 +97,7 @@ func applyAeonStatsBattles(r *http.Request, aeon Aeon, queryName ts.QueryParamNa
 }
 
 func applyYunaStats(r *http.Request, aeon Aeon, queryName ts.QueryParamName, allowedStatIDs []int32) ([]BaseStat, error) {
-	queryParam := Q.aeons[queryName]
+	queryParam := Q.Aeons[queryName]
 
 	yuna := lookup.L.Characters["yuna"]
 	yunaBS := E.Stats.toResAmtType(yuna.BaseStats, newBaseStat)

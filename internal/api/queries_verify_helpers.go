@@ -39,9 +39,9 @@ func (q queryVerifyer[T]) getParamAltList(queryName string, listName *string) (Q
 		return QueryParam{}, err
 	}
 
-	queryParam, ok := Q.defaultParams[ts.QueryParamName(queryName)]
+	queryParam, ok := Q.DefaultParams[ts.QueryParamName(queryName)]
 	if !ok {
-		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s", q.endpoint, *listName, queryMapToString(Q.defaultParams)), nil)
+		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s", q.endpoint, *listName, queryMapToString(Q.DefaultParams)), nil)
 	}
 
 	return queryParam, nil
