@@ -51,7 +51,7 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 		rel.Priority = table.Priority
 		rel.RequiredSlots = table.RequiredSlots
 		rel.RequiredAutoAbilities = namesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities)
-		rel.SelectableAutoAbilities = convertObjSlice(table.SelectableAutoAbilities, convertAbilityPool)
+		rel.SelectableAutoAbilities = ConvertObjSlice(table.SelectableAutoAbilities, convertAbilityPool)
 		return nil
 	})
 

@@ -15,7 +15,7 @@ var testSrv api.Server
 func TestMain(m *testing.M) {
 	log.SetOutput(io.Discard)
 
-	err := api.LoadEnvFromRoot()
+	err := config.LoadEnvFromRoot()
 	if err != nil {
 		panic(err)
 	}

@@ -37,8 +37,8 @@ func getMonsterDropChances(mon seedtypes.Monster, wantedAbilities []seedtypes.Eq
 		MonsterID:           mon.ID,
 		MonsterName:         h.NameToString(mon.Name, mon.Version, mon.Specification),
 		EquipmentDropChance: calcMonDropChance(mon),
-		SlotsChances:        convertObjSlice(mon.Equipment.AbilitySlots.Chances, convertChanceAmount),
-		ShotsChances:        convertObjSlice(mon.Equipment.AttachedAbilities.Chances, convertChanceAmount),
+		SlotsChances:        ConvertObjSlice(mon.Equipment.AbilitySlots.Chances, convertChanceAmount),
+		ShotsChances:        ConvertObjSlice(mon.Equipment.AttachedAbilities.Chances, convertChanceAmount),
 		AutoAbilities:       getDroppedAutoAbilities(wantedAbilities),
 	}
 }

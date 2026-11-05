@@ -50,7 +50,7 @@ func createAbilitySimple(r *http.Request, id int32, subsection Subsection) (Simp
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
 		Type:               &typeStr,
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
@@ -67,7 +67,7 @@ func createEnemyAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleRe
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
@@ -84,7 +84,7 @@ func createItemAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleRes
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
@@ -101,7 +101,7 @@ func createOverdriveAbilitySimple(r *http.Request, id int32, subsection Subsecti
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
@@ -119,7 +119,7 @@ func createPlayerAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleR
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
 		MpCost:             ability.MPCost,
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return playerAbilitySimple, nil
@@ -136,7 +136,7 @@ func createTriggerCommandSimple(_ *http.Request, id int32, _ Subsection) (Simple
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
@@ -153,7 +153,7 @@ func createMiscAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleRes
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil

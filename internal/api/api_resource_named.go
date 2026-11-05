@@ -96,7 +96,7 @@ func namesToNamedAPIResources[T seedtypes.IsNamed, R any, A APIResource](i handl
 func enumToNamedAPIResource(e enums.EnumResponse) NamedAPIResource {
 	return NamedAPIResource{
 		Name: string(e.Name),
-		URL:  createEnumURL(e.Name),
+		URL:  CreateEnumURL(e.Name),
 	}
 }
 
@@ -114,7 +114,7 @@ func enumsToNamedAPIResources(enums []enums.EnumResponse) []NamedAPIResource {
 func endpointToNamedAPIResource(e ts.EndpointName) NamedAPIResource {
 	return NamedAPIResource{
 		Name: string(e),
-		URL:  createListURL(e),
+		URL:  CreateListURL(e),
 	}
 }
 

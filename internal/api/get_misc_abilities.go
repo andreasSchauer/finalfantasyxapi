@@ -32,7 +32,7 @@ func getMiscAbility(r *http.Request, i handlerInput[seedtypes.MiscAbility, MiscA
 		Submenu:            namePtrToNamedAPIResPtr(E.Submenus, ability.Submenu, nil),
 		OpenSubmenu:        namePtrToNamedAPIResPtr(E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:             ability.Cursor,
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)

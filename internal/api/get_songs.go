@@ -35,8 +35,8 @@ func getSong(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResou
 		MusicSphereID:        song.MusicSphereID,
 		OstDisc:              song.OSTDisc,
 		OstTrackNumber:       song.OSTTrackNumber,
-		BackgroundMusic:      convertObjSlice(song.BackgroundMusic, convertBackgroundMusic),
-		Cues:                 convertObjSlice(song.Cues, convertCue),
+		BackgroundMusic:      ConvertObjSlice(song.BackgroundMusic, convertBackgroundMusic),
+		Cues:                 ConvertObjSlice(song.Cues, convertCue),
 		BossFights:           rel.BossFights,
 		FMVs:                 rel.FMVs,
 	}

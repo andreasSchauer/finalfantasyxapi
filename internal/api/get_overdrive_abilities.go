@@ -36,7 +36,7 @@ func getOverdriveAbility(r *http.Request, i handlerInput[seedtypes.OverdriveAbil
 		OverdriveCommand:   namePtrToNamedAPIResPtr(E.OverdriveCommands, overdrive.OverdriveCommand, nil),
 		User:               nameToNamedAPIResource(E.CharacterClasses, overdrive.User, nil),
 		RelatedStats:       namesToNamedAPIResources(E.Stats, ability.RelatedStats),
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	return response, nil

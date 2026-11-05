@@ -54,7 +54,7 @@ func (i handlerInput[T, R, A]) queryBool2(r *http.Request, inputIDs []int32, que
 		}
 
 		if !b {
-			dbIDs = removeIDs(inputIDs, dbIDs)
+			dbIDs = RemoveIDs(inputIDs, dbIDs)
 		}
 
 		return dbIDs, nil

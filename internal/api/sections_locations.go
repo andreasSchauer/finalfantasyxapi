@@ -32,9 +32,9 @@ func createLocationSimple(r *http.Request, id int32, subsection Subsection) (Sim
 		ID:        location.ID,
 		URL:       CreateResourceURL(i.Endpoint, id),
 		Name:      location.Name,
-		Shops:     convertObjSlice(shopIDs, idToShopLocSimple),
+		Shops:     ConvertObjSlice(shopIDs, idToShopLocSimple),
 		Treasures: getTreasuresLocSimple(id, subsection),
-		Monsters:  convertObjSlice(monsterIDs, idToMonsterSimpleString),
+		Monsters:  ConvertObjSlice(monsterIDs, idToMonsterSimpleString),
 	}
 
 	return locationSimple, nil

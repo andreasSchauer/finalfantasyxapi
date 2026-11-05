@@ -47,7 +47,7 @@ func createMixSimple(r *http.Request, id int32, _ Subsection) (SimpleResource, e
 		Name:         mix.Name,
 		URL:          CreateResourceURL(i.Endpoint, id),
 		Category:     mix.Category,
-		Combinations: convertObjSlice(combinations, convertMixCombinationSimple),
+		Combinations: ConvertObjSlice(combinations, convertMixCombinationSimple),
 	}
 
 	return mixSimple, nil

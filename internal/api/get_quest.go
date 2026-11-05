@@ -22,7 +22,7 @@ func getQuest(r *http.Request, i handlerInput[seedtypes.Quest, Quest, QuestAPIRe
 		TypedQuest:   questToQuestAPIResource(quest),
 		Availability: quest.Availability,
 		IsRepeatable: quest.IsRepeatable,
-		Completion:   convertObjPtr(quest.Completion, convertQuestCompletion),
+		Completion:   ConvertObjPtr(quest.Completion, convertQuestCompletion),
 	}
 
 	return response, nil

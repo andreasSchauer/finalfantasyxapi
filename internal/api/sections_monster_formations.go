@@ -30,7 +30,7 @@ func createMonsterFormationSimple(_ *http.Request, id int32, _ Subsection) (Simp
 		Category:       formation.FormationData.Category,
 		IsForcedAmbush: formation.FormationData.IsForcedAmbush,
 		FormationLoot:  getFormationLoot(formation),
-		Monsters:       convertObjSlice(formation.Monsters, monsterAmountString),
+		Monsters:       ConvertObjSlice(formation.Monsters, monsterAmountString),
 		Areas:          locAreaStrings(formation.EncounterAreas),
 	}
 

@@ -32,5 +32,5 @@ func getMixCombinations(r *http.Request, mix seedtypes.Mix) ([]MixCombination, e
 		})
 	}
 
-	return convertObjSlice(combinations, convertMixCombination), nil
+	return ConvertObjSlice(combinations, convertMixCombination), nil
 }

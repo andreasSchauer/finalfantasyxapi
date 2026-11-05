@@ -33,7 +33,7 @@ func getEnemyAbility(r *http.Request, i handlerInput[seedtypes.EnemyAbility, Ene
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
 		Monsters:           monsters,
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	return response, nil

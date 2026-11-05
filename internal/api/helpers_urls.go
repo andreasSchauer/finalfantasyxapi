@@ -11,25 +11,25 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getBaseURL() string {
+func GetBaseURL() string {
 	return fmt.Sprintf("http://%s/api", config.Cfg.Host)
 }
 
-func createListURL(endpoint ts.EndpointName) string {
-	return appendToURL(getBaseURL(), string(endpoint))
+func CreateListURL(endpoint ts.EndpointName) string {
+	return AppendToURL(GetBaseURL(), string(endpoint))
 }
 
-func createEnumURL(e ts.EnumName) string {
-	return fmt.Sprintf("%s/%s/%s", getBaseURL(), ts.EpEnums, ts.GetEnumKey(e))
+func CreateEnumURL(e ts.EnumName) string {
+	return fmt.Sprintf("%s/%s/%s", GetBaseURL(), ts.EpEnums, ts.GetEnumKey(e))
 }
 
 func URLToPath(url string) string {
-	prefix := getBaseURL()
+	prefix := GetBaseURL()
 	return strings.TrimPrefix(url, prefix)
 }
 
 func CreateResourceURL(endpoint ts.EndpointName, id int32) string {
-	url := createListURL(endpoint)
+	url := CreateListURL(endpoint)
 	return fmt.Sprintf("%s/%d", url, id)
 }
 
@@ -39,14 +39,14 @@ func CreateResourceURLQuery(endpoint ts.EndpointName, id int32, q url.Values) st
 }
 
 func CompleteTestURL(path string) string {
-	return fmt.Sprintf("%s%s", getBaseURL(), path)
+	return fmt.Sprintf("%s%s", GetBaseURL(), path)
 }
 
 func CompleteTestPath(endpoint ts.EndpointName, id int32) string {
 	return fmt.Sprintf("/%s/%d", endpoint, id)
 }
 
-func getIDFromURL(url string) int32 {
+func GetIDFromURL(url string) int32 {
 	urlTrimmed := strings.TrimSuffix(url, "/")
 	segments := strings.Split(urlTrimmed, "/")
 	idStr := segments[len(segments)-1]
@@ -55,19 +55,19 @@ func getIDFromURL(url string) int32 {
 	return int32(id)
 }
 
-func getSectionURL(endpoint ts.EndpointName, section ts.SectionName) string {
-	return fmt.Sprintf("%s/%s/%s", getBaseURL(), endpoint, section)
+func GetSectionURL(endpoint ts.EndpointName, section ts.SectionName) string {
+	return fmt.Sprintf("%s/%s/%s", GetBaseURL(), endpoint, section)
 }
 
-func appendToURL(url, segment string) string {
+func AppendToURL(url, segment string) string {
 	return fmt.Sprintf("%s/%s", url, segment)
 }
 
-func endpointsToURLs(source []ts.EndpointName) []string {
+func EndpointsToURLs(source []ts.EndpointName) []string {
 	urls := make([]string, 0, len(source))
 
 	for _, ep := range source {
-		url := createListURL(ep)
+		url := CreateListURL(ep)
 		urls = append(urls, url)
 	}
 

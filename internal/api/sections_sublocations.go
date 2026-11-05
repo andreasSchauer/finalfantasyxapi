@@ -34,9 +34,9 @@ func createSublocationSimple(r *http.Request, id int32, subsection Subsection) (
 		URL:            CreateResourceURL(i.Endpoint, id),
 		ParentLocation: createSimpleRef(sublocation.LocationID, sublocation.Location, nil, nil),
 		Name:           sublocation.Name,
-		Shops:          convertObjSlice(shopIDs, idToShopLocSimple),
+		Shops:          ConvertObjSlice(shopIDs, idToShopLocSimple),
 		Treasures:      getTreasuresLocSimple(id, subsection),
-		Monsters:       convertObjSlice(monsterIDs, idToMonsterSimpleString),
+		Monsters:       ConvertObjSlice(monsterIDs, idToMonsterSimpleString),
 	}
 
 	return sublocationSimple, nil

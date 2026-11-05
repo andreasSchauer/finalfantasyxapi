@@ -32,7 +32,7 @@ func getItemAbility(r *http.Request, i handlerInput[seedtypes.ItemAbility, ItemA
 		CanCopycat:         ability.CanCopycat,
 		RelatedStats:       namesToNamedAPIResources(E.Stats, item.RelatedStats),
 		Cursor:             item.Cursor,
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	if item.Usability == string(database.ItemUsabilityOutsideBattle) || item.Usability == string(database.ItemUsabilityAlways) {

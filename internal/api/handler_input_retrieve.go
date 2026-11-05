@@ -31,7 +31,7 @@ func (i handlerInput[T, R, A]) filterIDs(r *http.Request, IDs []int32, queryFns 
 			}
 
 			mu.Lock()
-			filteredIDs = getSharedIDs(filteredIDs, dbIDs)
+			filteredIDs = GetSharedIDs(filteredIDs, dbIDs)
 			mu.Unlock()
 
 			return nil
@@ -57,7 +57,7 @@ func (i handlerInput[T, R, A]) filterIDs(r *http.Request, IDs []int32, queryFns 
 	}
 
 	if flip {
-		filteredIDs = removeIDs(IDs, filteredIDs)
+		filteredIDs = RemoveIDs(IDs, filteredIDs)
 	}
 
 	return filteredIDs, nil

@@ -113,7 +113,7 @@ func getArenaCreationMonsters(r *http.Request, creation seedtypes.ArenaCreation)
 		return nil, err
 	}
 
-	monsterIDs, err := filterIDSlices(monsterIDSlices)
+	monsterIDs, err := FilterIDSlices(monsterIDSlices)
 	if err != nil {
 		return nil, err
 	}

@@ -30,8 +30,8 @@ type SubShopSimple struct {
 
 func convertSubShopSimple(ss seedtypes.SubShop) SubShopSimple {
 	return SubShopSimple{
-		Items:     convertObjSlice(ss.Items, shopItemNameString),
-		Equipment: convertObjSlice(ss.Equipment, convertShopEquipmentSimple),
+		Items:     ConvertObjSlice(ss.Items, shopItemNameString),
+		Equipment: ConvertObjSlice(ss.Equipment, convertShopEquipmentSimple),
 	}
 }
 
@@ -87,8 +87,8 @@ func createShopSimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, 
 		Area:        idToLocAreaString(shop.AreaID),
 		Category:    shop.Category,
 		Notes:       shop.Notes,
-		PreAirship:  convertObjPtr(shop.PreAirship, convertSubShopSimple),
-		PostAirship: convertObjPtr(shop.PostAirship, convertSubShopSimple),
+		PreAirship:  ConvertObjPtr(shop.PreAirship, convertSubShopSimple),
+		PostAirship: ConvertObjPtr(shop.PostAirship, convertSubShopSimple),
 	}
 
 	return shopSimple, nil

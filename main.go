@@ -5,12 +5,13 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 )
 
 func main() {
 	const port = "8080"
 
-	err := api.LoadEnvFromRoot()
+	err := config.LoadEnvFromRoot()
 	if err != nil {
 		log.Fatal(err)
 	}

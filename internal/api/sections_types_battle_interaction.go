@@ -33,13 +33,13 @@ func convertBattleInteractionSimple(bi seedtypes.BattleInteraction) BattleIntera
 		HitAmount:                 bi.HitAmount,
 		Accuracy:                  convertAccuracySimple(bi.Accuracy),
 		AffectedBy:                h.SliceOrNil(bi.AffectedBy),
-		Damage:                    convertObjPtr(bi.Damage, convertDamageSimple),
-		Delay:                     convertObjPtr(bi.InflictedDelay, convertInflictedDelaySimple),
-		InflictedStatusConditions: convertObjSliceOrNil(bi.InflictedStatusConditions, convertInflictedStatusSimple),
+		Damage:                    ConvertObjPtr(bi.Damage, convertDamageSimple),
+		Delay:                     ConvertObjPtr(bi.InflictedDelay, convertInflictedDelaySimple),
+		InflictedStatusConditions: ConvertObjSliceOrNil(bi.InflictedStatusConditions, convertInflictedStatusSimple),
 		RemovedStatusConditions:   h.SliceOrNil(bi.RemovedStatusConditions),
-		CopiedStatusConditions:    convertObjSliceOrNil(bi.CopiedStatusConditions, convertInflictedStatusSimple),
-		StatChanges:               convertObjSliceOrNil(bi.StatChanges, convertStatChangeSimple),
-		ModChanges:                convertObjSliceOrNil(bi.ModifierChanges, convertModChangeSimple),
+		CopiedStatusConditions:    ConvertObjSliceOrNil(bi.CopiedStatusConditions, convertInflictedStatusSimple),
+		StatChanges:               ConvertObjSliceOrNil(bi.StatChanges, convertStatChangeSimple),
+		ModChanges:                ConvertObjSliceOrNil(bi.ModifierChanges, convertModChangeSimple),
 	}
 
 	return biSimple
@@ -60,11 +60,11 @@ func convertDamageSimple(d seedtypes.Damage) DamageSimple {
 	return DamageSimple{
 		AttackType:    d.AttackType,
 		DamageType:    d.DamageType,
-		HP:            convertObjPtr(d.HP, convertClassDamageSimple),
-		MP:            convertObjPtr(d.MP, convertClassDamageSimple),
-		CTB:           convertObjPtr(d.CTB, convertClassDamageSimple),
+		HP:            ConvertObjPtr(d.HP, convertClassDamageSimple),
+		MP:            ConvertObjPtr(d.MP, convertClassDamageSimple),
+		CTB:           ConvertObjPtr(d.CTB, convertClassDamageSimple),
 		CanCritical:   h.PtrIsNotNil(d.Critical),
-		BreakDmgLimit: convertObjPtr(d.BreakDmgLimit, convertBreakDmgLimitSimple),
+		BreakDmgLimit: ConvertObjPtr(d.BreakDmgLimit, convertBreakDmgLimitSimple),
 		Element:       d.Element,
 	}
 }

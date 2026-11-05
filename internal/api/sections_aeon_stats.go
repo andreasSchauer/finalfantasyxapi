@@ -79,7 +79,7 @@ func createAeonStatSimple(_ *http.Request, id int32, _ Subsection) (SimpleResour
 		Name:  aeon.Name,
 		AVals: newAeonStatTable(aeon.BaseStats.AVals),
 		BVals: newAeonStatTable(aeon.BaseStats.BVals),
-		XVals: convertObjSlice(aeon.BaseStats.XVals, convertXVal),
+		XVals: ConvertObjSlice(aeon.BaseStats.XVals, convertXVal),
 	}
 
 	return aeonStatSub, nil

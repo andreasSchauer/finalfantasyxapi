@@ -33,7 +33,7 @@ func getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, Type
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		TypedAbility:       refToNamedAPIResource(ability.GetAbilityRef()),
 		Monsters:           monsters,
-		BattleInteractions: convertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	return response, nil

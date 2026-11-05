@@ -4,7 +4,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
-func convertObjPtr[Old, New any](item *Old, convFn func(Old) New) *New {
+func ConvertObjPtr[Old, New any](item *Old, convFn func(Old) New) *New {
 	if item == nil {
 		return nil
 	}
@@ -13,7 +13,7 @@ func convertObjPtr[Old, New any](item *Old, convFn func(Old) New) *New {
 	return &new
 }
 
-func convertObjSlice[Old, New any](items []Old, convFn func(Old) New) []New {
+func ConvertObjSlice[Old, New any](items []Old, convFn func(Old) New) []New {
 	newSlice := []New{}
 
 	for _, item := range items {
@@ -24,7 +24,7 @@ func convertObjSlice[Old, New any](items []Old, convFn func(Old) New) []New {
 	return newSlice
 }
 
-func convertObjSliceOrNil[Old, New any](items []Old, convFn func(Old) New) []New {
-	slice := convertObjSlice(items, convFn)
+func ConvertObjSliceOrNil[Old, New any](items []Old, convFn func(Old) New) []New {
+	slice := ConvertObjSlice(items, convFn)
 	return h.SliceOrNil(slice)
 }

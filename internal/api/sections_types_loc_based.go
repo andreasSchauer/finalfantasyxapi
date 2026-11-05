@@ -23,8 +23,8 @@ func idToShopLocSimple(shopID int32) ShopLocSimple {
 	return ShopLocSimple{
 		ID:          shopID,
 		Category:    database.ShopCategory(shopLookup.Category),
-		PreAirship:  convertObjPtr(shopLookup.PreAirship, convertShopSummarySimple),
-		PostAirship: convertObjPtr(shopLookup.PostAirship, convertShopSummarySimple),
+		PreAirship:  ConvertObjPtr(shopLookup.PreAirship, convertShopSummarySimple),
+		PostAirship: ConvertObjPtr(shopLookup.PostAirship, convertShopSummarySimple),
 	}
 }
 
@@ -85,7 +85,7 @@ func populateTreasuresLocSimple(treasureIDs []int32) TreasuresLocSimple {
 	}
 
 	itemAmounts = sortItemAmountsByID(itemAmounts)
-	treasures.Items = convertObjSlice(itemAmounts, convertItemAmountSimple)
+	treasures.Items = ConvertObjSlice(itemAmounts, convertItemAmountSimple)
 	return treasures
 }
 

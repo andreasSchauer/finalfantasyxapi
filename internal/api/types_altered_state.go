@@ -97,6 +97,6 @@ func convertAlt(asc seedtypes.Alt) Alt {
 		BaseStats:        h.SliceOrNil(E.Stats.toResAmtType(asc.BaseStats, newBaseStat)),
 		ElemResists:      h.SliceOrNil(namesToElemResists(asc.ElemResists)),
 		StatusImmunities: h.SliceOrNil(namesToNamedAPIResources(E.StatusConditions, asc.StatusImmunities)),
-		AddedStatus:      convertObjPtr(asc.AddedStatus, convertInflictedStatus),
+		AddedStatus:      ConvertObjPtr(asc.AddedStatus, convertInflictedStatus),
 	}
 }

@@ -47,14 +47,14 @@ func getCharacterRelationships(r *http.Request, char seedtypes.Character) (Chara
 	if !char.IsStoryBased {
 		g.Go(func() error {
 			var err error
-			rel.StdSphereGrid = convertObjPtr(char.StdSphereGrid, convertSphereGrid)
+			rel.StdSphereGrid = ConvertObjPtr(char.StdSphereGrid, convertSphereGrid)
 			rel.StdSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(ctx, char, config.Cfg.DB.GetCharacterSgAbilityIDs)
 			return err
 		})
 
 		g.Go(func() error {
 			var err error
-			rel.ExpSphereGrid = convertObjPtr(char.ExpSphereGrid, convertSphereGrid)
+			rel.ExpSphereGrid = ConvertObjPtr(char.ExpSphereGrid, convertSphereGrid)
 			rel.ExpSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(ctx, char, config.Cfg.DB.GetCharacterEgAbilityIDs)
 			return err
 		})

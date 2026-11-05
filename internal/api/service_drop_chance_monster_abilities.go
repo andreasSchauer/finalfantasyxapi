@@ -28,12 +28,12 @@ func getDroppedAutoAbilities(abilities []seedtypes.EquipmentDrop) DroppedAutoAbi
 
 		return DroppedAutoAbilities{
 			Forced:  &forcedAbility,
-			Dropped: convertObjSlice(abilities[1:], convertEqAbilityChance),
+			Dropped: ConvertObjSlice(abilities[1:], convertEqAbilityChance),
 		}
 	}
 
 	return DroppedAutoAbilities{
-		Dropped: convertObjSlice(abilities, convertEqAbilityChance),
+		Dropped: ConvertObjSlice(abilities, convertEqAbilityChance),
 	}
 }
 

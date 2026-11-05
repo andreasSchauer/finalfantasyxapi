@@ -21,8 +21,8 @@ func getShop(r *http.Request, i handlerInput[seedtypes.Shop, Shop, UnnamedAPIRes
 		Area:        idToAreaAPIResource(E.Areas, shop.AreaID),
 		Notes:       shop.Notes,
 		Category:    shop.Category,
-		PreAirship:  convertObjPtr(shop.PreAirship, convertSubShop),
-		PostAirship: convertObjPtr(shop.PostAirship, convertSubShop),
+		PreAirship:  ConvertObjPtr(shop.PreAirship, convertSubShop),
+		PostAirship: ConvertObjPtr(shop.PostAirship, convertSubShop),
 	}
 
 	return response, nil

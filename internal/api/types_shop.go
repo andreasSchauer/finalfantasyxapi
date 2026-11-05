@@ -18,8 +18,8 @@ type SubShop struct {
 
 func convertSubShop(ss seedtypes.SubShop) SubShop {
 	return SubShop{
-		Items:     convertObjSlice(ss.Items, convertShopItem),
-		Equipment: convertObjSlice(ss.Equipment, convertShopEquipment),
+		Items:     ConvertObjSlice(ss.Items, convertShopItem),
+		Equipment: ConvertObjSlice(ss.Equipment, convertShopEquipment),
 	}
 }
 

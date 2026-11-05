@@ -21,8 +21,8 @@ func convertMonsterEquipment(equipment seedtypes.MonsterEquipment) MonsterEquipm
 		CriticalPlus:      equipment.CriticalPlus,
 		AbilitySlots:      convertMonsterEquipmentSlots(equipment.AbilitySlots),
 		AttachedAbilities: convertMonsterEquipmentSlots(equipment.AttachedAbilities),
-		WeaponAbilities:   convertObjSlice(equipment.WeaponAbilities, convertEquipmentDrop),
-		ArmorAbilities:    convertObjSlice(equipment.ArmorAbilities, convertEquipmentDrop),
+		WeaponAbilities:   ConvertObjSlice(equipment.WeaponAbilities, convertEquipmentDrop),
+		ArmorAbilities:    ConvertObjSlice(equipment.ArmorAbilities, convertEquipmentDrop),
 	}
 
 	return monEquipment
@@ -42,7 +42,7 @@ func convertMonsterEquipmentSlots(seedSlots seedtypes.MonsterEquipmentSlots) Mon
 	equipmentSlots := MonsterEquipmentSlots{
 		MinAmount: seedSlots.MinAmount,
 		MaxAmount: seedSlots.MaxAmount,
-		Chances:   convertObjSlice(seedSlots.Chances, convertMonsterEquipmentSlotsChance),
+		Chances:   ConvertObjSlice(seedSlots.Chances, convertMonsterEquipmentSlotsChance),
 	}
 
 	return equipmentSlots

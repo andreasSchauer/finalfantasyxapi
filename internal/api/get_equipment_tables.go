@@ -24,9 +24,9 @@ func getEquipmentTable(r *http.Request, i handlerInput[seedtypes.EquipmentTable,
 		SpecificCharacter:       namePtrToNamedAPIResPtr(E.Characters, table.SpecificCharacter, nil),
 		Priority:                table.Priority,
 		RequiredAutoAbilities:   namesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities),
-		SelectableAutoAbilities: convertObjSlice(table.SelectableAutoAbilities, convertAbilityPool),
+		SelectableAutoAbilities: ConvertObjSlice(table.SelectableAutoAbilities, convertAbilityPool),
 		RequiredSlots:           table.RequiredSlots,
-		Equipment:               convertObjSlice(table.EquipmentNames, convertEquipmentName),
+		Equipment:               ConvertObjSlice(table.EquipmentNames, convertEquipmentName),
 	}
 
 	if table.SpecificCharacter != nil && table.Classification == string(database.EquipClassCelestialWeapon) {

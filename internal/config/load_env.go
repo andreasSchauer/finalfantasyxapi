@@ -1,4 +1,4 @@
-package api
+package config
 
 import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"

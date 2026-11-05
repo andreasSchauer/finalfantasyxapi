@@ -53,9 +53,9 @@ func createMonsterSimple(r *http.Request, id int32, subsection Subsection) (Simp
 		IsRepeatable:   mon.IsRepeatable,
 		CanBeCaptured:  mon.CanBeCaptured,
 		RonsoRages:     h.SliceOrNil(mon.RonsoRages),
-		Areas:          convertObjSlice(areaIDs, idToLocAreaString),
-		Items:          convertObjPtr(mon.Items, convertMonsterItemsSimple),
-		Equipment:      convertObjPtr(mon.Equipment, convertMonsterEquipmentSimple),
+		Areas:          ConvertObjSlice(areaIDs, idToLocAreaString),
+		Items:          ConvertObjPtr(mon.Items, convertMonsterItemsSimple),
+		Equipment:      ConvertObjPtr(mon.Equipment, convertMonsterEquipmentSimple),
 	}
 
 	return monSimple, nil

@@ -68,7 +68,7 @@ func (i handlerInputEnums) parseSegment(segment string) (enums.EnumResponse, str
 	if !ok {
 		return enums.EnumResponse{}, "", newHTTPError(http.StatusNotFound, fmt.Sprintf("enum '%s' not found", key), nil)
 	}
-	enum.UsedByEndpoints = endpointsToURLs(enum.UsedByEndpointsInt)
+	enum.UsedByEndpoints = EndpointsToURLs(enum.UsedByEndpointsInt)
 
 	return enum, key, nil
 }

@@ -44,9 +44,9 @@ func createAreaSimple(r *http.Request, id int32, subsection Subsection) (SimpleR
 		Specification:     area.Specification,
 		HasSaveSphere:     area.HasSaveSphere,
 		Availability:      area.Availability,
-		Shops:             convertObjSlice(shopIDs, idToShopLocSimple),
+		Shops:             ConvertObjSlice(shopIDs, idToShopLocSimple),
 		Treasures:         getTreasuresLocSimple(id, subsection),
-		Monsters:          convertObjSlice(monsterIDs, idToMonsterSimpleString),
+		Monsters:          ConvertObjSlice(monsterIDs, idToMonsterSimpleString),
 	}
 
 	return areaSimple, nil

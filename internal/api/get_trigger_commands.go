@@ -36,7 +36,7 @@ func getTriggerCommand(r *http.Request, i handlerInput[seedtypes.TriggerCommand,
 		Topmenu:            namePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
 		Cursor:             command.Cursor,
 		MonsterFormations:  rel.MonsterFormations,
-		BattleInteractions: convertObjSlice(command.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ConvertObjSlice(command.BattleInteractions, convertBattleInteraction),
 	}
 
 	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)

@@ -47,12 +47,12 @@ func createQueryParamRefResURLs(params []QueryParam) []QueryParam {
 		for j := range param.ReferencesInt {
 			if param.Type == ts.QptEnum || param.Type == ts.QptEnumList {
 				ref := param.ReferencesEnumsInt[j]
-				param.References[j] = createEnumURL(ref)
+				param.References[j] = CreateEnumURL(ref)
 				continue
 			}
 
 			ref := param.ReferencesInt[j]
-			param.References[j] = createListURL(ref)
+			param.References[j] = CreateListURL(ref)
 		}
 		paramsNew[i] = param
 	}

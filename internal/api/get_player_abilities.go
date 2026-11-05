@@ -46,7 +46,7 @@ func getPlayerAbility(r *http.Request, i handlerInput[seedtypes.PlayerAbility, P
 		OpenSubmenu:           namePtrToNamedAPIResPtr(E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:                ability.Cursor,
 		Monsters:              monsters,
-		BattleInteractions:    convertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions:    ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)

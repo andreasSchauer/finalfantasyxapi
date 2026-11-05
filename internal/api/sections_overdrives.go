@@ -31,7 +31,7 @@ func createOverdriveSimple(_ *http.Request, id int32, _ Subsection) (SimpleResou
 		Version:            overdrive.Version,
 		Specification:      overdrive.Specification,
 		Rank:               overdrive.Rank,
-		OverdriveAbilities: convertObjSlice(overdrive.OverdriveAbilities, abilityRefString),
+		OverdriveAbilities: ConvertObjSlice(overdrive.OverdriveAbilities, abilityRefString),
 	}
 
 	return overdriveSimple, nil

@@ -27,7 +27,7 @@ func convertMonsterItems(items seedtypes.MonsterItems) MonsterItems {
 		DropChance:          items.DropChance,
 		DropCondition:       items.DropCondition,
 		OtherItemsCondition: items.OtherItemsCondition,
-		OtherItems:          convertObjSlice(items.OtherItems, convertPossibleItem),
+		OtherItems:          ConvertObjSlice(items.OtherItems, convertPossibleItem),
 	}
 
 	if items.StealCommon != nil {

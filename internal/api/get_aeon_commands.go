@@ -29,7 +29,7 @@ func getAeonCommand(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonC
 		User:              nameToNamedAPIResource(E.CharacterClasses, userName, nil),
 		Topmenu:           namePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
 		OpenSubmenu:       namePtrToNamedAPIResPtr(E.Submenus, command.OpenSubmenu, nil),
-		PossibleAbilities: convertObjSlice(command.PossibleAbilities, convertPossibleAbilityList),
+		PossibleAbilities: ConvertObjSlice(command.PossibleAbilities, convertPossibleAbilityList),
 	}
 
 	return response, nil

@@ -8,18 +8,18 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-// s1 [1,2,3] s2 [2,3,4,5] => [1,2,3,4,5]
-func combineIDSlices(idSlices ...[]int32) []int32 {
+// CombineIDSlices does this: s1 [1,2,3] s2 [2,3,4,5] => [1,2,3,4,5]
+func CombineIDSlices(idSlices ...[]int32) []int32 {
 	ids := []int32{}
 
 	for _, slice := range idSlices {
-		ids = addUniqueIDsToSlice(ids, slice)
+		ids = AddUniqueIDsToSlice(ids, slice)
 	}
 
 	return ids
 }
 
-func filterIDSlices(slices [][]int32) ([]int32, error) {
+func FilterIDSlices(slices [][]int32) ([]int32, error) {
 	switch len(slices) {
 	case 0:
 		return []int32{}, nil
@@ -31,15 +31,15 @@ func filterIDSlices(slices [][]int32) ([]int32, error) {
 		ids := slices[0]
 
 		for i := 1; i < len(slices); i++ {
-			ids = getSharedIDs(ids, slices[i])
+			ids = GetSharedIDs(ids, slices[i])
 		}
 
 		return ids, nil
 	}
 }
 
-func addUniqueIDsToSlice(s1, s2 []int32) []int32 {
-	idMap := getIDMap(s1)
+func AddUniqueIDsToSlice(s1, s2 []int32) []int32 {
+	idMap := GetIDMap(s1)
 
 	for _, id := range s2 {
 		_, ok := idMap[id]
@@ -52,10 +52,10 @@ func addUniqueIDsToSlice(s1, s2 []int32) []int32 {
 	return s1
 }
 
-// s1 [1,2,3,4,5] s2 [2,4,5,7,8,9] => [2,4,5]
-func getSharedIDs(s1, s2 []int32) []int32 {
+// GetSharedIDs does this: s1 [1,2,3,4,5] s2 [2,4,5,7,8,9] => [2,4,5]
+func GetSharedIDs(s1, s2 []int32) []int32 {
 	sharedIDs := []int32{}
-	s2Map := getIDMap(s2)
+	s2Map := GetIDMap(s2)
 
 	for _, id := range s1 {
 		_, ok := s2Map[id]
@@ -68,7 +68,7 @@ func getSharedIDs(s1, s2 []int32) []int32 {
 	return sharedIDs
 }
 
-func getIDMap(s []int32) map[int32]bool {
+func GetIDMap(s []int32) map[int32]bool {
 	idMap := make(map[int32]bool)
 
 	for _, id := range s {
@@ -78,7 +78,7 @@ func getIDMap(s []int32) map[int32]bool {
 	return idMap
 }
 
-func sortNamesByID[T seedtypes.Lookupable](s []string, l map[string]T) []string {
+func SortNamesByID[T seedtypes.Lookupable](s []string, l map[string]T) []string {
 	slices.SortStableFunc(s, func(a, b string) int {
 		A, _ := lookup.GetResource(a, l)
 		B, _ := lookup.GetResource(b, l)
@@ -89,9 +89,9 @@ func sortNamesByID[T seedtypes.Lookupable](s []string, l map[string]T) []string 
 	return s
 }
 
-// ids [1,2,3,4,5] idsToRemove [2,4] => keptIDs [1,3,5] removedIDs [2,4]
-func separateIDs(ids []int32, idsToRemove []int32) ([]int32, []int32) {
-	removeMap := getIDMap(idsToRemove)
+// SeparateIDs does this: ids [1,2,3,4,5] idsToRemove [2,4] => keptIDs [1,3,5] removedIDs [2,4]
+func SeparateIDs(ids []int32, idsToRemove []int32) ([]int32, []int32) {
+	removeMap := GetIDMap(idsToRemove)
 	kept := []int32{}
 	removed := []int32{}
 
@@ -107,8 +107,8 @@ func separateIDs(ids []int32, idsToRemove []int32) ([]int32, []int32) {
 	return kept, removed
 }
 
-// items [1,2,3,4,5] changeItems [2,4] => [1,3,5]
-func removeIDs(items []int32, itemsToRemove []int32) []int32 {
-	keptIDs, _ := separateIDs(items, itemsToRemove)
+// RemoveIDs does this: items [1,2,3,4,5] changeItems [2,4] => [1,3,5]
+func RemoveIDs(items []int32, itemsToRemove []int32) []int32 {
+	keptIDs, _ := SeparateIDs(items, itemsToRemove)
 	return keptIDs
 }

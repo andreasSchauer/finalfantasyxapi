@@ -45,7 +45,7 @@ type QuestCompletion struct {
 func convertQuestCompletion(qc seedtypes.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
 		Condition: qc.Condition,
-		Areas:     convertObjSlice(qc.Areas, convertCompletionArea),
+		Areas:     ConvertObjSlice(qc.Areas, convertCompletionArea),
 		Reward:    E.AllItems.toResAmtFromName(qc.Reward),
 	}
 }

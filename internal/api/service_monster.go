@@ -31,7 +31,7 @@ func quickAssembleMon(monID int32, altStatePtr *int32) (Monster, error) {
 		ElemResists:      getMonsterElemResists(monsterLookup.ElemResists),
 		StatusImmunities: namesToNamedAPIResources(E.StatusConditions, monsterLookup.StatusImmunities),
 		StatusResists:    E.StatusConditions.toResAmtType(monsterLookup.StatusResists, newStatusResist),
-		Abilities:        convertObjSlice(monsterLookup.Abilities, convertMonsterAbility),
+		Abilities:        ConvertObjSlice(monsterLookup.Abilities, convertMonsterAbility),
 		AlteredStates:    getMonsterAlteredStates(nil, monsterLookup),
 	}
 

@@ -26,7 +26,7 @@ func getTreasure(r *http.Request, i handlerInput[seedtypes.Treasure, Treasure, U
 		LootType:        treasure.LootType,
 		GilAmount:       treasure.GilAmount,
 		Items:           E.AllItems.toResAmtsFromNames(treasure.Items),
-		Equipment:       convertObjPtr(treasure.Equipment, convertFoundEquipment),
+		Equipment:       ConvertObjPtr(treasure.Equipment, convertFoundEquipment),
 	}
 
 	return response, nil

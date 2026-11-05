@@ -15,14 +15,14 @@ type MonsterItemsSimple struct {
 
 func convertMonsterItemsSimple(items seedtypes.MonsterItems) MonsterItemsSimple {
 	return MonsterItemsSimple{
-		StealCommon:         convertObjPtr(items.StealCommon, convertItemAmountSimple),
-		StealRare:           convertObjPtr(items.StealRare, convertItemAmountSimple),
-		DropCommon:          convertObjPtr(items.DropCommon, convertItemAmountSimple),
-		DropRare:            convertObjPtr(items.DropRare, convertItemAmountSimple),
-		SecondaryDropCommon: convertObjPtr(items.SecondaryDropCommon, convertItemAmountSimple),
-		SecondaryDropRare:   convertObjPtr(items.SecondaryDropRare, convertItemAmountSimple),
-		Bribe:               convertObjPtr(items.Bribe, convertItemAmountSimple),
-		OtherItems:          convertObjSliceOrNil(items.OtherItems, posItemToItemAmtSimple),
+		StealCommon:         ConvertObjPtr(items.StealCommon, convertItemAmountSimple),
+		StealRare:           ConvertObjPtr(items.StealRare, convertItemAmountSimple),
+		DropCommon:          ConvertObjPtr(items.DropCommon, convertItemAmountSimple),
+		DropRare:            ConvertObjPtr(items.DropRare, convertItemAmountSimple),
+		SecondaryDropCommon: ConvertObjPtr(items.SecondaryDropCommon, convertItemAmountSimple),
+		SecondaryDropRare:   ConvertObjPtr(items.SecondaryDropRare, convertItemAmountSimple),
+		Bribe:               ConvertObjPtr(items.Bribe, convertItemAmountSimple),
+		OtherItems:          ConvertObjSliceOrNil(items.OtherItems, posItemToItemAmtSimple),
 	}
 }
 
@@ -33,7 +33,7 @@ type MonsterEquipmentSimple struct {
 
 func convertMonsterEquipmentSimple(equipment seedtypes.MonsterEquipment) MonsterEquipmentSimple {
 	return MonsterEquipmentSimple{
-		WeaponAbilities: convertObjSlice(equipment.WeaponAbilities, monsterAutoAbilityString),
-		ArmorAbilities:  convertObjSlice(equipment.ArmorAbilities, monsterAutoAbilityString),
+		WeaponAbilities: ConvertObjSlice(equipment.WeaponAbilities, monsterAutoAbilityString),
+		ArmorAbilities:  ConvertObjSlice(equipment.ArmorAbilities, monsterAutoAbilityString),
 	}
 }

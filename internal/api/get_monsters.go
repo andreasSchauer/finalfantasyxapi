@@ -56,12 +56,12 @@ func getMonster(r *http.Request, i handlerInput[seedtypes.Monster, Monster, Name
 		Areas:                rel.Areas,
 		Formations:           rel.Formations,
 		BaseStats:            E.Stats.toResAmtType(monster.BaseStats, newBaseStat),
-		Items:                convertObjPtr(monster.Items, convertMonsterItems),
-		Equipment:            convertObjPtr(monster.Equipment, convertMonsterEquipment),
+		Items:                ConvertObjPtr(monster.Items, convertMonsterItems),
+		Equipment:            ConvertObjPtr(monster.Equipment, convertMonsterEquipment),
 		ElemResists:          getMonsterElemResists(monster.ElemResists),
 		StatusImmunities:     namesToNamedAPIResources(E.StatusConditions, monster.StatusImmunities),
 		StatusResists:        E.StatusConditions.toResAmtType(monster.StatusResists, newStatusResist),
-		Abilities:            convertObjSlice(monster.Abilities, convertMonsterAbility),
+		Abilities:            ConvertObjSlice(monster.Abilities, convertMonsterAbility),
 		AlteredStates:        getMonsterAlteredStates(r, monster),
 	}
 

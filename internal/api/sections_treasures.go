@@ -36,8 +36,8 @@ func createTreasureSimple(_ *http.Request, id int32, _ Subsection) (SimpleResour
 		TreasureType: treasure.TreasureType,
 		LootType:     treasure.LootType,
 		GilAmount:    treasure.GilAmount,
-		Items:        convertObjSliceOrNil(treasure.Items, convertItemAmountSimple),
-		Equipment:    convertObjPtr(treasure.Equipment, convertEquipmentSimple),
+		Items:        ConvertObjSliceOrNil(treasure.Items, convertItemAmountSimple),
+		Equipment:    ConvertObjPtr(treasure.Equipment, convertEquipmentSimple),
 	}
 
 	return treasureSimple, nil

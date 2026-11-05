@@ -23,7 +23,7 @@ func getProperty(r *http.Request, i handlerInput[seedtypes.Property, Property, N
 		Effect:         property.Effect,
 		NullifyArmored: property.NullifyArmored,
 		RelatedStats:   namesToNamedAPIResources(E.Stats, property.RelatedStats),
-		ModifierChange: convertObjPtr(property.ModifierChange, convertModifierChange),
+		ModifierChange: ConvertObjPtr(property.ModifierChange, convertModifierChange),
 		AutoAbilities:  rel.AutoAbilities,
 		Monsters:       rel.Monsters,
 	}
