@@ -13,7 +13,7 @@ func (i handlerInput[T, R, A]) handleList(w http.ResponseWriter, r *http.Request
 	if handleHTTPError(w, err) {
 		return
 	}
-	resources := i.toResources(ids)
+	resources := i.toAPIResources(ids)
 
 	resourceList, err := newAPIResourceList(r, resources)
 	if handleHTTPError(w, err) {
@@ -208,7 +208,7 @@ func (i handlerInputEndpoints) handleList(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	endpoints := i.slice
+	endpoints := i.Slice
 	resources := endpointsToNamedAPIResources(endpoints)
 	setLimitMax(r, r.URL.Query())
 

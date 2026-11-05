@@ -21,7 +21,7 @@ func (i handlerInputEnums) assignDefaultParams() map[ts.QueryParamName]QueryPara
 }
 
 // make a wrapper method around this for each handlerInput?
-func (i handlerInput[T, R, A]) completeQueryParamsInit(params []QueryParam) map[ts.QueryParamName]QueryParam {
+func (i *handlerInput[T, R, A]) completeQueryParamsInit(params []QueryParam) map[ts.QueryParamName]QueryParam {
 	params = slices.Concat(params, Q.defaultParamSlice)
 
 	if hasSimpleView(i.subsections) {
@@ -46,7 +46,9 @@ func (i handlerInput[T, R, A]) completeQueryParamsInit(params []QueryParam) map[
 		params = append(params, queryParamFlip)
 	}
 
-	return paramSliceToMap(params, &i.Endpoint)
+	i.queryLookup = paramSliceToMap(params, &i.Endpoint)
+
+	return i.queryLookup
 }
 
 func hasSimpleView(sections map[ts.SectionName]Subsection) bool {

@@ -51,6 +51,6 @@ func (i handlerInput[T, R, A]) queryAvlRelRun[K seedtypes.Lookupable](ctx contex
 		return nil, newHTTPErrorDB(i.resTypePlural, item, err)
 	}
 
-	resources := i.toResources(dbIDs)
+	resources := i.toAPIResources(dbIDs)
 	return resources, nil
 }

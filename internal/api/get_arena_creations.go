@@ -118,6 +118,6 @@ func getArenaCreationMonsters(r *http.Request, creation seedtypes.ArenaCreation)
 		return nil, err
 	}
 
-	monsters := E.Monsters.toResources(monsterIDs)
+	monsters := E.Monsters.toAPIResources(monsterIDs)
 	return monsters, nil
 }

@@ -32,7 +32,7 @@ func getOverdriveAbility(r *http.Request, i handlerInput[seedtypes.OverdriveAbil
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
-		Overdrives:         E.Overdrives.toResources(overdriveIDs),
+		Overdrives:         E.Overdrives.toAPIResources(overdriveIDs),
 		OverdriveCommand:   namePtrToNamedAPIResPtr(E.OverdriveCommands, overdrive.OverdriveCommand, nil),
 		User:               nameToNamedAPIResource(E.CharacterClasses, overdrive.User, nil),
 		RelatedStats:       namesToNamedAPIResources(E.Stats, ability.RelatedStats),

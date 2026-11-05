@@ -1020,11 +1020,11 @@ func (E *Endpoints) Init() {
 		samplesFn: getCritChanceParamsSamples,
 	}
 
-	E.Endpoints.slice = E.InitializeEndpointSlice()
+	E.InitializeEndpointSlice()
 }
 
-func (E Endpoints) InitializeEndpointSlice() []ts.EndpointName {
-	endpoints := []ts.EndpointName{
+func (E *Endpoints) InitializeEndpointSlice() {
+	E.Endpoints.Slice = []ts.EndpointName{
 		E.Locations.Endpoint,
 		E.Sublocations.Endpoint,
 		E.Areas.Endpoint,
@@ -1081,6 +1081,5 @@ func (E Endpoints) InitializeEndpointSlice() []ts.EndpointName {
 		E.CritChance.Endpoint,
 	}
 
-	slices.Sort(endpoints)
-	return endpoints
+	slices.Sort(E.Endpoints.Slice)
 }

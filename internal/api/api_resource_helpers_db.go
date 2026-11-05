@@ -29,7 +29,7 @@ func (i handlerInput[T, R, A]) dbGetRelations(ctx context.Context, filterItem se
 		return nil, newHTTPErrorDB(i.resTypePlural, filterItem, err)
 	}
 
-	resources := i.toResources(dbIds)
+	resources := i.toAPIResources(dbIds)
 	return resources, nil
 }
 

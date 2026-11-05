@@ -182,9 +182,7 @@ func initLocationsParams() {
 		},
 	}
 
-	paramsMap := E.Locations.completeQueryParamsInit(params)
-	Q.locations = paramsMap
-	E.Locations.queryLookup = paramsMap
+	Q.locations = E.Locations.completeQueryParamsInit(params)
 }
 
 func initSublocationsParams() {
@@ -327,9 +325,7 @@ func initSublocationsParams() {
 		},
 	}
 
-	paramsMap := E.Sublocations.completeQueryParamsInit(params)
-	Q.sublocations = paramsMap
-	E.Sublocations.queryLookup = paramsMap
+	Q.sublocations = E.Sublocations.completeQueryParamsInit(params)
 }
 
 func initAreasParams() {
@@ -504,9 +500,7 @@ func initAreasParams() {
 		},
 	}
 
-	paramsMap := E.Areas.completeQueryParamsInit(params)
-	Q.areas = paramsMap
-	E.Areas.queryLookup = paramsMap
+	Q.areas = E.Areas.completeQueryParamsInit(params)
 }
 
 func initMonsterFormationsParams() {
@@ -585,9 +579,7 @@ func initMonsterFormationsParams() {
 		},
 	}
 
-	paramsMap := E.MonsterFormations.completeQueryParamsInit(params)
-	Q.monsterFormations = paramsMap
-	E.MonsterFormations.queryLookup = paramsMap
+	Q.monsterFormations = E.MonsterFormations.completeQueryParamsInit(params)
 }
 
 func initShopsParams() {
@@ -670,9 +662,7 @@ func initShopsParams() {
 		},
 	}
 
-	paramsMap := E.Shops.completeQueryParamsInit(params)
-	Q.shops = paramsMap
-	E.Shops.queryLookup = paramsMap
+	Q.shops = E.Shops.completeQueryParamsInit(params)
 }
 
 func initTreasuresParams() {
@@ -761,9 +751,7 @@ func initTreasuresParams() {
 		},
 	}
 
-	paramsMap := E.Treasures.completeQueryParamsInit(params)
-	Q.treasures = paramsMap
-	E.Treasures.queryLookup = paramsMap
+	Q.treasures = E.Treasures.completeQueryParamsInit(params)
 }
 
 func initQuestsParams() {
@@ -792,9 +780,7 @@ func initQuestsParams() {
 		},
 	}
 
-	paramsMap := E.Quests.completeQueryParamsInit(params)
-	Q.quests = paramsMap
-	E.Quests.queryLookup = paramsMap
+	Q.quests = E.Quests.completeQueryParamsInit(params)
 }
 
 func initSidequestsParams() {
@@ -809,9 +795,7 @@ func initSidequestsParams() {
 		},
 	}
 
-	paramsMap := E.Sidequests.completeQueryParamsInit(params)
-	Q.sidequests = paramsMap
-	E.Sidequests.queryLookup = paramsMap
+	Q.sidequests = E.Sidequests.completeQueryParamsInit(params)
 }
 
 func initSubquestsParams() {
@@ -832,9 +816,7 @@ func initSubquestsParams() {
 		},
 	}
 
-	paramsMap := E.Subquests.completeQueryParamsInit(params)
-	Q.subquests = paramsMap
-	E.Subquests.queryLookup = paramsMap
+	Q.subquests = E.Subquests.completeQueryParamsInit(params)
 }
 
 func initArenaCreationsParams() {
@@ -849,9 +831,7 @@ func initArenaCreationsParams() {
 		},
 	}
 
-	paramsMap := E.ArenaCreations.completeQueryParamsInit(params)
-	Q.arenaCreations = paramsMap
-	E.ArenaCreations.queryLookup = paramsMap
+	Q.arenaCreations = E.ArenaCreations.completeQueryParamsInit(params)
 }
 
 func initBlitzballPrizesParams() {
@@ -866,9 +846,7 @@ func initBlitzballPrizesParams() {
 		},
 	}
 
-	paramsMap := E.BlitzballPrizes.completeQueryParamsInit(params)
-	Q.blitzballPrizes = paramsMap
-	E.BlitzballPrizes.queryLookup = paramsMap
+	Q.blitzballPrizes = E.BlitzballPrizes.completeQueryParamsInit(params)
 }
 
 func initSongsParams() {
@@ -926,9 +904,7 @@ func initSongsParams() {
 		},
 	}
 
-	paramsMap := E.Songs.completeQueryParamsInit(params)
-	Q.songs = paramsMap
-	E.Songs.queryLookup = paramsMap
+	Q.songs = E.Songs.completeQueryParamsInit(params)
 }
 
 func initFMVsParams() {
@@ -942,9 +918,7 @@ func initFMVsParams() {
 		},
 	}
 
-	paramsMap := E.FMVs.completeQueryParamsInit(params)
-	Q.fmvs = paramsMap
-	E.FMVs.queryLookup = paramsMap
+	Q.fmvs = E.FMVs.completeQueryParamsInit(params)
 }
 
 func initPlayerUnitsParams() {
@@ -959,9 +933,7 @@ func initPlayerUnitsParams() {
 		},
 	}
 
-	paramsMap := E.PlayerUnits.completeQueryParamsInit(params)
-	Q.playerUnits = paramsMap
-	E.PlayerUnits.queryLookup = paramsMap
+	Q.playerUnits = E.PlayerUnits.completeQueryParamsInit(params)
 }
 
 func initCharactersParams() {
@@ -988,9 +960,7 @@ func initCharactersParams() {
 		},
 	}
 
-	paramsMap := E.Characters.completeQueryParamsInit(params)
-	Q.characters = paramsMap
-	E.Characters.queryLookup = paramsMap
+	Q.characters = E.Characters.completeQueryParamsInit(params)
 }
 
 func initAeonsParams() {
@@ -1018,9 +988,7 @@ func initAeonsParams() {
 		},
 	}
 
-	paramsMap := E.Aeons.completeQueryParamsInit(params)
-	Q.aeons = paramsMap
-	E.Aeons.queryLookup = paramsMap
+	Q.aeons = E.Aeons.completeQueryParamsInit(params)
 }
 
 func initCharacterClassesParams() {
@@ -1035,9 +1003,7 @@ func initCharacterClassesParams() {
 		},
 	}
 
-	paramsMap := E.CharacterClasses.completeQueryParamsInit(params)
-	Q.characterClasses = paramsMap
-	E.CharacterClasses.queryLookup = paramsMap
+	Q.characterClasses = E.CharacterClasses.completeQueryParamsInit(params)
 }
 
 func initMonstersParams() {
@@ -1274,9 +1240,7 @@ func initMonstersParams() {
 		},
 	}
 
-	paramsMap := E.Monsters.completeQueryParamsInit(params)
-	Q.monsters = paramsMap
-	E.Monsters.queryLookup = paramsMap
+	Q.monsters = E.Monsters.completeQueryParamsInit(params)
 }
 
 func initAbilitiesParams() {
@@ -1424,9 +1388,7 @@ func initAbilitiesParams() {
 		},
 	}
 
-	paramsMap := E.Abilities.completeQueryParamsInit(params)
-	Q.abilities = paramsMap
-	E.Abilities.queryLookup = paramsMap
+	Q.abilities = E.Abilities.completeQueryParamsInit(params)
 }
 
 func initPlayerAbilitiesParams() {
@@ -1640,9 +1602,7 @@ func initPlayerAbilitiesParams() {
 		},
 	}
 
-	paramsMap := E.PlayerAbilities.completeQueryParamsInit(params)
-	Q.playerAbilities = paramsMap
-	E.PlayerAbilities.queryLookup = paramsMap
+	Q.playerAbilities = E.PlayerAbilities.completeQueryParamsInit(params)
 }
 
 func initOverdriveAbilitiesParams() {
@@ -1741,9 +1701,7 @@ func initOverdriveAbilitiesParams() {
 		},
 	}
 
-	paramsMap := E.OverdriveAbilities.completeQueryParamsInit(params)
-	Q.overdriveAbilities = paramsMap
-	E.OverdriveAbilities.queryLookup = paramsMap
+	Q.overdriveAbilities = E.OverdriveAbilities.completeQueryParamsInit(params)
 }
 
 func initItemAbilitiesParams() {
@@ -1836,9 +1794,7 @@ func initItemAbilitiesParams() {
 		},
 	}
 
-	paramsMap := E.ItemAbilities.completeQueryParamsInit(params)
-	Q.itemAbilities = paramsMap
-	E.ItemAbilities.queryLookup = paramsMap
+	Q.itemAbilities = E.ItemAbilities.completeQueryParamsInit(params)
 }
 
 func initTriggerCommandsParams() {
@@ -1883,9 +1839,7 @@ func initTriggerCommandsParams() {
 		},
 	}
 
-	paramsMap := E.TriggerCommands.completeQueryParamsInit(params)
-	Q.triggerCommands = paramsMap
-	E.TriggerCommands.queryLookup = paramsMap
+	Q.triggerCommands = E.TriggerCommands.completeQueryParamsInit(params)
 }
 
 func initMiscAbilitiesParams() {
@@ -1946,9 +1900,7 @@ func initMiscAbilitiesParams() {
 		},
 	}
 
-	paramsMap := E.MiscAbilities.completeQueryParamsInit(params)
-	Q.miscAbilities = paramsMap
-	E.MiscAbilities.queryLookup = paramsMap
+	Q.miscAbilities = E.MiscAbilities.completeQueryParamsInit(params)
 }
 
 func initEnemyAbilitiesParams() {
@@ -2064,9 +2016,7 @@ func initEnemyAbilitiesParams() {
 		},
 	}
 
-	paramsMap := E.EnemyAbilities.completeQueryParamsInit(params)
-	Q.enemyAbilities = paramsMap
-	E.EnemyAbilities.queryLookup = paramsMap
+	Q.enemyAbilities = E.EnemyAbilities.completeQueryParamsInit(params)
 }
 
 func initOverdrivesParams() {
@@ -2087,9 +2037,7 @@ func initOverdrivesParams() {
 		},
 	}
 
-	paramsMap := E.Overdrives.completeQueryParamsInit(params)
-	Q.overdrives = paramsMap
-	E.Overdrives.queryLookup = paramsMap
+	Q.overdrives = E.Overdrives.completeQueryParamsInit(params)
 }
 
 func initSubmenusParams() {
@@ -2104,9 +2052,7 @@ func initSubmenusParams() {
 		},
 	}
 
-	paramsMap := E.Submenus.completeQueryParamsInit(params)
-	Q.submenus = paramsMap
-	E.Submenus.queryLookup = paramsMap
+	Q.submenus = E.Submenus.completeQueryParamsInit(params)
 }
 
 func initAllItemsParams() {
@@ -2188,9 +2134,7 @@ func initAllItemsParams() {
 		},
 	}
 
-	paramsMap := E.AllItems.completeQueryParamsInit(params)
-	Q.allItems = paramsMap
-	E.AllItems.queryLookup = paramsMap
+	Q.allItems = E.AllItems.completeQueryParamsInit(params)
 }
 
 func initItemsParams() {
@@ -2286,9 +2230,7 @@ func initItemsParams() {
 		},
 	}
 
-	paramsMap := E.Items.completeQueryParamsInit(params)
-	Q.items = paramsMap
-	E.Items.queryLookup = paramsMap
+	Q.items = E.Items.completeQueryParamsInit(params)
 }
 
 func initKeyItemsParams() {
@@ -2351,9 +2293,7 @@ func initKeyItemsParams() {
 		},
 	}
 
-	paramsMap := E.KeyItems.completeQueryParamsInit(params)
-	Q.keyItems = paramsMap
-	E.KeyItems.queryLookup = paramsMap
+	Q.keyItems = E.KeyItems.completeQueryParamsInit(params)
 }
 
 func initSpheresParams() {
@@ -2435,9 +2375,7 @@ func initSpheresParams() {
 		},
 	}
 
-	paramsMap := E.Spheres.completeQueryParamsInit(params)
-	Q.spheres = paramsMap
-	E.Spheres.queryLookup = paramsMap
+	Q.spheres = E.Spheres.completeQueryParamsInit(params)
 }
 
 func initPrimersParams() {
@@ -2452,9 +2390,7 @@ func initPrimersParams() {
 		},
 	}
 
-	paramsMap := E.Primers.completeQueryParamsInit(params)
-	Q.primers = paramsMap
-	E.Primers.queryLookup = paramsMap
+	Q.primers = E.Primers.completeQueryParamsInit(params)
 }
 
 func initMixesParams() {
@@ -2502,9 +2438,7 @@ func initMixesParams() {
 		},
 	}
 
-	paramsMap := E.Mixes.completeQueryParamsInit(params)
-	Q.mixes = paramsMap
-	E.Mixes.queryLookup = paramsMap
+	Q.mixes = E.Mixes.completeQueryParamsInit(params)
 }
 
 func initAutoAbilitiesParams() {
@@ -2632,9 +2566,7 @@ func initAutoAbilitiesParams() {
 		},
 	}
 
-	paramsMap := E.AutoAbilities.completeQueryParamsInit(params)
-	Q.autoAbilities = paramsMap
-	E.AutoAbilities.queryLookup = paramsMap
+	Q.autoAbilities = E.AutoAbilities.completeQueryParamsInit(params)
 }
 
 func initEquipmentTablesParams() {
@@ -2662,9 +2594,7 @@ func initEquipmentTablesParams() {
 		},
 	}
 
-	paramsMap := E.EquipmentTables.completeQueryParamsInit(params)
-	Q.equipmentTables = paramsMap
-	E.EquipmentTables.queryLookup = paramsMap
+	Q.equipmentTables = E.EquipmentTables.completeQueryParamsInit(params)
 }
 
 func initEquipmentParams() {
@@ -2716,9 +2646,7 @@ func initEquipmentParams() {
 		},
 	}
 
-	paramsMap := E.Equipment.completeQueryParamsInit(params)
-	Q.equipment = paramsMap
-	E.Equipment.queryLookup = paramsMap
+	Q.equipment = E.Equipment.completeQueryParamsInit(params)
 }
 
 func initCelestialWeaponsParams() {
@@ -2733,9 +2661,7 @@ func initCelestialWeaponsParams() {
 		},
 	}
 
-	paramsMap := E.CelestialWeapons.completeQueryParamsInit(params)
-	Q.celestialWeapons = paramsMap
-	E.CelestialWeapons.queryLookup = paramsMap
+	Q.celestialWeapons = E.CelestialWeapons.completeQueryParamsInit(params)
 }
 
 func initStatsParams() {
@@ -2748,9 +2674,7 @@ func initStatsParams() {
 		},
 	}
 
-	paramsMap := E.Stats.completeQueryParamsInit(params)
-	Q.stats = paramsMap
-	E.Stats.queryLookup = paramsMap
+	Q.stats = E.Stats.completeQueryParamsInit(params)
 }
 
 func initOverdriveModesParams() {
@@ -2765,9 +2689,7 @@ func initOverdriveModesParams() {
 		},
 	}
 
-	paramsMap := E.OverdriveModes.completeQueryParamsInit(params)
-	Q.overdriveModes = paramsMap
-	E.OverdriveModes.queryLookup = paramsMap
+	Q.overdriveModes = E.OverdriveModes.completeQueryParamsInit(params)
 }
 
 func initStatusConditionsParams() {
@@ -2832,9 +2754,7 @@ func initStatusConditionsParams() {
 		},
 	}
 
-	paramsMap := E.StatusConditions.completeQueryParamsInit(params)
-	Q.statusConditions = paramsMap
-	E.StatusConditions.queryLookup = paramsMap
+	Q.statusConditions = E.StatusConditions.completeQueryParamsInit(params)
 }
 
 func initModifiersParams() {
@@ -2849,9 +2769,7 @@ func initModifiersParams() {
 		},
 	}
 
-	paramsMap := E.Modifiers.completeQueryParamsInit(params)
-	Q.modifiers = paramsMap
-	E.Modifiers.queryLookup = paramsMap
+	Q.modifiers = E.Modifiers.completeQueryParamsInit(params)
 }
 
 func initAgilityTierParams() {
@@ -2865,7 +2783,5 @@ func initAgilityTierParams() {
 		},
 	}
 
-	paramsMap := E.AgilityTiers.completeQueryParamsInit(params)
-	Q.agilityTiers = paramsMap
-	E.AgilityTiers.queryLookup = paramsMap
+	Q.agilityTiers = E.AgilityTiers.completeQueryParamsInit(params)
 }

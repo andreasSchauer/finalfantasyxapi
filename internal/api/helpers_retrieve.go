@@ -15,7 +15,7 @@ func (i handlerInput[T, R, A]) handleMultiple(r *http.Request, name string) (API
 		return APIResourceList[A]{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'", i.resTypeSingle, name), err)
 	}
 
-	return i.toResList(r, dbIDs)
+	return i.toAPIResList(r, dbIDs)
 }
 
 func (i handlerInput[T, R, A]) filterIDs(r *http.Request, IDs []int32, queryFns []IDFilter) ([]int32, error) {

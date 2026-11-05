@@ -29,7 +29,7 @@ func TestRetrieveEndpoints(t *testing.T) {
 				requestURL:     "/api/endpoints",
 				expectedStatus: http.StatusOK,
 			},
-			count: len(api.E.InitializeEndpointSlice()),
+			count: len(api.E.Endpoints.Slice),
 			results: []string{
 				"/areas",
 				"/equipment-tables",

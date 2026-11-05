@@ -130,8 +130,8 @@ func itemAmtsToChildResAmts[T seedtypes.HasItemAmount, R any, A APIResource](i h
 	resAmts := []ResourceAmount[A]{}
 
 	for _, res := range resources {
-		lookup, _ := lookup.GetResourceByID(res.GetID(), i.objLookupID)
-		itemAmount := lookup.GetItemAmount()
+		lookupRes, _ := lookup.GetResourceByID(res.GetID(), i.objLookupID)
+		itemAmount := lookupRes.GetItemAmount()
 		resAmt := newResourceAmount(res, itemAmount.Amount)
 		resAmts = append(resAmts, resAmt)
 	}
