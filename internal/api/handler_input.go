@@ -3,12 +3,13 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type handlerInput[T seedtypes.Lookupable, R any, A APIResource] struct {
+type handlerInput[T seedtypes.Lookupable, R any, A apiresource.APIResource] struct {
 	Endpoint         ts.EndpointName
 	resTypeSingle    ts.ResTypeSingle
 	resTypePlural    ts.ResTypePlural

@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getCelestialWeapon(r *http.Request, i handlerInput[seedtypes.CelestialWeapon, CelestialWeapon, NamedAPIResource], id int32) (CelestialWeapon, error) {
+func getCelestialWeapon(r *http.Request, i handlerInput[seedtypes.CelestialWeapon, CelestialWeapon, apiresource.NamedAPIResource], id int32) (CelestialWeapon, error) {
 	celestialWeapon, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return CelestialWeapon{}, err
@@ -38,7 +39,7 @@ func getCelestialWeapon(r *http.Request, i handlerInput[seedtypes.CelestialWeapo
 	return response, nil
 }
 
-func retrieveCelestialWeapons(r *http.Request, i handlerInput[seedtypes.CelestialWeapon, CelestialWeapon, NamedAPIResource]) ([]int32, error) {
+func retrieveCelestialWeapons(r *http.Request, i handlerInput[seedtypes.CelestialWeapon, CelestialWeapon, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

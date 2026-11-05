@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -11,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, NamedAPIResource], id int32) (Sphere, error) {
+func getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, apiresource.NamedAPIResource], id int32) (Sphere, error) {
 	sphere, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Sphere{}, err
@@ -45,7 +46,7 @@ func getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, NamedAP
 	return response, nil
 }
 
-func retrieveSpheres(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, NamedAPIResource]) ([]int32, error) {
+func retrieveSpheres(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

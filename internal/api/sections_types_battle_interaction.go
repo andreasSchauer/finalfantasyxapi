@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"

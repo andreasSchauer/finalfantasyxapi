@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"sync"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -14,7 +15,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource], id int32) (ArenaCreation, error) {
+func getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, apiresource.NamedAPIResource], id int32) (ArenaCreation, error) {
 	creation, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return ArenaCreation{}, err
@@ -43,7 +44,7 @@ func getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, A
 	return response, nil
 }
 
-func retrieveArenaCreations(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, NamedAPIResource]) ([]int32, error) {
+func retrieveArenaCreations(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
@@ -54,7 +55,7 @@ func retrieveArenaCreations(r *http.Request, i handlerInput[seedtypes.ArenaCreat
 	})
 }
 
-func getArenaCreationMonsters(r *http.Request, creation seedtypes.ArenaCreation) ([]NamedAPIResource, error) {
+func getArenaCreationMonsters(r *http.Request, creation seedtypes.ArenaCreation) ([]apiresource.NamedAPIResource, error) {
 	mf := createMonsterFilter(creation)
 
 	if mf.IsZero() || mf.CreationsUnlockedCategory != nil {

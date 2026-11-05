@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -12,7 +13,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getEnemyAbility(r *http.Request, i handlerInput[seedtypes.EnemyAbility, EnemyAbility, NamedAPIResource], id int32) (EnemyAbility, error) {
+func getEnemyAbility(r *http.Request, i handlerInput[seedtypes.EnemyAbility, EnemyAbility, apiresource.NamedAPIResource], id int32) (EnemyAbility, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return EnemyAbility{}, err
@@ -40,7 +41,7 @@ func getEnemyAbility(r *http.Request, i handlerInput[seedtypes.EnemyAbility, Ene
 	return response, nil
 }
 
-func retrieveEnemyAbilities(r *http.Request, i handlerInput[seedtypes.EnemyAbility, EnemyAbility, NamedAPIResource]) ([]int32, error) {
+func retrieveEnemyAbilities(r *http.Request, i handlerInput[seedtypes.EnemyAbility, EnemyAbility, apiresource.NamedAPIResource]) ([]int32, error) {
 	abilityType := database.AbilityTypeEnemyAbility
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {

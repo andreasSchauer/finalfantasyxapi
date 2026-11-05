@@ -6,7 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -24,7 +25,7 @@ func (m MixSimple) GetURL() string {
 	return m.URL
 }
 
-func createMixSimple(r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createMixSimple(r *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.Mixes
 	mix, _ := lookup.GetResourceByID(id, i.objLookupID)
 	combinations := mix.PossibleCombinations

@@ -2,10 +2,12 @@ package api
 
 import (
 	"slices"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
 // remove lost items and put them into defStateGain
-func modifyResourcesLoss[T HasAPIResource](items, changeItems []T) ([]T, []T) {
+func modifyResourcesLoss[T apiresource.HasAPIResource](items, changeItems []T) ([]T, []T) {
 	if changeItems == nil {
 		return items, nil
 	}
@@ -27,7 +29,7 @@ func modifyResourcesLoss[T HasAPIResource](items, changeItems []T) ([]T, []T) {
 }
 
 // add gained items, but also put them into defStateLoss
-func modifyResourcesGain[T HasAPIResource](items, changeItems []T) ([]T, []T) {
+func modifyResourcesGain[T apiresource.HasAPIResource](items, changeItems []T) ([]T, []T) {
 	if changeItems == nil {
 		return items, nil
 	}
@@ -46,7 +48,7 @@ func modifyResourcesGain[T HasAPIResource](items, changeItems []T) ([]T, []T) {
 }
 
 // replace the items with those of the changeState
-func modifyResourcesChange[T HasAPIResource](items, changeItems []T) ([]T, []T) {
+func modifyResourcesChange[T apiresource.HasAPIResource](items, changeItems []T) ([]T, []T) {
 	if changeItems == nil {
 		return items, changeItems
 	}

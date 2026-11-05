@@ -3,19 +3,20 @@ package api
 import (
 	"slices"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
 type BaseStat struct {
-	Stat  NamedAPIResource `json:"stat"`
-	Value int32            `json:"value"`
+	Stat  apiresource.NamedAPIResource `json:"stat"`
+	Value int32                        `json:"value"`
 }
 
-func (bs BaseStat) GetAPIResource() APIResource {
+func (bs BaseStat) GetAPIResource() apiresource.APIResource {
 	return bs.Stat
 }
 
-func newBaseStat(res NamedAPIResource, value int32) BaseStat {
+func newBaseStat(res apiresource.NamedAPIResource, value int32) BaseStat {
 	return BaseStat{
 		Stat:  res,
 		Value: value,
@@ -34,8 +35,8 @@ func (bs BaseStat) GetVal() int32 {
 	return bs.Value
 }
 
-func (bs BaseStat) ToResAmount() ResourceAmount[NamedAPIResource] {
-	return ResourceAmount[NamedAPIResource]{
+func (bs BaseStat) ToResAmount() apiresource.ResourceAmount[apiresource.NamedAPIResource] {
+	return apiresource.ResourceAmount[apiresource.NamedAPIResource]{
 		Resource: bs.Stat,
 		Amount:   bs.Value,
 	}

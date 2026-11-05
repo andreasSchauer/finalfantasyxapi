@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSublocation(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource], id int32) (Sublocation, error) {
+func getSublocation(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, apiresource.NamedAPIResource], id int32) (Sublocation, error) {
 	sublocation, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Sublocation{}, err
@@ -33,7 +34,7 @@ func getSublocation(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublo
 	return response, nil
 }
 
-func retrieveSublocations(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, NamedAPIResource]) ([]int32, error) {
+func retrieveSublocations(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

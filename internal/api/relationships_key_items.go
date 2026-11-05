@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -44,7 +45,7 @@ func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (KeyIte
 		return err
 	})
 
-	var primer *NamedAPIResource
+	var primer *apiresource.NamedAPIResource
 	if keyItem.Category == string(database.KeyItemCategoryPrimer) {
 		primerRes := nameToNamedAPIResource(E.Primers, keyItem.Name, nil)
 		primer = &primerRes
@@ -59,7 +60,7 @@ func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (KeyIte
 	return rel, nil
 }
 
-func getKeyItemCelestialWeapon(ctx context.Context, keyItem seedtypes.KeyItem) (*NamedAPIResource, error) {
+func getKeyItemCelestialWeapon(ctx context.Context, keyItem seedtypes.KeyItem) (*apiresource.NamedAPIResource, error) {
 	if !(strings.HasSuffix(keyItem.Name, "crest") || strings.HasSuffix(keyItem.Name, "sigil")) {
 		return nil, nil
 	}

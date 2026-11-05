@@ -3,17 +3,18 @@ package api
 import (
 	"context"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type StatusInfliction struct {
-	PlayerAbilities    []NamedAPIResource `json:"player_abilities"`
-	OverdriveAbilities []NamedAPIResource `json:"overdrive_abilities"`
-	ItemAbilities      []NamedAPIResource `json:"item_abilities"`
-	MiscAbilities      []NamedAPIResource `json:"misc_abilities"`
-	EnemyAbilities     []NamedAPIResource `json:"enemy_abilities"`
+	PlayerAbilities    []apiresource.NamedAPIResource `json:"player_abilities"`
+	OverdriveAbilities []apiresource.NamedAPIResource `json:"overdrive_abilities"`
+	ItemAbilities      []apiresource.NamedAPIResource `json:"item_abilities"`
+	MiscAbilities      []apiresource.NamedAPIResource `json:"misc_abilities"`
+	EnemyAbilities     []apiresource.NamedAPIResource `json:"enemy_abilities"`
 }
 
 func (s StatusInfliction) IsZero() bool {
@@ -25,11 +26,11 @@ func (s StatusInfliction) IsZero() bool {
 }
 
 type StatusRemoval struct {
-	PlayerAbilities    []NamedAPIResource `json:"player_abilities"`
-	OverdriveAbilities []NamedAPIResource `json:"overdrive_abilities"`
-	ItemAbilities      []NamedAPIResource `json:"item_abilities"`
-	EnemyAbilities     []NamedAPIResource `json:"enemy_abilities"`
-	StatusConditions   []NamedAPIResource `json:"status_conditions"`
+	PlayerAbilities    []apiresource.NamedAPIResource `json:"player_abilities"`
+	OverdriveAbilities []apiresource.NamedAPIResource `json:"overdrive_abilities"`
+	ItemAbilities      []apiresource.NamedAPIResource `json:"item_abilities"`
+	EnemyAbilities     []apiresource.NamedAPIResource `json:"enemy_abilities"`
+	StatusConditions   []apiresource.NamedAPIResource `json:"status_conditions"`
 }
 
 func (s StatusRemoval) IsZero() bool {
@@ -80,13 +81,13 @@ func getStatusRemoval(ctx context.Context, status seedtypes.StatusCondition, que
 	return &statusRemoval, nil
 }
 
-func populateStatusInfliction(abilities []TypedAPIResource) StatusInfliction {
+func populateStatusInfliction(abilities []apiresource.TypedAPIResource) StatusInfliction {
 	infliction := StatusInfliction{
-		PlayerAbilities:    []NamedAPIResource{},
-		OverdriveAbilities: []NamedAPIResource{},
-		ItemAbilities:      []NamedAPIResource{},
-		MiscAbilities:      []NamedAPIResource{},
-		EnemyAbilities:     []NamedAPIResource{},
+		PlayerAbilities:    []apiresource.NamedAPIResource{},
+		OverdriveAbilities: []apiresource.NamedAPIResource{},
+		ItemAbilities:      []apiresource.NamedAPIResource{},
+		MiscAbilities:      []apiresource.NamedAPIResource{},
+		EnemyAbilities:     []apiresource.NamedAPIResource{},
 	}
 
 	for _, ability := range abilities {
@@ -125,12 +126,12 @@ func populateStatusInfliction(abilities []TypedAPIResource) StatusInfliction {
 	return infliction
 }
 
-func populateStatusRemoval(abilities []TypedAPIResource) StatusRemoval {
+func populateStatusRemoval(abilities []apiresource.TypedAPIResource) StatusRemoval {
 	removal := StatusRemoval{
-		PlayerAbilities:    []NamedAPIResource{},
-		OverdriveAbilities: []NamedAPIResource{},
-		ItemAbilities:      []NamedAPIResource{},
-		EnemyAbilities:     []NamedAPIResource{},
+		PlayerAbilities:    []apiresource.NamedAPIResource{},
+		OverdriveAbilities: []apiresource.NamedAPIResource{},
+		ItemAbilities:      []apiresource.NamedAPIResource{},
+		EnemyAbilities:     []apiresource.NamedAPIResource{},
 	}
 
 	for _, ability := range abilities {

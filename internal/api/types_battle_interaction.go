@@ -1,28 +1,29 @@
 package api
 
 import (
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type BattleInteraction struct {
-	Target                    string             `json:"target"`
-	Range                     *int32             `json:"range"`
-	HitAmount                 int32              `json:"hit_amount"`
-	ShatterRate               int32              `json:"shatter_rate"`
-	SpecialAction             *string            `json:"special_action,omitempty"`
-	BasedOnUserAttack         bool               `json:"based_on_user_attack"`
-	Darkable                  bool               `json:"darkable"`
-	Silenceable               bool               `json:"silenceable"`
-	Reflectable               bool               `json:"reflectable"`
-	Accuracy                  Accuracy           `json:"accuracy"`
-	Damage                    *Damage            `json:"damage"`
-	InflictedDelay            *InflictedDelay    `json:"inflicted_delay"`
-	InflictedStatusConditions []InflictedStatus  `json:"inflicted_status_conditions"`
-	RemovedStatusConditions   []NamedAPIResource `json:"removed_status_conditions"`
-	CopiedStatusConditions    []InflictedStatus  `json:"copied_status_conditions"`
-	StatChanges               []StatChange       `json:"stat_changes"`
-	ModifierChanges           []ModifierChange   `json:"modifier_changes"`
+	Target                    string                         `json:"target"`
+	Range                     *int32                         `json:"range"`
+	HitAmount                 int32                          `json:"hit_amount"`
+	ShatterRate               int32                          `json:"shatter_rate"`
+	SpecialAction             *string                        `json:"special_action,omitempty"`
+	BasedOnUserAttack         bool                           `json:"based_on_user_attack"`
+	Darkable                  bool                           `json:"darkable"`
+	Silenceable               bool                           `json:"silenceable"`
+	Reflectable               bool                           `json:"reflectable"`
+	Accuracy                  Accuracy                       `json:"accuracy"`
+	Damage                    *Damage                        `json:"damage"`
+	InflictedDelay            *InflictedDelay                `json:"inflicted_delay"`
+	InflictedStatusConditions []InflictedStatus              `json:"inflicted_status_conditions"`
+	RemovedStatusConditions   []apiresource.NamedAPIResource `json:"removed_status_conditions"`
+	CopiedStatusConditions    []InflictedStatus              `json:"copied_status_conditions"`
+	StatChanges               []StatChange                   `json:"stat_changes"`
+	ModifierChanges           []ModifierChange               `json:"modifier_changes"`
 }
 
 func convertBattleInteraction(bi seedtypes.BattleInteraction) BattleInteraction {
@@ -60,16 +61,16 @@ func convertBattleInteraction(bi seedtypes.BattleInteraction) BattleInteraction 
 }
 
 type Damage struct {
-	AttackType      string            `json:"attack_type"`
-	DamageType      string            `json:"damage_type"`
-	HP              *ClassDamage      `json:"hp"`
-	MP              *ClassDamage      `json:"mp"`
-	CTB             *ClassDamage      `json:"ctb"`
-	Critical        *string           `json:"critical"`
-	CriticalPlusVal *int32            `json:"critical_plus_val,omitempty"`
-	IsPiercing      bool              `json:"is_piercing"`
-	BreakDmgLimit   *string           `json:"break_dmg_lmt"`
-	Element         *NamedAPIResource `json:"element"`
+	AttackType      string                        `json:"attack_type"`
+	DamageType      string                        `json:"damage_type"`
+	HP              *ClassDamage                  `json:"hp"`
+	MP              *ClassDamage                  `json:"mp"`
+	CTB             *ClassDamage                  `json:"ctb"`
+	Critical        *string                       `json:"critical"`
+	CriticalPlusVal *int32                        `json:"critical_plus_val,omitempty"`
+	IsPiercing      bool                          `json:"is_piercing"`
+	BreakDmgLimit   *string                       `json:"break_dmg_lmt"`
+	Element         *apiresource.NamedAPIResource `json:"element"`
 }
 
 func convertDamage(d seedtypes.Damage) Damage {
@@ -128,13 +129,13 @@ func convertInflictedDelay(id seedtypes.InflictedDelay) InflictedDelay {
 }
 
 type InflictedStatus struct {
-	StatusCondition NamedAPIResource `json:"status_condition"`
-	Probability     int32            `json:"probability"`
-	DurationType    string           `json:"duration_type"`
-	Amount          *int32           `json:"amount,omitempty"`
+	StatusCondition apiresource.NamedAPIResource `json:"status_condition"`
+	Probability     int32                        `json:"probability"`
+	DurationType    string                       `json:"duration_type"`
+	Amount          *int32                       `json:"amount,omitempty"`
 }
 
-func (is InflictedStatus) GetAPIResource() APIResource {
+func (is InflictedStatus) GetAPIResource() apiresource.APIResource {
 	return is.StatusCondition
 }
 
@@ -152,12 +153,12 @@ func convertInflictedStatus(status seedtypes.InflictedStatus) InflictedStatus {
 }
 
 type StatChange struct {
-	Stat            NamedAPIResource `json:"stat"`
-	CalculationType string           `json:"calculation_type"`
-	Value           float32          `json:"value"`
+	Stat            apiresource.NamedAPIResource `json:"stat"`
+	CalculationType string                       `json:"calculation_type"`
+	Value           float32                      `json:"value"`
 }
 
-func (sc StatChange) GetAPIResource() APIResource {
+func (sc StatChange) GetAPIResource() apiresource.APIResource {
 	return sc.Stat
 }
 
@@ -174,12 +175,12 @@ func convertStatChange(sc seedtypes.StatChange) StatChange {
 }
 
 type ModifierChange struct {
-	Modifier        NamedAPIResource `json:"modifier"`
-	CalculationType string           `json:"calculation_type"`
-	Value           float32          `json:"value"`
+	Modifier        apiresource.NamedAPIResource `json:"modifier"`
+	CalculationType string                       `json:"calculation_type"`
+	Value           float32                      `json:"value"`
 }
 
-func (mc ModifierChange) GetAPIResource() APIResource {
+func (mc ModifierChange) GetAPIResource() apiresource.APIResource {
 	return mc.Modifier
 }
 

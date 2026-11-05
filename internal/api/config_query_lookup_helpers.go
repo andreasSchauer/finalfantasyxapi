@@ -3,6 +3,7 @@ package api
 import (
 	"slices"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -13,15 +14,14 @@ func AssignDefaultParams(endpoint ts.EndpointName, eLookup, qLookup *map[ts.Quer
 	*qLookup = params
 }
 
-func AssignQueryParams[T seedtypes.Lookupable, R any, A APIResource](params []QueryParam, i *handlerInput[T, R, A], queryLookup *map[ts.QueryParamName]QueryParam) {
+func AssignQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []QueryParam, i *handlerInput[T, R, A], queryLookup *map[ts.QueryParamName]QueryParam) {
 	paramMap := completeQueryParams(params, *i)
 
 	i.queryLookup = paramMap
 	*queryLookup = paramMap
 }
 
-
-func completeQueryParams[T seedtypes.Lookupable, R any, A APIResource](params []QueryParam, i handlerInput[T, R, A]) map[ts.QueryParamName]QueryParam {
+func completeQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []QueryParam, i handlerInput[T, R, A]) map[ts.QueryParamName]QueryParam {
 	params = slices.Concat(params, Q.DefaultParamSlice)
 
 	if hasSimpleView(i.subsections) {

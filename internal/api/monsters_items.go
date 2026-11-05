@@ -1,22 +1,23 @@
 package api
 
 import (
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type MonsterItems struct {
-	DropChance          int32                             `json:"drop_chance"`
-	DropCondition       *string                           `json:"drop_condition,omitempty"`
-	StealCommon         *ResourceAmount[TypedAPIResource] `json:"steal_common"`
-	StealRare           *ResourceAmount[TypedAPIResource] `json:"steal_rare"`
-	DropCommon          *ResourceAmount[TypedAPIResource] `json:"drop_common"`
-	DropRare            *ResourceAmount[TypedAPIResource] `json:"drop_rare"`
-	SecondaryDropCommon *ResourceAmount[TypedAPIResource] `json:"secondary_drop_common"`
-	SecondaryDropRare   *ResourceAmount[TypedAPIResource] `json:"secondary_drop_rare"`
-	Bribe               *ResourceAmount[TypedAPIResource] `json:"bribe"`
-	OtherItemsCondition *string                           `json:"other_items_condition,omitempty"`
-	OtherItems          []PossibleItem                    `json:"other_items"`
+	DropChance          int32                                                     `json:"drop_chance"`
+	DropCondition       *string                                                   `json:"drop_condition,omitempty"`
+	StealCommon         *apiresource.ResourceAmount[apiresource.TypedAPIResource] `json:"steal_common"`
+	StealRare           *apiresource.ResourceAmount[apiresource.TypedAPIResource] `json:"steal_rare"`
+	DropCommon          *apiresource.ResourceAmount[apiresource.TypedAPIResource] `json:"drop_common"`
+	DropRare            *apiresource.ResourceAmount[apiresource.TypedAPIResource] `json:"drop_rare"`
+	SecondaryDropCommon *apiresource.ResourceAmount[apiresource.TypedAPIResource] `json:"secondary_drop_common"`
+	SecondaryDropRare   *apiresource.ResourceAmount[apiresource.TypedAPIResource] `json:"secondary_drop_rare"`
+	Bribe               *apiresource.ResourceAmount[apiresource.TypedAPIResource] `json:"bribe"`
+	OtherItemsCondition *string                                                   `json:"other_items_condition,omitempty"`
+	OtherItems          []PossibleItem                                            `json:"other_items"`
 }
 
 func (mi MonsterItems) IsZero() bool {

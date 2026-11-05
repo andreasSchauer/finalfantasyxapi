@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func routerIDOnly[T seedtypes.Lookupable, R any, A APIResource](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A]) {
+func routerIDOnly[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A]) {
 	i.usage = []string{"/{id}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
@@ -31,7 +32,7 @@ func routerIDOnly[T seedtypes.Lookupable, R any, A APIResource](w http.ResponseW
 	}
 }
 
-func routerNameID[T seedtypes.Lookupable, R any, A APIResource](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A]) {
+func routerNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A]) {
 	i.usage = []string{"/{id}", "/{name}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
@@ -54,7 +55,7 @@ func routerNameID[T seedtypes.Lookupable, R any, A APIResource](w http.ResponseW
 	}
 }
 
-func routerNameVersion[T seedtypes.Lookupable, R any, A APIResource](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A]) {
+func routerNameVersion[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerInput[T, R, A]) {
 	i.usage = []string{"/{id}", "/{name}", "/{name}/{version}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 

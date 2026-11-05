@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -12,7 +13,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getItemAbility(r *http.Request, i handlerInput[seedtypes.ItemAbility, ItemAbility, NamedAPIResource], id int32) (ItemAbility, error) {
+func getItemAbility(r *http.Request, i handlerInput[seedtypes.ItemAbility, ItemAbility, apiresource.NamedAPIResource], id int32) (ItemAbility, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return ItemAbility{}, err
@@ -43,7 +44,7 @@ func getItemAbility(r *http.Request, i handlerInput[seedtypes.ItemAbility, ItemA
 	return response, nil
 }
 
-func retrieveItemAbilities(r *http.Request, i handlerInput[seedtypes.ItemAbility, ItemAbility, NamedAPIResource]) ([]int32, error) {
+func retrieveItemAbilities(r *http.Request, i handlerInput[seedtypes.ItemAbility, ItemAbility, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

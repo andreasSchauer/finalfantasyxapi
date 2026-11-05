@@ -1,16 +1,17 @@
 package api
 
 import (
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func idToTypedAPIResource[T seedtypes.IsTyped, R any, A APIResource](i handlerInput[T, R, A], id int32) TypedAPIResource {
+func idToTypedAPIResource[T seedtypes.IsTyped, R any, A apiresource.APIResource](i handlerInput[T, R, A], id int32) apiresource.TypedAPIResource {
 	res, _ := lookup.GetResourceByID(id, i.objLookupID)
 	params := res.GetResParamsTyped()
 
-	return TypedAPIResource{
+	return apiresource.TypedAPIResource{
 		ID:            params.ID,
 		Name:          params.Name,
 		Version:       params.Version,
@@ -20,12 +21,12 @@ func idToTypedAPIResource[T seedtypes.IsTyped, R any, A APIResource](i handlerIn
 	}
 }
 
-func keyToTypedAPIResource[T seedtypes.IsTyped, R, K any, A APIResource](i handlerInput[T, R, A], key K) TypedAPIResource {
+func keyToTypedAPIResource[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i handlerInput[T, R, A], key K) apiresource.TypedAPIResource {
 	res, _ := lookup.GetResource(key, i.objLookup)
 	return idToTypedAPIResource(i, res.GetID())
 }
 
-func keyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A APIResource](i handlerInput[T, R, A], keyPtr *K) *TypedAPIResource {
+func keyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i handlerInput[T, R, A], keyPtr *K) *apiresource.TypedAPIResource {
 	if keyPtr == nil {
 		return nil
 	}
@@ -34,8 +35,8 @@ func keyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A APIResource](i
 	return &res
 }
 
-func keysToTypedAPIResources[T seedtypes.IsTyped, R, K any, A APIResource](i handlerInput[T, R, A], refs []K) []TypedAPIResource {
-	resources := []TypedAPIResource{}
+func keysToTypedAPIResources[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i handlerInput[T, R, A], refs []K) []apiresource.TypedAPIResource {
+	resources := []apiresource.TypedAPIResource{}
 
 	for _, ref := range refs {
 		resource := keyToTypedAPIResource(i, ref)

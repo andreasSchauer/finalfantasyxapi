@@ -1,16 +1,18 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+
 type CelestialWeapon struct {
-	ID            int32              `json:"id"`
-	Name          string             `json:"name"`
-	Formula       string             `json:"formula"`
-	Character     NamedAPIResource   `json:"character"`
-	Aeon          *NamedAPIResource  `json:"aeon"`
-	Equipment     NamedAPIResource   `json:"equipment"`
-	AutoAbilities []NamedAPIResource `json:"auto_abilities"`
-	Crest         NamedAPIResource   `json:"crest"`
-	Sigil         NamedAPIResource   `json:"sigil"`
-	WpnTreasure   UnnamedAPIResource `json:"wpn_treasure"`
-	CrestTreasure UnnamedAPIResource `json:"crest_treasure"`
-	SigilQuest    QuestAPIResource   `json:"sigil_quest"`
+	ID            int32                          `json:"id"`
+	Name          string                         `json:"name"`
+	Formula       string                         `json:"formula"`
+	Character     apiresource.NamedAPIResource   `json:"character"`
+	Aeon          *apiresource.NamedAPIResource  `json:"aeon"`
+	Equipment     apiresource.NamedAPIResource   `json:"equipment"`
+	AutoAbilities []apiresource.NamedAPIResource `json:"auto_abilities"`
+	Crest         apiresource.NamedAPIResource   `json:"crest"`
+	Sigil         apiresource.NamedAPIResource   `json:"sigil"`
+	WpnTreasure   apiresource.UnnamedAPIResource `json:"wpn_treasure"`
+	CrestTreasure apiresource.UnnamedAPIResource `json:"crest_treasure"`
+	SigilQuest    apiresource.QuestAPIResource   `json:"sigil_quest"`
 }

@@ -1,7 +1,8 @@
 package api
 
 import (
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -9,11 +10,11 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func idToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](i handlerInput[T, R, A], id int32) NamedAPIResource {
+func idToNamedAPIResource[T seedtypes.IsNamed, R any, A apiresource.APIResource](i handlerInput[T, R, A], id int32) apiresource.NamedAPIResource {
 	res, _ := lookup.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
 	params := res.GetResParamsNamed()
 
-	return NamedAPIResource{
+	return apiresource.NamedAPIResource{
 		ID:            params.ID,
 		Name:          params.Name,
 		Version:       params.Version,
@@ -22,8 +23,8 @@ func idToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](i handlerIn
 	}
 }
 
-// essentially parses name or name/version like a handler and then converts the id to a NamedAPIResource
-func nameToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](i handlerInput[T, R, A], name string, version *int32) NamedAPIResource {
+// essentially parses name or name/version like a handler and then converts the id to a apiresource.NamedAPIResource
+func nameToNamedAPIResource[T seedtypes.IsNamed, R any, A apiresource.APIResource](i handlerInput[T, R, A], name string, version *int32) apiresource.NamedAPIResource {
 	var parseResp parseResponse
 	switch version {
 	case nil:
@@ -35,7 +36,7 @@ func nameToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](i handler
 	return idToNamedAPIResource(i, parseResp.ID)
 }
 
-func namePtrToNamedAPIResPtr[T seedtypes.IsNamed, R any, A APIResource](i handlerInput[T, R, A], namePtr *string, version *int32) *NamedAPIResource {
+func namePtrToNamedAPIResPtr[T seedtypes.IsNamed, R any, A apiresource.APIResource](i handlerInput[T, R, A], namePtr *string, version *int32) *apiresource.NamedAPIResource {
 	if namePtr == nil {
 		return nil
 	}
@@ -44,8 +45,8 @@ func namePtrToNamedAPIResPtr[T seedtypes.IsNamed, R any, A APIResource](i handle
 	return &res
 }
 
-func namesToNamedAPIResources[T seedtypes.IsNamed, R any, A APIResource](i handlerInput[T, R, A], names []string) []NamedAPIResource {
-	resources := make([]NamedAPIResource, 0, len(names)) // put this into more high frequency places
+func namesToNamedAPIResources[T seedtypes.IsNamed, R any, A apiresource.APIResource](i handlerInput[T, R, A], names []string) []apiresource.NamedAPIResource {
+	resources := make([]apiresource.NamedAPIResource, 0, len(names)) // put this into more high frequency places
 
 	for _, name := range names {
 		resource := nameToNamedAPIResource(i, name, nil)
@@ -55,15 +56,15 @@ func namesToNamedAPIResources[T seedtypes.IsNamed, R any, A APIResource](i handl
 	return resources
 }
 
-func enumToNamedAPIResource(e enums.EnumResponse) NamedAPIResource {
-	return NamedAPIResource{
+func enumToNamedAPIResource(e enums.EnumResponse) apiresource.NamedAPIResource {
+	return apiresource.NamedAPIResource{
 		Name: string(e.Name),
 		URL:  ah.CreateEnumURL(e.Name),
 	}
 }
 
-func enumsToNamedAPIResources(enums []enums.EnumResponse) []NamedAPIResource {
-	resources := make([]NamedAPIResource, 0, len(enums))
+func enumsToNamedAPIResources(enums []enums.EnumResponse) []apiresource.NamedAPIResource {
+	resources := make([]apiresource.NamedAPIResource, 0, len(enums))
 
 	for _, enum := range enums {
 		resource := enumToNamedAPIResource(enum)
@@ -73,15 +74,15 @@ func enumsToNamedAPIResources(enums []enums.EnumResponse) []NamedAPIResource {
 	return resources
 }
 
-func endpointToNamedAPIResource(e ts.EndpointName) NamedAPIResource {
-	return NamedAPIResource{
+func endpointToNamedAPIResource(e ts.EndpointName) apiresource.NamedAPIResource {
+	return apiresource.NamedAPIResource{
 		Name: string(e),
 		URL:  ah.CreateListURL(e),
 	}
 }
 
-func endpointsToNamedAPIResources(endpoints []ts.EndpointName) []NamedAPIResource {
-	resources := make([]NamedAPIResource, 0, len(endpoints))
+func endpointsToNamedAPIResources(endpoints []ts.EndpointName) []apiresource.NamedAPIResource {
+	resources := make([]apiresource.NamedAPIResource, 0, len(endpoints))
 
 	for _, ep := range endpoints {
 		resource := endpointToNamedAPIResource(ep)
@@ -91,8 +92,8 @@ func endpointsToNamedAPIResources(endpoints []ts.EndpointName) []NamedAPIResourc
 	return resources
 }
 
-func refsToNamedAPIResources(refs []seedtypes.AbilityReference) []NamedAPIResource {
-	abilities := []NamedAPIResource{}
+func refsToNamedAPIResources(refs []seedtypes.AbilityReference) []apiresource.NamedAPIResource {
+	abilities := []apiresource.NamedAPIResource{}
 
 	for _, ref := range refs {
 		abilityRes := refToNamedAPIResource(ref)
@@ -102,8 +103,8 @@ func refsToNamedAPIResources(refs []seedtypes.AbilityReference) []NamedAPIResour
 	return abilities
 }
 
-func refToNamedAPIResource(ref seedtypes.AbilityReference) NamedAPIResource {
-	var res NamedAPIResource
+func refToNamedAPIResource(ref seedtypes.AbilityReference) apiresource.NamedAPIResource {
+	var res apiresource.NamedAPIResource
 
 	switch database.AbilityType(ref.AbilityType) {
 	case database.AbilityTypeMiscAbility:

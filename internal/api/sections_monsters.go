@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -34,7 +35,7 @@ func (m MonsterSimple) GetURL() string {
 	return m.URL
 }
 
-func createMonsterSimple(r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createMonsterSimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
 	i := E.Monsters
 	mon, _ := lookup.GetResourceByID(id, i.objLookupID)
 

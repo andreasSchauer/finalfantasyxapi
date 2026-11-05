@@ -1,11 +1,14 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+)
 
 type FoundEquipment struct {
-	EquipmentName    NamedAPIResource   `json:"name"`
-	Abilities        []NamedAPIResource `json:"abilities"`
-	EmptySlotsAmount int32              `json:"empty_slots_amount"`
+	EquipmentName    apiresource.NamedAPIResource   `json:"name"`
+	Abilities        []apiresource.NamedAPIResource `json:"abilities"`
+	EmptySlotsAmount int32                          `json:"empty_slots_amount"`
 }
 
 func convertFoundEquipment(fe seedtypes.TreasureEquipment) FoundEquipment {

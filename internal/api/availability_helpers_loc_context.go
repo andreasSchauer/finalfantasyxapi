@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -15,7 +16,7 @@ type locContextParams struct {
 	Type    sql.NullString
 }
 
-func getLocContextParams[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A]) (locContextParams, error) {
+func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A]) (locContextParams, error) {
 	avlType := AvlTypeSelf
 	var locContextID sql.NullInt32
 	var locContextType string

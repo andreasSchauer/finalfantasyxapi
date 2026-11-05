@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getLocation(r *http.Request, i handlerInput[seedtypes.Location, Location, NamedAPIResource], id int32) (Location, error) {
+func getLocation(r *http.Request, i handlerInput[seedtypes.Location, Location, apiresource.NamedAPIResource], id int32) (Location, error) {
 	location, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Location{}, err
@@ -32,7 +33,7 @@ func getLocation(r *http.Request, i handlerInput[seedtypes.Location, Location, N
 	return response, nil
 }
 
-func retrieveLocations(r *http.Request, i handlerInput[seedtypes.Location, Location, NamedAPIResource]) ([]int32, error) {
+func retrieveLocations(r *http.Request, i handlerInput[seedtypes.Location, Location, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -11,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getShop(r *http.Request, i handlerInput[seedtypes.Shop, Shop, UnnamedAPIResource], id int32) (Shop, error) {
+func getShop(r *http.Request, i handlerInput[seedtypes.Shop, Shop, apiresource.UnnamedAPIResource], id int32) (Shop, error) {
 	shop, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Shop{}, err
@@ -29,7 +30,7 @@ func getShop(r *http.Request, i handlerInput[seedtypes.Shop, Shop, UnnamedAPIRes
 	return response, nil
 }
 
-func retrieveShops(r *http.Request, i handlerInput[seedtypes.Shop, Shop, UnnamedAPIResource]) ([]int32, error) {
+func retrieveShops(r *http.Request, i handlerInput[seedtypes.Shop, Shop, apiresource.UnnamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

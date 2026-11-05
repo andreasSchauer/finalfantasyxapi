@@ -3,39 +3,27 @@ package api
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
-type SimpleResourceList struct {
-	ListParams
-	ParentResource APIResource      `json:"parent_resource,omitempty"`
-	Results        []SimpleResource `json:"results"`
-}
-
-func (l SimpleResourceList) GetListParams() ListParams {
-	return l.ListParams
-}
-
-func (l SimpleResourceList) GetResults() []SimpleResource {
-	return l.Results
-}
-
-func (i handlerInput[T, R, A]) toSimpleResourceList(r *http.Request, id int32, sectionName string, subsection Subsection) (SimpleResourceList, error) {
+func (i handlerInput[T, R, A]) toSimpleResourceList(r *http.Request, id int32, sectionName string, subsection Subsection) (apiresource.SimpleResourceList, error) {
 	dbIDs, err := subsection.dbQuery(r.Context(), id)
 	if err != nil {
-		return SimpleResourceList{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, i.resTypeSingle, id), err)
+		return apiresource.SimpleResourceList{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, i.resTypeSingle, id), err)
 	}
 
 	results, err := createSimpleResources(r, dbIDs, subsection)
 	if err != nil {
-		return SimpleResourceList{}, err
+		return apiresource.SimpleResourceList{}, err
 	}
 
-	listParams, shownResults, err := createPaginatedList(r, results)
+	listParams, shownResults, err := CreatePaginatedList(r, results)
 	if err != nil {
-		return SimpleResourceList{}, err
+		return apiresource.SimpleResourceList{}, err
 	}
 
-	subResList := SimpleResourceList{
+	subResList := apiresource.SimpleResourceList{
 		ListParams:     listParams,
 		ParentResource: i.idToResFunc(i, id),
 		Results:        shownResults,
@@ -44,8 +32,8 @@ func (i handlerInput[T, R, A]) toSimpleResourceList(r *http.Request, id int32, s
 	return subResList, nil
 }
 
-func createSimpleResources(r *http.Request, dbIDs []int32, subsection Subsection) ([]SimpleResource, error) {
-	subs := []SimpleResource{}
+func createSimpleResources(r *http.Request, dbIDs []int32, subsection Subsection) ([]apiresource.SimpleResource, error) {
+	subs := []apiresource.SimpleResource{}
 
 	if subsection.relationsFn != nil {
 		var err error

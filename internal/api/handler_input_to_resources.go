@@ -2,6 +2,8 @@ package api
 
 import (
 	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
 func (i handlerInput[T, R, A]) toAPIResources(IDs []int32) []A {
@@ -14,12 +16,12 @@ func (i handlerInput[T, R, A]) toAPIResources(IDs []int32) []A {
 	return resources
 }
 
-func (i handlerInput[T, R, A]) toAPIResList(r *http.Request, IDs []int32) (APIResourceList[A], error) {
+func (i handlerInput[T, R, A]) toAPIResList(r *http.Request, IDs []int32) (apiresource.APIResourceList[A], error) {
 	resources := i.toAPIResources(IDs)
 
 	resourceList, err := newAPIResourceList(r, resources)
 	if err != nil {
-		return APIResourceList[A]{}, err
+		return apiresource.APIResourceList[A]{}, err
 	}
 
 	return resourceList, nil

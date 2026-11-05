@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -10,7 +11,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, NamedAPIResource], id int32) (EquipmentName, error) {
+func getEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, apiresource.NamedAPIResource], id int32) (EquipmentName, error) {
 	equipment, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return EquipmentName{}, err
@@ -40,7 +41,7 @@ func getEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, Equip
 	return response, nil
 }
 
-func retrieveEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, NamedAPIResource]) ([]int32, error) {
+func retrieveEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

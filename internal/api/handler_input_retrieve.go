@@ -5,15 +5,16 @@ import (
 	"net/http"
 	"sync"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
 
-func (i handlerInput[T, R, A]) handleMultiple(r *http.Request, name string) (APIResourceList[A], error) {
+func (i handlerInput[T, R, A]) handleMultiple(r *http.Request, name string) (apiresource.APIResourceList[A], error) {
 	dbIDs, err := i.getMultipleQuery(r.Context(), name)
 	if err != nil {
-		return APIResourceList[A]{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'", i.resTypeSingle, name), err)
+		return apiresource.APIResourceList[A]{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'", i.resTypeSingle, name), err)
 	}
 
 	return i.toAPIResList(r, dbIDs)

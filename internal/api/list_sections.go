@@ -4,15 +4,16 @@ import (
 	"net/http"
 	"slices"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type SectionList struct {
-	ListParams
+	apiresource.ListParams
 	Results []string `json:"results"`
 }
 
-func (l SectionList) GetListParams() ListParams {
+func (l SectionList) GetListParams() apiresource.ListParams {
 	return l.ListParams
 }
 
@@ -24,7 +25,7 @@ func getSectionList(r *http.Request, sectionMap map[ts.SectionName]Subsection) (
 	}
 	slices.Sort(sectionNames)
 
-	listParams, sections, err := createPaginatedList(r, sectionNames)
+	listParams, sections, err := CreatePaginatedList(r, sectionNames)
 	if err != nil {
 		return SectionList{}, err
 	}

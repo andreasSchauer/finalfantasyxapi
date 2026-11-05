@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -24,7 +25,7 @@ func (t TreasureSimple) GetURL() string {
 	return t.URL
 }
 
-func createTreasureSimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createTreasureSimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.Treasures
 	treasure, _ := lookup.GetResourceByID(id, i.objLookupID)
 

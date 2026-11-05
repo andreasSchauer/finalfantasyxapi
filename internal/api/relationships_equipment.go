@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -73,15 +74,15 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 	return rel, nil
 }
 
-func getEquipmentTableRef(r *http.Request, ctx context.Context, queryParam QueryParam, equipment seedtypes.EquipmentName) (UnnamedAPIResource, error) {
+func getEquipmentTableRef(r *http.Request, ctx context.Context, queryParam QueryParam, equipment seedtypes.EquipmentName) (apiresource.UnnamedAPIResource, error) {
 	tables, err := E.EquipmentTables.dbGetRelations(ctx, equipment, config.Cfg.DB.GetEquipmentEquipmentTableIDs)
 	if err != nil {
-		return UnnamedAPIResource{}, err
+		return apiresource.UnnamedAPIResource{}, err
 	}
 
 	tableIdx, err := getTableIndex(r, queryParam, len(tables))
 	if err != nil {
-		return UnnamedAPIResource{}, err
+		return apiresource.UnnamedAPIResource{}, err
 	}
 	tableRef := tables[tableIdx]
 

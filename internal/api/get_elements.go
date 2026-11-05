@@ -3,10 +3,11 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getElement(r *http.Request, i handlerInput[seedtypes.Element, Element, NamedAPIResource], id int32) (Element, error) {
+func getElement(r *http.Request, i handlerInput[seedtypes.Element, Element, apiresource.NamedAPIResource], id int32) (Element, error) {
 	element, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Element{}, err
@@ -36,6 +37,6 @@ func getElement(r *http.Request, i handlerInput[seedtypes.Element, Element, Name
 	return response, nil
 }
 
-func retrieveElements(r *http.Request, i handlerInput[seedtypes.Element, Element, NamedAPIResource]) ([]int32, error) {
+func retrieveElements(r *http.Request, i handlerInput[seedtypes.Element, Element, apiresource.NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

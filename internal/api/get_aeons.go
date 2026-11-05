@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAeon(r *http.Request, i handlerInput[seedtypes.Aeon, Aeon, NamedAPIResource], id int32) (Aeon, error) {
+func getAeon(r *http.Request, i handlerInput[seedtypes.Aeon, Aeon, apiresource.NamedAPIResource], id int32) (Aeon, error) {
 	aeon, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Aeon{}, err
@@ -57,7 +58,7 @@ func getAeon(r *http.Request, i handlerInput[seedtypes.Aeon, Aeon, NamedAPIResou
 	return response, nil
 }
 
-func retrieveAeons(r *http.Request, i handlerInput[seedtypes.Aeon, Aeon, NamedAPIResource]) ([]int32, error) {
+func retrieveAeons(r *http.Request, i handlerInput[seedtypes.Aeon, Aeon, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

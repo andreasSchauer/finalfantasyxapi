@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"golang.org/x/sync/errgroup"
@@ -22,7 +23,7 @@ func (l LocationSimple) GetURL() string {
 	return l.URL
 }
 
-func createLocationSimple(r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createLocationSimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
 	i := E.Locations
 	location, _ := lookup.GetResourceByID(id, i.objLookupID)
 

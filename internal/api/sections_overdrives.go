@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -21,7 +22,7 @@ func (o OverdriveSimple) GetURL() string {
 	return o.URL
 }
 
-func createOverdriveSimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createOverdriveSimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.Overdrives
 	overdrive, _ := lookup.GetResourceByID(id, i.objLookupID)
 

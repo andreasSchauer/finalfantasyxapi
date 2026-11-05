@@ -1,17 +1,18 @@
 package api
 
 import (
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type Shop struct {
-	ID          int32           `json:"id"`
-	Area        AreaAPIResource `json:"area"`
-	Category    string          `json:"category"`
-	Notes       *string         `json:"notes,omitempty"`
-	PreAirship  *SubShop        `json:"pre_airship"`
-	PostAirship *SubShop        `json:"post_airship"`
+	ID          int32                       `json:"id"`
+	Area        apiresource.AreaAPIResource `json:"area"`
+	Category    string                      `json:"category"`
+	Notes       *string                     `json:"notes,omitempty"`
+	PreAirship  *SubShop                    `json:"pre_airship"`
+	PostAirship *SubShop                    `json:"post_airship"`
 }
 
 type SubShop struct {
@@ -27,8 +28,8 @@ func convertSubShop(ss seedtypes.SubShop) SubShop {
 }
 
 type ShopItem struct {
-	Item  NamedAPIResource `json:"item"`
-	Price int32            `json:"price"`
+	Item  apiresource.NamedAPIResource `json:"item"`
+	Price int32                        `json:"price"`
 }
 
 func convertShopItem(si seedtypes.ShopItem) ShopItem {

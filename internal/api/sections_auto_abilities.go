@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -34,7 +35,7 @@ func (a AutoAbilitySimple) GetURL() string {
 	return a.URL
 }
 
-func createAutoAbilitySimple(r *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createAutoAbilitySimple(r *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.AutoAbilities
 	autoAbility, _ := lookup.GetResourceByID(id, i.objLookupID)
 

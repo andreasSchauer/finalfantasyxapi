@@ -3,11 +3,12 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getOverdriveCommand(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, NamedAPIResource], id int32) (OverdriveCommand, error) {
+func getOverdriveCommand(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, apiresource.NamedAPIResource], id int32) (OverdriveCommand, error) {
 	command, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return OverdriveCommand{}, err
@@ -32,6 +33,6 @@ func getOverdriveCommand(r *http.Request, i handlerInput[seedtypes.OverdriveComm
 	return response, nil
 }
 
-func retrieveOverdriveCommands(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, NamedAPIResource]) ([]int32, error) {
+func retrieveOverdriveCommands(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, apiresource.NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

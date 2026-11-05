@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -31,7 +32,7 @@ func (i handlerInput[T, R, A]) handleSubsection(w http.ResponseWriter, r *http.R
 	setLimitMax(r, q)
 
 	// if a subsection refers to the resource itself (/endpoint/{id}/simple, or /aeons/{id}/stats),
-	// it doesn't need a db query and can create a SimpleResource with the given id,
+	// it doesn't need a db query and can create a apiresource.SimpleResource with the given id,
 	// instead of querying the db for relations of the given id
 	if subsection.dbQuery == nil {
 		if subsection.relationsFn != nil {
@@ -120,12 +121,12 @@ func (i handlerInput[T, R, A]) handleSimple(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	listParams, shownResources, err := createPaginatedList(r, resources)
+	listParams, shownResources, err := CreatePaginatedList(r, resources)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	subResList := SimpleResourceList{
+	subResList := apiresource.SimpleResourceList{
 		ListParams: listParams,
 		Results:    shownResources,
 	}

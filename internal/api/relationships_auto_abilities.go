@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -12,7 +13,7 @@ import (
 func getAutoAbilityRelationships(r *http.Request, autoAbility seedtypes.AutoAbility) (AutoAbility, error) {
 	var rel AutoAbility
 	g, ctx := errgroup.WithContext(r.Context())
-	var monsterItems []NamedAPIResource
+	var monsterItems []apiresource.NamedAPIResource
 
 	availabilityParams, err := E.AutoAbilities.queryAvlRelGetParams(r, autoAbility.ID)
 	if err != nil {

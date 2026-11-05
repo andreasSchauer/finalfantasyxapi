@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -33,7 +34,7 @@ type biReplacement struct {
 	DamageFormula  *string
 }
 
-func applyUser[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], ability userAbility, queryName ts.QueryParamName) ([]BattleInteraction, error) {
+func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], ability userAbility, queryName ts.QueryParamName) ([]BattleInteraction, error) {
 	repl, err := getUnitRepl(r, i, queryName)
 	if queryIsEmpty(err) {
 		return ability.getBattleInteractions(), nil
@@ -52,7 +53,7 @@ func applyUser[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i 
 	return battleInteractions, nil
 }
 
-func getUnitRepl[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], queryName ts.QueryParamName) (unitRepl, error) {
+func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], queryName ts.QueryParamName) (unitRepl, error) {
 	queryParamUser := i.queryLookup[queryName]
 	queryParamBomb := i.queryLookup[ts.QpnBombWpn]
 	queryParamCelestialWpn := i.queryLookup[ts.QpnCelestialWeapon]

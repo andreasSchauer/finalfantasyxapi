@@ -1,12 +1,14 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+
 type OverdriveCommand struct {
-	ID          int32              `json:"id"`
-	Name        string             `json:"name"`
-	Description string             `json:"description"`
-	Rank        int32              `json:"rank"`
-	User        NamedAPIResource   `json:"user"`
-	Topmenu     *NamedAPIResource  `json:"topmenu"`
-	OpenSubmenu NamedAPIResource   `json:"open_submenu"`
-	Overdrives  []NamedAPIResource `json:"overdrives"`
+	ID          int32                          `json:"id"`
+	Name        string                         `json:"name"`
+	Description string                         `json:"description"`
+	Rank        int32                          `json:"rank"`
+	User        apiresource.NamedAPIResource   `json:"user"`
+	Topmenu     *apiresource.NamedAPIResource  `json:"topmenu"`
+	OpenSubmenu apiresource.NamedAPIResource   `json:"open_submenu"`
+	Overdrives  []apiresource.NamedAPIResource `json:"overdrives"`
 }

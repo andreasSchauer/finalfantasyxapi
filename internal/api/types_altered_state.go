@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -28,16 +29,16 @@ func getAlteredStatesAlterations(states []AlteredState) []AlteredState {
 }
 
 type Alt struct {
-	AlterationType   database.AlterationType `json:"alteration_type"`
-	Distance         *int32                  `json:"distance,omitempty"`
-	Properties       []NamedAPIResource      `json:"properties,omitempty"`
-	AutoAbilities    []NamedAPIResource      `json:"auto_abilities,omitempty"`
-	BaseStats        []BaseStat              `json:"base_stats,omitempty"`
-	ElemResists      []ElementalResist       `json:"elem_resists,omitempty"`
-	StatusImmunities []NamedAPIResource      `json:"status_immunities,omitempty"`
-	StatusResists    []StatusResist          `json:"status_resists,omitempty"`
-	AddedStatus      *InflictedStatus        `json:"added_status_condition,omitempty"`
-	RemovedStatus    *NamedAPIResource       `json:"removed_status_condition,omitempty"`
+	AlterationType   database.AlterationType        `json:"alteration_type"`
+	Distance         *int32                         `json:"distance,omitempty"`
+	Properties       []apiresource.NamedAPIResource `json:"properties,omitempty"`
+	AutoAbilities    []apiresource.NamedAPIResource `json:"auto_abilities,omitempty"`
+	BaseStats        []BaseStat                     `json:"base_stats,omitempty"`
+	ElemResists      []ElementalResist              `json:"elem_resists,omitempty"`
+	StatusImmunities []apiresource.NamedAPIResource `json:"status_immunities,omitempty"`
+	StatusResists    []StatusResist                 `json:"status_resists,omitempty"`
+	AddedStatus      *InflictedStatus               `json:"added_status_condition,omitempty"`
+	RemovedStatus    *apiresource.NamedAPIResource  `json:"removed_status_condition,omitempty"`
 }
 
 func (c *Alt) IsZero() bool {

@@ -4,7 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -78,8 +79,8 @@ func getCharacterClstlFormula(char Character) *string {
 	return &weapon.Formula
 }
 
-func getCharacterModeAmts(char seedtypes.Character) []ResourceAmount[NamedAPIResource] {
-	resAmts := []ResourceAmount[NamedAPIResource]{}
+func getCharacterModeAmts(char seedtypes.Character) []apiresource.ResourceAmount[apiresource.NamedAPIResource] {
+	resAmts := []apiresource.ResourceAmount[apiresource.NamedAPIResource]{}
 
 	if char.IsStoryBased {
 		return resAmts
@@ -97,12 +98,12 @@ func getCharacterModeAmts(char seedtypes.Character) []ResourceAmount[NamedAPIRes
 	return resAmts
 }
 
-func getCharModeAmount(char seedtypes.Character, id int32) (ResourceAmount[NamedAPIResource], error) {
+func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.ResourceAmount[apiresource.NamedAPIResource], error) {
 	i := E.OverdriveModes
 
 	mode, _ := lookup.GetResourceByID(id, i.objLookupID)
 	if len(mode.ActionsToLearn) == 0 {
-		return ResourceAmount[NamedAPIResource]{}, errs.ErrContinue
+		return apiresource.ResourceAmount[apiresource.NamedAPIResource]{}, errs.ErrContinue
 	}
 
 	amount := mode.ActionsToLearn[char.GetID()-1].Amount

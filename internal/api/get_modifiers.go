@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getModifier(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, NamedAPIResource], id int32) (Modifier, error) {
+func getModifier(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, apiresource.NamedAPIResource], id int32) (Modifier, error) {
 	modifier, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Modifier{}, err
@@ -39,7 +40,7 @@ func getModifier(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, N
 	return response, nil
 }
 
-func retrieveModifiers(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, NamedAPIResource]) ([]int32, error) {
+func retrieveModifiers(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

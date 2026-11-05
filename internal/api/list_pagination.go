@@ -6,28 +6,23 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type ListParams struct {
-	Count    int     `json:"count"`
-	Previous *string `json:"previous"`
-	Next     *string `json:"next"`
-}
-
-func createPaginatedList[T any](r *http.Request, items []T) (ListParams, []T, error) {
+func CreatePaginatedList[T any](r *http.Request, items []T) (apiresource.ListParams, []T, error) {
 	queryParamOffset := Q.DefaultParams[ts.QpnOffset]
 	queryParamLimit := Q.DefaultParams[ts.QpnLimit]
 
 	offset, err := queryParamOffset.parseInt(r)
 	if err != nil {
-		return ListParams{}, nil, err
+		return apiresource.ListParams{}, nil, err
 	}
 
 	limit, err := queryParamLimit.parseInt(r)
 	if err != nil {
-		return ListParams{}, nil, err
+		return apiresource.ListParams{}, nil, err
 	}
 	if limit == 0 {
 		limit = *queryParamLimit.DefaultVal
@@ -35,10 +30,10 @@ func createPaginatedList[T any](r *http.Request, items []T) (ListParams, []T, er
 
 	size := len(items)
 
-	listParams := ListParams{
+	listParams := apiresource.ListParams{
 		Count:    size,
-		Previous: createPreviousURL(r, offset, limit),
-		Next:     createNextURL(r, offset, limit, len(items)),
+		Previous: CreatePreviousURL(r, offset, limit),
+		Next:     CreateNextURL(r, offset, limit, len(items)),
 	}
 
 	if size == 0 {
@@ -46,7 +41,7 @@ func createPaginatedList[T any](r *http.Request, items []T) (ListParams, []T, er
 	}
 
 	if offset >= size {
-		return ListParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("offset must be smaller than number of resources (%d)", size), err)
+		return apiresource.ListParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("offset must be smaller than number of resources (%d)", size), err)
 	}
 
 	upperLimit := min(offset+limit, size)
@@ -55,7 +50,7 @@ func createPaginatedList[T any](r *http.Request, items []T) (ListParams, []T, er
 	return listParams, shownResources, nil
 }
 
-func createPreviousURL(r *http.Request, offset, limit int) *string {
+func CreatePreviousURL(r *http.Request, offset, limit int) *string {
 	if offset == 0 {
 		return nil
 	}
@@ -75,7 +70,7 @@ func createPreviousURL(r *http.Request, offset, limit int) *string {
 	return &previousURL
 }
 
-func createNextURL(r *http.Request, offset, limit, size int) *string {
+func CreateNextURL(r *http.Request, offset, limit, size int) *string {
 	nextOffset := offset + limit
 
 	if nextOffset >= size {

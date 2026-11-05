@@ -3,16 +3,17 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type QueryParameterList struct {
-	ListParams
+	apiresource.ListParams
 	Results []QueryParam `json:"results"`
 }
 
-func (l QueryParameterList) GetListParams() ListParams {
+func (l QueryParameterList) GetListParams() apiresource.ListParams {
 	return l.ListParams
 }
 
@@ -22,7 +23,7 @@ func getQueryParamList(r *http.Request, endpoint ts.EndpointName, queryLookup ma
 	queryParams = getAllowedResources(endpoint, queryParams)
 	queryParams = getAllowedValuesFromTypes(queryParams)
 
-	listParams, shownResources, err := createPaginatedList(r, queryParams)
+	listParams, shownResources, err := CreatePaginatedList(r, queryParams)
 	if err != nil {
 		return QueryParameterList{}, err
 	}

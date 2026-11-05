@@ -3,14 +3,15 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getQuest(r *http.Request, i handlerInput[seedtypes.Quest, Quest, QuestAPIResource], id int32) (Quest, error) {
+func getQuest(r *http.Request, i handlerInput[seedtypes.Quest, Quest, apiresource.QuestAPIResource], id int32) (Quest, error) {
 	quest, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Quest{}, err
@@ -29,7 +30,7 @@ func getQuest(r *http.Request, i handlerInput[seedtypes.Quest, Quest, QuestAPIRe
 	return response, nil
 }
 
-func retrieveQuests(r *http.Request, i handlerInput[seedtypes.Quest, Quest, QuestAPIResource]) ([]int32, error) {
+func retrieveQuests(r *http.Request, i handlerInput[seedtypes.Quest, Quest, apiresource.QuestAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

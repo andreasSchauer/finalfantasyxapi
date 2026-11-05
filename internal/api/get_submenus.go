@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource], id int32) (Submenu, error) {
+func getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, apiresource.NamedAPIResource], id int32) (Submenu, error) {
 	submenu, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Submenu{}, err
@@ -34,7 +35,7 @@ func getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, Name
 	return response, nil
 }
 
-func retrieveSubmenus(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, NamedAPIResource]) ([]int32, error) {
+func retrieveSubmenus(r *http.Request, i handlerInput[seedtypes.Submenu, Submenu, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"golang.org/x/sync/errgroup"
@@ -28,7 +29,7 @@ func (a AreaSimple) GetURL() string {
 	return a.URL
 }
 
-func createAreaSimple(r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createAreaSimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
 	i := E.Areas
 	area, _ := lookup.GetResourceByID(id, i.objLookupID)
 

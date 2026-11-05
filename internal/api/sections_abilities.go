@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -38,7 +39,7 @@ func (a PlayerAbilitySimple) GetURL() string {
 	return a.URL
 }
 
-func createAbilitySimple(r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createAbilitySimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
 	i := E.Abilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 	typeStr := string(ability.Type)
@@ -57,7 +58,7 @@ func createAbilitySimple(r *http.Request, id int32, subsection Subsection) (Simp
 	return abilitySimple, nil
 }
 
-func createEnemyAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createEnemyAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.EnemyAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -74,7 +75,7 @@ func createEnemyAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleRe
 	return abilitySimple, nil
 }
 
-func createItemAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createItemAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.ItemAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -91,7 +92,7 @@ func createItemAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleRes
 	return abilitySimple, nil
 }
 
-func createOverdriveAbilitySimple(r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createOverdriveAbilitySimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
 	i := E.OverdriveAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -108,7 +109,7 @@ func createOverdriveAbilitySimple(r *http.Request, id int32, subsection Subsecti
 	return abilitySimple, nil
 }
 
-func createPlayerAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createPlayerAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.PlayerAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -126,7 +127,7 @@ func createPlayerAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleR
 	return playerAbilitySimple, nil
 }
 
-func createTriggerCommandSimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createTriggerCommandSimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.TriggerCommands
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
@@ -143,7 +144,7 @@ func createTriggerCommandSimple(_ *http.Request, id int32, _ Subsection) (Simple
 	return abilitySimple, nil
 }
 
-func createMiscAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, error) {
+func createMiscAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.MiscAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 

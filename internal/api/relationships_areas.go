@@ -4,19 +4,20 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
 type AreaConnection struct {
-	Area           AreaAPIResource `json:"area"`
-	ConnectionType string          `json:"connection_type"`
-	IsStoryBased   bool            `json:"is_story_based"`
-	Notes          *string         `json:"notes,omitempty"`
+	Area           apiresource.AreaAPIResource `json:"area"`
+	ConnectionType string                      `json:"connection_type"`
+	IsStoryBased   bool                        `json:"is_story_based"`
+	Notes          *string                     `json:"notes,omitempty"`
 }
 
-func (ac AreaConnection) GetAPIResource() APIResource {
+func (ac AreaConnection) GetAPIResource() apiresource.APIResource {
 	return ac.Area
 }
 

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -106,7 +107,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 	return rel, nil
 }
 
-func getMonItemAmts(monsters []NamedAPIResource, itemName string) []MonItemAmts {
+func getMonItemAmts(monsters []apiresource.NamedAPIResource, itemName string) []MonItemAmts {
 	monItemAmts := []MonItemAmts{}
 
 	for _, monster := range monsters {

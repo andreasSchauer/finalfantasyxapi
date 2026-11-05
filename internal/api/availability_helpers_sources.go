@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -33,7 +34,7 @@ func reqsAreZero(reqs []string, srcType ViewSourceType) bool {
 	return len(reqs) == 1 && reqs[0] == string(srcType)
 }
 
-func getLocBasedSources[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], srcType ViewSourceType) (locBasedSources, error) {
+func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], srcType ViewSourceType) (locBasedSources, error) {
 	reqs := []string{string(srcType)}
 	excls := []string{}
 
@@ -108,7 +109,7 @@ type shopSources struct {
 	EmptySlots      []int32
 }
 
-func getShopSources[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A]) (shopSources, error) {
+func getShopSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A]) (shopSources, error) {
 	avlType := AvlTypeSelf
 	reqs := []string{}
 	excls := []string{}
@@ -163,7 +164,7 @@ func getShopSources[T seedtypes.Lookupable, R any, A APIResource](r *http.Reques
 	return sources, nil
 }
 
-func parseBoolSources[T seedtypes.Lookupable, R any, A APIResource](r *http.Request, i handlerInput[T, R, A], reqs, excls []string, sourceMap map[ts.QueryParamName]string) ([]string, []string, error) {
+func parseBoolSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], reqs, excls []string, sourceMap map[ts.QueryParamName]string) ([]string, []string, error) {
 	for queryName := range sourceMap {
 		b, err := i.queryLookup[queryName].parseBool(r)
 		if errExceptEmptyQuery(err) {

@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"golang.org/x/sync/errgroup"
@@ -23,7 +24,7 @@ func (s SublocationSimple) GetURL() string {
 	return s.URL
 }
 
-func createSublocationSimple(r *http.Request, id int32, subsection Subsection) (SimpleResource, error) {
+func createSublocationSimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
 	i := E.Sublocations
 	sublocation, _ := lookup.GetResourceByID(id, i.objLookupID)
 

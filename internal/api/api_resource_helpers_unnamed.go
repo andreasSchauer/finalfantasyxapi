@@ -1,16 +1,17 @@
 package api
 
 import (
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func idToUnnamedAPIResource[T seedtypes.IsUnnamed, R any, A APIResource](i handlerInput[T, R, A], id int32) UnnamedAPIResource {
+func idToUnnamedAPIResource[T seedtypes.IsUnnamed, R any, A apiresource.APIResource](i handlerInput[T, R, A], id int32) apiresource.UnnamedAPIResource {
 	res, _ := lookup.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
 	params := res.GetResParamsUnnamed()
 
-	return UnnamedAPIResource{
+	return apiresource.UnnamedAPIResource{
 		ID:  params.ID,
 		URL: ah.CreateResourceURL(i.Endpoint, params.ID),
 	}

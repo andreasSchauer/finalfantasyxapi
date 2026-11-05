@@ -3,27 +3,28 @@ package api
 import (
 	"context"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
 type LocRel struct {
-	Characters []NamedAPIResource   `json:"characters"`
-	Aeons      []NamedAPIResource   `json:"aeons"`
-	Shops      []UnnamedAPIResource `json:"shops"`
-	Treasures  []UnnamedAPIResource `json:"treasures"`
-	Monsters   []NamedAPIResource   `json:"monsters"`
-	Formations []UnnamedAPIResource `json:"monster_formations"`
-	Quests     []QuestAPIResource   `json:"quests"`
-	Music      *LocBasedMusic       `json:"music"`
-	FMVs       []NamedAPIResource   `json:"fmvs"`
+	Characters []apiresource.NamedAPIResource   `json:"characters"`
+	Aeons      []apiresource.NamedAPIResource   `json:"aeons"`
+	Shops      []apiresource.UnnamedAPIResource `json:"shops"`
+	Treasures  []apiresource.UnnamedAPIResource `json:"treasures"`
+	Monsters   []apiresource.NamedAPIResource   `json:"monsters"`
+	Formations []apiresource.UnnamedAPIResource `json:"monster_formations"`
+	Quests     []apiresource.QuestAPIResource   `json:"quests"`
+	Music      *LocBasedMusic                   `json:"music"`
+	FMVs       []apiresource.NamedAPIResource   `json:"fmvs"`
 }
 
 type LocBasedMusic struct {
-	BackgroundMusic []NamedAPIResource `json:"background_music"`
-	Cues            []NamedAPIResource `json:"cues"`
-	FMVs            []NamedAPIResource `json:"fmvs"`
-	BossMusic       []NamedAPIResource `json:"boss_fights"`
+	BackgroundMusic []apiresource.NamedAPIResource `json:"background_music"`
+	Cues            []apiresource.NamedAPIResource `json:"cues"`
+	FMVs            []apiresource.NamedAPIResource `json:"fmvs"`
+	BossMusic       []apiresource.NamedAPIResource `json:"boss_fights"`
 }
 
 func (m LocBasedMusic) IsZero() bool {

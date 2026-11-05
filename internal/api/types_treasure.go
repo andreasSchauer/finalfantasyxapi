@@ -1,14 +1,16 @@
 package api
 
+import "github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+
 type Treasure struct {
-	ID              int32                              `json:"id"`
-	Area            AreaAPIResource                    `json:"area"`
-	Availability    string			                   `json:"availability"`
-	IsAnimaTreasure bool                               `json:"is_anima_treasure"`
-	Notes           *string                            `json:"notes,omitempty"`
-	TreasureType    string                             `json:"treasure_type"`
-	LootType        string			                   `json:"loot_type"`
-	GilAmount       *int32                             `json:"gil_amount,omitempty"`
-	Items           []ResourceAmount[TypedAPIResource] `json:"items,omitempty"`
-	Equipment       *FoundEquipment                    `json:"equipment,omitempty"`
+	ID              int32                                                      `json:"id"`
+	Area            apiresource.AreaAPIResource                                `json:"area"`
+	Availability    string                                                     `json:"availability"`
+	IsAnimaTreasure bool                                                       `json:"is_anima_treasure"`
+	Notes           *string                                                    `json:"notes,omitempty"`
+	TreasureType    string                                                     `json:"treasure_type"`
+	LootType        string                                                     `json:"loot_type"`
+	GilAmount       *int32                                                     `json:"gil_amount,omitempty"`
+	Items           []apiresource.ResourceAmount[apiresource.TypedAPIResource] `json:"items,omitempty"`
+	Equipment       *FoundEquipment                                            `json:"equipment,omitempty"`
 }

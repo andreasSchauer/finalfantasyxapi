@@ -1,15 +1,16 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type ElementalResist struct {
-	Element  NamedAPIResource `json:"element"`
-	Affinity string           `json:"affinity"`
+	Element  apiresource.NamedAPIResource `json:"element"`
+	Affinity string                       `json:"affinity"`
 }
 
-func (er ElementalResist) GetAPIResource() APIResource {
+func (er ElementalResist) GetAPIResource() apiresource.APIResource {
 	return er.Element
 }
 

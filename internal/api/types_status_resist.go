@@ -1,15 +1,16 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type StatusResist struct {
-	StatusCondition NamedAPIResource `json:"status_condition"`
-	Resistance      int32            `json:"resistance"`
+	StatusCondition apiresource.NamedAPIResource `json:"status_condition"`
+	Resistance      int32                        `json:"resistance"`
 }
 
-func (sr StatusResist) GetAPIResource() APIResource {
+func (sr StatusResist) GetAPIResource() apiresource.APIResource {
 	return sr.StatusCondition
 }
 
@@ -20,7 +21,7 @@ func convertStatusResist(sr seedtypes.StatusResist) StatusResist {
 	}
 }
 
-func newStatusResist(res NamedAPIResource, resistance int32) StatusResist {
+func newStatusResist(res apiresource.NamedAPIResource, resistance int32) StatusResist {
 	return StatusResist{
 		StatusCondition: res,
 		Resistance:      resistance,
@@ -39,8 +40,8 @@ func (sr StatusResist) GetVal() int32 {
 	return sr.Resistance
 }
 
-func (sr StatusResist) ToResAmount() ResourceAmount[NamedAPIResource] {
-	return ResourceAmount[NamedAPIResource]{
+func (sr StatusResist) ToResAmount() apiresource.ResourceAmount[apiresource.NamedAPIResource] {
+	return apiresource.ResourceAmount[apiresource.NamedAPIResource]{
 		Resource: sr.StatusCondition,
 		Amount:   sr.Resistance,
 	}

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -11,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerUnit, TypedAPIResource], id int32) (PlayerUnit, error) {
+func getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerUnit, apiresource.TypedAPIResource], id int32) (PlayerUnit, error) {
 	unit, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return PlayerUnit{}, err
@@ -60,7 +61,7 @@ func getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerU
 	return response, nil
 }
 
-func retrievePlayerUnits(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerUnit, TypedAPIResource]) ([]int32, error) {
+func retrievePlayerUnits(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerUnit, apiresource.TypedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

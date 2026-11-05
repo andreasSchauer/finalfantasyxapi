@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -11,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMonster(r *http.Request, i handlerInput[seedtypes.Monster, Monster, NamedAPIResource], id int32) (Monster, error) {
+func getMonster(r *http.Request, i handlerInput[seedtypes.Monster, Monster, apiresource.NamedAPIResource], id int32) (Monster, error) {
 	monster, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Monster{}, err
@@ -69,7 +70,7 @@ func getMonster(r *http.Request, i handlerInput[seedtypes.Monster, Monster, Name
 	return completeMonsterResponse(r, response)
 }
 
-func retrieveMonsters(r *http.Request, i handlerInput[seedtypes.Monster, Monster, NamedAPIResource]) ([]int32, error) {
+func retrieveMonsters(r *http.Request, i handlerInput[seedtypes.Monster, Monster, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

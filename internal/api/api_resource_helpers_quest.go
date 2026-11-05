@@ -1,13 +1,14 @@
 package api
 
 import (
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](i handlerInput[T, R, A], id int32) QuestAPIResource {
+func idToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i handlerInput[T, R, A], id int32) apiresource.QuestAPIResource {
 	questLookup, _ := lookup.GetResourceByID(id, i.objLookupID)
 	params := questLookup.GetResParamsQuest()
 
@@ -15,7 +16,7 @@ func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](i handlerIn
 	case string(database.QuestTypeSidequest):
 		sidequest, _ := lookup.GetResource(*params.Sidequest, lookup.L.Sidequests)
 
-		return QuestAPIResource{
+		return apiresource.QuestAPIResource{
 			ID:        params.ID,
 			Sidequest: sidequest.Name,
 			Subquest:  nil,
@@ -26,7 +27,7 @@ func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](i handlerIn
 		subquest, _ := lookup.GetResource(*params.Subquest, lookup.L.Subquests)
 		sidequest, _ := lookup.GetResourceByID(subquest.SidequestID, lookup.L.SidequestsID)
 
-		return QuestAPIResource{
+		return apiresource.QuestAPIResource{
 			ID:        params.ID,
 			Sidequest: sidequest.Name,
 			Subquest:  &subquest.Name,
@@ -34,10 +35,10 @@ func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](i handlerIn
 		}
 	}
 
-	return QuestAPIResource{}
+	return apiresource.QuestAPIResource{}
 }
 
-func questToQuestAPIResource(quest seedtypes.Quest) QuestAPIResource {
+func questToQuestAPIResource(quest seedtypes.Quest) apiresource.QuestAPIResource {
 	switch quest.Type {
 	case database.QuestTypeSidequest:
 		return nameToQuestAPIResource(E.Sidequests, quest.Name)
@@ -46,16 +47,16 @@ func questToQuestAPIResource(quest seedtypes.Quest) QuestAPIResource {
 		return nameToQuestAPIResource(E.Subquests, quest.Name)
 	}
 
-	return QuestAPIResource{}
+	return apiresource.QuestAPIResource{}
 }
 
-func nameToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](i handlerInput[T, R, A], name string) QuestAPIResource {
+func nameToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i handlerInput[T, R, A], name string) apiresource.QuestAPIResource {
 	quest, _ := lookup.GetResource(name, i.objLookup)
 	return idToQuestAPIResource(i, quest.GetID())
 }
 
-func namesToQuestAPIResources[T seedtypes.IsQuest, R any, A APIResource](i handlerInput[T, R, A], names []string) []QuestAPIResource {
-	resources := []QuestAPIResource{}
+func namesToQuestAPIResources[T seedtypes.IsQuest, R any, A apiresource.APIResource](i handlerInput[T, R, A], names []string) []apiresource.QuestAPIResource {
+	resources := []apiresource.QuestAPIResource{}
 
 	for _, name := range names {
 		resource := nameToQuestAPIResource(i, name)

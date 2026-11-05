@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getArea(r *http.Request, i handlerInput[seedtypes.Area, Area, AreaAPIResource], id int32) (Area, error) {
+func getArea(r *http.Request, i handlerInput[seedtypes.Area, Area, apiresource.AreaAPIResource], id int32) (Area, error) {
 	area, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Area{}, err
@@ -45,7 +46,7 @@ func getArea(r *http.Request, i handlerInput[seedtypes.Area, Area, AreaAPIResour
 	return response, nil
 }
 
-func retrieveAreas(r *http.Request, i handlerInput[seedtypes.Area, Area, AreaAPIResource]) ([]int32, error) {
+func retrieveAreas(r *http.Request, i handlerInput[seedtypes.Area, Area, apiresource.AreaAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

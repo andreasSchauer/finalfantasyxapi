@@ -3,16 +3,17 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type AgilityParams struct {
-	AgilityTier UnnamedAPIResource `json:"agility_tier"`
-	TickSpeed   int32              `json:"tick_speed"`
-	MinICV      *int32             `json:"min_icv"`
-	MaxICV      *int32             `json:"max_icv"`
+	AgilityTier apiresource.UnnamedAPIResource `json:"agility_tier"`
+	TickSpeed   int32                          `json:"tick_speed"`
+	MinICV      *int32                         `json:"min_icv"`
+	MaxICV      *int32                         `json:"max_icv"`
 }
 
 func getAgilityTierDB(r *http.Request, stats []BaseStat) (seedtypes.AgilityTier, error) {

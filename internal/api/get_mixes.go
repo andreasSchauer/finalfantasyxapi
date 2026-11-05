@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -10,7 +11,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource], id int32) (Mix, error) {
+func getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, apiresource.NamedAPIResource], id int32) (Mix, error) {
 	mix, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Mix{}, err
@@ -36,7 +37,7 @@ func getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource
 	return response, nil
 }
 
-func retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, Mix, NamedAPIResource]) ([]int32, error) {
+func retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, Mix, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

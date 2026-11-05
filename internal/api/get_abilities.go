@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -11,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, TypedAPIResource], id int32) (Ability, error) {
+func getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, apiresource.TypedAPIResource], id int32) (Ability, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Ability{}, err
@@ -39,7 +40,7 @@ func getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, Type
 	return response, nil
 }
 
-func retrieveAbilities(r *http.Request, i handlerInput[seedtypes.Ability, Ability, TypedAPIResource]) ([]int32, error) {
+func retrieveAbilities(r *http.Request, i handlerInput[seedtypes.Ability, Ability, apiresource.TypedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

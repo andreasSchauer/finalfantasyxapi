@@ -121,7 +121,7 @@ func applyYunaStats(r *http.Request, aeon Aeon, queryName ts.QueryParamName, all
 func calcAeonStats(aeon Aeon, yuna map[string]int32) []BaseStat {
 	baseStats := aeon.BaseStats
 	aVals, bVals := getAeonStatTables(aeon)
-	yunaFloat := resAmtMapToFloat(yuna)
+	yunaFloat := ResAmtMapToFloat(yuna)
 	yParameter := yParamCalc(yuna)
 
 	for i, baseStat := range baseStats {
@@ -138,11 +138,11 @@ func getAeonStatTables(aeon Aeon) (map[string]float64, map[string]float64) {
 
 	aValsSlice := E.Stats.toResAmtType(aeonLookup.BaseStats.AVals, newBaseStat)
 	aValsInt := GetResAmtTypeMap(aValsSlice)
-	aVals := resAmtMapToFloat(aValsInt)
+	aVals := ResAmtMapToFloat(aValsInt)
 
 	bValsSlice := E.Stats.toResAmtType(aeonLookup.BaseStats.BVals, newBaseStat)
 	bValsInt := GetResAmtTypeMap(bValsSlice)
-	bVals := resAmtMapToFloat(bValsInt)
+	bVals := ResAmtMapToFloat(bValsInt)
 
 	return aVals, bVals
 }

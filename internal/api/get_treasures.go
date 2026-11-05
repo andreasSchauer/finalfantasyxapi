@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -11,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getTreasure(r *http.Request, i handlerInput[seedtypes.Treasure, Treasure, UnnamedAPIResource], id int32) (Treasure, error) {
+func getTreasure(r *http.Request, i handlerInput[seedtypes.Treasure, Treasure, apiresource.UnnamedAPIResource], id int32) (Treasure, error) {
 	treasure, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Treasure{}, err
@@ -33,7 +34,7 @@ func getTreasure(r *http.Request, i handlerInput[seedtypes.Treasure, Treasure, U
 	return response, nil
 }
 
-func retrieveTreasures(r *http.Request, i handlerInput[seedtypes.Treasure, Treasure, UnnamedAPIResource]) ([]int32, error) {
+func retrieveTreasures(r *http.Request, i handlerInput[seedtypes.Treasure, Treasure, apiresource.UnnamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

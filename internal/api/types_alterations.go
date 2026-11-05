@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -17,18 +18,18 @@ type AltStateChange struct {
 }
 
 type AltStateGain struct {
-	Properties       []NamedAPIResource `json:"properties,omitempty"`
-	AutoAbilities    []NamedAPIResource `json:"auto_abilities,omitempty"`
-	StatusImmunities []NamedAPIResource `json:"status_immunities,omitempty"`
-	StatusResists    []StatusResist     `json:"status_resists,omitempty"`
-	Status           *InflictedStatus   `json:"status,omitempty"`
+	Properties       []apiresource.NamedAPIResource `json:"properties,omitempty"`
+	AutoAbilities    []apiresource.NamedAPIResource `json:"auto_abilities,omitempty"`
+	StatusImmunities []apiresource.NamedAPIResource `json:"status_immunities,omitempty"`
+	StatusResists    []StatusResist                 `json:"status_resists,omitempty"`
+	Status           *InflictedStatus               `json:"status,omitempty"`
 }
 
 type AltStateLoss struct {
-	Properties       []NamedAPIResource `json:"properties,omitempty"`
-	AutoAbilities    []NamedAPIResource `json:"auto_abilities,omitempty"`
-	StatusImmunities []NamedAPIResource `json:"status_immunities,omitempty"`
-	Status           *NamedAPIResource  `json:"status,omitempty"`
+	Properties       []apiresource.NamedAPIResource `json:"properties,omitempty"`
+	AutoAbilities    []apiresource.NamedAPIResource `json:"auto_abilities,omitempty"`
+	StatusImmunities []apiresource.NamedAPIResource `json:"status_immunities,omitempty"`
+	Status           *apiresource.NamedAPIResource  `json:"status,omitempty"`
 }
 
 func getAlterations(alts []Alt) Alterations {

@@ -3,11 +3,12 @@ package api
 import (
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getProperty(r *http.Request, i handlerInput[seedtypes.Property, Property, NamedAPIResource], id int32) (Property, error) {
+func getProperty(r *http.Request, i handlerInput[seedtypes.Property, Property, apiresource.NamedAPIResource], id int32) (Property, error) {
 	property, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Property{}, err
@@ -32,6 +33,6 @@ func getProperty(r *http.Request, i handlerInput[seedtypes.Property, Property, N
 	return response, nil
 }
 
-func retrieveProperties(r *http.Request, i handlerInput[seedtypes.Property, Property, NamedAPIResource]) ([]int32, error) {
+func retrieveProperties(r *http.Request, i handlerInput[seedtypes.Property, Property, apiresource.NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

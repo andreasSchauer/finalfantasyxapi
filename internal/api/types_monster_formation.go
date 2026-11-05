@@ -1,6 +1,9 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+)
 
 type MonsterFormation struct {
 	ID             int32   `json:"id"`
@@ -10,10 +13,10 @@ type MonsterFormation struct {
 	CanEscape      bool    `json:"can_escape"`
 	Notes          *string `json:"notes,omitempty"`
 	FormationLoot
-	BossMusic       *FormationBossSong                 `json:"boss_music,omitempty"`
-	Monsters        []ResourceAmount[NamedAPIResource] `json:"monsters"`
-	Areas           []EncounterArea                    `json:"areas"`
-	TriggerCommands []FormationTriggerCommand          `json:"trigger_commands"`
+	BossMusic       *FormationBossSong                                         `json:"boss_music,omitempty"`
+	Monsters        []apiresource.ResourceAmount[apiresource.NamedAPIResource] `json:"monsters"`
+	Areas           []EncounterArea                                            `json:"areas"`
+	TriggerCommands []FormationTriggerCommand                                  `json:"trigger_commands"`
 }
 
 type FormationLoot struct {
@@ -23,12 +26,12 @@ type FormationLoot struct {
 }
 
 type EncounterArea struct {
-	Area          AreaAPIResource `json:"area"`
-	Specification *string         `json:"specification"`
-	Availability  string          `json:"availability"`
+	Area          apiresource.AreaAPIResource `json:"area"`
+	Specification *string                     `json:"specification"`
+	Availability  string                      `json:"availability"`
 }
 
-func (ec EncounterArea) GetAPIResource() APIResource {
+func (ec EncounterArea) GetAPIResource() apiresource.APIResource {
 	return ec.Area
 }
 
@@ -41,13 +44,13 @@ func convertEncounterArea(ea seedtypes.EncounterArea) EncounterArea {
 }
 
 type FormationTriggerCommand struct {
-	Ability   NamedAPIResource   `json:"ability"`
-	Condition *string            `json:"condition"`
-	UseAmount *int32             `json:"use_amount"`
-	Users     []NamedAPIResource `json:"users"`
+	Ability   apiresource.NamedAPIResource   `json:"ability"`
+	Condition *string                        `json:"condition"`
+	UseAmount *int32                         `json:"use_amount"`
+	Users     []apiresource.NamedAPIResource `json:"users"`
 }
 
-func (tc FormationTriggerCommand) GetAPIResource() APIResource {
+func (tc FormationTriggerCommand) GetAPIResource() apiresource.APIResource {
 	return tc.Ability
 }
 
@@ -61,11 +64,11 @@ func convertFormationTriggerCommand(tc seedtypes.FormationTriggerCommand) Format
 }
 
 type FormationBossSong struct {
-	Song             NamedAPIResource `json:"song"`
-	CelebrateVictory bool             `json:"celebrate_victory"`
+	Song             apiresource.NamedAPIResource `json:"song"`
+	CelebrateVictory bool                         `json:"celebrate_victory"`
 }
 
-func (bs FormationBossSong) GetAPIResource() APIResource {
+func (bs FormationBossSong) GetAPIResource() apiresource.APIResource {
 	return bs.Song
 }
 

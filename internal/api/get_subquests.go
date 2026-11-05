@@ -3,12 +3,13 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, QuestAPIResource], id int32) (Subquest, error) {
+func getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, apiresource.QuestAPIResource], id int32) (Subquest, error) {
 	subquest, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return Subquest{}, err
@@ -31,7 +32,7 @@ func getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, Q
 	return response, nil
 }
 
-func retrieveSubquests(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, QuestAPIResource]) ([]int32, error) {
+func retrieveSubquests(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, apiresource.QuestAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

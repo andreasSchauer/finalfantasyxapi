@@ -1,7 +1,8 @@
 package api
 
 import (
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -62,13 +63,13 @@ func convertMonsterEquipmentSlotsChance(chance seedtypes.EquipmentSlotsChance) E
 }
 
 type EquipmentDrop struct {
-	AutoAbility NamedAPIResource   `json:"auto_ability"`
-	IsForced    bool               `json:"is_forced"`
-	ForcedChars []NamedAPIResource `json:"forced_characters"`
-	Probability *int32             `json:"probability,omitempty"`
+	AutoAbility apiresource.NamedAPIResource   `json:"auto_ability"`
+	IsForced    bool                           `json:"is_forced"`
+	ForcedChars []apiresource.NamedAPIResource `json:"forced_characters"`
+	Probability *int32                         `json:"probability,omitempty"`
 }
 
-func (ed EquipmentDrop) GetAPIResource() APIResource {
+func (ed EquipmentDrop) GetAPIResource() apiresource.APIResource {
 	return ed.AutoAbility.GetAPIResource()
 }
 

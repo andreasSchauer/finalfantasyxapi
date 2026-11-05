@@ -1,15 +1,16 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
 type PossibleItem struct {
-	ResourceAmount[TypedAPIResource]
+	apiresource.ResourceAmount[apiresource.TypedAPIResource]
 	Chance int32 `json:"chance"`
 }
 
-func (ps PossibleItem) GetAPIResource() APIResource {
+func (ps PossibleItem) GetAPIResource() apiresource.APIResource {
 	return ps.Resource.GetAPIResource()
 }
 

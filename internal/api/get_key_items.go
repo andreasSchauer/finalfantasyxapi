@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource], id int32) (KeyItem, error) {
+func getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, apiresource.NamedAPIResource], id int32) (KeyItem, error) {
 	keyItem, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return KeyItem{}, err
@@ -37,7 +38,7 @@ func getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, Name
 	return response, nil
 }
 
-func retrieveKeyItems(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, NamedAPIResource]) ([]int32, error) {
+func retrieveKeyItems(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

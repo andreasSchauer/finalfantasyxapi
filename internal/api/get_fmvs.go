@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getFMV(r *http.Request, i handlerInput[seedtypes.FMV, FMV, NamedAPIResource], id int32) (FMV, error) {
+func getFMV(r *http.Request, i handlerInput[seedtypes.FMV, FMV, apiresource.NamedAPIResource], id int32) (FMV, error) {
 	fmv, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
 		return FMV{}, err
@@ -27,7 +28,7 @@ func getFMV(r *http.Request, i handlerInput[seedtypes.FMV, FMV, NamedAPIResource
 	return response, nil
 }
 
-func retrieveFMVs(r *http.Request, i handlerInput[seedtypes.FMV, FMV, NamedAPIResource]) ([]int32, error) {
+func retrieveFMVs(r *http.Request, i handlerInput[seedtypes.FMV, FMV, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
