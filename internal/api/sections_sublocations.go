@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"golang.org/x/sync/errgroup"
@@ -31,12 +32,12 @@ func createSublocationSimple(r *http.Request, id int32, subsection Subsection) (
 
 	sublocationSimple := SublocationSimple{
 		ID:             sublocation.ID,
-		URL:            CreateResourceURL(i.Endpoint, id),
+		URL:            ah.CreateResourceURL(i.Endpoint, id),
 		ParentLocation: createSimpleRef(sublocation.LocationID, sublocation.Location, nil, nil),
 		Name:           sublocation.Name,
-		Shops:          ConvertObjSlice(shopIDs, idToShopLocSimple),
+		Shops:          ah.ConvertObjSlice(shopIDs, idToShopLocSimple),
 		Treasures:      getTreasuresLocSimple(id, subsection),
-		Monsters:       ConvertObjSlice(monsterIDs, idToMonsterSimpleString),
+		Monsters:       ah.ConvertObjSlice(monsterIDs, idToMonsterSimpleString),
 	}
 
 	return sublocationSimple, nil

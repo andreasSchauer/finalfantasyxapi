@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -26,12 +27,12 @@ func createOverdriveSimple(_ *http.Request, id int32, _ Subsection) (SimpleResou
 
 	overdriveSimple := OverdriveSimple{
 		ID:                 overdrive.ID,
-		URL:                CreateResourceURL(i.Endpoint, id),
+		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               overdrive.Name,
 		Version:            overdrive.Version,
 		Specification:      overdrive.Specification,
 		Rank:               overdrive.Rank,
-		OverdriveAbilities: ConvertObjSlice(overdrive.OverdriveAbilities, abilityRefString),
+		OverdriveAbilities: ah.ConvertObjSlice(overdrive.OverdriveAbilities, abilityRefString),
 	}
 
 	return overdriveSimple, nil

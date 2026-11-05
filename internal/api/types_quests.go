@@ -1,6 +1,7 @@
 package api
 
 import (
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -45,7 +46,7 @@ type QuestCompletion struct {
 func convertQuestCompletion(qc seedtypes.QuestCompletion) QuestCompletion {
 	return QuestCompletion{
 		Condition: qc.Condition,
-		Areas:     ConvertObjSlice(qc.Areas, convertCompletionArea),
+		Areas:     ah.ConvertObjSlice(qc.Areas, convertCompletionArea),
 		Reward:    E.AllItems.toResAmtFromName(qc.Reward),
 	}
 }

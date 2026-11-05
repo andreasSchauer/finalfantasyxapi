@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -41,7 +42,7 @@ func createMonsterSimple(r *http.Request, id int32, subsection Subsection) (Simp
 
 	monSimple := MonsterSimple{
 		ID:             mon.ID,
-		URL:            CreateResourceURL(i.Endpoint, id),
+		URL:            ah.CreateResourceURL(i.Endpoint, id),
 		Name:           mon.Name,
 		Version:        mon.Version,
 		Specification:  mon.Specification,
@@ -53,9 +54,9 @@ func createMonsterSimple(r *http.Request, id int32, subsection Subsection) (Simp
 		IsRepeatable:   mon.IsRepeatable,
 		CanBeCaptured:  mon.CanBeCaptured,
 		RonsoRages:     h.SliceOrNil(mon.RonsoRages),
-		Areas:          ConvertObjSlice(areaIDs, idToLocAreaString),
-		Items:          ConvertObjPtr(mon.Items, convertMonsterItemsSimple),
-		Equipment:      ConvertObjPtr(mon.Equipment, convertMonsterEquipmentSimple),
+		Areas:          ah.ConvertObjSlice(areaIDs, idToLocAreaString),
+		Items:          ah.ConvertObjPtr(mon.Items, convertMonsterItemsSimple),
+		Equipment:      ah.ConvertObjPtr(mon.Equipment, convertMonsterEquipmentSimple),
 	}
 
 	return monSimple, nil

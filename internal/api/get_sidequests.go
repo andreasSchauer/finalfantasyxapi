@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -24,7 +25,7 @@ func getSidequest(r *http.Request, i handlerInput[seedtypes.Sidequest, Sidequest
 		UntypedQuest: idToQuestAPIResource(E.Quests, sidequest.Quest.ID),
 		Availability: sidequest.Availability,
 		IsRepeatable: sidequest.IsRepeatable,
-		Completion:   ConvertObjPtr(sidequest.Completion, convertQuestCompletion),
+		Completion:   ah.ConvertObjPtr(sidequest.Completion, convertQuestCompletion),
 		Subquests:    subquests,
 	}
 

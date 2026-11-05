@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -33,7 +34,7 @@ func getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, NamedAP
 		TargetNodePosition: sphere.TargetNodePosition,
 		TargetNodeState:    sphere.TargetNodeState,
 		TargetableNodes:    sphere.TargetableNodes,
-		CreatedNode:        ConvertObjPtr(sphere.CreatedNode, convertCreatedNode),
+		CreatedNode:        ah.ConvertObjPtr(sphere.CreatedNode, convertCreatedNode),
 		Monsters:           rel.Monsters,
 		Treasures:          rel.Treasures,
 		Shops:              rel.Shops,

@@ -3,7 +3,7 @@ package apitest
 import (
 	"errors"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 )
 
 // checks if two standard-type values or pointers of a field are equal
@@ -183,7 +183,7 @@ func (test test) compPageURL(fieldName string, expPathPtr, gotURLPtr *string) {
 
 	if expPathPtr != nil {
 		expPath := *expPathPtr
-		expURL := api.CompleteTestURL(expPath)
+		expURL := ah.CompleteTestURL(expPath)
 		expURLPtr = &expURL
 	}
 

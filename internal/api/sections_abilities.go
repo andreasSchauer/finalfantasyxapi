@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -44,13 +45,13 @@ func createAbilitySimple(r *http.Request, id int32, subsection Subsection) (Simp
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(i.Endpoint, id),
+		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
 		Type:               &typeStr,
-		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
@@ -62,12 +63,12 @@ func createEnemyAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleRe
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(i.Endpoint, id),
+		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
@@ -79,12 +80,12 @@ func createItemAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleRes
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(i.Endpoint, id),
+		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
@@ -96,12 +97,12 @@ func createOverdriveAbilitySimple(r *http.Request, id int32, subsection Subsecti
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(i.Endpoint, id),
+		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
@@ -113,13 +114,13 @@ func createPlayerAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleR
 
 	playerAbilitySimple := PlayerAbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(i.Endpoint, id),
+		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
 		MpCost:             ability.MPCost,
-		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return playerAbilitySimple, nil
@@ -131,12 +132,12 @@ func createTriggerCommandSimple(_ *http.Request, id int32, _ Subsection) (Simple
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(i.Endpoint, id),
+		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil
@@ -148,12 +149,12 @@ func createMiscAbilitySimple(_ *http.Request, id int32, _ Subsection) (SimpleRes
 
 	abilitySimple := AbilitySimple{
 		ID:                 ability.ID,
-		URL:                CreateResourceURL(i.Endpoint, id),
+		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
 		Rank:               ability.Rank,
-		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteractionSimple),
 	}
 
 	return abilitySimple, nil

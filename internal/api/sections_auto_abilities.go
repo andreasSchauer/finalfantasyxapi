@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -39,22 +40,22 @@ func createAutoAbilitySimple(r *http.Request, id int32, _ Subsection) (SimpleRes
 
 	autoAbilitySimple := AutoAbilitySimple{
 		ID:                  autoAbility.ID,
-		URL:                 CreateResourceURL(i.Endpoint, id),
+		URL:                 ah.CreateResourceURL(i.Endpoint, id),
 		Name:                autoAbility.Name,
-		RequiredItem:        ConvertObjPtr(autoAbility.RequiredItem, convertItemAmountSimple),
+		RequiredItem:        ah.ConvertObjPtr(autoAbility.RequiredItem, convertItemAmountSimple),
 		ActivationCondition: autoAbility.ActivationCondition,
 		Counter:             autoAbility.Counter,
 		GradualRecovery:     autoAbility.GradualRecovery,
 		AutoItemUse:         h.SliceOrNil(autoAbility.AutoItemUse),
 		OnHitElement:        autoAbility.OnHitElement,
-		AddedElemResist:     ConvertObjPtr(autoAbility.AddedElemResist, convertElemResistSimple),
-		OnHitStatus:         ConvertObjPtr(autoAbility.OnHitStatus, convertInflictedStatusSimple),
+		AddedElemResist:     ah.ConvertObjPtr(autoAbility.AddedElemResist, convertElemResistSimple),
+		OnHitStatus:         ah.ConvertObjPtr(autoAbility.OnHitStatus, convertInflictedStatusSimple),
 		AddedStatusses:      h.SliceOrNil(autoAbility.AddedStatusses),
-		AddedStatusResists:  ConvertObjSliceOrNil(autoAbility.AddedStatusResists, convertStatusResistSimple),
+		AddedStatusResists:  ah.ConvertObjSliceOrNil(autoAbility.AddedStatusResists, convertStatusResistSimple),
 		AddedProperty:       autoAbility.AddedProperty,
 		ConversionTo:        autoAbility.ConversionTo,
-		StatChanges:         ConvertObjSliceOrNil(autoAbility.StatChanges, convertStatChangeSimple),
-		ModifierChanges:     ConvertObjSliceOrNil(autoAbility.ModifierChanges, convertModChangeSimple),
+		StatChanges:         ah.ConvertObjSliceOrNil(autoAbility.StatChanges, convertStatChangeSimple),
+		ModifierChanges:     ah.ConvertObjSliceOrNil(autoAbility.ModifierChanges, convertModChangeSimple),
 	}
 
 	return autoAbilitySimple, nil

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -24,9 +25,9 @@ func getEquipmentTable(r *http.Request, i handlerInput[seedtypes.EquipmentTable,
 		SpecificCharacter:       namePtrToNamedAPIResPtr(E.Characters, table.SpecificCharacter, nil),
 		Priority:                table.Priority,
 		RequiredAutoAbilities:   namesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities),
-		SelectableAutoAbilities: ConvertObjSlice(table.SelectableAutoAbilities, convertAbilityPool),
+		SelectableAutoAbilities: ah.ConvertObjSlice(table.SelectableAutoAbilities, convertAbilityPool),
 		RequiredSlots:           table.RequiredSlots,
-		Equipment:               ConvertObjSlice(table.EquipmentNames, convertEquipmentName),
+		Equipment:               ah.ConvertObjSlice(table.EquipmentNames, convertEquipmentName),
 	}
 
 	if table.SpecificCharacter != nil && table.Classification == string(database.EquipClassCelestialWeapon) {

@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -42,6 +43,6 @@ func idToUnnamedAPIResource[T seedtypes.IsUnnamed, R any, A APIResource](i handl
 
 	return UnnamedAPIResource{
 		ID:  params.ID,
-		URL: CreateResourceURL(i.Endpoint, params.ID),
+		URL: ah.CreateResourceURL(i.Endpoint, params.ID),
 	}
 }

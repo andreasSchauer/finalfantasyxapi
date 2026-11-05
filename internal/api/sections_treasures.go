@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -29,15 +30,15 @@ func createTreasureSimple(_ *http.Request, id int32, _ Subsection) (SimpleResour
 
 	treasureSimple := TreasureSimple{
 		ID:           treasure.ID,
-		URL:          CreateResourceURL(i.Endpoint, id),
+		URL:          ah.CreateResourceURL(i.Endpoint, id),
 		Area:         idToLocAreaString(treasure.AreaID),
 		Availability: treasure.Availability,
 		Notes:        treasure.Notes,
 		TreasureType: treasure.TreasureType,
 		LootType:     treasure.LootType,
 		GilAmount:    treasure.GilAmount,
-		Items:        ConvertObjSliceOrNil(treasure.Items, convertItemAmountSimple),
-		Equipment:    ConvertObjPtr(treasure.Equipment, convertEquipmentSimple),
+		Items:        ah.ConvertObjSliceOrNil(treasure.Items, convertItemAmountSimple),
+		Equipment:    ah.ConvertObjPtr(treasure.Equipment, convertEquipmentSimple),
 	}
 
 	return treasureSimple, nil

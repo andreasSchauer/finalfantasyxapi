@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -33,13 +34,13 @@ func convertBattleInteractionSimple(bi seedtypes.BattleInteraction) BattleIntera
 		HitAmount:                 bi.HitAmount,
 		Accuracy:                  convertAccuracySimple(bi.Accuracy),
 		AffectedBy:                h.SliceOrNil(bi.AffectedBy),
-		Damage:                    ConvertObjPtr(bi.Damage, convertDamageSimple),
-		Delay:                     ConvertObjPtr(bi.InflictedDelay, convertInflictedDelaySimple),
-		InflictedStatusConditions: ConvertObjSliceOrNil(bi.InflictedStatusConditions, convertInflictedStatusSimple),
+		Damage:                    ah.ConvertObjPtr(bi.Damage, convertDamageSimple),
+		Delay:                     ah.ConvertObjPtr(bi.InflictedDelay, convertInflictedDelaySimple),
+		InflictedStatusConditions: ah.ConvertObjSliceOrNil(bi.InflictedStatusConditions, convertInflictedStatusSimple),
 		RemovedStatusConditions:   h.SliceOrNil(bi.RemovedStatusConditions),
-		CopiedStatusConditions:    ConvertObjSliceOrNil(bi.CopiedStatusConditions, convertInflictedStatusSimple),
-		StatChanges:               ConvertObjSliceOrNil(bi.StatChanges, convertStatChangeSimple),
-		ModChanges:                ConvertObjSliceOrNil(bi.ModifierChanges, convertModChangeSimple),
+		CopiedStatusConditions:    ah.ConvertObjSliceOrNil(bi.CopiedStatusConditions, convertInflictedStatusSimple),
+		StatChanges:               ah.ConvertObjSliceOrNil(bi.StatChanges, convertStatChangeSimple),
+		ModChanges:                ah.ConvertObjSliceOrNil(bi.ModifierChanges, convertModChangeSimple),
 	}
 
 	return biSimple
@@ -60,11 +61,11 @@ func convertDamageSimple(d seedtypes.Damage) DamageSimple {
 	return DamageSimple{
 		AttackType:    d.AttackType,
 		DamageType:    d.DamageType,
-		HP:            ConvertObjPtr(d.HP, convertClassDamageSimple),
-		MP:            ConvertObjPtr(d.MP, convertClassDamageSimple),
-		CTB:           ConvertObjPtr(d.CTB, convertClassDamageSimple),
+		HP:            ah.ConvertObjPtr(d.HP, convertClassDamageSimple),
+		MP:            ah.ConvertObjPtr(d.MP, convertClassDamageSimple),
+		CTB:           ah.ConvertObjPtr(d.CTB, convertClassDamageSimple),
 		CanCritical:   h.PtrIsNotNil(d.Critical),
-		BreakDmgLimit: ConvertObjPtr(d.BreakDmgLimit, convertBreakDmgLimitSimple),
+		BreakDmgLimit: ah.ConvertObjPtr(d.BreakDmgLimit, convertBreakDmgLimitSimple),
 		Element:       d.Element,
 	}
 }

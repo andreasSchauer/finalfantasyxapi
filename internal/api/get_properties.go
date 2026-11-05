@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -23,7 +24,7 @@ func getProperty(r *http.Request, i handlerInput[seedtypes.Property, Property, N
 		Effect:         property.Effect,
 		NullifyArmored: property.NullifyArmored,
 		RelatedStats:   namesToNamedAPIResources(E.Stats, property.RelatedStats),
-		ModifierChange: ConvertObjPtr(property.ModifierChange, convertModifierChange),
+		ModifierChange: ah.ConvertObjPtr(property.ModifierChange, convertModifierChange),
 		AutoAbilities:  rel.AutoAbilities,
 		Monsters:       rel.Monsters,
 	}

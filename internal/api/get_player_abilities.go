@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -46,7 +47,7 @@ func getPlayerAbility(r *http.Request, i handlerInput[seedtypes.PlayerAbility, P
 		OpenSubmenu:           namePtrToNamedAPIResPtr(E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:                ability.Cursor,
 		Monsters:              monsters,
-		BattleInteractions:    ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions:    ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)

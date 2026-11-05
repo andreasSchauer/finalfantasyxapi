@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -54,7 +55,7 @@ func (i handlerInput[T, R, A]) queryBool2(r *http.Request, inputIDs []int32, que
 		}
 
 		if !b {
-			dbIDs = RemoveIDs(inputIDs, dbIDs)
+			dbIDs = ah.RemoveIDs(inputIDs, dbIDs)
 		}
 
 		return dbIDs, nil

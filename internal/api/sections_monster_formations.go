@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -26,11 +27,11 @@ func createMonsterFormationSimple(_ *http.Request, id int32, _ Subsection) (Simp
 
 	formationSub := MonsterFormationSimple{
 		ID:             formation.ID,
-		URL:            CreateResourceURL(i.Endpoint, id),
+		URL:            ah.CreateResourceURL(i.Endpoint, id),
 		Category:       formation.FormationData.Category,
 		IsForcedAmbush: formation.FormationData.IsForcedAmbush,
 		FormationLoot:  getFormationLoot(formation),
-		Monsters:       ConvertObjSlice(formation.Monsters, monsterAmountString),
+		Monsters:       ah.ConvertObjSlice(formation.Monsters, monsterAmountString),
 		Areas:          locAreaStrings(formation.EncounterAreas),
 	}
 

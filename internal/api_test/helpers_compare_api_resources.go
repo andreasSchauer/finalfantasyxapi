@@ -2,6 +2,7 @@ package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -15,7 +16,7 @@ func (test test) compPathAPIResource[T api.HasAPIResource](fieldName, expPath st
 	}
 
 	gotURL := gotRes.GetAPIResource().GetURL()
-	gotPath := api.URLToPath(gotURL)
+	gotPath := ah.URLToPath(gotURL)
 
 	test.compare(fieldName, expPath, gotPath)
 }
@@ -40,7 +41,7 @@ func (test test) compPathAPIResourcePtrs[T api.HasAPIResource](fieldName string,
 // 23 == struct with api resource linking to host/api/endpoint/23
 func (test test) compIDAPIResource[T api.HasAPIResource](fieldName string, endpoint ts.EndpointName, expID int32, gotRes T) {
 	test.t.Helper()
-	expPath := api.CompleteTestPath(endpoint, expID)
+	expPath := ah.CompleteTestPath(endpoint, expID)
 	test.compPathAPIResource(fieldName, expPath, gotRes)
 }
 
@@ -54,7 +55,7 @@ func (test test) compIDAPIResourcePtrs[T api.HasAPIResource](fieldName string, e
 	if expIDPtr == nil {
 		expPathPtr = nil
 	} else {
-		expPath := api.CompleteTestPath(endpoint, *expIDPtr)
+		expPath := ah.CompleteTestPath(endpoint, *expIDPtr)
 		expPathPtr = &expPath
 	}
 

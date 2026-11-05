@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
@@ -30,7 +31,7 @@ func createSongSimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, 
 
 	songSimple := SongSimple{
 		ID:                song.ID,
-		URL:               CreateResourceURL(i.Endpoint, id),
+		URL:               ah.CreateResourceURL(i.Endpoint, id),
 		Name:              song.Name,
 		DurationInSeconds: song.DurationInSeconds,
 		CanLoop:           song.CanLoop,
@@ -67,7 +68,7 @@ func getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of location with id '%d'", err)
 	}
 
-	ids := CombineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
+	ids := ah.CombineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
 	return ids, nil
 }
 
@@ -92,7 +93,7 @@ func getSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of sublocation with id '%d'", err)
 	}
 
-	ids := CombineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
+	ids := ah.CombineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
 	return ids, nil
 }
 
@@ -117,6 +118,6 @@ func getAreaSongIDs(ctx context.Context, id int32) ([]int32, error) {
 		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of area with id '%d'", err)
 	}
 
-	ids := CombineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
+	ids := ah.CombineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
 	return ids, nil
 }

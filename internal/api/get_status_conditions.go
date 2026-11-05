@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -30,9 +31,9 @@ func getStatusCondition(r *http.Request, i handlerInput[seedtypes.StatusConditio
 		NullifyArmored:          status.NullifyArmored,
 		RelatedStats:            namesToNamedAPIResources(E.Stats, status.RelatedStats),
 		RemovedStatusConditions: namesToNamedAPIResources(E.StatusConditions, status.RemovedStatusConditions),
-		AddedElemResist:         ConvertObjPtr(status.AddedElemResist, convertElemResist),
-		StatChanges:             ConvertObjSlice(status.StatChanges, convertStatChange),
-		ModifierChanges:         ConvertObjSlice(status.ModifierChanges, convertModifierChange),
+		AddedElemResist:         ah.ConvertObjPtr(status.AddedElemResist, convertElemResist),
+		StatChanges:             ah.ConvertObjSlice(status.StatChanges, convertStatChange),
+		ModifierChanges:         ah.ConvertObjSlice(status.ModifierChanges, convertModifierChange),
 		AutoAbilities:           rel.AutoAbilities,
 		InflictedBy:             rel.InflictedBy,
 		RemovedBy:               rel.RemovedBy,

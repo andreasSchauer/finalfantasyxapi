@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"sync"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
@@ -31,7 +32,7 @@ func (i handlerInput[T, R, A]) filterIDs(r *http.Request, IDs []int32, queryFns 
 			}
 
 			mu.Lock()
-			filteredIDs = GetSharedIDs(filteredIDs, dbIDs)
+			filteredIDs = ah.GetSharedIDs(filteredIDs, dbIDs)
 			mu.Unlock()
 
 			return nil
@@ -57,7 +58,7 @@ func (i handlerInput[T, R, A]) filterIDs(r *http.Request, IDs []int32, queryFns 
 	}
 
 	if flip {
-		filteredIDs = RemoveIDs(IDs, filteredIDs)
+		filteredIDs = ah.RemoveIDs(IDs, filteredIDs)
 	}
 
 	return filteredIDs, nil

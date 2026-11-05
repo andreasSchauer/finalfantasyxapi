@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -47,12 +48,12 @@ func createQueryParamRefResURLs(params []QueryParam) []QueryParam {
 		for j := range param.ReferencesInt {
 			if param.Type == ts.QptEnum || param.Type == ts.QptEnumList {
 				ref := param.ReferencesEnumsInt[j]
-				param.References[j] = CreateEnumURL(ref)
+				param.References[j] = ah.CreateEnumURL(ref)
 				continue
 			}
 
 			ref := param.ReferencesInt[j]
-			param.References[j] = CreateListURL(ref)
+			param.References[j] = ah.CreateListURL(ref)
 		}
 		paramsNew[i] = param
 	}
@@ -63,7 +64,7 @@ func createQueryParamRefResURLs(params []QueryParam) []QueryParam {
 func getAllowedResources(endpoint ts.EndpointName, params []QueryParam) []QueryParam {
 	for idx, param := range params {
 		for _, id := range param.AllowedIDs {
-			allowedRes := CreateResourceURL(endpoint, id)
+			allowedRes := ah.CreateResourceURL(endpoint, id)
 			param.AllowedResources = append(param.AllowedResources, allowedRes)
 		}
 		params[idx] = param

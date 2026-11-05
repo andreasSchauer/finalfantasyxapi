@@ -1,6 +1,7 @@
 package api
 
 import (
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -23,8 +24,8 @@ func idToShopLocSimple(shopID int32) ShopLocSimple {
 	return ShopLocSimple{
 		ID:          shopID,
 		Category:    database.ShopCategory(shopLookup.Category),
-		PreAirship:  ConvertObjPtr(shopLookup.PreAirship, convertShopSummarySimple),
-		PostAirship: ConvertObjPtr(shopLookup.PostAirship, convertShopSummarySimple),
+		PreAirship:  ah.ConvertObjPtr(shopLookup.PreAirship, convertShopSummarySimple),
+		PostAirship: ah.ConvertObjPtr(shopLookup.PostAirship, convertShopSummarySimple),
 	}
 }
 
@@ -85,7 +86,7 @@ func populateTreasuresLocSimple(treasureIDs []int32) TreasuresLocSimple {
 	}
 
 	itemAmounts = sortItemAmountsByID(itemAmounts)
-	treasures.Items = ConvertObjSlice(itemAmounts, convertItemAmountSimple)
+	treasures.Items = ah.ConvertObjSlice(itemAmounts, convertItemAmountSimple)
 	return treasures
 }
 

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
@@ -68,7 +69,7 @@ func (i handlerInputEnums) parseSegment(segment string) (enums.EnumResponse, str
 	if !ok {
 		return enums.EnumResponse{}, "", newHTTPError(http.StatusNotFound, fmt.Sprintf("enum '%s' not found", key), nil)
 	}
-	enum.UsedByEndpoints = EndpointsToURLs(enum.UsedByEndpointsInt)
+	enum.UsedByEndpoints = ah.EndpointsToURLs(enum.UsedByEndpointsInt)
 
 	return enum, key, nil
 }

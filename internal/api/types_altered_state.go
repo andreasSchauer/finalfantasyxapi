@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -61,7 +62,7 @@ func getMonsterAlteredStates(r *http.Request, mon seedtypes.Monster) []AlteredSt
 		if r != nil {
 			q := r.URL.Query()
 			q.Set(string(ts.QpnAlteredState), strconv.Itoa(i+1))
-			url = CreateResourceURLQuery(E.Monsters.Endpoint, mon.ID, q)
+			url = ah.CreateResourceURLQuery(E.Monsters.Endpoint, mon.ID, q)
 		}
 
 		alteredState := AlteredState{
@@ -97,6 +98,6 @@ func convertAlt(asc seedtypes.Alt) Alt {
 		BaseStats:        h.SliceOrNil(E.Stats.toResAmtType(asc.BaseStats, newBaseStat)),
 		ElemResists:      h.SliceOrNil(namesToElemResists(asc.ElemResists)),
 		StatusImmunities: h.SliceOrNil(namesToNamedAPIResources(E.StatusConditions, asc.StatusImmunities)),
-		AddedStatus:      ConvertObjPtr(asc.AddedStatus, convertInflictedStatus),
+		AddedStatus:      ah.ConvertObjPtr(asc.AddedStatus, convertInflictedStatus),
 	}
 }

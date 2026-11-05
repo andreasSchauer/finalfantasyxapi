@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -33,7 +34,7 @@ func getEnemyAbility(r *http.Request, i handlerInput[seedtypes.EnemyAbility, Ene
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
 		Monsters:           monsters,
-		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	return response, nil

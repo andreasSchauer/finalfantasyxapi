@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -36,7 +37,7 @@ func getTriggerCommand(r *http.Request, i handlerInput[seedtypes.TriggerCommand,
 		Topmenu:            namePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
 		Cursor:             command.Cursor,
 		MonsterFormations:  rel.MonsterFormations,
-		BattleInteractions: ConvertObjSlice(command.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(command.BattleInteractions, convertBattleInteraction),
 	}
 
 	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)

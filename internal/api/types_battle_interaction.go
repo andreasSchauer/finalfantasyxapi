@@ -1,6 +1,7 @@
 package api
 
 import (
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -29,17 +30,17 @@ func convertBattleInteraction(bi seedtypes.BattleInteraction) BattleInteraction 
 		Target:                    bi.Target,
 		BasedOnUserAttack:         bi.BasedOnUserAttack,
 		Range:                     bi.Range,
-		Damage:                    ConvertObjPtr(bi.Damage, convertDamage),
+		Damage:                    ah.ConvertObjPtr(bi.Damage, convertDamage),
 		ShatterRate:               bi.ShatterRate,
 		Accuracy:                  convertAccuracy(bi.Accuracy),
 		HitAmount:                 bi.HitAmount,
 		SpecialAction:             bi.SpecialAction,
-		InflictedDelay:            ConvertObjPtr(bi.InflictedDelay, convertInflictedDelay),
-		InflictedStatusConditions: ConvertObjSlice(bi.InflictedStatusConditions, convertInflictedStatus),
+		InflictedDelay:            ah.ConvertObjPtr(bi.InflictedDelay, convertInflictedDelay),
+		InflictedStatusConditions: ah.ConvertObjSlice(bi.InflictedStatusConditions, convertInflictedStatus),
 		RemovedStatusConditions:   namesToNamedAPIResources(E.StatusConditions, bi.RemovedStatusConditions),
-		CopiedStatusConditions:    ConvertObjSlice(bi.CopiedStatusConditions, convertInflictedStatus),
-		StatChanges:               ConvertObjSlice(bi.StatChanges, convertStatChange),
-		ModifierChanges:           ConvertObjSlice(bi.ModifierChanges, convertModifierChange),
+		CopiedStatusConditions:    ah.ConvertObjSlice(bi.CopiedStatusConditions, convertInflictedStatus),
+		StatChanges:               ah.ConvertObjSlice(bi.StatChanges, convertStatChange),
+		ModifierChanges:           ah.ConvertObjSlice(bi.ModifierChanges, convertModifierChange),
 	}
 
 	for _, status := range bi.AffectedBy {
@@ -75,9 +76,9 @@ func convertDamage(d seedtypes.Damage) Damage {
 	return Damage{
 		AttackType:      d.AttackType,
 		DamageType:      d.DamageType,
-		HP:              ConvertObjPtr(d.HP, convertClassDamage),
-		MP:              ConvertObjPtr(d.MP, convertClassDamage),
-		CTB:             ConvertObjPtr(d.CTB, convertClassDamage),
+		HP:              ah.ConvertObjPtr(d.HP, convertClassDamage),
+		MP:              ah.ConvertObjPtr(d.MP, convertClassDamage),
+		CTB:             ah.ConvertObjPtr(d.CTB, convertClassDamage),
 		Critical:        d.Critical,
 		CriticalPlusVal: d.CriticalPlusVal,
 		IsPiercing:      d.IsPiercing,

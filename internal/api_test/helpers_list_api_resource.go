@@ -2,6 +2,7 @@ package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -30,7 +31,7 @@ func (test test) checkResPathsInSlice[T api.HasAPIResource](fieldName string, ex
 	}
 
 	for _, expPath := range expPaths {
-		expURL := api.CompleteTestURL(expPath)
+		expURL := ah.CompleteTestURL(expPath)
 		_, ok := gotMap[expURL]
 		if !ok {
 			test.t.Errorf("'%s' doesn't contain all wanted resources. missing '%s'.\n\n", fieldName, expPath)
@@ -48,10 +49,10 @@ func (test test) checkResIDsInSlice[T api.HasAPIResource](fieldName string, endp
 	}
 
 	for _, expID := range expIDs {
-		expURL := api.CreateResourceURL(endpoint, expID)
+		expURL := ah.CreateResourceURL(endpoint, expID)
 		_, ok := gotMap[expURL]
 		if !ok {
-			test.t.Errorf("'%s' doesn't contain all wanted resources. missing '%s'.\n\n", fieldName, api.CompleteTestPath(endpoint, expID))
+			test.t.Errorf("'%s' doesn't contain all wanted resources. missing '%s'.\n\n", fieldName, ah.CompleteTestPath(endpoint, expID))
 		}
 	}
 }

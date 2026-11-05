@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"slices"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -55,7 +56,7 @@ func applyAlteredState(mon Monster, altStateID int) Monster {
 	}
 
 	defaultState := AlteredState{
-		URL:         CreateResourceURL(E.Monsters.Endpoint, mon.ID),
+		URL:         ah.CreateResourceURL(E.Monsters.Endpoint, mon.ID),
 		Condition:   "default",
 		IsTemporary: false,
 	}

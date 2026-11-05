@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -32,7 +33,7 @@ func getItemAbility(r *http.Request, i handlerInput[seedtypes.ItemAbility, ItemA
 		CanCopycat:         ability.CanCopycat,
 		RelatedStats:       namesToNamedAPIResources(E.Stats, item.RelatedStats),
 		Cursor:             item.Cursor,
-		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	if item.Usability == string(database.ItemUsabilityOutsideBattle) || item.Usability == string(database.ItemUsabilityAlways) {

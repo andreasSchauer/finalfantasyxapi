@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
@@ -31,7 +32,7 @@ func quickAssembleMon(monID int32, altStatePtr *int32) (Monster, error) {
 		ElemResists:      getMonsterElemResists(monsterLookup.ElemResists),
 		StatusImmunities: namesToNamedAPIResources(E.StatusConditions, monsterLookup.StatusImmunities),
 		StatusResists:    E.StatusConditions.toResAmtType(monsterLookup.StatusResists, newStatusResist),
-		Abilities:        ConvertObjSlice(monsterLookup.Abilities, convertMonsterAbility),
+		Abilities:        ah.ConvertObjSlice(monsterLookup.Abilities, convertMonsterAbility),
 		AlteredStates:    getMonsterAlteredStates(nil, monsterLookup),
 	}
 

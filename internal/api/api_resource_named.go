@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -56,7 +57,7 @@ func idToNamedAPIResource[T seedtypes.IsNamed, R any, A APIResource](i handlerIn
 		Name:          params.Name,
 		Version:       params.Version,
 		Specification: params.Specification,
-		URL:           CreateResourceURL(i.Endpoint, params.ID),
+		URL:           ah.CreateResourceURL(i.Endpoint, params.ID),
 	}
 }
 
@@ -96,7 +97,7 @@ func namesToNamedAPIResources[T seedtypes.IsNamed, R any, A APIResource](i handl
 func enumToNamedAPIResource(e enums.EnumResponse) NamedAPIResource {
 	return NamedAPIResource{
 		Name: string(e.Name),
-		URL:  CreateEnumURL(e.Name),
+		URL:  ah.CreateEnumURL(e.Name),
 	}
 }
 
@@ -114,7 +115,7 @@ func enumsToNamedAPIResources(enums []enums.EnumResponse) []NamedAPIResource {
 func endpointToNamedAPIResource(e ts.EndpointName) NamedAPIResource {
 	return NamedAPIResource{
 		Name: string(e),
-		URL:  CreateListURL(e),
+		URL:  ah.CreateListURL(e),
 	}
 }
 

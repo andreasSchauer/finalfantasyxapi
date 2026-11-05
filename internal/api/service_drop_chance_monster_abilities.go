@@ -1,6 +1,7 @@
 package api
 
 import (
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -28,12 +29,12 @@ func getDroppedAutoAbilities(abilities []seedtypes.EquipmentDrop) DroppedAutoAbi
 
 		return DroppedAutoAbilities{
 			Forced:  &forcedAbility,
-			Dropped: ConvertObjSlice(abilities[1:], convertEqAbilityChance),
+			Dropped: ah.ConvertObjSlice(abilities[1:], convertEqAbilityChance),
 		}
 	}
 
 	return DroppedAutoAbilities{
-		Dropped: ConvertObjSlice(abilities, convertEqAbilityChance),
+		Dropped: ah.ConvertObjSlice(abilities, convertEqAbilityChance),
 	}
 }
 

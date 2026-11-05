@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -26,7 +27,7 @@ func getTreasure(r *http.Request, i handlerInput[seedtypes.Treasure, Treasure, U
 		LootType:        treasure.LootType,
 		GilAmount:       treasure.GilAmount,
 		Items:           E.AllItems.toResAmtsFromNames(treasure.Items),
-		Equipment:       ConvertObjPtr(treasure.Equipment, convertFoundEquipment),
+		Equipment:       ah.ConvertObjPtr(treasure.Equipment, convertFoundEquipment),
 	}
 
 	return response, nil

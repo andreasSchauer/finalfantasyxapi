@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -82,6 +83,6 @@ func areaToAreaAPIResource(i handlerInput[seedtypes.Area, Area, AreaAPIResource]
 			Version:     params.Version,
 		},
 		Specification: params.Specification,
-		URL:           CreateResourceURL(i.Endpoint, params.AreaID),
+		URL:           ah.CreateResourceURL(i.Endpoint, params.AreaID),
 	}
 }

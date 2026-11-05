@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -47,14 +48,14 @@ func getCharacterRelationships(r *http.Request, char seedtypes.Character) (Chara
 	if !char.IsStoryBased {
 		g.Go(func() error {
 			var err error
-			rel.StdSphereGrid = ConvertObjPtr(char.StdSphereGrid, convertSphereGrid)
+			rel.StdSphereGrid = ah.ConvertObjPtr(char.StdSphereGrid, convertSphereGrid)
 			rel.StdSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(ctx, char, config.Cfg.DB.GetCharacterSgAbilityIDs)
 			return err
 		})
 
 		g.Go(func() error {
 			var err error
-			rel.ExpSphereGrid = ConvertObjPtr(char.ExpSphereGrid, convertSphereGrid)
+			rel.ExpSphereGrid = ah.ConvertObjPtr(char.ExpSphereGrid, convertSphereGrid)
 			rel.ExpSphereGrid.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(ctx, char, config.Cfg.DB.GetCharacterEgAbilityIDs)
 			return err
 		})

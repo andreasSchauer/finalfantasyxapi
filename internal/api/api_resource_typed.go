@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -52,7 +53,7 @@ func idToTypedAPIResource[T seedtypes.IsTyped, R any, A APIResource](i handlerIn
 		Version:       params.Version,
 		Specification: params.Specification,
 		Type:          params.Type,
-		URL:           CreateResourceURL(i.Endpoint, params.ID),
+		URL:           ah.CreateResourceURL(i.Endpoint, params.ID),
 	}
 }
 

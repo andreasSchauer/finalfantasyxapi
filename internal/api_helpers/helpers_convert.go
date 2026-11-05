@@ -1,4 +1,5 @@
-package api
+// Package apihelpers ajisodaoijd
+package apihelpers
 
 import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"

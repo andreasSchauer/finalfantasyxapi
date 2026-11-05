@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -22,7 +23,7 @@ func getQuest(r *http.Request, i handlerInput[seedtypes.Quest, Quest, QuestAPIRe
 		TypedQuest:   questToQuestAPIResource(quest),
 		Availability: quest.Availability,
 		IsRepeatable: quest.IsRepeatable,
-		Completion:   ConvertObjPtr(quest.Completion, convertQuestCompletion),
+		Completion:   ah.ConvertObjPtr(quest.Completion, convertQuestCompletion),
 	}
 
 	return response, nil

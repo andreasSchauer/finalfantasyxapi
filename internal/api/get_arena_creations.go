@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"sync"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -113,7 +114,7 @@ func getArenaCreationMonsters(r *http.Request, creation seedtypes.ArenaCreation)
 		return nil, err
 	}
 
-	monsterIDs, err := FilterIDSlices(monsterIDSlices)
+	monsterIDs, err := ah.FilterIDSlices(monsterIDSlices)
 	if err != nil {
 		return nil, err
 	}

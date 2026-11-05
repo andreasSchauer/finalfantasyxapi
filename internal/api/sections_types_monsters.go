@@ -1,6 +1,9 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+import (
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+)
 
 type MonsterItemsSimple struct {
 	StealCommon         *string  `json:"steal_common,omitempty"`
@@ -15,14 +18,14 @@ type MonsterItemsSimple struct {
 
 func convertMonsterItemsSimple(items seedtypes.MonsterItems) MonsterItemsSimple {
 	return MonsterItemsSimple{
-		StealCommon:         ConvertObjPtr(items.StealCommon, convertItemAmountSimple),
-		StealRare:           ConvertObjPtr(items.StealRare, convertItemAmountSimple),
-		DropCommon:          ConvertObjPtr(items.DropCommon, convertItemAmountSimple),
-		DropRare:            ConvertObjPtr(items.DropRare, convertItemAmountSimple),
-		SecondaryDropCommon: ConvertObjPtr(items.SecondaryDropCommon, convertItemAmountSimple),
-		SecondaryDropRare:   ConvertObjPtr(items.SecondaryDropRare, convertItemAmountSimple),
-		Bribe:               ConvertObjPtr(items.Bribe, convertItemAmountSimple),
-		OtherItems:          ConvertObjSliceOrNil(items.OtherItems, posItemToItemAmtSimple),
+		StealCommon:         ah.ConvertObjPtr(items.StealCommon, convertItemAmountSimple),
+		StealRare:           ah.ConvertObjPtr(items.StealRare, convertItemAmountSimple),
+		DropCommon:          ah.ConvertObjPtr(items.DropCommon, convertItemAmountSimple),
+		DropRare:            ah.ConvertObjPtr(items.DropRare, convertItemAmountSimple),
+		SecondaryDropCommon: ah.ConvertObjPtr(items.SecondaryDropCommon, convertItemAmountSimple),
+		SecondaryDropRare:   ah.ConvertObjPtr(items.SecondaryDropRare, convertItemAmountSimple),
+		Bribe:               ah.ConvertObjPtr(items.Bribe, convertItemAmountSimple),
+		OtherItems:          ah.ConvertObjSliceOrNil(items.OtherItems, posItemToItemAmtSimple),
 	}
 }
 
@@ -33,7 +36,7 @@ type MonsterEquipmentSimple struct {
 
 func convertMonsterEquipmentSimple(equipment seedtypes.MonsterEquipment) MonsterEquipmentSimple {
 	return MonsterEquipmentSimple{
-		WeaponAbilities: ConvertObjSlice(equipment.WeaponAbilities, monsterAutoAbilityString),
-		ArmorAbilities:  ConvertObjSlice(equipment.ArmorAbilities, monsterAutoAbilityString),
+		WeaponAbilities: ah.ConvertObjSlice(equipment.WeaponAbilities, monsterAutoAbilityString),
+		ArmorAbilities:  ah.ConvertObjSlice(equipment.ArmorAbilities, monsterAutoAbilityString),
 	}
 }

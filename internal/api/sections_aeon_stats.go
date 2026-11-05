@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -75,11 +76,11 @@ func createAeonStatSimple(_ *http.Request, id int32, _ Subsection) (SimpleResour
 
 	aeonStatSub := AeonStatSimple{
 		ID:    aeon.ID,
-		URL:   CreateResourceURL(i.Endpoint, id),
+		URL:   ah.CreateResourceURL(i.Endpoint, id),
 		Name:  aeon.Name,
 		AVals: newAeonStatTable(aeon.BaseStats.AVals),
 		BVals: newAeonStatTable(aeon.BaseStats.BVals),
-		XVals: ConvertObjSlice(aeon.BaseStats.XVals, convertXVal),
+		XVals: ah.ConvertObjSlice(aeon.BaseStats.XVals, convertXVal),
 	}
 
 	return aeonStatSub, nil

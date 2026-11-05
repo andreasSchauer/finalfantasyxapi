@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -35,8 +36,8 @@ func getSong(r *http.Request, i handlerInput[seedtypes.Song, Song, NamedAPIResou
 		MusicSphereID:        song.MusicSphereID,
 		OstDisc:              song.OSTDisc,
 		OstTrackNumber:       song.OSTTrackNumber,
-		BackgroundMusic:      ConvertObjSlice(song.BackgroundMusic, convertBackgroundMusic),
-		Cues:                 ConvertObjSlice(song.Cues, convertCue),
+		BackgroundMusic:      ah.ConvertObjSlice(song.BackgroundMusic, convertBackgroundMusic),
+		Cues:                 ah.ConvertObjSlice(song.Cues, convertCue),
 		BossFights:           rel.BossFights,
 		FMVs:                 rel.FMVs,
 	}

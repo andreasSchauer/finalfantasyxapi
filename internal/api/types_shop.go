@@ -1,6 +1,9 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+import (
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+)
 
 type Shop struct {
 	ID          int32           `json:"id"`
@@ -18,8 +21,8 @@ type SubShop struct {
 
 func convertSubShop(ss seedtypes.SubShop) SubShop {
 	return SubShop{
-		Items:     ConvertObjSlice(ss.Items, convertShopItem),
-		Equipment: ConvertObjSlice(ss.Equipment, convertShopEquipment),
+		Items:     ah.ConvertObjSlice(ss.Items, convertShopItem),
+		Equipment: ah.ConvertObjSlice(ss.Equipment, convertShopEquipment),
 	}
 }
 

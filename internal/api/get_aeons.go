@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -30,15 +31,15 @@ func getAeon(r *http.Request, i handlerInput[seedtypes.Aeon, Aeon, NamedAPIResou
 		PhysAtkDmgConstant:     aeon.PhysAtkDmgConstant,
 		PhysAtkRange:           aeon.PhysAtkRange,
 		PhysAtkShatterRate:     aeon.PhysAtkShatterRate,
-		PhysAtkAccuracy:        ConvertObjPtr(aeon.PhysAtkAccuracy, convertAccuracy),
+		PhysAtkAccuracy:        ah.ConvertObjPtr(aeon.PhysAtkAccuracy, convertAccuracy),
 		CelestialWeapon:        rel.CelestialWeapon,
 		CharacterClasses:       rel.CharacterClasses,
 		BaseStats:              getAeonBaseStats(aeon),
 		AeonCommands:           rel.AeonCommands,
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		Overdrives:             rel.Overdrives,
-		WeaponAbilities:        ConvertObjSlice(aeon.Weapon, convertAeonEquipment),
-		ArmorAbilities:         ConvertObjSlice(aeon.Armor, convertAeonEquipment),
+		WeaponAbilities:        ah.ConvertObjSlice(aeon.Weapon, convertAeonEquipment),
+		ArmorAbilities:         ah.ConvertObjSlice(aeon.Armor, convertAeonEquipment),
 	}
 
 	response, err = applyAeonStats(r, response, nil)

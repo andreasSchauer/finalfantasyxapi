@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -30,8 +31,8 @@ type SubShopSimple struct {
 
 func convertSubShopSimple(ss seedtypes.SubShop) SubShopSimple {
 	return SubShopSimple{
-		Items:     ConvertObjSlice(ss.Items, shopItemNameString),
-		Equipment: ConvertObjSlice(ss.Equipment, convertShopEquipmentSimple),
+		Items:     ah.ConvertObjSlice(ss.Items, shopItemNameString),
+		Equipment: ah.ConvertObjSlice(ss.Equipment, convertShopEquipmentSimple),
 	}
 }
 
@@ -83,12 +84,12 @@ func createShopSimple(_ *http.Request, id int32, _ Subsection) (SimpleResource, 
 
 	shopSimple := ShopSimple{
 		ID:          shop.ID,
-		URL:         CreateResourceURL(i.Endpoint, id),
+		URL:         ah.CreateResourceURL(i.Endpoint, id),
 		Area:        idToLocAreaString(shop.AreaID),
 		Category:    shop.Category,
 		Notes:       shop.Notes,
-		PreAirship:  ConvertObjPtr(shop.PreAirship, convertSubShopSimple),
-		PostAirship: ConvertObjPtr(shop.PostAirship, convertSubShopSimple),
+		PreAirship:  ah.ConvertObjPtr(shop.PreAirship, convertSubShopSimple),
+		PostAirship: ah.ConvertObjPtr(shop.PostAirship, convertSubShopSimple),
 	}
 
 	return shopSimple, nil

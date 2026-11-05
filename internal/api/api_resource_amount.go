@@ -1,5 +1,7 @@
 package api
 
+import ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
+
 type ResourceAmount[A APIResource] struct {
 	Resource A     `json:"resource"`
 	Amount   int32 `json:"amount"`
@@ -37,7 +39,7 @@ func GetResAmtIDMap[A APIResource](items []ResourceAmount[A]) map[int32]int32 {
 
 	for _, item := range items {
 		url := item.Resource.GetURL()
-		id := GetIDFromURL(url)
+		id := ah.GetIDFromURL(url)
 		amountMap[id] = item.Amount
 	}
 

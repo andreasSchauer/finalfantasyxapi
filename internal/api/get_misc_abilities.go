@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -32,7 +33,7 @@ func getMiscAbility(r *http.Request, i handlerInput[seedtypes.MiscAbility, MiscA
 		Submenu:            namePtrToNamedAPIResPtr(E.Submenus, ability.Submenu, nil),
 		OpenSubmenu:        namePtrToNamedAPIResPtr(E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:             ability.Cursor,
-		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)

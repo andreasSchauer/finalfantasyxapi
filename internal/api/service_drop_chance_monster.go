@@ -1,6 +1,7 @@
 package api
 
 import (
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -37,8 +38,8 @@ func getMonsterDropChances(mon seedtypes.Monster, wantedAbilities []seedtypes.Eq
 		MonsterID:           mon.ID,
 		MonsterName:         h.NameToString(mon.Name, mon.Version, mon.Specification),
 		EquipmentDropChance: calcMonDropChance(mon),
-		SlotsChances:        ConvertObjSlice(mon.Equipment.AbilitySlots.Chances, convertChanceAmount),
-		ShotsChances:        ConvertObjSlice(mon.Equipment.AttachedAbilities.Chances, convertChanceAmount),
+		SlotsChances:        ah.ConvertObjSlice(mon.Equipment.AbilitySlots.Chances, convertChanceAmount),
+		ShotsChances:        ah.ConvertObjSlice(mon.Equipment.AttachedAbilities.Chances, convertChanceAmount),
 		AutoAbilities:       getDroppedAutoAbilities(wantedAbilities),
 	}
 }

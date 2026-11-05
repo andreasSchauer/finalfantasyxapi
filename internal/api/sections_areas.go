@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"golang.org/x/sync/errgroup"
@@ -36,7 +37,7 @@ func createAreaSimple(r *http.Request, id int32, subsection Subsection) (SimpleR
 
 	areaSimple := AreaSimple{
 		ID:                area.ID,
-		URL:               CreateResourceURL(i.Endpoint, id),
+		URL:               ah.CreateResourceURL(i.Endpoint, id),
 		ParentLocation:    createSimpleRef(area.LocationID, area.Location, nil, nil),
 		ParentSublocation: createSimpleRef(area.SublocationID, area.Sublocation, nil, nil),
 		Name:              area.Name,
@@ -44,9 +45,9 @@ func createAreaSimple(r *http.Request, id int32, subsection Subsection) (SimpleR
 		Specification:     area.Specification,
 		HasSaveSphere:     area.HasSaveSphere,
 		Availability:      area.Availability,
-		Shops:             ConvertObjSlice(shopIDs, idToShopLocSimple),
+		Shops:             ah.ConvertObjSlice(shopIDs, idToShopLocSimple),
 		Treasures:         getTreasuresLocSimple(id, subsection),
-		Monsters:          ConvertObjSlice(monsterIDs, idToMonsterSimpleString),
+		Monsters:          ah.ConvertObjSlice(monsterIDs, idToMonsterSimpleString),
 	}
 
 	return areaSimple, nil

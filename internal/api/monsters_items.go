@@ -1,6 +1,7 @@
 package api
 
 import (
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -27,7 +28,7 @@ func convertMonsterItems(items seedtypes.MonsterItems) MonsterItems {
 		DropChance:          items.DropChance,
 		DropCondition:       items.DropCondition,
 		OtherItemsCondition: items.OtherItemsCondition,
-		OtherItems:          ConvertObjSlice(items.OtherItems, convertPossibleItem),
+		OtherItems:          ah.ConvertObjSlice(items.OtherItems, convertPossibleItem),
 	}
 
 	if items.StealCommon != nil {

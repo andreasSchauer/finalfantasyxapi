@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -45,9 +46,9 @@ func createMixSimple(r *http.Request, id int32, _ Subsection) (SimpleResource, e
 	mixSimple := MixSimple{
 		ID:           mix.ID,
 		Name:         mix.Name,
-		URL:          CreateResourceURL(i.Endpoint, id),
+		URL:          ah.CreateResourceURL(i.Endpoint, id),
 		Category:     mix.Category,
-		Combinations: ConvertObjSlice(combinations, convertMixCombinationSimple),
+		Combinations: ah.ConvertObjSlice(combinations, convertMixCombinationSimple),
 	}
 
 	return mixSimple, nil

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -29,7 +30,7 @@ func getAeonCommand(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonC
 		User:              nameToNamedAPIResource(E.CharacterClasses, userName, nil),
 		Topmenu:           namePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
 		OpenSubmenu:       namePtrToNamedAPIResPtr(E.Submenus, command.OpenSubmenu, nil),
-		PossibleAbilities: ConvertObjSlice(command.PossibleAbilities, convertPossibleAbilityList),
+		PossibleAbilities: ah.ConvertObjSlice(command.PossibleAbilities, convertPossibleAbilityList),
 	}
 
 	return response, nil

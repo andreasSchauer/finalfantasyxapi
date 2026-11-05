@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -25,7 +26,7 @@ func createSubquestSimple(_ *http.Request, id int32, _ Subsection) (SimpleResour
 
 	subquestSimple := SubquestSimple{
 		ID:        subquest.ID,
-		URL:       CreateResourceURL(i.Endpoint, id),
+		URL:       ah.CreateResourceURL(i.Endpoint, id),
 		Name:      subquest.Name,
 		Condition: subquest.Completion.Condition,
 		Areas:     locAreaStrings(subquest.Completion.Areas),

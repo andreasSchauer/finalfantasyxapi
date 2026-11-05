@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -57,7 +58,7 @@ func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](i handlerIn
 			ID:        params.ID,
 			Sidequest: sidequest.Name,
 			Subquest:  nil,
-			URL:       CreateResourceURL(i.Endpoint, params.ID),
+			URL:       ah.CreateResourceURL(i.Endpoint, params.ID),
 		}
 
 	case string(database.QuestTypeSubquest):
@@ -68,7 +69,7 @@ func idToQuestAPIResource[T seedtypes.IsQuest, R any, A APIResource](i handlerIn
 			ID:        params.ID,
 			Sidequest: sidequest.Name,
 			Subquest:  &subquest.Name,
-			URL:       CreateResourceURL(i.Endpoint, params.ID),
+			URL:       ah.CreateResourceURL(i.Endpoint, params.ID),
 		}
 	}
 

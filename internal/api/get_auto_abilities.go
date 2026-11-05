@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -37,14 +38,14 @@ func getAutoAbility(r *http.Request, i handlerInput[seedtypes.AutoAbility, AutoA
 		GradualRecovery:        namePtrToNamedAPIResPtr(E.Stats, autoAbility.GradualRecovery, nil),
 		AutoItemUse:            namesToNamedAPIResources(E.Items, autoAbility.AutoItemUse),
 		OnHitElement:           namePtrToNamedAPIResPtr(E.Elements, autoAbility.OnHitElement, nil),
-		AddedElemResist:        ConvertObjPtr(autoAbility.AddedElemResist, convertElemResist),
-		OnHitStatus:            ConvertObjPtr(autoAbility.OnHitStatus, convertInflictedStatus),
+		AddedElemResist:        ah.ConvertObjPtr(autoAbility.AddedElemResist, convertElemResist),
+		OnHitStatus:            ah.ConvertObjPtr(autoAbility.OnHitStatus, convertInflictedStatus),
 		AddedStatusses:         namesToNamedAPIResources(E.StatusConditions, autoAbility.AddedStatusses),
-		AddedStatusResists:     ConvertObjSlice(autoAbility.AddedStatusResists, convertStatusResist),
+		AddedStatusResists:     ah.ConvertObjSlice(autoAbility.AddedStatusResists, convertStatusResist),
 		AddedProperty:          namePtrToNamedAPIResPtr(E.Properties, autoAbility.AddedProperty, nil),
 		ConversionTo:           namePtrToNamedAPIResPtr(E.Modifiers, autoAbility.ConversionTo, nil),
-		StatChanges:            ConvertObjSlice(autoAbility.StatChanges, convertStatChange),
-		ModifierChanges:        ConvertObjSlice(autoAbility.ModifierChanges, convertModifierChange),
+		StatChanges:            ah.ConvertObjSlice(autoAbility.StatChanges, convertStatChange),
+		ModifierChanges:        ah.ConvertObjSlice(autoAbility.ModifierChanges, convertModifierChange),
 		MonstersDrop:           rel.MonstersDrop,
 		MonstersItems:          rel.MonstersItems,
 		ShopsPreAirship:        rel.ShopsPreAirship,

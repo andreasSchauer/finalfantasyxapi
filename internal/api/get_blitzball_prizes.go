@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -21,7 +22,7 @@ func getBlitzballPrize(r *http.Request, i handlerInput[seedtypes.BlitzballPositi
 		Name:     fmt.Sprintf("%s - %s", bbPos.Category, bbPos.Slot),
 		Category: bbPos.Category,
 		Slot:     bbPos.Slot,
-		Items:    ConvertObjSlice(bbPos.Items, convertBlitzballItem),
+		Items:    ah.ConvertObjSlice(bbPos.Items, convertBlitzballItem),
 	}
 
 	return response, nil

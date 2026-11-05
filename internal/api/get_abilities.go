@@ -3,11 +3,11 @@ package api
 import (
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api_helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -33,7 +33,7 @@ func getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, Type
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		TypedAbility:       refToNamedAPIResource(ability.GetAbilityRef()),
 		Monsters:           monsters,
-		BattleInteractions: ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	return response, nil
