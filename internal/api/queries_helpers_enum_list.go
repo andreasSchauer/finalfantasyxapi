@@ -8,9 +8,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 )
 
-// checks for emptiness of enum-list-queryParam and converts its input into a slice of valid enum-strings.
-func (q QueryParam) parseEnumList[E, N any](r *http.Request, et enums.EnumType[E, N]) ([]E, error) {
-	query, err := q.checkEmpty(r)
+// ParseEnumList checks for emptiness of enum-list-queryParam and converts its input into a slice of valid enum-strings.
+func (q QueryParam) ParseEnumList[E, N any](r *http.Request, et enums.EnumType[E, N]) ([]E, error) {
+	query, err := q.CheckEmpty(r)
 	if err != nil {
 		return nil, err
 	}
@@ -20,14 +20,14 @@ func (q QueryParam) parseEnumList[E, N any](r *http.Request, et enums.EnumType[E
 
 // converts a list of unique query enum values or ids into a slice of valid typed enum-strings.
 func (q QueryParam) sliceEnums[E, N any](query string, et enums.EnumType[E, N]) ([]E, error) {
-	enumStrs, err := queryListSplit(query)
+	enumStrs, err := QueryListSplit(query)
 	if err != nil {
 		return nil, err
 	}
 	enums := []E{}
 
 	for _, enumStr := range enumStrs {
-		enum, err := q.checkEnum(enumStr, et)
+		enum, err := q.CheckEnum(enumStr, et)
 		if err != nil {
 			return nil, err
 		}

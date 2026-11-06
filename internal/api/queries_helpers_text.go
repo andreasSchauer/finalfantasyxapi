@@ -6,8 +6,9 @@ import (
 	"net/url"
 )
 
-func (q QueryParam) parseText(r *http.Request) (string, error) {
-	text, err := q.checkEmptyNoLower(r)
+// ParseText checks, if a simple string parameter is valid, without any other checks
+func (q QueryParam) ParseText(r *http.Request) (string, error) {
+	text, err := q.CheckEmptyNoLower(r)
 	if errExceptEmptyQuery(err) {
 		return "", err
 	}

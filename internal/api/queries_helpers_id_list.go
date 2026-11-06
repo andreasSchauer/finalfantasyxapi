@@ -10,9 +10,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-// checks for emptiness of id-list-queryParam and converts its input into a slice of valid ids.
-func (q QueryParam) parseIDList[F seedtypes.Lookupable](r *http.Request, fLookup map[string]F) ([]int32, error) {
-	query, err := q.checkEmpty(r)
+// ParseIDList checks for emptiness of id-list-queryParam and converts its input into a slice of valid ids.
+func (q QueryParam) ParseIDList[F seedtypes.Lookupable](r *http.Request, fLookup map[string]F) ([]int32, error) {
+	query, err := q.CheckEmpty(r)
 	if err != nil {
 		return nil, err
 	}
@@ -22,7 +22,7 @@ func (q QueryParam) parseIDList[F seedtypes.Lookupable](r *http.Request, fLookup
 
 // converts a list of unique query ids into a slice of valid ids.
 func (q QueryParam) sliceIDs[F seedtypes.Lookupable](r *http.Request, query string, fLookup map[string]F) ([]int32, error) {
-	idSegments, err := queryListSplit(query)
+	idSegments, err := QueryListSplit(query)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (q QueryParam) checkIDRange[F seedtypes.Lookupable](segment string, fLookup
 		return nil, nil
 
 	case 1:
-		id, err := q.parseIDVal(idStrs[0], len(fLookup))
+		id, err := q.ParseIDVal(idStrs[0], len(fLookup))
 		if err != nil {
 			return nil, err
 		}
@@ -78,12 +78,12 @@ func (q QueryParam) checkIDRange[F seedtypes.Lookupable](segment string, fLookup
 }
 
 func (q QueryParam) sliceIDRange[F seedtypes.Lookupable](idStrs []string, fLookup map[string]F) ([]int32, error) {
-	minID, err := q.parseIDVal(idStrs[0], len(fLookup))
+	minID, err := q.ParseIDVal(idStrs[0], len(fLookup))
 	if err != nil {
 		return nil, err
 	}
 
-	maxID, err := q.parseIDVal(idStrs[1], len(fLookup))
+	maxID, err := q.ParseIDVal(idStrs[1], len(fLookup))
 	if err != nil {
 		return nil, err
 	}

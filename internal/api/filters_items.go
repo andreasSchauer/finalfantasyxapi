@@ -14,7 +14,7 @@ func getMasterItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int
 	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(r)
+	methods, err := queryParamMethods.ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func getMasterItemsBySublocation(r *http.Request, ctx context.Context, id int32)
 	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(r)
+	methods, err := queryParamMethods.ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func getMasterItemsByLocation(r *http.Request, ctx context.Context, id int32) ([
 	i := E.AllItems
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(r)
+	methods, err := queryParamMethods.ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ func getItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, er
 	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(r)
+	methods, err := queryParamMethods.ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func getItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]in
 	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(r)
+	methods, err := queryParamMethods.ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -114,7 +114,7 @@ func getItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32
 	i := E.Items
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(r)
+	methods, err := queryParamMethods.ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

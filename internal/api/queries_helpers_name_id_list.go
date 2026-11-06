@@ -7,9 +7,9 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-// checks for emptiness of name/id-list-queryParam and converts its input into a slice of valid ids. accepts "none" as input.
-func (q QueryParam) parseNameIDList[P seedtypes.Lookupable](r *http.Request, pResType ts.ResTypeSingle, pLookup map[string]P) ([]int32, error) {
-	query, err := q.checkEmpty(r)
+// ParseNameIDList checks for emptiness of name/id-list-queryParam and converts its input into a slice of valid ids. accepts "none" as input.
+func (q QueryParam) ParseNameIDList[P seedtypes.Lookupable](r *http.Request, pResType ts.ResTypeSingle, pLookup map[string]P) ([]int32, error) {
+	query, err := q.CheckEmpty(r)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func (q QueryParam) parseNameIDList[P seedtypes.Lookupable](r *http.Request, pRe
 
 // converts a list of unique query ids or single-resource names into a slice of valid ids.
 func (q QueryParam) sliceNamesIDs[P seedtypes.Lookupable](query string, pResType ts.ResTypeSingle, pLookup map[string]P) ([]int32, error) {
-	queryStrs, err := queryListSplit(query)
+	queryStrs, err := QueryListSplit(query)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,7 @@ func (q QueryParam) sliceNamesIDs[P seedtypes.Lookupable](query string, pResType
 			continue
 		}
 
-		id, err := q.checkNameID(str, pResType, pLookup)
+		id, err := q.CheckNameID(str, pResType, pLookup)
 		if err != nil {
 			return nil, err
 		}

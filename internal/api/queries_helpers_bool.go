@@ -6,9 +6,9 @@ import (
 	"strconv"
 )
 
-// validates bool-queryParam and checks emptiness.
-func (q QueryParam) parseBool(r *http.Request) (bool, error) {
-	query, err := q.checkEmpty(r)
+// ParseBool validates bool-queryParam and checks emptiness.
+func (q QueryParam) ParseBool(r *http.Request) (bool, error) {
+	query, err := q.CheckEmpty(r)
 	if err != nil {
 		return false, err
 	}

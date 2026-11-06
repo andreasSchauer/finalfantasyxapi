@@ -75,7 +75,7 @@ func applyAeonStats(r *http.Request, aeon Aeon, allowedStatIDs []int32) (Aeon, e
 
 func applyAeonStatsBattles(r *http.Request, aeon Aeon, queryName ts.QueryParamName) ([]BaseStat, error) {
 	queryParam := Q.Aeons[queryName]
-	battles, err := queryParam.parseInt(r)
+	battles, err := queryParam.ParseInt(r)
 	if queryIsEmpty(err) {
 		return aeon.BaseStats, nil
 	}

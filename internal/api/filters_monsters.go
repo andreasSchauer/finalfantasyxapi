@@ -30,7 +30,7 @@ func getMonstersByElemResists(r *http.Request, ctx context.Context, query string
 }
 
 func getElemResistIDs(query string, queryParam QueryParam) ([]int32, error) {
-	eaPairs, err := queryListSplit(query)
+	eaPairs, err := QueryListSplit(query)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func getElemResistIDs(query string, queryParam QueryParam) ([]int32, error) {
 			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}
 
-		elementID, err := queryParam.checkNameID(elementStr, E.Elements.resTypeSingle, lookup.L.Elements)
+		elementID, err := queryParam.CheckNameID(elementStr, E.Elements.resTypeSingle, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -52,7 +52,7 @@ func getElemResistIDs(query string, queryParam QueryParam) ([]int32, error) {
 		}
 		elemMap[elementID] = true
 
-		affinity, err := queryParam.checkEnum(affinityStr, enums.T.ElementalAffinity)
+		affinity, err := queryParam.CheckEnum(affinityStr, enums.T.ElementalAffinity)
 		if err != nil {
 			return nil, err
 		}
@@ -93,7 +93,7 @@ func getMonstersByStatusResists(r *http.Request, ctx context.Context, ids []int3
 func verifyMonsterResistance(r *http.Request) (int32, error) {
 	queryParam := Q.Monsters[ts.QpnResistance]
 
-	resistance, err := queryParam.parseInt(r)
+	resistance, err := queryParam.ParseInt(r)
 	if err != nil {
 		return 0, err
 	}
@@ -106,7 +106,7 @@ func getMonstersByAutoAbility(r *http.Request, ctx context.Context, id int32) ([
 
 	queryParam := i.queryLookup[ts.QpnIsForced]
 
-	isForced, err := queryParam.parseBool(r)
+	isForced, err := queryParam.ParseBool(r)
 	if queryIsEmpty(err) {
 		return config.Cfg.DB.GetMonsterIDsByAutoAbility(ctx, id)
 	}
@@ -149,7 +149,7 @@ func getMonsterItemMethods(r *http.Request) ([]string, error) {
 		"drop":  {"drop_common", "drop_rare", "drop_secondary_common", "drop_secondary_rare"},
 	}
 
-	queryMethods, err := paramMethods.parseValueList(r)
+	queryMethods, err := paramMethods.ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

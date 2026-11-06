@@ -10,14 +10,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-// validates id-queryParam and checks emptiness.
-func (q QueryParam) parseID[F seedtypes.Lookupable](r *http.Request, fLookup map[string]F) (int32, error) {
-	query, err := q.checkEmpty(r)
+// ParseID validates id-queryParam and checks emptiness.
+func (q QueryParam) ParseID[F seedtypes.Lookupable](r *http.Request, fLookup map[string]F) (int32, error) {
+	query, err := q.CheckEmpty(r)
 	if err != nil {
 		return 0, err
 	}
 
-	id, err := q.parseIDVal(query, len(fLookup))
+	id, err := q.ParseIDVal(query, len(fLookup))
 	if err != nil {
 		return 0, err
 	}
@@ -25,9 +25,9 @@ func (q QueryParam) parseID[F seedtypes.Lookupable](r *http.Request, fLookup map
 	return id, nil
 }
 
-// validates id-queryParam and checks emptiness. accepts "none" as input.
-func (q QueryParam) parseIDPtr[F seedtypes.Lookupable](r *http.Request, fLookup map[string]F) (*int32, error) {
-	query, err := q.checkEmpty(r)
+// ParseIDPtr validates id-queryParam and checks emptiness. accepts "none" as input.
+func (q QueryParam) ParseIDPtr[F seedtypes.Lookupable](r *http.Request, fLookup map[string]F) (*int32, error) {
+	query, err := q.CheckEmpty(r)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (q QueryParam) parseIDPtr[F seedtypes.Lookupable](r *http.Request, fLookup 
 		return nil, nil
 	}
 
-	id, err := q.parseIDVal(query, len(fLookup))
+	id, err := q.ParseIDVal(query, len(fLookup))
 	if err != nil {
 		return nil, err
 	}
@@ -45,9 +45,9 @@ func (q QueryParam) parseIDPtr[F seedtypes.Lookupable](r *http.Request, fLookup 
 	return &id, nil
 }
 
-// checks if query ID is valid and within range. if it's invalid, it will return an httpError. if you want to soft-check the ID and do name checks afterwards, use checkQueryID()
-func (q QueryParam) parseIDVal(idStr string, maxID int) (int32, error) {
-	id, err := q.checkID(idStr, maxID)
+// ParseIDVal checks if query ID is valid and within range. if it's invalid, it will return an httpError. if you want to soft-check the ID and do name checks afterwards, use checkQueryID()
+func (q QueryParam) ParseIDVal(idStr string, maxID int) (int32, error) {
+	id, err := q.CheckID(idStr, maxID)
 	if errors.Is(err, errs.ErrNotAnID) {
 		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s' used for parameter '%s'", idStr, q.Name), err)
 	}
@@ -58,8 +58,8 @@ func (q QueryParam) parseIDVal(idStr string, maxID int) (int32, error) {
 	return int32(id), nil
 }
 
-// checks if query ID is valid and within range. if it's invalid, it will return errNotAnID, providing the possibility to do name-based checks. for a hard-check with errors, use parseQueryID()
-func (q QueryParam) checkID(idStr string, maxID int) (int32, error) {
+// CheckID checks if query ID is valid and within range. if it's invalid, it will return errNotAnID, providing the possibility to do name-based checks. for a hard-check with errors, use parseQueryID()
+func (q QueryParam) CheckID(idStr string, maxID int) (int32, error) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		return 0, errs.ErrNotAnID

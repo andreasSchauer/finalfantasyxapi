@@ -58,18 +58,18 @@ func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *ht
 	queryParamBomb := i.queryLookup[ts.QpnBombWpn]
 	queryParamCelestialWpn := i.queryLookup[ts.QpnCelestialWeapon]
 
-	unitID, err := queryParamUser.parseNameID(r, E.PlayerUnits.resTypeSingle, E.PlayerUnits.objLookup)
+	unitID, err := queryParamUser.ParseNameID(r, E.PlayerUnits.resTypeSingle, E.PlayerUnits.objLookup)
 	if err != nil {
 		return unitRepl{}, err
 	}
 	unit, _ := lookup.GetResourceByID(unitID, lookup.L.PlayerUnitsID)
 
-	bombWpn, err := queryParamBomb.parseBool(r)
+	bombWpn, err := queryParamBomb.ParseBool(r)
 	if errExceptEmptyQuery(err) {
 		return unitRepl{}, err
 	}
 
-	isCelestial, err := queryParamCelestialWpn.parseBool(r)
+	isCelestial, err := queryParamCelestialWpn.ParseBool(r)
 	if errExceptEmptyQuery(err) {
 		return unitRepl{}, err
 	}
@@ -105,7 +105,7 @@ func populateReplCharacter(repl unitRepl, queryParamUser QueryParam) (unitRepl, 
 		string(database.CelestialFormulaMpHigh): database.DamageFormulaClstlMpHigh,
 	}
 
-	id, err := queryParamUser.checkNameID(repl.unit.Name, ts.ResTypeSingle(repl.unit.Type), lookup.L.Characters)
+	id, err := queryParamUser.CheckNameID(repl.unit.Name, ts.ResTypeSingle(repl.unit.Type), lookup.L.Characters)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -135,7 +135,7 @@ func populateReplAeon(repl unitRepl, queryParamUser QueryParam) (unitRepl, error
 		return unitRepl{}, newHTTPError(http.StatusBadRequest, "aeons don't use celestial weapons", nil)
 	}
 
-	id, err := queryParamUser.checkNameID(repl.unit.Name, ts.ResTypeSingle(repl.unit.Type), lookup.L.Aeons)
+	id, err := queryParamUser.CheckNameID(repl.unit.Name, ts.ResTypeSingle(repl.unit.Type), lookup.L.Aeons)
 	if err != nil {
 		return unitRepl{}, err
 	}

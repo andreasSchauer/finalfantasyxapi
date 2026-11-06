@@ -4,8 +4,8 @@ import (
 	"net/http"
 )
 
-func (q QueryParam) parseValueList(r *http.Request) ([]string, error) {
-	query, err := q.checkEmpty(r)
+func (q QueryParam) ParseValueList(r *http.Request) ([]string, error) {
+	query, err := q.CheckEmpty(r)
 	if err != nil {
 		return nil, err
 	}
@@ -14,13 +14,13 @@ func (q QueryParam) parseValueList(r *http.Request) ([]string, error) {
 }
 
 func (q QueryParam) sliceValues(query string) ([]string, error) {
-	values, err := queryListSplit(query)
+	values, err := QueryListSplit(query)
 	if err != nil {
 		return nil, err
 	}
 
 	for _, value := range values {
-		err := q.checkValue(value)
+		err := q.CheckValue(value)
 		if err != nil {
 			return nil, err
 		}

@@ -2,73 +2,20 @@ package api
 
 import (
 	"cmp"
-	"net/http"
-	"net/url"
 	"slices"
-	"strconv"
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
-func paramMapToSlice(lookup map[ts.QueryParamName]QueryParam) []QueryParam {
-	queryParams := []QueryParam{}
-
-	for key := range lookup {
-		queryParams = append(queryParams, lookup[key])
-	}
-
-	slices.SortStableFunc(queryParams, func(a, b QueryParam) int {
-		return cmp.Compare(a.ID, b.ID)
-	})
-
-	return queryParams
-}
-
-func paramSliceToMap(params []QueryParam, endpoint ts.EndpointName) map[ts.QueryParamName]QueryParam {
-	paramMap := make(map[ts.QueryParamName]QueryParam, len(params))
-
-	for i, param := range params {
-		param.ID = i + 1
-		param = param.assignParamUsage()
-		param.Endpoint = endpoint
-		paramMap[param.Name] = param
-	}
-
-	return paramMap
-}
-
-func defaultParamSliceToMap(params []QueryParam) map[ts.QueryParamName]QueryParam {
-	paramMap := make(map[ts.QueryParamName]QueryParam, len(params))
-
-	for i, param := range params {
-		param.ID = i + 1
-		param = param.assignParamUsage()
-		paramMap[param.Name] = param
-	}
-
-	return paramMap
-}
-
-func queryMapToString(lookup map[ts.QueryParamName]QueryParam) string {
-	params := paramMapToSlice(lookup)
-	names := []string{}
-
-	for _, param := range params {
-		names = append(names, string(param.Name))
-	}
-
-	return h.FormatStringSlice(names)
-}
 
 func querySplit(query, sep string) []string {
 	queryTrimmed := strings.TrimSuffix(query, sep)
 	return strings.Split(queryTrimmed, sep)
 }
 
-func queryListSplit(query string) ([]string, error) {
+func QueryListSplit(query string) ([]string, error) {
 	segments := querySplit(query, ",")
 
 	if len(segments) > config.Cfg.FetchLimit {
@@ -92,45 +39,11 @@ func queryIntMapToSlice(m map[string]int32) []int32 {
 	return items
 }
 
-func getRawQueryLimit(r *http.Request) (int, error) {
-	queryParamLimit := Q.DefaultParams[ts.QpnLimit]
-	query, err := queryParamLimit.checkEmpty(r)
-	if err != nil {
-		return 0, err
+// checks, if "none" was used as input and returns errQueryNone, if it was
+func checkNoneQuery(query string) error {
+	if query == "none" {
+		return errs.ErrQueryNone
 	}
 
-	limit, err := queryParamLimit.checkInt(query)
-	if err != nil {
-		return 0, err
-	}
-	if limit == 0 {
-		limit = *queryParamLimit.DefaultVal
-	}
-	if limit > config.Cfg.FetchLimit {
-		return config.Cfg.FetchLimit, nil
-	}
-
-	return limit, nil
-}
-
-func getLimitMax() string {
-	queryParamLimit := Q.DefaultParams[ts.QpnLimit]
-
-	for _, input := range queryParamLimit.SpecialInputs {
-		if input.Key == ts.QsvMax {
-			return strconv.Itoa(input.Val)
-		}
-	}
-
-	return ""
-}
-
-func setLimitMax(r *http.Request, q url.Values) {
-	limit := q.Get(string(ts.QpnLimit))
-	if limit != "" {
-		return
-	}
-
-	q.Set(string(ts.QpnLimit), getLimitMax())
-	r.URL.RawQuery = q.Encode()
+	return nil
 }

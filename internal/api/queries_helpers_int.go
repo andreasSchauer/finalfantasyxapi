@@ -10,11 +10,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
-// checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored. also checks for emptiness and replaces empty inputs with default values, if they exist.
-func (q QueryParam) parseInt(r *http.Request) (int, error) {
+// ParseInt checks for default values, special values, validity, and range validity of an integer-based non-id query. if the query doesn't use defaults, special vals, or ranges, they are simply ignored. also checks for emptiness and replaces empty inputs with default values, if they exist.
+func (q QueryParam) ParseInt(r *http.Request) (int, error) {
 	query := r.URL.Query().Get(string(q.Name))
 
-	val, err := q.checkInt(query)
+	val, err := q.CheckInt(query)
 	if queryIsEmpty(err) {
 		return 0, errs.ErrEmptyQuery
 	}
@@ -25,8 +25,8 @@ func (q QueryParam) parseInt(r *http.Request) (int, error) {
 	return val, nil
 }
 
-// checks if query-int is valid and within allowed range. replaces special inputs with their corresponding value and replaces empty inputs with default values.
-func (q QueryParam) checkInt(queryVal string) (int, error) {
+// CheckInt checks if query-int is valid and within allowed range. replaces special inputs with their corresponding value and replaces empty inputs with default values.
+func (q QueryParam) CheckInt(queryVal string) (int, error) {
 	defaultVal, err := q.checkIntDefaultVal(queryVal)
 	if queryIsEmpty(err) {
 		return 0, errs.ErrEmptyQuery

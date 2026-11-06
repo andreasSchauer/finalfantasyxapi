@@ -8,13 +8,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (q QueryParam) parseValue(r *http.Request) (string, error) {
-	value, err := q.checkEmpty(r)
+func (q QueryParam) ParseValue(r *http.Request) (string, error) {
+	value, err := q.CheckEmpty(r)
 	if err != nil {
 		return "", err
 	}
 
-	err = q.checkValue(value)
+	err = q.CheckValue(value)
 	if err != nil {
 		return "", err
 	}
@@ -22,7 +22,7 @@ func (q QueryParam) parseValue(r *http.Request) (string, error) {
 	return value, nil
 }
 
-func (q QueryParam) checkValue(value string) error {
+func (q QueryParam) CheckValue(value string) error {
 	if !slices.Contains(q.AllowedValues, ts.QueryValue(value)) {
 		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. allowed values: %s", value, q.Name, ts.FormatQvSlice(q.AllowedValues)), nil)
 	}

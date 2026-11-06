@@ -49,7 +49,7 @@ type SpecialQueryInput struct {
 	Val int                `json:"value"`
 }
 
-// change functions to return the param
+
 
 func GetLocationsParams() []QueryParam {
 	return []QueryParam{

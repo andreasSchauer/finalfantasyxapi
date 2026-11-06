@@ -88,7 +88,7 @@ func getStatRelationships(r *http.Request, stat seedtypes.Stat) (Stat, error) {
 }
 
 func getStatQueries(r *http.Request) (StatQueries, error) {
-	changesOnly, err := Q.Stats[ts.QpnChangesOnly].parseBool(r)
+	changesOnly, err := Q.Stats[ts.QpnChangesOnly].ParseBool(r)
 	if errExceptEmptyQuery(err) {
 		return StatQueries{}, err
 	}

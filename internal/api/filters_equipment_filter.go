@@ -19,7 +19,7 @@ func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error)
 		return nil, err
 	}
 
-	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(r)
+	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].ParseIntList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func filterTreasuresEquipment(r *http.Request, ctx context.Context) ([]int32, er
 		return nil, err
 	}
 
-	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].parseIntList(r)
+	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].ParseIntList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

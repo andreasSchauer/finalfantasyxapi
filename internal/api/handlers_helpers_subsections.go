@@ -142,12 +142,12 @@ func (i handlerInput[T, R, A]) queryIDsParam(r *http.Request, segment *string) (
 
 	// ifs ids param is empty, just retrieve all ids
 	queryParamIDs := i.queryLookup[ts.QpnIDs]
-	_, err = queryParamIDs.checkEmpty(r)
+	_, err = queryParamIDs.CheckEmpty(r)
 	if queryIsEmpty(err) {
 		return i.retrieveFunc(r, i)
 	}
 
-	ids, err := queryParamIDs.parseIDList(r, i.objLookup)
+	ids, err := queryParamIDs.ParseIDList(r, i.objLookup)
 	if err != nil {
 		return nil, err
 	}

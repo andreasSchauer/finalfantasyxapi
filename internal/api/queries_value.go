@@ -10,11 +10,11 @@ import (
 func (i handlerInput[T, R, A]) queryValue(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryStringMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if queryParam.replacingParamsPresent(r, i.queryLookup) {
+		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		value, err := queryParam.parseValue(r)
+		value, err := queryParam.ParseValue(r)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}

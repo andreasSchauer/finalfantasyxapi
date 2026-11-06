@@ -20,7 +20,7 @@ type avlParams struct {
 func (i handlerInput[T, R, A]) queryAvlGetParams(r *http.Request) (avlParams, error) {
 	queryParamAvl := i.queryLookup[ts.QpnAvailability]
 
-	availabilities, err := queryParamAvl.parseEnumList(r, enums.T.AvailabilityType)
+	availabilities, err := queryParamAvl.ParseEnumList(r, enums.T.AvailabilityType)
 	if errExceptEmptyQuery(err) {
 		return avlParams{}, err
 	}
@@ -32,7 +32,7 @@ func (i handlerInput[T, R, A]) queryAvlGetParams(r *http.Request) (avlParams, er
 
 	_, ok := i.queryLookup[ts.QpnPreAirship]
 	if ok {
-		preAirship, err = i.queryLookup[ts.QpnPreAirship].parseBool(r)
+		preAirship, err = i.queryLookup[ts.QpnPreAirship].ParseBool(r)
 		if errExceptEmptyQuery(err) {
 			return avlParams{}, err
 		}

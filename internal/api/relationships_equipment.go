@@ -90,7 +90,7 @@ func getEquipmentTableRef(r *http.Request, ctx context.Context, queryParam Query
 }
 
 func getTableIndex(r *http.Request, queryParam QueryParam, maxID int) (int, error) {
-	tableIdx, err := queryParam.parseInt(r)
+	tableIdx, err := queryParam.ParseInt(r)
 	if errExceptEmptyQuery(err) {
 		return 0, err
 	}

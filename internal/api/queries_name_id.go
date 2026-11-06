@@ -12,11 +12,11 @@ import (
 func (i handlerInput[T, R, A]) queryNameID[P seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, pResType ts.ResTypeSingle, pLookup map[string]P, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if queryParam.replacingParamsPresent(r, i.queryLookup) {
+		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		id, err := queryParam.parseNameID(r, pResType, pLookup)
+		id, err := queryParam.ParseNameID(r, pResType, pLookup)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}
@@ -36,11 +36,11 @@ func (i handlerInput[T, R, A]) queryNameID[P seedtypes.Lookupable](r *http.Reque
 func (i handlerInput[T, R, A]) queryNameIDWrapper[P seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, pResType ts.ResTypeSingle, pLookup map[string]P, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if queryParam.replacingParamsPresent(r, i.queryLookup) {
+		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		id, err := queryParam.parseNameID(r, pResType, pLookup)
+		id, err := queryParam.ParseNameID(r, pResType, pLookup)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}

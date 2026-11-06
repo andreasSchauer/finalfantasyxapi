@@ -14,7 +14,7 @@ func getAreasByItem(r *http.Request, ctx context.Context, id int32) ([]int32, er
 	i := E.Areas
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(r)
+	methods, err := queryParamMethods.ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func getSublocationsByItem(r *http.Request, ctx context.Context, id int32) ([]in
 	i := E.Sublocations
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(r)
+	methods, err := queryParamMethods.ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func getLocationsByItem(r *http.Request, ctx context.Context, id int32) ([]int32
 	i := E.Locations
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
-	methods, err := queryParamMethods.parseValueList(r)
+	methods, err := queryParamMethods.ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

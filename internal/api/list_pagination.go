@@ -15,12 +15,12 @@ func CreatePaginatedList[T any](r *http.Request, items []T) (apiresource.ListPar
 	queryParamOffset := Q.DefaultParams[ts.QpnOffset]
 	queryParamLimit := Q.DefaultParams[ts.QpnLimit]
 
-	offset, err := queryParamOffset.parseInt(r)
+	offset, err := queryParamOffset.ParseInt(r)
 	if err != nil {
 		return apiresource.ListParams{}, nil, err
 	}
 
-	limit, err := queryParamLimit.parseInt(r)
+	limit, err := queryParamLimit.ParseInt(r)
 	if err != nil {
 		return apiresource.ListParams{}, nil, err
 	}

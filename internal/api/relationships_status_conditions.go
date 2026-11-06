@@ -66,21 +66,21 @@ func getStatusQueryResistance(r *http.Request) (StatusQueryResistance, error) {
 	var res StatusQueryResistance
 
 	queryParamResistance := Q.StatusConditions[ts.QpnResistance]
-	resistance, err := queryParamResistance.parseInt(r)
+	resistance, err := queryParamResistance.ParseInt(r)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.Resistance = int32(resistance)
 
 	queryParamMinRate := Q.StatusConditions[ts.QpnInflictMin]
-	minRate, err := queryParamMinRate.parseInt(r)
+	minRate, err := queryParamMinRate.ParseInt(r)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.MinRate = int32(minRate)
 
 	queryParamMaxRate := Q.StatusConditions[ts.QpnInflictMax]
-	maxRate, err := queryParamMaxRate.parseInt(r)
+	maxRate, err := queryParamMaxRate.ParseInt(r)
 	if errExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}

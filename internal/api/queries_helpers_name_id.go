@@ -10,19 +10,19 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-// validates name/id-queryParam and checks emptiness. returns the corresponding id.
-func (q QueryParam) parseNameID[P seedtypes.Lookupable](r *http.Request, pResType ts.ResTypeSingle, pLookup map[string]P) (int32, error) {
-	query, err := q.checkEmpty(r)
+// ParseNameID validates name/id-queryParam and checks emptiness. returns the corresponding id.
+func (q QueryParam) ParseNameID[P seedtypes.Lookupable](r *http.Request, pResType ts.ResTypeSingle, pLookup map[string]P) (int32, error) {
+	query, err := q.CheckEmpty(r)
 	if err != nil {
 		return 0, err
 	}
 
-	return q.checkNameID(query, pResType, pLookup)
+	return q.CheckNameID(query, pResType, pLookup)
 }
 
-// validates an id or single-segment-resource name, checks emptiness, and returns the corresponding id.
-func (q QueryParam) checkNameID[P seedtypes.Lookupable](query string, pResType ts.ResTypeSingle, pLookup map[string]P) (int32, error) {
-	id, err := q.checkID(query, len(pLookup))
+// CheckNameID validates an id or single-segment-resource name, checks emptiness, and returns the corresponding id.
+func (q QueryParam) CheckNameID[P seedtypes.Lookupable](query string, pResType ts.ResTypeSingle, pLookup map[string]P) (int32, error) {
+	id, err := q.CheckID(query, len(pLookup))
 	if err == nil {
 		return id, nil
 	}

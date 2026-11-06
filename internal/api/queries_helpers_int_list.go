@@ -10,9 +10,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 )
 
-// checks for emptiness of int-list-queryParam and converts its input into a slice of valid integers
-func (q QueryParam) parseIntList(r *http.Request) ([]int32, error) {
-	query, err := q.checkEmpty(r)
+// ParseIntList checks for emptiness of int-list-queryParam and converts its input into a slice of valid integers
+func (q QueryParam) ParseIntList(r *http.Request) ([]int32, error) {
+	query, err := q.CheckEmpty(r)
 	if err != nil {
 		return nil, err
 	}
@@ -22,7 +22,7 @@ func (q QueryParam) parseIntList(r *http.Request) ([]int32, error) {
 
 // converts a list of unique query ints into a slice of valid integers. also deals with ranged inputs.
 func (q QueryParam) sliceInts(r *http.Request, query string) ([]int32, error) {
-	intSegments, err := queryListSplit(query)
+	intSegments, err := QueryListSplit(query)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func (q QueryParam) checkIntRange(segment string) ([]int32, error) {
 		return nil, nil
 
 	case 1:
-		integer, err := q.checkInt(intStrs[0])
+		integer, err := q.CheckInt(intStrs[0])
 		if err != nil {
 			return nil, err
 		}
@@ -80,12 +80,12 @@ func (q QueryParam) checkIntRange(segment string) ([]int32, error) {
 
 // converts the two values of a ranged int query input into a slice of integers.
 func (q QueryParam) sliceIntRange(intStrs []string) ([]int32, error) {
-	minInt, err := q.checkInt(intStrs[0])
+	minInt, err := q.CheckInt(intStrs[0])
 	if err != nil {
 		return nil, err
 	}
 
-	maxInt, err := q.checkInt(intStrs[1])
+	maxInt, err := q.CheckInt(intStrs[1])
 	if err != nil {
 		return nil, err
 	}

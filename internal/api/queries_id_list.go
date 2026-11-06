@@ -12,11 +12,11 @@ import (
 func (i handlerInput[T, R, A]) queryIDList[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
-		if queryParam.replacingParamsPresent(r, i.queryLookup) {
+		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
 			return inputIDs, nil
 		}
 
-		queryIDs, err := queryParam.parseIDList(r, fLookup)
+		queryIDs, err := queryParam.ParseIDList(r, fLookup)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}
@@ -38,7 +38,7 @@ func (i handlerInput[T, R, A]) queryIDListWrapper[F seedtypes.Lookupable](r *htt
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 
-		queryIDs, err := queryParam.parseIDList(r, fLookup)
+		queryIDs, err := queryParam.ParseIDList(r, fLookup)
 		if queryIsEmpty(err) {
 			return inputIDs, nil
 		}

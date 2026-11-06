@@ -25,7 +25,7 @@ func filterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(r)
+	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func filterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(r)
+	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func filterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(r)
+	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -137,7 +137,7 @@ func filterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(r)
+	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

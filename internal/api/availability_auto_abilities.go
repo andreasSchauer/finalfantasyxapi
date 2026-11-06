@@ -19,7 +19,7 @@ func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) 
 		return inputIDs, nil
 	}
 
-	customize, err := i.queryLookup[ts.QpnCustomize].parseBool(r)
+	customize, err := i.queryLookup[ts.QpnCustomize].ParseBool(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) 
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].parseValueList(r)
+	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
 	if errExceptEmptyQuery(err) {
 		return nil, err
 	}

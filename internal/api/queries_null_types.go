@@ -14,7 +14,7 @@ import (
 func nullBool(r *http.Request, queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]QueryParam) (sql.NullBool, error) {
 	queryParam := queryLookup[queryName]
 
-	b, err := queryParam.parseBool(r)
+	b, err := queryParam.ParseBool(r)
 	if err != nil {
 		return sql.NullBool{}, err
 	}
@@ -25,7 +25,7 @@ func nullBool(r *http.Request, queryName ts.QueryParamName, queryLookup map[ts.Q
 func nullInt32(r *http.Request, queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
-	integer, err := queryParam.parseInt(r)
+	integer, err := queryParam.ParseInt(r)
 	if err != nil {
 		return sql.NullInt32{}, err
 	}
@@ -37,7 +37,7 @@ func nullInt32(r *http.Request, queryName ts.QueryParamName, queryLookup map[ts.
 func nullValue(r *http.Request, queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]QueryParam) (sql.NullString, error) {
 	queryParam := queryLookup[queryName]
 
-	value, err := queryParam.parseValue(r)
+	value, err := queryParam.ParseValue(r)
 	if err != nil {
 		return sql.NullString{}, err
 	}
@@ -48,7 +48,7 @@ func nullValue(r *http.Request, queryName ts.QueryParamName, queryLookup map[ts.
 func nullID[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
-	id, err := queryParam.parseID(r, i.objLookup)
+	id, err := queryParam.ParseID(r, i.objLookup)
 	if err != nil {
 		return sql.NullInt32{}, err
 	}
@@ -59,7 +59,7 @@ func nullID[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Re
 func nullNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
-	id, err := queryParam.parseNameID(r, i.resTypeSingle, i.objLookup)
+	id, err := queryParam.ParseNameID(r, i.resTypeSingle, i.objLookup)
 	if err != nil {
 		return sql.NullInt32{}, err
 	}
@@ -70,7 +70,7 @@ func nullNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *htt
 func nullEnum[E, N any](r *http.Request, queryName ts.QueryParamName, et enums.EnumType[E, N], queryLookup map[ts.QueryParamName]QueryParam) (sql.NullString, error) {
 	queryParam := queryLookup[queryName]
 
-	enumRes, err := queryParam.parseEnum(r, et)
+	enumRes, err := queryParam.ParseEnum(r, et)
 	if err != nil {
 		return sql.NullString{}, err
 	}

@@ -8,18 +8,18 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
-// validates enum-queryParam and checks emptiness.
-func (q QueryParam) parseEnum[E, N any](r *http.Request, et enums.EnumType[E, N]) (enums.EnumVal, error) {
-	query, err := q.checkEmpty(r)
+// ParseEnum validates enum-queryParam and checks emptiness.
+func (q QueryParam) ParseEnum[E, N any](r *http.Request, et enums.EnumType[E, N]) (enums.EnumVal, error) {
+	query, err := q.CheckEmpty(r)
 	if err != nil {
 		return enums.EnumVal{}, err
 	}
 
-	return q.checkEnum(query, et)
+	return q.CheckEnum(query, et)
 }
 
-// checks, if query enum is valid.
-func (q QueryParam) checkEnum[E, N any](val string, et enums.EnumType[E, N]) (enums.EnumVal, error) {
+// CheckEnum checks, if query enum is valid.
+func (q QueryParam) CheckEnum[E, N any](val string, et enums.EnumType[E, N]) (enums.EnumVal, error) {
 	enum, err := et.CheckVal(val)
 	switch err {
 	case errs.ErrIDNotFound:
