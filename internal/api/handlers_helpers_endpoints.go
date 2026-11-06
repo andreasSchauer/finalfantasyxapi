@@ -6,19 +6,19 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (i handlerInput[T, R, A]) handleList(w http.ResponseWriter, r *http.Request) {
 	ids, err := i.retrieveFunc(r, i)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 	resources := i.toAPIResources(ids)
 
 	resourceList, err := newAPIResourceList(r, resources)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, resourceList)
@@ -43,12 +43,12 @@ func (i handlerInput[T, R, A]) handleIDOnly(w http.ResponseWriter, r *http.Reque
 	}
 
 	parseRes, err := ah.ParseID(segment, i.resTypeSingle, len(i.objLookupID))
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
 	resource, err := i.getSingleFunc(r, i, parseRes.ID)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
@@ -74,13 +74,13 @@ func (i handlerInput[T, R, A]) handleNameID(w http.ResponseWriter, r *http.Reque
 	}
 
 	parseRes, err := i.parseSingleSegmentResource(segment)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
 	if i.getMultipleQuery != nil && parseRes.Name != "" {
 		resources, err := i.handleMultiple(r, parseRes.Name)
-		if handleHTTPError(w, err) {
+		if HandleHTTPError(w, err) {
 			return
 		}
 		respondWithJSON(w, http.StatusMultipleChoices, resources)
@@ -88,7 +88,7 @@ func (i handlerInput[T, R, A]) handleNameID(w http.ResponseWriter, r *http.Reque
 	}
 
 	resource, err := i.getSingleFunc(r, i, parseRes.ID)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
@@ -100,12 +100,12 @@ func (i handlerInput[T, R, A]) handleNameVersion(w http.ResponseWriter, r *http.
 	versionStr := segments[1]
 
 	parseRes, err := i.parseNameVersionResource(name, versionStr)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
 	resource, err := i.getSingleFunc(r, i, parseRes.ID)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
@@ -166,7 +166,7 @@ func (i handlerInput[T, R, A]) handleSubOrNameVer(w http.ResponseWriter, r *http
 // if len(segments) is 0, this function crafts the response for /enums
 func (i handlerInputEnums) handleList(w http.ResponseWriter, r *http.Request) {
 	err := verifyQueryParams[string](r, i.Endpoint, i.queryLookup, nil, nil)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
@@ -174,7 +174,7 @@ func (i handlerInputEnums) handleList(w http.ResponseWriter, r *http.Request) {
 	resources := enumsToNamedAPIResources(enums)
 
 	resourceList, err := newAPIResourceList(r, resources)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, resourceList)
@@ -190,13 +190,13 @@ func (i handlerInputEnums) handleSingle(w http.ResponseWriter, r *http.Request, 
 	}
 
 	enum, key, err := i.parseSegment(segment)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
 	// happens after enum parsing, just for error priority reasons. if I prioritize wrong query param errors over wrong enum errors, I can simply swap the two functions
 	err = verifyQueryParams(r, i.Endpoint, i.queryLookup, &key, nil)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
@@ -206,7 +206,7 @@ func (i handlerInputEnums) handleSingle(w http.ResponseWriter, r *http.Request, 
 // if len(segments) is 0, this function crafts the response for /endpoints
 func (i handlerInputEndpoints) handleList(w http.ResponseWriter, r *http.Request) {
 	err := verifyQueryParams[string](r, i.Endpoint, i.queryLookup, nil, nil)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
@@ -215,7 +215,7 @@ func (i handlerInputEndpoints) handleList(w http.ResponseWriter, r *http.Request
 	queryparam.SetLimitMax(r, r.URL.Query())
 
 	resourceList, err := newAPIResourceList(r, resources)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, resourceList)
@@ -235,7 +235,7 @@ func (i handlerInputEndpoints) handleSections(w http.ResponseWriter, r *http.Req
 
 func (i handlerInputService[P, R]) handleBody(w http.ResponseWriter, r *http.Request, segments []string) {
 	err := verifyQueryParamsService(r)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
@@ -251,7 +251,7 @@ func (i handlerInputService[P, R]) handleBody(w http.ResponseWriter, r *http.Req
 
 func (i handlerInputService[P, R]) handleBodySections(w http.ResponseWriter, r *http.Request, segments []string) {
 	err := verifyQueryParamsService(r)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
@@ -277,12 +277,12 @@ func (i handlerInputService[P, R]) handleBodySections(w http.ResponseWriter, r *
 
 func (i handlerInputService[P, R]) handlePost(w http.ResponseWriter, r *http.Request) {
 	err := verifyQueryParamsService(r)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 
 	response, err := servicePost(r, i)
-	if handleHTTPError(w, err) {
+	if HandleHTTPError(w, err) {
 		return
 	}
 

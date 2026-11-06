@@ -25,7 +25,7 @@ func (i handlerInput[T, R, A]) queryValueList(r *http.Request, inputIDs []int32,
 
 		dbIDs, err := dbQuery(ctx, values)
 		if err != nil {
-			return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParam, err)
+			return nil, i.ErrorDBFilter(queryParam, err)
 		}
 
 		return dbIDs, nil

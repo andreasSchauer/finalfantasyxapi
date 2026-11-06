@@ -23,7 +23,7 @@ func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) (
 		CharacterID: charIDPtr,
 	})
 	if err != nil {
-		return nil, newHTTPErrorDBFilter(i.resTypePlural, i.queryLookup[ts.QpnMonster], err)
+		return nil, i.ErrorDBFilter(i.queryLookup[ts.QpnMonster], err)
 	}
 
 	return dbIDs, nil
@@ -42,7 +42,7 @@ func getAutoAbilitiesByShop(r *http.Request, ctx context.Context, id int32) ([]i
 		CharacterID: charIDPtr,
 	})
 	if err != nil {
-		return nil, newHTTPErrorDBFilter(i.resTypePlural, i.queryLookup[ts.QpnMonster], err)
+		return nil, i.ErrorDBFilter(i.queryLookup[ts.QpnMonster], err)
 	}
 
 	return dbIDs, nil

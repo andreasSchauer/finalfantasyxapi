@@ -49,7 +49,7 @@ func (i handlerInput[T, R, A]) queryAvlRelGetParams(r *http.Request, parentID in
 func (i handlerInput[T, R, A]) queryAvlRelRun[K seedtypes.Lookupable](ctx context.Context, item K, params RelAvlParams, dbQuery RelAvailabilityDBQuery) ([]A, error) {
 	dbIDs, err := dbQuery(ctx, params)
 	if err != nil {
-		return nil, newHTTPErrorDB(i.resTypePlural, item, err)
+		return nil, i.ErrorDB(item, err)
 	}
 
 	resources := i.toAPIResources(dbIDs)

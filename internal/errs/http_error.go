@@ -3,6 +3,9 @@ package errs
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type HTTPError struct {
@@ -30,4 +33,24 @@ func NewHTTPError(code int, msg string, err error) HTTPError {
 
 func NewHTTPErrorFetchLimit(fetchLimit int) HTTPError {
 	return NewHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of inputs is %d", fetchLimit), nil)
+}
+
+func NewHTTPErrorDB(fetchType ts.ResTypePlural, parentItem seedtypes.Lookupable, err error) HTTPError {
+	return NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
+}
+
+func NewHTTPErrorDBPairs(parentResType, childResType ts.ResTypeSingle, err error) HTTPError {
+	return NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs", parentResType, childResType), err)
+}
+
+func NewHTTPErrorDBOne(fetchType ts.ResTypeSingle, parentItem seedtypes.Lookupable, err error) HTTPError {
+	return NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
+}
+
+func NewHTTPErrorDBFilter(fetchType ts.ResTypePlural, queryName ts.QueryParamName, err error) HTTPError {
+	return NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s for parameter '%s'", fetchType, queryName), err)
+}
+
+func NewHTTPErrorAvailability(fetchType ts.ResTypePlural, err error) HTTPError {
+	return NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by availability", fetchType), err)
 }

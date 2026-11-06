@@ -26,7 +26,7 @@ func (i handlerInput[T, R, A]) queryEnumList[E, N any](r *http.Request, et enums
 
 		dbIDs, err := dbQuery(ctx, enums)
 		if err != nil {
-			return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParam, err)
+			return nil, i.ErrorDBFilter(queryParam, err)
 		}
 
 		return dbIDs, nil

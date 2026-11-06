@@ -29,7 +29,7 @@ func (i handlerInput[T, R, A]) queryEnum[E, N any](r *http.Request, et enums.Enu
 
 		dbIDs, err := dbQuery(ctx, typedStr)
 		if err != nil {
-			return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParam, err)
+			return nil, i.ErrorDBFilter(queryParam, err)
 		}
 
 		return dbIDs, nil

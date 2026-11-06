@@ -16,7 +16,7 @@ func (i handlerInput[T, R, A]) dbGetRelation(ctx context.Context, filterItem see
 
 	dbID, err := dbQuery(ctx, filterItem.GetID())
 	if err != nil {
-		return zeroType, newHTTPErrorDB(i.resTypePlural, filterItem, err)
+		return zeroType, i.ErrorDB(filterItem, err)
 	}
 
 	res := i.idToResFunc(i, dbID)
@@ -27,7 +27,7 @@ func (i handlerInput[T, R, A]) dbGetRelation(ctx context.Context, filterItem see
 func (i handlerInput[T, R, A]) dbGetRelations(ctx context.Context, filterItem seedtypes.Lookupable, dbQuery DBQueryIntMany) ([]A, error) {
 	dbIds, err := dbQuery(ctx, filterItem.GetID())
 	if err != nil {
-		return nil, newHTTPErrorDB(i.resTypePlural, filterItem, err)
+		return nil, i.ErrorDB(filterItem, err)
 	}
 
 	resources := i.toAPIResources(dbIds)

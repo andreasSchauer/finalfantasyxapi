@@ -115,7 +115,7 @@ func sliceFromIntRange(min, max int32) []int32 {
 func cleanUpIntList(r *http.Request, ints []int32) ([]int32, error) {
 	ints = removeIntListDuplicates(ints)
 
-	limit, err := getRawQueryLimit(r)
+	limit, err := parseLimitQuery(r)
 	if errs.QueryIsEmpty(err) {
 		return ints, nil
 	}

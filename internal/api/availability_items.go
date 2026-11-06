@@ -42,7 +42,7 @@ func filterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil
@@ -80,7 +80,7 @@ func filterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil
@@ -116,7 +116,7 @@ func filterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil
@@ -154,7 +154,7 @@ func filterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil
@@ -177,7 +177,7 @@ func filterAvlPrimers(r *http.Request, inputIDs []int32) ([]int32, error) {
 		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil

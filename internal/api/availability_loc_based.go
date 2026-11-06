@@ -28,7 +28,7 @@ func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
 		dbIDs, err := config.Cfg.DB.FilterAreaIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
-			return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+			return nil, i.ErrorAvailability(err)
 		}
 
 		return dbIDs, nil
@@ -48,7 +48,7 @@ func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Methods:         sources.Methods,
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil
@@ -73,7 +73,7 @@ func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
 		dbIDs, err := config.Cfg.DB.FilterSublocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
-			return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+			return nil, i.ErrorAvailability(err)
 		}
 
 		return dbIDs, nil
@@ -93,7 +93,7 @@ func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Methods:         sources.Methods,
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil
@@ -118,7 +118,7 @@ func filterAvlLocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
 		dbIDs, err := config.Cfg.DB.FilterLocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
 		if err != nil {
-			return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+			return nil, i.ErrorAvailability(err)
 		}
 
 		return dbIDs, nil
@@ -138,7 +138,7 @@ func filterAvlLocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Methods:         sources.Methods,
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil

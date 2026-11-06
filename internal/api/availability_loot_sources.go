@@ -42,7 +42,7 @@ func filterAvlShops(r *http.Request, inputIDs []int32) ([]int32, error) {
 		EmptySlots:      sources.EmptySlots,
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil
@@ -65,7 +65,7 @@ func filterAvlTreasures(r *http.Request, inputIDs []int32) ([]int32, error) {
 		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil
@@ -89,7 +89,7 @@ func filterAvlQuests(r *http.Request, inputIDs []int32) ([]int32, error) {
 		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil
@@ -112,7 +112,7 @@ func filterAvlSidequests(r *http.Request, inputIDs []int32) ([]int32, error) {
 		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil
@@ -136,7 +136,7 @@ func filterAvlSubquests(r *http.Request, inputIDs []int32) ([]int32, error) {
 		PreAirship:   avlParams.preAirship,
 	})
 	if err != nil {
-		return nil, newHTTPErrorAvailability(i.resTypePlural, err)
+		return nil, i.ErrorAvailability(err)
 	}
 
 	return dbIDs, nil

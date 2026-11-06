@@ -27,7 +27,7 @@ func (i handlerInput[T, R, A]) queryNameIDListNul[P seedtypes.Lookupable](r *htt
 
 		dbIDs, err := dbQuery(ctx, queryIDs)
 		if err != nil {
-			return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParam, err)
+			return nil, i.ErrorDBFilter(queryParam, err)
 		}
 
 		return dbIDs, nil

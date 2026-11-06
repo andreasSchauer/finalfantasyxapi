@@ -50,21 +50,21 @@ func getLocationSectionRelations(r *http.Request, locIDs []int32) (map[int32]map
 	var treasureJunctions []Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Treasures.resTypeSingle, config.Cfg.DB.GetLocationTreasureIdPairs, juncLocationTreasure)
+		treasureJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Treasures.resTypeSingle, config.Cfg.DB.GetLocationTreasureIdPairs, juncLocationTreasure)
 		return err
 	})
 
 	var shopJunctions []Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Shops.resTypeSingle, config.Cfg.DB.GetLocationShopIdPairs, juncLocationShop)
+		shopJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Shops.resTypeSingle, config.Cfg.DB.GetLocationShopIdPairs, juncLocationShop)
 		return err
 	})
 
 	var monsterJunctions []Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = getDBJunctions(ctx, locIDs, i.resTypeSingle, E.Monsters.resTypeSingle, config.Cfg.DB.GetLocationMonsterIdPairs, juncLocationMonster)
+		monsterJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Monsters.resTypeSingle, config.Cfg.DB.GetLocationMonsterIdPairs, juncLocationMonster)
 		return err
 	})
 

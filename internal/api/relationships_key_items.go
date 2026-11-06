@@ -65,11 +65,11 @@ func getKeyItemCelestialWeapon(ctx context.Context, keyItem seedtypes.KeyItem) (
 		return nil, nil
 	}
 
-	keyItemBase := strings.Split(keyItem.Name, " ")[0]
+	keyItemBase, _, _ := strings.Cut(keyItem.Name, " ")
 
 	celestialID, err := config.Cfg.DB.GetKeyItemCelestialWeapon(ctx, database.KeyItemBase(keyItemBase))
 	if err != nil {
-		return nil, newHTTPErrorDBOne(E.CelestialWeapons.resTypeSingle, keyItem, err)
+		return nil, E.CelestialWeapons.ErrorDBOne(keyItem, err)
 	}
 
 	celestialRes := idToNamedAPIResource(E.CelestialWeapons, celestialID)

@@ -28,7 +28,7 @@ func (i handlerInput[T, R, A]) queryID[F seedtypes.Lookupable](r *http.Request, 
 
 		dbIDs, err := dbQuery(ctx, id)
 		if err != nil {
-			return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParam, err)
+			return nil, i.ErrorDBFilter(queryParam, err)
 		}
 
 		return dbIDs, nil
@@ -72,7 +72,7 @@ func (i handlerInput[T, R, A]) queryIDNul[F seedtypes.Lookupable](r *http.Reques
 
 		dbIDs, err := dbQuery(ctx, h.GetNullInt32(idPtr))
 		if err != nil {
-			return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParam, err)
+			return nil, i.ErrorDBFilter(queryParam, err)
 		}
 
 		return dbIDs, nil

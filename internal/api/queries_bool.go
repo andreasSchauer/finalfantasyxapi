@@ -27,7 +27,7 @@ func (i handlerInput[T, R, A]) queryBool(r *http.Request, inputIDs []int32, quer
 
 		dbIDs, err := dbQuery(ctx, b)
 		if err != nil {
-			return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParam, err)
+			return nil, i.ErrorDBFilter(queryParam, err)
 		}
 
 		return dbIDs, nil
@@ -52,7 +52,7 @@ func (i handlerInput[T, R, A]) queryBool2(r *http.Request, inputIDs []int32, que
 
 		dbIDs, err := dbQuery(ctx)
 		if err != nil {
-			return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParam, err)
+			return nil, i.ErrorDBFilter(queryParam, err)
 		}
 
 		if !b {

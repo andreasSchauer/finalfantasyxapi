@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getRawQueryLimit(r *http.Request) (int, error) {
+func parseLimitQuery(r *http.Request) (int, error) {
 	queryParamLimit := GetQueryParam(GetDefaultParams(), ts.QpnLimit)
 	query, err := queryParamLimit.CheckEmpty(r)
 	if err != nil {

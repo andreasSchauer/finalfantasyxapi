@@ -25,7 +25,7 @@ func getMasterItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int
 		Methods: h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParamMethods, err)
+		return nil, i.ErrorDBFilter(queryParamMethods, err)
 	}
 
 	return dbIDs, nil
@@ -45,7 +45,7 @@ func getMasterItemsBySublocation(r *http.Request, ctx context.Context, id int32)
 		Methods:       h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParamMethods, err)
+		return nil, i.ErrorDBFilter(queryParamMethods, err)
 	}
 
 	return dbIDs, nil
@@ -65,7 +65,7 @@ func getMasterItemsByLocation(r *http.Request, ctx context.Context, id int32) ([
 		Methods:    h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParamMethods, err)
+		return nil, i.ErrorDBFilter(queryParamMethods, err)
 	}
 
 	return dbIDs, nil
@@ -85,7 +85,7 @@ func getItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, er
 		Methods: h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParamMethods, err)
+		return nil, i.ErrorDBFilter(queryParamMethods, err)
 	}
 
 	return dbIDs, nil
@@ -105,7 +105,7 @@ func getItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]in
 		Methods:       h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParamMethods, err)
+		return nil, i.ErrorDBFilter(queryParamMethods, err)
 	}
 
 	return dbIDs, nil
@@ -125,7 +125,7 @@ func getItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32
 		Methods:    h.SliceOrNil(methods),
 	})
 	if err != nil {
-		return nil, newHTTPErrorDBFilter(i.resTypePlural, queryParamMethods, err)
+		return nil, i.ErrorDBFilter(queryParamMethods, err)
 	}
 
 	return dbIDs, nil
