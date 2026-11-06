@@ -2,6 +2,7 @@ package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -18,7 +19,7 @@ func (e expShop) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareShops(test test, exp expShop, got api.Shop) {
+func compareShops(test test, exp expShop, got apitypes.Shop) {
 	test.t.Helper()
 	test.compareExpIDOnly(exp.expIDOnly, got.ID)
 	test.compIDAPIResource("area", api.E.Areas.Endpoint, exp.area, got.Area)
@@ -32,7 +33,7 @@ type testSubShop struct {
 	equipment []testShopEquipment
 }
 
-func compareSubShops(test test, fieldName string, exp testSubShop, got api.SubShop) {
+func compareSubShops(test test, fieldName string, exp testSubShop, got apitypes.SubShop) {
 	test.t.Helper()
 	test.checkTestStructsInSlice(fieldName+" - items", exp.items, got.Items, compareShopItems)
 	test.checkTestStructsInSlice(fieldName+" - equipment", exp.equipment, got.Equipment, compareShopEquipment)
@@ -56,7 +57,7 @@ func newTestShopItem(idx int, itemID, price int32) testShopItem {
 	}
 }
 
-func compareShopItems(test test, fieldName string, exp testShopItem, got api.ShopItem) {
+func compareShopItems(test test, fieldName string, exp testShopItem, got apitypes.ShopItem) {
 	test.t.Helper()
 	test.compIDAPIResource(fieldName+" - item", api.E.Items.Endpoint, exp.item, got.Item)
 	test.compare(fieldName+" - price", exp.price, got.Price)
@@ -72,7 +73,7 @@ func (t testShopEquipment) GetIndex() int {
 	return t.index
 }
 
-func compareShopEquipment(test test, fieldName string, exp testShopEquipment, got api.ShopEquipment) {
+func compareShopEquipment(test test, fieldName string, exp testShopEquipment, got apitypes.ShopEquipment) {
 	test.t.Helper()
 	compareFoundEquipment(test, fieldName+" - found equipment", exp.equipment, got.Equipment)
 	test.compare(fieldName+" - price", exp.price, got.Price)

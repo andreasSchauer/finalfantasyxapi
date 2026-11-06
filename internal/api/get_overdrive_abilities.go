@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -14,19 +15,19 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getOverdriveAbility(r *http.Request, i handlerInput[seedtypes.OverdriveAbility, OverdriveAbility, apiresource.NamedAPIResource], id int32) (OverdriveAbility, error) {
+func getOverdriveAbility(r *http.Request, i handlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource], id int32) (apitypes.OverdriveAbility, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return OverdriveAbility{}, err
+		return apitypes.OverdriveAbility{}, err
 	}
 
 	overdriveIDs, err := config.Cfg.DB.GetOverdriveAbilityOverdriveIDs(r.Context(), id)
 	if err != nil {
-		return OverdriveAbility{}, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get parent overdrive", err)
+		return apitypes.OverdriveAbility{}, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get parent overdrive", err)
 	}
 	overdrive, _ := lookup.GetResourceByID(overdriveIDs[0], lookup.L.OverdrivesID)
 
-	response := OverdriveAbility{
+	response := apitypes.OverdriveAbility{
 		ID:                 ability.ID,
 		Name:               ability.Name,
 		Version:            ability.Version,
@@ -45,7 +46,7 @@ func getOverdriveAbility(r *http.Request, i handlerInput[seedtypes.OverdriveAbil
 	return response, nil
 }
 
-func retrieveOverdriveAbilities(r *http.Request, i handlerInput[seedtypes.OverdriveAbility, OverdriveAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveOverdriveAbilities(r *http.Request, i handlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -36,11 +36,10 @@ func keyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A apiresource.AP
 }
 
 func keysToTypedAPIResources[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i handlerInput[T, R, A], refs []K) []apiresource.TypedAPIResource {
-	resources := []apiresource.TypedAPIResource{}
+	resources := make([]apiresource.TypedAPIResource, len(refs))
 
-	for _, ref := range refs {
-		resource := keyToTypedAPIResource(i, ref)
-		resources = append(resources, resource)
+	for idx, ref := range refs {
+		resources[idx] = keyToTypedAPIResource(i, ref)
 	}
 
 	return resources

@@ -4,19 +4,20 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getOverdriveMode(r *http.Request, i handlerInput[seedtypes.OverdriveMode, OverdriveMode, apiresource.NamedAPIResource], id int32) (OverdriveMode, error) {
+func getOverdriveMode(r *http.Request, i handlerInput[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource], id int32) (apitypes.OverdriveMode, error) {
 	mode, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return OverdriveMode{}, err
+		return apitypes.OverdriveMode{}, err
 	}
 
-	response := OverdriveMode{
+	response := apitypes.OverdriveMode{
 		ID:          mode.ID,
 		Name:        mode.Name,
 		Description: mode.Description,
@@ -29,7 +30,7 @@ func getOverdriveMode(r *http.Request, i handlerInput[seedtypes.OverdriveMode, O
 	return response, nil
 }
 
-func retrieveOverdriveModes(r *http.Request, i handlerInput[seedtypes.OverdriveMode, OverdriveMode, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveOverdriveModes(r *http.Request, i handlerInput[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

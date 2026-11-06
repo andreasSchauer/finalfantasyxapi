@@ -56,11 +56,10 @@ func nameToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResourc
 }
 
 func namesToQuestAPIResources[T seedtypes.IsQuest, R any, A apiresource.APIResource](i handlerInput[T, R, A], names []string) []apiresource.QuestAPIResource {
-	resources := []apiresource.QuestAPIResource{}
+	resources := make([]apiresource.QuestAPIResource, len(names))
 
-	for _, name := range names {
-		resource := nameToQuestAPIResource(i, name)
-		resources = append(resources, resource)
+	for idx, name := range names {
+		resources[idx] = nameToQuestAPIResource(i, name)
 	}
 
 	return resources

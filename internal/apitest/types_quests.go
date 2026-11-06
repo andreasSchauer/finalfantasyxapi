@@ -3,6 +3,7 @@ package apitest
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
 type expSidequest struct {
@@ -17,7 +18,7 @@ func (e expSidequest) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSidequests(test test, exp expSidequest, got api.Sidequest) {
+func compareSidequests(test test, exp expSidequest, got apitypes.Sidequest) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResource("untyped quest", api.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
@@ -38,7 +39,7 @@ func (e expSubquest) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSubquests(test test, exp expSubquest, got api.Subquest) {
+func compareSubquests(test test, exp expSubquest, got apitypes.Subquest) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResource("untyped quest", api.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
@@ -52,7 +53,7 @@ type testQuestCompletion struct {
 	reward testResAmount[apiresource.TypedAPIResource]
 }
 
-func compareQuestCompletions(test test, fieldName string, exp testQuestCompletion, got api.QuestCompletion) {
+func compareQuestCompletions(test test, fieldName string, exp testQuestCompletion, got apitypes.QuestCompletion) {
 	test.t.Helper()
 	test.checkResIDsInSlice(fieldName+" - areas", api.E.Areas.Endpoint, exp.areas, got.Areas)
 	compareResAmounts(test, fieldName+" - rewards", exp.reward, got.Reward)

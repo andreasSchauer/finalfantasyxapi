@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getSongRelationships(r *http.Request, song seedtypes.Song) (Song, error) {
-	var rel Song
+func getSongRelationships(r *http.Request, song seedtypes.Song) (apitypes.Song, error) {
+	var rel apitypes.Song
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -26,7 +27,7 @@ func getSongRelationships(r *http.Request, song seedtypes.Song) (Song, error) {
 
 	err := g.Wait()
 	if err != nil {
-		return Song{}, err
+		return apitypes.Song{}, err
 	}
 
 	return rel, nil

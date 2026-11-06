@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -13,7 +14,7 @@ type MonsterFormationSimple struct {
 	URL            string `json:"url"`
 	Category       string `json:"category"`
 	IsForcedAmbush bool   `json:"is_forced_ambush"`
-	FormationLoot
+	apitypes.FormationLoot
 	Monsters []string `json:"monsters"`
 	Areas    []string `json:"areas"`
 }

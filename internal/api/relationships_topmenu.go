@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getTopmenuRelationships(r *http.Request, topmenu seedtypes.Topmenu) (Topmenu, error) {
-	var rel Topmenu
+func getTopmenuRelationships(r *http.Request, topmenu seedtypes.Topmenu) (apitypes.Topmenu, error) {
+	var rel apitypes.Topmenu
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -44,7 +45,7 @@ func getTopmenuRelationships(r *http.Request, topmenu seedtypes.Topmenu) (Topmen
 
 	err := g.Wait()
 	if err != nil {
-		return Topmenu{}, err
+		return apitypes.Topmenu{}, err
 	}
 
 	return rel, nil

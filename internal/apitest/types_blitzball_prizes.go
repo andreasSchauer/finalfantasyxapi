@@ -1,6 +1,8 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expBlitzballPrize struct {
 	testGeneral
@@ -14,7 +16,7 @@ func (e expBlitzballPrize) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareBlitzballPrizes(test test, exp expBlitzballPrize, got api.BlitzballPrize) {
+func compareBlitzballPrizes(test test, exp expBlitzballPrize, got apitypes.BlitzballPrize) {
 	test.t.Helper()
 	test.compareExpIDOnly(exp.expIDOnly, got.ID)
 	test.compare("category", exp.category, got.Category)

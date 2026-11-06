@@ -4,20 +4,21 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getAutoAbilityRelationships(r *http.Request, autoAbility seedtypes.AutoAbility) (AutoAbility, error) {
-	var rel AutoAbility
+func getAutoAbilityRelationships(r *http.Request, autoAbility seedtypes.AutoAbility) (apitypes.AutoAbility, error) {
+	var rel apitypes.AutoAbility
 	g, ctx := errgroup.WithContext(r.Context())
 	var monsterItems []apiresource.NamedAPIResource
 
 	availabilityParams, err := E.AutoAbilities.queryAvlRelGetParams(r, autoAbility.ID)
 	if err != nil {
-		return AutoAbility{}, err
+		return apitypes.AutoAbility{}, err
 	}
 
 	g.Go(func() error {
@@ -60,7 +61,7 @@ func getAutoAbilityRelationships(r *http.Request, autoAbility seedtypes.AutoAbil
 
 	err = g.Wait()
 	if err != nil {
-		return AutoAbility{}, err
+		return apitypes.AutoAbility{}, err
 	}
 
 	if autoAbility.RequiredItem != nil {

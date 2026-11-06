@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expStatusCondition struct {
 	testGeneral
@@ -15,7 +18,7 @@ func (e expStatusCondition) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareStatusConditions(test test, exp expStatusCondition, got api.StatusCondition) {
+func compareStatusConditions(test test, exp expStatusCondition, got apitypes.StatusCondition) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.checkResIDsInSlice("auto-abilities", api.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
@@ -32,7 +35,7 @@ type testStatusInfliction struct {
 	enemyAbilities     []int32
 }
 
-func compareStatusInflictions(test test, fieldName string, exp testStatusInfliction, got api.StatusInfliction) {
+func compareStatusInflictions(test test, fieldName string, exp testStatusInfliction, got apitypes.StatusInfliction) {
 	test.t.Helper()
 	test.checkResIDsInSlice(fieldName+" - player abilities", api.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
 	test.checkResIDsInSlice(fieldName+" - overdrive abilities", api.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
@@ -49,7 +52,7 @@ type testStatusRemoval struct {
 	statusConditions   []int32
 }
 
-func compareStatusRemovals(test test, fieldName string, exp testStatusRemoval, got api.StatusRemoval) {
+func compareStatusRemovals(test test, fieldName string, exp testStatusRemoval, got apitypes.StatusRemoval) {
 	test.t.Helper()
 	test.checkResIDsInSlice(fieldName+" - player abilities", api.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
 	test.checkResIDsInSlice(fieldName+" - overdrive abilities", api.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)

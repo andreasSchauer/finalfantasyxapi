@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -12,13 +13,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerUnit, apiresource.TypedAPIResource], id int32) (PlayerUnit, error) {
+func getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource], id int32) (apitypes.PlayerUnit, error) {
 	unit, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return PlayerUnit{}, err
+		return apitypes.PlayerUnit{}, err
 	}
 
-	var response PlayerUnit
+	var response apitypes.PlayerUnit
 
 	switch unit.Type {
 	case database.UnitTypeCharacter:
@@ -26,10 +27,10 @@ func getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerU
 
 		rel, err := getCharacterRelationships(r, character)
 		if err != nil {
-			return PlayerUnit{}, err
+			return apitypes.PlayerUnit{}, err
 		}
 
-		response = PlayerUnit{
+		response = apitypes.PlayerUnit{
 			ID:               unit.ID,
 			Name:             unit.Name,
 			Type:             unit.Type,
@@ -44,10 +45,10 @@ func getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerU
 
 		rel, err := getAeonRelationships(r, aeon)
 		if err != nil {
-			return PlayerUnit{}, err
+			return apitypes.PlayerUnit{}, err
 		}
 
-		response = PlayerUnit{
+		response = apitypes.PlayerUnit{
 			ID:               unit.ID,
 			Name:             unit.Name,
 			Type:             unit.Type,
@@ -61,7 +62,7 @@ func getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerU
 	return response, nil
 }
 
-func retrievePlayerUnits(r *http.Request, i handlerInput[seedtypes.PlayerUnit, PlayerUnit, apiresource.TypedAPIResource]) ([]int32, error) {
+func retrievePlayerUnits(r *http.Request, i handlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

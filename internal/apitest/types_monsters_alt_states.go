@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
 type testAppliedState struct {
@@ -12,7 +13,7 @@ type testAppliedState struct {
 	appliedStatus *int32
 }
 
-func compareMonsterAppliedStates(test test, _ string, exp testAppliedState, got api.AppliedState) {
+func compareMonsterAppliedStates(test test, _ string, exp testAppliedState, got apitypes.AppliedState) {
 	test.compare("applied state condition", exp.condition, got.Condition)
 	test.compare("applied state isTemporary", exp.isTemporary, got.IsTemporary)
 	test.compIDAPIResourcePtrs("applied status", api.E.StatusConditions.Endpoint, exp.appliedStatus, got.AppliedStatus)
@@ -25,7 +26,7 @@ type testDefaultState struct {
 	Loss        *testAltStateLoss
 }
 
-func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []api.AlteredState) {
+func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []apitypes.AlteredState) {
 	if test.dontCheck != nil && test.dontCheck["default state"] {
 		return
 	}
@@ -53,7 +54,7 @@ type testAltStateChange struct {
 	ElemResists []testElemResist
 }
 
-func compareAltStateChanges(test test, fieldName string, exp testAltStateChange, got api.AltStateChange) {
+func compareAltStateChanges(test test, fieldName string, exp testAltStateChange, got apitypes.AltStateChange) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
 	test.compare(desc+"distance", exp.Distance, got.Distance)
@@ -66,10 +67,10 @@ type testAltStateGain struct {
 	AutoAbilities    []int32
 	StatusImmunities []int32
 	StatusResists    map[string]int32
-	Status           *api.InflictedStatus
+	Status           *apitypes.InflictedStatus
 }
 
-func compareAltStateGains(test test, fieldName string, exp testAltStateGain, got api.AltStateGain) {
+func compareAltStateGains(test test, fieldName string, exp testAltStateGain, got apitypes.AltStateGain) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
 	test.checkResIDsInSlice(desc+"properties", api.E.Properties.Endpoint, exp.Properties, got.Properties)
@@ -86,7 +87,7 @@ type testAltStateLoss struct {
 	Status           *int32
 }
 
-func compareAltStateLosses(test test, fieldName string, exp testAltStateLoss, got api.AltStateLoss) {
+func compareAltStateLosses(test test, fieldName string, exp testAltStateLoss, got apitypes.AltStateLoss) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
 	test.checkResIDsInSlice(desc+"properties", api.E.Properties.Endpoint, exp.Properties, got.Properties)

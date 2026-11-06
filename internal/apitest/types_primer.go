@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expPrimer struct {
 	testGeneral
@@ -14,7 +17,7 @@ func (e expPrimer) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func comparePrimers(test test, exp expPrimer, got api.Primer) {
+func comparePrimers(test test, exp expPrimer, got apitypes.Primer) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResource("key item", api.E.KeyItems.Endpoint, exp.keyItem, got.KeyItem)

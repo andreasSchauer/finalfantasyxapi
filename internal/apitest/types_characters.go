@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expCharacter struct {
 	testGeneral
@@ -25,7 +28,7 @@ func (e expCharacter) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareCharacters(test test, exp expCharacter, got api.Character) {
+func compareCharacters(test test, exp expCharacter, got apitypes.Character) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResource("untyped unit", api.E.PlayerUnits.Endpoint, exp.untypedUnit, got.UntypedUnit)
@@ -48,7 +51,7 @@ type expSphereGrid struct {
 	playerAbilities []int32
 }
 
-func compareSphereGrids(test test, fieldName string, exp expSphereGrid, got api.SphereGrid) {
+func compareSphereGrids(test test, fieldName string, exp expSphereGrid, got apitypes.SphereGrid) {
 	test.t.Helper()
 	test.checkResIDsInSlice(fieldName+" abilities", api.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
 }

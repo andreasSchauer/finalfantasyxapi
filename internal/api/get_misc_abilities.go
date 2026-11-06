@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -12,13 +13,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMiscAbility(r *http.Request, i handlerInput[seedtypes.MiscAbility, MiscAbility, apiresource.NamedAPIResource], id int32) (MiscAbility, error) {
+func getMiscAbility(r *http.Request, i handlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource], id int32) (apitypes.MiscAbility, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return MiscAbility{}, err
+		return apitypes.MiscAbility{}, err
 	}
 
-	response := MiscAbility{
+	response := apitypes.MiscAbility{
 		ID:                 ability.ID,
 		Name:               ability.Name,
 		Version:            ability.Version,
@@ -39,14 +40,14 @@ func getMiscAbility(r *http.Request, i handlerInput[seedtypes.MiscAbility, MiscA
 
 	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
-		return MiscAbility{}, err
+		return apitypes.MiscAbility{}, err
 	}
 	response.BattleInteractions = battleInteractions
 
 	return response, nil
 }
 
-func retrieveMiscAbilities(r *http.Request, i handlerInput[seedtypes.MiscAbility, MiscAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveMiscAbilities(r *http.Request, i handlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

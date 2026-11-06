@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -233,10 +234,10 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			equipment: &testMonEquipment{
-				abilitySlots: api.MonsterEquipmentSlots{
+				abilitySlots: apitypes.MonsterEquipmentSlots{
 					MinAmount: 1,
 					MaxAmount: 2,
-					Chances: []api.EquipmentSlotsChance{
+					Chances: []apitypes.EquipmentSlotsChance{
 						{
 							Amount: 1,
 							Chance: 75,
@@ -247,10 +248,10 @@ func TestGetMonster(t *testing.T) {
 						},
 					},
 				},
-				attachedAbilities: api.MonsterEquipmentSlots{
+				attachedAbilities: apitypes.MonsterEquipmentSlots{
 					MinAmount: 0,
 					MaxAmount: 2,
-					Chances: []api.EquipmentSlotsChance{
+					Chances: []apitypes.EquipmentSlotsChance{
 						{
 							Amount: 0,
 							Chance: 50,
@@ -367,10 +368,10 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			equipment: &testMonEquipment{
-				abilitySlots: api.MonsterEquipmentSlots{
+				abilitySlots: apitypes.MonsterEquipmentSlots{
 					MinAmount: 2,
 					MaxAmount: 3,
-					Chances: []api.EquipmentSlotsChance{
+					Chances: []apitypes.EquipmentSlotsChance{
 						{
 							Amount: 2,
 							Chance: 50,
@@ -381,10 +382,10 @@ func TestGetMonster(t *testing.T) {
 						},
 					},
 				},
-				attachedAbilities: api.MonsterEquipmentSlots{
+				attachedAbilities: apitypes.MonsterEquipmentSlots{
 					MinAmount: 1,
 					MaxAmount: 3,
-					Chances: []api.EquipmentSlotsChance{
+					Chances: []apitypes.EquipmentSlotsChance{
 						{
 							Amount: 1,
 							Chance: 50,

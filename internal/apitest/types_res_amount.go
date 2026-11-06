@@ -3,6 +3,7 @@ package apitest
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
 type testResAmount[A apiresource.APIResource] struct {
@@ -41,7 +42,7 @@ func (t testPossibleItem) GetIndex() int {
 	return t.index
 }
 
-func comparePossibleItems(test test, fieldName string, exp testPossibleItem, got api.PossibleItem) {
+func comparePossibleItems(test test, fieldName string, exp testPossibleItem, got apitypes.PossibleItem) {
 	test.t.Helper()
 	compareResAmounts(test, fieldName+" - itemAmount", exp.testResAmount, got.ResourceAmount)
 	test.compare(fieldName+" - chance", exp.chance, got.Chance)

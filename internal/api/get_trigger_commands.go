@@ -5,24 +5,25 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getTriggerCommand(r *http.Request, i handlerInput[seedtypes.TriggerCommand, TriggerCommand, apiresource.NamedAPIResource], id int32) (TriggerCommand, error) {
+func getTriggerCommand(r *http.Request, i handlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource], id int32) (apitypes.TriggerCommand, error) {
 	command, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return TriggerCommand{}, err
+		return apitypes.TriggerCommand{}, err
 	}
 
 	rel, err := getTriggerCommandRelationships(r, command)
 	if err != nil {
-		return TriggerCommand{}, err
+		return apitypes.TriggerCommand{}, err
 	}
 
-	response := TriggerCommand{
+	response := apitypes.TriggerCommand{
 		ID:                 command.ID,
 		Name:               command.Name,
 		Version:            command.Version,
@@ -43,14 +44,14 @@ func getTriggerCommand(r *http.Request, i handlerInput[seedtypes.TriggerCommand,
 
 	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
-		return TriggerCommand{}, err
+		return apitypes.TriggerCommand{}, err
 	}
 	response.BattleInteractions = battleInteractions
 
 	return response, nil
 }
 
-func retrieveTriggerCommands(r *http.Request, i handlerInput[seedtypes.TriggerCommand, TriggerCommand, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveTriggerCommands(r *http.Request, i handlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

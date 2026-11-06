@@ -4,50 +4,19 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
-
-type StatusInfliction struct {
-	PlayerAbilities    []apiresource.NamedAPIResource `json:"player_abilities"`
-	OverdriveAbilities []apiresource.NamedAPIResource `json:"overdrive_abilities"`
-	ItemAbilities      []apiresource.NamedAPIResource `json:"item_abilities"`
-	MiscAbilities      []apiresource.NamedAPIResource `json:"misc_abilities"`
-	EnemyAbilities     []apiresource.NamedAPIResource `json:"enemy_abilities"`
-}
-
-func (s StatusInfliction) IsZero() bool {
-	return len(s.PlayerAbilities) == 0 &&
-		len(s.OverdriveAbilities) == 0 &&
-		len(s.ItemAbilities) == 0 &&
-		len(s.MiscAbilities) == 0 &&
-		len(s.EnemyAbilities) == 0
-}
-
-type StatusRemoval struct {
-	PlayerAbilities    []apiresource.NamedAPIResource `json:"player_abilities"`
-	OverdriveAbilities []apiresource.NamedAPIResource `json:"overdrive_abilities"`
-	ItemAbilities      []apiresource.NamedAPIResource `json:"item_abilities"`
-	EnemyAbilities     []apiresource.NamedAPIResource `json:"enemy_abilities"`
-	StatusConditions   []apiresource.NamedAPIResource `json:"status_conditions"`
-}
-
-func (s StatusRemoval) IsZero() bool {
-	return len(s.PlayerAbilities) == 0 &&
-		len(s.OverdriveAbilities) == 0 &&
-		len(s.ItemAbilities) == 0 &&
-		len(s.EnemyAbilities) == 0 &&
-		len(s.StatusConditions) == 0
-}
 
 type StatusInteractionQueries struct {
 	Abilities        DBQueryIntMany
 	StatusConditions DBQueryIntMany
 }
 
-func getStatusInfliction(ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*StatusInfliction, error) {
-	var statusInfliction StatusInfliction
+func getStatusInfliction(ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*apitypes.StatusInfliction, error) {
+	var statusInfliction apitypes.StatusInfliction
 
 	abilities, err := E.Abilities.dbGetRelations(ctx, status, queries.Abilities)
 	if err != nil {
@@ -62,7 +31,7 @@ func getStatusInfliction(ctx context.Context, status seedtypes.StatusCondition, 
 	return &statusInfliction, nil
 }
 
-func getStatusRemoval(ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*StatusRemoval, error) {
+func getStatusRemoval(ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*apitypes.StatusRemoval, error) {
 	abilities, err := E.Abilities.dbGetRelations(ctx, status, queries.Abilities)
 	if err != nil {
 		return nil, err
@@ -81,8 +50,8 @@ func getStatusRemoval(ctx context.Context, status seedtypes.StatusCondition, que
 	return &statusRemoval, nil
 }
 
-func populateStatusInfliction(abilities []apiresource.TypedAPIResource) StatusInfliction {
-	infliction := StatusInfliction{
+func populateStatusInfliction(abilities []apiresource.TypedAPIResource) apitypes.StatusInfliction {
+	infliction := apitypes.StatusInfliction{
 		PlayerAbilities:    []apiresource.NamedAPIResource{},
 		OverdriveAbilities: []apiresource.NamedAPIResource{},
 		ItemAbilities:      []apiresource.NamedAPIResource{},
@@ -126,8 +95,8 @@ func populateStatusInfliction(abilities []apiresource.TypedAPIResource) StatusIn
 	return infliction
 }
 
-func populateStatusRemoval(abilities []apiresource.TypedAPIResource) StatusRemoval {
-	removal := StatusRemoval{
+func populateStatusRemoval(abilities []apiresource.TypedAPIResource) apitypes.StatusRemoval {
+	removal := apitypes.StatusRemoval{
 		PlayerAbilities:    []apiresource.NamedAPIResource{},
 		OverdriveAbilities: []apiresource.NamedAPIResource{},
 		ItemAbilities:      []apiresource.NamedAPIResource{},

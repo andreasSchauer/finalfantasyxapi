@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getPropertyRelationships(r *http.Request, property seedtypes.Property) (Property, error) {
-	var rel Property
+func getPropertyRelationships(r *http.Request, property seedtypes.Property) (apitypes.Property, error) {
+	var rel apitypes.Property
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -26,7 +27,7 @@ func getPropertyRelationships(r *http.Request, property seedtypes.Property) (Pro
 
 	err := g.Wait()
 	if err != nil {
-		return Property{}, err
+		return apitypes.Property{}, err
 	}
 
 	return rel, nil

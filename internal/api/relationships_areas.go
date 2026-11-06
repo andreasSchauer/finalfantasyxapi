@@ -4,30 +4,19 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-type AreaConnection struct {
-	Area           apiresource.AreaAPIResource `json:"area"`
-	ConnectionType string                      `json:"connection_type"`
-	IsStoryBased   bool                        `json:"is_story_based"`
-	Notes          *string                     `json:"notes,omitempty"`
-}
-
-func (ac AreaConnection) GetAPIResource() apiresource.APIResource {
-	return ac.Area
-}
-
-func getAreaRelationships(r *http.Request, area seedtypes.Area) (LocRel, error) {
-	var rel LocRel
+func getAreaRelationships(r *http.Request, area seedtypes.Area) (apitypes.LocRel, error) {
+	var rel apitypes.LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := E.Areas.queryAvlRelGetParams(r, area.ID)
 	if err != nil {
-		return LocRel{}, err
+		return apitypes.LocRel{}, err
 	}
 
 	g.Go(func() error {
@@ -91,18 +80,18 @@ func getAreaRelationships(r *http.Request, area seedtypes.Area) (LocRel, error) 
 
 	err = g.Wait()
 	if err != nil {
-		return LocRel{}, err
+		return apitypes.LocRel{}, err
 	}
 
 	return rel, nil
 }
 
-func getAreaConnectedAreas(area seedtypes.Area) ([]AreaConnection, error) {
+func getAreaConnectedAreas(area seedtypes.Area) ([]apitypes.AreaConnection, error) {
 	i := E.Areas
-	connectedAreas := []AreaConnection{}
+	connectedAreas := []apitypes.AreaConnection{}
 
 	for _, connArea := range area.ConnectedAreas {
-		connection := AreaConnection{
+		connection := apitypes.AreaConnection{
 			Area:           locAreaToAreaAPIResource(i, connArea.LocationArea),
 			ConnectionType: connArea.ConnectionType,
 			IsStoryBased:   connArea.IsStoryBased,

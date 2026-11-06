@@ -4,21 +4,22 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getItemRelationships(r *http.Request, item seedtypes.Item) (Item, error) {
+func getItemRelationships(r *http.Request, item seedtypes.Item) (apitypes.Item, error) {
 	availabilityParams, err := E.Items.queryAvlRelGetParams(r, item.ID)
 	if err != nil {
-		return Item{}, err
+		return apitypes.Item{}, err
 	}
 
 	rel, err := runItemRelQueries(r, item, availabilityParams)
 	if err != nil {
-		return Item{}, err
+		return apitypes.Item{}, err
 	}
 
 	if item.Category == string(database.ItemCategorySphere) {
@@ -29,8 +30,8 @@ func getItemRelationships(r *http.Request, item seedtypes.Item) (Item, error) {
 	return rel, nil
 }
 
-func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams RelAvlParams) (Item, error) {
-	var rel Item
+func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams RelAvlParams) (apitypes.Item, error) {
+	var rel apitypes.Item
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -101,14 +102,14 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 
 	err := g.Wait()
 	if err != nil {
-		return Item{}, err
+		return apitypes.Item{}, err
 	}
 
 	return rel, nil
 }
 
-func getMonItemAmts(monsters []apiresource.NamedAPIResource, itemName string) []MonItemAmts {
-	monItemAmts := []MonItemAmts{}
+func getMonItemAmts(monsters []apiresource.NamedAPIResource, itemName string) []apitypes.MonItemAmts {
+	monItemAmts := []apitypes.MonItemAmts{}
 
 	for _, monster := range monsters {
 		monItemAmt := createItemMonster(itemName, monster)

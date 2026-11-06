@@ -4,21 +4,22 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getElement(r *http.Request, i handlerInput[seedtypes.Element, Element, apiresource.NamedAPIResource], id int32) (Element, error) {
+func getElement(r *http.Request, i handlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource], id int32) (apitypes.Element, error) {
 	element, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Element{}, err
+		return apitypes.Element{}, err
 	}
 
 	rel, err := getElementRelationships(r, element)
 	if err != nil {
-		return Element{}, err
+		return apitypes.Element{}, err
 	}
 
-	response := Element{
+	response := apitypes.Element{
 		ID:                 element.ID,
 		Name:               element.Name,
 		OppositeElement:    namePtrToNamedAPIResPtr(i, element.OppositeElement, nil),
@@ -37,6 +38,6 @@ func getElement(r *http.Request, i handlerInput[seedtypes.Element, Element, apir
 	return response, nil
 }
 
-func retrieveElements(r *http.Request, i handlerInput[seedtypes.Element, Element, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveElements(r *http.Request, i handlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

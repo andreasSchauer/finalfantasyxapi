@@ -2,6 +2,7 @@ package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -19,7 +20,7 @@ func (e expPlayerUnit) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func comparePlayerUnits(test test, exp expPlayerUnit, got api.PlayerUnit) {
+func comparePlayerUnits(test test, exp expPlayerUnit, got apitypes.PlayerUnit) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("unit type", string(exp.unitType), string(got.Type))

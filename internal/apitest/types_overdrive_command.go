@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expOverdriveCommand struct {
 	testGeneral
@@ -16,7 +19,7 @@ func (e expOverdriveCommand) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareOverdriveCommands(test test, exp expOverdriveCommand, got api.OverdriveCommand) {
+func compareOverdriveCommands(test test, exp expOverdriveCommand, got apitypes.OverdriveCommand) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("rank", exp.rank, got.Rank)

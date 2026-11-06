@@ -1,26 +1,17 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-type PossibleItem struct {
-	apiresource.ResourceAmount[apiresource.TypedAPIResource]
-	Chance int32 `json:"chance"`
-}
-
-func (ps PossibleItem) GetAPIResource() apiresource.APIResource {
-	return ps.Resource.GetAPIResource()
-}
-
-func newPossibleItem(item seedtypes.ItemAmount, chance int32) PossibleItem {
-	return PossibleItem{
+func newPossibleItem(item seedtypes.ItemAmount, chance int32) apitypes.PossibleItem {
+	return apitypes.PossibleItem{
 		ResourceAmount: E.AllItems.toResAmtFromName(item),
 		Chance:         chance,
 	}
 }
 
-func convertPossibleItem(item seedtypes.PossibleItem) PossibleItem {
+func convertPossibleItem(item seedtypes.PossibleItem) apitypes.PossibleItem {
 	return newPossibleItem(item.ItemAmount, item.Chance)
 }

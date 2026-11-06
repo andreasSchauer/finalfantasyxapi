@@ -3,15 +3,16 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getMasterItemObtainable(r *http.Request, masterItem seedtypes.MasterItem) (ObtainableFrom, error) {
+func getMasterItemObtainable(r *http.Request, masterItem seedtypes.MasterItem) (apitypes.ObtainableFrom, error) {
 	availabilityParams, err := E.AllItems.queryAvlRelGetParams(r, masterItem.ID)
 	if err != nil {
-		return ObtainableFrom{}, err
+		return apitypes.ObtainableFrom{}, err
 	}
 
 	bools, err := config.Cfg.DB.GetMasterItemObtainableBools(r.Context(), database.GetMasterItemObtainableBoolsParams{
@@ -20,10 +21,10 @@ func getMasterItemObtainable(r *http.Request, masterItem seedtypes.MasterItem) (
 		Repeatable:   availabilityParams.Repeatable,
 	})
 	if err != nil {
-		return ObtainableFrom{}, err
+		return apitypes.ObtainableFrom{}, err
 	}
 
-	obtainable := ObtainableFrom{
+	obtainable := apitypes.ObtainableFrom{
 		Monsters:        bools.Monsters,
 		Treasures:       bools.Treasures,
 		Shops:           bools.Shops,

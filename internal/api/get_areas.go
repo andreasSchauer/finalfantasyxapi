@@ -4,29 +4,30 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getArea(r *http.Request, i handlerInput[seedtypes.Area, Area, apiresource.AreaAPIResource], id int32) (Area, error) {
+func getArea(r *http.Request, i handlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], id int32) (apitypes.Area, error) {
 	area, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Area{}, err
+		return apitypes.Area{}, err
 	}
 
 	connections, err := getAreaConnectedAreas(area)
 	if err != nil {
-		return Area{}, err
+		return apitypes.Area{}, err
 	}
 
 	rel, err := getAreaRelationships(r, area)
 	if err != nil {
-		return Area{}, err
+		return apitypes.Area{}, err
 	}
 
-	response := Area{
+	response := apitypes.Area{
 		ID:                area.ID,
 		Name:              area.Name,
 		Version:           area.Version,
@@ -46,7 +47,7 @@ func getArea(r *http.Request, i handlerInput[seedtypes.Area, Area, apiresource.A
 	return response, nil
 }
 
-func retrieveAreas(r *http.Request, i handlerInput[seedtypes.Area, Area, apiresource.AreaAPIResource]) ([]int32, error) {
+func retrieveAreas(r *http.Request, i handlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

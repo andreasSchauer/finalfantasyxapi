@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expLocation struct {
 	testGeneral
@@ -14,7 +17,7 @@ func (e expLocation) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareLocations(test test, exp expLocation, got api.Location) {
+func compareLocations(test test, exp expLocation, got apitypes.Location) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)

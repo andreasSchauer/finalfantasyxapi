@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -13,13 +14,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getEquipmentTable(r *http.Request, i handlerInput[seedtypes.EquipmentTable, EquipmentTable, apiresource.UnnamedAPIResource], id int32) (EquipmentTable, error) {
+func getEquipmentTable(r *http.Request, i handlerInput[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource], id int32) (apitypes.EquipmentTable, error) {
 	table, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return EquipmentTable{}, err
+		return apitypes.EquipmentTable{}, err
 	}
 
-	response := EquipmentTable{
+	response := apitypes.EquipmentTable{
 		ID:                      table.ID,
 		Type:                    table.Type,
 		Classification:          table.Classification,
@@ -34,7 +35,7 @@ func getEquipmentTable(r *http.Request, i handlerInput[seedtypes.EquipmentTable,
 	if table.SpecificCharacter != nil && table.Classification == string(database.EquipClassCelestialWeapon) {
 		classRes, err := E.CelestialWeapons.dbGetRelationPtr(r.Context(), table, config.Cfg.DB.GetEquipmentTableCelestialWeaponID)
 		if err != nil {
-			return EquipmentTable{}, err
+			return apitypes.EquipmentTable{}, err
 		}
 		response.CelestialWeapon = classRes
 	}
@@ -42,7 +43,7 @@ func getEquipmentTable(r *http.Request, i handlerInput[seedtypes.EquipmentTable,
 	return response, nil
 }
 
-func retrieveEquipmentTables(r *http.Request, i handlerInput[seedtypes.EquipmentTable, EquipmentTable, apiresource.UnnamedAPIResource]) ([]int32, error) {
+func retrieveEquipmentTables(r *http.Request, i handlerInput[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

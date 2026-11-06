@@ -1,6 +1,8 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expAgilityTier struct {
 	testGeneral
@@ -11,14 +13,14 @@ type expAgilityTier struct {
 	monMaxICV   *int32
 	monMinICV   *int32
 	charMaxICV  *int32
-	charMinICVs []api.AgilitySubtier
+	charMinICVs []apitypes.AgilitySubtier
 }
 
 func (e expAgilityTier) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAgilityTiers(test test, exp expAgilityTier, got api.AgilityTier) {
+func compareAgilityTiers(test test, exp expAgilityTier, got apitypes.AgilityTier) {
 	test.t.Helper()
 	test.compareExpIDOnly(exp.expIDOnly, got.ID)
 	test.compare("from agility", exp.fromAgility, got.FromAgility)

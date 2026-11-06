@@ -5,13 +5,14 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getCharClassRelationships(r *http.Request, class seedtypes.CharacterClass) (CharacterClass, error) {
-	var rel CharacterClass
+func getCharClassRelationships(r *http.Request, class seedtypes.CharacterClass) (apitypes.CharacterClass, error) {
+	var rel apitypes.CharacterClass
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -51,7 +52,7 @@ func getCharClassRelationships(r *http.Request, class seedtypes.CharacterClass) 
 
 	err := g.Wait()
 	if err != nil {
-		return CharacterClass{}, err
+		return apitypes.CharacterClass{}, err
 	}
 
 	return rel, nil

@@ -6,19 +6,20 @@ import (
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (KeyItem, error) {
-	var rel KeyItem
+func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (apitypes.KeyItem, error) {
+	var rel apitypes.KeyItem
 	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := E.KeyItems.queryAvlRelGetParams(r, keyItem.ID)
 	if err != nil {
-		return KeyItem{}, err
+		return apitypes.KeyItem{}, err
 	}
 
 	g.Go(func() error {
@@ -54,7 +55,7 @@ func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (KeyIte
 
 	err = g.Wait()
 	if err != nil {
-		return KeyItem{}, err
+		return apitypes.KeyItem{}, err
 	}
 
 	return rel, nil

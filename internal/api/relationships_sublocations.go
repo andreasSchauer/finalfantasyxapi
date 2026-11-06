@@ -3,19 +3,20 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getSublocationRelationships(r *http.Request, sublocation seedtypes.Sublocation) (Sublocation, error) {
-	var rel Sublocation
-	var locRel LocRel
+func getSublocationRelationships(r *http.Request, sublocation seedtypes.Sublocation) (apitypes.Sublocation, error) {
+	var rel apitypes.Sublocation
+	var locRel apitypes.LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := E.Sublocations.queryAvlRelGetParams(r, sublocation.ID)
 	if err != nil {
-		return Sublocation{}, err
+		return apitypes.Sublocation{}, err
 	}
 
 	g.Go(func() error {
@@ -91,7 +92,7 @@ func getSublocationRelationships(r *http.Request, sublocation seedtypes.Sublocat
 
 	err = g.Wait()
 	if err != nil {
-		return Sublocation{}, err
+		return apitypes.Sublocation{}, err
 	}
 
 	rel.LocRel = locRel

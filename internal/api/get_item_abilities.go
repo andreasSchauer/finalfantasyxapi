@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -13,15 +14,15 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getItemAbility(r *http.Request, i handlerInput[seedtypes.ItemAbility, ItemAbility, apiresource.NamedAPIResource], id int32) (ItemAbility, error) {
+func getItemAbility(r *http.Request, i handlerInput[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource], id int32) (apitypes.ItemAbility, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return ItemAbility{}, err
+		return apitypes.ItemAbility{}, err
 	}
 
 	item, _ := lookup.GetResourceByID(id, lookup.L.ItemsID)
 
-	response := ItemAbility{
+	response := apitypes.ItemAbility{
 		ID:                 ability.ID,
 		Name:               ability.Name,
 		Item:               idToNamedAPIResource(E.Items, id),
@@ -44,7 +45,7 @@ func getItemAbility(r *http.Request, i handlerInput[seedtypes.ItemAbility, ItemA
 	return response, nil
 }
 
-func retrieveItemAbilities(r *http.Request, i handlerInput[seedtypes.ItemAbility, ItemAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveItemAbilities(r *http.Request, i handlerInput[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -13,8 +14,8 @@ type Monster struct {
 	Name                 string                           `json:"name"`
 	Version              *int32                           `json:"version,omitempty"`
 	Specification        *string                          `json:"specification,omitempty"`
-	AppliedState         *AppliedState                    `json:"applied_state,omitempty"`
-	AgilityParameters    *AgilityParams                   `json:"agility_parameters"`
+	AppliedState         *apitypes.AppliedState                    `json:"applied_state,omitempty"`
+	AgilityParameters    *apitypes.AgilityParams                   `json:"agility_parameters"`
 	Notes                *string                          `json:"notes,omitempty"`
 	Species              string                           `json:"species"`
 	Availability         string                           `json:"availability"`
@@ -45,16 +46,16 @@ type Monster struct {
 	ScanText             *string                          `json:"scan_text"`
 	Areas                []apiresource.AreaAPIResource    `json:"areas"`
 	Formations           []apiresource.UnnamedAPIResource `json:"monster_formations"`
-	BaseStats            []BaseStat                       `json:"base_stats"`
-	RegenAmounts         []RegenAmount                    `json:"regen_amounts"`
-	Items                *MonsterItems                    `json:"items"`
+	BaseStats            []apitypes.BaseStat                       `json:"base_stats"`
+	RegenAmounts         []apitypes.RegenAmount                    `json:"regen_amounts"`
+	Items                *apitypes.MonsterItems                    `json:"items"`
 	BribeChances         []BribeChance                    `json:"bribe_chances,omitempty"`
-	Equipment            *MonsterEquipment                `json:"equipment"`
-	ElemResists          []ElementalResist                `json:"elem_resists"`
+	Equipment            *apitypes.MonsterEquipment                `json:"equipment"`
+	ElemResists          []apitypes.ElementalResist                `json:"elem_resists"`
 	StatusImmunities     []apiresource.NamedAPIResource   `json:"status_immunities"`
-	StatusResists        []StatusResist                   `json:"status_resists"`
+	StatusResists        []apitypes.StatusResist                   `json:"status_resists"`
 	Abilities            []MonsterAbility                 `json:"abilities"`
-	AlteredStates        []AlteredState                   `json:"altered_states"`
+	AlteredStates        []apitypes.AlteredState                   `json:"altered_states"`
 }
 
 func (m Monster) String() string {

@@ -3,6 +3,7 @@ package apitest
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
 type expArenaCreation struct {
@@ -21,7 +22,7 @@ func (e expArenaCreation) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareArenaCreations(test test, exp expArenaCreation, got api.ArenaCreation) {
+func compareArenaCreations(test test, exp expArenaCreation, got apitypes.ArenaCreation) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("category", exp.category, got.Category)

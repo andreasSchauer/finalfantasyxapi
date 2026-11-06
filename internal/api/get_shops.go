@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -12,13 +13,13 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getShop(r *http.Request, i handlerInput[seedtypes.Shop, Shop, apiresource.UnnamedAPIResource], id int32) (Shop, error) {
+func getShop(r *http.Request, i handlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource], id int32) (apitypes.Shop, error) {
 	shop, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Shop{}, err
+		return apitypes.Shop{}, err
 	}
 
-	response := Shop{
+	response := apitypes.Shop{
 		ID:          shop.ID,
 		Area:        idToAreaAPIResource(E.Areas, shop.AreaID),
 		Notes:       shop.Notes,
@@ -30,7 +31,7 @@ func getShop(r *http.Request, i handlerInput[seedtypes.Shop, Shop, apiresource.U
 	return response, nil
 }
 
-func retrieveShops(r *http.Request, i handlerInput[seedtypes.Shop, Shop, apiresource.UnnamedAPIResource]) ([]int32, error) {
+func retrieveShops(r *http.Request, i handlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

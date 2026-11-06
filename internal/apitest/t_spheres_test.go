@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
 func TestGetSphere(t *testing.T) {
@@ -68,7 +69,7 @@ func TestGetSphere(t *testing.T) {
 			},
 			expUnique: newExpUnique(16, "hp sphere"),
 			item:      85,
-			createdNode: &api.CreatedNode{
+			createdNode: &apitypes.CreatedNode{
 				Node:  "hp",
 				Value: 300,
 			},
@@ -117,7 +118,7 @@ func TestGetSphere(t *testing.T) {
 			},
 			expUnique: newExpUnique(16, "hp sphere"),
 			item:      85,
-			createdNode: &api.CreatedNode{
+			createdNode: &apitypes.CreatedNode{
 				Node:  "hp",
 				Value: 300,
 			},

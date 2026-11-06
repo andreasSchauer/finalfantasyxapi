@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expMonsterFormation struct {
 	testGeneral
@@ -21,7 +24,7 @@ func (e expMonsterFormation) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareMonsterFormations(test test, exp expMonsterFormation, got api.MonsterFormation) {
+func compareMonsterFormations(test test, exp expMonsterFormation, got apitypes.MonsterFormation) {
 	test.t.Helper()
 	test.compareExpIDOnly(exp.expIDOnly, got.ID)
 	test.compare("category", exp.category, got.Category)
@@ -41,7 +44,7 @@ type testFormationTC struct {
 	Users   []int32
 }
 
-func compareFormationTCs(test test, fieldName string, exp testFormationTC, got api.FormationTriggerCommand) {
+func compareFormationTCs(test test, fieldName string, exp testFormationTC, got apitypes.FormationTriggerCommand) {
 	test.t.Helper()
 	tcEndpoint := api.E.TriggerCommands.Endpoint
 	charClassesEndpoint := api.E.CharacterClasses.Endpoint

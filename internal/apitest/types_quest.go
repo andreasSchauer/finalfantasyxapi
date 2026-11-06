@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -16,7 +16,7 @@ func (e expQuest) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareQuests(test test, exp expQuest, got api.Quest) {
+func compareQuests(test test, exp expQuest, got apitypes.Quest) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("quest type", string(exp.questType), string(got.Type))

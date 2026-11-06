@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -11,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMixCombinations(r *http.Request, mix seedtypes.Mix) ([]MixCombination, error) {
+func getMixCombinations(r *http.Request, mix seedtypes.Mix) ([]apitypes.MixCombination, error) {
 	combinations := mix.PossibleCombinations
 
 	best, err := Q.Mixes[ts.QpnBest].ParseBool(r)

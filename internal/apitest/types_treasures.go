@@ -3,6 +3,7 @@ package apitest
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -23,7 +24,7 @@ func (e expTreasure) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTreasures(test test, exp expTreasure, got api.Treasure) {
+func compareTreasures(test test, exp expTreasure, got apitypes.Treasure) {
 	test.t.Helper()
 	test.compareExpIDOnly(exp.expIDOnly, got.ID)
 	test.compIDAPIResource("area", api.E.Areas.Endpoint, exp.area, got.Area)
@@ -42,7 +43,7 @@ type testFoundEquipment struct {
 	emptySlotsAmount int32
 }
 
-func compareFoundEquipment(test test, fieldName string, exp testFoundEquipment, got api.FoundEquipment) {
+func compareFoundEquipment(test test, fieldName string, exp testFoundEquipment, got apitypes.FoundEquipment) {
 	test.t.Helper()
 	enEndpoint := api.E.Equipment.Endpoint
 	aaEndpoint := api.E.AutoAbilities.Endpoint

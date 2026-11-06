@@ -6,6 +6,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -15,11 +16,6 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type userAbility interface {
-	canUseAbility(string) bool
-	getBattleInteractions() []BattleInteraction
-	fmt.Stringer
-}
 
 type unitRepl struct {
 	unit        seedtypes.PlayerUnit
@@ -31,15 +27,15 @@ type unitRepl struct {
 type biReplacement struct {
 	Range          *int32
 	ShatterRate    *int32
-	Accuracy       *Accuracy
+	Accuracy       *apitypes.Accuracy
 	DamageConstant *int32
 	DamageFormula  *string
 }
 
-func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], ability userAbility, queryName ts.QueryParamName) ([]BattleInteraction, error) {
+func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], ability apitypes.UserAbility, queryName ts.QueryParamName) ([]apitypes.BattleInteraction, error) {
 	repl, err := getUnitRepl(r, i, queryName)
 	if errs.QueryIsEmpty(err) {
-		return ability.getBattleInteractions(), nil
+		return ability.GetBattleInteractions(), nil
 	}
 	if err != nil {
 		return nil, err
@@ -50,7 +46,7 @@ func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http
 		return nil, err
 	}
 
-	battleInteractions := applyBiReplacement(ability.getBattleInteractions(), repl.replVals)
+	battleInteractions := applyBiReplacement(ability.GetBattleInteractions(), repl.replVals)
 
 	return battleInteractions, nil
 }
@@ -151,15 +147,15 @@ func populateReplAeon(repl unitRepl, queryParamUser queryparam.QueryParam) (unit
 	return repl, nil
 }
 
-func verifyAbilityUsage(ability userAbility, repl unitRepl, queryName ts.QueryParamName) error {
-	if !ability.canUseAbility(repl.unit.Name) {
+func verifyAbilityUsage(ability apitypes.UserAbility, repl unitRepl, queryName ts.QueryParamName) error {
+	if !ability.CanUseAbility(repl.unit.Name) {
 		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, E.PlayerUnits.resTypeSingle, repl.unit.Name, ability), nil)
 	}
 
 	return nil
 }
 
-func applyBiReplacement(battleInteractions []BattleInteraction, replVals biReplacement) []BattleInteraction {
+func applyBiReplacement(battleInteractions []apitypes.BattleInteraction, replVals biReplacement) []apitypes.BattleInteraction {
 	for i, battleInteraction := range battleInteractions {
 		if !battleInteraction.BasedOnUserAttack {
 			continue

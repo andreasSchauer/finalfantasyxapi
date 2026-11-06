@@ -2,6 +2,7 @@ package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -25,7 +26,7 @@ type expBattleInteraction struct {
 	modifierChanges           []expModChange
 }
 
-func compareBattleInteractions(test test, fieldName string, exp expBattleInteraction, got api.BattleInteraction) {
+func compareBattleInteractions(test test, fieldName string, exp expBattleInteraction, got apitypes.BattleInteraction) {
 	test.t.Helper()
 	test.compare(fieldName+" target", exp.target, got.Target)
 	test.compare(fieldName+" range", exp.abilityRange, got.Range)
@@ -52,7 +53,7 @@ type expAccuracy struct {
 	accModifier *float32
 }
 
-func compareAccuracies(test test, fieldName string, exp expAccuracy, got api.Accuracy) {
+func compareAccuracies(test test, fieldName string, exp expAccuracy, got apitypes.Accuracy) {
 	test.compare(fieldName+" acc source", exp.accSource, got.AccSource)
 	test.compare(fieldName+" hit chance", exp.hitChance, got.HitChance)
 	test.compare(fieldName+" acc modifier", exp.accModifier, got.AccModifier)
@@ -71,7 +72,7 @@ type expDamage struct {
 	element         *int32
 }
 
-func compareDamages(test test, fieldName string, exp expDamage, got api.Damage) {
+func compareDamages(test test, fieldName string, exp expDamage, got apitypes.Damage) {
 	test.compare(fieldName+" attack type", string(exp.attackType), got.AttackType)
 	test.compare(fieldName+" damage type", string(exp.damageType), got.DamageType)
 	test.compTestStructPtrs(fieldName+" hp", exp.hp, got.HP, compareClassDamages)
@@ -89,7 +90,7 @@ type expClassDamage struct {
 	damageConstant int32
 }
 
-func compareClassDamages(test test, fieldName string, exp expClassDamage, got api.ClassDamage) {
+func compareClassDamages(test test, fieldName string, exp expClassDamage, got apitypes.ClassDamage) {
 	test.compare(fieldName+" - damage formula", string(exp.damageFormula), got.DamageFormula)
 	test.compare(fieldName+" - damage constant", exp.damageConstant, got.DamageConstant)
 }
@@ -98,7 +99,7 @@ type expInflictedDelay struct {
 	delayStrength string
 }
 
-func compareInflictedDelays(test test, fieldName string, exp expInflictedDelay, got api.InflictedDelay) {
+func compareInflictedDelays(test test, fieldName string, exp expInflictedDelay, got apitypes.InflictedDelay) {
 	test.compare(fieldName+" delay strength", exp.delayStrength, got.DelayStrength)
 }
 
@@ -108,7 +109,7 @@ type expStatChange struct {
 	value           float32
 }
 
-func compareStatChanges(test test, fieldName string, exp expStatChange, got api.StatChange) {
+func compareStatChanges(test test, fieldName string, exp expStatChange, got apitypes.StatChange) {
 	test.compIDAPIResource(fieldName+" - sc stat", api.E.Stats.Endpoint, exp.stat, got.Stat)
 	test.compare(fieldName+" - calculation type", exp.calculationType, got.CalculationType)
 	test.compare(fieldName+" - value", exp.value, got.Value)
@@ -120,7 +121,7 @@ type expModChange struct {
 	value           float32
 }
 
-func compareModChanges(test test, fieldName string, exp expModChange, got api.ModifierChange) {
+func compareModChanges(test test, fieldName string, exp expModChange, got apitypes.ModifierChange) {
 	test.compIDAPIResource(fieldName+" - mc modifier", api.E.Modifiers.Endpoint, exp.modifier, got.Modifier)
 	test.compare(fieldName+" - calculation type", exp.calculationType, got.CalculationType)
 	test.compare(fieldName+" - value", exp.value, got.Value)

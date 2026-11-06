@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -11,20 +12,20 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, apiresource.NamedAPIResource], id int32) (Mix, error) {
+func getMix(r *http.Request, i handlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource], id int32) (apitypes.Mix, error) {
 	mix, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Mix{}, err
+		return apitypes.Mix{}, err
 	}
 
 	overdrive, _ := lookup.GetResourceByID(mix.OverdriveID, lookup.L.OverdrivesID)
 
 	combinations, err := getMixCombinations(r, mix)
 	if err != nil {
-		return Mix{}, err
+		return apitypes.Mix{}, err
 	}
 
-	response := Mix{
+	response := apitypes.Mix{
 		ID:           mix.ID,
 		Name:         mix.Name,
 		Category:     mix.Category,
@@ -37,7 +38,7 @@ func getMix(r *http.Request, i handlerInput[seedtypes.Mix, Mix, apiresource.Name
 	return response, nil
 }
 
-func retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, Mix, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveMixes(r *http.Request, i handlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

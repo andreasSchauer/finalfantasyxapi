@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
@@ -70,7 +70,7 @@ func (test test) presenceSlices[E, G any](fieldName string, exp []E, got []G) bo
 	}
 }
 
-func (test test) presenceDefaultAltStates(exp *testDefaultState, gotStates []api.AlteredState) bool {
+func (test test) presenceDefaultAltStates(exp *testDefaultState, gotStates []apitypes.AlteredState) bool {
 	test.t.Helper()
 	switch {
 	case exp == nil && len(gotStates) == 0:

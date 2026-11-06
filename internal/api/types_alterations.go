@@ -1,44 +1,17 @@
 package api
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type Alterations struct {
-	Change *AltStateChange `json:"change,omitempty"`
-	Gain   *AltStateGain   `json:"gain,omitempty"`
-	Loss   *AltStateLoss   `json:"loss,omitempty"`
-}
-
-type AltStateChange struct {
-	Distance    *int32            `json:"distance,omitempty"`
-	BaseStats   []BaseStat        `json:"base_stats,omitempty"`
-	ElemResists []ElementalResist `json:"elem_resists,omitempty"`
-}
-
-type AltStateGain struct {
-	Properties       []apiresource.NamedAPIResource `json:"properties,omitempty"`
-	AutoAbilities    []apiresource.NamedAPIResource `json:"auto_abilities,omitempty"`
-	StatusImmunities []apiresource.NamedAPIResource `json:"status_immunities,omitempty"`
-	StatusResists    []StatusResist                 `json:"status_resists,omitempty"`
-	Status           *InflictedStatus               `json:"status,omitempty"`
-}
-
-type AltStateLoss struct {
-	Properties       []apiresource.NamedAPIResource `json:"properties,omitempty"`
-	AutoAbilities    []apiresource.NamedAPIResource `json:"auto_abilities,omitempty"`
-	StatusImmunities []apiresource.NamedAPIResource `json:"status_immunities,omitempty"`
-	Status           *apiresource.NamedAPIResource  `json:"status,omitempty"`
-}
-
-func getAlterations(alts []Alt) Alterations {
-	alterations := Alterations{}
+func getAlterations(alts []apitypes.Alt) apitypes.Alterations {
+	alterations := apitypes.Alterations{}
 
 	for _, alt := range alts {
 		switch alt.AlterationType {
 		case database.AlterationTypeChange:
-			change := AltStateChange{
+			change := apitypes.AltStateChange{
 				Distance:    alt.Distance,
 				BaseStats:   alt.BaseStats,
 				ElemResists: alt.ElemResists,
@@ -46,7 +19,7 @@ func getAlterations(alts []Alt) Alterations {
 			alterations.Change = &change
 
 		case database.AlterationTypeGain:
-			gain := AltStateGain{
+			gain := apitypes.AltStateGain{
 				Properties:       alt.Properties,
 				AutoAbilities:    alt.AutoAbilities,
 				StatusImmunities: alt.StatusImmunities,
@@ -56,7 +29,7 @@ func getAlterations(alts []Alt) Alterations {
 			alterations.Gain = &gain
 
 		case database.AlterationTypeLoss:
-			loss := AltStateLoss{
+			loss := apitypes.AltStateLoss{
 				Properties:       alt.Properties,
 				AutoAbilities:    alt.AutoAbilities,
 				StatusImmunities: alt.StatusImmunities,

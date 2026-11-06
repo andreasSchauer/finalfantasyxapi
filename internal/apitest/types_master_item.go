@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -10,14 +10,14 @@ type expMasterItem struct {
 	expUnique
 	itemType       database.ItemType
 	typedItem      string
-	obtainableFrom api.ObtainableFrom
+	obtainableFrom apitypes.ObtainableFrom
 }
 
 func (e expMasterItem) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareMasterItems(test test, exp expMasterItem, got api.MasterItem) {
+func compareMasterItems(test test, exp expMasterItem, got apitypes.MasterItem) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("item type", string(exp.itemType), string(got.Type))

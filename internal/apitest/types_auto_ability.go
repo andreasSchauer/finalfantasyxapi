@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expAutoAbility struct {
 	testGeneral
@@ -17,7 +20,7 @@ func (e expAutoAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAutoAbilities(test test, exp expAutoAbility, got api.AutoAbility) {
+func compareAutoAbilities(test test, exp expAutoAbility, got apitypes.AutoAbility) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.checkResIDsInSlice("monsters drop", api.E.Monsters.Endpoint, exp.monstersDrop, got.MonstersDrop)

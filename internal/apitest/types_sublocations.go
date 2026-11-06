@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expSublocation struct {
 	testGeneral
@@ -15,7 +18,7 @@ func (e expSublocation) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSublocations(test test, exp expSublocation, got api.Sublocation) {
+func compareSublocations(test test, exp expSublocation, got apitypes.Sublocation) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResource("location", api.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)

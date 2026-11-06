@@ -3,16 +3,17 @@ package api
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func idToAreaAPIResource(i handlerInput[seedtypes.Area, Area, apiresource.AreaAPIResource], id int32) apiresource.AreaAPIResource {
+func idToAreaAPIResource(i handlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], id int32) apiresource.AreaAPIResource {
 	res, _ := lookup.GetResourceByID(id, i.objLookupID)
 	return areaToAreaAPIResource(i, res)
 }
 
-func idPtrToAreaAPIResPtr(i handlerInput[seedtypes.Area, Area, apiresource.AreaAPIResource], idPtr *int32) *apiresource.AreaAPIResource {
+func idPtrToAreaAPIResPtr(i handlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], idPtr *int32) *apiresource.AreaAPIResource {
 	if idPtr == nil {
 		return nil
 	}
@@ -21,24 +22,23 @@ func idPtrToAreaAPIResPtr(i handlerInput[seedtypes.Area, Area, apiresource.AreaA
 	return &res
 }
 
-func locAreaToAreaAPIResource(i handlerInput[seedtypes.Area, Area, apiresource.AreaAPIResource], area seedtypes.LocationArea) apiresource.AreaAPIResource {
+func locAreaToAreaAPIResource(i handlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], area seedtypes.LocationArea) apiresource.AreaAPIResource {
 	res, _ := lookup.GetResource(area, i.objLookup)
 	return areaToAreaAPIResource(i, res)
 }
 
-func locAreasToAreaAPIResources(i handlerInput[seedtypes.Area, Area, apiresource.AreaAPIResource], areas []seedtypes.LocationArea) []apiresource.AreaAPIResource {
-	resources := []apiresource.AreaAPIResource{}
+func locAreasToAreaAPIResources(i handlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], areas []seedtypes.LocationArea) []apiresource.AreaAPIResource {
+	resources := make([]apiresource.AreaAPIResource, len(areas))
 
-	for _, area := range areas {
-		res := locAreaToAreaAPIResource(i, area)
-		resources = append(resources, res)
+	for idx, area := range areas {
+		resources[idx] = locAreaToAreaAPIResource(i, area)
 	}
 
 	return resources
 }
 
 // shared logic. not indended to be called directly
-func areaToAreaAPIResource(i handlerInput[seedtypes.Area, Area, apiresource.AreaAPIResource], area seedtypes.Area) apiresource.AreaAPIResource {
+func areaToAreaAPIResource(i handlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], area seedtypes.Area) apiresource.AreaAPIResource {
 	params := area.GetResParamsLocation()
 
 	return apiresource.AreaAPIResource{

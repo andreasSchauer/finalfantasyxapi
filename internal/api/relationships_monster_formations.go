@@ -1,12 +1,13 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getFormationLoot(formation seedtypes.MonsterFormation) FormationLoot {
-	var loot FormationLoot
+func getFormationLoot(formation seedtypes.MonsterFormation) apitypes.FormationLoot {
+	var loot apitypes.FormationLoot
 
 	for _, monAmt := range formation.Monsters {
 		mon, _ := lookup.GetResourceByID(monAmt.MonsterID, lookup.L.MonstersID)

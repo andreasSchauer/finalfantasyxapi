@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expSubmenu struct {
 	testGeneral
@@ -15,7 +18,7 @@ func (e expSubmenu) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSubmenus(test test, exp expSubmenu, got api.Submenu) {
+func compareSubmenus(test test, exp expSubmenu, got apitypes.Submenu) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResourcePtrs("topmenu", api.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
@@ -30,7 +33,7 @@ type expMenuOpen struct {
 	overdriveCommands []int32
 }
 
-func compareMenuOpen(test test, fieldName string, exp expMenuOpen, got api.MenuOpen) {
+func compareMenuOpen(test test, fieldName string, exp expMenuOpen, got apitypes.MenuOpen) {
 	test.t.Helper()
 	test.compIDAPIResourcePtrs(fieldName+" - ability", api.E.Abilities.Endpoint, exp.ability, got.Ability)
 	test.compIDAPIResourcePtrs(fieldName+" - aeon command", api.E.AeonCommands.Endpoint, exp.aeonCommand, got.AeonCommand)

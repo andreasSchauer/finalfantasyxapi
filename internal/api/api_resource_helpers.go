@@ -100,7 +100,7 @@ func getAPIResourceID[T apiresource.HasAPIResource](item T) int32 {
 }
 
 func getResourceMap[T apiresource.HasAPIResource](items []T) map[int32]T {
-	resourceMap := make(map[int32]T)
+	resourceMap := make(map[int32]T, len(items))
 
 	for _, item := range items {
 		id := getAPIResourceID(item)
@@ -111,7 +111,7 @@ func getResourceMap[T apiresource.HasAPIResource](items []T) map[int32]T {
 }
 
 func GetResourceURLMap[T apiresource.HasAPIResource](items []T) map[string]T {
-	resourceMap := make(map[string]T)
+	resourceMap := make(map[string]T, len(items))
 
 	for _, item := range items {
 		url := item.GetAPIResource().GetURL()
@@ -122,7 +122,7 @@ func GetResourceURLMap[T apiresource.HasAPIResource](items []T) map[string]T {
 }
 
 func GetSimpleResourceURLMap[T apiresource.SimpleResource](items []T) map[string]T {
-	resourceMap := make(map[string]T)
+	resourceMap := make(map[string]T, len(items))
 
 	for _, item := range items {
 		url := item.GetURL()

@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expCharacterClass struct {
 	testGeneral
@@ -18,7 +21,7 @@ func (e expCharacterClass) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareCharacterClasses(test test, exp expCharacterClass, got api.CharacterClass) {
+func compareCharacterClasses(test test, exp expCharacterClass, got apitypes.CharacterClass) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("category", exp.category, got.Category)

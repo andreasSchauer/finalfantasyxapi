@@ -46,11 +46,10 @@ func namePtrToNamedAPIResPtr[T seedtypes.IsNamed, R any, A apiresource.APIResour
 }
 
 func namesToNamedAPIResources[T seedtypes.IsNamed, R any, A apiresource.APIResource](i handlerInput[T, R, A], names []string) []apiresource.NamedAPIResource {
-	resources := make([]apiresource.NamedAPIResource, 0, len(names)) // put this into more high frequency places
+	resources := make([]apiresource.NamedAPIResource, len(names))
 
-	for _, name := range names {
-		resource := nameToNamedAPIResource(i, name, nil)
-		resources = append(resources, resource)
+	for idx, name := range names {
+		resources[idx] = nameToNamedAPIResource(i, name, nil)
 	}
 
 	return resources

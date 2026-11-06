@@ -4,23 +4,24 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getCharacter(r *http.Request, i handlerInput[seedtypes.Character, Character, apiresource.NamedAPIResource], id int32) (Character, error) {
+func getCharacter(r *http.Request, i handlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource], id int32) (apitypes.Character, error) {
 	character, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Character{}, err
+		return apitypes.Character{}, err
 	}
 
 	rel, err := getCharacterRelationships(r, character)
 	if err != nil {
-		return Character{}, err
+		return apitypes.Character{}, err
 	}
 
-	response := Character{
+	response := apitypes.Character{
 		ID:                     character.ID,
 		Name:                   character.Name,
 		UntypedUnit:            idToTypedAPIResource(E.PlayerUnits, character.PlayerUnit.ID),
@@ -42,7 +43,7 @@ func getCharacter(r *http.Request, i handlerInput[seedtypes.Character, Character
 
 	response.BaseStats, err = applyOsgStats(r, response)
 	if err != nil {
-		return Character{}, err
+		return apitypes.Character{}, err
 	}
 
 	response.RegenAmounts = calcRegenAmounts(response.BaseStats)
@@ -50,13 +51,13 @@ func getCharacter(r *http.Request, i handlerInput[seedtypes.Character, Character
 
 	response.AgilityParameters, err = getUnitAgilityParams(r, response.BaseStats)
 	if err != nil {
-		return Character{}, err
+		return apitypes.Character{}, err
 	}
 
 	return response, nil
 }
 
-func retrieveCharacters(r *http.Request, i handlerInput[seedtypes.Character, Character, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveCharacters(r *http.Request, i handlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

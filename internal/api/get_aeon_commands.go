@@ -5,13 +5,14 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getAeonCommand(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonCommand, apiresource.NamedAPIResource], id int32) (AeonCommand, error) {
+func getAeonCommand(r *http.Request, i handlerInput[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource], id int32) (apitypes.AeonCommand, error) {
 	command, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return AeonCommand{}, err
+		return apitypes.AeonCommand{}, err
 	}
 
 	var userName string
@@ -22,7 +23,7 @@ func getAeonCommand(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonC
 		userName = command.PossibleAbilities[0].User
 	}
 
-	response := AeonCommand{
+	response := apitypes.AeonCommand{
 		ID:                command.ID,
 		Name:              command.Name,
 		Description:       command.Description,
@@ -37,6 +38,6 @@ func getAeonCommand(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonC
 	return response, nil
 }
 
-func retrieveAeonCommands(r *http.Request, i handlerInput[seedtypes.AeonCommand, AeonCommand, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveAeonCommands(r *http.Request, i handlerInput[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

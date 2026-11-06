@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expSong struct {
 	testGeneral
@@ -19,7 +22,7 @@ func (e expSong) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSongs(test test, exp expSong, got api.Song) {
+func compareSongs(test test, exp expSong, got apitypes.Song) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("composer", exp.composer, got.Composer)
@@ -42,7 +45,7 @@ func (t testBackgroundMusic) GetIndex() int {
 	return t.index
 }
 
-func compareBackgroundMusic(test test, _ string, exp testBackgroundMusic, got api.BackgroundMusic) {
+func compareBackgroundMusic(test test, _ string, exp testBackgroundMusic, got apitypes.BackgroundMusic) {
 	test.t.Helper()
 	test.compare("bg music - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
 	test.checkResIDsInSlice("bg music - areas", api.E.Areas.Endpoint, exp.areas, got.Areas)
@@ -60,7 +63,7 @@ func (t testCue) GetIndex() int {
 	return t.index
 }
 
-func compareCues(test test, fieldName string, exp testCue, got api.Cue) {
+func compareCues(test test, fieldName string, exp testCue, got apitypes.Cue) {
 	test.t.Helper()
 	test.compIDAPIResourcePtrs(fieldName+" - trigger area", api.E.Areas.Endpoint, exp.triggerArea, got.TriggerArea)
 	test.checkResIDsInSlice(fieldName+" - included areas", api.E.Areas.Endpoint, exp.includedAreas, got.IncludedAreas)

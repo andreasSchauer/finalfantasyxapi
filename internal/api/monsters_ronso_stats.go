@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func applyRonsoStats(r *http.Request, mon Monster, queryName ts.QueryParamName) ([]BaseStat, error) {
+func applyRonsoStats(r *http.Request, mon Monster, queryName ts.QueryParamName) ([]apitypes.BaseStat, error) {
 	allowedStatIDs := []int32{1, 3, 5, 7}
 	baseStats := mon.BaseStats
 	queryParam := Q.Monsters[queryName]
@@ -30,7 +31,7 @@ func applyRonsoStats(r *http.Request, mon Monster, queryName ts.QueryParamName) 
 	return ronsoStats, nil
 }
 
-func replaceRonsoStats(mon Monster, kimahriStatMap map[string]int32, allowedStatIDs []int32) []BaseStat {
+func replaceRonsoStats(mon Monster, kimahriStatMap map[string]int32, allowedStatIDs []int32) []apitypes.BaseStat {
 	ronsoStatMap := make(map[string]int32)
 	ronsoStatMap["hp"] = getRonsoHP(mon, kimahriStatMap)
 	ronsoStatMap["strength"] = getRonsoStrength(mon, kimahriStatMap)

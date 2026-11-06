@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expLocRel struct {
 	characters []int32
@@ -14,7 +17,7 @@ type expLocRel struct {
 	music      *testLocMusic
 }
 
-func compareLocRel(test test, exp expLocRel, got api.LocRel) {
+func compareLocRel(test test, exp expLocRel, got apitypes.LocRel) {
 	test.t.Helper()
 	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)
 	test.checkResIDsInSlice("characters", api.E.Characters.Endpoint, exp.characters, got.Characters)
@@ -34,7 +37,7 @@ type testLocMusic struct {
 	bossMusic []int32
 }
 
-func compareLocMusic(test test, _ string, exp testLocMusic, got api.LocBasedMusic) {
+func compareLocMusic(test test, _ string, exp testLocMusic, got apitypes.LocBasedMusic) {
 	test.t.Helper()
 	songsEndpoint := api.E.Songs.Endpoint
 

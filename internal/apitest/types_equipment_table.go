@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expEquipmentTable struct {
 	testGeneral
@@ -17,7 +20,7 @@ func (e expEquipmentTable) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareEquipmentTables(test test, exp expEquipmentTable, got api.EquipmentTable) {
+func compareEquipmentTables(test test, exp expEquipmentTable, got apitypes.EquipmentTable) {
 	test.t.Helper()
 	test.compareExpIDOnly(exp.expIDOnly, got.ID)
 	test.compIDAPIResourcePtrs("celestial weapon", api.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
@@ -34,7 +37,7 @@ type testAbilityPool struct {
 	reqAmount     int32
 }
 
-func compareAbilityPools(test test, fieldName string, exp testAbilityPool, got api.AbilityPool) {
+func compareAbilityPools(test test, fieldName string, exp testAbilityPool, got apitypes.AbilityPool) {
 	test.t.Helper()
 	test.checkResIDsInSlice(fieldName+" - auto-abilities", api.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
 	test.compare(fieldName+" - required amount", exp.reqAmount, got.ReqAmount)

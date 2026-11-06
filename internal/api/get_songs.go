@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -12,18 +13,18 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSong(r *http.Request, i handlerInput[seedtypes.Song, Song, apiresource.NamedAPIResource], id int32) (Song, error) {
+func getSong(r *http.Request, i handlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource], id int32) (apitypes.Song, error) {
 	song, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Song{}, err
+		return apitypes.Song{}, err
 	}
 
 	rel, err := getSongRelationships(r, song)
 	if err != nil {
-		return Song{}, err
+		return apitypes.Song{}, err
 	}
 
-	response := Song{
+	response := apitypes.Song{
 		ID:                   song.ID,
 		Name:                 song.Name,
 		StreamingName:        song.StreamingName,
@@ -53,7 +54,7 @@ func getSong(r *http.Request, i handlerInput[seedtypes.Song, Song, apiresource.N
 	return response, nil
 }
 
-func retrieveSongs(r *http.Request, i handlerInput[seedtypes.Song, Song, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveSongs(r *http.Request, i handlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

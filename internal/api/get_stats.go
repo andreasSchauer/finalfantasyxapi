@@ -4,21 +4,22 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getStat(r *http.Request, i handlerInput[seedtypes.Stat, Stat, apiresource.NamedAPIResource], id int32) (Stat, error) {
+func getStat(r *http.Request, i handlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource], id int32) (apitypes.Stat, error) {
 	stat, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Stat{}, err
+		return apitypes.Stat{}, err
 	}
 
 	rel, err := getStatRelationships(r, stat)
 	if err != nil {
-		return Stat{}, err
+		return apitypes.Stat{}, err
 	}
 
-	response := Stat{
+	response := apitypes.Stat{
 		ID:                 stat.ID,
 		Name:               stat.Name,
 		Effect:             stat.Effect,
@@ -39,6 +40,6 @@ func getStat(r *http.Request, i handlerInput[seedtypes.Stat, Stat, apiresource.N
 	return response, nil
 }
 
-func retrieveStats(r *http.Request, i handlerInput[seedtypes.Stat, Stat, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveStats(r *http.Request, i handlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

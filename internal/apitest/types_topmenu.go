@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expTopmenu struct {
 	testGeneral
@@ -16,7 +19,7 @@ func (e expTopmenu) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTopmenus(test test, exp expTopmenu, got api.Topmenu) {
+func compareTopmenus(test test, exp expTopmenu, got apitypes.Topmenu) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.checkResIDsInSlice("submenus", api.E.Submenus.Endpoint, exp.submenus, got.Submenus)

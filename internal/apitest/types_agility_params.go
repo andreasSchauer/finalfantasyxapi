@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type testAgilityParams struct {
 	agilityTier int32
@@ -9,7 +12,7 @@ type testAgilityParams struct {
 	maxICV      *int32
 }
 
-func compareAgilityParams(test test, fieldName string, exp testAgilityParams, got api.AgilityParams) {
+func compareAgilityParams(test test, fieldName string, exp testAgilityParams, got apitypes.AgilityParams) {
 	test.t.Helper()
 	test.compIDAPIResource(fieldName+" - agility tier", api.E.AgilityTiers.Endpoint, exp.agilityTier, got.AgilityTier)
 	test.compare(fieldName+" - tick speed", exp.tickSpeed, got.TickSpeed)

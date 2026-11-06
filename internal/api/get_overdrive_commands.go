@@ -4,22 +4,23 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getOverdriveCommand(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, apiresource.NamedAPIResource], id int32) (OverdriveCommand, error) {
+func getOverdriveCommand(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource], id int32) (apitypes.OverdriveCommand, error) {
 	command, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return OverdriveCommand{}, err
+		return apitypes.OverdriveCommand{}, err
 	}
 
 	overdrives, err := E.Overdrives.dbGetRelations(r.Context(), command, ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveIDs))
 	if err != nil {
-		return OverdriveCommand{}, err
+		return apitypes.OverdriveCommand{}, err
 	}
 
-	response := OverdriveCommand{
+	response := apitypes.OverdriveCommand{
 		ID:          command.ID,
 		Name:        command.Name,
 		Description: command.Description,
@@ -33,6 +34,6 @@ func getOverdriveCommand(r *http.Request, i handlerInput[seedtypes.OverdriveComm
 	return response, nil
 }
 
-func retrieveOverdriveCommands(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, OverdriveCommand, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveOverdriveCommands(r *http.Request, i handlerInput[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

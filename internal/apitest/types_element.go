@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expElement struct {
 	testGeneral
@@ -21,7 +24,7 @@ func (e expElement) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareElements(test test, exp expElement, got api.Element) {
+func compareElements(test test, exp expElement, got apitypes.Element) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResourcePtrs("status protection", api.E.StatusConditions.Endpoint, exp.statusProtection, got.StatusProtection)

@@ -1,12 +1,15 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expSphere struct {
 	testGeneral
 	expUnique
 	item            int32
-	createdNode     *api.CreatedNode
+	createdNode     *apitypes.CreatedNode
 	monsters        []testMonItemAmts
 	treasures       map[int32]int32
 	shops           []int32
@@ -18,7 +21,7 @@ func (e expSphere) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSpheres(test test, exp expSphere, got api.Sphere) {
+func compareSpheres(test test, exp expSphere, got apitypes.Sphere) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResource("item", api.E.Items.Endpoint, exp.item, got.Item)

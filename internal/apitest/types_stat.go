@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expStat struct {
 	testGeneral
@@ -19,7 +22,7 @@ func (e expStat) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareStats(test test, exp expStat, got api.Stat) {
+func compareStats(test test, exp expStat, got apitypes.Stat) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.checkResIDsInSlice("spheres", api.E.Spheres.Endpoint, exp.spheres, got.Spheres)

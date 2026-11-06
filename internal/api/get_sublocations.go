@@ -4,24 +4,25 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSublocation(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, apiresource.NamedAPIResource], id int32) (Sublocation, error) {
+func getSublocation(r *http.Request, i handlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource], id int32) (apitypes.Sublocation, error) {
 	sublocation, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Sublocation{}, err
+		return apitypes.Sublocation{}, err
 	}
 
 	rel, err := getSublocationRelationships(r, sublocation)
 	if err != nil {
-		return Sublocation{}, err
+		return apitypes.Sublocation{}, err
 	}
 
-	response := Sublocation{
+	response := apitypes.Sublocation{
 		ID:                    sublocation.ID,
 		Name:                  sublocation.Name,
 		ParentLocation:        nameToNamedAPIResource(E.Locations, sublocation.Location, nil),
@@ -34,7 +35,7 @@ func getSublocation(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublo
 	return response, nil
 }
 
-func retrieveSublocations(r *http.Request, i handlerInput[seedtypes.Sublocation, Sublocation, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveSublocations(r *http.Request, i handlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

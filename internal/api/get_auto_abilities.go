@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -12,18 +13,18 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAutoAbility(r *http.Request, i handlerInput[seedtypes.AutoAbility, AutoAbility, apiresource.NamedAPIResource], id int32) (AutoAbility, error) {
+func getAutoAbility(r *http.Request, i handlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource], id int32) (apitypes.AutoAbility, error) {
 	autoAbility, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return AutoAbility{}, err
+		return apitypes.AutoAbility{}, err
 	}
 
 	rel, err := getAutoAbilityRelationships(r, autoAbility)
 	if err != nil {
-		return AutoAbility{}, err
+		return apitypes.AutoAbility{}, err
 	}
 
-	response := AutoAbility{
+	response := apitypes.AutoAbility{
 		ID:                     autoAbility.ID,
 		Name:                   autoAbility.Name,
 		Description:            autoAbility.Description,
@@ -58,7 +59,7 @@ func getAutoAbility(r *http.Request, i handlerInput[seedtypes.AutoAbility, AutoA
 	return response, nil
 }
 
-func retrieveAutoAbilities(r *http.Request, i handlerInput[seedtypes.AutoAbility, AutoAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveAutoAbilities(r *http.Request, i handlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

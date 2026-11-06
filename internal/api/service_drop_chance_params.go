@@ -39,7 +39,7 @@ func getDropChanceParamsDoc() ParamsDoc {
 				Type:        "int (id: character)",
 				MinVal:      h.GetInt32Ptr(1),
 				MaxVal:      h.GetInt32Ptr(int32(len(lookup.L.Characters) - 1)),
-				Description: "Specify a character to calculate the chance of them receiving equipment. Character-specific auto-abilities like 'Piercing' for Kimahri and Auron will be factored in, when calculating the drop chance.",
+				Description: "Specify a character to calculate the chance of them receiving equipment. apitypes.Character-specific auto-abilities like 'Piercing' for Kimahri and Auron will be factored in, when calculating the drop chance.",
 			},
 			{
 				Field:       ts.PfnPartyMembers,

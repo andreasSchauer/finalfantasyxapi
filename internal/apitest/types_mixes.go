@@ -2,6 +2,7 @@ package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -17,7 +18,7 @@ func (e expMix) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareMixes(test test, exp expMix, got api.Mix) {
+func compareMixes(test test, exp expMix, got apitypes.Mix) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("category", string(exp.category), got.Category)
@@ -35,7 +36,7 @@ func (mc testMixCombination) GetIndex() int {
 	return mc.index
 }
 
-func compareMixCombinations(test test, fieldName string, exp testMixCombination, got api.MixCombination) {
+func compareMixCombinations(test test, fieldName string, exp testMixCombination, got apitypes.MixCombination) {
 	test.t.Helper()
 	test.compIDAPIResource(fieldName+" - first item", api.E.Items.Endpoint, exp.firstItem, got.FirstItem)
 	test.compIDAPIResource(fieldName+" - second item", api.E.Items.Endpoint, exp.secondItem, got.SecondItem)

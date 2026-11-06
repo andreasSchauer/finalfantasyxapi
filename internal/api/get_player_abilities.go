@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -13,18 +14,18 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getPlayerAbility(r *http.Request, i handlerInput[seedtypes.PlayerAbility, PlayerAbility, apiresource.NamedAPIResource], id int32) (PlayerAbility, error) {
+func getPlayerAbility(r *http.Request, i handlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource], id int32) (apitypes.PlayerAbility, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return PlayerAbility{}, err
+		return apitypes.PlayerAbility{}, err
 	}
 
 	monsters, err := E.Monsters.dbGetRelations(r.Context(), ability, config.Cfg.DB.GetPlayerAbilityMonsterIDs)
 	if err != nil {
-		return PlayerAbility{}, err
+		return apitypes.PlayerAbility{}, err
 	}
 
-	response := PlayerAbility{
+	response := apitypes.PlayerAbility{
 		ID:                    ability.ID,
 		Name:                  ability.Name,
 		Version:               ability.Version,
@@ -53,14 +54,14 @@ func getPlayerAbility(r *http.Request, i handlerInput[seedtypes.PlayerAbility, P
 
 	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
-		return PlayerAbility{}, err
+		return apitypes.PlayerAbility{}, err
 	}
 	response.BattleInteractions = battleInteractions
 
 	return response, nil
 }
 
-func retrievePlayerAbilities(r *http.Request, i handlerInput[seedtypes.PlayerAbility, PlayerAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrievePlayerAbilities(r *http.Request, i handlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -2,32 +2,12 @@ package api
 
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-type BattleInteraction struct {
-	Target                    string                         `json:"target"`
-	Range                     *int32                         `json:"range"`
-	HitAmount                 int32                          `json:"hit_amount"`
-	ShatterRate               int32                          `json:"shatter_rate"`
-	SpecialAction             *string                        `json:"special_action,omitempty"`
-	BasedOnUserAttack         bool                           `json:"based_on_user_attack"`
-	Darkable                  bool                           `json:"darkable"`
-	Silenceable               bool                           `json:"silenceable"`
-	Reflectable               bool                           `json:"reflectable"`
-	Accuracy                  Accuracy                       `json:"accuracy"`
-	Damage                    *Damage                        `json:"damage"`
-	InflictedDelay            *InflictedDelay                `json:"inflicted_delay"`
-	InflictedStatusConditions []InflictedStatus              `json:"inflicted_status_conditions"`
-	RemovedStatusConditions   []apiresource.NamedAPIResource `json:"removed_status_conditions"`
-	CopiedStatusConditions    []InflictedStatus              `json:"copied_status_conditions"`
-	StatChanges               []StatChange                   `json:"stat_changes"`
-	ModifierChanges           []ModifierChange               `json:"modifier_changes"`
-}
-
-func convertBattleInteraction(bi seedtypes.BattleInteraction) BattleInteraction {
-	battleInteraction := BattleInteraction{
+func convertBattleInteraction(bi seedtypes.BattleInteraction) apitypes.BattleInteraction {
+	battleInteraction := apitypes.BattleInteraction{
 		Target:                    bi.Target,
 		BasedOnUserAttack:         bi.BasedOnUserAttack,
 		Range:                     bi.Range,
@@ -60,21 +40,8 @@ func convertBattleInteraction(bi seedtypes.BattleInteraction) BattleInteraction 
 	return battleInteraction
 }
 
-type Damage struct {
-	AttackType      string                        `json:"attack_type"`
-	DamageType      string                        `json:"damage_type"`
-	HP              *ClassDamage                  `json:"hp"`
-	MP              *ClassDamage                  `json:"mp"`
-	CTB             *ClassDamage                  `json:"ctb"`
-	Critical        *string                       `json:"critical"`
-	CriticalPlusVal *int32                        `json:"critical_plus_val,omitempty"`
-	IsPiercing      bool                          `json:"is_piercing"`
-	BreakDmgLimit   *string                       `json:"break_dmg_lmt"`
-	Element         *apiresource.NamedAPIResource `json:"element"`
-}
-
-func convertDamage(d seedtypes.Damage) Damage {
-	return Damage{
+func convertDamage(d seedtypes.Damage) apitypes.Damage {
+	return apitypes.Damage{
 		AttackType:      d.AttackType,
 		DamageType:      d.DamageType,
 		HP:              ah.ConvertObjPtr(d.HP, convertClassDamage),
@@ -88,63 +55,31 @@ func convertDamage(d seedtypes.Damage) Damage {
 	}
 }
 
-type ClassDamage struct {
-	Condition      *string `json:"condition,omitempty"`
-	DamageFormula  string  `json:"damage_formula"`
-	DamageConstant int32   `json:"damage_constant"`
-}
-
-func convertClassDamage(ad seedtypes.ClassDamage) ClassDamage {
-	return ClassDamage{
+func convertClassDamage(ad seedtypes.ClassDamage) apitypes.ClassDamage {
+	return apitypes.ClassDamage{
 		Condition:      ad.Condition,
 		DamageFormula:  ad.DamageFormula,
 		DamageConstant: ad.DamageConstant,
 	}
 }
 
-type Accuracy struct {
-	AccSource   string   `json:"acc_source"`
-	HitChance   *int32   `json:"hit_chance,omitempty"`
-	AccModifier *float32 `json:"acc_modifier,omitempty"`
-}
-
-func convertAccuracy(a seedtypes.Accuracy) Accuracy {
-	return Accuracy{
+func convertAccuracy(a seedtypes.Accuracy) apitypes.Accuracy {
+	return apitypes.Accuracy{
 		AccSource:   a.AccSource,
 		HitChance:   a.HitChance,
 		AccModifier: a.AccModifier,
 	}
 }
 
-type InflictedDelay struct {
-	Condition     *string `json:"condition,omitempty"`
-	DelayStrength string  `json:"delay_strength"`
-}
-
-func convertInflictedDelay(id seedtypes.InflictedDelay) InflictedDelay {
-	return InflictedDelay{
+func convertInflictedDelay(id seedtypes.InflictedDelay) apitypes.InflictedDelay {
+	return apitypes.InflictedDelay{
 		Condition:     id.Condition,
 		DelayStrength: id.DelayStrength,
 	}
 }
 
-type InflictedStatus struct {
-	StatusCondition apiresource.NamedAPIResource `json:"status_condition"`
-	Probability     int32                        `json:"probability"`
-	DurationType    string                       `json:"duration_type"`
-	Amount          *int32                       `json:"amount,omitempty"`
-}
-
-func (is InflictedStatus) GetAPIResource() apiresource.APIResource {
-	return is.StatusCondition
-}
-
-func (is InflictedStatus) IsZero() bool {
-	return is.StatusCondition.Name == ""
-}
-
-func convertInflictedStatus(status seedtypes.InflictedStatus) InflictedStatus {
-	return InflictedStatus{
+func convertInflictedStatus(status seedtypes.InflictedStatus) apitypes.InflictedStatus {
+	return apitypes.InflictedStatus{
 		StatusCondition: nameToNamedAPIResource(E.StatusConditions, status.StatusCondition, nil),
 		Probability:     status.Probability,
 		DurationType:    status.DurationType,
@@ -152,44 +87,16 @@ func convertInflictedStatus(status seedtypes.InflictedStatus) InflictedStatus {
 	}
 }
 
-type StatChange struct {
-	Stat            apiresource.NamedAPIResource `json:"stat"`
-	CalculationType string                       `json:"calculation_type"`
-	Value           float32                      `json:"value"`
-}
-
-func (sc StatChange) GetAPIResource() apiresource.APIResource {
-	return sc.Stat
-}
-
-func (sc StatChange) IsZero() bool {
-	return sc.Stat.Name == ""
-}
-
-func convertStatChange(sc seedtypes.StatChange) StatChange {
-	return StatChange{
+func convertStatChange(sc seedtypes.StatChange) apitypes.StatChange {
+	return apitypes.StatChange{
 		Stat:            nameToNamedAPIResource(E.Stats, sc.StatName, nil),
 		CalculationType: sc.CalculationType,
 		Value:           sc.Value,
 	}
 }
 
-type ModifierChange struct {
-	Modifier        apiresource.NamedAPIResource `json:"modifier"`
-	CalculationType string                       `json:"calculation_type"`
-	Value           float32                      `json:"value"`
-}
-
-func (mc ModifierChange) GetAPIResource() apiresource.APIResource {
-	return mc.Modifier
-}
-
-func (mc ModifierChange) IsZero() bool {
-	return mc.Modifier.Name == ""
-}
-
-func convertModifierChange(mc seedtypes.ModifierChange) ModifierChange {
-	return ModifierChange{
+func convertModifierChange(mc seedtypes.ModifierChange) apitypes.ModifierChange {
+	return apitypes.ModifierChange{
 		Modifier:        nameToNamedAPIResource(E.Modifiers, mc.ModifierName, nil),
 		CalculationType: mc.CalculationType,
 		Value:           mc.Value,

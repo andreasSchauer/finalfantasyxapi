@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -12,18 +13,18 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, apiresource.TypedAPIResource], id int32) (Ability, error) {
+func getAbility(r *http.Request, i handlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource], id int32) (apitypes.Ability, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Ability{}, err
+		return apitypes.Ability{}, err
 	}
 
 	monsters, err := E.Monsters.dbGetRelations(r.Context(), ability, config.Cfg.DB.GetAbilityMonsterIDs)
 	if err != nil {
-		return Ability{}, err
+		return apitypes.Ability{}, err
 	}
 
-	response := Ability{
+	response := apitypes.Ability{
 		ID:                 ability.ID,
 		Name:               ability.Name,
 		Version:            ability.Version,
@@ -40,7 +41,7 @@ func getAbility(r *http.Request, i handlerInput[seedtypes.Ability, Ability, apir
 	return response, nil
 }
 
-func retrieveAbilities(r *http.Request, i handlerInput[seedtypes.Ability, Ability, apiresource.TypedAPIResource]) ([]int32, error) {
+func retrieveAbilities(r *http.Request, i handlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

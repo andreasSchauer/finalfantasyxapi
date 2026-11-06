@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -35,7 +36,7 @@ func TestGetAgilityTier(t *testing.T) {
 			monMaxICV:   h.GetInt32Ptr(23),
 			monMinICV:   h.GetInt32Ptr(21),
 			charMaxICV:  h.GetInt32Ptr(21),
-			charMinICVs: []api.AgilitySubtier{
+			charMinICVs: []apitypes.AgilitySubtier{
 				{
 					FromAgility: 35,
 					ToAgility:   35,

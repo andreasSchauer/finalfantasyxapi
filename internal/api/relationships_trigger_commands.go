@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getTriggerCommandRelationships(r *http.Request, command seedtypes.TriggerCommand) (TriggerCommand, error) {
-	var rel TriggerCommand
+func getTriggerCommandRelationships(r *http.Request, command seedtypes.TriggerCommand) (apitypes.TriggerCommand, error) {
+	var rel apitypes.TriggerCommand
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -26,7 +27,7 @@ func getTriggerCommandRelationships(r *http.Request, command seedtypes.TriggerCo
 
 	err := g.Wait()
 	if err != nil {
-		return TriggerCommand{}, err
+		return apitypes.TriggerCommand{}, err
 	}
 
 	return rel, nil

@@ -3,18 +3,19 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeapon) (CelestialWeapon, error) {
+func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeapon) (apitypes.CelestialWeapon, error) {
 	crest, _ := lookup.GetResource(cw.KeyItemBase+" crest", lookup.L.KeyItems)
 	sigil, _ := lookup.GetResource(cw.KeyItemBase+" sigil", lookup.L.KeyItems)
 	equipment, _ := lookup.GetResource(cw, lookup.L.EquipmentNames)
 
-	rel := CelestialWeapon{
+	rel := apitypes.CelestialWeapon{
 		Equipment: nameToNamedAPIResource(E.Equipment, equipment.Name, nil),
 		Crest:     nameToNamedAPIResource(E.KeyItems, crest.Name, nil),
 		Sigil:     nameToNamedAPIResource(E.KeyItems, sigil.Name, nil),
@@ -57,7 +58,7 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 
 	err := g.Wait()
 	if err != nil {
-		return CelestialWeapon{}, err
+		return apitypes.CelestialWeapon{}, err
 	}
 
 	return rel, nil

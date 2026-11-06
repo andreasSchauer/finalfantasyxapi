@@ -2,6 +2,7 @@ package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -21,7 +22,7 @@ func (e expKeyItem) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareKeyItems(test test, exp expKeyItem, got api.KeyItem) {
+func compareKeyItems(test test, exp expKeyItem, got apitypes.KeyItem) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResource("untyped item", api.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)

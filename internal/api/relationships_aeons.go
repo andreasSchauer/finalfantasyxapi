@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -11,8 +12,8 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (Aeon, error) {
-	var rel Aeon
+func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, error) {
+	var rel apitypes.Aeon
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -47,34 +48,34 @@ func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (Aeon, error) {
 
 	err := g.Wait()
 	if err != nil {
-		return Aeon{}, err
+		return apitypes.Aeon{}, err
 	}
 
 	return rel, nil
 }
 
-func getAeonBaseStats(aeon seedtypes.Aeon) []BaseStat {
+func getAeonBaseStats(aeon seedtypes.Aeon) []apitypes.BaseStat {
 	baseStats := aeon.BaseStats.XVals[0].BaseStats
 	return E.Stats.toResAmtType(baseStats, newBaseStat)
 }
 
-func applyAeonStats(r *http.Request, aeon Aeon, allowedStatIDs []int32) (Aeon, error) {
+func applyAeonStats(r *http.Request, aeon apitypes.Aeon, allowedStatIDs []int32) (apitypes.Aeon, error) {
 	var err error
 
 	aeon.BaseStats, err = applyAeonStatsBattles(r, aeon, ts.QpnBattles)
 	if err != nil {
-		return Aeon{}, err
+		return apitypes.Aeon{}, err
 	}
 
 	aeon.BaseStats, err = applyYunaStats(r, aeon, ts.QpnYunaStats, allowedStatIDs)
 	if err != nil {
-		return Aeon{}, err
+		return apitypes.Aeon{}, err
 	}
 
 	return aeon, nil
 }
 
-func applyAeonStatsBattles(r *http.Request, aeon Aeon, queryName ts.QueryParamName) ([]BaseStat, error) {
+func applyAeonStatsBattles(r *http.Request, aeon apitypes.Aeon, queryName ts.QueryParamName) ([]apitypes.BaseStat, error) {
 	queryParam := Q.Aeons[queryName]
 	battles, err := queryParam.ParseInt(r)
 	if errs.QueryIsEmpty(err) {
@@ -97,7 +98,7 @@ func applyAeonStatsBattles(r *http.Request, aeon Aeon, queryName ts.QueryParamNa
 	return baseStats, nil
 }
 
-func applyYunaStats(r *http.Request, aeon Aeon, queryName ts.QueryParamName, allowedStatIDs []int32) ([]BaseStat, error) {
+func applyYunaStats(r *http.Request, aeon apitypes.Aeon, queryName ts.QueryParamName, allowedStatIDs []int32) ([]apitypes.BaseStat, error) {
 	queryParam := Q.Aeons[queryName]
 
 	yuna := lookup.L.Characters["yuna"]
@@ -119,7 +120,7 @@ func applyYunaStats(r *http.Request, aeon Aeon, queryName ts.QueryParamName, all
 	return aeonStats, nil
 }
 
-func calcAeonStats(aeon Aeon, yuna map[string]int32) []BaseStat {
+func calcAeonStats(aeon apitypes.Aeon, yuna map[string]int32) []apitypes.BaseStat {
 	baseStats := aeon.BaseStats
 	aVals, bVals := getAeonStatTables(aeon)
 	yunaFloat := ResAmtMapToFloat(yuna)
@@ -134,7 +135,7 @@ func calcAeonStats(aeon Aeon, yuna map[string]int32) []BaseStat {
 	return baseStats
 }
 
-func getAeonStatTables(aeon Aeon) (map[string]float64, map[string]float64) {
+func getAeonStatTables(aeon apitypes.Aeon) (map[string]float64, map[string]float64) {
 	aeonLookup, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 
 	aValsSlice := E.Stats.toResAmtType(aeonLookup.BaseStats.AVals, newBaseStat)
@@ -177,10 +178,10 @@ func yStatCalc(stat string, yParameter float64, aVals, bVals, yuna map[string]fl
 	}
 }
 
-func getUnitAgilityParams(r *http.Request, baseStats []BaseStat) (AgilityParams, error) {
+func getUnitAgilityParams(r *http.Request, baseStats []apitypes.BaseStat) (apitypes.AgilityParams, error) {
 	agilityTier, err := getAgilityTierDB(r, baseStats)
 	if err != nil {
-		return AgilityParams{}, err
+		return apitypes.AgilityParams{}, err
 	}
 	agilityStat := getBaseStat("agility", baseStats)
 	agility := agilityStat.Value
@@ -194,7 +195,7 @@ func getUnitAgilityParams(r *http.Request, baseStats []BaseStat) (AgilityParams,
 		}
 	}
 
-	agilityParams := AgilityParams{
+	agilityParams := apitypes.AgilityParams{
 		AgilityTier: idToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   agilityTier.TickSpeed,
 		MinICV:      minICV,

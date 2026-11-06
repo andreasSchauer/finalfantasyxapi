@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -81,7 +82,7 @@ func completeMonsterResponse(r *http.Request, mon Monster) (Monster, error) {
 	return mon, nil
 }
 
-func getMonsterElemResists(resists []seedtypes.ElementalResist) []ElementalResist {
+func getMonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.ElementalResist {
 	elemResists := namesToElemResists(resists)
 	elemResistMap := getResourceMap(elemResists)
 
@@ -109,7 +110,7 @@ func getMonsterPoisonDamage(mon Monster) (*int32, error) {
 	return &poisonDamage, nil
 }
 
-func getMonsterAgilityParams(r *http.Request, mon Monster) (*AgilityParams, error) {
+func getMonsterAgilityParams(r *http.Request, mon Monster) (*apitypes.AgilityParams, error) {
 	agilityTier, err := getAgilityTierDB(r, mon.BaseStats)
 	if err != nil {
 		return nil, err
@@ -124,7 +125,7 @@ func getMonsterAgilityParams(r *http.Request, mon Monster) (*AgilityParams, erro
 		tickspeed /= 2
 	}
 
-	agilityParams := AgilityParams{
+	agilityParams := apitypes.AgilityParams{
 		AgilityTier: idToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   tickspeed,
 		MinICV:      agilityTier.MonsterMinICV,

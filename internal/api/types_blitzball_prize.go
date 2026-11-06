@@ -1,15 +1,10 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+)
 
-type BlitzballPrize struct {
-	ID       int32          `json:"id"`
-	Name     string         `json:"name"`
-	Category string         `json:"category"`
-	Slot     string         `json:"slot"`
-	Items    []PossibleItem `json:"items"`
-}
-
-func convertBlitzballItem(bi seedtypes.BlitzballItem) PossibleItem {
+func convertBlitzballItem(bi seedtypes.BlitzballItem) apitypes.PossibleItem {
 	return convertPossibleItem(bi.PossibleItem)
 }

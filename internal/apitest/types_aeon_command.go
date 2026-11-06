@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expAeonCommand struct {
 	testGeneral
@@ -15,7 +18,7 @@ func (e expAeonCommand) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAeonCommands(test test, exp expAeonCommand, got api.AeonCommand) {
+func compareAeonCommands(test test, exp expAeonCommand, got apitypes.AeonCommand) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResource("user", api.E.CharacterClasses.Endpoint, exp.user, got.User)
@@ -29,7 +32,7 @@ type expPossibleAbilityList struct {
 	abilities []int32
 }
 
-func comparePosAbilityList(test test, fieldName string, exp expPossibleAbilityList, got api.PossibleAbilityList) {
+func comparePosAbilityList(test test, fieldName string, exp expPossibleAbilityList, got apitypes.PossibleAbilityList) {
 	test.t.Helper()
 	test.compIDAPIResource(fieldName+" - user", api.E.CharacterClasses.Endpoint, exp.user, got.User)
 	test.checkResIDsInSlice(fieldName+" - abilities", api.E.Abilities.Endpoint, exp.abilities, got.Abilities)

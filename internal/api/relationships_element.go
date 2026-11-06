@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getElementRelationships(r *http.Request, element seedtypes.Element) (Element, error) {
-	var rel Element
+func getElementRelationships(r *http.Request, element seedtypes.Element) (apitypes.Element, error) {
+	var rel apitypes.Element
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -74,7 +75,7 @@ func getElementRelationships(r *http.Request, element seedtypes.Element) (Elemen
 
 	err := g.Wait()
 	if err != nil {
-		return Element{}, err
+		return apitypes.Element{}, err
 	}
 
 	return rel, nil

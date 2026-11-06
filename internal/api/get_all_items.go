@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -12,18 +13,18 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMasterItem(r *http.Request, i handlerInput[seedtypes.MasterItem, MasterItem, apiresource.TypedAPIResource], id int32) (MasterItem, error) {
+func getMasterItem(r *http.Request, i handlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource], id int32) (apitypes.MasterItem, error) {
 	masterItem, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return MasterItem{}, err
+		return apitypes.MasterItem{}, err
 	}
 
 	obtainable, err := getMasterItemObtainable(r, masterItem)
 	if err != nil {
-		return MasterItem{}, err
+		return apitypes.MasterItem{}, err
 	}
 
-	response := MasterItem{
+	response := apitypes.MasterItem{
 		ID:             masterItem.ID,
 		Name:           masterItem.Name,
 		Type:           masterItem.Type,
@@ -49,7 +50,7 @@ func getMasterItem(r *http.Request, i handlerInput[seedtypes.MasterItem, MasterI
 	return response, nil
 }
 
-func retrieveMasterItems(r *http.Request, i handlerInput[seedtypes.MasterItem, MasterItem, apiresource.TypedAPIResource]) ([]int32, error) {
+func retrieveMasterItems(r *http.Request, i handlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

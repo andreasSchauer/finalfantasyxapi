@@ -6,21 +6,12 @@ import (
 	"slices"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
-
-type AppliedState struct {
-	Condition     string           `json:"condition"`
-	IsTemporary   bool             `json:"is_temporary"`
-	AppliedStatus *InflictedStatus `json:"applied_status,omitempty"`
-}
-
-func (as AppliedState) IsZero() bool {
-	return as.Condition == ""
-}
 
 func applyAlteredStateFromQuery(r *http.Request, mon Monster, queryName ts.QueryParamName) (Monster, error) {
 	altStateID, err := getAltStateID(r, mon, queryName)
@@ -51,12 +42,12 @@ func applyAlteredStateFromJSON(mon Monster, altStatePtr *int32) (Monster, error)
 
 func applyAlteredState(mon Monster, altStateID int) Monster {
 	altState := mon.AlteredStates[altStateID-1]
-	appliedState := AppliedState{
+	appliedState := apitypes.AppliedState{
 		Condition:   altState.Condition,
 		IsTemporary: altState.IsTemporary,
 	}
 
-	defaultState := AlteredState{
+	defaultState := apitypes.AlteredState{
 		URL:         ah.CreateResourceURL(E.Monsters.Endpoint, mon.ID),
 		Condition:   "default",
 		IsTemporary: false,
@@ -118,8 +109,8 @@ func vpAltStateID(mon Monster, altStateID int) error {
 	return nil
 }
 
-func applyAltChange(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
-	defStateChange := Alt{
+func applyAltChange(mon Monster, change apitypes.Alt, appliedState apitypes.AppliedState, defaultState apitypes.AlteredState) (Monster, apitypes.AppliedState, apitypes.AlteredState) {
+	defStateChange := apitypes.Alt{
 		AlterationType: database.AlterationTypeChange,
 	}
 
@@ -137,11 +128,11 @@ func applyAltChange(mon Monster, change Alt, appliedState AppliedState, defaultS
 	return mon, appliedState, defaultState
 }
 
-func applyAltGain(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
-	defStateLoss := Alt{
+func applyAltGain(mon Monster, change apitypes.Alt, appliedState apitypes.AppliedState, defaultState apitypes.AlteredState) (Monster, apitypes.AppliedState, apitypes.AlteredState) {
+	defStateLoss := apitypes.Alt{
 		AlterationType: database.AlterationTypeLoss,
 	}
-	defStateGain := Alt{
+	defStateGain := apitypes.Alt{
 		AlterationType: database.AlterationTypeGain,
 	}
 
@@ -166,8 +157,8 @@ func applyAltGain(mon Monster, change Alt, appliedState AppliedState, defaultSta
 	return mon, appliedState, defaultState
 }
 
-func applyAltLoss(mon Monster, change Alt, appliedState AppliedState, defaultState AlteredState) (Monster, AppliedState, AlteredState) {
-	defStateGain := Alt{
+func applyAltLoss(mon Monster, change apitypes.Alt, appliedState apitypes.AppliedState, defaultState apitypes.AlteredState) (Monster, apitypes.AppliedState, apitypes.AlteredState) {
+	defStateGain := apitypes.Alt{
 		AlterationType: database.AlterationTypeGain,
 	}
 
@@ -182,7 +173,7 @@ func applyAltLoss(mon Monster, change Alt, appliedState AppliedState, defaultSta
 }
 
 // put default in first and cut out the currently applied state
-func replaceAltState(states []AlteredState, def AlteredState, i int) []AlteredState {
+func replaceAltState(states []apitypes.AlteredState, def apitypes.AlteredState, i int) []apitypes.AlteredState {
 	allStates := h.Unshift(states, def)
 	size := len(allStates)
 	s1 := allStates[0:i]

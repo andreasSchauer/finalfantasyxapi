@@ -11,7 +11,7 @@ func GetResAmtTypeMap[T apiresource.ResourceAmountType[A], A apiresource.APIReso
 }
 
 func GetResAmtMap[A apiresource.APIResource](items []apiresource.ResourceAmount[A]) map[string]int32 {
-	amountMap := make(map[string]int32)
+	amountMap := make(map[string]int32, len(items))
 
 	for _, item := range items {
 		key := item.Resource.GetTestKey()
@@ -22,7 +22,7 @@ func GetResAmtMap[A apiresource.APIResource](items []apiresource.ResourceAmount[
 }
 
 func GetResAmtIDMap[A apiresource.APIResource](items []apiresource.ResourceAmount[A]) map[int32]int32 {
-	amountMap := make(map[int32]int32)
+	amountMap := make(map[int32]int32, len(items))
 
 	for _, item := range items {
 		url := item.Resource.GetURL()
@@ -34,17 +34,17 @@ func GetResAmtIDMap[A apiresource.APIResource](items []apiresource.ResourceAmoun
 }
 
 func ResAmtTypesToStructs[T apiresource.ResourceAmountType[A], A apiresource.APIResource](items []T) []apiresource.ResourceAmount[A] {
-	resAmts := []apiresource.ResourceAmount[A]{}
+	resAmts := make([]apiresource.ResourceAmount[A], len(items))
 
-	for _, item := range items {
-		resAmts = append(resAmts, item.ToResAmount())
+	for i, item := range items {
+		resAmts[i] = item.ToResAmount()
 	}
 
 	return resAmts
 }
 
 func ResAmtMapToFloat(intMap map[string]int32) map[string]float64 {
-	floatMap := make(map[string]float64)
+	floatMap := make(map[string]float64, len(intMap))
 
 	for key := range intMap {
 		float := float64(intMap[key])

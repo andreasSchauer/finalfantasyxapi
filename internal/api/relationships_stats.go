@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -20,13 +21,13 @@ type StatQueries struct {
 	Properties         DBQueryIntMany
 }
 
-func getStatRelationships(r *http.Request, stat seedtypes.Stat) (Stat, error) {
-	var rel Stat
+func getStatRelationships(r *http.Request, stat seedtypes.Stat) (apitypes.Stat, error) {
+	var rel apitypes.Stat
 	g, ctx := errgroup.WithContext(r.Context())
 
 	queries, err := getStatQueries(r)
 	if err != nil {
-		return Stat{}, err
+		return apitypes.Stat{}, err
 	}
 
 	g.Go(func() error {
@@ -82,7 +83,7 @@ func getStatRelationships(r *http.Request, stat seedtypes.Stat) (Stat, error) {
 
 	err = g.Wait()
 	if err != nil {
-		return Stat{}, err
+		return apitypes.Stat{}, err
 	}
 
 	return rel, nil

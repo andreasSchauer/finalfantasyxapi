@@ -1,11 +1,8 @@
 package api
 
-type RegenAmount struct {
-	Ticks    int32 `json:"ticks"`
-	HealedHP int32 `json:"healed_hp"`
-}
+import "github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 
-func calcRegenAmountsMonster(mon Monster) []RegenAmount {
+func calcRegenAmountsMonster(mon Monster) []apitypes.RegenAmount {
 	regenRes := nameToNamedAPIResource(E.StatusConditions, "regen", nil)
 	if resourcesContain(mon.StatusImmunities, regenRes) {
 		return nil
@@ -14,9 +11,9 @@ func calcRegenAmountsMonster(mon Monster) []RegenAmount {
 	return calcRegenAmounts(mon.BaseStats)
 }
 
-func calcRegenAmounts(baseStats []BaseStat) []RegenAmount {
+func calcRegenAmounts(baseStats []apitypes.BaseStat) []apitypes.RegenAmount {
 	ticks := []int32{0, 1, 2, 3, 4, 5, 10, 15, 20, 30, 50}
-	regenAmounts := make([]RegenAmount, len(ticks))
+	regenAmounts := make([]apitypes.RegenAmount, len(ticks))
 	hp := getBaseStatVal("hp", baseStats)
 
 	for i, tickAmt := range ticks {
@@ -26,8 +23,8 @@ func calcRegenAmounts(baseStats []BaseStat) []RegenAmount {
 	return regenAmounts
 }
 
-func getRegenAmount(hp, ticks int32) RegenAmount {
-	return RegenAmount{
+func getRegenAmount(hp, ticks int32) apitypes.RegenAmount {
+	return apitypes.RegenAmount{
 		Ticks:    ticks,
 		HealedHP: calcRegenAmount(hp, ticks),
 	}

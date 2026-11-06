@@ -6,6 +6,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -16,8 +17,8 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getCharacterRelationships(r *http.Request, char seedtypes.Character) (Character, error) {
-	rel := Character{
+func getCharacterRelationships(r *http.Request, char seedtypes.Character) (apitypes.Character, error) {
+	rel := apitypes.Character{
 		OverdriveModes: getCharacterModeAmts(char),
 	}
 	g, ctx := errgroup.WithContext(r.Context())
@@ -64,13 +65,13 @@ func getCharacterRelationships(r *http.Request, char seedtypes.Character) (Chara
 
 	err := g.Wait()
 	if err != nil {
-		return Character{}, err
+		return apitypes.Character{}, err
 	}
 
 	return rel, nil
 }
 
-func getCharacterClstlFormula(char Character) *string {
+func getCharacterClstlFormula(char apitypes.Character) *string {
 	if char.CelestialWeapon == nil {
 		return nil
 	}
@@ -112,7 +113,7 @@ func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.Resource
 	return modeAmount, nil
 }
 
-func applyOsgStats(r *http.Request, char Character) ([]BaseStat, error) {
+func applyOsgStats(r *http.Request, char apitypes.Character) ([]apitypes.BaseStat, error) {
 	if char.IsStoryBased {
 		return char.BaseStats, nil
 	}

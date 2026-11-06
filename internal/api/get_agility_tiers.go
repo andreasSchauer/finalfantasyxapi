@@ -5,18 +5,19 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAgilityTier(r *http.Request, i handlerInput[seedtypes.AgilityTier, AgilityTier, apiresource.UnnamedAPIResource], id int32) (AgilityTier, error) {
+func getAgilityTier(r *http.Request, i handlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource], id int32) (apitypes.AgilityTier, error) {
 	agilityTier, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return AgilityTier{}, err
+		return apitypes.AgilityTier{}, err
 	}
 
-	response := AgilityTier{
+	response := apitypes.AgilityTier{
 		ID:          agilityTier.ID,
 		FromAgility: agilityTier.MinAgility,
 		ToAgility:   agilityTier.MaxAgility,
@@ -30,7 +31,7 @@ func getAgilityTier(r *http.Request, i handlerInput[seedtypes.AgilityTier, Agili
 	return response, nil
 }
 
-func retrieveAgilityTiers(r *http.Request, i handlerInput[seedtypes.AgilityTier, AgilityTier, apiresource.UnnamedAPIResource]) ([]int32, error) {
+func retrieveAgilityTiers(r *http.Request, i handlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

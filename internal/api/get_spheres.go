@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -12,18 +13,18 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, apiresource.NamedAPIResource], id int32) (Sphere, error) {
+func getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource], id int32) (apitypes.Sphere, error) {
 	sphere, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Sphere{}, err
+		return apitypes.Sphere{}, err
 	}
 
 	rel, err := getSphereRelationships(r, sphere)
 	if err != nil {
-		return Sphere{}, err
+		return apitypes.Sphere{}, err
 	}
 
-	response := Sphere{
+	response := apitypes.Sphere{
 		ID:                 sphere.ID,
 		Name:               sphere.Name,
 		Item:               rel.Item,
@@ -46,7 +47,7 @@ func getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, apireso
 	return response, nil
 }
 
-func retrieveSpheres(r *http.Request, i handlerInput[seedtypes.Sphere, Sphere, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveSpheres(r *http.Request, i handlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

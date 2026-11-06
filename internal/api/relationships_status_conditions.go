@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -11,13 +12,13 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getStatusConditionRelationships(r *http.Request, status seedtypes.StatusCondition) (StatusCondition, error) {
-	var rel StatusCondition
+func getStatusConditionRelationships(r *http.Request, status seedtypes.StatusCondition) (apitypes.StatusCondition, error) {
+	var rel apitypes.StatusCondition
 	g, ctx := errgroup.WithContext(r.Context())
 
 	res, err := getStatusQueryResistance(r)
 	if err != nil {
-		return StatusCondition{}, err
+		return apitypes.StatusCondition{}, err
 	}
 
 	g.Go(func() error {
@@ -51,7 +52,7 @@ func getStatusConditionRelationships(r *http.Request, status seedtypes.StatusCon
 
 	err = g.Wait()
 	if err != nil {
-		return StatusCondition{}, err
+		return apitypes.StatusCondition{}, err
 	}
 
 	return rel, nil

@@ -5,22 +5,14 @@ import (
 	"strconv"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type AlteredState struct {
-	URL         string `json:"url"`
-	Condition   string `json:"condition"`
-	IsTemporary bool   `json:"is_temporary"`
-	Alts        []Alt  `json:"-"`
-	Alterations
-}
-
-func getAlteredStatesAlterations(states []AlteredState) []AlteredState {
+func getAlteredStatesAlterations(states []apitypes.AlteredState) []apitypes.AlteredState {
 	for i := range states {
 		states[i].Alterations = getAlterations(states[i].Alts)
 	}
@@ -28,33 +20,8 @@ func getAlteredStatesAlterations(states []AlteredState) []AlteredState {
 	return states
 }
 
-type Alt struct {
-	AlterationType   database.AlterationType        `json:"alteration_type"`
-	Distance         *int32                         `json:"distance,omitempty"`
-	Properties       []apiresource.NamedAPIResource `json:"properties,omitempty"`
-	AutoAbilities    []apiresource.NamedAPIResource `json:"auto_abilities,omitempty"`
-	BaseStats        []BaseStat                     `json:"base_stats,omitempty"`
-	ElemResists      []ElementalResist              `json:"elem_resists,omitempty"`
-	StatusImmunities []apiresource.NamedAPIResource `json:"status_immunities,omitempty"`
-	StatusResists    []StatusResist                 `json:"status_resists,omitempty"`
-	AddedStatus      *InflictedStatus               `json:"added_status_condition,omitempty"`
-	RemovedStatus    *apiresource.NamedAPIResource  `json:"removed_status_condition,omitempty"`
-}
-
-func (c *Alt) IsZero() bool {
-	return c.Distance == nil &&
-		c.Properties == nil &&
-		c.AutoAbilities == nil &&
-		c.BaseStats == nil &&
-		c.ElemResists == nil &&
-		c.StatusImmunities == nil &&
-		c.StatusResists == nil &&
-		c.AddedStatus == nil &&
-		c.RemovedStatus == nil
-}
-
-func getMonsterAlteredStates(r *http.Request, mon seedtypes.Monster) []AlteredState {
-	alteredStates := []AlteredState{}
+func getMonsterAlteredStates(r *http.Request, mon seedtypes.Monster) []apitypes.AlteredState {
+	alteredStates := []apitypes.AlteredState{}
 
 	for i, altState := range mon.AlteredStates {
 		var url string
@@ -66,7 +33,7 @@ func getMonsterAlteredStates(r *http.Request, mon seedtypes.Monster) []AlteredSt
 			url = ah.CreateResourceURLQuery(E.Monsters.Endpoint, mon.ID, q)
 		}
 
-		alteredState := AlteredState{
+		alteredState := apitypes.AlteredState{
 			URL:         url,
 			Condition:   altState.Condition,
 			IsTemporary: altState.IsTemporary,
@@ -79,8 +46,8 @@ func getMonsterAlteredStates(r *http.Request, mon seedtypes.Monster) []AlteredSt
 	return alteredStates
 }
 
-func getAlts(as seedtypes.AlteredState) []Alt {
-	alts := []Alt{}
+func getAlts(as seedtypes.AlteredState) []apitypes.Alt {
+	alts := []apitypes.Alt{}
 
 	for _, change := range as.Changes {
 		altStateChange := convertAlt(change)
@@ -92,8 +59,8 @@ func getAlts(as seedtypes.AlteredState) []Alt {
 	return alts
 }
 
-func convertAlt(asc seedtypes.Alt) Alt {
-	return Alt{
+func convertAlt(asc seedtypes.Alt) apitypes.Alt {
+	return apitypes.Alt{
 		Properties:       h.SliceOrNil(namesToNamedAPIResources(E.Properties, asc.Properties)),
 		AutoAbilities:    h.SliceOrNil(namesToNamedAPIResources(E.AutoAbilities, asc.AutoAbilities)),
 		BaseStats:        h.SliceOrNil(E.Stats.toResAmtType(asc.BaseStats, newBaseStat)),

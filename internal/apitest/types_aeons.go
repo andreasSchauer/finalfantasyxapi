@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expAeon struct {
 	testGeneral
@@ -24,7 +27,7 @@ func (e expAeon) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAeons(test test, exp expAeon, got api.Aeon) {
+func compareAeons(test test, exp expAeon, got apitypes.Aeon) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResource("untyped unit", api.E.PlayerUnits.Endpoint, exp.untypedUnit, got.UntypedUnit)
@@ -46,7 +49,7 @@ type expAeonEquipment struct {
 	celestialWeapon bool
 }
 
-func compareAeonEquipment(test test, _ string, exp expAeonEquipment, got api.AeonEquipment) {
+func compareAeonEquipment(test test, _ string, exp expAeonEquipment, got apitypes.AeonEquipment) {
 	test.t.Helper()
 	test.compIDAPIResource("auto ability", api.E.AutoAbilities.Endpoint, exp.autoAbility, got.AutoAbility)
 	test.compare("celestial weapon", exp.celestialWeapon, got.CelestialWeapon)

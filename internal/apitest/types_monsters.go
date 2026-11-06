@@ -3,6 +3,7 @@ package apitest
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -66,7 +67,7 @@ type testMonItems struct {
 	otherItems     []testPossibleItem
 }
 
-func compareMonsterItems(test test, fieldName string, exp testMonItems, got api.MonsterItems) {
+func compareMonsterItems(test test, fieldName string, exp testMonItems, got apitypes.MonsterItems) {
 	test.t.Helper()
 	itemMap := exp.items
 
@@ -82,13 +83,13 @@ func compareMonsterItems(test test, fieldName string, exp testMonItems, got api.
 }
 
 type testMonEquipment struct {
-	abilitySlots      api.MonsterEquipmentSlots
-	attachedAbilities api.MonsterEquipmentSlots
+	abilitySlots      apitypes.MonsterEquipmentSlots
+	attachedAbilities apitypes.MonsterEquipmentSlots
 	weaponAbilities   []int32
 	armorAbilities    []int32
 }
 
-func compareMonsterEquipment(test test, _ string, exp testMonEquipment, got api.MonsterEquipment) {
+func compareMonsterEquipment(test test, _ string, exp testMonEquipment, got apitypes.MonsterEquipment) {
 	test.t.Helper()
 	test.compStructs("ability slots", exp.abilitySlots, got.AbilitySlots)
 	test.compStructs("attached abilities", exp.attachedAbilities, got.AttachedAbilities)

@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getModifierRelationships(r *http.Request, modifier seedtypes.Modifier) (Modifier, error) {
-	var rel Modifier
+func getModifierRelationships(r *http.Request, modifier seedtypes.Modifier) (apitypes.Modifier, error) {
+	var rel apitypes.Modifier
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -62,7 +63,7 @@ func getModifierRelationships(r *http.Request, modifier seedtypes.Modifier) (Mod
 
 	err := g.Wait()
 	if err != nil {
-		return Modifier{}, err
+		return apitypes.Modifier{}, err
 	}
 
 	return rel, nil

@@ -4,14 +4,15 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getSubmenuRelationships(r *http.Request, submenu seedtypes.Submenu) (Submenu, error) {
-	var rel Submenu
+func getSubmenuRelationships(r *http.Request, submenu seedtypes.Submenu) (apitypes.Submenu, error) {
+	var rel apitypes.Submenu
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -28,14 +29,14 @@ func getSubmenuRelationships(r *http.Request, submenu seedtypes.Submenu) (Submen
 
 	err := g.Wait()
 	if err != nil {
-		return Submenu{}, err
+		return apitypes.Submenu{}, err
 	}
 
 	return rel, nil
 }
 
-func createSubmenuOpenedBy(ctx context.Context, submenu seedtypes.Submenu) (*MenuOpen, error) {
-	var menuOpen MenuOpen
+func createSubmenuOpenedBy(ctx context.Context, submenu seedtypes.Submenu) (*apitypes.MenuOpen, error) {
+	var menuOpen apitypes.MenuOpen
 	g, ctx := errgroup.WithContext(ctx)
 
 	g.Go(func() error {

@@ -4,6 +4,7 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
 // remove lost items and put them into defStateGain
@@ -70,7 +71,7 @@ func modifyResourcesChange[T apiresource.HasAPIResource](items, changeItems []T)
 
 // if a resistance becomes an immunity, the resistance needs to be added to defStateGain
 // while the immunity needs to be added to defStateLoss
-func modifyGainedImmunities(mon Monster, change, defStateGain, defStateLoss Alt, appliedState AppliedState) (Monster, Alt, Alt, AppliedState) {
+func modifyGainedImmunities(mon Monster, change, defStateGain, defStateLoss apitypes.Alt, appliedState apitypes.AppliedState) (Monster, apitypes.Alt, apitypes.Alt, apitypes.AppliedState) {
 	if change.StatusImmunities == nil {
 		return mon, defStateGain, defStateLoss, appliedState
 	}

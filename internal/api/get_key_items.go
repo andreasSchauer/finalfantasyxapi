@@ -4,24 +4,25 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, apiresource.NamedAPIResource], id int32) (KeyItem, error) {
+func getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource], id int32) (apitypes.KeyItem, error) {
 	keyItem, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return KeyItem{}, err
+		return apitypes.KeyItem{}, err
 	}
 
 	rel, err := getKeyItemRelationships(r, keyItem)
 	if err != nil {
-		return KeyItem{}, err
+		return apitypes.KeyItem{}, err
 	}
 
-	response := KeyItem{
+	response := apitypes.KeyItem{
 		ID:              keyItem.ID,
 		Name:            keyItem.Name,
 		UntypedItem:     idToTypedAPIResource(E.AllItems, keyItem.MasterItem.ID),
@@ -38,7 +39,7 @@ func getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, apir
 	return response, nil
 }
 
-func retrieveKeyItems(r *http.Request, i handlerInput[seedtypes.KeyItem, KeyItem, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveKeyItems(r *http.Request, i handlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

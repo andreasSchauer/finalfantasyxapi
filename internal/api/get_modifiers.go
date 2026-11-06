@@ -4,24 +4,25 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getModifier(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, apiresource.NamedAPIResource], id int32) (Modifier, error) {
+func getModifier(r *http.Request, i handlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource], id int32) (apitypes.Modifier, error) {
 	modifier, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Modifier{}, err
+		return apitypes.Modifier{}, err
 	}
 
 	rel, err := getModifierRelationships(r, modifier)
 	if err != nil {
-		return Modifier{}, err
+		return apitypes.Modifier{}, err
 	}
 
-	response := Modifier{
+	response := apitypes.Modifier{
 		ID:                 modifier.ID,
 		Name:               modifier.Name,
 		Effect:             modifier.Effect,
@@ -40,7 +41,7 @@ func getModifier(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, a
 	return response, nil
 }
 
-func retrieveModifiers(r *http.Request, i handlerInput[seedtypes.Modifier, Modifier, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveModifiers(r *http.Request, i handlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -6,6 +6,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -15,10 +16,10 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, apiresource.NamedAPIResource], id int32) (ArenaCreation, error) {
+func getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource], id int32) (apitypes.ArenaCreation, error) {
 	creation, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return ArenaCreation{}, err
+		return apitypes.ArenaCreation{}, err
 	}
 
 	subquest, _ := lookup.GetResourceByID(creation.SubquestID, lookup.L.SubquestsID)
@@ -26,10 +27,10 @@ func getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, A
 
 	monsters, err := getArenaCreationMonsters(r, creation)
 	if err != nil {
-		return ArenaCreation{}, err
+		return apitypes.ArenaCreation{}, err
 	}
 
-	response := ArenaCreation{
+	response := apitypes.ArenaCreation{
 		ID:                        creation.ID,
 		Name:                      creation.Name,
 		Category:                  creation.Category,
@@ -44,7 +45,7 @@ func getArenaCreation(r *http.Request, i handlerInput[seedtypes.ArenaCreation, A
 	return response, nil
 }
 
-func retrieveArenaCreations(r *http.Request, i handlerInput[seedtypes.ArenaCreation, ArenaCreation, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveArenaCreations(r *http.Request, i handlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

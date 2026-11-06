@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -13,18 +14,18 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getEnemyAbility(r *http.Request, i handlerInput[seedtypes.EnemyAbility, EnemyAbility, apiresource.NamedAPIResource], id int32) (EnemyAbility, error) {
+func getEnemyAbility(r *http.Request, i handlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource], id int32) (apitypes.EnemyAbility, error) {
 	ability, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return EnemyAbility{}, err
+		return apitypes.EnemyAbility{}, err
 	}
 
 	monsters, err := E.Monsters.dbGetRelations(r.Context(), ability, config.Cfg.DB.GetEnemyAbilityMonsterIDs)
 	if err != nil {
-		return EnemyAbility{}, err
+		return apitypes.EnemyAbility{}, err
 	}
 
-	response := EnemyAbility{
+	response := apitypes.EnemyAbility{
 		ID:                 ability.ID,
 		Name:               ability.Name,
 		Version:            ability.Version,
@@ -41,7 +42,7 @@ func getEnemyAbility(r *http.Request, i handlerInput[seedtypes.EnemyAbility, Ene
 	return response, nil
 }
 
-func retrieveEnemyAbilities(r *http.Request, i handlerInput[seedtypes.EnemyAbility, EnemyAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveEnemyAbilities(r *http.Request, i handlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource]) ([]int32, error) {
 	abilityType := database.AbilityTypeEnemyAbility
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {

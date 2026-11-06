@@ -4,22 +4,23 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getRonsoRage(r *http.Request, i handlerInput[seedtypes.RonsoRage, RonsoRage, apiresource.NamedAPIResource], id int32) (RonsoRage, error) {
+func getRonsoRage(r *http.Request, i handlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource], id int32) (apitypes.RonsoRage, error) {
 	ronsoRage, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return RonsoRage{}, err
+		return apitypes.RonsoRage{}, err
 	}
 
 	monsters, err := E.Monsters.dbGetRelations(r.Context(), ronsoRage, config.Cfg.DB.GetRonsoRageMonsterIDs)
 	if err != nil {
-		return RonsoRage{}, err
+		return apitypes.RonsoRage{}, err
 	}
 
-	response := RonsoRage{
+	response := apitypes.RonsoRage{
 		ID:          ronsoRage.ID,
 		Name:        ronsoRage.Name,
 		Description: ronsoRage.Description,
@@ -31,6 +32,6 @@ func getRonsoRage(r *http.Request, i handlerInput[seedtypes.RonsoRage, RonsoRage
 	return response, nil
 }
 
-func retrieveRonsoRages(r *http.Request, i handlerInput[seedtypes.RonsoRage, RonsoRage, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveRonsoRages(r *http.Request, i handlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

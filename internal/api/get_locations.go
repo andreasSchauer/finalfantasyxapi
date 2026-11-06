@@ -4,24 +4,25 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getLocation(r *http.Request, i handlerInput[seedtypes.Location, Location, apiresource.NamedAPIResource], id int32) (Location, error) {
+func getLocation(r *http.Request, i handlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource], id int32) (apitypes.Location, error) {
 	location, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Location{}, err
+		return apitypes.Location{}, err
 	}
 
 	rel, err := getLocationRelationships(r, location)
 	if err != nil {
-		return Location{}, err
+		return apitypes.Location{}, err
 	}
 
-	response := Location{
+	response := apitypes.Location{
 		ID:                 location.ID,
 		Name:               location.Name,
 		ConnectedLocations: rel.ConnectedLocations,
@@ -33,7 +34,7 @@ func getLocation(r *http.Request, i handlerInput[seedtypes.Location, Location, a
 	return response, nil
 }
 
-func retrieveLocations(r *http.Request, i handlerInput[seedtypes.Location, Location, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveLocations(r *http.Request, i handlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -1,6 +1,9 @@
 package api
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type EquipmentName struct {
 	ID                      int32                            `json:"id"`
@@ -12,7 +15,7 @@ type EquipmentName struct {
 	Priority                *int32                           `json:"priority"`
 	CelestialWeapon         *apiresource.NamedAPIResource    `json:"celestial_weapon,omitempty"`
 	RequiredAutoAbilities   []apiresource.NamedAPIResource   `json:"required_auto_abilities"`
-	SelectableAutoAbilities []AbilityPool                    `json:"selectable_auto_abilities"`
+	SelectableAutoAbilities []apitypes.AbilityPool                    `json:"selectable_auto_abilities"`
 	RequiredSlots           *int32                           `json:"required_slots"`
 	Treasures               []apiresource.UnnamedAPIResource `json:"treasures"`
 	Shops                   []apiresource.UnnamedAPIResource `json:"shops"`

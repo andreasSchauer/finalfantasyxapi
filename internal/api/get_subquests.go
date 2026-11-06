@@ -4,18 +4,19 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, apiresource.QuestAPIResource], id int32) (Subquest, error) {
+func getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource], id int32) (apitypes.Subquest, error) {
 	subquest, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Subquest{}, err
+		return apitypes.Subquest{}, err
 	}
 
-	response := Subquest{
+	response := apitypes.Subquest{
 		ID:              subquest.ID,
 		Name:            subquest.Name,
 		UntypedQuest:    idToQuestAPIResource(E.Quests, subquest.Quest.ID),
@@ -32,7 +33,7 @@ func getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, a
 	return response, nil
 }
 
-func retrieveSubquests(r *http.Request, i handlerInput[seedtypes.Subquest, Subquest, apiresource.QuestAPIResource]) ([]int32, error) {
+func retrieveSubquests(r *http.Request, i handlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expArea struct {
 	testGeneral
@@ -16,7 +19,7 @@ func (e expArea) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAreas(test test, exp expArea, got api.Area) {
+func compareAreas(test test, exp expArea, got apitypes.Area) {
 	test.t.Helper()
 	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
 	test.compare("displayName", exp.displayName, got.DisplayName)

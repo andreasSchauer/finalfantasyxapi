@@ -2,6 +2,7 @@ package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -24,7 +25,7 @@ func (e expItem) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareItems(test test, exp expItem, got api.Item) {
+func compareItems(test test, exp expItem, got apitypes.Item) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResource("untyped item", api.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
@@ -56,7 +57,7 @@ func (t testMonItemAmts) GetIndex() int {
 	return t.index
 }
 
-func compareMonItemAmts(test test, fieldName string, exp testMonItemAmts, got api.MonItemAmts) {
+func compareMonItemAmts(test test, fieldName string, exp testMonItemAmts, got apitypes.MonItemAmts) {
 	test.t.Helper()
 	test.compIDAPIResource(fieldName+" - monster", api.E.Monsters.Endpoint, exp.monster, got.Monster)
 	test.compare(fieldName+" - steal common", exp.stealCommon, got.StealCommon)

@@ -15,11 +15,10 @@ func ConvertObjPtr[Old, New any](item *Old, convFn func(Old) New) *New {
 }
 
 func ConvertObjSlice[Old, New any](items []Old, convFn func(Old) New) []New {
-	newSlice := []New{}
+	newSlice := make([]New, len(items))
 
-	for _, item := range items {
-		new := convFn(item)
-		newSlice = append(newSlice, new)
+	for i, item := range items {
+		newSlice[i] = convFn(item)
 	}
 
 	return newSlice

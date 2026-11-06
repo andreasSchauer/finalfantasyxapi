@@ -5,23 +5,24 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAeon(r *http.Request, i handlerInput[seedtypes.Aeon, Aeon, apiresource.NamedAPIResource], id int32) (Aeon, error) {
+func getAeon(r *http.Request, i handlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource], id int32) (apitypes.Aeon, error) {
 	aeon, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Aeon{}, err
+		return apitypes.Aeon{}, err
 	}
 
 	rel, err := getAeonRelationships(r, aeon)
 	if err != nil {
-		return Aeon{}, err
+		return apitypes.Aeon{}, err
 	}
 
-	response := Aeon{
+	response := apitypes.Aeon{
 		ID:                     aeon.ID,
 		Name:                   aeon.Name,
 		UntypedUnit:            idToTypedAPIResource(E.PlayerUnits, aeon.PlayerUnit.ID),
@@ -45,20 +46,20 @@ func getAeon(r *http.Request, i handlerInput[seedtypes.Aeon, Aeon, apiresource.N
 
 	response, err = applyAeonStats(r, response, nil)
 	if err != nil {
-		return Aeon{}, err
+		return apitypes.Aeon{}, err
 	}
 
 	response.RegenAmounts = calcRegenAmounts(response.BaseStats)
 
 	response.AgilityParameters, err = getUnitAgilityParams(r, response.BaseStats)
 	if err != nil {
-		return Aeon{}, err
+		return apitypes.Aeon{}, err
 	}
 
 	return response, nil
 }
 
-func retrieveAeons(r *http.Request, i handlerInput[seedtypes.Aeon, Aeon, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveAeons(r *http.Request, i handlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

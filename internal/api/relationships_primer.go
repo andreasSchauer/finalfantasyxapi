@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getPrimerRelationships(r *http.Request, primer seedtypes.Primer) (Primer, error) {
-	var rel Primer
+func getPrimerRelationships(r *http.Request, primer seedtypes.Primer) (apitypes.Primer, error) {
+	var rel apitypes.Primer
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -26,7 +27,7 @@ func getPrimerRelationships(r *http.Request, primer seedtypes.Primer) (Primer, e
 
 	err := g.Wait()
 	if err != nil {
-		return Primer{}, err
+		return apitypes.Primer{}, err
 	}
 
 	return rel, nil

@@ -2,6 +2,7 @@ package apitest
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
@@ -21,7 +22,7 @@ func (e expAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAbilities(test test, exp expAbility, got api.Ability) {
+func compareAbilities(test test, exp expAbility, got apitypes.Ability) {
 	test.t.Helper()
 	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
 	test.compare("ability type", string(exp.abilityType), string(got.Type))
@@ -49,7 +50,7 @@ func (e expEnemyAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareEnemyAbilities(test test, exp expEnemyAbility, got api.EnemyAbility) {
+func compareEnemyAbilities(test test, exp expEnemyAbility, got apitypes.EnemyAbility) {
 	test.t.Helper()
 	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", exp.rank, got.Rank)
@@ -77,7 +78,7 @@ func (e expItemAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareItemAbilities(test test, exp expItemAbility, got api.ItemAbility) {
+func compareItemAbilities(test test, exp expItemAbility, got apitypes.ItemAbility) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("rank", exp.rank, got.Rank)
@@ -110,7 +111,7 @@ func (e expPlayerAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func comparePlayerAbilities(test test, exp expPlayerAbility, got api.PlayerAbility) {
+func comparePlayerAbilities(test test, exp expPlayerAbility, got apitypes.PlayerAbility) {
 	test.t.Helper()
 	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", exp.rank, got.Rank)
@@ -140,7 +141,7 @@ func (e expOverdriveAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareOverdriveAbilities(test test, exp expOverdriveAbility, got api.OverdriveAbility) {
+func compareOverdriveAbilities(test test, exp expOverdriveAbility, got apitypes.OverdriveAbility) {
 	test.t.Helper()
 	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", exp.rank, got.Rank)
@@ -167,7 +168,7 @@ func (e expMiscAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareMiscAbilities(test test, exp expMiscAbility, got api.MiscAbility) {
+func compareMiscAbilities(test test, exp expMiscAbility, got apitypes.MiscAbility) {
 	test.t.Helper()
 	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", exp.rank, got.Rank)
@@ -197,7 +198,7 @@ func (e expTriggerCommand) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTriggerCommands(test test, exp expTriggerCommand, got api.TriggerCommand) {
+func compareTriggerCommands(test test, exp expTriggerCommand, got apitypes.TriggerCommand) {
 	test.t.Helper()
 	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", exp.rank, got.Rank)

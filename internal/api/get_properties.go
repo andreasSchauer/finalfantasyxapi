@@ -5,21 +5,22 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getProperty(r *http.Request, i handlerInput[seedtypes.Property, Property, apiresource.NamedAPIResource], id int32) (Property, error) {
+func getProperty(r *http.Request, i handlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource], id int32) (apitypes.Property, error) {
 	property, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Property{}, err
+		return apitypes.Property{}, err
 	}
 
 	rel, err := getPropertyRelationships(r, property)
 	if err != nil {
-		return Property{}, err
+		return apitypes.Property{}, err
 	}
 
-	response := Property{
+	response := apitypes.Property{
 		ID:             property.ID,
 		Name:           property.Name,
 		Effect:         property.Effect,
@@ -33,6 +34,6 @@ func getProperty(r *http.Request, i handlerInput[seedtypes.Property, Property, a
 	return response, nil
 }
 
-func retrieveProperties(r *http.Request, i handlerInput[seedtypes.Property, Property, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveProperties(r *http.Request, i handlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource]) ([]int32, error) {
 	return i.queryParamsVerifyRetrieve(r)
 }

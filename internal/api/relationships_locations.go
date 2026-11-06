@@ -3,19 +3,20 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
-func getLocationRelationships(r *http.Request, location seedtypes.Location) (Location, error) {
-	var rel Location
-	var locRel LocRel
+func getLocationRelationships(r *http.Request, location seedtypes.Location) (apitypes.Location, error) {
+	var rel apitypes.Location
+	var locRel apitypes.LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := E.Locations.queryAvlRelGetParams(r, location.ID)
 	if err != nil {
-		return Location{}, err
+		return apitypes.Location{}, err
 	}
 
 	g.Go(func() error {
@@ -91,7 +92,7 @@ func getLocationRelationships(r *http.Request, location seedtypes.Location) (Loc
 
 	err = g.Wait()
 	if err != nil {
-		return Location{}, err
+		return apitypes.Location{}, err
 	}
 
 	rel.LocRel = locRel
