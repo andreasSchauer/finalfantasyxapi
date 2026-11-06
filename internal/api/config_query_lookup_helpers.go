@@ -10,9 +10,9 @@ import (
 )
 
 func AssignDefaultParams(endpoint ts.EndpointName, eLookup, qLookup *map[ts.QueryParamName]queryparam.QueryParam) {
-	params := paramSliceToMap(Q.DefaultParamSlice, endpoint)
-	*eLookup = params
-	*qLookup = params
+	paramMap := paramSliceToMap(Q.DefaultParamSlice, endpoint)
+	*eLookup = paramMap
+	*qLookup = paramMap
 }
 
 func AssignQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []queryparam.QueryParam, i *handlerInput[T, R, A], queryLookup *map[ts.QueryParamName]queryparam.QueryParam) {
