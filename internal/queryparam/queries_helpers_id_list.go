@@ -1,4 +1,4 @@
-package api
+package queryparam
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -36,7 +37,7 @@ func (q QueryParam) sliceIDs[F seedtypes.Lookupable](r *http.Request, query stri
 		ids = slices.Concat(ids, idsNew)
 
 		if len(ids) > config.Cfg.FetchLimit {
-			return nil, newHTTPErrorFetchLimit(config.Cfg.FetchLimit)
+			return nil, errs.NewHTTPErrorFetchLimit(config.Cfg.FetchLimit)
 		}
 	}
 
@@ -71,7 +72,7 @@ func (q QueryParam) checkIDRange[F seedtypes.Lookupable](segment string, fLookup
 		ids = slices.Concat(ids, newIDs)
 
 	default:
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", q.Name, segment, q.Usage), nil)
+		return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", q.Name, segment, q.Usage), nil)
 	}
 
 	return ids, nil

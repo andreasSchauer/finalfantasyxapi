@@ -1,4 +1,4 @@
-package api
+package apihelpers
 
 import (
 	"errors"
@@ -13,44 +13,44 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type parseResponse struct {
+type ParseResponse struct {
 	ID   int32
 	Name string // if Name != "", there are multiple resources with that name
 }
 
-func newParseResponse(id int32, name string) parseResponse {
-	return parseResponse{
+func newParseResponse(id int32, name string) ParseResponse {
+	return ParseResponse{
 		ID:   id,
 		Name: name,
 	}
 }
 
-func parseID(idStr string, resourceType ts.ResTypeSingle, maxID int) (parseResponse, error) {
-	response, err := checkID(idStr, resourceType, maxID)
+func ParseID(idStr string, resourceType ts.ResTypeSingle, maxID int) (ParseResponse, error) {
+	response, err := CheckID(idStr, resourceType, maxID)
 	if errors.Is(err, errs.ErrNotAnID) {
-		return parseResponse{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s'", idStr), err)
+		return ParseResponse{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s'", idStr), err)
 	}
 	if err != nil {
-		return parseResponse{}, err
+		return ParseResponse{}, err
 	}
 
 	return response, nil
 }
 
-func checkID(idStr string, resourceType ts.ResTypeSingle, maxID int) (parseResponse, error) {
+func CheckID(idStr string, resourceType ts.ResTypeSingle, maxID int) (ParseResponse, error) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		return parseResponse{}, errs.ErrNotAnID
+		return ParseResponse{}, errs.ErrNotAnID
 	}
 
 	if id > maxID || id <= 0 {
-		return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with provided id '%d' doesn't exist. max id: %d", resourceType, id, maxID), err)
+		return ParseResponse{}, errs.NewHTTPError(http.StatusNotFound, fmt.Sprintf("%s with provided id '%d' doesn't exist. max id: %d", resourceType, id, maxID), err)
 	}
 
 	return newParseResponse(int32(id), ""), nil
 }
 
-func checkUniqueName[T seedtypes.Lookupable](name string, l map[string]T) (parseResponse, error) {
+func CheckUniqueName[T seedtypes.Lookupable](name string, l map[string]T) (ParseResponse, error) {
 	nameWithSpaces := h.GetNameWithSpaces(name, "_")
 
 	lookupObj := seedtypes.LookupObject{
@@ -69,10 +69,10 @@ func checkUniqueName[T seedtypes.Lookupable](name string, l map[string]T) (parse
 		return newParseResponse(response.GetID(), ""), nil
 	}
 
-	return parseResponse{}, errs.ErrNoResource
+	return ParseResponse{}, errs.ErrNoResource
 }
 
-func checkNameMultiple[T seedtypes.Lookupable](name string, l map[string]T) (parseResponse, error) {
+func CheckNameMultiple[T seedtypes.Lookupable](name string, l map[string]T) (ParseResponse, error) {
 	nameWithSpaces := h.GetNameWithSpaces(name, "_")
 	var testVersion int32 = 1
 
@@ -85,10 +85,10 @@ func checkNameMultiple[T seedtypes.Lookupable](name string, l map[string]T) (par
 	if err == nil {
 		return newParseResponse(0, lookupObj.Name), nil
 	}
-	return parseResponse{}, errs.ErrNoResource
+	return ParseResponse{}, errs.ErrNoResource
 }
 
-func checkNameVersion[T seedtypes.Lookupable](name string, version *int32, l map[string]T) (parseResponse, error) {
+func CheckNameVersion[T seedtypes.Lookupable](name string, version *int32, l map[string]T) (ParseResponse, error) {
 	nameWithSpaces := h.GetNameWithSpaces(name, "_")
 
 	key := seedtypes.LookupObject{
@@ -100,10 +100,10 @@ func checkNameVersion[T seedtypes.Lookupable](name string, version *int32, l map
 	if err == nil {
 		return newParseResponse(resource.GetID(), ""), nil
 	}
-	return parseResponse{}, errs.ErrNoResource
+	return ParseResponse{}, errs.ErrNoResource
 }
 
-func parseVersionStr(versionStr string) (*int32, error) {
+func ParseVersionStr(versionStr string) (*int32, error) {
 	var versionPtr *int32
 
 	if versionStr == "" {
@@ -112,7 +112,7 @@ func parseVersionStr(versionStr string) (*int32, error) {
 
 	version, err := strconv.Atoi(versionStr)
 	if err != nil {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid version number: '%s'", versionStr), err)
+		return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid version number: '%s'", versionStr), err)
 	}
 	versionInt32 := int32(version)
 	versionPtr = &versionInt32

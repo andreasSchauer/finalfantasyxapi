@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -15,7 +16,7 @@ func (i handlerInput[T, R, A]) queryIntList(r *http.Request, inputIDs []int32, q
 		}
 
 		ints, err := queryParam.ParseIntList(r)
-		if queryIsEmpty(err) {
+		if errs.QueryIsEmpty(err) {
 			return inputIDs, nil
 		}
 		if err != nil {

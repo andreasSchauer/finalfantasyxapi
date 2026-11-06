@@ -1,4 +1,4 @@
-package api
+package queryparam
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -18,11 +19,11 @@ func (q QueryParam) ParseTyped(r *http.Request) (string, string, error) {
 
 	resType, unitStr, found := strings.Cut(query, ":")
 	if !found {
-		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", q.Name, query, q.Usage), nil)
+		return "", "", errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", q.Name, query, q.Usage), nil)
 	}
 
 	if !slices.Contains(q.AllowedResTypes, resType) {
-		return "", "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resource type '%s' for parameter '%s'. supported resource types: %s", resType, q.Name, h.FormatStringSlice(q.AllowedResTypes)), nil)
+		return "", "", errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid resource type '%s' for parameter '%s'. supported resource types: %s", resType, q.Name, h.FormatStringSlice(q.AllowedResTypes)), nil)
 	}
 
 	return resType, unitStr, nil

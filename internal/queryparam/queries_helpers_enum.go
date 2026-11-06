@@ -1,4 +1,4 @@
-package api
+package queryparam
 
 import (
 	"fmt"
@@ -23,10 +23,10 @@ func (q QueryParam) CheckEnum[E, N any](val string, et enums.EnumType[E, N]) (en
 	enum, err := et.CheckVal(val)
 	switch err {
 	case errs.ErrIDNotFound:
-		return enums.EnumVal{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%s' used for parameter '%s' doesn't exist. max id: %d", val, q.Name, len(et.Lookup)), nil)
+		return enums.EnumVal{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%s' used for parameter '%s' doesn't exist. max id: %d", val, q.Name, len(et.Lookup)), nil)
 
 	case errs.ErrNoResource:
-		return enums.EnumVal{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values", val, q.Name, q.Endpoint), nil)
+		return enums.EnumVal{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid enum value '%s' used for parameter '%s'. use /api/%s/parameters to see allowed values", val, q.Name, q.Endpoint), nil)
 
 	default:
 		return enum, nil

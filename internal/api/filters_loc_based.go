@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -15,7 +16,7 @@ func getAreasByItem(r *http.Request, ctx context.Context, id int32) ([]int32, er
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -35,7 +36,7 @@ func getSublocationsByItem(r *http.Request, ctx context.Context, id int32) ([]in
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -55,7 +56,7 @@ func getLocationsByItem(r *http.Request, ctx context.Context, id int32) ([]int32
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 

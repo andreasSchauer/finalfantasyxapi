@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -15,7 +16,7 @@ func getMasterItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -35,7 +36,7 @@ func getMasterItemsBySublocation(r *http.Request, ctx context.Context, id int32)
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -55,7 +56,7 @@ func getMasterItemsByLocation(r *http.Request, ctx context.Context, id int32) ([
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -75,7 +76,7 @@ func getItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, er
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -95,7 +96,7 @@ func getItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]in
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -115,7 +116,7 @@ func getItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32
 	queryParamMethods := i.queryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 

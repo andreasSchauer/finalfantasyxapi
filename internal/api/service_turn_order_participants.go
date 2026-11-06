@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -73,7 +74,7 @@ func getParticipantsParty(params TurnOrderParams, maps *participantMaps) ([]Part
 	for i, partyMember := range params.Party {
 		isDupe := maps.duplicates[partyMember.getDuplicateKey()]
 		if isDupe {
-			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(ts.PfnParty, fmt.Sprintf("duplicate unit id found at index %d. each party member can only appear once", i)), nil)
+			return nil, errs.NewHTTPError(http.StatusBadRequest, fieldErrorMsg(ts.PfnParty, fmt.Sprintf("duplicate unit id found at index %d. each party member can only appear once", i)), nil)
 		}
 
 		unit, _ := lookup.GetResourceByID(partyMember.UnitID, lookup.L.PlayerUnitsID)
@@ -105,7 +106,7 @@ func getParticipantsMons(params TurnOrderParams, maps *participantMaps) ([]Parti
 	for i, mon := range params.Mons {
 		isDupe := maps.duplicates[mon.getDuplicateKey()]
 		if isDupe {
-			return nil, newHTTPError(http.StatusBadRequest, fieldErrorMsg(ts.PfnMons, fmt.Sprintf("duplicate monster found at index %d. exact duplicate monsters are not allowed", i)), nil)
+			return nil, errs.NewHTTPError(http.StatusBadRequest, fieldErrorMsg(ts.PfnMons, fmt.Sprintf("duplicate monster found at index %d. exact duplicate monsters are not allowed", i)), nil)
 		}
 
 		participant, firstTurnAglTier, err := fetchTurnOrderMonster(params, mon)

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -17,7 +18,7 @@ func (i handlerInput[T, R, A]) queryEnum[E, N any](r *http.Request, et enums.Enu
 		}
 
 		enum, err := queryParam.ParseEnum(r, et)
-		if queryIsEmpty(err) {
+		if errs.QueryIsEmpty(err) {
 			return inputIDs, nil
 		}
 		if err != nil {
@@ -40,7 +41,7 @@ func (i handlerInput[T, R, A]) queryEnumWrapper[E, N any](r *http.Request, et en
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		enum, err := queryParam.ParseEnum(r, et)
-		if queryIsEmpty(err) {
+		if errs.QueryIsEmpty(err) {
 			return inputIDs, nil
 		}
 		if err != nil {

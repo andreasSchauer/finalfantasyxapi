@@ -11,63 +11,63 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
-// deals with a single segment path that is either a name or an id and returns a parseResponse with the id, if a single match is found, or a name, if multiple matches with that name were found.
-func (i handlerInput[T, R, A]) parseSingleSegmentResource(segment string) (parseResponse, error) {
+// deals with a single segment path that is either a name or an id and returns a ah.ParseResponse with the id, if a single match is found, or a name, if multiple matches with that name were found.
+func (i handlerInput[T, R, A]) parseSingleSegmentResource(segment string) (ah.ParseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {
-		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding", err)
+		return ah.ParseResponse{}, errs.NewHTTPError(http.StatusBadRequest, "invalid url encoding", err)
 	}
 
-	response, err := checkID(decoded, i.resTypeSingle, len(i.objLookup))
+	response, err := ah.CheckID(decoded, i.resTypeSingle, len(i.objLookup))
 	if err == nil {
 		return response, nil
 	}
 	if !errors.Is(err, errs.ErrNotAnID) {
-		return parseResponse{}, err
+		return ah.ParseResponse{}, err
 	}
 
-	response, err = checkUniqueName(decoded, i.objLookup)
+	response, err = ah.CheckUniqueName(decoded, i.objLookup)
 	if err == nil {
 		return response, nil
 	}
 
-	response, err = checkNameMultiple(decoded, i.objLookup)
+	response, err = ah.CheckNameMultiple(decoded, i.objLookup)
 	if err == nil {
 		return response, nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s'", i.resTypeSingle, segment), err)
+	return ah.ParseResponse{}, errs.NewHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s'", i.resTypeSingle, segment), err)
 }
 
-// deals with a name/version path and returns a parseResponse with the id, if a match is found.
-func (i handlerInput[T, R, A]) parseNameVersionResource(name, versionStr string) (parseResponse, error) {
+// deals with a name/version path and returns a ah.ParseResponse with the id, if a match is found.
+func (i handlerInput[T, R, A]) parseNameVersionResource(name, versionStr string) (ah.ParseResponse, error) {
 	nameDecoded, err := url.PathUnescape(name)
 	if err != nil {
-		return parseResponse{}, newHTTPError(http.StatusBadRequest, "invalid url encoding", err)
+		return ah.ParseResponse{}, errs.NewHTTPError(http.StatusBadRequest, "invalid url encoding", err)
 	}
 
-	versionPtr, err := parseVersionStr(versionStr)
+	versionPtr, err := ah.ParseVersionStr(versionStr)
 	if err != nil {
-		return parseResponse{}, err
+		return ah.ParseResponse{}, err
 	}
 
-	response, err := checkNameVersion(nameDecoded, versionPtr, i.objLookup)
+	response, err := ah.CheckNameVersion(nameDecoded, versionPtr, i.objLookup)
 	if err == nil {
 		return response, nil
 	}
 
-	return parseResponse{}, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s', version '%s'", i.resTypeSingle, name, versionStr), err)
+	return ah.ParseResponse{}, errs.NewHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s', version '%s'", i.resTypeSingle, name, versionStr), err)
 }
 
 func (i handlerInputEnums) parseSegment(segment string) (enums.EnumResponse, string, error) {
 	key, err := url.PathUnescape(segment)
 	if err != nil {
-		return enums.EnumResponse{}, "", newHTTPError(http.StatusBadRequest, "invalid url encoding", err)
+		return enums.EnumResponse{}, "", errs.NewHTTPError(http.StatusBadRequest, "invalid url encoding", err)
 	}
 
 	enum, ok := i.lookup[key]
 	if !ok {
-		return enums.EnumResponse{}, "", newHTTPError(http.StatusNotFound, fmt.Sprintf("enum '%s' not found", key), nil)
+		return enums.EnumResponse{}, "", errs.NewHTTPError(http.StatusNotFound, fmt.Sprintf("enum '%s' not found", key), nil)
 	}
 	enum.UsedByEndpoints = ah.EndpointsToURLs(enum.UsedByEndpointsInt)
 

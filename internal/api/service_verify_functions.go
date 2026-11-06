@@ -20,7 +20,7 @@ func vfEnum(v paramsVerifyer, typedVal string, fieldName ts.FieldName) (string, 
 	}
 
 	if !slices.Contains(doc.EnumValues, typedVal) {
-		return "", newHTTPError(http.StatusBadRequest, fmt.Sprintf("value '%s' of field '%s' is not a valid enum value. allowed values: %s", typedVal, fieldName, h.FormatStringSlice(doc.EnumValues)), nil)
+		return "", errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("value '%s' of field '%s' is not a valid enum value. allowed values: %s", typedVal, fieldName, h.FormatStringSlice(doc.EnumValues)), nil)
 	}
 
 	return typedVal, nil
@@ -34,7 +34,7 @@ func vfArray[T any](v paramsVerifyer, arr []T, fieldName ts.FieldName) ([]T, err
 	doc := v.paramsRules[fieldName].Doc
 
 	if len(arr) == 0 {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("empty array used for field '%s'. the use of empty arrays is not supported by this API. omit the field, or use 'null' instead", fieldName), nil)
+		return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("empty array used for field '%s'. the use of empty arrays is not supported by this API. omit the field, or use 'null' instead", fieldName), nil)
 	}
 
 	if doc.MaxArrayLen == nil {
@@ -42,7 +42,7 @@ func vfArray[T any](v paramsVerifyer, arr []T, fieldName ts.FieldName) ([]T, err
 	}
 
 	if len(arr) > *doc.MaxArrayLen {
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("too many items in array of field '%s'. got: %d, maximum allowed: %d", fieldName, len(arr), *doc.MaxArrayLen), nil)
+		return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("too many items in array of field '%s'. got: %d, maximum allowed: %d", fieldName, len(arr), *doc.MaxArrayLen), nil)
 	}
 
 	return arr, nil
@@ -70,15 +70,15 @@ func vfIntRange(val int32, minVal, maxVal *int32, fieldName ts.FieldName, intTyp
 	errStart := getFieldRangeErrStart(val, fieldName, intType, isArray)
 
 	if minVal != nil && maxVal != nil && (val < *minVal || val > *maxVal) {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. allowed range: %d to %d", errStart, *minVal, *maxVal), nil)
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. allowed range: %d to %d", errStart, *minVal, *maxVal), nil)
 	}
 
 	if minVal != nil && val < *minVal {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. lowest allowed value: %d", errStart, *minVal), nil)
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. lowest allowed value: %d", errStart, *minVal), nil)
 	}
 
 	if maxVal != nil && val > *maxVal {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. highest allowed value: %d", errStart, *maxVal), nil)
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. highest allowed value: %d", errStart, *maxVal), nil)
 	}
 
 	return val, nil

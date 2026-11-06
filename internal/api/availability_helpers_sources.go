@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -39,39 +40,39 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource
 	excls := []string{}
 
 	monID, err := nullID(r, E.Monsters, ts.QpnMonster, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
-	if !queryIsEmpty(err) {
+	if !errs.QueryIsEmpty(err) {
 		reqs = append(reqs, "monster-single")
 	}
 
 	itemID, err := nullID(r, E.Items, ts.QpnItem, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
-	if !queryIsEmpty(err) {
+	if !errs.QueryIsEmpty(err) {
 		reqs = append(reqs, string(ViewSourceTypeItem))
 	}
 
 	keyItemID, err := nullID(r, E.KeyItems, ts.QpnKeyItem, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
-	if !queryIsEmpty(err) {
+	if !errs.QueryIsEmpty(err) {
 		reqs = append(reqs, string(ViewSourceTypeKeyItem))
 	}
 
 	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
-	if !queryIsEmpty(err) {
+	if !errs.QueryIsEmpty(err) {
 		reqs = append(reqs, string(ViewSourceTypeAutoAbility))
 	}
 
 	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
 
@@ -115,28 +116,28 @@ func getShopSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r 
 	excls := []string{}
 
 	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
-	if !queryIsEmpty(err) {
+	if !errs.QueryIsEmpty(err) {
 		avlType = AvlTypeContext
 		reqs = append(reqs, "equip-filter")
 	}
 
 	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].ParseIntList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
-	if !queryIsEmpty(err) {
+	if !errs.QueryIsEmpty(err) {
 		avlType = AvlTypeContext
 		reqs = append(reqs, "equip-filter")
 	}
 
 	charID, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
-	if !queryIsEmpty(err) {
+	if !errs.QueryIsEmpty(err) {
 		avlType = AvlTypeContext
 		reqs = append(reqs, "equip-filter")
 	}
@@ -167,10 +168,10 @@ func getShopSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r 
 func parseBoolSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], reqs, excls []string, sourceMap map[ts.QueryParamName]string) ([]string, []string, error) {
 	for queryName := range sourceMap {
 		b, err := i.queryLookup[queryName].ParseBool(r)
-		if errExceptEmptyQuery(err) {
+		if errs.ErrExceptEmptyQuery(err) {
 			return nil, nil, err
 		}
-		if !queryIsEmpty(err) {
+		if !errs.QueryIsEmpty(err) {
 			if b {
 				reqs = append(reqs, sourceMap[queryName])
 			} else {

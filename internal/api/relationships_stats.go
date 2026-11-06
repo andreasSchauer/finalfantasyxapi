@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
@@ -89,7 +90,7 @@ func getStatRelationships(r *http.Request, stat seedtypes.Stat) (Stat, error) {
 
 func getStatQueries(r *http.Request) (StatQueries, error) {
 	changesOnly, err := Q.Stats[ts.QpnChangesOnly].ParseBool(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return StatQueries{}, err
 	}
 

@@ -1,4 +1,4 @@
-package api
+package queryparam
 
 import (
 	"net/http"

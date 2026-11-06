@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -22,7 +23,7 @@ func getAgilityTierDB(r *http.Request, stats []BaseStat) (seedtypes.AgilityTier,
 
 	dbAgilityTier, err := config.Cfg.DB.GetAgilityTierByAgility(r.Context(), agility)
 	if err != nil {
-		return seedtypes.AgilityTier{}, newHTTPError(http.StatusInternalServerError, "couldn't extract agility parameters", err)
+		return seedtypes.AgilityTier{}, errs.NewHTTPError(http.StatusInternalServerError, "couldn't extract agility parameters", err)
 	}
 
 	agilityTier, _ := lookup.GetResourceByID(dbAgilityTier.ID, lookup.L.AgilityTiersID)

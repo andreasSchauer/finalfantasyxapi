@@ -1,10 +1,11 @@
-package api
+package queryparam
 
 import (
 	"errors"
 	"fmt"
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -30,10 +31,10 @@ func (q QueryParam) CheckNameID[P seedtypes.Lookupable](query string, pResType t
 		return 0, err
 	}
 
-	resource, err := checkUniqueName(query, pLookup)
+	resource, err := ah.CheckUniqueName(query, pLookup)
 	if err == nil {
 		return resource.ID, nil
 	}
 
-	return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s' used for parameter '%s'", pResType, query, q.Name), err)
+	return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("unknown %s '%s' used for parameter '%s'", pResType, query, q.Name), err)
 }

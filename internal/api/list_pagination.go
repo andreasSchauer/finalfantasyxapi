@@ -8,6 +8,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -41,7 +42,7 @@ func CreatePaginatedList[T any](r *http.Request, items []T) (apiresource.ListPar
 	}
 
 	if offset >= size {
-		return apiresource.ListParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("offset must be smaller than number of resources (%d)", size), err)
+		return apiresource.ListParams{}, nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("offset must be smaller than number of resources (%d)", size), err)
 	}
 
 	upperLimit := min(offset+limit, size)

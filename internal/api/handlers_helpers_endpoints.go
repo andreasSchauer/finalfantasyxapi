@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 )
 
 func (i handlerInput[T, R, A]) handleList(w http.ResponseWriter, r *http.Request) {
@@ -40,7 +42,7 @@ func (i handlerInput[T, R, A]) handleIDOnly(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	parseRes, err := parseID(segment, i.resTypeSingle, len(i.objLookupID))
+	parseRes, err := ah.ParseID(segment, i.resTypeSingle, len(i.objLookupID))
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -210,7 +212,7 @@ func (i handlerInputEndpoints) handleList(w http.ResponseWriter, r *http.Request
 
 	endpoints := i.Slice
 	resources := endpointsToNamedAPIResources(endpoints)
-	setLimitMax(r, r.URL.Query())
+	queryparam.SetLimitMax(r, r.URL.Query())
 
 	resourceList, err := newAPIResourceList(r, resources)
 	if handleHTTPError(w, err) {

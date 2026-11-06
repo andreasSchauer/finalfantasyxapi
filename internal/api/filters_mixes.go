@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -14,7 +15,7 @@ func getMixesByItem(r *http.Request, ctx context.Context, firstItemID int32) ([]
 	i := E.Mixes
 
 	secondItemIDPtr, err := nullID(r, E.Items, ts.QpnSecondItem, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -23,7 +24,7 @@ func getMixesByItem(r *http.Request, ctx context.Context, firstItemID int32) ([]
 		SecondItemID: secondItemIDPtr,
 	})
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by items", i.resTypePlural), err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by items", i.resTypePlural), err)
 	}
 
 	return dbIDs, nil

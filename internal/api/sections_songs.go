@@ -7,6 +7,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -51,22 +52,22 @@ func createSongSimple(_ *http.Request, id int32, _ Subsection) (apiresource.Simp
 func getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := config.Cfg.DB.GetLocationBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of location with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of location with id '%d'", err)
 	}
 
 	cueSongIDs, err := config.Cfg.DB.GetLocationCueSongIDs(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of location with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of location with id '%d'", err)
 	}
 
 	bossSongIDs, err := config.Cfg.DB.GetLocationBossSongIDs(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get boss song of location with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get boss song of location with id '%d'", err)
 	}
 
 	fmvSongIDs, err := config.Cfg.DB.GetLocationFMVSongIDs(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of location with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get fmv song of location with id '%d'", err)
 	}
 
 	ids := ah.CombineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
@@ -76,22 +77,22 @@ func getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 func getSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := config.Cfg.DB.GetSublocationBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of sublocation with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of sublocation with id '%d'", err)
 	}
 
 	cueSongIDs, err := config.Cfg.DB.GetSublocationCueSongIDs(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of sublocation with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of sublocation with id '%d'", err)
 	}
 
 	bossSongIDs, err := config.Cfg.DB.GetSublocationBossSongIDs(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get boss song of sublocation with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get boss song of sublocation with id '%d'", err)
 	}
 
 	fmvSongIDs, err := config.Cfg.DB.GetSublocationFMVSongIDs(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of sublocation with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get fmv song of sublocation with id '%d'", err)
 	}
 
 	ids := ah.CombineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)
@@ -101,22 +102,22 @@ func getSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 func getAreaSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := config.Cfg.DB.GetAreaBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of area with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of area with id '%d'", err)
 	}
 
 	cueSongIDs, err := ToIntManyNull(config.Cfg.DB.GetAreaCueSongIDs)(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of area with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of area with id '%d'", err)
 	}
 
 	bossSongIDs, err := config.Cfg.DB.GetAreaBossSongIDs(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get boss song of area with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get boss song of area with id '%d'", err)
 	}
 
 	fmvSongIDs, err := config.Cfg.DB.GetAreaFMVSongIDs(ctx, id)
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, "couldn't get fmv song of area with id '%d'", err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get fmv song of area with id '%d'", err)
 	}
 
 	ids := ah.CombineIDSlices(bgSongIDs, cueSongIDs, bossSongIDs, fmvSongIDs)

@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -30,7 +32,7 @@ func (q queryVerifyer[T]) requestType() error {
 
 // checks, if a query param that is meant for single resource requests is used in the correct context. returns an error, if no key is provided (meaning the parameter was combined with a list request). also returns an error if the key is an id and the given id is not among the allowed ids, and if that restriction exists for the query param.
 func (q queryVerifyer[T]) single() error {
-	if q.param.ParamUse == puSingle {
+	if q.param.ParamUse == queryparam.PuSingle {
 		if q.key == nil {
 			return errSingleResParam(q.param.Name)
 		}
@@ -61,7 +63,7 @@ func (q queryVerifyer[T]) allowedIDs(id int32) error {
 		}
 	}
 	if !allowedIDPresent {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%d'. parameter '%s' can only be used with ids: %s", id, q.param.Name, h.FormatIntSlice(q.param.AllowedIDs)), nil)
+		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%d'. parameter '%s' can only be used with ids: %s", id, q.param.Name, h.FormatIntSlice(q.param.AllowedIDs)), nil)
 	}
 
 	return nil
@@ -69,7 +71,7 @@ func (q queryVerifyer[T]) allowedIDs(id int32) error {
 
 // checks, if a query param that is meant for list requests is used in the correct context. returns an error, if a key is provided (meaning the parameter was combined with a single resource request).
 func (q queryVerifyer[T]) list() error {
-	if q.param.ParamUse == puList && q.key != nil {
+	if q.param.ParamUse == queryparam.PuList && q.key != nil {
 		return errListResParam(q.param.Name)
 	}
 
@@ -79,7 +81,7 @@ func (q queryVerifyer[T]) list() error {
 // checks, if a query param that is meant for a specific segment is used in the correct context, for example /endpoint/simple. returns an error, if the given segment doesn't match with the requested segment.
 func (q queryVerifyer[T]) subsection() error {
 	if q.param.ForSegment != nil && !segmentsMatch(q.param.ForSegment, q.segment) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in the following format: '/api/%s/%s%s'", q.param.Name, q.param.Name, q.endpoint, *q.param.ForSegment, q.param.Usage), nil)
+		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in the following format: '/api/%s/%s%s'", q.param.Name, q.param.Name, q.endpoint, *q.param.ForSegment, q.param.Usage), nil)
 	}
 
 	return nil

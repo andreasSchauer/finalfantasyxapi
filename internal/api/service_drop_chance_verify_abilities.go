@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -14,14 +15,14 @@ import (
 
 func vfAutoAbilities(params DropChanceParams, mon seedtypes.Monster) ([]seedtypes.AutoAbility, []seedtypes.EquipmentDrop, error) {
 	if mon.Equipment == nil {
-		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' doesn't drop equipment", mon), nil)
+		return nil, nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' doesn't drop equipment", mon), nil)
 	}
 
 	monMaxSlots := getMonMaxSlots(mon)
 	reqSlots := params.GetRequiredSlots()
 
 	if reqSlots > monMaxSlots {
-		return nil, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("query requires %d slots, but the max amount of slots, monster '%s' can drop, is %d", reqSlots, mon, monMaxSlots), nil)
+		return nil, nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("query requires %d slots, but the max amount of slots, monster '%s' can drop, is %d", reqSlots, mon, monMaxSlots), nil)
 	}
 
 	params, autoAbilities, err := vfWantedAutoAbilities(params)
@@ -63,14 +64,14 @@ func vfWantedAutoAbilities(params DropChanceParams) (DropChanceParams, []seedtyp
 		}
 
 		if *params.EquipType != ability.Type {
-			return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, "weapon- and armor-abilities can't be combined", nil)
+			return DropChanceParams{}, nil, errs.NewHTTPError(http.StatusBadRequest, "weapon- and armor-abilities can't be combined", nil)
 		}
 
 		autoAbilities = append(autoAbilities, ability)
 	}
 
 	if params.EquipType == nil {
-		return DropChanceParams{}, nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("can't discern equipment's type. use '%s' to discern the type, or set it manually by using '%s'", ts.PfnAutoAbilities, ts.PfnEquipType), nil)
+		return DropChanceParams{}, nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("can't discern equipment's type. use '%s' to discern the type, or set it manually by using '%s'", ts.PfnAutoAbilities, ts.PfnEquipType), nil)
 	}
 
 	return params, autoAbilities, nil
@@ -100,7 +101,7 @@ func vfAutoAbilitiesDropped(wantedAutoAbilities []seedtypes.AutoAbility, monster
 		}
 
 		if !isPresent {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s' (%d). it only drops the following auto-abilities: %s", mon, ability.Name, ability.ID, formatMonAutoAbilities(mon)), nil)
+			return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't drop auto-ability '%s' (%d). it only drops the following auto-abilities: %s", mon, ability.Name, ability.ID, formatMonAutoAbilities(mon)), nil)
 		}
 	}
 

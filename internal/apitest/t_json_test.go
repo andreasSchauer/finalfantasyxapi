@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
 func TestReadJsonRequest_Malformed(t *testing.T) {
@@ -19,7 +20,7 @@ func TestReadJsonRequest_Malformed(t *testing.T) {
 		t.Fatal("expected an error for malformed JSON, got nil")
 	}
 
-	httpErr, ok := err.(api.HTTPError)
+	httpErr, ok := err.(errs.HTTPError)
 	if !ok || httpErr.Code != http.StatusBadRequest {
 		t.Errorf("expected status 400, got %v", err)
 	}

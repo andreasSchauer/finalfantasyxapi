@@ -1,4 +1,4 @@
-package api
+package queryparam
 
 import (
 	"net/http"
@@ -10,7 +10,7 @@ import (
 )
 
 func getRawQueryLimit(r *http.Request) (int, error) {
-	queryParamLimit := Q.DefaultParams[ts.QpnLimit]
+	queryParamLimit := GetQueryParam(GetDefaultParams(), ts.QpnLimit)
 	query, err := queryParamLimit.CheckEmpty(r)
 	if err != nil {
 		return 0, err
@@ -31,7 +31,7 @@ func getRawQueryLimit(r *http.Request) (int, error) {
 }
 
 func getLimitMax() string {
-	queryParamLimit := Q.DefaultParams[ts.QpnLimit]
+	queryParamLimit := GetQueryParam(GetDefaultParams(), ts.QpnLimit)
 
 	for _, input := range queryParamLimit.SpecialInputs {
 		if input.Key == ts.QsvMax {
@@ -42,7 +42,7 @@ func getLimitMax() string {
 	return ""
 }
 
-func setLimitMax(r *http.Request, q url.Values) {
+func SetLimitMax(r *http.Request, q url.Values) {
 	limit := q.Get(string(ts.QpnLimit))
 	if limit != "" {
 		return

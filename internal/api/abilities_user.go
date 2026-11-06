@@ -7,8 +7,10 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -36,7 +38,7 @@ type biReplacement struct {
 
 func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], ability userAbility, queryName ts.QueryParamName) ([]BattleInteraction, error) {
 	repl, err := getUnitRepl(r, i, queryName)
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return ability.getBattleInteractions(), nil
 	}
 	if err != nil {
@@ -65,12 +67,12 @@ func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *ht
 	unit, _ := lookup.GetResourceByID(unitID, lookup.L.PlayerUnitsID)
 
 	bombWpn, err := queryParamBomb.ParseBool(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return unitRepl{}, err
 	}
 
 	isCelestial, err := queryParamCelestialWpn.ParseBool(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return unitRepl{}, err
 	}
 
@@ -98,7 +100,7 @@ func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *ht
 	return repl, nil
 }
 
-func populateReplCharacter(repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
+func populateReplCharacter(repl unitRepl, queryParamUser queryparam.QueryParam) (unitRepl, error) {
 	charFormulas := map[string]database.DamageFormula{
 		string(database.CelestialFormulaHpHigh): database.DamageFormulaClstlHpHigh,
 		string(database.CelestialFormulaHpLow):  database.DamageFormulaClstlHpLow,
@@ -120,7 +122,7 @@ func populateReplCharacter(repl unitRepl, queryParamUser QueryParam) (unitRepl, 
 	if repl.isCelestial {
 		clstlWpn, err := lookup.GetResourceByID(id, lookup.L.CelestialWeaponsID)
 		if err != nil {
-			return unitRepl{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't have a celestial weapon", character), err)
+			return unitRepl{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't have a celestial weapon", character), err)
 		}
 
 		formula := string(charFormulas[clstlWpn.Formula])
@@ -130,9 +132,9 @@ func populateReplCharacter(repl unitRepl, queryParamUser QueryParam) (unitRepl, 
 	return repl, nil
 }
 
-func populateReplAeon(repl unitRepl, queryParamUser QueryParam) (unitRepl, error) {
+func populateReplAeon(repl unitRepl, queryParamUser queryparam.QueryParam) (unitRepl, error) {
 	if repl.isCelestial {
-		return unitRepl{}, newHTTPError(http.StatusBadRequest, "aeons don't use celestial weapons", nil)
+		return unitRepl{}, errs.NewHTTPError(http.StatusBadRequest, "aeons don't use celestial weapons", nil)
 	}
 
 	id, err := queryParamUser.CheckNameID(repl.unit.Name, ts.ResTypeSingle(repl.unit.Type), lookup.L.Aeons)
@@ -151,7 +153,7 @@ func populateReplAeon(repl unitRepl, queryParamUser QueryParam) (unitRepl, error
 
 func verifyAbilityUsage(ability userAbility, repl unitRepl, queryName ts.QueryParamName) error {
 	if !ability.canUseAbility(repl.unit.Name) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, E.PlayerUnits.resTypeSingle, repl.unit.Name, ability), nil)
+		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, E.PlayerUnits.resTypeSingle, repl.unit.Name, ability), nil)
 	}
 
 	return nil

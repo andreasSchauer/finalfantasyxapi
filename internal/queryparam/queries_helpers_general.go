@@ -1,4 +1,4 @@
-package api
+package queryparam
 
 import (
 	"net/http"
@@ -44,7 +44,7 @@ func (q QueryParam) ReplacingParamsPresent(r *http.Request, queryLookup map[ts.Q
 	for _, param := range q.ReplacedBy {
 		p := queryLookup[param]
 		_, err := p.CheckEmpty(r)
-		if !queryIsEmpty(err) {
+		if !errs.QueryIsEmpty(err) {
 			return true
 		}
 	}

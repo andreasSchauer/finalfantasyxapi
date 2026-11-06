@@ -1,4 +1,4 @@
-package api
+package queryparam
 
 import (
 	"fmt"
@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
@@ -36,7 +38,7 @@ func (q QueryParam) ParseStats(r *http.Request, allowedStatIDs []int32) (map[str
 func (q QueryParam) parseStatPair(pair string, allowedStatIDs []int32) (string, int, error) {
 	stat, valueStr, found := strings.Cut(pair, ":")
 	if !found {
-		return "", 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s' . usage: '%s'", q.Name, stat, q.Usage), nil)
+		return "", 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s' . usage: '%s'", q.Name, stat, q.Usage), nil)
 	}
 
 	err := q.validateStatName(stat, allowedStatIDs)
@@ -53,13 +55,13 @@ func (q QueryParam) parseStatPair(pair string, allowedStatIDs []int32) (string, 
 }
 
 func (q QueryParam) validateStatName(stat string, allowedStatIDs []int32) error {
-	parseResp, err := checkUniqueName(stat, lookup.L.Stats)
+	parseResp, err := ah.CheckUniqueName(stat, lookup.L.Stats)
 	if err != nil {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat: '%s' in '%s'. stat doesn't exist. use '/api/stats' to see existing stats", stat, q.Name), err)
+		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat: '%s' in '%s'. stat doesn't exist. use '/api/stats' to see existing stats", stat, q.Name), err)
 	}
 
 	if !slices.Contains(allowedStatIDs, parseResp.ID) {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat '%s' in '%s'. '%s' only uses %s", stat, q.Name, q.Name, getAllowedStatString(allowedStatIDs)), nil)
+		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat '%s' in '%s'. '%s' only uses %s", stat, q.Name, q.Name, getAllowedStatString(allowedStatIDs)), nil)
 	}
 
 	return nil
@@ -68,7 +70,7 @@ func (q QueryParam) validateStatName(stat string, allowedStatIDs []int32) error 
 func (q QueryParam) validateStatVal(statName string, valStr string) (int, error) {
 	val, err := strconv.Atoi(valStr)
 	if err != nil {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat value '%s' in '%s'. stat value needs to be a positive integer", valStr, q.Name), err)
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid stat value '%s' in '%s'. stat value needs to be a positive integer", valStr, q.Name), err)
 	}
 
 	var maxStatVal int
@@ -83,7 +85,7 @@ func (q QueryParam) validateStatVal(statName string, valStr string) (int, error)
 	}
 
 	if val > maxStatVal {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s in '%s' can't be higher than %d", statName, q.Name, maxStatVal), nil)
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s in '%s' can't be higher than %d", statName, q.Name, maxStatVal), nil)
 	}
 
 	return val, nil

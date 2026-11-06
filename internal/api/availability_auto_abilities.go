@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -12,15 +13,15 @@ func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) 
 	i := E.AutoAbilities
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
 	customize, err := i.queryLookup[ts.QpnCustomize].ParseBool(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -30,12 +31,12 @@ func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) 
 	}
 
 	charID, err := nullID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 

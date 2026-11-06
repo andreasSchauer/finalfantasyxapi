@@ -7,6 +7,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
@@ -14,7 +15,7 @@ import (
 func (i handlerInput[T, R, A]) handleMultiple(r *http.Request, name string) (apiresource.APIResourceList[A], error) {
 	dbIDs, err := i.getMultipleQuery(r.Context(), name)
 	if err != nil {
-		return apiresource.APIResourceList[A]{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'", i.resTypeSingle, name), err)
+		return apiresource.APIResourceList[A]{}, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'", i.resTypeSingle, name), err)
 	}
 
 	return i.toAPIResList(r, dbIDs)
@@ -54,7 +55,7 @@ func (i handlerInput[T, R, A]) filterIDs(r *http.Request, IDs []int32, queryFns 
 	}
 
 	flip, err := i.queryLookup[ts.QpnFlip].ParseBool(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 

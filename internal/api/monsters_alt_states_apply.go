@@ -7,6 +7,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -23,7 +24,7 @@ func (as AppliedState) IsZero() bool {
 
 func applyAlteredStateFromQuery(r *http.Request, mon Monster, queryName ts.QueryParamName) (Monster, error) {
 	altStateID, err := getAltStateID(r, mon, queryName)
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return mon, nil
 	}
 	if err != nil {
@@ -92,7 +93,7 @@ func getAltStateID(r *http.Request, mon Monster, queryName ts.QueryParamName) (i
 	}
 
 	if len(mon.AlteredStates) == 0 {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states", mon.String()), nil)
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states", mon.String()), nil)
 	}
 
 	id, err := queryParam.ParseIDVal(query, len(mon.AlteredStates))
@@ -107,11 +108,11 @@ func vpAltStateID(mon Monster, altStateID int) error {
 	altStateAmt := len(mon.AlteredStates)
 
 	if altStateAmt == 0 {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states", mon.String()), nil)
+		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s has no altered states", mon.String()), nil)
 	}
 
 	if altStateID > altStateAmt || altStateID <= 0 {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided alt state id '%d' used for %s is out of range. max id: %d", altStateID, mon.String(), altStateAmt), nil)
+		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("provided alt state id '%d' used for %s is out of range. max id: %d", altStateID, mon.String(), altStateAmt), nil)
 	}
 
 	return nil

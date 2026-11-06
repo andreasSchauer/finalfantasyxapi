@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -18,7 +19,7 @@ func (i handlerInput[T, R, A]) queryJoined(r *http.Request, inputIDs []int32, qu
 				return inputIDs, nil
 			}
 			_, err := queryParam.CheckEmpty(r)
-			if !queryIsEmpty(err) {
+			if !errs.QueryIsEmpty(err) {
 				allEmpty = false
 				break
 			}

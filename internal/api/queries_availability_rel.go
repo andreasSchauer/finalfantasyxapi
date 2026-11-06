@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -22,7 +23,7 @@ func (i handlerInput[T, R, A]) queryAvlRelGetParams(r *http.Request, parentID in
 	queryParam := i.queryLookup[ts.QpnRelAvailability]
 
 	availabilities, err := queryParam.ParseEnumList(r, enums.T.AvailabilityType)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return RelAvlParams{}, err
 	}
 
@@ -31,7 +32,7 @@ func (i handlerInput[T, R, A]) queryAvlRelGetParams(r *http.Request, parentID in
 	_, ok := i.queryLookup[ts.QpnRelRepeatable]
 	if ok {
 		repeatable, err = nullBool(r, ts.QpnRelRepeatable, i.queryLookup)
-		if errExceptEmptyQuery(err) {
+		if errs.ErrExceptEmptyQuery(err) {
 			return RelAvlParams{}, err
 		}
 	}

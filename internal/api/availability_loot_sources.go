@@ -5,16 +5,17 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
 func filterAvlShops(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Shops
 
 	avlParams, err := i.queryAvlGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
@@ -51,10 +52,10 @@ func filterAvlTreasures(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Treasures
 
 	avlParams, err := i.queryAvlGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
@@ -74,10 +75,10 @@ func filterAvlQuests(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Quests
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
@@ -98,10 +99,10 @@ func filterAvlSidequests(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Sidequests
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
@@ -121,10 +122,10 @@ func filterAvlSubquests(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Subquests
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 

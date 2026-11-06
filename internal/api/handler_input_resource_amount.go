@@ -1,6 +1,7 @@
 package api
 
 import (
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -24,12 +25,12 @@ func (i handlerInput[T, R, A]) toResAmtFromNamePtr[NA apiresource.NameAmount](it
 }
 
 func (i handlerInput[T, R, A]) toResAmtFromName[NA apiresource.NameAmount](item NA) apiresource.ResourceAmount[A] {
-	var parseResp parseResponse
+	var parseResp ah.ParseResponse
 	switch item.GetVersion() {
 	case nil:
-		parseResp, _ = checkUniqueName(item.GetName(), i.objLookup)
+		parseResp, _ = ah.CheckUniqueName(item.GetName(), i.objLookup)
 	default:
-		parseResp, _ = checkNameVersion(item.GetName(), item.GetVersion(), i.objLookup)
+		parseResp, _ = ah.CheckNameVersion(item.GetName(), item.GetVersion(), i.objLookup)
 	}
 
 	return apiresource.ResourceAmount[A]{

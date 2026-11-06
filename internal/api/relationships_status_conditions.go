@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
@@ -67,27 +68,27 @@ func getStatusQueryResistance(r *http.Request) (StatusQueryResistance, error) {
 
 	queryParamResistance := Q.StatusConditions[ts.QpnResistance]
 	resistance, err := queryParamResistance.ParseInt(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.Resistance = int32(resistance)
 
 	queryParamMinRate := Q.StatusConditions[ts.QpnInflictMin]
 	minRate, err := queryParamMinRate.ParseInt(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.MinRate = int32(minRate)
 
 	queryParamMaxRate := Q.StatusConditions[ts.QpnInflictMax]
 	maxRate, err := queryParamMaxRate.ParseInt(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.MaxRate = int32(maxRate)
 
 	if res.MinRate > res.MaxRate {
-		return StatusQueryResistance{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid use of parameter '%s'. '%s' can't be higher than '%s'", queryParamMinRate.Name, queryParamMinRate.Name, queryParamMaxRate.Name), nil)
+		return StatusQueryResistance{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid use of parameter '%s'. '%s' can't be higher than '%s'", queryParamMinRate.Name, queryParamMinRate.Name, queryParamMaxRate.Name), nil)
 	}
 
 	return res, nil

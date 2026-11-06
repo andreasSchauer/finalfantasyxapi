@@ -1,4 +1,4 @@
-package api
+package queryparam
 
 import (
 	"cmp"
@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
 // ParseIntList checks for emptiness of int-list-queryParam and converts its input into a slice of valid integers
@@ -36,7 +37,7 @@ func (q QueryParam) sliceInts(r *http.Request, query string) ([]int32, error) {
 		ints = slices.Concat(ints, intsNew)
 
 		if len(ints) > config.Cfg.FetchLimit {
-			return nil, newHTTPErrorFetchLimit(config.Cfg.FetchLimit)
+			return nil, errs.NewHTTPErrorFetchLimit(config.Cfg.FetchLimit)
 		}
 	}
 
@@ -72,7 +73,7 @@ func (q QueryParam) checkIntRange(segment string) ([]int32, error) {
 		ints = slices.Concat(ints, newInts)
 
 	default:
-		return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", q.Name, segment, q.Usage), nil)
+		return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", q.Name, segment, q.Usage), nil)
 	}
 
 	return ints, nil
@@ -115,7 +116,7 @@ func cleanUpIntList(r *http.Request, ints []int32) ([]int32, error) {
 	ints = removeIntListDuplicates(ints)
 
 	limit, err := getRawQueryLimit(r)
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return ints, nil
 	}
 	if err != nil {

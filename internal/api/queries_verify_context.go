@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -35,7 +36,7 @@ func (q queryVerifyer[T]) context() error {
 // verifies the use of an exclusive query param
 func (q queryVerifyer[T]) exclusive() error {
 	if q.param.IsExclusive && !q.canUseExclusiveParam() {
-		return newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' can't be combined with other parameters", q.param.Name), nil)
+		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' can't be combined with other parameters", q.param.Name), nil)
 	}
 
 	return nil
@@ -67,7 +68,7 @@ func (q queryVerifyer[T]) requiresAll() error {
 		reqParamVal := q.usedNames.Get(string(reqParam))
 
 		if reqParamVal == "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. when using parameter '%s', the following parameter(s) must be present: %s", q.param.Name, q.param.Name, ts.FormatQpnSlice(q.param.RequiresAll)), nil)
+			return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. when using parameter '%s', the following parameter(s) must be present: %s", q.param.Name, q.param.Name, ts.FormatQpnSlice(q.param.RequiresAll)), nil)
 		}
 	}
 
@@ -84,7 +85,7 @@ func (q queryVerifyer[T]) conflictsWith() error {
 		fbParamVal := q.usedNames.Get(string(conflictParam))
 
 		if fbParamVal != "" {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can't be used in combination with the following parameter(s): %s", q.param.Name, q.param.Name, ts.FormatQpnSlice(q.param.ConflictsWith)), nil)
+			return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can't be used in combination with the following parameter(s): %s", q.param.Name, q.param.Name, ts.FormatQpnSlice(q.param.ConflictsWith)), nil)
 		}
 	}
 
@@ -105,7 +106,7 @@ func (q queryVerifyer[T]) requiresOne() error {
 		}
 	}
 
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in combination with at least one of the following parameters: %s", q.param.Name, q.param.Name, ts.FormatQpnSlice(q.param.RequiresOne)), nil)
+	return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid usage of parameter '%s'. parameter '%s' can only be used in combination with at least one of the following parameters: %s", q.param.Name, q.param.Name, ts.FormatQpnSlice(q.param.RequiresOne)), nil)
 }
 
 // checks, if the query param is a default param.

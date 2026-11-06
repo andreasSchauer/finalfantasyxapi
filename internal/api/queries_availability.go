@@ -21,10 +21,10 @@ func (i handlerInput[T, R, A]) queryAvlGetParams(r *http.Request) (avlParams, er
 	queryParamAvl := i.queryLookup[ts.QpnAvailability]
 
 	availabilities, err := queryParamAvl.ParseEnumList(r, enums.T.AvailabilityType)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return avlParams{}, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return avlParams{}, errs.ErrEmptyQuery
 	}
 
@@ -33,7 +33,7 @@ func (i handlerInput[T, R, A]) queryAvlGetParams(r *http.Request) (avlParams, er
 	_, ok := i.queryLookup[ts.QpnPreAirship]
 	if ok {
 		preAirship, err = i.queryLookup[ts.QpnPreAirship].ParseBool(r)
-		if errExceptEmptyQuery(err) {
+		if errs.ErrExceptEmptyQuery(err) {
 			return avlParams{}, err
 		}
 
@@ -55,16 +55,16 @@ func (i handlerInput[T, R, A]) queryAvlGetParams(r *http.Request) (avlParams, er
 
 func (i handlerInput[T, R, A]) queryAvlRepGetParams(r *http.Request) (avlParams, error) {
 	params, errAvl := i.queryAvlGetParams(r)
-	if errExceptEmptyQuery(errAvl) {
+	if errs.ErrExceptEmptyQuery(errAvl) {
 		return avlParams{}, errAvl
 	}
 
 	isRepeatable, errRepl := nullBool(r, ts.QpnRepeatable, i.queryLookup)
-	if errExceptEmptyQuery(errRepl) {
+	if errs.ErrExceptEmptyQuery(errRepl) {
 		return avlParams{}, errRepl
 	}
 
-	if queryIsEmpty(errAvl) && queryIsEmpty(errRepl) {
+	if errs.QueryIsEmpty(errAvl) && errs.QueryIsEmpty(errRepl) {
 		return avlParams{}, errs.ErrEmptyQuery
 	}
 

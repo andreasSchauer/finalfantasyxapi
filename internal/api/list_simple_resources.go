@@ -5,12 +5,13 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
 func (i handlerInput[T, R, A]) toSimpleResourceList(r *http.Request, id int32, sectionName string, subsection Subsection) (apiresource.SimpleResourceList, error) {
 	dbIDs, err := subsection.dbQuery(r.Context(), id)
 	if err != nil {
-		return apiresource.SimpleResourceList{}, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, i.resTypeSingle, id), err)
+		return apiresource.SimpleResourceList{}, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, i.resTypeSingle, id), err)
 	}
 
 	results, err := createSimpleResources(r, dbIDs, subsection)

@@ -1,4 +1,4 @@
-package api
+package queryparam
 
 import (
 	"errors"
@@ -49,7 +49,7 @@ func (q QueryParam) ParseIDPtr[F seedtypes.Lookupable](r *http.Request, fLookup 
 func (q QueryParam) ParseIDVal(idStr string, maxID int) (int32, error) {
 	id, err := q.CheckID(idStr, maxID)
 	if errors.Is(err, errs.ErrNotAnID) {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s' used for parameter '%s'", idStr, q.Name), err)
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s' used for parameter '%s'", idStr, q.Name), err)
 	}
 	if err != nil {
 		return 0, err
@@ -66,7 +66,7 @@ func (q QueryParam) CheckID(idStr string, maxID int) (int32, error) {
 	}
 
 	if id > maxID || id <= 0 {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%d' used for parameter '%s' is out of range. max id: %d", id, q.Name, maxID), err)
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("provided id '%d' used for parameter '%s' is out of range. max id: %d", id, q.Name, maxID), err)
 	}
 
 	return int32(id), nil

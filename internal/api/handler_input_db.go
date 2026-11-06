@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -39,7 +40,7 @@ func (i handlerInput[T, R, A]) dbGetRelationPtr(ctx context.Context, item seedty
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", i.resTypeSingle, item), err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", i.resTypeSingle, item), err)
 	}
 
 	res := i.idToResFunc(i, dbID)

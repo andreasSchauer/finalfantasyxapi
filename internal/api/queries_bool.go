@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -17,7 +18,7 @@ func (i handlerInput[T, R, A]) queryBool(r *http.Request, inputIDs []int32, quer
 		}
 
 		b, err := queryParam.ParseBool(r)
-		if queryIsEmpty(err) {
+		if errs.QueryIsEmpty(err) {
 			return inputIDs, nil
 		}
 		if err != nil {
@@ -42,7 +43,7 @@ func (i handlerInput[T, R, A]) queryBool2(r *http.Request, inputIDs []int32, que
 		}
 
 		b, err := queryParam.ParseBool(r)
-		if queryIsEmpty(err) {
+		if errs.QueryIsEmpty(err) {
 			return inputIDs, nil
 		}
 		if err != nil {
@@ -70,7 +71,7 @@ func (i handlerInput[T, R, A]) queryBoolWrapper(r *http.Request, inputIDs []int3
 		}
 
 		b, err := queryParam.ParseBool(r)
-		if queryIsEmpty(err) {
+		if errs.QueryIsEmpty(err) {
 			return inputIDs, nil
 		}
 		if err != nil {

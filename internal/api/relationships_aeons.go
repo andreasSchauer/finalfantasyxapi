@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -76,7 +77,7 @@ func applyAeonStats(r *http.Request, aeon Aeon, allowedStatIDs []int32) (Aeon, e
 func applyAeonStatsBattles(r *http.Request, aeon Aeon, queryName ts.QueryParamName) ([]BaseStat, error) {
 	queryParam := Q.Aeons[queryName]
 	battles, err := queryParam.ParseInt(r)
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return aeon.BaseStats, nil
 	}
 	if err != nil {
@@ -103,7 +104,7 @@ func applyYunaStats(r *http.Request, aeon Aeon, queryName ts.QueryParamName, all
 	yunaBS := E.Stats.toResAmtType(yuna.BaseStats, newBaseStat)
 
 	yunaStatCalcMap, err := getStatCalcMap(r, queryParam, yunaBS, allowedStatIDs)
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return aeon.BaseStats, nil
 	}
 	if err != nil {

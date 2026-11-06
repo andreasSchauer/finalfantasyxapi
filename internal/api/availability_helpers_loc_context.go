@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -22,30 +23,30 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 	var locContextType string
 
 	locID, err := nullID(r, E.Locations, ts.QpnLocation, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
-	if !queryIsEmpty(err) {
+	if !errs.QueryIsEmpty(err) {
 		avlType = AvlTypeContext
 		locContextID = locID
 		locContextType = string(ViewSourceTypeLocation)
 	}
 
 	subLocID, err := nullID(r, E.Sublocations, ts.QpnSublocation, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
-	if !queryIsEmpty(err) {
+	if !errs.QueryIsEmpty(err) {
 		avlType = AvlTypeContext
 		locContextID = subLocID
 		locContextType = string(ViewSourceTypeSublocation)
 	}
 
 	areaID, err := nullID(r, E.Areas, ts.QpnArea, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
-	if !queryIsEmpty(err) {
+	if !errs.QueryIsEmpty(err) {
 		avlType = AvlTypeContext2
 		locContextID = areaID
 		locContextType = string(ViewSourceTypeArea)

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -19,7 +20,7 @@ func applyOmnisElements(r *http.Request, mon Monster, queryName ts.QueryParamNam
 	}
 
 	circleCounts, err := parseOmnisQuery(r, queryName)
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return mon.ElemResists, nil
 	}
 	if err != nil {
@@ -36,7 +37,7 @@ func applyOmnisElements(r *http.Request, mon Monster, queryName ts.QueryParamNam
 		// lookup element to find out the opposite element
 		elementLookup, err := lookup.GetResource(elementName, lookup.L.Elements)
 		if err != nil {
-			return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get element '%s'", elementName), err)
+			return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get element '%s'", elementName), err)
 		}
 		oppositeElementName := *elementLookup.OppositeElement // safe, because holy continues
 
@@ -73,13 +74,13 @@ func parseOmnisQuery(r *http.Request, queryName ts.QueryParamName) (map[string]i
 	circleCounts := make(map[string]int)
 
 	if len(query) != 4 {
-		return nil, newHTTPError(http.StatusBadRequest, "invalid input. omnis_elements must contain a combination of exactly four letters. valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)", nil)
+		return nil, errs.NewHTTPError(http.StatusBadRequest, "invalid input. omnis_elements must contain a combination of exactly four letters. valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)", nil)
 	}
 
 	for _, char := range query {
 		element, ok := elements[char]
 		if !ok {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid letter '%c' for omnis_elements. use any four-letter-combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)", char), nil)
+			return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid letter '%c' for omnis_elements. use any four-letter-combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)", char), nil)
 		}
 
 		circleCounts[element]++

@@ -1,58 +1,33 @@
 package api
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type HTTPError struct {
-	Code int
-	msg  string
-	err  error
+func newHTTPErrorDB(fetchType ts.ResTypePlural, parentItem seedtypes.Lookupable, err error) errs.HTTPError {
+	return errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
 }
 
-func (e HTTPError) Error() string {
-	if e.err != nil {
-		return fmt.Sprintf("http error: %s: %v", e.msg, e.err)
-	}
-	return fmt.Sprintf("http error: %s", e.msg)
+func newHTTPErrorDBPairs(childResType, parentResType ts.ResTypeSingle, err error) errs.HTTPError {
+	return errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs", childResType, parentResType), err)
 }
 
-func newHTTPError(code int, msg string, err error) HTTPError {
-	return HTTPError{
-		Code: code,
-		msg:  msg,
-		err:  err,
-	}
+func newHTTPErrorDBOne(fetchType ts.ResTypeSingle, parentItem seedtypes.Lookupable, err error) errs.HTTPError {
+	return errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
 }
 
-func newHTTPErrorDB(fetchType ts.ResTypePlural, parentItem seedtypes.Lookupable, err error) HTTPError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
+func newHTTPErrorDBFilter(fetchType ts.ResTypePlural, queryParam queryparam.QueryParam, err error) errs.HTTPError {
+	return errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s for parameter '%s'", fetchType, queryParam.Name), err)
 }
 
-func newHTTPErrorDBPairs(childResType, parentResType ts.ResTypeSingle, err error) HTTPError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s + %s pairs", childResType, parentResType), err)
-}
-
-func newHTTPErrorDBOne(fetchType ts.ResTypeSingle, parentItem seedtypes.Lookupable, err error) HTTPError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", fetchType, parentItem), err)
-}
-
-func newHTTPErrorDBFilter(fetchType ts.ResTypePlural, queryParam QueryParam, err error) HTTPError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s for parameter '%s'", fetchType, queryParam.Name), err)
-}
-
-func newHTTPErrorFetchLimit(fetchLimit int) HTTPError {
-	return newHTTPError(http.StatusBadRequest, fmt.Sprintf("fetch limit exceeded. the maximum amount of inputs is %d", fetchLimit), nil)
-}
-
-func newHTTPErrorAvailability(fetchType ts.ResTypePlural, err error) HTTPError {
-	return newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by availability", fetchType), err)
+func newHTTPErrorAvailability(fetchType ts.ResTypePlural, err error) errs.HTTPError {
+	return errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by availability", fetchType), err)
 }
 
 func handleHTTPError(w http.ResponseWriter, err error) bool {
@@ -60,9 +35,9 @@ func handleHTTPError(w http.ResponseWriter, err error) bool {
 		return false
 	}
 
-	httpErr, ok := err.(HTTPError)
+	httpErr, ok := err.(errs.HTTPError)
 	if ok {
-		respondWithError(w, httpErr.Code, httpErr.msg, httpErr.err)
+		respondWithError(w, httpErr.Code, httpErr.Msg, httpErr.Err)
 		return true
 	}
 
@@ -75,9 +50,9 @@ func cascadeHTTPError(msg string, err error) error {
 		return nil
 	}
 
-	httpErr, ok := err.(HTTPError)
+	httpErr, ok := err.(errs.HTTPError)
 	if ok {
-		httpErr.msg = fmt.Sprintf("%s: %s", msg, httpErr.msg)
+		httpErr.Msg = fmt.Sprintf("%s: %s", msg, httpErr.Msg)
 		return httpErr
 	}
 
@@ -98,12 +73,4 @@ func getFieldRangeErrStart(val int32, fieldName ts.FieldName, intType string, is
 	errStart += " is out of range"
 
 	return errStart
-}
-
-func errExceptEmptyQuery(err error) bool {
-	return err != nil && !queryIsEmpty(err)
-}
-
-func queryIsEmpty(err error) bool {
-	return errors.Is(err, errs.ErrEmptyQuery)
 }

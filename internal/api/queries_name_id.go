@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -17,7 +18,7 @@ func (i handlerInput[T, R, A]) queryNameID[P seedtypes.Lookupable](r *http.Reque
 		}
 
 		id, err := queryParam.ParseNameID(r, pResType, pLookup)
-		if queryIsEmpty(err) {
+		if errs.QueryIsEmpty(err) {
 			return inputIDs, nil
 		}
 		if err != nil {
@@ -41,7 +42,7 @@ func (i handlerInput[T, R, A]) queryNameIDWrapper[P seedtypes.Lookupable](r *htt
 		}
 
 		id, err := queryParam.ParseNameID(r, pResType, pLookup)
-		if queryIsEmpty(err) {
+		if errs.QueryIsEmpty(err) {
 			return inputIDs, nil
 		}
 		if err != nil {

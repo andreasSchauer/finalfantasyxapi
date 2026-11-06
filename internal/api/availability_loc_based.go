@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
 
@@ -12,10 +13,10 @@ func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Areas
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
@@ -57,10 +58,10 @@ func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Sublocations
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
@@ -102,10 +103,10 @@ func filterAvlLocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Locations
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 

@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -12,7 +15,7 @@ func (i handlerInput[T, R, A]) handleSubsection(w http.ResponseWriter, r *http.R
 	idStr := segments[0]
 	sectionName := segments[1]
 
-	parseRes, err := parseID(idStr, i.resTypeSingle, len(i.objLookup))
+	parseRes, err := ah.ParseID(idStr, i.resTypeSingle, len(i.objLookup))
 	if handleHTTPError(w, err) {
 		return
 	}
@@ -29,7 +32,7 @@ func (i handlerInput[T, R, A]) handleSubsection(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	setLimitMax(r, q)
+	queryparam.SetLimitMax(r, q)
 
 	// if a subsection refers to the resource itself (/endpoint/{id}/simple, or /aeons/{id}/stats),
 	// it doesn't need a db query and can create a apiresource.SimpleResource with the given id,
@@ -70,14 +73,14 @@ func (i handlerInputEndpoints) handleParameters(w http.ResponseWriter, r *http.R
 	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
 }
 
-func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam) {
+func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) {
 	segment := string(ts.SnParameters)
 	err := verifyQueryParamsAltList(r, endpoint, queryLookup, &segment)
 	if handleHTTPError(w, err) {
 		return
 	}
 
-	setLimitMax(r, r.URL.Query())
+	queryparam.SetLimitMax(r, r.URL.Query())
 
 	parameterList, err := getQueryParamList(r, endpoint, queryLookup)
 	if handleHTTPError(w, err) {
@@ -93,7 +96,7 @@ func (i handlerInput[T, R, A]) handleSections(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	setLimitMax(r, r.URL.Query())
+	queryparam.SetLimitMax(r, r.URL.Query())
 
 	sectionList, err := getSectionList(r, i.subsections)
 	if handleHTTPError(w, err) {
@@ -143,7 +146,7 @@ func (i handlerInput[T, R, A]) queryIDsParam(r *http.Request, segment *string) (
 	// ifs ids param is empty, just retrieve all ids
 	queryParamIDs := i.queryLookup[ts.QpnIDs]
 	_, err = queryParamIDs.CheckEmpty(r)
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return i.retrieveFunc(r, i)
 	}
 
@@ -152,7 +155,7 @@ func (i handlerInput[T, R, A]) queryIDsParam(r *http.Request, segment *string) (
 		return nil, err
 	}
 
-	setLimitMax(r, r.URL.Query())
+	queryparam.SetLimitMax(r, r.URL.Query())
 
 	return ids, nil
 }

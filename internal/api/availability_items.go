@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -13,10 +14,10 @@ func filterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.AllItems
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
@@ -26,7 +27,7 @@ func filterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	}
 
 	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -51,10 +52,10 @@ func filterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Items
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
@@ -64,7 +65,7 @@ func filterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	}
 
 	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -89,10 +90,10 @@ func filterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.KeyItems
 
 	avlParams, err := i.queryAvlGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
@@ -102,7 +103,7 @@ func filterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	}
 
 	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -125,10 +126,10 @@ func filterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Spheres
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
@@ -138,7 +139,7 @@ func filterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
 	}
 
 	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -163,10 +164,10 @@ func filterAvlPrimers(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Primers
 
 	avlParams, err := i.queryAvlGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 

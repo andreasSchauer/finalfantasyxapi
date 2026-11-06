@@ -9,7 +9,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
@@ -74,7 +76,7 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 	return rel, nil
 }
 
-func getEquipmentTableRef(r *http.Request, ctx context.Context, queryParam QueryParam, equipment seedtypes.EquipmentName) (apiresource.UnnamedAPIResource, error) {
+func getEquipmentTableRef(r *http.Request, ctx context.Context, queryParam queryparam.QueryParam, equipment seedtypes.EquipmentName) (apiresource.UnnamedAPIResource, error) {
 	tables, err := E.EquipmentTables.dbGetRelations(ctx, equipment, config.Cfg.DB.GetEquipmentEquipmentTableIDs)
 	if err != nil {
 		return apiresource.UnnamedAPIResource{}, err
@@ -89,14 +91,14 @@ func getEquipmentTableRef(r *http.Request, ctx context.Context, queryParam Query
 	return tableRef, nil
 }
 
-func getTableIndex(r *http.Request, queryParam QueryParam, maxID int) (int, error) {
+func getTableIndex(r *http.Request, queryParam queryparam.QueryParam, maxID int) (int, error) {
 	tableIdx, err := queryParam.ParseInt(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return 0, err
 	}
 
 	if tableIdx <= 0 || tableIdx > maxID {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%d' used for parameter '%s'. '%s' can range from 1 to %d for this resource", tableIdx, queryParam.Name, queryParam.Name, maxID), nil)
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%d' used for parameter '%s'. '%s' can range from 1 to %d for this resource", tableIdx, queryParam.Name, queryParam.Name, maxID), nil)
 	}
 	tableIdx -= 1
 

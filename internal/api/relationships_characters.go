@@ -121,7 +121,7 @@ func applyOsgStats(r *http.Request, char Character) ([]BaseStat, error) {
 	queryParam := Q.Characters[ts.QpnOsgStats]
 
 	sgType, err := queryParam.ParseEnum(r, enums.T.SphereGridType)
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return char.BaseStats, nil
 	}
 	if err != nil {

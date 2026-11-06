@@ -5,10 +5,11 @@ import (
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 )
 
 // parses the given stats and generates a complete stat map where each given stat is compared to the entity's given stats, usually the default stats. the higher value will be preferred, since lower than the default isn't possible. if no value for a stat was given, the default stat will be used. the result of this function is usually used to calculate the stats of another entity, not to replace any stats of the given entity.
-func getStatCalcMap(r *http.Request, queryParam QueryParam, baseStats []BaseStat, allowedStatIDs []int32) (map[string]int32, error) {
+func getStatCalcMap(r *http.Request, queryParam queryparam.QueryParam, baseStats []BaseStat, allowedStatIDs []int32) (map[string]int32, error) {
 	if allowedStatIDs == nil {
 		allowedStatIDs = h.GetNumSlice(1, int32(len(lookup.L.Stats)))
 	}

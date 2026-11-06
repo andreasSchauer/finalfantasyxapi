@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -13,7 +14,7 @@ func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) (
 	i := E.AutoAbilities
 
 	charIDPtr, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
@@ -32,7 +33,7 @@ func getAutoAbilitiesByShop(r *http.Request, ctx context.Context, id int32) ([]i
 	i := E.AutoAbilities
 
 	charIDPtr, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 

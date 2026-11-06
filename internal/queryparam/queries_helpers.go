@@ -1,4 +1,4 @@
-package api
+package queryparam
 
 import (
 	"cmp"
@@ -9,7 +9,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
-
 func querySplit(query, sep string) []string {
 	queryTrimmed := strings.TrimSuffix(query, sep)
 	return strings.Split(queryTrimmed, sep)
@@ -19,7 +18,7 @@ func QueryListSplit(query string) ([]string, error) {
 	segments := querySplit(query, ",")
 
 	if len(segments) > config.Cfg.FetchLimit {
-		return nil, newHTTPErrorFetchLimit(config.Cfg.FetchLimit)
+		return nil, errs.NewHTTPErrorFetchLimit(config.Cfg.FetchLimit)
 	}
 
 	return segments, nil

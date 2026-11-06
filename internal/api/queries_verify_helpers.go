@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -23,25 +25,25 @@ func (q queryVerifyer[T]) usage() error {
 }
 
 // used for normal endpoints like /endpoint and /endpoint/{id|key}. simply looks up the query param and returns an error, if it doesn't exist.
-func (q queryVerifyer[T]) getParam(queryName string) (QueryParam, error) {
+func (q queryVerifyer[T]) getParam(queryName string) (queryparam.QueryParam, error) {
 	queryParam, ok := q.queryLookup[ts.QueryParamName(queryName)]
 	if !ok {
-		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s. use /api/%s/parameters for available parameters", queryName, q.endpoint, q.endpoint), nil)
+		return queryparam.QueryParam{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("parameter '%s' does not exist for endpoint /%s. use /api/%s/parameters for available parameters", queryName, q.endpoint, q.endpoint), nil)
 	}
 
 	return queryParam, nil
 }
 
 // used for alternative lists like /endpoint/sections and /endpoint/parameters. simply looks up the query param and returns an error, if it doesn't exist. enforces the used parameter to be a default parameter.
-func (q queryVerifyer[T]) getParamAltList(queryName string, listName *string) (QueryParam, error) {
+func (q queryVerifyer[T]) getParamAltList(queryName string, listName *string) (queryparam.QueryParam, error) {
 	_, err := q.getParam(queryName)
 	if err != nil {
-		return QueryParam{}, err
+		return queryparam.QueryParam{}, err
 	}
 
 	queryParam, ok := Q.DefaultParams[ts.QueryParamName(queryName)]
 	if !ok {
-		return QueryParam{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s", q.endpoint, *listName, queryMapToString(Q.DefaultParams)), nil)
+		return queryparam.QueryParam{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s", q.endpoint, *listName, queryMapToString(Q.DefaultParams)), nil)
 	}
 
 	return queryParam, nil

@@ -5,6 +5,7 @@ import (
 	"unicode"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -67,7 +68,7 @@ func handleAlBhed(params AlBhedParams) (AlBhedResponse, error) {
 	}
 
 	if !translate {
-		return AlBhedResponse{}, newHTTPError(http.StatusBadRequest, "wrong format. all brackets must be closed", nil)
+		return AlBhedResponse{}, errs.NewHTTPError(http.StatusBadRequest, "wrong format. all brackets must be closed", nil)
 	}
 
 	response.TranslatedText = string(translatedRunes)
@@ -78,7 +79,7 @@ func handleAlBhed(params AlBhedParams) (AlBhedResponse, error) {
 func setTranslator(translate, newState bool) (bool, error) {
 	// this essentially means, the same bracket came twice without the other in between, like '[['
 	if translate == newState {
-		return false, newHTTPError(http.StatusBadRequest, "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket", nil)
+		return false, errs.NewHTTPError(http.StatusBadRequest, "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket", nil)
 	}
 	return newState, nil
 }

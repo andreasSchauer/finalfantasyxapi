@@ -18,7 +18,7 @@ func (i handlerInput[T, R, A]) queryInt(r *http.Request, inputIDs []int32, query
 		}
 
 		integer, err := queryParam.ParseInt(r)
-		if queryIsEmpty(err) {
+		if errs.QueryIsEmpty(err) {
 			return inputIDs, nil
 		}
 		if err != nil {
@@ -43,7 +43,7 @@ func (i handlerInput[T, R, A]) queryIntWrapper(r *http.Request, inputIDs []int32
 		}
 
 		integer, err := queryParam.ParseInt(r)
-		if queryIsEmpty(err) {
+		if errs.QueryIsEmpty(err) {
 			return inputIDs, nil
 		}
 		if err != nil {

@@ -1,4 +1,4 @@
-package api
+package queryparam
 
 import (
 	"errors"
@@ -15,7 +15,7 @@ func (q QueryParam) ParseInt(r *http.Request) (int, error) {
 	query := r.URL.Query().Get(string(q.Name))
 
 	val, err := q.CheckInt(query)
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return 0, errs.ErrEmptyQuery
 	}
 	if err != nil {
@@ -28,7 +28,7 @@ func (q QueryParam) ParseInt(r *http.Request) (int, error) {
 // CheckInt checks if query-int is valid and within allowed range. replaces special inputs with their corresponding value and replaces empty inputs with default values.
 func (q QueryParam) CheckInt(queryVal string) (int, error) {
 	defaultVal, err := q.checkIntDefaultVal(queryVal)
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return 0, errs.ErrEmptyQuery
 	}
 	if !errors.Is(err, errs.ErrNoDefaultVal) {
@@ -79,7 +79,7 @@ func (q QueryParam) checkIntSpecialVals(query string) (int, error) {
 func (q QueryParam) checkIntAllowedRange(query string) (int, error) {
 	val, err := strconv.Atoi(query)
 	if err != nil {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. usage: '%s'", query, q.Name, q.Usage), err)
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%s' used for parameter '%s'. usage: '%s'", query, q.Name, q.Usage), err)
 	}
 
 	intRange := q.AllowedIntRange
@@ -91,7 +91,7 @@ func (q QueryParam) checkIntAllowedRange(query string) (int, error) {
 	max := intRange[1]
 
 	if val > max || val < min {
-		return 0, newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%d' used for parameter '%s'. value must be an integer ranging from %d to %d", val, q.Name, min, max), nil)
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid value '%d' used for parameter '%s'. value must be an integer ranging from %d to %d", val, q.Name, min, max), nil)
 	}
 
 	return val, nil

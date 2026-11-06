@@ -25,12 +25,12 @@ func idToNamedAPIResource[T seedtypes.IsNamed, R any, A apiresource.APIResource]
 
 // essentially parses name or name/version like a handler and then converts the id to a apiresource.NamedAPIResource
 func nameToNamedAPIResource[T seedtypes.IsNamed, R any, A apiresource.APIResource](i handlerInput[T, R, A], name string, version *int32) apiresource.NamedAPIResource {
-	var parseResp parseResponse
+	var parseResp ah.ParseResponse
 	switch version {
 	case nil:
-		parseResp, _ = checkUniqueName(name, i.objLookup)
+		parseResp, _ = ah.CheckUniqueName(name, i.objLookup)
 	default:
-		parseResp, _ = checkNameVersion(name, version, i.objLookup)
+		parseResp, _ = ah.CheckNameVersion(name, version, i.objLookup)
 	}
 
 	return idToNamedAPIResource(i, parseResp.ID)

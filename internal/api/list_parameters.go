@@ -5,19 +5,20 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type QueryParameterList struct {
 	apiresource.ListParams
-	Results []QueryParam `json:"results"`
+	Results []queryparam.QueryParam `json:"results"`
 }
 
 func (l QueryParameterList) GetListParams() apiresource.ListParams {
 	return l.ListParams
 }
 
-func getQueryParamList(r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]QueryParam) (QueryParameterList, error) {
+func getQueryParamList(r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) (QueryParameterList, error) {
 
 	queryParams := paramMapToSlice(queryLookup)
 	queryParams = getAllowedResources(endpoint, queryParams)
@@ -36,7 +37,7 @@ func getQueryParamList(r *http.Request, endpoint ts.EndpointName, queryLookup ma
 	return list, nil
 }
 
-func createQueryParamRefResURLs(params []QueryParam) []QueryParam {
+func createQueryParamRefResURLs(params []queryparam.QueryParam) []queryparam.QueryParam {
 	paramsNew := params
 
 	for i := range paramsNew {
@@ -62,7 +63,7 @@ func createQueryParamRefResURLs(params []QueryParam) []QueryParam {
 	return paramsNew
 }
 
-func getAllowedResources(endpoint ts.EndpointName, params []QueryParam) []QueryParam {
+func getAllowedResources(endpoint ts.EndpointName, params []queryparam.QueryParam) []queryparam.QueryParam {
 	for idx, param := range params {
 		for _, id := range param.AllowedIDs {
 			allowedRes := ah.CreateResourceURL(endpoint, id)
@@ -74,7 +75,7 @@ func getAllowedResources(endpoint ts.EndpointName, params []QueryParam) []QueryP
 	return params
 }
 
-func getAllowedValuesFromTypes(params []QueryParam) []QueryParam {
+func getAllowedValuesFromTypes(params []queryparam.QueryParam) []queryparam.QueryParam {
 	for idx, param := range params {
 		for _, typeRes := range param.EnumVals {
 			param.AllowedValues = append(param.AllowedValues, ts.QueryValue(typeRes.Name))

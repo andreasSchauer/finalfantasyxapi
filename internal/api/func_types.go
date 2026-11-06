@@ -7,10 +7,11 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 )
 
 type IDFilter func(context.Context) ([]int32, error)
-type QueryWrapBasic func(*http.Request, context.Context, string, QueryParam) ([]int32, error)
+type QueryWrapBasic func(*http.Request, context.Context, string, queryparam.QueryParam) ([]int32, error)
 type QueryWrapBool func(*http.Request, context.Context, bool) ([]int32, error)
 type QueryWrapEnum[E any] func(*http.Request, context.Context, E) ([]int32, error)
 type QueryWrapIntSlice func(*http.Request, context.Context, []int32) ([]int32, error)

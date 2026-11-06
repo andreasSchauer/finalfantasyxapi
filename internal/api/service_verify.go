@@ -34,7 +34,7 @@ func (v paramsVerifyer) checkFields() error {
 	for fieldName := range v.userValues {
 		_, exists := v.paramsRules[fieldName]
 		if !exists {
-			return newHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid field: '%s'", fieldName), nil)
+			return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid field: '%s'", fieldName), nil)
 		}
 	}
 
@@ -153,7 +153,7 @@ func (v paramsVerifyer) array[T any](arr []T, fieldName ts.FieldName, verifyFn v
 
 	valSlice, ok := v.userValues[fieldName].([]any)
 	if !ok {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find value slice of field '%s'", fieldName), nil)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find value slice of field '%s'", fieldName), nil)
 	}
 
 	for i, item := range arr {
@@ -188,7 +188,7 @@ func (v paramsVerifyer) idArray(arr []int32, fieldName ts.FieldName) ([]int32, e
 		errStart := fmt.Sprintf("index %d of array at field '%s'", i, fieldName)
 
 		if isDupe[val] {
-			return nil, newHTTPError(http.StatusBadRequest, fmt.Sprintf("%s: array of field '%s' can't have duplicate ids", errStart, fieldName), nil)
+			return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s: array of field '%s' can't have duplicate ids", errStart, fieldName), nil)
 		}
 
 		arr[i], err = vfArrayChildID(v, val, fieldName)
@@ -205,7 +205,7 @@ func (v paramsVerifyer) idArray(arr []int32, fieldName ts.FieldName) ([]int32, e
 func (v paramsVerifyer) objChildVerifyer(fieldName ts.FieldName) (paramsVerifyer, error) {
 	childUserVals, ok := v.userValues[fieldName].(map[ts.FieldName]any)
 	if !ok {
-		return paramsVerifyer{}, newHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
+		return paramsVerifyer{}, errs.NewHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
 	}
 
 	cv := createParamsVerifyer(v.paramsRules[fieldName].Children, childUserVals)
@@ -216,7 +216,7 @@ func (v paramsVerifyer) objChildVerifyer(fieldName ts.FieldName) (paramsVerifyer
 func (v paramsVerifyer) arrChildVerifyer(rawItem any, fieldName ts.FieldName) (paramsVerifyer, error) {
 	childUserVals, ok := rawItem.(map[ts.FieldName]any)
 	if !ok {
-		return paramsVerifyer{}, newHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
+		return paramsVerifyer{}, errs.NewHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
 	}
 
 	cv := createParamsVerifyer(v.paramsRules[fieldName].Children, childUserVals)

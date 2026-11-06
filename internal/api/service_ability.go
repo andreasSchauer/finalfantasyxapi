@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -18,7 +19,7 @@ func quickAssembleAbility(abilityID int32, interactionPtr *int32) (seedtypes.Abi
 
 	if interactionPtr == nil {
 		if interactionsAmt > 1 {
-			return seedtypes.Ability{}, seedtypes.BattleInteraction{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("ability '%s' has multiple battle interactions. use '%s.%s.%s' to specify the interaction", abilityString, ts.PfnAbility, ts.PfnLookup, ts.PfnInteraction), nil)
+			return seedtypes.Ability{}, seedtypes.BattleInteraction{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("ability '%s' has multiple battle interactions. use '%s.%s.%s' to specify the interaction", abilityString, ts.PfnAbility, ts.PfnLookup, ts.PfnInteraction), nil)
 		}
 		return ability, ability.BattleInteractions[0], nil
 	}
@@ -26,7 +27,7 @@ func quickAssembleAbility(abilityID int32, interactionPtr *int32) (seedtypes.Abi
 	interactionID := *interactionPtr
 
 	if interactionID > interactionsAmt || interactionID <= 0 {
-		return seedtypes.Ability{}, seedtypes.BattleInteraction{}, newHTTPError(http.StatusBadRequest, fmt.Sprintf("provided interaction id '%d' used for ability '%s' is out of range. max id: %d", interactionID, abilityString, interactionsAmt), nil)
+		return seedtypes.Ability{}, seedtypes.BattleInteraction{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("provided interaction id '%d' used for ability '%s' is out of range. max id: %d", interactionID, abilityString, interactionsAmt), nil)
 	}
 
 	wantedBI := ability.BattleInteractions[interactionID-1]

@@ -5,16 +5,17 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
 func filterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Monsters
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 
@@ -43,10 +44,10 @@ func filterAvlMonsterFormations(r *http.Request, inputIDs []int32) ([]int32, err
 	i := E.MonsterFormations
 
 	avlParams, err := i.queryAvlRepGetParams(r)
-	if errExceptEmptyQuery(err) {
+	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
-	if queryIsEmpty(err) {
+	if errs.QueryIsEmpty(err) {
 		return inputIDs, nil
 	}
 

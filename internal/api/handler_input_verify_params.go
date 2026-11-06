@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -17,7 +18,7 @@ func (i handlerInput[T, R, A]) queryParamsVerifyGet(r *http.Request, id int32) (
 
 	resource, err := lookup.GetResourceByID(id, i.objLookupID)
 	if err != nil {
-		return zeroType, newHTTPError(http.StatusNotFound, fmt.Sprintf("%s with id '%d' doesn't exist", i.resTypeSingle, id), err)
+		return zeroType, errs.NewHTTPError(http.StatusNotFound, fmt.Sprintf("%s with id '%d' doesn't exist", i.resTypeSingle, id), err)
 	}
 
 	return resource, nil
@@ -31,7 +32,7 @@ func (i handlerInput[T, R, A]) queryParamsVerifyRetrieve(r *http.Request) ([]int
 
 	dbIDs, err := i.retrieveQuery(r.Context())
 	if err != nil {
-		return nil, newHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s", i.resTypePlural), err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s", i.resTypePlural), err)
 	}
 
 	return dbIDs, nil
