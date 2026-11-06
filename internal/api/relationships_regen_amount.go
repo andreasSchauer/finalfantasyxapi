@@ -2,7 +2,7 @@ package api
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 
-func calcRegenAmountsMonster(mon Monster) []apitypes.RegenAmount {
+func calcRegenAmountsMonster(mon apitypes.Monster) []apitypes.RegenAmount {
 	regenRes := nameToNamedAPIResource(E.StatusConditions, "regen", nil)
 	if resourcesContain(mon.StatusImmunities, regenRes) {
 		return nil

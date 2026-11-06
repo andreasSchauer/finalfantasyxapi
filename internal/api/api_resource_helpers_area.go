@@ -43,12 +43,10 @@ func areaToAreaAPIResource(i handlerInput[seedtypes.Area, apitypes.Area, apireso
 
 	return apiresource.AreaAPIResource{
 		AreaID: params.AreaID,
-		LocationArea: seedtypes.LocationArea{
-			Location:    params.Location,
-			Sublocation: params.Sublocation,
-			Area:        params.Area,
-			Version:     params.Version,
-		},
+		Location:    params.Location,
+		Sublocation: params.Sublocation,
+		Area:        params.Area,
+		Version:     params.Version,
 		Specification: params.Specification,
 		URL:           ah.CreateResourceURL(i.Endpoint, params.AreaID),
 	}

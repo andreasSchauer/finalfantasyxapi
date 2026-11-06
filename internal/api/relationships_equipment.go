@@ -7,6 +7,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -17,18 +18,18 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentName) (EquipmentName, error) {
+func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentName) (apitypes.EquipmentName, error) {
 	i := E.Equipment
 	var table seedtypes.EquipmentTable
 
-	rel := EquipmentName{
+	rel := apitypes.EquipmentName{
 		Character: nameToNamedAPIResource(E.Characters, equipment.CharacterName, nil),
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := i.queryAvlRelGetParams(r, equipment.ID)
 	if err != nil {
-		return EquipmentName{}, err
+		return apitypes.EquipmentName{}, err
 	}
 
 	g.Go(func() error {
@@ -61,14 +62,14 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 
 	err = g.Wait()
 	if err != nil {
-		return EquipmentName{}, err
+		return apitypes.EquipmentName{}, err
 	}
 
 	if table.Classification == string(database.EquipClassCelestialWeapon) {
 		char, _ := lookup.GetResource(equipment.CharacterName, lookup.L.Characters)
 		cwRes, err := E.CelestialWeapons.dbGetRelationPtr(r.Context(), char, config.Cfg.DB.GetCharacterCelestialWeaponID)
 		if err != nil {
-			return EquipmentName{}, err
+			return apitypes.EquipmentName{}, err
 		}
 		rel.CelestialWeapon = cwRes
 	}

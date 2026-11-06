@@ -215,7 +215,7 @@ func TestGetMonster(t *testing.T) {
 					"bribe":        h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](28, 6)),
 				},
 			},
-			bribeChances: []api.BribeChance{
+			bribeChances: []apitypes.BribeChance{
 				{
 					Gil:    3000,
 					Chance: 25,

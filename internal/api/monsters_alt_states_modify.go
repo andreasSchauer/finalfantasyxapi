@@ -71,7 +71,7 @@ func modifyResourcesChange[T apiresource.HasAPIResource](items, changeItems []T)
 
 // if a resistance becomes an immunity, the resistance needs to be added to defStateGain
 // while the immunity needs to be added to defStateLoss
-func modifyGainedImmunities(mon Monster, change, defStateGain, defStateLoss apitypes.Alt, appliedState apitypes.AppliedState) (Monster, apitypes.Alt, apitypes.Alt, apitypes.AppliedState) {
+func modifyGainedImmunities(mon apitypes.Monster, change, defStateGain, defStateLoss apitypes.Alt, appliedState apitypes.AppliedState) (apitypes.Monster, apitypes.Alt, apitypes.Alt, apitypes.AppliedState) {
 	if change.StatusImmunities == nil {
 		return mon, defStateGain, defStateLoss, appliedState
 	}

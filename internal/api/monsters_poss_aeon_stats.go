@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func applyPossessedAeonStats(r *http.Request, mon Monster) ([]apitypes.BaseStat, error) {
+func applyPossessedAeonStats(r *http.Request, mon apitypes.Monster) ([]apitypes.BaseStat, error) {
 	paramYunaStats := Q.Monsters[ts.QpnYunaStats]
 	if !slices.Contains(paramYunaStats.AllowedIDs, mon.ID) {
 		return mon.BaseStats, nil

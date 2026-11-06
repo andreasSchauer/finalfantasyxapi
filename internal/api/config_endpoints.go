@@ -33,7 +33,7 @@ type Endpoints struct {
 	Characters         handlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]
 	Aeons              handlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]
 	CharacterClasses   handlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource]
-	Monsters           handlerInput[seedtypes.Monster, Monster, apiresource.NamedAPIResource]
+	Monsters           handlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]
 	Abilities          handlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource]
 	PlayerAbilities    handlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource]
 	OverdriveAbilities handlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]
@@ -55,7 +55,7 @@ type Endpoints struct {
 	Mixes              handlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource]
 	AutoAbilities      handlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]
 	EquipmentTables    handlerInput[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource]
-	Equipment          handlerInput[seedtypes.EquipmentName, EquipmentName, apiresource.NamedAPIResource]
+	Equipment          handlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource]
 	CelestialWeapons   handlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource]
 	Stats              handlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource]
 	Properties         handlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource]
@@ -470,13 +470,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Monsters = handlerInput[seedtypes.Monster, Monster, apiresource.NamedAPIResource]{
+	E.Monsters = handlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]{
 		Endpoint:         ts.EpMonsters,
 		resTypeSingle:    ts.RTSMonsters,
 		resTypePlural:    ts.RTPMonsters,
 		objLookup:        lookup.L.Monsters,
 		objLookupID:      lookup.L.MonstersID,
-		idToResFunc:      idToNamedAPIResource[seedtypes.Monster, Monster, apiresource.NamedAPIResource],
+		idToResFunc:      idToNamedAPIResource[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource],
 		getMultipleQuery: config.Cfg.DB.GetMonsterIDsByName,
 		retrieveQuery:    config.Cfg.DB.GetMonsterIDs,
 		getSingleFunc:    getMonster,
@@ -865,13 +865,13 @@ func (E *Endpoints) Init() {
 		retrieveFunc:  retrieveEquipmentTables,
 	}
 
-	E.Equipment = handlerInput[seedtypes.EquipmentName, EquipmentName, apiresource.NamedAPIResource]{
+	E.Equipment = handlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpEquipment,
 		resTypeSingle: ts.RTSEquipment,
 		resTypePlural: ts.RTPEquipment,
 		objLookup:     lookup.L.EquipmentNames,
 		objLookupID:   lookup.L.EquipmentNamesID,
-		idToResFunc:   idToNamedAPIResource[seedtypes.EquipmentName, EquipmentName, apiresource.NamedAPIResource],
+		idToResFunc:   idToNamedAPIResource[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource],
 		retrieveQuery: config.Cfg.DB.GetEquipmentIDs,
 		getSingleFunc: getEquipment,
 		retrieveFunc:  retrieveEquipment,

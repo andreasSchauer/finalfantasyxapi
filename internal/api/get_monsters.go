@@ -5,6 +5,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -12,18 +13,18 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMonster(r *http.Request, i handlerInput[seedtypes.Monster, Monster, apiresource.NamedAPIResource], id int32) (Monster, error) {
+func getMonster(r *http.Request, i handlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource], id int32) (apitypes.Monster, error) {
 	monster, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	rel, err := getMonsterRelationships(r, monster)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
-	response := Monster{
+	response := apitypes.Monster{
 		ID:                   monster.ID,
 		Name:                 monster.Name,
 		Version:              monster.Version,
@@ -70,7 +71,7 @@ func getMonster(r *http.Request, i handlerInput[seedtypes.Monster, Monster, apir
 	return completeMonsterResponse(r, response)
 }
 
-func retrieveMonsters(r *http.Request, i handlerInput[seedtypes.Monster, Monster, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveMonsters(r *http.Request, i handlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

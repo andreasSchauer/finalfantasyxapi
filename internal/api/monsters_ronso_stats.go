@@ -10,7 +10,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func applyRonsoStats(r *http.Request, mon Monster, queryName ts.QueryParamName) ([]apitypes.BaseStat, error) {
+func applyRonsoStats(r *http.Request, mon apitypes.Monster, queryName ts.QueryParamName) ([]apitypes.BaseStat, error) {
 	allowedStatIDs := []int32{1, 3, 5, 7}
 	baseStats := mon.BaseStats
 	queryParam := Q.Monsters[queryName]
@@ -31,7 +31,7 @@ func applyRonsoStats(r *http.Request, mon Monster, queryName ts.QueryParamName) 
 	return ronsoStats, nil
 }
 
-func replaceRonsoStats(mon Monster, kimahriStatMap map[string]int32, allowedStatIDs []int32) []apitypes.BaseStat {
+func replaceRonsoStats(mon apitypes.Monster, kimahriStatMap map[string]int32, allowedStatIDs []int32) []apitypes.BaseStat {
 	ronsoStatMap := make(map[string]int32)
 	ronsoStatMap["hp"] = getRonsoHP(mon, kimahriStatMap)
 	ronsoStatMap["strength"] = getRonsoStrength(mon, kimahriStatMap)
@@ -41,7 +41,7 @@ func replaceRonsoStats(mon Monster, kimahriStatMap map[string]int32, allowedStat
 	return replaceBaseStats(mon.BaseStats, ronsoStatMap, allowedStatIDs)
 }
 
-func getRonsoHP(mon Monster, kimahriStatMap map[string]int32) int32 {
+func getRonsoHP(mon apitypes.Monster, kimahriStatMap map[string]int32) int32 {
 	kimahriStr := kimahriStatMap["strength"]
 	kimahriMag := kimahriStatMap["magic"]
 
@@ -62,7 +62,7 @@ func getRonsoHP(mon Monster, kimahriStatMap map[string]int32) int32 {
 	return 0
 }
 
-func getRonsoStrength(mon Monster, kimahriStatMap map[string]int32) int32 {
+func getRonsoStrength(mon apitypes.Monster, kimahriStatMap map[string]int32) int32 {
 	kimahriHP := kimahriStatMap["hp"]
 	strengthVals := []int32{11, 12, 13, 15, 17, 19, 21, 22, 23, 24, 25, 27}
 
@@ -77,7 +77,7 @@ func getRonsoStrength(mon Monster, kimahriStatMap map[string]int32) int32 {
 	return strength
 }
 
-func getRonsoMagic(mon Monster, kimahriStatMap map[string]int32) int32 {
+func getRonsoMagic(mon apitypes.Monster, kimahriStatMap map[string]int32) int32 {
 	kimahriHP := kimahriStatMap["hp"]
 	magicVals := []int32{8, 8, 9, 10, 12, 14, 16, 17, 19, 20, 21, 22}
 
@@ -92,7 +92,7 @@ func getRonsoMagic(mon Monster, kimahriStatMap map[string]int32) int32 {
 	return magic
 }
 
-func getRonsoAgility(mon Monster, kimahriStatMap map[string]int32) int32 {
+func getRonsoAgility(mon apitypes.Monster, kimahriStatMap map[string]int32) int32 {
 	var agility int32
 	kimahriAgility := kimahriStatMap["agility"]
 

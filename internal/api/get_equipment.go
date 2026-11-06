@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -11,18 +12,18 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, apiresource.NamedAPIResource], id int32) (EquipmentName, error) {
+func getEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource], id int32) (apitypes.EquipmentName, error) {
 	equipment, err := i.queryParamsVerifyGet(r, id)
 	if err != nil {
-		return EquipmentName{}, err
+		return apitypes.EquipmentName{}, err
 	}
 
 	rel, err := getEquipmentRelationships(r, equipment)
 	if err != nil {
-		return EquipmentName{}, err
+		return apitypes.EquipmentName{}, err
 	}
 
-	response := EquipmentName{
+	response := apitypes.EquipmentName{
 		ID:                      equipment.ID,
 		Name:                    equipment.Name,
 		Character:               rel.Character,
@@ -41,7 +42,7 @@ func getEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, Equip
 	return response, nil
 }
 
-func retrieveEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, EquipmentName, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveEquipment(r *http.Request, i handlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.queryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -53,7 +53,7 @@ func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) 
 		Customize:      customize,
 	})
 	if err != nil {
-		return nil, i.ErrorAvailability(err)
+		return nil, i.ErrorAvl(err)
 	}
 
 	return dbIDs, nil

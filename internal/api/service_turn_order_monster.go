@@ -3,6 +3,7 @@ package api
 import (
 	"slices"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -33,7 +34,7 @@ func fetchFormationMons(params TurnOrderParams) TurnOrderParams {
 	return params
 }
 
-func assembleMonTurnOrder(monID int32, altState *int32) (Monster, *seedtypes.AgilityTier) {
+func assembleMonTurnOrder(monID int32, altState *int32) (apitypes.Monster, *seedtypes.AgilityTier) {
 	penanceArmIDs := []int32{306, 307}
 	firstTurnAglIDs := []int32{167, 168, 215, 306, 307}
 	var firstTurnAglTier *seedtypes.AgilityTier
@@ -67,7 +68,7 @@ func getFirstTurnAglTier(monID int32) *seedtypes.AgilityTier {
 	return &tier
 }
 
-func getTurnOrderMonAgility(monID int32, monster Monster) int32 {
+func getTurnOrderMonAgility(monID int32, monster apitypes.Monster) int32 {
 	agility := getBaseStatVal("agility", monster.BaseStats)
 
 	return handleNoTurnMons(monID, agility)
@@ -83,7 +84,7 @@ func handleNoTurnMons(monID, agility int32) int32 {
 	return agility
 }
 
-func fetchMonsterHasteStatus(mon Monster, statusPtr *string, ignImmunities bool) (*string, error) {
+func fetchMonsterHasteStatus(mon apitypes.Monster, statusPtr *string, ignImmunities bool) (*string, error) {
 	const statusSlow = string(database.HasteStatusSlow)
 	const statusHaste = string(database.HasteStatusHaste)
 	const statusAutoHaste = string(database.HasteStatusAutoHaste)

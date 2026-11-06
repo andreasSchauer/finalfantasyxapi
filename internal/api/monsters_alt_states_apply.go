@@ -13,19 +13,19 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func applyAlteredStateFromQuery(r *http.Request, mon Monster, queryName ts.QueryParamName) (Monster, error) {
+func applyAlteredStateFromQuery(r *http.Request, mon apitypes.Monster, queryName ts.QueryParamName) (apitypes.Monster, error) {
 	altStateID, err := getAltStateID(r, mon, queryName)
 	if errs.QueryIsEmpty(err) {
 		return mon, nil
 	}
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	return applyAlteredState(mon, altStateID), nil
 }
 
-func applyAlteredStateFromJSON(mon Monster, altStatePtr *int32) (Monster, error) {
+func applyAlteredStateFromJSON(mon apitypes.Monster, altStatePtr *int32) (apitypes.Monster, error) {
 	if altStatePtr == nil {
 		return mon, nil
 	}
@@ -34,13 +34,13 @@ func applyAlteredStateFromJSON(mon Monster, altStatePtr *int32) (Monster, error)
 
 	err := vpAltStateID(mon, altStateID)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	return applyAlteredState(mon, altStateID), nil
 }
 
-func applyAlteredState(mon Monster, altStateID int) Monster {
+func applyAlteredState(mon apitypes.Monster, altStateID int) apitypes.Monster {
 	altState := mon.AlteredStates[altStateID-1]
 	appliedState := apitypes.AppliedState{
 		Condition:   altState.Condition,
@@ -76,7 +76,7 @@ func applyAlteredState(mon Monster, altStateID int) Monster {
 	return mon
 }
 
-func getAltStateID(r *http.Request, mon Monster, queryName ts.QueryParamName) (int, error) {
+func getAltStateID(r *http.Request, mon apitypes.Monster, queryName ts.QueryParamName) (int, error) {
 	queryParam := Q.Monsters[queryName]
 	query, err := queryParam.CheckEmpty(r)
 	if err != nil {
@@ -95,7 +95,7 @@ func getAltStateID(r *http.Request, mon Monster, queryName ts.QueryParamName) (i
 	return int(id), nil
 }
 
-func vpAltStateID(mon Monster, altStateID int) error {
+func vpAltStateID(mon apitypes.Monster, altStateID int) error {
 	altStateAmt := len(mon.AlteredStates)
 
 	if altStateAmt == 0 {
@@ -109,7 +109,7 @@ func vpAltStateID(mon Monster, altStateID int) error {
 	return nil
 }
 
-func applyAltChange(mon Monster, change apitypes.Alt, appliedState apitypes.AppliedState, defaultState apitypes.AlteredState) (Monster, apitypes.AppliedState, apitypes.AlteredState) {
+func applyAltChange(mon apitypes.Monster, change apitypes.Alt, appliedState apitypes.AppliedState, defaultState apitypes.AlteredState) (apitypes.Monster, apitypes.AppliedState, apitypes.AlteredState) {
 	defStateChange := apitypes.Alt{
 		AlterationType: database.AlterationTypeChange,
 	}
@@ -128,7 +128,7 @@ func applyAltChange(mon Monster, change apitypes.Alt, appliedState apitypes.Appl
 	return mon, appliedState, defaultState
 }
 
-func applyAltGain(mon Monster, change apitypes.Alt, appliedState apitypes.AppliedState, defaultState apitypes.AlteredState) (Monster, apitypes.AppliedState, apitypes.AlteredState) {
+func applyAltGain(mon apitypes.Monster, change apitypes.Alt, appliedState apitypes.AppliedState, defaultState apitypes.AlteredState) (apitypes.Monster, apitypes.AppliedState, apitypes.AlteredState) {
 	defStateLoss := apitypes.Alt{
 		AlterationType: database.AlterationTypeLoss,
 	}
@@ -157,7 +157,7 @@ func applyAltGain(mon Monster, change apitypes.Alt, appliedState apitypes.Applie
 	return mon, appliedState, defaultState
 }
 
-func applyAltLoss(mon Monster, change apitypes.Alt, appliedState apitypes.AppliedState, defaultState apitypes.AlteredState) (Monster, apitypes.AppliedState, apitypes.AlteredState) {
+func applyAltLoss(mon apitypes.Monster, change apitypes.Alt, appliedState apitypes.AppliedState, defaultState apitypes.AlteredState) (apitypes.Monster, apitypes.AppliedState, apitypes.AlteredState) {
 	defStateGain := apitypes.Alt{
 		AlterationType: database.AlterationTypeGain,
 	}

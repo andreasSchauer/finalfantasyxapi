@@ -23,7 +23,7 @@ type expMonster struct {
 	baseStats        map[string]int32
 	regenAmounts     []testRegenAmount
 	items            *testMonItems
-	bribeChances     []api.BribeChance
+	bribeChances     []apitypes.BribeChance
 	equipment        *testMonEquipment
 	elemResists      []testElemResist
 	statusImmunities []int32
@@ -36,7 +36,7 @@ func (e expMonster) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareMonsters(test test, exp expMonster, got api.Monster) {
+func compareMonsters(test test, exp expMonster, got apitypes.Monster) {
 	test.t.Helper()
 	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
 	test.compare("species", string(exp.species), got.Species)

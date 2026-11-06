@@ -11,7 +11,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func applyOmnisElements(r *http.Request, mon Monster, queryName ts.QueryParamName) ([]apitypes.ElementalResist, error) {
+func applyOmnisElements(r *http.Request, mon apitypes.Monster, queryName ts.QueryParamName) ([]apitypes.ElementalResist, error) {
 	circlesAffinity := map[int]string{
 		0: string(database.ElementalAffinityNeutral),
 		1: string(database.ElementalAffinityHalved),

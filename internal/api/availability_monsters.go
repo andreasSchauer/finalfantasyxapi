@@ -34,7 +34,7 @@ func filterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
 		LocContextType: locContext.Type,
 	})
 	if err != nil {
-		return nil, i.ErrorAvailability(err)
+		return nil, i.ErrorAvl(err)
 	}
 
 	return dbIDs, nil
@@ -66,7 +66,7 @@ func filterAvlMonsterFormations(r *http.Request, inputIDs []int32) ([]int32, err
 		LocContextType: locContext.Type,
 	})
 	if err != nil {
-		return nil, i.ErrorAvailability(err)
+		return nil, i.ErrorAvl(err)
 	}
 
 	return dbIDs, nil

@@ -1,6 +1,9 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+)
 
 type expEquipment struct {
 	testGeneral
@@ -19,7 +22,7 @@ func (e expEquipment) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareEquipment(test test, exp expEquipment, got api.EquipmentName) {
+func compareEquipment(test test, exp expEquipment, got apitypes.EquipmentName) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compIDAPIResource("equipment table", api.E.EquipmentTables.Endpoint, exp.equipmentTable, got.EquipmentTable)

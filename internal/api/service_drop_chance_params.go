@@ -48,7 +48,7 @@ func getDropChanceParamsDoc() ParamsDoc {
 				ChildMinVal: h.GetInt32Ptr(1),
 				ChildMaxVal: h.GetInt32Ptr(int32(len(lookup.L.Characters) - 1)),
 				MaxArrayLen: h.GetIntPtr(7),
-				Description: "Specify the characters that are currently accessible in the menu. Only these characters can receive equipment. For example, in the Gagazet underwater section, only Tidus, Wakka and Rikku can get equipment. If you fight an underwater enemy in the Monster Arena however, everybody is eligible, even though you can only fight with these three.",
+				Description: "Specify the characters that are currently accessible in the menu. Only these characters can receive equipment. For example, in the Gagazet underwater section, only Tidus, Wakka and Rikku can get equipment. If you fight an underwater enemy in the apitypes.Monster Arena however, everybody is eligible, even though you can only fight with these three.",
 			},
 			{
 				Field:       ts.PfnAutoAbilities,

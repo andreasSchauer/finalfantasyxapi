@@ -10,13 +10,13 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getMonsterRelationships(r *http.Request, monster seedtypes.Monster) (Monster, error) {
-	var rel Monster
+func getMonsterRelationships(r *http.Request, monster seedtypes.Monster) (apitypes.Monster, error) {
+	var rel apitypes.Monster
 	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := E.Monsters.queryAvlRelGetParams(r, monster.ID)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	g.Go(func() error {
@@ -33,48 +33,48 @@ func getMonsterRelationships(r *http.Request, monster seedtypes.Monster) (Monste
 
 	err = g.Wait()
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	return rel, nil
 }
 
-func completeMonsterResponse(r *http.Request, mon Monster) (Monster, error) {
+func completeMonsterResponse(r *http.Request, mon apitypes.Monster) (apitypes.Monster, error) {
 	mon, err := applyAlteredStateFromQuery(r, mon, ts.QpnAlteredState)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	mon.BaseStats, err = applyPossessedAeonStats(r, mon)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	mon.BaseStats, err = applyRonsoStats(r, mon, ts.QpnKimahriStats)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	mon.RegenAmounts = calcRegenAmountsMonster(mon)
 
 	mon.ElemResists, err = applyOmnisElements(r, mon, ts.QpnOmnisElements)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	mon.BribeChances, err = getMonsterBribeChances(mon)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	mon.PoisonDamage, err = getMonsterPoisonDamage(mon)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	mon.AgilityParameters, err = getMonsterAgilityParams(r, mon)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	mon.AlteredStates = getAlteredStatesAlterations(mon.AlteredStates)
@@ -97,7 +97,7 @@ func getMonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.Eleme
 	return resourceMapToSlice(elemResistMap)
 }
 
-func getMonsterPoisonDamage(mon Monster) (*int32, error) {
+func getMonsterPoisonDamage(mon apitypes.Monster) (*int32, error) {
 	if mon.PoisonRate == nil {
 		return nil, nil
 	}
@@ -110,7 +110,7 @@ func getMonsterPoisonDamage(mon Monster) (*int32, error) {
 	return &poisonDamage, nil
 }
 
-func getMonsterAgilityParams(r *http.Request, mon Monster) (*apitypes.AgilityParams, error) {
+func getMonsterAgilityParams(r *http.Request, mon apitypes.Monster) (*apitypes.AgilityParams, error) {
 	agilityTier, err := getAgilityTierDB(r, mon.BaseStats)
 	if err != nil {
 		return nil, err
@@ -140,7 +140,7 @@ func getMonsterAgilityParams(r *http.Request, mon Monster) (*apitypes.AgilityPar
 	return &agilityParams, nil
 }
 
-func appliedStateHaste(mon Monster) bool {
+func appliedStateHaste(mon apitypes.Monster) bool {
 	if mon.AppliedState == nil {
 		return false
 	}
@@ -153,7 +153,7 @@ func appliedStateHaste(mon Monster) bool {
 }
 
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
-func getMonsterBribeChances(mon Monster) ([]BribeChance, error) {
+func getMonsterBribeChances(mon apitypes.Monster) ([]apitypes.BribeChance, error) {
 	bribe := nameToNamedAPIResource(E.StatusConditions, "bribe", nil)
 	if resourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
 		return nil, nil
@@ -162,12 +162,12 @@ func getMonsterBribeChances(mon Monster) ([]BribeChance, error) {
 	hpStat := getBaseStat("hp", mon.BaseStats)
 	hp := hpStat.Value
 
-	bribeChances := []BribeChance{}
+	bribeChances := []apitypes.BribeChance{}
 	var multiplier int32 = 10
 	var chance int32 = 25
 
 	for multiplier <= 25 {
-		bribeChance := BribeChance{
+		bribeChance := apitypes.BribeChance{
 			Gil:    hp * multiplier,
 			Chance: chance,
 		}

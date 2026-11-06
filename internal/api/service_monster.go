@@ -5,15 +5,16 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
-func quickAssembleMon(monID int32, altStatePtr *int32) (Monster, error) {
+func quickAssembleMon(monID int32, altStatePtr *int32) (apitypes.Monster, error) {
 	monsterLookup, _ := lookup.GetResourceByID(monID, lookup.L.MonstersID)
 
-	monster := Monster{
+	monster := apitypes.Monster{
 		ID:               monsterLookup.ID,
 		Name:             monsterLookup.Name,
 		Version:          monsterLookup.Version,
@@ -39,13 +40,13 @@ func quickAssembleMon(monID int32, altStatePtr *int32) (Monster, error) {
 
 	monster, err := applyAlteredStateFromJSON(monster, altStatePtr)
 	if err != nil {
-		return Monster{}, err
+		return apitypes.Monster{}, err
 	}
 
 	return monster, nil
 }
 
-func monsterHasFirstStrike(mon Monster) bool {
+func monsterHasFirstStrike(mon apitypes.Monster) bool {
 	for _, aa := range mon.AutoAbilities {
 		if aa.Name == "first strike" {
 			return true
@@ -55,11 +56,11 @@ func monsterHasFirstStrike(mon Monster) bool {
 	return false
 }
 
-func monHasAppliedStatus(mon Monster) bool {
+func monHasAppliedStatus(mon apitypes.Monster) bool {
 	return mon.AppliedState != nil && mon.AppliedState.AppliedStatus != nil
 }
 
-func enforceMonImmunity(status string, mon Monster, ignImmunities bool) error {
+func enforceMonImmunity(status string, mon apitypes.Monster, ignImmunities bool) error {
 	if !ignImmunities && monImmuneToStatus(status, mon) {
 		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to '%s'", h.NameToString(mon.Name, mon.Version, nil), status), nil)
 	}
@@ -67,7 +68,7 @@ func enforceMonImmunity(status string, mon Monster, ignImmunities bool) error {
 	return nil
 }
 
-func monImmuneToStatus(status string, mon Monster) bool {
+func monImmuneToStatus(status string, mon apitypes.Monster) bool {
 	for _, condition := range mon.StatusImmunities {
 		if condition.Name == status {
 			return true

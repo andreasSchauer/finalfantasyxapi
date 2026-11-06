@@ -1,86 +1,14 @@
 package api
 
 import (
-	"fmt"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-type Monster struct {
-	ID                   int32                            `json:"id"`
-	Name                 string                           `json:"name"`
-	Version              *int32                           `json:"version,omitempty"`
-	Specification        *string                          `json:"specification,omitempty"`
-	AppliedState         *apitypes.AppliedState                    `json:"applied_state,omitempty"`
-	AgilityParameters    *apitypes.AgilityParams                   `json:"agility_parameters"`
-	Notes                *string                          `json:"notes,omitempty"`
-	Species              string                           `json:"species"`
-	Availability         string                           `json:"availability"`
-	IsRepeatable         bool                             `json:"is_repeatable"`
-	CanBeCaptured        bool                             `json:"can_be_captured"`
-	AreaConquestLocation *string                          `json:"area_conquest_location,omitempty"`
-	Category             string                           `json:"category"`
-	CTBIconType          string                           `json:"ctb_icon_type"`
-	HasOverdrive         bool                             `json:"has_overdrive"`
-	IsUnderwater         bool                             `json:"is_underwater"`
-	IsZombie             bool                             `json:"is_zombie"`
-	Distance             int32                            `json:"distance"`
-	Properties           []apiresource.NamedAPIResource   `json:"properties"`
-	AutoAbilities        []apiresource.NamedAPIResource   `json:"auto_abilities"`
-	AP                   int32                            `json:"ap"`
-	APOverkill           int32                            `json:"ap_overkill"`
-	OverkillDamage       int32                            `json:"overkill_damage"`
-	Gil                  int32                            `json:"gil"`
-	StealGil             *int32                           `json:"steal_gil"`
-	RonsoRages           []apiresource.NamedAPIResource   `json:"ronso_rages"`
-	DoomCountdown        *int32                           `json:"doom_countdown"`
-	PoisonRate           *float32                         `json:"poison_rate"`
-	PoisonDamage         *int32                           `json:"poison_damage,omitempty"`
-	ThreatenChance       *int32                           `json:"threaten_chance"`
-	ZanmatoLevel         int32                            `json:"zanmato_level"`
-	MonsterArenaPrice    *int32                           `json:"monster_arena_price,omitempty"`
-	SensorText           *string                          `json:"sensor_text"`
-	ScanText             *string                          `json:"scan_text"`
-	Areas                []apiresource.AreaAPIResource    `json:"areas"`
-	Formations           []apiresource.UnnamedAPIResource `json:"monster_formations"`
-	BaseStats            []apitypes.BaseStat                       `json:"base_stats"`
-	RegenAmounts         []apitypes.RegenAmount                    `json:"regen_amounts"`
-	Items                *apitypes.MonsterItems                    `json:"items"`
-	BribeChances         []BribeChance                    `json:"bribe_chances,omitempty"`
-	Equipment            *apitypes.MonsterEquipment                `json:"equipment"`
-	ElemResists          []apitypes.ElementalResist                `json:"elem_resists"`
-	StatusImmunities     []apiresource.NamedAPIResource   `json:"status_immunities"`
-	StatusResists        []apitypes.StatusResist                   `json:"status_resists"`
-	Abilities            []MonsterAbility                 `json:"abilities"`
-	AlteredStates        []apitypes.AlteredState                   `json:"altered_states"`
-}
-
-func (m Monster) String() string {
-	return fmt.Sprintf("monster '%s'", h.NameToString(m.Name, m.Version, m.Specification))
-}
-
-type MonsterAbility struct {
-	Ability  apiresource.TypedAPIResource `json:"ability"`
-	IsForced bool                         `json:"is_forced"`
-	IsUnused bool                         `json:"is_unused"`
-}
-
-func convertMonsterAbility(ability seedtypes.MonsterAbility) MonsterAbility {
-	return MonsterAbility{
+func convertMonsterAbility(ability seedtypes.MonsterAbility) apitypes.MonsterAbility {
+	return apitypes.MonsterAbility{
 		Ability:  keyToTypedAPIResource(E.Abilities, ability.AbilityReference),
 		IsForced: ability.IsForced,
 		IsUnused: ability.IsUnused,
 	}
-}
-
-func (ma MonsterAbility) GetAPIResource() apiresource.APIResource {
-	return ma.Ability
-}
-
-type BribeChance struct {
-	Gil    int32 `json:"gil"`
-	Chance int32 `json:"chance"`
 }
