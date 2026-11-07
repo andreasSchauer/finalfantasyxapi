@@ -64,6 +64,6 @@ func getClassLearnableAbilities(ctx context.Context, class seedtypes.CharacterCl
 		return nil, err
 	}
 
-	learnableAbilities := removeResourcesURL(allAbilities, defaultAbilities)
+	learnableAbilities := RemoveResourcesURL(allAbilities, defaultAbilities)
 	return learnableAbilities, nil
 }

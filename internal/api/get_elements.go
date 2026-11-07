@@ -22,7 +22,7 @@ func getElement(r *http.Request, i HandlerInput[seedtypes.Element, apitypes.Elem
 	response := apitypes.Element{
 		ID:                 element.ID,
 		Name:               element.Name,
-		OppositeElement:    namePtrToNamedAPIResPtr(i, element.OppositeElement, nil),
+		OppositeElement:    NamePtrToNamedAPIResPtr(i, element.OppositeElement, nil),
 		StatusProtection:   rel.StatusProtection,
 		AutoAbilities:      rel.AutoAbilities,
 		PlayerAbilities:    rel.PlayerAbilities,

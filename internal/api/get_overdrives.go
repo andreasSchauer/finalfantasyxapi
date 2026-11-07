@@ -30,8 +30,8 @@ func getOverdrive(r *http.Request, i HandlerInput[seedtypes.Overdrive, apitypes.
 		UnlockCondition:    overdrive.UnlockCondition,
 		CountdownInSec:     overdrive.CountdownInSec,
 		Cursor:             overdrive.Cursor,
-		User:               nameToNamedAPIResource(E.CharacterClasses, overdrive.User, nil),
-		OverdriveCommand:   namePtrToNamedAPIResPtr(E.OverdriveCommands, overdrive.OverdriveCommand, nil),
+		User:               NameToNamedAPIResource(E.CharacterClasses, overdrive.User, nil),
+		OverdriveCommand:   NamePtrToNamedAPIResPtr(E.OverdriveCommands, overdrive.OverdriveCommand, nil),
 		OverdriveAbilities: refsToNamedAPIResources(overdrive.OverdriveAbilities),
 	}
 

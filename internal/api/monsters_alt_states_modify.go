@@ -21,10 +21,10 @@ func modifyResourcesLoss[T apiresource.HasAPIResource](items, changeItems []T) (
 		defStateGainItems = append(defStateGainItems, item)
 	}
 
-	items = removeResources(items, itemsToRemove)
+	items = RemoveResources(items, itemsToRemove)
 
-	slices.SortStableFunc(items, sortAPIResources)
-	slices.SortStableFunc(defStateGainItems, sortAPIResources)
+	slices.SortStableFunc(items, SortAPIResources)
+	slices.SortStableFunc(defStateGainItems, SortAPIResources)
 
 	return items, defStateGainItems
 }
@@ -42,8 +42,8 @@ func modifyResourcesGain[T apiresource.HasAPIResource](items, changeItems []T) (
 		defStateLossItems = append(defStateLossItems, item)
 	}
 
-	slices.SortStableFunc(items, sortAPIResources)
-	slices.SortStableFunc(defStateLossItems, sortAPIResources)
+	slices.SortStableFunc(items, SortAPIResources)
+	slices.SortStableFunc(defStateLossItems, SortAPIResources)
 
 	return items, defStateLossItems
 }
@@ -55,10 +55,10 @@ func modifyResourcesChange[T apiresource.HasAPIResource](items, changeItems []T)
 	}
 
 	defStateChangeItems := []T{}
-	replaceMap := getResourceMap(changeItems)
+	replaceMap := GetResourceMap(changeItems)
 
 	for i, item := range items {
-		key := getAPIResourceID(item)
+		key := GetAPIResourceID(item)
 		_, ok := replaceMap[key]
 		if ok {
 			defStateChangeItems = append(defStateChangeItems, item)
@@ -78,7 +78,7 @@ func modifyGainedImmunities(mon apitypes.Monster, change, defStateGain, defState
 
 	mon.StatusImmunities, defStateLoss.StatusImmunities = modifyResourcesGain(mon.StatusImmunities, change.StatusImmunities)
 
-	keptItems, removedItems := separateResources(mon.StatusResists, change.StatusImmunities)
+	keptItems, removedItems := SeparateResources(mon.StatusResists, change.StatusImmunities)
 
 	if len(removedItems) == 0 {
 		removedItems = nil

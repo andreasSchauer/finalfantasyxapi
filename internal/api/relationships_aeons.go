@@ -196,7 +196,7 @@ func getUnitAgilityParams(r *http.Request, baseStats []apitypes.BaseStat) (apity
 	}
 
 	agilityParams := apitypes.AgilityParams{
-		AgilityTier: idToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
+		AgilityTier: IDToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   agilityTier.TickSpeed,
 		MinICV:      minICV,
 		MaxICV:      agilityTier.CharacterMaxICV,

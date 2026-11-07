@@ -7,7 +7,7 @@ import (
 
 func convertMixCombination(mc seedtypes.MixCombination) apitypes.MixCombination {
 	return apitypes.MixCombination{
-		FirstItem:  nameToNamedAPIResource(E.Items, mc.FirstItem, nil),
-		SecondItem: nameToNamedAPIResource(E.Items, mc.SecondItem, nil),
+		FirstItem:  NameToNamedAPIResource(E.Items, mc.FirstItem, nil),
+		SecondItem: NameToNamedAPIResource(E.Items, mc.SecondItem, nil),
 	}
 }

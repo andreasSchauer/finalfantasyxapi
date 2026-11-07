@@ -25,7 +25,7 @@ func getPrimer(r *http.Request, i HandlerInput[seedtypes.Primer, apitypes.Primer
 	response := apitypes.Primer{
 		ID:            primer.ID,
 		Name:          primer.Name,
-		KeyItem:       nameToNamedAPIResource(E.KeyItems, keyItem.Name, nil),
+		KeyItem:       NameToNamedAPIResource(E.KeyItems, keyItem.Name, nil),
 		Description:   keyItem.Description,
 		AlBhedLetter:  primer.AlBhedLetter,
 		EnglishLetter: primer.EnglishLetter,

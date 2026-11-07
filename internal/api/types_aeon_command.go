@@ -7,7 +7,7 @@ import (
 
 func convertPossibleAbilityList(pa seedtypes.PossibleAbilityList) apitypes.PossibleAbilityList {
 	return apitypes.PossibleAbilityList{
-		User:      nameToNamedAPIResource(E.CharacterClasses, pa.User, nil),
-		Abilities: keysToTypedAPIResources(E.Abilities, pa.Abilities),
+		User:      NameToNamedAPIResource(E.CharacterClasses, pa.User, nil),
+		Abilities: KeysToTypedAPIResources(E.Abilities, pa.Abilities),
 	}
 }

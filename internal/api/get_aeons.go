@@ -25,8 +25,8 @@ func getAeon(r *http.Request, i HandlerInput[seedtypes.Aeon, apitypes.Aeon, apir
 	response := apitypes.Aeon{
 		ID:                     aeon.ID,
 		Name:                   aeon.Name,
-		UntypedUnit:            idToTypedAPIResource(E.PlayerUnits, aeon.PlayerUnit.ID),
-		Area:                   locAreaToAreaAPIResource(E.Areas, aeon.LocationArea),
+		UntypedUnit:            IDToTypedAPIResource(E.PlayerUnits, aeon.PlayerUnit.ID),
+		Area:                   LocAreaToAreaAPIResource(E.Areas, aeon.LocationArea),
 		UnlockCondition:        aeon.UnlockCondition,
 		IsOptional:             aeon.IsOptional,
 		BattlesToRegenerate:    aeon.BattlesToRegenerate,

@@ -7,14 +7,14 @@ import (
 
 func newElemResist(element, affinity string) apitypes.ElementalResist {
 	return apitypes.ElementalResist{
-		Element:  nameToNamedAPIResource(E.Elements, element, nil),
+		Element:  NameToNamedAPIResource(E.Elements, element, nil),
 		Affinity: affinity,
 	}
 }
 
 func convertElemResist(er seedtypes.ElementalResist) apitypes.ElementalResist {
 	return apitypes.ElementalResist{
-		Element:  nameToNamedAPIResource(E.Elements, er.Element, nil),
+		Element:  NameToNamedAPIResource(E.Elements, er.Element, nil),
 		Affinity: er.Affinity,
 	}
 }

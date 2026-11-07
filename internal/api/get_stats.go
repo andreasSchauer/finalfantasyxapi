@@ -26,7 +26,7 @@ func getStat(r *http.Request, i HandlerInput[seedtypes.Stat, apitypes.Stat, apir
 		MinVal:             stat.MinVal,
 		MaxVal:             stat.MaxVal,
 		MaxVal2:            stat.MaxVal2,
-		ActivationSphere:   nameToNamedAPIResource(E.Spheres, stat.ActivationSphere, nil),
+		ActivationSphere:   NameToNamedAPIResource(E.Spheres, stat.ActivationSphere, nil),
 		Spheres:            rel.Spheres,
 		AutoAbilities:      rel.AutoAbilities,
 		PlayerAbilities:    rel.PlayerAbilities,

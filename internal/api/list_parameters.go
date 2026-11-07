@@ -20,7 +20,7 @@ func (l QueryParameterList) GetListParams() apiresource.ListParams {
 
 func getQueryParamList(r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) (QueryParameterList, error) {
 
-	queryParams := paramMapToSlice(queryLookup)
+	queryParams := ParamMapToSlice(queryLookup)
 	queryParams = getAllowedResources(endpoint, queryParams)
 	queryParams = getAllowedValuesFromTypes(queryParams)
 

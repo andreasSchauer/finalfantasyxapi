@@ -37,14 +37,14 @@ func getMasterItem(r *http.Request, i HandlerInput[seedtypes.MasterItem, apitype
 
 		response.Description = item.Description
 		response.Effect = item.Effect
-		response.TypedItem = nameToNamedAPIResource(E.Items, item.Name, nil)
+		response.TypedItem = NameToNamedAPIResource(E.Items, item.Name, nil)
 
 	case database.ItemTypeKeyItem:
 		keyItem, _ := lookup.GetResource(masterItem, lookup.L.KeyItems)
 
 		response.Description = keyItem.Description
 		response.Effect = keyItem.Effect
-		response.TypedItem = nameToNamedAPIResource(E.KeyItems, keyItem.Name, nil)
+		response.TypedItem = NameToNamedAPIResource(E.KeyItems, keyItem.Name, nil)
 	}
 
 	return response, nil

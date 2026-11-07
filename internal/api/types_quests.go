@@ -16,7 +16,7 @@ func convertQuestCompletion(qc seedtypes.QuestCompletion) apitypes.QuestCompleti
 
 func convertCompletionArea(cl seedtypes.CompletionArea) apitypes.CompletionArea {
 	return apitypes.CompletionArea{
-		Area:  locAreaToAreaAPIResource(E.Areas, cl.LocationArea),
+		Area:  LocAreaToAreaAPIResource(E.Areas, cl.LocationArea),
 		Notes: cl.Notes,
 	}
 }

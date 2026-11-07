@@ -15,15 +15,15 @@ func routerIDOnly[T seedtypes.Lookupable, R any, A apiresource.APIResource](w ht
 
 	switch len(segments) {
 	case 0:
-		i.HandleList(w, r)
+		HandleList(w, r, i)
 		return
 
 	case 1:
-		i.HandleIDOnly(w, r, segments)
+		HandleIDOnly(w, r, i, segments)
 		return
 
 	case 2:
-		i.HandleSubsections(w, r, segments)
+		HandleSubsections(w, r, i, segments)
 		return
 
 	default:
@@ -38,15 +38,15 @@ func routerNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](w ht
 
 	switch len(segments) {
 	case 0:
-		i.HandleList(w, r)
+		HandleList(w, r, i)
 		return
 
 	case 1:
-		i.HandleNameID(w, r, segments)
+		HandleNameID(w, r, i, segments)
 		return
 
 	case 2:
-		i.HandleSubsections(w, r, segments)
+		HandleSubsections(w, r, i, segments)
 		return
 
 	default:
@@ -61,15 +61,15 @@ func routerNameVersion[T seedtypes.Lookupable, R any, A apiresource.APIResource]
 
 	switch len(segments) {
 	case 0:
-		i.HandleList(w, r)
+		HandleList(w, r, i)
 		return
 
 	case 1:
-		i.HandleNameID(w, r, segments)
+		HandleNameID(w, r, i, segments)
 		return
 
 	case 2:
-		i.HandleSubOrNameVer(w, r, segments)
+		HandleSubOrNameVer(w, r, i, segments)
 		return
 
 	default:
@@ -83,11 +83,11 @@ func routerEnums(w http.ResponseWriter, r *http.Request, i HandlerInputEnums) {
 
 	switch len(segments) {
 	case 0:
-		i.HandleList(w, r)
+		i.HandleListEnums(w, r)
 		return
 
 	case 1:
-		i.HandleSingle(w, r, segments)
+		i.HandleSingleEnums(w, r, segments)
 		return
 
 	default:
@@ -101,11 +101,11 @@ func routerEndpoints(w http.ResponseWriter, r *http.Request, i HandlerInputEndpo
 
 	switch len(segments) {
 	case 0:
-		i.HandleList(w, r)
+		i.HandleListEndpoints(w, r)
 		return
 
 	case 1:
-		i.HandleSections(w, r, segments)
+		i.HandleSectionsEndpoints(w, r, segments)
 		return
 
 	default:

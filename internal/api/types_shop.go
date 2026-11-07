@@ -15,7 +15,7 @@ func convertSubShop(ss seedtypes.SubShop) apitypes.SubShop {
 
 func convertShopItem(si seedtypes.ShopItem) apitypes.ShopItem {
 	return apitypes.ShopItem{
-		Item:  nameToNamedAPIResource(E.Items, si.Name, nil),
+		Item:  NameToNamedAPIResource(E.Items, si.Name, nil),
 		Price: si.Price,
 	}
 }

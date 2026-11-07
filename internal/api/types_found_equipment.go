@@ -7,8 +7,8 @@ import (
 
 func convertFoundEquipment(fe seedtypes.TreasureEquipment) apitypes.FoundEquipment {
 	return apitypes.FoundEquipment{
-		EquipmentName:    nameToNamedAPIResource(E.Equipment, fe.Name, nil),
-		Abilities:        namesToNamedAPIResources(E.AutoAbilities, fe.Abilities),
+		EquipmentName:    NameToNamedAPIResource(E.Equipment, fe.Name, nil),
+		Abilities:        NamesToNamedAPIResources(E.AutoAbilities, fe.Abilities),
 		EmptySlotsAmount: fe.EmptySlotsAmount,
 	}
 }

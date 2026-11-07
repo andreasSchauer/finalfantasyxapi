@@ -25,7 +25,7 @@ func getRonsoRage(r *http.Request, i HandlerInput[seedtypes.RonsoRage, apitypes.
 		Name:        ronsoRage.Name,
 		Description: ronsoRage.Description,
 		Effect:      ronsoRage.Effect,
-		Overdrive:   nameToNamedAPIResource(E.Overdrives, ronsoRage.Name, nil),
+		Overdrive:   NameToNamedAPIResource(E.Overdrives, ronsoRage.Name, nil),
 		Monsters:    monsters,
 	}
 

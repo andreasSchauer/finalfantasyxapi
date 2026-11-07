@@ -84,7 +84,7 @@ func completeMonsterResponse(r *http.Request, mon apitypes.Monster) (apitypes.Mo
 
 func getMonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.ElementalResist {
 	elemResists := namesToElemResists(resists)
-	elemResistMap := getResourceMap(elemResists)
+	elemResistMap := GetResourceMap(elemResists)
 
 	for key := range lookup.L.ElementsID {
 		_, ok := elemResistMap[key]
@@ -94,7 +94,7 @@ func getMonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.Eleme
 		}
 	}
 
-	return resourceMapToSlice(elemResistMap)
+	return ResourceMapToSlice(elemResistMap)
 }
 
 func getMonsterPoisonDamage(mon apitypes.Monster) (*int32, error) {
@@ -126,14 +126,14 @@ func getMonsterAgilityParams(r *http.Request, mon apitypes.Monster) (*apitypes.A
 	}
 
 	agilityParams := apitypes.AgilityParams{
-		AgilityTier: idToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
+		AgilityTier: IDToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   tickspeed,
 		MinICV:      agilityTier.MonsterMinICV,
 		MaxICV:      agilityTier.MonsterMaxICV,
 	}
 
-	fs := nameToNamedAPIResource(E.AutoAbilities, "first strike", nil)
-	if resourcesContain(mon.AutoAbilities, fs) {
+	fs := NameToNamedAPIResource(E.AutoAbilities, "first strike", nil)
+	if ResourcesContain(mon.AutoAbilities, fs) {
 		agilityParams.MinICV, agilityParams.MaxICV = getEqualICVs(-1)
 	}
 
@@ -154,8 +154,8 @@ func appliedStateHaste(mon apitypes.Monster) bool {
 
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
 func getMonsterBribeChances(mon apitypes.Monster) ([]apitypes.BribeChance, error) {
-	bribe := nameToNamedAPIResource(E.StatusConditions, "bribe", nil)
-	if resourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
+	bribe := NameToNamedAPIResource(E.StatusConditions, "bribe", nil)
+	if ResourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
 		return nil, nil
 	}
 

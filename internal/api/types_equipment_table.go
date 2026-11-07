@@ -8,11 +8,11 @@ import (
 
 func convertAbilityPool(p seedtypes.AbilityPool) apitypes.AbilityPool {
 	return apitypes.AbilityPool{
-		AutoAbilities: namesToNamedAPIResources(E.AutoAbilities, p.AutoAbilities),
+		AutoAbilities: NamesToNamedAPIResources(E.AutoAbilities, p.AutoAbilities),
 		ReqAmount:     p.ReqAmount,
 	}
 }
 
 func convertEquipmentName(n seedtypes.EquipmentName) apiresource.NamedAPIResource {
-	return nameToNamedAPIResource(E.Equipment, n.Name, nil)
+	return NameToNamedAPIResource(E.Equipment, n.Name, nil)
 }

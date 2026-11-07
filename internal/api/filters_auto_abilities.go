@@ -13,7 +13,7 @@ import (
 func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AutoAbilities
 
-	charIDPtr, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
+	charIDPtr, err := NullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) (
 func getAutoAbilitiesByShop(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AutoAbilities
 
-	charIDPtr, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
+	charIDPtr, err := NullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

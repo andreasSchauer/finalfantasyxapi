@@ -19,15 +19,15 @@ func getSubquest(r *http.Request, i HandlerInput[seedtypes.Subquest, apitypes.Su
 	response := apitypes.Subquest{
 		ID:              subquest.ID,
 		Name:            subquest.Name,
-		UntypedQuest:    idToQuestAPIResource(E.Quests, subquest.Quest.ID),
-		ParentSidequest: idToQuestAPIResource(E.Sidequests, subquest.SidequestID),
+		UntypedQuest:    IDToQuestAPIResource(E.Quests, subquest.Quest.ID),
+		ParentSidequest: IDToQuestAPIResource(E.Sidequests, subquest.SidequestID),
 		Availability:    subquest.Availability,
 		IsRepeatable:    subquest.IsRepeatable,
 		Completion:      convertQuestCompletion(*subquest.Completion),
 	}
 
 	if response.ParentSidequest.Sidequest == "monster arena" {
-		response.ArenaCreation = namePtrToNamedAPIResPtr(E.ArenaCreations, &subquest.Name, nil)
+		response.ArenaCreation = NamePtrToNamedAPIResPtr(E.ArenaCreations, &subquest.Name, nil)
 	}
 
 	return response, nil

@@ -14,7 +14,7 @@ import (
 func getMixesByItem(r *http.Request, ctx context.Context, firstItemID int32) ([]int32, error) {
 	i := E.Mixes
 
-	secondItemIDPtr, err := nullID(r, E.Items, ts.QpnSecondItem, i.queryLookup)
+	secondItemIDPtr, err := NullID(r, E.Items, ts.QpnSecondItem, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

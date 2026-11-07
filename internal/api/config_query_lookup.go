@@ -76,7 +76,7 @@ func (Q *QueryLookup) Init() {
 	defaultParams := queryparam.GetDefaultParams()
 
 	Q.DefaultParamSlice = defaultParams
-	Q.DefaultParams = defaultParamSliceToMap(defaultParams)
+	Q.DefaultParams = DefaultParamSliceToMap(defaultParams)
 	AssignQueryParams(queryparam.GetLocationsParams(), &E.Locations, &Q.Locations)
 	AssignQueryParams(queryparam.GetSublocationsParams(), &E.Sublocations, &Q.Sublocations)
 	AssignQueryParams(queryparam.GetAreasParams(), &E.Areas, &Q.Areas)

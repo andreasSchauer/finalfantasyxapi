@@ -39,8 +39,8 @@ func convertMonsterEquipmentSlotsChance(chance seedtypes.EquipmentSlotsChance) a
 
 func convertEquipmentDrop(drop seedtypes.EquipmentDrop) apitypes.EquipmentDrop {
 	return apitypes.EquipmentDrop{
-		AutoAbility: nameToNamedAPIResource(E.AutoAbilities, drop.Ability, nil),
-		ForcedChars: namesToNamedAPIResources(E.Characters, drop.Characters),
+		AutoAbility: NameToNamedAPIResource(E.AutoAbilities, drop.Ability, nil),
+		ForcedChars: NamesToNamedAPIResources(E.Characters, drop.Characters),
 		IsForced:    drop.IsForced,
 		Probability: drop.Probability,
 	}

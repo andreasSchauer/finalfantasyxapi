@@ -25,7 +25,7 @@ func getKeyItem(r *http.Request, i HandlerInput[seedtypes.KeyItem, apitypes.KeyI
 	response := apitypes.KeyItem{
 		ID:              keyItem.ID,
 		Name:            keyItem.Name,
-		UntypedItem:     idToTypedAPIResource(E.AllItems, keyItem.MasterItem.ID),
+		UntypedItem:     IDToTypedAPIResource(E.AllItems, keyItem.MasterItem.ID),
 		Category:        keyItem.Category,
 		Description:     keyItem.Description,
 		Effect:          keyItem.Effect,

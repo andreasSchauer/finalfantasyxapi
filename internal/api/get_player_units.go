@@ -34,8 +34,8 @@ func getPlayerUnit(r *http.Request, i HandlerInput[seedtypes.PlayerUnit, apitype
 			ID:               unit.ID,
 			Name:             unit.Name,
 			Type:             unit.Type,
-			TypedUnit:        nameToNamedAPIResource(E.Characters, unit.Name, nil),
-			Area:             locAreaToAreaAPIResource(E.Areas, character.LocationArea),
+			TypedUnit:        NameToNamedAPIResource(E.Characters, unit.Name, nil),
+			Area:             LocAreaToAreaAPIResource(E.Areas, character.LocationArea),
 			CelestialWeapon:  rel.CelestialWeapon,
 			CharacterClasses: rel.CharacterClasses,
 		}
@@ -52,8 +52,8 @@ func getPlayerUnit(r *http.Request, i HandlerInput[seedtypes.PlayerUnit, apitype
 			ID:               unit.ID,
 			Name:             unit.Name,
 			Type:             unit.Type,
-			TypedUnit:        nameToNamedAPIResource(E.Aeons, unit.Name, nil),
-			Area:             locAreaToAreaAPIResource(E.Areas, aeon.LocationArea),
+			TypedUnit:        NameToNamedAPIResource(E.Aeons, unit.Name, nil),
+			Area:             LocAreaToAreaAPIResource(E.Areas, aeon.LocationArea),
 			CelestialWeapon:  rel.CelestialWeapon,
 			CharacterClasses: rel.CharacterClasses,
 		}

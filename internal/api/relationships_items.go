@@ -23,7 +23,7 @@ func getItemRelationships(r *http.Request, item seedtypes.Item) (apitypes.Item, 
 	}
 
 	if item.Category == string(database.ItemCategorySphere) {
-		sphereRes := nameToNamedAPIResource(E.Spheres, item.Name, nil)
+		sphereRes := NameToNamedAPIResource(E.Spheres, item.Name, nil)
 		rel.Sphere = &sphereRes
 	}
 

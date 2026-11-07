@@ -10,7 +10,7 @@ func convertBackgroundMusic(bm seedtypes.BackgroundMusic) apitypes.BackgroundMus
 	return apitypes.BackgroundMusic{
 		Condition:              bm.Condition,
 		ReplacesEncounterMusic: bm.ReplacesEncounterMusic,
-		Areas:                  locAreasToAreaAPIResources(E.Areas, bm.LocationAreas),
+		Areas:                  LocAreasToAreaAPIResources(E.Areas, bm.LocationAreas),
 	}
 }
 
@@ -18,14 +18,14 @@ func convertCue(cue seedtypes.Cue) apitypes.Cue {
 	var triggerAreaPtr *apiresource.AreaAPIResource
 
 	if cue.TriggerLocationArea != nil {
-		triggerArea := locAreaToAreaAPIResource(E.Areas, *cue.TriggerLocationArea)
+		triggerArea := LocAreaToAreaAPIResource(E.Areas, *cue.TriggerLocationArea)
 		triggerAreaPtr = &triggerArea
 	}
 
 	return apitypes.Cue{
 		SceneDescription:       cue.SceneDescription,
 		TriggerArea:            triggerAreaPtr,
-		IncludedAreas:          locAreasToAreaAPIResources(E.Areas, cue.IncludedAreas),
+		IncludedAreas:          LocAreasToAreaAPIResources(E.Areas, cue.IncludedAreas),
 		ReplacesEncounterMusic: cue.ReplacesEncounterMusic,
 		ReplacesBGMusic:        cue.ReplacesBGMusic,
 		EndTrigger:             cue.EndTrigger,

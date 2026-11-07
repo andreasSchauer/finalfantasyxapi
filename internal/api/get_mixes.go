@@ -29,7 +29,7 @@ func getMix(r *http.Request, i HandlerInput[seedtypes.Mix, apitypes.Mix, apireso
 		ID:           mix.ID,
 		Name:         mix.Name,
 		Category:     mix.Category,
-		Overdrive:    nameToNamedAPIResource(E.Overdrives, overdrive.Name, nil),
+		Overdrive:    NameToNamedAPIResource(E.Overdrives, overdrive.Name, nil),
 		Description:  overdrive.Description,
 		Effect:       overdrive.Effect,
 		Combinations: combinations,

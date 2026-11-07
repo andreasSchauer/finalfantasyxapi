@@ -15,7 +15,7 @@ func newStatusResist(res apiresource.NamedAPIResource, resistance int32) apitype
 
 func convertStatusResist(sr seedtypes.StatusResist) apitypes.StatusResist {
 	return apitypes.StatusResist{
-		StatusCondition: nameToNamedAPIResource(E.StatusConditions, sr.StatusCondition, nil),
+		StatusCondition: NameToNamedAPIResource(E.StatusConditions, sr.StatusCondition, nil),
 		Resistance:      sr.Resistance,
 	}
 }

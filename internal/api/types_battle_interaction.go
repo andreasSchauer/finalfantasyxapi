@@ -18,7 +18,7 @@ func convertBattleInteraction(bi seedtypes.BattleInteraction) apitypes.BattleInt
 		SpecialAction:             bi.SpecialAction,
 		InflictedDelay:            ah.ConvertObjPtr(bi.InflictedDelay, convertInflictedDelay),
 		InflictedStatusConditions: ah.ConvertObjSlice(bi.InflictedStatusConditions, convertInflictedStatus),
-		RemovedStatusConditions:   namesToNamedAPIResources(E.StatusConditions, bi.RemovedStatusConditions),
+		RemovedStatusConditions:   NamesToNamedAPIResources(E.StatusConditions, bi.RemovedStatusConditions),
 		CopiedStatusConditions:    ah.ConvertObjSlice(bi.CopiedStatusConditions, convertInflictedStatus),
 		StatChanges:               ah.ConvertObjSlice(bi.StatChanges, convertStatChange),
 		ModifierChanges:           ah.ConvertObjSlice(bi.ModifierChanges, convertModifierChange),
@@ -51,7 +51,7 @@ func convertDamage(d seedtypes.Damage) apitypes.Damage {
 		CriticalPlusVal: d.CriticalPlusVal,
 		IsPiercing:      d.IsPiercing,
 		BreakDmgLimit:   d.BreakDmgLimit,
-		Element:         namePtrToNamedAPIResPtr(E.Elements, d.Element, nil),
+		Element:         NamePtrToNamedAPIResPtr(E.Elements, d.Element, nil),
 	}
 }
 
@@ -80,7 +80,7 @@ func convertInflictedDelay(id seedtypes.InflictedDelay) apitypes.InflictedDelay 
 
 func convertInflictedStatus(status seedtypes.InflictedStatus) apitypes.InflictedStatus {
 	return apitypes.InflictedStatus{
-		StatusCondition: nameToNamedAPIResource(E.StatusConditions, status.StatusCondition, nil),
+		StatusCondition: NameToNamedAPIResource(E.StatusConditions, status.StatusCondition, nil),
 		Probability:     status.Probability,
 		DurationType:    status.DurationType,
 		Amount:          status.Amount,
@@ -89,7 +89,7 @@ func convertInflictedStatus(status seedtypes.InflictedStatus) apitypes.Inflicted
 
 func convertStatChange(sc seedtypes.StatChange) apitypes.StatChange {
 	return apitypes.StatChange{
-		Stat:            nameToNamedAPIResource(E.Stats, sc.StatName, nil),
+		Stat:            NameToNamedAPIResource(E.Stats, sc.StatName, nil),
 		CalculationType: sc.CalculationType,
 		Value:           sc.Value,
 	}
@@ -97,7 +97,7 @@ func convertStatChange(sc seedtypes.StatChange) apitypes.StatChange {
 
 func convertModifierChange(mc seedtypes.ModifierChange) apitypes.ModifierChange {
 	return apitypes.ModifierChange{
-		Modifier:        nameToNamedAPIResource(E.Modifiers, mc.ModifierName, nil),
+		Modifier:        NameToNamedAPIResource(E.Modifiers, mc.ModifierName, nil),
 		CalculationType: mc.CalculationType,
 		Value:           mc.Value,
 	}

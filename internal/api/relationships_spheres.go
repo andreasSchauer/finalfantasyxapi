@@ -22,7 +22,7 @@ func getSphereRelationships(r *http.Request, sphere seedtypes.Sphere) (apitypes.
 	}
 
 	rel := apitypes.Sphere{
-		Item:            nameToNamedAPIResource(E.Items, item.Name, nil),
+		Item:            NameToNamedAPIResource(E.Items, item.Name, nil),
 		Description:     item.Description,
 		Effect:          item.Effect,
 		Monsters:        itemRel.Monsters,

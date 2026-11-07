@@ -30,7 +30,7 @@ func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) 
 		return nil, err
 	}
 
-	charID, err := nullID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
+	charID, err := NullID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

@@ -27,8 +27,8 @@ func getSubmenu(r *http.Request, i HandlerInput[seedtypes.Submenu, apitypes.Subm
 		Name:        submenu.Name,
 		Description: submenu.Description,
 		Effect:      submenu.Effect,
-		Topmenu:     namePtrToNamedAPIResPtr(E.Topmenus, submenu.Topmenu, nil),
-		Users:       namesToNamedAPIResources(E.CharacterClasses, submenu.Users),
+		Topmenu:     NamePtrToNamedAPIResPtr(E.Topmenus, submenu.Topmenu, nil),
+		Users:       NamesToNamedAPIResources(E.CharacterClasses, submenu.Users),
 		OpenedBy:    rel.OpenedBy,
 		Abilities:   rel.Abilities,
 	}

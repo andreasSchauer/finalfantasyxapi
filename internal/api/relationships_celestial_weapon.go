@@ -16,9 +16,9 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 	equipment, _ := lookup.GetResource(cw, lookup.L.EquipmentNames)
 
 	rel := apitypes.CelestialWeapon{
-		Equipment: nameToNamedAPIResource(E.Equipment, equipment.Name, nil),
-		Crest:     nameToNamedAPIResource(E.KeyItems, crest.Name, nil),
-		Sigil:     nameToNamedAPIResource(E.KeyItems, sigil.Name, nil),
+		Equipment: NameToNamedAPIResource(E.Equipment, equipment.Name, nil),
+		Crest:     NameToNamedAPIResource(E.KeyItems, crest.Name, nil),
+		Sigil:     NameToNamedAPIResource(E.KeyItems, sigil.Name, nil),
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -28,7 +28,7 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 			return err
 		}
 		table, _ := lookup.GetResourceByID(tables[0].ID, lookup.L.EquipmentTablesID)
-		rel.AutoAbilities = namesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities)
+		rel.AutoAbilities = NamesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities)
 		return nil
 	})
 

@@ -8,10 +8,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i HandlerInput[T, R, A]) HandleSubsection(w http.ResponseWriter, r *http.Request, segments []string) {
+func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i HandlerInput[T, R, A], segments []string) {
 	idStr := segments[0]
 	sectionName := segments[1]
 
@@ -22,7 +23,7 @@ func (i HandlerInput[T, R, A]) HandleSubsection(w http.ResponseWriter, r *http.R
 
 	subsection, ok := i.subsections[ts.SectionName(sectionName)]
 	if !ok {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s", sectionName, i.Endpoint, formatSectionNames(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s", sectionName, i.Endpoint, FormatSectionNames(i.subsections)), nil)
 		return
 	}
 
@@ -61,21 +62,21 @@ func (i HandlerInput[T, R, A]) HandleSubsection(w http.ResponseWriter, r *http.R
 	respondWithJSON(w, http.StatusOK, list)
 }
 
-func (i HandlerInput[T, R, A]) HandleParameters(w http.ResponseWriter, r *http.Request) {
+func HandleParameters[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i HandlerInput[T, R, A]) {
 	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
 }
 
-func (i HandlerInputEnums) HandleParameters(w http.ResponseWriter, r *http.Request) {
+func HandleParametersEnums(w http.ResponseWriter, r *http.Request, i HandlerInputEnums) {
 	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
 }
 
-func (i HandlerInputEndpoints) HandleParameters(w http.ResponseWriter, r *http.Request) {
+func HandleParametersEndpoints(w http.ResponseWriter, r *http.Request, i HandlerInputEndpoints) {
 	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
 }
 
 func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) {
 	segment := string(ts.SnParameters)
-	err := verifyQueryParamsAltList(r, endpoint, queryLookup, &segment)
+	err := VerifyQueryParamsAltList(r, endpoint, queryLookup, &segment)
 	if HandleHTTPError(w, err) {
 		return
 	}
@@ -89,9 +90,9 @@ func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
-func (i HandlerInput[T, R, A]) HandleSections(w http.ResponseWriter, r *http.Request) {
+func HandleSections[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i HandlerInput[T, R, A]) {
 	segment := string(ts.SnSections)
-	err := verifyQueryParamsAltList(r, i.Endpoint, i.queryLookup, &segment)
+	err := VerifyQueryParamsAltList(r, i.Endpoint, i.queryLookup, &segment)
 	if HandleHTTPError(w, err) {
 		return
 	}
@@ -105,7 +106,7 @@ func (i HandlerInput[T, R, A]) HandleSections(w http.ResponseWriter, r *http.Req
 	respondWithJSON(w, http.StatusOK, sectionList)
 }
 
-func (i HandlerInput[T, R, A]) HandleSimple(w http.ResponseWriter, r *http.Request) {
+func HandleSimple[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i HandlerInput[T, R, A]) {
 	segment := string(ts.SnSimple)
 
 	_, ok := i.subsections[ts.SnSimple]
@@ -114,12 +115,12 @@ func (i HandlerInput[T, R, A]) HandleSimple(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	ids, err := i.HandleIDsQuery(r, &segment)
+	ids, err := HandleIDsQuery(r, i, &segment)
 	if HandleHTTPError(w, err) {
 		return
 	}
 
-	resources, err := createSimpleResources(r, ids, i.subsections[ts.SectionName(segment)])
+	resources, err := CreateSimpleResources(r, ids, i.subsections[ts.SectionName(segment)])
 	if HandleHTTPError(w, err) {
 		return
 	}
@@ -137,8 +138,8 @@ func (i HandlerInput[T, R, A]) HandleSimple(w http.ResponseWriter, r *http.Reque
 	respondWithJSON(w, http.StatusOK, subResList)
 }
 
-func (i HandlerInput[T, R, A]) HandleIDsQuery(r *http.Request, segment *string) ([]int32, error) {
-	err := verifyQueryParams[any](r, i.Endpoint, i.queryLookup, nil, segment)
+func HandleIDsQuery[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i HandlerInput[T, R, A], segment *string) ([]int32, error) {
+	err := VerifyQueryParams[any](r, i.Endpoint, i.queryLookup, nil, segment)
 	if err != nil {
 		return nil, err
 	}

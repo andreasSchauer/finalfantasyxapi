@@ -25,7 +25,7 @@ func getSublocation(r *http.Request, i HandlerInput[seedtypes.Sublocation, apity
 	response := apitypes.Sublocation{
 		ID:                    sublocation.ID,
 		Name:                  sublocation.Name,
-		ParentLocation:        nameToNamedAPIResource(E.Locations, sublocation.Location, nil),
+		ParentLocation:        NameToNamedAPIResource(E.Locations, sublocation.Location, nil),
 		Availability:          sublocation.Availability,
 		ConnectedSublocations: rel.ConnectedSublocations,
 		Areas:                 rel.Areas,

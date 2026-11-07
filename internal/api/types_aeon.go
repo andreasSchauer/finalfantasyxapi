@@ -7,7 +7,7 @@ import (
 
 func convertAeonEquipment(ae seedtypes.AeonEquipment) apitypes.AeonEquipment {
 	return apitypes.AeonEquipment{
-		AutoAbility:     nameToNamedAPIResource(E.AutoAbilities, ae.AutoAbility, nil),
+		AutoAbility:     NameToNamedAPIResource(E.AutoAbilities, ae.AutoAbility, nil),
 		CelestialWeapon: ae.CelestialWeapon,
 	}
 }

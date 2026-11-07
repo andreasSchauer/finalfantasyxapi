@@ -25,9 +25,9 @@ func getOverdriveCommand(r *http.Request, i HandlerInput[seedtypes.OverdriveComm
 		Name:        command.Name,
 		Description: command.Description,
 		Rank:        command.Rank,
-		User:        nameToNamedAPIResource(E.CharacterClasses, command.User, nil),
-		Topmenu:     namePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
-		OpenSubmenu: nameToNamedAPIResource(E.Submenus, command.OpenSubmenu, nil),
+		User:        NameToNamedAPIResource(E.CharacterClasses, command.User, nil),
+		Topmenu:     NamePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
+		OpenSubmenu: NameToNamedAPIResource(E.Submenus, command.OpenSubmenu, nil),
 		Overdrives:  overdrives,
 	}
 

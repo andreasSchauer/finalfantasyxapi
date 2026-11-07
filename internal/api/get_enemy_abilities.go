@@ -30,7 +30,7 @@ func getEnemyAbility(r *http.Request, i HandlerInput[seedtypes.EnemyAbility, api
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		UntypedAbility:     idToTypedAPIResource(E.Abilities, ability.Ability.ID),
+		UntypedAbility:     IDToTypedAPIResource(E.Abilities, ability.Ability.ID),
 		Effect:             ability.Effect,
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,

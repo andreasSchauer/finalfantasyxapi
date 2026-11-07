@@ -22,8 +22,8 @@ func getFMV(r *http.Request, i HandlerInput[seedtypes.FMV, apitypes.FMV, apireso
 		Name:                fmv.Name,
 		Translation:         fmv.Translation,
 		CutsceneDescription: fmv.CutsceneDescription,
-		Area:                locAreaToAreaAPIResource(E.Areas, fmv.LocationArea),
-		Song:                namePtrToNamedAPIResPtr(E.Songs, fmv.SongName, nil),
+		Area:                LocAreaToAreaAPIResource(E.Areas, fmv.LocationArea),
+		Song:                NamePtrToNamedAPIResPtr(E.Songs, fmv.SongName, nil),
 	}
 
 	return response, nil

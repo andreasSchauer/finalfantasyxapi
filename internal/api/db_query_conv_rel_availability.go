@@ -7,7 +7,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type RelAvailabilityDBQuery func(ctx context.Context, p RelAvlParams) ([]int32, error)
 
 func getItemSourceIDs(sourceType ViewSourceType) RelAvailabilityDBQuery {
 	return func(ctx context.Context, p RelAvlParams) ([]int32, error) {

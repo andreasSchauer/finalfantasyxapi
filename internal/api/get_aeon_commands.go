@@ -29,9 +29,9 @@ func getAeonCommand(r *http.Request, i HandlerInput[seedtypes.AeonCommand, apity
 		Description:       command.Description,
 		Effect:            command.Effect,
 		Cursor:            command.Cursor,
-		User:              nameToNamedAPIResource(E.CharacterClasses, userName, nil),
-		Topmenu:           namePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
-		OpenSubmenu:       namePtrToNamedAPIResPtr(E.Submenus, command.OpenSubmenu, nil),
+		User:              NameToNamedAPIResource(E.CharacterClasses, userName, nil),
+		Topmenu:           NamePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
+		OpenSubmenu:       NamePtrToNamedAPIResPtr(E.Submenus, command.OpenSubmenu, nil),
 		PossibleAbilities: ah.ConvertObjSlice(command.PossibleAbilities, convertPossibleAbilityList),
 	}
 

@@ -76,18 +76,3 @@ func abilityRefString(ref seedtypes.AbilityReference) string {
 	ability, _ := lookup.GetResource(ref, lookup.L.Abilities)
 	return h.NameToString(ability.Name, ability.Version, ability.Specification)
 }
-
-func formatSectionNames(itemMap map[ts.SectionName]Subsection) string {
-	keys := []string{}
-
-	for key := range itemMap {
-		keyFormatted := fmt.Sprintf("'%s'", key)
-		keys = append(keys, keyFormatted)
-	}
-
-	slices.SortStableFunc(keys, func(a, b string) int {
-		return cmp.Compare(a, b)
-	})
-
-	return strings.Join(keys, ", ")
-}

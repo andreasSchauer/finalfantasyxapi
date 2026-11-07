@@ -10,7 +10,7 @@ import (
 )
 
 func AssignDefaultParams(endpoint ts.EndpointName, eLookup, qLookup *map[ts.QueryParamName]queryparam.QueryParam) {
-	paramMap := paramSliceToMap(Q.DefaultParamSlice, endpoint)
+	paramMap := ParamSliceToMap(Q.DefaultParamSlice, endpoint)
 	*eLookup = paramMap
 	*qLookup = paramMap
 }
@@ -47,7 +47,7 @@ func completeQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 		params = append(params, queryParamFlip)
 	}
 
-	return paramSliceToMap(params, i.Endpoint)
+	return ParamSliceToMap(params, i.Endpoint)
 }
 
 func hasSimpleView(sections map[ts.SectionName]Subsection) bool {

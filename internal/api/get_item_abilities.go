@@ -25,15 +25,15 @@ func getItemAbility(r *http.Request, i HandlerInput[seedtypes.ItemAbility, apity
 	response := apitypes.ItemAbility{
 		ID:                 ability.ID,
 		Name:               ability.Name,
-		Item:               idToNamedAPIResource(E.Items, id),
-		UntypedAbility:     idToTypedAPIResource(E.Abilities, ability.Ability.ID),
+		Item:               IDToNamedAPIResource(E.Items, id),
+		UntypedAbility:     IDToTypedAPIResource(E.Abilities, ability.Ability.ID),
 		Description:        item.Description,
 		Effect:             item.Effect,
 		Category:           item.Category,
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
-		RelatedStats:       namesToNamedAPIResources(E.Stats, item.RelatedStats),
+		RelatedStats:       NamesToNamedAPIResources(E.Stats, item.RelatedStats),
 		Cursor:             item.Cursor,
 		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}

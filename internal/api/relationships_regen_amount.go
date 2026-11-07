@@ -3,8 +3,8 @@ package api
 import "github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 
 func calcRegenAmountsMonster(mon apitypes.Monster) []apitypes.RegenAmount {
-	regenRes := nameToNamedAPIResource(E.StatusConditions, "regen", nil)
-	if resourcesContain(mon.StatusImmunities, regenRes) {
+	regenRes := NameToNamedAPIResource(E.StatusConditions, "regen", nil)
+	if ResourcesContain(mon.StatusImmunities, regenRes) {
 		return nil
 	}
 

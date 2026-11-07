@@ -7,7 +7,7 @@ import (
 
 func convertEncounterArea(ea seedtypes.EncounterArea) apitypes.EncounterArea {
 	return apitypes.EncounterArea{
-		Area:          locAreaToAreaAPIResource(E.Areas, ea.LocationArea),
+		Area:          LocAreaToAreaAPIResource(E.Areas, ea.LocationArea),
 		Specification: ea.Specification,
 		Availability:  ea.Availability,
 	}
@@ -15,16 +15,16 @@ func convertEncounterArea(ea seedtypes.EncounterArea) apitypes.EncounterArea {
 
 func convertFormationTriggerCommand(tc seedtypes.FormationTriggerCommand) apitypes.FormationTriggerCommand {
 	return apitypes.FormationTriggerCommand{
-		Ability:   nameToNamedAPIResource(E.TriggerCommands, tc.Name, tc.Version),
+		Ability:   NameToNamedAPIResource(E.TriggerCommands, tc.Name, tc.Version),
 		Condition: tc.Condition,
 		UseAmount: tc.UseAmount,
-		Users:     namesToNamedAPIResources(E.CharacterClasses, tc.Users),
+		Users:     NamesToNamedAPIResources(E.CharacterClasses, tc.Users),
 	}
 }
 
 func convertFormationBossSong(bossMusic seedtypes.FormationBossSong) apitypes.FormationBossSong {
 	return apitypes.FormationBossSong{
-		Song:             nameToNamedAPIResource(E.Songs, bossMusic.Song, nil),
+		Song:             NameToNamedAPIResource(E.Songs, bossMusic.Song, nil),
 		CelebrateVictory: bossMusic.CelebrateVictory,
 	}
 }

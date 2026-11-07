@@ -23,7 +23,7 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 	var table seedtypes.EquipmentTable
 
 	rel := apitypes.EquipmentName{
-		Character: nameToNamedAPIResource(E.Characters, equipment.CharacterName, nil),
+		Character: NameToNamedAPIResource(E.Characters, equipment.CharacterName, nil),
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -55,7 +55,7 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 		rel.Classification = table.Classification
 		rel.Priority = table.Priority
 		rel.RequiredSlots = table.RequiredSlots
-		rel.RequiredAutoAbilities = namesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities)
+		rel.RequiredAutoAbilities = NamesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities)
 		rel.SelectableAutoAbilities = ah.ConvertObjSlice(table.SelectableAutoAbilities, convertAbilityPool)
 		return nil
 	})

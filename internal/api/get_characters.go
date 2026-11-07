@@ -24,8 +24,8 @@ func getCharacter(r *http.Request, i HandlerInput[seedtypes.Character, apitypes.
 	response := apitypes.Character{
 		ID:                     character.ID,
 		Name:                   character.Name,
-		UntypedUnit:            idToTypedAPIResource(E.PlayerUnits, character.PlayerUnit.ID),
-		Area:                   locAreaToAreaAPIResource(E.Areas, character.LocationArea),
+		UntypedUnit:            IDToTypedAPIResource(E.PlayerUnits, character.PlayerUnit.ID),
+		Area:                   LocAreaToAreaAPIResource(E.Areas, character.LocationArea),
 		IsStoryBased:           character.IsStoryBased,
 		CanFightUnderwater:     character.CanFightUnderwater,
 		PhysAtkRange:           character.PhysAtkRange,

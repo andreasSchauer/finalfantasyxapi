@@ -21,7 +21,7 @@ func getTreasure(r *http.Request, i HandlerInput[seedtypes.Treasure, apitypes.Tr
 
 	response := apitypes.Treasure{
 		ID:              treasure.ID,
-		Area:            idToAreaAPIResource(E.Areas, treasure.AreaID),
+		Area:            IDToAreaAPIResource(E.Areas, treasure.AreaID),
 		Availability:    treasure.Availability,
 		IsAnimaTreasure: treasure.IsAnimaTreasure,
 		Notes:           treasure.Notes,

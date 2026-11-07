@@ -39,7 +39,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource
 	reqs := []string{string(srcType)}
 	excls := []string{}
 
-	monID, err := nullID(r, E.Monsters, ts.QpnMonster, i.queryLookup)
+	monID, err := NullID(r, E.Monsters, ts.QpnMonster, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -47,7 +47,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource
 		reqs = append(reqs, "monster-single")
 	}
 
-	itemID, err := nullID(r, E.Items, ts.QpnItem, i.queryLookup)
+	itemID, err := NullID(r, E.Items, ts.QpnItem, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -55,7 +55,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource
 		reqs = append(reqs, string(ViewSourceTypeItem))
 	}
 
-	keyItemID, err := nullID(r, E.KeyItems, ts.QpnKeyItem, i.queryLookup)
+	keyItemID, err := NullID(r, E.KeyItems, ts.QpnKeyItem, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -63,7 +63,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource
 		reqs = append(reqs, string(ViewSourceTypeKeyItem))
 	}
 
-	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := NullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return locBasedSources{}, err
 	}
@@ -115,7 +115,7 @@ func getShopSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r 
 	reqs := []string{}
 	excls := []string{}
 
-	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := NullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}
@@ -133,7 +133,7 @@ func getShopSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r 
 		reqs = append(reqs, "equip-filter")
 	}
 
-	charID, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
+	charID, err := NullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return shopSources{}, err
 	}

@@ -15,7 +15,7 @@ import (
 func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
 	i := E.Shops
 
-	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := NullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -25,7 +25,7 @@ func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error)
 		return nil, err
 	}
 
-	charID, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
+	charID, err := NullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error)
 func filterTreasuresEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
 	i := E.Treasures
 
-	autoAbilityID, err := nullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := NullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func filterTreasuresEquipment(r *http.Request, ctx context.Context) ([]int32, er
 		return nil, err
 	}
 
-	charID, err := nullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
+	charID, err := NullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

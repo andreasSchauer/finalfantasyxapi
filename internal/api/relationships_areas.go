@@ -92,7 +92,7 @@ func getAreaConnectedAreas(area seedtypes.Area) ([]apitypes.AreaConnection, erro
 
 	for _, connArea := range area.ConnectedAreas {
 		connection := apitypes.AreaConnection{
-			Area:           locAreaToAreaAPIResource(i, connArea.LocationArea),
+			Area:           LocAreaToAreaAPIResource(i, connArea.LocationArea),
 			ConnectionType: connArea.ConnectionType,
 			IsStoryBased:   connArea.IsStoryBased,
 			Notes:          connArea.Notes,

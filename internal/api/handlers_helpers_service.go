@@ -6,7 +6,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-// most if not all of these should be methods
+// most if not all of these should be methods (of router?)
 
 func servicePost[P ServiceParams, R ServiceResponse](r *http.Request, i HandlerInputService[P, R]) (R, error) {
 	var zero R

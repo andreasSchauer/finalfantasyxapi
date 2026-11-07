@@ -7,7 +7,7 @@ import (
 
 func convertMonsterAbility(ability seedtypes.MonsterAbility) apitypes.MonsterAbility {
 	return apitypes.MonsterAbility{
-		Ability:  keyToTypedAPIResource(E.Abilities, ability.AbilityReference),
+		Ability:  KeyToTypedAPIResource(E.Abilities, ability.AbilityReference),
 		IsForced: ability.IsForced,
 		IsUnused: ability.IsUnused,
 	}

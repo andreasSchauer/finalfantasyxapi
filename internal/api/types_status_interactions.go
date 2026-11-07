@@ -67,27 +67,27 @@ func populateStatusInfliction(abilities []apiresource.TypedAPIResource) apitypes
 		switch ability.Type {
 		case string(database.AbilityTypePlayerAbility):
 			playerAbility, _ := lookup.GetResource(obj, lookup.L.PlayerAbilities)
-			res := nameToNamedAPIResource(E.PlayerAbilities, playerAbility.Name, playerAbility.Version)
+			res := NameToNamedAPIResource(E.PlayerAbilities, playerAbility.Name, playerAbility.Version)
 			infliction.PlayerAbilities = append(infliction.PlayerAbilities, res)
 
 		case string(database.AbilityTypeOverdriveAbility):
 			overdriveAbility, _ := lookup.GetResource(obj, lookup.L.OverdriveAbilities)
-			res := nameToNamedAPIResource(E.OverdriveAbilities, overdriveAbility.Name, overdriveAbility.Version)
+			res := NameToNamedAPIResource(E.OverdriveAbilities, overdriveAbility.Name, overdriveAbility.Version)
 			infliction.OverdriveAbilities = append(infliction.OverdriveAbilities, res)
 
 		case string(database.AbilityTypeItemAbility):
 			itemAbility, _ := lookup.GetResource(ability.Name, lookup.L.ItemAbilities)
-			res := nameToNamedAPIResource(E.ItemAbilities, itemAbility.Name, itemAbility.Version)
+			res := NameToNamedAPIResource(E.ItemAbilities, itemAbility.Name, itemAbility.Version)
 			infliction.ItemAbilities = append(infliction.ItemAbilities, res)
 
 		case string(database.AbilityTypeMiscAbility):
 			miscAbility, _ := lookup.GetResource(obj, lookup.L.MiscAbilities)
-			res := nameToNamedAPIResource(E.MiscAbilities, miscAbility.Name, miscAbility.Version)
+			res := NameToNamedAPIResource(E.MiscAbilities, miscAbility.Name, miscAbility.Version)
 			infliction.MiscAbilities = append(infliction.MiscAbilities, res)
 
 		case string(database.AbilityTypeEnemyAbility):
 			enemyAbility, _ := lookup.GetResource(obj, lookup.L.EnemyAbilities)
-			res := nameToNamedAPIResource(E.EnemyAbilities, enemyAbility.Name, enemyAbility.Version)
+			res := NameToNamedAPIResource(E.EnemyAbilities, enemyAbility.Name, enemyAbility.Version)
 			infliction.EnemyAbilities = append(infliction.EnemyAbilities, res)
 		}
 	}
@@ -111,22 +111,22 @@ func populateStatusRemoval(abilities []apiresource.TypedAPIResource) apitypes.St
 		switch ability.Type {
 		case string(database.AbilityTypePlayerAbility):
 			playerAbility, _ := lookup.GetResource(obj, lookup.L.PlayerAbilities)
-			res := nameToNamedAPIResource(E.PlayerAbilities, playerAbility.Name, playerAbility.Version)
+			res := NameToNamedAPIResource(E.PlayerAbilities, playerAbility.Name, playerAbility.Version)
 			removal.PlayerAbilities = append(removal.PlayerAbilities, res)
 
 		case string(database.AbilityTypeOverdriveAbility):
 			overdriveAbility, _ := lookup.GetResource(obj, lookup.L.OverdriveAbilities)
-			res := nameToNamedAPIResource(E.OverdriveAbilities, overdriveAbility.Name, overdriveAbility.Version)
+			res := NameToNamedAPIResource(E.OverdriveAbilities, overdriveAbility.Name, overdriveAbility.Version)
 			removal.OverdriveAbilities = append(removal.OverdriveAbilities, res)
 
 		case string(database.AbilityTypeItemAbility):
 			itemAbility, _ := lookup.GetResource(ability.Name, lookup.L.ItemAbilities)
-			res := nameToNamedAPIResource(E.ItemAbilities, itemAbility.Name, itemAbility.Version)
+			res := NameToNamedAPIResource(E.ItemAbilities, itemAbility.Name, itemAbility.Version)
 			removal.ItemAbilities = append(removal.ItemAbilities, res)
 
 		case string(database.AbilityTypeEnemyAbility):
 			enemyAbility, _ := lookup.GetResource(obj, lookup.L.EnemyAbilities)
-			res := nameToNamedAPIResource(E.EnemyAbilities, enemyAbility.Name, enemyAbility.Version)
+			res := NameToNamedAPIResource(E.EnemyAbilities, enemyAbility.Name, enemyAbility.Version)
 			removal.EnemyAbilities = append(removal.EnemyAbilities, res)
 		}
 	}
