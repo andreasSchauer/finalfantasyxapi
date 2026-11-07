@@ -6,12 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSublocation(r *http.Request, i HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource], id int32) (apitypes.Sublocation, error) {
+func getSublocation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource], id int32) (apitypes.Sublocation, error) {
 	sublocation, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Sublocation{}, err
@@ -25,7 +26,7 @@ func getSublocation(r *http.Request, i HandlerInput[seedtypes.Sublocation, apity
 	response := apitypes.Sublocation{
 		ID:                    sublocation.ID,
 		Name:                  sublocation.Name,
-		ParentLocation:        NameToNamedAPIResource(E.Locations, sublocation.Location, nil),
+		ParentLocation:        handlerinput.NameToNamedAPIResource(E.Locations, sublocation.Location, nil),
 		Availability:          sublocation.Availability,
 		ConnectedSublocations: rel.ConnectedSublocations,
 		Areas:                 rel.Areas,
@@ -35,13 +36,13 @@ func getSublocation(r *http.Request, i HandlerInput[seedtypes.Sublocation, apity
 	return response, nil
 }
 
-func retrieveSublocations(r *http.Request, i HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveSublocations(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationSublocationIDs),
 		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetSublocationIDsWithMonster),
 		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getSublocationsByItem),

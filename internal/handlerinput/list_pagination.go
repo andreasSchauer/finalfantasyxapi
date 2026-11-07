@@ -14,9 +14,9 @@ import (
 )
 
 func CreatePaginatedList[T any](r *http.Request, items []T) (apiresource.ListParams, []T, error) {
-	defaultParams := queryparam.GetDefaultParams()
-	queryParamOffset := queryparam.GetQueryParam(defaultParams, ts.QpnOffset)
-	queryParamLimit := queryparam.GetQueryParam(defaultParams, ts.QpnLimit)
+	defaultParams := queryparam.GetDefaultParamMap()
+	queryParamOffset := defaultParams[ts.QpnOffset]
+	queryParamLimit := defaultParams[ts.QpnLimit]
 
 	offset, err := queryParamOffset.ParseInt(r)
 	if err != nil {

@@ -10,7 +10,7 @@ import (
 )
 
 func parseLimitQuery(r *http.Request) (int, error) {
-	queryParamLimit := GetQueryParam(GetDefaultParams(), ts.QpnLimit)
+	queryParamLimit := GetDefaultParamMap()[ts.QpnLimit]
 	query, err := queryParamLimit.CheckEmpty(r)
 	if err != nil {
 		return 0, err
@@ -31,7 +31,7 @@ func parseLimitQuery(r *http.Request) (int, error) {
 }
 
 func getLimitMax() string {
-	queryParamLimit := GetQueryParam(GetDefaultParams(), ts.QpnLimit)
+	queryParamLimit := GetDefaultParamMap()[ts.QpnLimit]
 
 	for _, input := range queryParamLimit.SpecialInputs {
 		if input.Key == ts.QsvMax {

@@ -7,11 +7,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAeon(r *http.Request, i HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource], id int32) (apitypes.Aeon, error) {
+func getAeon(r *http.Request, i handlerinput.HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource], id int32) (apitypes.Aeon, error) {
 	aeon, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Aeon{}, err
@@ -25,8 +26,8 @@ func getAeon(r *http.Request, i HandlerInput[seedtypes.Aeon, apitypes.Aeon, apir
 	response := apitypes.Aeon{
 		ID:                     aeon.ID,
 		Name:                   aeon.Name,
-		UntypedUnit:            IDToTypedAPIResource(E.PlayerUnits, aeon.PlayerUnit.ID),
-		Area:                   LocAreaToAreaAPIResource(E.Areas, aeon.LocationArea),
+		UntypedUnit:            handlerinput.IDToTypedAPIResource(E.PlayerUnits, aeon.PlayerUnit.ID),
+		Area:                   handlerinput.LocAreaToAreaAPIResource(E.Areas, aeon.LocationArea),
 		UnlockCondition:        aeon.UnlockCondition,
 		IsOptional:             aeon.IsOptional,
 		BattlesToRegenerate:    aeon.BattlesToRegenerate,
@@ -59,13 +60,13 @@ func getAeon(r *http.Request, i HandlerInput[seedtypes.Aeon, apitypes.Aeon, apir
 	return response, nil
 }
 
-func retrieveAeons(r *http.Request, i HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveAeons(r *http.Request, i handlerinput.HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryBool(r, ids, ts.QpnOptional, config.Cfg.DB.GetAeonIDsOptional),
 	})
 }

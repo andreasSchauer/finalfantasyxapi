@@ -3,6 +3,7 @@ package api
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -16,7 +17,7 @@ func convertQuestCompletion(qc seedtypes.QuestCompletion) apitypes.QuestCompleti
 
 func convertCompletionArea(cl seedtypes.CompletionArea) apitypes.CompletionArea {
 	return apitypes.CompletionArea{
-		Area:  LocAreaToAreaAPIResource(E.Areas, cl.LocationArea),
+		Area:  handlerinput.LocAreaToAreaAPIResource(E.Areas, cl.LocationArea),
 		Notes: cl.Notes,
 	}
 }

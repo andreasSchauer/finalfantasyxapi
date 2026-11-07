@@ -9,6 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
@@ -31,7 +32,7 @@ type biReplacement struct {
 	DamageFormula  *string
 }
 
-func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i HandlerInput[T, R, A], ability apitypes.UserAbility, queryName ts.QueryParamName) ([]apitypes.BattleInteraction, error) {
+func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.HandlerInput[T, R, A], ability apitypes.UserAbility, queryName ts.QueryParamName) ([]apitypes.BattleInteraction, error) {
 	repl, err := getUnitRepl(r, i, queryName)
 	if errs.QueryIsEmpty(err) {
 		return ability.GetBattleInteractions(), nil
@@ -50,12 +51,12 @@ func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http
 	return battleInteractions, nil
 }
 
-func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i HandlerInput[T, R, A], queryName ts.QueryParamName) (unitRepl, error) {
-	queryParamUser := i.queryLookup[queryName]
-	queryParamBomb := i.queryLookup[ts.QpnBombWpn]
-	queryParamCelestialWpn := i.queryLookup[ts.QpnCelestialWeapon]
+func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.HandlerInput[T, R, A], queryName ts.QueryParamName) (unitRepl, error) {
+	queryParamUser := i.QueryLookup[queryName]
+	queryParamBomb := i.QueryLookup[ts.QpnBombWpn]
+	queryParamCelestialWpn := i.QueryLookup[ts.QpnCelestialWeapon]
 
-	unitID, err := queryParamUser.ParseNameID(r, E.PlayerUnits.resTypeSingle, E.PlayerUnits.objLookup)
+	unitID, err := queryParamUser.ParseNameID(r, E.PlayerUnits.ResTypeSingle, E.PlayerUnits.ObjLookup)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -148,7 +149,7 @@ func populateReplAeon(repl unitRepl, queryParamUser queryparam.QueryParam) (unit
 
 func verifyAbilityUsage(ability apitypes.UserAbility, repl unitRepl, queryName ts.QueryParamName) error {
 	if !ability.CanUseAbility(repl.unit.Name) {
-		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, E.PlayerUnits.resTypeSingle, repl.unit.Name, ability), nil)
+		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, E.PlayerUnits.ResTypeSingle, repl.unit.Name, ability), nil)
 	}
 
 	return nil

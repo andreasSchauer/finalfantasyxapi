@@ -48,7 +48,3 @@ type SpecialQueryInput struct {
 	Key ts.QuerySpecialVal `json:"key"`
 	Val int                `json:"value"`
 }
-
-func (q QueryParam) IsZero() bool {
-	return q.ID == 0 && q.Name == ""
-}

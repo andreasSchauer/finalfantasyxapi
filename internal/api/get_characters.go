@@ -6,11 +6,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getCharacter(r *http.Request, i HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource], id int32) (apitypes.Character, error) {
+func getCharacter(r *http.Request, i handlerinput.HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource], id int32) (apitypes.Character, error) {
 	character, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Character{}, err
@@ -24,8 +25,8 @@ func getCharacter(r *http.Request, i HandlerInput[seedtypes.Character, apitypes.
 	response := apitypes.Character{
 		ID:                     character.ID,
 		Name:                   character.Name,
-		UntypedUnit:            IDToTypedAPIResource(E.PlayerUnits, character.PlayerUnit.ID),
-		Area:                   LocAreaToAreaAPIResource(E.Areas, character.LocationArea),
+		UntypedUnit:            handlerinput.IDToTypedAPIResource(E.PlayerUnits, character.PlayerUnit.ID),
+		Area:                   handlerinput.LocAreaToAreaAPIResource(E.Areas, character.LocationArea),
 		IsStoryBased:           character.IsStoryBased,
 		CanFightUnderwater:     character.CanFightUnderwater,
 		PhysAtkRange:           character.PhysAtkRange,
@@ -57,13 +58,13 @@ func getCharacter(r *http.Request, i HandlerInput[seedtypes.Character, apitypes.
 	return response, nil
 }
 
-func retrieveCharacters(r *http.Request, i HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveCharacters(r *http.Request, i handlerinput.HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryBool(r, ids, ts.QpnStoryBased, config.Cfg.DB.GetCharacterIDsStoryBased),
 		i.QueryBool(r, ids, ts.QpnUnderwater, config.Cfg.DB.GetCharacterIDsCanFightUnderwater),
 	})

@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -22,22 +23,22 @@ func refToNamedAPIResource(ref seedtypes.AbilityReference) apiresource.NamedAPIR
 
 	switch database.AbilityType(ref.AbilityType) {
 	case database.AbilityTypeMiscAbility:
-		res = NameToNamedAPIResource(E.MiscAbilities, ref.Name, ref.Version)
+		res = handlerinput.NameToNamedAPIResource(E.MiscAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypePlayerAbility:
-		res = NameToNamedAPIResource(E.PlayerAbilities, ref.Name, ref.Version)
+		res = handlerinput.NameToNamedAPIResource(E.PlayerAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeEnemyAbility:
-		res = NameToNamedAPIResource(E.EnemyAbilities, ref.Name, ref.Version)
+		res = handlerinput.NameToNamedAPIResource(E.EnemyAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeOverdriveAbility:
-		res = NameToNamedAPIResource(E.OverdriveAbilities, ref.Name, ref.Version)
+		res = handlerinput.NameToNamedAPIResource(E.OverdriveAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeItemAbility:
-		res = NameToNamedAPIResource(E.ItemAbilities, ref.Name, ref.Version)
+		res = handlerinput.NameToNamedAPIResource(E.ItemAbilities, ref.Name, ref.Version)
 
 	case database.AbilityTypeTriggerCommand:
-		res = NameToNamedAPIResource(E.TriggerCommands, ref.Name, ref.Version)
+		res = handlerinput.NameToNamedAPIResource(E.TriggerCommands, ref.Name, ref.Version)
 
 	}
 	return res
@@ -46,10 +47,10 @@ func refToNamedAPIResource(ref seedtypes.AbilityReference) apiresource.NamedAPIR
 func questToQuestAPIResource(quest seedtypes.Quest) apiresource.QuestAPIResource {
 	switch quest.Type {
 	case database.QuestTypeSidequest:
-		return NameToQuestAPIResource(E.Sidequests, quest.Name)
+		return handlerinput.NameToQuestAPIResource(E.Sidequests, quest.Name)
 
 	case database.QuestTypeSubquest:
-		return NameToQuestAPIResource(E.Subquests, quest.Name)
+		return handlerinput.NameToQuestAPIResource(E.Subquests, quest.Name)
 	}
 
 	return apiresource.QuestAPIResource{}

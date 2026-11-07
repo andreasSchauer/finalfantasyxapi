@@ -9,9 +9,9 @@ import (
 )
 
 func (i HandlerInput[T, R, A]) ToSimpleResourceList(r *http.Request, id int32, sectionName string, subsection Subsection) (apiresource.SimpleResourceList, error) {
-	dbIDs, err := subsection.dbQuery(r.Context(), id)
+	dbIDs, err := subsection.DBQuery(r.Context(), id)
 	if err != nil {
-		return apiresource.SimpleResourceList{}, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, i.resTypeSingle, id), err)
+		return apiresource.SimpleResourceList{}, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, i.ResTypeSingle, id), err)
 	}
 
 	results, err := CreateSimpleResources(r, dbIDs, subsection)
@@ -26,7 +26,7 @@ func (i HandlerInput[T, R, A]) ToSimpleResourceList(r *http.Request, id int32, s
 
 	subResList := apiresource.SimpleResourceList{
 		ListParams:     listParams,
-		ParentResource: i.idToResFunc(i, id),
+		ParentResource: i.IDToResFunc(i, id),
 		Results:        shownResults,
 	}
 
@@ -36,16 +36,16 @@ func (i HandlerInput[T, R, A]) ToSimpleResourceList(r *http.Request, id int32, s
 func CreateSimpleResources(r *http.Request, dbIDs []int32, subsection Subsection) ([]apiresource.SimpleResource, error) {
 	subs := []apiresource.SimpleResource{}
 
-	if subsection.relationsFn != nil {
+	if subsection.RelationsFn != nil {
 		var err error
-		subsection.relations, err = subsection.relationsFn(r, dbIDs)
+		subsection.Relations, err = subsection.RelationsFn(r, dbIDs)
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	for _, id := range dbIDs {
-		subRes, err := subsection.createSubFn(r, id, subsection)
+		subRes, err := subsection.CreateSubFn(r, id, subsection)
 		if err != nil {
 			return nil, err
 		}

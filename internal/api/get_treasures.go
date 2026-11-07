@@ -8,12 +8,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getTreasure(r *http.Request, i HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource], id int32) (apitypes.Treasure, error) {
+func getTreasure(r *http.Request, i handlerinput.HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource], id int32) (apitypes.Treasure, error) {
 	treasure, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Treasure{}, err
@@ -21,7 +22,7 @@ func getTreasure(r *http.Request, i HandlerInput[seedtypes.Treasure, apitypes.Tr
 
 	response := apitypes.Treasure{
 		ID:              treasure.ID,
-		Area:            IDToAreaAPIResource(E.Areas, treasure.AreaID),
+		Area:            handlerinput.IDToAreaAPIResource(E.Areas, treasure.AreaID),
 		Availability:    treasure.Availability,
 		IsAnimaTreasure: treasure.IsAnimaTreasure,
 		Notes:           treasure.Notes,
@@ -35,13 +36,13 @@ func getTreasure(r *http.Request, i HandlerInput[seedtypes.Treasure, apitypes.Tr
 	return response, nil
 }
 
-func retrieveTreasures(r *http.Request, i HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource]) ([]int32, error) {
+func retrieveTreasures(r *http.Request, i handlerinput.HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationTreasureIDs),
 		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationTreasureIDs),
 		i.QueryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetAreaTreasureIDs),

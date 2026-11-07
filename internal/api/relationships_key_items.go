@@ -9,6 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -48,7 +49,7 @@ func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (apityp
 
 	var primer *apiresource.NamedAPIResource
 	if keyItem.Category == string(database.KeyItemCategoryPrimer) {
-		primerRes := NameToNamedAPIResource(E.Primers, keyItem.Name, nil)
+		primerRes := handlerinput.NameToNamedAPIResource(E.Primers, keyItem.Name, nil)
 		primer = &primerRes
 	}
 	rel.Primer = primer
@@ -73,6 +74,6 @@ func getKeyItemCelestialWeapon(ctx context.Context, keyItem seedtypes.KeyItem) (
 		return nil, E.CelestialWeapons.ErrorDBOne(keyItem, err)
 	}
 
-	celestialRes := IDToNamedAPIResource(E.CelestialWeapons, celestialID)
+	celestialRes := handlerinput.IDToNamedAPIResource(E.CelestialWeapons, celestialID)
 	return &celestialRes, nil
 }

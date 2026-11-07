@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -84,7 +85,7 @@ func completeMonsterResponse(r *http.Request, mon apitypes.Monster) (apitypes.Mo
 
 func getMonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.ElementalResist {
 	elemResists := namesToElemResists(resists)
-	elemResistMap := GetResourceMap(elemResists)
+	elemResistMap := handlerinput.GetResourceMap(elemResists)
 
 	for key := range lookup.L.ElementsID {
 		_, ok := elemResistMap[key]
@@ -94,7 +95,7 @@ func getMonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.Eleme
 		}
 	}
 
-	return ResourceMapToSlice(elemResistMap)
+	return handlerinput.ResourceMapToSlice(elemResistMap)
 }
 
 func getMonsterPoisonDamage(mon apitypes.Monster) (*int32, error) {
@@ -126,14 +127,14 @@ func getMonsterAgilityParams(r *http.Request, mon apitypes.Monster) (*apitypes.A
 	}
 
 	agilityParams := apitypes.AgilityParams{
-		AgilityTier: IDToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
+		AgilityTier: handlerinput.IDToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   tickspeed,
 		MinICV:      agilityTier.MonsterMinICV,
 		MaxICV:      agilityTier.MonsterMaxICV,
 	}
 
-	fs := NameToNamedAPIResource(E.AutoAbilities, "first strike", nil)
-	if ResourcesContain(mon.AutoAbilities, fs) {
+	fs := handlerinput.NameToNamedAPIResource(E.AutoAbilities, "first strike", nil)
+	if handlerinput.ResourcesContain(mon.AutoAbilities, fs) {
 		agilityParams.MinICV, agilityParams.MaxICV = getEqualICVs(-1)
 	}
 
@@ -154,8 +155,8 @@ func appliedStateHaste(mon apitypes.Monster) bool {
 
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
 func getMonsterBribeChances(mon apitypes.Monster) ([]apitypes.BribeChance, error) {
-	bribe := NameToNamedAPIResource(E.StatusConditions, "bribe", nil)
-	if ResourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
+	bribe := handlerinput.NameToNamedAPIResource(E.StatusConditions, "bribe", nil)
+	if handlerinput.ResourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
 		return nil, nil
 	}
 

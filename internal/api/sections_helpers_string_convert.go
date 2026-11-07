@@ -1,15 +1,10 @@
 package api
 
 import (
-	"cmp"
 	"fmt"
-	"slices"
-	"strings"
-
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func idToLocAreaString(areaID int32) string {

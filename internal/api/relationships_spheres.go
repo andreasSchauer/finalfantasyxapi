@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -22,7 +23,7 @@ func getSphereRelationships(r *http.Request, sphere seedtypes.Sphere) (apitypes.
 	}
 
 	rel := apitypes.Sphere{
-		Item:            NameToNamedAPIResource(E.Items, item.Name, nil),
+		Item:            handlerinput.NameToNamedAPIResource(E.Items, item.Name, nil),
 		Description:     item.Description,
 		Effect:          item.Effect,
 		Monsters:        itemRel.Monsters,

@@ -10,13 +10,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
 
-func getArenaCreation(r *http.Request, i HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource], id int32) (apitypes.ArenaCreation, error) {
+func getArenaCreation(r *http.Request, i handlerinput.HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource], id int32) (apitypes.ArenaCreation, error) {
 	creation, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.ArenaCreation{}, err
@@ -34,8 +35,8 @@ func getArenaCreation(r *http.Request, i HandlerInput[seedtypes.ArenaCreation, a
 		ID:                        creation.ID,
 		Name:                      creation.Name,
 		Category:                  creation.Category,
-		Monster:                   IDToNamedAPIResource(E.Monsters, *creation.MonsterID),
-		ParentSubquest:            IDToQuestAPIResource(E.Subquests, creation.SubquestID),
+		Monster:                   handlerinput.IDToNamedAPIResource(E.Monsters, *creation.MonsterID),
+		ParentSubquest:            handlerinput.IDToQuestAPIResource(E.Subquests, creation.SubquestID),
 		Reward:                    E.AllItems.ToResAmtFromName(ia),
 		RequiredCatchAmount:       creation.Amount,
 		UnlockedCreationsCategory: creation.CreationsUnlockedCategory,
@@ -45,13 +46,13 @@ func getArenaCreation(r *http.Request, i HandlerInput[seedtypes.ArenaCreation, a
 	return response, nil
 }
 
-func retrieveArenaCreations(r *http.Request, i HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveArenaCreations(r *http.Request, i handlerinput.HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnumList(r, enums.T.ArenaCreationCategory, ids, ts.QpnCategory, config.Cfg.DB.GetArenaCreationIDsByCategory),
 	})
 }

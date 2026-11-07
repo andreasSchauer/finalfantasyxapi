@@ -13,9 +13,9 @@ func (i HandlerInput[T, R, A]) QueryJoined(r *http.Request, inputIDs []int32, qu
 		allEmpty := true
 
 		for _, queryName := range queryNames {
-			queryParam := i.queryLookup[queryName]
+			queryParam := i.QueryLookup[queryName]
 
-			if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
+			if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {
 				return inputIDs, nil
 			}
 			_, err := queryParam.CheckEmpty(r)

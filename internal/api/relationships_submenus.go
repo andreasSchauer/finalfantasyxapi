@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
@@ -17,7 +18,7 @@ func getSubmenuRelationships(r *http.Request, submenu seedtypes.Submenu) (apityp
 
 	g.Go(func() error {
 		var err error
-		rel.Abilities, err = E.Abilities.DBGetRelations(ctx, submenu, ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs))
+		rel.Abilities, err = E.Abilities.DBGetRelations(ctx, submenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs))
 		return err
 	})
 
@@ -41,18 +42,18 @@ func createSubmenuOpenedBy(ctx context.Context, submenu seedtypes.Submenu) (*api
 
 	g.Go(func() error {
 		var err error
-		menuOpen.Ability, err = E.Abilities.DBGetRelationPtr(ctx, submenu, ToIntOneNull(config.Cfg.DB.GetSubmenuOpenedByAbilityID))
+		menuOpen.Ability, err = E.Abilities.DBGetRelationPtr(ctx, submenu, handlerinput.ToIntOneNull(config.Cfg.DB.GetSubmenuOpenedByAbilityID))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		menuOpen.AeonCommand, err = E.AeonCommands.DBGetRelationPtr(ctx, submenu, ToIntOneNull(config.Cfg.DB.GetSubmenuOpenedByAeonCommandID))
+		menuOpen.AeonCommand, err = E.AeonCommands.DBGetRelationPtr(ctx, submenu, handlerinput.ToIntOneNull(config.Cfg.DB.GetSubmenuOpenedByAeonCommandID))
 		return err
 	})
 
 	g.Go(func() error {
-		overdriveCommands, err := E.OverdriveCommands.DBGetRelations(ctx, submenu, ToIntManyNull(config.Cfg.DB.GetSubmenuOpenedByOverdriveCommandIDs))
+		overdriveCommands, err := E.OverdriveCommands.DBGetRelations(ctx, submenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetSubmenuOpenedByOverdriveCommandIDs))
 		if err != nil {
 			return err
 		}

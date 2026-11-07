@@ -8,12 +8,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getPlayerUnit(r *http.Request, i HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource], id int32) (apitypes.PlayerUnit, error) {
+func getPlayerUnit(r *http.Request, i handlerinput.HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource], id int32) (apitypes.PlayerUnit, error) {
 	unit, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.PlayerUnit{}, err
@@ -34,8 +35,8 @@ func getPlayerUnit(r *http.Request, i HandlerInput[seedtypes.PlayerUnit, apitype
 			ID:               unit.ID,
 			Name:             unit.Name,
 			Type:             unit.Type,
-			TypedUnit:        NameToNamedAPIResource(E.Characters, unit.Name, nil),
-			Area:             LocAreaToAreaAPIResource(E.Areas, character.LocationArea),
+			TypedUnit:        handlerinput.NameToNamedAPIResource(E.Characters, unit.Name, nil),
+			Area:             handlerinput.LocAreaToAreaAPIResource(E.Areas, character.LocationArea),
 			CelestialWeapon:  rel.CelestialWeapon,
 			CharacterClasses: rel.CharacterClasses,
 		}
@@ -52,8 +53,8 @@ func getPlayerUnit(r *http.Request, i HandlerInput[seedtypes.PlayerUnit, apitype
 			ID:               unit.ID,
 			Name:             unit.Name,
 			Type:             unit.Type,
-			TypedUnit:        NameToNamedAPIResource(E.Aeons, unit.Name, nil),
-			Area:             LocAreaToAreaAPIResource(E.Areas, aeon.LocationArea),
+			TypedUnit:        handlerinput.NameToNamedAPIResource(E.Aeons, unit.Name, nil),
+			Area:             handlerinput.LocAreaToAreaAPIResource(E.Areas, aeon.LocationArea),
 			CelestialWeapon:  rel.CelestialWeapon,
 			CharacterClasses: rel.CharacterClasses,
 		}
@@ -62,13 +63,13 @@ func getPlayerUnit(r *http.Request, i HandlerInput[seedtypes.PlayerUnit, apitype
 	return response, nil
 }
 
-func retrievePlayerUnits(r *http.Request, i HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]) ([]int32, error) {
+func retrievePlayerUnits(r *http.Request, i handlerinput.HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnum(r, enums.T.UnitType, ids, ts.QpnType, config.Cfg.DB.GetPlayerUnitIDsByType),
 	})
 }

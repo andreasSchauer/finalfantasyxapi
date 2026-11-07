@@ -9,7 +9,7 @@ import (
 )
 
 func IDToAreaAPIResource(i HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], id int32) apiresource.AreaAPIResource {
-	res, _ := lookup.GetResourceByID(id, i.objLookupID)
+	res, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	return areaToAreaAPIResource(i, res)
 }
 
@@ -23,7 +23,7 @@ func IDPtrToAreaAPIResPtr(i HandlerInput[seedtypes.Area, apitypes.Area, apiresou
 }
 
 func LocAreaToAreaAPIResource(i HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], area seedtypes.LocationArea) apiresource.AreaAPIResource {
-	res, _ := lookup.GetResource(area, i.objLookup)
+	res, _ := lookup.GetResource(area, i.ObjLookup)
 	return areaToAreaAPIResource(i, res)
 }
 

@@ -102,7 +102,7 @@ func getCharacterModeAmts(char seedtypes.Character) []apiresource.ResourceAmount
 func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.ResourceAmount[apiresource.NamedAPIResource], error) {
 	i := E.OverdriveModes
 
-	mode, _ := lookup.GetResourceByID(id, i.objLookupID)
+	mode, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	if len(mode.ActionsToLearn) == 0 {
 		return apiresource.ResourceAmount[apiresource.NamedAPIResource]{}, errs.ErrContinue
 	}

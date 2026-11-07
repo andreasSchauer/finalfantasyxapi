@@ -8,7 +8,7 @@ import (
 )
 
 func IDToUnnamedAPIResource[T seedtypes.IsUnnamed, R any, A apiresource.APIResource](i HandlerInput[T, R, A], id int32) apiresource.UnnamedAPIResource {
-	res, _ := lookup.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
+	res, _ := lookup.GetResourceByID(id, i.ObjLookupID) // no error needed, because everything was verified through seedtypes
 	params := res.GetResParamsUnnamed()
 
 	return apiresource.UnnamedAPIResource{

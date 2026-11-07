@@ -7,11 +7,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getCharacterClass(r *http.Request, i HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource], id int32) (apitypes.CharacterClass, error) {
+func getCharacterClass(r *http.Request, i handlerinput.HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource], id int32) (apitypes.CharacterClass, error) {
 	class, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.CharacterClass{}, err
@@ -37,13 +38,13 @@ func getCharacterClass(r *http.Request, i HandlerInput[seedtypes.CharacterClass,
 	return response, nil
 }
 
-func retrieveCharacterClasses(r *http.Request, i HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveCharacterClasses(r *http.Request, i handlerinput.HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnumList(r, enums.T.CharacterClassCategory, ids, ts.QpnCategory, config.Cfg.DB.GetCharacterClassesIDsByCategory),
 	})
 }

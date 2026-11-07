@@ -13,31 +13,31 @@ import (
 
 type HandlerInput[T seedtypes.Lookupable, R any, A apiresource.APIResource] struct {
 	Endpoint         ts.EndpointName
-	resTypeSingle    ts.ResTypeSingle
-	resTypePlural    ts.ResTypePlural
-	usage            []string
-	objLookup        map[string]T
-	objLookupID      map[int32]T
-	queryLookup      map[ts.QueryParamName]queryparam.QueryParam
-	getMultipleQuery DBQueryStringMany
-	retrieveQuery    DBQueryNoInput
-	idToResFunc      func(HandlerInput[T, R, A], int32) A
-	getSingleFunc    func(*http.Request, HandlerInput[T, R, A], int32) (R, error)
-	retrieveFunc     func(*http.Request, HandlerInput[T, R, A]) ([]int32, error)
-	avlFunc          func(*http.Request, []int32) ([]int32, error)
-	subsections      map[ts.SectionName]Subsection
+	ResTypeSingle    ts.ResTypeSingle
+	ResTypePlural    ts.ResTypePlural
+	Usage            []string
+	ObjLookup        map[string]T
+	ObjLookupID      map[int32]T
+	QueryLookup      map[ts.QueryParamName]queryparam.QueryParam
+	GetMultipleQuery DBQueryStringMany
+	RetrieveQuery    DBQueryNoInput
+	IDToResFunc      func(HandlerInput[T, R, A], int32) A
+	GetSingleFunc    func(*http.Request, HandlerInput[T, R, A], int32) (R, error)
+	RetrieveFunc     func(*http.Request, HandlerInput[T, R, A]) ([]int32, error)
+	AvlFunc          func(*http.Request, []int32) ([]int32, error)
+	Subsections      map[ts.SectionName]Subsection
 }
 
 type HandlerInputEnums struct {
 	Endpoint    ts.EndpointName
-	usage       []string
-	lookup      map[string]enums.EnumResponse
-	queryLookup map[ts.QueryParamName]queryparam.QueryParam
+	Usage       []string
+	Lookup      map[string]enums.EnumResponse
+	QueryLookup map[ts.QueryParamName]queryparam.QueryParam
 }
 
 type HandlerInputEndpoints struct {
 	Endpoint    ts.EndpointName
-	usage       []string
+	Usage       []string
 	Slice       []ts.EndpointName
-	queryLookup map[ts.QueryParamName]queryparam.QueryParam
+	QueryLookup map[ts.QueryParamName]queryparam.QueryParam
 }

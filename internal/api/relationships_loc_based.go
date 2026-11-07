@@ -4,15 +4,16 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
 
 type LocBasedMusicQueries struct {
-	CueSongs  DBQueryIntMany
-	BmSongs   DBQueryIntMany
-	FMVSongs  DBQueryIntMany
-	BossMusic DBQueryIntMany
+	CueSongs  handlerinput.DBQueryIntMany
+	BmSongs   handlerinput.DBQueryIntMany
+	FMVSongs  handlerinput.DBQueryIntMany
+	BossMusic handlerinput.DBQueryIntMany
 }
 
 func getMusicLocBased(ctx context.Context, item seedtypes.Lookupable, queries LocBasedMusicQueries) (*apitypes.LocBasedMusic, error) {

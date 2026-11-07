@@ -6,15 +6,16 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func createAutoAbilitySimple(r *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
+func createAutoAbilitySimple(r *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.AutoAbilities
-	autoAbility, _ := lookup.GetResourceByID(id, i.objLookupID)
+	autoAbility, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	autoAbilitySimple := sectiontypes.AutoAbilitySimple{
 		ID:                  autoAbility.ID,

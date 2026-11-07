@@ -4,28 +4,29 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func AssignDefaultParams(endpoint ts.EndpointName, eLookup, qLookup *map[ts.QueryParamName]queryparam.QueryParam) {
-	paramMap := ParamSliceToMap(Q.DefaultParamSlice, endpoint)
+	paramMap := queryparam.ParamSliceToMap(Q.DefaultParamSlice, endpoint)
 	*eLookup = paramMap
 	*qLookup = paramMap
 }
 
-func AssignQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []queryparam.QueryParam, i *HandlerInput[T, R, A], queryLookup *map[ts.QueryParamName]queryparam.QueryParam) {
+func AssignQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []queryparam.QueryParam, i *handlerinput.HandlerInput[T, R, A], queryLookup *map[ts.QueryParamName]queryparam.QueryParam) {
 	paramMap := completeQueryParams(params, *i)
 
-	i.queryLookup = paramMap
+	i.QueryLookup = paramMap
 	*queryLookup = paramMap
 }
 
-func completeQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []queryparam.QueryParam, i HandlerInput[T, R, A]) map[ts.QueryParamName]queryparam.QueryParam {
+func completeQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []queryparam.QueryParam, i handlerinput.HandlerInput[T, R, A]) map[ts.QueryParamName]queryparam.QueryParam {
 	params = slices.Concat(params, Q.DefaultParamSlice)
 
-	if hasSimpleView(i.subsections) {
+	if hasSimpleView(i.Subsections) {
 		queryParamIDs := queryparam.QueryParam{
 			Name:        ts.QpnIDs,
 			Description: "Used to manually input the ids of resources to be batch-fetched for simple display. The original order will be preserved, but duplicates will be removed.",
@@ -47,10 +48,10 @@ func completeQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 		params = append(params, queryParamFlip)
 	}
 
-	return ParamSliceToMap(params, i.Endpoint)
+	return queryparam.ParamSliceToMap(params, i.Endpoint)
 }
 
-func hasSimpleView(sections map[ts.SectionName]Subsection) bool {
+func hasSimpleView(sections map[ts.SectionName]handlerinput.Subsection) bool {
 	if sections == nil {
 		return false
 	}

@@ -7,11 +7,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getCelestialWeapon(r *http.Request, i HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource], id int32) (apitypes.CelestialWeapon, error) {
+func getCelestialWeapon(r *http.Request, i handlerinput.HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource], id int32) (apitypes.CelestialWeapon, error) {
 	celestialWeapon, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.CelestialWeapon{}, err
@@ -26,8 +27,8 @@ func getCelestialWeapon(r *http.Request, i HandlerInput[seedtypes.CelestialWeapo
 		ID:            celestialWeapon.ID,
 		Name:          celestialWeapon.Name,
 		Formula:       celestialWeapon.Formula,
-		Character:     NameToNamedAPIResource(E.Characters, celestialWeapon.Character, nil),
-		Aeon:          NamePtrToNamedAPIResPtr(E.Aeons, celestialWeapon.Aeon, nil),
+		Character:     handlerinput.NameToNamedAPIResource(E.Characters, celestialWeapon.Character, nil),
+		Aeon:          handlerinput.NamePtrToNamedAPIResPtr(E.Aeons, celestialWeapon.Aeon, nil),
 		AutoAbilities: rel.AutoAbilities,
 		Equipment:     rel.Equipment,
 		Crest:         rel.Crest,
@@ -40,13 +41,13 @@ func getCelestialWeapon(r *http.Request, i HandlerInput[seedtypes.CelestialWeapo
 	return response, nil
 }
 
-func retrieveCelestialWeapons(r *http.Request, i HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveCelestialWeapons(r *http.Request, i handlerinput.HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnum(r, enums.T.CelestialFormula, ids, ts.QpnFormula, config.Cfg.DB.GetCelestialWeaponIDsByFormula),
 	})
 }

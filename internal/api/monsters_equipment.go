@@ -3,6 +3,7 @@ package api
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -39,8 +40,8 @@ func convertMonsterEquipmentSlotsChance(chance seedtypes.EquipmentSlotsChance) a
 
 func convertEquipmentDrop(drop seedtypes.EquipmentDrop) apitypes.EquipmentDrop {
 	return apitypes.EquipmentDrop{
-		AutoAbility: NameToNamedAPIResource(E.AutoAbilities, drop.Ability, nil),
-		ForcedChars: NamesToNamedAPIResources(E.Characters, drop.Characters),
+		AutoAbility: handlerinput.NameToNamedAPIResource(E.AutoAbilities, drop.Ability, nil),
+		ForcedChars: handlerinput.NamesToNamedAPIResources(E.Characters, drop.Characters),
 		IsForced:    drop.IsForced,
 		Probability: drop.Probability,
 	}

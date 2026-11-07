@@ -2,6 +2,7 @@ package handlerinput
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -10,8 +11,11 @@ import (
 
 func (i HandlerInput[T, R, A]) QueryIntList(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
-		queryParam := i.queryLookup[queryName]
-		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
+		if queryName == ts.QpnLimit {
+			fmt.Println()
+		}
+		queryParam := i.QueryLookup[queryName]
+		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {
 			return inputIDs, nil
 		}
 

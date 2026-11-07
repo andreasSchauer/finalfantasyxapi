@@ -35,6 +35,10 @@ func ParamSliceToMap(params []QueryParam, endpoint ts.EndpointName) map[ts.Query
 	return paramMap
 }
 
+func GetDefaultParamMap() map[ts.QueryParamName]QueryParam {
+	return DefaultParamSliceToMap(GetDefaultParams())
+}
+
 func DefaultParamSliceToMap(params []QueryParam) map[ts.QueryParamName]QueryParam {
 	paramMap := make(map[ts.QueryParamName]QueryParam, len(params))
 

@@ -26,16 +26,16 @@ func filterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
+	methods, err := i.QueryLookup[ts.QpnMethods].ParseValueList(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := config.Cfg.DB.FilterMasterItemIDsByAvailability(r.Context(), database.FilterMasterItemIDsByAvailabilityParams{
 		Ids:            inputIDs,
-		Availability:   avlParams.availabilities,
-		IsRepeatable:   avlParams.isRepeatable,
-		PreAirship:     avlParams.preAirship,
+		Availability:   avlParams.Availabilities,
+		IsRepeatable:   avlParams.IsRepeatable,
+		PreAirship:     avlParams.PreAirship,
 		AvlType:        locContext.AvlType,
 		LocContextID:   locContext.ID,
 		LocContextType: locContext.Type,
@@ -64,16 +64,16 @@ func filterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
+	methods, err := i.QueryLookup[ts.QpnMethods].ParseValueList(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := config.Cfg.DB.FilterItemIDsByAvailability(r.Context(), database.FilterItemIDsByAvailabilityParams{
 		Ids:            inputIDs,
-		Availability:   avlParams.availabilities,
-		IsRepeatable:   avlParams.isRepeatable,
-		PreAirship:     avlParams.preAirship,
+		Availability:   avlParams.Availabilities,
+		IsRepeatable:   avlParams.IsRepeatable,
+		PreAirship:     avlParams.PreAirship,
 		AvlType:        locContext.AvlType,
 		LocContextID:   locContext.ID,
 		LocContextType: locContext.Type,
@@ -102,15 +102,15 @@ func filterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
+	methods, err := i.QueryLookup[ts.QpnMethods].ParseValueList(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := config.Cfg.DB.FilterKeyItemIDsByAvailability(r.Context(), database.FilterKeyItemIDsByAvailabilityParams{
 		Ids:            inputIDs,
-		Availability:   avlParams.availabilities,
-		PreAirship:     avlParams.preAirship,
+		Availability:   avlParams.Availabilities,
+		PreAirship:     avlParams.PreAirship,
 		LocContextID:   locContext.ID,
 		LocContextType: locContext.Type,
 		Methods:        h.SliceOrNil(methods),
@@ -138,16 +138,16 @@ func filterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
+	methods, err := i.QueryLookup[ts.QpnMethods].ParseValueList(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := config.Cfg.DB.FilterSphereIDsByAvailability(r.Context(), database.FilterSphereIDsByAvailabilityParams{
 		Ids:            inputIDs,
-		Availability:   avlParams.availabilities,
-		IsRepeatable:   avlParams.isRepeatable,
-		PreAirship:     avlParams.preAirship,
+		Availability:   avlParams.Availabilities,
+		IsRepeatable:   avlParams.IsRepeatable,
+		PreAirship:     avlParams.PreAirship,
 		AvlType:        locContext.AvlType,
 		LocContextID:   locContext.ID,
 		LocContextType: locContext.Type,
@@ -173,8 +173,8 @@ func filterAvlPrimers(r *http.Request, inputIDs []int32) ([]int32, error) {
 
 	dbIDs, err := config.Cfg.DB.FilterPrimerIDsByAvailability(r.Context(), database.FilterPrimerIDsByAvailabilityParams{
 		Ids:          inputIDs,
-		Availability: avlParams.availabilities,
-		PreAirship:   avlParams.preAirship,
+		Availability: avlParams.Availabilities,
+		PreAirship:   avlParams.PreAirship,
 	})
 	if err != nil {
 		return nil, i.ErrorAvl(err)

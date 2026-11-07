@@ -14,8 +14,8 @@ import (
 
 func (i HandlerInput[T, R, A]) QueryID[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
-		queryParam := i.queryLookup[queryName]
-		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
+		queryParam := i.QueryLookup[queryName]
+		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {
 			return inputIDs, nil
 		}
 
@@ -40,8 +40,8 @@ func (i HandlerInput[T, R, A]) QueryID[F seedtypes.Lookupable](r *http.Request, 
 
 func (i HandlerInput[T, R, A]) QueryIDWrapper[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
-		queryParam := i.queryLookup[queryName]
-		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
+		queryParam := i.QueryLookup[queryName]
+		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {
 			return inputIDs, nil
 		}
 
@@ -59,8 +59,8 @@ func (i HandlerInput[T, R, A]) QueryIDWrapper[F seedtypes.Lookupable](r *http.Re
 
 func (i HandlerInput[T, R, A]) QueryIDNul[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, dbQuery DBQueryNullIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
-		queryParam := i.queryLookup[queryName]
-		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
+		queryParam := i.QueryLookup[queryName]
+		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {
 			return inputIDs, nil
 		}
 

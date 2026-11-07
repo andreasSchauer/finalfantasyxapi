@@ -36,16 +36,15 @@ func (q queryVerifyer[T]) getParam(queryName string) (queryparam.QueryParam, err
 
 // used for alternative lists like /endpoint/sections and /endpoint/parameters. simply looks up the query param and returns an error, if it doesn't exist. enforces the used parameter to be a default parameter.
 func (q queryVerifyer[T]) getParamAltList(queryName string, listName *string) (queryparam.QueryParam, error) {
-	defaultParams := queryparam.GetDefaultParams()
-
 	_, err := q.getParam(queryName)
 	if err != nil {
 		return queryparam.QueryParam{}, err
 	}
-
-	queryParam := queryparam.GetQueryParam(defaultParams, ts.QueryParamName(queryName))
-	if queryParam.IsZero() {
-		return queryparam.QueryParam{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s", q.endpoint, *listName, queryparam.DefaultParamSliceToString(defaultParams)), nil)
+	
+	defaultParams := queryparam.GetDefaultParamMap()
+	queryParam, ok := defaultParams[ts.QueryParamName(queryName)]
+	if !ok {
+		return queryparam.QueryParam{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("only the following default parameters are allowed when using /api/%s/%s: %s", q.endpoint, *listName, queryparam.QueryMapToString(defaultParams)), nil)
 	}
 
 	return queryParam, nil

@@ -11,6 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -23,7 +24,7 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 	var table seedtypes.EquipmentTable
 
 	rel := apitypes.EquipmentName{
-		Character: NameToNamedAPIResource(E.Characters, equipment.CharacterName, nil),
+		Character: handlerinput.NameToNamedAPIResource(E.Characters, equipment.CharacterName, nil),
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -46,7 +47,7 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 
 	g.Go(func() error {
 		var err error
-		rel.EquipmentTable, err = getEquipmentTableRef(r, ctx, i.queryLookup[ts.QpnTable], equipment)
+		rel.EquipmentTable, err = getEquipmentTableRef(r, ctx, i.QueryLookup[ts.QpnTable], equipment)
 		if err != nil {
 			return err
 		}
@@ -55,7 +56,7 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 		rel.Classification = table.Classification
 		rel.Priority = table.Priority
 		rel.RequiredSlots = table.RequiredSlots
-		rel.RequiredAutoAbilities = NamesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities)
+		rel.RequiredAutoAbilities = handlerinput.NamesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities)
 		rel.SelectableAutoAbilities = ah.ConvertObjSlice(table.SelectableAutoAbilities, convertAbilityPool)
 		return nil
 	})

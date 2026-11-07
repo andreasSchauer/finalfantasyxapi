@@ -10,12 +10,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getOverdriveAbility(r *http.Request, i HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource], id int32) (apitypes.OverdriveAbility, error) {
+func getOverdriveAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource], id int32) (apitypes.OverdriveAbility, error) {
 	ability, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.OverdriveAbility{}, err
@@ -32,35 +33,35 @@ func getOverdriveAbility(r *http.Request, i HandlerInput[seedtypes.OverdriveAbil
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		UntypedAbility:     IDToTypedAPIResource(E.Abilities, ability.Ability.ID),
+		UntypedAbility:     handlerinput.IDToTypedAPIResource(E.Abilities, ability.Ability.ID),
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
 		Overdrives:         E.Overdrives.ToAPIResources(overdriveIDs),
-		OverdriveCommand:   NamePtrToNamedAPIResPtr(E.OverdriveCommands, overdrive.OverdriveCommand, nil),
-		User:               NameToNamedAPIResource(E.CharacterClasses, overdrive.User, nil),
-		RelatedStats:       NamesToNamedAPIResources(E.Stats, ability.RelatedStats),
+		OverdriveCommand:   handlerinput.NamePtrToNamedAPIResPtr(E.OverdriveCommands, overdrive.OverdriveCommand, nil),
+		User:               handlerinput.NameToNamedAPIResource(E.CharacterClasses, overdrive.User, nil),
+		RelatedStats:       handlerinput.NamesToNamedAPIResources(E.Stats, ability.RelatedStats),
 		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
 
 	return response, nil
 }
 
-func retrieveOverdriveAbilities(r *http.Request, i HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveOverdriveAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 	abilityType := database.AbilityTypeOverdriveAbility
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnumList(r, enums.T.AttackType, ids, ts.QpnAttackType, getTypedAbilityIDsByAttackType(abilityType)),
 		i.QueryEnumList(r, enums.T.TargetType, ids, ts.QpnTargetType, getTypedAbilityIDsByTargetType(abilityType)),
 		i.QueryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, getTypedAbilityIDsByDamageFormula(abilityType)),
 		i.QueryIntList(r, ids, ts.QpnRank, getTypedAbilityIDsByRank(abilityType)),
-		i.QueryNameIDListNul(r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(abilityType)),
-		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetOverdriveAbilityIDsByCharClass),
-		i.QueryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, config.Cfg.DB.GetOverdriveAbilityIDsByRelatedStat),
+		i.QueryNameIDListNul(r, ids, ts.QpnElement, E.Elements.ResTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(abilityType)),
+		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.ResTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetOverdriveAbilityIDsByCharClass),
+		i.QueryNameID(r, ids, ts.QpnRelatedStat, E.Stats.ResTypeSingle, lookup.L.Stats, config.Cfg.DB.GetOverdriveAbilityIDsByRelatedStat),
 		i.QueryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(abilityType)),
 		i.QueryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(abilityType)),
 		i.QueryBool2(r, ids, ts.QpnCanCrit, getTypedAbilityIDsCanCrit(abilityType)),

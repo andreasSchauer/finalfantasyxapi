@@ -76,7 +76,7 @@ func (Q *QueryLookup) Init() {
 	defaultParams := queryparam.GetDefaultParams()
 
 	Q.DefaultParamSlice = defaultParams
-	Q.DefaultParams = DefaultParamSliceToMap(defaultParams)
+	Q.DefaultParams = queryparam.DefaultParamSliceToMap(defaultParams)
 	AssignQueryParams(queryparam.GetLocationsParams(), &E.Locations, &Q.Locations)
 	AssignQueryParams(queryparam.GetSublocationsParams(), &E.Sublocations, &Q.Sublocations)
 	AssignQueryParams(queryparam.GetAreasParams(), &E.Areas, &Q.Areas)
@@ -106,12 +106,12 @@ func (Q *QueryLookup) Init() {
 	AssignQueryParams(queryparam.GetMiscAbilitiesParams(), &E.MiscAbilities, &Q.MiscAbilities)
 	AssignQueryParams(queryparam.GetEnemyAbilitiesParams(), &E.EnemyAbilities, &Q.EnemyAbilities)
 
-	AssignDefaultParams(E.AeonCommands.Endpoint, &E.AeonCommands.queryLookup, &Q.AeonCommands)
-	AssignDefaultParams(E.OverdriveCommands.Endpoint, &E.OverdriveCommands.queryLookup, &Q.OverdriveCommands)
+	AssignDefaultParams(E.AeonCommands.Endpoint, &E.AeonCommands.QueryLookup, &Q.AeonCommands)
+	AssignDefaultParams(E.OverdriveCommands.Endpoint, &E.OverdriveCommands.QueryLookup, &Q.OverdriveCommands)
 	AssignQueryParams(queryparam.GetOverdrivesParams(), &E.Overdrives, &Q.Overdrives)
-	AssignDefaultParams(E.RonsoRages.Endpoint, &E.RonsoRages.queryLookup, &Q.RonsoRages)
+	AssignDefaultParams(E.RonsoRages.Endpoint, &E.RonsoRages.QueryLookup, &Q.RonsoRages)
 	AssignQueryParams(queryparam.GetSubmenusParams(), &E.Submenus, &Q.Submenus)
-	AssignDefaultParams(E.Topmenus.Endpoint, &E.Topmenus.queryLookup, &Q.Topmenus)
+	AssignDefaultParams(E.Topmenus.Endpoint, &E.Topmenus.QueryLookup, &Q.Topmenus)
 
 	AssignQueryParams(queryparam.GetAllItemsParams(), &E.AllItems, &Q.AllItems)
 	AssignQueryParams(queryparam.GetItemsParams(), &E.Items, &Q.Items)
@@ -126,13 +126,13 @@ func (Q *QueryLookup) Init() {
 	AssignQueryParams(queryparam.GetCelestialWeaponsParams(), &E.CelestialWeapons, &Q.CelestialWeapons)
 
 	AssignQueryParams(queryparam.GetStatsParams(), &E.Stats, &Q.Stats)
-	AssignDefaultParams(E.Properties.Endpoint, &E.Properties.queryLookup, &Q.Properties)
+	AssignDefaultParams(E.Properties.Endpoint, &E.Properties.QueryLookup, &Q.Properties)
 	AssignQueryParams(queryparam.GetOverdriveModesParams(), &E.OverdriveModes, &Q.OverdriveModes)
-	AssignDefaultParams(E.Elements.Endpoint, &E.Elements.queryLookup, &Q.Elements)
+	AssignDefaultParams(E.Elements.Endpoint, &E.Elements.QueryLookup, &Q.Elements)
 	AssignQueryParams(queryparam.GetStatusConditionsParams(), &E.StatusConditions, &Q.StatusConditions)
 	AssignQueryParams(queryparam.GetModifiersParams(), &E.Modifiers, &Q.Modifiers)
 	AssignQueryParams(queryparam.GetAgilityTierParams(), &E.AgilityTiers, &Q.AgilityTiers)
 
-	AssignDefaultParams(E.Enums.Endpoint, &E.Enums.queryLookup, &Q.Enums)
-	AssignDefaultParams(E.Endpoints.Endpoint, &E.Endpoints.queryLookup, &Q.Endpoints)
+	AssignDefaultParams(E.Enums.Endpoint, &E.Enums.QueryLookup, &Q.Enums)
+	AssignDefaultParams(E.Endpoints.Endpoint, &E.Endpoints.QueryLookup, &Q.Endpoints)
 }

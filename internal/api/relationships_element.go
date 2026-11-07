@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -27,25 +28,25 @@ func getElementRelationships(r *http.Request, element seedtypes.Element) (apityp
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = E.PlayerAbilities.DBGetRelations(ctx, element, ToIntManyNull(config.Cfg.DB.GetElementPlayerAbilityIDs))
+		rel.PlayerAbilities, err = E.PlayerAbilities.DBGetRelations(ctx, element, handlerinput.ToIntManyNull(config.Cfg.DB.GetElementPlayerAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = E.OverdriveAbilities.DBGetRelations(ctx, element, ToIntManyNull(config.Cfg.DB.GetElementOverdriveAbilityIDs))
+		rel.OverdriveAbilities, err = E.OverdriveAbilities.DBGetRelations(ctx, element, handlerinput.ToIntManyNull(config.Cfg.DB.GetElementOverdriveAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = E.ItemAbilities.DBGetRelations(ctx, element, ToIntManyNull(config.Cfg.DB.GetElementItemAbilityIDs))
+		rel.ItemAbilities, err = E.ItemAbilities.DBGetRelations(ctx, element, handlerinput.ToIntManyNull(config.Cfg.DB.GetElementItemAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.EnemyAbilities, err = E.EnemyAbilities.DBGetRelations(ctx, element, ToIntManyNull(config.Cfg.DB.GetElementEnemyAbilityIDs))
+		rel.EnemyAbilities, err = E.EnemyAbilities.DBGetRelations(ctx, element, handlerinput.ToIntManyNull(config.Cfg.DB.GetElementEnemyAbilityIDs))
 		return err
 	})
 

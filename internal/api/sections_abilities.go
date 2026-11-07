@@ -5,13 +5,14 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
-func createAbilitySimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
+func createAbilitySimple(r *http.Request, id int32, subsection handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.Abilities
-	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
+	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	typeStr := string(ability.Type)
 
 	abilitySimple := sectiontypes.AbilitySimple{
@@ -28,9 +29,9 @@ func createAbilitySimple(r *http.Request, id int32, subsection Subsection) (apir
 	return abilitySimple, nil
 }
 
-func createEnemyAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
+func createEnemyAbilitySimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.EnemyAbilities
-	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
+	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	abilitySimple := sectiontypes.AbilitySimple{
 		ID:                 ability.ID,
@@ -45,9 +46,9 @@ func createEnemyAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresou
 	return abilitySimple, nil
 }
 
-func createItemAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
+func createItemAbilitySimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.ItemAbilities
-	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
+	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	abilitySimple := sectiontypes.AbilitySimple{
 		ID:                 ability.ID,
@@ -62,9 +63,9 @@ func createItemAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresour
 	return abilitySimple, nil
 }
 
-func createOverdriveAbilitySimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
+func createOverdriveAbilitySimple(r *http.Request, id int32, subsection handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.OverdriveAbilities
-	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
+	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	abilitySimple := sectiontypes.AbilitySimple{
 		ID:                 ability.ID,
@@ -79,9 +80,9 @@ func createOverdriveAbilitySimple(r *http.Request, id int32, subsection Subsecti
 	return abilitySimple, nil
 }
 
-func createPlayerAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
+func createPlayerAbilitySimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.PlayerAbilities
-	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
+	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	playerAbilitySimple := sectiontypes.PlayerAbilitySimple{
 		ID:                 ability.ID,
@@ -97,9 +98,9 @@ func createPlayerAbilitySimple(_ *http.Request, id int32, _ Subsection) (apireso
 	return playerAbilitySimple, nil
 }
 
-func createTriggerCommandSimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
+func createTriggerCommandSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.TriggerCommands
-	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
+	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	abilitySimple := sectiontypes.AbilitySimple{
 		ID:                 ability.ID,
@@ -114,9 +115,9 @@ func createTriggerCommandSimple(_ *http.Request, id int32, _ Subsection) (apires
 	return abilitySimple, nil
 }
 
-func createMiscAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
+func createMiscAbilitySimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.MiscAbilities
-	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
+	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	abilitySimple := sectiontypes.AbilitySimple{
 		ID:                 ability.ID,

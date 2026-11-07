@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -15,17 +16,17 @@ import (
 func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
 	i := E.Shops
 
-	autoAbilityID, err := NullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := handlerinput.NullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].ParseIntList(r)
+	emptySlots, err := i.QueryLookup[ts.QpnEmptySlots].ParseIntList(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	charID, err := NullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
+	charID, err := handlerinput.NullNameID(r, E.Characters, ts.QpnCharacter, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -36,7 +37,7 @@ func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error)
 		EmptySlots:    h.SliceOrNil(emptySlots),
 	})
 	if err != nil {
-		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%s', character id '%s', empty slots amount '%s'", i.resTypePlural, h.NullInt32ToString(autoAbilityID), h.NullInt32ToString(charID), h.FormatIntSlice(emptySlots)), err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%s', character id '%s', empty slots amount '%s'", i.ResTypePlural, h.NullInt32ToString(autoAbilityID), h.NullInt32ToString(charID), h.FormatIntSlice(emptySlots)), err)
 	}
 
 	return dbIDs, nil
@@ -45,17 +46,17 @@ func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error)
 func filterTreasuresEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
 	i := E.Treasures
 
-	autoAbilityID, err := NullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.queryLookup)
+	autoAbilityID, err := handlerinput.NullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	emptySlots, err := i.queryLookup[ts.QpnEmptySlots].ParseIntList(r)
+	emptySlots, err := i.QueryLookup[ts.QpnEmptySlots].ParseIntList(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	charID, err := NullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
+	charID, err := handlerinput.NullNameID(r, E.Characters, ts.QpnCharacter, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -66,7 +67,7 @@ func filterTreasuresEquipment(r *http.Request, ctx context.Context) ([]int32, er
 		EmptySlots:    h.SliceOrNil(emptySlots),
 	})
 	if err != nil {
-		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%s', character id '%s', empty slots amount '%s'", i.resTypePlural, h.NullInt32ToString(autoAbilityID), h.NullInt32ToString(charID), h.FormatIntSlice(emptySlots)), err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%s', character id '%s', empty slots amount '%s'", i.ResTypePlural, h.NullInt32ToString(autoAbilityID), h.NullInt32ToString(charID), h.FormatIntSlice(emptySlots)), err)
 	}
 
 	return dbIDs, nil

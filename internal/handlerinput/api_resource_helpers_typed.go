@@ -8,7 +8,7 @@ import (
 )
 
 func IDToTypedAPIResource[T seedtypes.IsTyped, R any, A apiresource.APIResource](i HandlerInput[T, R, A], id int32) apiresource.TypedAPIResource {
-	res, _ := lookup.GetResourceByID(id, i.objLookupID)
+	res, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	params := res.GetResParamsTyped()
 
 	return apiresource.TypedAPIResource{
@@ -22,7 +22,7 @@ func IDToTypedAPIResource[T seedtypes.IsTyped, R any, A apiresource.APIResource]
 }
 
 func KeyToTypedAPIResource[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i HandlerInput[T, R, A], key K) apiresource.TypedAPIResource {
-	res, _ := lookup.GetResource(key, i.objLookup)
+	res, _ := lookup.GetResource(key, i.ObjLookup)
 	return IDToTypedAPIResource(i, res.GetID())
 }
 

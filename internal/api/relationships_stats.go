@@ -6,19 +6,20 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
 
 type StatQueries struct {
-	AutoAbilities      DBQueryIntMany
-	PlayerAbilities    DBQueryIntMany
-	OverdriveAbilities DBQueryIntMany
-	ItemAbilities      DBQueryIntMany
-	TriggerCommands    DBQueryIntMany
-	StatusConditions   DBQueryIntMany
-	Properties         DBQueryIntMany
+	AutoAbilities      handlerinput.DBQueryIntMany
+	PlayerAbilities    handlerinput.DBQueryIntMany
+	OverdriveAbilities handlerinput.DBQueryIntMany
+	ItemAbilities      handlerinput.DBQueryIntMany
+	TriggerCommands    handlerinput.DBQueryIntMany
+	StatusConditions   handlerinput.DBQueryIntMany
+	Properties         handlerinput.DBQueryIntMany
 }
 
 func getStatRelationships(r *http.Request, stat seedtypes.Stat) (apitypes.Stat, error) {

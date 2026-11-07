@@ -21,7 +21,7 @@ func (i HandlerInput[T, R, A]) DBGetRelation(ctx context.Context, filterItem see
 		return zeroType, i.ErrorDB(filterItem, err)
 	}
 
-	res := i.idToResFunc(i, dbID)
+	res := i.IDToResFunc(i, dbID)
 	return res, nil
 }
 
@@ -42,10 +42,10 @@ func (i HandlerInput[T, R, A]) DBGetRelationPtr(ctx context.Context, item seedty
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
-		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", i.resTypeSingle, item), err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get %s of %s", i.ResTypeSingle, item), err)
 	}
 
-	res := i.idToResFunc(i, dbID)
+	res := i.IDToResFunc(i, dbID)
 	return &res, nil
 }
 

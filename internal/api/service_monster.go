@@ -7,6 +7,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
@@ -23,8 +24,8 @@ func quickAssembleMon(monID int32, altStatePtr *int32) (apitypes.Monster, error)
 		IsUnderwater:     monsterLookup.IsUnderwater,
 		IsZombie:         monsterLookup.IsZombie,
 		Distance:         monsterLookup.Distance,
-		Properties:       NamesToNamedAPIResources(E.Properties, monsterLookup.Properties),
-		AutoAbilities:    NamesToNamedAPIResources(E.AutoAbilities, monsterLookup.AutoAbilities),
+		Properties:       handlerinput.NamesToNamedAPIResources(E.Properties, monsterLookup.Properties),
+		AutoAbilities:    handlerinput.NamesToNamedAPIResources(E.AutoAbilities, monsterLookup.AutoAbilities),
 		StealGil:         monsterLookup.StealGil,
 		DoomCountdown:    monsterLookup.DoomCountdown,
 		PoisonRate:       monsterLookup.PoisonRate,
@@ -32,7 +33,7 @@ func quickAssembleMon(monID int32, altStatePtr *int32) (apitypes.Monster, error)
 		ZanmatoLevel:     monsterLookup.ZanmatoLevel,
 		BaseStats:        E.Stats.ToResAmtType(monsterLookup.BaseStats, newBaseStat),
 		ElemResists:      getMonsterElemResists(monsterLookup.ElemResists),
-		StatusImmunities: NamesToNamedAPIResources(E.StatusConditions, monsterLookup.StatusImmunities),
+		StatusImmunities: handlerinput.NamesToNamedAPIResources(E.StatusConditions, monsterLookup.StatusImmunities),
 		StatusResists:    E.StatusConditions.ToResAmtType(monsterLookup.StatusResists, newStatusResist),
 		Abilities:        ah.ConvertObjSlice(monsterLookup.Abilities, convertMonsterAbility),
 		AlteredStates:    getMonsterAlteredStates(nil, monsterLookup),

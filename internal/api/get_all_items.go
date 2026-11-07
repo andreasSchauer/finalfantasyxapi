@@ -8,12 +8,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMasterItem(r *http.Request, i HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource], id int32) (apitypes.MasterItem, error) {
+func getMasterItem(r *http.Request, i handlerinput.HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource], id int32) (apitypes.MasterItem, error) {
 	masterItem, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.MasterItem{}, err
@@ -37,30 +38,30 @@ func getMasterItem(r *http.Request, i HandlerInput[seedtypes.MasterItem, apitype
 
 		response.Description = item.Description
 		response.Effect = item.Effect
-		response.TypedItem = NameToNamedAPIResource(E.Items, item.Name, nil)
+		response.TypedItem = handlerinput.NameToNamedAPIResource(E.Items, item.Name, nil)
 
 	case database.ItemTypeKeyItem:
 		keyItem, _ := lookup.GetResource(masterItem, lookup.L.KeyItems)
 
 		response.Description = keyItem.Description
 		response.Effect = keyItem.Effect
-		response.TypedItem = NameToNamedAPIResource(E.KeyItems, keyItem.Name, nil)
+		response.TypedItem = handlerinput.NameToNamedAPIResource(E.KeyItems, keyItem.Name, nil)
 	}
 
 	return response, nil
 }
 
-func retrieveMasterItems(r *http.Request, i HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]) ([]int32, error) {
+func retrieveMasterItems(r *http.Request, i handlerinput.HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnumList(r, enums.T.ItemType, ids, ts.QpnType, config.Cfg.DB.GetMasterItemIDsByType),
 		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetMasterItemIDsByMethods),
-		i.QueryIDWrapper(r, ids, ts.QpnLocation, E.Locations.objLookup, getMasterItemsByLocation),
-		i.QueryIDWrapper(r, ids, ts.QpnSublocation, E.Sublocations.objLookup, getMasterItemsBySublocation),
-		i.QueryIDWrapper(r, ids, ts.QpnArea, E.Areas.objLookup, getMasterItemsByArea),
+		i.QueryIDWrapper(r, ids, ts.QpnLocation, E.Locations.ObjLookup, getMasterItemsByLocation),
+		i.QueryIDWrapper(r, ids, ts.QpnSublocation, E.Sublocations.ObjLookup, getMasterItemsBySublocation),
+		i.QueryIDWrapper(r, ids, ts.QpnArea, E.Areas.ObjLookup, getMasterItemsByArea),
 	})
 }

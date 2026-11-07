@@ -45,7 +45,7 @@ func getElemResistIDs(query string, queryParam queryparam.QueryParam) ([]int32, 
 			return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}
 
-		elementID, err := queryParam.CheckNameID(elementStr, E.Elements.resTypeSingle, lookup.L.Elements)
+		elementID, err := queryParam.CheckNameID(elementStr, E.Elements.ResTypeSingle, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -106,7 +106,7 @@ func verifyMonsterResistance(r *http.Request) (int32, error) {
 func getMonstersByAutoAbility(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Monsters
 
-	queryParam := i.queryLookup[ts.QpnIsForced]
+	queryParam := i.QueryLookup[ts.QpnIsForced]
 
 	isForced, err := queryParam.ParseBool(r)
 	if errs.QueryIsEmpty(err) {
@@ -118,7 +118,7 @@ func getMonstersByAutoAbility(r *http.Request, ctx context.Context, id int32) ([
 		IsForced:      isForced,
 	})
 	if err != nil {
-		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%d'", i.resTypePlural, id), err)
+		return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by auto-ability id '%d'", i.ResTypePlural, id), err)
 	}
 
 	return dbIDs, nil
@@ -137,7 +137,7 @@ func getMonstersByItem(r *http.Request, ctx context.Context, id int32) ([]int32,
 		Methods: methods,
 	})
 	if err != nil {
-		return nil, i.ErrorDBFilter(i.queryLookup[ts.QpnItem], err)
+		return nil, i.ErrorDBFilter(i.QueryLookup[ts.QpnItem], err)
 	}
 
 	return dbIDs, nil
@@ -145,7 +145,7 @@ func getMonstersByItem(r *http.Request, ctx context.Context, id int32) ([]int32,
 
 func getMonsterItemMethods(r *http.Request) ([]string, error) {
 	i := E.Monsters
-	paramMethods := i.queryLookup[ts.QpnMethods]
+	paramMethods := i.QueryLookup[ts.QpnMethods]
 	aliasses := map[string][]string{
 		"steal": {"steal_common", "steal_rare"},
 		"drop":  {"drop_common", "drop_rare", "drop_secondary_common", "drop_secondary_rare"},

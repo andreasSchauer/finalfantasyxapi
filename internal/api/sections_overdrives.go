@@ -5,14 +5,14 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
-
-func createOverdriveSimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
+func createOverdriveSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.Overdrives
-	overdrive, _ := lookup.GetResourceByID(id, i.objLookupID)
+	overdrive, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	overdriveSimple := sectiontypes.OverdriveSimple{
 		ID:                 overdrive.ID,

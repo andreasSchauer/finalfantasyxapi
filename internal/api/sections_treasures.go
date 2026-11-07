@@ -5,13 +5,14 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
-func createTreasureSimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
+func createTreasureSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.Treasures
-	treasure, _ := lookup.GetResourceByID(id, i.objLookupID)
+	treasure, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	treasureSimple := sectiontypes.TreasureSimple{
 		ID:           treasure.ID,

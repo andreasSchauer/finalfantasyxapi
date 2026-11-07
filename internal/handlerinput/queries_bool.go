@@ -13,8 +13,8 @@ import (
 
 func (i HandlerInput[T, R, A]) QueryBool(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryBool) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
-		queryParam := i.queryLookup[queryName]
-		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
+		queryParam := i.QueryLookup[queryName]
+		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {
 			return inputIDs, nil
 		}
 
@@ -39,8 +39,8 @@ func (i HandlerInput[T, R, A]) QueryBool(r *http.Request, inputIDs []int32, quer
 
 func (i HandlerInput[T, R, A]) QueryBool2(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryNoInput) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
-		queryParam := i.queryLookup[queryName]
-		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
+		queryParam := i.QueryLookup[queryName]
+		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {
 			return inputIDs, nil
 		}
 
@@ -67,8 +67,8 @@ func (i HandlerInput[T, R, A]) QueryBool2(r *http.Request, inputIDs []int32, que
 
 func (i HandlerInput[T, R, A]) QueryBoolWrapper(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapBool) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
-		queryParam := i.queryLookup[queryName]
-		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
+		queryParam := i.QueryLookup[queryName]
+		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {
 			return inputIDs, nil
 		}
 

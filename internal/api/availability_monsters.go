@@ -26,9 +26,9 @@ func filterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
 
 	dbIDs, err := config.Cfg.DB.FilterMonsterIDsByAvailability(r.Context(), database.FilterMonsterIDsByAvailabilityParams{
 		Ids:            inputIDs,
-		Availability:   avlParams.availabilities,
-		IsRepeatable:   avlParams.isRepeatable,
-		PreAirship:     avlParams.preAirship,
+		Availability:   avlParams.Availabilities,
+		IsRepeatable:   avlParams.IsRepeatable,
+		PreAirship:     avlParams.PreAirship,
 		AvlType:        locContext.AvlType,
 		LocContextID:   locContext.ID,
 		LocContextType: locContext.Type,
@@ -58,9 +58,9 @@ func filterAvlMonsterFormations(r *http.Request, inputIDs []int32) ([]int32, err
 
 	dbIDs, err := config.Cfg.DB.FilterMonsterFormationIDsByAvailability(r.Context(), database.FilterMonsterFormationIDsByAvailabilityParams{
 		Ids:            inputIDs,
-		Availability:   avlParams.availabilities,
-		IsRepeatable:   avlParams.isRepeatable,
-		PreAirship:     avlParams.preAirship,
+		Availability:   avlParams.Availabilities,
+		IsRepeatable:   avlParams.IsRepeatable,
+		PreAirship:     avlParams.PreAirship,
 		AvlType:        locContext.AvlType,
 		LocContextID:   locContext.ID,
 		LocContextType: locContext.Type,

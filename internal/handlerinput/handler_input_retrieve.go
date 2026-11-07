@@ -35,15 +35,15 @@ func (i HandlerInput[T, R, A]) FilterIDs(r *http.Request, IDs []int32, queryFns 
 		return nil, err
 	}
 
-	if i.avlFunc != nil {
+	if i.AvlFunc != nil {
 		var err error
-		filteredIDs, err = i.avlFunc(r, filteredIDs)
+		filteredIDs, err = i.AvlFunc(r, filteredIDs)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	flip, err := i.queryLookup[ts.QpnFlip].ParseBool(r)
+	flip, err := i.QueryLookup[ts.QpnFlip].ParseBool(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

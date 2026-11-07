@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -15,7 +16,7 @@ func getPropertyRelationships(r *http.Request, property seedtypes.Property) (api
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = E.AutoAbilities.DBGetRelations(ctx, property, ToIntManyNull(config.Cfg.DB.GetPropertyAutoAbilityIDs))
+		rel.AutoAbilities, err = E.AutoAbilities.DBGetRelations(ctx, property, handlerinput.ToIntManyNull(config.Cfg.DB.GetPropertyAutoAbilityIDs))
 		return err
 	})
 

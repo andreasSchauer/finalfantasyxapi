@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 )
 
 // remove lost items and put them into defStateGain
@@ -21,10 +22,10 @@ func modifyResourcesLoss[T apiresource.HasAPIResource](items, changeItems []T) (
 		defStateGainItems = append(defStateGainItems, item)
 	}
 
-	items = RemoveResources(items, itemsToRemove)
+	items = handlerinput.RemoveResources(items, itemsToRemove)
 
-	slices.SortStableFunc(items, SortAPIResources)
-	slices.SortStableFunc(defStateGainItems, SortAPIResources)
+	slices.SortStableFunc(items, handlerinput.SortAPIResources)
+	slices.SortStableFunc(defStateGainItems, handlerinput.SortAPIResources)
 
 	return items, defStateGainItems
 }
@@ -42,8 +43,8 @@ func modifyResourcesGain[T apiresource.HasAPIResource](items, changeItems []T) (
 		defStateLossItems = append(defStateLossItems, item)
 	}
 
-	slices.SortStableFunc(items, SortAPIResources)
-	slices.SortStableFunc(defStateLossItems, SortAPIResources)
+	slices.SortStableFunc(items, handlerinput.SortAPIResources)
+	slices.SortStableFunc(defStateLossItems, handlerinput.SortAPIResources)
 
 	return items, defStateLossItems
 }
@@ -55,10 +56,10 @@ func modifyResourcesChange[T apiresource.HasAPIResource](items, changeItems []T)
 	}
 
 	defStateChangeItems := []T{}
-	replaceMap := GetResourceMap(changeItems)
+	replaceMap := handlerinput.GetResourceMap(changeItems)
 
 	for i, item := range items {
-		key := GetAPIResourceID(item)
+		key := handlerinput.GetAPIResourceID(item)
 		_, ok := replaceMap[key]
 		if ok {
 			defStateChangeItems = append(defStateChangeItems, item)
@@ -78,7 +79,7 @@ func modifyGainedImmunities(mon apitypes.Monster, change, defStateGain, defState
 
 	mon.StatusImmunities, defStateLoss.StatusImmunities = modifyResourcesGain(mon.StatusImmunities, change.StatusImmunities)
 
-	keptItems, removedItems := SeparateResources(mon.StatusResists, change.StatusImmunities)
+	keptItems, removedItems := handlerinput.SeparateResources(mon.StatusResists, change.StatusImmunities)
 
 	if len(removedItems) == 0 {
 		removedItems = nil

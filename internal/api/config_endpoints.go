@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -16,56 +17,56 @@ import (
 var E = &Endpoints{}
 
 type Endpoints struct {
-	Locations          HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource]
-	Sublocations       HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource]
-	Areas              HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]
-	MonsterFormations  HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]
-	Shops              HandlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource]
-	Treasures          HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource]
-	Quests             HandlerInput[seedtypes.Quest, apitypes.Quest, apiresource.QuestAPIResource]
-	Sidequests         HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource]
-	Subquests          HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource]
-	ArenaCreations     HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource]
-	BlitzballPrizes    HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource]
-	Songs              HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource]
-	FMVs               HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource]
-	PlayerUnits        HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]
-	Characters         HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]
-	Aeons              HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]
-	CharacterClasses   HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource]
-	Monsters           HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]
-	Abilities          HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource]
-	PlayerAbilities    HandlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource]
-	OverdriveAbilities HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]
-	ItemAbilities      HandlerInput[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource]
-	TriggerCommands    HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]
-	MiscAbilities      HandlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource]
-	EnemyAbilities     HandlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource]
-	AeonCommands       HandlerInput[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource]
-	OverdriveCommands  HandlerInput[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource]
-	Overdrives         HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource]
-	RonsoRages         HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource]
-	Submenus           HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource]
-	Topmenus           HandlerInput[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource]
-	AllItems           HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]
-	Items              HandlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource]
-	KeyItems           HandlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource]
-	Spheres            HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource]
-	Primers            HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource]
-	Mixes              HandlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource]
-	AutoAbilities      HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]
-	EquipmentTables    HandlerInput[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource]
-	Equipment          HandlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource]
-	CelestialWeapons   HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource]
-	Stats              HandlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource]
-	Properties         HandlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource]
-	OverdriveModes     HandlerInput[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource]
-	Elements           HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]
-	StatusConditions   HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource]
-	Modifiers          HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource]
-	AgilityTiers       HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]
-	Enums              HandlerInputEnums
-	Endpoints          HandlerInputEndpoints
+	Locations          handlerinput.HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource]
+	Sublocations       handlerinput.HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource]
+	Areas              handlerinput.HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]
+	MonsterFormations  handlerinput.HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]
+	Shops              handlerinput.HandlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource]
+	Treasures          handlerinput.HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource]
+	Quests             handlerinput.HandlerInput[seedtypes.Quest, apitypes.Quest, apiresource.QuestAPIResource]
+	Sidequests         handlerinput.HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource]
+	Subquests          handlerinput.HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource]
+	ArenaCreations     handlerinput.HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource]
+	BlitzballPrizes    handlerinput.HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource]
+	Songs              handlerinput.HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource]
+	FMVs               handlerinput.HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource]
+	PlayerUnits        handlerinput.HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]
+	Characters         handlerinput.HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]
+	Aeons              handlerinput.HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]
+	CharacterClasses   handlerinput.HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource]
+	Monsters           handlerinput.HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]
+	Abilities          handlerinput.HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource]
+	PlayerAbilities    handlerinput.HandlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource]
+	OverdriveAbilities handlerinput.HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]
+	ItemAbilities      handlerinput.HandlerInput[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource]
+	TriggerCommands    handlerinput.HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]
+	MiscAbilities      handlerinput.HandlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource]
+	EnemyAbilities     handlerinput.HandlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource]
+	AeonCommands       handlerinput.HandlerInput[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource]
+	OverdriveCommands  handlerinput.HandlerInput[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource]
+	Overdrives         handlerinput.HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource]
+	RonsoRages         handlerinput.HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource]
+	Submenus           handlerinput.HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource]
+	Topmenus           handlerinput.HandlerInput[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource]
+	AllItems           handlerinput.HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]
+	Items              handlerinput.HandlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource]
+	KeyItems           handlerinput.HandlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource]
+	Spheres            handlerinput.HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource]
+	Primers            handlerinput.HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource]
+	Mixes              handlerinput.HandlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource]
+	AutoAbilities      handlerinput.HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]
+	EquipmentTables    handlerinput.HandlerInput[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource]
+	Equipment          handlerinput.HandlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource]
+	CelestialWeapons   handlerinput.HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource]
+	Stats              handlerinput.HandlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource]
+	Properties         handlerinput.HandlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource]
+	OverdriveModes     handlerinput.HandlerInput[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource]
+	Elements           handlerinput.HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]
+	StatusConditions   handlerinput.HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource]
+	Modifiers          handlerinput.HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource]
+	AgilityTiers       handlerinput.HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]
+	Enums              handlerinput.HandlerInputEnums
+	Endpoints          handlerinput.HandlerInputEndpoints
 	AlBhed             HandlerInputService[AlBhedParams, AlBhedResponse]
 	TurnOrder          HandlerInputService[TurnOrderParams, TurnOrderResponse]
 	DropChance         HandlerInputService[DropChanceParams, DropChanceResponse]
@@ -73,953 +74,953 @@ type Endpoints struct {
 }
 
 func (E *Endpoints) Init() {
-	E.Locations = HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource]{
+	E.Locations = handlerinput.HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpLocations,
-		resTypeSingle: ts.RTSLocations,
-		resTypePlural: ts.RTPLocations,
-		objLookup:     lookup.L.Locations,
-		objLookupID:   lookup.L.LocationsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetLocationIDs,
-		getSingleFunc: getLocation,
-		retrieveFunc:  retrieveLocations,
-		avlFunc:       filterAvlLocations,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSLocations,
+		ResTypePlural: ts.RTPLocations,
+		ObjLookup:     lookup.L.Locations,
+		ObjLookupID:   lookup.L.LocationsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetLocationIDs,
+		GetSingleFunc: getLocation,
+		RetrieveFunc:  retrieveLocations,
+		AvlFunc:       filterAvlLocations,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createLocationSimple,
-				relationsFn: getLocationSectionRelations,
+				CreateSubFn: createLocationSimple,
+				RelationsFn: getLocationSectionRelations,
 			},
 			ts.SnConnected: {
-				dbQuery:     config.Cfg.DB.GetConnectedLocationIDs,
-				createSubFn: createLocationSimple,
-				relationsFn: getLocationSectionRelations,
+				DBQuery:     config.Cfg.DB.GetConnectedLocationIDs,
+				CreateSubFn: createLocationSimple,
+				RelationsFn: getLocationSectionRelations,
 			},
 			ts.SnSublocations: {
-				dbQuery:     config.Cfg.DB.GetLocationSublocationIDs,
-				createSubFn: createSublocationSimple,
-				relationsFn: getSublocationSectionRelations,
+				DBQuery:     config.Cfg.DB.GetLocationSublocationIDs,
+				CreateSubFn: createSublocationSimple,
+				RelationsFn: getSublocationSectionRelations,
 			},
 			ts.SnAreas: {
-				dbQuery:     config.Cfg.DB.GetLocationAreaIDs,
-				createSubFn: createAreaSimple,
-				relationsFn: getAreaSectionRelations,
+				DBQuery:     config.Cfg.DB.GetLocationAreaIDs,
+				CreateSubFn: createAreaSimple,
+				RelationsFn: getAreaSectionRelations,
 			},
 			ts.SnMonsterFormations: {
-				dbQuery:     config.Cfg.DB.GetLocationMonsterFormationIDs,
-				createSubFn: createMonsterFormationSimple,
+				DBQuery:     config.Cfg.DB.GetLocationMonsterFormationIDs,
+				CreateSubFn: createMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     config.Cfg.DB.GetLocationMonsterIDs,
-				createSubFn: createMonsterSimple,
-				relationsFn: getMonsterSectionRelations,
+				DBQuery:     config.Cfg.DB.GetLocationMonsterIDs,
+				CreateSubFn: createMonsterSimple,
+				RelationsFn: getMonsterSectionRelations,
 			},
 			ts.SnShops: {
-				dbQuery:     config.Cfg.DB.GetLocationShopIDs,
-				createSubFn: createShopSimple,
+				DBQuery:     config.Cfg.DB.GetLocationShopIDs,
+				CreateSubFn: createShopSimple,
 			},
 			ts.SnSongs: {
-				dbQuery:     getLocationSongIDs,
-				createSubFn: createSongSimple,
+				DBQuery:     getLocationSongIDs,
+				CreateSubFn: createSongSimple,
 			},
 			ts.SnTreasures: {
-				dbQuery:     config.Cfg.DB.GetLocationTreasureIDs,
-				createSubFn: createTreasureSimple,
+				DBQuery:     config.Cfg.DB.GetLocationTreasureIDs,
+				CreateSubFn: createTreasureSimple,
 			},
 		},
 	}
 
-	E.Sublocations = HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource]{
+	E.Sublocations = handlerinput.HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpSublocations,
-		resTypeSingle: ts.RTSSublocations,
-		resTypePlural: ts.RTPSublocations,
-		objLookup:     lookup.L.Sublocations,
-		objLookupID:   lookup.L.SublocationsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetSublocationIDs,
-		getSingleFunc: getSublocation,
-		retrieveFunc:  retrieveSublocations,
-		avlFunc:       filterAvlSublocations,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSSublocations,
+		ResTypePlural: ts.RTPSublocations,
+		ObjLookup:     lookup.L.Sublocations,
+		ObjLookupID:   lookup.L.SublocationsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetSublocationIDs,
+		GetSingleFunc: getSublocation,
+		RetrieveFunc:  retrieveSublocations,
+		AvlFunc:       filterAvlSublocations,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createSublocationSimple,
-				relationsFn: getSublocationSectionRelations,
+				CreateSubFn: createSublocationSimple,
+				RelationsFn: getSublocationSectionRelations,
 			},
 			ts.SnConnected: {
-				dbQuery:     config.Cfg.DB.GetConnectedSublocationIDs,
-				createSubFn: createSublocationSimple,
-				relationsFn: getSublocationSectionRelations,
+				DBQuery:     config.Cfg.DB.GetConnectedSublocationIDs,
+				CreateSubFn: createSublocationSimple,
+				RelationsFn: getSublocationSectionRelations,
 			},
 			ts.SnAreas: {
-				dbQuery:     config.Cfg.DB.GetSublocationAreaIDs,
-				createSubFn: createAreaSimple,
+				DBQuery:     config.Cfg.DB.GetSublocationAreaIDs,
+				CreateSubFn: createAreaSimple,
 			},
 			ts.SnMonsterFormations: {
-				dbQuery:     config.Cfg.DB.GetSublocationMonsterFormationIDs,
-				createSubFn: createMonsterFormationSimple,
+				DBQuery:     config.Cfg.DB.GetSublocationMonsterFormationIDs,
+				CreateSubFn: createMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     config.Cfg.DB.GetSublocationMonsterIDs,
-				createSubFn: createMonsterSimple,
-				relationsFn: getMonsterSectionRelations,
+				DBQuery:     config.Cfg.DB.GetSublocationMonsterIDs,
+				CreateSubFn: createMonsterSimple,
+				RelationsFn: getMonsterSectionRelations,
 			},
 			ts.SnShops: {
-				dbQuery:     config.Cfg.DB.GetSublocationShopIDs,
-				createSubFn: createShopSimple,
+				DBQuery:     config.Cfg.DB.GetSublocationShopIDs,
+				CreateSubFn: createShopSimple,
 			},
 			ts.SnSongs: {
-				dbQuery:     getSublocationSongIDs,
-				createSubFn: createSongSimple,
+				DBQuery:     getSublocationSongIDs,
+				CreateSubFn: createSongSimple,
 			},
 			ts.SnTreasures: {
-				dbQuery:     config.Cfg.DB.GetSublocationTreasureIDs,
-				createSubFn: createTreasureSimple,
+				DBQuery:     config.Cfg.DB.GetSublocationTreasureIDs,
+				CreateSubFn: createTreasureSimple,
 			},
 		},
 	}
 
-	E.Areas = HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]{
+	E.Areas = handlerinput.HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]{
 		Endpoint:      ts.EpAreas,
-		resTypeSingle: ts.RTSAreas,
-		resTypePlural: ts.RTPAreas,
-		objLookup:     lookup.L.Areas,
-		objLookupID:   lookup.L.AreasID,
-		idToResFunc:   IDToAreaAPIResource,
-		retrieveQuery: config.Cfg.DB.GetAreaIDs,
-		getSingleFunc: getArea,
-		retrieveFunc:  retrieveAreas,
-		avlFunc:       filterAvlAreas,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSAreas,
+		ResTypePlural: ts.RTPAreas,
+		ObjLookup:     lookup.L.Areas,
+		ObjLookupID:   lookup.L.AreasID,
+		IDToResFunc:   handlerinput.IDToAreaAPIResource,
+		RetrieveQuery: config.Cfg.DB.GetAreaIDs,
+		GetSingleFunc: getArea,
+		RetrieveFunc:  retrieveAreas,
+		AvlFunc:       filterAvlAreas,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createAreaSimple,
-				relationsFn: getAreaSectionRelations,
+				CreateSubFn: createAreaSimple,
+				RelationsFn: getAreaSectionRelations,
 			},
 			ts.SnConnected: {
-				dbQuery:     config.Cfg.DB.GetAreaConnectionIDs,
-				createSubFn: createAreaSimple,
-				relationsFn: getAreaSectionRelations,
+				DBQuery:     config.Cfg.DB.GetAreaConnectionIDs,
+				CreateSubFn: createAreaSimple,
+				RelationsFn: getAreaSectionRelations,
 			},
 			ts.SnMonsterFormations: {
-				dbQuery:     config.Cfg.DB.GetAreaMonsterFormationIDs,
-				createSubFn: createMonsterFormationSimple,
+				DBQuery:     config.Cfg.DB.GetAreaMonsterFormationIDs,
+				CreateSubFn: createMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     config.Cfg.DB.GetAreaMonsterIDs,
-				createSubFn: createMonsterSimple,
-				relationsFn: getMonsterSectionRelations,
+				DBQuery:     config.Cfg.DB.GetAreaMonsterIDs,
+				CreateSubFn: createMonsterSimple,
+				RelationsFn: getMonsterSectionRelations,
 			},
 			ts.SnSongs: {
-				dbQuery:     getAreaSongIDs,
-				createSubFn: createSongSimple,
+				DBQuery:     getAreaSongIDs,
+				CreateSubFn: createSongSimple,
 			},
 			ts.SnTreasures: {
-				dbQuery:     config.Cfg.DB.GetAreaTreasureIDs,
-				createSubFn: createTreasureSimple,
+				DBQuery:     config.Cfg.DB.GetAreaTreasureIDs,
+				CreateSubFn: createTreasureSimple,
 			},
 		},
 	}
 
-	E.MonsterFormations = HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]{
+	E.MonsterFormations = handlerinput.HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]{
 		Endpoint:      ts.EpMonsterFormations,
-		resTypeSingle: ts.RTSMonsterFormations,
-		resTypePlural: ts.RTPMonsterFormations,
-		objLookup:     lookup.L.MonsterFormations,
-		objLookupID:   lookup.L.MonsterFormationsID,
-		idToResFunc:   IDToUnnamedAPIResource[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetMonsterFormationIDs,
-		getSingleFunc: getMonsterFormation,
-		retrieveFunc:  retrieveMonsterFormations,
-		avlFunc:       filterAvlMonsterFormations,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSMonsterFormations,
+		ResTypePlural: ts.RTPMonsterFormations,
+		ObjLookup:     lookup.L.MonsterFormations,
+		ObjLookupID:   lookup.L.MonsterFormationsID,
+		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetMonsterFormationIDs,
+		GetSingleFunc: getMonsterFormation,
+		RetrieveFunc:  retrieveMonsterFormations,
+		AvlFunc:       filterAvlMonsterFormations,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createMonsterFormationSimple,
+				CreateSubFn: createMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     config.Cfg.DB.GetMonsterFormationMonsterIDs,
-				createSubFn: createMonsterSimple,
-				relationsFn: getMonsterSectionRelations,
+				DBQuery:     config.Cfg.DB.GetMonsterFormationMonsterIDs,
+				CreateSubFn: createMonsterSimple,
+				RelationsFn: getMonsterSectionRelations,
 			},
 		},
 	}
 
-	E.Shops = HandlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource]{
+	E.Shops = handlerinput.HandlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource]{
 		Endpoint:      ts.EpShops,
-		resTypeSingle: ts.RTSShops,
-		resTypePlural: ts.RTPShops,
-		objLookup:     lookup.L.Shops,
-		objLookupID:   lookup.L.ShopsID,
-		idToResFunc:   IDToUnnamedAPIResource[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetShopIDs,
-		getSingleFunc: getShop,
-		retrieveFunc:  retrieveShops,
-		avlFunc:       filterAvlShops,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSShops,
+		ResTypePlural: ts.RTPShops,
+		ObjLookup:     lookup.L.Shops,
+		ObjLookupID:   lookup.L.ShopsID,
+		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetShopIDs,
+		GetSingleFunc: getShop,
+		RetrieveFunc:  retrieveShops,
+		AvlFunc:       filterAvlShops,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createShopSimple,
+				CreateSubFn: createShopSimple,
 			},
 		},
 	}
 
-	E.Treasures = HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource]{
+	E.Treasures = handlerinput.HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource]{
 		Endpoint:      ts.EpTreasures,
-		resTypeSingle: ts.RTSTreasures,
-		resTypePlural: ts.RTPTreasures,
-		objLookup:     lookup.L.Treasures,
-		objLookupID:   lookup.L.TreasuresID,
-		idToResFunc:   IDToUnnamedAPIResource[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetTreasureIDs,
-		getSingleFunc: getTreasure,
-		avlFunc:       filterAvlTreasures,
-		retrieveFunc:  retrieveTreasures,
+		ResTypeSingle: ts.RTSTreasures,
+		ResTypePlural: ts.RTPTreasures,
+		ObjLookup:     lookup.L.Treasures,
+		ObjLookupID:   lookup.L.TreasuresID,
+		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetTreasureIDs,
+		GetSingleFunc: getTreasure,
+		AvlFunc:       filterAvlTreasures,
+		RetrieveFunc:  retrieveTreasures,
 	}
 
-	E.Quests = HandlerInput[seedtypes.Quest, apitypes.Quest, apiresource.QuestAPIResource]{
+	E.Quests = handlerinput.HandlerInput[seedtypes.Quest, apitypes.Quest, apiresource.QuestAPIResource]{
 		Endpoint:      ts.EpQuests,
-		resTypeSingle: ts.RTSQuests,
-		resTypePlural: ts.RTPQuests,
-		objLookup:     lookup.L.Quests,
-		objLookupID:   lookup.L.QuestsID,
-		idToResFunc:   IDToQuestAPIResource[seedtypes.Quest, apitypes.Quest, apiresource.QuestAPIResource],
-		retrieveQuery: config.Cfg.DB.GetQuestIDs,
-		getSingleFunc: getQuest,
-		retrieveFunc:  retrieveQuests,
-		avlFunc:       filterAvlQuests,
+		ResTypeSingle: ts.RTSQuests,
+		ResTypePlural: ts.RTPQuests,
+		ObjLookup:     lookup.L.Quests,
+		ObjLookupID:   lookup.L.QuestsID,
+		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Quest, apitypes.Quest, apiresource.QuestAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetQuestIDs,
+		GetSingleFunc: getQuest,
+		RetrieveFunc:  retrieveQuests,
+		AvlFunc:       filterAvlQuests,
 	}
 
-	E.Sidequests = HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource]{
+	E.Sidequests = handlerinput.HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource]{
 		Endpoint:      ts.EpSidequests,
-		resTypeSingle: ts.RTSSidequests,
-		resTypePlural: ts.RTPSidequests,
-		objLookup:     lookup.L.Sidequests,
-		objLookupID:   lookup.L.SidequestsID,
-		idToResFunc:   IDToQuestAPIResource[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource],
-		retrieveQuery: config.Cfg.DB.GetSidequestIDs,
-		getSingleFunc: getSidequest,
-		retrieveFunc:  retrieveSidequests,
-		avlFunc:       filterAvlSidequests,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSSidequests,
+		ResTypePlural: ts.RTPSidequests,
+		ObjLookup:     lookup.L.Sidequests,
+		ObjLookupID:   lookup.L.SidequestsID,
+		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetSidequestIDs,
+		GetSingleFunc: getSidequest,
+		RetrieveFunc:  retrieveSidequests,
+		AvlFunc:       filterAvlSidequests,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSubquests: {
-				dbQuery:     config.Cfg.DB.GetSidequestSubquestIDs,
-				createSubFn: createSubquestSimple,
+				DBQuery:     config.Cfg.DB.GetSidequestSubquestIDs,
+				CreateSubFn: createSubquestSimple,
 			},
 		},
 	}
 
-	E.Subquests = HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource]{
+	E.Subquests = handlerinput.HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource]{
 		Endpoint:      ts.EpSubquests,
-		resTypeSingle: ts.RTSSubquests,
-		resTypePlural: ts.RTPSubquests,
-		objLookup:     lookup.L.Subquests,
-		objLookupID:   lookup.L.SubquestsID,
-		idToResFunc:   IDToQuestAPIResource[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource],
-		retrieveQuery: config.Cfg.DB.GetSubquestIDs,
-		getSingleFunc: getSubquest,
-		retrieveFunc:  retrieveSubquests,
-		avlFunc:       filterAvlSubquests,
+		ResTypeSingle: ts.RTSSubquests,
+		ResTypePlural: ts.RTPSubquests,
+		ObjLookup:     lookup.L.Subquests,
+		ObjLookupID:   lookup.L.SubquestsID,
+		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetSubquestIDs,
+		GetSingleFunc: getSubquest,
+		RetrieveFunc:  retrieveSubquests,
+		AvlFunc:       filterAvlSubquests,
 	}
 
-	E.ArenaCreations = HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource]{
+	E.ArenaCreations = handlerinput.HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpArenaCreations,
-		resTypeSingle: ts.RTSArenaCreations,
-		resTypePlural: ts.RTPArenaCreations,
-		objLookup:     lookup.L.ArenaCreations,
-		objLookupID:   lookup.L.ArenaCreationsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetArenaCreationIDs,
-		getSingleFunc: getArenaCreation,
-		retrieveFunc:  retrieveArenaCreations,
+		ResTypeSingle: ts.RTSArenaCreations,
+		ResTypePlural: ts.RTPArenaCreations,
+		ObjLookup:     lookup.L.ArenaCreations,
+		ObjLookupID:   lookup.L.ArenaCreationsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetArenaCreationIDs,
+		GetSingleFunc: getArenaCreation,
+		RetrieveFunc:  retrieveArenaCreations,
 	}
 
-	E.BlitzballPrizes = HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource]{
+	E.BlitzballPrizes = handlerinput.HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpBlitzballPrizes,
-		resTypeSingle: ts.RTSBlitzballPrizes,
-		resTypePlural: ts.RTPBlitzballPrizes,
-		objLookup:     lookup.L.Positions,
-		objLookupID:   lookup.L.PositionsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetBlitzballPrizeIDs,
-		getSingleFunc: getBlitzballPrize,
-		retrieveFunc:  retrieveBlitzballPrizes,
+		ResTypeSingle: ts.RTSBlitzballPrizes,
+		ResTypePlural: ts.RTPBlitzballPrizes,
+		ObjLookup:     lookup.L.Positions,
+		ObjLookupID:   lookup.L.PositionsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetBlitzballPrizeIDs,
+		GetSingleFunc: getBlitzballPrize,
+		RetrieveFunc:  retrieveBlitzballPrizes,
 	}
 
-	E.Songs = HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource]{
+	E.Songs = handlerinput.HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpSongs,
-		resTypeSingle: ts.RTSSongs,
-		resTypePlural: ts.RTPSongs,
-		objLookup:     lookup.L.Songs,
-		objLookupID:   lookup.L.SongsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetSongIDs,
-		getSingleFunc: getSong,
-		retrieveFunc:  retrieveSongs,
+		ResTypeSingle: ts.RTSSongs,
+		ResTypePlural: ts.RTPSongs,
+		ObjLookup:     lookup.L.Songs,
+		ObjLookupID:   lookup.L.SongsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetSongIDs,
+		GetSingleFunc: getSong,
+		RetrieveFunc:  retrieveSongs,
 	}
 
-	E.FMVs = HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource]{
+	E.FMVs = handlerinput.HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpFMVs,
-		resTypeSingle: ts.RTSFMVs,
-		resTypePlural: ts.RTPFMVs,
-		objLookup:     lookup.L.FMVs,
-		objLookupID:   lookup.L.FMVsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetFmvIDs,
-		getSingleFunc: getFMV,
-		retrieveFunc:  retrieveFMVs,
+		ResTypeSingle: ts.RTSFMVs,
+		ResTypePlural: ts.RTPFMVs,
+		ObjLookup:     lookup.L.FMVs,
+		ObjLookupID:   lookup.L.FMVsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetFmvIDs,
+		GetSingleFunc: getFMV,
+		RetrieveFunc:  retrieveFMVs,
 	}
 
-	E.PlayerUnits = HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]{
+	E.PlayerUnits = handlerinput.HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]{
 		Endpoint:      ts.EpPlayerUnits,
-		resTypeSingle: ts.RTSPlayerUnits,
-		resTypePlural: ts.RTPPlayerUnits,
-		objLookup:     lookup.L.PlayerUnits,
-		objLookupID:   lookup.L.PlayerUnitsID,
-		idToResFunc:   IDToTypedAPIResource[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetPlayerUnitIDs,
-		getSingleFunc: getPlayerUnit,
-		retrieveFunc:  retrievePlayerUnits,
+		ResTypeSingle: ts.RTSPlayerUnits,
+		ResTypePlural: ts.RTPPlayerUnits,
+		ObjLookup:     lookup.L.PlayerUnits,
+		ObjLookupID:   lookup.L.PlayerUnitsID,
+		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetPlayerUnitIDs,
+		GetSingleFunc: getPlayerUnit,
+		RetrieveFunc:  retrievePlayerUnits,
 	}
 
-	E.Characters = HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]{
+	E.Characters = handlerinput.HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpCharacters,
-		resTypeSingle: ts.RTSCharacters,
-		resTypePlural: ts.RTPCharacters,
-		objLookup:     lookup.L.Characters,
-		objLookupID:   lookup.L.CharactersID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetCharacterIDs,
-		getSingleFunc: getCharacter,
-		retrieveFunc:  retrieveCharacters,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSCharacters,
+		ResTypePlural: ts.RTPCharacters,
+		ObjLookup:     lookup.L.Characters,
+		ObjLookupID:   lookup.L.CharactersID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetCharacterIDs,
+		GetSingleFunc: getCharacter,
+		RetrieveFunc:  retrieveCharacters,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnDefaultAbilities: {
-				dbQuery:     config.Cfg.DB.GetCharacterDefaultAbilityIDs,
-				createSubFn: createPlayerAbilitySimple,
+				DBQuery:     config.Cfg.DB.GetCharacterDefaultAbilityIDs,
+				CreateSubFn: createPlayerAbilitySimple,
 			},
 			ts.SnStdSgAbilities: {
-				dbQuery:     config.Cfg.DB.GetCharacterSgAbilityIDs,
-				createSubFn: createPlayerAbilitySimple,
+				DBQuery:     config.Cfg.DB.GetCharacterSgAbilityIDs,
+				CreateSubFn: createPlayerAbilitySimple,
 			},
 			ts.SnExpSgAbilities: {
-				dbQuery:     config.Cfg.DB.GetCharacterEgAbilityIDs,
-				createSubFn: createPlayerAbilitySimple,
+				DBQuery:     config.Cfg.DB.GetCharacterEgAbilityIDs,
+				CreateSubFn: createPlayerAbilitySimple,
 			},
 			ts.SnOverdriveAbilities: {
-				dbQuery:     config.Cfg.DB.GetCharacterOverdriveAbilityIDs,
-				createSubFn: createOverdriveAbilitySimple,
+				DBQuery:     config.Cfg.DB.GetCharacterOverdriveAbilityIDs,
+				CreateSubFn: createOverdriveAbilitySimple,
 			},
 			ts.SnOverdrives: {
-				dbQuery:     config.Cfg.DB.GetCharacterOverdriveIDs,
-				createSubFn: createOverdriveSimple,
+				DBQuery:     config.Cfg.DB.GetCharacterOverdriveIDs,
+				CreateSubFn: createOverdriveSimple,
 			},
 		},
 	}
 
-	E.Aeons = HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]{
+	E.Aeons = handlerinput.HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpAeons,
-		resTypeSingle: ts.RTSAeons,
-		resTypePlural: ts.RTPAeons,
-		objLookup:     lookup.L.Aeons,
-		objLookupID:   lookup.L.AeonsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetAeonIDs,
-		getSingleFunc: getAeon,
-		retrieveFunc:  retrieveAeons,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSAeons,
+		ResTypePlural: ts.RTPAeons,
+		ObjLookup:     lookup.L.Aeons,
+		ObjLookupID:   lookup.L.AeonsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetAeonIDs,
+		GetSingleFunc: getAeon,
+		RetrieveFunc:  retrieveAeons,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnDefaultAbilities: {
-				dbQuery:     config.Cfg.DB.GetAeonDefaultAbilityIDs,
-				createSubFn: createPlayerAbilitySimple,
+				DBQuery:     config.Cfg.DB.GetAeonDefaultAbilityIDs,
+				CreateSubFn: createPlayerAbilitySimple,
 			},
 			ts.SnOverdriveAbilities: {
-				dbQuery:     config.Cfg.DB.GetAeonOverdriveAbilityIDs,
-				createSubFn: createOverdriveAbilitySimple,
+				DBQuery:     config.Cfg.DB.GetAeonOverdriveAbilityIDs,
+				CreateSubFn: createOverdriveAbilitySimple,
 			},
 			ts.SnOverdrives: {
-				dbQuery:     config.Cfg.DB.GetAeonOverdriveIDs,
-				createSubFn: createOverdriveSimple,
+				DBQuery:     config.Cfg.DB.GetAeonOverdriveIDs,
+				CreateSubFn: createOverdriveSimple,
 			},
 			ts.SnStats: {
-				createSubFn: createAeonStatSimple,
+				CreateSubFn: createAeonStatSimple,
 			},
 		},
 	}
 
-	E.CharacterClasses = HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource]{
+	E.CharacterClasses = handlerinput.HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpCharacterClasses,
-		resTypeSingle: ts.RTSCharacterClasses,
-		resTypePlural: ts.RTPCharacterClasses,
-		objLookup:     lookup.L.CharClasses,
-		objLookupID:   lookup.L.CharClassesID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetCharacterClassesIDs,
-		getSingleFunc: getCharacterClass,
-		retrieveFunc:  retrieveCharacterClasses,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSCharacterClasses,
+		ResTypePlural: ts.RTPCharacterClasses,
+		ObjLookup:     lookup.L.CharClasses,
+		ObjLookupID:   lookup.L.CharClassesID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetCharacterClassesIDs,
+		GetSingleFunc: getCharacterClass,
+		RetrieveFunc:  retrieveCharacterClasses,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnDefaultAbilities: {
-				dbQuery:     config.Cfg.DB.GetCharacterClassDefaultAbilityIDs,
-				createSubFn: createAbilitySimple,
+				DBQuery:     config.Cfg.DB.GetCharacterClassDefaultAbilityIDs,
+				CreateSubFn: createAbilitySimple,
 			},
 			ts.SnLearnableAbilities: {
-				dbQuery:     config.Cfg.DB.GetCharacterClassLearnableAbilityIDs,
-				createSubFn: createAbilitySimple,
+				DBQuery:     config.Cfg.DB.GetCharacterClassLearnableAbilityIDs,
+				CreateSubFn: createAbilitySimple,
 			},
 			ts.SnDefaultOverdrives: {
-				dbQuery:     config.Cfg.DB.GetCharacterClassDefaultOverdriveIDs,
-				createSubFn: createOverdriveSimple,
+				DBQuery:     config.Cfg.DB.GetCharacterClassDefaultOverdriveIDs,
+				CreateSubFn: createOverdriveSimple,
 			},
 			ts.SnLearnableOverdrives: {
-				dbQuery:     config.Cfg.DB.GetCharacterClassLearnableOverdriveIDs,
-				createSubFn: createOverdriveSimple,
+				DBQuery:     config.Cfg.DB.GetCharacterClassLearnableOverdriveIDs,
+				CreateSubFn: createOverdriveSimple,
 			},
 		},
 	}
 
-	E.Monsters = HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]{
+	E.Monsters = handlerinput.HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]{
 		Endpoint:         ts.EpMonsters,
-		resTypeSingle:    ts.RTSMonsters,
-		resTypePlural:    ts.RTPMonsters,
-		objLookup:        lookup.L.Monsters,
-		objLookupID:      lookup.L.MonstersID,
-		idToResFunc:      IDToNamedAPIResource[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource],
-		getMultipleQuery: config.Cfg.DB.GetMonsterIDsByName,
-		retrieveQuery:    config.Cfg.DB.GetMonsterIDs,
-		getSingleFunc:    getMonster,
-		retrieveFunc:     retrieveMonsters,
-		avlFunc:          filterAvlMonsters,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle:    ts.RTSMonsters,
+		ResTypePlural:    ts.RTPMonsters,
+		ObjLookup:        lookup.L.Monsters,
+		ObjLookupID:      lookup.L.MonstersID,
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource],
+		GetMultipleQuery: config.Cfg.DB.GetMonsterIDsByName,
+		RetrieveQuery:    config.Cfg.DB.GetMonsterIDs,
+		GetSingleFunc:    getMonster,
+		RetrieveFunc:     retrieveMonsters,
+		AvlFunc:          filterAvlMonsters,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createMonsterSimple,
-				relationsFn: getMonsterSectionRelations,
+				CreateSubFn: createMonsterSimple,
+				RelationsFn: getMonsterSectionRelations,
 			},
 			ts.SnAbilities: {
-				dbQuery:     config.Cfg.DB.GetMonsterAbilityIDs,
-				createSubFn: createAbilitySimple,
+				DBQuery:     config.Cfg.DB.GetMonsterAbilityIDs,
+				CreateSubFn: createAbilitySimple,
 			},
 			ts.SnAreas: {
-				dbQuery:     config.Cfg.DB.GetMonsterAreaIDs,
-				createSubFn: createAreaSimple,
-				relationsFn: getAreaSectionRelations,
+				DBQuery:     config.Cfg.DB.GetMonsterAreaIDs,
+				CreateSubFn: createAreaSimple,
+				RelationsFn: getAreaSectionRelations,
 			},
 			ts.SnMonsterFormations: {
-				dbQuery:     config.Cfg.DB.GetMonsterMonsterFormationIDs,
-				createSubFn: createMonsterFormationSimple,
+				DBQuery:     config.Cfg.DB.GetMonsterMonsterFormationIDs,
+				CreateSubFn: createMonsterFormationSimple,
 			},
 		},
 	}
 
-	E.Abilities = HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource]{
+	E.Abilities = handlerinput.HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource]{
 		Endpoint:      ts.EpAbilities,
-		resTypeSingle: ts.RTSAbilities,
-		resTypePlural: ts.RTPAbilities,
-		objLookup:     lookup.L.Abilities,
-		objLookupID:   lookup.L.AbilitiesID,
-		idToResFunc:   IDToTypedAPIResource[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetAbilityIDs,
-		getSingleFunc: getAbility,
-		retrieveFunc:  retrieveAbilities,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSAbilities,
+		ResTypePlural: ts.RTPAbilities,
+		ObjLookup:     lookup.L.Abilities,
+		ObjLookupID:   lookup.L.AbilitiesID,
+		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetAbilityIDs,
+		GetSingleFunc: getAbility,
+		RetrieveFunc:  retrieveAbilities,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createAbilitySimple,
+				CreateSubFn: createAbilitySimple,
 			},
 		},
 	}
 
-	E.PlayerAbilities = HandlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource]{
+	E.PlayerAbilities = handlerinput.HandlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource]{
 		Endpoint:         ts.EpPlayerAbilities,
-		resTypeSingle:    ts.RTSPlayerAbilities,
-		resTypePlural:    ts.RTPPlayerAbilities,
-		objLookup:        lookup.L.PlayerAbilities,
-		objLookupID:      lookup.L.PlayerAbilitiesID,
-		idToResFunc:      IDToNamedAPIResource[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource],
-		getMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypePlayerAbility),
-		retrieveQuery:    config.Cfg.DB.GetPlayerAbilityIDs,
-		getSingleFunc:    getPlayerAbility,
-		retrieveFunc:     retrievePlayerAbilities,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle:    ts.RTSPlayerAbilities,
+		ResTypePlural:    ts.RTPPlayerAbilities,
+		ObjLookup:        lookup.L.PlayerAbilities,
+		ObjLookupID:      lookup.L.PlayerAbilitiesID,
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource],
+		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypePlayerAbility),
+		RetrieveQuery:    config.Cfg.DB.GetPlayerAbilityIDs,
+		GetSingleFunc:    getPlayerAbility,
+		RetrieveFunc:     retrievePlayerAbilities,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createPlayerAbilitySimple,
+				CreateSubFn: createPlayerAbilitySimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     config.Cfg.DB.GetPlayerAbilityMonsterIDs,
-				createSubFn: createMonsterSimple,
-				relationsFn: getMonsterSectionRelations,
+				DBQuery:     config.Cfg.DB.GetPlayerAbilityMonsterIDs,
+				CreateSubFn: createMonsterSimple,
+				RelationsFn: getMonsterSectionRelations,
 			},
 		},
 	}
 
-	E.OverdriveAbilities = HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]{
+	E.OverdriveAbilities = handlerinput.HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]{
 		Endpoint:         ts.EpOverdriveAbilities,
-		resTypeSingle:    ts.RTSOverdriveAbilities,
-		resTypePlural:    ts.RTPOverdriveAbilities,
-		objLookup:        lookup.L.OverdriveAbilities,
-		objLookupID:      lookup.L.OverdriveAbilitiesID,
-		idToResFunc:      IDToNamedAPIResource[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource],
-		getMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeOverdriveAbility),
-		retrieveQuery:    config.Cfg.DB.GetOverdriveAbilityIDs,
-		getSingleFunc:    getOverdriveAbility,
-		retrieveFunc:     retrieveOverdriveAbilities,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle:    ts.RTSOverdriveAbilities,
+		ResTypePlural:    ts.RTPOverdriveAbilities,
+		ObjLookup:        lookup.L.OverdriveAbilities,
+		ObjLookupID:      lookup.L.OverdriveAbilitiesID,
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource],
+		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeOverdriveAbility),
+		RetrieveQuery:    config.Cfg.DB.GetOverdriveAbilityIDs,
+		GetSingleFunc:    getOverdriveAbility,
+		RetrieveFunc:     retrieveOverdriveAbilities,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createOverdriveAbilitySimple,
+				CreateSubFn: createOverdriveAbilitySimple,
 			},
 		},
 	}
 
-	E.ItemAbilities = HandlerInput[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource]{
+	E.ItemAbilities = handlerinput.HandlerInput[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpItemAbilities,
-		resTypeSingle: ts.RTSItemAbilities,
-		resTypePlural: ts.RTPItemAbilities,
-		objLookup:     lookup.L.ItemAbilities,
-		objLookupID:   lookup.L.ItemAbilitiesID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetItemAbilityIDs,
-		getSingleFunc: getItemAbility,
-		retrieveFunc:  retrieveItemAbilities,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSItemAbilities,
+		ResTypePlural: ts.RTPItemAbilities,
+		ObjLookup:     lookup.L.ItemAbilities,
+		ObjLookupID:   lookup.L.ItemAbilitiesID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetItemAbilityIDs,
+		GetSingleFunc: getItemAbility,
+		RetrieveFunc:  retrieveItemAbilities,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createItemAbilitySimple,
+				CreateSubFn: createItemAbilitySimple,
 			},
 		},
 	}
 
-	E.TriggerCommands = HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]{
+	E.TriggerCommands = handlerinput.HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]{
 		Endpoint:         ts.EpTriggerCommands,
-		resTypeSingle:    ts.RTSTriggerCommands,
-		resTypePlural:    ts.RTPTriggerCommands,
-		objLookup:        lookup.L.TriggerCommands,
-		objLookupID:      lookup.L.TriggerCommandsID,
-		idToResFunc:      IDToNamedAPIResource[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource],
-		getMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeTriggerCommand),
-		retrieveQuery:    config.Cfg.DB.GetTriggerCommandIDs,
-		getSingleFunc:    getTriggerCommand,
-		retrieveFunc:     retrieveTriggerCommands,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle:    ts.RTSTriggerCommands,
+		ResTypePlural:    ts.RTPTriggerCommands,
+		ObjLookup:        lookup.L.TriggerCommands,
+		ObjLookupID:      lookup.L.TriggerCommandsID,
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource],
+		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeTriggerCommand),
+		RetrieveQuery:    config.Cfg.DB.GetTriggerCommandIDs,
+		GetSingleFunc:    getTriggerCommand,
+		RetrieveFunc:     retrieveTriggerCommands,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createTriggerCommandSimple,
+				CreateSubFn: createTriggerCommandSimple,
 			},
 		},
 	}
 
-	E.MiscAbilities = HandlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource]{
+	E.MiscAbilities = handlerinput.HandlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource]{
 		Endpoint:         ts.EpMiscAbilities,
-		resTypeSingle:    ts.RTSMiscAbilities,
-		resTypePlural:    ts.RTPMiscAbilities,
-		objLookup:        lookup.L.MiscAbilities,
-		objLookupID:      lookup.L.MiscAbilitiesID,
-		idToResFunc:      IDToNamedAPIResource[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource],
-		getMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeMiscAbility),
-		retrieveQuery:    config.Cfg.DB.GetMiscAbilityIDs,
-		getSingleFunc:    getMiscAbility,
-		retrieveFunc:     retrieveMiscAbilities,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle:    ts.RTSMiscAbilities,
+		ResTypePlural:    ts.RTPMiscAbilities,
+		ObjLookup:        lookup.L.MiscAbilities,
+		ObjLookupID:      lookup.L.MiscAbilitiesID,
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource],
+		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeMiscAbility),
+		RetrieveQuery:    config.Cfg.DB.GetMiscAbilityIDs,
+		GetSingleFunc:    getMiscAbility,
+		RetrieveFunc:     retrieveMiscAbilities,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createMiscAbilitySimple,
+				CreateSubFn: createMiscAbilitySimple,
 			},
 		},
 	}
 
-	E.EnemyAbilities = HandlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource]{
+	E.EnemyAbilities = handlerinput.HandlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource]{
 		Endpoint:         ts.EpEnemyAbilities,
-		resTypeSingle:    ts.RTSEnemyAbilities,
-		resTypePlural:    ts.RTPEnemyAbilities,
-		objLookup:        lookup.L.EnemyAbilities,
-		objLookupID:      lookup.L.EnemyAbilitiesID,
-		idToResFunc:      IDToNamedAPIResource[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource],
-		getMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeEnemyAbility),
-		retrieveQuery:    config.Cfg.DB.GetEnemyAbilityIDs,
-		getSingleFunc:    getEnemyAbility,
-		retrieveFunc:     retrieveEnemyAbilities,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle:    ts.RTSEnemyAbilities,
+		ResTypePlural:    ts.RTPEnemyAbilities,
+		ObjLookup:        lookup.L.EnemyAbilities,
+		ObjLookupID:      lookup.L.EnemyAbilitiesID,
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource],
+		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeEnemyAbility),
+		RetrieveQuery:    config.Cfg.DB.GetEnemyAbilityIDs,
+		GetSingleFunc:    getEnemyAbility,
+		RetrieveFunc:     retrieveEnemyAbilities,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createEnemyAbilitySimple,
+				CreateSubFn: createEnemyAbilitySimple,
 			},
 			ts.SnMonsters: {
-				dbQuery:     config.Cfg.DB.GetEnemyAbilityMonsterIDs,
-				createSubFn: createMonsterSimple,
-				relationsFn: getMonsterSectionRelations,
+				DBQuery:     config.Cfg.DB.GetEnemyAbilityMonsterIDs,
+				CreateSubFn: createMonsterSimple,
+				RelationsFn: getMonsterSectionRelations,
 			},
 		},
 	}
 
-	E.AeonCommands = HandlerInput[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource]{
+	E.AeonCommands = handlerinput.HandlerInput[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpAeonCommands,
-		resTypeSingle: ts.RTSAeonCommands,
-		resTypePlural: ts.RTPAeonCommands,
-		objLookup:     lookup.L.AeonCommands,
-		objLookupID:   lookup.L.AeonCommandsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetAeonCommandIDs,
-		getSingleFunc: getAeonCommand,
-		retrieveFunc:  retrieveAeonCommands,
+		ResTypeSingle: ts.RTSAeonCommands,
+		ResTypePlural: ts.RTPAeonCommands,
+		ObjLookup:     lookup.L.AeonCommands,
+		ObjLookupID:   lookup.L.AeonCommandsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetAeonCommandIDs,
+		GetSingleFunc: getAeonCommand,
+		RetrieveFunc:  retrieveAeonCommands,
 	}
 
-	E.OverdriveCommands = HandlerInput[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource]{
+	E.OverdriveCommands = handlerinput.HandlerInput[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpOverdriveCommands,
-		resTypeSingle: ts.RTSOverdriveCommands,
-		resTypePlural: ts.RTPOverdriveCommands,
-		objLookup:     lookup.L.OverdriveCommands,
-		objLookupID:   lookup.L.OverdriveCommandsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetOverdriveCommandIDs,
-		getSingleFunc: getOverdriveCommand,
-		retrieveFunc:  retrieveOverdriveCommands,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSOverdriveCommands,
+		ResTypePlural: ts.RTPOverdriveCommands,
+		ObjLookup:     lookup.L.OverdriveCommands,
+		ObjLookupID:   lookup.L.OverdriveCommandsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetOverdriveCommandIDs,
+		GetSingleFunc: getOverdriveCommand,
+		RetrieveFunc:  retrieveOverdriveCommands,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnOverdriveAbilities: {
-				dbQuery:     ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveAbilityIDs),
-				createSubFn: createOverdriveAbilitySimple,
+				DBQuery:     handlerinput.ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveAbilityIDs),
+				CreateSubFn: createOverdriveAbilitySimple,
 			},
 			ts.SnOverdrives: {
-				dbQuery:     ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveIDs),
-				createSubFn: createOverdriveSimple,
+				DBQuery:     handlerinput.ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveIDs),
+				CreateSubFn: createOverdriveSimple,
 			},
 		},
 	}
 
-	E.Overdrives = HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource]{
+	E.Overdrives = handlerinput.HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpOverdrives,
-		resTypeSingle: ts.RTSOverdrives,
-		resTypePlural: ts.RTPOverdrives,
-		objLookup:     lookup.L.Overdrives,
-		objLookupID:   lookup.L.OverdrivesID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetOverdriveIDs,
-		getSingleFunc: getOverdrive,
-		retrieveFunc:  retrieveOverdrives,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSOverdrives,
+		ResTypePlural: ts.RTPOverdrives,
+		ObjLookup:     lookup.L.Overdrives,
+		ObjLookupID:   lookup.L.OverdrivesID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetOverdriveIDs,
+		GetSingleFunc: getOverdrive,
+		RetrieveFunc:  retrieveOverdrives,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createOverdriveSimple,
+				CreateSubFn: createOverdriveSimple,
 			},
 			ts.SnOverdriveAbilities: {
-				dbQuery:     config.Cfg.DB.GetOverdriveOverdriveAbilityIDs,
-				createSubFn: createOverdriveAbilitySimple,
+				DBQuery:     config.Cfg.DB.GetOverdriveOverdriveAbilityIDs,
+				CreateSubFn: createOverdriveAbilitySimple,
 			},
 		},
 	}
 
-	E.RonsoRages = HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource]{
+	E.RonsoRages = handlerinput.HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpRonsoRages,
-		resTypeSingle: ts.RTSRonsoRages,
-		resTypePlural: ts.RTPRonsoRages,
-		objLookup:     lookup.L.RonsoRages,
-		objLookupID:   lookup.L.RonsoRagesID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetRonsoRageIDs,
-		getSingleFunc: getRonsoRage,
-		retrieveFunc:  retrieveRonsoRages,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSRonsoRages,
+		ResTypePlural: ts.RTPRonsoRages,
+		ObjLookup:     lookup.L.RonsoRages,
+		ObjLookupID:   lookup.L.RonsoRagesID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetRonsoRageIDs,
+		GetSingleFunc: getRonsoRage,
+		RetrieveFunc:  retrieveRonsoRages,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnMonsters: {
-				dbQuery:     config.Cfg.DB.GetRonsoRageMonsterIDs,
-				createSubFn: createMonsterSimple,
-				relationsFn: getMonsterSectionRelations,
+				DBQuery:     config.Cfg.DB.GetRonsoRageMonsterIDs,
+				CreateSubFn: createMonsterSimple,
+				RelationsFn: getMonsterSectionRelations,
 			},
 		},
 	}
 
-	E.Submenus = HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource]{
+	E.Submenus = handlerinput.HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpSubmenus,
-		resTypeSingle: ts.RTSSubmenus,
-		resTypePlural: ts.RTPSubmenus,
-		objLookup:     lookup.L.Submenus,
-		objLookupID:   lookup.L.SubmenusID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetSubmenuIDs,
-		getSingleFunc: getSubmenu,
-		retrieveFunc:  retrieveSubmenus,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSSubmenus,
+		ResTypePlural: ts.RTPSubmenus,
+		ObjLookup:     lookup.L.Submenus,
+		ObjLookupID:   lookup.L.SubmenusID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetSubmenuIDs,
+		GetSingleFunc: getSubmenu,
+		RetrieveFunc:  retrieveSubmenus,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnAbilities: {
-				dbQuery:     ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs),
-				createSubFn: createAbilitySimple,
+				DBQuery:     handlerinput.ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs),
+				CreateSubFn: createAbilitySimple,
 			},
 		},
 	}
 
-	E.Topmenus = HandlerInput[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource]{
+	E.Topmenus = handlerinput.HandlerInput[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpTopmenus,
-		resTypeSingle: ts.RTSTopmenus,
-		resTypePlural: ts.RTPTopmenus,
-		objLookup:     lookup.L.Topmenus,
-		objLookupID:   lookup.L.TopmenusID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetTopmenuIDs,
-		getSingleFunc: getTopmenu,
-		retrieveFunc:  retrieveTopmenus,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSTopmenus,
+		ResTypePlural: ts.RTPTopmenus,
+		ObjLookup:     lookup.L.Topmenus,
+		ObjLookupID:   lookup.L.TopmenusID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetTopmenuIDs,
+		GetSingleFunc: getTopmenu,
+		RetrieveFunc:  retrieveTopmenus,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnAbilities: {
-				dbQuery:     ToIntManyNull(config.Cfg.DB.GetTopmenuAbilityIDs),
-				createSubFn: createAbilitySimple,
+				DBQuery:     handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuAbilityIDs),
+				CreateSubFn: createAbilitySimple,
 			},
 		},
 	}
 
-	E.AllItems = HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]{
+	E.AllItems = handlerinput.HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]{
 		Endpoint:      ts.EpAllItems,
-		resTypeSingle: ts.RTSAllItems,
-		resTypePlural: ts.RTPAllItems,
-		objLookup:     lookup.L.MasterItems,
-		objLookupID:   lookup.L.MasterItemsID,
-		idToResFunc:   IDToTypedAPIResource[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetMasterItemIDs,
-		getSingleFunc: getMasterItem,
-		retrieveFunc:  retrieveMasterItems,
-		avlFunc:       filterAvlMasterItems,
+		ResTypeSingle: ts.RTSAllItems,
+		ResTypePlural: ts.RTPAllItems,
+		ObjLookup:     lookup.L.MasterItems,
+		ObjLookupID:   lookup.L.MasterItemsID,
+		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetMasterItemIDs,
+		GetSingleFunc: getMasterItem,
+		RetrieveFunc:  retrieveMasterItems,
+		AvlFunc:       filterAvlMasterItems,
 	}
 
-	E.Items = HandlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource]{
+	E.Items = handlerinput.HandlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpItems,
-		resTypeSingle: ts.RTSItems,
-		resTypePlural: ts.RTPItems,
-		objLookup:     lookup.L.Items,
-		objLookupID:   lookup.L.ItemsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetItemIDs,
-		getSingleFunc: getItem,
-		retrieveFunc:  retrieveItems,
-		avlFunc:       filterAvlItems,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSItems,
+		ResTypePlural: ts.RTPItems,
+		ObjLookup:     lookup.L.Items,
+		ObjLookupID:   lookup.L.ItemsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetItemIDs,
+		GetSingleFunc: getItem,
+		RetrieveFunc:  retrieveItems,
+		AvlFunc:       filterAvlItems,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnMixes: {
-				dbQuery:     config.Cfg.DB.GetItemMixIDs,
-				createSubFn: createMixSimple,
+				DBQuery:     config.Cfg.DB.GetItemMixIDs,
+				CreateSubFn: createMixSimple,
 			},
 		},
 	}
 
-	E.Spheres = HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource]{
+	E.Spheres = handlerinput.HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpSpheres,
-		resTypeSingle: ts.RTSSpheres,
-		resTypePlural: ts.RTPSpheres,
-		objLookup:     lookup.L.Spheres,
-		objLookupID:   lookup.L.SpheresID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetSphereIDs,
-		getSingleFunc: getSphere,
-		retrieveFunc:  retrieveSpheres,
-		avlFunc:       filterAvlSpheres,
+		ResTypeSingle: ts.RTSSpheres,
+		ResTypePlural: ts.RTPSpheres,
+		ObjLookup:     lookup.L.Spheres,
+		ObjLookupID:   lookup.L.SpheresID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetSphereIDs,
+		GetSingleFunc: getSphere,
+		RetrieveFunc:  retrieveSpheres,
+		AvlFunc:       filterAvlSpheres,
 	}
 
-	E.KeyItems = HandlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource]{
+	E.KeyItems = handlerinput.HandlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpKeyItems,
-		resTypeSingle: ts.RTSKeyItems,
-		resTypePlural: ts.RTPKeyItems,
-		objLookup:     lookup.L.KeyItems,
-		objLookupID:   lookup.L.KeyItemsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetKeyItemIDs,
-		getSingleFunc: getKeyItem,
-		retrieveFunc:  retrieveKeyItems,
-		avlFunc:       filterAvlKeyItems,
+		ResTypeSingle: ts.RTSKeyItems,
+		ResTypePlural: ts.RTPKeyItems,
+		ObjLookup:     lookup.L.KeyItems,
+		ObjLookupID:   lookup.L.KeyItemsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetKeyItemIDs,
+		GetSingleFunc: getKeyItem,
+		RetrieveFunc:  retrieveKeyItems,
+		AvlFunc:       filterAvlKeyItems,
 	}
 
-	E.Primers = HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource]{
+	E.Primers = handlerinput.HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpPrimers,
-		resTypeSingle: ts.RTSPrimers,
-		resTypePlural: ts.RTPPrimers,
-		objLookup:     lookup.L.Primers,
-		objLookupID:   lookup.L.PrimersID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetPrimerIDs,
-		getSingleFunc: getPrimer,
-		retrieveFunc:  retrievePrimers,
-		avlFunc:       filterAvlPrimers,
+		ResTypeSingle: ts.RTSPrimers,
+		ResTypePlural: ts.RTPPrimers,
+		ObjLookup:     lookup.L.Primers,
+		ObjLookupID:   lookup.L.PrimersID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetPrimerIDs,
+		GetSingleFunc: getPrimer,
+		RetrieveFunc:  retrievePrimers,
+		AvlFunc:       filterAvlPrimers,
 	}
 
-	E.Mixes = HandlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource]{
+	E.Mixes = handlerinput.HandlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpMixes,
-		resTypeSingle: ts.RTSMixes,
-		resTypePlural: ts.RTPMixes,
-		objLookup:     lookup.L.Mixes,
-		objLookupID:   lookup.L.MixesID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetMixIDs,
-		getSingleFunc: getMix,
-		retrieveFunc:  retrieveMixes,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSMixes,
+		ResTypePlural: ts.RTPMixes,
+		ObjLookup:     lookup.L.Mixes,
+		ObjLookupID:   lookup.L.MixesID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetMixIDs,
+		GetSingleFunc: getMix,
+		RetrieveFunc:  retrieveMixes,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createMixSimple,
+				CreateSubFn: createMixSimple,
 			},
 		},
 	}
 
-	E.AutoAbilities = HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]{
+	E.AutoAbilities = handlerinput.HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpAutoAbilities,
-		resTypeSingle: ts.RTSAutoAbilities,
-		resTypePlural: ts.RTPAutoAbilities,
-		objLookup:     lookup.L.AutoAbilities,
-		objLookupID:   lookup.L.AutoAbilitiesID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetAutoAbilityIDs,
-		getSingleFunc: getAutoAbility,
-		retrieveFunc:  retrieveAutoAbilities,
-		avlFunc:       filterAvlAutoAbilities,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSAutoAbilities,
+		ResTypePlural: ts.RTPAutoAbilities,
+		ObjLookup:     lookup.L.AutoAbilities,
+		ObjLookupID:   lookup.L.AutoAbilitiesID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetAutoAbilityIDs,
+		GetSingleFunc: getAutoAbility,
+		RetrieveFunc:  retrieveAutoAbilities,
+		AvlFunc:       filterAvlAutoAbilities,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				createSubFn: createAutoAbilitySimple,
+				CreateSubFn: createAutoAbilitySimple,
 			},
 		},
 	}
 
-	E.EquipmentTables = HandlerInput[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource]{
+	E.EquipmentTables = handlerinput.HandlerInput[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource]{
 		Endpoint:      ts.EpEquipmentTables,
-		resTypeSingle: ts.RTSEquipmentTables,
-		resTypePlural: ts.RTPEquipmentTables,
-		objLookup:     lookup.L.EquipmentTables,
-		objLookupID:   lookup.L.EquipmentTablesID,
-		idToResFunc:   IDToUnnamedAPIResource[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetEquipmentTableIDs,
-		getSingleFunc: getEquipmentTable,
-		retrieveFunc:  retrieveEquipmentTables,
+		ResTypeSingle: ts.RTSEquipmentTables,
+		ResTypePlural: ts.RTPEquipmentTables,
+		ObjLookup:     lookup.L.EquipmentTables,
+		ObjLookupID:   lookup.L.EquipmentTablesID,
+		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetEquipmentTableIDs,
+		GetSingleFunc: getEquipmentTable,
+		RetrieveFunc:  retrieveEquipmentTables,
 	}
 
-	E.Equipment = HandlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource]{
+	E.Equipment = handlerinput.HandlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpEquipment,
-		resTypeSingle: ts.RTSEquipment,
-		resTypePlural: ts.RTPEquipment,
-		objLookup:     lookup.L.EquipmentNames,
-		objLookupID:   lookup.L.EquipmentNamesID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetEquipmentIDs,
-		getSingleFunc: getEquipment,
-		retrieveFunc:  retrieveEquipment,
+		ResTypeSingle: ts.RTSEquipment,
+		ResTypePlural: ts.RTPEquipment,
+		ObjLookup:     lookup.L.EquipmentNames,
+		ObjLookupID:   lookup.L.EquipmentNamesID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetEquipmentIDs,
+		GetSingleFunc: getEquipment,
+		RetrieveFunc:  retrieveEquipment,
 	}
 
-	E.CelestialWeapons = HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource]{
+	E.CelestialWeapons = handlerinput.HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpCelestialWeapons,
-		resTypeSingle: ts.RTSCelestialWeapons,
-		resTypePlural: ts.RTPCelestialWeapons,
-		objLookup:     lookup.L.CelestialWeapons,
-		objLookupID:   lookup.L.CelestialWeaponsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetCelestialWeaponIDs,
-		getSingleFunc: getCelestialWeapon,
-		retrieveFunc:  retrieveCelestialWeapons,
-		subsections: map[ts.SectionName]Subsection{
+		ResTypeSingle: ts.RTSCelestialWeapons,
+		ResTypePlural: ts.RTPCelestialWeapons,
+		ObjLookup:     lookup.L.CelestialWeapons,
+		ObjLookupID:   lookup.L.CelestialWeaponsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetCelestialWeaponIDs,
+		GetSingleFunc: getCelestialWeapon,
+		RetrieveFunc:  retrieveCelestialWeapons,
+		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnAutoAbilities: {
-				dbQuery:     convertGetCelestialWeaponAutoAbilityIDs(),
-				createSubFn: createAutoAbilitySimple,
+				DBQuery:     convertGetCelestialWeaponAutoAbilityIDs(),
+				CreateSubFn: createAutoAbilitySimple,
 			},
 		},
 	}
 
-	E.Stats = HandlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource]{
+	E.Stats = handlerinput.HandlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpStats,
-		resTypeSingle: ts.RTSStats,
-		resTypePlural: ts.RTPStats,
-		objLookup:     lookup.L.Stats,
-		objLookupID:   lookup.L.StatsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetStatIDs,
-		getSingleFunc: getStat,
-		retrieveFunc:  retrieveStats,
+		ResTypeSingle: ts.RTSStats,
+		ResTypePlural: ts.RTPStats,
+		ObjLookup:     lookup.L.Stats,
+		ObjLookupID:   lookup.L.StatsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetStatIDs,
+		GetSingleFunc: getStat,
+		RetrieveFunc:  retrieveStats,
 	}
 
-	E.Properties = HandlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource]{
+	E.Properties = handlerinput.HandlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpProperties,
-		resTypeSingle: ts.RTSProperties,
-		resTypePlural: ts.RTPProperties,
-		objLookup:     lookup.L.Properties,
-		objLookupID:   lookup.L.PropertiesID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetPropertyIDs,
-		getSingleFunc: getProperty,
-		retrieveFunc:  retrieveProperties,
+		ResTypeSingle: ts.RTSProperties,
+		ResTypePlural: ts.RTPProperties,
+		ObjLookup:     lookup.L.Properties,
+		ObjLookupID:   lookup.L.PropertiesID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetPropertyIDs,
+		GetSingleFunc: getProperty,
+		RetrieveFunc:  retrieveProperties,
 	}
 
-	E.OverdriveModes = HandlerInput[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource]{
+	E.OverdriveModes = handlerinput.HandlerInput[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpOverdriveModes,
-		resTypeSingle: ts.RTSOverdriveModes,
-		resTypePlural: ts.RTPOverdriveModes,
-		objLookup:     lookup.L.OverdriveModes,
-		objLookupID:   lookup.L.OverdriveModesID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetOverdriveModeIDs,
-		getSingleFunc: getOverdriveMode,
-		retrieveFunc:  retrieveOverdriveModes,
+		ResTypeSingle: ts.RTSOverdriveModes,
+		ResTypePlural: ts.RTPOverdriveModes,
+		ObjLookup:     lookup.L.OverdriveModes,
+		ObjLookupID:   lookup.L.OverdriveModesID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetOverdriveModeIDs,
+		GetSingleFunc: getOverdriveMode,
+		RetrieveFunc:  retrieveOverdriveModes,
 	}
 
-	E.Elements = HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]{
+	E.Elements = handlerinput.HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpElements,
-		resTypeSingle: ts.RTSElements,
-		resTypePlural: ts.RTPElements,
-		objLookup:     lookup.L.Elements,
-		objLookupID:   lookup.L.ElementsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetElementIDs,
-		getSingleFunc: getElement,
-		retrieveFunc:  retrieveElements,
+		ResTypeSingle: ts.RTSElements,
+		ResTypePlural: ts.RTPElements,
+		ObjLookup:     lookup.L.Elements,
+		ObjLookupID:   lookup.L.ElementsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetElementIDs,
+		GetSingleFunc: getElement,
+		RetrieveFunc:  retrieveElements,
 	}
 
-	E.StatusConditions = HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource]{
+	E.StatusConditions = handlerinput.HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpStatusConditions,
-		resTypeSingle: ts.RTSStatusConditions,
-		resTypePlural: ts.RTPStatusConditions,
-		objLookup:     lookup.L.StatusConditions,
-		objLookupID:   lookup.L.StatusConditionsID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetStatusConditionIDs,
-		getSingleFunc: getStatusCondition,
-		retrieveFunc:  retrieveStatusConditions,
+		ResTypeSingle: ts.RTSStatusConditions,
+		ResTypePlural: ts.RTPStatusConditions,
+		ObjLookup:     lookup.L.StatusConditions,
+		ObjLookupID:   lookup.L.StatusConditionsID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetStatusConditionIDs,
+		GetSingleFunc: getStatusCondition,
+		RetrieveFunc:  retrieveStatusConditions,
 	}
 
-	E.Modifiers = HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource]{
+	E.Modifiers = handlerinput.HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource]{
 		Endpoint:      ts.EpModifiers,
-		resTypeSingle: ts.RTSModifiers,
-		resTypePlural: ts.RTPModifiers,
-		objLookup:     lookup.L.Modifiers,
-		objLookupID:   lookup.L.ModifiersID,
-		idToResFunc:   IDToNamedAPIResource[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetModifierIDs,
-		getSingleFunc: getModifier,
-		retrieveFunc:  retrieveModifiers,
+		ResTypeSingle: ts.RTSModifiers,
+		ResTypePlural: ts.RTPModifiers,
+		ObjLookup:     lookup.L.Modifiers,
+		ObjLookupID:   lookup.L.ModifiersID,
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetModifierIDs,
+		GetSingleFunc: getModifier,
+		RetrieveFunc:  retrieveModifiers,
 	}
 
-	E.AgilityTiers = HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]{
+	E.AgilityTiers = handlerinput.HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]{
 		Endpoint:      ts.EpAgilityTiers,
-		resTypeSingle: ts.RTSAgilityTiers,
-		resTypePlural: ts.RTPAgilityTiers,
-		objLookup:     nil,
-		objLookupID:   lookup.L.AgilityTiersID,
-		idToResFunc:   IDToUnnamedAPIResource[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource],
-		retrieveQuery: config.Cfg.DB.GetAgilityTierIDs,
-		getSingleFunc: getAgilityTier,
-		retrieveFunc:  retrieveAgilityTiers,
+		ResTypeSingle: ts.RTSAgilityTiers,
+		ResTypePlural: ts.RTPAgilityTiers,
+		ObjLookup:     nil,
+		ObjLookupID:   lookup.L.AgilityTiersID,
+		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource],
+		RetrieveQuery: config.Cfg.DB.GetAgilityTierIDs,
+		GetSingleFunc: getAgilityTier,
+		RetrieveFunc:  retrieveAgilityTiers,
 	}
 
-	E.Enums = HandlerInputEnums{
+	E.Enums = handlerinput.HandlerInputEnums{
 		Endpoint: ts.EpEnums,
-		usage:    []string{"/api/enums", "/api/enums/{enum_name}"},
-		lookup:   enums.T.Lookup,
+		Usage:    []string{"/api/enums", "/api/enums/{enum_name}"},
+		Lookup:   enums.T.Lookup,
 	}
 
-	E.Endpoints = HandlerInputEndpoints{
+	E.Endpoints = handlerinput.HandlerInputEndpoints{
 		Endpoint: ts.EpEndpoints,
-		usage:    []string{"/api/endpoints"},
+		Usage:    []string{"/api/endpoints"},
 	}
 
 	E.AlBhed = HandlerInputService[AlBhedParams, AlBhedResponse]{
 		Endpoint:  ts.EpAlBhed,
-		verifyFn:  verifyAlBhedParams,
-		executeFn: handleAlBhed,
-		docsFn:    getAlBhedParamsDoc,
-		samplesFn: getAlBhedParamsSamples,
+		VerifyFn:  verifyAlBhedParams,
+		ExecuteFn: handleAlBhed,
+		DocsFn:    getAlBhedParamsDoc,
+		SamplesFn: getAlBhedParamsSamples,
 	}
 
 	E.TurnOrder = HandlerInputService[TurnOrderParams, TurnOrderResponse]{
 		Endpoint:  ts.EpTurnOrder,
-		verifyFn:  verifyTurnOrderParams,
-		executeFn: handleTurnOrder,
-		docsFn:    getTurnOrderParamsDoc,
-		samplesFn: getTurnOrderParamsSamples,
+		VerifyFn:  verifyTurnOrderParams,
+		ExecuteFn: handleTurnOrder,
+		DocsFn:    getTurnOrderParamsDoc,
+		SamplesFn: getTurnOrderParamsSamples,
 	}
 
 	E.DropChance = HandlerInputService[DropChanceParams, DropChanceResponse]{
 		Endpoint:  ts.EpDropChance,
-		verifyFn:  verifyDropChanceParams,
-		executeFn: handleDropChance,
-		docsFn:    getDropChanceParamsDoc,
-		samplesFn: getDropChanceParamsSamples,
+		VerifyFn:  verifyDropChanceParams,
+		ExecuteFn: handleDropChance,
+		DocsFn:    getDropChanceParamsDoc,
+		SamplesFn: getDropChanceParamsSamples,
 	}
 
 	E.CritChance = HandlerInputService[CritChanceParams, CritChanceResponse]{
 		Endpoint:  ts.EpCritChance,
-		verifyFn:  verifyCritChanceParams,
-		executeFn: handleCritChance,
-		docsFn:    getCritChanceParamsDoc,
-		samplesFn: getCritChanceParamsSamples,
+		VerifyFn:  verifyCritChanceParams,
+		ExecuteFn: handleCritChance,
+		DocsFn:    getCritChanceParamsDoc,
+		SamplesFn: getCritChanceParamsSamples,
 	}
 
 	E.InitializeEndpointSlice()

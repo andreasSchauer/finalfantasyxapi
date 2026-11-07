@@ -7,18 +7,18 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-
-func createMonsterSimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
+func createMonsterSimple(r *http.Request, id int32, subsection handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.Monsters
-	mon, _ := lookup.GetResourceByID(id, i.objLookupID)
+	mon, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
-	areaIDs := subsection.relations[id][RelationAreas]
+	areaIDs := subsection.Relations[id][handlerinput.RelationAreas]
 
 	monSimple := sectiontypes.MonsterSimple{
 		ID:             mon.ID,
@@ -70,19 +70,19 @@ func getMonsterSimpleBribeAmount(mon seedtypes.Monster, hp int32) *int32 {
 	return &bribeAmount
 }
 
-func getMonsterSectionRelations(r *http.Request, monIDs []int32) (map[int32]map[Relation][]int32, error) {
+func getMonsterSectionRelations(r *http.Request, monIDs []int32) (map[int32]map[handlerinput.Relation][]int32, error) {
 	i := E.Monsters
-	relations := make(map[int32]map[Relation][]int32)
+	relations := make(map[int32]map[handlerinput.Relation][]int32)
 
-	monsterJunctions, err := i.GetDBJunctions(r.Context(), monIDs, E.Areas.resTypeSingle, config.Cfg.DB.GetMonsterAreaIdPairs, juncMonsterArea)
+	monsterJunctions, err := i.GetDBJunctions(r.Context(), monIDs, E.Areas.ResTypeSingle, config.Cfg.DB.GetMonsterAreaIdPairs, juncMonsterArea)
 	if err != nil {
 		return nil, err
 	}
 
 	for _, monID := range monIDs {
-		relationMap := make(map[Relation][]int32)
+		relationMap := make(map[handlerinput.Relation][]int32)
 
-		relationMap[RelationAreas], monsterJunctions = GetJunctionIDs(monID, monsterJunctions)
+		relationMap[handlerinput.RelationAreas], monsterJunctions = GetJunctionIDs(monID, monsterJunctions)
 
 		relations[monID] = relationMap
 	}
@@ -102,7 +102,6 @@ func convertMonsterItemsSimple(items seedtypes.MonsterItems) sectiontypes.Monste
 		OtherItems:          ah.ConvertObjSliceOrNil(items.OtherItems, posItemToItemAmtSimple),
 	}
 }
-
 
 func convertMonsterEquipmentSimple(equipment seedtypes.MonsterEquipment) sectiontypes.MonsterEquipmentSimple {
 	return sectiontypes.MonsterEquipmentSimple{

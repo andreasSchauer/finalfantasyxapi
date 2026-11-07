@@ -7,6 +7,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -61,11 +62,11 @@ func getAlts(as seedtypes.AlteredState) []apitypes.Alt {
 
 func convertAlt(asc seedtypes.Alt) apitypes.Alt {
 	return apitypes.Alt{
-		Properties:       h.SliceOrNil(NamesToNamedAPIResources(E.Properties, asc.Properties)),
-		AutoAbilities:    h.SliceOrNil(NamesToNamedAPIResources(E.AutoAbilities, asc.AutoAbilities)),
+		Properties:       h.SliceOrNil(handlerinput.NamesToNamedAPIResources(E.Properties, asc.Properties)),
+		AutoAbilities:    h.SliceOrNil(handlerinput.NamesToNamedAPIResources(E.AutoAbilities, asc.AutoAbilities)),
 		BaseStats:        h.SliceOrNil(E.Stats.ToResAmtType(asc.BaseStats, newBaseStat)),
 		ElemResists:      h.SliceOrNil(namesToElemResists(asc.ElemResists)),
-		StatusImmunities: h.SliceOrNil(NamesToNamedAPIResources(E.StatusConditions, asc.StatusImmunities)),
+		StatusImmunities: h.SliceOrNil(handlerinput.NamesToNamedAPIResources(E.StatusConditions, asc.StatusImmunities)),
 		AddedStatus:      ah.ConvertObjPtr(asc.AddedStatus, convertInflictedStatus),
 	}
 }

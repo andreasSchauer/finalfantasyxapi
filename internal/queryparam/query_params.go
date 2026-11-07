@@ -6,6 +6,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
+
 func GetDefaultParams() []QueryParam {
 	return []QueryParam{
 		{

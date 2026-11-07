@@ -25,8 +25,8 @@ func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return nil, err
 	}
 
-	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
-		dbIDs, err := config.Cfg.DB.FilterAreaIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
+	if sources.IsZero() && h.NullBoolIsZero(avlParams.IsRepeatable) {
+		dbIDs, err := config.Cfg.DB.FilterAreaIDsByAvailabilitySoft(r.Context(), avlParams.Availabilities)
 		if err != nil {
 			return nil, i.ErrorAvl(err)
 		}
@@ -36,9 +36,9 @@ func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 
 	dbIDs, err := config.Cfg.DB.FilterAreaIDsByAvailability(r.Context(), database.FilterAreaIDsByAvailabilityParams{
 		Ids:             inputIDs,
-		Availability:    avlParams.availabilities,
-		IsRepeatable:    avlParams.isRepeatable,
-		PreAirship:      avlParams.preAirship,
+		Availability:    avlParams.Availabilities,
+		IsRepeatable:    avlParams.IsRepeatable,
+		PreAirship:      avlParams.PreAirship,
 		RequiredSources: sources.RequiredSources,
 		ExcludedSources: sources.ExcludedSources,
 		MonsterID:       sources.MonsterID,
@@ -70,8 +70,8 @@ func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return nil, err
 	}
 
-	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
-		dbIDs, err := config.Cfg.DB.FilterSublocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
+	if sources.IsZero() && h.NullBoolIsZero(avlParams.IsRepeatable) {
+		dbIDs, err := config.Cfg.DB.FilterSublocationIDsByAvailabilitySoft(r.Context(), avlParams.Availabilities)
 		if err != nil {
 			return nil, i.ErrorAvl(err)
 		}
@@ -81,9 +81,9 @@ func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 
 	dbIDs, err := config.Cfg.DB.FilterSublocationIDsByAvailability(r.Context(), database.FilterSublocationIDsByAvailabilityParams{
 		Ids:             inputIDs,
-		Availability:    avlParams.availabilities,
-		IsRepeatable:    avlParams.isRepeatable,
-		PreAirship:      avlParams.preAirship,
+		Availability:    avlParams.Availabilities,
+		IsRepeatable:    avlParams.IsRepeatable,
+		PreAirship:      avlParams.PreAirship,
 		RequiredSources: sources.RequiredSources,
 		ExcludedSources: sources.ExcludedSources,
 		MonsterID:       sources.MonsterID,
@@ -115,8 +115,8 @@ func filterAvlLocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return nil, err
 	}
 
-	if sources.IsZero() && h.NullBoolIsZero(avlParams.isRepeatable) {
-		dbIDs, err := config.Cfg.DB.FilterLocationIDsByAvailabilitySoft(r.Context(), avlParams.availabilities)
+	if sources.IsZero() && h.NullBoolIsZero(avlParams.IsRepeatable) {
+		dbIDs, err := config.Cfg.DB.FilterLocationIDsByAvailabilitySoft(r.Context(), avlParams.Availabilities)
 		if err != nil {
 			return nil, i.ErrorAvl(err)
 		}
@@ -126,9 +126,9 @@ func filterAvlLocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 
 	dbIDs, err := config.Cfg.DB.FilterLocationIDsByAvailability(r.Context(), database.FilterLocationIDsByAvailabilityParams{
 		Ids:             inputIDs,
-		Availability:    avlParams.availabilities,
-		IsRepeatable:    avlParams.isRepeatable,
-		PreAirship:      avlParams.preAirship,
+		Availability:    avlParams.Availabilities,
+		IsRepeatable:    avlParams.IsRepeatable,
+		PreAirship:      avlParams.PreAirship,
 		RequiredSources: sources.RequiredSources,
 		ExcludedSources: sources.ExcludedSources,
 		MonsterID:       sources.MonsterID,

@@ -10,7 +10,7 @@ import (
 )
 
 func IDToNamedAPIResource[T seedtypes.IsNamed, R any, A apiresource.APIResource](i HandlerInput[T, R, A], id int32) apiresource.NamedAPIResource {
-	res, _ := lookup.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
+	res, _ := lookup.GetResourceByID(id, i.ObjLookupID) // no error needed, because everything was verified through seedtypes
 	params := res.GetResParamsNamed()
 
 	return apiresource.NamedAPIResource{
@@ -26,9 +26,9 @@ func NameToNamedAPIResource[T seedtypes.IsNamed, R any, A apiresource.APIResourc
 	var parseResp ah.ParseResponse
 	switch version {
 	case nil:
-		parseResp, _ = ah.CheckUniqueName(name, i.objLookup)
+		parseResp, _ = ah.CheckUniqueName(name, i.ObjLookup)
 	default:
-		parseResp, _ = ah.CheckNameVersion(name, version, i.objLookup)
+		parseResp, _ = ah.CheckNameVersion(name, version, i.ObjLookup)
 	}
 
 	return IDToNamedAPIResource(i, parseResp.ID)

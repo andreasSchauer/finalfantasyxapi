@@ -8,12 +8,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMonster(r *http.Request, i HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource], id int32) (apitypes.Monster, error) {
+func getMonster(r *http.Request, i handlerinput.HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource], id int32) (apitypes.Monster, error) {
 	monster, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Monster{}, err
@@ -41,14 +42,14 @@ func getMonster(r *http.Request, i HandlerInput[seedtypes.Monster, apitypes.Mons
 		IsUnderwater:         monster.IsUnderwater,
 		IsZombie:             monster.IsZombie,
 		Distance:             monster.Distance,
-		Properties:           NamesToNamedAPIResources(E.Properties, monster.Properties),
-		AutoAbilities:        NamesToNamedAPIResources(E.AutoAbilities, monster.AutoAbilities),
+		Properties:           handlerinput.NamesToNamedAPIResources(E.Properties, monster.Properties),
+		AutoAbilities:        handlerinput.NamesToNamedAPIResources(E.AutoAbilities, monster.AutoAbilities),
 		AP:                   monster.AP,
 		APOverkill:           monster.APOverkill,
 		OverkillDamage:       monster.OverkillDamage,
 		Gil:                  monster.Gil,
 		StealGil:             monster.StealGil,
-		RonsoRages:           NamesToNamedAPIResources(E.RonsoRages, monster.RonsoRages),
+		RonsoRages:           handlerinput.NamesToNamedAPIResources(E.RonsoRages, monster.RonsoRages),
 		DoomCountdown:        monster.DoomCountdown,
 		PoisonRate:           monster.PoisonRate,
 		ThreatenChance:       monster.ThreatenChance,
@@ -62,7 +63,7 @@ func getMonster(r *http.Request, i HandlerInput[seedtypes.Monster, apitypes.Mons
 		Items:                ah.ConvertObjPtr(monster.Items, convertMonsterItems),
 		Equipment:            ah.ConvertObjPtr(monster.Equipment, convertMonsterEquipment),
 		ElemResists:          getMonsterElemResists(monster.ElemResists),
-		StatusImmunities:     NamesToNamedAPIResources(E.StatusConditions, monster.StatusImmunities),
+		StatusImmunities:     handlerinput.NamesToNamedAPIResources(E.StatusConditions, monster.StatusImmunities),
 		StatusResists:        E.StatusConditions.ToResAmtType(monster.StatusResists, newStatusResist),
 		Abilities:            ah.ConvertObjSlice(monster.Abilities, convertMonsterAbility),
 		AlteredStates:        getMonsterAlteredStates(r, monster),
@@ -71,13 +72,13 @@ func getMonster(r *http.Request, i HandlerInput[seedtypes.Monster, apitypes.Mons
 	return completeMonsterResponse(r, response)
 }
 
-func retrieveMonsters(r *http.Request, i HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveMonsters(r *http.Request, i handlerinput.HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryWrapper(r, ids, ts.QpnElementalResists, getMonstersByElemResists),
 		i.QueryIDListWrapper(r, ids, ts.QpnStatusResists, lookup.L.StatusConditions, getMonstersByStatusResists),
 
@@ -93,7 +94,7 @@ func retrieveMonsters(r *http.Request, i HandlerInput[seedtypes.Monster, apitype
 
 		i.QueryEnumList(r, enums.T.MonsterCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMonsterIDsByCategory),
 		i.QueryEnum(r, enums.T.MonsterSpecies, ids, ts.QpnSpecies, config.Cfg.DB.GetMonsterIDsBySpecies),
-		i.QueryEnum(r, enums.T.CreationArea, ids, ts.QpnCreationArea, ToEnumQuery(enums.T.CreationArea, config.Cfg.DB.GetMonsterIDsByMaCreationArea)),
+		i.QueryEnum(r, enums.T.CreationArea, ids, ts.QpnCreationArea, handlerinput.ToEnumQuery(enums.T.CreationArea, config.Cfg.DB.GetMonsterIDsByMaCreationArea)),
 
 		i.QueryBool(r, ids, ts.QpnRepeatable, config.Cfg.DB.GetMonsterIDsByIsRepeatable),
 		i.QueryBool(r, ids, ts.QpnCapture, config.Cfg.DB.GetMonsterIDsByCanBeCaptured),

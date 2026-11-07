@@ -5,11 +5,12 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getPrimer(r *http.Request, i HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource], id int32) (apitypes.Primer, error) {
+func getPrimer(r *http.Request, i handlerinput.HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource], id int32) (apitypes.Primer, error) {
 	primer, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Primer{}, err
@@ -25,7 +26,7 @@ func getPrimer(r *http.Request, i HandlerInput[seedtypes.Primer, apitypes.Primer
 	response := apitypes.Primer{
 		ID:            primer.ID,
 		Name:          primer.Name,
-		KeyItem:       NameToNamedAPIResource(E.KeyItems, keyItem.Name, nil),
+		KeyItem:       handlerinput.NameToNamedAPIResource(E.KeyItems, keyItem.Name, nil),
 		Description:   keyItem.Description,
 		AlBhedLetter:  primer.AlBhedLetter,
 		EnglishLetter: primer.EnglishLetter,
@@ -36,11 +37,11 @@ func getPrimer(r *http.Request, i HandlerInput[seedtypes.Primer, apitypes.Primer
 	return response, nil
 }
 
-func retrievePrimers(r *http.Request, i HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrievePrimers(r *http.Request, i handlerinput.HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{})
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{})
 }

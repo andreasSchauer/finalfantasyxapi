@@ -3,6 +3,7 @@ package api
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -15,7 +16,7 @@ func convertSubShop(ss seedtypes.SubShop) apitypes.SubShop {
 
 func convertShopItem(si seedtypes.ShopItem) apitypes.ShopItem {
 	return apitypes.ShopItem{
-		Item:  NameToNamedAPIResource(E.Items, si.Name, nil),
+		Item:  handlerinput.NameToNamedAPIResource(E.Items, si.Name, nil),
 		Price: si.Price,
 	}
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
@@ -16,9 +17,9 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 	equipment, _ := lookup.GetResource(cw, lookup.L.EquipmentNames)
 
 	rel := apitypes.CelestialWeapon{
-		Equipment: NameToNamedAPIResource(E.Equipment, equipment.Name, nil),
-		Crest:     NameToNamedAPIResource(E.KeyItems, crest.Name, nil),
-		Sigil:     NameToNamedAPIResource(E.KeyItems, sigil.Name, nil),
+		Equipment: handlerinput.NameToNamedAPIResource(E.Equipment, equipment.Name, nil),
+		Crest:     handlerinput.NameToNamedAPIResource(E.KeyItems, crest.Name, nil),
+		Sigil:     handlerinput.NameToNamedAPIResource(E.KeyItems, sigil.Name, nil),
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -28,13 +29,13 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 			return err
 		}
 		table, _ := lookup.GetResourceByID(tables[0].ID, lookup.L.EquipmentTablesID)
-		rel.AutoAbilities = NamesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities)
+		rel.AutoAbilities = handlerinput.NamesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.WpnTreasure, err = E.Treasures.DBGetRelation(ctx, cw, ToIntOneNull(config.Cfg.DB.GetCelestialWeaponTreasureID))
+		rel.WpnTreasure, err = E.Treasures.DBGetRelation(ctx, cw, handlerinput.ToIntOneNull(config.Cfg.DB.GetCelestialWeaponTreasureID))
 		return err
 	})
 

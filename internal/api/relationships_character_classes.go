@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -64,6 +65,6 @@ func getClassLearnableAbilities(ctx context.Context, class seedtypes.CharacterCl
 		return nil, err
 	}
 
-	learnableAbilities := RemoveResourcesURL(allAbilities, defaultAbilities)
+	learnableAbilities := handlerinput.RemoveResourcesURL(allAbilities, defaultAbilities)
 	return learnableAbilities, nil
 }

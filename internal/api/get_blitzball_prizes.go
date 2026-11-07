@@ -9,11 +9,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getBlitzballPrize(r *http.Request, i HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource], id int32) (apitypes.BlitzballPrize, error) {
+func getBlitzballPrize(r *http.Request, i handlerinput.HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource], id int32) (apitypes.BlitzballPrize, error) {
 	bbPos, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.BlitzballPrize{}, err
@@ -30,13 +31,13 @@ func getBlitzballPrize(r *http.Request, i HandlerInput[seedtypes.BlitzballPositi
 	return response, nil
 }
 
-func retrieveBlitzballPrizes(r *http.Request, i HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveBlitzballPrizes(r *http.Request, i handlerinput.HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnum(r, enums.T.BlitzballTournamentCategory, ids, ts.QpnCategory, config.Cfg.DB.GetBlitzballPrizeIDsByCategory),
 	})
 }

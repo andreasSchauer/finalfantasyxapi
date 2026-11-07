@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"golang.org/x/sync/errgroup"
 )
@@ -23,14 +24,14 @@ func getItemRelationships(r *http.Request, item seedtypes.Item) (apitypes.Item, 
 	}
 
 	if item.Category == string(database.ItemCategorySphere) {
-		sphereRes := NameToNamedAPIResource(E.Spheres, item.Name, nil)
+		sphereRes := handlerinput.NameToNamedAPIResource(E.Spheres, item.Name, nil)
 		rel.Sphere = &sphereRes
 	}
 
 	return rel, nil
 }
 
-func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams RelAvlParams) (apitypes.Item, error) {
+func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams handlerinput.RelAvlParams) (apitypes.Item, error) {
 	var rel apitypes.Item
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -48,7 +49,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 		if err != nil {
 			return err
 		}
-		rel.Treasures = ItemAmtsToChildResAmts2(E.Treasures, treasures, item.ID)
+		rel.Treasures = handlerinput.ItemAmtsToChildResAmts2(E.Treasures, treasures, item.ID)
 		return nil
 	})
 
@@ -63,7 +64,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 		if err != nil {
 			return err
 		}
-		rel.Quests = ItemAmtsToChildResAmts(E.Quests, quests)
+		rel.Quests = handlerinput.ItemAmtsToChildResAmts(E.Quests, quests)
 		return nil
 	})
 
@@ -72,7 +73,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 		if err != nil {
 			return err
 		}
-		rel.BlitzballPrizes = ItemAmtsToChildResAmts2(E.BlitzballPrizes, blitzballPrizes, item.ID)
+		rel.BlitzballPrizes = handlerinput.ItemAmtsToChildResAmts2(E.BlitzballPrizes, blitzballPrizes, item.ID)
 		return nil
 	})
 
@@ -81,7 +82,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 		if err != nil {
 			return err
 		}
-		rel.AeonLearnAbilities = ItemAmtsToChildResAmts(E.PlayerAbilities, playerAbilities)
+		rel.AeonLearnAbilities = handlerinput.ItemAmtsToChildResAmts(E.PlayerAbilities, playerAbilities)
 		return nil
 	})
 
@@ -90,7 +91,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 		if err != nil {
 			return err
 		}
-		rel.AutoAbilities = ItemAmtsToChildResAmts(E.AutoAbilities, autoAbilities)
+		rel.AutoAbilities = handlerinput.ItemAmtsToChildResAmts(E.AutoAbilities, autoAbilities)
 		return nil
 	})
 

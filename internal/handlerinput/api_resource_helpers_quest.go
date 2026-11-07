@@ -9,7 +9,7 @@ import (
 )
 
 func IDToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i HandlerInput[T, R, A], id int32) apiresource.QuestAPIResource {
-	questLookup, _ := lookup.GetResourceByID(id, i.objLookupID)
+	questLookup, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	params := questLookup.GetResParamsQuest()
 
 	switch params.Type {
@@ -39,7 +39,7 @@ func IDToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource]
 }
 
 func NameToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i HandlerInput[T, R, A], name string) apiresource.QuestAPIResource {
-	quest, _ := lookup.GetResource(name, i.objLookup)
+	quest, _ := lookup.GetResource(name, i.ObjLookup)
 	return IDToQuestAPIResource(i, quest.GetID())
 }
 

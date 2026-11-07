@@ -9,7 +9,7 @@ import (
 
 func (i HandlerInput[T, R, A]) ToResAmt(id, amount int32) apiresource.ResourceAmount[A] {
 	return apiresource.ResourceAmount[A]{
-		Resource: i.idToResFunc(i, id),
+		Resource: i.IDToResFunc(i, id),
 		Amount:   amount,
 	}
 }
@@ -28,13 +28,13 @@ func (i HandlerInput[T, R, A]) ToResAmtFromName[NA apiresource.NameAmount](item 
 	var parseResp ah.ParseResponse
 	switch item.GetVersion() {
 	case nil:
-		parseResp, _ = ah.CheckUniqueName(item.GetName(), i.objLookup)
+		parseResp, _ = ah.CheckUniqueName(item.GetName(), i.ObjLookup)
 	default:
-		parseResp, _ = ah.CheckNameVersion(item.GetName(), item.GetVersion(), i.objLookup)
+		parseResp, _ = ah.CheckNameVersion(item.GetName(), item.GetVersion(), i.ObjLookup)
 	}
 
 	return apiresource.ResourceAmount[A]{
-		Resource: i.idToResFunc(i, parseResp.ID),
+		Resource: i.IDToResFunc(i, parseResp.ID),
 		Amount:   item.GetVal(),
 	}
 }
@@ -67,7 +67,7 @@ func ItemAmtsToChildResAmts[T seedtypes.HasItemAmount, R any, A apiresource.APIR
 	resAmts := []apiresource.ResourceAmount[A]{}
 
 	for _, res := range resources {
-		lookupRes, _ := lookup.GetResourceByID(res.GetID(), i.objLookupID)
+		lookupRes, _ := lookup.GetResourceByID(res.GetID(), i.ObjLookupID)
 		itemAmount := lookupRes.GetItemAmount()
 		resAmt := apiresource.NewResourceAmount(res, itemAmount.Amount)
 		resAmts = append(resAmts, resAmt)
@@ -81,7 +81,7 @@ func ItemAmtsToChildResAmts2[T seedtypes.HasItemAmounts, R any, A apiresource.AP
 	resAmts := []apiresource.ResourceAmount[A]{}
 
 	for _, res := range resources {
-		item, _ := lookup.GetResourceByID(res.GetID(), i.objLookupID)
+		item, _ := lookup.GetResourceByID(res.GetID(), i.ObjLookupID)
 		itemAmounts := item.GetItemAmounts()
 		var itemAmount seedtypes.ItemAmount
 

@@ -1,9 +1,9 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -26,7 +26,7 @@ func (test test) checkResPathsInSlice[T apiresource.HasAPIResource](fieldName st
 	test.t.Helper()
 	test.checkSliceBasic(fieldName, expPaths, gotRes)
 
-	gotMap := api.GetResourceURLMap(gotRes)
+	gotMap := handlerinput.GetResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
 		test.t.Errorf("there appear to be duplicates in '%s'.\n\n", fieldName)
 	}
@@ -44,7 +44,7 @@ func (test test) checkResIDsInSlice[T apiresource.HasAPIResource](fieldName stri
 	test.t.Helper()
 	test.checkSliceBasic(fieldName, expIDs, gotRes)
 
-	gotMap := api.GetResourceURLMap(gotRes)
+	gotMap := handlerinput.GetResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
 		test.t.Errorf("there appear to be duplicates in '%s'.\n\n", fieldName)
 	}

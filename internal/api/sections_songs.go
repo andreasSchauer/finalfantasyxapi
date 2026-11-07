@@ -8,13 +8,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
-func createSongSimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
+func createSongSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.Songs
-	song, _ := lookup.GetResourceByID(id, i.objLookupID)
+	song, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	songSimple := sectiontypes.SongSimple{
 		ID:                song.ID,
@@ -90,7 +91,7 @@ func getAreaSongIDs(ctx context.Context, id int32) ([]int32, error) {
 		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of area with id '%d'", err)
 	}
 
-	cueSongIDs, err := ToIntManyNull(config.Cfg.DB.GetAreaCueSongIDs)(ctx, id)
+	cueSongIDs, err := handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaCueSongIDs)(ctx, id)
 	if err != nil {
 		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get cue song ids of area with id '%d'", err)
 	}

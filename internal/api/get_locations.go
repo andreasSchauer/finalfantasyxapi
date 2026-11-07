@@ -6,12 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getLocation(r *http.Request, i HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource], id int32) (apitypes.Location, error) {
+func getLocation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource], id int32) (apitypes.Location, error) {
 	location, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Location{}, err
@@ -34,13 +35,13 @@ func getLocation(r *http.Request, i HandlerInput[seedtypes.Location, apitypes.Lo
 	return response, nil
 }
 
-func retrieveLocations(r *http.Request, i HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveLocations(r *http.Request, i handlerinput.HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetLocationIDsWithMonster),
 		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getLocationsByItem),
 		i.QueryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, config.Cfg.DB.GetLocationIDsWithKeyItem),

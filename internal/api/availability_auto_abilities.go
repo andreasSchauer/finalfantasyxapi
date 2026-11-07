@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -20,7 +21,7 @@ func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) 
 		return inputIDs, nil
 	}
 
-	customize, err := i.queryLookup[ts.QpnCustomize].ParseBool(r)
+	customize, err := i.QueryLookup[ts.QpnCustomize].ParseBool(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -30,21 +31,21 @@ func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) 
 		return nil, err
 	}
 
-	charID, err := NullID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
+	charID, err := handlerinput.NullID(r, E.Characters, ts.QpnCharacter, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
-	methods, err := i.queryLookup[ts.QpnMethods].ParseValueList(r)
+	methods, err := i.QueryLookup[ts.QpnMethods].ParseValueList(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
 
 	dbIDs, err := config.Cfg.DB.FilterAutoAbilityIDsByAvailability(r.Context(), database.FilterAutoAbilityIDsByAvailabilityParams{
 		Ids:            inputIDs,
-		Availability:   avlParams.availabilities,
-		IsRepeatable:   avlParams.isRepeatable,
-		PreAirship:     avlParams.preAirship,
+		Availability:   avlParams.Availabilities,
+		IsRepeatable:   avlParams.IsRepeatable,
+		PreAirship:     avlParams.PreAirship,
 		AvlType:        locContext.AvlType,
 		LocContextID:   locContext.ID,
 		LocContextType: locContext.Type,

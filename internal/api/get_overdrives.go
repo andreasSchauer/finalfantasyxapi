@@ -6,12 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getOverdrive(r *http.Request, i HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource], id int32) (apitypes.Overdrive, error) {
+func getOverdrive(r *http.Request, i handlerinput.HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource], id int32) (apitypes.Overdrive, error) {
 	overdrive, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Overdrive{}, err
@@ -30,22 +31,22 @@ func getOverdrive(r *http.Request, i HandlerInput[seedtypes.Overdrive, apitypes.
 		UnlockCondition:    overdrive.UnlockCondition,
 		CountdownInSec:     overdrive.CountdownInSec,
 		Cursor:             overdrive.Cursor,
-		User:               NameToNamedAPIResource(E.CharacterClasses, overdrive.User, nil),
-		OverdriveCommand:   NamePtrToNamedAPIResPtr(E.OverdriveCommands, overdrive.OverdriveCommand, nil),
+		User:               handlerinput.NameToNamedAPIResource(E.CharacterClasses, overdrive.User, nil),
+		OverdriveCommand:   handlerinput.NamePtrToNamedAPIResPtr(E.OverdriveCommands, overdrive.OverdriveCommand, nil),
 		OverdriveAbilities: refsToNamedAPIResources(overdrive.OverdriveAbilities),
 	}
 
 	return response, nil
 }
 
-func retrieveOverdrives(r *http.Request, i HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveOverdrives(r *http.Request, i handlerinput.HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryIntList(r, ids, ts.QpnRank, config.Cfg.DB.GetOverdriveIDsByRank),
-		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(config.Cfg.DB.GetOverdriveIDsByUser)),
+		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.ResTypeSingle, lookup.L.CharClasses, handlerinput.ToIntManyNull(config.Cfg.DB.GetOverdriveIDsByUser)),
 	})
 }

@@ -5,10 +5,11 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getElement(r *http.Request, i HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource], id int32) (apitypes.Element, error) {
+func getElement(r *http.Request, i handlerinput.HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource], id int32) (apitypes.Element, error) {
 	element, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Element{}, err
@@ -22,7 +23,7 @@ func getElement(r *http.Request, i HandlerInput[seedtypes.Element, apitypes.Elem
 	response := apitypes.Element{
 		ID:                 element.ID,
 		Name:               element.Name,
-		OppositeElement:    NamePtrToNamedAPIResPtr(i, element.OppositeElement, nil),
+		OppositeElement:    handlerinput.NamePtrToNamedAPIResPtr(i, element.OppositeElement, nil),
 		StatusProtection:   rel.StatusProtection,
 		AutoAbilities:      rel.AutoAbilities,
 		PlayerAbilities:    rel.PlayerAbilities,
@@ -38,6 +39,6 @@ func getElement(r *http.Request, i HandlerInput[seedtypes.Element, apitypes.Elem
 	return response, nil
 }
 
-func retrieveElements(r *http.Request, i HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveElements(r *http.Request, i handlerinput.HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]) ([]int32, error) {
 	return i.QueryParamsVerifyRetrieve(r)
 }

@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -17,12 +18,12 @@ type locContextParams struct {
 	Type    sql.NullString
 }
 
-func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i HandlerInput[T, R, A]) (locContextParams, error) {
+func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.HandlerInput[T, R, A]) (locContextParams, error) {
 	avlType := AvlTypeSelf
 	var locContextID sql.NullInt32
 	var locContextType string
 
-	locID, err := NullID(r, E.Locations, ts.QpnLocation, i.queryLookup)
+	locID, err := handlerinput.NullID(r, E.Locations, ts.QpnLocation, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -32,7 +33,7 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 		locContextType = string(ViewSourceTypeLocation)
 	}
 
-	subLocID, err := NullID(r, E.Sublocations, ts.QpnSublocation, i.queryLookup)
+	subLocID, err := handlerinput.NullID(r, E.Sublocations, ts.QpnSublocation, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -42,7 +43,7 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 		locContextType = string(ViewSourceTypeSublocation)
 	}
 
-	areaID, err := NullID(r, E.Areas, ts.QpnArea, i.queryLookup)
+	areaID, err := handlerinput.NullID(r, E.Areas, ts.QpnArea, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}

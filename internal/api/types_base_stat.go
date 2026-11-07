@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -17,7 +18,7 @@ func newBaseStat(res apiresource.NamedAPIResource, value int32) apitypes.BaseSta
 
 func getBaseStat(stat string, baseStats []apitypes.BaseStat) apitypes.BaseStat {
 	statLookup, _ := lookup.GetResource(stat, lookup.L.Stats)
-	statMap := GetResourceMap(baseStats)
+	statMap := handlerinput.GetResourceMap(baseStats)
 
 	return statMap[statLookup.ID]
 }

@@ -6,18 +6,18 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"golang.org/x/sync/errgroup"
 )
 
-
-func createLocationSimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
+func createLocationSimple(r *http.Request, id int32, subsection handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.Locations
-	location, _ := lookup.GetResourceByID(id, i.objLookupID)
+	location, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
-	monsterIDs := subsection.relations[id][RelationMonsters]
-	shopIDs := subsection.relations[id][RelationShops]
+	monsterIDs := subsection.Relations[id][handlerinput.RelationMonsters]
+	shopIDs := subsection.Relations[id][handlerinput.RelationShops]
 
 	locationSimple := sectiontypes.LocationSimple{
 		ID:        location.ID,
@@ -31,29 +31,29 @@ func createLocationSimple(r *http.Request, id int32, subsection Subsection) (api
 	return locationSimple, nil
 }
 
-func getLocationSectionRelations(r *http.Request, locIDs []int32) (map[int32]map[Relation][]int32, error) {
+func getLocationSectionRelations(r *http.Request, locIDs []int32) (map[int32]map[handlerinput.Relation][]int32, error) {
 	i := E.Locations
-	relations := make(map[int32]map[Relation][]int32)
+	relations := make(map[int32]map[handlerinput.Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())
 
 	var treasureJunctions []sectiontypes.Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Treasures.resTypeSingle, config.Cfg.DB.GetLocationTreasureIdPairs, juncLocationTreasure)
+		treasureJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Treasures.ResTypeSingle, config.Cfg.DB.GetLocationTreasureIdPairs, juncLocationTreasure)
 		return err
 	})
 
 	var shopJunctions []sectiontypes.Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Shops.resTypeSingle, config.Cfg.DB.GetLocationShopIdPairs, juncLocationShop)
+		shopJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Shops.ResTypeSingle, config.Cfg.DB.GetLocationShopIdPairs, juncLocationShop)
 		return err
 	})
 
 	var monsterJunctions []sectiontypes.Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Monsters.resTypeSingle, config.Cfg.DB.GetLocationMonsterIdPairs, juncLocationMonster)
+		monsterJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Monsters.ResTypeSingle, config.Cfg.DB.GetLocationMonsterIdPairs, juncLocationMonster)
 		return err
 	})
 
@@ -63,11 +63,11 @@ func getLocationSectionRelations(r *http.Request, locIDs []int32) (map[int32]map
 	}
 
 	for _, locID := range locIDs {
-		relationMap := make(map[Relation][]int32)
+		relationMap := make(map[handlerinput.Relation][]int32)
 
-		relationMap[RelationTreasures], treasureJunctions = GetJunctionIDs(locID, treasureJunctions)
-		relationMap[RelationShops], shopJunctions = GetJunctionIDs(locID, shopJunctions)
-		relationMap[RelationMonsters], monsterJunctions = GetJunctionIDs(locID, monsterJunctions)
+		relationMap[handlerinput.RelationTreasures], treasureJunctions = GetJunctionIDs(locID, treasureJunctions)
+		relationMap[handlerinput.RelationShops], shopJunctions = GetJunctionIDs(locID, shopJunctions)
+		relationMap[handlerinput.RelationMonsters], monsterJunctions = GetJunctionIDs(locID, monsterJunctions)
 
 		relations[locID] = relationMap
 	}

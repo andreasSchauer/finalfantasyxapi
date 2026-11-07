@@ -7,10 +7,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getSidequest(r *http.Request, i HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource], id int32) (apitypes.Sidequest, error) {
+func getSidequest(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource], id int32) (apitypes.Sidequest, error) {
 	sidequest, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Sidequest{}, err
@@ -24,7 +25,7 @@ func getSidequest(r *http.Request, i HandlerInput[seedtypes.Sidequest, apitypes.
 	response := apitypes.Sidequest{
 		ID:           sidequest.ID,
 		Name:         sidequest.Name,
-		UntypedQuest: IDToQuestAPIResource(E.Quests, sidequest.Quest.ID),
+		UntypedQuest: handlerinput.IDToQuestAPIResource(E.Quests, sidequest.Quest.ID),
 		Availability: sidequest.Availability,
 		IsRepeatable: sidequest.IsRepeatable,
 		Completion:   ah.ConvertObjPtr(sidequest.Completion, convertQuestCompletion),
@@ -34,11 +35,11 @@ func getSidequest(r *http.Request, i HandlerInput[seedtypes.Sidequest, apitypes.
 	return response, nil
 }
 
-func retrieveSidequests(r *http.Request, i HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource]) ([]int32, error) {
+func retrieveSidequests(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{})
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{})
 }

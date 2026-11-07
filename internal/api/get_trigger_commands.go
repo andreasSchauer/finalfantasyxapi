@@ -7,12 +7,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getTriggerCommand(r *http.Request, i HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource], id int32) (apitypes.TriggerCommand, error) {
+func getTriggerCommand(r *http.Request, i handlerinput.HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource], id int32) (apitypes.TriggerCommand, error) {
 	command, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
@@ -28,15 +29,15 @@ func getTriggerCommand(r *http.Request, i HandlerInput[seedtypes.TriggerCommand,
 		Name:               command.Name,
 		Version:            command.Version,
 		Specification:      command.Specification,
-		UntypedAbility:     IDToTypedAPIResource(E.Abilities, command.Ability.ID),
+		UntypedAbility:     handlerinput.IDToTypedAPIResource(E.Abilities, command.Ability.ID),
 		Description:        command.Description,
 		Effect:             command.Effect,
 		Rank:               command.Rank,
 		AppearsInHelpBar:   command.AppearsInHelpBar,
 		CanCopycat:         command.CanCopycat,
 		UsedBy:             rel.UsedBy,
-		RelatedStats:       NamesToNamedAPIResources(E.Stats, command.RelatedStats),
-		Topmenu:            NamePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
+		RelatedStats:       handlerinput.NamesToNamedAPIResources(E.Stats, command.RelatedStats),
+		Topmenu:            handlerinput.NamePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
 		Cursor:             command.Cursor,
 		MonsterFormations:  rel.MonsterFormations,
 		BattleInteractions: ah.ConvertObjSlice(command.BattleInteractions, convertBattleInteraction),
@@ -51,14 +52,14 @@ func getTriggerCommand(r *http.Request, i HandlerInput[seedtypes.TriggerCommand,
 	return response, nil
 }
 
-func retrieveTriggerCommands(r *http.Request, i HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveTriggerCommands(r *http.Request, i handlerinput.HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
-		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetTriggerCommandIDsByCharClass),
-		i.QueryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, config.Cfg.DB.GetTriggerCommandIDsByRelatedStat),
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
+		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.ResTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetTriggerCommandIDsByCharClass),
+		i.QueryNameID(r, ids, ts.QpnRelatedStat, E.Stats.ResTypeSingle, lookup.L.Stats, config.Cfg.DB.GetTriggerCommandIDsByRelatedStat),
 	})
 }

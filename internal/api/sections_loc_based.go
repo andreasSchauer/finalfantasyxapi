@@ -3,11 +3,11 @@ package api
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
-
 
 func idToShopLocSimple(shopID int32) sectiontypes.ShopLocSimple {
 	shopLookup, _ := lookup.GetResourceByID(shopID, lookup.L.ShopsID)
@@ -33,9 +33,8 @@ func convertShopSummarySimple(shop seedtypes.SubShop) sectiontypes.ShopSummarySi
 	return shopLoc
 }
 
-
-func getTreasuresLocSimple(id int32, subsection Subsection) *sectiontypes.TreasuresLocSimple {
-	treasureIDs := subsection.relations[id][RelationTreasures]
+func getTreasuresLocSimple(id int32, subsection handlerinput.Subsection) *sectiontypes.TreasuresLocSimple {
+	treasureIDs := subsection.Relations[id][handlerinput.RelationTreasures]
 
 	if len(treasureIDs) == 0 {
 		return nil

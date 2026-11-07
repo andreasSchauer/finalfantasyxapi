@@ -8,12 +8,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMonsterFormation(r *http.Request, i HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource], id int32) (apitypes.MonsterFormation, error) {
+func getMonsterFormation(r *http.Request, i handlerinput.HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource], id int32) (apitypes.MonsterFormation, error) {
 	formation, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.MonsterFormation{}, err
@@ -36,13 +37,13 @@ func getMonsterFormation(r *http.Request, i HandlerInput[seedtypes.MonsterFormat
 	return response, nil
 }
 
-func retrieveMonsterFormations(r *http.Request, i HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]) ([]int32, error) {
+func retrieveMonsterFormations(r *http.Request, i handlerinput.HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetMonsterFormationIDsByMonster),
 		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetMonsterFormationIDsByLocation),
 		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetMonsterFormationIDsBySublocation),

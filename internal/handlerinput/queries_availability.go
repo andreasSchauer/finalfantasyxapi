@@ -12,13 +12,13 @@ import (
 )
 
 type avlParams struct {
-	availabilities []int32
-	isRepeatable   sql.NullBool
-	preAirship     bool
+	Availabilities []int32
+	IsRepeatable   sql.NullBool
+	PreAirship     bool
 }
 
 func (i HandlerInput[T, R, A]) QueryAvlGetParams(r *http.Request) (avlParams, error) {
-	queryParamAvl := i.queryLookup[ts.QpnAvailability]
+	queryParamAvl := i.QueryLookup[ts.QpnAvailability]
 
 	availabilities, err := queryParamAvl.ParseEnumList(r, enums.T.AvailabilityType)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -30,9 +30,9 @@ func (i HandlerInput[T, R, A]) QueryAvlGetParams(r *http.Request) (avlParams, er
 
 	var preAirship bool
 
-	_, ok := i.queryLookup[ts.QpnPreAirship]
+	_, ok := i.QueryLookup[ts.QpnPreAirship]
 	if ok {
-		preAirship, err = i.queryLookup[ts.QpnPreAirship].ParseBool(r)
+		preAirship, err = i.QueryLookup[ts.QpnPreAirship].ParseBool(r)
 		if errs.ErrExceptEmptyQuery(err) {
 			return avlParams{}, err
 		}
@@ -46,8 +46,8 @@ func (i HandlerInput[T, R, A]) QueryAvlGetParams(r *http.Request) (avlParams, er
 	avlRanks := avlToRanks(availabilities, preAirship)
 
 	params := avlParams{
-		availabilities: h.SliceOrNil(avlRanks),
-		preAirship:     preAirship,
+		Availabilities: h.SliceOrNil(avlRanks),
+		PreAirship:     preAirship,
 	}
 
 	return params, nil
@@ -61,7 +61,7 @@ func (i HandlerInput[T, R, A]) QueryAvlRepGetParams(r *http.Request) (avlParams,
 		return avlParams{}, errAvl
 	}
 
-	isRepeatable, errRepl := NullBool(r, ts.QpnRepeatable, i.queryLookup)
+	isRepeatable, errRepl := NullBool(r, ts.QpnRepeatable, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(errRepl) {
 		return avlParams{}, errRepl
 	}
@@ -70,7 +70,7 @@ func (i HandlerInput[T, R, A]) QueryAvlRepGetParams(r *http.Request) (avlParams,
 		return avlParams{}, errs.ErrEmptyQuery
 	}
 
-	params.isRepeatable = isRepeatable
+	params.IsRepeatable = isRepeatable
 
 	return params, nil
 }

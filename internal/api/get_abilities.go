@@ -8,12 +8,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAbility(r *http.Request, i HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource], id int32) (apitypes.Ability, error) {
+func getAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource], id int32) (apitypes.Ability, error) {
 	ability, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Ability{}, err
@@ -41,20 +42,20 @@ func getAbility(r *http.Request, i HandlerInput[seedtypes.Ability, apitypes.Abil
 	return response, nil
 }
 
-func retrieveAbilities(r *http.Request, i HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource]) ([]int32, error) {
+func retrieveAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnumList(r, enums.T.AbilityType, ids, ts.QpnType, config.Cfg.DB.GetAbilityIDsByType),
 		i.QueryEnumList(r, enums.T.DamageType, ids, ts.QpnDamageType, config.Cfg.DB.GetAbilityIDsByDamageType),
 		i.QueryEnumList(r, enums.T.AttackType, ids, ts.QpnAttackType, config.Cfg.DB.GetAbilityIDsByAttackType),
 		i.QueryEnumList(r, enums.T.TargetType, ids, ts.QpnTargetType, config.Cfg.DB.GetAbilityIDsByTargetType),
 		i.QueryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, config.Cfg.DB.GetAbilityIDsByDamageFormula),
 		i.QueryIntList(r, ids, ts.QpnRank, config.Cfg.DB.GetAbilityIDsByRank),
-		i.QueryNameIDListNul(r, ids, ts.QpnElement, E.Elements.resTypeSingle, lookup.L.Elements, config.Cfg.DB.GetAbilityIDsByElement),
+		i.QueryNameIDListNul(r, ids, ts.QpnElement, E.Elements.ResTypeSingle, lookup.L.Elements, config.Cfg.DB.GetAbilityIDsByElement),
 		i.QueryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, config.Cfg.DB.GetAbilityIDsByInflictedStatus),
 		i.QueryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, config.Cfg.DB.GetAbilityIDsByRemovedStatus),
 		i.QueryID(r, ids, ts.QpnMonster, lookup.L.MonsterFormations, config.Cfg.DB.GetAbilityIDsByMonster),

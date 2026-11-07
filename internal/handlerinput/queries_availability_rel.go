@@ -20,7 +20,7 @@ type RelAvlParams struct {
 }
 
 func (i HandlerInput[T, R, A]) QueryAvlRelGetParams(r *http.Request, parentID int32) (RelAvlParams, error) {
-	queryParam := i.queryLookup[ts.QpnRelAvailability]
+	queryParam := i.QueryLookup[ts.QpnRelAvailability]
 
 	availabilities, err := queryParam.ParseEnumList(r, enums.T.AvailabilityType)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -29,9 +29,9 @@ func (i HandlerInput[T, R, A]) QueryAvlRelGetParams(r *http.Request, parentID in
 
 	var repeatable sql.NullBool
 
-	_, ok := i.queryLookup[ts.QpnRelRepeatable]
+	_, ok := i.QueryLookup[ts.QpnRelRepeatable]
 	if ok {
-		repeatable, err = NullBool(r, ts.QpnRelRepeatable, i.queryLookup)
+		repeatable, err = NullBool(r, ts.QpnRelRepeatable, i.QueryLookup)
 		if errs.ErrExceptEmptyQuery(err) {
 			return RelAvlParams{}, err
 		}

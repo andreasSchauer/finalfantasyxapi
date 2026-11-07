@@ -8,12 +8,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAutoAbility(r *http.Request, i HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource], id int32) (apitypes.AutoAbility, error) {
+func getAutoAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource], id int32) (apitypes.AutoAbility, error) {
 	autoAbility, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.AutoAbility{}, err
@@ -31,21 +32,21 @@ func getAutoAbility(r *http.Request, i HandlerInput[seedtypes.AutoAbility, apity
 		Effect:                 autoAbility.Effect,
 		EquipType:              autoAbility.Type,
 		Category:               autoAbility.Category,
-		RelatedStats:           NamesToNamedAPIResources(E.Stats, autoAbility.RelatedStats),
+		RelatedStats:           handlerinput.NamesToNamedAPIResources(E.Stats, autoAbility.RelatedStats),
 		AbilityValue:           autoAbility.AbilityValue,
 		RequiredItem:           E.AllItems.ToResAmtFromNamePtr(autoAbility.RequiredItem),
-		LockedOutAutoAbilities: NamesToNamedAPIResources(E.AutoAbilities, autoAbility.LockedOutAbilities),
+		LockedOutAutoAbilities: handlerinput.NamesToNamedAPIResources(E.AutoAbilities, autoAbility.LockedOutAbilities),
 		ActivationCondition:    autoAbility.ActivationCondition,
 		Counter:                autoAbility.Counter,
-		GradualRecovery:        NamePtrToNamedAPIResPtr(E.Stats, autoAbility.GradualRecovery, nil),
-		AutoItemUse:            NamesToNamedAPIResources(E.Items, autoAbility.AutoItemUse),
-		OnHitElement:           NamePtrToNamedAPIResPtr(E.Elements, autoAbility.OnHitElement, nil),
+		GradualRecovery:        handlerinput.NamePtrToNamedAPIResPtr(E.Stats, autoAbility.GradualRecovery, nil),
+		AutoItemUse:            handlerinput.NamesToNamedAPIResources(E.Items, autoAbility.AutoItemUse),
+		OnHitElement:           handlerinput.NamePtrToNamedAPIResPtr(E.Elements, autoAbility.OnHitElement, nil),
 		AddedElemResist:        ah.ConvertObjPtr(autoAbility.AddedElemResist, convertElemResist),
 		OnHitStatus:            ah.ConvertObjPtr(autoAbility.OnHitStatus, convertInflictedStatus),
-		AddedStatusses:         NamesToNamedAPIResources(E.StatusConditions, autoAbility.AddedStatusses),
+		AddedStatusses:         handlerinput.NamesToNamedAPIResources(E.StatusConditions, autoAbility.AddedStatusses),
 		AddedStatusResists:     ah.ConvertObjSlice(autoAbility.AddedStatusResists, convertStatusResist),
-		AddedProperty:          NamePtrToNamedAPIResPtr(E.Properties, autoAbility.AddedProperty, nil),
-		ConversionTo:           NamePtrToNamedAPIResPtr(E.Modifiers, autoAbility.ConversionTo, nil),
+		AddedProperty:          handlerinput.NamePtrToNamedAPIResPtr(E.Properties, autoAbility.AddedProperty, nil),
+		ConversionTo:           handlerinput.NamePtrToNamedAPIResPtr(E.Modifiers, autoAbility.ConversionTo, nil),
 		StatChanges:            ah.ConvertObjSlice(autoAbility.StatChanges, convertStatChange),
 		ModifierChanges:        ah.ConvertObjSlice(autoAbility.ModifierChanges, convertModifierChange),
 		MonstersDrop:           rel.MonstersDrop,
@@ -59,13 +60,13 @@ func getAutoAbility(r *http.Request, i HandlerInput[seedtypes.AutoAbility, apity
 	return response, nil
 }
 
-func retrieveAutoAbilities(r *http.Request, i HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveAutoAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnumList(r, enums.T.AutoAbilityCategory, ids, ts.QpnCategory, config.Cfg.DB.GetAutoAbilityIDsByCategory),
 		i.QueryEnum(r, enums.T.EquipType, ids, ts.QpnType, config.Cfg.DB.GetAutoAbilityIDsByEquipType),
 		i.QueryIDWrapper(r, ids, ts.QpnMonster, lookup.L.Monsters, getAutoAbilitiesByMonster),

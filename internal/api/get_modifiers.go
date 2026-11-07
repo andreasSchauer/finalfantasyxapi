@@ -7,11 +7,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getModifier(r *http.Request, i HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource], id int32) (apitypes.Modifier, error) {
+func getModifier(r *http.Request, i handlerinput.HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource], id int32) (apitypes.Modifier, error) {
 	modifier, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Modifier{}, err
@@ -41,13 +42,13 @@ func getModifier(r *http.Request, i HandlerInput[seedtypes.Modifier, apitypes.Mo
 	return response, nil
 }
 
-func retrieveModifiers(r *http.Request, i HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveModifiers(r *http.Request, i handlerinput.HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnumList(r, enums.T.ModifierCategory, ids, ts.QpnCategory, config.Cfg.DB.GetModifierIDsByCategory),
 	})
 }

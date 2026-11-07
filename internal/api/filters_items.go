@@ -13,7 +13,7 @@ import (
 
 func getMasterItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AllItems
-	queryParamMethods := i.queryLookup[ts.QpnMethods]
+	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -33,7 +33,7 @@ func getMasterItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int
 
 func getMasterItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AllItems
-	queryParamMethods := i.queryLookup[ts.QpnMethods]
+	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -53,7 +53,7 @@ func getMasterItemsBySublocation(r *http.Request, ctx context.Context, id int32)
 
 func getMasterItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AllItems
-	queryParamMethods := i.queryLookup[ts.QpnMethods]
+	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -73,7 +73,7 @@ func getMasterItemsByLocation(r *http.Request, ctx context.Context, id int32) ([
 
 func getItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Items
-	queryParamMethods := i.queryLookup[ts.QpnMethods]
+	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -93,7 +93,7 @@ func getItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, er
 
 func getItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Items
-	queryParamMethods := i.queryLookup[ts.QpnMethods]
+	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -113,7 +113,7 @@ func getItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]in
 
 func getItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.Items
-	queryParamMethods := i.queryLookup[ts.QpnMethods]
+	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
 	if errs.ErrExceptEmptyQuery(err) {

@@ -26,12 +26,12 @@ func compute[P ServiceParams, R ServiceResponse](i HandlerInputService[P, R], pa
 		return zero, err
 	}
 
-	return i.executeFn(params)
+	return i.ExecuteFn(params)
 }
 
 func verifyJSONParams[P ServiceParams, R ServiceResponse](i HandlerInputService[P, R], params P, userValues map[ts.FieldName]any) (P, error) {
 	var zero P
-	docs := i.docsFn()
+	docs := i.DocsFn()
 	paramsRules := compileParamsRules(docs.Fields)
 
 	v := createParamsVerifyer(paramsRules, userValues)
@@ -41,6 +41,6 @@ func verifyJSONParams[P ServiceParams, R ServiceResponse](i HandlerInputService[
 		return zero, err
 	}
 
-	return i.verifyFn(v, params)
+	return i.VerifyFn(v, params)
 
 }

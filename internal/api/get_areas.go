@@ -6,12 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getArea(r *http.Request, i HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], id int32) (apitypes.Area, error) {
+func getArea(r *http.Request, i handlerinput.HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], id int32) (apitypes.Area, error) {
 	area, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Area{}, err
@@ -33,8 +34,8 @@ func getArea(r *http.Request, i HandlerInput[seedtypes.Area, apitypes.Area, apir
 		Version:           area.Version,
 		Specification:     area.Specification,
 		DisplayName:       getAreaDisplayName(area),
-		ParentLocation:    NameToNamedAPIResource(E.Locations, area.Location, nil),
-		ParentSublocation: NameToNamedAPIResource(E.Sublocations, area.Sublocation, nil),
+		ParentLocation:    handlerinput.NameToNamedAPIResource(E.Locations, area.Location, nil),
+		ParentSublocation: handlerinput.NameToNamedAPIResource(E.Sublocations, area.Sublocation, nil),
 		Availability:      area.Availability,
 		HasSaveSphere:     area.HasSaveSphere,
 		AirshipDropOff:    area.AirshipDropOff,
@@ -47,13 +48,13 @@ func getArea(r *http.Request, i HandlerInput[seedtypes.Area, apitypes.Area, apir
 	return response, nil
 }
 
-func retrieveAreas(r *http.Request, i HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]) ([]int32, error) {
+func retrieveAreas(r *http.Request, i handlerinput.HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]) ([]int32, error) {
 	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []IDFilter{
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationAreaIDs),
 		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationAreaIDs),
 		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreaIDsWithMonster),

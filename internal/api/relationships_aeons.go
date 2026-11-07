@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -123,7 +124,7 @@ func applyYunaStats(r *http.Request, aeon apitypes.Aeon, queryName ts.QueryParam
 func calcAeonStats(aeon apitypes.Aeon, yuna map[string]int32) []apitypes.BaseStat {
 	baseStats := aeon.BaseStats
 	aVals, bVals := getAeonStatTables(aeon)
-	yunaFloat := ResAmtMapToFloat(yuna)
+	yunaFloat := handlerinput.ResAmtMapToFloat(yuna)
 	yParameter := yParamCalc(yuna)
 
 	for i, baseStat := range baseStats {
@@ -139,12 +140,12 @@ func getAeonStatTables(aeon apitypes.Aeon) (map[string]float64, map[string]float
 	aeonLookup, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 
 	aValsSlice := E.Stats.ToResAmtType(aeonLookup.BaseStats.AVals, newBaseStat)
-	aValsInt := GetResAmtTypeMap(aValsSlice)
-	aVals := ResAmtMapToFloat(aValsInt)
+	aValsInt := handlerinput.GetResAmtTypeMap(aValsSlice)
+	aVals := handlerinput.ResAmtMapToFloat(aValsInt)
 
 	bValsSlice := E.Stats.ToResAmtType(aeonLookup.BaseStats.BVals, newBaseStat)
-	bValsInt := GetResAmtTypeMap(bValsSlice)
-	bVals := ResAmtMapToFloat(bValsInt)
+	bValsInt := handlerinput.GetResAmtTypeMap(bValsSlice)
+	bVals := handlerinput.ResAmtMapToFloat(bValsInt)
 
 	return aVals, bVals
 }
@@ -196,7 +197,7 @@ func getUnitAgilityParams(r *http.Request, baseStats []apitypes.BaseStat) (apity
 	}
 
 	agilityParams := apitypes.AgilityParams{
-		AgilityTier: IDToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
+		AgilityTier: handlerinput.IDToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   agilityTier.TickSpeed,
 		MinICV:      minICV,
 		MaxICV:      agilityTier.CharacterMaxICV,

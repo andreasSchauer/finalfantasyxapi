@@ -7,23 +7,24 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i HandlerInput[T, R, A], segments []string) {
+func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A], segments []string) {
 	idStr := segments[0]
 	sectionName := segments[1]
 
-	parseRes, err := ah.ParseID(idStr, i.resTypeSingle, len(i.objLookup))
+	parseRes, err := ah.ParseID(idStr, i.ResTypeSingle, len(i.ObjLookup))
 	if HandleHTTPError(w, err) {
 		return
 	}
 
-	subsection, ok := i.subsections[ts.SectionName(sectionName)]
+	subsection, ok := i.Subsections[ts.SectionName(sectionName)]
 	if !ok {
-		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s", sectionName, i.Endpoint, FormatSectionNames(i.subsections)), nil)
+		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("subsection '%s' does not exist for endpoint /%s. supported subsections: %s", sectionName, i.Endpoint, handlerinput.FormatSectionNames(i.Subsections)), nil)
 		return
 	}
 
@@ -38,16 +39,16 @@ func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](
 	// if a subsection refers to the resource itself (/endpoint/{id}/simple, or /aeons/{id}/stats),
 	// it doesn't need a db query and can create a apiresource.SimpleResource with the given id,
 	// instead of querying the db for relations of the given id
-	if subsection.dbQuery == nil {
-		if subsection.relationsFn != nil {
+	if subsection.DBQuery == nil {
+		if subsection.RelationsFn != nil {
 			var err error
-			subsection.relations, err = subsection.relationsFn(r, []int32{parseRes.ID})
+			subsection.Relations, err = subsection.RelationsFn(r, []int32{parseRes.ID})
 			if HandleHTTPError(w, err) {
 				return
 			}
 		}
 
-		simpleRes, err := subsection.createSubFn(r, parseRes.ID, subsection)
+		simpleRes, err := subsection.CreateSubFn(r, parseRes.ID, subsection)
 		if HandleHTTPError(w, err) {
 			return
 		}
@@ -62,21 +63,21 @@ func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](
 	respondWithJSON(w, http.StatusOK, list)
 }
 
-func HandleParameters[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i HandlerInput[T, R, A]) {
-	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
+func HandleParameters[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
+	handleParametersWrapper(w, r, i.Endpoint, i.QueryLookup)
 }
 
-func HandleParametersEnums(w http.ResponseWriter, r *http.Request, i HandlerInputEnums) {
-	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
+func HandleParametersEnums(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEnums) {
+	handleParametersWrapper(w, r, i.Endpoint, i.QueryLookup)
 }
 
-func HandleParametersEndpoints(w http.ResponseWriter, r *http.Request, i HandlerInputEndpoints) {
-	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
+func HandleParametersEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEndpoints) {
+	handleParametersWrapper(w, r, i.Endpoint, i.QueryLookup)
 }
 
 func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) {
 	segment := string(ts.SnParameters)
-	err := VerifyQueryParamsAltList(r, endpoint, queryLookup, &segment)
+	err := handlerinput.VerifyQueryParamsAltList(r, endpoint, queryLookup, &segment)
 	if HandleHTTPError(w, err) {
 		return
 	}
@@ -90,26 +91,26 @@ func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
-func HandleSections[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i HandlerInput[T, R, A]) {
+func HandleSections[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
 	segment := string(ts.SnSections)
-	err := VerifyQueryParamsAltList(r, i.Endpoint, i.queryLookup, &segment)
+	err := handlerinput.VerifyQueryParamsAltList(r, i.Endpoint, i.QueryLookup, &segment)
 	if HandleHTTPError(w, err) {
 		return
 	}
 
 	queryparam.SetLimitMax(r, r.URL.Query())
 
-	sectionList, err := getSectionList(r, i.subsections)
+	sectionList, err := getSectionList(r, i.Subsections)
 	if HandleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, sectionList)
 }
 
-func HandleSimple[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i HandlerInput[T, R, A]) {
+func HandleSimple[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
 	segment := string(ts.SnSimple)
 
-	_, ok := i.subsections[ts.SnSimple]
+	_, ok := i.Subsections[ts.SnSimple]
 	if !ok {
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("simple view is not available for endpoint /%s", i.Endpoint), nil)
 		return
@@ -120,12 +121,12 @@ func HandleSimple[T seedtypes.Lookupable, R any, A apiresource.APIResource](w ht
 		return
 	}
 
-	resources, err := CreateSimpleResources(r, ids, i.subsections[ts.SectionName(segment)])
+	resources, err := handlerinput.CreateSimpleResources(r, ids, i.Subsections[ts.SectionName(segment)])
 	if HandleHTTPError(w, err) {
 		return
 	}
 
-	listParams, shownResources, err := CreatePaginatedList(r, resources)
+	listParams, shownResources, err := handlerinput.CreatePaginatedList(r, resources)
 	if HandleHTTPError(w, err) {
 		return
 	}
@@ -138,20 +139,20 @@ func HandleSimple[T seedtypes.Lookupable, R any, A apiresource.APIResource](w ht
 	respondWithJSON(w, http.StatusOK, subResList)
 }
 
-func HandleIDsQuery[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i HandlerInput[T, R, A], segment *string) ([]int32, error) {
-	err := VerifyQueryParams[any](r, i.Endpoint, i.queryLookup, nil, segment)
+func HandleIDsQuery[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.HandlerInput[T, R, A], segment *string) ([]int32, error) {
+	err := handlerinput.VerifyQueryParams[any](r, i.Endpoint, i.QueryLookup, nil, segment)
 	if err != nil {
 		return nil, err
 	}
 
 	// ifs ids param is empty, just retrieve all ids
-	queryParamIDs := i.queryLookup[ts.QpnIDs]
+	queryParamIDs := i.QueryLookup[ts.QpnIDs]
 	_, err = queryParamIDs.CheckEmpty(r)
 	if errs.QueryIsEmpty(err) {
-		return i.retrieveFunc(r, i)
+		return i.RetrieveFunc(r, i)
 	}
 
-	ids, err := queryParamIDs.ParseIDList(r, i.objLookup)
+	ids, err := queryParamIDs.ParseIDList(r, i.ObjLookup)
 	if err != nil {
 		return nil, err
 	}

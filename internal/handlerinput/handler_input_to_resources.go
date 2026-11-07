@@ -10,7 +10,7 @@ func (i HandlerInput[T, R, A]) ToAPIResources(IDs []int32) []A {
 	resources := make([]A, len(IDs))
 
 	for idx, id := range IDs {
-		resources[idx] = i.idToResFunc(i, id)
+		resources[idx] = i.IDToResFunc(i, id)
 	}
 
 	return resources

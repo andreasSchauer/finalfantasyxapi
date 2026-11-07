@@ -7,13 +7,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AutoAbilities
 
-	charIDPtr, err := NullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
+	charIDPtr, err := handlerinput.NullNameID(r, E.Characters, ts.QpnCharacter, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -23,7 +24,7 @@ func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) (
 		CharacterID: charIDPtr,
 	})
 	if err != nil {
-		return nil, i.ErrorDBFilter(i.queryLookup[ts.QpnMonster], err)
+		return nil, i.ErrorDBFilter(i.QueryLookup[ts.QpnMonster], err)
 	}
 
 	return dbIDs, nil
@@ -32,7 +33,7 @@ func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) (
 func getAutoAbilitiesByShop(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := E.AutoAbilities
 
-	charIDPtr, err := NullNameID(r, E.Characters, ts.QpnCharacter, i.queryLookup)
+	charIDPtr, err := handlerinput.NullNameID(r, E.Characters, ts.QpnCharacter, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -42,7 +43,7 @@ func getAutoAbilitiesByShop(r *http.Request, ctx context.Context, id int32) ([]i
 		CharacterID: charIDPtr,
 	})
 	if err != nil {
-		return nil, i.ErrorDBFilter(i.queryLookup[ts.QpnMonster], err)
+		return nil, i.ErrorDBFilter(i.QueryLookup[ts.QpnMonster], err)
 	}
 
 	return dbIDs, nil

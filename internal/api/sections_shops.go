@@ -6,6 +6,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
@@ -56,9 +57,9 @@ func foundEquipmentAbilitiesStringPtr(fe seedtypes.TreasureEquipment) *string {
 	}
 }
 
-func createShopSimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
+func createShopSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := E.Shops
-	shop, _ := lookup.GetResourceByID(id, i.objLookupID)
+	shop, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	shopSimple := sectiontypes.ShopSimple{
 		ID:          shop.ID,

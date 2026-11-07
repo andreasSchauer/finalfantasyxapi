@@ -10,8 +10,8 @@ import (
 
 func (i HandlerInput[T, R, A]) QueryValueList(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryStringList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
-		queryParam := i.queryLookup[queryName]
-		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
+		queryParam := i.QueryLookup[queryName]
+		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {
 			return inputIDs, nil
 		}
 
