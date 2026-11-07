@@ -16,7 +16,7 @@ import (
 )
 
 func getItemAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource], id int32) (apitypes.ItemAbility, error) {
-	ability, err := i.QueryParamsVerifyGet(r, id)
+	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.ItemAbility{}, err
 	}
@@ -47,7 +47,7 @@ func getItemAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.ItemA
 }
 
 func retrieveItemAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

@@ -15,7 +15,7 @@ import (
 )
 
 func getAutoAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource], id int32) (apitypes.AutoAbility, error) {
-	autoAbility, err := i.QueryParamsVerifyGet(r, id)
+	autoAbility, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.AutoAbility{}, err
 	}
@@ -61,7 +61,7 @@ func getAutoAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.AutoA
 }
 
 func retrieveAutoAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

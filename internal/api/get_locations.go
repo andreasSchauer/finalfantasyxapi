@@ -13,7 +13,7 @@ import (
 )
 
 func getLocation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource], id int32) (apitypes.Location, error) {
-	location, err := i.QueryParamsVerifyGet(r, id)
+	location, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Location{}, err
 	}
@@ -36,7 +36,7 @@ func getLocation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Location
 }
 
 func retrieveLocations(r *http.Request, i handlerinput.HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

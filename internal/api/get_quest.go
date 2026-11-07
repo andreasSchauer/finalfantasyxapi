@@ -14,7 +14,7 @@ import (
 )
 
 func getQuest(r *http.Request, i handlerinput.HandlerInput[seedtypes.Quest, apitypes.Quest, apiresource.QuestAPIResource], id int32) (apitypes.Quest, error) {
-	quest, err := i.QueryParamsVerifyGet(r, id)
+	quest, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Quest{}, err
 	}
@@ -33,7 +33,7 @@ func getQuest(r *http.Request, i handlerinput.HandlerInput[seedtypes.Quest, apit
 }
 
 func retrieveQuests(r *http.Request, i handlerinput.HandlerInput[seedtypes.Quest, apitypes.Quest, apiresource.QuestAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

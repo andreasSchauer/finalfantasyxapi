@@ -15,7 +15,7 @@ import (
 )
 
 func getAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource], id int32) (apitypes.Ability, error) {
-	ability, err := i.QueryParamsVerifyGet(r, id)
+	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Ability{}, err
 	}
@@ -43,7 +43,7 @@ func getAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.Ability, 
 }
 
 func retrieveAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

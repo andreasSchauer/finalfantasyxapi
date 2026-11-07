@@ -15,7 +15,7 @@ import (
 )
 
 func getShop(r *http.Request, i handlerinput.HandlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource], id int32) (apitypes.Shop, error) {
-	shop, err := i.QueryParamsVerifyGet(r, id)
+	shop, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Shop{}, err
 	}
@@ -33,7 +33,7 @@ func getShop(r *http.Request, i handlerinput.HandlerInput[seedtypes.Shop, apityp
 }
 
 func retrieveShops(r *http.Request, i handlerinput.HandlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

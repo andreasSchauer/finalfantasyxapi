@@ -13,7 +13,7 @@ import (
 )
 
 func getCelestialWeapon(r *http.Request, i handlerinput.HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource], id int32) (apitypes.CelestialWeapon, error) {
-	celestialWeapon, err := i.QueryParamsVerifyGet(r, id)
+	celestialWeapon, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.CelestialWeapon{}, err
 	}
@@ -42,7 +42,7 @@ func getCelestialWeapon(r *http.Request, i handlerinput.HandlerInput[seedtypes.C
 }
 
 func retrieveCelestialWeapons(r *http.Request, i handlerinput.HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

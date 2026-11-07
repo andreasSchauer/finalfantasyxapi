@@ -15,7 +15,7 @@ import (
 )
 
 func getMonsterFormation(r *http.Request, i handlerinput.HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource], id int32) (apitypes.MonsterFormation, error) {
-	formation, err := i.QueryParamsVerifyGet(r, id)
+	formation, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.MonsterFormation{}, err
 	}
@@ -38,7 +38,7 @@ func getMonsterFormation(r *http.Request, i handlerinput.HandlerInput[seedtypes.
 }
 
 func retrieveMonsterFormations(r *http.Request, i handlerinput.HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

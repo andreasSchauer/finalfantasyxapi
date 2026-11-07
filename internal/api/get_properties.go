@@ -11,7 +11,7 @@ import (
 )
 
 func getProperty(r *http.Request, i handlerinput.HandlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource], id int32) (apitypes.Property, error) {
-	property, err := i.QueryParamsVerifyGet(r, id)
+	property, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Property{}, err
 	}
@@ -36,5 +36,5 @@ func getProperty(r *http.Request, i handlerinput.HandlerInput[seedtypes.Property
 }
 
 func retrieveProperties(r *http.Request, i handlerinput.HandlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource]) ([]int32, error) {
-	return i.QueryParamsVerifyRetrieve(r)
+	return i.VerifyQueriesRetrieve(r)
 }

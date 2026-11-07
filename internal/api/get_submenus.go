@@ -13,7 +13,7 @@ import (
 )
 
 func getSubmenu(r *http.Request, i handlerinput.HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource], id int32) (apitypes.Submenu, error) {
-	submenu, err := i.QueryParamsVerifyGet(r, id)
+	submenu, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Submenu{}, err
 	}
@@ -38,7 +38,7 @@ func getSubmenu(r *http.Request, i handlerinput.HandlerInput[seedtypes.Submenu, 
 }
 
 func retrieveSubmenus(r *http.Request, i handlerinput.HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

@@ -16,7 +16,7 @@ import (
 )
 
 func getEquipmentTable(r *http.Request, i handlerinput.HandlerInput[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource], id int32) (apitypes.EquipmentTable, error) {
-	table, err := i.QueryParamsVerifyGet(r, id)
+	table, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.EquipmentTable{}, err
 	}
@@ -45,7 +45,7 @@ func getEquipmentTable(r *http.Request, i handlerinput.HandlerInput[seedtypes.Eq
 }
 
 func retrieveEquipmentTables(r *http.Request, i handlerinput.HandlerInput[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

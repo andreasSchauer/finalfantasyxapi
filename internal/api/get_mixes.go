@@ -14,7 +14,7 @@ import (
 )
 
 func getMix(r *http.Request, i handlerinput.HandlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource], id int32) (apitypes.Mix, error) {
-	mix, err := i.QueryParamsVerifyGet(r, id)
+	mix, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Mix{}, err
 	}
@@ -40,7 +40,7 @@ func getMix(r *http.Request, i handlerinput.HandlerInput[seedtypes.Mix, apitypes
 }
 
 func retrieveMixes(r *http.Request, i handlerinput.HandlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

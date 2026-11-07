@@ -13,7 +13,7 @@ import (
 )
 
 func getAgilityTier(r *http.Request, i handlerinput.HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource], id int32) (apitypes.AgilityTier, error) {
-	agilityTier, err := i.QueryParamsVerifyGet(r, id)
+	agilityTier, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.AgilityTier{}, err
 	}
@@ -33,7 +33,7 @@ func getAgilityTier(r *http.Request, i handlerinput.HandlerInput[seedtypes.Agili
 }
 
 func retrieveAgilityTiers(r *http.Request, i handlerinput.HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

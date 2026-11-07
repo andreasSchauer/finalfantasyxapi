@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
-func (i HandlerInput[T, R, A]) QueryParamsVerifyGet(r *http.Request, id int32) (T, error) {
+func (i HandlerInput[T, R, A]) VerifyQueriesGet(r *http.Request, id int32) (T, error) {
 	var zeroType T
 
 	err := VerifyQueryParams(r, i.Endpoint, i.QueryLookup, &id, nil)
@@ -24,7 +24,7 @@ func (i HandlerInput[T, R, A]) QueryParamsVerifyGet(r *http.Request, id int32) (
 	return resource, nil
 }
 
-func (i HandlerInput[T, R, A]) QueryParamsVerifyRetrieve(r *http.Request) ([]int32, error) {
+func (i HandlerInput[T, R, A]) VerifyQueriesRetrieve(r *http.Request) ([]int32, error) {
 	err := VerifyQueryParams[int32](r, i.Endpoint, i.QueryLookup, nil, nil)
 	if err != nil {
 		return nil, err

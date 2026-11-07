@@ -15,7 +15,7 @@ import (
 )
 
 func getSphere(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource], id int32) (apitypes.Sphere, error) {
-	sphere, err := i.QueryParamsVerifyGet(r, id)
+	sphere, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Sphere{}, err
 	}
@@ -49,7 +49,7 @@ func getSphere(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sphere, ap
 }
 
 func retrieveSpheres(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

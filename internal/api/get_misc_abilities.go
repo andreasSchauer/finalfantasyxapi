@@ -15,7 +15,7 @@ import (
 )
 
 func getMiscAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource], id int32) (apitypes.MiscAbility, error) {
-	ability, err := i.QueryParamsVerifyGet(r, id)
+	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.MiscAbility{}, err
 	}
@@ -49,7 +49,7 @@ func getMiscAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.MiscA
 }
 
 func retrieveMiscAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

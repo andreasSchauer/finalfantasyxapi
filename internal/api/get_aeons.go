@@ -13,7 +13,7 @@ import (
 )
 
 func getAeon(r *http.Request, i handlerinput.HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource], id int32) (apitypes.Aeon, error) {
-	aeon, err := i.QueryParamsVerifyGet(r, id)
+	aeon, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Aeon{}, err
 	}
@@ -61,7 +61,7 @@ func getAeon(r *http.Request, i handlerinput.HandlerInput[seedtypes.Aeon, apityp
 }
 
 func retrieveAeons(r *http.Request, i handlerinput.HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

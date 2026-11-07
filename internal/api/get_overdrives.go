@@ -13,7 +13,7 @@ import (
 )
 
 func getOverdrive(r *http.Request, i handlerinput.HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource], id int32) (apitypes.Overdrive, error) {
-	overdrive, err := i.QueryParamsVerifyGet(r, id)
+	overdrive, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Overdrive{}, err
 	}
@@ -40,7 +40,7 @@ func getOverdrive(r *http.Request, i handlerinput.HandlerInput[seedtypes.Overdri
 }
 
 func retrieveOverdrives(r *http.Request, i handlerinput.HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

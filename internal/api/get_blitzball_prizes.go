@@ -15,7 +15,7 @@ import (
 )
 
 func getBlitzballPrize(r *http.Request, i handlerinput.HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource], id int32) (apitypes.BlitzballPrize, error) {
-	bbPos, err := i.QueryParamsVerifyGet(r, id)
+	bbPos, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.BlitzballPrize{}, err
 	}
@@ -32,7 +32,7 @@ func getBlitzballPrize(r *http.Request, i handlerinput.HandlerInput[seedtypes.Bl
 }
 
 func retrieveBlitzballPrizes(r *http.Request, i handlerinput.HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

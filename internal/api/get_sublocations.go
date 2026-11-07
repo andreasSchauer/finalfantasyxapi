@@ -13,7 +13,7 @@ import (
 )
 
 func getSublocation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource], id int32) (apitypes.Sublocation, error) {
-	sublocation, err := i.QueryParamsVerifyGet(r, id)
+	sublocation, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Sublocation{}, err
 	}
@@ -37,7 +37,7 @@ func getSublocation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sublo
 }
 
 func retrieveSublocations(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

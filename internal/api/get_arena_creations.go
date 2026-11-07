@@ -18,7 +18,7 @@ import (
 )
 
 func getArenaCreation(r *http.Request, i handlerinput.HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource], id int32) (apitypes.ArenaCreation, error) {
-	creation, err := i.QueryParamsVerifyGet(r, id)
+	creation, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.ArenaCreation{}, err
 	}
@@ -47,7 +47,7 @@ func getArenaCreation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Are
 }
 
 func retrieveArenaCreations(r *http.Request, i handlerinput.HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

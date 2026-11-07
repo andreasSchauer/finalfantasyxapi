@@ -17,7 +17,7 @@ import (
 )
 
 func getOverdriveAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource], id int32) (apitypes.OverdriveAbility, error) {
-	ability, err := i.QueryParamsVerifyGet(r, id)
+	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.OverdriveAbility{}, err
 	}
@@ -48,7 +48,7 @@ func getOverdriveAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.
 }
 
 func retrieveOverdriveAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

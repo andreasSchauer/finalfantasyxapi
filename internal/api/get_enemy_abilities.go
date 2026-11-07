@@ -16,7 +16,7 @@ import (
 )
 
 func getEnemyAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource], id int32) (apitypes.EnemyAbility, error) {
-	ability, err := i.QueryParamsVerifyGet(r, id)
+	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.EnemyAbility{}, err
 	}
@@ -45,7 +45,7 @@ func getEnemyAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.Enem
 
 func retrieveEnemyAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource]) ([]int32, error) {
 	abilityType := database.AbilityTypeEnemyAbility
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

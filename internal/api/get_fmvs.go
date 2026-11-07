@@ -13,7 +13,7 @@ import (
 )
 
 func getFMV(r *http.Request, i handlerinput.HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource], id int32) (apitypes.FMV, error) {
-	fmv, err := i.QueryParamsVerifyGet(r, id)
+	fmv, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.FMV{}, err
 	}
@@ -31,7 +31,7 @@ func getFMV(r *http.Request, i handlerinput.HandlerInput[seedtypes.FMV, apitypes
 }
 
 func retrieveFMVs(r *http.Request, i handlerinput.HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

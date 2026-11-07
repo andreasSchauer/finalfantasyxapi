@@ -12,7 +12,7 @@ import (
 )
 
 func getSubquest(r *http.Request, i handlerinput.HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource], id int32) (apitypes.Subquest, error) {
-	subquest, err := i.QueryParamsVerifyGet(r, id)
+	subquest, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Subquest{}, err
 	}
@@ -35,7 +35,7 @@ func getSubquest(r *http.Request, i handlerinput.HandlerInput[seedtypes.Subquest
 }
 
 func retrieveSubquests(r *http.Request, i handlerinput.HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

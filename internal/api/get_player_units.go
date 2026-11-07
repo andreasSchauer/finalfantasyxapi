@@ -15,7 +15,7 @@ import (
 )
 
 func getPlayerUnit(r *http.Request, i handlerinput.HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource], id int32) (apitypes.PlayerUnit, error) {
-	unit, err := i.QueryParamsVerifyGet(r, id)
+	unit, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.PlayerUnit{}, err
 	}
@@ -64,7 +64,7 @@ func getPlayerUnit(r *http.Request, i handlerinput.HandlerInput[seedtypes.Player
 }
 
 func retrievePlayerUnits(r *http.Request, i handlerinput.HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

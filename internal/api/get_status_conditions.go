@@ -14,7 +14,7 @@ import (
 )
 
 func getStatusCondition(r *http.Request, i handlerinput.HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource], id int32) (apitypes.StatusCondition, error) {
-	status, err := i.QueryParamsVerifyGet(r, id)
+	status, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.StatusCondition{}, err
 	}
@@ -47,7 +47,7 @@ func getStatusCondition(r *http.Request, i handlerinput.HandlerInput[seedtypes.S
 }
 
 func retrieveStatusConditions(r *http.Request, i handlerinput.HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

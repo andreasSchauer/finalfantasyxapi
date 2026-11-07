@@ -13,7 +13,7 @@ import (
 )
 
 func getModifier(r *http.Request, i handlerinput.HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource], id int32) (apitypes.Modifier, error) {
-	modifier, err := i.QueryParamsVerifyGet(r, id)
+	modifier, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Modifier{}, err
 	}
@@ -43,7 +43,7 @@ func getModifier(r *http.Request, i handlerinput.HandlerInput[seedtypes.Modifier
 }
 
 func retrieveModifiers(r *http.Request, i handlerinput.HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

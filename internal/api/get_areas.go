@@ -13,7 +13,7 @@ import (
 )
 
 func getArea(r *http.Request, i handlerinput.HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], id int32) (apitypes.Area, error) {
-	area, err := i.QueryParamsVerifyGet(r, id)
+	area, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Area{}, err
 	}
@@ -49,7 +49,7 @@ func getArea(r *http.Request, i handlerinput.HandlerInput[seedtypes.Area, apityp
 }
 
 func retrieveAreas(r *http.Request, i handlerinput.HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

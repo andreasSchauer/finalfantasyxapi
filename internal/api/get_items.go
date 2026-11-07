@@ -14,7 +14,7 @@ import (
 )
 
 func getItem(r *http.Request, i handlerinput.HandlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource], id int32) (apitypes.Item, error) {
-	item, err := i.QueryParamsVerifyGet(r, id)
+	item, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Item{}, err
 	}
@@ -58,7 +58,7 @@ func getItem(r *http.Request, i handlerinput.HandlerInput[seedtypes.Item, apityp
 }
 
 func retrieveItems(r *http.Request, i handlerinput.HandlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

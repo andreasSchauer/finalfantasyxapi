@@ -12,7 +12,7 @@ import (
 )
 
 func getCharacter(r *http.Request, i handlerinput.HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource], id int32) (apitypes.Character, error) {
-	character, err := i.QueryParamsVerifyGet(r, id)
+	character, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Character{}, err
 	}
@@ -59,7 +59,7 @@ func getCharacter(r *http.Request, i handlerinput.HandlerInput[seedtypes.Charact
 }
 
 func retrieveCharacters(r *http.Request, i handlerinput.HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

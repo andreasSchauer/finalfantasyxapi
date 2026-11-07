@@ -15,7 +15,7 @@ import (
 )
 
 func getTreasure(r *http.Request, i handlerinput.HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource], id int32) (apitypes.Treasure, error) {
-	treasure, err := i.QueryParamsVerifyGet(r, id)
+	treasure, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Treasure{}, err
 	}
@@ -37,7 +37,7 @@ func getTreasure(r *http.Request, i handlerinput.HandlerInput[seedtypes.Treasure
 }
 
 func retrieveTreasures(r *http.Request, i handlerinput.HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

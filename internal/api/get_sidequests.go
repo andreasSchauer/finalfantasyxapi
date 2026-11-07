@@ -12,7 +12,7 @@ import (
 )
 
 func getSidequest(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource], id int32) (apitypes.Sidequest, error) {
-	sidequest, err := i.QueryParamsVerifyGet(r, id)
+	sidequest, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Sidequest{}, err
 	}
@@ -36,7 +36,7 @@ func getSidequest(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sideque
 }
 
 func retrieveSidequests(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

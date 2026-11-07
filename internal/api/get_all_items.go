@@ -15,7 +15,7 @@ import (
 )
 
 func getMasterItem(r *http.Request, i handlerinput.HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource], id int32) (apitypes.MasterItem, error) {
-	masterItem, err := i.QueryParamsVerifyGet(r, id)
+	masterItem, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.MasterItem{}, err
 	}
@@ -52,7 +52,7 @@ func getMasterItem(r *http.Request, i handlerinput.HandlerInput[seedtypes.Master
 }
 
 func retrieveMasterItems(r *http.Request, i handlerinput.HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

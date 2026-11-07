@@ -10,7 +10,7 @@ import (
 )
 
 func getElement(r *http.Request, i handlerinput.HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource], id int32) (apitypes.Element, error) {
-	element, err := i.QueryParamsVerifyGet(r, id)
+	element, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Element{}, err
 	}
@@ -40,5 +40,5 @@ func getElement(r *http.Request, i handlerinput.HandlerInput[seedtypes.Element, 
 }
 
 func retrieveElements(r *http.Request, i handlerinput.HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]) ([]int32, error) {
-	return i.QueryParamsVerifyRetrieve(r)
+	return i.VerifyQueriesRetrieve(r)
 }

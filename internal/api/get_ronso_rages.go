@@ -11,7 +11,7 @@ import (
 )
 
 func getRonsoRage(r *http.Request, i handlerinput.HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource], id int32) (apitypes.RonsoRage, error) {
-	ronsoRage, err := i.QueryParamsVerifyGet(r, id)
+	ronsoRage, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.RonsoRage{}, err
 	}
@@ -34,5 +34,5 @@ func getRonsoRage(r *http.Request, i handlerinput.HandlerInput[seedtypes.RonsoRa
 }
 
 func retrieveRonsoRages(r *http.Request, i handlerinput.HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource]) ([]int32, error) {
-	return i.QueryParamsVerifyRetrieve(r)
+	return i.VerifyQueriesRetrieve(r)
 }

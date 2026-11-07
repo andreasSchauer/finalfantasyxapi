@@ -10,7 +10,7 @@ import (
 )
 
 func getStat(r *http.Request, i handlerinput.HandlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource], id int32) (apitypes.Stat, error) {
-	stat, err := i.QueryParamsVerifyGet(r, id)
+	stat, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Stat{}, err
 	}
@@ -42,5 +42,5 @@ func getStat(r *http.Request, i handlerinput.HandlerInput[seedtypes.Stat, apityp
 }
 
 func retrieveStats(r *http.Request, i handlerinput.HandlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource]) ([]int32, error) {
-	return i.QueryParamsVerifyRetrieve(r)
+	return i.VerifyQueriesRetrieve(r)
 }

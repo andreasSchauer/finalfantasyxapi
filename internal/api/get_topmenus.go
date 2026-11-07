@@ -10,7 +10,7 @@ import (
 )
 
 func getTopmenu(r *http.Request, i handlerinput.HandlerInput[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource], id int32) (apitypes.Topmenu, error) {
-	topmenu, err := i.QueryParamsVerifyGet(r, id)
+	topmenu, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Topmenu{}, err
 	}
@@ -34,5 +34,5 @@ func getTopmenu(r *http.Request, i handlerinput.HandlerInput[seedtypes.Topmenu, 
 }
 
 func retrieveTopmenus(r *http.Request, i handlerinput.HandlerInput[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource]) ([]int32, error) {
-	return i.QueryParamsVerifyRetrieve(r)
+	return i.VerifyQueriesRetrieve(r)
 }

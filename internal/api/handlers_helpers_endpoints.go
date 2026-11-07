@@ -249,7 +249,7 @@ func HandleSectionsEndpoints(w http.ResponseWriter, r *http.Request, i handlerin
 }
 
 func HandleBody[P ServiceParams, R ServiceResponse](w http.ResponseWriter, r *http.Request, i HandlerInputService[P, R], segments []string) {
-	err := handlerinput.VerifyQueryParamsService(r)
+	err := VerifyQueryParamsService(r)
 	if HandleHTTPError(w, err) {
 		return
 	}
@@ -265,7 +265,7 @@ func HandleBody[P ServiceParams, R ServiceResponse](w http.ResponseWriter, r *ht
 }
 
 func HandleBodySections[P ServiceParams, R ServiceResponse](w http.ResponseWriter, r *http.Request, i HandlerInputService[P, R], segments []string) {
-	err := handlerinput.VerifyQueryParamsService(r)
+	err := VerifyQueryParamsService(r)
 	if HandleHTTPError(w, err) {
 		return
 	}
@@ -291,7 +291,7 @@ func HandleBodySections[P ServiceParams, R ServiceResponse](w http.ResponseWrite
 }
 
 func HandlePost[P ServiceParams, R ServiceResponse](w http.ResponseWriter, r *http.Request, i HandlerInputService[P, R]) {
-	err := handlerinput.VerifyQueryParamsService(r)
+	err := VerifyQueryParamsService(r)
 	if HandleHTTPError(w, err) {
 		return
 	}

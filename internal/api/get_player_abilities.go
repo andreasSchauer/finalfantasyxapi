@@ -16,7 +16,7 @@ import (
 )
 
 func getPlayerAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource], id int32) (apitypes.PlayerAbility, error) {
-	ability, err := i.QueryParamsVerifyGet(r, id)
+	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
 	}
@@ -63,7 +63,7 @@ func getPlayerAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.Pla
 }
 
 func retrievePlayerAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

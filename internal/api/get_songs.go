@@ -15,7 +15,7 @@ import (
 )
 
 func getSong(r *http.Request, i handlerinput.HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource], id int32) (apitypes.Song, error) {
-	song, err := i.QueryParamsVerifyGet(r, id)
+	song, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Song{}, err
 	}
@@ -56,7 +56,7 @@ func getSong(r *http.Request, i handlerinput.HandlerInput[seedtypes.Song, apityp
 }
 
 func retrieveSongs(r *http.Request, i handlerinput.HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.QueryParamsVerifyRetrieve(r)
+	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}

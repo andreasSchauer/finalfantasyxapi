@@ -2,10 +2,6 @@ package api
 
 import "github.com/andreasSchauer/finalfantasyxapi/internal/database"
 
-type SampleParams[P any] struct {
-	Description 	string		`json:"description"`
-	Params			P			`json:"params"`
-}
 
 func getAlBhedParamsSamples() []SampleParams[AlBhedParams] {
 	return []SampleParams[AlBhedParams]{
