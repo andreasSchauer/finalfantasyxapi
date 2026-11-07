@@ -11,8 +11,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource], id int32) (apitypes.KeyItem, error) {
-	keyItem, err := i.queryParamsVerifyGet(r, id)
+func getKeyItem(r *http.Request, i HandlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource], id int32) (apitypes.KeyItem, error) {
+	keyItem, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.KeyItem{}, err
 	}
@@ -39,17 +39,17 @@ func getKeyItem(r *http.Request, i handlerInput[seedtypes.KeyItem, apitypes.KeyI
 	return response, nil
 }
 
-func retrieveKeyItems(r *http.Request, i handlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveKeyItems(r *http.Request, i HandlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryEnumList(r, enums.T.KeyItemCategory, ids, ts.QpnCategory, config.Cfg.DB.GetKeyItemIDsCategory),
-		i.queryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetKeyItemIDsByMethods),
-		i.queryID(r, ids, ts.QpnLocation, E.Locations.objLookup, config.Cfg.DB.GetKeyItemIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, E.Sublocations.objLookup, config.Cfg.DB.GetKeyItemIDsBySublocation),
-		i.queryID(r, ids, ts.QpnArea, E.Areas.objLookup, config.Cfg.DB.GetKeyItemIDsByArea),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryEnumList(r, enums.T.KeyItemCategory, ids, ts.QpnCategory, config.Cfg.DB.GetKeyItemIDsCategory),
+		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetKeyItemIDsByMethods),
+		i.QueryID(r, ids, ts.QpnLocation, E.Locations.objLookup, config.Cfg.DB.GetKeyItemIDsByLocation),
+		i.QueryID(r, ids, ts.QpnSublocation, E.Sublocations.objLookup, config.Cfg.DB.GetKeyItemIDsBySublocation),
+		i.QueryID(r, ids, ts.QpnArea, E.Areas.objLookup, config.Cfg.DB.GetKeyItemIDsByArea),
 	})
 }

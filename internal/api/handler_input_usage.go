@@ -7,7 +7,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i handlerInput[T, R, A]) compileUsage() string {
+func (i HandlerInput[T, R, A]) CompileUsage() string {
 	listUsage := getUsagePath("", i.Endpoint)
 	usageStrings := []string{listUsage}
 

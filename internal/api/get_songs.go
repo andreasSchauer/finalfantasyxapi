@@ -13,8 +13,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSong(r *http.Request, i handlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource], id int32) (apitypes.Song, error) {
-	song, err := i.queryParamsVerifyGet(r, id)
+func getSong(r *http.Request, i HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource], id int32) (apitypes.Song, error) {
+	song, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Song{}, err
 	}
@@ -54,19 +54,19 @@ func getSong(r *http.Request, i handlerInput[seedtypes.Song, apitypes.Song, apir
 	return response, nil
 }
 
-func retrieveSongs(r *http.Request, i handlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveSongs(r *http.Request, i HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationSongIDs),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationSongIDs),
-		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetAreaSongIDs),
-		i.queryBool2(r, ids, ts.QpnSpecialUse, config.Cfg.DB.GetSongIDsWithSpecialUseCase),
-		i.queryBool2(r, ids, ts.QpnFMVs, config.Cfg.DB.GetSongIDsWithFMVs),
-		i.queryEnum(r, enums.T.Composer, ids, ts.QpnComposer, ToEnumQuery(enums.T.Composer, config.Cfg.DB.GetSongIDsByComposer)),
-		i.queryEnum(r, enums.T.Arranger, ids, ts.QpnArranger, ToEnumQuery(enums.T.Arranger, config.Cfg.DB.GetSongIDsByArranger)),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationSongIDs),
+		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationSongIDs),
+		i.QueryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetAreaSongIDs),
+		i.QueryBool2(r, ids, ts.QpnSpecialUse, config.Cfg.DB.GetSongIDsWithSpecialUseCase),
+		i.QueryBool2(r, ids, ts.QpnFMVs, config.Cfg.DB.GetSongIDsWithFMVs),
+		i.QueryEnum(r, enums.T.Composer, ids, ts.QpnComposer, ToEnumQuery(enums.T.Composer, config.Cfg.DB.GetSongIDsByComposer)),
+		i.QueryEnum(r, enums.T.Arranger, ids, ts.QpnArranger, ToEnumQuery(enums.T.Arranger, config.Cfg.DB.GetSongIDsByArranger)),
 	})
 }

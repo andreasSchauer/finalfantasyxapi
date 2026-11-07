@@ -23,13 +23,13 @@ func getStatusConditionRelationships(r *http.Request, status seedtypes.StatusCon
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(ctx, status, config.Cfg.DB.GetStatusConditionAutoAbilityIDs)
+		rel.AutoAbilities, err = E.AutoAbilities.DBGetRelations(ctx, status, config.Cfg.DB.GetStatusConditionAutoAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersResistance, err = E.Monsters.dbGetRelations(ctx, status, convGetStatusConditionResistingMonsterIDs(res.Resistance))
+		rel.MonstersResistance, err = E.Monsters.DBGetRelations(ctx, status, convGetStatusConditionResistingMonsterIDs(res.Resistance))
 		return err
 	})
 

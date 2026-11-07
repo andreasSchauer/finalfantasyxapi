@@ -13,8 +13,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource], id int32) (apitypes.PlayerUnit, error) {
-	unit, err := i.queryParamsVerifyGet(r, id)
+func getPlayerUnit(r *http.Request, i HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource], id int32) (apitypes.PlayerUnit, error) {
+	unit, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.PlayerUnit{}, err
 	}
@@ -62,13 +62,13 @@ func getPlayerUnit(r *http.Request, i handlerInput[seedtypes.PlayerUnit, apitype
 	return response, nil
 }
 
-func retrievePlayerUnits(r *http.Request, i handlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrievePlayerUnits(r *http.Request, i HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryEnum(r, enums.T.UnitType, ids, ts.QpnType, config.Cfg.DB.GetPlayerUnitIDsByType),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryEnum(r, enums.T.UnitType, ids, ts.QpnType, config.Cfg.DB.GetPlayerUnitIDsByType),
 	})
 }

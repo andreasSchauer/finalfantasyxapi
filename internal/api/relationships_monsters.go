@@ -14,20 +14,20 @@ func getMonsterRelationships(r *http.Request, monster seedtypes.Monster) (apityp
 	var rel apitypes.Monster
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := E.Monsters.queryAvlRelGetParams(r, monster.ID)
+	availabilityParams, err := E.Monsters.QueryAvlRelGetParams(r, monster.ID)
 	if err != nil {
 		return apitypes.Monster{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = E.Areas.queryAvlRelRun(ctx, monster, availabilityParams, getMonsterAreaIDs())
+		rel.Areas, err = E.Areas.QueryAvlRelRun(ctx, monster, availabilityParams, getMonsterAreaIDs())
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Formations, err = E.MonsterFormations.queryAvlRelRun(ctx, monster, availabilityParams, getMonsterMonsterFormationIDs())
+		rel.Formations, err = E.MonsterFormations.QueryAvlRelRun(ctx, monster, availabilityParams, getMonsterMonsterFormationIDs())
 		return err
 	})
 

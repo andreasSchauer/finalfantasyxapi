@@ -46,7 +46,7 @@ func nullValue(r *http.Request, queryName ts.QueryParamName, queryLookup map[ts.
 	return h.GetNullString(&value), nil
 }
 
-func nullID[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) (sql.NullInt32, error) {
+func nullID[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i HandlerInput[T, R, A], queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := queryParam.ParseID(r, i.objLookup)
@@ -57,7 +57,7 @@ func nullID[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Re
 	return h.GetNullInt32(&id), nil
 }
 
-func nullNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) (sql.NullInt32, error) {
+func nullNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i HandlerInput[T, R, A], queryName ts.QueryParamName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) (sql.NullInt32, error) {
 	queryParam := queryLookup[queryName]
 
 	id, err := queryParam.ParseNameID(r, i.resTypeSingle, i.objLookup)

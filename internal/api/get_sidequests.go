@@ -10,13 +10,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getSidequest(r *http.Request, i handlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource], id int32) (apitypes.Sidequest, error) {
-	sidequest, err := i.queryParamsVerifyGet(r, id)
+func getSidequest(r *http.Request, i HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource], id int32) (apitypes.Sidequest, error) {
+	sidequest, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Sidequest{}, err
 	}
 
-	subquests, err := E.Subquests.dbGetRelations(r.Context(), sidequest, config.Cfg.DB.GetSidequestSubquestIDs)
+	subquests, err := E.Subquests.DBGetRelations(r.Context(), sidequest, config.Cfg.DB.GetSidequestSubquestIDs)
 	if err != nil {
 		return apitypes.Sidequest{}, err
 	}
@@ -34,11 +34,11 @@ func getSidequest(r *http.Request, i handlerInput[seedtypes.Sidequest, apitypes.
 	return response, nil
 }
 
-func retrieveSidequests(r *http.Request, i handlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveSidequests(r *http.Request, i HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{})
+	return i.FilterIDs(r, ids, []IDFilter{})
 }

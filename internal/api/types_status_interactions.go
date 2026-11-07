@@ -18,7 +18,7 @@ type StatusInteractionQueries struct {
 func getStatusInfliction(ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*apitypes.StatusInfliction, error) {
 	var statusInfliction apitypes.StatusInfliction
 
-	abilities, err := E.Abilities.dbGetRelations(ctx, status, queries.Abilities)
+	abilities, err := E.Abilities.DBGetRelations(ctx, status, queries.Abilities)
 	if err != nil {
 		return nil, err
 	}
@@ -32,13 +32,13 @@ func getStatusInfliction(ctx context.Context, status seedtypes.StatusCondition, 
 }
 
 func getStatusRemoval(ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*apitypes.StatusRemoval, error) {
-	abilities, err := E.Abilities.dbGetRelations(ctx, status, queries.Abilities)
+	abilities, err := E.Abilities.DBGetRelations(ctx, status, queries.Abilities)
 	if err != nil {
 		return nil, err
 	}
 	statusRemoval := populateStatusRemoval(abilities)
 
-	statusRemoval.StatusConditions, err = E.StatusConditions.dbGetRelations(ctx, status, queries.StatusConditions)
+	statusRemoval.StatusConditions, err = E.StatusConditions.DBGetRelations(ctx, status, queries.StatusConditions)
 	if err != nil {
 		return nil, err
 	}

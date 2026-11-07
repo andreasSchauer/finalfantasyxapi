@@ -9,31 +9,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-type MonsterSimple struct {
-	ID             int32                   `json:"id"`
-	URL            string                  `json:"url"`
-	Name           string                  `json:"name"`
-	Version        *int32                  `json:"version,omitempty"`
-	Specification  *string                 `json:"specification,omitempty"`
-	HP             string                  `json:"hp"`
-	AP             string                  `json:"ap"`
-	Gil            int32                   `json:"gil"`
-	MaxBribeAmount *int32                  `json:"max_bribe_amount,omitempty"`
-	Availability   string                  `json:"availability"`
-	IsRepeatable   bool                    `json:"is_repeatable"`
-	CanBeCaptured  bool                    `json:"can_be_captured"`
-	RonsoRages     []string                `json:"ronso_rages,omitempty"`
-	Areas          []string                `json:"areas"`
-	Items          *MonsterItemsSimple     `json:"items,omitempty"`
-	Equipment      *MonsterEquipmentSimple `json:"equipment,omitempty"`
-}
-
-func (m MonsterSimple) GetURL() string {
-	return m.URL
-}
 
 func createMonsterSimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
 	i := E.Monsters
@@ -41,7 +20,7 @@ func createMonsterSimple(r *http.Request, id int32, subsection Subsection) (apir
 
 	areaIDs := subsection.relations[id][RelationAreas]
 
-	monSimple := MonsterSimple{
+	monSimple := sectiontypes.MonsterSimple{
 		ID:             mon.ID,
 		URL:            ah.CreateResourceURL(i.Endpoint, id),
 		Name:           mon.Name,
@@ -103,10 +82,31 @@ func getMonsterSectionRelations(r *http.Request, monIDs []int32) (map[int32]map[
 	for _, monID := range monIDs {
 		relationMap := make(map[Relation][]int32)
 
-		relationMap[RelationAreas], monsterJunctions = getJunctionIDs(monID, monsterJunctions)
+		relationMap[RelationAreas], monsterJunctions = GetJunctionIDs(monID, monsterJunctions)
 
 		relations[monID] = relationMap
 	}
 
 	return relations, nil
+}
+
+func convertMonsterItemsSimple(items seedtypes.MonsterItems) sectiontypes.MonsterItemsSimple {
+	return sectiontypes.MonsterItemsSimple{
+		StealCommon:         ah.ConvertObjPtr(items.StealCommon, convertItemAmountSimple),
+		StealRare:           ah.ConvertObjPtr(items.StealRare, convertItemAmountSimple),
+		DropCommon:          ah.ConvertObjPtr(items.DropCommon, convertItemAmountSimple),
+		DropRare:            ah.ConvertObjPtr(items.DropRare, convertItemAmountSimple),
+		SecondaryDropCommon: ah.ConvertObjPtr(items.SecondaryDropCommon, convertItemAmountSimple),
+		SecondaryDropRare:   ah.ConvertObjPtr(items.SecondaryDropRare, convertItemAmountSimple),
+		Bribe:               ah.ConvertObjPtr(items.Bribe, convertItemAmountSimple),
+		OtherItems:          ah.ConvertObjSliceOrNil(items.OtherItems, posItemToItemAmtSimple),
+	}
+}
+
+
+func convertMonsterEquipmentSimple(equipment seedtypes.MonsterEquipment) sectiontypes.MonsterEquipmentSimple {
+	return sectiontypes.MonsterEquipmentSimple{
+		WeaponAbilities: ah.ConvertObjSlice(equipment.WeaponAbilities, monsterAutoAbilityString),
+		ArmorAbilities:  ah.ConvertObjSlice(equipment.ArmorAbilities, monsterAutoAbilityString),
+	}
 }

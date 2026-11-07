@@ -32,50 +32,50 @@ func getStatRelationships(r *http.Request, stat seedtypes.Stat) (apitypes.Stat, 
 
 	g.Go(func() error {
 		var err error
-		rel.Spheres, err = E.Spheres.dbGetRelations(ctx, stat, config.Cfg.DB.GetStatSphereIDs)
+		rel.Spheres, err = E.Spheres.DBGetRelations(ctx, stat, config.Cfg.DB.GetStatSphereIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(ctx, stat, queries.AutoAbilities)
+		rel.AutoAbilities, err = E.AutoAbilities.DBGetRelations(ctx, stat, queries.AutoAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = E.PlayerAbilities.dbGetRelations(ctx, stat, queries.PlayerAbilities)
+		rel.PlayerAbilities, err = E.PlayerAbilities.DBGetRelations(ctx, stat, queries.PlayerAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = E.OverdriveAbilities.dbGetRelations(ctx, stat, queries.OverdriveAbilities)
+		rel.OverdriveAbilities, err = E.OverdriveAbilities.DBGetRelations(ctx, stat, queries.OverdriveAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = E.ItemAbilities.dbGetRelations(ctx, stat, queries.ItemAbilities)
+		rel.ItemAbilities, err = E.ItemAbilities.DBGetRelations(ctx, stat, queries.ItemAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.TriggerCommands, err = E.TriggerCommands.dbGetRelations(ctx, stat, queries.TriggerCommands)
+		rel.TriggerCommands, err = E.TriggerCommands.DBGetRelations(ctx, stat, queries.TriggerCommands)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.StatusConditions, err = E.StatusConditions.dbGetRelations(ctx, stat, queries.StatusConditions)
+		rel.StatusConditions, err = E.StatusConditions.DBGetRelations(ctx, stat, queries.StatusConditions)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		if queries.Properties != nil {
-			rel.Properties, err = E.Properties.dbGetRelations(ctx, stat, queries.Properties)
+			rel.Properties, err = E.Properties.DBGetRelations(ctx, stat, queries.Properties)
 			return err
 		}
 		return nil

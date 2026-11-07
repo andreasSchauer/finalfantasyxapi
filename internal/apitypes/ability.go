@@ -31,6 +31,8 @@ type Ability struct {
 	BattleInteractions []BattleInteraction            `json:"battle_interactions"`
 }
 
+
+
 type EnemyAbility struct {
 	ID                 int32                          `json:"id"`
 	Name               string                         `json:"name"`

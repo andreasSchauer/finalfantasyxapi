@@ -17,7 +17,7 @@ type avlParams struct {
 	preAirship     bool
 }
 
-func (i handlerInput[T, R, A]) queryAvlGetParams(r *http.Request) (avlParams, error) {
+func (i HandlerInput[T, R, A]) QueryAvlGetParams(r *http.Request) (avlParams, error) {
 	queryParamAvl := i.queryLookup[ts.QpnAvailability]
 
 	availabilities, err := queryParamAvl.ParseEnumList(r, enums.T.AvailabilityType)
@@ -53,8 +53,10 @@ func (i handlerInput[T, R, A]) queryAvlGetParams(r *http.Request) (avlParams, er
 	return params, nil
 }
 
-func (i handlerInput[T, R, A]) queryAvlRepGetParams(r *http.Request) (avlParams, error) {
-	params, errAvl := i.queryAvlGetParams(r)
+// what's the difference?
+
+func (i HandlerInput[T, R, A]) QueryAvlRepGetParams(r *http.Request) (avlParams, error) {
+	params, errAvl := i.QueryAvlGetParams(r)
 	if errs.ErrExceptEmptyQuery(errAvl) {
 		return avlParams{}, errAvl
 	}

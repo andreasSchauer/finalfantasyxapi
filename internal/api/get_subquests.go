@@ -10,8 +10,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource], id int32) (apitypes.Subquest, error) {
-	subquest, err := i.queryParamsVerifyGet(r, id)
+func getSubquest(r *http.Request, i HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource], id int32) (apitypes.Subquest, error) {
+	subquest, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Subquest{}, err
 	}
@@ -33,13 +33,13 @@ func getSubquest(r *http.Request, i handlerInput[seedtypes.Subquest, apitypes.Su
 	return response, nil
 }
 
-func retrieveSubquests(r *http.Request, i handlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveSubquests(r *http.Request, i HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryBool(r, ids, ts.QpnRepeatable, config.Cfg.DB.GetSubquestIDsByRepeatable),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryBool(r, ids, ts.QpnRepeatable, config.Cfg.DB.GetSubquestIDsByRepeatable),
 	})
 }

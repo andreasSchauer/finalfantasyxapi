@@ -12,16 +12,18 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func (i handlerInput[T, R, A]) handleMultiple(r *http.Request, name string) (apiresource.APIResourceList[A], error) {
+// is this in the right file?
+
+func (i HandlerInput[T, R, A]) HandleMultiple(r *http.Request, name string) (apiresource.APIResourceList[A], error) {
 	dbIDs, err := i.getMultipleQuery(r.Context(), name)
 	if err != nil {
 		return apiresource.APIResourceList[A]{}, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'", i.resTypeSingle, name), err)
 	}
 
-	return i.toAPIResList(r, dbIDs)
+	return i.ToAPIResList(r, dbIDs)
 }
 
-func (i handlerInput[T, R, A]) filterIDs(r *http.Request, IDs []int32, queryFns []IDFilter) ([]int32, error) {
+func (i HandlerInput[T, R, A]) FilterIDs(r *http.Request, IDs []int32, queryFns []IDFilter) ([]int32, error) {
 	filteredIDs := IDs
 	g, ctx := errgroup.WithContext(r.Context())
 	var mu sync.Mutex

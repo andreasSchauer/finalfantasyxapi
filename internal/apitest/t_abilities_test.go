@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
 func TestGetAbility(t *testing.T) {
@@ -403,5 +404,5 @@ func TestSubsectionAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Abilities.Endpoint, "SubsectionAbilities", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, api.AbilitySimple])
+	testIDList(t, tests, api.E.Abilities.Endpoint, "SubsectionAbilities", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, sectiontypes.AbilitySimple])
 }

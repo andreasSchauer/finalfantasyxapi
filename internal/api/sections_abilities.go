@@ -6,45 +6,15 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
-
-type AbilitySimple struct {
-	ID                 int32                     `json:"id"`
-	URL                string                    `json:"url"`
-	Name               string                    `json:"name"`
-	Version            *int32                    `json:"version,omitempty"`
-	Specification      *string                   `json:"specification,omitempty"`
-	Type               *string                   `json:"type,omitempty"`
-	Rank               *int32                    `json:"rank"`
-	BattleInteractions []BattleInteractionSimple `json:"battle_interactions"`
-}
-
-func (a AbilitySimple) GetURL() string {
-	return a.URL
-}
-
-type PlayerAbilitySimple struct {
-	ID                 int32                     `json:"id"`
-	URL                string                    `json:"url"`
-	Name               string                    `json:"name"`
-	Version            *int32                    `json:"version,omitempty"`
-	Specification      *string                   `json:"specification,omitempty"`
-	Type               *string                   `json:"type,omitempty"`
-	Rank               *int32                    `json:"rank"`
-	MpCost             int32                     `json:"mp_cost"`
-	BattleInteractions []BattleInteractionSimple `json:"battle_interactions"`
-}
-
-func (a PlayerAbilitySimple) GetURL() string {
-	return a.URL
-}
 
 func createAbilitySimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
 	i := E.Abilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 	typeStr := string(ability.Type)
 
-	abilitySimple := AbilitySimple{
+	abilitySimple := sectiontypes.AbilitySimple{
 		ID:                 ability.ID,
 		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
@@ -62,7 +32,7 @@ func createEnemyAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresou
 	i := E.EnemyAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
-	abilitySimple := AbilitySimple{
+	abilitySimple := sectiontypes.AbilitySimple{
 		ID:                 ability.ID,
 		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
@@ -79,7 +49,7 @@ func createItemAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresour
 	i := E.ItemAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
-	abilitySimple := AbilitySimple{
+	abilitySimple := sectiontypes.AbilitySimple{
 		ID:                 ability.ID,
 		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
@@ -96,7 +66,7 @@ func createOverdriveAbilitySimple(r *http.Request, id int32, subsection Subsecti
 	i := E.OverdriveAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
-	abilitySimple := AbilitySimple{
+	abilitySimple := sectiontypes.AbilitySimple{
 		ID:                 ability.ID,
 		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
@@ -113,7 +83,7 @@ func createPlayerAbilitySimple(_ *http.Request, id int32, _ Subsection) (apireso
 	i := E.PlayerAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
-	playerAbilitySimple := PlayerAbilitySimple{
+	playerAbilitySimple := sectiontypes.PlayerAbilitySimple{
 		ID:                 ability.ID,
 		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
@@ -131,7 +101,7 @@ func createTriggerCommandSimple(_ *http.Request, id int32, _ Subsection) (apires
 	i := E.TriggerCommands
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
-	abilitySimple := AbilitySimple{
+	abilitySimple := sectiontypes.AbilitySimple{
 		ID:                 ability.ID,
 		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,
@@ -148,7 +118,7 @@ func createMiscAbilitySimple(_ *http.Request, id int32, _ Subsection) (apiresour
 	i := E.MiscAbilities
 	ability, _ := lookup.GetResourceByID(id, i.objLookupID)
 
-	abilitySimple := AbilitySimple{
+	abilitySimple := sectiontypes.AbilitySimple{
 		ID:                 ability.ID,
 		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               ability.Name,

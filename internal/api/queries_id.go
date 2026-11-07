@@ -11,7 +11,8 @@ import (
 )
 
 // query uses an id of another resource type to filter resources
-func (i handlerInput[T, R, A]) queryID[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, dbQuery DBQueryIntMany) IDFilter {
+
+func (i HandlerInput[T, R, A]) QueryID[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
@@ -36,7 +37,8 @@ func (i handlerInput[T, R, A]) queryID[F seedtypes.Lookupable](r *http.Request, 
 }
 
 // like idOnlyQuery, but with more specialized logic in between (wrapperFn)
-func (i handlerInput[T, R, A]) queryIDWrapper[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, wrapperFn QueryWrapInt) IDFilter {
+
+func (i HandlerInput[T, R, A]) QueryIDWrapper[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
@@ -55,7 +57,7 @@ func (i handlerInput[T, R, A]) queryIDWrapper[F seedtypes.Lookupable](r *http.Re
 	}
 }
 
-func (i handlerInput[T, R, A]) queryIDNul[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, dbQuery DBQueryNullIntMany) IDFilter {
+func (i HandlerInput[T, R, A]) QueryIDNul[F seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, fLookup map[string]F, dbQuery DBQueryNullIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {

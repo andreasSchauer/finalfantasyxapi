@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
 func TestGetSubquest(t *testing.T) {
@@ -197,5 +198,5 @@ func TestSubsectionSubquests(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Subquests.Endpoint, "SubsectionSubquests", testSrv.HandleSidequests, compareSimpleResourceLists[apiresource.NamedAPIResource, api.SubquestSimple])
+	testIDList(t, tests, api.E.Subquests.Endpoint, "SubsectionSubquests", testSrv.HandleSidequests, compareSimpleResourceLists[apiresource.NamedAPIResource, sectiontypes.SubquestSimple])
 }

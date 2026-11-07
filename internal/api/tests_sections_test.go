@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
@@ -340,12 +341,12 @@ func TestPopulateTreasuresLocSimple(t *testing.T) {
 
 func TestGetJunctionIDs(t *testing.T) {
 	tests := []struct {
-		input     []Junction
+		input     []sectiontypes.Junction
 		parentIDs []int32
 		expIDs    [][]int32
 	}{
 		{
-			input: []Junction{
+			input: []sectiontypes.Junction{
 				{
 					ParentID: 15,
 					ChildID:  13,
@@ -404,7 +405,7 @@ func TestGetJunctionIDs(t *testing.T) {
 		for j, id := range tc.parentIDs {
 			var got []int32
 			initialLen := len(tc.input)
-			got, tc.input = getJunctionIDs(id, tc.input)
+			got, tc.input = GetJunctionIDs(id, tc.input)
 			combinedLen := len(got) + (len(tc.input))
 
 			if !reflect.DeepEqual(got, tc.expIDs[j]) {

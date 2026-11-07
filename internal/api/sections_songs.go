@@ -9,29 +9,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
-
-type SongSimple struct {
-	ID                int32   `json:"id"`
-	URL               string  `json:"url"`
-	Name              string  `json:"name"`
-	Composer          *string `json:"composer,omitempty"`
-	Arranger          *string `json:"arranger,omitempty"`
-	Performer         *string `json:"performer,omitempty"`
-	Lyricist          *string `json:"lyricist,omitempty"`
-	DurationInSeconds int32   `json:"duration_in_seconds"`
-	CanLoop           bool    `json:"can_loop"`
-}
-
-func (s SongSimple) GetURL() string {
-	return s.URL
-}
 
 func createSongSimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.Songs
 	song, _ := lookup.GetResourceByID(id, i.objLookupID)
 
-	songSimple := SongSimple{
+	songSimple := sectiontypes.SongSimple{
 		ID:                song.ID,
 		URL:               ah.CreateResourceURL(i.Endpoint, id),
 		Name:              song.Name,

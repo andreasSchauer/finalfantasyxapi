@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func idToUnnamedAPIResource[T seedtypes.IsUnnamed, R any, A apiresource.APIResource](i handlerInput[T, R, A], id int32) apiresource.UnnamedAPIResource {
+func idToUnnamedAPIResource[T seedtypes.IsUnnamed, R any, A apiresource.APIResource](i HandlerInput[T, R, A], id int32) apiresource.UnnamedAPIResource {
 	res, _ := lookup.GetResourceByID(id, i.objLookupID) // no error needed, because everything was verified through seedtypes
 	params := res.GetResParamsUnnamed()
 

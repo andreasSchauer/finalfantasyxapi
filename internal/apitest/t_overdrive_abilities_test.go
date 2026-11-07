@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
 func TestGetOverdriveAbility(t *testing.T) {
@@ -440,5 +441,5 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.OverdriveAbilities.Endpoint, "SubsectionOverdriveAbilities", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, api.AbilitySimple])
+	testIDList(t, tests, api.E.OverdriveAbilities.Endpoint, "SubsectionOverdriveAbilities", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, sectiontypes.AbilitySimple])
 }

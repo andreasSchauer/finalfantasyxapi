@@ -12,7 +12,7 @@ import (
 func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Areas
 
-	avlParams, err := i.queryAvlRepGetParams(r)
+	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Sublocations
 
-	avlParams, err := i.queryAvlRepGetParams(r)
+	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 func filterAvlLocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Locations
 
-	avlParams, err := i.queryAvlRepGetParams(r)
+	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

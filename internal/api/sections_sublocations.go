@@ -7,22 +7,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"golang.org/x/sync/errgroup"
 )
 
-type SublocationSimple struct {
-	ID             int32               `json:"id"`
-	URL            string              `json:"url"`
-	Name           string              `json:"name"`
-	ParentLocation SimpleRef           `json:"parent_location"`
-	Shops          []ShopLocSimple     `json:"shops"`
-	Treasures      *TreasuresLocSimple `json:"treasures"`
-	Monsters       []string            `json:"monsters"`
-}
-
-func (s SublocationSimple) GetURL() string {
-	return s.URL
-}
 
 func createSublocationSimple(r *http.Request, id int32, subsection Subsection) (apiresource.SimpleResource, error) {
 	i := E.Sublocations
@@ -31,7 +19,7 @@ func createSublocationSimple(r *http.Request, id int32, subsection Subsection) (
 	monsterIDs := subsection.relations[id][RelationMonsters]
 	shopIDs := subsection.relations[id][RelationShops]
 
-	sublocationSimple := SublocationSimple{
+	sublocationSimple := sectiontypes.SublocationSimple{
 		ID:             sublocation.ID,
 		URL:            ah.CreateResourceURL(i.Endpoint, id),
 		ParentLocation: createSimpleRef(sublocation.LocationID, sublocation.Location, nil, nil),
@@ -49,21 +37,21 @@ func getSublocationSectionRelations(r *http.Request, subLocIDs []int32) (map[int
 	relations := make(map[int32]map[Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())
 
-	var treasureJunctions []Junction
+	var treasureJunctions []sectiontypes.Junction
 	g.Go(func() error {
 		var err error
 		treasureJunctions, err = i.GetDBJunctions(ctx, subLocIDs, E.Treasures.resTypeSingle, config.Cfg.DB.GetSublocationTreasureIdPairs, juncSublocationTreasure)
 		return err
 	})
 
-	var shopJunctions []Junction
+	var shopJunctions []sectiontypes.Junction
 	g.Go(func() error {
 		var err error
 		shopJunctions, err = i.GetDBJunctions(ctx, subLocIDs, E.Shops.resTypeSingle, config.Cfg.DB.GetSublocationShopIdPairs, juncSublocationShop)
 		return err
 	})
 
-	var monsterJunctions []Junction
+	var monsterJunctions []sectiontypes.Junction
 	g.Go(func() error {
 		var err error
 		monsterJunctions, err = i.GetDBJunctions(ctx, subLocIDs, E.Monsters.resTypeSingle, config.Cfg.DB.GetSublocationMonsterIdPairs, juncSublocationMonster)
@@ -78,9 +66,9 @@ func getSublocationSectionRelations(r *http.Request, subLocIDs []int32) (map[int
 	for _, subLocID := range subLocIDs {
 		relationMap := make(map[Relation][]int32)
 
-		relationMap[RelationTreasures], treasureJunctions = getJunctionIDs(subLocID, treasureJunctions)
-		relationMap[RelationShops], shopJunctions = getJunctionIDs(subLocID, shopJunctions)
-		relationMap[RelationMonsters], monsterJunctions = getJunctionIDs(subLocID, monsterJunctions)
+		relationMap[RelationTreasures], treasureJunctions = GetJunctionIDs(subLocID, treasureJunctions)
+		relationMap[RelationShops], shopJunctions = GetJunctionIDs(subLocID, shopJunctions)
+		relationMap[RelationMonsters], monsterJunctions = GetJunctionIDs(subLocID, monsterJunctions)
 
 		relations[subLocID] = relationMap
 	}

@@ -10,7 +10,8 @@ import (
 )
 
 // query uses an integer value as input.
-func (i handlerInput[T, R, A]) queryInt(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryIntMany) IDFilter {
+
+func (i HandlerInput[T, R, A]) QueryInt(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryIntMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
@@ -35,7 +36,8 @@ func (i handlerInput[T, R, A]) queryInt(r *http.Request, inputIDs []int32, query
 }
 
 // query uses an integer value as input.
-func (i handlerInput[T, R, A]) queryIntWrapper(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapInt) IDFilter {
+
+func (i HandlerInput[T, R, A]) QueryIntWrapper(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapInt) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {

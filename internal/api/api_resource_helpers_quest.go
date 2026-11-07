@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func idToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i handlerInput[T, R, A], id int32) apiresource.QuestAPIResource {
+func idToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i HandlerInput[T, R, A], id int32) apiresource.QuestAPIResource {
 	questLookup, _ := lookup.GetResourceByID(id, i.objLookupID)
 	params := questLookup.GetResParamsQuest()
 
@@ -50,12 +50,12 @@ func questToQuestAPIResource(quest seedtypes.Quest) apiresource.QuestAPIResource
 	return apiresource.QuestAPIResource{}
 }
 
-func nameToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i handlerInput[T, R, A], name string) apiresource.QuestAPIResource {
+func nameToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i HandlerInput[T, R, A], name string) apiresource.QuestAPIResource {
 	quest, _ := lookup.GetResource(name, i.objLookup)
 	return idToQuestAPIResource(i, quest.GetID())
 }
 
-func namesToQuestAPIResources[T seedtypes.IsQuest, R any, A apiresource.APIResource](i handlerInput[T, R, A], names []string) []apiresource.QuestAPIResource {
+func namesToQuestAPIResources[T seedtypes.IsQuest, R any, A apiresource.APIResource](i HandlerInput[T, R, A], names []string) []apiresource.QuestAPIResource {
 	resources := make([]apiresource.QuestAPIResource, len(names))
 
 	for idx, name := range names {

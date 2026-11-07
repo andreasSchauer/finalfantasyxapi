@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
 func TestGetTreasure(t *testing.T) {
@@ -271,5 +272,5 @@ func TestSubsectionTreasures(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Treasures.Endpoint, "SubsectionTreasures", nil, compareSimpleResourceLists[apiresource.UnnamedAPIResource, api.TreasureSimple])
+	testIDList(t, tests, api.E.Treasures.Endpoint, "SubsectionTreasures", nil, compareSimpleResourceLists[apiresource.UnnamedAPIResource, sectiontypes.TreasureSimple])
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
 func TestGetMonster(t *testing.T) {
@@ -1777,5 +1778,5 @@ func TestSubsectionMonsters(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Monsters.Endpoint, "SubsectionMonsters", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, api.MonsterSimple])
+	testIDList(t, tests, api.E.Monsters.Endpoint, "SubsectionMonsters", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, sectiontypes.MonsterSimple])
 }

@@ -12,7 +12,7 @@ import (
 func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.AutoAbilities
 
-	avlParams, err := i.queryAvlRepGetParams(r)
+	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

@@ -7,49 +7,20 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-type AeonStatSimple struct {
-	ID    int32         `json:"id"`
-	URL   string        `json:"url"`
-	Name  string        `json:"name"`
-	AVals AeonStatTable `json:"a_vals"`
-	BVals AeonStatTable `json:"b_vals"`
-	XVals []Xval        `json:"x_vals"`
-}
 
-func (a AeonStatSimple) GetURL() string {
-	return a.URL
-}
-
-type Xval struct {
-	Battles int32         `json:"battles"`
-	Stats   AeonStatTable `json:"stats"`
-}
-
-func convertXVal(x seedtypes.XVal) Xval {
-	return Xval{
+func convertXVal(x seedtypes.XVal) sectiontypes.Xval {
+	return sectiontypes.Xval{
 		Battles: x.Battles,
 		Stats:   newAeonStatTable(x.BaseStats),
 	}
 }
 
-type AeonStatTable struct {
-	HP           int32  `json:"hp"`
-	MP           int32  `json:"mp"`
-	Strength     int32  `json:"strength"`
-	Defense      int32  `json:"defense"`
-	Magic        int32  `json:"magic"`
-	MagicDefense int32  `json:"magic_defense"`
-	Agility      int32  `json:"agility"`
-	Luck         *int32 `json:"luck,omitempty"`
-	Evasion      int32  `json:"evasion"`
-	Accuracy     int32  `json:"accuracy"`
-}
-
-func newAeonStatTable(baseStats []seedtypes.BaseStat) AeonStatTable {
-	stats := E.Stats.toResAmtType(baseStats, newBaseStat)
+func newAeonStatTable(baseStats []seedtypes.BaseStat) sectiontypes.AeonStatTable {
+	stats := E.Stats.ToResAmtType(baseStats, newBaseStat)
 	statMap := GetResAmtTypeMap(stats)
 	luckPtr := h.GetInt32Ptr(statMap["luck"])
 
@@ -57,7 +28,7 @@ func newAeonStatTable(baseStats []seedtypes.BaseStat) AeonStatTable {
 		luckPtr = nil
 	}
 
-	return AeonStatTable{
+	return sectiontypes.AeonStatTable{
 		HP:           statMap["hp"],
 		MP:           statMap["mp"],
 		Strength:     statMap["strength"],
@@ -75,7 +46,7 @@ func createAeonStatSimple(_ *http.Request, id int32, _ Subsection) (apiresource.
 	i := E.Aeons
 	aeon, _ := lookup.GetResourceByID(id, lookup.L.AeonsID)
 
-	aeonStatSub := AeonStatSimple{
+	aeonStatSub := sectiontypes.AeonStatSimple{
 		ID:    aeon.ID,
 		URL:   ah.CreateResourceURL(i.Endpoint, id),
 		Name:  aeon.Name,

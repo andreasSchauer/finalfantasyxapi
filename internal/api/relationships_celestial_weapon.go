@@ -23,7 +23,7 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
-		tables, err := E.EquipmentTables.dbGetRelations(ctx, equipment, config.Cfg.DB.GetEquipmentEquipmentTableIDs)
+		tables, err := E.EquipmentTables.DBGetRelations(ctx, equipment, config.Cfg.DB.GetEquipmentEquipmentTableIDs)
 		if err != nil {
 			return err
 		}
@@ -34,12 +34,12 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 
 	g.Go(func() error {
 		var err error
-		rel.WpnTreasure, err = E.Treasures.dbGetRelation(ctx, cw, ToIntOneNull(config.Cfg.DB.GetCelestialWeaponTreasureID))
+		rel.WpnTreasure, err = E.Treasures.DBGetRelation(ctx, cw, ToIntOneNull(config.Cfg.DB.GetCelestialWeaponTreasureID))
 		return err
 	})
 
 	g.Go(func() error {
-		crestTreasures, err := E.Treasures.dbGetRelations(ctx, crest, config.Cfg.DB.GetKeyItemTreasureIDs)
+		crestTreasures, err := E.Treasures.DBGetRelations(ctx, crest, config.Cfg.DB.GetKeyItemTreasureIDs)
 		if err != nil {
 			return err
 		}
@@ -48,7 +48,7 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 	})
 
 	g.Go(func() error {
-		sigilQuests, err := E.Quests.dbGetRelations(ctx, sigil, config.Cfg.DB.GetKeyItemQuestIDs)
+		sigilQuests, err := E.Quests.DBGetRelations(ctx, sigil, config.Cfg.DB.GetKeyItemQuestIDs)
 		if err != nil {
 			return err
 		}

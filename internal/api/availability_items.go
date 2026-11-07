@@ -13,7 +13,7 @@ import (
 func filterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.AllItems
 
-	avlParams, err := i.queryAvlRepGetParams(r)
+	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func filterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 func filterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Items
 
-	avlParams, err := i.queryAvlRepGetParams(r)
+	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -89,7 +89,7 @@ func filterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 func filterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.KeyItems
 
-	avlParams, err := i.queryAvlGetParams(r)
+	avlParams, err := i.QueryAvlGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func filterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 func filterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Spheres
 
-	avlParams, err := i.queryAvlRepGetParams(r)
+	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -163,7 +163,7 @@ func filterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
 func filterAvlPrimers(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Primers
 
-	avlParams, err := i.queryAvlGetParams(r)
+	avlParams, err := i.QueryAvlGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

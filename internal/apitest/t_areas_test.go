@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
 func TestGetArea(t *testing.T) {
@@ -772,5 +773,5 @@ func TestSubsectionAreas(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Areas.Endpoint, "SubsectionAreas", nil, compareSimpleResourceLists[apiresource.AreaAPIResource, api.AreaSimple])
+	testIDList(t, tests, api.E.Areas.Endpoint, "SubsectionAreas", nil, compareSimpleResourceLists[apiresource.AreaAPIResource, sectiontypes.AreaSimple])
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
 func TestGetShop(t *testing.T) {
@@ -395,5 +396,5 @@ func TestSubsectionShops(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Shops.Endpoint, "SubsectionShops", nil, compareSimpleResourceLists[apiresource.UnnamedAPIResource, api.ShopSimple])
+	testIDList(t, tests, api.E.Shops.Endpoint, "SubsectionShops", nil, compareSimpleResourceLists[apiresource.UnnamedAPIResource, sectiontypes.ShopSimple])
 }

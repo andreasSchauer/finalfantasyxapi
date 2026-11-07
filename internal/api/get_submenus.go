@@ -11,8 +11,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource], id int32) (apitypes.Submenu, error) {
-	submenu, err := i.queryParamsVerifyGet(r, id)
+func getSubmenu(r *http.Request, i HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource], id int32) (apitypes.Submenu, error) {
+	submenu, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Submenu{}, err
 	}
@@ -36,13 +36,13 @@ func getSubmenu(r *http.Request, i handlerInput[seedtypes.Submenu, apitypes.Subm
 	return response, nil
 }
 
-func retrieveSubmenus(r *http.Request, i handlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveSubmenus(r *http.Request, i HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryNameID(r, ids, ts.QpnTopmenu, E.Topmenus.resTypeSingle, lookup.L.Topmenus, ToIntManyNull(config.Cfg.DB.GetTopmenuSubmenuIDs)),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryNameID(r, ids, ts.QpnTopmenu, E.Topmenus.resTypeSingle, lookup.L.Topmenus, ToIntManyNull(config.Cfg.DB.GetTopmenuSubmenuIDs)),
 	})
 }

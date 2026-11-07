@@ -7,7 +7,7 @@ import (
 
 func newPossibleItem(item seedtypes.ItemAmount, chance int32) apitypes.PossibleItem {
 	return apitypes.PossibleItem{
-		ResourceAmount: E.AllItems.toResAmtFromName(item),
+		ResourceAmount: E.AllItems.ToResAmtFromName(item),
 		Chance:         chance,
 	}
 }

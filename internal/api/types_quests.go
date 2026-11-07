@@ -10,7 +10,7 @@ func convertQuestCompletion(qc seedtypes.QuestCompletion) apitypes.QuestCompleti
 	return apitypes.QuestCompletion{
 		Condition: qc.Condition,
 		Areas:     ah.ConvertObjSlice(qc.Areas, convertCompletionArea),
-		Reward:    E.AllItems.toResAmtFromName(qc.Reward),
+		Reward:    E.AllItems.ToResAmtFromName(qc.Reward),
 	}
 }
 

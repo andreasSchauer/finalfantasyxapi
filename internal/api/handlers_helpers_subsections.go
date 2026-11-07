@@ -11,7 +11,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i handlerInput[T, R, A]) handleSubsection(w http.ResponseWriter, r *http.Request, segments []string) {
+func (i HandlerInput[T, R, A]) HandleSubsection(w http.ResponseWriter, r *http.Request, segments []string) {
 	idStr := segments[0]
 	sectionName := segments[1]
 
@@ -54,22 +54,22 @@ func (i handlerInput[T, R, A]) handleSubsection(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	list, err := i.toSimpleResourceList(r, parseRes.ID, sectionName, subsection)
+	list, err := i.ToSimpleResourceList(r, parseRes.ID, sectionName, subsection)
 	if HandleHTTPError(w, err) {
 		return
 	}
 	respondWithJSON(w, http.StatusOK, list)
 }
 
-func (i handlerInput[T, R, A]) handleParameters(w http.ResponseWriter, r *http.Request) {
+func (i HandlerInput[T, R, A]) HandleParameters(w http.ResponseWriter, r *http.Request) {
 	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
 }
 
-func (i handlerInputEnums) handleParameters(w http.ResponseWriter, r *http.Request) {
+func (i HandlerInputEnums) HandleParameters(w http.ResponseWriter, r *http.Request) {
 	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
 }
 
-func (i handlerInputEndpoints) handleParameters(w http.ResponseWriter, r *http.Request) {
+func (i HandlerInputEndpoints) HandleParameters(w http.ResponseWriter, r *http.Request) {
 	handleParametersWrapper(w, r, i.Endpoint, i.queryLookup)
 }
 
@@ -89,7 +89,7 @@ func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
-func (i handlerInput[T, R, A]) handleSections(w http.ResponseWriter, r *http.Request) {
+func (i HandlerInput[T, R, A]) HandleSections(w http.ResponseWriter, r *http.Request) {
 	segment := string(ts.SnSections)
 	err := verifyQueryParamsAltList(r, i.Endpoint, i.queryLookup, &segment)
 	if HandleHTTPError(w, err) {
@@ -105,7 +105,7 @@ func (i handlerInput[T, R, A]) handleSections(w http.ResponseWriter, r *http.Req
 	respondWithJSON(w, http.StatusOK, sectionList)
 }
 
-func (i handlerInput[T, R, A]) handleSimple(w http.ResponseWriter, r *http.Request) {
+func (i HandlerInput[T, R, A]) HandleSimple(w http.ResponseWriter, r *http.Request) {
 	segment := string(ts.SnSimple)
 
 	_, ok := i.subsections[ts.SnSimple]
@@ -114,7 +114,7 @@ func (i handlerInput[T, R, A]) handleSimple(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	ids, err := i.queryIDsParam(r, &segment)
+	ids, err := i.HandleIDsQuery(r, &segment)
 	if HandleHTTPError(w, err) {
 		return
 	}
@@ -137,7 +137,7 @@ func (i handlerInput[T, R, A]) handleSimple(w http.ResponseWriter, r *http.Reque
 	respondWithJSON(w, http.StatusOK, subResList)
 }
 
-func (i handlerInput[T, R, A]) queryIDsParam(r *http.Request, segment *string) ([]int32, error) {
+func (i HandlerInput[T, R, A]) HandleIDsQuery(r *http.Request, segment *string) ([]int32, error) {
 	err := verifyQueryParams[any](r, i.Endpoint, i.queryLookup, nil, segment)
 	if err != nil {
 		return nil, err

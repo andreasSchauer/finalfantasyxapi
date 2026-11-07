@@ -11,7 +11,7 @@ import (
 func filterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.Monsters
 
-	avlParams, err := i.queryAvlRepGetParams(r)
+	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func filterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
 func filterAvlMonsterFormations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := E.MonsterFormations
 
-	avlParams, err := i.queryAvlRepGetParams(r)
+	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

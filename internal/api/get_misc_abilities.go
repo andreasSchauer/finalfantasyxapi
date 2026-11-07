@@ -13,8 +13,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMiscAbility(r *http.Request, i handlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource], id int32) (apitypes.MiscAbility, error) {
-	ability, err := i.queryParamsVerifyGet(r, id)
+func getMiscAbility(r *http.Request, i HandlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource], id int32) (apitypes.MiscAbility, error) {
+	ability, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.MiscAbility{}, err
 	}
@@ -47,18 +47,18 @@ func getMiscAbility(r *http.Request, i handlerInput[seedtypes.MiscAbility, apity
 	return response, nil
 }
 
-func retrieveMiscAbilities(r *http.Request, i handlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveMiscAbilities(r *http.Request, i HandlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 	abilityType := database.AbilityTypeMiscAbility
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryIntList(r, ids, ts.QpnRank, getTypedAbilityIDsByRank(abilityType)),
-		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetMiscAbilityIDsByCharClass),
-		i.queryBool(r, ids, ts.QpnCopycat, getTypedAbilityIDsByCanCopycat(abilityType)),
-		i.queryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(abilityType)),
-		i.queryBool2(r, ids, ts.QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(abilityType)),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryIntList(r, ids, ts.QpnRank, getTypedAbilityIDsByRank(abilityType)),
+		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetMiscAbilityIDsByCharClass),
+		i.QueryBool(r, ids, ts.QpnCopycat, getTypedAbilityIDsByCanCopycat(abilityType)),
+		i.QueryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(abilityType)),
+		i.QueryBool2(r, ids, ts.QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(abilityType)),
 	})
 }

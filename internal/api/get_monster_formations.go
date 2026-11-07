@@ -13,8 +13,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMonsterFormation(r *http.Request, i handlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource], id int32) (apitypes.MonsterFormation, error) {
-	formation, err := i.queryParamsVerifyGet(r, id)
+func getMonsterFormation(r *http.Request, i HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource], id int32) (apitypes.MonsterFormation, error) {
+	formation, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.MonsterFormation{}, err
 	}
@@ -28,7 +28,7 @@ func getMonsterFormation(r *http.Request, i handlerInput[seedtypes.MonsterFormat
 		Notes:           formation.FormationData.Notes,
 		FormationLoot:   getFormationLoot(formation),
 		BossMusic:       ah.ConvertObjPtr(formation.FormationData.BossMusic, convertFormationBossSong),
-		Monsters:        E.Monsters.toResAmtsFromNames(formation.Monsters),
+		Monsters:        E.Monsters.ToResAmtsFromNames(formation.Monsters),
 		Areas:           ah.ConvertObjSlice(formation.EncounterAreas, convertEncounterArea),
 		TriggerCommands: ah.ConvertObjSlice(formation.TriggerCommands, convertFormationTriggerCommand),
 	}
@@ -36,19 +36,19 @@ func getMonsterFormation(r *http.Request, i handlerInput[seedtypes.MonsterFormat
 	return response, nil
 }
 
-func retrieveMonsterFormations(r *http.Request, i handlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveMonsterFormations(r *http.Request, i HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetMonsterFormationIDsByMonster),
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetMonsterFormationIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetMonsterFormationIDsBySublocation),
-		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetMonsterFormationIDsByArea),
-		i.queryBool(r, ids, ts.QpnAmbush, config.Cfg.DB.GetMonsterFormationIDsByForcedAmbush),
-		i.queryBool(r, ids, ts.QpnEscape, config.Cfg.DB.GetMonsterFormationIDsByCanEscape),
-		i.queryEnumList(r, enums.T.MonsterFormationCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMonsterFormationIDsByCategory),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetMonsterFormationIDsByMonster),
+		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetMonsterFormationIDsByLocation),
+		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetMonsterFormationIDsBySublocation),
+		i.QueryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetMonsterFormationIDsByArea),
+		i.QueryBool(r, ids, ts.QpnAmbush, config.Cfg.DB.GetMonsterFormationIDsByForcedAmbush),
+		i.QueryBool(r, ids, ts.QpnEscape, config.Cfg.DB.GetMonsterFormationIDsByCanEscape),
+		i.QueryEnumList(r, enums.T.MonsterFormationCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMonsterFormationIDsByCategory),
 	})
 }

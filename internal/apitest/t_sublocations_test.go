@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
 func TestGetSublocation(t *testing.T) {
@@ -537,5 +538,5 @@ func TestSubsectionSublocations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Sublocations.Endpoint, "SubsectionSublocations", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, api.SublocationSimple])
+	testIDList(t, tests, api.E.Sublocations.Endpoint, "SubsectionSublocations", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, sectiontypes.SublocationSimple])
 }

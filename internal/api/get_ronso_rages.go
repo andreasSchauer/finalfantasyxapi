@@ -9,13 +9,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getRonsoRage(r *http.Request, i handlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource], id int32) (apitypes.RonsoRage, error) {
-	ronsoRage, err := i.queryParamsVerifyGet(r, id)
+func getRonsoRage(r *http.Request, i HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource], id int32) (apitypes.RonsoRage, error) {
+	ronsoRage, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.RonsoRage{}, err
 	}
 
-	monsters, err := E.Monsters.dbGetRelations(r.Context(), ronsoRage, config.Cfg.DB.GetRonsoRageMonsterIDs)
+	monsters, err := E.Monsters.DBGetRelations(r.Context(), ronsoRage, config.Cfg.DB.GetRonsoRageMonsterIDs)
 	if err != nil {
 		return apitypes.RonsoRage{}, err
 	}
@@ -32,6 +32,6 @@ func getRonsoRage(r *http.Request, i handlerInput[seedtypes.RonsoRage, apitypes.
 	return response, nil
 }
 
-func retrieveRonsoRages(r *http.Request, i handlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource]) ([]int32, error) {
-	return i.queryParamsVerifyRetrieve(r)
+func retrieveRonsoRages(r *http.Request, i HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource]) ([]int32, error) {
+	return i.QueryParamsVerifyRetrieve(r)
 }

@@ -15,31 +15,31 @@ func getTopmenuRelationships(r *http.Request, topmenu seedtypes.Topmenu) (apityp
 
 	g.Go(func() error {
 		var err error
-		rel.Submenus, err = E.Submenus.dbGetRelations(ctx, topmenu, ToIntManyNull(config.Cfg.DB.GetTopmenuSubmenuIDs))
+		rel.Submenus, err = E.Submenus.DBGetRelations(ctx, topmenu, ToIntManyNull(config.Cfg.DB.GetTopmenuSubmenuIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveCommands, err = E.OverdriveCommands.dbGetRelations(ctx, topmenu, ToIntManyNull(config.Cfg.DB.GetTopmenuOverdriveCommandIDs))
+		rel.OverdriveCommands, err = E.OverdriveCommands.DBGetRelations(ctx, topmenu, ToIntManyNull(config.Cfg.DB.GetTopmenuOverdriveCommandIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Overdrives, err = E.Overdrives.dbGetRelations(ctx, topmenu, ToIntManyNull(config.Cfg.DB.GetTopmenuOverdriveIDs))
+		rel.Overdrives, err = E.Overdrives.DBGetRelations(ctx, topmenu, ToIntManyNull(config.Cfg.DB.GetTopmenuOverdriveIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AeonCommands, err = E.AeonCommands.dbGetRelations(ctx, topmenu, ToIntManyNull(config.Cfg.DB.GetTopmenuAeonCommandIDs))
+		rel.AeonCommands, err = E.AeonCommands.DBGetRelations(ctx, topmenu, ToIntManyNull(config.Cfg.DB.GetTopmenuAeonCommandIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Abilities, err = E.Abilities.dbGetRelations(ctx, topmenu, ToIntManyNull(config.Cfg.DB.GetTopmenuAbilityIDs))
+		rel.Abilities, err = E.Abilities.DBGetRelations(ctx, topmenu, ToIntManyNull(config.Cfg.DB.GetTopmenuAbilityIDs))
 		return err
 	})
 

@@ -11,8 +11,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getFMV(r *http.Request, i handlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource], id int32) (apitypes.FMV, error) {
-	fmv, err := i.queryParamsVerifyGet(r, id)
+func getFMV(r *http.Request, i HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource], id int32) (apitypes.FMV, error) {
+	fmv, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.FMV{}, err
 	}
@@ -29,13 +29,13 @@ func getFMV(r *http.Request, i handlerInput[seedtypes.FMV, apitypes.FMV, apireso
 	return response, nil
 }
 
-func retrieveFMVs(r *http.Request, i handlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveFMVs(r *http.Request, i HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationFmvIDs),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationFmvIDs),
 	})
 }

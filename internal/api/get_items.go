@@ -12,8 +12,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getItem(r *http.Request, i handlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource], id int32) (apitypes.Item, error) {
-	item, err := i.queryParamsVerifyGet(r, id)
+func getItem(r *http.Request, i HandlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource], id int32) (apitypes.Item, error) {
+	item, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Item{}, err
 	}
@@ -56,19 +56,19 @@ func getItem(r *http.Request, i handlerInput[seedtypes.Item, apitypes.Item, apir
 	return response, nil
 }
 
-func retrieveItems(r *http.Request, i handlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveItems(r *http.Request, i HandlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryEnumList(r, enums.T.ItemCategory, ids, ts.QpnCategory, config.Cfg.DB.GetItemIDsCategory),
-		i.queryBool2(r, ids, ts.QpnHasAbility, config.Cfg.DB.GetItemIDsWithAbility),
-		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, config.Cfg.DB.GetItemIDsByRelatedStat),
-		i.queryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetItemIDsByMethods),
-		i.queryIDWrapper(r, ids, ts.QpnLocation, E.Locations.objLookup, getItemsByLocation),
-		i.queryIDWrapper(r, ids, ts.QpnSublocation, E.Sublocations.objLookup, getItemsBySublocation),
-		i.queryIDWrapper(r, ids, ts.QpnArea, E.Areas.objLookup, getItemsByArea),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryEnumList(r, enums.T.ItemCategory, ids, ts.QpnCategory, config.Cfg.DB.GetItemIDsCategory),
+		i.QueryBool2(r, ids, ts.QpnHasAbility, config.Cfg.DB.GetItemIDsWithAbility),
+		i.QueryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, config.Cfg.DB.GetItemIDsByRelatedStat),
+		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetItemIDsByMethods),
+		i.QueryIDWrapper(r, ids, ts.QpnLocation, E.Locations.objLookup, getItemsByLocation),
+		i.QueryIDWrapper(r, ids, ts.QpnSublocation, E.Sublocations.objLookup, getItemsBySublocation),
+		i.QueryIDWrapper(r, ids, ts.QpnArea, E.Areas.objLookup, getItemsByArea),
 	})
 }

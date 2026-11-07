@@ -12,8 +12,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getTriggerCommand(r *http.Request, i handlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource], id int32) (apitypes.TriggerCommand, error) {
-	command, err := i.queryParamsVerifyGet(r, id)
+func getTriggerCommand(r *http.Request, i HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource], id int32) (apitypes.TriggerCommand, error) {
+	command, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
 	}
@@ -51,14 +51,14 @@ func getTriggerCommand(r *http.Request, i handlerInput[seedtypes.TriggerCommand,
 	return response, nil
 }
 
-func retrieveTriggerCommands(r *http.Request, i handlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveTriggerCommands(r *http.Request, i HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetTriggerCommandIDsByCharClass),
-		i.queryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, config.Cfg.DB.GetTriggerCommandIDsByRelatedStat),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetTriggerCommandIDsByCharClass),
+		i.QueryNameID(r, ids, ts.QpnRelatedStat, E.Stats.resTypeSingle, lookup.L.Stats, config.Cfg.DB.GetTriggerCommandIDsByRelatedStat),
 	})
 }

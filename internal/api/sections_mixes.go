@@ -10,20 +10,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-type MixSimple struct {
-	ID           int32    `json:"id"`
-	Name         string   `json:"name"`
-	URL          string   `json:"url"`
-	Category     string   `json:"category"`
-	Combinations []string `json:"combinations"`
-}
-
-func (m MixSimple) GetURL() string {
-	return m.URL
-}
 
 func createMixSimple(r *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.Mixes
@@ -44,7 +34,7 @@ func createMixSimple(r *http.Request, id int32, _ Subsection) (apiresource.Simpl
 		})
 	}
 
-	mixSimple := MixSimple{
+	mixSimple := sectiontypes.MixSimple{
 		ID:           mix.ID,
 		Name:         mix.Name,
 		URL:          ah.CreateResourceURL(i.Endpoint, id),

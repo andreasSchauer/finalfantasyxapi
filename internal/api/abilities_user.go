@@ -16,7 +16,6 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-
 type unitRepl struct {
 	unit        seedtypes.PlayerUnit
 	bombWpn     bool
@@ -32,7 +31,7 @@ type biReplacement struct {
 	DamageFormula  *string
 }
 
-func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], ability apitypes.UserAbility, queryName ts.QueryParamName) ([]apitypes.BattleInteraction, error) {
+func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i HandlerInput[T, R, A], ability apitypes.UserAbility, queryName ts.QueryParamName) ([]apitypes.BattleInteraction, error) {
 	repl, err := getUnitRepl(r, i, queryName)
 	if errs.QueryIsEmpty(err) {
 		return ability.GetBattleInteractions(), nil
@@ -51,7 +50,7 @@ func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http
 	return battleInteractions, nil
 }
 
-func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerInput[T, R, A], queryName ts.QueryParamName) (unitRepl, error) {
+func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i HandlerInput[T, R, A], queryName ts.QueryParamName) (unitRepl, error) {
 	queryParamUser := i.queryLookup[queryName]
 	queryParamBomb := i.queryLookup[ts.QpnBombWpn]
 	queryParamCelestialWpn := i.queryLookup[ts.QpnCelestialWeapon]

@@ -14,6 +14,8 @@ type NamedAPIResource struct {
 	URL           string  `json:"url"`
 }
 
+
+
 func (r NamedAPIResource) IsZero() bool {
 	return r.Name == ""
 }

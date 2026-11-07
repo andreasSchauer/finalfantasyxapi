@@ -12,7 +12,7 @@ import (
 )
 
 func getItemRelationships(r *http.Request, item seedtypes.Item) (apitypes.Item, error) {
-	availabilityParams, err := E.Items.queryAvlRelGetParams(r, item.ID)
+	availabilityParams, err := E.Items.QueryAvlRelGetParams(r, item.ID)
 	if err != nil {
 		return apitypes.Item{}, err
 	}
@@ -35,7 +35,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
-		monsters, err := E.Monsters.queryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeMonster))
+		monsters, err := E.Monsters.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeMonster))
 		if err != nil {
 			return err
 		}
@@ -44,59 +44,59 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 	})
 
 	g.Go(func() error {
-		treasures, err := E.Treasures.queryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeTreasure))
+		treasures, err := E.Treasures.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeTreasure))
 		if err != nil {
 			return err
 		}
-		rel.Treasures = itemAmtsToChildResAmts2(E.Treasures, treasures, item.ID)
+		rel.Treasures = ItemAmtsToChildResAmts2(E.Treasures, treasures, item.ID)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = E.Shops.queryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeShop))
+		rel.Shops, err = E.Shops.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeShop))
 		return err
 	})
 
 	g.Go(func() error {
-		quests, err := E.Quests.queryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeQuest))
+		quests, err := E.Quests.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeQuest))
 		if err != nil {
 			return err
 		}
-		rel.Quests = itemAmtsToChildResAmts(E.Quests, quests)
+		rel.Quests = ItemAmtsToChildResAmts(E.Quests, quests)
 		return nil
 	})
 
 	g.Go(func() error {
-		blitzballPrizes, err := E.BlitzballPrizes.queryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeBlitzball))
+		blitzballPrizes, err := E.BlitzballPrizes.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeBlitzball))
 		if err != nil {
 			return err
 		}
-		rel.BlitzballPrizes = itemAmtsToChildResAmts2(E.BlitzballPrizes, blitzballPrizes, item.ID)
+		rel.BlitzballPrizes = ItemAmtsToChildResAmts2(E.BlitzballPrizes, blitzballPrizes, item.ID)
 		return nil
 	})
 
 	g.Go(func() error {
-		playerAbilities, err := E.PlayerAbilities.dbGetRelations(ctx, item, config.Cfg.DB.GetItemPlayerAbilityIDs)
+		playerAbilities, err := E.PlayerAbilities.DBGetRelations(ctx, item, config.Cfg.DB.GetItemPlayerAbilityIDs)
 		if err != nil {
 			return err
 		}
-		rel.AeonLearnAbilities = itemAmtsToChildResAmts(E.PlayerAbilities, playerAbilities)
+		rel.AeonLearnAbilities = ItemAmtsToChildResAmts(E.PlayerAbilities, playerAbilities)
 		return nil
 	})
 
 	g.Go(func() error {
-		autoAbilities, err := E.AutoAbilities.dbGetRelations(ctx, item, config.Cfg.DB.GetItemAutoAbilityIDs)
+		autoAbilities, err := E.AutoAbilities.DBGetRelations(ctx, item, config.Cfg.DB.GetItemAutoAbilityIDs)
 		if err != nil {
 			return err
 		}
-		rel.AutoAbilities = itemAmtsToChildResAmts(E.AutoAbilities, autoAbilities)
+		rel.AutoAbilities = ItemAmtsToChildResAmts(E.AutoAbilities, autoAbilities)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Mixes, err = E.Mixes.dbGetRelations(ctx, item, config.Cfg.DB.GetItemMixIDs)
+		rel.Mixes, err = E.Mixes.DBGetRelations(ctx, item, config.Cfg.DB.GetItemMixIDs)
 		return err
 	})
 

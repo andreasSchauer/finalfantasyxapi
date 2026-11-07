@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func idToTypedAPIResource[T seedtypes.IsTyped, R any, A apiresource.APIResource](i handlerInput[T, R, A], id int32) apiresource.TypedAPIResource {
+func idToTypedAPIResource[T seedtypes.IsTyped, R any, A apiresource.APIResource](i HandlerInput[T, R, A], id int32) apiresource.TypedAPIResource {
 	res, _ := lookup.GetResourceByID(id, i.objLookupID)
 	params := res.GetResParamsTyped()
 
@@ -21,12 +21,12 @@ func idToTypedAPIResource[T seedtypes.IsTyped, R any, A apiresource.APIResource]
 	}
 }
 
-func keyToTypedAPIResource[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i handlerInput[T, R, A], key K) apiresource.TypedAPIResource {
+func keyToTypedAPIResource[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i HandlerInput[T, R, A], key K) apiresource.TypedAPIResource {
 	res, _ := lookup.GetResource(key, i.objLookup)
 	return idToTypedAPIResource(i, res.GetID())
 }
 
-func keyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i handlerInput[T, R, A], keyPtr *K) *apiresource.TypedAPIResource {
+func keyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i HandlerInput[T, R, A], keyPtr *K) *apiresource.TypedAPIResource {
 	if keyPtr == nil {
 		return nil
 	}
@@ -35,7 +35,7 @@ func keyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A apiresource.AP
 	return &res
 }
 
-func keysToTypedAPIResources[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i handlerInput[T, R, A], refs []K) []apiresource.TypedAPIResource {
+func keysToTypedAPIResources[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i HandlerInput[T, R, A], refs []K) []apiresource.TypedAPIResource {
 	resources := make([]apiresource.TypedAPIResource, len(refs))
 
 	for idx, ref := range refs {

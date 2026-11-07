@@ -27,20 +27,20 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := i.queryAvlRelGetParams(r, equipment.ID)
+	availabilityParams, err := i.QueryAvlRelGetParams(r, equipment.ID)
 	if err != nil {
 		return apitypes.EquipmentName{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = E.Treasures.queryAvlRelRun(ctx, equipment, availabilityParams, getEquipmentSourceIDs(ViewSourceTypeTreasure))
+		rel.Treasures, err = E.Treasures.QueryAvlRelRun(ctx, equipment, availabilityParams, getEquipmentSourceIDs(ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = E.Shops.queryAvlRelRun(ctx, equipment, availabilityParams, getEquipmentSourceIDs(ViewSourceTypeShop))
+		rel.Shops, err = E.Shops.QueryAvlRelRun(ctx, equipment, availabilityParams, getEquipmentSourceIDs(ViewSourceTypeShop))
 		return err
 	})
 
@@ -67,7 +67,7 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 
 	if table.Classification == string(database.EquipClassCelestialWeapon) {
 		char, _ := lookup.GetResource(equipment.CharacterName, lookup.L.Characters)
-		cwRes, err := E.CelestialWeapons.dbGetRelationPtr(r.Context(), char, config.Cfg.DB.GetCharacterCelestialWeaponID)
+		cwRes, err := E.CelestialWeapons.DBGetRelationPtr(r.Context(), char, config.Cfg.DB.GetCharacterCelestialWeaponID)
 		if err != nil {
 			return apitypes.EquipmentName{}, err
 		}
@@ -78,7 +78,7 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 }
 
 func getEquipmentTableRef(r *http.Request, ctx context.Context, queryParam queryparam.QueryParam, equipment seedtypes.EquipmentName) (apiresource.UnnamedAPIResource, error) {
-	tables, err := E.EquipmentTables.dbGetRelations(ctx, equipment, config.Cfg.DB.GetEquipmentEquipmentTableIDs)
+	tables, err := E.EquipmentTables.DBGetRelations(ctx, equipment, config.Cfg.DB.GetEquipmentEquipmentTableIDs)
 	if err != nil {
 		return apiresource.UnnamedAPIResource{}, err
 	}

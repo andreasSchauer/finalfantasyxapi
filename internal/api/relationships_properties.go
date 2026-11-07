@@ -15,13 +15,13 @@ func getPropertyRelationships(r *http.Request, property seedtypes.Property) (api
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = E.AutoAbilities.dbGetRelations(ctx, property, ToIntManyNull(config.Cfg.DB.GetPropertyAutoAbilityIDs))
+		rel.AutoAbilities, err = E.AutoAbilities.DBGetRelations(ctx, property, ToIntManyNull(config.Cfg.DB.GetPropertyAutoAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Monsters, err = E.Monsters.dbGetRelations(ctx, property, config.Cfg.DB.GetPropertyMonsterIDs)
+		rel.Monsters, err = E.Monsters.DBGetRelations(ctx, property, config.Cfg.DB.GetPropertyMonsterIDs)
 		return err
 	})
 

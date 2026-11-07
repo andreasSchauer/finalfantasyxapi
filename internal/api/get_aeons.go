@@ -11,8 +11,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAeon(r *http.Request, i handlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource], id int32) (apitypes.Aeon, error) {
-	aeon, err := i.queryParamsVerifyGet(r, id)
+func getAeon(r *http.Request, i HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource], id int32) (apitypes.Aeon, error) {
+	aeon, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Aeon{}, err
 	}
@@ -59,13 +59,13 @@ func getAeon(r *http.Request, i handlerInput[seedtypes.Aeon, apitypes.Aeon, apir
 	return response, nil
 }
 
-func retrieveAeons(r *http.Request, i handlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveAeons(r *http.Request, i HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryBool(r, ids, ts.QpnOptional, config.Cfg.DB.GetAeonIDsOptional),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryBool(r, ids, ts.QpnOptional, config.Cfg.DB.GetAeonIDsOptional),
 	})
 }

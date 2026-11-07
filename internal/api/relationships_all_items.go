@@ -10,7 +10,7 @@ import (
 )
 
 func getMasterItemObtainable(r *http.Request, masterItem seedtypes.MasterItem) (apitypes.ObtainableFrom, error) {
-	availabilityParams, err := E.AllItems.queryAvlRelGetParams(r, masterItem.ID)
+	availabilityParams, err := E.AllItems.QueryAvlRelGetParams(r, masterItem.ID)
 	if err != nil {
 		return apitypes.ObtainableFrom{}, err
 	}

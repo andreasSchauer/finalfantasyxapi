@@ -3,16 +3,9 @@ package api
 import (
 	"slices"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
-
-type ItemAmountSimple struct {
-	ia            seedtypes.ItemAmount `json:"-"`
-	ItemAmountStr string               `json:"item"`
-	ItemType      database.ItemType    `json:"item_type"`
-}
 
 func convertItemAmountSimple(ia seedtypes.ItemAmount) string {
 	return h.NameAmountString(ia.ItemName, nil, nil, ia.Amount)

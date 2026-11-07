@@ -13,8 +13,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMonster(r *http.Request, i handlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource], id int32) (apitypes.Monster, error) {
-	monster, err := i.queryParamsVerifyGet(r, id)
+func getMonster(r *http.Request, i HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource], id int32) (apitypes.Monster, error) {
+	monster, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Monster{}, err
 	}
@@ -58,12 +58,12 @@ func getMonster(r *http.Request, i handlerInput[seedtypes.Monster, apitypes.Mons
 		ScanText:             monster.ScanText,
 		Areas:                rel.Areas,
 		Formations:           rel.Formations,
-		BaseStats:            E.Stats.toResAmtType(monster.BaseStats, newBaseStat),
+		BaseStats:            E.Stats.ToResAmtType(monster.BaseStats, newBaseStat),
 		Items:                ah.ConvertObjPtr(monster.Items, convertMonsterItems),
 		Equipment:            ah.ConvertObjPtr(monster.Equipment, convertMonsterEquipment),
 		ElemResists:          getMonsterElemResists(monster.ElemResists),
 		StatusImmunities:     namesToNamedAPIResources(E.StatusConditions, monster.StatusImmunities),
-		StatusResists:        E.StatusConditions.toResAmtType(monster.StatusResists, newStatusResist),
+		StatusResists:        E.StatusConditions.ToResAmtType(monster.StatusResists, newStatusResist),
 		Abilities:            ah.ConvertObjSlice(monster.Abilities, convertMonsterAbility),
 		AlteredStates:        getMonsterAlteredStates(r, monster),
 	}
@@ -71,34 +71,34 @@ func getMonster(r *http.Request, i handlerInput[seedtypes.Monster, apitypes.Mons
 	return completeMonsterResponse(r, response)
 }
 
-func retrieveMonsters(r *http.Request, i handlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveMonsters(r *http.Request, i HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryBasicWrapper(r, ids, ts.QpnElementalResists, getMonstersByElemResists),
-		i.queryIDListWrapper(r, ids, ts.QpnStatusResists, lookup.L.StatusConditions, getMonstersByStatusResists),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryWrapper(r, ids, ts.QpnElementalResists, getMonstersByElemResists),
+		i.QueryIDListWrapper(r, ids, ts.QpnStatusResists, lookup.L.StatusConditions, getMonstersByStatusResists),
 
-		i.queryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getMonstersByItem),
-		i.queryID(r, ids, ts.QpnRonsoRage, lookup.L.RonsoRages, config.Cfg.DB.GetMonsterIDsByRonsoRage),
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetMonsterIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetMonsterIDsBySublocation),
-		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetMonsterIDsByArea),
-		i.queryIDWrapper(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, getMonstersByAutoAbility),
+		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getMonstersByItem),
+		i.QueryID(r, ids, ts.QpnRonsoRage, lookup.L.RonsoRages, config.Cfg.DB.GetMonsterIDsByRonsoRage),
+		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetMonsterIDsByLocation),
+		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetMonsterIDsBySublocation),
+		i.QueryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetMonsterIDsByArea),
+		i.QueryIDWrapper(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, getMonstersByAutoAbility),
 
-		i.queryIntList(r, ids, ts.QpnEmptySlots, config.Cfg.DB.GetMonsterIDsByEmptySlots),
-		i.queryIntList(r, ids, ts.QpnDistance, config.Cfg.DB.GetMonsterIDsByDistance),
+		i.QueryIntList(r, ids, ts.QpnEmptySlots, config.Cfg.DB.GetMonsterIDsByEmptySlots),
+		i.QueryIntList(r, ids, ts.QpnDistance, config.Cfg.DB.GetMonsterIDsByDistance),
 
-		i.queryEnumList(r, enums.T.MonsterCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMonsterIDsByCategory),
-		i.queryEnum(r, enums.T.MonsterSpecies, ids, ts.QpnSpecies, config.Cfg.DB.GetMonsterIDsBySpecies),
-		i.queryEnum(r, enums.T.CreationArea, ids, ts.QpnCreationArea, ToEnumQuery(enums.T.CreationArea, config.Cfg.DB.GetMonsterIDsByMaCreationArea)),
+		i.QueryEnumList(r, enums.T.MonsterCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMonsterIDsByCategory),
+		i.QueryEnum(r, enums.T.MonsterSpecies, ids, ts.QpnSpecies, config.Cfg.DB.GetMonsterIDsBySpecies),
+		i.QueryEnum(r, enums.T.CreationArea, ids, ts.QpnCreationArea, ToEnumQuery(enums.T.CreationArea, config.Cfg.DB.GetMonsterIDsByMaCreationArea)),
 
-		i.queryBool(r, ids, ts.QpnRepeatable, config.Cfg.DB.GetMonsterIDsByIsRepeatable),
-		i.queryBool(r, ids, ts.QpnCapture, config.Cfg.DB.GetMonsterIDsByCanBeCaptured),
-		i.queryBool(r, ids, ts.QpnHasOverdrive, config.Cfg.DB.GetMonsterIDsByHasOverdrive),
-		i.queryBool(r, ids, ts.QpnUnderwater, config.Cfg.DB.GetMonsterIDsByIsUnderwater),
-		i.queryBool(r, ids, ts.QpnZombie, config.Cfg.DB.GetMonsterIDsByIsZombie),
+		i.QueryBool(r, ids, ts.QpnRepeatable, config.Cfg.DB.GetMonsterIDsByIsRepeatable),
+		i.QueryBool(r, ids, ts.QpnCapture, config.Cfg.DB.GetMonsterIDsByCanBeCaptured),
+		i.QueryBool(r, ids, ts.QpnHasOverdrive, config.Cfg.DB.GetMonsterIDsByHasOverdrive),
+		i.QueryBool(r, ids, ts.QpnUnderwater, config.Cfg.DB.GetMonsterIDsByIsUnderwater),
+		i.QueryBool(r, ids, ts.QpnZombie, config.Cfg.DB.GetMonsterIDsByIsZombie),
 	})
 }

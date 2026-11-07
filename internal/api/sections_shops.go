@@ -8,42 +8,19 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-type ShopSimple struct {
-	ID          int32          `json:"id"`
-	URL         string         `json:"url"`
-	Area        string         `json:"area"`
-	Category    string         `json:"category"`
-	Notes       *string        `json:"notes,omitempty"`
-	PreAirship  *SubShopSimple `json:"pre_airship"`
-	PostAirship *SubShopSimple `json:"post_airship"`
-}
-
-func (s ShopSimple) GetURL() string {
-	return s.URL
-}
-
-type SubShopSimple struct {
-	Items     []string              `json:"items"`
-	Equipment []ShopEquipmentSimple `json:"equipment"`
-}
-
-func convertSubShopSimple(ss seedtypes.SubShop) SubShopSimple {
-	return SubShopSimple{
+func convertSubShopSimple(ss seedtypes.SubShop) sectiontypes.SubShopSimple {
+	return sectiontypes.SubShopSimple{
 		Items:     ah.ConvertObjSlice(ss.Items, shopItemNameString),
 		Equipment: ah.ConvertObjSlice(ss.Equipment, convertShopEquipmentSimple),
 	}
 }
 
-type ShopEquipmentSimple struct {
-	EquipmentName string  `json:"equipment_name"`
-	Abilities     *string `json:"abilities"`
-}
-
-func convertShopEquipmentSimple(se seedtypes.ShopEquipment) ShopEquipmentSimple {
-	return ShopEquipmentSimple{
+func convertShopEquipmentSimple(se seedtypes.ShopEquipment) sectiontypes.ShopEquipmentSimple {
+	return sectiontypes.ShopEquipmentSimple{
 		EquipmentName: shopEquipmentNameString(se),
 		Abilities:     foundEquipmentAbilitiesStringPtr(se.TreasureEquipment),
 	}
@@ -83,7 +60,7 @@ func createShopSimple(_ *http.Request, id int32, _ Subsection) (apiresource.Simp
 	i := E.Shops
 	shop, _ := lookup.GetResourceByID(id, i.objLookupID)
 
-	shopSimple := ShopSimple{
+	shopSimple := sectiontypes.ShopSimple{
 		ID:          shop.ID,
 		URL:         ah.CreateResourceURL(i.Endpoint, id),
 		Area:        idToLocAreaString(shop.AreaID),

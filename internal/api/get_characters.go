@@ -10,8 +10,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getCharacter(r *http.Request, i handlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource], id int32) (apitypes.Character, error) {
-	character, err := i.queryParamsVerifyGet(r, id)
+func getCharacter(r *http.Request, i HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource], id int32) (apitypes.Character, error) {
+	character, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Character{}, err
 	}
@@ -34,7 +34,7 @@ func getCharacter(r *http.Request, i handlerInput[seedtypes.Character, apitypes.
 		CelestialWeapon:        rel.CelestialWeapon,
 		OverdriveCommand:       rel.OverdriveCommand,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              E.Stats.toResAmtType(character.BaseStats, newBaseStat),
+		BaseStats:              E.Stats.ToResAmtType(character.BaseStats, newBaseStat),
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		StdSphereGrid:          rel.StdSphereGrid,
 		ExpSphereGrid:          rel.ExpSphereGrid,
@@ -57,14 +57,14 @@ func getCharacter(r *http.Request, i handlerInput[seedtypes.Character, apitypes.
 	return response, nil
 }
 
-func retrieveCharacters(r *http.Request, i handlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveCharacters(r *http.Request, i HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryBool(r, ids, ts.QpnStoryBased, config.Cfg.DB.GetCharacterIDsStoryBased),
-		i.queryBool(r, ids, ts.QpnUnderwater, config.Cfg.DB.GetCharacterIDsCanFightUnderwater),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryBool(r, ids, ts.QpnStoryBased, config.Cfg.DB.GetCharacterIDsStoryBased),
+		i.QueryBool(r, ids, ts.QpnUnderwater, config.Cfg.DB.GetCharacterIDsCanFightUnderwater),
 	})
 }

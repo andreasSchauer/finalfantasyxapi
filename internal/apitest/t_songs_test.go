@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
 func TestGetSong(t *testing.T) {
@@ -268,5 +269,5 @@ func TestSubsectionSongs(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Songs.Endpoint, "SubsectionSongs", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, api.SongSimple])
+	testIDList(t, tests, api.E.Songs.Endpoint, "SubsectionSongs", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, sectiontypes.SongSimple])
 }

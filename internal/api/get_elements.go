@@ -8,8 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getElement(r *http.Request, i handlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource], id int32) (apitypes.Element, error) {
-	element, err := i.queryParamsVerifyGet(r, id)
+func getElement(r *http.Request, i HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource], id int32) (apitypes.Element, error) {
+	element, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Element{}, err
 	}
@@ -38,6 +38,6 @@ func getElement(r *http.Request, i handlerInput[seedtypes.Element, apitypes.Elem
 	return response, nil
 }
 
-func retrieveElements(r *http.Request, i handlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]) ([]int32, error) {
-	return i.queryParamsVerifyRetrieve(r)
+func retrieveElements(r *http.Request, i HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]) ([]int32, error) {
+	return i.QueryParamsVerifyRetrieve(r)
 }

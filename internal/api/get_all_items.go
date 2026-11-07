@@ -13,8 +13,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMasterItem(r *http.Request, i handlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource], id int32) (apitypes.MasterItem, error) {
-	masterItem, err := i.queryParamsVerifyGet(r, id)
+func getMasterItem(r *http.Request, i HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource], id int32) (apitypes.MasterItem, error) {
+	masterItem, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.MasterItem{}, err
 	}
@@ -50,17 +50,17 @@ func getMasterItem(r *http.Request, i handlerInput[seedtypes.MasterItem, apitype
 	return response, nil
 }
 
-func retrieveMasterItems(r *http.Request, i handlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveMasterItems(r *http.Request, i HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryEnumList(r, enums.T.ItemType, ids, ts.QpnType, config.Cfg.DB.GetMasterItemIDsByType),
-		i.queryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetMasterItemIDsByMethods),
-		i.queryIDWrapper(r, ids, ts.QpnLocation, E.Locations.objLookup, getMasterItemsByLocation),
-		i.queryIDWrapper(r, ids, ts.QpnSublocation, E.Sublocations.objLookup, getMasterItemsBySublocation),
-		i.queryIDWrapper(r, ids, ts.QpnArea, E.Areas.objLookup, getMasterItemsByArea),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryEnumList(r, enums.T.ItemType, ids, ts.QpnType, config.Cfg.DB.GetMasterItemIDsByType),
+		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetMasterItemIDsByMethods),
+		i.QueryIDWrapper(r, ids, ts.QpnLocation, E.Locations.objLookup, getMasterItemsByLocation),
+		i.QueryIDWrapper(r, ids, ts.QpnSublocation, E.Sublocations.objLookup, getMasterItemsBySublocation),
+		i.QueryIDWrapper(r, ids, ts.QpnArea, E.Areas.objLookup, getMasterItemsByArea),
 	})
 }

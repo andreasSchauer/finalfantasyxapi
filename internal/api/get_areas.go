@@ -11,8 +11,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getArea(r *http.Request, i handlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], id int32) (apitypes.Area, error) {
-	area, err := i.queryParamsVerifyGet(r, id)
+func getArea(r *http.Request, i HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], id int32) (apitypes.Area, error) {
+	area, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Area{}, err
 	}
@@ -47,31 +47,31 @@ func getArea(r *http.Request, i handlerInput[seedtypes.Area, apitypes.Area, apir
 	return response, nil
 }
 
-func retrieveAreas(r *http.Request, i handlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveAreas(r *http.Request, i HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationAreaIDs),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationAreaIDs),
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreaIDsWithMonster),
-		i.queryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getAreasByItem),
-		i.queryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, config.Cfg.DB.GetAreaIDsWithKeyItem),
-		i.queryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreasByMonster),
-		i.queryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, config.Cfg.DB.GetAreaIDsWithAutoAbility),
-		i.queryBool(r, ids, ts.QpnSaveSphere, config.Cfg.DB.GetAreaIDsWithSaveSphere),
-		i.queryBool(r, ids, ts.QpnCompSphere, config.Cfg.DB.GetAreaIDsWithCompSphere),
-		i.queryBool(r, ids, ts.QpnAirship, config.Cfg.DB.GetAreaIDsWithDropOff),
-		i.queryBool(r, ids, ts.QpnChocobo, config.Cfg.DB.GetAreaIDsChocobo),
-		i.queryBool2(r, ids, ts.QpnCharacters, config.Cfg.DB.GetAreaIDsWithCharacters),
-		i.queryBool2(r, ids, ts.QpnAeons, config.Cfg.DB.GetAreaIDsWithAeons),
-		i.queryBool2(r, ids, ts.QpnMonsters, config.Cfg.DB.GetAreaIDsWithMonsters),
-		i.queryBool2(r, ids, ts.QpnBossFights, config.Cfg.DB.GetAreaIDsWithBosses),
-		i.queryBool2(r, ids, ts.QpnShops, config.Cfg.DB.GetAreaIDsWithShops),
-		i.queryBool2(r, ids, ts.QpnTreasures, config.Cfg.DB.GetAreaIDsWithTreasures),
-		i.queryBool2(r, ids, ts.QpnSidequests, config.Cfg.DB.GetAreaIDsWithSidequests),
-		i.queryBool2(r, ids, ts.QpnFMVs, config.Cfg.DB.GetAreaIDsWithFMVs),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationAreaIDs),
+		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationAreaIDs),
+		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreaIDsWithMonster),
+		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getAreasByItem),
+		i.QueryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, config.Cfg.DB.GetAreaIDsWithKeyItem),
+		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreasByMonster),
+		i.QueryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, config.Cfg.DB.GetAreaIDsWithAutoAbility),
+		i.QueryBool(r, ids, ts.QpnSaveSphere, config.Cfg.DB.GetAreaIDsWithSaveSphere),
+		i.QueryBool(r, ids, ts.QpnCompSphere, config.Cfg.DB.GetAreaIDsWithCompSphere),
+		i.QueryBool(r, ids, ts.QpnAirship, config.Cfg.DB.GetAreaIDsWithDropOff),
+		i.QueryBool(r, ids, ts.QpnChocobo, config.Cfg.DB.GetAreaIDsChocobo),
+		i.QueryBool2(r, ids, ts.QpnCharacters, config.Cfg.DB.GetAreaIDsWithCharacters),
+		i.QueryBool2(r, ids, ts.QpnAeons, config.Cfg.DB.GetAreaIDsWithAeons),
+		i.QueryBool2(r, ids, ts.QpnMonsters, config.Cfg.DB.GetAreaIDsWithMonsters),
+		i.QueryBool2(r, ids, ts.QpnBossFights, config.Cfg.DB.GetAreaIDsWithBosses),
+		i.QueryBool2(r, ids, ts.QpnShops, config.Cfg.DB.GetAreaIDsWithShops),
+		i.QueryBool2(r, ids, ts.QpnTreasures, config.Cfg.DB.GetAreaIDsWithTreasures),
+		i.QueryBool2(r, ids, ts.QpnSidequests, config.Cfg.DB.GetAreaIDsWithSidequests),
+		i.QueryBool2(r, ids, ts.QpnFMVs, config.Cfg.DB.GetAreaIDsWithFMVs),
 	})
 }

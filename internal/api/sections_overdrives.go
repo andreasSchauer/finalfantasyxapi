@@ -6,27 +6,15 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
-type OverdriveSimple struct {
-	ID                 int32    `json:"id"`
-	URL                string   `json:"url"`
-	Name               string   `json:"name"`
-	Version            *int32   `json:"version,omitempty"`
-	Specification      *string  `json:"specification,omitempty"`
-	Rank               *int32   `json:"rank"`
-	OverdriveAbilities []string `json:"overdrive_abilities"`
-}
-
-func (o OverdriveSimple) GetURL() string {
-	return o.URL
-}
 
 func createOverdriveSimple(_ *http.Request, id int32, _ Subsection) (apiresource.SimpleResource, error) {
 	i := E.Overdrives
 	overdrive, _ := lookup.GetResourceByID(id, i.objLookupID)
 
-	overdriveSimple := OverdriveSimple{
+	overdriveSimple := sectiontypes.OverdriveSimple{
 		ID:                 overdrive.ID,
 		URL:                ah.CreateResourceURL(i.Endpoint, id),
 		Name:               overdrive.Name,

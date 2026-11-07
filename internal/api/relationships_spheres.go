@@ -11,7 +11,7 @@ import (
 func getSphereRelationships(r *http.Request, sphere seedtypes.Sphere) (apitypes.Sphere, error) {
 	item, _ := lookup.GetResourceByID(sphere.ItemID, lookup.L.ItemsID)
 
-	availabilityParams, err := E.Spheres.queryAvlRelGetParams(r, item.ID)
+	availabilityParams, err := E.Spheres.QueryAvlRelGetParams(r, item.ID)
 	if err != nil {
 		return apitypes.Sphere{}, err
 	}

@@ -11,8 +11,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
-// deals with a single segment path that is either a name or an id and returns a ah.ParseResponse with the id, if a single match is found, or a name, if multiple matches with that name were found.
-func (i handlerInput[T, R, A]) parseSingleSegmentResource(segment string) (ah.ParseResponse, error) {
+// ParseSingleSegmentResource deals with a single segment path that is either a name or an id and returns a ah.ParseResponse with the id, if a single match is found, or a name, if multiple matches with that name were found.
+func (i HandlerInput[T, R, A]) ParseSingleSegmentResource(segment string) (ah.ParseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {
 		return ah.ParseResponse{}, errs.NewHTTPError(http.StatusBadRequest, "invalid url encoding", err)
@@ -39,8 +39,8 @@ func (i handlerInput[T, R, A]) parseSingleSegmentResource(segment string) (ah.Pa
 	return ah.ParseResponse{}, errs.NewHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s'", i.resTypeSingle, segment), err)
 }
 
-// deals with a name/version path and returns a ah.ParseResponse with the id, if a match is found.
-func (i handlerInput[T, R, A]) parseNameVersionResource(name, versionStr string) (ah.ParseResponse, error) {
+// ParseNameVersionResource deals with a name/version path and returns a ah.ParseResponse with the id, if a match is found.
+func (i HandlerInput[T, R, A]) ParseNameVersionResource(name, versionStr string) (ah.ParseResponse, error) {
 	nameDecoded, err := url.PathUnescape(name)
 	if err != nil {
 		return ah.ParseResponse{}, errs.NewHTTPError(http.StatusBadRequest, "invalid url encoding", err)
@@ -59,7 +59,7 @@ func (i handlerInput[T, R, A]) parseNameVersionResource(name, versionStr string)
 	return ah.ParseResponse{}, errs.NewHTTPError(http.StatusNotFound, fmt.Sprintf("%s not found: '%s', version '%s'", i.resTypeSingle, name, versionStr), err)
 }
 
-func (i handlerInputEnums) parseSegment(segment string) (enums.EnumResponse, string, error) {
+func (i HandlerInputEnums) ParseSegment(segment string) (enums.EnumResponse, string, error) {
 	key, err := url.PathUnescape(segment)
 	if err != nil {
 		return enums.EnumResponse{}, "", errs.NewHTTPError(http.StatusBadRequest, "invalid url encoding", err)

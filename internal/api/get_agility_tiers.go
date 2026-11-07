@@ -11,8 +11,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAgilityTier(r *http.Request, i handlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource], id int32) (apitypes.AgilityTier, error) {
-	agilityTier, err := i.queryParamsVerifyGet(r, id)
+func getAgilityTier(r *http.Request, i HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource], id int32) (apitypes.AgilityTier, error) {
+	agilityTier, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.AgilityTier{}, err
 	}
@@ -31,13 +31,13 @@ func getAgilityTier(r *http.Request, i handlerInput[seedtypes.AgilityTier, apity
 	return response, nil
 }
 
-func retrieveAgilityTiers(r *http.Request, i handlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveAgilityTiers(r *http.Request, i HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryInt(r, ids, ts.QpnAgility, config.Cfg.DB.GetAgilityTierIDsByAgility),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryInt(r, ids, ts.QpnAgility, config.Cfg.DB.GetAgilityTierIDsByAgility),
 	})
 }

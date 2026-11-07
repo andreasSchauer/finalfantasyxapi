@@ -12,8 +12,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getStatusCondition(r *http.Request, i handlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource], id int32) (apitypes.StatusCondition, error) {
-	status, err := i.queryParamsVerifyGet(r, id)
+func getStatusCondition(r *http.Request, i HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource], id int32) (apitypes.StatusCondition, error) {
+	status, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.StatusCondition{}, err
 	}
@@ -45,13 +45,13 @@ func getStatusCondition(r *http.Request, i handlerInput[seedtypes.StatusConditio
 	return response, nil
 }
 
-func retrieveStatusConditions(r *http.Request, i handlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveStatusConditions(r *http.Request, i HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryEnumList(r, enums.T.StatusConditionCategory, ids, ts.QpnCategory, config.Cfg.DB.GetStatusConditionIDsByCategory),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryEnumList(r, enums.T.StatusConditionCategory, ids, ts.QpnCategory, config.Cfg.DB.GetStatusConditionIDsByCategory),
 	})
 }

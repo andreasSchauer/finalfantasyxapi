@@ -17,26 +17,26 @@ func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (apityp
 	var rel apitypes.KeyItem
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := E.KeyItems.queryAvlRelGetParams(r, keyItem.ID)
+	availabilityParams, err := E.KeyItems.QueryAvlRelGetParams(r, keyItem.ID)
 	if err != nil {
 		return apitypes.KeyItem{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = E.Treasures.queryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ViewSourceTypeTreasure))
+		rel.Treasures, err = E.Treasures.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Quests, err = E.Quests.queryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ViewSourceTypeQuest))
+		rel.Quests, err = E.Quests.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ViewSourceTypeQuest))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = E.Areas.queryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemAreaIDs())
+		rel.Areas, err = E.Areas.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemAreaIDs())
 		return err
 	})
 

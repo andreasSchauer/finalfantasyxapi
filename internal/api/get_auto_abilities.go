@@ -13,8 +13,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAutoAbility(r *http.Request, i handlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource], id int32) (apitypes.AutoAbility, error) {
-	autoAbility, err := i.queryParamsVerifyGet(r, id)
+func getAutoAbility(r *http.Request, i HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource], id int32) (apitypes.AutoAbility, error) {
+	autoAbility, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.AutoAbility{}, err
 	}
@@ -33,7 +33,7 @@ func getAutoAbility(r *http.Request, i handlerInput[seedtypes.AutoAbility, apity
 		Category:               autoAbility.Category,
 		RelatedStats:           namesToNamedAPIResources(E.Stats, autoAbility.RelatedStats),
 		AbilityValue:           autoAbility.AbilityValue,
-		RequiredItem:           E.AllItems.toResAmtFromNamePtr(autoAbility.RequiredItem),
+		RequiredItem:           E.AllItems.ToResAmtFromNamePtr(autoAbility.RequiredItem),
 		LockedOutAutoAbilities: namesToNamedAPIResources(E.AutoAbilities, autoAbility.LockedOutAbilities),
 		ActivationCondition:    autoAbility.ActivationCondition,
 		Counter:                autoAbility.Counter,
@@ -59,21 +59,21 @@ func getAutoAbility(r *http.Request, i handlerInput[seedtypes.AutoAbility, apity
 	return response, nil
 }
 
-func retrieveAutoAbilities(r *http.Request, i handlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveAutoAbilities(r *http.Request, i HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryEnumList(r, enums.T.AutoAbilityCategory, ids, ts.QpnCategory, config.Cfg.DB.GetAutoAbilityIDsByCategory),
-		i.queryEnum(r, enums.T.EquipType, ids, ts.QpnType, config.Cfg.DB.GetAutoAbilityIDsByEquipType),
-		i.queryIDWrapper(r, ids, ts.QpnMonster, lookup.L.Monsters, getAutoAbilitiesByMonster),
-		i.queryID(r, ids, "monster_items", lookup.L.Monsters, config.Cfg.DB.GetAutoAbilityIDsByMonsterItems),
-		i.queryIDWrapper(r, ids, ts.QpnShop, lookup.L.Shops, getAutoAbilitiesByShop),
-		i.queryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetAutoAbilityIDsByMethods),
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetAutoAbilityIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetAutoAbilityIDsBySublocation),
-		i.queryID(r, ids, "areas", lookup.L.Areas, config.Cfg.DB.GetAutoAbilityIDsByArea),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryEnumList(r, enums.T.AutoAbilityCategory, ids, ts.QpnCategory, config.Cfg.DB.GetAutoAbilityIDsByCategory),
+		i.QueryEnum(r, enums.T.EquipType, ids, ts.QpnType, config.Cfg.DB.GetAutoAbilityIDsByEquipType),
+		i.QueryIDWrapper(r, ids, ts.QpnMonster, lookup.L.Monsters, getAutoAbilitiesByMonster),
+		i.QueryID(r, ids, "monster_items", lookup.L.Monsters, config.Cfg.DB.GetAutoAbilityIDsByMonsterItems),
+		i.QueryIDWrapper(r, ids, ts.QpnShop, lookup.L.Shops, getAutoAbilitiesByShop),
+		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetAutoAbilityIDsByMethods),
+		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetAutoAbilityIDsByLocation),
+		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetAutoAbilityIDsBySublocation),
+		i.QueryID(r, ids, "areas", lookup.L.Areas, config.Cfg.DB.GetAutoAbilityIDsByArea),
 	})
 }

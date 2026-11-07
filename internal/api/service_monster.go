@@ -30,10 +30,10 @@ func quickAssembleMon(monID int32, altStatePtr *int32) (apitypes.Monster, error)
 		PoisonRate:       monsterLookup.PoisonRate,
 		ThreatenChance:   monsterLookup.ThreatenChance,
 		ZanmatoLevel:     monsterLookup.ZanmatoLevel,
-		BaseStats:        E.Stats.toResAmtType(monsterLookup.BaseStats, newBaseStat),
+		BaseStats:        E.Stats.ToResAmtType(monsterLookup.BaseStats, newBaseStat),
 		ElemResists:      getMonsterElemResists(monsterLookup.ElemResists),
 		StatusImmunities: namesToNamedAPIResources(E.StatusConditions, monsterLookup.StatusImmunities),
-		StatusResists:    E.StatusConditions.toResAmtType(monsterLookup.StatusResists, newStatusResist),
+		StatusResists:    E.StatusConditions.ToResAmtType(monsterLookup.StatusResists, newStatusResist),
 		Abilities:        ah.ConvertObjSlice(monsterLookup.Abilities, convertMonsterAbility),
 		AlteredStates:    getMonsterAlteredStates(nil, monsterLookup),
 	}

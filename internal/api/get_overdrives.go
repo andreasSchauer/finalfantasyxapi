@@ -11,8 +11,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getOverdrive(r *http.Request, i handlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource], id int32) (apitypes.Overdrive, error) {
-	overdrive, err := i.queryParamsVerifyGet(r, id)
+func getOverdrive(r *http.Request, i HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource], id int32) (apitypes.Overdrive, error) {
+	overdrive, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Overdrive{}, err
 	}
@@ -38,14 +38,14 @@ func getOverdrive(r *http.Request, i handlerInput[seedtypes.Overdrive, apitypes.
 	return response, nil
 }
 
-func retrieveOverdrives(r *http.Request, i handlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveOverdrives(r *http.Request, i HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryIntList(r, ids, ts.QpnRank, config.Cfg.DB.GetOverdriveIDsByRank),
-		i.queryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(config.Cfg.DB.GetOverdriveIDsByUser)),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryIntList(r, ids, ts.QpnRank, config.Cfg.DB.GetOverdriveIDsByRank),
+		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.resTypeSingle, lookup.L.CharClasses, ToIntManyNull(config.Cfg.DB.GetOverdriveIDsByUser)),
 	})
 }

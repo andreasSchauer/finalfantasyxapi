@@ -18,31 +18,31 @@ func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, 
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = E.CelestialWeapons.dbGetRelationPtr(ctx, aeon, config.Cfg.DB.GetAeonCelestialWeaponID)
+		rel.CelestialWeapon, err = E.CelestialWeapons.DBGetRelationPtr(ctx, aeon, config.Cfg.DB.GetAeonCelestialWeaponID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = E.CharacterClasses.dbGetRelations(ctx, aeon, config.Cfg.DB.GetAeonCharClassIDs)
+		rel.CharacterClasses, err = E.CharacterClasses.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AeonCommands, err = E.AeonCommands.dbGetRelations(ctx, aeon, config.Cfg.DB.GetAeonAeonCommandIDs)
+		rel.AeonCommands, err = E.AeonCommands.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonAeonCommandIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Overdrives, err = E.Overdrives.dbGetRelations(ctx, aeon, config.Cfg.DB.GetAeonOverdriveIDs)
+		rel.Overdrives, err = E.Overdrives.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.dbGetRelations(ctx, aeon, config.Cfg.DB.GetAeonDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonDefaultAbilityIDs)
 		return err
 	})
 
@@ -56,7 +56,7 @@ func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, 
 
 func getAeonBaseStats(aeon seedtypes.Aeon) []apitypes.BaseStat {
 	baseStats := aeon.BaseStats.XVals[0].BaseStats
-	return E.Stats.toResAmtType(baseStats, newBaseStat)
+	return E.Stats.ToResAmtType(baseStats, newBaseStat)
 }
 
 func applyAeonStats(r *http.Request, aeon apitypes.Aeon, allowedStatIDs []int32) (apitypes.Aeon, error) {
@@ -93,7 +93,7 @@ func applyAeonStatsBattles(r *http.Request, aeon apitypes.Aeon, queryName ts.Que
 
 	seedAeon, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 	newBaseStats := seedAeon.BaseStats.XVals[i].BaseStats
-	baseStats := E.Stats.toResAmtType(newBaseStats, newBaseStat)
+	baseStats := E.Stats.ToResAmtType(newBaseStats, newBaseStat)
 
 	return baseStats, nil
 }
@@ -102,7 +102,7 @@ func applyYunaStats(r *http.Request, aeon apitypes.Aeon, queryName ts.QueryParam
 	queryParam := Q.Aeons[queryName]
 
 	yuna := lookup.L.Characters["yuna"]
-	yunaBS := E.Stats.toResAmtType(yuna.BaseStats, newBaseStat)
+	yunaBS := E.Stats.ToResAmtType(yuna.BaseStats, newBaseStat)
 
 	yunaStatCalcMap, err := getStatCalcMap(r, queryParam, yunaBS, allowedStatIDs)
 	if errs.QueryIsEmpty(err) {
@@ -138,11 +138,11 @@ func calcAeonStats(aeon apitypes.Aeon, yuna map[string]int32) []apitypes.BaseSta
 func getAeonStatTables(aeon apitypes.Aeon) (map[string]float64, map[string]float64) {
 	aeonLookup, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 
-	aValsSlice := E.Stats.toResAmtType(aeonLookup.BaseStats.AVals, newBaseStat)
+	aValsSlice := E.Stats.ToResAmtType(aeonLookup.BaseStats.AVals, newBaseStat)
 	aValsInt := GetResAmtTypeMap(aValsSlice)
 	aVals := ResAmtMapToFloat(aValsInt)
 
-	bValsSlice := E.Stats.toResAmtType(aeonLookup.BaseStats.BVals, newBaseStat)
+	bValsSlice := E.Stats.ToResAmtType(aeonLookup.BaseStats.BVals, newBaseStat)
 	bValsInt := GetResAmtTypeMap(bValsSlice)
 	bVals := ResAmtMapToFloat(bValsInt)
 

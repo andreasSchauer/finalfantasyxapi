@@ -13,8 +13,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource], id int32) (apitypes.Sphere, error) {
-	sphere, err := i.queryParamsVerifyGet(r, id)
+func getSphere(r *http.Request, i HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource], id int32) (apitypes.Sphere, error) {
+	sphere, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Sphere{}, err
 	}
@@ -47,17 +47,17 @@ func getSphere(r *http.Request, i handlerInput[seedtypes.Sphere, apitypes.Sphere
 	return response, nil
 }
 
-func retrieveSpheres(r *http.Request, i handlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource]) ([]int32, error) {
-	ids, err := i.queryParamsVerifyRetrieve(r)
+func retrieveSpheres(r *http.Request, i HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource]) ([]int32, error) {
+	ids, err := i.QueryParamsVerifyRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.filterIDs(r, ids, []IDFilter{
-		i.queryEnumList(r, enums.T.SphereColor, ids, ts.QpnColor, config.Cfg.DB.GetSphereIDsByColor),
-		i.queryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetSphereIDsByLocation),
-		i.queryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSphereIDsBySublocation),
-		i.queryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetSphereIDsByArea),
-		i.queryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetSphereIDsByMethods),
+	return i.FilterIDs(r, ids, []IDFilter{
+		i.QueryEnumList(r, enums.T.SphereColor, ids, ts.QpnColor, config.Cfg.DB.GetSphereIDsByColor),
+		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetSphereIDsByLocation),
+		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSphereIDsBySublocation),
+		i.QueryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetSphereIDsByArea),
+		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetSphereIDsByMethods),
 	})
 }

@@ -9,8 +9,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-// used for query filters that can't really be generalized. this one simply checks, if it's empty and then calls the wrapperFn
-func (i handlerInput[T, R, A]) queryBasicWrapper(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapBasic) IDFilter {
+
+func (i HandlerInput[T, R, A]) QueryWrapper(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapBasic) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		query, err := queryParam.BasicChecks(r, i.queryLookup)

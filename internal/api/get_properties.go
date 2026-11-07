@@ -9,8 +9,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getProperty(r *http.Request, i handlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource], id int32) (apitypes.Property, error) {
-	property, err := i.queryParamsVerifyGet(r, id)
+func getProperty(r *http.Request, i HandlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource], id int32) (apitypes.Property, error) {
+	property, err := i.QueryParamsVerifyGet(r, id)
 	if err != nil {
 		return apitypes.Property{}, err
 	}
@@ -34,6 +34,6 @@ func getProperty(r *http.Request, i handlerInput[seedtypes.Property, apitypes.Pr
 	return response, nil
 }
 
-func retrieveProperties(r *http.Request, i handlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource]) ([]int32, error) {
-	return i.queryParamsVerifyRetrieve(r)
+func retrieveProperties(r *http.Request, i HandlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource]) ([]int32, error) {
+	return i.QueryParamsVerifyRetrieve(r)
 }

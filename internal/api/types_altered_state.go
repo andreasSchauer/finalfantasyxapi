@@ -63,7 +63,7 @@ func convertAlt(asc seedtypes.Alt) apitypes.Alt {
 	return apitypes.Alt{
 		Properties:       h.SliceOrNil(namesToNamedAPIResources(E.Properties, asc.Properties)),
 		AutoAbilities:    h.SliceOrNil(namesToNamedAPIResources(E.AutoAbilities, asc.AutoAbilities)),
-		BaseStats:        h.SliceOrNil(E.Stats.toResAmtType(asc.BaseStats, newBaseStat)),
+		BaseStats:        h.SliceOrNil(E.Stats.ToResAmtType(asc.BaseStats, newBaseStat)),
 		ElemResists:      h.SliceOrNil(namesToElemResists(asc.ElemResists)),
 		StatusImmunities: h.SliceOrNil(namesToNamedAPIResources(E.StatusConditions, asc.StatusImmunities)),
 		AddedStatus:      ah.ConvertObjPtr(asc.AddedStatus, convertInflictedStatus),

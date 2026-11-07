@@ -10,7 +10,8 @@ import (
 )
 
 // query uses an enum type (id or string possible) that needs to be checked for validity and then returns all resources matching that type
-func (i handlerInput[T, R, A]) queryEnum[E, N any](r *http.Request, et enums.EnumType[E, N], inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryEnum[E]) IDFilter {
+
+func (i HandlerInput[T, R, A]) QueryEnum[E, N any](r *http.Request, et enums.EnumType[E, N], inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryEnum[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		if queryParam.ReplacingParamsPresent(r, i.queryLookup) {
@@ -37,7 +38,8 @@ func (i handlerInput[T, R, A]) queryEnum[E, N any](r *http.Request, et enums.Enu
 }
 
 // like enum query, but with more specialized logic in between (wrapperFn). For example, if types are grouped together (ctbIconType)
-func (i handlerInput[T, R, A]) queryEnumWrapper[E, N any](r *http.Request, et enums.EnumType[E, N], inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapEnum[E]) IDFilter {
+
+func (i HandlerInput[T, R, A]) QueryEnumWrapper[E, N any](r *http.Request, et enums.EnumType[E, N], inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapEnum[E]) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.queryLookup[queryName]
 		enum, err := queryParam.ParseEnum(r, et)
