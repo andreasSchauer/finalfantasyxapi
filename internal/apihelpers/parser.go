@@ -1,7 +1,6 @@
 package apihelpers
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -23,18 +22,6 @@ func newParseResponse(id int32, name string) ParseResponse {
 		ID:   id,
 		Name: name,
 	}
-}
-
-func ParseID(idStr string, resourceType ts.ResTypeSingle, maxID int) (ParseResponse, error) {
-	response, err := CheckID(idStr, resourceType, maxID)
-	if errors.Is(err, errs.ErrNotAnID) {
-		return ParseResponse{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid id '%s'", idStr), err)
-	}
-	if err != nil {
-		return ParseResponse{}, err
-	}
-
-	return response, nil
 }
 
 func CheckID(idStr string, resourceType ts.ResTypeSingle, maxID int) (ParseResponse, error) {
@@ -101,21 +88,4 @@ func CheckNameVersion[T seedtypes.Lookupable](name string, version *int32, l map
 		return newParseResponse(resource.GetID(), ""), nil
 	}
 	return ParseResponse{}, errs.ErrNoResource
-}
-
-func ParseVersionStr(versionStr string) (*int32, error) {
-	var versionPtr *int32
-
-	if versionStr == "" {
-		return nil, nil
-	}
-
-	version, err := strconv.Atoi(versionStr)
-	if err != nil {
-		return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid version number: '%s'", versionStr), err)
-	}
-	versionInt32 := int32(version)
-	versionPtr = &versionInt32
-
-	return versionPtr, nil
 }

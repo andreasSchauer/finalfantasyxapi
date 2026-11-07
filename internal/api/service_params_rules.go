@@ -9,6 +9,10 @@ type FieldRules struct {
 	Children ParamsRules
 }
 
+func (d ParamsDoc) CompileRules() ParamsRules {
+	return compileParamsRules(d.Fields)
+}
+
 func compileParamsRules(fields []FieldDoc) ParamsRules {
 	if len(fields) == 0 {
 		return nil

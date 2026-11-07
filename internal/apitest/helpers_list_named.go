@@ -1,11 +1,11 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func compareParameterLists(test test, _ ts.EndpointName, exp expListNames, got api.QueryParameterList) {
+func compareParameterLists(test test, _ ts.EndpointName, exp expListNames, got handlerinput.QueryParameterList) {
 	test.t.Helper()
 	test.compareListParams(exp.GetListParams(), got.GetListParams())
 	gotNames := []string{}
@@ -17,7 +17,7 @@ func compareParameterLists(test test, _ ts.EndpointName, exp expListNames, got a
 	test.checkStringsInSlice("results", exp.results, gotNames)
 }
 
-func compareSectionLists(test test, endpoint ts.EndpointName, exp expListNames, got api.SectionList) {
+func compareSectionLists(test test, endpoint ts.EndpointName, exp expListNames, got handlerinput.SectionList) {
 	test.t.Helper()
 	test.compareListParams(exp.GetListParams(), got.GetListParams())
 

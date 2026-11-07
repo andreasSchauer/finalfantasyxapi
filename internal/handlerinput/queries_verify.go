@@ -17,8 +17,8 @@ type queryVerifyer[T any] struct {
 	key         *T
 }
 
-// VerifyQueryParams verifies the correct usage of all query parameters of an endpoint
-func VerifyQueryParams[T any](r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam, key *T, segment *string) error {
+// verifyQueryParams verifies the correct usage of all query parameters of an endpoint
+func verifyQueryParams[T any](r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam, key *T, segment *string) error {
 	var err error
 	q := r.URL.Query()
 
@@ -45,9 +45,8 @@ func VerifyQueryParams[T any](r *http.Request, endpoint ts.EndpointName, queryLo
 	return nil
 }
 
-
-// VerifyQueryParamsAltList verifies the correct usage of all query parameters of an alternative list that is used on an endpoint, like /endpoint/sections, or /endpoint/parameters
-func VerifyQueryParamsAltList(r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam, listName *string) error {
+// verifyQueryParamsAltList verifies the correct usage of all query parameters of an alternative list that is used on an endpoint, like /endpoint/sections, or /endpoint/parameters
+func verifyQueryParamsAltList(r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam, listName *string) error {
 	var err error
 	q := r.URL.Query()
 

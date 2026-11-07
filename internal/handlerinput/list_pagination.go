@@ -13,7 +13,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func CreatePaginatedList[T any](r *http.Request, items []T) (apiresource.ListParams, []T, error) {
+func createPaginatedList[T any](r *http.Request, items []T) (apiresource.ListParams, []T, error) {
 	defaultParams := queryparam.GetDefaultParamMap()
 	queryParamOffset := defaultParams[ts.QpnOffset]
 	queryParamLimit := defaultParams[ts.QpnLimit]

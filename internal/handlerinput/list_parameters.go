@@ -1,11 +1,10 @@
-package api
+package handlerinput
 
 import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -19,13 +18,13 @@ func (l QueryParameterList) GetListParams() apiresource.ListParams {
 	return l.ListParams
 }
 
-func getQueryParamList(r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) (QueryParameterList, error) {
+func GetQueryParamList(r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) (QueryParameterList, error) {
 
 	queryParams := queryparam.ParamMapToSlice(queryLookup)
 	queryParams = getAllowedResources(endpoint, queryParams)
 	queryParams = getAllowedValuesFromTypes(queryParams)
 
-	listParams, shownResources, err := handlerinput.CreatePaginatedList(r, queryParams)
+	listParams, shownResources, err := createPaginatedList(r, queryParams)
 	if err != nil {
 		return QueryParameterList{}, err
 	}

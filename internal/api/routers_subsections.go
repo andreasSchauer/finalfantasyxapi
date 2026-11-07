@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -13,11 +12,8 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A], segments []string) {
-	idStr := segments[0]
-	sectionName := segments[1]
-
-	parseRes, err := ah.ParseID(idStr, i.ResTypeSingle, len(i.ObjLookup))
+func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A], idStr, sectionName string) {
+	parseRes, err := ParseID(idStr, i.ResTypeSingle, len(i.ObjLookup))
 	if HandleHTTPError(w, err) {
 		return
 	}
@@ -64,27 +60,36 @@ func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](
 }
 
 func HandleParameters[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
-	handleParametersWrapper(w, r, i.Endpoint, i.QueryLookup)
-}
-
-func HandleParametersEnums(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEnums) {
-	handleParametersWrapper(w, r, i.Endpoint, i.QueryLookup)
-}
-
-func HandleParametersEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEndpoints) {
-	handleParametersWrapper(w, r, i.Endpoint, i.QueryLookup)
-}
-
-func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) {
-	segment := string(ts.SnParameters)
-	err := handlerinput.VerifyQueryParamsAltList(r, endpoint, queryLookup, &segment)
+	err := i.VerifyQueriesAltList(r, ts.SnParameters)
 	if HandleHTTPError(w, err) {
 		return
 	}
 
+	handleParametersWrapper(w, r, i.Endpoint, i.QueryLookup)
+}
+
+func HandleParametersEnums(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEnums) {
+	err := i.VerifyQueriesAltList(r, ts.SnParameters)
+	if HandleHTTPError(w, err) {
+		return
+	}
+
+	handleParametersWrapper(w, r, i.Endpoint, i.QueryLookup)
+}
+
+func HandleParametersEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEndpoints) {
+	err := i.VerifyQueriesAltList(r, ts.SnParameters)
+	if HandleHTTPError(w, err) {
+		return
+	}
+
+	handleParametersWrapper(w, r, i.Endpoint, i.QueryLookup)
+}
+
+func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts.EndpointName, queryLookup map[ts.QueryParamName]queryparam.QueryParam) {
 	queryparam.SetLimitMax(r, r.URL.Query())
 
-	parameterList, err := getQueryParamList(r, endpoint, queryLookup)
+	parameterList, err := handlerinput.GetQueryParamList(r, endpoint, queryLookup)
 	if HandleHTTPError(w, err) {
 		return
 	}
@@ -92,15 +97,14 @@ func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts
 }
 
 func HandleSections[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
-	segment := string(ts.SnSections)
-	err := handlerinput.VerifyQueryParamsAltList(r, i.Endpoint, i.QueryLookup, &segment)
+	err := i.VerifyQueriesAltList(r, ts.SnSections)
 	if HandleHTTPError(w, err) {
 		return
 	}
 
 	queryparam.SetLimitMax(r, r.URL.Query())
 
-	sectionList, err := getSectionList(r, i.Subsections)
+	sectionList, err := handlerinput.GetSectionList(r, i.Subsections)
 	if HandleHTTPError(w, err) {
 		return
 	}
@@ -108,39 +112,28 @@ func HandleSections[T seedtypes.Lookupable, R any, A apiresource.APIResource](w 
 }
 
 func HandleSimple[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
-	segment := string(ts.SnSimple)
-
 	_, ok := i.Subsections[ts.SnSimple]
 	if !ok {
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("simple view is not available for endpoint /%s", i.Endpoint), nil)
 		return
 	}
 
-	ids, err := HandleIDsQuery(r, i, &segment)
+	ids, err := HandleIDsQuery(r, i)
 	if HandleHTTPError(w, err) {
 		return
 	}
 
-	resources, err := handlerinput.CreateSimpleResources(r, ids, i.Subsections[ts.SectionName(segment)])
+	subsection := i.Subsections[ts.SnSimple]
+	subResList, err := handlerinput.CreateSimpleResourceList(r, ids, subsection)
 	if HandleHTTPError(w, err) {
 		return
-	}
-
-	listParams, shownResources, err := handlerinput.CreatePaginatedList(r, resources)
-	if HandleHTTPError(w, err) {
-		return
-	}
-
-	subResList := apiresource.SimpleResourceList{
-		ListParams: listParams,
-		Results:    shownResources,
 	}
 
 	respondWithJSON(w, http.StatusOK, subResList)
 }
 
-func HandleIDsQuery[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.HandlerInput[T, R, A], segment *string) ([]int32, error) {
-	err := handlerinput.VerifyQueryParams[any](r, i.Endpoint, i.QueryLookup, nil, segment)
+func HandleIDsQuery[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.HandlerInput[T, R, A]) ([]int32, error) {
+	err := i.VerifyIDsQuery(r)
 	if err != nil {
 		return nil, err
 	}

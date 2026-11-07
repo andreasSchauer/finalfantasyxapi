@@ -7,7 +7,7 @@ import (
 )
 
 func NewAPIResourceList[A apiresource.APIResource](r *http.Request, resources []A) (apiresource.APIResourceList[A], error) {
-	listParams, shownResources, err := CreatePaginatedList(r, resources)
+	listParams, shownResources, err := createPaginatedList(r, resources)
 	if err != nil {
 		return apiresource.APIResourceList[A]{}, err
 	}

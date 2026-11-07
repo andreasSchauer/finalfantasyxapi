@@ -6,6 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
+// might get moved to another package
+
 type Subsection struct {
 	DBQuery     DBQueryIntMany
 	CreateSubFn func(*http.Request, int32, Subsection) (apiresource.SimpleResource, error)

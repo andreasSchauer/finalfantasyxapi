@@ -28,9 +28,9 @@ func isValidInt(idStr string) bool {
 	return err == nil
 }
 
-func getSegmentCases(segments []string) (bool, bool, bool) {
-	firstIsInt := isValidInt(segments[0])
-	secondIsInt := isValidInt(segments[1])
+func getSegmentCases(segment1, segment2 string) (bool, bool, bool) {
+	firstIsInt := isValidInt(segment1)
+	secondIsInt := isValidInt(segment2)
 
 	isSubsection := firstIsInt && !secondIsInt   // endpoint/1/section
 	isNameVersion := !firstIsInt && secondIsInt  // endpoint/name/1

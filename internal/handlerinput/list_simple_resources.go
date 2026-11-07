@@ -14,26 +14,36 @@ func (i HandlerInput[T, R, A]) ToSimpleResourceList(r *http.Request, id int32, s
 		return apiresource.SimpleResourceList{}, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't retrieve %s of %s with id '%d'", sectionName, i.ResTypeSingle, id), err)
 	}
 
-	results, err := CreateSimpleResources(r, dbIDs, subsection)
+	subResList, err := CreateSimpleResourceList(r, dbIDs, subsection)
 	if err != nil {
 		return apiresource.SimpleResourceList{}, err
 	}
 
-	listParams, shownResults, err := CreatePaginatedList(r, results)
+	subResList.ParentResource = i.IDToResFunc(i, id)
+
+	return subResList, nil
+}
+
+func CreateSimpleResourceList(r *http.Request, dbIDs []int32, subsection Subsection) (apiresource.SimpleResourceList, error) {
+	results, err := createSimpleResources(r, dbIDs, subsection)
+	if err != nil {
+		return apiresource.SimpleResourceList{}, err
+	}
+
+	listParams, shownResults, err := createPaginatedList(r, results)
 	if err != nil {
 		return apiresource.SimpleResourceList{}, err
 	}
 
 	subResList := apiresource.SimpleResourceList{
-		ListParams:     listParams,
-		ParentResource: i.IDToResFunc(i, id),
-		Results:        shownResults,
+		ListParams: listParams,
+		Results:    shownResults,
 	}
 
 	return subResList, nil
 }
 
-func CreateSimpleResources(r *http.Request, dbIDs []int32, subsection Subsection) ([]apiresource.SimpleResource, error) {
+func createSimpleResources(r *http.Request, dbIDs []int32, subsection Subsection) ([]apiresource.SimpleResource, error) {
 	subs := []apiresource.SimpleResource{}
 
 	if subsection.RelationsFn != nil {

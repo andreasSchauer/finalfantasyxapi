@@ -1,11 +1,10 @@
-package api
+package handlerinput
 
 import (
 	"net/http"
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -18,7 +17,7 @@ func (l SectionList) GetListParams() apiresource.ListParams {
 	return l.ListParams
 }
 
-func getSectionList(r *http.Request, sectionMap map[ts.SectionName]handlerinput.Subsection) (SectionList, error) {
+func GetSectionList(r *http.Request, sectionMap map[ts.SectionName]Subsection) (SectionList, error) {
 	sectionNames := []string{}
 
 	for section := range sectionMap {
@@ -26,7 +25,7 @@ func getSectionList(r *http.Request, sectionMap map[ts.SectionName]handlerinput.
 	}
 	slices.Sort(sectionNames)
 
-	listParams, sections, err := handlerinput.CreatePaginatedList(r, sectionNames)
+	listParams, sections, err := createPaginatedList(r, sectionNames)
 	if err != nil {
 		return SectionList{}, err
 	}

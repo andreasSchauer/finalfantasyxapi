@@ -60,7 +60,7 @@ func enumToNamedAPIResource(e enums.EnumResponse) apiresource.NamedAPIResource {
 	}
 }
 
-func EnumsToNamedAPIResources(enums []enums.EnumResponse) []apiresource.NamedAPIResource {
+func enumsToNamedAPIResources(enums []enums.EnumResponse) []apiresource.NamedAPIResource {
 	resources := make([]apiresource.NamedAPIResource, 0, len(enums))
 
 	for _, enum := range enums {
