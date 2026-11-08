@@ -14,7 +14,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSphere(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource], id int32) (apitypes.Sphere, error) {
+func getSphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.Sphere, apiresource.Named], id int32) (apitypes.Sphere, error) {
 	sphere, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Sphere{}, err
@@ -48,7 +48,7 @@ func getSphere(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sphere, ap
 	return response, nil
 }
 
-func retrieveSpheres(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveSpheres(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.Sphere, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -17,16 +17,16 @@ type AltStateChange struct {
 }
 
 type AltStateGain struct {
-	Properties       []apiresource.NamedAPIResource `json:"properties,omitempty"`
-	AutoAbilities    []apiresource.NamedAPIResource `json:"auto_abilities,omitempty"`
-	StatusImmunities []apiresource.NamedAPIResource `json:"status_immunities,omitempty"`
-	StatusResists    []StatusResist                 `json:"status_resists,omitempty"`
-	Status           *InflictedStatus               `json:"status,omitempty"`
+	Properties       []apiresource.Named `json:"properties,omitempty"`
+	AutoAbilities    []apiresource.Named `json:"auto_abilities,omitempty"`
+	StatusImmunities []apiresource.Named `json:"status_immunities,omitempty"`
+	StatusResists    []StatusResist      `json:"status_resists,omitempty"`
+	Status           *InflictedStatus    `json:"status,omitempty"`
 }
 
 type AltStateLoss struct {
-	Properties       []apiresource.NamedAPIResource `json:"properties,omitempty"`
-	AutoAbilities    []apiresource.NamedAPIResource `json:"auto_abilities,omitempty"`
-	StatusImmunities []apiresource.NamedAPIResource `json:"status_immunities,omitempty"`
-	Status           *apiresource.NamedAPIResource  `json:"status,omitempty"`
+	Properties       []apiresource.Named `json:"properties,omitempty"`
+	AutoAbilities    []apiresource.Named `json:"auto_abilities,omitempty"`
+	StatusImmunities []apiresource.Named `json:"status_immunities,omitempty"`
+	Status           *apiresource.Named  `json:"status,omitempty"`
 }

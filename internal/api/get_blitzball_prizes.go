@@ -14,7 +14,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getBlitzballPrize(r *http.Request, i handlerinput.HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource], id int32) (apitypes.BlitzballPrize, error) {
+func getBlitzballPrize(r *http.Request, i handlerinput.Main[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.Named], id int32) (apitypes.BlitzballPrize, error) {
 	bbPos, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.BlitzballPrize{}, err
@@ -31,7 +31,7 @@ func getBlitzballPrize(r *http.Request, i handlerinput.HandlerInput[seedtypes.Bl
 	return response, nil
 }
 
-func retrieveBlitzballPrizes(r *http.Request, i handlerinput.HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveBlitzballPrizes(r *http.Request, i handlerinput.Main[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

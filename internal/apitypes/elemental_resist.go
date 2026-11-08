@@ -5,8 +5,8 @@ import (
 )
 
 type ElementalResist struct {
-	Element  apiresource.NamedAPIResource `json:"element"`
-	Affinity string                       `json:"affinity"`
+	Element  apiresource.Named `json:"element"`
+	Affinity string            `json:"affinity"`
 }
 
 func (er ElementalResist) GetAPIResource() apiresource.APIResource {

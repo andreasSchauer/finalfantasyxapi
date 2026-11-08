@@ -13,7 +13,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getEquipment(r *http.Request, i handlerinput.HandlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource], id int32) (apitypes.EquipmentName, error) {
+func getEquipment(r *http.Request, i handlerinput.Main[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.Named], id int32) (apitypes.EquipmentName, error) {
 	equipment, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.EquipmentName{}, err
@@ -43,7 +43,7 @@ func getEquipment(r *http.Request, i handlerinput.HandlerInput[seedtypes.Equipme
 	return response, nil
 }
 
-func retrieveEquipment(r *http.Request, i handlerinput.HandlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveEquipment(r *http.Request, i handlerinput.Main[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

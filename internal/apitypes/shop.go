@@ -5,12 +5,12 @@ import (
 )
 
 type Shop struct {
-	ID          int32                       `json:"id"`
-	Area        apiresource.AreaAPIResource `json:"area"`
-	Category    string                      `json:"category"`
-	Notes       *string                     `json:"notes,omitempty"`
-	PreAirship  *SubShop                    `json:"pre_airship"`
-	PostAirship *SubShop                    `json:"post_airship"`
+	ID          int32            `json:"id"`
+	Area        apiresource.Area `json:"area"`
+	Category    string           `json:"category"`
+	Notes       *string          `json:"notes,omitempty"`
+	PreAirship  *SubShop         `json:"pre_airship"`
+	PostAirship *SubShop         `json:"post_airship"`
 }
 
 type SubShop struct {
@@ -19,8 +19,8 @@ type SubShop struct {
 }
 
 type ShopItem struct {
-	Item  apiresource.NamedAPIResource `json:"item"`
-	Price int32                        `json:"price"`
+	Item  apiresource.Named `json:"item"`
+	Price int32             `json:"price"`
 }
 
 type ShopEquipment struct {

@@ -46,7 +46,7 @@ func TestGetArenaCreation(t *testing.T) {
 			category:            "area",
 			monster:             268,
 			parentSubquest:      13,
-			reward:              newTestResAmount[apiresource.TypedAPIResource](107, 60),
+			reward:              newTestResAmount[apiresource.Typed](107, 60),
 			requiredCatchAmount: 1,
 			requiredMonsters:    []int32{239, 243, 245, 248},
 		},
@@ -63,7 +63,7 @@ func TestGetArenaCreation(t *testing.T) {
 			category:            "species",
 			monster:             274,
 			parentSubquest:      19,
-			reward:              newTestResAmount[apiresource.TypedAPIResource](64, 60),
+			reward:              newTestResAmount[apiresource.Typed](64, 60),
 			requiredCatchAmount: 4,
 			requiredMonsters:    []int32{40, 73, 87, 170, 240},
 		},
@@ -80,7 +80,7 @@ func TestGetArenaCreation(t *testing.T) {
 			category:                  "original",
 			monster:                   286,
 			parentSubquest:            31,
-			reward:                    newTestResAmount[apiresource.TypedAPIResource](110, 99),
+			reward:                    newTestResAmount[apiresource.Typed](110, 99),
 			requiredCatchAmount:       6,
 			unlockedCreationsCategory: h.GetStrPtr("species"),
 			requiredMonsters:          nil,
@@ -118,5 +118,5 @@ func TestRetrieveArenaCreations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.ArenaCreations.Endpoint, "RetrieveArenaCreations", testSrv.HandleArenaCreations, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.ArenaCreations.Endpoint, "RetrieveArenaCreations", testSrv.HandleArenaCreations, compareAPIResourceLists[apiresource.Named])
 }

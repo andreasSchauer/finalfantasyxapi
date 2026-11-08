@@ -10,20 +10,20 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func AssignDefaultParams(endpoint ts.EndpointName, eLookup, qLookup *map[ts.QueryParamName]queryparam.QueryParam) {
+func assignDefaultParams(endpoint ts.EndpointName, eLookup, qLookup *map[ts.QueryParamName]queryparam.QueryParam) {
 	paramMap := queryparam.ParamSliceToMap(Q.DefaultParamSlice, endpoint)
 	*eLookup = paramMap
 	*qLookup = paramMap
 }
 
-func AssignQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []queryparam.QueryParam, i *handlerinput.HandlerInput[T, R, A], queryLookup *map[ts.QueryParamName]queryparam.QueryParam) {
+func assignQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []queryparam.QueryParam, i *handlerinput.Main[T, R, A], queryLookup *map[ts.QueryParamName]queryparam.QueryParam) {
 	paramMap := completeQueryParams(params, *i)
 
 	i.QueryLookup = paramMap
 	*queryLookup = paramMap
 }
 
-func completeQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []queryparam.QueryParam, i handlerinput.HandlerInput[T, R, A]) map[ts.QueryParamName]queryparam.QueryParam {
+func completeQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []queryparam.QueryParam, i handlerinput.Main[T, R, A]) map[ts.QueryParamName]queryparam.QueryParam {
 	params = slices.Concat(params, Q.DefaultParamSlice)
 
 	if hasSimpleView(i.Subsections) {

@@ -5,11 +5,11 @@ import (
 )
 
 type StatusInfliction struct {
-	PlayerAbilities    []apiresource.NamedAPIResource `json:"player_abilities"`
-	OverdriveAbilities []apiresource.NamedAPIResource `json:"overdrive_abilities"`
-	ItemAbilities      []apiresource.NamedAPIResource `json:"item_abilities"`
-	MiscAbilities      []apiresource.NamedAPIResource `json:"misc_abilities"`
-	EnemyAbilities     []apiresource.NamedAPIResource `json:"enemy_abilities"`
+	PlayerAbilities    []apiresource.Named `json:"player_abilities"`
+	OverdriveAbilities []apiresource.Named `json:"overdrive_abilities"`
+	ItemAbilities      []apiresource.Named `json:"item_abilities"`
+	MiscAbilities      []apiresource.Named `json:"misc_abilities"`
+	EnemyAbilities     []apiresource.Named `json:"enemy_abilities"`
 }
 
 func (s StatusInfliction) IsZero() bool {
@@ -21,11 +21,11 @@ func (s StatusInfliction) IsZero() bool {
 }
 
 type StatusRemoval struct {
-	PlayerAbilities    []apiresource.NamedAPIResource `json:"player_abilities"`
-	OverdriveAbilities []apiresource.NamedAPIResource `json:"overdrive_abilities"`
-	ItemAbilities      []apiresource.NamedAPIResource `json:"item_abilities"`
-	EnemyAbilities     []apiresource.NamedAPIResource `json:"enemy_abilities"`
-	StatusConditions   []apiresource.NamedAPIResource `json:"status_conditions"`
+	PlayerAbilities    []apiresource.Named `json:"player_abilities"`
+	OverdriveAbilities []apiresource.Named `json:"overdrive_abilities"`
+	ItemAbilities      []apiresource.Named `json:"item_abilities"`
+	EnemyAbilities     []apiresource.Named `json:"enemy_abilities"`
+	StatusConditions   []apiresource.Named `json:"status_conditions"`
 }
 
 func (s StatusRemoval) IsZero() bool {

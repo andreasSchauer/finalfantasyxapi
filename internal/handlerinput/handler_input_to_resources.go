@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
-func (i HandlerInput[T, R, A]) ToAPIResources(IDs []int32) []A {
+func (i Main[T, R, A]) ToAPIResources(IDs []int32) []A {
 	resources := make([]A, len(IDs))
 
 	for idx, id := range IDs {
@@ -16,7 +16,7 @@ func (i HandlerInput[T, R, A]) ToAPIResources(IDs []int32) []A {
 	return resources
 }
 
-func (i HandlerInput[T, R, A]) ToAPIResList(r *http.Request, IDs []int32) (apiresource.APIResourceList[A], error) {
+func (i Main[T, R, A]) ToAPIResList(r *http.Request, IDs []int32) (apiresource.APIResourceList[A], error) {
 	resources := i.ToAPIResources(IDs)
 
 	resourceList, err := NewAPIResourceList(r, resources)

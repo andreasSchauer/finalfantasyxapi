@@ -30,10 +30,10 @@ type EquipmentSlotsChance struct {
 }
 
 type EquipmentDrop struct {
-	AutoAbility apiresource.NamedAPIResource   `json:"auto_ability"`
-	IsForced    bool                           `json:"is_forced"`
-	ForcedChars []apiresource.NamedAPIResource `json:"forced_characters"`
-	Probability *int32                         `json:"probability,omitempty"`
+	AutoAbility apiresource.Named   `json:"auto_ability"`
+	IsForced    bool                `json:"is_forced"`
+	ForcedChars []apiresource.Named `json:"forced_characters"`
+	Probability *int32              `json:"probability,omitempty"`
 }
 
 func (ed EquipmentDrop) GetAPIResource() apiresource.APIResource {

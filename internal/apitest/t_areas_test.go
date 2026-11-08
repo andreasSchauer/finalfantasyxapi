@@ -665,7 +665,7 @@ func TestRetrieveAreas(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Areas.Endpoint, "RetrieveAreas", testSrv.HandleAreas, compareAPIResourceLists[apiresource.AreaAPIResource])
+	testIDList(t, tests, api.E.Areas.Endpoint, "RetrieveAreas", testSrv.HandleAreas, compareAPIResourceLists[apiresource.Area])
 }
 
 func TestSubsectionAreas(t *testing.T) {
@@ -773,5 +773,5 @@ func TestSubsectionAreas(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Areas.Endpoint, "SubsectionAreas", nil, compareSimpleResourceLists[apiresource.AreaAPIResource, sectiontypes.AreaSimple])
+	testIDList(t, tests, api.E.Areas.Endpoint, "SubsectionAreas", nil, compareSimpleResourceLists[apiresource.Area, sectiontypes.AreaSimple])
 }

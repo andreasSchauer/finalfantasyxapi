@@ -7,14 +7,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func (i HandlerInput[T, R, A]) ToResAmt(id, amount int32) apiresource.ResourceAmount[A] {
+func (i Main[T, R, A]) ToResAmt(id, amount int32) apiresource.ResourceAmount[A] {
 	return apiresource.ResourceAmount[A]{
 		Resource: i.IDToResFunc(i, id),
 		Amount:   amount,
 	}
 }
 
-func (i HandlerInput[T, R, A]) ToResAmtFromNamePtr[NA apiresource.NameAmount](itemPtr *NA) *apiresource.ResourceAmount[A] {
+func (i Main[T, R, A]) ToResAmtFromNamePtr[NA apiresource.NameAmount](itemPtr *NA) *apiresource.ResourceAmount[A] {
 	if itemPtr == nil {
 		return nil
 	}
@@ -24,7 +24,7 @@ func (i HandlerInput[T, R, A]) ToResAmtFromNamePtr[NA apiresource.NameAmount](it
 	return &resAmt
 }
 
-func (i HandlerInput[T, R, A]) ToResAmtFromName[NA apiresource.NameAmount](item NA) apiresource.ResourceAmount[A] {
+func (i Main[T, R, A]) ToResAmtFromName[NA apiresource.NameAmount](item NA) apiresource.ResourceAmount[A] {
 	var parseResp ah.ParseResponse
 	switch item.GetVersion() {
 	case nil:
@@ -39,7 +39,7 @@ func (i HandlerInput[T, R, A]) ToResAmtFromName[NA apiresource.NameAmount](item 
 	}
 }
 
-func (i HandlerInput[T, R, A]) ToResAmtsFromNames[NA apiresource.NameAmount](items []NA) []apiresource.ResourceAmount[A] {
+func (i Main[T, R, A]) ToResAmtsFromNames[NA apiresource.NameAmount](items []NA) []apiresource.ResourceAmount[A] {
 	results := []apiresource.ResourceAmount[A]{}
 
 	for _, item := range items {
@@ -50,7 +50,7 @@ func (i HandlerInput[T, R, A]) ToResAmtsFromNames[NA apiresource.NameAmount](ite
 	return results
 }
 
-func (i HandlerInput[T, R, A]) ToResAmtType[NA apiresource.NameAmount, RA apiresource.ResourceAmountType[A]](old []NA, fn func(A, int32) RA) []RA {
+func (i Main[T, R, A]) ToResAmtType[NA apiresource.NameAmount, RA apiresource.ResourceAmountType[A]](old []NA, fn func(A, int32) RA) []RA {
 	resAmts := []RA{}
 
 	for _, item := range old {
@@ -63,7 +63,7 @@ func (i HandlerInput[T, R, A]) ToResAmtType[NA apiresource.NameAmount, RA apires
 }
 
 // ItemAmtsToChildResAmts takes a slice of parent resources and for each of them, attaches the amount of the resource's seedtypes.ItemAmount field to the resource.
-func ItemAmtsToChildResAmts[T seedtypes.HasItemAmount, R any, A apiresource.APIResource](i HandlerInput[T, R, A], resources []A) []apiresource.ResourceAmount[A] {
+func ItemAmtsToChildResAmts[T seedtypes.HasItemAmount, R any, A apiresource.APIResource](i Main[T, R, A], resources []A) []apiresource.ResourceAmount[A] {
 	resAmts := []apiresource.ResourceAmount[A]{}
 
 	for _, res := range resources {
@@ -77,7 +77,7 @@ func ItemAmtsToChildResAmts[T seedtypes.HasItemAmount, R any, A apiresource.APIR
 }
 
 // ItemAmtsToChildResAmts2 takes a slice of parent resources and for each of them, searches the resource's seedtypes.ItemAmount slice for the target item and attaches its amount to the resource.
-func ItemAmtsToChildResAmts2[T seedtypes.HasItemAmounts, R any, A apiresource.APIResource](i HandlerInput[T, R, A], resources []A, itemID int32) []apiresource.ResourceAmount[A] {
+func ItemAmtsToChildResAmts2[T seedtypes.HasItemAmounts, R any, A apiresource.APIResource](i Main[T, R, A], resources []A, itemID int32) []apiresource.ResourceAmount[A] {
 	resAmts := []apiresource.ResourceAmount[A]{}
 
 	for _, res := range resources {

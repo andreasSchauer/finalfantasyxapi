@@ -7,8 +7,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func refsToNamedAPIResources(refs []seedtypes.AbilityReference) []apiresource.NamedAPIResource {
-	abilities := []apiresource.NamedAPIResource{}
+func refsToNamedAPIResources(refs []seedtypes.AbilityReference) []apiresource.Named {
+	abilities := []apiresource.Named{}
 
 	for _, ref := range refs {
 		abilityRes := refToNamedAPIResource(ref)
@@ -18,8 +18,8 @@ func refsToNamedAPIResources(refs []seedtypes.AbilityReference) []apiresource.Na
 	return abilities
 }
 
-func refToNamedAPIResource(ref seedtypes.AbilityReference) apiresource.NamedAPIResource {
-	var res apiresource.NamedAPIResource
+func refToNamedAPIResource(ref seedtypes.AbilityReference) apiresource.Named {
+	var res apiresource.Named
 
 	switch database.AbilityType(ref.AbilityType) {
 	case database.AbilityTypeMiscAbility:
@@ -44,7 +44,7 @@ func refToNamedAPIResource(ref seedtypes.AbilityReference) apiresource.NamedAPIR
 	return res
 }
 
-func questToQuestAPIResource(quest seedtypes.Quest) apiresource.QuestAPIResource {
+func questToQuestAPIResource(quest seedtypes.Quest) apiresource.Quest {
 	switch quest.Type {
 	case database.QuestTypeSidequest:
 		return handlerinput.NameToQuestAPIResource(E.Sidequests, quest.Name)
@@ -53,5 +53,5 @@ func questToQuestAPIResource(quest seedtypes.Quest) apiresource.QuestAPIResource
 		return handlerinput.NameToQuestAPIResource(E.Subquests, quest.Name)
 	}
 
-	return apiresource.QuestAPIResource{}
+	return apiresource.Quest{}
 }

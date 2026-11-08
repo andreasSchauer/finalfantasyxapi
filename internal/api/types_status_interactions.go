@@ -51,13 +51,13 @@ func getStatusRemoval(ctx context.Context, status seedtypes.StatusCondition, que
 	return &statusRemoval, nil
 }
 
-func populateStatusInfliction(abilities []apiresource.TypedAPIResource) apitypes.StatusInfliction {
+func populateStatusInfliction(abilities []apiresource.Typed) apitypes.StatusInfliction {
 	infliction := apitypes.StatusInfliction{
-		PlayerAbilities:    []apiresource.NamedAPIResource{},
-		OverdriveAbilities: []apiresource.NamedAPIResource{},
-		ItemAbilities:      []apiresource.NamedAPIResource{},
-		MiscAbilities:      []apiresource.NamedAPIResource{},
-		EnemyAbilities:     []apiresource.NamedAPIResource{},
+		PlayerAbilities:    []apiresource.Named{},
+		OverdriveAbilities: []apiresource.Named{},
+		ItemAbilities:      []apiresource.Named{},
+		MiscAbilities:      []apiresource.Named{},
+		EnemyAbilities:     []apiresource.Named{},
 	}
 
 	for _, ability := range abilities {
@@ -96,12 +96,12 @@ func populateStatusInfliction(abilities []apiresource.TypedAPIResource) apitypes
 	return infliction
 }
 
-func populateStatusRemoval(abilities []apiresource.TypedAPIResource) apitypes.StatusRemoval {
+func populateStatusRemoval(abilities []apiresource.Typed) apitypes.StatusRemoval {
 	removal := apitypes.StatusRemoval{
-		PlayerAbilities:    []apiresource.NamedAPIResource{},
-		OverdriveAbilities: []apiresource.NamedAPIResource{},
-		ItemAbilities:      []apiresource.NamedAPIResource{},
-		EnemyAbilities:     []apiresource.NamedAPIResource{},
+		PlayerAbilities:    []apiresource.Named{},
+		OverdriveAbilities: []apiresource.Named{},
+		ItemAbilities:      []apiresource.Named{},
+		EnemyAbilities:     []apiresource.Named{},
 	}
 
 	for _, ability := range abilities {

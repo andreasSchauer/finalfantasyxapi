@@ -11,7 +11,7 @@ import (
 
 // db query searches for resources with matching boolean db column value
 
-func (i HandlerInput[T, R, A]) QueryBool(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryBool) IDFilter {
+func (i Main[T, R, A]) QueryBool(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryBool) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.QueryLookup[queryName]
 		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {
@@ -37,7 +37,7 @@ func (i HandlerInput[T, R, A]) QueryBool(r *http.Request, inputIDs []int32, quer
 
 // db query accumulates all resources that fulfill a certain condition. a false boolean flips these results.
 
-func (i HandlerInput[T, R, A]) QueryBool2(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryNoInput) IDFilter {
+func (i Main[T, R, A]) QueryBool2(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryNoInput) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.QueryLookup[queryName]
 		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {
@@ -65,7 +65,7 @@ func (i HandlerInput[T, R, A]) QueryBool2(r *http.Request, inputIDs []int32, que
 	}
 }
 
-func (i HandlerInput[T, R, A]) QueryBoolWrapper(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapBool) IDFilter {
+func (i Main[T, R, A]) QueryBoolWrapper(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapBool) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.QueryLookup[queryName]
 		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {

@@ -100,5 +100,5 @@ func TestRetrieveBlitzballPrizes(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.BlitzballPrizes.Endpoint, "RetrieveBlitzballPositions", testSrv.HandleBlitzballPrizes, compareAPIResourceLists[apiresource.UnnamedAPIResource])
+	testIDList(t, tests, api.E.BlitzballPrizes.Endpoint, "RetrieveBlitzballPositions", testSrv.HandleBlitzballPrizes, compareAPIResourceLists[apiresource.Unnamed])
 }

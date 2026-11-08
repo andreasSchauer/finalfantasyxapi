@@ -80,5 +80,5 @@ func TestRetrieveCelestialWeapons(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.CelestialWeapons.Endpoint, "RetrieveCelestialWeapons", testSrv.HandleCelestialWeapons, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.CelestialWeapons.Endpoint, "RetrieveCelestialWeapons", testSrv.HandleCelestialWeapons, compareAPIResourceLists[apiresource.Named])
 }

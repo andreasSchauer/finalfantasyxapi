@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func IDToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i HandlerInput[T, R, A], id int32) apiresource.QuestAPIResource {
+func IDToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i Main[T, R, A], id int32) apiresource.Quest {
 	questLookup, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	params := questLookup.GetResParamsQuest()
 
@@ -16,7 +16,7 @@ func IDToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource]
 	case string(database.QuestTypeSidequest):
 		sidequest, _ := lookup.GetResource(*params.Sidequest, lookup.L.Sidequests)
 
-		return apiresource.QuestAPIResource{
+		return apiresource.Quest{
 			ID:        params.ID,
 			Sidequest: sidequest.Name,
 			Subquest:  nil,
@@ -27,7 +27,7 @@ func IDToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource]
 		subquest, _ := lookup.GetResource(*params.Subquest, lookup.L.Subquests)
 		sidequest, _ := lookup.GetResourceByID(subquest.SidequestID, lookup.L.SidequestsID)
 
-		return apiresource.QuestAPIResource{
+		return apiresource.Quest{
 			ID:        params.ID,
 			Sidequest: sidequest.Name,
 			Subquest:  &subquest.Name,
@@ -35,16 +35,16 @@ func IDToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource]
 		}
 	}
 
-	return apiresource.QuestAPIResource{}
+	return apiresource.Quest{}
 }
 
-func NameToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i HandlerInput[T, R, A], name string) apiresource.QuestAPIResource {
+func NameToQuestAPIResource[T seedtypes.IsQuest, R any, A apiresource.APIResource](i Main[T, R, A], name string) apiresource.Quest {
 	quest, _ := lookup.GetResource(name, i.ObjLookup)
 	return IDToQuestAPIResource(i, quest.GetID())
 }
 
-func NamesToQuestAPIResources[T seedtypes.IsQuest, R any, A apiresource.APIResource](i HandlerInput[T, R, A], names []string) []apiresource.QuestAPIResource {
-	resources := make([]apiresource.QuestAPIResource, len(names))
+func NamesToQuestAPIResources[T seedtypes.IsQuest, R any, A apiresource.APIResource](i Main[T, R, A], names []string) []apiresource.Quest {
+	resources := make([]apiresource.Quest, len(names))
 
 	for idx, name := range names {
 		resources[idx] = NameToQuestAPIResource(i, name)

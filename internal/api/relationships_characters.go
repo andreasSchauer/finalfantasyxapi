@@ -80,8 +80,8 @@ func getCharacterClstlFormula(char apitypes.Character) *string {
 	return &weapon.Formula
 }
 
-func getCharacterModeAmts(char seedtypes.Character) []apiresource.ResourceAmount[apiresource.NamedAPIResource] {
-	resAmts := []apiresource.ResourceAmount[apiresource.NamedAPIResource]{}
+func getCharacterModeAmts(char seedtypes.Character) []apiresource.ResourceAmount[apiresource.Named] {
+	resAmts := []apiresource.ResourceAmount[apiresource.Named]{}
 
 	if char.IsStoryBased {
 		return resAmts
@@ -99,12 +99,12 @@ func getCharacterModeAmts(char seedtypes.Character) []apiresource.ResourceAmount
 	return resAmts
 }
 
-func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.ResourceAmount[apiresource.NamedAPIResource], error) {
+func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.ResourceAmount[apiresource.Named], error) {
 	i := E.OverdriveModes
 
 	mode, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	if len(mode.ActionsToLearn) == 0 {
-		return apiresource.ResourceAmount[apiresource.NamedAPIResource]{}, errs.ErrContinue
+		return apiresource.ResourceAmount[apiresource.Named]{}, errs.ErrContinue
 	}
 
 	amount := mode.ActionsToLearn[char.GetID()-1].Amount

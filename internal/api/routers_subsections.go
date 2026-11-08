@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A], idStr, sectionName string) {
+func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A], idStr, sectionName string) {
 	parseRes, err := ParseID(idStr, i.ResTypeSingle, len(i.ObjLookup))
 	if HandleHTTPError(w, err) {
 		return
@@ -59,7 +59,7 @@ func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](
 	respondWithJSON(w, http.StatusOK, list)
 }
 
-func HandleParameters[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
+func HandleParameters[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A]) {
 	err := i.VerifyQueriesAltList(r, ts.SnParameters)
 	if HandleHTTPError(w, err) {
 		return
@@ -68,7 +68,7 @@ func HandleParameters[T seedtypes.Lookupable, R any, A apiresource.APIResource](
 	handleParametersWrapper(w, r, i.Endpoint, i.QueryLookup)
 }
 
-func HandleParametersEnums(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEnums) {
+func HandleParametersEnums(w http.ResponseWriter, r *http.Request, i handlerinput.Enums) {
 	err := i.VerifyQueriesAltList(r, ts.SnParameters)
 	if HandleHTTPError(w, err) {
 		return
@@ -77,7 +77,7 @@ func HandleParametersEnums(w http.ResponseWriter, r *http.Request, i handlerinpu
 	handleParametersWrapper(w, r, i.Endpoint, i.QueryLookup)
 }
 
-func HandleParametersEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEndpoints) {
+func HandleParametersEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.Endpoints) {
 	err := i.VerifyQueriesAltList(r, ts.SnParameters)
 	if HandleHTTPError(w, err) {
 		return
@@ -96,7 +96,7 @@ func handleParametersWrapper(w http.ResponseWriter, r *http.Request, endpoint ts
 	respondWithJSON(w, http.StatusOK, parameterList)
 }
 
-func HandleSections[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
+func HandleSections[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A]) {
 	err := i.VerifyQueriesAltList(r, ts.SnSections)
 	if HandleHTTPError(w, err) {
 		return
@@ -111,7 +111,7 @@ func HandleSections[T seedtypes.Lookupable, R any, A apiresource.APIResource](w 
 	respondWithJSON(w, http.StatusOK, sectionList)
 }
 
-func HandleSimple[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
+func HandleSimple[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A]) {
 	_, ok := i.Subsections[ts.SnSimple]
 	if !ok {
 		respondWithError(w, http.StatusBadRequest, fmt.Sprintf("simple view is not available for endpoint /%s", i.Endpoint), nil)
@@ -132,7 +132,7 @@ func HandleSimple[T seedtypes.Lookupable, R any, A apiresource.APIResource](w ht
 	respondWithJSON(w, http.StatusOK, subResList)
 }
 
-func HandleIDsQuery[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.HandlerInput[T, R, A]) ([]int32, error) {
+func HandleIDsQuery[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A]) ([]int32, error) {
 	err := i.VerifyIDsQuery(r)
 	if err != nil {
 		return nil, err

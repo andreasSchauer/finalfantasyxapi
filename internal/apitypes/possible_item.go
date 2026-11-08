@@ -5,7 +5,7 @@ import (
 )
 
 type PossibleItem struct {
-	apiresource.ResourceAmount[apiresource.TypedAPIResource]
+	apiresource.ResourceAmount[apiresource.Typed]
 	Chance int32 `json:"chance"`
 }
 

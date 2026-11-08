@@ -14,7 +14,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMonsterFormation(r *http.Request, i handlerinput.HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource], id int32) (apitypes.MonsterFormation, error) {
+func getMonsterFormation(r *http.Request, i handlerinput.Main[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.Unnamed], id int32) (apitypes.MonsterFormation, error) {
 	formation, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.MonsterFormation{}, err
@@ -37,7 +37,7 @@ func getMonsterFormation(r *http.Request, i handlerinput.HandlerInput[seedtypes.
 	return response, nil
 }
 
-func retrieveMonsterFormations(r *http.Request, i handlerinput.HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]) ([]int32, error) {
+func retrieveMonsterFormations(r *http.Request, i handlerinput.Main[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.Unnamed]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

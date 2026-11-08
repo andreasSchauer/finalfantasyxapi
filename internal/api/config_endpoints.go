@@ -19,70 +19,70 @@ import (
 var E = &Endpoints{}
 
 type Endpoints struct {
-	Locations          handlerinput.HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource]
-	Sublocations       handlerinput.HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource]
-	Areas              handlerinput.HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]
-	MonsterFormations  handlerinput.HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]
-	Shops              handlerinput.HandlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource]
-	Treasures          handlerinput.HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource]
-	Quests             handlerinput.HandlerInput[seedtypes.Quest, apitypes.Quest, apiresource.QuestAPIResource]
-	Sidequests         handlerinput.HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource]
-	Subquests          handlerinput.HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource]
-	ArenaCreations     handlerinput.HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource]
-	BlitzballPrizes    handlerinput.HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource]
-	Songs              handlerinput.HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource]
-	FMVs               handlerinput.HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource]
-	PlayerUnits        handlerinput.HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]
-	Characters         handlerinput.HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]
-	Aeons              handlerinput.HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]
-	CharacterClasses   handlerinput.HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource]
-	Monsters           handlerinput.HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]
-	Abilities          handlerinput.HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource]
-	PlayerAbilities    handlerinput.HandlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource]
-	OverdriveAbilities handlerinput.HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]
-	ItemAbilities      handlerinput.HandlerInput[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource]
-	TriggerCommands    handlerinput.HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]
-	MiscAbilities      handlerinput.HandlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource]
-	EnemyAbilities     handlerinput.HandlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource]
-	AeonCommands       handlerinput.HandlerInput[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource]
-	OverdriveCommands  handlerinput.HandlerInput[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource]
-	Overdrives         handlerinput.HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource]
-	RonsoRages         handlerinput.HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource]
-	Submenus           handlerinput.HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource]
-	Topmenus           handlerinput.HandlerInput[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource]
-	AllItems           handlerinput.HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]
-	Items              handlerinput.HandlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource]
-	KeyItems           handlerinput.HandlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource]
-	Spheres            handlerinput.HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource]
-	Primers            handlerinput.HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource]
-	Mixes              handlerinput.HandlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource]
-	AutoAbilities      handlerinput.HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]
-	EquipmentTables    handlerinput.HandlerInput[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource]
-	Equipment          handlerinput.HandlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource]
-	CelestialWeapons   handlerinput.HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource]
-	Stats              handlerinput.HandlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource]
-	Properties         handlerinput.HandlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource]
-	OverdriveModes     handlerinput.HandlerInput[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource]
-	Elements           handlerinput.HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]
-	StatusConditions   handlerinput.HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource]
-	Modifiers          handlerinput.HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource]
-	AgilityTiers       handlerinput.HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]
-	Enums              handlerinput.HandlerInputEnums
-	Endpoints          handlerinput.HandlerInputEndpoints
-	AlBhed             handlerinput.ServiceInput[servicetypes.AlBhedParams, servicetypes.AlBhedResponse]
-	TurnOrder          handlerinput.ServiceInput[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]
-	DropChance         handlerinput.ServiceInput[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]
-	CritChance         handlerinput.ServiceInput[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]
+	Locations          handlerinput.Main[seedtypes.Location, apitypes.Location, apiresource.Named]
+	Sublocations       handlerinput.Main[seedtypes.Sublocation, apitypes.Sublocation, apiresource.Named]
+	Areas              handlerinput.Main[seedtypes.Area, apitypes.Area, apiresource.Area]
+	MonsterFormations  handlerinput.Main[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.Unnamed]
+	Shops              handlerinput.Main[seedtypes.Shop, apitypes.Shop, apiresource.Unnamed]
+	Treasures          handlerinput.Main[seedtypes.Treasure, apitypes.Treasure, apiresource.Unnamed]
+	Quests             handlerinput.Main[seedtypes.Quest, apitypes.Quest, apiresource.Quest]
+	Sidequests         handlerinput.Main[seedtypes.Sidequest, apitypes.Sidequest, apiresource.Quest]
+	Subquests          handlerinput.Main[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest]
+	ArenaCreations     handlerinput.Main[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.Named]
+	BlitzballPrizes    handlerinput.Main[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.Named]
+	Songs              handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named]
+	FMVs               handlerinput.Main[seedtypes.FMV, apitypes.FMV, apiresource.Named]
+	PlayerUnits        handlerinput.Main[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.Typed]
+	Characters         handlerinput.Main[seedtypes.Character, apitypes.Character, apiresource.Named]
+	Aeons              handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named]
+	CharacterClasses   handlerinput.Main[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.Named]
+	Monsters           handlerinput.Main[seedtypes.Monster, apitypes.Monster, apiresource.Named]
+	Abilities          handlerinput.Main[seedtypes.Ability, apitypes.Ability, apiresource.Typed]
+	PlayerAbilities    handlerinput.Main[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.Named]
+	OverdriveAbilities handlerinput.Main[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.Named]
+	ItemAbilities      handlerinput.Main[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.Named]
+	TriggerCommands    handlerinput.Main[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.Named]
+	MiscAbilities      handlerinput.Main[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.Named]
+	EnemyAbilities     handlerinput.Main[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.Named]
+	AeonCommands       handlerinput.Main[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.Named]
+	OverdriveCommands  handlerinput.Main[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.Named]
+	Overdrives         handlerinput.Main[seedtypes.Overdrive, apitypes.Overdrive, apiresource.Named]
+	RonsoRages         handlerinput.Main[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.Named]
+	Submenus           handlerinput.Main[seedtypes.Submenu, apitypes.Submenu, apiresource.Named]
+	Topmenus           handlerinput.Main[seedtypes.Topmenu, apitypes.Topmenu, apiresource.Named]
+	AllItems           handlerinput.Main[seedtypes.MasterItem, apitypes.MasterItem, apiresource.Typed]
+	Items              handlerinput.Main[seedtypes.Item, apitypes.Item, apiresource.Named]
+	KeyItems           handlerinput.Main[seedtypes.KeyItem, apitypes.KeyItem, apiresource.Named]
+	Spheres            handlerinput.Main[seedtypes.Sphere, apitypes.Sphere, apiresource.Named]
+	Primers            handlerinput.Main[seedtypes.Primer, apitypes.Primer, apiresource.Named]
+	Mixes              handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named]
+	AutoAbilities      handlerinput.Main[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.Named]
+	EquipmentTables    handlerinput.Main[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.Unnamed]
+	Equipment          handlerinput.Main[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.Named]
+	CelestialWeapons   handlerinput.Main[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.Named]
+	Stats              handlerinput.Main[seedtypes.Stat, apitypes.Stat, apiresource.Named]
+	Properties         handlerinput.Main[seedtypes.Property, apitypes.Property, apiresource.Named]
+	OverdriveModes     handlerinput.Main[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.Named]
+	Elements           handlerinput.Main[seedtypes.Element, apitypes.Element, apiresource.Named]
+	StatusConditions   handlerinput.Main[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.Named]
+	Modifiers          handlerinput.Main[seedtypes.Modifier, apitypes.Modifier, apiresource.Named]
+	AgilityTiers       handlerinput.Main[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.Unnamed]
+	Enums              handlerinput.Enums
+	Endpoints          handlerinput.Endpoints
+	AlBhed             handlerinput.Service[servicetypes.AlBhedParams, servicetypes.AlBhedResponse]
+	TurnOrder          handlerinput.Service[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]
+	DropChance         handlerinput.Service[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]
+	CritChance         handlerinput.Service[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]
 }
 
 func (E *Endpoints) Init() {
-	E.Locations = handlerinput.HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource]{
+	E.Locations = handlerinput.Main[seedtypes.Location, apitypes.Location, apiresource.Named]{
 		Endpoint:      ts.EpLocations,
 		ResTypeSingle: ts.RTSLocations,
 		ResTypePlural: ts.RTPLocations,
 		ObjLookup:     lookup.L.Locations,
 		ObjLookupID:   lookup.L.LocationsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Location, apitypes.Location, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetLocationIDs,
 		GetSingleFunc: getLocation,
 		RetrieveFunc:  retrieveLocations,
@@ -131,13 +131,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Sublocations = handlerinput.HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource]{
+	E.Sublocations = handlerinput.Main[seedtypes.Sublocation, apitypes.Sublocation, apiresource.Named]{
 		Endpoint:      ts.EpSublocations,
 		ResTypeSingle: ts.RTSSublocations,
 		ResTypePlural: ts.RTPSublocations,
 		ObjLookup:     lookup.L.Sublocations,
 		ObjLookupID:   lookup.L.SublocationsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Sublocation, apitypes.Sublocation, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetSublocationIDs,
 		GetSingleFunc: getSublocation,
 		RetrieveFunc:  retrieveSublocations,
@@ -180,7 +180,7 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Areas = handlerinput.HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]{
+	E.Areas = handlerinput.Main[seedtypes.Area, apitypes.Area, apiresource.Area]{
 		Endpoint:      ts.EpAreas,
 		ResTypeSingle: ts.RTSAreas,
 		ResTypePlural: ts.RTPAreas,
@@ -221,13 +221,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.MonsterFormations = handlerinput.HandlerInput[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource]{
+	E.MonsterFormations = handlerinput.Main[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.Unnamed]{
 		Endpoint:      ts.EpMonsterFormations,
 		ResTypeSingle: ts.RTSMonsterFormations,
 		ResTypePlural: ts.RTPMonsterFormations,
 		ObjLookup:     lookup.L.MonsterFormations,
 		ObjLookupID:   lookup.L.MonsterFormationsID,
-		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.UnnamedAPIResource],
+		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.Unnamed],
 		RetrieveQuery: config.Cfg.DB.GetMonsterFormationIDs,
 		GetSingleFunc: getMonsterFormation,
 		RetrieveFunc:  retrieveMonsterFormations,
@@ -244,13 +244,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Shops = handlerinput.HandlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource]{
+	E.Shops = handlerinput.Main[seedtypes.Shop, apitypes.Shop, apiresource.Unnamed]{
 		Endpoint:      ts.EpShops,
 		ResTypeSingle: ts.RTSShops,
 		ResTypePlural: ts.RTPShops,
 		ObjLookup:     lookup.L.Shops,
 		ObjLookupID:   lookup.L.ShopsID,
-		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource],
+		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.Shop, apitypes.Shop, apiresource.Unnamed],
 		RetrieveQuery: config.Cfg.DB.GetShopIDs,
 		GetSingleFunc: getShop,
 		RetrieveFunc:  retrieveShops,
@@ -262,39 +262,39 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Treasures = handlerinput.HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource]{
+	E.Treasures = handlerinput.Main[seedtypes.Treasure, apitypes.Treasure, apiresource.Unnamed]{
 		Endpoint:      ts.EpTreasures,
 		ResTypeSingle: ts.RTSTreasures,
 		ResTypePlural: ts.RTPTreasures,
 		ObjLookup:     lookup.L.Treasures,
 		ObjLookupID:   lookup.L.TreasuresID,
-		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource],
+		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.Treasure, apitypes.Treasure, apiresource.Unnamed],
 		RetrieveQuery: config.Cfg.DB.GetTreasureIDs,
 		GetSingleFunc: getTreasure,
 		AvlFunc:       filterAvlTreasures,
 		RetrieveFunc:  retrieveTreasures,
 	}
 
-	E.Quests = handlerinput.HandlerInput[seedtypes.Quest, apitypes.Quest, apiresource.QuestAPIResource]{
+	E.Quests = handlerinput.Main[seedtypes.Quest, apitypes.Quest, apiresource.Quest]{
 		Endpoint:      ts.EpQuests,
 		ResTypeSingle: ts.RTSQuests,
 		ResTypePlural: ts.RTPQuests,
 		ObjLookup:     lookup.L.Quests,
 		ObjLookupID:   lookup.L.QuestsID,
-		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Quest, apitypes.Quest, apiresource.QuestAPIResource],
+		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Quest, apitypes.Quest, apiresource.Quest],
 		RetrieveQuery: config.Cfg.DB.GetQuestIDs,
 		GetSingleFunc: getQuest,
 		RetrieveFunc:  retrieveQuests,
 		AvlFunc:       filterAvlQuests,
 	}
 
-	E.Sidequests = handlerinput.HandlerInput[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource]{
+	E.Sidequests = handlerinput.Main[seedtypes.Sidequest, apitypes.Sidequest, apiresource.Quest]{
 		Endpoint:      ts.EpSidequests,
 		ResTypeSingle: ts.RTSSidequests,
 		ResTypePlural: ts.RTPSidequests,
 		ObjLookup:     lookup.L.Sidequests,
 		ObjLookupID:   lookup.L.SidequestsID,
-		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Sidequest, apitypes.Sidequest, apiresource.QuestAPIResource],
+		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Sidequest, apitypes.Sidequest, apiresource.Quest],
 		RetrieveQuery: config.Cfg.DB.GetSidequestIDs,
 		GetSingleFunc: getSidequest,
 		RetrieveFunc:  retrieveSidequests,
@@ -307,86 +307,86 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Subquests = handlerinput.HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource]{
+	E.Subquests = handlerinput.Main[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest]{
 		Endpoint:      ts.EpSubquests,
 		ResTypeSingle: ts.RTSSubquests,
 		ResTypePlural: ts.RTPSubquests,
 		ObjLookup:     lookup.L.Subquests,
 		ObjLookupID:   lookup.L.SubquestsID,
-		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource],
+		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest],
 		RetrieveQuery: config.Cfg.DB.GetSubquestIDs,
 		GetSingleFunc: getSubquest,
 		RetrieveFunc:  retrieveSubquests,
 		AvlFunc:       filterAvlSubquests,
 	}
 
-	E.ArenaCreations = handlerinput.HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource]{
+	E.ArenaCreations = handlerinput.Main[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.Named]{
 		Endpoint:      ts.EpArenaCreations,
 		ResTypeSingle: ts.RTSArenaCreations,
 		ResTypePlural: ts.RTPArenaCreations,
 		ObjLookup:     lookup.L.ArenaCreations,
 		ObjLookupID:   lookup.L.ArenaCreationsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetArenaCreationIDs,
 		GetSingleFunc: getArenaCreation,
 		RetrieveFunc:  retrieveArenaCreations,
 	}
 
-	E.BlitzballPrizes = handlerinput.HandlerInput[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource]{
+	E.BlitzballPrizes = handlerinput.Main[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.Named]{
 		Endpoint:      ts.EpBlitzballPrizes,
 		ResTypeSingle: ts.RTSBlitzballPrizes,
 		ResTypePlural: ts.RTPBlitzballPrizes,
 		ObjLookup:     lookup.L.Positions,
 		ObjLookupID:   lookup.L.PositionsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetBlitzballPrizeIDs,
 		GetSingleFunc: getBlitzballPrize,
 		RetrieveFunc:  retrieveBlitzballPrizes,
 	}
 
-	E.Songs = handlerinput.HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource]{
+	E.Songs = handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named]{
 		Endpoint:      ts.EpSongs,
 		ResTypeSingle: ts.RTSSongs,
 		ResTypePlural: ts.RTPSongs,
 		ObjLookup:     lookup.L.Songs,
 		ObjLookupID:   lookup.L.SongsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Song, apitypes.Song, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetSongIDs,
 		GetSingleFunc: getSong,
 		RetrieveFunc:  retrieveSongs,
 	}
 
-	E.FMVs = handlerinput.HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource]{
+	E.FMVs = handlerinput.Main[seedtypes.FMV, apitypes.FMV, apiresource.Named]{
 		Endpoint:      ts.EpFMVs,
 		ResTypeSingle: ts.RTSFMVs,
 		ResTypePlural: ts.RTPFMVs,
 		ObjLookup:     lookup.L.FMVs,
 		ObjLookupID:   lookup.L.FMVsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.FMV, apitypes.FMV, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetFmvIDs,
 		GetSingleFunc: getFMV,
 		RetrieveFunc:  retrieveFMVs,
 	}
 
-	E.PlayerUnits = handlerinput.HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]{
+	E.PlayerUnits = handlerinput.Main[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.Typed]{
 		Endpoint:      ts.EpPlayerUnits,
 		ResTypeSingle: ts.RTSPlayerUnits,
 		ResTypePlural: ts.RTPPlayerUnits,
 		ObjLookup:     lookup.L.PlayerUnits,
 		ObjLookupID:   lookup.L.PlayerUnitsID,
-		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource],
+		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.Typed],
 		RetrieveQuery: config.Cfg.DB.GetPlayerUnitIDs,
 		GetSingleFunc: getPlayerUnit,
 		RetrieveFunc:  retrievePlayerUnits,
 	}
 
-	E.Characters = handlerinput.HandlerInput[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource]{
+	E.Characters = handlerinput.Main[seedtypes.Character, apitypes.Character, apiresource.Named]{
 		Endpoint:      ts.EpCharacters,
 		ResTypeSingle: ts.RTSCharacters,
 		ResTypePlural: ts.RTPCharacters,
 		ObjLookup:     lookup.L.Characters,
 		ObjLookupID:   lookup.L.CharactersID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Character, apitypes.Character, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Character, apitypes.Character, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetCharacterIDs,
 		GetSingleFunc: getCharacter,
 		RetrieveFunc:  retrieveCharacters,
@@ -414,13 +414,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Aeons = handlerinput.HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]{
+	E.Aeons = handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named]{
 		Endpoint:      ts.EpAeons,
 		ResTypeSingle: ts.RTSAeons,
 		ResTypePlural: ts.RTPAeons,
 		ObjLookup:     lookup.L.Aeons,
 		ObjLookupID:   lookup.L.AeonsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Aeon, apitypes.Aeon, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetAeonIDs,
 		GetSingleFunc: getAeon,
 		RetrieveFunc:  retrieveAeons,
@@ -443,13 +443,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.CharacterClasses = handlerinput.HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource]{
+	E.CharacterClasses = handlerinput.Main[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.Named]{
 		Endpoint:      ts.EpCharacterClasses,
 		ResTypeSingle: ts.RTSCharacterClasses,
 		ResTypePlural: ts.RTPCharacterClasses,
 		ObjLookup:     lookup.L.CharClasses,
 		ObjLookupID:   lookup.L.CharClassesID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetCharacterClassesIDs,
 		GetSingleFunc: getCharacterClass,
 		RetrieveFunc:  retrieveCharacterClasses,
@@ -473,13 +473,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Monsters = handlerinput.HandlerInput[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource]{
+	E.Monsters = handlerinput.Main[seedtypes.Monster, apitypes.Monster, apiresource.Named]{
 		Endpoint:         ts.EpMonsters,
 		ResTypeSingle:    ts.RTSMonsters,
 		ResTypePlural:    ts.RTPMonsters,
 		ObjLookup:        lookup.L.Monsters,
 		ObjLookupID:      lookup.L.MonstersID,
-		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.Monster, apitypes.Monster, apiresource.NamedAPIResource],
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.Monster, apitypes.Monster, apiresource.Named],
 		GetMultipleQuery: config.Cfg.DB.GetMonsterIDsByName,
 		RetrieveQuery:    config.Cfg.DB.GetMonsterIDs,
 		GetSingleFunc:    getMonster,
@@ -506,13 +506,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Abilities = handlerinput.HandlerInput[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource]{
+	E.Abilities = handlerinput.Main[seedtypes.Ability, apitypes.Ability, apiresource.Typed]{
 		Endpoint:      ts.EpAbilities,
 		ResTypeSingle: ts.RTSAbilities,
 		ResTypePlural: ts.RTPAbilities,
 		ObjLookup:     lookup.L.Abilities,
 		ObjLookupID:   lookup.L.AbilitiesID,
-		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.Ability, apitypes.Ability, apiresource.TypedAPIResource],
+		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.Ability, apitypes.Ability, apiresource.Typed],
 		RetrieveQuery: config.Cfg.DB.GetAbilityIDs,
 		GetSingleFunc: getAbility,
 		RetrieveFunc:  retrieveAbilities,
@@ -523,13 +523,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.PlayerAbilities = handlerinput.HandlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource]{
+	E.PlayerAbilities = handlerinput.Main[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.Named]{
 		Endpoint:         ts.EpPlayerAbilities,
 		ResTypeSingle:    ts.RTSPlayerAbilities,
 		ResTypePlural:    ts.RTPPlayerAbilities,
 		ObjLookup:        lookup.L.PlayerAbilities,
 		ObjLookupID:      lookup.L.PlayerAbilitiesID,
-		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource],
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.Named],
 		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypePlayerAbility),
 		RetrieveQuery:    config.Cfg.DB.GetPlayerAbilityIDs,
 		GetSingleFunc:    getPlayerAbility,
@@ -546,13 +546,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.OverdriveAbilities = handlerinput.HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]{
+	E.OverdriveAbilities = handlerinput.Main[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.Named]{
 		Endpoint:         ts.EpOverdriveAbilities,
 		ResTypeSingle:    ts.RTSOverdriveAbilities,
 		ResTypePlural:    ts.RTPOverdriveAbilities,
 		ObjLookup:        lookup.L.OverdriveAbilities,
 		ObjLookupID:      lookup.L.OverdriveAbilitiesID,
-		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource],
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.Named],
 		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeOverdriveAbility),
 		RetrieveQuery:    config.Cfg.DB.GetOverdriveAbilityIDs,
 		GetSingleFunc:    getOverdriveAbility,
@@ -564,13 +564,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.ItemAbilities = handlerinput.HandlerInput[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource]{
+	E.ItemAbilities = handlerinput.Main[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.Named]{
 		Endpoint:      ts.EpItemAbilities,
 		ResTypeSingle: ts.RTSItemAbilities,
 		ResTypePlural: ts.RTPItemAbilities,
 		ObjLookup:     lookup.L.ItemAbilities,
 		ObjLookupID:   lookup.L.ItemAbilitiesID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetItemAbilityIDs,
 		GetSingleFunc: getItemAbility,
 		RetrieveFunc:  retrieveItemAbilities,
@@ -581,13 +581,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.TriggerCommands = handlerinput.HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]{
+	E.TriggerCommands = handlerinput.Main[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.Named]{
 		Endpoint:         ts.EpTriggerCommands,
 		ResTypeSingle:    ts.RTSTriggerCommands,
 		ResTypePlural:    ts.RTPTriggerCommands,
 		ObjLookup:        lookup.L.TriggerCommands,
 		ObjLookupID:      lookup.L.TriggerCommandsID,
-		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource],
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.Named],
 		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeTriggerCommand),
 		RetrieveQuery:    config.Cfg.DB.GetTriggerCommandIDs,
 		GetSingleFunc:    getTriggerCommand,
@@ -599,13 +599,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.MiscAbilities = handlerinput.HandlerInput[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource]{
+	E.MiscAbilities = handlerinput.Main[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.Named]{
 		Endpoint:         ts.EpMiscAbilities,
 		ResTypeSingle:    ts.RTSMiscAbilities,
 		ResTypePlural:    ts.RTPMiscAbilities,
 		ObjLookup:        lookup.L.MiscAbilities,
 		ObjLookupID:      lookup.L.MiscAbilitiesID,
-		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.NamedAPIResource],
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.Named],
 		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeMiscAbility),
 		RetrieveQuery:    config.Cfg.DB.GetMiscAbilityIDs,
 		GetSingleFunc:    getMiscAbility,
@@ -617,13 +617,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.EnemyAbilities = handlerinput.HandlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource]{
+	E.EnemyAbilities = handlerinput.Main[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.Named]{
 		Endpoint:         ts.EpEnemyAbilities,
 		ResTypeSingle:    ts.RTSEnemyAbilities,
 		ResTypePlural:    ts.RTPEnemyAbilities,
 		ObjLookup:        lookup.L.EnemyAbilities,
 		ObjLookupID:      lookup.L.EnemyAbilitiesID,
-		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource],
+		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.Named],
 		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeEnemyAbility),
 		RetrieveQuery:    config.Cfg.DB.GetEnemyAbilityIDs,
 		GetSingleFunc:    getEnemyAbility,
@@ -640,25 +640,25 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.AeonCommands = handlerinput.HandlerInput[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource]{
+	E.AeonCommands = handlerinput.Main[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.Named]{
 		Endpoint:      ts.EpAeonCommands,
 		ResTypeSingle: ts.RTSAeonCommands,
 		ResTypePlural: ts.RTPAeonCommands,
 		ObjLookup:     lookup.L.AeonCommands,
 		ObjLookupID:   lookup.L.AeonCommandsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetAeonCommandIDs,
 		GetSingleFunc: getAeonCommand,
 		RetrieveFunc:  retrieveAeonCommands,
 	}
 
-	E.OverdriveCommands = handlerinput.HandlerInput[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource]{
+	E.OverdriveCommands = handlerinput.Main[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.Named]{
 		Endpoint:      ts.EpOverdriveCommands,
 		ResTypeSingle: ts.RTSOverdriveCommands,
 		ResTypePlural: ts.RTPOverdriveCommands,
 		ObjLookup:     lookup.L.OverdriveCommands,
 		ObjLookupID:   lookup.L.OverdriveCommandsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetOverdriveCommandIDs,
 		GetSingleFunc: getOverdriveCommand,
 		RetrieveFunc:  retrieveOverdriveCommands,
@@ -674,13 +674,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Overdrives = handlerinput.HandlerInput[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource]{
+	E.Overdrives = handlerinput.Main[seedtypes.Overdrive, apitypes.Overdrive, apiresource.Named]{
 		Endpoint:      ts.EpOverdrives,
 		ResTypeSingle: ts.RTSOverdrives,
 		ResTypePlural: ts.RTPOverdrives,
 		ObjLookup:     lookup.L.Overdrives,
 		ObjLookupID:   lookup.L.OverdrivesID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Overdrive, apitypes.Overdrive, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Overdrive, apitypes.Overdrive, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetOverdriveIDs,
 		GetSingleFunc: getOverdrive,
 		RetrieveFunc:  retrieveOverdrives,
@@ -695,13 +695,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.RonsoRages = handlerinput.HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource]{
+	E.RonsoRages = handlerinput.Main[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.Named]{
 		Endpoint:      ts.EpRonsoRages,
 		ResTypeSingle: ts.RTSRonsoRages,
 		ResTypePlural: ts.RTPRonsoRages,
 		ObjLookup:     lookup.L.RonsoRages,
 		ObjLookupID:   lookup.L.RonsoRagesID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetRonsoRageIDs,
 		GetSingleFunc: getRonsoRage,
 		RetrieveFunc:  retrieveRonsoRages,
@@ -714,13 +714,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Submenus = handlerinput.HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource]{
+	E.Submenus = handlerinput.Main[seedtypes.Submenu, apitypes.Submenu, apiresource.Named]{
 		Endpoint:      ts.EpSubmenus,
 		ResTypeSingle: ts.RTSSubmenus,
 		ResTypePlural: ts.RTPSubmenus,
 		ObjLookup:     lookup.L.Submenus,
 		ObjLookupID:   lookup.L.SubmenusID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Submenu, apitypes.Submenu, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetSubmenuIDs,
 		GetSingleFunc: getSubmenu,
 		RetrieveFunc:  retrieveSubmenus,
@@ -732,13 +732,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Topmenus = handlerinput.HandlerInput[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource]{
+	E.Topmenus = handlerinput.Main[seedtypes.Topmenu, apitypes.Topmenu, apiresource.Named]{
 		Endpoint:      ts.EpTopmenus,
 		ResTypeSingle: ts.RTSTopmenus,
 		ResTypePlural: ts.RTPTopmenus,
 		ObjLookup:     lookup.L.Topmenus,
 		ObjLookupID:   lookup.L.TopmenusID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Topmenu, apitypes.Topmenu, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetTopmenuIDs,
 		GetSingleFunc: getTopmenu,
 		RetrieveFunc:  retrieveTopmenus,
@@ -750,26 +750,26 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.AllItems = handlerinput.HandlerInput[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource]{
+	E.AllItems = handlerinput.Main[seedtypes.MasterItem, apitypes.MasterItem, apiresource.Typed]{
 		Endpoint:      ts.EpAllItems,
 		ResTypeSingle: ts.RTSAllItems,
 		ResTypePlural: ts.RTPAllItems,
 		ObjLookup:     lookup.L.MasterItems,
 		ObjLookupID:   lookup.L.MasterItemsID,
-		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.MasterItem, apitypes.MasterItem, apiresource.TypedAPIResource],
+		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.MasterItem, apitypes.MasterItem, apiresource.Typed],
 		RetrieveQuery: config.Cfg.DB.GetMasterItemIDs,
 		GetSingleFunc: getMasterItem,
 		RetrieveFunc:  retrieveMasterItems,
 		AvlFunc:       filterAvlMasterItems,
 	}
 
-	E.Items = handlerinput.HandlerInput[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource]{
+	E.Items = handlerinput.Main[seedtypes.Item, apitypes.Item, apiresource.Named]{
 		Endpoint:      ts.EpItems,
 		ResTypeSingle: ts.RTSItems,
 		ResTypePlural: ts.RTPItems,
 		ObjLookup:     lookup.L.Items,
 		ObjLookupID:   lookup.L.ItemsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Item, apitypes.Item, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Item, apitypes.Item, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetItemIDs,
 		GetSingleFunc: getItem,
 		RetrieveFunc:  retrieveItems,
@@ -782,52 +782,52 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Spheres = handlerinput.HandlerInput[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource]{
+	E.Spheres = handlerinput.Main[seedtypes.Sphere, apitypes.Sphere, apiresource.Named]{
 		Endpoint:      ts.EpSpheres,
 		ResTypeSingle: ts.RTSSpheres,
 		ResTypePlural: ts.RTPSpheres,
 		ObjLookup:     lookup.L.Spheres,
 		ObjLookupID:   lookup.L.SpheresID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Sphere, apitypes.Sphere, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Sphere, apitypes.Sphere, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetSphereIDs,
 		GetSingleFunc: getSphere,
 		RetrieveFunc:  retrieveSpheres,
 		AvlFunc:       filterAvlSpheres,
 	}
 
-	E.KeyItems = handlerinput.HandlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource]{
+	E.KeyItems = handlerinput.Main[seedtypes.KeyItem, apitypes.KeyItem, apiresource.Named]{
 		Endpoint:      ts.EpKeyItems,
 		ResTypeSingle: ts.RTSKeyItems,
 		ResTypePlural: ts.RTPKeyItems,
 		ObjLookup:     lookup.L.KeyItems,
 		ObjLookupID:   lookup.L.KeyItemsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.KeyItem, apitypes.KeyItem, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetKeyItemIDs,
 		GetSingleFunc: getKeyItem,
 		RetrieveFunc:  retrieveKeyItems,
 		AvlFunc:       filterAvlKeyItems,
 	}
 
-	E.Primers = handlerinput.HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource]{
+	E.Primers = handlerinput.Main[seedtypes.Primer, apitypes.Primer, apiresource.Named]{
 		Endpoint:      ts.EpPrimers,
 		ResTypeSingle: ts.RTSPrimers,
 		ResTypePlural: ts.RTPPrimers,
 		ObjLookup:     lookup.L.Primers,
 		ObjLookupID:   lookup.L.PrimersID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Primer, apitypes.Primer, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetPrimerIDs,
 		GetSingleFunc: getPrimer,
 		RetrieveFunc:  retrievePrimers,
 		AvlFunc:       filterAvlPrimers,
 	}
 
-	E.Mixes = handlerinput.HandlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource]{
+	E.Mixes = handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named]{
 		Endpoint:      ts.EpMixes,
 		ResTypeSingle: ts.RTSMixes,
 		ResTypePlural: ts.RTPMixes,
 		ObjLookup:     lookup.L.Mixes,
 		ObjLookupID:   lookup.L.MixesID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Mix, apitypes.Mix, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetMixIDs,
 		GetSingleFunc: getMix,
 		RetrieveFunc:  retrieveMixes,
@@ -838,13 +838,13 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.AutoAbilities = handlerinput.HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]{
+	E.AutoAbilities = handlerinput.Main[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.Named]{
 		Endpoint:      ts.EpAutoAbilities,
 		ResTypeSingle: ts.RTSAutoAbilities,
 		ResTypePlural: ts.RTPAutoAbilities,
 		ObjLookup:     lookup.L.AutoAbilities,
 		ObjLookupID:   lookup.L.AutoAbilitiesID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetAutoAbilityIDs,
 		GetSingleFunc: getAutoAbility,
 		RetrieveFunc:  retrieveAutoAbilities,
@@ -856,37 +856,37 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.EquipmentTables = handlerinput.HandlerInput[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource]{
+	E.EquipmentTables = handlerinput.Main[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.Unnamed]{
 		Endpoint:      ts.EpEquipmentTables,
 		ResTypeSingle: ts.RTSEquipmentTables,
 		ResTypePlural: ts.RTPEquipmentTables,
 		ObjLookup:     lookup.L.EquipmentTables,
 		ObjLookupID:   lookup.L.EquipmentTablesID,
-		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.UnnamedAPIResource],
+		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.Unnamed],
 		RetrieveQuery: config.Cfg.DB.GetEquipmentTableIDs,
 		GetSingleFunc: getEquipmentTable,
 		RetrieveFunc:  retrieveEquipmentTables,
 	}
 
-	E.Equipment = handlerinput.HandlerInput[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource]{
+	E.Equipment = handlerinput.Main[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.Named]{
 		Endpoint:      ts.EpEquipment,
 		ResTypeSingle: ts.RTSEquipment,
 		ResTypePlural: ts.RTPEquipment,
 		ObjLookup:     lookup.L.EquipmentNames,
 		ObjLookupID:   lookup.L.EquipmentNamesID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetEquipmentIDs,
 		GetSingleFunc: getEquipment,
 		RetrieveFunc:  retrieveEquipment,
 	}
 
-	E.CelestialWeapons = handlerinput.HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource]{
+	E.CelestialWeapons = handlerinput.Main[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.Named]{
 		Endpoint:      ts.EpCelestialWeapons,
 		ResTypeSingle: ts.RTSCelestialWeapons,
 		ResTypePlural: ts.RTPCelestialWeapons,
 		ObjLookup:     lookup.L.CelestialWeapons,
 		ObjLookupID:   lookup.L.CelestialWeaponsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetCelestialWeaponIDs,
 		GetSingleFunc: getCelestialWeapon,
 		RetrieveFunc:  retrieveCelestialWeapons,
@@ -898,102 +898,102 @@ func (E *Endpoints) Init() {
 		},
 	}
 
-	E.Stats = handlerinput.HandlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource]{
+	E.Stats = handlerinput.Main[seedtypes.Stat, apitypes.Stat, apiresource.Named]{
 		Endpoint:      ts.EpStats,
 		ResTypeSingle: ts.RTSStats,
 		ResTypePlural: ts.RTPStats,
 		ObjLookup:     lookup.L.Stats,
 		ObjLookupID:   lookup.L.StatsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Stat, apitypes.Stat, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetStatIDs,
 		GetSingleFunc: getStat,
 		RetrieveFunc:  retrieveStats,
 	}
 
-	E.Properties = handlerinput.HandlerInput[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource]{
+	E.Properties = handlerinput.Main[seedtypes.Property, apitypes.Property, apiresource.Named]{
 		Endpoint:      ts.EpProperties,
 		ResTypeSingle: ts.RTSProperties,
 		ResTypePlural: ts.RTPProperties,
 		ObjLookup:     lookup.L.Properties,
 		ObjLookupID:   lookup.L.PropertiesID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Property, apitypes.Property, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Property, apitypes.Property, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetPropertyIDs,
 		GetSingleFunc: getProperty,
 		RetrieveFunc:  retrieveProperties,
 	}
 
-	E.OverdriveModes = handlerinput.HandlerInput[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource]{
+	E.OverdriveModes = handlerinput.Main[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.Named]{
 		Endpoint:      ts.EpOverdriveModes,
 		ResTypeSingle: ts.RTSOverdriveModes,
 		ResTypePlural: ts.RTPOverdriveModes,
 		ObjLookup:     lookup.L.OverdriveModes,
 		ObjLookupID:   lookup.L.OverdriveModesID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetOverdriveModeIDs,
 		GetSingleFunc: getOverdriveMode,
 		RetrieveFunc:  retrieveOverdriveModes,
 	}
 
-	E.Elements = handlerinput.HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]{
+	E.Elements = handlerinput.Main[seedtypes.Element, apitypes.Element, apiresource.Named]{
 		Endpoint:      ts.EpElements,
 		ResTypeSingle: ts.RTSElements,
 		ResTypePlural: ts.RTPElements,
 		ObjLookup:     lookup.L.Elements,
 		ObjLookupID:   lookup.L.ElementsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Element, apitypes.Element, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetElementIDs,
 		GetSingleFunc: getElement,
 		RetrieveFunc:  retrieveElements,
 	}
 
-	E.StatusConditions = handlerinput.HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource]{
+	E.StatusConditions = handlerinput.Main[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.Named]{
 		Endpoint:      ts.EpStatusConditions,
 		ResTypeSingle: ts.RTSStatusConditions,
 		ResTypePlural: ts.RTPStatusConditions,
 		ObjLookup:     lookup.L.StatusConditions,
 		ObjLookupID:   lookup.L.StatusConditionsID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetStatusConditionIDs,
 		GetSingleFunc: getStatusCondition,
 		RetrieveFunc:  retrieveStatusConditions,
 	}
 
-	E.Modifiers = handlerinput.HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource]{
+	E.Modifiers = handlerinput.Main[seedtypes.Modifier, apitypes.Modifier, apiresource.Named]{
 		Endpoint:      ts.EpModifiers,
 		ResTypeSingle: ts.RTSModifiers,
 		ResTypePlural: ts.RTPModifiers,
 		ObjLookup:     lookup.L.Modifiers,
 		ObjLookupID:   lookup.L.ModifiersID,
-		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource],
+		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Modifier, apitypes.Modifier, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetModifierIDs,
 		GetSingleFunc: getModifier,
 		RetrieveFunc:  retrieveModifiers,
 	}
 
-	E.AgilityTiers = handlerinput.HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]{
+	E.AgilityTiers = handlerinput.Main[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.Unnamed]{
 		Endpoint:      ts.EpAgilityTiers,
 		ResTypeSingle: ts.RTSAgilityTiers,
 		ResTypePlural: ts.RTPAgilityTiers,
 		ObjLookup:     nil,
 		ObjLookupID:   lookup.L.AgilityTiersID,
-		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource],
+		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.Unnamed],
 		RetrieveQuery: config.Cfg.DB.GetAgilityTierIDs,
 		GetSingleFunc: getAgilityTier,
 		RetrieveFunc:  retrieveAgilityTiers,
 	}
 
-	E.Enums = handlerinput.HandlerInputEnums{
+	E.Enums = handlerinput.Enums{
 		Endpoint: ts.EpEnums,
 		Usage:    []string{"/api/enums", "/api/enums/{enum_name}"},
 		Lookup:   enums.T.Lookup,
 	}
 
-	E.Endpoints = handlerinput.HandlerInputEndpoints{
+	E.Endpoints = handlerinput.Endpoints{
 		Endpoint: ts.EpEndpoints,
 		Usage:    []string{"/api/endpoints"},
 	}
 
-	E.AlBhed = handlerinput.ServiceInput[servicetypes.AlBhedParams, servicetypes.AlBhedResponse]{
+	E.AlBhed = handlerinput.Service[servicetypes.AlBhedParams, servicetypes.AlBhedResponse]{
 		Endpoint:  ts.EpAlBhed,
 		VerifyFn:  serviceverify.VerifyAlBhedParams,
 		ExecuteFn: handleAlBhed,
@@ -1001,7 +1001,7 @@ func (E *Endpoints) Init() {
 		Samples:   servicetypes.AlBhedParamsSamples,
 	}
 
-	E.TurnOrder = handlerinput.ServiceInput[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]{
+	E.TurnOrder = handlerinput.Service[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]{
 		Endpoint:  ts.EpTurnOrder,
 		VerifyFn:  serviceverify.VerifyTurnOrderParams,
 		ExecuteFn: handleTurnOrder,
@@ -1009,7 +1009,7 @@ func (E *Endpoints) Init() {
 		Samples:   servicetypes.TurnOrderParamsSamples,
 	}
 
-	E.DropChance = handlerinput.ServiceInput[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]{
+	E.DropChance = handlerinput.Service[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]{
 		Endpoint:  ts.EpDropChance,
 		VerifyFn:  serviceverify.VerifyDropChanceParams,
 		ExecuteFn: handleDropChance,
@@ -1017,7 +1017,7 @@ func (E *Endpoints) Init() {
 		Samples:   servicetypes.DropChanceParamsSamples,
 	}
 
-	E.CritChance = handlerinput.ServiceInput[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]{
+	E.CritChance = handlerinput.Service[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]{
 		Endpoint:  ts.EpCritChance,
 		VerifyFn:  serviceverify.VerifyCritChanceParams,
 		ExecuteFn: handleCritChance,

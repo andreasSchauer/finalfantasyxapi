@@ -8,7 +8,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i HandlerInput[T, R, A]) QueryValue(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryStringMany) IDFilter {
+func (i Main[T, R, A]) QueryValue(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, dbQuery DBQueryStringMany) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.QueryLookup[queryName]
 		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {

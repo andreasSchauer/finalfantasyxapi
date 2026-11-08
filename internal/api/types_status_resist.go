@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func newStatusResist(res apiresource.NamedAPIResource, resistance int32) apitypes.StatusResist {
+func newStatusResist(res apiresource.Named, resistance int32) apitypes.StatusResist {
 	return apitypes.StatusResist{
 		StatusCondition: res,
 		Resistance:      resistance,

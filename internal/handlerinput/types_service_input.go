@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type ServiceInput[P servicetypes.ServiceParams, R servicetypes.ServiceResponse] struct {
+type Service[P servicetypes.ServiceParams, R servicetypes.ServiceResponse] struct {
 	Endpoint  ts.EndpointName
 	Usage     []string
 	VerifyFn  func(serviceverify.ParamsVerifyer, P) (P, error)
@@ -18,7 +18,7 @@ type ServiceInput[P servicetypes.ServiceParams, R servicetypes.ServiceResponse] 
 	Samples   []servicetypes.SampleParams[P]
 }
 
-func (i ServiceInput[P, R]) ServicePost(r *http.Request) (R, error) {
+func (i Service[P, R]) ServicePost(r *http.Request) (R, error) {
 	var zero R
 	params, userValues, err := servicetypes.GetParamsJSONBody[P](r)
 	if err != nil {
@@ -28,7 +28,7 @@ func (i ServiceInput[P, R]) ServicePost(r *http.Request) (R, error) {
 	return i.compute(params, userValues)
 }
 
-func (i ServiceInput[P, R]) compute(params P, userValues map[ts.FieldName]any) (R, error) {
+func (i Service[P, R]) compute(params P, userValues map[ts.FieldName]any) (R, error) {
 	var zero R
 
 	params, err := i.verifyJSONParams(params, userValues)
@@ -39,7 +39,7 @@ func (i ServiceInput[P, R]) compute(params P, userValues map[ts.FieldName]any) (
 	return i.ExecuteFn(params)
 }
 
-func (i ServiceInput[P, R]) verifyJSONParams(params P, userValues map[ts.FieldName]any) (P, error) {
+func (i Service[P, R]) verifyJSONParams(params P, userValues map[ts.FieldName]any) (P, error) {
 	var zero P
 	docs := i.DocsFn()
 
@@ -55,7 +55,7 @@ func (i ServiceInput[P, R]) verifyJSONParams(params P, userValues map[ts.FieldNa
 }
 
 // VerifyQueries verifies, if no query params are in use for an endpoint that receives a post request
-func (i ServiceInput[P, R]) VerifyQueries(r *http.Request) error {
+func (i Service[P, R]) VerifyQueries(r *http.Request) error {
 	if len(r.URL.Query()) > 0 {
 		return errs.NewHTTPError(http.StatusBadRequest, "computational endpoints don't have any query parameters", nil)
 	}

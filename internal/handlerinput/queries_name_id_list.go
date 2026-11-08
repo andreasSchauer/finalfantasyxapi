@@ -11,7 +11,7 @@ import (
 
 // query uses a list of names or ids as database input to filter for resources. alternatively, "none" can be used as input instead.
 
-func (i HandlerInput[T, R, A]) QueryNameIDListNul[P seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, pResType ts.ResTypeSingle, pLookup map[string]P, dbQuery DBQueryIntList) IDFilter {
+func (i Main[T, R, A]) QueryNameIDListNul[P seedtypes.Lookupable](r *http.Request, inputIDs []int32, queryName ts.QueryParamName, pResType ts.ResTypeSingle, pLookup map[string]P, dbQuery DBQueryIntList) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.QueryLookup[queryName]
 		if queryParam.ReplacingParamsPresent(r, i.QueryLookup) {

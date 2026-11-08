@@ -16,7 +16,7 @@ type expTreasure struct {
 	treasureType    database.TreasureType
 	lootType        database.LootType
 	gilAmount       *int32
-	items           []testResAmount[apiresource.TypedAPIResource]
+	items           []testResAmount[apiresource.Typed]
 	equipment       *testFoundEquipment
 }
 

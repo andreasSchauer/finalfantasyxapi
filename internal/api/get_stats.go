@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getStat(r *http.Request, i handlerinput.HandlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource], id int32) (apitypes.Stat, error) {
+func getStat(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat, apiresource.Named], id int32) (apitypes.Stat, error) {
 	stat, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Stat{}, err
@@ -41,6 +41,6 @@ func getStat(r *http.Request, i handlerinput.HandlerInput[seedtypes.Stat, apityp
 	return response, nil
 }
 
-func retrieveStats(r *http.Request, i handlerinput.HandlerInput[seedtypes.Stat, apitypes.Stat, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveStats(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat, apiresource.Named]) ([]int32, error) {
 	return i.VerifyQueriesRetrieve(r)
 }

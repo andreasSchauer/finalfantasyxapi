@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getTopmenu(r *http.Request, i handlerinput.HandlerInput[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource], id int32) (apitypes.Topmenu, error) {
+func getTopmenu(r *http.Request, i handlerinput.Main[seedtypes.Topmenu, apitypes.Topmenu, apiresource.Named], id int32) (apitypes.Topmenu, error) {
 	topmenu, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Topmenu{}, err
@@ -33,6 +33,6 @@ func getTopmenu(r *http.Request, i handlerinput.HandlerInput[seedtypes.Topmenu, 
 	return response, nil
 }
 
-func retrieveTopmenus(r *http.Request, i handlerinput.HandlerInput[seedtypes.Topmenu, apitypes.Topmenu, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveTopmenus(r *http.Request, i handlerinput.Main[seedtypes.Topmenu, apitypes.Topmenu, apiresource.Named]) ([]int32, error) {
 	return i.VerifyQueriesRetrieve(r)
 }

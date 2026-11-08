@@ -5,8 +5,8 @@ import (
 )
 
 type BaseStat struct {
-	Stat  apiresource.NamedAPIResource `json:"stat"`
-	Value int32                        `json:"value"`
+	Stat  apiresource.Named `json:"stat"`
+	Value int32             `json:"value"`
 }
 
 func (bs BaseStat) GetAPIResource() apiresource.APIResource {
@@ -25,8 +25,8 @@ func (bs BaseStat) GetVal() int32 {
 	return bs.Value
 }
 
-func (bs BaseStat) ToResAmount() apiresource.ResourceAmount[apiresource.NamedAPIResource] {
-	return apiresource.ResourceAmount[apiresource.NamedAPIResource]{
+func (bs BaseStat) ToResAmount() apiresource.ResourceAmount[apiresource.Named] {
+	return apiresource.ResourceAmount[apiresource.Named]{
 		Resource: bs.Stat,
 		Amount:   bs.Value,
 	}

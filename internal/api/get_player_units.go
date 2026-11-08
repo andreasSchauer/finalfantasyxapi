@@ -14,7 +14,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getPlayerUnit(r *http.Request, i handlerinput.HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource], id int32) (apitypes.PlayerUnit, error) {
+func getPlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.Typed], id int32) (apitypes.PlayerUnit, error) {
 	unit, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.PlayerUnit{}, err
@@ -63,7 +63,7 @@ func getPlayerUnit(r *http.Request, i handlerinput.HandlerInput[seedtypes.Player
 	return response, nil
 }
 
-func retrievePlayerUnits(r *http.Request, i handlerinput.HandlerInput[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.TypedAPIResource]) ([]int32, error) {
+func retrievePlayerUnits(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.Typed]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -13,7 +13,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMix(r *http.Request, i handlerinput.HandlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource], id int32) (apitypes.Mix, error) {
+func getMix(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named], id int32) (apitypes.Mix, error) {
 	mix, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Mix{}, err
@@ -39,7 +39,7 @@ func getMix(r *http.Request, i handlerinput.HandlerInput[seedtypes.Mix, apitypes
 	return response, nil
 }
 
-func retrieveMixes(r *http.Request, i handlerinput.HandlerInput[seedtypes.Mix, apitypes.Mix, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveMixes(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

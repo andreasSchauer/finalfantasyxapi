@@ -50,7 +50,7 @@ func compareSubquests(test test, exp expSubquest, got apitypes.Subquest) {
 
 type testQuestCompletion struct {
 	areas  []int32
-	reward testResAmount[apiresource.TypedAPIResource]
+	reward testResAmount[apiresource.Typed]
 }
 
 func compareQuestCompletions(test test, fieldName string, exp testQuestCompletion, got apitypes.QuestCompletion) {

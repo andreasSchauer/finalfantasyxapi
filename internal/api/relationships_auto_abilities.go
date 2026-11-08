@@ -14,7 +14,7 @@ import (
 func getAutoAbilityRelationships(r *http.Request, autoAbility seedtypes.AutoAbility) (apitypes.AutoAbility, error) {
 	var rel apitypes.AutoAbility
 	g, ctx := errgroup.WithContext(r.Context())
-	var monsterItems []apiresource.NamedAPIResource
+	var monsterItems []apiresource.Named
 
 	availabilityParams, err := E.AutoAbilities.QueryAvlRelGetParams(r, autoAbility.ID)
 	if err != nil {

@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getOverdriveCommand(r *http.Request, i handlerinput.HandlerInput[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource], id int32) (apitypes.OverdriveCommand, error) {
+func getOverdriveCommand(r *http.Request, i handlerinput.Main[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.Named], id int32) (apitypes.OverdriveCommand, error) {
 	command, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.OverdriveCommand{}, err
@@ -35,6 +35,6 @@ func getOverdriveCommand(r *http.Request, i handlerinput.HandlerInput[seedtypes.
 	return response, nil
 }
 
-func retrieveOverdriveCommands(r *http.Request, i handlerinput.HandlerInput[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveOverdriveCommands(r *http.Request, i handlerinput.Main[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.Named]) ([]int32, error) {
 	return i.VerifyQueriesRetrieve(r)
 }

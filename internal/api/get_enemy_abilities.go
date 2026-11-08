@@ -15,7 +15,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getEnemyAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource], id int32) (apitypes.EnemyAbility, error) {
+func getEnemyAbility(r *http.Request, i handlerinput.Main[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.Named], id int32) (apitypes.EnemyAbility, error) {
 	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.EnemyAbility{}, err
@@ -43,7 +43,7 @@ func getEnemyAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.Enem
 	return response, nil
 }
 
-func retrieveEnemyAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveEnemyAbilities(r *http.Request, i handlerinput.Main[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.Named]) ([]int32, error) {
 	abilityType := database.AbilityTypeEnemyAbility
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {

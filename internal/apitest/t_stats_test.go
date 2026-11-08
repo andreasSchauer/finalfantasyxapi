@@ -106,5 +106,5 @@ func TestRetrieveStats(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Stats.Endpoint, "RetrieveStats", testSrv.HandleStats, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Stats.Endpoint, "RetrieveStats", testSrv.HandleStats, compareAPIResourceLists[apiresource.Named])
 }

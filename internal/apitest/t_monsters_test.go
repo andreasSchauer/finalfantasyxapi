@@ -208,12 +208,12 @@ func TestGetMonster(t *testing.T) {
 			},
 			items: &testMonItems{
 				itemDropChance: 255,
-				items: map[string]*testResAmount[apiresource.TypedAPIResource]{
-					"steal common": h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](27, 1)),
-					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](28, 1)),
-					"drop common":  h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](71, 1)),
-					"drop rare":    h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](71, 1)),
-					"bribe":        h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](28, 6)),
+				items: map[string]*testResAmount[apiresource.Typed]{
+					"steal common": h.GetStructPtr(newTestResAmount[apiresource.Typed](27, 1)),
+					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.Typed](28, 1)),
+					"drop common":  h.GetStructPtr(newTestResAmount[apiresource.Typed](71, 1)),
+					"drop rare":    h.GetStructPtr(newTestResAmount[apiresource.Typed](71, 1)),
+					"bribe":        h.GetStructPtr(newTestResAmount[apiresource.Typed](28, 6)),
 				},
 			},
 			bribeChances: []apitypes.BribeChance{
@@ -305,9 +305,9 @@ func TestGetMonster(t *testing.T) {
 			regenAmounts: nil,
 			items: &testMonItems{
 				itemDropChance: 0,
-				items: map[string]*testResAmount[apiresource.TypedAPIResource]{
-					"steal common": h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](1, 1)),
-					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](1, 1)),
+				items: map[string]*testResAmount[apiresource.Typed]{
+					"steal common": h.GetStructPtr(newTestResAmount[apiresource.Typed](1, 1)),
+					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.Typed](1, 1)),
 				},
 				otherItems: []testPossibleItem{
 					newTestPossibleItem(0, 9, 1, 60),
@@ -360,11 +360,11 @@ func TestGetMonster(t *testing.T) {
 			formations: []int32{126},
 			items: &testMonItems{
 				itemDropChance: 255,
-				items: map[string]*testResAmount[apiresource.TypedAPIResource]{
-					"steal common": h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](5, 1)),
-					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](6, 1)),
-					"drop common":  h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](82, 1)),
-					"drop rare":    h.GetStructPtr(newTestResAmount[apiresource.TypedAPIResource](82, 1)),
+				items: map[string]*testResAmount[apiresource.Typed]{
+					"steal common": h.GetStructPtr(newTestResAmount[apiresource.Typed](5, 1)),
+					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.Typed](6, 1)),
+					"drop common":  h.GetStructPtr(newTestResAmount[apiresource.Typed](82, 1)),
+					"drop rare":    h.GetStructPtr(newTestResAmount[apiresource.Typed](82, 1)),
 					"bribe":        nil,
 				},
 			},
@@ -1291,7 +1291,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Monsters.Endpoint, "GetMultipleMonsters", testSrv.HandleMonsters, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Monsters.Endpoint, "GetMultipleMonsters", testSrv.HandleMonsters, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestRetrieveMonsters(t *testing.T) {
@@ -1655,7 +1655,7 @@ func TestRetrieveMonsters(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Monsters.Endpoint, "RetrieveMonsters", testSrv.HandleMonsters, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Monsters.Endpoint, "RetrieveMonsters", testSrv.HandleMonsters, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestSubsectionMonsters(t *testing.T) {
@@ -1778,5 +1778,5 @@ func TestSubsectionMonsters(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Monsters.Endpoint, "SubsectionMonsters", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, sectiontypes.MonsterSimple])
+	testIDList(t, tests, api.E.Monsters.Endpoint, "SubsectionMonsters", nil, compareSimpleResourceLists[apiresource.Named, sectiontypes.MonsterSimple])
 }

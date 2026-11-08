@@ -30,7 +30,7 @@ func ParseID(idStr string, resourceType ts.ResTypeSingle, maxID int) (ah.ParseRe
 }
 
 // ParseSingleSegmentResource deals with a single segment path that is either a name or an id and returns a ah.ParseResponse with the id, if a single match is found, or a name, if multiple matches with that name were found.
-func ParseSingleSegmentResource[T seedtypes.Lookupable, R any, A apiresource.APIResource](i handlerinput.HandlerInput[T, R, A], segment string) (ah.ParseResponse, error) {
+func ParseSingleSegmentResource[T seedtypes.Lookupable, R any, A apiresource.APIResource](i handlerinput.Main[T, R, A], segment string) (ah.ParseResponse, error) {
 	decoded, err := url.PathUnescape(segment)
 	if err != nil {
 		return ah.ParseResponse{}, errs.NewHTTPError(http.StatusBadRequest, "invalid url encoding", err)
@@ -58,7 +58,7 @@ func ParseSingleSegmentResource[T seedtypes.Lookupable, R any, A apiresource.API
 }
 
 // ParseNameVersionResource deals with a name/version path and returns a ah.ParseResponse with the id, if a match is found.
-func ParseNameVersionResource[T seedtypes.Lookupable, R any, A apiresource.APIResource](i handlerinput.HandlerInput[T, R, A], name, versionStr string) (ah.ParseResponse, error) {
+func ParseNameVersionResource[T seedtypes.Lookupable, R any, A apiresource.APIResource](i handlerinput.Main[T, R, A], name, versionStr string) (ah.ParseResponse, error) {
 	nameDecoded, err := url.PathUnescape(name)
 	if err != nil {
 		return ah.ParseResponse{}, errs.NewHTTPError(http.StatusBadRequest, "invalid url encoding", err)
@@ -95,7 +95,7 @@ func ParseVersionStr(versionStr string) (*int32, error) {
 	return versionPtr, nil
 }
 
-func ParseSegment(i handlerinput.HandlerInputEnums, segment string) (enums.EnumResponse, string, error) {
+func ParseSegment(i handlerinput.Enums, segment string) (enums.EnumResponse, string, error) {
 	key, err := url.PathUnescape(segment)
 	if err != nil {
 		return enums.EnumResponse{}, "", errs.NewHTTPError(http.StatusBadRequest, "invalid url encoding", err)

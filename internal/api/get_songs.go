@@ -14,7 +14,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSong(r *http.Request, i handlerinput.HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource], id int32) (apitypes.Song, error) {
+func getSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named], id int32) (apitypes.Song, error) {
 	song, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Song{}, err
@@ -55,7 +55,7 @@ func getSong(r *http.Request, i handlerinput.HandlerInput[seedtypes.Song, apityp
 	return response, nil
 }
 
-func retrieveSongs(r *http.Request, i handlerinput.HandlerInput[seedtypes.Song, apitypes.Song, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveSongs(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

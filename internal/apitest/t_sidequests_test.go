@@ -53,7 +53,7 @@ func TestGetSidequest(t *testing.T) {
 			untypedQuest: 2,
 			completion: &testQuestCompletion{
 				areas:  []int32{207},
-				reward: newTestResAmount[apiresource.TypedAPIResource](126, 1),
+				reward: newTestResAmount[apiresource.Typed](126, 1),
 			},
 			subquests: []int32{37, 39, 42, 44, 45, 49, 52},
 		},
@@ -85,7 +85,7 @@ func TestGetSidequest(t *testing.T) {
 			untypedQuest: 9,
 			completion: &testQuestCompletion{
 				areas:  []int32{183, 180},
-				reward: newTestResAmount[apiresource.TypedAPIResource](111, 99),
+				reward: newTestResAmount[apiresource.Typed](111, 99),
 			},
 			subquests: []int32{},
 		},
@@ -131,5 +131,5 @@ func TestRetrieveSidequests(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Sidequests.Endpoint, "RetrieveSidequests", testSrv.HandleSidequests, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Sidequests.Endpoint, "RetrieveSidequests", testSrv.HandleSidequests, compareAPIResourceLists[apiresource.Named])
 }

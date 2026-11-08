@@ -107,5 +107,5 @@ func TestRetrieveAeonCommands(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.AeonCommands.Endpoint, "RetrieveAeonCommands", testSrv.HandleAeonCommands, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.AeonCommands.Endpoint, "RetrieveAeonCommands", testSrv.HandleAeonCommands, compareAPIResourceLists[apiresource.Named])
 }

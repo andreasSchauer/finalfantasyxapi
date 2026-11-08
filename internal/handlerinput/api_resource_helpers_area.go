@@ -8,12 +8,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func IDToAreaAPIResource(i HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], id int32) apiresource.AreaAPIResource {
+func IDToAreaAPIResource(i Main[seedtypes.Area, apitypes.Area, apiresource.Area], id int32) apiresource.Area {
 	res, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	return areaToAreaAPIResource(i, res)
 }
 
-func IDPtrToAreaAPIResPtr(i HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], idPtr *int32) *apiresource.AreaAPIResource {
+func IDPtrToAreaAPIResPtr(i Main[seedtypes.Area, apitypes.Area, apiresource.Area], idPtr *int32) *apiresource.Area {
 	if idPtr == nil {
 		return nil
 	}
@@ -22,13 +22,13 @@ func IDPtrToAreaAPIResPtr(i HandlerInput[seedtypes.Area, apitypes.Area, apiresou
 	return &res
 }
 
-func LocAreaToAreaAPIResource(i HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], area seedtypes.LocationArea) apiresource.AreaAPIResource {
+func LocAreaToAreaAPIResource(i Main[seedtypes.Area, apitypes.Area, apiresource.Area], area seedtypes.LocationArea) apiresource.Area {
 	res, _ := lookup.GetResource(area, i.ObjLookup)
 	return areaToAreaAPIResource(i, res)
 }
 
-func LocAreasToAreaAPIResources(i HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], areas []seedtypes.LocationArea) []apiresource.AreaAPIResource {
-	resources := make([]apiresource.AreaAPIResource, len(areas))
+func LocAreasToAreaAPIResources(i Main[seedtypes.Area, apitypes.Area, apiresource.Area], areas []seedtypes.LocationArea) []apiresource.Area {
+	resources := make([]apiresource.Area, len(areas))
 
 	for idx, area := range areas {
 		resources[idx] = LocAreaToAreaAPIResource(i, area)
@@ -38,10 +38,10 @@ func LocAreasToAreaAPIResources(i HandlerInput[seedtypes.Area, apitypes.Area, ap
 }
 
 // shared logic. not indended to be called directly
-func areaToAreaAPIResource(i HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], area seedtypes.Area) apiresource.AreaAPIResource {
+func areaToAreaAPIResource(i Main[seedtypes.Area, apitypes.Area, apiresource.Area], area seedtypes.Area) apiresource.Area {
 	params := area.GetResParamsLocation()
 
-	return apiresource.AreaAPIResource{
+	return apiresource.Area{
 		AreaID:        params.AreaID,
 		Location:      params.Location,
 		Sublocation:   params.Sublocation,

@@ -148,5 +148,5 @@ func TestRetrieveModifiers(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Modifiers.Endpoint, "RetrieveModifiers", testSrv.HandleModifiers, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Modifiers.Endpoint, "RetrieveModifiers", testSrv.HandleModifiers, compareAPIResourceLists[apiresource.Named])
 }

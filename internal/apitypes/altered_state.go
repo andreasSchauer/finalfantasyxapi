@@ -14,16 +14,16 @@ type AlteredState struct {
 }
 
 type Alt struct {
-	AlterationType   database.AlterationType        `json:"alteration_type"`
-	Distance         *int32                         `json:"distance,omitempty"`
-	Properties       []apiresource.NamedAPIResource `json:"properties,omitempty"`
-	AutoAbilities    []apiresource.NamedAPIResource `json:"auto_abilities,omitempty"`
-	BaseStats        []BaseStat                     `json:"base_stats,omitempty"`
-	ElemResists      []ElementalResist              `json:"elem_resists,omitempty"`
-	StatusImmunities []apiresource.NamedAPIResource `json:"status_immunities,omitempty"`
-	StatusResists    []StatusResist                 `json:"status_resists,omitempty"`
-	AddedStatus      *InflictedStatus               `json:"added_status_condition,omitempty"`
-	RemovedStatus    *apiresource.NamedAPIResource  `json:"removed_status_condition,omitempty"`
+	AlterationType   database.AlterationType `json:"alteration_type"`
+	Distance         *int32                  `json:"distance,omitempty"`
+	Properties       []apiresource.Named     `json:"properties,omitempty"`
+	AutoAbilities    []apiresource.Named     `json:"auto_abilities,omitempty"`
+	BaseStats        []BaseStat              `json:"base_stats,omitempty"`
+	ElemResists      []ElementalResist       `json:"elem_resists,omitempty"`
+	StatusImmunities []apiresource.Named     `json:"status_immunities,omitempty"`
+	StatusResists    []StatusResist          `json:"status_resists,omitempty"`
+	AddedStatus      *InflictedStatus        `json:"added_status_condition,omitempty"`
+	RemovedStatus    *apiresource.Named      `json:"removed_status_condition,omitempty"`
 }
 
 func (c *Alt) IsZero() bool {

@@ -7,11 +7,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func IDToTypedAPIResource[T seedtypes.IsTyped, R any, A apiresource.APIResource](i HandlerInput[T, R, A], id int32) apiresource.TypedAPIResource {
+func IDToTypedAPIResource[T seedtypes.IsTyped, R any, A apiresource.APIResource](i Main[T, R, A], id int32) apiresource.Typed {
 	res, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	params := res.GetResParamsTyped()
 
-	return apiresource.TypedAPIResource{
+	return apiresource.Typed{
 		ID:            params.ID,
 		Name:          params.Name,
 		Version:       params.Version,
@@ -21,12 +21,12 @@ func IDToTypedAPIResource[T seedtypes.IsTyped, R any, A apiresource.APIResource]
 	}
 }
 
-func KeyToTypedAPIResource[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i HandlerInput[T, R, A], key K) apiresource.TypedAPIResource {
+func KeyToTypedAPIResource[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i Main[T, R, A], key K) apiresource.Typed {
 	res, _ := lookup.GetResource(key, i.ObjLookup)
 	return IDToTypedAPIResource(i, res.GetID())
 }
 
-func KeyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i HandlerInput[T, R, A], keyPtr *K) *apiresource.TypedAPIResource {
+func KeyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i Main[T, R, A], keyPtr *K) *apiresource.Typed {
 	if keyPtr == nil {
 		return nil
 	}
@@ -35,8 +35,8 @@ func KeyPtrToTypedAPIResourcePtr[T seedtypes.IsTyped, R, K any, A apiresource.AP
 	return &res
 }
 
-func KeysToTypedAPIResources[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i HandlerInput[T, R, A], refs []K) []apiresource.TypedAPIResource {
-	resources := make([]apiresource.TypedAPIResource, len(refs))
+func KeysToTypedAPIResources[T seedtypes.IsTyped, R, K any, A apiresource.APIResource](i Main[T, R, A], refs []K) []apiresource.Typed {
+	resources := make([]apiresource.Typed, len(refs))
 
 	for idx, ref := range refs {
 		resources[idx] = KeyToTypedAPIResource(i, ref)

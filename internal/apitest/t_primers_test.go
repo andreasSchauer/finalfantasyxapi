@@ -98,5 +98,5 @@ func TestRetrievePrimers(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Primers.Endpoint, "RetrievePrimers", testSrv.HandlePrimers, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Primers.Endpoint, "RetrievePrimers", testSrv.HandlePrimers, compareAPIResourceLists[apiresource.Named])
 }

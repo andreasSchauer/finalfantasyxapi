@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getArea(r *http.Request, i handlerinput.HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource], id int32) (apitypes.Area, error) {
+func getArea(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area, apiresource.Area], id int32) (apitypes.Area, error) {
 	area, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Area{}, err
@@ -48,7 +48,7 @@ func getArea(r *http.Request, i handlerinput.HandlerInput[seedtypes.Area, apityp
 	return response, nil
 }
 
-func retrieveAreas(r *http.Request, i handlerinput.HandlerInput[seedtypes.Area, apitypes.Area, apiresource.AreaAPIResource]) ([]int32, error) {
+func retrieveAreas(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area, apiresource.Area]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

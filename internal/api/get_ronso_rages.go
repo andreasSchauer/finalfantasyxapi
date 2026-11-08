@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getRonsoRage(r *http.Request, i handlerinput.HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource], id int32) (apitypes.RonsoRage, error) {
+func getRonsoRage(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.Named], id int32) (apitypes.RonsoRage, error) {
 	ronsoRage, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.RonsoRage{}, err
@@ -33,6 +33,6 @@ func getRonsoRage(r *http.Request, i handlerinput.HandlerInput[seedtypes.RonsoRa
 	return response, nil
 }
 
-func retrieveRonsoRages(r *http.Request, i handlerinput.HandlerInput[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveRonsoRages(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.Named]) ([]int32, error) {
 	return i.VerifyQueriesRetrieve(r)
 }

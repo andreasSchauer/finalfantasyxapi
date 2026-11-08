@@ -337,5 +337,5 @@ func TestRetrieveItemAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.ItemAbilities.Endpoint, "RetrieveItemAbilities", testSrv.HandleItemAbilities, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.ItemAbilities.Endpoint, "RetrieveItemAbilities", testSrv.HandleItemAbilities, compareAPIResourceLists[apiresource.Named])
 }

@@ -601,5 +601,5 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.AutoAbilities.Endpoint, "RetrieveAutoAbilities", testSrv.HandleAutoAbilities, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.AutoAbilities.Endpoint, "RetrieveAutoAbilities", testSrv.HandleAutoAbilities, compareAPIResourceLists[apiresource.Named])
 }

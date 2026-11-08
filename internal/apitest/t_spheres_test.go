@@ -366,5 +366,5 @@ func TestRetrieveSpheres(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Spheres.Endpoint, "RetrieveSpheres", testSrv.HandleSpheres, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Spheres.Endpoint, "RetrieveSpheres", testSrv.HandleSpheres, compareAPIResourceLists[apiresource.Named])
 }

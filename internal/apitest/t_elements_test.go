@@ -66,5 +66,5 @@ func TestRetrieveElements(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Elements.Endpoint, "RetrieveElements", testSrv.HandleElements, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Elements.Endpoint, "RetrieveElements", testSrv.HandleElements, compareAPIResourceLists[apiresource.Named])
 }

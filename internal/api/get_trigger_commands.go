@@ -13,7 +13,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getTriggerCommand(r *http.Request, i handlerinput.HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource], id int32) (apitypes.TriggerCommand, error) {
+func getTriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.Named], id int32) (apitypes.TriggerCommand, error) {
 	command, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
@@ -52,7 +52,7 @@ func getTriggerCommand(r *http.Request, i handlerinput.HandlerInput[seedtypes.Tr
 	return response, nil
 }
 
-func retrieveTriggerCommands(r *http.Request, i handlerinput.HandlerInput[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveTriggerCommands(r *http.Request, i handlerinput.Main[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

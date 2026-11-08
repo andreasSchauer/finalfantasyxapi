@@ -11,7 +11,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSubquest(r *http.Request, i handlerinput.HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource], id int32) (apitypes.Subquest, error) {
+func getSubquest(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest], id int32) (apitypes.Subquest, error) {
 	subquest, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Subquest{}, err
@@ -34,7 +34,7 @@ func getSubquest(r *http.Request, i handlerinput.HandlerInput[seedtypes.Subquest
 	return response, nil
 }
 
-func retrieveSubquests(r *http.Request, i handlerinput.HandlerInput[seedtypes.Subquest, apitypes.Subquest, apiresource.QuestAPIResource]) ([]int32, error) {
+func retrieveSubquests(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

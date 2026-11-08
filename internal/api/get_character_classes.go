@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getCharacterClass(r *http.Request, i handlerinput.HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource], id int32) (apitypes.CharacterClass, error) {
+func getCharacterClass(r *http.Request, i handlerinput.Main[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.Named], id int32) (apitypes.CharacterClass, error) {
 	class, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.CharacterClass{}, err
@@ -38,7 +38,7 @@ func getCharacterClass(r *http.Request, i handlerinput.HandlerInput[seedtypes.Ch
 	return response, nil
 }
 
-func retrieveCharacterClasses(r *http.Request, i handlerinput.HandlerInput[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveCharacterClasses(r *http.Request, i handlerinput.Main[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -9,7 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i HandlerInput[T, R, A]) QueryWrapper(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapBasic) IDFilter {
+func (i Main[T, R, A]) QueryWrapper(r *http.Request, inputIDs []int32, queryName ts.QueryParamName, wrapperFn QueryWrapBasic) IDFilter {
 	return func(ctx context.Context) ([]int32, error) {
 		queryParam := i.QueryLookup[queryName]
 		query, err := queryParam.BasicChecks(r, i.QueryLookup)

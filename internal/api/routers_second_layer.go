@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func HandleList[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
+func HandleList[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A]) {
 	ids, err := i.RetrieveFunc(r, i)
 	if HandleHTTPError(w, err) {
 		return
@@ -26,7 +26,7 @@ func HandleList[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http
 	respondWithJSON(w, http.StatusOK, resourceList)
 }
 
-func HandleIDOnly[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A], segment string) {
+func HandleIDOnly[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A], segment string) {
 	if segment == string(ts.SnParameters) {
 		HandleParameters(w, r, i)
 		return
@@ -55,7 +55,7 @@ func HandleIDOnly[T seedtypes.Lookupable, R any, A apiresource.APIResource](w ht
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-func HandleNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A], segment string) {
+func HandleNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A], segment string) {
 	if segment == string(ts.SnParameters) {
 		HandleParameters(w, r, i)
 		return
@@ -93,7 +93,7 @@ func HandleNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](w ht
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-func HandleMultiple[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.HandlerInput[T, R, A], name string) (apiresource.APIResourceList[A], error) {
+func HandleMultiple[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A], name string) (apiresource.APIResourceList[A], error) {
 	dbIDs, err := i.GetMultipleQuery(r.Context(), name)
 	if err != nil {
 		return apiresource.APIResourceList[A]{}, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get multiple %s with name '%s'", i.ResTypeSingle, name), err)
@@ -102,7 +102,7 @@ func HandleMultiple[T seedtypes.Lookupable, R any, A apiresource.APIResource](r 
 	return i.ToAPIResList(r, dbIDs)
 }
 
-func HandleNameVersion[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A], name, versionStr string) {
+func HandleNameVersion[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A], name, versionStr string) {
 	parseRes, err := ParseNameVersionResource(i, name, versionStr)
 	if HandleHTTPError(w, err) {
 		return
@@ -116,7 +116,7 @@ func HandleNameVersion[T seedtypes.Lookupable, R any, A apiresource.APIResource]
 	respondWithJSON(w, http.StatusOK, resource)
 }
 
-func HandleSubsections[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A], posIDStr, posSection string) {
+func HandleSubsections[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A], posIDStr, posSection string) {
 	idIsValid := isValidInt(posIDStr)
 	sectionIsInt := isValidInt(posSection)
 
@@ -143,7 +143,7 @@ func HandleSubsections[T seedtypes.Lookupable, R any, A apiresource.APIResource]
 	}
 }
 
-func HandleSubOrNameVer[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A], segment1, segment2 string) {
+func HandleSubOrNameVer[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A], segment1, segment2 string) {
 	isSubsection, isNameVersion, subsectionIsInt := getSegmentCases(segment1, segment2)
 
 	switch {
@@ -167,7 +167,7 @@ func HandleSubOrNameVer[T seedtypes.Lookupable, R any, A apiresource.APIResource
 
 // if len(segments) is 0, this function crafts the response for /enums
 
-func HandleListEnums(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEnums) {
+func HandleListEnums(w http.ResponseWriter, r *http.Request, i handlerinput.Enums) {
 	err := i.VerifyQueriesRetrieve(r)
 	if HandleHTTPError(w, err) {
 		return
@@ -183,7 +183,7 @@ func HandleListEnums(w http.ResponseWriter, r *http.Request, i handlerinput.Hand
 
 // if len(segments) is 1, this function crafts the response for /enums/{enum_name} and /enums/parameters
 
-func HandleSingleEnums(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEnums, segment string) {
+func HandleSingleEnums(w http.ResponseWriter, r *http.Request, i handlerinput.Enums, segment string) {
 	if segment == string(ts.SnParameters) {
 		HandleParametersEnums(w, r, i)
 		return
@@ -204,7 +204,7 @@ func HandleSingleEnums(w http.ResponseWriter, r *http.Request, i handlerinput.Ha
 }
 
 // HandleListEndpoints crafts the response for /endpoints, if len(segments) is 0
-func HandleListEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEndpoints) {
+func HandleListEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.Endpoints) {
 	err := i.VerifyQueries(r)
 	if HandleHTTPError(w, err) {
 		return
@@ -218,7 +218,7 @@ func HandleListEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.
 }
 
 // HandleSectionsEndpoints checks if /endpoints was combined with 'parameters' if len(segments) is 1. returns an error, if it wasn't
-func HandleSectionsEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEndpoints, segment string) {
+func HandleSectionsEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.Endpoints, segment string) {
 	if segment == string(ts.SnParameters) {
 		HandleParametersEndpoints(w, r, i)
 		return
@@ -227,7 +227,7 @@ func HandleSectionsEndpoints(w http.ResponseWriter, r *http.Request, i handlerin
 	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests", nil)
 }
 
-func HandleBody[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.ServiceInput[P, R], segment string) {
+func HandleBody[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R], segment string) {
 	err := i.VerifyQueries(r)
 	if HandleHTTPError(w, err) {
 		return
@@ -241,7 +241,7 @@ func HandleBody[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w 
 	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'", i.Endpoint), nil)
 }
 
-func HandleBodySections[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.ServiceInput[P, R], segments []string) {
+func HandleBodySections[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R], segments []string) {
 	err := i.VerifyQueries(r)
 	if HandleHTTPError(w, err) {
 		return
@@ -267,7 +267,7 @@ func HandleBodySections[P servicetypes.ServiceParams, R servicetypes.ServiceResp
 	}
 }
 
-func HandlePost[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.ServiceInput[P, R]) {
+func HandlePost[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R]) {
 	err := i.VerifyQueries(r)
 	if HandleHTTPError(w, err) {
 		return

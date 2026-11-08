@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func createItemMonster(itemName string, mon apiresource.NamedAPIResource) apitypes.MonItemAmts {
+func createItemMonster(itemName string, mon apiresource.Named) apitypes.MonItemAmts {
 	monster, _ := lookup.GetResourceByID(mon.ID, lookup.L.MonstersID)
 
 	return apitypes.MonItemAmts{

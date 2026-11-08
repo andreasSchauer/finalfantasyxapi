@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getElement(r *http.Request, i handlerinput.HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource], id int32) (apitypes.Element, error) {
+func getElement(r *http.Request, i handlerinput.Main[seedtypes.Element, apitypes.Element, apiresource.Named], id int32) (apitypes.Element, error) {
 	element, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Element{}, err
@@ -39,6 +39,6 @@ func getElement(r *http.Request, i handlerinput.HandlerInput[seedtypes.Element, 
 	return response, nil
 }
 
-func retrieveElements(r *http.Request, i handlerinput.HandlerInput[seedtypes.Element, apitypes.Element, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveElements(r *http.Request, i handlerinput.Main[seedtypes.Element, apitypes.Element, apiresource.Named]) ([]int32, error) {
 	return i.VerifyQueriesRetrieve(r)
 }

@@ -63,8 +63,8 @@ func TestGetTreasure(t *testing.T) {
 			treasureType:    database.TreasureTypeChest,
 			lootType:        database.LootTypeItem,
 			gilAmount:       nil,
-			items: []testResAmount[apiresource.TypedAPIResource]{
-				newTestResAmount[apiresource.TypedAPIResource](82, 1),
+			items: []testResAmount[apiresource.Typed]{
+				newTestResAmount[apiresource.Typed](82, 1),
 			},
 			equipment: nil,
 		},
@@ -82,8 +82,8 @@ func TestGetTreasure(t *testing.T) {
 			treasureType:    database.TreasureTypeObject,
 			lootType:        database.LootTypeItem,
 			gilAmount:       nil,
-			items: []testResAmount[apiresource.TypedAPIResource]{
-				newTestResAmount[apiresource.TypedAPIResource](147, 1),
+			items: []testResAmount[apiresource.Typed]{
+				newTestResAmount[apiresource.Typed](147, 1),
 			},
 			equipment: nil,
 		},
@@ -139,8 +139,8 @@ func TestGetTreasure(t *testing.T) {
 			treasureType:    database.TreasureTypeGift,
 			lootType:        database.LootTypeItem,
 			gilAmount:       nil,
-			items: []testResAmount[apiresource.TypedAPIResource]{
-				newTestResAmount[apiresource.TypedAPIResource](97, 1),
+			items: []testResAmount[apiresource.Typed]{
+				newTestResAmount[apiresource.Typed](97, 1),
 			},
 			equipment: nil,
 		},
@@ -234,7 +234,7 @@ func TestRetrieveTreasures(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Treasures.Endpoint, "RetrieveTreasures", testSrv.HandleTreasures, compareAPIResourceLists[apiresource.UnnamedAPIResource])
+	testIDList(t, tests, api.E.Treasures.Endpoint, "RetrieveTreasures", testSrv.HandleTreasures, compareAPIResourceLists[apiresource.Unnamed])
 }
 
 func TestSubsectionTreasures(t *testing.T) {
@@ -272,5 +272,5 @@ func TestSubsectionTreasures(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Treasures.Endpoint, "SubsectionTreasures", nil, compareSimpleResourceLists[apiresource.UnnamedAPIResource, sectiontypes.TreasureSimple])
+	testIDList(t, tests, api.E.Treasures.Endpoint, "SubsectionTreasures", nil, compareSimpleResourceLists[apiresource.Unnamed, sectiontypes.TreasureSimple])
 }

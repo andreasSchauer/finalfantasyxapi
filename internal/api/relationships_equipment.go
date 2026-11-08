@@ -78,15 +78,15 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 	return rel, nil
 }
 
-func getEquipmentTableRef(r *http.Request, ctx context.Context, queryParam queryparam.QueryParam, equipment seedtypes.EquipmentName) (apiresource.UnnamedAPIResource, error) {
+func getEquipmentTableRef(r *http.Request, ctx context.Context, queryParam queryparam.QueryParam, equipment seedtypes.EquipmentName) (apiresource.Unnamed, error) {
 	tables, err := E.EquipmentTables.DBGetRelations(ctx, equipment, config.Cfg.DB.GetEquipmentEquipmentTableIDs)
 	if err != nil {
-		return apiresource.UnnamedAPIResource{}, err
+		return apiresource.Unnamed{}, err
 	}
 
 	tableIdx, err := getTableIndex(r, queryParam, len(tables))
 	if err != nil {
-		return apiresource.UnnamedAPIResource{}, err
+		return apiresource.Unnamed{}, err
 	}
 	tableRef := tables[tableIdx]
 

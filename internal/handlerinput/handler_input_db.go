@@ -13,7 +13,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i HandlerInput[T, R, A]) DBGetRelation(ctx context.Context, filterItem seedtypes.Lookupable, dbQuery DBQueryIntOne) (A, error) {
+func (i Main[T, R, A]) DBGetRelation(ctx context.Context, filterItem seedtypes.Lookupable, dbQuery DBQueryIntOne) (A, error) {
 	var zeroType A
 
 	dbID, err := dbQuery(ctx, filterItem.GetID())
@@ -26,7 +26,7 @@ func (i HandlerInput[T, R, A]) DBGetRelation(ctx context.Context, filterItem see
 }
 
 // DBGetRelations gets relationship resources of item. handlerInput = endpoint of fetched resources
-func (i HandlerInput[T, R, A]) DBGetRelations(ctx context.Context, filterItem seedtypes.Lookupable, dbQuery DBQueryIntMany) ([]A, error) {
+func (i Main[T, R, A]) DBGetRelations(ctx context.Context, filterItem seedtypes.Lookupable, dbQuery DBQueryIntMany) ([]A, error) {
 	dbIds, err := dbQuery(ctx, filterItem.GetID())
 	if err != nil {
 		return nil, i.ErrorDB(filterItem, err)
@@ -36,7 +36,7 @@ func (i HandlerInput[T, R, A]) DBGetRelations(ctx context.Context, filterItem se
 	return resources, nil
 }
 
-func (i HandlerInput[T, R, A]) DBGetRelationPtr(ctx context.Context, item seedtypes.Lookupable, dbQuery DBQueryIntOne) (*A, error) {
+func (i Main[T, R, A]) DBGetRelationPtr(ctx context.Context, item seedtypes.Lookupable, dbQuery DBQueryIntOne) (*A, error) {
 	dbID, err := dbQuery(ctx, item.GetID())
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -51,7 +51,7 @@ func (i HandlerInput[T, R, A]) DBGetRelationPtr(ctx context.Context, item seedty
 
 // queries db for junctionPairs and converts them into a []Junction
 
-func (i HandlerInput[T, R, A]) GetDBJunctions[row any](ctx context.Context, ids []int32, childResType ts.ResTypeSingle, dbQuery func(context.Context, []int32) ([]row, error), converter func(row) sectiontypes.Junction) ([]sectiontypes.Junction, error) {
+func (i Main[T, R, A]) GetDBJunctions[row any](ctx context.Context, ids []int32, childResType ts.ResTypeSingle, dbQuery func(context.Context, []int32) ([]row, error), converter func(row) sectiontypes.Junction) ([]sectiontypes.Junction, error) {
 	dbJunctions, err := dbQuery(ctx, ids)
 	if err != nil {
 		return nil, i.ErrorDBPairs(childResType, err)

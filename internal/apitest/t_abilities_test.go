@@ -346,7 +346,7 @@ func TestRetrieveAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Abilities.Endpoint, "RetrieveAbilities", testSrv.HandleAbilities, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Abilities.Endpoint, "RetrieveAbilities", testSrv.HandleAbilities, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestSubsectionAbilities(t *testing.T) {
@@ -404,5 +404,5 @@ func TestSubsectionAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Abilities.Endpoint, "SubsectionAbilities", nil, compareSimpleResourceLists[apiresource.NamedAPIResource, sectiontypes.AbilitySimple])
+	testIDList(t, tests, api.E.Abilities.Endpoint, "SubsectionAbilities", nil, compareSimpleResourceLists[apiresource.Named, sectiontypes.AbilitySimple])
 }

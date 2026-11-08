@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
-func newBaseStat(res apiresource.NamedAPIResource, value int32) apitypes.BaseStat {
+func newBaseStat(res apiresource.Named, value int32) apitypes.BaseStat {
 	return apitypes.BaseStat{
 		Stat:  res,
 		Value: value,

@@ -291,5 +291,5 @@ func TestRetrieveAeons(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Aeons.Endpoint, "RetrieveAeons", testSrv.HandleAeons, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Aeons.Endpoint, "RetrieveAeons", testSrv.HandleAeons, compareAPIResourceLists[apiresource.Named])
 }

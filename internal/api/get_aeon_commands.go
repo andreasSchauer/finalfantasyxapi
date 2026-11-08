@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getAeonCommand(r *http.Request, i handlerinput.HandlerInput[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource], id int32) (apitypes.AeonCommand, error) {
+func getAeonCommand(r *http.Request, i handlerinput.Main[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.Named], id int32) (apitypes.AeonCommand, error) {
 	command, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.AeonCommand{}, err
@@ -39,6 +39,6 @@ func getAeonCommand(r *http.Request, i handlerinput.HandlerInput[seedtypes.AeonC
 	return response, nil
 }
 
-func retrieveAeonCommands(r *http.Request, i handlerinput.HandlerInput[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveAeonCommands(r *http.Request, i handlerinput.Main[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.Named]) ([]int32, error) {
 	return i.VerifyQueriesRetrieve(r)
 }

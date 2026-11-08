@@ -14,7 +14,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getTreasure(r *http.Request, i handlerinput.HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource], id int32) (apitypes.Treasure, error) {
+func getTreasure(r *http.Request, i handlerinput.Main[seedtypes.Treasure, apitypes.Treasure, apiresource.Unnamed], id int32) (apitypes.Treasure, error) {
 	treasure, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Treasure{}, err
@@ -36,7 +36,7 @@ func getTreasure(r *http.Request, i handlerinput.HandlerInput[seedtypes.Treasure
 	return response, nil
 }
 
-func retrieveTreasures(r *http.Request, i handlerinput.HandlerInput[seedtypes.Treasure, apitypes.Treasure, apiresource.UnnamedAPIResource]) ([]int32, error) {
+func retrieveTreasures(r *http.Request, i handlerinput.Main[seedtypes.Treasure, apitypes.Treasure, apiresource.Unnamed]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

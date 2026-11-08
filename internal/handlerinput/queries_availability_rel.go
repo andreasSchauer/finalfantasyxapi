@@ -19,7 +19,7 @@ type RelAvlParams struct {
 	Repeatable   sql.NullBool
 }
 
-func (i HandlerInput[T, R, A]) QueryAvlRelGetParams(r *http.Request, parentID int32) (RelAvlParams, error) {
+func (i Main[T, R, A]) QueryAvlRelGetParams(r *http.Request, parentID int32) (RelAvlParams, error) {
 	queryParam := i.QueryLookup[ts.QpnRelAvailability]
 
 	availabilities, err := queryParam.ParseEnumList(r, enums.T.AvailabilityType)
@@ -46,7 +46,7 @@ func (i HandlerInput[T, R, A]) QueryAvlRelGetParams(r *http.Request, parentID in
 	return availabilityParams, nil
 }
 
-func (i HandlerInput[T, R, A]) QueryAvlRelRun[K seedtypes.Lookupable](ctx context.Context, item K, params RelAvlParams, dbQuery DBQueryRelAvl) ([]A, error) {
+func (i Main[T, R, A]) QueryAvlRelRun[K seedtypes.Lookupable](ctx context.Context, item K, params RelAvlParams, dbQuery DBQueryRelAvl) ([]A, error) {
 	dbIDs, err := dbQuery(ctx, params)
 	if err != nil {
 		return nil, i.ErrorDB(item, err)

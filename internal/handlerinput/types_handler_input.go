@@ -10,7 +10,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type HandlerInput[T seedtypes.Lookupable, R any, A apiresource.APIResource] struct {
+type Main[T seedtypes.Lookupable, R any, A apiresource.APIResource] struct {
 	Endpoint         ts.EndpointName
 	ResTypeSingle    ts.ResTypeSingle
 	ResTypePlural    ts.ResTypePlural
@@ -20,9 +20,9 @@ type HandlerInput[T seedtypes.Lookupable, R any, A apiresource.APIResource] stru
 	QueryLookup      map[ts.QueryParamName]queryparam.QueryParam
 	GetMultipleQuery DBQueryStringMany
 	RetrieveQuery    DBQueryNoInput
-	IDToResFunc      func(HandlerInput[T, R, A], int32) A
-	GetSingleFunc    func(*http.Request, HandlerInput[T, R, A], int32) (R, error)
-	RetrieveFunc     func(*http.Request, HandlerInput[T, R, A]) ([]int32, error)
+	IDToResFunc      func(Main[T, R, A], int32) A
+	GetSingleFunc    func(*http.Request, Main[T, R, A], int32) (R, error)
+	RetrieveFunc     func(*http.Request, Main[T, R, A]) ([]int32, error)
 	AvlFunc          func(*http.Request, []int32) ([]int32, error)
 	Subsections      map[ts.SectionName]Subsection
 }

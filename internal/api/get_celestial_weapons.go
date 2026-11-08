@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getCelestialWeapon(r *http.Request, i handlerinput.HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource], id int32) (apitypes.CelestialWeapon, error) {
+func getCelestialWeapon(r *http.Request, i handlerinput.Main[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.Named], id int32) (apitypes.CelestialWeapon, error) {
 	celestialWeapon, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.CelestialWeapon{}, err
@@ -41,7 +41,7 @@ func getCelestialWeapon(r *http.Request, i handlerinput.HandlerInput[seedtypes.C
 	return response, nil
 }
 
-func retrieveCelestialWeapons(r *http.Request, i handlerinput.HandlerInput[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveCelestialWeapons(r *http.Request, i handlerinput.Main[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

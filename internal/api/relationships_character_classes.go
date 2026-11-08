@@ -59,7 +59,7 @@ func getCharClassRelationships(r *http.Request, class seedtypes.CharacterClass) 
 	return rel, nil
 }
 
-func getClassLearnableAbilities(ctx context.Context, class seedtypes.CharacterClass, defaultAbilities []apiresource.TypedAPIResource) ([]apiresource.TypedAPIResource, error) {
+func getClassLearnableAbilities(ctx context.Context, class seedtypes.CharacterClass, defaultAbilities []apiresource.Typed) ([]apiresource.Typed, error) {
 	allAbilities, err := E.Abilities.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
 		return nil, err

@@ -118,5 +118,5 @@ func TestRetrieveSubmenus(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Submenus.Endpoint, "RetrieveSubmenus", testSrv.HandleSubmenus, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Submenus.Endpoint, "RetrieveSubmenus", testSrv.HandleSubmenus, compareAPIResourceLists[apiresource.Named])
 }

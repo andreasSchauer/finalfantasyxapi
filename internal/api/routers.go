@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-func routerIDOnly[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
+func routerIDOnly[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A]) {
 	i.Usage = []string{"/{id}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
@@ -34,7 +34,7 @@ func routerIDOnly[T seedtypes.Lookupable, R any, A apiresource.APIResource](w ht
 	}
 }
 
-func routerNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
+func routerNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A]) {
 	i.Usage = []string{"/{id}", "/{name}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
@@ -57,7 +57,7 @@ func routerNameID[T seedtypes.Lookupable, R any, A apiresource.APIResource](w ht
 	}
 }
 
-func routerNameVersion[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInput[T, R, A]) {
+func routerNameVersion[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A]) {
 	i.Usage = []string{"/{id}", "/{name}", "/{name}/{version}"}
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
@@ -80,7 +80,7 @@ func routerNameVersion[T seedtypes.Lookupable, R any, A apiresource.APIResource]
 	}
 }
 
-func routerEnums(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEnums) {
+func routerEnums(w http.ResponseWriter, r *http.Request, i handlerinput.Enums) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
@@ -98,7 +98,7 @@ func routerEnums(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerI
 	}
 }
 
-func routerEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.HandlerInputEndpoints) {
+func routerEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.Endpoints) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
@@ -116,7 +116,7 @@ func routerEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.Hand
 	}
 }
 
-func routerServiceGet[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.ServiceInput[P, R]) {
+func routerServiceGet[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R]) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
@@ -134,7 +134,7 @@ func routerServiceGet[P servicetypes.ServiceParams, R servicetypes.ServiceRespon
 	}
 }
 
-func routerServicePost[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.ServiceInput[P, R]) {
+func routerServicePost[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R]) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {

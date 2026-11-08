@@ -15,7 +15,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getPlayerAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource], id int32) (apitypes.PlayerAbility, error) {
+func getPlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.Named], id int32) (apitypes.PlayerAbility, error) {
 	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
@@ -62,7 +62,7 @@ func getPlayerAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.Pla
 	return response, nil
 }
 
-func retrievePlayerAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrievePlayerAbilities(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

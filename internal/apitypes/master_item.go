@@ -6,13 +6,13 @@ import (
 )
 
 type MasterItem struct {
-	ID             int32                        `json:"id"`
-	Name           string                       `json:"name"`
-	Type           database.ItemType            `json:"type"`
-	TypedItem      apiresource.NamedAPIResource `json:"typed_item"`
-	Description    string                       `json:"description"`
-	Effect         string                       `json:"effect"`
-	ObtainableFrom ObtainableFrom               `json:"obtainable_from"`
+	ID             int32             `json:"id"`
+	Name           string            `json:"name"`
+	Type           database.ItemType `json:"type"`
+	TypedItem      apiresource.Named `json:"typed_item"`
+	Description    string            `json:"description"`
+	Effect         string            `json:"effect"`
+	ObtainableFrom ObtainableFrom    `json:"obtainable_from"`
 }
 
 type ObtainableFrom struct {

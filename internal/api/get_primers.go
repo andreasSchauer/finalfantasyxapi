@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getPrimer(r *http.Request, i handlerinput.HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource], id int32) (apitypes.Primer, error) {
+func getPrimer(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.Primer, apiresource.Named], id int32) (apitypes.Primer, error) {
 	primer, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Primer{}, err
@@ -37,7 +37,7 @@ func getPrimer(r *http.Request, i handlerinput.HandlerInput[seedtypes.Primer, ap
 	return response, nil
 }
 
-func retrievePrimers(r *http.Request, i handlerinput.HandlerInput[seedtypes.Primer, apitypes.Primer, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrievePrimers(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.Primer, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

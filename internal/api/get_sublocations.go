@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSublocation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource], id int32) (apitypes.Sublocation, error) {
+func getSublocation(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, apitypes.Sublocation, apiresource.Named], id int32) (apitypes.Sublocation, error) {
 	sublocation, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Sublocation{}, err
@@ -36,7 +36,7 @@ func getSublocation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sublo
 	return response, nil
 }
 
-func retrieveSublocations(r *http.Request, i handlerinput.HandlerInput[seedtypes.Sublocation, apitypes.Sublocation, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveSublocations(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, apitypes.Sublocation, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -14,7 +14,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAutoAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource], id int32) (apitypes.AutoAbility, error) {
+func getAutoAbility(r *http.Request, i handlerinput.Main[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.Named], id int32) (apitypes.AutoAbility, error) {
 	autoAbility, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.AutoAbility{}, err
@@ -60,7 +60,7 @@ func getAutoAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.AutoA
 	return response, nil
 }
 
-func retrieveAutoAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveAutoAbilities(r *http.Request, i handlerinput.Main[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

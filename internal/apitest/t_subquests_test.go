@@ -48,7 +48,7 @@ func TestGetSubquest(t *testing.T) {
 			parentSidequest: 1,
 			completion: testQuestCompletion{
 				areas:  []int32{203},
-				reward: newTestResAmount[apiresource.TypedAPIResource](50, 99),
+				reward: newTestResAmount[apiresource.Typed](50, 99),
 			},
 			arenaCreation: h.GetInt32Ptr(5),
 		},
@@ -66,7 +66,7 @@ func TestGetSubquest(t *testing.T) {
 			parentSidequest: 2,
 			completion: testQuestCompletion{
 				areas:  []int32{207},
-				reward: newTestResAmount[apiresource.TypedAPIResource](3, 30),
+				reward: newTestResAmount[apiresource.Typed](3, 30),
 			},
 			arenaCreation: nil,
 		},
@@ -84,7 +84,7 @@ func TestGetSubquest(t *testing.T) {
 			parentSidequest: 6,
 			completion: testQuestCompletion{
 				areas:  []int32{142, 143},
-				reward: newTestResAmount[apiresource.TypedAPIResource](98, 1),
+				reward: newTestResAmount[apiresource.Typed](98, 1),
 			},
 			arenaCreation: nil,
 		},
@@ -154,7 +154,7 @@ func TestRetrieveSubquests(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Subquests.Endpoint, "RetrieveSubquests", testSrv.HandleSubquests, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Subquests.Endpoint, "RetrieveSubquests", testSrv.HandleSubquests, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestSubsectionSubquests(t *testing.T) {
@@ -198,5 +198,5 @@ func TestSubsectionSubquests(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Subquests.Endpoint, "SubsectionSubquests", testSrv.HandleSidequests, compareSimpleResourceLists[apiresource.NamedAPIResource, sectiontypes.SubquestSimple])
+	testIDList(t, tests, api.E.Subquests.Endpoint, "SubsectionSubquests", testSrv.HandleSidequests, compareSimpleResourceLists[apiresource.Named, sectiontypes.SubquestSimple])
 }

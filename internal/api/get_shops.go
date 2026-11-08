@@ -14,7 +14,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getShop(r *http.Request, i handlerinput.HandlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource], id int32) (apitypes.Shop, error) {
+func getShop(r *http.Request, i handlerinput.Main[seedtypes.Shop, apitypes.Shop, apiresource.Unnamed], id int32) (apitypes.Shop, error) {
 	shop, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Shop{}, err
@@ -32,7 +32,7 @@ func getShop(r *http.Request, i handlerinput.HandlerInput[seedtypes.Shop, apityp
 	return response, nil
 }
 
-func retrieveShops(r *http.Request, i handlerinput.HandlerInput[seedtypes.Shop, apitypes.Shop, apiresource.UnnamedAPIResource]) ([]int32, error) {
+func retrieveShops(r *http.Request, i handlerinput.Main[seedtypes.Shop, apitypes.Shop, apiresource.Unnamed]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

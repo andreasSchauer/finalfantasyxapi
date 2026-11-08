@@ -78,5 +78,5 @@ func TestRetrieveProperties(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Properties.Endpoint, "RetrieveProperties", testSrv.HandleProperties, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Properties.Endpoint, "RetrieveProperties", testSrv.HandleProperties, compareAPIResourceLists[apiresource.Named])
 }

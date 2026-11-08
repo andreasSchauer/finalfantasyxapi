@@ -189,5 +189,5 @@ func TestRetrieveStatusConditions(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.StatusConditions.Endpoint, "RetrieveStatusConditions", testSrv.HandleStatusConditions, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.StatusConditions.Endpoint, "RetrieveStatusConditions", testSrv.HandleStatusConditions, compareAPIResourceLists[apiresource.Named])
 }

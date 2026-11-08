@@ -63,7 +63,7 @@ func compareMonsters(test test, exp expMonster, got apitypes.Monster) {
 
 type testMonItems struct {
 	itemDropChance int32
-	items          map[string]*testResAmount[apiresource.TypedAPIResource]
+	items          map[string]*testResAmount[apiresource.Typed]
 	otherItems     []testPossibleItem
 }
 

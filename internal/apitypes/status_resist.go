@@ -5,8 +5,8 @@ import (
 )
 
 type StatusResist struct {
-	StatusCondition apiresource.NamedAPIResource `json:"status_condition"`
-	Resistance      int32                        `json:"resistance"`
+	StatusCondition apiresource.Named `json:"status_condition"`
+	Resistance      int32             `json:"resistance"`
 }
 
 func (sr StatusResist) GetAPIResource() apiresource.APIResource {
@@ -25,8 +25,8 @@ func (sr StatusResist) GetVal() int32 {
 	return sr.Resistance
 }
 
-func (sr StatusResist) ToResAmount() apiresource.ResourceAmount[apiresource.NamedAPIResource] {
-	return apiresource.ResourceAmount[apiresource.NamedAPIResource]{
+func (sr StatusResist) ToResAmount() apiresource.ResourceAmount[apiresource.Named] {
+	return apiresource.ResourceAmount[apiresource.Named]{
 		Resource: sr.StatusCondition,
 		Amount:   sr.Resistance,
 	}

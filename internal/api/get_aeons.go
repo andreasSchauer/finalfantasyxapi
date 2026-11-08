@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAeon(r *http.Request, i handlerinput.HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource], id int32) (apitypes.Aeon, error) {
+func getAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named], id int32) (apitypes.Aeon, error) {
 	aeon, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Aeon{}, err
@@ -60,7 +60,7 @@ func getAeon(r *http.Request, i handlerinput.HandlerInput[seedtypes.Aeon, apityp
 	return response, nil
 }
 
-func retrieveAeons(r *http.Request, i handlerinput.HandlerInput[seedtypes.Aeon, apitypes.Aeon, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveAeons(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

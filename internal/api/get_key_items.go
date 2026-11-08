@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getKeyItem(r *http.Request, i handlerinput.HandlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource], id int32) (apitypes.KeyItem, error) {
+func getKeyItem(r *http.Request, i handlerinput.Main[seedtypes.KeyItem, apitypes.KeyItem, apiresource.Named], id int32) (apitypes.KeyItem, error) {
 	keyItem, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.KeyItem{}, err
@@ -40,7 +40,7 @@ func getKeyItem(r *http.Request, i handlerinput.HandlerInput[seedtypes.KeyItem, 
 	return response, nil
 }
 
-func retrieveKeyItems(r *http.Request, i handlerinput.HandlerInput[seedtypes.KeyItem, apitypes.KeyItem, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveKeyItems(r *http.Request, i handlerinput.Main[seedtypes.KeyItem, apitypes.KeyItem, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -143,5 +143,5 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.OverdriveModes.Endpoint, "RetrieveOverdriveModes", testSrv.HandleOverdriveModes, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.OverdriveModes.Endpoint, "RetrieveOverdriveModes", testSrv.HandleOverdriveModes, compareAPIResourceLists[apiresource.Named])
 }

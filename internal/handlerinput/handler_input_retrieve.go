@@ -10,7 +10,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func (i HandlerInput[T, R, A]) FilterIDs(r *http.Request, IDs []int32, queryFns []IDFilter) ([]int32, error) {
+func (i Main[T, R, A]) FilterIDs(r *http.Request, IDs []int32, queryFns []IDFilter) ([]int32, error) {
 	filteredIDs := IDs
 	g, ctx := errgroup.WithContext(r.Context())
 	var mu sync.Mutex

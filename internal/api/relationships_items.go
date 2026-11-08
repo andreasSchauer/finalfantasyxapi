@@ -109,7 +109,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 	return rel, nil
 }
 
-func getMonItemAmts(monsters []apiresource.NamedAPIResource, itemName string) []apitypes.MonItemAmts {
+func getMonItemAmts(monsters []apiresource.Named, itemName string) []apitypes.MonItemAmts {
 	monItemAmts := []apitypes.MonItemAmts{}
 
 	for _, monster := range monsters {

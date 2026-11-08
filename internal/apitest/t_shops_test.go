@@ -368,7 +368,7 @@ func TestRetrieveShops(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Shops.Endpoint, "RetrieveShops", testSrv.HandleShops, compareAPIResourceLists[apiresource.UnnamedAPIResource])
+	testIDList(t, tests, api.E.Shops.Endpoint, "RetrieveShops", testSrv.HandleShops, compareAPIResourceLists[apiresource.Unnamed])
 }
 
 func TestSubsectionShops(t *testing.T) {
@@ -396,5 +396,5 @@ func TestSubsectionShops(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Shops.Endpoint, "SubsectionShops", nil, compareSimpleResourceLists[apiresource.UnnamedAPIResource, sectiontypes.ShopSimple])
+	testIDList(t, tests, api.E.Shops.Endpoint, "SubsectionShops", nil, compareSimpleResourceLists[apiresource.Unnamed, sectiontypes.ShopSimple])
 }

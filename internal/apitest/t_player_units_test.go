@@ -141,5 +141,5 @@ func TestRetrievePlayerUnits(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.PlayerUnits.Endpoint, "RetrievePlayerUnits", testSrv.HandlePlayerUnits, compareAPIResourceLists[apiresource.TypedAPIResource])
+	testIDList(t, tests, api.E.PlayerUnits.Endpoint, "RetrievePlayerUnits", testSrv.HandlePlayerUnits, compareAPIResourceLists[apiresource.Typed])
 }

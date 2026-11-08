@@ -297,5 +297,5 @@ func TestRetrieveEquipment(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Equipment.Endpoint, "RetrieveEquipment", testSrv.HandleEquipment, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Equipment.Endpoint, "RetrieveEquipment", testSrv.HandleEquipment, compareAPIResourceLists[apiresource.Named])
 }

@@ -196,7 +196,7 @@ func TestGetMultipleEnemyAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.EnemyAbilities.Endpoint, "GetMultipleEnemyAbilities", testSrv.HandleEnemyAbilities, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.EnemyAbilities.Endpoint, "GetMultipleEnemyAbilities", testSrv.HandleEnemyAbilities, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestRetrieveEnemyAbilities(t *testing.T) {
@@ -254,5 +254,5 @@ func TestRetrieveEnemyAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.EnemyAbilities.Endpoint, "RetrieveEnemyAbilities", testSrv.HandleEnemyAbilities, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.EnemyAbilities.Endpoint, "RetrieveEnemyAbilities", testSrv.HandleEnemyAbilities, compareAPIResourceLists[apiresource.Named])
 }

@@ -32,7 +32,7 @@ type biReplacement struct {
 	DamageFormula  *string
 }
 
-func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.HandlerInput[T, R, A], ability apitypes.UserAbility, queryName ts.QueryParamName) ([]apitypes.BattleInteraction, error) {
+func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A], ability apitypes.UserAbility, queryName ts.QueryParamName) ([]apitypes.BattleInteraction, error) {
 	repl, err := getUnitRepl(r, i, queryName)
 	if errs.QueryIsEmpty(err) {
 		return ability.GetBattleInteractions(), nil
@@ -51,7 +51,7 @@ func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http
 	return battleInteractions, nil
 }
 
-func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.HandlerInput[T, R, A], queryName ts.QueryParamName) (unitRepl, error) {
+func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A], queryName ts.QueryParamName) (unitRepl, error) {
 	queryParamUser := i.QueryLookup[queryName]
 	queryParamBomb := i.QueryLookup[ts.QpnBombWpn]
 	queryParamCelestialWpn := i.QueryLookup[ts.QpnCelestialWeapon]

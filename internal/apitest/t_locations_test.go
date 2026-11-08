@@ -412,7 +412,7 @@ func TestRetrieveLocations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Locations.Endpoint, "RetrieveLocations", testSrv.HandleLocations, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.Locations.Endpoint, "RetrieveLocations", testSrv.HandleLocations, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestSubsectionLocations(t *testing.T) {
@@ -447,5 +447,5 @@ func TestSubsectionLocations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Locations.Endpoint, "SubsectionLocations", testSrv.HandleLocations, compareSimpleResourceLists[apiresource.NamedAPIResource, sectiontypes.LocationSimple])
+	testIDList(t, tests, api.E.Locations.Endpoint, "SubsectionLocations", testSrv.HandleLocations, compareSimpleResourceLists[apiresource.Named, sectiontypes.LocationSimple])
 }

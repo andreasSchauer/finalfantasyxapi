@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAgilityTier(r *http.Request, i handlerinput.HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource], id int32) (apitypes.AgilityTier, error) {
+func getAgilityTier(r *http.Request, i handlerinput.Main[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.Unnamed], id int32) (apitypes.AgilityTier, error) {
 	agilityTier, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.AgilityTier{}, err
@@ -32,7 +32,7 @@ func getAgilityTier(r *http.Request, i handlerinput.HandlerInput[seedtypes.Agili
 	return response, nil
 }
 
-func retrieveAgilityTiers(r *http.Request, i handlerinput.HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]) ([]int32, error) {
+func retrieveAgilityTiers(r *http.Request, i handlerinput.Main[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.Unnamed]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

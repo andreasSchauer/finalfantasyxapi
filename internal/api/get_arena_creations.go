@@ -17,7 +17,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getArenaCreation(r *http.Request, i handlerinput.HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource], id int32) (apitypes.ArenaCreation, error) {
+func getArenaCreation(r *http.Request, i handlerinput.Main[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.Named], id int32) (apitypes.ArenaCreation, error) {
 	creation, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.ArenaCreation{}, err
@@ -46,7 +46,7 @@ func getArenaCreation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Are
 	return response, nil
 }
 
-func retrieveArenaCreations(r *http.Request, i handlerinput.HandlerInput[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveArenaCreations(r *http.Request, i handlerinput.Main[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func retrieveArenaCreations(r *http.Request, i handlerinput.HandlerInput[seedtyp
 	})
 }
 
-func getArenaCreationMonsters(r *http.Request, creation seedtypes.ArenaCreation) ([]apiresource.NamedAPIResource, error) {
+func getArenaCreationMonsters(r *http.Request, creation seedtypes.ArenaCreation) ([]apiresource.Named, error) {
 	mf := createMonsterFilter(creation)
 
 	if mf.IsZero() || mf.CreationsUnlockedCategory != nil {

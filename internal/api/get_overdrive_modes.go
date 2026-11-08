@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getOverdriveMode(r *http.Request, i handlerinput.HandlerInput[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource], id int32) (apitypes.OverdriveMode, error) {
+func getOverdriveMode(r *http.Request, i handlerinput.Main[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.Named], id int32) (apitypes.OverdriveMode, error) {
 	mode, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.OverdriveMode{}, err
@@ -31,7 +31,7 @@ func getOverdriveMode(r *http.Request, i handlerinput.HandlerInput[seedtypes.Ove
 	return response, nil
 }
 
-func retrieveOverdriveModes(r *http.Request, i handlerinput.HandlerInput[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveOverdriveModes(r *http.Request, i handlerinput.Main[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

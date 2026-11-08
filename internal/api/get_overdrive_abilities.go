@@ -16,7 +16,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getOverdriveAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource], id int32) (apitypes.OverdriveAbility, error) {
+func getOverdriveAbility(r *http.Request, i handlerinput.Main[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.Named], id int32) (apitypes.OverdriveAbility, error) {
 	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.OverdriveAbility{}, err
@@ -47,7 +47,7 @@ func getOverdriveAbility(r *http.Request, i handlerinput.HandlerInput[seedtypes.
 	return response, nil
 }
 
-func retrieveOverdriveAbilities(r *http.Request, i handlerinput.HandlerInput[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveOverdriveAbilities(r *http.Request, i handlerinput.Main[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

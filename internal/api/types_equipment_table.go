@@ -14,6 +14,6 @@ func convertAbilityPool(p seedtypes.AbilityPool) apitypes.AbilityPool {
 	}
 }
 
-func convertEquipmentName(n seedtypes.EquipmentName) apiresource.NamedAPIResource {
+func convertEquipmentName(n seedtypes.EquipmentName) apiresource.Named {
 	return handlerinput.NameToNamedAPIResource(E.Equipment, n.Name, nil)
 }

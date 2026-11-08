@@ -47,7 +47,7 @@ func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (apityp
 		return err
 	})
 
-	var primer *apiresource.NamedAPIResource
+	var primer *apiresource.Named
 	if keyItem.Category == string(database.KeyItemCategoryPrimer) {
 		primerRes := handlerinput.NameToNamedAPIResource(E.Primers, keyItem.Name, nil)
 		primer = &primerRes
@@ -62,7 +62,7 @@ func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (apityp
 	return rel, nil
 }
 
-func getKeyItemCelestialWeapon(ctx context.Context, keyItem seedtypes.KeyItem) (*apiresource.NamedAPIResource, error) {
+func getKeyItemCelestialWeapon(ctx context.Context, keyItem seedtypes.KeyItem) (*apiresource.Named, error) {
 	if !(strings.HasSuffix(keyItem.Name, "crest") || strings.HasSuffix(keyItem.Name, "sigil")) {
 		return nil, nil
 	}

@@ -16,7 +16,7 @@ func convertBackgroundMusic(bm seedtypes.BackgroundMusic) apitypes.BackgroundMus
 }
 
 func convertCue(cue seedtypes.Cue) apitypes.Cue {
-	var triggerAreaPtr *apiresource.AreaAPIResource
+	var triggerAreaPtr *apiresource.Area
 
 	if cue.TriggerLocationArea != nil {
 		triggerArea := handlerinput.LocAreaToAreaAPIResource(E.Areas, *cue.TriggerLocationArea)

@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getFMV(r *http.Request, i handlerinput.HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource], id int32) (apitypes.FMV, error) {
+func getFMV(r *http.Request, i handlerinput.Main[seedtypes.FMV, apitypes.FMV, apiresource.Named], id int32) (apitypes.FMV, error) {
 	fmv, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.FMV{}, err
@@ -30,7 +30,7 @@ func getFMV(r *http.Request, i handlerinput.HandlerInput[seedtypes.FMV, apitypes
 	return response, nil
 }
 
-func retrieveFMVs(r *http.Request, i handlerinput.HandlerInput[seedtypes.FMV, apitypes.FMV, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveFMVs(r *http.Request, i handlerinput.Main[seedtypes.FMV, apitypes.FMV, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

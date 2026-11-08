@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getSubmenu(r *http.Request, i handlerinput.HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource], id int32) (apitypes.Submenu, error) {
+func getSubmenu(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes.Submenu, apiresource.Named], id int32) (apitypes.Submenu, error) {
 	submenu, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Submenu{}, err
@@ -37,7 +37,7 @@ func getSubmenu(r *http.Request, i handlerinput.HandlerInput[seedtypes.Submenu, 
 	return response, nil
 }
 
-func retrieveSubmenus(r *http.Request, i handlerinput.HandlerInput[seedtypes.Submenu, apitypes.Submenu, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveSubmenus(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes.Submenu, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

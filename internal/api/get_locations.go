@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getLocation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource], id int32) (apitypes.Location, error) {
+func getLocation(r *http.Request, i handlerinput.Main[seedtypes.Location, apitypes.Location, apiresource.Named], id int32) (apitypes.Location, error) {
 	location, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Location{}, err
@@ -35,7 +35,7 @@ func getLocation(r *http.Request, i handlerinput.HandlerInput[seedtypes.Location
 	return response, nil
 }
 
-func retrieveLocations(r *http.Request, i handlerinput.HandlerInput[seedtypes.Location, apitypes.Location, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveLocations(r *http.Request, i handlerinput.Main[seedtypes.Location, apitypes.Location, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

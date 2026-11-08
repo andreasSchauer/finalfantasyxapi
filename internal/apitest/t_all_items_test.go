@@ -289,5 +289,5 @@ func TestRetrieveAllItems(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.AllItems.Endpoint, "RetrieveMasterItems", testSrv.HandleAllItems, compareAPIResourceLists[apiresource.NamedAPIResource])
+	testIDList(t, tests, api.E.AllItems.Endpoint, "RetrieveMasterItems", testSrv.HandleAllItems, compareAPIResourceLists[apiresource.Named])
 }

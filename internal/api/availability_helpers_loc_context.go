@@ -18,7 +18,7 @@ type locContextParams struct {
 	Type    sql.NullString
 }
 
-func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.HandlerInput[T, R, A]) (locContextParams, error) {
+func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A]) (locContextParams, error) {
 	avlType := AvlTypeSelf
 	var locContextID sql.NullInt32
 	var locContextType string

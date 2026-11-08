@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getModifier(r *http.Request, i handlerinput.HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource], id int32) (apitypes.Modifier, error) {
+func getModifier(r *http.Request, i handlerinput.Main[seedtypes.Modifier, apitypes.Modifier, apiresource.Named], id int32) (apitypes.Modifier, error) {
 	modifier, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Modifier{}, err
@@ -42,7 +42,7 @@ func getModifier(r *http.Request, i handlerinput.HandlerInput[seedtypes.Modifier
 	return response, nil
 }
 
-func retrieveModifiers(r *http.Request, i handlerinput.HandlerInput[seedtypes.Modifier, apitypes.Modifier, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveModifiers(r *http.Request, i handlerinput.Main[seedtypes.Modifier, apitypes.Modifier, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -26,14 +26,14 @@ func newTestResAmount[A apiresource.APIResource](itemID int32, amount int32) tes
 
 type testPossibleItem struct {
 	index int
-	testResAmount[apiresource.TypedAPIResource]
+	testResAmount[apiresource.Typed]
 	chance int32
 }
 
 func newTestPossibleItem(idx int, itemID int32, amount, chance int32) testPossibleItem {
 	return testPossibleItem{
 		index:         idx,
-		testResAmount: newTestResAmount[apiresource.TypedAPIResource](itemID, amount),
+		testResAmount: newTestResAmount[apiresource.Typed](itemID, amount),
 		chance:        chance,
 	}
 }

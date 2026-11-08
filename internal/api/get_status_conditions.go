@@ -13,7 +13,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getStatusCondition(r *http.Request, i handlerinput.HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource], id int32) (apitypes.StatusCondition, error) {
+func getStatusCondition(r *http.Request, i handlerinput.Main[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.Named], id int32) (apitypes.StatusCondition, error) {
 	status, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.StatusCondition{}, err
@@ -46,7 +46,7 @@ func getStatusCondition(r *http.Request, i handlerinput.HandlerInput[seedtypes.S
 	return response, nil
 }
 
-func retrieveStatusConditions(r *http.Request, i handlerinput.HandlerInput[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.NamedAPIResource]) ([]int32, error) {
+func retrieveStatusConditions(r *http.Request, i handlerinput.Main[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
