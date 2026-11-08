@@ -257,7 +257,7 @@ func HandleBodySections[P ServiceParams, R ServiceResponse](w http.ResponseWrite
 		return
 
 	case string(ts.SnSamples):
-		respondWithJSON(w, http.StatusOK, i.SamplesFn())
+		respondWithJSON(w, http.StatusOK, i.Samples)
 		return
 
 	default:

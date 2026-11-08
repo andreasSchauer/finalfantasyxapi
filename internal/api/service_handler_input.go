@@ -8,5 +8,5 @@ type HandlerInputService[P ServiceParams, R ServiceResponse] struct {
 	VerifyFn  func(paramsVerifyer, P) (P, error)
 	ExecuteFn func(P) (R, error)
 	DocsFn    func() ParamsDoc
-	SamplesFn func() []SampleParams[P]
+	Samples   []SampleParams[P]
 }

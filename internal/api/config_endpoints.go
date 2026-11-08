@@ -996,7 +996,7 @@ func (E *Endpoints) Init() {
 		VerifyFn:  verifyAlBhedParams,
 		ExecuteFn: handleAlBhed,
 		DocsFn:    getAlBhedParamsDoc,
-		SamplesFn: getAlBhedParamsSamples,
+		Samples:   AlBhedParamsSamples,
 	}
 
 	E.TurnOrder = HandlerInputService[TurnOrderParams, TurnOrderResponse]{
@@ -1004,7 +1004,7 @@ func (E *Endpoints) Init() {
 		VerifyFn:  verifyTurnOrderParams,
 		ExecuteFn: handleTurnOrder,
 		DocsFn:    getTurnOrderParamsDoc,
-		SamplesFn: getTurnOrderParamsSamples,
+		Samples:   TurnOrderParamsSamples,
 	}
 
 	E.DropChance = HandlerInputService[DropChanceParams, DropChanceResponse]{
@@ -1012,7 +1012,7 @@ func (E *Endpoints) Init() {
 		VerifyFn:  verifyDropChanceParams,
 		ExecuteFn: handleDropChance,
 		DocsFn:    getDropChanceParamsDoc,
-		SamplesFn: getDropChanceParamsSamples,
+		Samples:   DropChanceParamsSamples,
 	}
 
 	E.CritChance = HandlerInputService[CritChanceParams, CritChanceResponse]{
@@ -1020,7 +1020,7 @@ func (E *Endpoints) Init() {
 		VerifyFn:  verifyCritChanceParams,
 		ExecuteFn: handleCritChance,
 		DocsFn:    getCritChanceParamsDoc,
-		SamplesFn: getCritChanceParamsSamples,
+		Samples:   CritChanceParamsSamples,
 	}
 
 	E.InitializeEndpointSlice()
