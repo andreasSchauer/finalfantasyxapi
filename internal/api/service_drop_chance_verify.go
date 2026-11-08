@@ -32,7 +32,7 @@ func verifyDropChanceParams(v paramsVerifyer, params DropChanceParams) (DropChan
 		return DropChanceParams{}, err
 	}
 
-	params.OptionalAbilities, err = v.field(params.OptionalAbilities, ts.PfnOptionalAbilities)
+	params.OptionalAbilities, err = v.bool(params.OptionalAbilities, ts.PfnOptionalAbilities)
 	if err != nil {
 		return DropChanceParams{}, err
 	}
@@ -52,7 +52,7 @@ func verifyDropChanceParams(v paramsVerifyer, params DropChanceParams) (DropChan
 		return DropChanceParams{}, err
 	}
 
-	params.Decimals, err = v.field(params.Decimals, ts.PfnDecimals)
+	params.Decimals, err = v.bool(params.Decimals, ts.PfnDecimals)
 	if err != nil {
 		return DropChanceParams{}, err
 	}

@@ -53,7 +53,7 @@ func (i HandlerInput[T, R, A]) QueryAvlGetParams(r *http.Request) (avlParams, er
 	return params, nil
 }
 
-// what's the difference?
+
 
 func (i HandlerInput[T, R, A]) QueryAvlRepGetParams(r *http.Request) (avlParams, error) {
 	params, errAvl := i.QueryAvlGetParams(r)

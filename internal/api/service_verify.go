@@ -41,19 +41,20 @@ func (v paramsVerifyer) checkFields() error {
 	return nil
 }
 
-func (v paramsVerifyer) fieldVerifyer[T any](val T, fieldName ts.FieldName) fieldVerifyer[T] {
+func (v paramsVerifyer) newFieldVerifyer[T any](val T, fieldName ts.FieldName) fieldVerifyer[T] {
 	return fieldVerifyer[T]{
 		fieldName:    fieldName,
 		val:          val,
 		doc:          v.paramsRules[fieldName].Doc,
 		valIsPresent: v.hasVal(fieldName),
-		pv:           v,
+		paramsRules:  v.paramsRules,
+		userValues:   v.userValues,
 	}
 }
 
 func (v paramsVerifyer) field[T any](val T, fieldName ts.FieldName) (T, error) {
 	var zero T
-	fv := v.fieldVerifyer(val, fieldName)
+	fv := v.newFieldVerifyer(val, fieldName)
 	fns := []func() error{
 		fv.required,
 		fv.conflictsWith,

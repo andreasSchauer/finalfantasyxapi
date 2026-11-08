@@ -12,11 +12,11 @@ import (
 )
 
 type fieldVerifyer[T any] struct {
-	fieldName    ts.FieldName
-	val          T
-	doc          FieldDoc
-	valIsPresent bool
-	pv           paramsVerifyer
+	fieldName    	ts.FieldName
+	val          	T
+	doc          	FieldDoc
+	valIsPresent 	bool
+	paramsVerifyer
 }
 
 func (v fieldVerifyer[T]) required() error {
@@ -33,8 +33,8 @@ func (v fieldVerifyer[T]) conflictsWith() error {
 	}
 
 	for _, conflictingField := range v.doc.ConflictsWith {
-		if v.valIsPresent && v.pv.hasVal(conflictingField) {
-			return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be used in combination with field '%s'", v.fieldName, v.pv.paramsRules[conflictingField].Doc.Field), nil)
+		if v.valIsPresent && v.hasVal(conflictingField) {
+			return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can't be used in combination with field '%s'", v.fieldName, v.paramsRules[conflictingField].Doc.Field), nil)
 		}
 	}
 
@@ -46,7 +46,7 @@ func (v fieldVerifyer[T]) requiredOr() error {
 		return nil
 	}
 
-	if slices.ContainsFunc(v.doc.RequiredOr, v.pv.hasVal) {
+	if slices.ContainsFunc(v.doc.RequiredOr, v.hasVal) {
 		return nil
 	}
 
@@ -60,7 +60,7 @@ func (v fieldVerifyer[T]) requiresAll() error {
 		return nil
 	}
 
-	if slices.ContainsFunc(v.doc.RequiresAll, v.pv.hasNoVal) {
+	if slices.ContainsFunc(v.doc.RequiresAll, v.hasNoVal) {
 		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' requires the following fields to have a value: %s", v.fieldName, ts.FormatPfnSlice(v.doc.RequiresAll)), nil)
 	}
 
@@ -72,7 +72,7 @@ func (v fieldVerifyer[T]) requiresOne() error {
 		return nil
 	}
 
-	if slices.ContainsFunc(v.doc.RequiresOne, v.pv.hasVal) {
+	if slices.ContainsFunc(v.doc.RequiresOne, v.hasVal) {
 		return nil
 	}
 
@@ -84,7 +84,7 @@ func (v fieldVerifyer[T]) allowedIDs() error {
 		return nil
 	}
 
-	id, err := getInt32FromUserVals(ts.PfnUnitID, v.pv.userValues)
+	id, err := getInt32FromUserVals(ts.PfnUnitID, v.userValues)
 	if err != nil {
 		return nil
 	}
@@ -105,8 +105,8 @@ func (v fieldVerifyer[T]) allowedIDValPairs() error {
 		return errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find parent id field for field '%s'", v.fieldName), nil)
 	}
 
-	id, _ := getInt32FromUserVals(*v.doc.ParentIDField, v.pv.userValues)
-	value, err := getInt32FromUserVals(v.fieldName, v.pv.userValues)
+	id, _ := getInt32FromUserVals(*v.doc.ParentIDField, v.userValues)
+	value, err := getInt32FromUserVals(v.fieldName, v.userValues)
 	if err != nil {
 		return nil
 	}

@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 )
 
-func getItemSourceIDs(sourceType ViewSourceType) handlerinput.RelAvailabilityDBQuery {
+func getItemSourceIDs(sourceType ViewSourceType) handlerinput.DBQueryRelAvl {
 	return func(ctx context.Context, p handlerinput.RelAvlParams) ([]int32, error) {
 		return config.Cfg.DB.GetItemSourceIDs(ctx, database.GetItemSourceIDsParams{
 			ItemID:       p.ParentID,
@@ -19,7 +19,7 @@ func getItemSourceIDs(sourceType ViewSourceType) handlerinput.RelAvailabilityDBQ
 	}
 }
 
-func getKeyItemSourceIDs(sourceType ViewSourceType) handlerinput.RelAvailabilityDBQuery {
+func getKeyItemSourceIDs(sourceType ViewSourceType) handlerinput.DBQueryRelAvl {
 	return func(ctx context.Context, p handlerinput.RelAvlParams) ([]int32, error) {
 		return config.Cfg.DB.GetKeyItemSourceIDs(ctx, database.GetKeyItemSourceIDsParams{
 			KeyItemID:    p.ParentID,
@@ -29,7 +29,7 @@ func getKeyItemSourceIDs(sourceType ViewSourceType) handlerinput.RelAvailability
 	}
 }
 
-func getKeyItemAreaIDs() handlerinput.RelAvailabilityDBQuery {
+func getKeyItemAreaIDs() handlerinput.DBQueryRelAvl {
 	return func(ctx context.Context, p handlerinput.RelAvlParams) ([]int32, error) {
 		return config.Cfg.DB.GetKeyItemAreaIDs(ctx, database.GetKeyItemAreaIDsParams{
 			KeyItemID:    p.ParentID,
@@ -38,7 +38,7 @@ func getKeyItemAreaIDs() handlerinput.RelAvailabilityDBQuery {
 	}
 }
 
-func getAutoAbilitySourceIDs(sourceType ViewSourceType, shopType *database.ShopType) handlerinput.RelAvailabilityDBQuery {
+func getAutoAbilitySourceIDs(sourceType ViewSourceType, shopType *database.ShopType) handlerinput.DBQueryRelAvl {
 	return func(ctx context.Context, p handlerinput.RelAvlParams) ([]int32, error) {
 		return config.Cfg.DB.GetAutoAbilitySourceIDs(ctx, database.GetAutoAbilitySourceIDsParams{
 			AutoAbilityID: p.ParentID,
@@ -50,7 +50,7 @@ func getAutoAbilitySourceIDs(sourceType ViewSourceType, shopType *database.ShopT
 	}
 }
 
-func getAutoAbilityItemMonsterIDs() handlerinput.RelAvailabilityDBQuery {
+func getAutoAbilityItemMonsterIDs() handlerinput.DBQueryRelAvl {
 	return func(ctx context.Context, p handlerinput.RelAvlParams) ([]int32, error) {
 		return config.Cfg.DB.GetAutoAbilityItemMonsterIDs(ctx, database.GetAutoAbilityItemMonsterIDsParams{
 			AutoAbilityID: p.ParentID,
@@ -60,7 +60,7 @@ func getAutoAbilityItemMonsterIDs() handlerinput.RelAvailabilityDBQuery {
 	}
 }
 
-func getEquipmentSourceIDs(sourceType ViewSourceType) handlerinput.RelAvailabilityDBQuery {
+func getEquipmentSourceIDs(sourceType ViewSourceType) handlerinput.DBQueryRelAvl {
 	return func(ctx context.Context, p handlerinput.RelAvlParams) ([]int32, error) {
 		return config.Cfg.DB.GetEquipmentSourceIDs(ctx, database.GetEquipmentSourceIDsParams{
 			EquipmentNameID: p.ParentID,
@@ -70,7 +70,7 @@ func getEquipmentSourceIDs(sourceType ViewSourceType) handlerinput.RelAvailabili
 	}
 }
 
-func getAreaRelSourceIDs(sourceType ViewSourceType) handlerinput.RelAvailabilityDBQuery {
+func getAreaRelSourceIDs(sourceType ViewSourceType) handlerinput.DBQueryRelAvl {
 	return func(ctx context.Context, p handlerinput.RelAvlParams) ([]int32, error) {
 		return config.Cfg.DB.GetAreaRelSourceIDs(ctx, database.GetAreaRelSourceIDsParams{
 			AreaID:       p.ParentID,
@@ -81,7 +81,7 @@ func getAreaRelSourceIDs(sourceType ViewSourceType) handlerinput.RelAvailability
 	}
 }
 
-func getSublocationRelSourceIDs(sourceType ViewSourceType) handlerinput.RelAvailabilityDBQuery {
+func getSublocationRelSourceIDs(sourceType ViewSourceType) handlerinput.DBQueryRelAvl {
 	return func(ctx context.Context, p handlerinput.RelAvlParams) ([]int32, error) {
 		return config.Cfg.DB.GetSublocationRelSourceIDs(ctx, database.GetSublocationRelSourceIDsParams{
 			SublocationID: p.ParentID,
@@ -92,7 +92,7 @@ func getSublocationRelSourceIDs(sourceType ViewSourceType) handlerinput.RelAvail
 	}
 }
 
-func getLocationRelSourceIDs(sourceType ViewSourceType) handlerinput.RelAvailabilityDBQuery {
+func getLocationRelSourceIDs(sourceType ViewSourceType) handlerinput.DBQueryRelAvl {
 	return func(ctx context.Context, p handlerinput.RelAvlParams) ([]int32, error) {
 		return config.Cfg.DB.GetLocationRelSourceIDs(ctx, database.GetLocationRelSourceIDsParams{
 			LocationID:   p.ParentID,
@@ -103,7 +103,7 @@ func getLocationRelSourceIDs(sourceType ViewSourceType) handlerinput.RelAvailabi
 	}
 }
 
-func getMonsterAreaIDs() handlerinput.RelAvailabilityDBQuery {
+func getMonsterAreaIDs() handlerinput.DBQueryRelAvl {
 	return func(ctx context.Context, p handlerinput.RelAvlParams) ([]int32, error) {
 		return config.Cfg.DB.GetMonsterAreaIDsRel(ctx, database.GetMonsterAreaIDsRelParams{
 			MonsterID:    p.ParentID,
@@ -113,7 +113,7 @@ func getMonsterAreaIDs() handlerinput.RelAvailabilityDBQuery {
 	}
 }
 
-func getMonsterMonsterFormationIDs() handlerinput.RelAvailabilityDBQuery {
+func getMonsterMonsterFormationIDs() handlerinput.DBQueryRelAvl {
 	return func(ctx context.Context, p handlerinput.RelAvlParams) ([]int32, error) {
 		return config.Cfg.DB.GetMonsterMonsterFormationIDsRel(ctx, database.GetMonsterMonsterFormationIDsRelParams{
 			MonsterID:    p.ParentID,

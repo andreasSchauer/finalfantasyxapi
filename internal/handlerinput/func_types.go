@@ -18,7 +18,7 @@ type QueryWrapIntSlice func(*http.Request, context.Context, []int32) ([]int32, e
 type QueryWrapInt func(*http.Request, context.Context, int32) ([]int32, error)
 type QueryWrapJoined func(*http.Request, context.Context) ([]int32, error)
 
-type RelAvailabilityDBQuery func(ctx context.Context, p RelAvlParams) ([]int32, error)
+type DBQueryRelAvl func(ctx context.Context, p RelAvlParams) ([]int32, error)
 type DBQueryNoInput func(context.Context) ([]int32, error)
 type DBQueryIntOne func(context.Context, int32) (int32, error)
 type DBQueryIntMany func(context.Context, int32) ([]int32, error)

@@ -10,6 +10,14 @@ func (v paramsVerifyer) id(val int32, fieldName ts.FieldName) (int32, error) {
 	return v.fieldWrapper(val, fieldName, vfID)
 }
 
+func (v paramsVerifyer) string(val string, fieldName ts.FieldName) (string, error) {
+	return v.field(val, fieldName)
+}
+
+func (v paramsVerifyer) bool(val bool, fieldName ts.FieldName) (bool, error) {
+	return v.field(val, fieldName)
+}
+
 func (v paramsVerifyer) enum(val string, fieldName ts.FieldName) (string, error) {
 	return v.fieldWrapper(val, fieldName, vfEnum)
 }
@@ -20,6 +28,14 @@ func (v paramsVerifyer) intPtr(val *int32, fieldName ts.FieldName) (*int32, erro
 
 func (v paramsVerifyer) idPtr(val *int32, fieldName ts.FieldName) (*int32, error) {
 	return v.fieldPtrWrapper(val, fieldName, vfID)
+}
+
+func (v paramsVerifyer) stringPtr(val *string, fieldName ts.FieldName) (*string, error) {
+	return v.fieldPtr(val, fieldName)
+}
+
+func (v paramsVerifyer) boolPtr(val *bool, fieldName ts.FieldName) (*bool, error) {
+	return v.fieldPtr(val, fieldName)
 }
 
 func (v paramsVerifyer) enumPtr(val *string, fieldName ts.FieldName) (*string, error) {

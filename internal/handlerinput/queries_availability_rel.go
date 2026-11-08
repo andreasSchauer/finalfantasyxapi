@@ -46,7 +46,7 @@ func (i HandlerInput[T, R, A]) QueryAvlRelGetParams(r *http.Request, parentID in
 	return availabilityParams, nil
 }
 
-func (i HandlerInput[T, R, A]) QueryAvlRelRun[K seedtypes.Lookupable](ctx context.Context, item K, params RelAvlParams, dbQuery RelAvailabilityDBQuery) ([]A, error) {
+func (i HandlerInput[T, R, A]) QueryAvlRelRun[K seedtypes.Lookupable](ctx context.Context, item K, params RelAvlParams, dbQuery DBQueryRelAvl) ([]A, error) {
 	dbIDs, err := dbQuery(ctx, params)
 	if err != nil {
 		return nil, i.ErrorDB(item, err)

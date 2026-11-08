@@ -10,12 +10,12 @@ func verifyTurnOrderParams(v paramsVerifyer, params TurnOrderParams) (TurnOrderP
 		return TurnOrderParams{}, err
 	}
 
-	params.IgnFirstTurn, err = v.field(params.IgnFirstTurn, ts.PfnIgnFirstTurn)
+	params.IgnFirstTurn, err = v.bool(params.IgnFirstTurn, ts.PfnIgnFirstTurn)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
 
-	params.IgnImmunities, err = v.field(params.IgnImmunities, ts.PfnIgnImmunities)
+	params.IgnImmunities, err = v.bool(params.IgnImmunities, ts.PfnIgnImmunities)
 	if err != nil {
 		return TurnOrderParams{}, err
 	}
@@ -61,7 +61,7 @@ func vfTurnOrderParty(v paramsVerifyer, item turnOrderParty, _ ts.FieldName) (tu
 		return turnOrderParty{}, err
 	}
 
-	item.FirstStrike, err = v.field(item.FirstStrike, ts.PfnFirstStrike)
+	item.FirstStrike, err = v.bool(item.FirstStrike, ts.PfnFirstStrike)
 	if err != nil {
 		return turnOrderParty{}, err
 	}
@@ -87,7 +87,7 @@ func vfTurnOrderMon(v paramsVerifyer, item turnOrderMon, _ ts.FieldName) (turnOr
 		return turnOrderMon{}, err
 	}
 
-	item.Name, err = v.fieldPtr(item.Name, ts.PfnName)
+	item.Name, err = v.stringPtr(item.Name, ts.PfnName)
 	if err != nil {
 		return turnOrderMon{}, err
 	}
@@ -97,7 +97,7 @@ func vfTurnOrderMon(v paramsVerifyer, item turnOrderMon, _ ts.FieldName) (turnOr
 		return turnOrderMon{}, err
 	}
 
-	item.FirstStrike, err = v.fieldPtr(item.FirstStrike, ts.PfnFirstStrike)
+	item.FirstStrike, err = v.boolPtr(item.FirstStrike, ts.PfnFirstStrike)
 	if err != nil {
 		return turnOrderMon{}, err
 	}

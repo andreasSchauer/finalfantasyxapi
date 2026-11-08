@@ -5,7 +5,7 @@ import ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 func verifyAlBhedParams(v paramsVerifyer, params AlBhedParams) (AlBhedParams, error) {
 	var err error
 
-	params.Text, err = v.field(params.Text, ts.PfnText)
+	params.Text, err = v.string(params.Text, ts.PfnText)
 	if err != nil {
 		return AlBhedParams{}, err
 	}
