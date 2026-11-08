@@ -1,4 +1,5 @@
-package api
+// Package serviceverify adapsoadsokp
+package serviceverify
 
 import (
 	"errors"
@@ -6,31 +7,32 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type paramsVerifyer struct {
-	paramsRules ParamsRules
+type ParamsVerifyer struct {
+	paramsRules servicetypes.ParamsRules
 	userValues  map[ts.FieldName]any
 }
 
-func createParamsVerifyer(paramsRules ParamsRules, userValues map[ts.FieldName]any) paramsVerifyer {
-	return paramsVerifyer{
+func NewParamsVerifyer(paramsRules servicetypes.ParamsRules, userValues map[ts.FieldName]any) ParamsVerifyer {
+	return ParamsVerifyer{
 		paramsRules: paramsRules,
 		userValues:  userValues,
 	}
 }
 
-func (v paramsVerifyer) hasVal(fieldName ts.FieldName) bool {
+func (v ParamsVerifyer) hasVal(fieldName ts.FieldName) bool {
 	jsonVal, ok := v.userValues[fieldName]
 	return ok && jsonVal != nil
 }
 
-func (v paramsVerifyer) hasNoVal(fieldName ts.FieldName) bool {
+func (v ParamsVerifyer) hasNoVal(fieldName ts.FieldName) bool {
 	return !v.hasVal(fieldName)
 }
 
-func (v paramsVerifyer) checkFields() error {
+func (v ParamsVerifyer) CheckFields() error {
 	for fieldName := range v.userValues {
 		_, exists := v.paramsRules[fieldName]
 		if !exists {
@@ -41,7 +43,7 @@ func (v paramsVerifyer) checkFields() error {
 	return nil
 }
 
-func (v paramsVerifyer) newFieldVerifyer[T any](val T, fieldName ts.FieldName) fieldVerifyer[T] {
+func (v ParamsVerifyer) NewFieldVerifyer[T any](val T, fieldName ts.FieldName) fieldVerifyer[T] {
 	return fieldVerifyer[T]{
 		fieldName:    fieldName,
 		val:          val,
@@ -52,9 +54,9 @@ func (v paramsVerifyer) newFieldVerifyer[T any](val T, fieldName ts.FieldName) f
 	}
 }
 
-func (v paramsVerifyer) field[T any](val T, fieldName ts.FieldName) (T, error) {
+func (v ParamsVerifyer) field[T any](val T, fieldName ts.FieldName) (T, error) {
 	var zero T
-	fv := v.newFieldVerifyer(val, fieldName)
+	fv := v.NewFieldVerifyer(val, fieldName)
 	fns := []func() error{
 		fv.required,
 		fv.conflictsWith,
@@ -75,7 +77,7 @@ func (v paramsVerifyer) field[T any](val T, fieldName ts.FieldName) (T, error) {
 	return fv.assignDefaultVal(), nil
 }
 
-func (v paramsVerifyer) fieldPtr[T any](ptr *T, fieldName ts.FieldName) (*T, error) {
+func (v ParamsVerifyer) fieldPtr[T any](ptr *T, fieldName ts.FieldName) (*T, error) {
 	ptr, err := v.field(ptr, fieldName)
 	if err != nil {
 		return nil, err
@@ -93,7 +95,7 @@ func (v paramsVerifyer) fieldPtr[T any](ptr *T, fieldName ts.FieldName) (*T, err
 	return ptr, nil
 }
 
-func (v paramsVerifyer) obj[T any](obj T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
+func (v ParamsVerifyer) Obj[T any](obj T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
 	var zero T
 
 	obj, err := v.field(obj, fieldName)
@@ -109,18 +111,18 @@ func (v paramsVerifyer) obj[T any](obj T, fieldName ts.FieldName, verifyFn verif
 
 	cv, err := v.objChildVerifyer(fieldName)
 	if err != nil {
-		return zero, cascadeHTTPError(errStart, err)
+		return zero, errs.CascadeHTTPError(errStart, err)
 	}
 
 	obj, err = cv.objFieldWrapper(obj, fieldName, verifyFn)
 	if err != nil {
-		return zero, cascadeHTTPError(errStart, err)
+		return zero, errs.CascadeHTTPError(errStart, err)
 	}
 
 	return obj, nil
 }
 
-func (v paramsVerifyer) objPtr[T any](objPtr *T, fieldName ts.FieldName, verifyFn verifyFn[T]) (*T, error) {
+func (v ParamsVerifyer) ObjPtr[T any](objPtr *T, fieldName ts.FieldName, verifyFn verifyFn[T]) (*T, error) {
 	objPtr, err := v.field(objPtr, fieldName)
 	if err != nil {
 		return nil, err
@@ -130,7 +132,7 @@ func (v paramsVerifyer) objPtr[T any](objPtr *T, fieldName ts.FieldName, verifyF
 		return objPtr, nil
 	}
 
-	*objPtr, err = v.obj(*objPtr, fieldName, verifyFn)
+	*objPtr, err = v.Obj(*objPtr, fieldName, verifyFn)
 	if err != nil {
 		return nil, err
 	}
@@ -138,8 +140,8 @@ func (v paramsVerifyer) objPtr[T any](objPtr *T, fieldName ts.FieldName, verifyF
 	return objPtr, nil
 }
 
-// verifies, if an array-field fulfills all its conditions. the basic checks as well as a max length check are performed on the array itself. after that, a type-specific verification function can be performed on each of the array's items.
-func (v paramsVerifyer) array[T any](arr []T, fieldName ts.FieldName, verifyFn verifyFn[T]) ([]T, error) {
+// Array verifies, if an Array-field fulfills all its conditions. the basic checks as well as a max length check are performed on the Array itself. after that, a type-specific verification function can be performed on each of the Array's items.
+func (v ParamsVerifyer) Array[T any](arr []T, fieldName ts.FieldName, verifyFn verifyFn[T]) ([]T, error) {
 	arr, err := v.arrayField(arr, fieldName)
 	if errors.Is(err, errs.ErrNullArray) {
 		return arr, nil
@@ -162,19 +164,19 @@ func (v paramsVerifyer) array[T any](arr []T, fieldName ts.FieldName, verifyFn v
 
 		cv, err := v.arrChildVerifyer(valSlice[i], fieldName)
 		if err != nil {
-			return nil, cascadeHTTPError(errStart, err)
+			return nil, errs.CascadeHTTPError(errStart, err)
 		}
 
 		arr[i], err = cv.arrItemWrapper(item, fieldName, verifyFn)
 		if err != nil {
-			return nil, cascadeHTTPError(errStart, err)
+			return nil, errs.CascadeHTTPError(errStart, err)
 		}
 	}
 
 	return arr, nil
 }
 
-func (v paramsVerifyer) idArray(arr []int32, fieldName ts.FieldName) ([]int32, error) {
+func (v ParamsVerifyer) IDArray(arr []int32, fieldName ts.FieldName) ([]int32, error) {
 	arr, err := v.arrayField(arr, fieldName)
 	if errors.Is(err, errs.ErrNullArray) {
 		return arr, nil
@@ -194,7 +196,7 @@ func (v paramsVerifyer) idArray(arr []int32, fieldName ts.FieldName) ([]int32, e
 
 		arr[i], err = vfArrayChildID(v, val, fieldName)
 		if err != nil {
-			return nil, cascadeHTTPError(errStart, err)
+			return nil, errs.CascadeHTTPError(errStart, err)
 		}
 
 		isDupe[val] = true
@@ -203,24 +205,24 @@ func (v paramsVerifyer) idArray(arr []int32, fieldName ts.FieldName) ([]int32, e
 	return arr, nil
 }
 
-func (v paramsVerifyer) objChildVerifyer(fieldName ts.FieldName) (paramsVerifyer, error) {
+func (v ParamsVerifyer) objChildVerifyer(fieldName ts.FieldName) (ParamsVerifyer, error) {
 	childUserVals, ok := v.userValues[fieldName].(map[ts.FieldName]any)
 	if !ok {
-		return paramsVerifyer{}, errs.NewHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
+		return ParamsVerifyer{}, errs.NewHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
 	}
 
-	cv := createParamsVerifyer(v.paramsRules[fieldName].Children, childUserVals)
+	cv := NewParamsVerifyer(v.paramsRules[fieldName].Children, childUserVals)
 
 	return cv, nil
 }
 
-func (v paramsVerifyer) arrChildVerifyer(rawItem any, fieldName ts.FieldName) (paramsVerifyer, error) {
+func (v ParamsVerifyer) arrChildVerifyer(rawItem any, fieldName ts.FieldName) (ParamsVerifyer, error) {
 	childUserVals, ok := rawItem.(map[ts.FieldName]any)
 	if !ok {
-		return paramsVerifyer{}, errs.NewHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
+		return ParamsVerifyer{}, errs.NewHTTPError(http.StatusInternalServerError, "couldn't find value map", nil)
 	}
 
-	cv := createParamsVerifyer(v.paramsRules[fieldName].Children, childUserVals)
+	cv := NewParamsVerifyer(v.paramsRules[fieldName].Children, childUserVals)
 
 	return cv, nil
 }

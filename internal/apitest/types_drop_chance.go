@@ -1,17 +1,19 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
+)
 
 type expDropChanceResponse struct {
 	testGeneral
-	api.DropChanceResponse
+	servicetypes.DropChanceResponse
 }
 
 func (e expDropChanceResponse) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareDropChanceResponses(test test, exp expDropChanceResponse, got api.DropChanceResponse) {
+func compareDropChanceResponses(test test, exp expDropChanceResponse, got servicetypes.DropChanceResponse) {
 	test.t.Helper()
 	test.compare("drop chance fin blow", exp.DropChanceFinBlow, got.DropChanceFinBlow)
 	test.compare("drop chance no fin blow", exp.DropChanceNoFinBlow, got.DropChanceNoFinBlow)
@@ -21,7 +23,7 @@ func compareDropChanceResponses(test test, exp expDropChanceResponse, got api.Dr
 	test.compStructsWithFn("monster drop chances", exp.MonsterChances, got.MonsterChances, compareMonsterDropChances)
 }
 
-func compareWantedEquipments(test test, fieldName string, exp, got api.WantedEquipment) {
+func compareWantedEquipments(test test, fieldName string, exp, got servicetypes.WantedEquipment) {
 	test.t.Helper()
 	test.compare(fieldName+" min slots", exp.MinSlots, got.MinSlots)
 	test.compare(fieldName+" max slots", exp.MaxSlots, got.MaxSlots)
@@ -32,13 +34,13 @@ func compareWantedEquipments(test test, fieldName string, exp, got api.WantedEqu
 	test.compare(fieldName+" optional slots are", exp.OptionalSlotsAre, got.OptionalSlotsAre)
 }
 
-func compareEquipmentMatchChances(test test, fieldName string, exp, got api.EquipmentMatchChances) {
+func compareEquipmentMatchChances(test test, fieldName string, exp, got servicetypes.EquipmentMatchChances) {
 	test.t.Helper()
 	test.compare(fieldName+" fin blow", exp.FinBlow, got.FinBlow)
 	test.compare(fieldName+" no fin blow", exp.NoFinBlow, got.NoFinBlow)
 }
 
-func compareCharacterChances(test test, fieldName string, exp, got api.CharacterChances) {
+func compareCharacterChances(test test, fieldName string, exp, got servicetypes.CharacterChances) {
 	test.t.Helper()
 	test.compareSlices(fieldName+" eligible chars", exp.EligibleChars, got.EligibleChars)
 	test.compare(fieldName+" any fin blow", exp.AnyFinBlow, got.AnyFinBlow)
@@ -46,14 +48,14 @@ func compareCharacterChances(test test, fieldName string, exp, got api.Character
 	test.compStructPtrsWithFn(fieldName+" specific character", exp.SpecificChar, got.SpecificChar, compareSpecificCharChances)
 }
 
-func compareSpecificCharChances(test test, fieldName string, exp, got api.SpecificCharChances) {
+func compareSpecificCharChances(test test, fieldName string, exp, got servicetypes.SpecificCharChances) {
 	test.t.Helper()
 	test.compare(fieldName+" is eligible", exp.IsEligible, got.IsEligible)
 	test.compare(fieldName+" fin blow", exp.FinBlow, got.FinBlow)
 	test.compare(fieldName+" no fin blow", exp.NoFinBlow, got.NoFinBlow)
 }
 
-func compareMonsterDropChances(test test, fieldName string, exp, got api.MonsterDropChances) {
+func compareMonsterDropChances(test test, fieldName string, exp, got servicetypes.MonsterDropChances) {
 	test.t.Helper()
 	test.compare(fieldName+" monster id", exp.MonsterID, got.MonsterID)
 	test.compare(fieldName+" monster name", exp.MonsterName, got.MonsterName)
@@ -63,20 +65,20 @@ func compareMonsterDropChances(test test, fieldName string, exp, got api.Monster
 	compareDroppedAutoAbilities(test, fieldName+" auto abilities", exp.AutoAbilities, got.AutoAbilities)
 }
 
-func compareDroppedAutoAbilities(test test, fieldName string, exp, got api.DroppedAutoAbilities) {
+func compareDroppedAutoAbilities(test test, fieldName string, exp, got servicetypes.DroppedAutoAbilities) {
 	test.t.Helper()
 	test.compStructPtrsWithFn(fieldName+" forced", exp.Forced, got.Forced, compareEqAbilitiesSimple)
 	test.compStructSlicesWithFn(fieldName+" dropped", exp.Dropped, got.Dropped, compareEqAbilitiesChance)
 }
 
-func compareEqAbilitiesSimple(test test, fieldName string, exp, got api.EqAbilitySimple) {
+func compareEqAbilitiesSimple(test test, fieldName string, exp, got servicetypes.EqAbilitySimple) {
 	test.t.Helper()
 	test.compare(fieldName+" id", exp.ID, got.ID)
 	test.compare(fieldName+" name", exp.Name, got.Name)
 	test.compareSlices(fieldName+" characters", exp.Characters, got.Characters)
 }
 
-func compareEqAbilitiesChance(test test, fieldName string, exp, got api.EqAbilityChance) {
+func compareEqAbilitiesChance(test test, fieldName string, exp, got servicetypes.EqAbilityChance) {
 	test.t.Helper()
 	compareEqAbilitiesSimple(test, fieldName+" dropped auto ability info", exp.EqAbilitySimple, got.EqAbilitySimple)
 	test.compare(fieldName+" chance", exp.Chance, got.Chance)

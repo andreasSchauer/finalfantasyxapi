@@ -4,13 +4,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
-
-type AgilityVals struct {
-	TickSpeed int32  `json:"tick_speed"`
-	MinICV    *int32 `json:"min_icv"`
-	MaxICV    *int32 `json:"max_icv"`
-}
 
 func getAllAgilityTiers() []seedtypes.AgilityTier {
 	tiers := make([]seedtypes.AgilityTier, len(lookup.L.AgilityTiersID))
@@ -36,9 +31,9 @@ func getTierByAgility(agility int32) seedtypes.AgilityTier {
 	return agilityTier
 }
 
-func extractAglTierChar(participant Participant, params TurnOrderParams) AgilityVals {
+func extractAglTierChar(participant servicetypes.Participant, params servicetypes.TurnOrderParams) servicetypes.AgilityVals {
 	agilityTier := getTierByAgility(participant.Agility)
-	aglVals := AgilityVals{
+	aglVals := servicetypes.AgilityVals{
 		TickSpeed: agilityTier.TickSpeed,
 		MaxICV:    agilityTier.CharacterMaxICV,
 	}
@@ -53,9 +48,9 @@ func extractAglTierChar(participant Participant, params TurnOrderParams) Agility
 	return calcAgilityVals(aglVals, participant, params, nil)
 }
 
-func extractAglTierMon(participant Participant, params TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) AgilityVals {
+func extractAglTierMon(participant servicetypes.Participant, params servicetypes.TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) servicetypes.AgilityVals {
 	agilityTier := getTierByAgility(participant.Agility)
-	aglVals := AgilityVals{
+	aglVals := servicetypes.AgilityVals{
 		TickSpeed: agilityTier.TickSpeed,
 		MinICV:    agilityTier.MonsterMinICV,
 		MaxICV:    agilityTier.MonsterMaxICV,
@@ -64,7 +59,7 @@ func extractAglTierMon(participant Participant, params TurnOrderParams, monFirst
 	return calcAgilityVals(aglVals, participant, params, monFirstTurnTier)
 }
 
-func calcAgilityVals(aglVals AgilityVals, participant Participant, params TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) AgilityVals {
+func calcAgilityVals(aglVals servicetypes.AgilityVals, participant servicetypes.Participant, params servicetypes.TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) servicetypes.AgilityVals {
 	aglVals.TickSpeed = calcTickSpeed(aglVals.TickSpeed, participant.Status)
 	aglVals.MinICV, aglVals.MaxICV = calcICVs(aglVals.MinICV, aglVals.MaxICV, participant, params, monFirstTurnTier)
 
@@ -89,7 +84,7 @@ func calcTickSpeed(tickSpeed int32, statusPtr *string) int32 {
 	}
 }
 
-func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) (*int32, *int32) {
+func calcICVs(minPtr, maxPtr *int32, participant servicetypes.Participant, params servicetypes.TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) (*int32, *int32) {
 	if monFirstTurnTier != nil {
 		minPtr = monFirstTurnTier.MonsterMinICV
 		maxPtr = monFirstTurnTier.MonsterMaxICV
@@ -105,10 +100,10 @@ func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderPa
 
 	if participant.FirstStrike {
 		switch participant.Party {
-		case BattlePartyPlayer:
+		case servicetypes.BattlePartyPlayer:
 			return getEqualICVs(0)
 
-		case BattlePartyOpponent:
+		case servicetypes.BattlePartyOpponent:
 			return getEqualICVs(-1)
 		}
 	}
@@ -116,19 +111,19 @@ func calcICVs(minPtr, maxPtr *int32, participant Participant, params TurnOrderPa
 	switch params.BattleStart {
 	case string(database.BattleStartAmbush):
 		switch participant.Party {
-		case BattlePartyPlayer:
+		case servicetypes.BattlePartyPlayer:
 			return calcICVsStartFavorable(*minPtr, participant.Status)
 
-		case BattlePartyOpponent:
+		case servicetypes.BattlePartyOpponent:
 			return getEqualICVs(0)
 		}
 
 	case string(database.BattleStartPreemptive):
 		switch participant.Party {
-		case BattlePartyPlayer:
+		case servicetypes.BattlePartyPlayer:
 			return getEqualICVs(0)
 
-		case BattlePartyOpponent:
+		case servicetypes.BattlePartyOpponent:
 			return calcICVsStartFavorable(*minPtr, participant.Status)
 		}
 	}

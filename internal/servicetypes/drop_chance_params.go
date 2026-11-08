@@ -1,4 +1,4 @@
-package api
+package servicetypes
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -23,7 +23,7 @@ func (p DropChanceParams) GetRequiredSlots() int32 {
 	return h.Len32(p.AutoAbilities) + h.DerefInt32Ptr(p.MinEmptySlots)
 }
 
-func getDropChanceParamsDoc() ParamsDoc {
+func GetDropChanceParamsDoc() ParamsDoc {
 	return ParamsDoc{
 		Fields: []FieldDoc{
 			{

@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -312,32 +312,32 @@ func TestDropChance(t *testing.T) {
 					ts.PfnTotalSlots:    1,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.7059,
 				DropChanceNoFinBlow: 0.2647,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         1,
 					MaxSlots:         1,
 					ReqAbilities:     []string{"piercing"},
 					ReqEmptySlots:    nil,
 					MinOptionalSlots: 0,
 					MaxOptionalSlots: 0,
-					OptionalSlotsAre: string(api.OptionalSlotAllEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAllEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   15,
 					NoFinBlow: 5.625,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"kimahri"},
 					AnyFinBlow:    40,
 					AnyNoFinBlow:  15,
 				},
-				MonsterChances: api.MonsterDropChances{
+				MonsterChances: servicetypes.MonsterDropChances{
 					MonsterID:           27,
 					MonsterName:         "yellow element",
 					EquipmentDropChance: 4.7059,
-					SlotsChances: []api.ChanceAmount{
+					SlotsChances: []servicetypes.ChanceAmount{
 						{
 							Amount: 1,
 							Chance: 75,
@@ -347,7 +347,7 @@ func TestDropChance(t *testing.T) {
 							Chance: 25,
 						},
 					},
-					ShotsChances: []api.ChanceAmount{
+					ShotsChances: []servicetypes.ChanceAmount{
 						{
 							Amount: 0,
 							Chance: 50,
@@ -357,15 +357,15 @@ func TestDropChance(t *testing.T) {
 							Chance: 50,
 						},
 					},
-					AutoAbilities: api.DroppedAutoAbilities{
-						Forced: &api.EqAbilitySimple{
+					AutoAbilities: servicetypes.DroppedAutoAbilities{
+						Forced: &servicetypes.EqAbilitySimple{
 							ID:         2,
 							Name:       "piercing",
 							Characters: []string{"kimahri", "auron"},
 						},
-						Dropped: []api.EqAbilityChance{
+						Dropped: []servicetypes.EqAbilityChance{
 							{
-								EqAbilitySimple: api.EqAbilitySimple{
+								EqAbilitySimple: servicetypes.EqAbilitySimple{
 									ID:         6,
 									Name:       "lightningstrike",
 									Characters: []string{},
@@ -373,7 +373,7 @@ func TestDropChance(t *testing.T) {
 								Chance: 57.1429,
 							},
 							{
-								EqAbilitySimple: api.EqAbilitySimple{
+								EqAbilitySimple: servicetypes.EqAbilitySimple{
 									ID:         26,
 									Name:       "distill mana",
 									Characters: []string{},
@@ -399,27 +399,27 @@ func TestDropChance(t *testing.T) {
 					ts.PfnCharacterID:   5,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.7353,
 				DropChanceNoFinBlow: 0.2206,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         1,
 					MaxSlots:         2,
 					ReqAbilities:     []string{"piercing"},
 					ReqEmptySlots:    nil,
 					MinOptionalSlots: 0,
 					MaxOptionalSlots: 1,
-					OptionalSlotsAre: string(api.OptionalSlotAllEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAllEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   15.625,
 					NoFinBlow: 4.6875,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"kimahri", "auron"},
 					AnyFinBlow:    46.4286,
 					AnyNoFinBlow:  21.4286,
-					SpecificChar: &api.SpecificCharChances{
+					SpecificChar: &servicetypes.SpecificCharChances{
 						FinBlow:    35.7143,
 						NoFinBlow:  10.7143,
 						IsEligible: true,
@@ -439,37 +439,37 @@ func TestDropChance(t *testing.T) {
 					ts.PfnDecimals:      true,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         1,
 					MaxSlots:         2,
 					ReqAbilities:     []string{"darktouch"},
 					ReqEmptySlots:    nil,
 					MinOptionalSlots: 0,
 					MaxOptionalSlots: 1,
-					OptionalSlotsAre: string(api.OptionalSlotAllEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAllEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    0.785714,
 					AnyNoFinBlow:  0.535714,
-					SpecificChar: &api.SpecificCharChances{
+					SpecificChar: &servicetypes.SpecificCharChances{
 						FinBlow:    0.357143,
 						NoFinBlow:  0.107143,
 						IsEligible: false,
 					},
 				},
-				MonsterChances: api.MonsterDropChances{
+				MonsterChances: servicetypes.MonsterDropChances{
 					MonsterID:           50,
 					MonsterName:         "garuda - 3 (regular encounter)",
 					EquipmentDropChance: 0.501961,
-					SlotsChances: []api.ChanceAmount{
+					SlotsChances: []servicetypes.ChanceAmount{
 						{
 							Amount: 1,
 							Chance: 0.5,
@@ -479,7 +479,7 @@ func TestDropChance(t *testing.T) {
 							Chance: 0.5,
 						},
 					},
-					ShotsChances: []api.ChanceAmount{
+					ShotsChances: []servicetypes.ChanceAmount{
 						{
 							Amount: 1,
 							Chance: 0.75,
@@ -489,15 +489,15 @@ func TestDropChance(t *testing.T) {
 							Chance: 0.25,
 						},
 					},
-					AutoAbilities: api.DroppedAutoAbilities{
-						Forced: &api.EqAbilitySimple{
+					AutoAbilities: servicetypes.DroppedAutoAbilities{
+						Forced: &servicetypes.EqAbilitySimple{
 							ID:         2,
 							Name:       "piercing",
 							Characters: []string{"kimahri", "auron"},
 						},
-						Dropped: []api.EqAbilityChance{
+						Dropped: []servicetypes.EqAbilityChance{
 							{
-								EqAbilitySimple: api.EqAbilitySimple{
+								EqAbilitySimple: servicetypes.EqAbilitySimple{
 									ID:         9,
 									Name:       "darktouch",
 									Characters: []string{},
@@ -505,7 +505,7 @@ func TestDropChance(t *testing.T) {
 								Chance: 0.285714,
 							},
 							{
-								EqAbilitySimple: api.EqAbilitySimple{
+								EqAbilitySimple: servicetypes.EqAbilitySimple{
 									ID:         29,
 									Name:       "strength +3%",
 									Characters: []string{"tidus", "wakka", "kimahri", "auron", "rikku"},
@@ -513,7 +513,7 @@ func TestDropChance(t *testing.T) {
 								Chance: 0.714286,
 							},
 							{
-								EqAbilitySimple: api.EqAbilitySimple{
+								EqAbilitySimple: servicetypes.EqAbilitySimple{
 									ID:         33,
 									Name:       "magic +3%",
 									Characters: []string{"yuna", "lulu"},
@@ -540,18 +540,18 @@ func TestDropChance(t *testing.T) {
 					ts.PfnCharacterID:   5,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
-					SpecificChar: &api.SpecificCharChances{
+					SpecificChar: &servicetypes.SpecificCharChances{
 						FinBlow:    35.7143,
 						NoFinBlow:  10.7143,
 						IsEligible: false,
@@ -575,19 +575,19 @@ func TestDropChance(t *testing.T) {
 					ts.PfnCharacterID:       5,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   1.2805,
 				DropChanceNoFinBlow: 0.3842,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         1,
 					MaxSlots:         2,
 					ReqAbilities:     []string{"darktouch"},
 					ReqEmptySlots:    nil,
 					MinOptionalSlots: 0,
 					MaxOptionalSlots: 1,
-					OptionalSlotsAre: string(api.OptionalSlotAbilityOrEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAbilityOrEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   2.551,
 					NoFinBlow: 0.7653,
 				},
@@ -609,18 +609,18 @@ func TestDropChance(t *testing.T) {
 					ts.PfnCharacterID:   5,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
-					SpecificChar: &api.SpecificCharChances{
+					SpecificChar: &servicetypes.SpecificCharChances{
 						IsEligible: false,
 						FinBlow:    35.7143,
 						NoFinBlow:  10.7143,
@@ -645,10 +645,10 @@ func TestDropChance(t *testing.T) {
 					ts.PfnCharacterID:   5,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
@@ -671,18 +671,18 @@ func TestDropChance(t *testing.T) {
 					ts.PfnCharacterID:       5,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   4.4818,
 				DropChanceNoFinBlow: 1.3445,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   8.9286,
 					NoFinBlow: 2.6786,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"kimahri", "auron"},
 					AnyFinBlow:    46.4286,
 					AnyNoFinBlow:  21.4286,
-					SpecificChar: &api.SpecificCharChances{
+					SpecificChar: &servicetypes.SpecificCharChances{
 						FinBlow:    35.7143,
 						NoFinBlow:  10.7143,
 						IsEligible: true,
@@ -701,32 +701,32 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: true,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         2,
 					MaxSlots:         3,
 					ReqAbilities:     []string{"evade & counter"},
 					ReqEmptySlots:    nil,
 					MinOptionalSlots: 1,
 					MaxOptionalSlots: 2,
-					OptionalSlotsAre: string(api.OptionalSlotAbilityOrEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAbilityOrEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
-				MonsterChances: api.MonsterDropChances{
+				MonsterChances: servicetypes.MonsterDropChances{
 					MonsterID:           258,
 					MonsterName:         "kottos",
 					EquipmentDropChance: 100,
-					SlotsChances: []api.ChanceAmount{
+					SlotsChances: []servicetypes.ChanceAmount{
 						{
 							Amount: 2,
 							Chance: 50,
@@ -736,7 +736,7 @@ func TestDropChance(t *testing.T) {
 							Chance: 50,
 						},
 					},
-					ShotsChances: []api.ChanceAmount{
+					ShotsChances: []servicetypes.ChanceAmount{
 						{
 							Amount: 4,
 							Chance: 50,
@@ -746,15 +746,15 @@ func TestDropChance(t *testing.T) {
 							Chance: 50,
 						},
 					},
-					AutoAbilities: api.DroppedAutoAbilities{
-						Forced: &api.EqAbilitySimple{
+					AutoAbilities: servicetypes.DroppedAutoAbilities{
+						Forced: &servicetypes.EqAbilitySimple{
 							ID:         37,
 							Name:       "counterattack",
 							Characters: []string{},
 						},
-						Dropped: []api.EqAbilityChance{
+						Dropped: []servicetypes.EqAbilityChance{
 							{
-								EqAbilitySimple: api.EqAbilitySimple{
+								EqAbilitySimple: servicetypes.EqAbilitySimple{
 									ID:         37,
 									Name:       "counterattack",
 									Characters: []string{},
@@ -762,7 +762,7 @@ func TestDropChance(t *testing.T) {
 								Chance: 28.5714,
 							},
 							{
-								EqAbilitySimple: api.EqAbilitySimple{
+								EqAbilitySimple: servicetypes.EqAbilitySimple{
 									ID:         38,
 									Name:       "evade & counter",
 									Characters: []string{},
@@ -770,7 +770,7 @@ func TestDropChance(t *testing.T) {
 								Chance: 42.8571,
 							},
 							{
-								EqAbilitySimple: api.EqAbilitySimple{
+								EqAbilitySimple: servicetypes.EqAbilitySimple{
 									ID:         39,
 									Name:       "magic counter",
 									Characters: []string{},
@@ -797,14 +797,14 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: false,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{},
 					AnyFinBlow:    0,
 					AnyNoFinBlow:  0,
@@ -826,14 +826,14 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: true,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   50,
 				DropChanceNoFinBlow: 50,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   50,
 					NoFinBlow: 50,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
@@ -854,14 +854,14 @@ func TestDropChance(t *testing.T) {
 					ts.PfnAutoAbilities: []any{30, 19},
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.2744,
 				DropChanceNoFinBlow: 0.1543,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   1.1662,
 					NoFinBlow: 0.656,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "wakka", "rikku"},
 					AnyFinBlow:    57.1429,
 					AnyNoFinBlow:  32.1429,
@@ -883,14 +883,14 @@ func TestDropChance(t *testing.T) {
 					ts.PfnAutoAbilities: []any{30, 19},
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.4802,
 				DropChanceNoFinBlow: 0.4802,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   2.0408,
 					NoFinBlow: 2.0408,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "wakka", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
@@ -911,14 +911,14 @@ func TestDropChance(t *testing.T) {
 					ts.PfnAutoAbilities: []any{34, 19},
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.2229,
 				DropChanceNoFinBlow: 0.1029,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   0.9475,
 					NoFinBlow: 0.4373,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"yuna", "lulu"},
 					AnyFinBlow:    46.4286,
 					AnyNoFinBlow:  21.4286,
@@ -941,18 +941,18 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: false,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "wakka", "rikku"},
 					AnyFinBlow:    57.1429,
 					AnyNoFinBlow:  32.1429,
-					SpecificChar: &api.SpecificCharChances{
+					SpecificChar: &servicetypes.SpecificCharChances{
 						FinBlow:    35.7143,
 						NoFinBlow:  10.7143,
 						IsEligible: false,
@@ -976,18 +976,18 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: false,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.1715,
 				DropChanceNoFinBlow: 0.0514,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   0.7289,
 					NoFinBlow: 0.2187,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "wakka", "rikku"},
 					AnyFinBlow:    57.1429,
 					AnyNoFinBlow:  32.1429,
-					SpecificChar: &api.SpecificCharChances{
+					SpecificChar: &servicetypes.SpecificCharChances{
 						FinBlow:    35.7143,
 						NoFinBlow:  10.7143,
 						IsEligible: true,
@@ -1009,23 +1009,23 @@ func TestDropChance(t *testing.T) {
 					ts.PfnEquipType:  string(database.EquipTypeWeapon),
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   6.5076,
 				DropChanceNoFinBlow: 4.437,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         4,
 					MaxSlots:         4,
 					ReqAbilities:     []string{},
 					ReqEmptySlots:    nil,
 					MinOptionalSlots: 4,
 					MaxOptionalSlots: 4,
-					OptionalSlotsAre: string(api.OptionalSlotAllEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAllEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   12.9643,
 					NoFinBlow: 8.8393,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
@@ -1046,23 +1046,23 @@ func TestDropChance(t *testing.T) {
 					ts.PfnEquipType:     string(database.EquipTypeWeapon),
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   6.5076,
 				DropChanceNoFinBlow: 4.437,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         4,
 					MaxSlots:         4,
 					ReqAbilities:     []string{},
 					ReqEmptySlots:    h.GetInt32Ptr(4),
 					MinOptionalSlots: 0,
 					MaxOptionalSlots: 0,
-					OptionalSlotsAre: string(api.OptionalSlotAllEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAllEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   12.9643,
 					NoFinBlow: 8.8393,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
@@ -1079,47 +1079,47 @@ func TestDropChance(t *testing.T) {
 					ts.PfnAutoAbilities: []any{129},
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   50,
 				DropChanceNoFinBlow: 50,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         4,
 					MaxSlots:         4,
 					ReqAbilities:     []string{"ribbon"},
 					ReqEmptySlots:    nil,
 					MinOptionalSlots: 3,
 					MaxOptionalSlots: 3,
-					OptionalSlotsAre: string(api.OptionalSlotAllEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAllEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   50,
 					NoFinBlow: 50,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
-				MonsterChances: api.MonsterDropChances{
+				MonsterChances: servicetypes.MonsterDropChances{
 					MonsterID:           305,
 					MonsterName:         "penance",
 					EquipmentDropChance: 100,
-					SlotsChances: []api.ChanceAmount{
+					SlotsChances: []servicetypes.ChanceAmount{
 						{
 							Amount: 4,
 							Chance: 100,
 						},
 					},
-					ShotsChances: []api.ChanceAmount{
+					ShotsChances: []servicetypes.ChanceAmount{
 						{
 							Amount: 1,
 							Chance: 100,
 						},
 					},
-					AutoAbilities: api.DroppedAutoAbilities{
-						Dropped: []api.EqAbilityChance{
+					AutoAbilities: servicetypes.DroppedAutoAbilities{
+						Dropped: []servicetypes.EqAbilityChance{
 							{
-								EqAbilitySimple: api.EqAbilitySimple{
+								EqAbilitySimple: servicetypes.EqAbilitySimple{
 									ID:         129,
 									Name:       "ribbon",
 									Characters: []string{},
@@ -1144,38 +1144,38 @@ func TestDropChance(t *testing.T) {
 					ts.PfnAutoAbilities: []any{51},
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   50,
 				DropChanceNoFinBlow: 50,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   50,
 					NoFinBlow: 50,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
 				},
-				MonsterChances: api.MonsterDropChances{
+				MonsterChances: servicetypes.MonsterDropChances{
 					MonsterID:           305,
 					MonsterName:         "penance",
 					EquipmentDropChance: 100,
-					SlotsChances: []api.ChanceAmount{
+					SlotsChances: []servicetypes.ChanceAmount{
 						{
 							Amount: 4,
 							Chance: 100,
 						},
 					},
-					ShotsChances: []api.ChanceAmount{
+					ShotsChances: []servicetypes.ChanceAmount{
 						{
 							Amount: 1,
 							Chance: 100,
 						},
 					},
-					AutoAbilities: api.DroppedAutoAbilities{
-						Dropped: []api.EqAbilityChance{
+					AutoAbilities: servicetypes.DroppedAutoAbilities{
+						Dropped: []servicetypes.EqAbilityChance{
 							{
-								EqAbilitySimple: api.EqAbilitySimple{
+								EqAbilitySimple: servicetypes.EqAbilitySimple{
 									ID:         51,
 									Name:       "break damage limit",
 									Characters: []string{},
@@ -1202,18 +1202,18 @@ func TestDropChance(t *testing.T) {
 					ts.PfnCharacterID:   1,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   17.8571,
 				DropChanceNoFinBlow: 5.3571,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   17.8571,
 					NoFinBlow: 5.3571,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
-					SpecificChar: &api.SpecificCharChances{
+					SpecificChar: &servicetypes.SpecificCharChances{
 						FinBlow:    35.7143,
 						NoFinBlow:  10.7143,
 						IsEligible: true,
@@ -1235,23 +1235,23 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: true,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   2.0168,
 				DropChanceNoFinBlow: 2.0168,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         1,
 					MaxSlots:         2,
 					ReqAbilities:     []string{"water ward"},
 					ReqEmptySlots:    nil,
 					MinOptionalSlots: 0,
 					MaxOptionalSlots: 1,
-					OptionalSlotsAre: string(api.OptionalSlotAbilityOrEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAbilityOrEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   42.8571,
 					NoFinBlow: 42.8571,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
@@ -1273,14 +1273,14 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: true,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.3361,
 				DropChanceNoFinBlow: 0.3361,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   7.1429,
 					NoFinBlow: 7.1429,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
@@ -1302,14 +1302,14 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: false,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   2.0168,
 				DropChanceNoFinBlow: 2.0168,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   42.8571,
 					NoFinBlow: 42.8571,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
@@ -1331,14 +1331,14 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: false,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.3361,
 				DropChanceNoFinBlow: 0.3361,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   7.1429,
 					NoFinBlow: 7.1429,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
@@ -1359,14 +1359,14 @@ func TestDropChance(t *testing.T) {
 					ts.PfnAutoAbilities: []any{62, 61},
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
@@ -1387,23 +1387,23 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: false,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0,
 				DropChanceNoFinBlow: 0,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         2,
 					MaxSlots:         4,
 					ReqAbilities:     []string{"hp +20%", "hp +10%"},
 					ReqEmptySlots:    nil,
 					MinOptionalSlots: 0,
 					MaxOptionalSlots: 2,
-					OptionalSlotsAre: string(api.OptionalSlotAllEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAllEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   0,
 					NoFinBlow: 0,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{},
 					AnyFinBlow:    0,
 					AnyNoFinBlow:  0,
@@ -1425,14 +1425,14 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: true,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   31.7126,
 				DropChanceNoFinBlow: 31.7126,
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   31.7126,
 					NoFinBlow: 31.7126,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,
@@ -1454,23 +1454,23 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: false,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.2311,
 				DropChanceNoFinBlow: 0.1576,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         4,
 					MaxSlots:         4,
 					ReqAbilities:     []string{},
 					ReqEmptySlots:    h.GetInt32Ptr(4),
 					MinOptionalSlots: 0,
 					MaxOptionalSlots: 0,
-					OptionalSlotsAre: string(api.OptionalSlotAllEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAllEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   1.9643,
 					NoFinBlow: 1.3393,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
@@ -1492,23 +1492,23 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: true,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.2311,
 				DropChanceNoFinBlow: 0.1576,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         4,
 					MaxSlots:         4,
 					ReqAbilities:     []string{},
 					ReqEmptySlots:    h.GetInt32Ptr(4),
 					MinOptionalSlots: 0,
 					MaxOptionalSlots: 0,
-					OptionalSlotsAre: string(api.OptionalSlotAbilityOrEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAbilityOrEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   1.9643,
 					NoFinBlow: 1.3393,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
@@ -1530,23 +1530,23 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: false,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.2311,
 				DropChanceNoFinBlow: 0.1576,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         4,
 					MaxSlots:         4,
 					ReqAbilities:     []string{},
 					ReqEmptySlots:    nil,
 					MinOptionalSlots: 4,
 					MaxOptionalSlots: 4,
-					OptionalSlotsAre: string(api.OptionalSlotAllEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAllEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   1.9643,
 					NoFinBlow: 1.3393,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "rikku"},
 					AnyFinBlow:    78.5714,
 					AnyNoFinBlow:  53.5714,
@@ -1568,23 +1568,23 @@ func TestDropChance(t *testing.T) {
 					ts.PfnOptionalAbilities: true,
 				},
 			},
-			DropChanceResponse: api.DropChanceResponse{
+			DropChanceResponse: servicetypes.DropChanceResponse{
 				DropChanceFinBlow:   0.5882,
 				DropChanceNoFinBlow: 0.5882,
-				WantedEquipment: api.WantedEquipment{
+				WantedEquipment: servicetypes.WantedEquipment{
 					MinSlots:         4,
 					MaxSlots:         4,
 					ReqAbilities:     []string{},
 					ReqEmptySlots:    nil,
 					MinOptionalSlots: 4,
 					MaxOptionalSlots: 4,
-					OptionalSlotsAre: string(api.OptionalSlotAbilityOrEmpty),
+					OptionalSlotsAre: string(servicetypes.OptionalSlotAbilityOrEmpty),
 				},
-				EquipmentMatchChances: api.EquipmentMatchChances{
+				EquipmentMatchChances: servicetypes.EquipmentMatchChances{
 					FinBlow:   5,
 					NoFinBlow: 5,
 				},
-				CharacterChances: api.CharacterChances{
+				CharacterChances: servicetypes.CharacterChances{
 					EligibleChars: []string{"tidus", "yuna", "wakka", "lulu", "kimahri", "auron", "rikku"},
 					AnyFinBlow:    100,
 					AnyNoFinBlow:  100,

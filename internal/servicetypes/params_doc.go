@@ -1,4 +1,4 @@
-package api
+package servicetypes
 
 import (
 	"fmt"
@@ -11,6 +11,10 @@ import (
 type ParamsDoc struct {
 	GeneralRules *string    `json:"general_rules"`
 	Fields       []FieldDoc `json:"fields"`
+}
+
+func (d ParamsDoc) CompileRules() ParamsRules {
+	return compileParamsRules(d.Fields)
 }
 
 type FieldDoc struct {
@@ -46,7 +50,7 @@ func (e AllowedIDValPairs) format() string {
 	return fmt.Sprintf("id: %d, vals: %s", e.ID, h.IntSliceToString(e.Values))
 }
 
-func formatAllowedIDValPairs(entries []AllowedIDValPairs) string {
+func FormatAllowedIDValPairs(entries []AllowedIDValPairs) string {
 	slice := make([]string, len(entries))
 
 	for i := range entries {

@@ -1,4 +1,4 @@
-package api
+package serviceverify
 
 import (
 	"fmt"
@@ -8,15 +8,16 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 type fieldVerifyer[T any] struct {
-	fieldName    	ts.FieldName
-	val          	T
-	doc          	FieldDoc
-	valIsPresent 	bool
-	paramsVerifyer
+	fieldName    ts.FieldName
+	val          T
+	doc          servicetypes.FieldDoc
+	valIsPresent bool
+	ParamsVerifyer
 }
 
 func (v fieldVerifyer[T]) required() error {
@@ -84,7 +85,7 @@ func (v fieldVerifyer[T]) allowedIDs() error {
 		return nil
 	}
 
-	id, err := getInt32FromUserVals(ts.PfnUnitID, v.userValues)
+	id, err := servicetypes.GetInt32FromUserVals(ts.PfnUnitID, v.userValues)
 	if err != nil {
 		return nil
 	}
@@ -105,8 +106,8 @@ func (v fieldVerifyer[T]) allowedIDValPairs() error {
 		return errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find parent id field for field '%s'", v.fieldName), nil)
 	}
 
-	id, _ := getInt32FromUserVals(*v.doc.ParentIDField, v.userValues)
-	value, err := getInt32FromUserVals(v.fieldName, v.userValues)
+	id, _ := servicetypes.GetInt32FromUserVals(*v.doc.ParentIDField, v.userValues)
+	value, err := servicetypes.GetInt32FromUserVals(v.fieldName, v.userValues)
 	if err != nil {
 		return nil
 	}
@@ -127,7 +128,7 @@ func (v fieldVerifyer[T]) allowedIDValPairs() error {
 		return nil
 	}
 
-	return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s", v.fieldName, formatAllowedIDValPairs(v.doc.AllowedIDValPairs)), nil)
+	return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s", v.fieldName, servicetypes.FormatAllowedIDValPairs(v.doc.AllowedIDValPairs)), nil)
 }
 
 func (v fieldVerifyer[T]) assignDefaultVal() T {

@@ -1,4 +1,4 @@
-package api
+package servicetypes
 
 import (
 	"fmt"
@@ -17,18 +17,18 @@ type TurnOrderParams struct {
 	RNG           string           `json:"rng,omitempty"`
 	BattleStart   string           `json:"battle_start,omitempty"`
 	FormationID   *int32           `json:"formation_id,omitempty"`
-	Party         []turnOrderParty `json:"party,omitempty"`
-	Mons          []turnOrderMon   `json:"mons,omitempty"`
+	Party         []TurnOrderParty `json:"party,omitempty"`
+	Mons          []TurnOrderMon   `json:"mons,omitempty"`
 }
 
-type turnOrderParty struct {
+type TurnOrderParty struct {
 	UnitID      int32   `json:"unit_id,omitempty"`
 	Agility     int32   `json:"agility,omitempty"`
 	FirstStrike bool    `json:"first_strike,omitempty"`
 	Status      *string `json:"status,omitempty"`
 }
 
-func (p turnOrderParty) getDuplicateKey() string {
+func (p TurnOrderParty) GetDuplicateKey() string {
 	return h.CombineFields([]any{
 		fmt.Sprintf("%T", p),
 		p.UnitID,
@@ -59,7 +59,8 @@ turnOrderMon
 */
 
 // use the same separation that is used for crit chance
-type turnOrderMon struct {
+
+type TurnOrderMon struct {
 	MonsterID   *int32  `json:"monster_id,omitempty"`
 	AltState    *int32  `json:"alt_state,omitempty"`
 	Name        *string `json:"name,omitempty"`
@@ -68,7 +69,7 @@ type turnOrderMon struct {
 	Status      *string `json:"status,omitempty"`
 }
 
-func (p turnOrderMon) getDuplicateKey() string {
+func (p TurnOrderMon) GetDuplicateKey() string {
 	return h.CombineFields([]any{
 		fmt.Sprintf("%T", p),
 		h.DerefOrNil(p.MonsterID),
@@ -80,7 +81,7 @@ func (p turnOrderMon) getDuplicateKey() string {
 	})
 }
 
-func getTurnOrderParamsDoc() ParamsDoc {
+func GetTurnOrderParamsDoc() ParamsDoc {
 	return ParamsDoc{
 		GeneralRules: h.GetStrPtr(""),
 		Fields: []FieldDoc{

@@ -1,4 +1,4 @@
-package api
+package serviceverify
 
 import (
 	"fmt"
@@ -10,9 +10,9 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-type verifyFn[T any] func(paramsVerifyer, T, ts.FieldName) (T, error)
+type verifyFn[T any] func(ParamsVerifyer, T, ts.FieldName) (T, error)
 
-func vfEnum(v paramsVerifyer, typedVal string, fieldName ts.FieldName) (string, error) {
+func vfEnum(v ParamsVerifyer, typedVal string, fieldName ts.FieldName) (string, error) {
 	doc := v.paramsRules[fieldName].Doc
 
 	if doc.EnumValues == nil {
@@ -26,7 +26,7 @@ func vfEnum(v paramsVerifyer, typedVal string, fieldName ts.FieldName) (string, 
 	return typedVal, nil
 }
 
-func vfArray[T any](v paramsVerifyer, arr []T, fieldName ts.FieldName) ([]T, error) {
+func vfArray[T any](v ParamsVerifyer, arr []T, fieldName ts.FieldName) ([]T, error) {
 	if arr == nil {
 		return arr, errs.ErrNullArray
 	}
@@ -34,7 +34,7 @@ func vfArray[T any](v paramsVerifyer, arr []T, fieldName ts.FieldName) ([]T, err
 	doc := v.paramsRules[fieldName].Doc
 
 	if len(arr) == 0 {
-		return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("empty array used for field '%s'. the use of empty arrays is not supported by this API. omit the field, or use 'null' instead", fieldName), nil)
+		return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("empty array used for field '%s'. the use of empty arrays is not supported by this api. omit the field, or use 'null' instead", fieldName), nil)
 	}
 
 	if doc.MaxArrayLen == nil {
@@ -48,26 +48,26 @@ func vfArray[T any](v paramsVerifyer, arr []T, fieldName ts.FieldName) ([]T, err
 	return arr, nil
 }
 
-func vfID(v paramsVerifyer, val int32, fieldName ts.FieldName) (int32, error) {
+func vfID(v ParamsVerifyer, val int32, fieldName ts.FieldName) (int32, error) {
 	doc := v.paramsRules[fieldName].Doc
 
 	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "id", false)
 }
 
-func vfInt(v paramsVerifyer, val int32, fieldName ts.FieldName) (int32, error) {
+func vfInt(v ParamsVerifyer, val int32, fieldName ts.FieldName) (int32, error) {
 	doc := v.paramsRules[fieldName].Doc
 
 	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "value", false)
 }
 
-func vfArrayChildID(v paramsVerifyer, val int32, fieldName ts.FieldName) (int32, error) {
+func vfArrayChildID(v ParamsVerifyer, val int32, fieldName ts.FieldName) (int32, error) {
 	doc := v.paramsRules[fieldName].Doc
 
 	return vfIntRange(val, doc.ChildMinVal, doc.ChildMaxVal, fieldName, "id", true)
 }
 
 func vfIntRange(val int32, minVal, maxVal *int32, fieldName ts.FieldName, intType string, isArray bool) (int32, error) {
-	errStart := getFieldRangeErrStart(val, fieldName, intType, isArray)
+	errStart := errs.GetFieldRangeErrStart(val, fieldName, intType, isArray)
 
 	if minVal != nil && maxVal != nil && (val < *minVal || val > *maxVal) {
 		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. allowed range: %d to %d", errStart, *minVal, *maxVal), nil)

@@ -4,40 +4,22 @@ import (
 	"slices"
 
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
-
-type TurnOrderResponse struct {
-	TurnsAmt      int32         `json:"turns_amt"`
-	IgnFirstTurn  bool          `json:"ign_first_turn"`
-	IgnImmunities bool          `json:"ign_immunities"`
-	BattleStart   string        `json:"battle_start"`
-	RNG           string        `json:"rng"`
-	PlayerParty   []Participant `json:"player_party"`
-	OpponentParty []Participant `json:"opponent_party"`
-	TurnOrder     []BattleTurn  `json:"turn_order"`
-}
 
 type TurnParams struct {
 	Name          string
-	Party         BattleParty
+	Party         servicetypes.BattleParty
 	PriorityKey   string
 	Agility       int32
 	TickSpeed     int32
 	TicksNextTurn int32
 }
 
-type BattleTurn struct {
-	Turn        int32       `json:"turn"`
-	CurrentTick int32       `json:"current_tick"`
-	Name        string      `json:"name"`
-	Party       BattleParty `json:"party"`
-	PriorityKey string      `json:"-"`
-}
-
-func handleTurnOrder(params TurnOrderParams) (TurnOrderResponse, error) {
+func handleTurnOrder(params servicetypes.TurnOrderParams) (servicetypes.TurnOrderResponse, error) {
 	var err error
 
-	response := TurnOrderResponse{
+	response := servicetypes.TurnOrderResponse{
 		TurnsAmt:      params.TurnsAmt,
 		IgnFirstTurn:  params.IgnFirstTurn,
 		IgnImmunities: params.IgnImmunities,
@@ -46,7 +28,7 @@ func handleTurnOrder(params TurnOrderParams) (TurnOrderResponse, error) {
 
 	params, response.PlayerParty, response.OpponentParty, err = getParticipants(params)
 	if err != nil {
-		return TurnOrderResponse{}, err
+		return servicetypes.TurnOrderResponse{}, err
 	}
 	participants := slices.Concat(response.PlayerParty, response.OpponentParty)
 	response.BattleStart = params.BattleStart
@@ -58,9 +40,9 @@ func handleTurnOrder(params TurnOrderParams) (TurnOrderResponse, error) {
 	return response, nil
 }
 
-func calcTurnOrder(params TurnOrderParams, participants []Participant) []BattleTurn {
+func calcTurnOrder(params servicetypes.TurnOrderParams, participants []servicetypes.Participant) []servicetypes.BattleTurn {
 	turnQueue := readyTurnQueue(participants, params.RNG)
-	turns := []BattleTurn{}
+	turns := []servicetypes.BattleTurn{}
 	var ticksTotal int32
 	var turnsTotal int32
 
@@ -85,7 +67,7 @@ func calcTurnOrder(params TurnOrderParams, participants []Participant) []BattleT
 			turnQueue[i].TicksNextTurn -= ticksPassed
 		}
 
-		battleTurn := BattleTurn{
+		battleTurn := servicetypes.BattleTurn{
 			Turn:        turnsTotal,
 			CurrentTick: ticksTotal,
 			Name:        currentTurn.Name,
@@ -101,7 +83,7 @@ func calcTurnOrder(params TurnOrderParams, participants []Participant) []BattleT
 	return turns
 }
 
-func completeTurnOrderResponse(response TurnOrderResponse, participantsAmt int, turnsAmt int32) TurnOrderResponse {
+func completeTurnOrderResponse(response servicetypes.TurnOrderResponse, participantsAmt int, turnsAmt int32) servicetypes.TurnOrderResponse {
 	turnCounter := make(map[string]int32, participantsAmt)
 
 	for _, turn := range response.TurnOrder {
@@ -119,8 +101,8 @@ func completeTurnOrderResponse(response TurnOrderResponse, participantsAmt int, 
 	return response
 }
 
-func calcParticipantTurns(participant Participant, turnCounter map[string]int32, totalTurns int32) Participant {
-	turnsReceived := turnCounter[participant.getKey()]
+func calcParticipantTurns(participant servicetypes.Participant, turnCounter map[string]int32, totalTurns int32) servicetypes.Participant {
+	turnsReceived := turnCounter[participant.GetKey()]
 	participant.TurnsReceived = turnsReceived
 
 	turnsPercent := float64(turnsReceived) / float64(totalTurns)

@@ -1,4 +1,4 @@
-package api
+package servicetypes
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"

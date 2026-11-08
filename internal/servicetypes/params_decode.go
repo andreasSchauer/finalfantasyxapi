@@ -1,4 +1,4 @@
-package api
+package servicetypes
 
 import (
 	"encoding/json"
@@ -9,17 +9,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getParamsJSONBody[P any](r *http.Request) (P, map[ts.FieldName]any, error) {
-	var zero P
-	var params P
 
-	bodyBytes, err := io.ReadAll(r.Body)
-	if err != nil {
-		return zero, nil, errs.NewHTTPError(http.StatusInternalServerError, "failed to read request body", err)
-	}
-
-	return ReadJSONRequest(bodyBytes, params, "invalid or corrupt payload in request body")
-}
 
 func ReadJSONRequest[P any](data []byte, params P, errMsg string) (P, map[ts.FieldName]any, error) {
 	var zero P
@@ -35,4 +25,17 @@ func ReadJSONRequest[P any](data []byte, params P, errMsg string) (P, map[ts.Fie
 	userValues := toUserValueMap(rawMap)
 
 	return params, userValues, nil
+}
+
+
+func GetParamsJSONBody[P any](r *http.Request) (P, map[ts.FieldName]any, error) {
+	var zero P
+	var params P
+
+	bodyBytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		return zero, nil, errs.NewHTTPError(http.StatusInternalServerError, "failed to read request body", err)
+	}
+
+	return ReadJSONRequest(bodyBytes, params, "invalid or corrupt payload in request body")
 }

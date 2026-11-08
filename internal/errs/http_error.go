@@ -54,3 +54,17 @@ func NewHTTPErrorDBFilter(fetchType ts.ResTypePlural, queryName ts.QueryParamNam
 func NewHTTPErrorAvailability(fetchType ts.ResTypePlural, err error) HTTPError {
 	return NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't filter %s by availability", fetchType), err)
 }
+
+func CascadeHTTPError(msg string, err error) error {
+	if err == nil {
+		return nil
+	}
+
+	httpErr, ok := err.(HTTPError)
+	if ok {
+		httpErr.Msg = fmt.Sprintf("%s: %s", msg, httpErr.Msg)
+		return httpErr
+	}
+
+	return nil
+}

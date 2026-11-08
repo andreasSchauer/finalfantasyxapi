@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -52,7 +52,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "empty array used for field 'party'. the use of empty arrays is not supported by this API. omit the field, or use 'null' instead",
+				expectedErr:    "empty array used for field 'party'. the use of empty arrays is not supported by this api. omit the field, or use 'null' instead",
 				requestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{},
 				},
@@ -63,7 +63,7 @@ func TestTurnOrder(t *testing.T) {
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "empty array used for field 'mons'. the use of empty arrays is not supported by this API. omit the field, or use 'null' instead",
+				expectedErr:    "empty array used for field 'mons'. the use of empty arrays is not supported by this api. omit the field, or use 'null' instead",
 				requestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{},
 				},
@@ -420,17 +420,17 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      30,
 				IgnFirstTurn:  false,
 				IgnImmunities: false,
 				BattleStart:   string(database.BattleStartNormal),
 				RNG:           string(database.TurnOrderRngMedian),
-				PlayerParty: []api.Participant{
+				PlayerParty: []servicetypes.Participant{
 					{
 						Name:    "tidus",
 						Agility: 50,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 6,
 							MinICV:    h.GetInt32Ptr(14),
 							MaxICV:    h.GetInt32Ptr(18),
@@ -441,7 +441,7 @@ func TestTurnOrder(t *testing.T) {
 						TurnsPercent:  100,
 					},
 				},
-				OpponentParty: []api.Participant{},
+				OpponentParty: []servicetypes.Participant{},
 			},
 			testTurnOrder: []testBattleTurn{
 				{
@@ -449,21 +449,21 @@ func TestTurnOrder(t *testing.T) {
 					turn:        1,
 					currentTick: 16,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       4,
 					turn:        5,
 					currentTick: 88,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       29,
 					turn:        30,
 					currentTick: 538,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 			},
 		},
@@ -495,17 +495,17 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      20,
 				IgnFirstTurn:  false,
 				IgnImmunities: false,
 				BattleStart:   string(database.BattleStartNormal),
 				RNG:           string(database.TurnOrderRngWorst),
-				PlayerParty: []api.Participant{
+				PlayerParty: []servicetypes.Participant{
 					{
 						Name:    "tidus",
 						Agility: 50,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 3,
 							MinICV:    h.GetInt32Ptr(14),
 							MaxICV:    h.GetInt32Ptr(18),
@@ -516,11 +516,11 @@ func TestTurnOrder(t *testing.T) {
 						TurnsPercent:  90,
 					},
 				},
-				OpponentParty: []api.Participant{
+				OpponentParty: []servicetypes.Participant{
 					{
 						Name:    "yellow element",
 						Agility: 5,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 32,
 							MinICV:    h.GetInt32Ptr(48),
 							MaxICV:    h.GetInt32Ptr(53),
@@ -538,28 +538,28 @@ func TestTurnOrder(t *testing.T) {
 					turn:        1,
 					currentTick: 18,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       4,
 					turn:        5,
 					currentTick: 48,
 					name:        "yellow element",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       10,
 					turn:        11,
 					currentTick: 99,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       16,
 					turn:        17,
 					currentTick: 144,
 					name:        "yellow element",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 			},
 		},
@@ -592,17 +592,17 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      10,
 				IgnFirstTurn:  false,
 				IgnImmunities: true,
 				BattleStart:   string(database.BattleStartNormal),
 				RNG:           string(database.TurnOrderRngBest),
-				PlayerParty: []api.Participant{
+				PlayerParty: []servicetypes.Participant{
 					{
 						Name:    "tidus",
 						Agility: 50,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 3,
 							MinICV:    h.GetInt32Ptr(7),
 							MaxICV:    h.GetInt32Ptr(9),
@@ -613,11 +613,11 @@ func TestTurnOrder(t *testing.T) {
 						TurnsPercent:  80,
 					},
 				},
-				OpponentParty: []api.Participant{
+				OpponentParty: []servicetypes.Participant{
 					{
 						Name:    "cactuar king",
 						Agility: 80,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 10,
 							MinICV:    h.GetInt32Ptr(15),
 							MaxICV:    h.GetInt32Ptr(16),
@@ -635,28 +635,28 @@ func TestTurnOrder(t *testing.T) {
 					turn:        1,
 					currentTick: 7,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       1,
 					turn:        2,
 					currentTick: 16,
 					name:        "cactuar king",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       2,
 					turn:        3,
 					currentTick: 16,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       3,
 					turn:        4,
 					currentTick: 25,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 			},
 		},
@@ -697,17 +697,17 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      10,
 				IgnFirstTurn:  false,
 				IgnImmunities: true,
 				BattleStart:   string(database.BattleStartNormal),
 				RNG:           string(database.TurnOrderRngBest),
-				PlayerParty: []api.Participant{
+				PlayerParty: []servicetypes.Participant{
 					{
 						Name:    "tidus",
 						Agility: 50,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 3,
 							MinICV:    h.GetInt32Ptr(0),
 							MaxICV:    h.GetInt32Ptr(0),
@@ -718,11 +718,11 @@ func TestTurnOrder(t *testing.T) {
 						TurnsPercent:  50,
 					},
 				},
-				OpponentParty: []api.Participant{
+				OpponentParty: []servicetypes.Participant{
 					{
 						Name:    "frank (1)",
 						Agility: 50,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 12,
 							MinICV:    h.GetInt32Ptr(-1),
 							MaxICV:    h.GetInt32Ptr(-1),
@@ -735,7 +735,7 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "frank (2)",
 						Agility: 80,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 2,
 							MinICV:    h.GetInt32Ptr(15),
 							MaxICV:    h.GetInt32Ptr(16),
@@ -753,28 +753,28 @@ func TestTurnOrder(t *testing.T) {
 					turn:        1,
 					currentTick: 0,
 					name:        "frank (1)",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       1,
 					turn:        2,
 					currentTick: 0,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       2,
 					turn:        3,
 					currentTick: 9,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       3,
 					turn:        4,
 					currentTick: 16,
 					name:        "frank (2)",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 			},
 		},
@@ -816,17 +816,17 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      10,
 				IgnFirstTurn:  false,
 				IgnImmunities: false,
 				BattleStart:   string(database.BattleStartAmbush),
 				RNG:           string(database.TurnOrderRngMedian),
-				PlayerParty: []api.Participant{
+				PlayerParty: []servicetypes.Participant{
 					{
 						Name:    "kimahri",
 						Agility: 255,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 1,
 							MinICV:    h.GetInt32Ptr(4),
 							MaxICV:    h.GetInt32Ptr(4),
@@ -839,7 +839,7 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "tidus",
 						Agility: 255,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 1,
 							MinICV:    h.GetInt32Ptr(4),
 							MaxICV:    h.GetInt32Ptr(4),
@@ -852,7 +852,7 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "rikku",
 						Agility: 255,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 1,
 							MinICV:    h.GetInt32Ptr(4),
 							MaxICV:    h.GetInt32Ptr(4),
@@ -863,11 +863,11 @@ func TestTurnOrder(t *testing.T) {
 						TurnsPercent:  20,
 					},
 				},
-				OpponentParty: []api.Participant{
+				OpponentParty: []servicetypes.Participant{
 					{
 						Name:    "frank",
 						Agility: 255,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 3,
 							MinICV:    h.GetInt32Ptr(0),
 							MaxICV:    h.GetInt32Ptr(0),
@@ -884,35 +884,35 @@ func TestTurnOrder(t *testing.T) {
 					turn:        1,
 					currentTick: 0,
 					name:        "frank",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       1,
 					turn:        2,
 					currentTick: 4,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       2,
 					turn:        3,
 					currentTick: 4,
 					name:        "kimahri",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       3,
 					turn:        4,
 					currentTick: 4,
 					name:        "rikku",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       4,
 					turn:        5,
 					currentTick: 7,
 					name:        "tidus",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 			},
 		},
@@ -938,17 +938,17 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      10,
 				IgnFirstTurn:  false,
 				IgnImmunities: false,
 				BattleStart:   string(database.BattleStartNormal),
 				RNG:           string(database.TurnOrderRngMedian),
-				PlayerParty: []api.Participant{
+				PlayerParty: []servicetypes.Participant{
 					{
 						Name:    "anima",
 						Agility: 10,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 14,
 							MinICV:    h.GetInt32Ptr(41),
 							MaxICV:    h.GetInt32Ptr(42),
@@ -958,11 +958,11 @@ func TestTurnOrder(t *testing.T) {
 						TurnsPercent:  30,
 					},
 				},
-				OpponentParty: []api.Participant{
+				OpponentParty: []servicetypes.Participant{
 					{
 						Name:    "basilisk",
 						Agility: 9,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 15,
 							MinICV:    h.GetInt32Ptr(45),
 							MaxICV:    h.GetInt32Ptr(50),
@@ -974,7 +974,7 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "bite bug",
 						Agility: 15,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 12,
 							MinICV:    h.GetInt32Ptr(36),
 							MaxICV:    h.GetInt32Ptr(40),
@@ -991,28 +991,28 @@ func TestTurnOrder(t *testing.T) {
 					turn:        1,
 					currentTick: 38,
 					name:        "bite bug",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       1,
 					turn:        2,
 					currentTick: 41,
 					name:        "anima",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       2,
 					turn:        3,
 					currentTick: 47,
 					name:        "basilisk",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       7,
 					turn:        8,
 					currentTick: 125,
 					name:        "anima",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 			},
 		},
@@ -1038,17 +1038,17 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      10,
 				IgnFirstTurn:  false,
 				IgnImmunities: false,
 				BattleStart:   string(database.BattleStartPreemptive),
 				RNG:           string(database.TurnOrderRngMedian),
-				PlayerParty: []api.Participant{
+				PlayerParty: []servicetypes.Participant{
 					{
 						Name:    "anima",
 						Agility: 10,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 14,
 							MinICV:    h.GetInt32Ptr(0),
 							MaxICV:    h.GetInt32Ptr(0),
@@ -1058,11 +1058,11 @@ func TestTurnOrder(t *testing.T) {
 						TurnsPercent:  50,
 					},
 				},
-				OpponentParty: []api.Participant{
+				OpponentParty: []servicetypes.Participant{
 					{
 						Name:    "basilisk",
 						Agility: 9,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 15,
 							MinICV:    h.GetInt32Ptr(135),
 							MaxICV:    h.GetInt32Ptr(135),
@@ -1074,7 +1074,7 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "bite bug",
 						Agility: 15,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 12,
 							MinICV:    h.GetInt32Ptr(108),
 							MaxICV:    h.GetInt32Ptr(108),
@@ -1091,35 +1091,35 @@ func TestTurnOrder(t *testing.T) {
 					turn:        1,
 					currentTick: 0,
 					name:        "anima",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       1,
 					turn:        2,
 					currentTick: 42,
 					name:        "anima",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       2,
 					turn:        3,
 					currentTick: 84,
 					name:        "anima",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       3,
 					turn:        4,
 					currentTick: 108,
 					name:        "bite bug",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       5,
 					turn:        6,
 					currentTick: 135,
 					name:        "basilisk",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 			},
 		},
@@ -1151,17 +1151,17 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      10,
 				IgnFirstTurn:  true,
 				IgnImmunities: true,
 				BattleStart:   string(database.BattleStartNormal),
 				RNG:           string(database.TurnOrderRngMedian),
-				PlayerParty: []api.Participant{
+				PlayerParty: []servicetypes.Participant{
 					{
 						Name:    "yuna",
 						Agility: 24,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 9,
 							MinICV:    h.GetInt32Ptr(0),
 							MaxICV:    h.GetInt32Ptr(0),
@@ -1171,11 +1171,11 @@ func TestTurnOrder(t *testing.T) {
 						TurnsPercent:  50,
 					},
 				},
-				OpponentParty: []api.Participant{
+				OpponentParty: []servicetypes.Participant{
 					{
 						Name:    "sin - 1",
 						Agility: 6,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 8,
 							MinICV:    h.GetInt32Ptr(0),
 							MaxICV:    h.GetInt32Ptr(0),
@@ -1193,35 +1193,35 @@ func TestTurnOrder(t *testing.T) {
 					turn:        1,
 					currentTick: 0,
 					name:        "yuna",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       1,
 					turn:        2,
 					currentTick: 0,
 					name:        "sin - 1",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       2,
 					turn:        3,
 					currentTick: 24,
 					name:        "sin - 1",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       3,
 					turn:        4,
 					currentTick: 27,
 					name:        "yuna",
-					party:       api.BattlePartyPlayer,
+					party:       servicetypes.BattlePartyPlayer,
 				},
 				{
 					index:       8,
 					turn:        9,
 					currentTick: 96,
 					name:        "sin - 1",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 			},
 		},
@@ -1252,18 +1252,18 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      10,
 				IgnFirstTurn:  false,
 				IgnImmunities: false,
 				BattleStart:   string(database.BattleStartNormal),
 				RNG:           string(database.TurnOrderRngMedian),
-				PlayerParty:   []api.Participant{},
-				OpponentParty: []api.Participant{
+				PlayerParty:   []servicetypes.Participant{},
+				OpponentParty: []servicetypes.Participant{
 					{
 						Name:    "oblitzerator (1)",
 						Agility: 30,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 8,
 							MinICV:    h.GetInt32Ptr(24),
 							MaxICV:    h.GetInt32Ptr(26),
@@ -1275,7 +1275,7 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "oblitzerator (2)",
 						Agility: 16,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 12,
 							MinICV:    h.GetInt32Ptr(36),
 							MaxICV:    h.GetInt32Ptr(40),
@@ -1288,7 +1288,7 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "oblitzerator (3)",
 						Agility: 26,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 9,
 							MinICV:    h.GetInt32Ptr(27),
 							MaxICV:    h.GetInt32Ptr(30),
@@ -1306,35 +1306,35 @@ func TestTurnOrder(t *testing.T) {
 					turn:        1,
 					currentTick: 25,
 					name:        "oblitzerator (1)",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       1,
 					turn:        2,
 					currentTick: 28,
 					name:        "oblitzerator (3)",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       2,
 					turn:        3,
 					currentTick: 38,
 					name:        "oblitzerator (2)",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       3,
 					turn:        4,
 					currentTick: 49,
 					name:        "oblitzerator (1)",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 				{
 					index:       7,
 					turn:        8,
 					currentTick: 82,
 					name:        "oblitzerator (3)",
-					party:       api.BattlePartyOpponent,
+					party:       servicetypes.BattlePartyOpponent,
 				},
 			},
 		},
@@ -1361,18 +1361,18 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      30,
 				IgnFirstTurn:  false,
 				IgnImmunities: false,
 				BattleStart:   string(database.BattleStartNormal),
 				RNG:           string(database.TurnOrderRngMedian),
-				PlayerParty:   []api.Participant{},
-				OpponentParty: []api.Participant{
+				PlayerParty:   []servicetypes.Participant{},
+				OpponentParty: []servicetypes.Participant{
 					{
 						Name:    "seymour",
 						Agility: 55,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 6,
 							MinICV:    h.GetInt32Ptr(18),
 							MaxICV:    h.GetInt32Ptr(20),
@@ -1407,18 +1407,18 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      30,
 				IgnFirstTurn:  false,
 				IgnImmunities: true,
 				BattleStart:   string(database.BattleStartNormal),
 				RNG:           string(database.TurnOrderRngMedian),
-				PlayerParty:   []api.Participant{},
-				OpponentParty: []api.Participant{
+				PlayerParty:   []servicetypes.Participant{},
+				OpponentParty: []servicetypes.Participant{
 					{
 						Name:    "left arm",
 						Agility: 255,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 6,
 							MinICV:    h.GetInt32Ptr(12),
 							MaxICV:    h.GetInt32Ptr(13),
@@ -1448,18 +1448,18 @@ func TestTurnOrder(t *testing.T) {
 					ts.PfnFormationID: 226,
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      30,
 				IgnFirstTurn:  false,
 				IgnImmunities: false,
 				BattleStart:   string(database.BattleStartAmbush),
 				RNG:           string(database.TurnOrderRngMedian),
-				PlayerParty:   []api.Participant{},
-				OpponentParty: []api.Participant{
+				PlayerParty:   []servicetypes.Participant{},
+				OpponentParty: []servicetypes.Participant{
 					{
 						Name:    "dark yojimbo",
 						Agility: 243,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 3,
 							MinICV:    h.GetInt32Ptr(0),
 							MaxICV:    h.GetInt32Ptr(0),
@@ -1471,7 +1471,7 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "dark koma inu",
 						Agility: 0,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 0,
 							MinICV:    nil,
 							MaxICV:    nil,
@@ -1502,17 +1502,17 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TurnOrderResponse: api.TurnOrderResponse{
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
 				TurnsAmt:      30,
 				IgnFirstTurn:  false,
 				IgnImmunities: false,
 				BattleStart:   string(database.BattleStartNormal),
 				RNG:           string(database.TurnOrderRngMedian),
-				PlayerParty: []api.Participant{
+				PlayerParty: []servicetypes.Participant{
 					{
 						Name:    "tidus",
 						Agility: 0,
-						AgilityVals: api.AgilityVals{
+						AgilityVals: servicetypes.AgilityVals{
 							TickSpeed: 0,
 							MinICV:    nil,
 							MaxICV:    nil,
@@ -1523,7 +1523,7 @@ func TestTurnOrder(t *testing.T) {
 						TurnsPercent:  0,
 					},
 				},
-				OpponentParty: []api.Participant{},
+				OpponentParty: []servicetypes.Participant{},
 			},
 			testTurnOrder: []testBattleTurn{},
 		},

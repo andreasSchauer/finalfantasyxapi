@@ -4,12 +4,14 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/serviceverify"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func (i HandlerInputService[P, R]) ServicePost(r *http.Request) (R, error) {
 	var zero R
-	params, userValues, err := getParamsJSONBody[P](r)
+	params, userValues, err := servicetypes.GetParamsJSONBody[P](r)
 	if err != nil {
 		return zero, err
 	}
@@ -32,9 +34,9 @@ func (i HandlerInputService[P, R]) verifyJSONParams(params P, userValues map[ts.
 	var zero P
 	docs := i.DocsFn()
 
-	v := createParamsVerifyer(docs.CompileRules(), userValues)
+	v := serviceverify.NewParamsVerifyer(docs.CompileRules(), userValues)
 
-	err := v.checkFields()
+	err := v.CheckFields()
 	if err != nil {
 		return zero, err
 	}

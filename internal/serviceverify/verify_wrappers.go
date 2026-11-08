@@ -1,8 +1,8 @@
-package api
+package serviceverify
 
 import ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 
-func (v paramsVerifyer) fieldWrapper[T any](val T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
+func (v ParamsVerifyer) fieldWrapper[T any](val T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
 	var zero T
 
 	val, err := v.field(val, fieldName)
@@ -14,7 +14,7 @@ func (v paramsVerifyer) fieldWrapper[T any](val T, fieldName ts.FieldName, verif
 }
 
 // verifies, if a pointer-field fulfills all its conditions. the basic checks are performed on the pointer itself. after that, the pointer is safely dereferenced and a type-specific verification function can be performed on the pointer's typed value. a pointer will never have a default value since it's optional.
-func (v paramsVerifyer) fieldPtrWrapper[T any](ptr *T, fieldName ts.FieldName, verifyFn verifyFn[T]) (*T, error) {
+func (v ParamsVerifyer) fieldPtrWrapper[T any](ptr *T, fieldName ts.FieldName, verifyFn verifyFn[T]) (*T, error) {
 	ptr, err := v.field(ptr, fieldName)
 	if err != nil {
 		return nil, err
@@ -32,10 +32,10 @@ func (v paramsVerifyer) fieldPtrWrapper[T any](ptr *T, fieldName ts.FieldName, v
 	return ptr, nil
 }
 
-func (v paramsVerifyer) objFieldWrapper[T any](val T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
+func (v ParamsVerifyer) objFieldWrapper[T any](val T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
 	var zero T
 
-	err := v.checkFields()
+	err := v.CheckFields()
 	if err != nil {
 		return zero, err
 	}
@@ -43,10 +43,10 @@ func (v paramsVerifyer) objFieldWrapper[T any](val T, fieldName ts.FieldName, ve
 	return v.fieldWrapper(val, fieldName, verifyFn)
 }
 
-func (v paramsVerifyer) arrItemWrapper[T any](val T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
+func (v ParamsVerifyer) arrItemWrapper[T any](val T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
 	var zero T
 
-	err := v.checkFields()
+	err := v.CheckFields()
 	if err != nil {
 		return zero, err
 	}

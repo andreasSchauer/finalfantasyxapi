@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
 type AbilityWheel struct {
@@ -54,7 +55,7 @@ func getTargetIdxGroup(targetName string, indexedNames [8]string) []int32 {
 	return targetIndexGroup
 }
 
-func createAbilityWheels(abilities []seedtypes.EquipmentDrop, params DropChanceParams) []AbilityWheel {
+func createAbilityWheels(abilities []seedtypes.EquipmentDrop, params servicetypes.DropChanceParams) []AbilityWheel {
 	uniqueKeys := getUniqueWheelKeys(abilities, params)
 	var wheels []AbilityWheel
 
@@ -120,7 +121,7 @@ func sortAbilityWheels(a, b AbilityWheel) int {
 	return 0
 }
 
-func getUniqueWheelKeys(abilities []seedtypes.EquipmentDrop, params DropChanceParams) map[string][]seedtypes.Character {
+func getUniqueWheelKeys(abilities []seedtypes.EquipmentDrop, params servicetypes.DropChanceParams) map[string][]seedtypes.Character {
 	uniqueKeys := make(map[string][]seedtypes.Character)
 
 	for _, charID := range params.PartyMembers {

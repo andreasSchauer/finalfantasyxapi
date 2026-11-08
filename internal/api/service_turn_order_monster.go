@@ -8,9 +8,10 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-func fetchFormationMons(params TurnOrderParams) TurnOrderParams {
+func fetchFormationMons(params servicetypes.TurnOrderParams) servicetypes.TurnOrderParams {
 	if params.FormationID == nil {
 		return params
 	}
@@ -24,7 +25,7 @@ func fetchFormationMons(params TurnOrderParams) TurnOrderParams {
 	for _, monAmt := range formation.Monsters {
 		monID := monAmt.MonsterID
 
-		mon := turnOrderMon{
+		mon := servicetypes.TurnOrderMon{
 			MonsterID: &monID,
 		}
 

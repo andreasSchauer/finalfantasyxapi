@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
 func TestServiceBody(t *testing.T) {
@@ -82,7 +83,7 @@ func TestServiceBodyDocs(t *testing.T) {
 		},
 	}
 
-	testServiceResponsesGet[api.ParamsDoc](t, tests, "ServiceBodyDocs")
+	testServiceResponsesGet[servicetypes.ParamsDoc](t, tests, "ServiceBodyDocs")
 }
 
 func TestAlBhedBodySamples(t *testing.T) {
@@ -96,7 +97,7 @@ func TestAlBhedBodySamples(t *testing.T) {
 		},
 	}
 
-	testServiceResponsesGet[[]api.SampleParams[api.AlBhedParams]](t, tests, "AlBhedBodySamples")
+	testServiceResponsesGet[[]servicetypes.SampleParams[servicetypes.AlBhedParams]](t, tests, "AlBhedBodySamples")
 }
 
 func TestTurnOrderBodySamples(t *testing.T) {
@@ -110,7 +111,7 @@ func TestTurnOrderBodySamples(t *testing.T) {
 		},
 	}
 
-	testServiceResponsesGet[[]api.SampleParams[api.TurnOrderParams]](t, tests, "TurnOrderBodySamples")
+	testServiceResponsesGet[[]servicetypes.SampleParams[servicetypes.TurnOrderParams]](t, tests, "TurnOrderBodySamples")
 }
 
 func TestDropChanceBodySamples(t *testing.T) {
@@ -124,5 +125,5 @@ func TestDropChanceBodySamples(t *testing.T) {
 		},
 	}
 
-	testServiceResponsesGet[[]api.SampleParams[api.DropChanceParams]](t, tests, "DropChanceBodySamples")
+	testServiceResponsesGet[[]servicetypes.SampleParams[servicetypes.DropChanceParams]](t, tests, "DropChanceBodySamples")
 }

@@ -1,12 +1,16 @@
 package api
 
-import ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/serviceverify"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+)
 
-type HandlerInputService[P ServiceParams, R ServiceResponse] struct {
+type HandlerInputService[P servicetypes.ServiceParams, R servicetypes.ServiceResponse] struct {
 	Endpoint  ts.EndpointName
 	Usage     []string
-	VerifyFn  func(paramsVerifyer, P) (P, error)
+	VerifyFn  func(serviceverify.ParamsVerifyer, P) (P, error)
 	ExecuteFn func(P) (R, error)
-	DocsFn    func() ParamsDoc
-	Samples   []SampleParams[P]
+	DocsFn    func() servicetypes.ParamsDoc
+	Samples   []servicetypes.SampleParams[P]
 }

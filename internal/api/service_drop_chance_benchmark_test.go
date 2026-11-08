@@ -2,12 +2,14 @@ package api
 
 import (
 	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-var benchMarkResult DropChanceResponse
+var benchMarkResult servicetypes.DropChanceResponse
 
 func BenchmarkHandleDropChance(b *testing.B) {
-	params := DropChanceParams{
+	params := servicetypes.DropChanceParams{
 		Monster:           261,
 		PartyMembers:      []int32{1, 2, 3, 4, 5, 6, 7},
 		AutoAbilities:     []int32{31, 30},

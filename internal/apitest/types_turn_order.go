@@ -1,10 +1,12 @@
 package apitest
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/api"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
+)
 
 type expTurnOrderResponse struct {
 	testGeneral
-	api.TurnOrderResponse
+	servicetypes.TurnOrderResponse
 	testTurnOrder []testBattleTurn
 }
 
@@ -12,7 +14,7 @@ func (e expTurnOrderResponse) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTurnOrderResponses(test test, exp expTurnOrderResponse, got api.TurnOrderResponse) {
+func compareTurnOrderResponses(test test, exp expTurnOrderResponse, got servicetypes.TurnOrderResponse) {
 	test.t.Helper()
 	test.compare("turns amt", exp.TurnsAmt, got.TurnsAmt)
 	test.compare("ign first turn", exp.IgnFirstTurn, got.IgnFirstTurn)
@@ -24,7 +26,7 @@ func compareTurnOrderResponses(test test, exp expTurnOrderResponse, got api.Turn
 	test.checkTestStructsInSlice("turn order", exp.testTurnOrder, got.TurnOrder, compareBattleTurns)
 }
 
-func compareParticipants(test test, fieldName string, exp, got api.Participant) {
+func compareParticipants(test test, fieldName string, exp, got servicetypes.Participant) {
 	test.t.Helper()
 	test.compare(fieldName+" name", exp.Name, got.Name)
 	test.compare(fieldName+" party", string(exp.Party), string(got.Party))
@@ -44,14 +46,14 @@ type testBattleTurn struct {
 	turn        int32
 	currentTick int32
 	name        string
-	party       api.BattleParty
+	party       servicetypes.BattleParty
 }
 
 func (t testBattleTurn) GetIndex() int {
 	return t.index
 }
 
-func compareBattleTurns(test test, fieldName string, exp testBattleTurn, got api.BattleTurn) {
+func compareBattleTurns(test test, fieldName string, exp testBattleTurn, got servicetypes.BattleTurn) {
 	test.t.Helper()
 	test.compare(fieldName+" turn", exp.turn, got.Turn)
 	test.compare(fieldName+" current tick", exp.currentTick, got.CurrentTick)

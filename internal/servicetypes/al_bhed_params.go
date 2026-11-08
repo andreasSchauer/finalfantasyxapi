@@ -1,4 +1,4 @@
-package api
+package servicetypes
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -11,7 +11,7 @@ type AlBhedParams struct {
 	Direction string `json:"direction,omitempty"`
 }
 
-func getAlBhedParamsDoc() ParamsDoc {
+func GetAlBhedParamsDoc() ParamsDoc {
 	return ParamsDoc{
 		Fields: []FieldDoc{
 			{

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -109,7 +109,7 @@ func TestAlBhed(t *testing.T) {
 					ts.PfnText: "I am cool",
 				},
 			},
-			AlBhedResponse: api.AlBhedResponse{
+			AlBhedResponse: servicetypes.AlBhedResponse{
 				TranslatedText: "E ys luum",
 				OriginalText:   "I am cool",
 				Direction:      "to-al-bhed",
@@ -124,7 +124,7 @@ func TestAlBhed(t *testing.T) {
 					ts.PfnText: "father",
 				},
 			},
-			AlBhedResponse: api.AlBhedResponse{
+			AlBhedResponse: servicetypes.AlBhedResponse{
 				TranslatedText: "vydran",
 				OriginalText:   "father",
 				Direction:      "to-al-bhed",
@@ -139,7 +139,7 @@ func TestAlBhed(t *testing.T) {
 					ts.PfnText: "f[y]the[n]",
 				},
 			},
-			AlBhedResponse: api.AlBhedResponse{
+			AlBhedResponse: servicetypes.AlBhedResponse{
 				TranslatedText: "vydran",
 				OriginalText:   "f[y]the[n]",
 				Direction:      "to-al-bhed",
@@ -154,7 +154,7 @@ func TestAlBhed(t *testing.T) {
 					ts.PfnText: "f[Ydr]er",
 				},
 			},
-			AlBhedResponse: api.AlBhedResponse{
+			AlBhedResponse: servicetypes.AlBhedResponse{
 				TranslatedText: "vYdran",
 				OriginalText:   "f[Ydr]er",
 				Direction:      "to-al-bhed",
@@ -170,7 +170,7 @@ func TestAlBhed(t *testing.T) {
 					ts.PfnDirection: "to-english",
 				},
 			},
-			AlBhedResponse: api.AlBhedResponse{
+			AlBhedResponse: servicetypes.AlBhedResponse{
 				TranslatedText: "father",
 				OriginalText:   "v[ath]an",
 				Direction:      "to-english",
@@ -185,7 +185,7 @@ func TestAlBhed(t *testing.T) {
 					ts.PfnText: "!?,. 1234567890",
 				},
 			},
-			AlBhedResponse: api.AlBhedResponse{
+			AlBhedResponse: servicetypes.AlBhedResponse{
 				TranslatedText: "!?,. 1234567890",
 				OriginalText:   "!?,. 1234567890",
 				Direction:      "to-al-bhed",

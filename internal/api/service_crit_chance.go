@@ -1,9 +1,7 @@
 package api
 
-type CritChanceResponse struct {
-	CritChance float64 `json:"crit_chance"`
-}
+import "github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 
-func handleCritChance(_ CritChanceParams) (CritChanceResponse, error) {
-	return CritChanceResponse{}, nil
+func handleCritChance(_ servicetypes.CritChanceParams) (servicetypes.CritChanceResponse, error) {
+	return servicetypes.CritChanceResponse{}, nil
 }

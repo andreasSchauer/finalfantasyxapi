@@ -10,10 +10,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func vfAutoAbilities(params DropChanceParams, mon seedtypes.Monster) ([]seedtypes.AutoAbility, []seedtypes.EquipmentDrop, error) {
+func vfAutoAbilities(params servicetypes.DropChanceParams, mon seedtypes.Monster) ([]seedtypes.AutoAbility, []seedtypes.EquipmentDrop, error) {
 	if mon.Equipment == nil {
 		return nil, nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' doesn't drop equipment", mon), nil)
 	}
@@ -53,7 +54,7 @@ func getMonMaxSlots(mon seedtypes.Monster) int32 {
 	return slotsChances[len(slotsChances)-1].Amount
 }
 
-func vfWantedAutoAbilities(params DropChanceParams) (DropChanceParams, []seedtypes.AutoAbility, error) {
+func vfWantedAutoAbilities(params servicetypes.DropChanceParams) (servicetypes.DropChanceParams, []seedtypes.AutoAbility, error) {
 	var autoAbilities []seedtypes.AutoAbility
 
 	for _, id := range params.AutoAbilities {
@@ -64,14 +65,14 @@ func vfWantedAutoAbilities(params DropChanceParams) (DropChanceParams, []seedtyp
 		}
 
 		if *params.EquipType != ability.Type {
-			return DropChanceParams{}, nil, errs.NewHTTPError(http.StatusBadRequest, "weapon- and armor-abilities can't be combined", nil)
+			return servicetypes.DropChanceParams{}, nil, errs.NewHTTPError(http.StatusBadRequest, "weapon- and armor-abilities can't be combined", nil)
 		}
 
 		autoAbilities = append(autoAbilities, ability)
 	}
 
 	if params.EquipType == nil {
-		return DropChanceParams{}, nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("can't discern equipment's type. use '%s' to discern the type, or set it manually by using '%s'", ts.PfnAutoAbilities, ts.PfnEquipType), nil)
+		return servicetypes.DropChanceParams{}, nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("can't discern equipment's type. use '%s' to discern the type, or set it manually by using '%s'", ts.PfnAutoAbilities, ts.PfnEquipType), nil)
 	}
 
 	return params, autoAbilities, nil

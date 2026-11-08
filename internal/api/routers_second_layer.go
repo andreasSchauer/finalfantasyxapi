@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -226,7 +227,7 @@ func HandleSectionsEndpoints(w http.ResponseWriter, r *http.Request, i handlerin
 	respondWithError(w, http.StatusBadRequest, "wrong format. '/endpoints' doesn't support single-resource requests", nil)
 }
 
-func HandleBody[P ServiceParams, R ServiceResponse](w http.ResponseWriter, r *http.Request, i HandlerInputService[P, R], segment string) {
+func HandleBody[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i HandlerInputService[P, R], segment string) {
 	err := i.VerifyQueries(r)
 	if HandleHTTPError(w, err) {
 		return
@@ -240,7 +241,7 @@ func HandleBody[P ServiceParams, R ServiceResponse](w http.ResponseWriter, r *ht
 	respondWithError(w, http.StatusBadRequest, fmt.Sprintf("'GET api/%s' only supports '/body'", i.Endpoint), nil)
 }
 
-func HandleBodySections[P ServiceParams, R ServiceResponse](w http.ResponseWriter, r *http.Request, i HandlerInputService[P, R], segments []string) {
+func HandleBodySections[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i HandlerInputService[P, R], segments []string) {
 	err := i.VerifyQueries(r)
 	if HandleHTTPError(w, err) {
 		return
@@ -266,7 +267,7 @@ func HandleBodySections[P ServiceParams, R ServiceResponse](w http.ResponseWrite
 	}
 }
 
-func HandlePost[P ServiceParams, R ServiceResponse](w http.ResponseWriter, r *http.Request, i HandlerInputService[P, R]) {
+func HandlePost[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i HandlerInputService[P, R]) {
 	err := i.VerifyQueries(r)
 	if HandleHTTPError(w, err) {
 		return

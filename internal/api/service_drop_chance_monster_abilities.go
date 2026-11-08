@@ -2,75 +2,35 @@ package api
 
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-type DroppedAutoAbilities struct {
-	Forced  *EqAbilitySimple  `json:"forced"`
-	Dropped []EqAbilityChance `json:"dropped"`
-}
-
-func (d DroppedAutoAbilities) Percent() DroppedAutoAbilities {
-	d.Dropped = h.SlicePercent(d.Dropped)
-
-	return d
-}
-
-func (d DroppedAutoAbilities) Round(n int32) DroppedAutoAbilities {
-	d.Dropped = h.SliceRound(d.Dropped, n)
-
-	return d
-}
-
-func getDroppedAutoAbilities(abilities []seedtypes.EquipmentDrop) DroppedAutoAbilities {
+func getDroppedAutoAbilities(abilities []seedtypes.EquipmentDrop) servicetypes.DroppedAutoAbilities {
 	if abilities[0].IsForced {
 		forcedAbility := convertEqAbilitySimple(abilities[0])
 
-		return DroppedAutoAbilities{
+		return servicetypes.DroppedAutoAbilities{
 			Forced:  &forcedAbility,
 			Dropped: ah.ConvertObjSlice(abilities[1:], convertEqAbilityChance),
 		}
 	}
 
-	return DroppedAutoAbilities{
+	return servicetypes.DroppedAutoAbilities{
 		Dropped: ah.ConvertObjSlice(abilities, convertEqAbilityChance),
 	}
 }
 
-type EqAbilitySimple struct {
-	ID         int32    `json:"id"`
-	Name       string   `json:"name"`
-	Characters []string `json:"characters"`
-}
-
-func convertEqAbilitySimple(ed seedtypes.EquipmentDrop) EqAbilitySimple {
-	return EqAbilitySimple{
+func convertEqAbilitySimple(ed seedtypes.EquipmentDrop) servicetypes.EqAbilitySimple {
+	return servicetypes.EqAbilitySimple{
 		ID:         ed.AutoAbilityID,
 		Name:       ed.Ability,
 		Characters: ed.Characters,
 	}
 }
 
-type EqAbilityChance struct {
-	EqAbilitySimple
-	Chance float64 `json:"chance"`
-}
-
-func (a EqAbilityChance) Percent() EqAbilityChance {
-	a.Chance = h.DecimalToPercent(a.Chance)
-
-	return a
-}
-
-func (a EqAbilityChance) Round(n int32) EqAbilityChance {
-	a.Chance = h.FloatRound(a.Chance, n)
-
-	return a
-}
-
-func convertEqAbilityChance(ed seedtypes.EquipmentDrop) EqAbilityChance {
-	return EqAbilityChance{
+func convertEqAbilityChance(ed seedtypes.EquipmentDrop) servicetypes.EqAbilityChance {
+	return servicetypes.EqAbilityChance{
 		EqAbilitySimple: convertEqAbilitySimple(ed),
 		Chance:          calcAutoAbilityDropChance(ed),
 	}

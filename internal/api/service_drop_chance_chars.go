@@ -6,6 +6,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
 type CharChanceParams struct {
@@ -14,67 +15,16 @@ type CharChanceParams struct {
 	monAbilities    []seedtypes.EquipmentDrop
 }
 
-type CharacterChances struct {
-	EligibleChars []string             `json:"eligible_chars"`
-	AnyFinBlow    float64              `json:"any_fin_blow"`
-	AnyNoFinBlow  float64              `json:"any_no_fin_blow"`
-	SpecificChar  *SpecificCharChances `json:"specific_character,omitempty"`
-}
-
-func (c CharacterChances) Percent() CharacterChances {
-	c.AnyFinBlow = h.DecimalToPercent(c.AnyFinBlow)
-	c.AnyNoFinBlow = h.DecimalToPercent(c.AnyNoFinBlow)
-
-	if c.SpecificChar != nil {
-		newObj := c.SpecificChar.Percent()
-		c.SpecificChar = &newObj
-	}
-
-	return c
-}
-
-func (c CharacterChances) Round(n int32) CharacterChances {
-	c.AnyFinBlow = h.FloatRound(c.AnyFinBlow, n)
-	c.AnyNoFinBlow = h.FloatRound(c.AnyNoFinBlow, n)
-
-	if c.SpecificChar != nil {
-		newObj := c.SpecificChar.Round(n)
-		c.SpecificChar = &newObj
-	}
-
-	return c
-}
-
-type SpecificCharChances struct {
-	IsEligible bool    `json:"is_eligible"`
-	FinBlow    float64 `json:"fin_blow"`
-	NoFinBlow  float64 `json:"no_fin_blow"`
-}
-
-func (c SpecificCharChances) Percent() SpecificCharChances {
-	c.FinBlow = h.DecimalToPercent(c.FinBlow)
-	c.NoFinBlow = h.DecimalToPercent(c.NoFinBlow)
-
-	return c
-}
-
-func (c SpecificCharChances) Round(n int32) SpecificCharChances {
-	c.FinBlow = h.FloatRound(c.FinBlow, n)
-	c.NoFinBlow = h.FloatRound(c.NoFinBlow, n)
-
-	return c
-}
-
-func (p CharChanceParams) calcChances(params DropChanceParams) CharacterChances {
+func (p CharChanceParams) calcChances(params servicetypes.DropChanceParams) servicetypes.CharacterChances {
 	eligibleChars := []string{}
 	baseRandomChance := 0.75 / h.FloatLen(params.PartyMembers)
-	var chances CharacterChances
+	var chances servicetypes.CharacterChances
 
 	if params.CharacterID != nil {
 		finBlowChance := baseRandomChance + 0.25
 		char, _ := lookup.GetResourceByID(*params.CharacterID, lookup.L.CharactersID)
 
-		specificChar := SpecificCharChances{
+		specificChar := servicetypes.SpecificCharChances{
 			NoFinBlow:  baseRandomChance,
 			FinBlow:    finBlowChance,
 			IsEligible: p.charIsEligible(params, char),
@@ -110,7 +60,7 @@ func (p CharChanceParams) calcChances(params DropChanceParams) CharacterChances 
 	return chances
 }
 
-func (p CharChanceParams) charIsEligible(params DropChanceParams, char seedtypes.Character) bool {
+func (p CharChanceParams) charIsEligible(params servicetypes.DropChanceParams, char seedtypes.Character) bool {
 	if p.forcedAbilityEliminatesChar(params, char) {
 		return false
 	}
@@ -126,7 +76,7 @@ func (p CharChanceParams) charIsEligible(params DropChanceParams, char seedtypes
 	return true
 }
 
-func (p CharChanceParams) forcedAbilityEliminatesChar(params DropChanceParams, char seedtypes.Character) bool {
+func (p CharChanceParams) forcedAbilityEliminatesChar(params servicetypes.DropChanceParams, char seedtypes.Character) bool {
 	// the character gets the forced ability, but the ability wasn't specified in auto_abilities
 	charGetsUnwantedForced := p.charGetsUnwantedForced(char)
 	noLooseSlotLeft := p.noLooseSlotLeft(params) // there's no loose slot left to fill in with an optional ability
@@ -145,7 +95,7 @@ func (p CharChanceParams) charGetsUnwantedForced(char seedtypes.Character) bool 
 		charGetsAbility(p.monAbilities[0], &char)
 }
 
-func (p CharChanceParams) noLooseSlotLeft(params DropChanceParams) bool {
+func (p CharChanceParams) noLooseSlotLeft(params servicetypes.DropChanceParams) bool {
 	return params.GetRequiredSlots() == p.monMaxSlots
 }
 

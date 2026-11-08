@@ -11,6 +11,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/serviceverify"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -67,10 +69,10 @@ type Endpoints struct {
 	AgilityTiers       handlerinput.HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]
 	Enums              handlerinput.HandlerInputEnums
 	Endpoints          handlerinput.HandlerInputEndpoints
-	AlBhed             HandlerInputService[AlBhedParams, AlBhedResponse]
-	TurnOrder          HandlerInputService[TurnOrderParams, TurnOrderResponse]
-	DropChance         HandlerInputService[DropChanceParams, DropChanceResponse]
-	CritChance         HandlerInputService[CritChanceParams, CritChanceResponse]
+	AlBhed             HandlerInputService[servicetypes.AlBhedParams, servicetypes.AlBhedResponse]
+	TurnOrder          HandlerInputService[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]
+	DropChance         HandlerInputService[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]
+	CritChance         HandlerInputService[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]
 }
 
 func (E *Endpoints) Init() {
@@ -991,36 +993,36 @@ func (E *Endpoints) Init() {
 		Usage:    []string{"/api/endpoints"},
 	}
 
-	E.AlBhed = HandlerInputService[AlBhedParams, AlBhedResponse]{
+	E.AlBhed = HandlerInputService[servicetypes.AlBhedParams, servicetypes.AlBhedResponse]{
 		Endpoint:  ts.EpAlBhed,
-		VerifyFn:  verifyAlBhedParams,
+		VerifyFn:  serviceverify.VerifyAlBhedParams,
 		ExecuteFn: handleAlBhed,
-		DocsFn:    getAlBhedParamsDoc,
-		Samples:   AlBhedParamsSamples,
+		DocsFn:    servicetypes.GetAlBhedParamsDoc,
+		Samples:   servicetypes.AlBhedParamsSamples,
 	}
 
-	E.TurnOrder = HandlerInputService[TurnOrderParams, TurnOrderResponse]{
+	E.TurnOrder = HandlerInputService[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]{
 		Endpoint:  ts.EpTurnOrder,
-		VerifyFn:  verifyTurnOrderParams,
+		VerifyFn:  serviceverify.VerifyTurnOrderParams,
 		ExecuteFn: handleTurnOrder,
-		DocsFn:    getTurnOrderParamsDoc,
-		Samples:   TurnOrderParamsSamples,
+		DocsFn:    servicetypes.GetTurnOrderParamsDoc,
+		Samples:   servicetypes.TurnOrderParamsSamples,
 	}
 
-	E.DropChance = HandlerInputService[DropChanceParams, DropChanceResponse]{
+	E.DropChance = HandlerInputService[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]{
 		Endpoint:  ts.EpDropChance,
-		VerifyFn:  verifyDropChanceParams,
+		VerifyFn:  serviceverify.VerifyDropChanceParams,
 		ExecuteFn: handleDropChance,
-		DocsFn:    getDropChanceParamsDoc,
-		Samples:   DropChanceParamsSamples,
+		DocsFn:    servicetypes.GetDropChanceParamsDoc,
+		Samples:   servicetypes.DropChanceParamsSamples,
 	}
 
-	E.CritChance = HandlerInputService[CritChanceParams, CritChanceResponse]{
+	E.CritChance = HandlerInputService[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]{
 		Endpoint:  ts.EpCritChance,
-		VerifyFn:  verifyCritChanceParams,
+		VerifyFn:  serviceverify.VerifyCritChanceParams,
 		ExecuteFn: handleCritChance,
-		DocsFn:    getCritChanceParamsDoc,
-		Samples:   CritChanceParamsSamples,
+		DocsFn:    servicetypes.GetCritChanceParamsDoc,
+		Samples:   servicetypes.CritChanceParamsSamples,
 	}
 
 	E.InitializeEndpointSlice()

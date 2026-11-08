@@ -2,29 +2,13 @@ package api
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-type WantedEquipment struct {
-	MinSlots         int32    `json:"min_slots"`
-	MaxSlots         int32    `json:"max_slots"`
-	ReqAbilities     []string `json:"req_abilities"`
-	ReqEmptySlots    *int32   `json:"req_empty_slots"`
-	MinOptionalSlots int32    `json:"min_optional_slots"`
-	MaxOptionalSlots int32    `json:"max_optional_slots"`
-	OptionalSlotsAre string   `json:"optional_slots_are"`
-}
-
-type OptionalSlotDefinition string
-
-const (
-	OptionalSlotAllEmpty       OptionalSlotDefinition = "all-empty"
-	OptionalSlotAbilityOrEmpty OptionalSlotDefinition = "ability-or-empty"
-)
-
-func getWantedEquipment(params DropChanceParams, wantedAbilities []seedtypes.AutoAbility, slotsTable []seedtypes.EquipmentSlotsChance) WantedEquipment {
+func getWantedEquipment(params servicetypes.DropChanceParams, wantedAbilities []seedtypes.AutoAbility, slotsTable []seedtypes.EquipmentSlotsChance) servicetypes.WantedEquipment {
 	requiredSlots := params.GetRequiredSlots()
 
-	we := WantedEquipment{
+	we := servicetypes.WantedEquipment{
 		MinSlots:         slotsTable[0].Amount,
 		MaxSlots:         slotsTable[len(slotsTable)-1].Amount,
 		ReqAbilities:     getReqAbilities(wantedAbilities),
@@ -48,10 +32,10 @@ func getReqAbilities(wantedAbilities []seedtypes.AutoAbility) []string {
 	return reqAbilities
 }
 
-func getOptionalSlotDef(params DropChanceParams) string {
+func getOptionalSlotDef(params servicetypes.DropChanceParams) string {
 	if params.OptionalAbilities {
-		return string(OptionalSlotAbilityOrEmpty)
+		return string(servicetypes.OptionalSlotAbilityOrEmpty)
 	}
 
-	return string(OptionalSlotAllEmpty)
+	return string(servicetypes.OptionalSlotAllEmpty)
 }

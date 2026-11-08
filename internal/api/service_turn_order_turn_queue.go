@@ -4,9 +4,10 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-func readyTurnQueue(participants []Participant, rng string) []TurnParams {
+func readyTurnQueue(participants []servicetypes.Participant, rng string) []TurnParams {
 	var turnQueue []TurnParams
 
 	for _, participant := range participants {
@@ -16,7 +17,7 @@ func readyTurnQueue(participants []Participant, rng string) []TurnParams {
 
 		params := TurnParams{
 			Name:        participant.Name,
-			PriorityKey: participant.getKey(),
+			PriorityKey: participant.GetKey(),
 			Party:       participant.Party,
 			Agility:     participant.Agility,
 			TickSpeed:   participant.TickSpeed,
@@ -25,19 +26,19 @@ func readyTurnQueue(participants []Participant, rng string) []TurnParams {
 		switch rng {
 		case string(database.TurnOrderRngBest):
 			switch participant.Party {
-			case BattlePartyPlayer:
+			case servicetypes.BattlePartyPlayer:
 				params.TicksNextTurn = *participant.MinICV
 
-			case BattlePartyOpponent:
+			case servicetypes.BattlePartyOpponent:
 				params.TicksNextTurn = *participant.MaxICV
 			}
 
 		case string(database.TurnOrderRngWorst):
 			switch participant.Party {
-			case BattlePartyPlayer:
+			case servicetypes.BattlePartyPlayer:
 				params.TicksNextTurn = *participant.MaxICV
 
-			case BattlePartyOpponent:
+			case servicetypes.BattlePartyOpponent:
 				params.TicksNextTurn = *participant.MinICV
 			}
 

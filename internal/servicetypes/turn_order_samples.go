@@ -1,10 +1,9 @@
-package api
+package servicetypes
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
-
 
 var TurnOrderParamsSamples = []SampleParams[TurnOrderParams]{
 	{
@@ -17,17 +16,17 @@ var TurnOrderParamsSamples = []SampleParams[TurnOrderParams]{
 		Description: "Your party against a formation.",
 		Params: TurnOrderParams{
 			FormationID: h.GetInt32Ptr(25),
-			Party: []turnOrderParty{
+			Party: []TurnOrderParty{
 				{
-					UnitID: 1,
+					UnitID:  1,
 					Agility: 15,
 				},
 				{
-					UnitID: 2,
+					UnitID:  2,
 					Agility: 16,
 				},
 				{
-					UnitID: 3,
+					UnitID:  3,
 					Agility: 17,
 				},
 			},
@@ -37,28 +36,28 @@ var TurnOrderParamsSamples = []SampleParams[TurnOrderParams]{
 		Description: "Your party against a custom selection of monsters (preemptive strike; one monster was slowed).",
 		Params: TurnOrderParams{
 			BattleStart: string(database.BattleStartPreemptive),
-			Party: []turnOrderParty{
+			Party: []TurnOrderParty{
 				{
-					UnitID: 1,
+					UnitID:  1,
 					Agility: 25,
 				},
 				{
-					UnitID: 2,
+					UnitID:  2,
 					Agility: 23,
 				},
 				{
-					UnitID: 3,
+					UnitID:  3,
 					Agility: 20,
 				},
 			},
-			Mons: []turnOrderMon{
+			Mons: []TurnOrderMon{
 				{
 					MonsterID: h.GetInt32Ptr(140),
-					Status: h.GetStrPtr(string(database.HasteStatusSlow)),
+					Status:    h.GetStrPtr(string(database.HasteStatusSlow)),
 				},
 				{
 					MonsterID: h.GetInt32Ptr(139),
-					AltState: h.GetInt32Ptr(1),
+					AltState:  h.GetInt32Ptr(1),
 				},
 				{
 					MonsterID: h.GetInt32Ptr(141),
@@ -70,27 +69,27 @@ var TurnOrderParamsSamples = []SampleParams[TurnOrderParams]{
 		Description: "Measure raw turn frequency of your party against two custom monsters.",
 		Params: TurnOrderParams{
 			IgnFirstTurn: true,
-			Party: []turnOrderParty{
+			Party: []TurnOrderParty{
 				{
-					UnitID: 1,
+					UnitID:  1,
 					Agility: 60,
 				},
 				{
-					UnitID: 2,
+					UnitID:  2,
 					Agility: 80,
 				},
 				{
-					UnitID: 3,
+					UnitID:  3,
 					Agility: 40,
 				},
 			},
-			Mons: []turnOrderMon{
+			Mons: []TurnOrderMon{
 				{
 					MonsterID: h.GetInt32Ptr(140),
-					Agility: h.GetInt32Ptr(75),
+					Agility:   h.GetInt32Ptr(75),
 				},
 				{
-					Name: h.GetStrPtr("fast boi"),
+					Name:    h.GetStrPtr("fast boi"),
 					Agility: h.GetInt32Ptr(200),
 				},
 			},
@@ -100,24 +99,24 @@ var TurnOrderParamsSamples = []SampleParams[TurnOrderParams]{
 		Description: "Endgame-setup.",
 		Params: TurnOrderParams{
 			IgnFirstTurn: true,
-			Party: []turnOrderParty{
+			Party: []TurnOrderParty{
 				{
-					UnitID: 1,
+					UnitID:  1,
 					Agility: 255,
-					Status: h.GetStrPtr(string(database.HasteStatusAutoHaste)),
+					Status:  h.GetStrPtr(string(database.HasteStatusAutoHaste)),
 				},
 				{
-					UnitID: 2,
+					UnitID:  2,
 					Agility: 255,
-					Status: h.GetStrPtr(string(database.HasteStatusAutoHaste)),
+					Status:  h.GetStrPtr(string(database.HasteStatusAutoHaste)),
 				},
 				{
-					UnitID: 3,
+					UnitID:  3,
 					Agility: 255,
-					Status: h.GetStrPtr(string(database.HasteStatusAutoHaste)),
+					Status:  h.GetStrPtr(string(database.HasteStatusAutoHaste)),
 				},
 			},
-			Mons: []turnOrderMon{
+			Mons: []TurnOrderMon{
 				{
 					MonsterID: h.GetInt32Ptr(292),
 				},

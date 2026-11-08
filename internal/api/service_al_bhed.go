@@ -7,16 +7,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-type AlBhedResponse struct {
-	TranslatedText string `json:"translated_text"`
-	OriginalText   string `json:"original_text"`
-	Direction      string `json:"direction"`
-}
-
-func handleAlBhed(params AlBhedParams) (AlBhedResponse, error) {
-	response := AlBhedResponse{
+func handleAlBhed(params servicetypes.AlBhedParams) (servicetypes.AlBhedResponse, error) {
+	response := servicetypes.AlBhedResponse{
 		OriginalText: params.Text,
 		Direction:    params.Direction,
 	}
@@ -30,7 +25,7 @@ func handleAlBhed(params AlBhedParams) (AlBhedResponse, error) {
 		if string(char) == "[" {
 			translate, err = setTranslator(translate, false)
 			if err != nil {
-				return AlBhedResponse{}, err
+				return servicetypes.AlBhedResponse{}, err
 			}
 			continue
 		}
@@ -38,7 +33,7 @@ func handleAlBhed(params AlBhedParams) (AlBhedResponse, error) {
 		if string(char) == "]" {
 			translate, err = setTranslator(translate, true)
 			if err != nil {
-				return AlBhedResponse{}, err
+				return servicetypes.AlBhedResponse{}, err
 			}
 			continue
 		}
@@ -68,7 +63,7 @@ func handleAlBhed(params AlBhedParams) (AlBhedResponse, error) {
 	}
 
 	if !translate {
-		return AlBhedResponse{}, errs.NewHTTPError(http.StatusBadRequest, "wrong format. all brackets must be closed", nil)
+		return servicetypes.AlBhedResponse{}, errs.NewHTTPError(http.StatusBadRequest, "wrong format. all brackets must be closed", nil)
 	}
 
 	response.TranslatedText = string(translatedRunes)

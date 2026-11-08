@@ -1,4 +1,4 @@
-package api
+package servicetypes
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -80,7 +80,7 @@ type TargetCustomCritChance struct {
 	Luck int32 `json:"luck"`
 }
 
-func getCritChanceParamsDoc() ParamsDoc {
+func GetCritChanceParamsDoc() ParamsDoc {
 	return ParamsDoc{
 		GeneralRules: h.GetStrPtr(""),
 		Fields: []FieldDoc{

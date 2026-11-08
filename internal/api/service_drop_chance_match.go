@@ -4,26 +4,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
-
-type EquipmentMatchChances struct {
-	FinBlow   float64 `json:"fin_blow"`
-	NoFinBlow float64 `json:"no_fin_blow"`
-}
-
-func (c EquipmentMatchChances) Percent() EquipmentMatchChances {
-	c.FinBlow = h.DecimalToPercent(c.FinBlow)
-	c.NoFinBlow = h.DecimalToPercent(c.NoFinBlow)
-
-	return c
-}
-
-func (c EquipmentMatchChances) Round(n int32) EquipmentMatchChances {
-	c.FinBlow = h.FloatRound(c.FinBlow, n)
-	c.NoFinBlow = h.FloatRound(c.NoFinBlow, n)
-
-	return c
-}
 
 type MatchChanceParams struct {
 	mon              seedtypes.Monster
@@ -31,10 +13,10 @@ type MatchChanceParams struct {
 	monAbilities     []seedtypes.EquipmentDrop
 	slotsTable       []seedtypes.EquipmentSlotsChance
 	shotsTable       []seedtypes.EquipmentSlotsChance
-	characterChances CharacterChances
+	characterChances servicetypes.CharacterChances
 }
 
-func (p MatchChanceParams) calcChances(params DropChanceParams) EquipmentMatchChances {
+func (p MatchChanceParams) calcChances(params servicetypes.DropChanceParams) servicetypes.EquipmentMatchChances {
 	equipTypeChance := 0.5
 	wheels := createAbilityWheels(p.monAbilities, params)
 
@@ -76,13 +58,13 @@ func (p MatchChanceParams) calcChances(params DropChanceParams) EquipmentMatchCh
 	chanceFinBlow *= equipTypeChance
 	chanceNoFinBlow *= equipTypeChance
 
-	return EquipmentMatchChances{
+	return servicetypes.EquipmentMatchChances{
 		FinBlow:   chanceFinBlow,
 		NoFinBlow: chanceNoFinBlow,
 	}
 }
 
-func extractAbilitySlots(params DropChanceParams, mon seedtypes.Monster) []seedtypes.EquipmentSlotsChance {
+func extractAbilitySlots(params servicetypes.DropChanceParams, mon seedtypes.Monster) []seedtypes.EquipmentSlotsChance {
 	var minSlots = params.GetRequiredSlots()
 	var maxSlots int32 = 4
 	abilitySlotChances := mon.Equipment.AbilitySlots.Chances
@@ -102,7 +84,7 @@ func extractAbilitySlots(params DropChanceParams, mon seedtypes.Monster) []seedt
 	return chances
 }
 
-func getWheelWeights(wheel AbilityWheel, cc CharacterChances) (float64, float64) {
+func getWheelWeights(wheel AbilityWheel, cc servicetypes.CharacterChances) (float64, float64) {
 	if cc.SpecificChar != nil {
 		specificChar := *cc.SpecificChar
 		return specificChar.FinBlow, specificChar.NoFinBlow

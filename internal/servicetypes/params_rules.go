@@ -1,16 +1,14 @@
-package api
+package servicetypes
 
-import ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+import (
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+)
 
 type ParamsRules map[ts.FieldName]FieldRules
 
 type FieldRules struct {
 	Doc      FieldDoc
 	Children ParamsRules
-}
-
-func (d ParamsDoc) CompileRules() ParamsRules {
-	return compileParamsRules(d.Fields)
 }
 
 func compileParamsRules(fields []FieldDoc) ParamsRules {
