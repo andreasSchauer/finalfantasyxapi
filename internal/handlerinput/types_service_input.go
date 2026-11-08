@@ -1,5 +1,4 @@
-// Package serviceinput
-package serviceinput
+package handlerinput
 
 import (
 	"net/http"
