@@ -85,7 +85,7 @@ func (v fieldVerifyer[T]) allowedIDs() error {
 		return nil
 	}
 
-	id, err := servicetypes.GetInt32FromUserVals(ts.PfnUnitID, v.userValues)
+	id, err := v.extractInt32(ts.PfnUnitID)
 	if err != nil {
 		return nil
 	}
@@ -106,8 +106,8 @@ func (v fieldVerifyer[T]) allowedIDValPairs() error {
 		return errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't find parent id field for field '%s'", v.fieldName), nil)
 	}
 
-	id, _ := servicetypes.GetInt32FromUserVals(*v.doc.ParentIDField, v.userValues)
-	value, err := servicetypes.GetInt32FromUserVals(v.fieldName, v.userValues)
+	id, _ := v.extractInt32(*v.doc.ParentIDField)
+	value, err := v.extractInt32(v.fieldName)
 	if err != nil {
 		return nil
 	}
@@ -150,4 +150,14 @@ func (v fieldVerifyer[T]) hasDefaultVal() bool {
 
 func (v fieldVerifyer[T]) valIsPointer() bool {
 	return reflect.ValueOf(v.val).Kind() == reflect.Pointer
+}
+
+func (v fieldVerifyer[T]) extractInt32(fieldName ts.FieldName) (int32, error) {
+	raw, ok := v.userValues[fieldName]
+	if !ok {
+		return 0, errs.ErrNoVal
+	}
+	intVal := int32(raw.(float64))
+
+	return intVal, nil
 }

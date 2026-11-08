@@ -8,3 +8,8 @@ type ServiceParams interface {
 type ServiceResponse interface {
 	AlBhedResponse | TurnOrderResponse | DropChanceResponse | CritChanceResponse
 }
+
+type SampleParams[P ServiceParams] struct {
+	Description string `json:"description"`
+	Params      P      `json:"params"`
+}

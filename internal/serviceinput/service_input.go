@@ -1,4 +1,5 @@
-package api
+// Package serviceinput
+package serviceinput
 
 import (
 	"net/http"
@@ -9,7 +10,16 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func (i HandlerInputService[P, R]) ServicePost(r *http.Request) (R, error) {
+type ServiceInput[P servicetypes.ServiceParams, R servicetypes.ServiceResponse] struct {
+	Endpoint  ts.EndpointName
+	Usage     []string
+	VerifyFn  func(serviceverify.ParamsVerifyer, P) (P, error)
+	ExecuteFn func(P) (R, error)
+	DocsFn    func() servicetypes.ParamsDoc
+	Samples   []servicetypes.SampleParams[P]
+}
+
+func (i ServiceInput[P, R]) ServicePost(r *http.Request) (R, error) {
 	var zero R
 	params, userValues, err := servicetypes.GetParamsJSONBody[P](r)
 	if err != nil {
@@ -19,7 +29,7 @@ func (i HandlerInputService[P, R]) ServicePost(r *http.Request) (R, error) {
 	return i.compute(params, userValues)
 }
 
-func (i HandlerInputService[P, R]) compute(params P, userValues map[ts.FieldName]any) (R, error) {
+func (i ServiceInput[P, R]) compute(params P, userValues map[ts.FieldName]any) (R, error) {
 	var zero R
 
 	params, err := i.verifyJSONParams(params, userValues)
@@ -30,7 +40,7 @@ func (i HandlerInputService[P, R]) compute(params P, userValues map[ts.FieldName
 	return i.ExecuteFn(params)
 }
 
-func (i HandlerInputService[P, R]) verifyJSONParams(params P, userValues map[ts.FieldName]any) (P, error) {
+func (i ServiceInput[P, R]) verifyJSONParams(params P, userValues map[ts.FieldName]any) (P, error) {
 	var zero P
 	docs := i.DocsFn()
 
@@ -46,7 +56,7 @@ func (i HandlerInputService[P, R]) verifyJSONParams(params P, userValues map[ts.
 }
 
 // VerifyQueries verifies, if no query params are in use for an endpoint that receives a post request
-func (i HandlerInputService[P, R]) VerifyQueries(r *http.Request) error {
+func (i ServiceInput[P, R]) VerifyQueries(r *http.Request) error {
 	if len(r.URL.Query()) > 0 {
 		return errs.NewHTTPError(http.StatusBadRequest, "computational endpoints don't have any query parameters", nil)
 	}

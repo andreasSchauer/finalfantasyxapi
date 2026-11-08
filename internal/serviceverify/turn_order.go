@@ -8,42 +8,42 @@ import (
 func VerifyTurnOrderParams(v ParamsVerifyer, params servicetypes.TurnOrderParams) (servicetypes.TurnOrderParams, error) {
 	var err error
 
-	params.TurnsAmt, err = v.Int(params.TurnsAmt, ts.PfnTurnsAmt)
+	params.TurnsAmt, err = v.int(params.TurnsAmt, ts.PfnTurnsAmt)
 	if err != nil {
 		return servicetypes.TurnOrderParams{}, err
 	}
 
-	params.IgnFirstTurn, err = v.Bool(params.IgnFirstTurn, ts.PfnIgnFirstTurn)
+	params.IgnFirstTurn, err = v.bool(params.IgnFirstTurn, ts.PfnIgnFirstTurn)
 	if err != nil {
 		return servicetypes.TurnOrderParams{}, err
 	}
 
-	params.IgnImmunities, err = v.Bool(params.IgnImmunities, ts.PfnIgnImmunities)
+	params.IgnImmunities, err = v.bool(params.IgnImmunities, ts.PfnIgnImmunities)
 	if err != nil {
 		return servicetypes.TurnOrderParams{}, err
 	}
 
-	params.RNG, err = v.Enum(params.RNG, ts.PfnRNG)
+	params.RNG, err = v.enum(params.RNG, ts.PfnRNG)
 	if err != nil {
 		return servicetypes.TurnOrderParams{}, err
 	}
 
-	params.BattleStart, err = v.Enum(params.BattleStart, ts.PfnBattleStart)
+	params.BattleStart, err = v.enum(params.BattleStart, ts.PfnBattleStart)
 	if err != nil {
 		return servicetypes.TurnOrderParams{}, err
 	}
 
-	params.FormationID, err = v.IDPtr(params.FormationID, ts.PfnFormationID)
+	params.FormationID, err = v.idPtr(params.FormationID, ts.PfnFormationID)
 	if err != nil {
 		return servicetypes.TurnOrderParams{}, err
 	}
 
-	params.Party, err = v.Array(params.Party, ts.PfnParty, vfTurnOrderParty)
+	params.Party, err = v.array(params.Party, ts.PfnParty, vfTurnOrderParty)
 	if err != nil {
 		return servicetypes.TurnOrderParams{}, err
 	}
 
-	params.Mons, err = v.Array(params.Mons, ts.PfnMons, vfTurnOrderMon)
+	params.Mons, err = v.array(params.Mons, ts.PfnMons, vfTurnOrderMon)
 	if err != nil {
 		return servicetypes.TurnOrderParams{}, err
 	}
@@ -54,22 +54,22 @@ func VerifyTurnOrderParams(v ParamsVerifyer, params servicetypes.TurnOrderParams
 func vfTurnOrderParty(v ParamsVerifyer, item servicetypes.TurnOrderParty, _ ts.FieldName) (servicetypes.TurnOrderParty, error) {
 	var err error
 
-	item.UnitID, err = v.ID(item.UnitID, ts.PfnUnitID)
+	item.UnitID, err = v.id(item.UnitID, ts.PfnUnitID)
 	if err != nil {
 		return servicetypes.TurnOrderParty{}, err
 	}
 
-	item.Agility, err = v.Int(item.Agility, ts.PfnAgility)
+	item.Agility, err = v.int(item.Agility, ts.PfnAgility)
 	if err != nil {
 		return servicetypes.TurnOrderParty{}, err
 	}
 
-	item.FirstStrike, err = v.Bool(item.FirstStrike, ts.PfnFirstStrike)
+	item.FirstStrike, err = v.bool(item.FirstStrike, ts.PfnFirstStrike)
 	if err != nil {
 		return servicetypes.TurnOrderParty{}, err
 	}
 
-	item.Status, err = v.EnumPtr(item.Status, ts.PfnStatus)
+	item.Status, err = v.enumPtr(item.Status, ts.PfnStatus)
 	if err != nil {
 		return servicetypes.TurnOrderParty{}, err
 	}
@@ -80,32 +80,32 @@ func vfTurnOrderParty(v ParamsVerifyer, item servicetypes.TurnOrderParty, _ ts.F
 func vfTurnOrderMon(v ParamsVerifyer, item servicetypes.TurnOrderMon, _ ts.FieldName) (servicetypes.TurnOrderMon, error) {
 	var err error
 
-	item.MonsterID, err = v.IDPtr(item.MonsterID, ts.PfnUnitID)
+	item.MonsterID, err = v.idPtr(item.MonsterID, ts.PfnUnitID)
 	if err != nil {
 		return servicetypes.TurnOrderMon{}, err
 	}
 
-	item.AltState, err = v.IntPtr(item.AltState, ts.PfnAltState)
+	item.AltState, err = v.intPtr(item.AltState, ts.PfnAltState)
 	if err != nil {
 		return servicetypes.TurnOrderMon{}, err
 	}
 
-	item.Name, err = v.StringPtr(item.Name, ts.PfnName)
+	item.Name, err = v.stringPtr(item.Name, ts.PfnName)
 	if err != nil {
 		return servicetypes.TurnOrderMon{}, err
 	}
 
-	item.Agility, err = v.IntPtr(item.Agility, ts.PfnAgility)
+	item.Agility, err = v.intPtr(item.Agility, ts.PfnAgility)
 	if err != nil {
 		return servicetypes.TurnOrderMon{}, err
 	}
 
-	item.FirstStrike, err = v.BoolPtr(item.FirstStrike, ts.PfnFirstStrike)
+	item.FirstStrike, err = v.boolPtr(item.FirstStrike, ts.PfnFirstStrike)
 	if err != nil {
 		return servicetypes.TurnOrderMon{}, err
 	}
 
-	item.Status, err = v.EnumPtr(item.Status, ts.PfnStatus)
+	item.Status, err = v.enumPtr(item.Status, ts.PfnStatus)
 	if err != nil {
 		return servicetypes.TurnOrderMon{}, err
 	}

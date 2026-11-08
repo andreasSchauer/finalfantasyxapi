@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/serviceinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
@@ -116,7 +117,7 @@ func routerEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.Hand
 	}
 }
 
-func routerServiceGet[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i HandlerInputService[P, R]) {
+func routerServiceGet[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i serviceinput.ServiceInput[P, R]) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {
@@ -134,7 +135,7 @@ func routerServiceGet[P servicetypes.ServiceParams, R servicetypes.ServiceRespon
 	}
 }
 
-func routerServicePost[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i HandlerInputService[P, R]) {
+func routerServicePost[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i serviceinput.ServiceInput[P, R]) {
 	segments := getPathSegments(r.URL.Path, i.Endpoint)
 
 	switch len(segments) {

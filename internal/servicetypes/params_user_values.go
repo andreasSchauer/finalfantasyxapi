@@ -1,7 +1,6 @@
 package servicetypes
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -47,14 +46,4 @@ func toUserValueSlice(input []any) []any {
 	}
 
 	return output
-}
-
-func GetInt32FromUserVals(fieldName ts.FieldName, userValues map[ts.FieldName]any) (int32, error) {
-	raw, ok := userValues[fieldName]
-	if !ok {
-		return 0, errs.ErrNoVal
-	}
-	intVal := int32(raw.(float64))
-
-	return intVal, nil
 }

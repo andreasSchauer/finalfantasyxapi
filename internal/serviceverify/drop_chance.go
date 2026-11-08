@@ -13,47 +13,47 @@ import (
 func VerifyDropChanceParams(v ParamsVerifyer, params servicetypes.DropChanceParams) (servicetypes.DropChanceParams, error) {
 	var err error
 
-	params.Monster, err = v.ID(params.Monster, ts.PfnMonsterID)
+	params.Monster, err = v.id(params.Monster, ts.PfnMonsterID)
 	if err != nil {
 		return servicetypes.DropChanceParams{}, err
 	}
 
-	params.CharacterID, err = v.IDPtr(params.CharacterID, ts.PfnCharacterID)
+	params.CharacterID, err = v.idPtr(params.CharacterID, ts.PfnCharacterID)
 	if err != nil {
 		return servicetypes.DropChanceParams{}, err
 	}
 
-	params.PartyMembers, err = v.IDArray(params.PartyMembers, ts.PfnPartyMembers)
+	params.PartyMembers, err = v.idArray(params.PartyMembers, ts.PfnPartyMembers)
 	if err != nil {
 		return servicetypes.DropChanceParams{}, err
 	}
 
-	params.AutoAbilities, err = v.IDArray(params.AutoAbilities, ts.PfnAutoAbilities)
+	params.AutoAbilities, err = v.idArray(params.AutoAbilities, ts.PfnAutoAbilities)
 	if err != nil {
 		return servicetypes.DropChanceParams{}, err
 	}
 
-	params.OptionalAbilities, err = v.Bool(params.OptionalAbilities, ts.PfnOptionalAbilities)
+	params.OptionalAbilities, err = v.bool(params.OptionalAbilities, ts.PfnOptionalAbilities)
 	if err != nil {
 		return servicetypes.DropChanceParams{}, err
 	}
 
-	params.EquipType, err = v.EnumPtr(params.EquipType, ts.PfnEquipType)
+	params.EquipType, err = v.enumPtr(params.EquipType, ts.PfnEquipType)
 	if err != nil {
 		return servicetypes.DropChanceParams{}, err
 	}
 
-	params.MinEmptySlots, err = v.IntPtr(params.MinEmptySlots, ts.PfnMinEmptySlots)
+	params.MinEmptySlots, err = v.intPtr(params.MinEmptySlots, ts.PfnMinEmptySlots)
 	if err != nil {
 		return servicetypes.DropChanceParams{}, err
 	}
 
-	params.TotalSlots, err = v.IntPtr(params.TotalSlots, ts.PfnTotalSlots)
+	params.TotalSlots, err = v.intPtr(params.TotalSlots, ts.PfnTotalSlots)
 	if err != nil {
 		return servicetypes.DropChanceParams{}, err
 	}
 
-	params.Decimals, err = v.Bool(params.Decimals, ts.PfnDecimals)
+	params.Decimals, err = v.bool(params.Decimals, ts.PfnDecimals)
 	if err != nil {
 		return servicetypes.DropChanceParams{}, err
 	}

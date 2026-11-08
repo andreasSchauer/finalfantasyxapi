@@ -11,6 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/serviceinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/serviceverify"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -69,10 +70,10 @@ type Endpoints struct {
 	AgilityTiers       handlerinput.HandlerInput[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.UnnamedAPIResource]
 	Enums              handlerinput.HandlerInputEnums
 	Endpoints          handlerinput.HandlerInputEndpoints
-	AlBhed             HandlerInputService[servicetypes.AlBhedParams, servicetypes.AlBhedResponse]
-	TurnOrder          HandlerInputService[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]
-	DropChance         HandlerInputService[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]
-	CritChance         HandlerInputService[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]
+	AlBhed             serviceinput.ServiceInput[servicetypes.AlBhedParams, servicetypes.AlBhedResponse]
+	TurnOrder          serviceinput.ServiceInput[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]
+	DropChance         serviceinput.ServiceInput[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]
+	CritChance         serviceinput.ServiceInput[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]
 }
 
 func (E *Endpoints) Init() {
@@ -993,7 +994,7 @@ func (E *Endpoints) Init() {
 		Usage:    []string{"/api/endpoints"},
 	}
 
-	E.AlBhed = HandlerInputService[servicetypes.AlBhedParams, servicetypes.AlBhedResponse]{
+	E.AlBhed = serviceinput.ServiceInput[servicetypes.AlBhedParams, servicetypes.AlBhedResponse]{
 		Endpoint:  ts.EpAlBhed,
 		VerifyFn:  serviceverify.VerifyAlBhedParams,
 		ExecuteFn: handleAlBhed,
@@ -1001,7 +1002,7 @@ func (E *Endpoints) Init() {
 		Samples:   servicetypes.AlBhedParamsSamples,
 	}
 
-	E.TurnOrder = HandlerInputService[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]{
+	E.TurnOrder = serviceinput.ServiceInput[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]{
 		Endpoint:  ts.EpTurnOrder,
 		VerifyFn:  serviceverify.VerifyTurnOrderParams,
 		ExecuteFn: handleTurnOrder,
@@ -1009,7 +1010,7 @@ func (E *Endpoints) Init() {
 		Samples:   servicetypes.TurnOrderParamsSamples,
 	}
 
-	E.DropChance = HandlerInputService[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]{
+	E.DropChance = serviceinput.ServiceInput[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]{
 		Endpoint:  ts.EpDropChance,
 		VerifyFn:  serviceverify.VerifyDropChanceParams,
 		ExecuteFn: handleDropChance,
@@ -1017,7 +1018,7 @@ func (E *Endpoints) Init() {
 		Samples:   servicetypes.DropChanceParamsSamples,
 	}
 
-	E.CritChance = HandlerInputService[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]{
+	E.CritChance = serviceinput.ServiceInput[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]{
 		Endpoint:  ts.EpCritChance,
 		VerifyFn:  serviceverify.VerifyCritChanceParams,
 		ExecuteFn: handleCritChance,

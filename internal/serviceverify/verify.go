@@ -43,7 +43,7 @@ func (v ParamsVerifyer) CheckFields() error {
 	return nil
 }
 
-func (v ParamsVerifyer) NewFieldVerifyer[T any](val T, fieldName ts.FieldName) fieldVerifyer[T] {
+func (v ParamsVerifyer) newFieldVerifyer[T any](val T, fieldName ts.FieldName) fieldVerifyer[T] {
 	return fieldVerifyer[T]{
 		fieldName:    fieldName,
 		val:          val,
@@ -56,7 +56,7 @@ func (v ParamsVerifyer) NewFieldVerifyer[T any](val T, fieldName ts.FieldName) f
 
 func (v ParamsVerifyer) field[T any](val T, fieldName ts.FieldName) (T, error) {
 	var zero T
-	fv := v.NewFieldVerifyer(val, fieldName)
+	fv := v.newFieldVerifyer(val, fieldName)
 	fns := []func() error{
 		fv.required,
 		fv.conflictsWith,
@@ -95,7 +95,7 @@ func (v ParamsVerifyer) fieldPtr[T any](ptr *T, fieldName ts.FieldName) (*T, err
 	return ptr, nil
 }
 
-func (v ParamsVerifyer) Obj[T any](obj T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
+func (v ParamsVerifyer) obj[T any](obj T, fieldName ts.FieldName, verifyFn verifyFn[T]) (T, error) {
 	var zero T
 
 	obj, err := v.field(obj, fieldName)
@@ -122,7 +122,7 @@ func (v ParamsVerifyer) Obj[T any](obj T, fieldName ts.FieldName, verifyFn verif
 	return obj, nil
 }
 
-func (v ParamsVerifyer) ObjPtr[T any](objPtr *T, fieldName ts.FieldName, verifyFn verifyFn[T]) (*T, error) {
+func (v ParamsVerifyer) objPtr[T any](objPtr *T, fieldName ts.FieldName, verifyFn verifyFn[T]) (*T, error) {
 	objPtr, err := v.field(objPtr, fieldName)
 	if err != nil {
 		return nil, err
@@ -132,7 +132,7 @@ func (v ParamsVerifyer) ObjPtr[T any](objPtr *T, fieldName ts.FieldName, verifyF
 		return objPtr, nil
 	}
 
-	*objPtr, err = v.Obj(*objPtr, fieldName, verifyFn)
+	*objPtr, err = v.obj(*objPtr, fieldName, verifyFn)
 	if err != nil {
 		return nil, err
 	}
@@ -140,8 +140,8 @@ func (v ParamsVerifyer) ObjPtr[T any](objPtr *T, fieldName ts.FieldName, verifyF
 	return objPtr, nil
 }
 
-// Array verifies, if an Array-field fulfills all its conditions. the basic checks as well as a max length check are performed on the Array itself. after that, a type-specific verification function can be performed on each of the Array's items.
-func (v ParamsVerifyer) Array[T any](arr []T, fieldName ts.FieldName, verifyFn verifyFn[T]) ([]T, error) {
+// array verifies, if an array-field fulfills all its conditions. the basic checks as well as a max length check are performed on the array itself. after that, a type-specific verification function can be performed on each of the array's items.
+func (v ParamsVerifyer) array[T any](arr []T, fieldName ts.FieldName, verifyFn verifyFn[T]) ([]T, error) {
 	arr, err := v.arrayField(arr, fieldName)
 	if errors.Is(err, errs.ErrNullArray) {
 		return arr, nil
@@ -176,7 +176,7 @@ func (v ParamsVerifyer) Array[T any](arr []T, fieldName ts.FieldName, verifyFn v
 	return arr, nil
 }
 
-func (v ParamsVerifyer) IDArray(arr []int32, fieldName ts.FieldName) ([]int32, error) {
+func (v ParamsVerifyer) idArray(arr []int32, fieldName ts.FieldName) ([]int32, error) {
 	arr, err := v.arrayField(arr, fieldName)
 	if errors.Is(err, errs.ErrNullArray) {
 		return arr, nil

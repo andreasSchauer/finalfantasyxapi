@@ -8,17 +8,17 @@ import (
 func VerifyCritChanceParams(v ParamsVerifyer, params servicetypes.CritChanceParams) (servicetypes.CritChanceParams, error) {
 	var err error
 
-	params.Ability, err = v.Obj(params.Ability, ts.PfnAbility, vfAbilityCritChance)
+	params.Ability, err = v.obj(params.Ability, ts.PfnAbility, vfAbilityCritChance)
 	if err != nil {
 		return servicetypes.CritChanceParams{}, err
 	}
 
-	params.User, err = v.Obj(params.User, ts.PfnUser, vfUserCritChance)
+	params.User, err = v.obj(params.User, ts.PfnUser, vfUserCritChance)
 	if err != nil {
 		return servicetypes.CritChanceParams{}, err
 	}
 
-	params.Target, err = v.Obj(params.Target, ts.PfnTarget, vfTargetCritChance)
+	params.Target, err = v.obj(params.Target, ts.PfnTarget, vfTargetCritChance)
 	if err != nil {
 		return servicetypes.CritChanceParams{}, err
 	}
@@ -29,12 +29,12 @@ func VerifyCritChanceParams(v ParamsVerifyer, params servicetypes.CritChancePara
 func vfAbilityCritChance(v ParamsVerifyer, item servicetypes.AbilityCritChance, _ ts.FieldName) (servicetypes.AbilityCritChance, error) {
 	var err error
 
-	item.Lookup, err = v.ObjPtr(item.Lookup, ts.PfnLookup, vfAbilityLookupCritChance)
+	item.Lookup, err = v.objPtr(item.Lookup, ts.PfnLookup, vfAbilityLookupCritChance)
 	if err != nil {
 		return servicetypes.AbilityCritChance{}, err
 	}
 
-	item.Custom, err = v.ObjPtr(item.Custom, ts.PfnCustom, vfAbilityCustomCritChance)
+	item.Custom, err = v.objPtr(item.Custom, ts.PfnCustom, vfAbilityCustomCritChance)
 	if err != nil {
 		return servicetypes.AbilityCritChance{}, err
 	}
@@ -45,17 +45,17 @@ func vfAbilityCritChance(v ParamsVerifyer, item servicetypes.AbilityCritChance, 
 func vfAbilityLookupCritChance(v ParamsVerifyer, item servicetypes.AbilityLookupCritChance, _ ts.FieldName) (servicetypes.AbilityLookupCritChance, error) {
 	var err error
 
-	item.AbilityID, err = v.ID(item.AbilityID, ts.PfnAbilityID)
+	item.AbilityID, err = v.id(item.AbilityID, ts.PfnAbilityID)
 	if err != nil {
 		return servicetypes.AbilityLookupCritChance{}, err
 	}
 
-	item.Interaction, err = v.IntPtr(item.Interaction, ts.PfnInteraction)
+	item.Interaction, err = v.intPtr(item.Interaction, ts.PfnInteraction)
 	if err != nil {
 		return servicetypes.AbilityLookupCritChance{}, err
 	}
 
-	item.Overrides, err = v.ObjPtr(item.Overrides, ts.PfnOverrides, vfAbilityOverridesCritChance)
+	item.Overrides, err = v.objPtr(item.Overrides, ts.PfnOverrides, vfAbilityOverridesCritChance)
 	if err != nil {
 		return servicetypes.AbilityLookupCritChance{}, err
 	}
@@ -66,12 +66,12 @@ func vfAbilityLookupCritChance(v ParamsVerifyer, item servicetypes.AbilityLookup
 func vfAbilityOverridesCritChance(v ParamsVerifyer, item servicetypes.AbilityOverridesCritChance, _ ts.FieldName) (servicetypes.AbilityOverridesCritChance, error) {
 	var err error
 
-	item.Critical, err = v.EnumPtr(item.Critical, ts.PfnCritical)
+	item.Critical, err = v.enumPtr(item.Critical, ts.PfnCritical)
 	if err != nil {
 		return servicetypes.AbilityOverridesCritChance{}, err
 	}
 
-	item.CriticalPlusVal, err = v.IntPtr(item.CriticalPlusVal, ts.PfnCriticalPlusVal)
+	item.CriticalPlusVal, err = v.intPtr(item.CriticalPlusVal, ts.PfnCriticalPlusVal)
 	if err != nil {
 		return servicetypes.AbilityOverridesCritChance{}, err
 	}
@@ -82,12 +82,12 @@ func vfAbilityOverridesCritChance(v ParamsVerifyer, item servicetypes.AbilityOve
 func vfAbilityCustomCritChance(v ParamsVerifyer, item servicetypes.AbilityCustomCritChance, _ ts.FieldName) (servicetypes.AbilityCustomCritChance, error) {
 	var err error
 
-	item.Critical, err = v.Enum(item.Critical, ts.PfnCritical)
+	item.Critical, err = v.enum(item.Critical, ts.PfnCritical)
 	if err != nil {
 		return servicetypes.AbilityCustomCritChance{}, err
 	}
 
-	item.CriticalPlusVal, err = v.Int(item.CriticalPlusVal, ts.PfnCriticalPlusVal)
+	item.CriticalPlusVal, err = v.int(item.CriticalPlusVal, ts.PfnCriticalPlusVal)
 	if err != nil {
 		return servicetypes.AbilityCustomCritChance{}, err
 	}
@@ -98,17 +98,17 @@ func vfAbilityCustomCritChance(v ParamsVerifyer, item servicetypes.AbilityCustom
 func vfUserCritChance(v ParamsVerifyer, item servicetypes.UserCritChance, _ ts.FieldName) (servicetypes.UserCritChance, error) {
 	var err error
 
-	item.Lookup, err = v.ObjPtr(item.Lookup, ts.PfnLookup, vfUserLookupCritChance)
+	item.Lookup, err = v.objPtr(item.Lookup, ts.PfnLookup, vfUserLookupCritChance)
 	if err != nil {
 		return servicetypes.UserCritChance{}, err
 	}
 
-	item.Custom, err = v.ObjPtr(item.Custom, ts.PfnCustom, vfUserCustomCritChance)
+	item.Custom, err = v.objPtr(item.Custom, ts.PfnCustom, vfUserCustomCritChance)
 	if err != nil {
 		return servicetypes.UserCritChance{}, err
 	}
 
-	item.LuckStacks, err = v.Int(item.LuckStacks, ts.PfnLuckStacks)
+	item.LuckStacks, err = v.int(item.LuckStacks, ts.PfnLuckStacks)
 	if err != nil {
 		return servicetypes.UserCritChance{}, err
 	}
@@ -119,12 +119,12 @@ func vfUserCritChance(v ParamsVerifyer, item servicetypes.UserCritChance, _ ts.F
 func vfUserLookupCritChance(v ParamsVerifyer, item servicetypes.UserLookupCritChance, _ ts.FieldName) (servicetypes.UserLookupCritChance, error) {
 	var err error
 
-	item.MonsterID, err = v.ID(item.MonsterID, ts.PfnMonsterID)
+	item.MonsterID, err = v.id(item.MonsterID, ts.PfnMonsterID)
 	if err != nil {
 		return servicetypes.UserLookupCritChance{}, err
 	}
 
-	item.Overrides, err = v.ObjPtr(item.Overrides, ts.PfnOverrides, vfUserOverridesCritChance)
+	item.Overrides, err = v.objPtr(item.Overrides, ts.PfnOverrides, vfUserOverridesCritChance)
 	if err != nil {
 		return servicetypes.UserLookupCritChance{}, err
 	}
@@ -135,12 +135,12 @@ func vfUserLookupCritChance(v ParamsVerifyer, item servicetypes.UserLookupCritCh
 func vfUserOverridesCritChance(v ParamsVerifyer, item servicetypes.UserOverridesCritChance, _ ts.FieldName) (servicetypes.UserOverridesCritChance, error) {
 	var err error
 
-	item.Luck, err = v.IntPtr(item.Luck, ts.PfnLuck)
+	item.Luck, err = v.intPtr(item.Luck, ts.PfnLuck)
 	if err != nil {
 		return servicetypes.UserOverridesCritChance{}, err
 	}
 
-	item.CriticalPlusVal, err = v.IntPtr(item.CriticalPlusVal, ts.PfnCriticalPlusVal)
+	item.CriticalPlusVal, err = v.intPtr(item.CriticalPlusVal, ts.PfnCriticalPlusVal)
 	if err != nil {
 		return servicetypes.UserOverridesCritChance{}, err
 	}
@@ -151,12 +151,12 @@ func vfUserOverridesCritChance(v ParamsVerifyer, item servicetypes.UserOverrides
 func vfUserCustomCritChance(v ParamsVerifyer, item servicetypes.UserCustomCritChance, _ ts.FieldName) (servicetypes.UserCustomCritChance, error) {
 	var err error
 
-	item.Luck, err = v.Int(item.Luck, ts.PfnLuck)
+	item.Luck, err = v.int(item.Luck, ts.PfnLuck)
 	if err != nil {
 		return servicetypes.UserCustomCritChance{}, err
 	}
 
-	item.CriticalPlusVal, err = v.Int(item.CriticalPlusVal, ts.PfnCriticalPlusVal)
+	item.CriticalPlusVal, err = v.int(item.CriticalPlusVal, ts.PfnCriticalPlusVal)
 	if err != nil {
 		return servicetypes.UserCustomCritChance{}, err
 	}
@@ -167,17 +167,17 @@ func vfUserCustomCritChance(v ParamsVerifyer, item servicetypes.UserCustomCritCh
 func vfTargetCritChance(v ParamsVerifyer, item servicetypes.TargetCritChance, _ ts.FieldName) (servicetypes.TargetCritChance, error) {
 	var err error
 
-	item.Lookup, err = v.ObjPtr(item.Lookup, ts.PfnLookup, vfTargetLookupCritChance)
+	item.Lookup, err = v.objPtr(item.Lookup, ts.PfnLookup, vfTargetLookupCritChance)
 	if err != nil {
 		return servicetypes.TargetCritChance{}, err
 	}
 
-	item.Custom, err = v.ObjPtr(item.Custom, ts.PfnCustom, vfTargetCustomCritChance)
+	item.Custom, err = v.objPtr(item.Custom, ts.PfnCustom, vfTargetCustomCritChance)
 	if err != nil {
 		return servicetypes.TargetCritChance{}, err
 	}
 
-	item.JinxStacks, err = v.Int(item.JinxStacks, ts.PfnJinxStacks)
+	item.JinxStacks, err = v.int(item.JinxStacks, ts.PfnJinxStacks)
 	if err != nil {
 		return servicetypes.TargetCritChance{}, err
 	}
@@ -188,12 +188,12 @@ func vfTargetCritChance(v ParamsVerifyer, item servicetypes.TargetCritChance, _ 
 func vfTargetLookupCritChance(v ParamsVerifyer, item servicetypes.TargetLookupCritChance, _ ts.FieldName) (servicetypes.TargetLookupCritChance, error) {
 	var err error
 
-	item.MonsterID, err = v.ID(item.MonsterID, ts.PfnMonsterID)
+	item.MonsterID, err = v.id(item.MonsterID, ts.PfnMonsterID)
 	if err != nil {
 		return servicetypes.TargetLookupCritChance{}, err
 	}
 
-	item.Overrides, err = v.ObjPtr(item.Overrides, ts.PfnOverrides, vfTargetOverridesCritChance)
+	item.Overrides, err = v.objPtr(item.Overrides, ts.PfnOverrides, vfTargetOverridesCritChance)
 	if err != nil {
 		return servicetypes.TargetLookupCritChance{}, err
 	}
@@ -204,7 +204,7 @@ func vfTargetLookupCritChance(v ParamsVerifyer, item servicetypes.TargetLookupCr
 func vfTargetOverridesCritChance(v ParamsVerifyer, item servicetypes.TargetOverridesCritChance, _ ts.FieldName) (servicetypes.TargetOverridesCritChance, error) {
 	var err error
 
-	item.Luck, err = v.IntPtr(item.Luck, ts.PfnLuck)
+	item.Luck, err = v.intPtr(item.Luck, ts.PfnLuck)
 	if err != nil {
 		return servicetypes.TargetOverridesCritChance{}, err
 	}
@@ -215,7 +215,7 @@ func vfTargetOverridesCritChance(v ParamsVerifyer, item servicetypes.TargetOverr
 func vfTargetCustomCritChance(v ParamsVerifyer, item servicetypes.TargetCustomCritChance, _ ts.FieldName) (servicetypes.TargetCustomCritChance, error) {
 	var err error
 
-	item.Luck, err = v.Int(item.Luck, ts.PfnLuck)
+	item.Luck, err = v.int(item.Luck, ts.PfnLuck)
 	if err != nil {
 		return servicetypes.TargetCustomCritChance{}, err
 	}
