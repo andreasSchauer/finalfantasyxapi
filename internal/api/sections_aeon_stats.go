@@ -11,6 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 )
 
 func convertXVal(x seedtypes.XVal) sectiontypes.Xval {
@@ -21,7 +22,7 @@ func convertXVal(x seedtypes.XVal) sectiontypes.Xval {
 }
 
 func newAeonStatTable(baseStats []seedtypes.BaseStat) sectiontypes.AeonStatTable {
-	stats := apilookups.E.Stats.ToResAmtType(baseStats, newBaseStat)
+	stats := apilookups.E.Stats.ToResAmtType(baseStats, th.NewBaseStat)
 	statMap := handlerinput.GetResAmtTypeMap(stats)
 	luckPtr := h.GetInt32Ptr(statMap["luck"])
 

@@ -8,8 +8,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -61,13 +59,40 @@ func getAlts(as seedtypes.AlteredState) []apitypes.Alt {
 	return alts
 }
 
-func convertAlt(asc seedtypes.Alt) apitypes.Alt {
-	return apitypes.Alt{
-		Properties:       h.SliceOrNil(handlerinput.NamesToNamedAPIResources(apilookups.E.Properties, asc.Properties)),
-		AutoAbilities:    h.SliceOrNil(handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, asc.AutoAbilities)),
-		BaseStats:        h.SliceOrNil(apilookups.E.Stats.ToResAmtType(asc.BaseStats, newBaseStat)),
-		ElemResists:      h.SliceOrNil(namesToElemResists(asc.ElemResists)),
-		StatusImmunities: h.SliceOrNil(handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, asc.StatusImmunities)),
-		AddedStatus:      ah.ConvertObjPtr(asc.AddedStatus, convertInflictedStatus),
+
+func getAlterations(alts []apitypes.Alt) apitypes.Alterations {
+	alterations := apitypes.Alterations{}
+
+	for _, alt := range alts {
+		switch alt.AlterationType {
+		case database.AlterationTypeChange:
+			change := apitypes.AltStateChange{
+				Distance:    alt.Distance,
+				BaseStats:   alt.BaseStats,
+				ElemResists: alt.ElemResists,
+			}
+			alterations.Change = &change
+
+		case database.AlterationTypeGain:
+			gain := apitypes.AltStateGain{
+				Properties:       alt.Properties,
+				AutoAbilities:    alt.AutoAbilities,
+				StatusImmunities: alt.StatusImmunities,
+				StatusResists:    alt.StatusResists,
+				Status:           alt.AddedStatus,
+			}
+			alterations.Gain = &gain
+
+		case database.AlterationTypeLoss:
+			loss := apitypes.AltStateLoss{
+				Properties:       alt.Properties,
+				AutoAbilities:    alt.AutoAbilities,
+				StatusImmunities: alt.StatusImmunities,
+				Status:           alt.RemovedStatus,
+			}
+			alterations.Loss = &loss
+		}
 	}
+
+	return alterations
 }

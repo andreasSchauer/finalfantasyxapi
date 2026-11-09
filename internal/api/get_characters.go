@@ -9,6 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -36,7 +37,7 @@ func getCharacter(r *http.Request, i handlerinput.Main[seedtypes.Character, apit
 		CelestialWeapon:        rel.CelestialWeapon,
 		OverdriveCommand:       rel.OverdriveCommand,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              apilookups.E.Stats.ToResAmtType(character.BaseStats, newBaseStat),
+		BaseStats:              apilookups.E.Stats.ToResAmtType(character.BaseStats, th.NewBaseStat),
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		StdSphereGrid:          rel.StdSphereGrid,
 		ExpSphereGrid:          rel.ExpSphereGrid,

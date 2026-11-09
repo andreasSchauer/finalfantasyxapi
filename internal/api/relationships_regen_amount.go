@@ -4,6 +4,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 )
 
 func calcRegenAmountsMonster(mon apitypes.Monster) []apitypes.RegenAmount {
@@ -18,7 +19,7 @@ func calcRegenAmountsMonster(mon apitypes.Monster) []apitypes.RegenAmount {
 func calcRegenAmounts(baseStats []apitypes.BaseStat) []apitypes.RegenAmount {
 	ticks := []int32{0, 1, 2, 3, 4, 5, 10, 15, 20, 30, 50}
 	regenAmounts := make([]apitypes.RegenAmount, len(ticks))
-	hp := getBaseStatVal("hp", baseStats)
+	hp := th.GetBaseStatVal("hp", baseStats)
 
 	for i, tickAmt := range ticks {
 		regenAmounts[i] = getRegenAmount(hp, tickAmt)

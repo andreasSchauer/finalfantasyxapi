@@ -10,6 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -38,7 +39,7 @@ func getAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon,
 		PhysAtkAccuracy:        ah.ConvertObjPtr(aeon.PhysAtkAccuracy, convertAccuracy),
 		CelestialWeapon:        rel.CelestialWeapon,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              getAeonBaseStats(aeon),
+		BaseStats:              th.GetAeonBaseStats(aeon),
 		AeonCommands:           rel.AeonCommands,
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		Overdrives:             rel.Overdrives,

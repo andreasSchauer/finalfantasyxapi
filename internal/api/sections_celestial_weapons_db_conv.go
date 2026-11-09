@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
-func convertGetCelestialWeaponAutoAbilityIDs() handlerinput.DBQueryIntMany {
+func GetCelestialWeaponAutoAbilityIDs() handlerinput.DBQueryIntMany {
 	return func(ctx context.Context, id int32) ([]int32, error) {
 		cw, _ := lookup.GetResourceByID(id, lookup.L.CelestialWeaponsID)
 

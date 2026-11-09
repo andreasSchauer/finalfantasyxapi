@@ -9,6 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 )
 
 func fetchFormationMons(params servicetypes.TurnOrderParams) servicetypes.TurnOrderParams {
@@ -63,14 +64,14 @@ func getFirstTurnAglTier(monID int32) *seedtypes.AgilityTier {
 
 	baseStats := altState.Alts[0].BaseStats
 
-	aglBS := getBaseStat("agility", baseStats)
+	aglBS := th.GetBaseStat("agility", baseStats)
 	tier := getTierByAgility(aglBS.Value)
 
 	return &tier
 }
 
 func getTurnOrderMonAgility(monID int32, monster apitypes.Monster) int32 {
-	agility := getBaseStatVal("agility", monster.BaseStats)
+	agility := th.GetBaseStatVal("agility", monster.BaseStats)
 
 	return handleNoTurnMons(monID, agility)
 }

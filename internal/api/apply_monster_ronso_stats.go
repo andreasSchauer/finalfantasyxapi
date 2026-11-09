@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -17,7 +18,7 @@ func applyRonsoStats(r *http.Request, mon apitypes.Monster, queryName ts.QueryPa
 	queryParam := apilookups.Q.Monsters[queryName]
 
 	kimahri, _ := lookup.L.Characters["kimahri"]
-	kimahriBS := apilookups.E.Stats.ToResAmtType(kimahri.BaseStats, newBaseStat)
+	kimahriBS := apilookups.E.Stats.ToResAmtType(kimahri.BaseStats, th.NewBaseStat)
 
 	kimahriStatCalcMap, err := getStatCalcMap(r, queryParam, kimahriBS, allowedStatIDs)
 	if errs.QueryIsEmpty(err) {
@@ -39,7 +40,7 @@ func replaceRonsoStats(mon apitypes.Monster, kimahriStatMap map[string]int32, al
 	ronsoStatMap["magic"] = getRonsoMagic(mon, kimahriStatMap)
 	ronsoStatMap["agility"] = getRonsoAgility(mon, kimahriStatMap)
 
-	return replaceBaseStats(mon.BaseStats, ronsoStatMap, allowedStatIDs)
+	return th.ReplaceBaseStats(mon.BaseStats, ronsoStatMap, allowedStatIDs)
 }
 
 func getRonsoHP(mon apitypes.Monster, kimahriStatMap map[string]int32) int32 {

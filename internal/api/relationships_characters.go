@@ -9,12 +9,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -112,33 +109,4 @@ func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.Resource
 	modeAmount := i.ToResAmt(id, amount)
 
 	return modeAmount, nil
-}
-
-func applyOsgStats(r *http.Request, char apitypes.Character) ([]apitypes.BaseStat, error) {
-	if char.IsStoryBased {
-		return char.BaseStats, nil
-	}
-
-	var statMap map[string]int32
-	queryParam := apilookups.Q.Characters[ts.QpnOsgStats]
-
-	sgType, err := queryParam.ParseEnum(r, enums.T.SphereGridType)
-	if errs.QueryIsEmpty(err) {
-		return char.BaseStats, nil
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	switch sgType.Name {
-	case string(database.SphereGridTypeStandard):
-		statMap = char.StdSphereGrid.ToMap()
-
-	case string(database.SphereGridTypeExpert):
-		statMap = char.ExpSphereGrid.ToMap()
-	}
-
-	newStats := addToBaseStats(char.BaseStats, statMap)
-
-	return newStats, nil
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 )
 
 func quickAssembleMon(monID int32, altStatePtr *int32) (apitypes.Monster, error) {
@@ -32,10 +33,10 @@ func quickAssembleMon(monID int32, altStatePtr *int32) (apitypes.Monster, error)
 		PoisonRate:       monsterLookup.PoisonRate,
 		ThreatenChance:   monsterLookup.ThreatenChance,
 		ZanmatoLevel:     monsterLookup.ZanmatoLevel,
-		BaseStats:        apilookups.E.Stats.ToResAmtType(monsterLookup.BaseStats, newBaseStat),
+		BaseStats:        apilookups.E.Stats.ToResAmtType(monsterLookup.BaseStats, th.NewBaseStat),
 		ElemResists:      getMonsterElemResists(monsterLookup.ElemResists),
 		StatusImmunities: handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, monsterLookup.StatusImmunities),
-		StatusResists:    apilookups.E.StatusConditions.ToResAmtType(monsterLookup.StatusResists, newStatusResist),
+		StatusResists:    apilookups.E.StatusConditions.ToResAmtType(monsterLookup.StatusResists, th.NewStatusResist),
 		Abilities:        ah.ConvertObjSlice(monsterLookup.Abilities, convertMonsterAbility),
 		AlteredStates:    getMonsterAlteredStates(nil, monsterLookup),
 	}

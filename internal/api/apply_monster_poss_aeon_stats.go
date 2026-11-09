@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -23,7 +24,7 @@ func applyPossessedAeonStats(r *http.Request, mon apitypes.Monster) ([]apitypes.
 	aeon := apitypes.Aeon{
 		ID:        aeonLookup.ID,
 		Name:      aeonLookup.Name,
-		BaseStats: getAeonBaseStats(aeonLookup),
+		BaseStats: th.GetAeonBaseStats(aeonLookup),
 	}
 
 	aeon, err := applyAeonStats(r, aeon, nil)
@@ -32,7 +33,7 @@ func applyPossessedAeonStats(r *http.Request, mon apitypes.Monster) ([]apitypes.
 	}
 
 	aeonStatMap := handlerinput.GetResAmtTypeMap(aeon.BaseStats)
-	newBaseStats := replaceBaseStats(mon.BaseStats, aeonStatMap, allowedStatIDs)
+	newBaseStats := th.ReplaceBaseStats(mon.BaseStats, aeonStatMap, allowedStatIDs)
 
 	return newBaseStats, nil
 }

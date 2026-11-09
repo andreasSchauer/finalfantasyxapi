@@ -1,34 +1,37 @@
-package api
+// Package typehelpers asdüijasdpüojp
+package typehelpers
 
 import (
 	"slices"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func newBaseStat(res apiresource.Named, value int32) apitypes.BaseStat {
+func NewBaseStat(res apiresource.Named, value int32) apitypes.BaseStat {
 	return apitypes.BaseStat{
 		Stat:  res,
 		Value: value,
 	}
 }
 
-func getBaseStat(stat string, baseStats []apitypes.BaseStat) apitypes.BaseStat {
+func GetBaseStat(stat string, baseStats []apitypes.BaseStat) apitypes.BaseStat {
 	statLookup, _ := lookup.GetResource(stat, lookup.L.Stats)
 	statMap := handlerinput.GetResourceMap(baseStats)
 
 	return statMap[statLookup.ID]
 }
 
-func getBaseStatVal(stat string, baseStats []apitypes.BaseStat) int32 {
-	bs := getBaseStat(stat, baseStats)
+func GetBaseStatVal(stat string, baseStats []apitypes.BaseStat) int32 {
+	bs := GetBaseStat(stat, baseStats)
 	return bs.Value
 }
 
-func replaceBaseStats(baseStats []apitypes.BaseStat, statMap map[string]int32, allowedStatIDs []int32) []apitypes.BaseStat {
+func ReplaceBaseStats(baseStats []apitypes.BaseStat, statMap map[string]int32, allowedStatIDs []int32) []apitypes.BaseStat {
 	for i, baseStat := range baseStats {
 		if !slices.Contains(allowedStatIDs, baseStat.Stat.ID) {
 			continue
@@ -43,7 +46,7 @@ func replaceBaseStats(baseStats []apitypes.BaseStat, statMap map[string]int32, a
 	return baseStats
 }
 
-func addToBaseStats(baseStats []apitypes.BaseStat, statMap map[string]int32) []apitypes.BaseStat {
+func AddToBaseStats(baseStats []apitypes.BaseStat, statMap map[string]int32) []apitypes.BaseStat {
 	for i, baseStat := range baseStats {
 		toAdd, ok := statMap[baseStat.Stat.Name]
 		if ok {
@@ -52,4 +55,9 @@ func addToBaseStats(baseStats []apitypes.BaseStat, statMap map[string]int32) []a
 	}
 
 	return baseStats
+}
+
+func GetAeonBaseStats(aeon seedtypes.Aeon) []apitypes.BaseStat {
+	baseStats := aeon.BaseStats.XVals[0].BaseStats
+	return apilookups.E.Stats.ToResAmtType(baseStats, NewBaseStat)
 }

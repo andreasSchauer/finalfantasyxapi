@@ -832,7 +832,7 @@ func InitEndpoints() {
 		RetrieveFunc:  retrieveCelestialWeapons,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnAutoAbilities: {
-				DBQuery:     convertGetCelestialWeaponAutoAbilityIDs(),
+				DBQuery:     GetCelestialWeaponAutoAbilityIDs(),
 				CreateSubFn: createAutoAbilitySimple,
 			},
 		},

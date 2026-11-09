@@ -12,6 +12,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -60,12 +61,12 @@ func getMonster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes
 		ScanText:             monster.ScanText,
 		Areas:                rel.Areas,
 		Formations:           rel.Formations,
-		BaseStats:            apilookups.E.Stats.ToResAmtType(monster.BaseStats, newBaseStat),
+		BaseStats:            apilookups.E.Stats.ToResAmtType(monster.BaseStats, th.NewBaseStat),
 		Items:                ah.ConvertObjPtr(monster.Items, convertMonsterItems),
 		Equipment:            ah.ConvertObjPtr(monster.Equipment, convertMonsterEquipment),
 		ElemResists:          getMonsterElemResists(monster.ElemResists),
 		StatusImmunities:     handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, monster.StatusImmunities),
-		StatusResists:        apilookups.E.StatusConditions.ToResAmtType(monster.StatusResists, newStatusResist),
+		StatusResists:        apilookups.E.StatusConditions.ToResAmtType(monster.StatusResists, th.NewStatusResist),
 		Abilities:            ah.ConvertObjSlice(monster.Abilities, convertMonsterAbility),
 		AlteredStates:        getMonsterAlteredStates(r, monster),
 	}

@@ -30,14 +30,14 @@ func getStatusConditionRelationships(r *http.Request, status seedtypes.StatusCon
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersResistance, err = apilookups.E.Monsters.DBGetRelations(ctx, status, convGetStatusConditionResistingMonsterIDs(res.Resistance))
+		rel.MonstersResistance, err = apilookups.E.Monsters.DBGetRelations(ctx, status, GetStatusConditionResistingMonsterIDs(res.Resistance))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		rel.InflictedBy, err = getStatusInfliction(ctx, status, StatusInteractionQueries{
-			Abilities: convGetStatusConditionAbilityIDsInflicted(res.MinRate, res.MaxRate),
+			Abilities: GetStatusConditionAbilityIDsInflicted(res.MinRate, res.MaxRate),
 		})
 		return err
 	})

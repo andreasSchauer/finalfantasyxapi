@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 	"golang.org/x/sync/errgroup"
 )
@@ -85,14 +86,14 @@ func completeMonsterResponse(r *http.Request, mon apitypes.Monster) (apitypes.Mo
 }
 
 func getMonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.ElementalResist {
-	elemResists := namesToElemResists(resists)
+	elemResists := th.NamesToElemResists(resists)
 	elemResistMap := handlerinput.GetResourceMap(elemResists)
 
 	for key := range lookup.L.ElementsID {
 		_, ok := elemResistMap[key]
 		if !ok {
 			element := lookup.L.ElementsID[key]
-			elemResistMap[element.ID] = newElemResist(element.Name, "neutral")
+			elemResistMap[element.ID] = th.NewElemResist(element.Name, "neutral")
 		}
 	}
 
@@ -104,7 +105,7 @@ func getMonsterPoisonDamage(mon apitypes.Monster) (*int32, error) {
 		return nil, nil
 	}
 
-	hpStat := getBaseStat("hp", mon.BaseStats)
+	hpStat := th.GetBaseStat("hp", mon.BaseStats)
 
 	poisonDamageFloat := float32(hpStat.Value) * *mon.PoisonRate
 	poisonDamage := int32(poisonDamageFloat)
@@ -113,7 +114,7 @@ func getMonsterPoisonDamage(mon apitypes.Monster) (*int32, error) {
 }
 
 func getMonsterAgilityParams(r *http.Request, mon apitypes.Monster) (*apitypes.AgilityParams, error) {
-	agilityTier, err := getAgilityTierDB(r, mon.BaseStats)
+	agilityTier, err := GetAgilityTierDB(r, mon.BaseStats)
 	if err != nil {
 		return nil, err
 	}
@@ -161,7 +162,7 @@ func getMonsterBribeChances(mon apitypes.Monster) ([]apitypes.BribeChance, error
 		return nil, nil
 	}
 
-	hpStat := getBaseStat("hp", mon.BaseStats)
+	hpStat := th.GetBaseStat("hp", mon.BaseStats)
 	hp := hpStat.Value
 
 	bribeChances := []apitypes.BribeChance{}
