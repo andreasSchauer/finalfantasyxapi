@@ -25,7 +25,7 @@ func getSubquest(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apityp
 		ParentSidequest: handlerinput.IDToQuestAPIResource(apilookups.E.Sidequests, subquest.SidequestID),
 		Availability:    subquest.Availability,
 		IsRepeatable:    subquest.IsRepeatable,
-		Completion:      convertQuestCompletion(*subquest.Completion),
+		Completion:      ConvertQuestCompletion(*subquest.Completion),
 	}
 
 	if response.ParentSidequest.Sidequest == "monster arena" {

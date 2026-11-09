@@ -5,7 +5,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertSphereGrid(sg seedtypes.SphereGrid) apitypes.SphereGrid {
+func ConvertSphereGrid(sg seedtypes.SphereGrid) apitypes.SphereGrid {
 	return apitypes.SphereGrid{
 		StatTable:  sg.StatTable,
 		Lv1Locks:   sg.Lv1Locks,

@@ -29,10 +29,10 @@ func getMonsterFormation(r *http.Request, i handlerinput.Main[seedtypes.MonsterF
 		CanEscape:       formation.FormationData.CanEscape,
 		Notes:           formation.FormationData.Notes,
 		FormationLoot:   getFormationLoot(formation),
-		BossMusic:       ah.ConvertObjPtr(formation.FormationData.BossMusic, convertFormationBossSong),
+		BossMusic:       ah.ConvertObjPtr(formation.FormationData.BossMusic, ConvertFormationBossSong),
 		Monsters:        apilookups.E.Monsters.ToResAmtsFromNames(formation.Monsters),
-		Areas:           ah.ConvertObjSlice(formation.EncounterAreas, convertEncounterArea),
-		TriggerCommands: ah.ConvertObjSlice(formation.TriggerCommands, convertFormationTriggerCommand),
+		Areas:           ah.ConvertObjSlice(formation.EncounterAreas, ConvertEncounterArea),
+		TriggerCommands: ah.ConvertObjSlice(formation.TriggerCommands, ConvertFormationTriggerCommand),
 	}
 
 	return response, nil

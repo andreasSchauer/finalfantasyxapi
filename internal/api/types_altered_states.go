@@ -10,13 +10,13 @@ import (
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 )
 
-func convertAlt(asc seedtypes.Alt) apitypes.Alt {
+func ConvertAlt(asc seedtypes.Alt) apitypes.Alt {
 	return apitypes.Alt{
 		Properties:       h.SliceOrNil(handlerinput.NamesToNamedAPIResources(apilookups.E.Properties, asc.Properties)),
 		AutoAbilities:    h.SliceOrNil(handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, asc.AutoAbilities)),
 		BaseStats:        h.SliceOrNil(apilookups.E.Stats.ToResAmtType(asc.BaseStats, th.NewBaseStat)),
 		ElemResists:      h.SliceOrNil(th.NamesToElemResists(asc.ElemResists)),
 		StatusImmunities: h.SliceOrNil(handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, asc.StatusImmunities)),
-		AddedStatus:      ah.ConvertObjPtr(asc.AddedStatus, convertInflictedStatus),
+		AddedStatus:      ah.ConvertObjPtr(asc.AddedStatus, ConvertInflictedStatus),
 	}
 }

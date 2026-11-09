@@ -34,7 +34,7 @@ func getOverdrive(r *http.Request, i handlerinput.Main[seedtypes.Overdrive, apit
 		Cursor:             overdrive.Cursor,
 		User:               handlerinput.NameToNamedAPIResource(apilookups.E.CharacterClasses, overdrive.User, nil),
 		OverdriveCommand:   handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.OverdriveCommands, overdrive.OverdriveCommand, nil),
-		OverdriveAbilities: refsToNamedAPIResources(overdrive.OverdriveAbilities),
+		OverdriveAbilities: RefsToNamedAPIResources(overdrive.OverdriveAbilities),
 	}
 
 	return response, nil

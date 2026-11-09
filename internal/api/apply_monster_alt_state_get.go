@@ -50,7 +50,7 @@ func getAlts(as seedtypes.AlteredState) []apitypes.Alt {
 	alts := []apitypes.Alt{}
 
 	for _, change := range as.Changes {
-		altStateChange := convertAlt(change)
+		altStateChange := ConvertAlt(change)
 		altStateChange.AlterationType = database.AlterationType(change.AlterationType)
 		altStateChange.Distance = change.Distance
 		alts = append(alts, altStateChange)
@@ -58,7 +58,6 @@ func getAlts(as seedtypes.AlteredState) []apitypes.Alt {
 
 	return alts
 }
-
 
 func getAlterations(alts []apitypes.Alt) apitypes.Alterations {
 	alterations := apitypes.Alterations{}

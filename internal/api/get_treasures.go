@@ -31,7 +31,7 @@ func getTreasure(r *http.Request, i handlerinput.Main[seedtypes.Treasure, apityp
 		LootType:        treasure.LootType,
 		GilAmount:       treasure.GilAmount,
 		Items:           apilookups.E.AllItems.ToResAmtsFromNames(treasure.Items),
-		Equipment:       ah.ConvertObjPtr(treasure.Equipment, convertFoundEquipment),
+		Equipment:       ah.ConvertObjPtr(treasure.Equipment, ConvertFoundEquipment),
 	}
 
 	return response, nil

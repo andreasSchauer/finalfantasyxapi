@@ -36,15 +36,15 @@ func getAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon,
 		PhysAtkDmgConstant:     aeon.PhysAtkDmgConstant,
 		PhysAtkRange:           aeon.PhysAtkRange,
 		PhysAtkShatterRate:     aeon.PhysAtkShatterRate,
-		PhysAtkAccuracy:        ah.ConvertObjPtr(aeon.PhysAtkAccuracy, convertAccuracy),
+		PhysAtkAccuracy:        ah.ConvertObjPtr(aeon.PhysAtkAccuracy, ConvertAccuracy),
 		CelestialWeapon:        rel.CelestialWeapon,
 		CharacterClasses:       rel.CharacterClasses,
 		BaseStats:              th.GetAeonBaseStats(aeon),
 		AeonCommands:           rel.AeonCommands,
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		Overdrives:             rel.Overdrives,
-		WeaponAbilities:        ah.ConvertObjSlice(aeon.Weapon, convertAeonEquipment),
-		ArmorAbilities:         ah.ConvertObjSlice(aeon.Armor, convertAeonEquipment),
+		WeaponAbilities:        ah.ConvertObjSlice(aeon.Weapon, ConvertAeonEquipment),
+		ArmorAbilities:         ah.ConvertObjSlice(aeon.Armor, ConvertAeonEquipment),
 	}
 
 	response, err = applyAeonStats(r, response, nil)

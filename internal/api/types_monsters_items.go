@@ -7,12 +7,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertMonsterItems(items seedtypes.MonsterItems) apitypes.MonsterItems {
+func ConvertMonsterItems(items seedtypes.MonsterItems) apitypes.MonsterItems {
 	monItems := apitypes.MonsterItems{
 		DropChance:          items.DropChance,
 		DropCondition:       items.DropCondition,
 		OtherItemsCondition: items.OtherItemsCondition,
-		OtherItems:          ah.ConvertObjSlice(items.OtherItems, convertPossibleItem),
+		OtherItems:          ah.ConvertObjSlice(items.OtherItems, ConvertPossibleItem),
 	}
 
 	if items.StealCommon != nil {

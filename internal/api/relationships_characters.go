@@ -48,14 +48,14 @@ func getCharacterRelationships(r *http.Request, char seedtypes.Character) (apity
 	if !char.IsStoryBased {
 		g.Go(func() error {
 			var err error
-			rel.StdSphereGrid = ah.ConvertObjPtr(char.StdSphereGrid, convertSphereGrid)
+			rel.StdSphereGrid = ah.ConvertObjPtr(char.StdSphereGrid, ConvertSphereGrid)
 			rel.StdSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterSgAbilityIDs)
 			return err
 		})
 
 		g.Go(func() error {
 			var err error
-			rel.ExpSphereGrid = ah.ConvertObjPtr(char.ExpSphereGrid, convertSphereGrid)
+			rel.ExpSphereGrid = ah.ConvertObjPtr(char.ExpSphereGrid, ConvertSphereGrid)
 			rel.ExpSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterEgAbilityIDs)
 			return err
 		})

@@ -8,18 +8,18 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func refsToNamedAPIResources(refs []seedtypes.AbilityReference) []apiresource.Named {
+func RefsToNamedAPIResources(refs []seedtypes.AbilityReference) []apiresource.Named {
 	abilities := []apiresource.Named{}
 
 	for _, ref := range refs {
-		abilityRes := refToNamedAPIResource(ref)
+		abilityRes := RefToNamedAPIResource(ref)
 		abilities = append(abilities, abilityRes)
 	}
 
 	return abilities
 }
 
-func refToNamedAPIResource(ref seedtypes.AbilityReference) apiresource.Named {
+func RefToNamedAPIResource(ref seedtypes.AbilityReference) apiresource.Named {
 	var res apiresource.Named
 
 	switch database.AbilityType(ref.AbilityType) {
@@ -45,7 +45,7 @@ func refToNamedAPIResource(ref seedtypes.AbilityReference) apiresource.Named {
 	return res
 }
 
-func questToQuestAPIResource(quest seedtypes.Quest) apiresource.Quest {
+func QuestToQuestAPIResource(quest seedtypes.Quest) apiresource.Quest {
 	switch quest.Type {
 	case database.QuestTypeSidequest:
 		return handlerinput.NameToQuestAPIResource(apilookups.E.Sidequests, quest.Name)

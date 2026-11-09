@@ -37,7 +37,7 @@ func getSphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.S
 		TargetNodePosition: sphere.TargetNodePosition,
 		TargetNodeState:    sphere.TargetNodeState,
 		TargetableNodes:    sphere.TargetableNodes,
-		CreatedNode:        ah.ConvertObjPtr(sphere.CreatedNode, convertCreatedNode),
+		CreatedNode:        ah.ConvertObjPtr(sphere.CreatedNode, ConvertCreatedNode),
 		Monsters:           rel.Monsters,
 		Treasures:          rel.Treasures,
 		Shops:              rel.Shops,

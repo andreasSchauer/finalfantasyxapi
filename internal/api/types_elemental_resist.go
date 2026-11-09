@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertElemResist(er seedtypes.ElementalResist) apitypes.ElementalResist {
+func ConvertElemResist(er seedtypes.ElementalResist) apitypes.ElementalResist {
 	return apitypes.ElementalResist{
 		Element:  handlerinput.NameToNamedAPIResource(apilookups.E.Elements, er.Element, nil),
 		Affinity: er.Affinity,

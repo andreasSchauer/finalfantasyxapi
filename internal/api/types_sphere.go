@@ -5,7 +5,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertCreatedNode(n seedtypes.CreatedNode) apitypes.CreatedNode {
+func ConvertCreatedNode(n seedtypes.CreatedNode) apitypes.CreatedNode {
 	return apitypes.CreatedNode{
 		Node:  n.Node,
 		Value: n.Value,

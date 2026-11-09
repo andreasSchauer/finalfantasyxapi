@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertBackgroundMusic(bm seedtypes.BackgroundMusic) apitypes.BackgroundMusic {
+func ConvertBackgroundMusic(bm seedtypes.BackgroundMusic) apitypes.BackgroundMusic {
 	return apitypes.BackgroundMusic{
 		Condition:              bm.Condition,
 		ReplacesEncounterMusic: bm.ReplacesEncounterMusic,
@@ -16,7 +16,7 @@ func convertBackgroundMusic(bm seedtypes.BackgroundMusic) apitypes.BackgroundMus
 	}
 }
 
-func convertCue(cue seedtypes.Cue) apitypes.Cue {
+func ConvertCue(cue seedtypes.Cue) apitypes.Cue {
 	var triggerAreaPtr *apiresource.Area
 
 	if cue.TriggerLocationArea != nil {

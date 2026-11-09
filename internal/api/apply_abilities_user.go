@@ -142,7 +142,7 @@ func populateReplAeon(repl unitRepl, queryParamUser queryparam.QueryParam) (unit
 
 	repl.replVals.Range = aeon.PhysAtkRange
 	repl.replVals.ShatterRate = aeon.PhysAtkShatterRate
-	repl.replVals.Accuracy = ah.ConvertObjPtr(aeon.PhysAtkAccuracy, convertAccuracy)
+	repl.replVals.Accuracy = ah.ConvertObjPtr(aeon.PhysAtkAccuracy, ConvertAccuracy)
 	repl.replVals.DamageConstant = aeon.PhysAtkDmgConstant
 
 	return repl, nil

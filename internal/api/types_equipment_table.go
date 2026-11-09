@@ -8,13 +8,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertAbilityPool(p seedtypes.AbilityPool) apitypes.AbilityPool {
+func ConvertAbilityPool(p seedtypes.AbilityPool) apitypes.AbilityPool {
 	return apitypes.AbilityPool{
 		AutoAbilities: handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, p.AutoAbilities),
 		ReqAmount:     p.ReqAmount,
 	}
 }
 
-func convertEquipmentName(n seedtypes.EquipmentName) apiresource.Named {
+func ConvertEquipmentName(n seedtypes.EquipmentName) apiresource.Named {
 	return handlerinput.NameToNamedAPIResource(apilookups.E.Equipment, n.Name, nil)
 }

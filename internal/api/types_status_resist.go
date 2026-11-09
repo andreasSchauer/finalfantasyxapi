@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertStatusResist(sr seedtypes.StatusResist) apitypes.StatusResist {
+func ConvertStatusResist(sr seedtypes.StatusResist) apitypes.StatusResist {
 	return apitypes.StatusResist{
 		StatusCondition: handlerinput.NameToNamedAPIResource(apilookups.E.StatusConditions, sr.StatusCondition, nil),
 		Resistance:      sr.Resistance,

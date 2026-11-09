@@ -5,7 +5,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertAgilitySubtier(st seedtypes.AgilitySubtier) apitypes.AgilitySubtier {
+func ConvertAgilitySubtier(st seedtypes.AgilitySubtier) apitypes.AgilitySubtier {
 	return apitypes.AgilitySubtier{
 		FromAgility: st.MinAgility,
 		ToAgility:   st.MaxAgility,

@@ -5,6 +5,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertBlitzballItem(bi seedtypes.BlitzballItem) apitypes.PossibleItem {
-	return convertPossibleItem(bi.PossibleItem)
+func ConvertBlitzballItem(bi seedtypes.BlitzballItem) apitypes.PossibleItem {
+	return ConvertPossibleItem(bi.PossibleItem)
 }

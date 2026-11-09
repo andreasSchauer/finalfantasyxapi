@@ -25,7 +25,7 @@ func getBlitzballPrize(r *http.Request, i handlerinput.Main[seedtypes.BlitzballP
 		Name:     fmt.Sprintf("%s - %s", bbPos.Category, bbPos.Slot),
 		Category: bbPos.Category,
 		Slot:     bbPos.Slot,
-		Items:    ah.ConvertObjSlice(bbPos.Items, convertBlitzballItem),
+		Items:    ah.ConvertObjSlice(bbPos.Items, ConvertBlitzballItem),
 	}
 
 	return response, nil

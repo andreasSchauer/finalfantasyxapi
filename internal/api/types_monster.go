@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertMonsterAbility(ability seedtypes.MonsterAbility) apitypes.MonsterAbility {
+func ConvertMonsterAbility(ability seedtypes.MonsterAbility) apitypes.MonsterAbility {
 	return apitypes.MonsterAbility{
 		Ability:  handlerinput.KeyToTypedAPIResource(apilookups.E.Abilities, ability.AbilityReference),
 		IsForced: ability.IsForced,

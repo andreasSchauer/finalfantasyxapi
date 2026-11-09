@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertMonsterEquipment(equipment seedtypes.MonsterEquipment) apitypes.MonsterEquipment {
+func ConvertMonsterEquipment(equipment seedtypes.MonsterEquipment) apitypes.MonsterEquipment {
 	monEquipment := apitypes.MonsterEquipment{
 		DropChance:        equipment.DropChance,
 		Power:             equipment.Power,

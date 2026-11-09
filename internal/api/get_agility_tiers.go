@@ -26,7 +26,7 @@ func getAgilityTier(r *http.Request, i handlerinput.Main[seedtypes.AgilityTier, 
 		MonMinICV:   agilityTier.MonsterMinICV,
 		MonMaxICV:   agilityTier.MonsterMaxICV,
 		CharMaxICV:  agilityTier.CharacterMaxICV,
-		CharMinICVs: ah.ConvertObjSlice(agilityTier.CharacterMinICVs, convertAgilitySubtier),
+		CharMinICVs: ah.ConvertObjSlice(agilityTier.CharacterMinICVs, ConvertAgilitySubtier),
 	}
 
 	return response, nil

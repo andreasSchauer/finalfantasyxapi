@@ -35,9 +35,9 @@ func getAbility(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes
 		Rank:               ability.Rank,
 		CanCopycat:         ability.CanCopycat,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
-		TypedAbility:       refToNamedAPIResource(ability.GetAbilityRef()),
+		TypedAbility:       RefToNamedAPIResource(ability.GetAbilityRef()),
 		Monsters:           monsters,
-		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, ConvertBattleInteraction),
 	}
 
 	return response, nil

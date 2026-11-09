@@ -29,7 +29,7 @@ func getSidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apit
 		UntypedQuest: handlerinput.IDToQuestAPIResource(apilookups.E.Quests, sidequest.Quest.ID),
 		Availability: sidequest.Availability,
 		IsRepeatable: sidequest.IsRepeatable,
-		Completion:   ah.ConvertObjPtr(sidequest.Completion, convertQuestCompletion),
+		Completion:   ah.ConvertObjPtr(sidequest.Completion, ConvertQuestCompletion),
 		Subquests:    subquests,
 	}
 

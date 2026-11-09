@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertPossibleAbilityList(pa seedtypes.PossibleAbilityList) apitypes.PossibleAbilityList {
+func ConvertPossibleAbilityList(pa seedtypes.PossibleAbilityList) apitypes.PossibleAbilityList {
 	return apitypes.PossibleAbilityList{
 		User:      handlerinput.NameToNamedAPIResource(apilookups.E.CharacterClasses, pa.User, nil),
 		Abilities: handlerinput.KeysToTypedAPIResources(apilookups.E.Abilities, pa.Abilities),

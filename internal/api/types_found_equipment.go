@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertFoundEquipment(fe seedtypes.TreasureEquipment) apitypes.FoundEquipment {
+func ConvertFoundEquipment(fe seedtypes.TreasureEquipment) apitypes.FoundEquipment {
 	return apitypes.FoundEquipment{
 		EquipmentName:    handlerinput.NameToNamedAPIResource(apilookups.E.Equipment, fe.Name, nil),
 		Abilities:        handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, fe.Abilities),

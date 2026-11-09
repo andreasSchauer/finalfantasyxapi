@@ -8,23 +8,23 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func convertSubShop(ss seedtypes.SubShop) apitypes.SubShop {
+func ConvertSubShop(ss seedtypes.SubShop) apitypes.SubShop {
 	return apitypes.SubShop{
-		Items:     ah.ConvertObjSlice(ss.Items, convertShopItem),
-		Equipment: ah.ConvertObjSlice(ss.Equipment, convertShopEquipment),
+		Items:     ah.ConvertObjSlice(ss.Items, ConvertShopItem),
+		Equipment: ah.ConvertObjSlice(ss.Equipment, ConvertShopEquipment),
 	}
 }
 
-func convertShopItem(si seedtypes.ShopItem) apitypes.ShopItem {
+func ConvertShopItem(si seedtypes.ShopItem) apitypes.ShopItem {
 	return apitypes.ShopItem{
 		Item:  handlerinput.NameToNamedAPIResource(apilookups.E.Items, si.Name, nil),
 		Price: si.Price,
 	}
 }
 
-func convertShopEquipment(se seedtypes.ShopEquipment) apitypes.ShopEquipment {
+func ConvertShopEquipment(se seedtypes.ShopEquipment) apitypes.ShopEquipment {
 	return apitypes.ShopEquipment{
-		Equipment: convertFoundEquipment(se.TreasureEquipment),
+		Equipment: ConvertFoundEquipment(se.TreasureEquipment),
 		Price:     se.Price,
 	}
 }

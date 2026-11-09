@@ -23,10 +23,10 @@ func getQuest(r *http.Request, i handlerinput.Main[seedtypes.Quest, apitypes.Que
 		ID:           quest.ID,
 		Name:         quest.Name,
 		Type:         quest.Type,
-		TypedQuest:   questToQuestAPIResource(quest),
+		TypedQuest:   QuestToQuestAPIResource(quest),
 		Availability: quest.Availability,
 		IsRepeatable: quest.IsRepeatable,
-		Completion:   ah.ConvertObjPtr(quest.Completion, convertQuestCompletion),
+		Completion:   ah.ConvertObjPtr(quest.Completion, ConvertQuestCompletion),
 	}
 
 	return response, nil

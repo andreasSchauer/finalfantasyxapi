@@ -6,6 +6,6 @@ import (
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 )
 
-func convertPossibleItem(item seedtypes.PossibleItem) apitypes.PossibleItem {
+func ConvertPossibleItem(item seedtypes.PossibleItem) apitypes.PossibleItem {
 	return th.NewPossibleItem(item.ItemAmount, item.Chance)
 }

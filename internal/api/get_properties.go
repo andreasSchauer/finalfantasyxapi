@@ -28,7 +28,7 @@ func getProperty(r *http.Request, i handlerinput.Main[seedtypes.Property, apityp
 		Effect:         property.Effect,
 		NullifyArmored: property.NullifyArmored,
 		RelatedStats:   handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, property.RelatedStats),
-		ModifierChange: ah.ConvertObjPtr(property.ModifierChange, convertModifierChange),
+		ModifierChange: ah.ConvertObjPtr(property.ModifierChange, ConvertModifierChange),
 		AutoAbilities:  rel.AutoAbilities,
 		Monsters:       rel.Monsters,
 	}
