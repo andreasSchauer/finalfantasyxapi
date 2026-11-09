@@ -38,10 +38,11 @@ func seedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
 	for _, shop := range rawJSON.shops {
 		if shop.PreAirship != nil {
 			for _, item := range shop.PreAirship.Items {
-				j := ShopJunction{}
-				j.ParentID = shop.ID
-				j.ChildID = item.ID
-				j.ShopType = shop.PreAirship.Type
+				j := ShopJunction{
+					ParentID: shop.ID,
+					ChildID: item.ID,
+					ShopType: shop.PreAirship.Type,
+				}
 				dataHash := generateJunctionHash(j, desc)
 
 				params.DataHash = append(params.DataHash, dataHash)
@@ -53,10 +54,11 @@ func seedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
 
 		if shop.PostAirship != nil {
 			for _, item := range shop.PostAirship.Items {
-				j := ShopJunction{}
-				j.ParentID = shop.ID
-				j.ChildID = item.ID
-				j.ShopType = shop.PostAirship.Type
+				j := ShopJunction{
+					ParentID: shop.ID,
+					ChildID: item.ID,
+					ShopType: shop.PostAirship.Type,
+				}
 				dataHash := generateJunctionHash(j, desc)
 
 				params.DataHash = append(params.DataHash, dataHash)

@@ -3,7 +3,6 @@ package helpers
 type ChanceContainer[T any] interface {
 	Percent() T
 	Round(int32) T
-
 }
 
 func SlicePercent[T ChanceContainer[T]](s []T) []T {
