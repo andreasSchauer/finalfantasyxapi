@@ -1,4 +1,4 @@
-package api
+package turnorder
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"

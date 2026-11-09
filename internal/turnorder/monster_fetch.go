@@ -1,4 +1,4 @@
-package api
+package turnorder
 
 import (
 	"slices"
@@ -8,6 +8,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/servicehelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 )
@@ -45,7 +46,7 @@ func assembleMonTurnOrder(monID int32, altState *int32) (apitypes.Monster, *seed
 		altState = h.GetInt32Ptr(2)
 	}
 
-	monster, _ := quickAssembleMon(monID, altState)
+	monster, _ := sh.QuickAssembleMon(monID, altState)
 
 	if slices.Contains(firstTurnAglIDs, monID) {
 		firstTurnAglTier = getFirstTurnAglTier(monID)
@@ -55,7 +56,7 @@ func assembleMonTurnOrder(monID int32, altState *int32) (apitypes.Monster, *seed
 }
 
 func getFirstTurnAglTier(monID int32) *seedtypes.AgilityTier {
-	mon, _ := quickAssembleMon(monID, nil)
+	mon, _ := sh.QuickAssembleMon(monID, nil)
 	altState := mon.AlteredStates[0]
 
 	if len(altState.Alts) == 0 {
@@ -84,35 +85,4 @@ func handleNoTurnMons(monID, agility int32) int32 {
 	}
 
 	return agility
-}
-
-func fetchMonsterHasteStatus(mon apitypes.Monster, statusPtr *string, ignImmunities bool) (*string, error) {
-	const statusSlow = string(database.HasteStatusSlow)
-	const statusHaste = string(database.HasteStatusHaste)
-	const statusAutoHaste = string(database.HasteStatusAutoHaste)
-
-	if monHasAppliedStatus(mon) {
-		monStatus := mon.AppliedState.AppliedStatus.StatusCondition.Name
-
-		if statusPtr == nil && (monStatus == statusHaste || monStatus == statusSlow) {
-			statusPtr = &monStatus
-		}
-	}
-
-	if statusPtr == nil {
-		return nil, nil
-	}
-
-	status := *statusPtr
-
-	if status == statusAutoHaste {
-		status = statusHaste
-	}
-
-	err := enforceMonImmunity(status, mon, ignImmunities)
-	if err != nil {
-		return nil, err
-	}
-
-	return &status, nil
 }

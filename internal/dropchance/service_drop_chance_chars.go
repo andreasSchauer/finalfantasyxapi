@@ -1,4 +1,4 @@
-package api
+package dropchance
 
 import (
 	"slices"
@@ -9,13 +9,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-type CharChanceParams struct {
+type charChanceParams struct {
 	monMaxSlots     int32
 	wantedAbilities []seedtypes.AutoAbility
 	monAbilities    []seedtypes.EquipmentDrop
 }
 
-func (p CharChanceParams) calcChances(params servicetypes.DropChanceParams) servicetypes.CharacterChances {
+func (p charChanceParams) calcChances(params servicetypes.DropChanceParams) servicetypes.CharacterChances {
 	eligibleChars := []string{}
 	baseRandomChance := 0.75 / h.FloatLen(params.PartyMembers)
 	var chances servicetypes.CharacterChances
@@ -60,7 +60,7 @@ func (p CharChanceParams) calcChances(params servicetypes.DropChanceParams) serv
 	return chances
 }
 
-func (p CharChanceParams) charIsEligible(params servicetypes.DropChanceParams, char seedtypes.Character) bool {
+func (p charChanceParams) charIsEligible(params servicetypes.DropChanceParams, char seedtypes.Character) bool {
 	if p.forcedAbilityEliminatesChar(params, char) {
 		return false
 	}
@@ -76,7 +76,7 @@ func (p CharChanceParams) charIsEligible(params servicetypes.DropChanceParams, c
 	return true
 }
 
-func (p CharChanceParams) forcedAbilityEliminatesChar(params servicetypes.DropChanceParams, char seedtypes.Character) bool {
+func (p charChanceParams) forcedAbilityEliminatesChar(params servicetypes.DropChanceParams, char seedtypes.Character) bool {
 	// the character gets the forced ability, but the ability wasn't specified in auto_abilities
 	charGetsUnwantedForced := p.charGetsUnwantedForced(char)
 	noLooseSlotLeft := p.noLooseSlotLeft(params) // there's no loose slot left to fill in with an optional ability
@@ -89,21 +89,21 @@ func (p CharChanceParams) forcedAbilityEliminatesChar(params servicetypes.DropCh
 	return false
 }
 
-func (p CharChanceParams) charGetsUnwantedForced(char seedtypes.Character) bool {
+func (p charChanceParams) charGetsUnwantedForced(char seedtypes.Character) bool {
 	return p.forcedSlotExists() &&
 		!p.forcedSlotWanted() &&
 		charGetsAbility(p.monAbilities[0], &char)
 }
 
-func (p CharChanceParams) noLooseSlotLeft(params servicetypes.DropChanceParams) bool {
+func (p charChanceParams) noLooseSlotLeft(params servicetypes.DropChanceParams) bool {
 	return params.GetRequiredSlots() == p.monMaxSlots
 }
 
-func (p CharChanceParams) forcedSlotExists() bool {
+func (p charChanceParams) forcedSlotExists() bool {
 	return p.monAbilities[0].IsForced
 }
 
-func (p CharChanceParams) forcedSlotWanted() bool {
+func (p charChanceParams) forcedSlotWanted() bool {
 	if !p.forcedSlotExists() {
 		return false
 	}

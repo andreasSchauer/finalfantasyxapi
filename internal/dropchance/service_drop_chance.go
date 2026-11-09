@@ -1,11 +1,12 @@
-package api
+// Package dropchance
+package dropchance
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-func handleDropChance(params servicetypes.DropChanceParams) (servicetypes.DropChanceResponse, error) {
+func Handle(params servicetypes.DropChanceParams) (servicetypes.DropChanceResponse, error) {
 	mon, _ := lookup.GetResourceByID(params.Monster, lookup.L.MonstersID)
 
 	wantedAbilities, monAbilities, err := vfAutoAbilities(params, mon)
@@ -16,14 +17,14 @@ func handleDropChance(params servicetypes.DropChanceParams) (servicetypes.DropCh
 	slotsTable := extractAbilitySlots(params, mon)
 	monDropChances := getMonsterDropChances(mon, monAbilities)
 
-	ccp := CharChanceParams{
+	ccp := charChanceParams{
 		monMaxSlots:     getEquipMaxSlots(slotsTable),
 		wantedAbilities: wantedAbilities,
 		monAbilities:    monAbilities,
 	}
 	characterChances := ccp.calcChances(params)
 
-	mcp := MatchChanceParams{
+	mcp := matchChanceParams{
 		mon:              mon,
 		wantedAbilities:  wantedAbilities,
 		monAbilities:     monAbilities,

@@ -1,4 +1,4 @@
-package api
+package dropchance
 
 import (
 	"testing"
@@ -20,7 +20,7 @@ func BenchmarkHandleDropChance(b *testing.B) {
 	b.ResetTimer()
 
 	for b.Loop() {
-		res, err := handleDropChance(params)
+		res, err := Handle(params)
 		if err != nil {
 			b.Fatalf("Calculation failed during benchmark: %v", err)
 		}

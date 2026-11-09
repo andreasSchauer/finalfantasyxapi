@@ -1,4 +1,4 @@
-package api
+package turnorder
 
 import (
 	"slices"
@@ -7,15 +7,15 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-func readyTurnQueue(participants []servicetypes.Participant, rng string) []TurnParams {
-	var turnQueue []TurnParams
+func readyTurnQueue(participants []servicetypes.Participant, rng string) []turnParams {
+	var turnQueue []turnParams
 
 	for _, participant := range participants {
 		if participant.TickSpeed == 0 || participant.MinICV == nil || participant.MaxICV == nil {
 			continue
 		}
 
-		params := TurnParams{
+		params := turnParams{
 			Name:        participant.Name,
 			PriorityKey: participant.GetKey(),
 			Party:       participant.Party,
@@ -52,13 +52,13 @@ func readyTurnQueue(participants []servicetypes.Participant, rng string) []TurnP
 	return sortTurnQueue(turnQueue)
 }
 
-func sortTurnQueue(turnQueue []TurnParams) []TurnParams {
+func sortTurnQueue(turnQueue []turnParams) []turnParams {
 	slices.SortStableFunc(turnQueue, sortTurnQueueTicks)
 
 	return turnQueue
 }
 
-func sortTurnQueueTicks(a, b TurnParams) int {
+func sortTurnQueueTicks(a, b turnParams) int {
 	if a.TicksNextTurn < b.TicksNextTurn {
 		return -1
 	}
@@ -70,7 +70,7 @@ func sortTurnQueueTicks(a, b TurnParams) int {
 	return sortTurnQueueAgility(a, b)
 }
 
-func sortTurnQueueAgility(a, b TurnParams) int {
+func sortTurnQueueAgility(a, b turnParams) int {
 	if a.Agility > b.Agility {
 		return -1
 	}
@@ -82,7 +82,7 @@ func sortTurnQueueAgility(a, b TurnParams) int {
 	return sortTurnQueuePriority(a, b)
 }
 
-func sortTurnQueuePriority(a, b TurnParams) int {
+func sortTurnQueuePriority(a, b turnParams) int {
 	priorities := getPriorityMap()
 
 	aVal, ok := priorities[a.PriorityKey]

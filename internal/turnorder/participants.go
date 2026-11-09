@@ -1,4 +1,4 @@
-package api
+package turnorder
 
 import (
 	"fmt"
@@ -8,6 +8,7 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/servicehelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
@@ -110,11 +111,11 @@ func fetchTurnOrderMonster(params servicetypes.TurnOrderParams, mon servicetypes
 	participant := servicetypes.Participant{
 		Name:        h.NameToString(monster.Name, monster.Version, nil),
 		Agility:     getTurnOrderMonAgility(*mon.MonsterID, monster),
-		FirstStrike: monsterHasFirstStrike(monster),
+		FirstStrike: sh.MonsterHasFirstStrike(monster),
 		AltState:    mon.AltState,
 	}
 
-	participant.Status, err = fetchMonsterHasteStatus(monster, mon.Status, params.IgnImmunities)
+	participant.Status, err = sh.FetchMonsterHasteStatus(monster, mon.Status, params.IgnImmunities)
 	if err != nil {
 		return servicetypes.Participant{}, nil, err
 	}

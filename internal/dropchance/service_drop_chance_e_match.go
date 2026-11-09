@@ -1,8 +1,8 @@
-package api
+package dropchance
 
 import "slices"
 
-type EquipmentMatcher struct {
+type equipmentMatcher struct {
 	wantedIndices     [][]int32
 	wantedLen         int32
 	minEmptySlots     *int32
@@ -10,7 +10,7 @@ type EquipmentMatcher struct {
 	optionalAbilities bool
 }
 
-func (m *EquipmentMatcher) Match(equipment *[4]int32, eqLen int32) bool {
+func (m *equipmentMatcher) Match(equipment *[4]int32, eqLen int32) bool {
 	if !m.allWantedAbilitiesPresent(equipment, eqLen) {
 		return false
 	}
@@ -29,7 +29,7 @@ func (m *EquipmentMatcher) Match(equipment *[4]int32, eqLen int32) bool {
 	return true
 }
 
-func (m *EquipmentMatcher) allWantedAbilitiesPresent(equipment *[4]int32, eqLen int32) bool {
+func (m *equipmentMatcher) allWantedAbilitiesPresent(equipment *[4]int32, eqLen int32) bool {
 	for _, wantedIdxGroup := range m.wantedIndices {
 		var found bool
 
@@ -48,7 +48,7 @@ func (m *EquipmentMatcher) allWantedAbilitiesPresent(equipment *[4]int32, eqLen 
 	return true
 }
 
-func (m *EquipmentMatcher) strictAbilitiesMatch(eqLen int32) bool {
+func (m *equipmentMatcher) strictAbilitiesMatch(eqLen int32) bool {
 	if !m.optionalAbilities && m.wantedLen != eqLen {
 		return false
 	}
@@ -56,7 +56,7 @@ func (m *EquipmentMatcher) strictAbilitiesMatch(eqLen int32) bool {
 	return true
 }
 
-func (m *EquipmentMatcher) emptySlotsPossible(eqLen int32) bool {
+func (m *equipmentMatcher) emptySlotsPossible(eqLen int32) bool {
 	actualEmptySlots := m.equipmentSlots - eqLen
 
 	if actualEmptySlots < 0 {

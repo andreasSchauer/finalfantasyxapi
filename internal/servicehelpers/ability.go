@@ -1,4 +1,5 @@
-package api
+// Package servicehelpers asjdasd
+package servicehelpers
 
 import (
 	"fmt"
@@ -11,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func quickAssembleAbility(abilityID int32, interactionPtr *int32) (seedtypes.Ability, seedtypes.BattleInteraction, error) {
+func QuickAssembleAbility(abilityID int32, interactionPtr *int32) (seedtypes.Ability, seedtypes.BattleInteraction, error) {
 	ability, _ := lookup.GetResourceByID(abilityID, lookup.L.AbilitiesID)
 	abilityType := string(ability.Type)
 	abilityString := h.NameToString(ability.Name, ability.Version, &abilityType)

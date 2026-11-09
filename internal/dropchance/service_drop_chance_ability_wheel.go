@@ -1,4 +1,4 @@
-package api
+package dropchance
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-type AbilityWheel struct {
+type abilityWheel struct {
 	Characters   []seedtypes.Character
 	PrioritySlot *string
 	Abilities    [7]string
@@ -18,7 +18,7 @@ type AbilityWheel struct {
 	IndexedNames [8]string
 }
 
-func (w *AbilityWheel) compileClashes() {
+func (w *abilityWheel) compileClashes() {
 	copy(w.IndexedNames[:7], w.Abilities[:])
 
 	if w.PrioritySlot != nil {
@@ -55,9 +55,9 @@ func getTargetIdxGroup(targetName string, indexedNames [8]string) []int32 {
 	return targetIndexGroup
 }
 
-func createAbilityWheels(abilities []seedtypes.EquipmentDrop, params servicetypes.DropChanceParams) []AbilityWheel {
+func createAbilityWheels(abilities []seedtypes.EquipmentDrop, params servicetypes.DropChanceParams) []abilityWheel {
 	uniqueKeys := getUniqueWheelKeys(abilities, params)
-	var wheels []AbilityWheel
+	var wheels []abilityWheel
 
 	if params.CharacterID != nil {
 		char, _ := lookup.GetResourceByID(*params.CharacterID, lookup.L.CharactersID)
@@ -79,8 +79,8 @@ func createAbilityWheels(abilities []seedtypes.EquipmentDrop, params servicetype
 	return wheels
 }
 
-func createAbilityWheel(abilities []seedtypes.EquipmentDrop, char seedtypes.Character) AbilityWheel {
-	var wheel AbilityWheel
+func createAbilityWheel(abilities []seedtypes.EquipmentDrop, char seedtypes.Character) abilityWheel {
+	var wheel abilityWheel
 
 	idx := 0
 	for _, ability := range abilities {
@@ -106,7 +106,7 @@ func createAbilityWheel(abilities []seedtypes.EquipmentDrop, char seedtypes.Char
 	return wheel
 }
 
-func sortAbilityWheels(a, b AbilityWheel) int {
+func sortAbilityWheels(a, b abilityWheel) int {
 	aID := a.Characters[0].ID
 	bID := b.Characters[0].ID
 

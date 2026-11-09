@@ -1,4 +1,5 @@
-package api
+// Package albhed ajsdoasdoij
+package albhed
 
 import (
 	"net/http"
@@ -10,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-func handleAlBhed(params servicetypes.AlBhedParams) (servicetypes.AlBhedResponse, error) {
+func Handle(params servicetypes.AlBhedParams) (servicetypes.AlBhedResponse, error) {
 	response := servicetypes.AlBhedResponse{
 		OriginalText: params.Text,
 		Direction:    params.Direction,

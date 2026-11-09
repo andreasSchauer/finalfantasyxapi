@@ -1,4 +1,4 @@
-package api
+package dropchance
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"

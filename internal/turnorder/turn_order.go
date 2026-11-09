@@ -1,4 +1,5 @@
-package api
+// Package turnorder asdjiasd
+package turnorder
 
 import (
 	"slices"
@@ -7,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-type TurnParams struct {
+type turnParams struct {
 	Name          string
 	Party         servicetypes.BattleParty
 	PriorityKey   string
@@ -16,7 +17,7 @@ type TurnParams struct {
 	TicksNextTurn int32
 }
 
-func handleTurnOrder(params servicetypes.TurnOrderParams) (servicetypes.TurnOrderResponse, error) {
+func Handle(params servicetypes.TurnOrderParams) (servicetypes.TurnOrderResponse, error) {
 	var err error
 
 	response := servicetypes.TurnOrderResponse{

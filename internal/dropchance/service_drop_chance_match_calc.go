@@ -1,4 +1,4 @@
-package api
+package dropchance
 
 import (
 	"runtime"
@@ -9,20 +9,20 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-type EquipmentMatchParams struct {
+type equipmentMatchParams struct {
 	WantedAbilities   []seedtypes.AutoAbility
 	WantedIndices     [][]int32
 	OptionalAbilities bool
 	MinEmptySlots     *int32
 	EquipmentSlots    int32
 	ShotAmt           int32
-	AbilityWheel      AbilityWheel
+	AbilityWheel      abilityWheel
 }
 
-func (p EquipmentMatchParams) calcChance() float64 {
+func (p equipmentMatchParams) calcChance() float64 {
 	baseEquipment, baseEqLen := p.initEquipment()
 
-	matcher := EquipmentMatcher{
+	matcher := equipmentMatcher{
 		wantedIndices:     p.WantedIndices,
 		wantedLen:         h.Len32(p.WantedAbilities),
 		minEmptySlots:     p.MinEmptySlots,
@@ -38,7 +38,7 @@ func (p EquipmentMatchParams) calcChance() float64 {
 		return 0
 	}
 
-	assembler := EquipmentAssembler{
+	assembler := equipmentAssembler{
 		indexedNames:   p.AbilityWheel.IndexedNames,
 		clashes:        p.AbilityWheel.Clashes,
 		equipment:      baseEquipment,

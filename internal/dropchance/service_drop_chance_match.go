@@ -1,4 +1,4 @@
-package api
+package dropchance
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
-type MatchChanceParams struct {
+type matchChanceParams struct {
 	mon              seedtypes.Monster
 	wantedAbilities  []seedtypes.AutoAbility
 	monAbilities     []seedtypes.EquipmentDrop
@@ -16,7 +16,7 @@ type MatchChanceParams struct {
 	characterChances servicetypes.CharacterChances
 }
 
-func (p MatchChanceParams) calcChances(params servicetypes.DropChanceParams) servicetypes.EquipmentMatchChances {
+func (p matchChanceParams) calcChances(params servicetypes.DropChanceParams) servicetypes.EquipmentMatchChances {
 	equipTypeChance := 0.5
 	wheels := createAbilityWheels(p.monAbilities, params)
 
@@ -37,7 +37,7 @@ func (p MatchChanceParams) calcChances(params servicetypes.DropChanceParams) ser
 			for _, shots := range p.shotsTable {
 				shotWeight := h.PercentageToDecimal(shots.Chance)
 
-				matchParams := EquipmentMatchParams{
+				matchParams := equipmentMatchParams{
 					WantedAbilities:   p.wantedAbilities,
 					WantedIndices:     wantedIndices,
 					OptionalAbilities: params.OptionalAbilities,
@@ -84,7 +84,7 @@ func extractAbilitySlots(params servicetypes.DropChanceParams, mon seedtypes.Mon
 	return chances
 }
 
-func getWheelWeights(wheel AbilityWheel, cc servicetypes.CharacterChances) (float64, float64) {
+func getWheelWeights(wheel abilityWheel, cc servicetypes.CharacterChances) (float64, float64) {
 	if cc.SpecificChar != nil {
 		specificChar := *cc.SpecificChar
 		return specificChar.FinBlow, specificChar.NoFinBlow
@@ -102,7 +102,7 @@ func getWheelWeights(wheel AbilityWheel, cc servicetypes.CharacterChances) (floa
 	return wheelWeightFinBlow, wheelWeightNoFinBlow
 }
 
-func getWantedIndices(wantedAbilities []seedtypes.AutoAbility, wheel AbilityWheel) ([][]int32, error) {
+func getWantedIndices(wantedAbilities []seedtypes.AutoAbility, wheel abilityWheel) ([][]int32, error) {
 	var idxGroups [][]int32
 
 	for _, ability := range wantedAbilities {

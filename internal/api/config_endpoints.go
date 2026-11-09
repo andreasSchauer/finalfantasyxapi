@@ -1,11 +1,14 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/albhed"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/critchance"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/dropchance"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/filters"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/get"
@@ -15,6 +18,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/serviceverify"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/turnorder"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -939,7 +943,7 @@ func InitEndpoints() {
 	apilookups.E.AlBhed = handlerinput.Service[servicetypes.AlBhedParams, servicetypes.AlBhedResponse]{
 		Endpoint:  ts.EpAlBhed,
 		VerifyFn:  serviceverify.VerifyAlBhedParams,
-		ExecuteFn: handleAlBhed,
+		ExecuteFn: albhed.Handle,
 		DocsFn:    servicetypes.GetAlBhedParamsDoc,
 		Samples:   servicetypes.AlBhedParamsSamples,
 	}
@@ -947,7 +951,7 @@ func InitEndpoints() {
 	apilookups.E.TurnOrder = handlerinput.Service[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]{
 		Endpoint:  ts.EpTurnOrder,
 		VerifyFn:  serviceverify.VerifyTurnOrderParams,
-		ExecuteFn: handleTurnOrder,
+		ExecuteFn: turnorder.Handle,
 		DocsFn:    servicetypes.GetTurnOrderParamsDoc,
 		Samples:   servicetypes.TurnOrderParamsSamples,
 	}
@@ -955,7 +959,7 @@ func InitEndpoints() {
 	apilookups.E.DropChance = handlerinput.Service[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]{
 		Endpoint:  ts.EpDropChance,
 		VerifyFn:  serviceverify.VerifyDropChanceParams,
-		ExecuteFn: handleDropChance,
+		ExecuteFn: dropchance.Handle,
 		DocsFn:    servicetypes.GetDropChanceParamsDoc,
 		Samples:   servicetypes.DropChanceParamsSamples,
 	}
@@ -963,7 +967,7 @@ func InitEndpoints() {
 	apilookups.E.CritChance = handlerinput.Service[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]{
 		Endpoint:  ts.EpCritChance,
 		VerifyFn:  serviceverify.VerifyCritChanceParams,
-		ExecuteFn: handleCritChance,
+		ExecuteFn: critchance.Handle,
 		DocsFn:    servicetypes.GetCritChanceParamsDoc,
 		Samples:   servicetypes.CritChanceParamsSamples,
 	}

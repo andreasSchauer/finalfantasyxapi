@@ -1,4 +1,4 @@
-package api
+package dropchance
 
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"

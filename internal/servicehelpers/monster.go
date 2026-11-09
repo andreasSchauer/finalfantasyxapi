@@ -1,4 +1,4 @@
-package api
+package servicehelpers
 
 import (
 	"fmt"
@@ -9,6 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -16,7 +17,7 @@ import (
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 )
 
-func quickAssembleMon(monID int32, altStatePtr *int32) (apitypes.Monster, error) {
+func QuickAssembleMon(monID int32, altStatePtr *int32) (apitypes.Monster, error) {
 	monsterLookup, _ := lookup.GetResourceByID(monID, lookup.L.MonstersID)
 
 	monster := apitypes.Monster{
@@ -51,7 +52,7 @@ func quickAssembleMon(monID int32, altStatePtr *int32) (apitypes.Monster, error)
 	return monster, nil
 }
 
-func monsterHasFirstStrike(mon apitypes.Monster) bool {
+func MonsterHasFirstStrike(mon apitypes.Monster) bool {
 	for _, aa := range mon.AutoAbilities {
 		if aa.Name == "first strike" {
 			return true
@@ -81,4 +82,35 @@ func monImmuneToStatus(status string, mon apitypes.Monster) bool {
 	}
 
 	return false
+}
+
+func FetchMonsterHasteStatus(mon apitypes.Monster, statusPtr *string, ignImmunities bool) (*string, error) {
+	const statusSlow = string(database.HasteStatusSlow)
+	const statusHaste = string(database.HasteStatusHaste)
+	const statusAutoHaste = string(database.HasteStatusAutoHaste)
+
+	if monHasAppliedStatus(mon) {
+		monStatus := mon.AppliedState.AppliedStatus.StatusCondition.Name
+
+		if statusPtr == nil && (monStatus == statusHaste || monStatus == statusSlow) {
+			statusPtr = &monStatus
+		}
+	}
+
+	if statusPtr == nil {
+		return nil, nil
+	}
+
+	status := *statusPtr
+
+	if status == statusAutoHaste {
+		status = statusHaste
+	}
+
+	err := enforceMonImmunity(status, mon, ignImmunities)
+	if err != nil {
+		return nil, err
+	}
+
+	return &status, nil
 }
