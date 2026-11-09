@@ -1,27 +1,8 @@
 package api
 
 import (
-	"fmt"
 	"strconv"
-	"strings"
-
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
-
-func getPathSegments(path string, endpoint ts.EndpointName) []string {
-	prefix := fmt.Sprintf("/api/%s", endpoint)
-	pathLower := strings.ToLower(path)
-	pathTrimmed := strings.TrimPrefix(pathLower, prefix)
-	pathTrimmed = strings.TrimPrefix(pathTrimmed, "/")
-	pathTrimmed = strings.TrimSuffix(pathTrimmed, "/")
-	segments := []string{}
-
-	if pathTrimmed != "" {
-		segments = strings.Split(pathTrimmed, "/")
-	}
-
-	return segments
-}
 
 func isValidInt(idStr string) bool {
 	_, err := strconv.Atoi(idStr)

@@ -29,12 +29,9 @@ func getSubquest(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apityp
 		Completion:      apiconv.ConvertQuestCompletion(*subquest.Completion),
 	}
 
-	if response.ParentSidequest.Sidequest == "monster arena" {
-		response.ArenaCreation = handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.ArenaCreations, &subquest.Name, nil)
-	}
-
-	return response, nil
+	return CompleteSubquestResponse(response), nil
 }
+
 
 func retrieveSubquests(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

@@ -44,21 +44,9 @@ func getCharacter(r *http.Request, i handlerinput.Main[seedtypes.Character, apit
 		OverdriveModes:         rel.OverdriveModes,
 	}
 
-	response.BaseStats, err = applyOsgStats(r, response)
-	if err != nil {
-		return apitypes.Character{}, err
-	}
-
-	response.RegenAmounts = calcRegenAmounts(response.BaseStats)
-	response.CelestialFormula = getCharacterClstlFormula(response)
-
-	response.AgilityParameters, err = getUnitAgilityParams(r, response.BaseStats)
-	if err != nil {
-		return apitypes.Character{}, err
-	}
-
-	return response, nil
+	return completeCharacterResponse(r, response)
 }
+
 
 func retrieveCharacters(r *http.Request, i handlerinput.Main[seedtypes.Character, apitypes.Character, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

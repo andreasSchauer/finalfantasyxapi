@@ -3,7 +3,6 @@ package api
 import (
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -20,9 +19,7 @@ func getMix(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, ap
 		return apitypes.Mix{}, err
 	}
 
-	overdrive, _ := lookup.GetResourceByID(mix.OverdriveID, lookup.L.OverdrivesID)
-
-	combinations, err := getMixCombinations(r, mix)
+	rel, err := GetMixRelationships(r, mix)
 	if err != nil {
 		return apitypes.Mix{}, err
 	}
@@ -31,14 +28,15 @@ func getMix(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, ap
 		ID:           mix.ID,
 		Name:         mix.Name,
 		Category:     mix.Category,
-		Overdrive:    handlerinput.NameToNamedAPIResource(apilookups.E.Overdrives, overdrive.Name, nil),
-		Description:  overdrive.Description,
-		Effect:       overdrive.Effect,
-		Combinations: combinations,
+		Overdrive:    rel.Overdrive,
+		Description:  rel.Description,
+		Effect:       rel.Effect,
+		Combinations: rel.Combinations,
 	}
 
 	return response, nil
 }
+
 
 func retrieveMixes(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

@@ -13,7 +13,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func createAreaSimple(r *http.Request, id int32, subsection handlerinput.Subsection) (apiresource.SimpleResource, error) {
+func CreateAreaSimple(r *http.Request, id int32, subsection handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := apilookups.E.Areas
 	area, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 

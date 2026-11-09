@@ -14,7 +14,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func createAutoAbilitySimple(r *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
+func CreateAutoAbilitySimple(r *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := apilookups.E.AutoAbilities
 	autoAbility, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 

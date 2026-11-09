@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
-func createMonsterFormationSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
+func CreateMonsterFormationSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := apilookups.E.MonsterFormations
 	formation, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
@@ -20,7 +20,7 @@ func createMonsterFormationSimple(_ *http.Request, id int32, _ handlerinput.Subs
 		URL:            ah.CreateResourceURL(i.Endpoint, id),
 		Category:       formation.FormationData.Category,
 		IsForcedAmbush: formation.FormationData.IsForcedAmbush,
-		FormationLoot:  getFormationLoot(formation),
+		FormationLoot:  GetFormationLoot(formation),
 		Monsters:       ah.ConvertObjSlice(formation.Monsters, monsterAmountString),
 		Areas:          locAreaStrings(formation.EncounterAreas),
 	}

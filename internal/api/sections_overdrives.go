@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 )
 
-func createOverdriveSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
+func CreateOverdriveSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := apilookups.E.Overdrives
 	overdrive, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 

@@ -9,7 +9,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -23,24 +22,22 @@ func getEquipmentTable(r *http.Request, i handlerinput.Main[seedtypes.EquipmentT
 		return apitypes.EquipmentTable{}, err
 	}
 
+	rel, err := GetEquipmentTableRelationships(r, table)
+	if err != nil {
+		return apitypes.EquipmentTable{}, err
+	}
+
 	response := apitypes.EquipmentTable{
 		ID:                      table.ID,
 		Type:                    table.Type,
 		Classification:          table.Classification,
 		SpecificCharacter:       handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Characters, table.SpecificCharacter, nil),
 		Priority:                table.Priority,
+		CelestialWeapon:		 rel.CelestialWeapon,
 		RequiredAutoAbilities:   handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, table.RequiredAutoAbilities),
 		SelectableAutoAbilities: ah.ConvertObjSlice(table.SelectableAutoAbilities, apiconv.ConvertAbilityPool),
 		RequiredSlots:           table.RequiredSlots,
 		Equipment:               ah.ConvertObjSlice(table.EquipmentNames, apiconv.ConvertEquipmentName),
-	}
-
-	if table.SpecificCharacter != nil && table.Classification == string(database.EquipClassCelestialWeapon) {
-		classRes, err := apilookups.E.CelestialWeapons.DBGetRelationPtr(r.Context(), table, config.Cfg.DB.GetEquipmentTableCelestialWeaponID)
-		if err != nil {
-			return apitypes.EquipmentTable{}, err
-		}
-		response.CelestialWeapon = classRes
 	}
 
 	return response, nil

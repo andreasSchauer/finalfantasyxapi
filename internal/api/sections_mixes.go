@@ -16,14 +16,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func createMixSimple(r *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
+func CreateMixSimple(r *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := apilookups.E.Mixes
 	mix, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	combinations := mix.PossibleCombinations
 
 	prefix := fmt.Sprintf("/api/%s", apilookups.E.Items.Endpoint)
 	path := strings.ToLower(r.URL.Path)
-	segments := getPathSegments(path, apilookups.E.Items.Endpoint)
+	segments := ah.GetPathSegments(path, apilookups.E.Items.Endpoint)
 	isItemsSection := len(segments) == 2 && strings.HasPrefix(path, prefix)
 
 	if isItemsSection {

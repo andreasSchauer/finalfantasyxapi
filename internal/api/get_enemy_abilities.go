@@ -23,7 +23,7 @@ func getEnemyAbility(r *http.Request, i handlerinput.Main[seedtypes.EnemyAbility
 		return apitypes.EnemyAbility{}, err
 	}
 
-	monsters, err := apilookups.E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetEnemyAbilityMonsterIDs)
+	rel, err := GetEnemyAbilityRelationships(r, ability)
 	if err != nil {
 		return apitypes.EnemyAbility{}, err
 	}
@@ -38,7 +38,7 @@ func getEnemyAbility(r *http.Request, i handlerinput.Main[seedtypes.EnemyAbility
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
-		Monsters:           monsters,
+		Monsters:           rel.Monsters,
 		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 

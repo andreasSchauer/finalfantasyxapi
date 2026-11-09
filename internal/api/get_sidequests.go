@@ -8,7 +8,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -19,7 +18,7 @@ func getSidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apit
 		return apitypes.Sidequest{}, err
 	}
 
-	subquests, err := apilookups.E.Subquests.DBGetRelations(r.Context(), sidequest, config.Cfg.DB.GetSidequestSubquestIDs)
+	rel, err := GetSidequestRelationships(r, sidequest)
 	if err != nil {
 		return apitypes.Sidequest{}, err
 	}
@@ -31,11 +30,12 @@ func getSidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apit
 		Availability: sidequest.Availability,
 		IsRepeatable: sidequest.IsRepeatable,
 		Completion:   ah.ConvertObjPtr(sidequest.Completion, apiconv.ConvertQuestCompletion),
-		Subquests:    subquests,
+		Subquests:    rel.Subquests,
 	}
 
 	return response, nil
 }
+
 
 func retrieveSidequests(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apitypes.Sidequest, apiresource.Quest]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

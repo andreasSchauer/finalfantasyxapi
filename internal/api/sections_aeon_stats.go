@@ -44,7 +44,7 @@ func newAeonStatTable(baseStats []seedtypes.BaseStat) sectiontypes.AeonStatTable
 	}
 }
 
-func createAeonStatSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
+func CreateAeonStatSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := apilookups.E.Aeons
 	aeon, _ := lookup.GetResourceByID(id, lookup.L.AeonsID)
 

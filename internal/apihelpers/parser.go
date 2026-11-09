@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -11,6 +12,23 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
+
+
+func GetPathSegments(path string, endpoint ts.EndpointName) []string {
+	prefix := fmt.Sprintf("/api/%s", endpoint)
+	pathLower := strings.ToLower(path)
+	pathTrimmed := strings.TrimPrefix(pathLower, prefix)
+	pathTrimmed = strings.TrimPrefix(pathTrimmed, "/")
+	pathTrimmed = strings.TrimSuffix(pathTrimmed, "/")
+	segments := []string{}
+
+	if pathTrimmed != "" {
+		segments = strings.Split(pathTrimmed, "/")
+	}
+
+	return segments
+}
+
 
 type ParseResponse struct {
 	ID   int32

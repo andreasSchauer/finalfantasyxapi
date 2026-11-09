@@ -10,6 +10,14 @@ import (
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 )
 
+func ConvertMonsterAbility(ability seedtypes.MonsterAbility) apitypes.MonsterAbility {
+	return apitypes.MonsterAbility{
+		Ability:  handlerinput.KeyToTypedAPIResource(apilookups.E.Abilities, ability.AbilityReference),
+		IsForced: ability.IsForced,
+		IsUnused: ability.IsUnused,
+	}
+}
+
 func ConvertAlt(asc seedtypes.Alt) apitypes.Alt {
 	return apitypes.Alt{
 		Properties:       h.SliceOrNil(handlerinput.NamesToNamedAPIResources(apilookups.E.Properties, asc.Properties)),

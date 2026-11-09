@@ -33,6 +33,10 @@ func getSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song,
 		InGameName:           song.InGameName,
 		OstName:              song.OSTName,
 		Translation:          song.Translation,
+		Composer: 			  rel.Composer,
+		Arranger: 			  rel.Arranger,
+		Performer: 			  rel.Performer,
+		Lyricist: 			  rel.Lyricist,
 		DurationInSeconds:    song.DurationInSeconds,
 		CanLoop:              song.CanLoop,
 		SpecialUseCase:       song.SpecialUseCase,
@@ -46,15 +50,9 @@ func getSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song,
 		FMVs:                 rel.FMVs,
 	}
 
-	if song.Credits != nil {
-		response.Composer = song.Credits.Composer
-		response.Arranger = song.Credits.Arranger
-		response.Performer = song.Credits.Performer
-		response.Lyricist = song.Credits.Lyricist
-	}
-
 	return response, nil
 }
+
 
 func retrieveSongs(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

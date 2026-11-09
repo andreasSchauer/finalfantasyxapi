@@ -48,19 +48,7 @@ func getAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon,
 		ArmorAbilities:         ah.ConvertObjSlice(aeon.Armor, apiconv.ConvertAeonEquipment),
 	}
 
-	response, err = applyAeonStats(r, response, nil)
-	if err != nil {
-		return apitypes.Aeon{}, err
-	}
-
-	response.RegenAmounts = calcRegenAmounts(response.BaseStats)
-
-	response.AgilityParameters, err = getUnitAgilityParams(r, response.BaseStats)
-	if err != nil {
-		return apitypes.Aeon{}, err
-	}
-
-	return response, nil
+	return completeAeonResponse(r, response)
 }
 
 func retrieveAeons(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named]) ([]int32, error) {

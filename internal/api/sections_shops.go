@@ -58,7 +58,7 @@ func foundEquipmentAbilitiesStringPtr(fe seedtypes.TreasureEquipment) *string {
 	}
 }
 
-func createShopSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
+func CreateShopSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
 	i := apilookups.E.Shops
 	shop, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 

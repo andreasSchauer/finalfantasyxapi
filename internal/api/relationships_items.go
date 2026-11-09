@@ -30,6 +30,13 @@ func getItemRelationships(r *http.Request, item seedtypes.Item) (apitypes.Item, 
 		rel.Sphere = &sphereRes
 	}
 
+	var itemAbilityNamePtr *string
+	if len(item.BattleInteractions) > 0 {
+		itemAbilityNamePtr = &item.Name
+	}
+
+	rel.ItemAbility = handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.ItemAbilities, itemAbilityNamePtr, nil)
+
 	return rel, nil
 }
 

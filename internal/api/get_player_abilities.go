@@ -23,7 +23,7 @@ func getPlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbili
 		return apitypes.PlayerAbility{}, err
 	}
 
-	monsters, err := apilookups.E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetPlayerAbilityMonsterIDs)
+	rel, err := GetPlayerAbilityRelationships(r, ability)
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
 	}
@@ -51,7 +51,7 @@ func getPlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbili
 		Submenu:               handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, ability.Submenu, nil),
 		OpenSubmenu:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:                ability.Cursor,
-		Monsters:              monsters,
+		Monsters:              rel.Monsters,
 		BattleInteractions:    ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 

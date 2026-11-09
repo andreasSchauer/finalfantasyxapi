@@ -111,3 +111,21 @@ func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.Resource
 
 	return modeAmount, nil
 }
+
+
+func completeCharacterResponse(r *http.Request, char apitypes.Character) (apitypes.Character, error) {
+	char, err := ApplyOsgStats(r, char)
+	if err != nil {
+		return apitypes.Character{}, err
+	}
+
+	char.RegenAmounts = calcRegenAmounts(char.BaseStats)
+	char.CelestialFormula = getCharacterClstlFormula(char)
+
+	char.AgilityParameters, err = getUnitAgilityParams(r, char.BaseStats)
+	if err != nil {
+		return apitypes.Character{}, err
+	}
+
+	return char, nil
+}

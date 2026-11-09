@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getFormationLoot(formation seedtypes.MonsterFormation) apitypes.FormationLoot {
+func GetFormationLoot(formation seedtypes.MonsterFormation) apitypes.FormationLoot {
 	var loot apitypes.FormationLoot
 
 	for _, monAmt := range formation.Monsters {

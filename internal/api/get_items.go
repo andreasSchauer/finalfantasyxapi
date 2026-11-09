@@ -20,11 +20,6 @@ func getItem(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes.Item,
 		return apitypes.Item{}, err
 	}
 
-	var itemAbilityNamePtr *string
-	if len(item.BattleInteractions) > 0 {
-		itemAbilityNamePtr = &item.Name
-	}
-
 	rel, err := getItemRelationships(r, item)
 	if err != nil {
 		return apitypes.Item{}, err
@@ -41,7 +36,7 @@ func getItem(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes.Item,
 		Usability:          item.Usability,
 		BasePrice:          item.BasePrice,
 		SellValue:          item.SellValue,
-		ItemAbility:        handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.ItemAbilities, itemAbilityNamePtr, nil),
+		ItemAbility:        rel.ItemAbility,
 		Sphere:             rel.Sphere,
 		AvailableMenus:     handlerinput.NamesToNamedAPIResources(apilookups.E.Submenus, item.AvailableMenus),
 		RelatedStats:       handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, item.RelatedStats),

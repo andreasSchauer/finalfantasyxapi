@@ -43,12 +43,12 @@ func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http
 		return nil, err
 	}
 
-	err = verifyAbilityUsage(ability, repl, queryName)
+	err = repl.verifyAbilityUsage(ability, queryName)
 	if err != nil {
 		return nil, err
 	}
 
-	battleInteractions := applyBiReplacement(ability.GetBattleInteractions(), repl.replVals)
+	battleInteractions := repl.applyBiReplacement(ability.GetBattleInteractions())
 
 	return battleInteractions, nil
 }
@@ -83,13 +83,13 @@ func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *ht
 
 	switch repl.unit.Type {
 	case database.UnitTypeCharacter:
-		repl, err = populateReplCharacter(repl, queryParamUser)
+		err = repl.populateChar(queryParamUser)
 		if err != nil {
 			return unitRepl{}, err
 		}
 
 	case database.UnitTypeAeon:
-		repl, err = populateReplAeon(repl, queryParamUser)
+		err = repl.populateAeon(queryParamUser)
 		if err != nil {
 			return unitRepl{}, err
 		}
@@ -98,7 +98,7 @@ func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *ht
 	return repl, nil
 }
 
-func populateReplCharacter(repl unitRepl, queryParamUser queryparam.QueryParam) (unitRepl, error) {
+func (repl *unitRepl) populateChar(queryParamUser queryparam.QueryParam) error {
 	charFormulas := map[string]database.DamageFormula{
 		string(database.CelestialFormulaHpHigh): database.DamageFormulaClstlHpHigh,
 		string(database.CelestialFormulaHpLow):  database.DamageFormulaClstlHpLow,
@@ -107,7 +107,7 @@ func populateReplCharacter(repl unitRepl, queryParamUser queryparam.QueryParam) 
 
 	id, err := queryParamUser.CheckNameID(repl.unit.Name, ts.ResTypeSingle(repl.unit.Type), lookup.L.Characters)
 	if err != nil {
-		return unitRepl{}, err
+		return err
 	}
 	character, _ := lookup.GetResourceByID(id, lookup.L.CharactersID)
 
@@ -120,24 +120,24 @@ func populateReplCharacter(repl unitRepl, queryParamUser queryparam.QueryParam) 
 	if repl.isCelestial {
 		clstlWpn, err := lookup.GetResourceByID(id, lookup.L.CelestialWeaponsID)
 		if err != nil {
-			return unitRepl{}, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't have a celestial weapon", character), err)
+			return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s doesn't have a celestial weapon", character), err)
 		}
 
 		formula := string(charFormulas[clstlWpn.Formula])
 		repl.replVals.DamageFormula = &formula
 	}
 
-	return repl, nil
+	return nil
 }
 
-func populateReplAeon(repl unitRepl, queryParamUser queryparam.QueryParam) (unitRepl, error) {
+func (repl *unitRepl) populateAeon(queryParamUser queryparam.QueryParam) error {
 	if repl.isCelestial {
-		return unitRepl{}, errs.NewHTTPError(http.StatusBadRequest, "aeons don't use celestial weapons", nil)
+		return errs.NewHTTPError(http.StatusBadRequest, "aeons don't use celestial weapons", nil)
 	}
 
 	id, err := queryParamUser.CheckNameID(repl.unit.Name, ts.ResTypeSingle(repl.unit.Type), lookup.L.Aeons)
 	if err != nil {
-		return unitRepl{}, err
+		return err
 	}
 	aeon, _ := lookup.GetResourceByID(id, lookup.L.AeonsID)
 
@@ -146,10 +146,10 @@ func populateReplAeon(repl unitRepl, queryParamUser queryparam.QueryParam) (unit
 	repl.replVals.Accuracy = ah.ConvertObjPtr(aeon.PhysAtkAccuracy, apiconv.ConvertAccuracy)
 	repl.replVals.DamageConstant = aeon.PhysAtkDmgConstant
 
-	return repl, nil
+	return nil
 }
 
-func verifyAbilityUsage(ability apitypes.UserAbility, repl unitRepl, queryName ts.QueryParamName) error {
+func (repl unitRepl) verifyAbilityUsage(ability apitypes.UserAbility, queryName ts.QueryParamName) error {
 	if !ability.CanUseAbility(repl.unit.Name) {
 		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, apilookups.E.PlayerUnits.ResTypeSingle, repl.unit.Name, ability), nil)
 	}
@@ -157,7 +157,9 @@ func verifyAbilityUsage(ability apitypes.UserAbility, repl unitRepl, queryName t
 	return nil
 }
 
-func applyBiReplacement(battleInteractions []apitypes.BattleInteraction, replVals biReplacement) []apitypes.BattleInteraction {
+func (repl unitRepl) applyBiReplacement(battleInteractions []apitypes.BattleInteraction) []apitypes.BattleInteraction {
+	replVals := repl.replVals
+
 	for i, battleInteraction := range battleInteractions {
 		if !battleInteraction.BasedOnUserAttack {
 			continue

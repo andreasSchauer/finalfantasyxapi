@@ -22,7 +22,7 @@ func getAbility(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes
 		return apitypes.Ability{}, err
 	}
 
-	monsters, err := apilookups.E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetAbilityMonsterIDs)
+	rel, err := GetAbilityRelationships(r, ability)
 	if err != nil {
 		return apitypes.Ability{}, err
 	}
@@ -37,7 +37,7 @@ func getAbility(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes
 		CanCopycat:         ability.CanCopycat,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		TypedAbility:       apiconv.RefToNamedAPIResource(ability.GetAbilityRef()),
-		Monsters:           monsters,
+		Monsters:           rel.Monsters,
 		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 

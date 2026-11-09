@@ -18,13 +18,7 @@ func getAeonCommand(r *http.Request, i handlerinput.Main[seedtypes.AeonCommand, 
 		return apitypes.AeonCommand{}, err
 	}
 
-	var userName string
-
-	if len(command.PossibleAbilities) == 3 {
-		userName = "magus-sisters"
-	} else {
-		userName = command.PossibleAbilities[0].User
-	}
+	rel := GetAeonCommandRelationships(r, command)
 
 	response := apitypes.AeonCommand{
 		ID:                command.ID,
@@ -32,7 +26,7 @@ func getAeonCommand(r *http.Request, i handlerinput.Main[seedtypes.AeonCommand, 
 		Description:       command.Description,
 		Effect:            command.Effect,
 		Cursor:            command.Cursor,
-		User:              handlerinput.NameToNamedAPIResource(apilookups.E.CharacterClasses, userName, nil),
+		User:              rel.User,
 		Topmenu:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Topmenus, command.Topmenu, nil),
 		OpenSubmenu:       handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, command.OpenSubmenu, nil),
 		PossibleAbilities: ah.ConvertObjSlice(command.PossibleAbilities, apiconv.ConvertPossibleAbilityList),

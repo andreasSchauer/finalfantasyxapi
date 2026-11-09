@@ -6,7 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -17,7 +16,7 @@ func getRonsoRage(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apit
 		return apitypes.RonsoRage{}, err
 	}
 
-	monsters, err := apilookups.E.Monsters.DBGetRelations(r.Context(), ronsoRage, config.Cfg.DB.GetRonsoRageMonsterIDs)
+	rel, err := GetRonsoRageRelationships(r, ronsoRage)
 	if err != nil {
 		return apitypes.RonsoRage{}, err
 	}
@@ -28,7 +27,7 @@ func getRonsoRage(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apit
 		Description: ronsoRage.Description,
 		Effect:      ronsoRage.Effect,
 		Overdrive:   handlerinput.NameToNamedAPIResource(apilookups.E.Overdrives, ronsoRage.Name, nil),
-		Monsters:    monsters,
+		Monsters:    rel.Monsters,
 	}
 
 	return response, nil

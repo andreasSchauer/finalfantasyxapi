@@ -23,30 +23,28 @@ func getItemAbility(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, 
 		return apitypes.ItemAbility{}, err
 	}
 
-	item, _ := lookup.GetResourceByID(id, lookup.L.ItemsID)
+	rel := GetItemAbilityRelationships(r, ability)
 
 	response := apitypes.ItemAbility{
-		ID:                 ability.ID,
-		Name:               ability.Name,
-		Item:               handlerinput.IDToNamedAPIResource(apilookups.E.Items, id),
-		UntypedAbility:     handlerinput.IDToTypedAPIResource(apilookups.E.Abilities, ability.Ability.ID),
-		Description:        item.Description,
-		Effect:             item.Effect,
-		Category:           item.Category,
-		Rank:               ability.Rank,
-		AppearsInHelpBar:   ability.AppearsInHelpBar,
-		CanCopycat:         ability.CanCopycat,
-		RelatedStats:       handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, item.RelatedStats),
-		Cursor:             item.Cursor,
-		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
-	}
-
-	if item.Usability == string(database.ItemUsabilityOutsideBattle) || item.Usability == string(database.ItemUsabilityAlways) {
-		response.CanUseOutsideBattle = true
+		ID:                 	ability.ID,
+		Name:               	ability.Name,
+		Item:               	rel.Item,
+		UntypedAbility:     	handlerinput.IDToTypedAPIResource(apilookups.E.Abilities, ability.Ability.ID),
+		Description:        	rel.Description,
+		Effect:             	rel.Effect,
+		Category:           	rel.Category,
+		CanUseOutsideBattle: 	rel.CanUseOutsideBattle,
+		Rank:               	ability.Rank,
+		AppearsInHelpBar:   	ability.AppearsInHelpBar,
+		CanCopycat:         	ability.CanCopycat,
+		RelatedStats:       	rel.RelatedStats,
+		Cursor:             	rel.Cursor,
+		BattleInteractions: 	ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 
 	return response, nil
 }
+
 
 func retrieveItemAbilities(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

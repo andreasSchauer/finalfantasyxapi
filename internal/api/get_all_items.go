@@ -7,10 +7,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -21,7 +19,7 @@ func getMasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, ap
 		return apitypes.MasterItem{}, err
 	}
 
-	obtainable, err := getMasterItemObtainable(r, masterItem)
+	rel, err := GetMasterItemRelationships(r, masterItem)
 	if err != nil {
 		return apitypes.MasterItem{}, err
 	}
@@ -30,26 +28,10 @@ func getMasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, ap
 		ID:             masterItem.ID,
 		Name:           masterItem.Name,
 		Type:           masterItem.Type,
-		ObtainableFrom: obtainable,
+		ObtainableFrom: rel.ObtainableFrom,
 	}
 
-	switch masterItem.Type {
-	case database.ItemTypeItem:
-		item, _ := lookup.GetResource(masterItem, lookup.L.Items)
-
-		response.Description = item.Description
-		response.Effect = item.Effect
-		response.TypedItem = handlerinput.NameToNamedAPIResource(apilookups.E.Items, item.Name, nil)
-
-	case database.ItemTypeKeyItem:
-		keyItem, _ := lookup.GetResource(masterItem, lookup.L.KeyItems)
-
-		response.Description = keyItem.Description
-		response.Effect = keyItem.Effect
-		response.TypedItem = handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, keyItem.Name, nil)
-	}
-
-	return response, nil
+	return CompleteMasterItemResponse(r, response), nil
 }
 
 func retrieveMasterItems(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, apitypes.MasterItem, apiresource.Typed]) ([]int32, error) {

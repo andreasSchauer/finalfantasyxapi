@@ -29,44 +29,44 @@ func InitEndpoints() {
 		AvlFunc:       filterAvlLocations,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createLocationSimple,
+				CreateSubFn: CreateLocationSimple,
 				RelationsFn: getLocationSectionRelations,
 			},
 			ts.SnConnected: {
 				DBQuery:     config.Cfg.DB.GetConnectedLocationIDs,
-				CreateSubFn: createLocationSimple,
+				CreateSubFn: CreateLocationSimple,
 				RelationsFn: getLocationSectionRelations,
 			},
 			ts.SnSublocations: {
 				DBQuery:     config.Cfg.DB.GetLocationSublocationIDs,
-				CreateSubFn: createSublocationSimple,
+				CreateSubFn: CreateSublocationSimple,
 				RelationsFn: getSublocationSectionRelations,
 			},
 			ts.SnAreas: {
 				DBQuery:     config.Cfg.DB.GetLocationAreaIDs,
-				CreateSubFn: createAreaSimple,
+				CreateSubFn: CreateAreaSimple,
 				RelationsFn: getAreaSectionRelations,
 			},
 			ts.SnMonsterFormations: {
 				DBQuery:     config.Cfg.DB.GetLocationMonsterFormationIDs,
-				CreateSubFn: createMonsterFormationSimple,
+				CreateSubFn: CreateMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
 				DBQuery:     config.Cfg.DB.GetLocationMonsterIDs,
-				CreateSubFn: createMonsterSimple,
+				CreateSubFn: CreateMonsterSimple,
 				RelationsFn: getMonsterSectionRelations,
 			},
 			ts.SnShops: {
 				DBQuery:     config.Cfg.DB.GetLocationShopIDs,
-				CreateSubFn: createShopSimple,
+				CreateSubFn: CreateShopSimple,
 			},
 			ts.SnSongs: {
 				DBQuery:     getLocationSongIDs,
-				CreateSubFn: createSongSimple,
+				CreateSubFn: CreateSongSimple,
 			},
 			ts.SnTreasures: {
 				DBQuery:     config.Cfg.DB.GetLocationTreasureIDs,
-				CreateSubFn: createTreasureSimple,
+				CreateSubFn: CreateTreasureSimple,
 			},
 		},
 	}
@@ -84,38 +84,38 @@ func InitEndpoints() {
 		AvlFunc:       filterAvlSublocations,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createSublocationSimple,
+				CreateSubFn: CreateSublocationSimple,
 				RelationsFn: getSublocationSectionRelations,
 			},
 			ts.SnConnected: {
 				DBQuery:     config.Cfg.DB.GetConnectedSublocationIDs,
-				CreateSubFn: createSublocationSimple,
+				CreateSubFn: CreateSublocationSimple,
 				RelationsFn: getSublocationSectionRelations,
 			},
 			ts.SnAreas: {
 				DBQuery:     config.Cfg.DB.GetSublocationAreaIDs,
-				CreateSubFn: createAreaSimple,
+				CreateSubFn: CreateAreaSimple,
 			},
 			ts.SnMonsterFormations: {
 				DBQuery:     config.Cfg.DB.GetSublocationMonsterFormationIDs,
-				CreateSubFn: createMonsterFormationSimple,
+				CreateSubFn: CreateMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
 				DBQuery:     config.Cfg.DB.GetSublocationMonsterIDs,
-				CreateSubFn: createMonsterSimple,
+				CreateSubFn: CreateMonsterSimple,
 				RelationsFn: getMonsterSectionRelations,
 			},
 			ts.SnShops: {
 				DBQuery:     config.Cfg.DB.GetSublocationShopIDs,
-				CreateSubFn: createShopSimple,
+				CreateSubFn: CreateShopSimple,
 			},
 			ts.SnSongs: {
 				DBQuery:     getSublocationSongIDs,
-				CreateSubFn: createSongSimple,
+				CreateSubFn: CreateSongSimple,
 			},
 			ts.SnTreasures: {
 				DBQuery:     config.Cfg.DB.GetSublocationTreasureIDs,
-				CreateSubFn: createTreasureSimple,
+				CreateSubFn: CreateTreasureSimple,
 			},
 		},
 	}
@@ -133,30 +133,30 @@ func InitEndpoints() {
 		AvlFunc:       filterAvlAreas,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createAreaSimple,
+				CreateSubFn: CreateAreaSimple,
 				RelationsFn: getAreaSectionRelations,
 			},
 			ts.SnConnected: {
 				DBQuery:     config.Cfg.DB.GetAreaConnectionIDs,
-				CreateSubFn: createAreaSimple,
+				CreateSubFn: CreateAreaSimple,
 				RelationsFn: getAreaSectionRelations,
 			},
 			ts.SnMonsterFormations: {
 				DBQuery:     config.Cfg.DB.GetAreaMonsterFormationIDs,
-				CreateSubFn: createMonsterFormationSimple,
+				CreateSubFn: CreateMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
 				DBQuery:     config.Cfg.DB.GetAreaMonsterIDs,
-				CreateSubFn: createMonsterSimple,
+				CreateSubFn: CreateMonsterSimple,
 				RelationsFn: getMonsterSectionRelations,
 			},
 			ts.SnSongs: {
 				DBQuery:     getAreaSongIDs,
-				CreateSubFn: createSongSimple,
+				CreateSubFn: CreateSongSimple,
 			},
 			ts.SnTreasures: {
 				DBQuery:     config.Cfg.DB.GetAreaTreasureIDs,
-				CreateSubFn: createTreasureSimple,
+				CreateSubFn: CreateTreasureSimple,
 			},
 		},
 	}
@@ -174,11 +174,11 @@ func InitEndpoints() {
 		AvlFunc:       filterAvlMonsterFormations,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createMonsterFormationSimple,
+				CreateSubFn: CreateMonsterFormationSimple,
 			},
 			ts.SnMonsters: {
 				DBQuery:     config.Cfg.DB.GetMonsterFormationMonsterIDs,
-				CreateSubFn: createMonsterSimple,
+				CreateSubFn: CreateMonsterSimple,
 				RelationsFn: getMonsterSectionRelations,
 			},
 		},
@@ -197,7 +197,7 @@ func InitEndpoints() {
 		AvlFunc:       filterAvlShops,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createShopSimple,
+				CreateSubFn: CreateShopSimple,
 			},
 		},
 	}
@@ -242,7 +242,7 @@ func InitEndpoints() {
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSubquests: {
 				DBQuery:     config.Cfg.DB.GetSidequestSubquestIDs,
-				CreateSubFn: createSubquestSimple,
+				CreateSubFn: CreateSubquestSimple,
 			},
 		},
 	}
@@ -333,23 +333,23 @@ func InitEndpoints() {
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnDefaultAbilities: {
 				DBQuery:     config.Cfg.DB.GetCharacterDefaultAbilityIDs,
-				CreateSubFn: createPlayerAbilitySimple,
+				CreateSubFn: CreatePlayerAbilitySimple,
 			},
 			ts.SnStdSgAbilities: {
 				DBQuery:     config.Cfg.DB.GetCharacterSgAbilityIDs,
-				CreateSubFn: createPlayerAbilitySimple,
+				CreateSubFn: CreatePlayerAbilitySimple,
 			},
 			ts.SnExpSgAbilities: {
 				DBQuery:     config.Cfg.DB.GetCharacterEgAbilityIDs,
-				CreateSubFn: createPlayerAbilitySimple,
+				CreateSubFn: CreatePlayerAbilitySimple,
 			},
 			ts.SnOverdriveAbilities: {
 				DBQuery:     config.Cfg.DB.GetCharacterOverdriveAbilityIDs,
-				CreateSubFn: createOverdriveAbilitySimple,
+				CreateSubFn: CreateOverdriveAbilitySimple,
 			},
 			ts.SnOverdrives: {
 				DBQuery:     config.Cfg.DB.GetCharacterOverdriveIDs,
-				CreateSubFn: createOverdriveSimple,
+				CreateSubFn: CreateOverdriveSimple,
 			},
 		},
 	}
@@ -367,18 +367,18 @@ func InitEndpoints() {
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnDefaultAbilities: {
 				DBQuery:     config.Cfg.DB.GetAeonDefaultAbilityIDs,
-				CreateSubFn: createPlayerAbilitySimple,
+				CreateSubFn: CreatePlayerAbilitySimple,
 			},
 			ts.SnOverdriveAbilities: {
 				DBQuery:     config.Cfg.DB.GetAeonOverdriveAbilityIDs,
-				CreateSubFn: createOverdriveAbilitySimple,
+				CreateSubFn: CreateOverdriveAbilitySimple,
 			},
 			ts.SnOverdrives: {
 				DBQuery:     config.Cfg.DB.GetAeonOverdriveIDs,
-				CreateSubFn: createOverdriveSimple,
+				CreateSubFn: CreateOverdriveSimple,
 			},
 			ts.SnStats: {
-				CreateSubFn: createAeonStatSimple,
+				CreateSubFn: CreateAeonStatSimple,
 			},
 		},
 	}
@@ -396,19 +396,19 @@ func InitEndpoints() {
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnDefaultAbilities: {
 				DBQuery:     config.Cfg.DB.GetCharacterClassDefaultAbilityIDs,
-				CreateSubFn: createAbilitySimple,
+				CreateSubFn: CreateAbilitySimple,
 			},
 			ts.SnLearnableAbilities: {
 				DBQuery:     config.Cfg.DB.GetCharacterClassLearnableAbilityIDs,
-				CreateSubFn: createAbilitySimple,
+				CreateSubFn: CreateAbilitySimple,
 			},
 			ts.SnDefaultOverdrives: {
 				DBQuery:     config.Cfg.DB.GetCharacterClassDefaultOverdriveIDs,
-				CreateSubFn: createOverdriveSimple,
+				CreateSubFn: CreateOverdriveSimple,
 			},
 			ts.SnLearnableOverdrives: {
 				DBQuery:     config.Cfg.DB.GetCharacterClassLearnableOverdriveIDs,
-				CreateSubFn: createOverdriveSimple,
+				CreateSubFn: CreateOverdriveSimple,
 			},
 		},
 	}
@@ -427,21 +427,21 @@ func InitEndpoints() {
 		AvlFunc:          filterAvlMonsters,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createMonsterSimple,
+				CreateSubFn: CreateMonsterSimple,
 				RelationsFn: getMonsterSectionRelations,
 			},
 			ts.SnAbilities: {
 				DBQuery:     config.Cfg.DB.GetMonsterAbilityIDs,
-				CreateSubFn: createAbilitySimple,
+				CreateSubFn: CreateAbilitySimple,
 			},
 			ts.SnAreas: {
 				DBQuery:     config.Cfg.DB.GetMonsterAreaIDs,
-				CreateSubFn: createAreaSimple,
+				CreateSubFn: CreateAreaSimple,
 				RelationsFn: getAreaSectionRelations,
 			},
 			ts.SnMonsterFormations: {
 				DBQuery:     config.Cfg.DB.GetMonsterMonsterFormationIDs,
-				CreateSubFn: createMonsterFormationSimple,
+				CreateSubFn: CreateMonsterFormationSimple,
 			},
 		},
 	}
@@ -458,7 +458,7 @@ func InitEndpoints() {
 		RetrieveFunc:  retrieveAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createAbilitySimple,
+				CreateSubFn: CreateAbilitySimple,
 			},
 		},
 	}
@@ -476,11 +476,11 @@ func InitEndpoints() {
 		RetrieveFunc:     retrievePlayerAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createPlayerAbilitySimple,
+				CreateSubFn: CreatePlayerAbilitySimple,
 			},
 			ts.SnMonsters: {
 				DBQuery:     config.Cfg.DB.GetPlayerAbilityMonsterIDs,
-				CreateSubFn: createMonsterSimple,
+				CreateSubFn: CreateMonsterSimple,
 				RelationsFn: getMonsterSectionRelations,
 			},
 		},
@@ -499,7 +499,7 @@ func InitEndpoints() {
 		RetrieveFunc:     retrieveOverdriveAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createOverdriveAbilitySimple,
+				CreateSubFn: CreateOverdriveAbilitySimple,
 			},
 		},
 	}
@@ -516,7 +516,7 @@ func InitEndpoints() {
 		RetrieveFunc:  retrieveItemAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createItemAbilitySimple,
+				CreateSubFn: CreateItemAbilitySimple,
 			},
 		},
 	}
@@ -534,7 +534,7 @@ func InitEndpoints() {
 		RetrieveFunc:     retrieveTriggerCommands,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createTriggerCommandSimple,
+				CreateSubFn: CreateTriggerCommandSimple,
 			},
 		},
 	}
@@ -552,7 +552,7 @@ func InitEndpoints() {
 		RetrieveFunc:     retrieveMiscAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createMiscAbilitySimple,
+				CreateSubFn: CreateMiscAbilitySimple,
 			},
 		},
 	}
@@ -570,11 +570,11 @@ func InitEndpoints() {
 		RetrieveFunc:     retrieveEnemyAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createEnemyAbilitySimple,
+				CreateSubFn: CreateEnemyAbilitySimple,
 			},
 			ts.SnMonsters: {
 				DBQuery:     config.Cfg.DB.GetEnemyAbilityMonsterIDs,
-				CreateSubFn: createMonsterSimple,
+				CreateSubFn: CreateMonsterSimple,
 				RelationsFn: getMonsterSectionRelations,
 			},
 		},
@@ -605,11 +605,11 @@ func InitEndpoints() {
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnOverdriveAbilities: {
 				DBQuery:     handlerinput.ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveAbilityIDs),
-				CreateSubFn: createOverdriveAbilitySimple,
+				CreateSubFn: CreateOverdriveAbilitySimple,
 			},
 			ts.SnOverdrives: {
 				DBQuery:     handlerinput.ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveIDs),
-				CreateSubFn: createOverdriveSimple,
+				CreateSubFn: CreateOverdriveSimple,
 			},
 		},
 	}
@@ -626,11 +626,11 @@ func InitEndpoints() {
 		RetrieveFunc:  retrieveOverdrives,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createOverdriveSimple,
+				CreateSubFn: CreateOverdriveSimple,
 			},
 			ts.SnOverdriveAbilities: {
 				DBQuery:     config.Cfg.DB.GetOverdriveOverdriveAbilityIDs,
-				CreateSubFn: createOverdriveAbilitySimple,
+				CreateSubFn: CreateOverdriveAbilitySimple,
 			},
 		},
 	}
@@ -648,7 +648,7 @@ func InitEndpoints() {
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnMonsters: {
 				DBQuery:     config.Cfg.DB.GetRonsoRageMonsterIDs,
-				CreateSubFn: createMonsterSimple,
+				CreateSubFn: CreateMonsterSimple,
 				RelationsFn: getMonsterSectionRelations,
 			},
 		},
@@ -667,7 +667,7 @@ func InitEndpoints() {
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnAbilities: {
 				DBQuery:     handlerinput.ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs),
-				CreateSubFn: createAbilitySimple,
+				CreateSubFn: CreateAbilitySimple,
 			},
 		},
 	}
@@ -685,7 +685,7 @@ func InitEndpoints() {
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnAbilities: {
 				DBQuery:     handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuAbilityIDs),
-				CreateSubFn: createAbilitySimple,
+				CreateSubFn: CreateAbilitySimple,
 			},
 		},
 	}
@@ -717,7 +717,7 @@ func InitEndpoints() {
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnMixes: {
 				DBQuery:     config.Cfg.DB.GetItemMixIDs,
-				CreateSubFn: createMixSimple,
+				CreateSubFn: CreateMixSimple,
 			},
 		},
 	}
@@ -773,7 +773,7 @@ func InitEndpoints() {
 		RetrieveFunc:  retrieveMixes,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createMixSimple,
+				CreateSubFn: CreateMixSimple,
 			},
 		},
 	}
@@ -791,7 +791,7 @@ func InitEndpoints() {
 		AvlFunc:       filterAvlAutoAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
-				CreateSubFn: createAutoAbilitySimple,
+				CreateSubFn: CreateAutoAbilitySimple,
 			},
 		},
 	}
@@ -833,7 +833,7 @@ func InitEndpoints() {
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnAutoAbilities: {
 				DBQuery:     GetCelestialWeaponAutoAbilityIDs(),
-				CreateSubFn: createAutoAbilitySimple,
+				CreateSubFn: CreateAutoAbilitySimple,
 			},
 		},
 	}

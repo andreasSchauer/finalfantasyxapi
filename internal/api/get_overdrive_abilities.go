@@ -24,11 +24,10 @@ func getOverdriveAbility(r *http.Request, i handlerinput.Main[seedtypes.Overdriv
 		return apitypes.OverdriveAbility{}, err
 	}
 
-	overdriveIDs, err := config.Cfg.DB.GetOverdriveAbilityOverdriveIDs(r.Context(), id)
+	rel, err := GetOverdriveAbilityRelationships(r, ability)
 	if err != nil {
 		return apitypes.OverdriveAbility{}, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get parent overdrive", err)
 	}
-	overdrive, _ := lookup.GetResourceByID(overdriveIDs[0], lookup.L.OverdrivesID)
 
 	response := apitypes.OverdriveAbility{
 		ID:                 ability.ID,
@@ -39,15 +38,16 @@ func getOverdriveAbility(r *http.Request, i handlerinput.Main[seedtypes.Overdriv
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
-		Overdrives:         apilookups.E.Overdrives.ToAPIResources(overdriveIDs),
-		OverdriveCommand:   handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.OverdriveCommands, overdrive.OverdriveCommand, nil),
-		User:               handlerinput.NameToNamedAPIResource(apilookups.E.CharacterClasses, overdrive.User, nil),
+		Overdrives:         rel.Overdrives,
+		OverdriveCommand:   rel.OverdriveCommand,
+		User:               rel.User,
 		RelatedStats:       handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, ability.RelatedStats),
 		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 
 	return response, nil
 }
+
 
 func retrieveOverdriveAbilities(r *http.Request, i handlerinput.Main[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

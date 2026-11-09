@@ -32,5 +32,12 @@ func getSongRelationships(r *http.Request, song seedtypes.Song) (apitypes.Song, 
 		return apitypes.Song{}, err
 	}
 
+	if song.Credits != nil {
+		rel.Composer = song.Credits.Composer
+		rel.Arranger = song.Credits.Arranger
+		rel.Performer = song.Credits.Performer
+		rel.Lyricist = song.Credits.Lyricist
+	}
+
 	return rel, nil
 }
