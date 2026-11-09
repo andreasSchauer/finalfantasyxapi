@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 )
 
-type Server struct {}
+type Server struct{}
 
 func (srv *Server) Init() error {
 	err := config.Cfg.Init()
@@ -21,6 +21,6 @@ func (srv *Server) Init() error {
 
 func (srv *Server) InitGlobals() {
 	enums.T.Init()
-	E.Init()
-	Q.Init()
+	InitEndpoints(E)
+	InitQueryLookup(Q)
 }
