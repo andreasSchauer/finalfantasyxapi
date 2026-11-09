@@ -23,7 +23,7 @@ func getMonster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes
 		return apitypes.Monster{}, err
 	}
 
-	rel, err := getMonsterRelationships(r, monster)
+	rel, err := GetMonsterRelationships(r, monster)
 	if err != nil {
 		return apitypes.Monster{}, err
 	}
@@ -65,14 +65,14 @@ func getMonster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes
 		BaseStats:            apilookups.E.Stats.ToResAmtType(monster.BaseStats, th.NewBaseStat),
 		Items:                ah.ConvertObjPtr(monster.Items, apiconv.ConvertMonsterItems),
 		Equipment:            ah.ConvertObjPtr(monster.Equipment, apiconv.ConvertMonsterEquipment),
-		ElemResists:          getMonsterElemResists(monster.ElemResists),
+		ElemResists:          rel.ElemResists,
 		StatusImmunities:     handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, monster.StatusImmunities),
 		StatusResists:        apilookups.E.StatusConditions.ToResAmtType(monster.StatusResists, th.NewStatusResist),
 		Abilities:            ah.ConvertObjSlice(monster.Abilities, apiconv.ConvertMonsterAbility),
-		AlteredStates:        getMonsterAlteredStates(r, monster),
+		AlteredStates:        rel.AlteredStates,
 	}
 
-	return completeMonsterResponse(r, response)
+	return CompleteMonsterResponse(r, response)
 }
 
 func retrieveMonsters(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes.Monster, apiresource.Named]) ([]int32, error) {

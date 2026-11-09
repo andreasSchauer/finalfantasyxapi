@@ -18,7 +18,7 @@ func getProperty(r *http.Request, i handlerinput.Main[seedtypes.Property, apityp
 		return apitypes.Property{}, err
 	}
 
-	rel, err := getPropertyRelationships(r, property)
+	rel, err := GetPropertyRelationships(r, property)
 	if err != nil {
 		return apitypes.Property{}, err
 	}

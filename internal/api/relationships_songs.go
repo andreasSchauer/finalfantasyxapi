@@ -11,7 +11,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getSongRelationships(r *http.Request, song seedtypes.Song) (apitypes.Song, error) {
+func GetSongRelationships(r *http.Request, song seedtypes.Song) (apitypes.Song, error) {
 	var rel apitypes.Song
 	g, ctx := errgroup.WithContext(r.Context())
 

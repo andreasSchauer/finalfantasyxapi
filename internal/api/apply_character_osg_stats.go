@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func ApplyOsgStats(r *http.Request, char apitypes.Character) (apitypes.Character, error) {
+func applyOsgStats(r *http.Request, char apitypes.Character) (apitypes.Character, error) {
 	if char.IsStoryBased {
 		return char, nil
 	}

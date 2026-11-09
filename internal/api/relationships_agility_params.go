@@ -14,7 +14,7 @@ import (
 )
 
 func getUnitAgilityParams(r *http.Request, baseStats []apitypes.BaseStat) (apitypes.AgilityParams, error) {
-	agilityTier, err := GetAgilityTierDB(r, baseStats)
+	agilityTier, err := getAgilityTierDB(r, baseStats)
 	if err != nil {
 		return apitypes.AgilityParams{}, err
 	}
@@ -40,7 +40,7 @@ func getUnitAgilityParams(r *http.Request, baseStats []apitypes.BaseStat) (apity
 	return agilityParams, nil
 }
 
-func GetAgilityTierDB(r *http.Request, stats []apitypes.BaseStat) (seedtypes.AgilityTier, error) {
+func getAgilityTierDB(r *http.Request, stats []apitypes.BaseStat) (seedtypes.AgilityTier, error) {
 	agilityStat := th.GetBaseStat("agility", stats)
 	agility := agilityStat.Value
 

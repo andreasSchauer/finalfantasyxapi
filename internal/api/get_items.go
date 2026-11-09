@@ -20,7 +20,7 @@ func getItem(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes.Item,
 		return apitypes.Item{}, err
 	}
 
-	rel, err := getItemRelationships(r, item)
+	rel, err := GetItemRelationships(r, item)
 	if err != nil {
 		return apitypes.Item{}, err
 	}

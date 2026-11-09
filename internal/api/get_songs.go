@@ -21,7 +21,7 @@ func getSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song,
 		return apitypes.Song{}, err
 	}
 
-	rel, err := getSongRelationships(r, song)
+	rel, err := GetSongRelationships(r, song)
 	if err != nil {
 		return apitypes.Song{}, err
 	}
@@ -33,10 +33,10 @@ func getSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song,
 		InGameName:           song.InGameName,
 		OstName:              song.OSTName,
 		Translation:          song.Translation,
-		Composer: 			  rel.Composer,
-		Arranger: 			  rel.Arranger,
-		Performer: 			  rel.Performer,
-		Lyricist: 			  rel.Lyricist,
+		Composer:             rel.Composer,
+		Arranger:             rel.Arranger,
+		Performer:            rel.Performer,
+		Lyricist:             rel.Lyricist,
 		DurationInSeconds:    song.DurationInSeconds,
 		CanLoop:              song.CanLoop,
 		SpecialUseCase:       song.SpecialUseCase,
@@ -52,7 +52,6 @@ func getSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song,
 
 	return response, nil
 }
-
 
 func retrieveSongs(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

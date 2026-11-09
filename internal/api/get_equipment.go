@@ -20,7 +20,7 @@ func getEquipment(r *http.Request, i handlerinput.Main[seedtypes.EquipmentName, 
 		return apitypes.EquipmentName{}, err
 	}
 
-	rel, err := getEquipmentRelationships(r, equipment)
+	rel, err := GetEquipmentRelationships(r, equipment)
 	if err != nil {
 		return apitypes.EquipmentName{}, err
 	}

@@ -16,7 +16,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getCharacterRelationships(r *http.Request, char seedtypes.Character) (apitypes.Character, error) {
+func GetCharacterRelationships(r *http.Request, char seedtypes.Character) (apitypes.Character, error) {
 	rel := apitypes.Character{
 		OverdriveModes: getCharacterModeAmts(char),
 	}
@@ -112,9 +112,8 @@ func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.Resource
 	return modeAmount, nil
 }
 
-
-func completeCharacterResponse(r *http.Request, char apitypes.Character) (apitypes.Character, error) {
-	char, err := ApplyOsgStats(r, char)
+func CompleteCharacterResponse(r *http.Request, char apitypes.Character) (apitypes.Character, error) {
+	char, err := applyOsgStats(r, char)
 	if err != nil {
 		return apitypes.Character{}, err
 	}

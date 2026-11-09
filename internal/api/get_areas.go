@@ -24,7 +24,7 @@ func getArea(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area,
 		return apitypes.Area{}, err
 	}
 
-	rel, err := getAreaRelationships(r, area)
+	rel, err := GetAreaRelationships(r, area)
 	if err != nil {
 		return apitypes.Area{}, err
 	}

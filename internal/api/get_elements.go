@@ -15,7 +15,7 @@ func getElement(r *http.Request, i handlerinput.Main[seedtypes.Element, apitypes
 		return apitypes.Element{}, err
 	}
 
-	rel, err := getElementRelationships(r, element)
+	rel, err := GetElementRelationships(r, element)
 	if err != nil {
 		return apitypes.Element{}, err
 	}

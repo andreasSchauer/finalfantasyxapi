@@ -16,7 +16,7 @@ func getStat(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat,
 		return apitypes.Stat{}, err
 	}
 
-	rel, err := getStatRelationships(r, stat)
+	rel, err := GetStatRelationships(r, stat)
 	if err != nil {
 		return apitypes.Stat{}, err
 	}

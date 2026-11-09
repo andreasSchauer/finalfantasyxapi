@@ -19,7 +19,7 @@ func getKeyItem(r *http.Request, i handlerinput.Main[seedtypes.KeyItem, apitypes
 		return apitypes.KeyItem{}, err
 	}
 
-	rel, err := getKeyItemRelationships(r, keyItem)
+	rel, err := GetKeyItemRelationships(r, keyItem)
 	if err != nil {
 		return apitypes.KeyItem{}, err
 	}

@@ -18,7 +18,7 @@ func getLocation(r *http.Request, i handlerinput.Main[seedtypes.Location, apityp
 		return apitypes.Location{}, err
 	}
 
-	rel, err := getLocationRelationships(r, location)
+	rel, err := GetLocationRelationships(r, location)
 	if err != nil {
 		return apitypes.Location{}, err
 	}

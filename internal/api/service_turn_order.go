@@ -35,7 +35,7 @@ func handleTurnOrder(params servicetypes.TurnOrderParams) (servicetypes.TurnOrde
 
 	response.TurnOrder = calcTurnOrder(params, participants)
 
-	response = completeTurnOrderResponse(response, len(participants), params.TurnsAmt)
+	response = CompleteTurnOrderResponse(response, len(participants), params.TurnsAmt)
 
 	return response, nil
 }
@@ -83,7 +83,7 @@ func calcTurnOrder(params servicetypes.TurnOrderParams, participants []servicety
 	return turns
 }
 
-func completeTurnOrderResponse(response servicetypes.TurnOrderResponse, participantsAmt int, turnsAmt int32) servicetypes.TurnOrderResponse {
+func CompleteTurnOrderResponse(response servicetypes.TurnOrderResponse, participantsAmt int, turnsAmt int32) servicetypes.TurnOrderResponse {
 	turnCounter := make(map[string]int32, participantsAmt)
 
 	for _, turn := range response.TurnOrder {

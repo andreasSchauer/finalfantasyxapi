@@ -15,7 +15,7 @@ func getPrimer(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.P
 		return apitypes.Primer{}, err
 	}
 
-	rel, err := getPrimerRelationships(r, primer)
+	rel, err := GetPrimerRelationships(r, primer)
 	if err != nil {
 		return apitypes.Primer{}, err
 	}

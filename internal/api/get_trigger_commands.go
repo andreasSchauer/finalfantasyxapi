@@ -21,7 +21,7 @@ func getTriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerCom
 		return apitypes.TriggerCommand{}, err
 	}
 
-	rel, err := getTriggerCommandRelationships(r, command)
+	rel, err := GetTriggerCommandRelationships(r, command)
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
 	}
@@ -45,7 +45,7 @@ func getTriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerCom
 		BattleInteractions: ah.ConvertObjSlice(command.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
+	battleInteractions, err := ApplyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
 	}

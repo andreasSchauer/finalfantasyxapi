@@ -14,7 +14,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getItemRelationships(r *http.Request, item seedtypes.Item) (apitypes.Item, error) {
+func GetItemRelationships(r *http.Request, item seedtypes.Item) (apitypes.Item, error) {
 	availabilityParams, err := apilookups.E.Items.QueryAvlRelGetParams(r, item.ID)
 	if err != nil {
 		return apitypes.Item{}, err
@@ -162,4 +162,3 @@ func getAmountOther(wantedItem string, otherItems []seedtypes.PossibleItem) int3
 
 	return 0
 }
-

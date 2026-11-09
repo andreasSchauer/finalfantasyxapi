@@ -55,7 +55,7 @@ func getPlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbili
 		BattleInteractions:    ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
+	battleInteractions, err := ApplyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
 	}

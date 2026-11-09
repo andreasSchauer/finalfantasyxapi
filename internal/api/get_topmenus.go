@@ -15,7 +15,7 @@ func getTopmenu(r *http.Request, i handlerinput.Main[seedtypes.Topmenu, apitypes
 		return apitypes.Topmenu{}, err
 	}
 
-	rel, err := getTopmenuRelationships(r, topmenu)
+	rel, err := GetTopmenuRelationships(r, topmenu)
 	if err != nil {
 		return apitypes.Topmenu{}, err
 	}

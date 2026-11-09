@@ -21,7 +21,7 @@ func getStatusCondition(r *http.Request, i handlerinput.Main[seedtypes.StatusCon
 		return apitypes.StatusCondition{}, err
 	}
 
-	rel, err := getStatusConditionRelationships(r, status)
+	rel, err := GetStatusConditionRelationships(r, status)
 	if err != nil {
 		return apitypes.StatusCondition{}, err
 	}

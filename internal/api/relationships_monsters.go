@@ -13,8 +13,12 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getMonsterRelationships(r *http.Request, monster seedtypes.Monster) (apitypes.Monster, error) {
-	var rel apitypes.Monster
+func GetMonsterRelationships(r *http.Request, monster seedtypes.Monster) (apitypes.Monster, error) {
+	rel := apitypes.Monster{
+		ElemResists:   getMonsterElemResists(monster.ElemResists),
+		AlteredStates: getMonsterAlteredStates(r, monster),
+	}
+
 	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := apilookups.E.Monsters.QueryAvlRelGetParams(r, monster.ID)
@@ -42,7 +46,7 @@ func getMonsterRelationships(r *http.Request, monster seedtypes.Monster) (apityp
 	return rel, nil
 }
 
-func completeMonsterResponse(r *http.Request, mon apitypes.Monster) (apitypes.Monster, error) {
+func CompleteMonsterResponse(r *http.Request, mon apitypes.Monster) (apitypes.Monster, error) {
 	mon, err := applyAlteredStateFromQuery(r, mon, ts.QpnAlteredState)
 	if err != nil {
 		return apitypes.Monster{}, err
@@ -114,7 +118,7 @@ func getMonsterPoisonDamage(mon apitypes.Monster) (*int32, error) {
 }
 
 func getMonsterAgilityParams(r *http.Request, mon apitypes.Monster) (*apitypes.AgilityParams, error) {
-	agilityTier, err := GetAgilityTierDB(r, mon.BaseStats)
+	agilityTier, err := getAgilityTierDB(r, mon.BaseStats)
 	if err != nil {
 		return nil, err
 	}

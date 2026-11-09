@@ -10,7 +10,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getLocationRelationships(r *http.Request, location seedtypes.Location) (apitypes.Location, error) {
+func GetLocationRelationships(r *http.Request, location seedtypes.Location) (apitypes.Location, error) {
 	var rel apitypes.Location
 	var locRel apitypes.LocRel
 	g, ctx := errgroup.WithContext(r.Context())

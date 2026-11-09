@@ -22,7 +22,7 @@ func getAutoAbility(r *http.Request, i handlerinput.Main[seedtypes.AutoAbility, 
 		return apitypes.AutoAbility{}, err
 	}
 
-	rel, err := getAutoAbilityRelationships(r, autoAbility)
+	rel, err := GetAutoAbilityRelationships(r, autoAbility)
 	if err != nil {
 		return apitypes.AutoAbility{}, err
 	}

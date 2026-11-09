@@ -21,7 +21,7 @@ func getAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon,
 		return apitypes.Aeon{}, err
 	}
 
-	rel, err := getAeonRelationships(r, aeon)
+	rel, err := GetAeonRelationships(r, aeon)
 	if err != nil {
 		return apitypes.Aeon{}, err
 	}
@@ -48,7 +48,7 @@ func getAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon,
 		ArmorAbilities:         ah.ConvertObjSlice(aeon.Armor, apiconv.ConvertAeonEquipment),
 	}
 
-	return completeAeonResponse(r, response)
+	return CompleteAeonResponse(r, response)
 }
 
 func retrieveAeons(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named]) ([]int32, error) {

@@ -21,7 +21,7 @@ func getSphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.S
 		return apitypes.Sphere{}, err
 	}
 
-	rel, err := getSphereRelationships(r, sphere)
+	rel, err := GetSphereRelationships(r, sphere)
 	if err != nil {
 		return apitypes.Sphere{}, err
 	}

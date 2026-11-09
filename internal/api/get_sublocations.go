@@ -19,7 +19,7 @@ func getSublocation(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, 
 		return apitypes.Sublocation{}, err
 	}
 
-	rel, err := getSublocationRelationships(r, sublocation)
+	rel, err := GetSublocationRelationships(r, sublocation)
 	if err != nil {
 		return apitypes.Sublocation{}, err
 	}

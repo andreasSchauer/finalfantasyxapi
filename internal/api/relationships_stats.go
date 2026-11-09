@@ -23,7 +23,7 @@ type StatQueries struct {
 	Properties         handlerinput.DBQueryIntMany
 }
 
-func getStatRelationships(r *http.Request, stat seedtypes.Stat) (apitypes.Stat, error) {
+func GetStatRelationships(r *http.Request, stat seedtypes.Stat) (apitypes.Stat, error) {
 	var rel apitypes.Stat
 	g, ctx := errgroup.WithContext(r.Context())
 

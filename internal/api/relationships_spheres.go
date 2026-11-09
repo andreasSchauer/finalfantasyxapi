@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
-func getSphereRelationships(r *http.Request, sphere seedtypes.Sphere) (apitypes.Sphere, error) {
+func GetSphereRelationships(r *http.Request, sphere seedtypes.Sphere) (apitypes.Sphere, error) {
 	item, _ := lookup.GetResourceByID(sphere.ItemID, lookup.L.ItemsID)
 
 	availabilityParams, err := apilookups.E.Spheres.QueryAvlRelGetParams(r, item.ID)

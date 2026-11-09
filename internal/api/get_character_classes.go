@@ -18,7 +18,7 @@ func getCharacterClass(r *http.Request, i handlerinput.Main[seedtypes.CharacterC
 		return apitypes.CharacterClass{}, err
 	}
 
-	rel, err := getCharClassRelationships(r, class)
+	rel, err := GetCharClassRelationships(r, class)
 	if err != nil {
 		return apitypes.CharacterClass{}, err
 	}

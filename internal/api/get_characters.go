@@ -19,7 +19,7 @@ func getCharacter(r *http.Request, i handlerinput.Main[seedtypes.Character, apit
 		return apitypes.Character{}, err
 	}
 
-	rel, err := getCharacterRelationships(r, character)
+	rel, err := GetCharacterRelationships(r, character)
 	if err != nil {
 		return apitypes.Character{}, err
 	}
@@ -44,9 +44,8 @@ func getCharacter(r *http.Request, i handlerinput.Main[seedtypes.Character, apit
 		OverdriveModes:         rel.OverdriveModes,
 	}
 
-	return completeCharacterResponse(r, response)
+	return CompleteCharacterResponse(r, response)
 }
-
 
 func retrieveCharacters(r *http.Request, i handlerinput.Main[seedtypes.Character, apitypes.Character, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

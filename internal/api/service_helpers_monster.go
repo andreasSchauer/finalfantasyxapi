@@ -42,7 +42,7 @@ func quickAssembleMon(monID int32, altStatePtr *int32) (apitypes.Monster, error)
 		AlteredStates:    getMonsterAlteredStates(nil, monsterLookup),
 	}
 
-	monster, err := applyAlteredStateFromJSON(monster, altStatePtr)
+	monster, err := ApplyAlteredStateFromJSON(monster, altStatePtr)
 	if err != nil {
 		return apitypes.Monster{}, err
 	}

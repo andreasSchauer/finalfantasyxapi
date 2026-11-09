@@ -10,7 +10,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getModifierRelationships(r *http.Request, modifier seedtypes.Modifier) (apitypes.Modifier, error) {
+func GetModifierRelationships(r *http.Request, modifier seedtypes.Modifier) (apitypes.Modifier, error) {
 	var rel apitypes.Modifier
 	g, ctx := errgroup.WithContext(r.Context())
 

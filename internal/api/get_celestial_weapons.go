@@ -19,7 +19,7 @@ func getCelestialWeapon(r *http.Request, i handlerinput.Main[seedtypes.Celestial
 		return apitypes.CelestialWeapon{}, err
 	}
 
-	rel, err := getCelestialWeaponRelationships(r, celestialWeapon)
+	rel, err := GetCelestialWeaponRelationships(r, celestialWeapon)
 	if err != nil {
 		return apitypes.CelestialWeapon{}, err
 	}

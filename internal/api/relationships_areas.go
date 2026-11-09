@@ -12,7 +12,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getAreaRelationships(r *http.Request, area seedtypes.Area) (apitypes.LocRel, error) {
+func GetAreaRelationships(r *http.Request, area seedtypes.Area) (apitypes.LocRel, error) {
 	var rel apitypes.LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 

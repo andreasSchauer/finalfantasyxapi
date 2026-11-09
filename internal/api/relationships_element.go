@@ -11,7 +11,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getElementRelationships(r *http.Request, element seedtypes.Element) (apitypes.Element, error) {
+func GetElementRelationships(r *http.Request, element seedtypes.Element) (apitypes.Element, error) {
 	var rel apitypes.Element
 	g, ctx := errgroup.WithContext(r.Context())
 

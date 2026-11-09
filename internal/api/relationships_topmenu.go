@@ -11,7 +11,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getTopmenuRelationships(r *http.Request, topmenu seedtypes.Topmenu) (apitypes.Topmenu, error) {
+func GetTopmenuRelationships(r *http.Request, topmenu seedtypes.Topmenu) (apitypes.Topmenu, error) {
 	var rel apitypes.Topmenu
 	g, ctx := errgroup.WithContext(r.Context())
 

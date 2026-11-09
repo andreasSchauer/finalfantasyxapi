@@ -26,7 +26,7 @@ func applyAlteredStateFromQuery(r *http.Request, mon apitypes.Monster, queryName
 	return applyAlteredState(mon, altStateID), nil
 }
 
-func applyAlteredStateFromJSON(mon apitypes.Monster, altStatePtr *int32) (apitypes.Monster, error) {
+func ApplyAlteredStateFromJSON(mon apitypes.Monster, altStatePtr *int32) (apitypes.Monster, error) {
 	if altStatePtr == nil {
 		return mon, nil
 	}

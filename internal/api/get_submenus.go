@@ -19,7 +19,7 @@ func getSubmenu(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes
 		return apitypes.Submenu{}, err
 	}
 
-	rel, err := getSubmenuRelationships(r, submenu)
+	rel, err := GetSubmenuRelationships(r, submenu)
 	if err != nil {
 		return apitypes.Submenu{}, err
 	}

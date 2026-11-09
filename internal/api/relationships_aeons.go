@@ -10,7 +10,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, error) {
+func GetAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, error) {
 	var rel apitypes.Aeon
 	g, ctx := errgroup.WithContext(r.Context())
 
@@ -52,7 +52,7 @@ func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, 
 	return rel, nil
 }
 
-func completeAeonResponse(r *http.Request, aeon apitypes.Aeon) (apitypes.Aeon, error) {
+func CompleteAeon2Response(r *http.Request, aeon apitypes.Aeon) (apitypes.Aeon, error) {
 	aeon, err := applyAeonStats(r, aeon, nil)
 	if err != nil {
 		return apitypes.Aeon{}, err

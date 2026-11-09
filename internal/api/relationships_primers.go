@@ -12,12 +12,12 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getPrimerRelationships(r *http.Request, primer seedtypes.Primer) (apitypes.Primer, error) {
+func GetPrimerRelationships(r *http.Request, primer seedtypes.Primer) (apitypes.Primer, error) {
 	keyItem, _ := lookup.GetResource(primer, lookup.L.KeyItems)
-	
+
 	rel := apitypes.Primer{
-		KeyItem:       handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, keyItem.Name, nil),
-		Description:   keyItem.Description,
+		KeyItem:     handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, keyItem.Name, nil),
+		Description: keyItem.Description,
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 

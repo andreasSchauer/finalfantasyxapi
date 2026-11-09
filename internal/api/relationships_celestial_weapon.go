@@ -12,7 +12,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeapon) (apitypes.CelestialWeapon, error) {
+func GetCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeapon) (apitypes.CelestialWeapon, error) {
 	crest, _ := lookup.GetResource(cw.KeyItemBase+" crest", lookup.L.KeyItems)
 	sigil, _ := lookup.GetResource(cw.KeyItemBase+" sigil", lookup.L.KeyItems)
 	equipment, _ := lookup.GetResource(cw, lookup.L.EquipmentNames)

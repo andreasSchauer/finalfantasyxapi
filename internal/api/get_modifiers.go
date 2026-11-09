@@ -18,7 +18,7 @@ func getModifier(r *http.Request, i handlerinput.Main[seedtypes.Modifier, apityp
 		return apitypes.Modifier{}, err
 	}
 
-	rel, err := getModifierRelationships(r, modifier)
+	rel, err := GetModifierRelationships(r, modifier)
 	if err != nil {
 		return apitypes.Modifier{}, err
 	}

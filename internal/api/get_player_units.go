@@ -27,7 +27,7 @@ func getPlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, ap
 	case database.UnitTypeCharacter:
 		character, _ := lookup.GetResource(unit, lookup.L.Characters)
 
-		rel, err := getCharacterRelationships(r, character)
+		rel, err := GetCharacterRelationships(r, character)
 		if err != nil {
 			return apitypes.PlayerUnit{}, err
 		}
@@ -45,7 +45,7 @@ func getPlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, ap
 	case database.UnitTypeAeon:
 		aeon, _ := lookup.GetResource(unit, lookup.L.Aeons)
 
-		rel, err := getAeonRelationships(r, aeon)
+		rel, err := GetAeonRelationships(r, aeon)
 		if err != nil {
 			return apitypes.PlayerUnit{}, err
 		}

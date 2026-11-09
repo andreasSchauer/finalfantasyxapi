@@ -11,7 +11,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func getPropertyRelationships(r *http.Request, property seedtypes.Property) (apitypes.Property, error) {
+func GetPropertyRelationships(r *http.Request, property seedtypes.Property) (apitypes.Property, error) {
 	var rel apitypes.Property
 	g, ctx := errgroup.WithContext(r.Context())
 
