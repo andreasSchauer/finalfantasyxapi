@@ -5,6 +5,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 )
 
 func getAllAgilityTiers() []seedtypes.AgilityTier {
@@ -95,16 +96,16 @@ func calcICVs(minPtr, maxPtr *int32, participant servicetypes.Participant, param
 	}
 
 	if params.IgnFirstTurn {
-		return getEqualICVs(0)
+		return th.GetEqualICVs(0)
 	}
 
 	if participant.FirstStrike {
 		switch participant.Party {
 		case servicetypes.BattlePartyPlayer:
-			return getEqualICVs(0)
+			return th.GetEqualICVs(0)
 
 		case servicetypes.BattlePartyOpponent:
-			return getEqualICVs(-1)
+			return th.GetEqualICVs(-1)
 		}
 	}
 
@@ -115,13 +116,13 @@ func calcICVs(minPtr, maxPtr *int32, participant servicetypes.Participant, param
 			return calcICVsStartFavorable(*minPtr, participant.Status)
 
 		case servicetypes.BattlePartyOpponent:
-			return getEqualICVs(0)
+			return th.GetEqualICVs(0)
 		}
 
 	case string(database.BattleStartPreemptive):
 		switch participant.Party {
 		case servicetypes.BattlePartyPlayer:
-			return getEqualICVs(0)
+			return th.GetEqualICVs(0)
 
 		case servicetypes.BattlePartyOpponent:
 			return calcICVsStartFavorable(*minPtr, participant.Status)
@@ -143,15 +144,8 @@ func calcICVs(minPtr, maxPtr *int32, participant servicetypes.Participant, param
 	return &minICV, &maxICV
 }
 
-func getEqualICVs(val int32) (*int32, *int32) {
-	minICV := val
-	maxICV := val
-
-	return &minICV, &maxICV
-}
-
 func calcICVsStartFavorable(minVal int32, status *string) (*int32, *int32) {
-	minPtr, maxPtr := getEqualICVs(minVal * 3)
+	minPtr, maxPtr := th.GetEqualICVs(minVal * 3)
 
 	if status == nil || *status != string(database.HasteStatusAutoHaste) {
 		return minPtr, maxPtr

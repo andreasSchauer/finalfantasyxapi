@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -18,7 +19,7 @@ func getProperty(r *http.Request, i handlerinput.Main[seedtypes.Property, apityp
 		return apitypes.Property{}, err
 	}
 
-	rel, err := GetPropertyRelationships(r, property)
+	rel, err := assemble.GetPropertyRelationships(r, property)
 	if err != nil {
 		return apitypes.Property{}, err
 	}

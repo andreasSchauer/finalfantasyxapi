@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -15,7 +16,7 @@ func getTopmenu(r *http.Request, i handlerinput.Main[seedtypes.Topmenu, apitypes
 		return apitypes.Topmenu{}, err
 	}
 
-	rel, err := GetTopmenuRelationships(r, topmenu)
+	rel, err := assemble.GetTopmenuRelationships(r, topmenu)
 	if err != nil {
 		return apitypes.Topmenu{}, err
 	}

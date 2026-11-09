@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -27,7 +28,7 @@ func getPlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, ap
 	case database.UnitTypeCharacter:
 		character, _ := lookup.GetResource(unit, lookup.L.Characters)
 
-		rel, err := GetCharacterRelationships(r, character)
+		rel, err := assemble.GetCharacterRelationships(r, character)
 		if err != nil {
 			return apitypes.PlayerUnit{}, err
 		}
@@ -45,7 +46,7 @@ func getPlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, ap
 	case database.UnitTypeAeon:
 		aeon, _ := lookup.GetResource(unit, lookup.L.Aeons)
 
-		rel, err := GetAeonRelationships(r, aeon)
+		rel, err := assemble.GetAeonRelationships(r, aeon)
 		if err != nil {
 			return apitypes.PlayerUnit{}, err
 		}

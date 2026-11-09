@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -20,7 +21,7 @@ func getEquipment(r *http.Request, i handlerinput.Main[seedtypes.EquipmentName, 
 		return apitypes.EquipmentName{}, err
 	}
 
-	rel, err := GetEquipmentRelationships(r, equipment)
+	rel, err := assemble.GetEquipmentRelationships(r, equipment)
 	if err != nil {
 		return apitypes.EquipmentName{}, err
 	}

@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -29,9 +30,8 @@ func getSubquest(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apityp
 		Completion:      apiconv.ConvertQuestCompletion(*subquest.Completion),
 	}
 
-	return CompleteSubquestResponse(response), nil
+	return assemble.CompleteSubquestResponse(response), nil
 }
-
 
 func retrieveSubquests(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

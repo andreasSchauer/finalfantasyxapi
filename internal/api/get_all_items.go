@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -19,7 +20,7 @@ func getMasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, ap
 		return apitypes.MasterItem{}, err
 	}
 
-	rel, err := GetMasterItemRelationships(r, masterItem)
+	rel, err := assemble.GetMasterItemRelationships(r, masterItem)
 	if err != nil {
 		return apitypes.MasterItem{}, err
 	}
@@ -31,7 +32,7 @@ func getMasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, ap
 		ObtainableFrom: rel.ObtainableFrom,
 	}
 
-	return CompleteMasterItemResponse(r, response), nil
+	return assemble.CompleteMasterItemResponse(r, response), nil
 }
 
 func retrieveMasterItems(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, apitypes.MasterItem, apiresource.Typed]) ([]int32, error) {

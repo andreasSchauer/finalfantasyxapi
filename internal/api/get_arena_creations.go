@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -19,7 +20,7 @@ func getArenaCreation(r *http.Request, i handlerinput.Main[seedtypes.ArenaCreati
 		return apitypes.ArenaCreation{}, err
 	}
 
-	rel, err := GetArenaCreationRelationships(r, creation)
+	rel, err := assemble.GetArenaCreationRelationships(r, creation)
 	if err != nil {
 		return apitypes.ArenaCreation{}, err
 	}

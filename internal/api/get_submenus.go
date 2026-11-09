@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -19,7 +20,7 @@ func getSubmenu(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes
 		return apitypes.Submenu{}, err
 	}
 
-	rel, err := GetSubmenuRelationships(r, submenu)
+	rel, err := assemble.GetSubmenuRelationships(r, submenu)
 	if err != nil {
 		return apitypes.Submenu{}, err
 	}

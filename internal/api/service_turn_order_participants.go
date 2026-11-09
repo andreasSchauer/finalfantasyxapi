@@ -9,6 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
+	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -63,7 +64,7 @@ func getParticipantsParty(params servicetypes.TurnOrderParams, maps *participant
 		participant.AgilityVals = extractAglTierChar(participant, params)
 
 		if params.FormationID != nil && *params.FormationID == idFormationSpectral {
-			participant.MinICV, participant.MaxICV = getEqualICVs(0)
+			participant.MinICV, participant.MaxICV = th.GetEqualICVs(0)
 		}
 
 		playerParty = append(playerParty, participant)
@@ -146,7 +147,7 @@ func populateParticipantMon(params servicetypes.TurnOrderParams, participant ser
 	}
 
 	if isSpectralKeeperInStoryFight(*mon.MonsterID, params.FormationID) {
-		participant.MinICV, participant.MaxICV = getEqualICVs(21)
+		participant.MinICV, participant.MaxICV = th.GetEqualICVs(21)
 	}
 
 	return participant

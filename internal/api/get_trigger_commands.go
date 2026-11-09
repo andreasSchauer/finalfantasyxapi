@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -21,7 +22,7 @@ func getTriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerCom
 		return apitypes.TriggerCommand{}, err
 	}
 
-	rel, err := GetTriggerCommandRelationships(r, command)
+	rel, err := assemble.GetTriggerCommandRelationships(r, command)
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
 	}
@@ -45,7 +46,7 @@ func getTriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerCom
 		BattleInteractions: ah.ConvertObjSlice(command.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 
-	battleInteractions, err := ApplyUser(r, i, response, ts.QpnAbilityUser)
+	battleInteractions, err := assemble.ApplyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
 	}

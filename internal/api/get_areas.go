@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -19,12 +20,12 @@ func getArea(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area,
 		return apitypes.Area{}, err
 	}
 
-	connections, err := getAreaConnectedAreas(area)
+	connections, err := assemble.GetAreaConnectedAreas(area)
 	if err != nil {
 		return apitypes.Area{}, err
 	}
 
-	rel, err := GetAreaRelationships(r, area)
+	rel, err := assemble.GetAreaRelationships(r, area)
 	if err != nil {
 		return apitypes.Area{}, err
 	}
@@ -34,7 +35,7 @@ func getArea(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area,
 		Name:              area.Name,
 		Version:           area.Version,
 		Specification:     area.Specification,
-		DisplayName:       getAreaDisplayName(area),
+		DisplayName:       assemble.GetAreaDisplayName(area),
 		ParentLocation:    handlerinput.NameToNamedAPIResource(apilookups.E.Locations, area.Location, nil),
 		ParentSublocation: handlerinput.NameToNamedAPIResource(apilookups.E.Sublocations, area.Sublocation, nil),
 		Availability:      area.Availability,

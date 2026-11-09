@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -21,7 +22,7 @@ func getStatusCondition(r *http.Request, i handlerinput.Main[seedtypes.StatusCon
 		return apitypes.StatusCondition{}, err
 	}
 
-	rel, err := GetStatusConditionRelationships(r, status)
+	rel, err := assemble.GetStatusConditionRelationships(r, status)
 	if err != nil {
 		return apitypes.StatusCondition{}, err
 	}

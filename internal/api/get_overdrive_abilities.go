@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -24,7 +25,7 @@ func getOverdriveAbility(r *http.Request, i handlerinput.Main[seedtypes.Overdriv
 		return apitypes.OverdriveAbility{}, err
 	}
 
-	rel, err := GetOverdriveAbilityRelationships(r, ability)
+	rel, err := assemble.GetOverdriveAbilityRelationships(r, ability)
 	if err != nil {
 		return apitypes.OverdriveAbility{}, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get parent overdrive", err)
 	}
@@ -47,7 +48,6 @@ func getOverdriveAbility(r *http.Request, i handlerinput.Main[seedtypes.Overdriv
 
 	return response, nil
 }
-
 
 func retrieveOverdriveAbilities(r *http.Request, i handlerinput.Main[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

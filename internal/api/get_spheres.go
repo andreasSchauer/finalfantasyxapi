@@ -7,6 +7,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -21,7 +22,7 @@ func getSphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.S
 		return apitypes.Sphere{}, err
 	}
 
-	rel, err := GetSphereRelationships(r, sphere)
+	rel, err := assemble.GetSphereRelationships(r, sphere)
 	if err != nil {
 		return apitypes.Sphere{}, err
 	}

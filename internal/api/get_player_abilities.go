@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -23,7 +24,7 @@ func getPlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbili
 		return apitypes.PlayerAbility{}, err
 	}
 
-	rel, err := GetPlayerAbilityRelationships(r, ability)
+	rel, err := assemble.GetPlayerAbilityRelationships(r, ability)
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
 	}
@@ -55,7 +56,7 @@ func getPlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbili
 		BattleInteractions:    ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 
-	battleInteractions, err := ApplyUser(r, i, response, ts.QpnAbilityUser)
+	battleInteractions, err := assemble.ApplyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
 	}

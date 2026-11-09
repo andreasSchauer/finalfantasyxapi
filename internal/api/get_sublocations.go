@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -19,7 +20,7 @@ func getSublocation(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, 
 		return apitypes.Sublocation{}, err
 	}
 
-	rel, err := GetSublocationRelationships(r, sublocation)
+	rel, err := assemble.GetSublocationRelationships(r, sublocation)
 	if err != nil {
 		return apitypes.Sublocation{}, err
 	}

@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
@@ -21,7 +22,7 @@ func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return inputIDs, nil
 	}
 
-	sources, err := getLocBasedSources(r, i, ViewSourceTypeArea)
+	sources, err := getLocBasedSources(r, i, ts.VstArea)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +67,7 @@ func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return inputIDs, nil
 	}
 
-	sources, err := getLocBasedSources(r, i, ViewSourceTypeSublocation)
+	sources, err := getLocBasedSources(r, i, ts.VstSublocation)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +112,7 @@ func filterAvlLocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 		return inputIDs, nil
 	}
 
-	sources, err := getLocBasedSources(r, i, ViewSourceTypeLocation)
+	sources, err := getLocBasedSources(r, i, ts.VstLocation)
 	if err != nil {
 		return nil, err
 	}

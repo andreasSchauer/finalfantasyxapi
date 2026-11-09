@@ -20,7 +20,7 @@ type locContextParams struct {
 }
 
 func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A]) (locContextParams, error) {
-	avlType := AvlTypeSelf
+	avlType := ts.AvlTypeSelf
 	var locContextID sql.NullInt32
 	var locContextType string
 
@@ -29,9 +29,9 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 		return locContextParams{}, err
 	}
 	if !errs.QueryIsEmpty(err) {
-		avlType = AvlTypeContext
+		avlType = ts.AvlTypeContext
 		locContextID = locID
-		locContextType = string(ViewSourceTypeLocation)
+		locContextType = string(ts.VstLocation)
 	}
 
 	subLocID, err := handlerinput.NullID(r, apilookups.E.Sublocations, ts.QpnSublocation, i.QueryLookup)
@@ -39,9 +39,9 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 		return locContextParams{}, err
 	}
 	if !errs.QueryIsEmpty(err) {
-		avlType = AvlTypeContext
+		avlType = ts.AvlTypeContext
 		locContextID = subLocID
-		locContextType = string(ViewSourceTypeSublocation)
+		locContextType = string(ts.VstSublocation)
 	}
 
 	areaID, err := handlerinput.NullID(r, apilookups.E.Areas, ts.QpnArea, i.QueryLookup)
@@ -49,9 +49,9 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 		return locContextParams{}, err
 	}
 	if !errs.QueryIsEmpty(err) {
-		avlType = AvlTypeContext2
+		avlType = ts.AvlTypeContext2
 		locContextID = areaID
-		locContextType = string(ViewSourceTypeArea)
+		locContextType = string(ts.VstArea)
 	}
 
 	var locCtxTypePtr *string

@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -23,28 +24,27 @@ func getItemAbility(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, 
 		return apitypes.ItemAbility{}, err
 	}
 
-	rel := GetItemAbilityRelationships(r, ability)
+	rel := assemble.GetItemAbilityRelationships(r, ability)
 
 	response := apitypes.ItemAbility{
-		ID:                 	ability.ID,
-		Name:               	ability.Name,
-		Item:               	rel.Item,
-		UntypedAbility:     	handlerinput.IDToTypedAPIResource(apilookups.E.Abilities, ability.Ability.ID),
-		Description:        	rel.Description,
-		Effect:             	rel.Effect,
-		Category:           	rel.Category,
-		CanUseOutsideBattle: 	rel.CanUseOutsideBattle,
-		Rank:               	ability.Rank,
-		AppearsInHelpBar:   	ability.AppearsInHelpBar,
-		CanCopycat:         	ability.CanCopycat,
-		RelatedStats:       	rel.RelatedStats,
-		Cursor:             	rel.Cursor,
-		BattleInteractions: 	ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
+		ID:                  ability.ID,
+		Name:                ability.Name,
+		Item:                rel.Item,
+		UntypedAbility:      handlerinput.IDToTypedAPIResource(apilookups.E.Abilities, ability.Ability.ID),
+		Description:         rel.Description,
+		Effect:              rel.Effect,
+		Category:            rel.Category,
+		CanUseOutsideBattle: rel.CanUseOutsideBattle,
+		Rank:                ability.Rank,
+		AppearsInHelpBar:    ability.AppearsInHelpBar,
+		CanCopycat:          ability.CanCopycat,
+		RelatedStats:        rel.RelatedStats,
+		Cursor:              rel.Cursor,
+		BattleInteractions:  ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 
 	return response, nil
 }
-
 
 func retrieveItemAbilities(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

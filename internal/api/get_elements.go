@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -15,7 +16,7 @@ func getElement(r *http.Request, i handlerinput.Main[seedtypes.Element, apitypes
 		return apitypes.Element{}, err
 	}
 
-	rel, err := GetElementRelationships(r, element)
+	rel, err := assemble.GetElementRelationships(r, element)
 	if err != nil {
 		return apitypes.Element{}, err
 	}

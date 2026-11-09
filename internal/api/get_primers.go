@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -15,7 +16,7 @@ func getPrimer(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.P
 		return apitypes.Primer{}, err
 	}
 
-	rel, err := GetPrimerRelationships(r, primer)
+	rel, err := assemble.GetPrimerRelationships(r, primer)
 	if err != nil {
 		return apitypes.Primer{}, err
 	}

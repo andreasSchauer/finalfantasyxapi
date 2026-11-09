@@ -197,13 +197,13 @@ func getAreas() []seedtypes.Area {
 	return areas
 }
 
-func getAreaConnectedAreas(a seedtypes.Area) ([]seedtypes.AreaConnection, error) {
+func GetAreaConnectedAreas(a seedtypes.Area) ([]seedtypes.AreaConnection, error) {
 	return a.ConnectedAreas, nil
 }
 
 func seedJuncAreaConnectedAreas(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "area + area connections"
-	jParams, err := processJunctions(desc, getAreas(), getAreaConnectedAreas)
+	jParams, err := processJunctions(desc, getAreas(), GetAreaConnectedAreas)
 	if err != nil {
 		return err
 	}

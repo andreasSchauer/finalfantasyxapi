@@ -14,7 +14,7 @@ import (
 )
 
 type locBasedSources struct {
-	SrcType         ViewSourceType
+	SrcType         ts.ViewSourceType
 	RequiredSources []string
 	ExcludedSources []string
 	MonsterID       sql.NullInt32
@@ -33,11 +33,11 @@ func (s locBasedSources) IsZero() bool {
 		s.Methods == nil
 }
 
-func reqsAreZero(reqs []string, srcType ViewSourceType) bool {
+func reqsAreZero(reqs []string, srcType ts.ViewSourceType) bool {
 	return len(reqs) == 1 && reqs[0] == string(srcType)
 }
 
-func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A], srcType ViewSourceType) (locBasedSources, error) {
+func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A], srcType ts.ViewSourceType) (locBasedSources, error) {
 	reqs := []string{string(srcType)}
 	excls := []string{}
 
@@ -54,7 +54,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource
 		return locBasedSources{}, err
 	}
 	if !errs.QueryIsEmpty(err) {
-		reqs = append(reqs, string(ViewSourceTypeItem))
+		reqs = append(reqs, string(ts.VstItem))
 	}
 
 	keyItemID, err := handlerinput.NullID(r, apilookups.E.KeyItems, ts.QpnKeyItem, i.QueryLookup)
@@ -62,7 +62,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource
 		return locBasedSources{}, err
 	}
 	if !errs.QueryIsEmpty(err) {
-		reqs = append(reqs, string(ViewSourceTypeKeyItem))
+		reqs = append(reqs, string(ts.VstKeyItem))
 	}
 
 	autoAbilityID, err := handlerinput.NullID(r, apilookups.E.AutoAbilities, ts.QpnAutoAbility, i.QueryLookup)
@@ -70,7 +70,7 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource
 		return locBasedSources{}, err
 	}
 	if !errs.QueryIsEmpty(err) {
-		reqs = append(reqs, string(ViewSourceTypeAutoAbility))
+		reqs = append(reqs, string(ts.VstAutoAbility))
 	}
 
 	methods, err := i.QueryLookup[ts.QpnMethods].ParseValueList(r)
@@ -79,11 +79,11 @@ func getLocBasedSources[T seedtypes.Lookupable, R any, A apiresource.APIResource
 	}
 
 	reqs, excls, err = parseBoolSources(r, i, reqs, excls, map[ts.QueryParamName]string{
-		ts.QpnMonsters:   string(ViewSourceTypeMonster),
-		ts.QpnBossFights: string(ViewSourceTypeBoss),
-		ts.QpnShops:      string(ViewSourceTypeShop),
-		ts.QpnTreasures:  string(ViewSourceTypeTreasure),
-		ts.QpnSidequests: string(ViewSourceTypeQuest),
+		ts.QpnMonsters:   string(ts.VstMonster),
+		ts.QpnBossFights: string(ts.VstBoss),
+		ts.QpnShops:      string(ts.VstShop),
+		ts.QpnTreasures:  string(ts.VstTreasure),
+		ts.QpnSidequests: string(ts.VstQuest),
 	})
 	if err != nil {
 		return locBasedSources{}, err
@@ -113,7 +113,7 @@ type shopSources struct {
 }
 
 func getShopSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A]) (shopSources, error) {
-	avlType := AvlTypeSelf
+	avlType := ts.AvlTypeSelf
 	reqs := []string{}
 	excls := []string{}
 
@@ -122,7 +122,7 @@ func getShopSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r 
 		return shopSources{}, err
 	}
 	if !errs.QueryIsEmpty(err) {
-		avlType = AvlTypeContext
+		avlType = ts.AvlTypeContext
 		reqs = append(reqs, "equip-filter")
 	}
 
@@ -131,7 +131,7 @@ func getShopSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r 
 		return shopSources{}, err
 	}
 	if !errs.QueryIsEmpty(err) {
-		avlType = AvlTypeContext
+		avlType = ts.AvlTypeContext
 		reqs = append(reqs, "equip-filter")
 	}
 
@@ -140,19 +140,19 @@ func getShopSources[T seedtypes.Lookupable, R any, A apiresource.APIResource](r 
 		return shopSources{}, err
 	}
 	if !errs.QueryIsEmpty(err) {
-		avlType = AvlTypeContext
+		avlType = ts.AvlTypeContext
 		reqs = append(reqs, "equip-filter")
 	}
 
 	reqs, excls, err = parseBoolSources(r, i, reqs, excls, map[ts.QueryParamName]string{
-		ts.QpnItems:     string(ViewSourceTypeItem),
-		ts.QpnEquipment: string(ViewSourceTypeEquipment),
+		ts.QpnItems:     string(ts.VstItem),
+		ts.QpnEquipment: string(ts.VstEquipment),
 	})
 	if err != nil {
 		return shopSources{}, err
 	}
 	if len(reqs) > 0 || len(excls) > 0 {
-		avlType = AvlTypeContext
+		avlType = ts.AvlTypeContext
 	}
 
 	sources := shopSources{

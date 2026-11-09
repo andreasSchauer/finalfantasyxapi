@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -19,7 +20,7 @@ func getMix(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, ap
 		return apitypes.Mix{}, err
 	}
 
-	rel, err := GetMixRelationships(r, mix)
+	rel, err := assemble.GetMixRelationships(r, mix)
 	if err != nil {
 		return apitypes.Mix{}, err
 	}
@@ -36,7 +37,6 @@ func getMix(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, ap
 
 	return response, nil
 }
-
 
 func retrieveMixes(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)

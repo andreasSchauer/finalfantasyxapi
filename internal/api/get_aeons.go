@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -21,7 +22,7 @@ func getAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon,
 		return apitypes.Aeon{}, err
 	}
 
-	rel, err := GetAeonRelationships(r, aeon)
+	rel, err := assemble.GetAeonRelationships(r, aeon)
 	if err != nil {
 		return apitypes.Aeon{}, err
 	}
@@ -48,7 +49,7 @@ func getAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon,
 		ArmorAbilities:         ah.ConvertObjSlice(aeon.Armor, apiconv.ConvertAeonEquipment),
 	}
 
-	return CompleteAeonResponse(r, response)
+	return assemble.CompleteAeonResponse(r, response)
 }
 
 func retrieveAeons(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named]) ([]int32, error) {

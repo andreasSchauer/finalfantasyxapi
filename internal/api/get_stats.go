@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -16,7 +17,7 @@ func getStat(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat,
 		return apitypes.Stat{}, err
 	}
 
-	rel, err := GetStatRelationships(r, stat)
+	rel, err := assemble.GetStatRelationships(r, stat)
 	if err != nil {
 		return apitypes.Stat{}, err
 	}

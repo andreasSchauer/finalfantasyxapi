@@ -7,6 +7,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -21,7 +22,7 @@ func getSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song,
 		return apitypes.Song{}, err
 	}
 
-	rel, err := GetSongRelationships(r, song)
+	rel, err := assemble.GetSongRelationships(r, song)
 	if err != nil {
 		return apitypes.Song{}, err
 	}

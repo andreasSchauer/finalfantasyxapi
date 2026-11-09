@@ -1,0 +1,71 @@
+package assemble
+
+import (
+	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+)
+
+func GetMasterItemRelationships(r *http.Request, masterItem seedtypes.MasterItem) (apitypes.MasterItem, error) {
+	var rel apitypes.MasterItem
+	var err error
+
+	rel.ObtainableFrom, err = getMasterItemObtainable(r, masterItem)
+	if err != nil {
+		return apitypes.MasterItem{}, err
+	}
+
+	return rel, nil
+}
+
+func getMasterItemObtainable(r *http.Request, masterItem seedtypes.MasterItem) (apitypes.ObtainableFrom, error) {
+	availabilityParams, err := apilookups.E.AllItems.QueryAvlRelGetParams(r, masterItem.ID)
+	if err != nil {
+		return apitypes.ObtainableFrom{}, err
+	}
+
+	bools, err := config.Cfg.DB.GetMasterItemObtainableBools(r.Context(), database.GetMasterItemObtainableBoolsParams{
+		MasterItemID: availabilityParams.ParentID,
+		Availability: availabilityParams.Availability,
+		Repeatable:   availabilityParams.Repeatable,
+	})
+	if err != nil {
+		return apitypes.ObtainableFrom{}, err
+	}
+
+	obtainable := apitypes.ObtainableFrom{
+		Monsters:        bools.Monsters,
+		Treasures:       bools.Treasures,
+		Shops:           bools.Shops,
+		Quests:          bools.Quests,
+		BlitzballPrizes: bools.Blitzball,
+	}
+
+	return obtainable, nil
+}
+
+func CompleteMasterItemResponse(r *http.Request, masterItem apitypes.MasterItem) apitypes.MasterItem {
+	switch masterItem.Type {
+	case database.ItemTypeItem:
+		item, _ := lookup.GetResource(masterItem.Name, lookup.L.Items)
+
+		masterItem.Description = item.Description
+		masterItem.Effect = item.Effect
+		masterItem.TypedItem = handlerinput.NameToNamedAPIResource(apilookups.E.Items, item.Name, nil)
+
+	case database.ItemTypeKeyItem:
+		keyItem, _ := lookup.GetResource(masterItem.Name, lookup.L.KeyItems)
+
+		masterItem.Description = keyItem.Description
+		masterItem.Effect = keyItem.Effect
+		masterItem.TypedItem = handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, keyItem.Name, nil)
+	}
+
+	return masterItem
+}

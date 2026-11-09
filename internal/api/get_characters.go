@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -19,7 +20,7 @@ func getCharacter(r *http.Request, i handlerinput.Main[seedtypes.Character, apit
 		return apitypes.Character{}, err
 	}
 
-	rel, err := GetCharacterRelationships(r, character)
+	rel, err := assemble.GetCharacterRelationships(r, character)
 	if err != nil {
 		return apitypes.Character{}, err
 	}
@@ -44,7 +45,7 @@ func getCharacter(r *http.Request, i handlerinput.Main[seedtypes.Character, apit
 		OverdriveModes:         rel.OverdriveModes,
 	}
 
-	return CompleteCharacterResponse(r, response)
+	return assemble.CompleteCharacterResponse(r, response)
 }
 
 func retrieveCharacters(r *http.Request, i handlerinput.Main[seedtypes.Character, apitypes.Character, apiresource.Named]) ([]int32, error) {

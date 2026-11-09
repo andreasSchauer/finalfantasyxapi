@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -29,7 +30,7 @@ func getMonsterFormation(r *http.Request, i handlerinput.Main[seedtypes.MonsterF
 		IsForcedAmbush:  formation.FormationData.IsForcedAmbush,
 		CanEscape:       formation.FormationData.CanEscape,
 		Notes:           formation.FormationData.Notes,
-		FormationLoot:   GetFormationLoot(formation),
+		FormationLoot:   assemble.GetFormationLoot(formation),
 		BossMusic:       ah.ConvertObjPtr(formation.FormationData.BossMusic, apiconv.ConvertFormationBossSong),
 		Monsters:        apilookups.E.Monsters.ToResAmtsFromNames(formation.Monsters),
 		Areas:           ah.ConvertObjSlice(formation.EncounterAreas, apiconv.ConvertEncounterArea),

@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -16,7 +17,7 @@ func getOverdriveCommand(r *http.Request, i handlerinput.Main[seedtypes.Overdriv
 		return apitypes.OverdriveCommand{}, err
 	}
 
-	rel, err := GetOverdriveCommandRelationships(r, command)
+	rel, err := assemble.GetOverdriveCommandRelationships(r, command)
 	if err != nil {
 		return apitypes.OverdriveCommand{}, err
 	}
@@ -34,7 +35,6 @@ func getOverdriveCommand(r *http.Request, i handlerinput.Main[seedtypes.Overdriv
 
 	return response, nil
 }
-
 
 func retrieveOverdriveCommands(r *http.Request, i handlerinput.Main[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.Named]) ([]int32, error) {
 	return i.VerifyQueriesRetrieve(r)

@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -22,7 +23,7 @@ func getEquipmentTable(r *http.Request, i handlerinput.Main[seedtypes.EquipmentT
 		return apitypes.EquipmentTable{}, err
 	}
 
-	rel, err := GetEquipmentTableRelationships(r, table)
+	rel, err := assemble.GetEquipmentTableRelationships(r, table)
 	if err != nil {
 		return apitypes.EquipmentTable{}, err
 	}
@@ -33,7 +34,7 @@ func getEquipmentTable(r *http.Request, i handlerinput.Main[seedtypes.EquipmentT
 		Classification:          table.Classification,
 		SpecificCharacter:       handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Characters, table.SpecificCharacter, nil),
 		Priority:                table.Priority,
-		CelestialWeapon:		 rel.CelestialWeapon,
+		CelestialWeapon:         rel.CelestialWeapon,
 		RequiredAutoAbilities:   handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, table.RequiredAutoAbilities),
 		SelectableAutoAbilities: ah.ConvertObjSlice(table.SelectableAutoAbilities, apiconv.ConvertAbilityPool),
 		RequiredSlots:           table.RequiredSlots,

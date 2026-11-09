@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -23,7 +24,7 @@ func getMonster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes
 		return apitypes.Monster{}, err
 	}
 
-	rel, err := GetMonsterRelationships(r, monster)
+	rel, err := assemble.GetMonsterRelationships(r, monster)
 	if err != nil {
 		return apitypes.Monster{}, err
 	}
@@ -72,7 +73,7 @@ func getMonster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes
 		AlteredStates:        rel.AlteredStates,
 	}
 
-	return CompleteMonsterResponse(r, response)
+	return assemble.CompleteMonsterResponse(r, response)
 }
 
 func retrieveMonsters(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes.Monster, apiresource.Named]) ([]int32, error) {

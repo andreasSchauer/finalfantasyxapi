@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -18,7 +19,7 @@ func getLocation(r *http.Request, i handlerinput.Main[seedtypes.Location, apityp
 		return apitypes.Location{}, err
 	}
 
-	rel, err := GetLocationRelationships(r, location)
+	rel, err := assemble.GetLocationRelationships(r, location)
 	if err != nil {
 		return apitypes.Location{}, err
 	}

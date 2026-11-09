@@ -1,0 +1,74 @@
+package assemble
+
+import (
+	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	"golang.org/x/sync/errgroup"
+)
+
+func GetAutoAbilityRelationships(r *http.Request, autoAbility seedtypes.AutoAbility) (apitypes.AutoAbility, error) {
+	var rel apitypes.AutoAbility
+	g, ctx := errgroup.WithContext(r.Context())
+	var monsterItems []apiresource.Named
+
+	availabilityParams, err := apilookups.E.AutoAbilities.QueryAvlRelGetParams(r, autoAbility.ID)
+	if err != nil {
+		return apitypes.AutoAbility{}, err
+	}
+
+	g.Go(func() error {
+		var err error
+		monsterItems, err = apilookups.E.Monsters.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilityItemMonsterIDs())
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.MonstersDrop, err = apilookups.E.Monsters.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstMonster, nil))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		preAirship := database.ShopTypePreAirship
+		rel.ShopsPreAirship, err = apilookups.E.Shops.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstShop, &preAirship))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		postAirship := database.ShopTypePostAirship
+		rel.ShopsPostAirship, err = apilookups.E.Shops.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstShop, &postAirship))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstTreasure, nil))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.EquipmentTables, err = apilookups.E.EquipmentTables.DBGetRelations(ctx, autoAbility, config.Cfg.DB.GetAutoAbilityEquipmentTableIDs)
+		return err
+	})
+
+	err = g.Wait()
+	if err != nil {
+		return apitypes.AutoAbility{}, err
+	}
+
+	if autoAbility.RequiredItem != nil {
+		rel.MonstersItems = getMonItemAmts(monsterItems, autoAbility.RequiredItem.ItemName)
+	}
+
+	return rel, nil
+}

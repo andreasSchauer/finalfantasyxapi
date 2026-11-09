@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -16,7 +17,7 @@ func getRonsoRage(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apit
 		return apitypes.RonsoRage{}, err
 	}
 
-	rel, err := GetRonsoRageRelationships(r, ronsoRage)
+	rel, err := assemble.GetRonsoRageRelationships(r, ronsoRage)
 	if err != nil {
 		return apitypes.RonsoRage{}, err
 	}

@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -22,7 +23,7 @@ func getAbility(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes
 		return apitypes.Ability{}, err
 	}
 
-	rel, err := GetAbilityRelationships(r, ability)
+	rel, err := assemble.GetAbilityRelationships(r, ability)
 	if err != nil {
 		return apitypes.Ability{}, err
 	}

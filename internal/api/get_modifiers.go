@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -18,7 +19,7 @@ func getModifier(r *http.Request, i handlerinput.Main[seedtypes.Modifier, apityp
 		return apitypes.Modifier{}, err
 	}
 
-	rel, err := GetModifierRelationships(r, modifier)
+	rel, err := assemble.GetModifierRelationships(r, modifier)
 	if err != nil {
 		return apitypes.Modifier{}, err
 	}

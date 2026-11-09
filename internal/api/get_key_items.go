@@ -6,6 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -19,7 +20,7 @@ func getKeyItem(r *http.Request, i handlerinput.Main[seedtypes.KeyItem, apitypes
 		return apitypes.KeyItem{}, err
 	}
 
-	rel, err := GetKeyItemRelationships(r, keyItem)
+	rel, err := assemble.GetKeyItemRelationships(r, keyItem)
 	if err != nil {
 		return apitypes.KeyItem{}, err
 	}
