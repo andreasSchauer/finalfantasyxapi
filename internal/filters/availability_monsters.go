@@ -1,4 +1,4 @@
-package api
+package filters
 
 import (
 	"net/http"
@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
-func filterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Monsters
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
@@ -41,7 +41,7 @@ func filterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterAvlMonsterFormations(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlMonsterFormations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.MonsterFormations
 
 	avlParams, err := i.QueryAvlRepGetParams(r)

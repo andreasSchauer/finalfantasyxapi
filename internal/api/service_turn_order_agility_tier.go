@@ -18,7 +18,7 @@ func getAllAgilityTiers() []seedtypes.AgilityTier {
 	return tiers
 }
 
-func getTierByAgility(agility int32) seedtypes.AgilityTier {
+func GetTierByAgility(agility int32) seedtypes.AgilityTier {
 	tiers := getAllAgilityTiers()
 	var agilityTier seedtypes.AgilityTier
 
@@ -33,7 +33,7 @@ func getTierByAgility(agility int32) seedtypes.AgilityTier {
 }
 
 func extractAglTierChar(participant servicetypes.Participant, params servicetypes.TurnOrderParams) servicetypes.AgilityVals {
-	agilityTier := getTierByAgility(participant.Agility)
+	agilityTier := GetTierByAgility(participant.Agility)
 	aglVals := servicetypes.AgilityVals{
 		TickSpeed: agilityTier.TickSpeed,
 		MaxICV:    agilityTier.CharacterMaxICV,
@@ -50,7 +50,7 @@ func extractAglTierChar(participant servicetypes.Participant, params servicetype
 }
 
 func extractAglTierMon(participant servicetypes.Participant, params servicetypes.TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) servicetypes.AgilityVals {
-	agilityTier := getTierByAgility(participant.Agility)
+	agilityTier := GetTierByAgility(participant.Agility)
 	aglVals := servicetypes.AgilityVals{
 		TickSpeed: agilityTier.TickSpeed,
 		MinICV:    agilityTier.MonsterMinICV,

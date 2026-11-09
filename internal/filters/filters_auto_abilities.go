@@ -1,4 +1,4 @@
-package api
+package filters
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func GetAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.AutoAbilities
 
 	charIDPtr, err := handlerinput.NullNameID(r, apilookups.E.Characters, ts.QpnCharacter, i.QueryLookup)
@@ -31,7 +31,7 @@ func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) (
 	return dbIDs, nil
 }
 
-func getAutoAbilitiesByShop(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func GetAutoAbilitiesByShop(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.AutoAbilities
 
 	charIDPtr, err := handlerinput.NullNameID(r, apilookups.E.Characters, ts.QpnCharacter, i.QueryLookup)

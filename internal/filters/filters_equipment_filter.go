@@ -1,4 +1,4 @@
-package api
+package filters
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
+func FilterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
 	i := apilookups.E.Shops
 
 	autoAbilityID, err := handlerinput.NullID(r, apilookups.E.AutoAbilities, ts.QpnAutoAbility, i.QueryLookup)
@@ -44,7 +44,7 @@ func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error)
 	return dbIDs, nil
 }
 
-func filterTreasuresEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
+func FilterTreasuresEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
 	i := apilookups.E.Treasures
 
 	autoAbilityID, err := handlerinput.NullID(r, apilookups.E.AutoAbilities, ts.QpnAutoAbility, i.QueryLookup)

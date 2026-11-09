@@ -1,4 +1,4 @@
-package api
+package filters
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMixesByItem(r *http.Request, ctx context.Context, firstItemID int32) ([]int32, error) {
+func GetMixesByItem(r *http.Request, ctx context.Context, firstItemID int32) ([]int32, error) {
 	i := apilookups.E.Mixes
 
 	secondItemIDPtr, err := handlerinput.NullID(r, apilookups.E.Items, ts.QpnSecondItem, i.QueryLookup)

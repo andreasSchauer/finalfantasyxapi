@@ -1,4 +1,4 @@
-package api
+package filters
 
 import (
 	"context"
@@ -18,7 +18,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMonstersByElemResists(r *http.Request, ctx context.Context, query string, queryParam queryparam.QueryParam) ([]int32, error) {
+func GetMonstersByElemResists(r *http.Request, ctx context.Context, query string, queryParam queryparam.QueryParam) ([]int32, error) {
 	ids, err := getElemResistIDs(query, queryParam)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func getElemResistIDs(query string, queryParam queryparam.QueryParam) ([]int32, 
 	return ids, nil
 }
 
-func getMonstersByStatusResists(r *http.Request, ctx context.Context, ids []int32) ([]int32, error) {
+func GetMonstersByStatusResists(r *http.Request, ctx context.Context, ids []int32) ([]int32, error) {
 	resistance, err := verifyMonsterResistance(r)
 	if err != nil {
 		return nil, err
@@ -104,7 +104,7 @@ func verifyMonsterResistance(r *http.Request) (int32, error) {
 	return int32(resistance), nil
 }
 
-func getMonstersByAutoAbility(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func GetMonstersByAutoAbility(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.Monsters
 
 	queryParam := i.QueryLookup[ts.QpnIsForced]
@@ -125,7 +125,7 @@ func getMonstersByAutoAbility(r *http.Request, ctx context.Context, id int32) ([
 	return dbIDs, nil
 }
 
-func getMonstersByItem(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func GetMonstersByItem(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.Monsters
 
 	methods, err := getMonsterItemMethods(r)

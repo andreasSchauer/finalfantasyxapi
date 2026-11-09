@@ -1,4 +1,4 @@
-package api
+package filters
 
 import (
 	"net/http"
@@ -11,7 +11,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Areas
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
@@ -56,7 +56,7 @@ func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Sublocations
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
@@ -101,7 +101,7 @@ func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterAvlLocations(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlLocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Locations
 
 	avlParams, err := i.QueryAvlRepGetParams(r)

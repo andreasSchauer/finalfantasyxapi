@@ -12,6 +12,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/filters"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -55,20 +56,20 @@ func retrieveEnemyAbilities(r *http.Request, i handlerinput.Main[seedtypes.Enemy
 
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetEnemyAbilityIDsByMonster),
-		i.QueryEnumList(r, enums.T.DamageType, ids, ts.QpnDamageType, getTypedAbilityIDsByDamageType(abilityType)),
-		i.QueryEnumList(r, enums.T.AttackType, ids, ts.QpnAttackType, getTypedAbilityIDsByAttackType(abilityType)),
-		i.QueryEnumList(r, enums.T.TargetType, ids, ts.QpnTargetType, getTypedAbilityIDsByTargetType(abilityType)),
-		i.QueryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, getTypedAbilityIDsByDamageFormula(abilityType)),
-		i.QueryIntList(r, ids, ts.QpnRank, getTypedAbilityIDsByRank(abilityType)),
-		i.QueryNameIDListNul(r, ids, ts.QpnElement, apilookups.E.Elements.ResTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(abilityType)),
-		i.QueryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(abilityType)),
-		i.QueryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(abilityType)),
-		i.QueryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(abilityType)),
-		i.QueryBool2(r, ids, ts.QpnCanCrit, getTypedAbilityIDsCanCrit(abilityType)),
-		i.QueryBool2(r, ids, ts.QpnBDL, getTypedAbilityIDsBreakDmgLimit(abilityType)),
-		i.QueryBool2(r, ids, ts.QpnDarkable, getTypedAbilityIDsDarkable(abilityType)),
-		i.QueryBool2(r, ids, ts.QpnSilenceable, getTypedAbilityIDsSilenceable(abilityType)),
-		i.QueryBool2(r, ids, ts.QpnReflectable, getTypedAbilityIDsReflectable(abilityType)),
-		i.QueryBool2(r, ids, ts.QpnDelay, getTypedAbilityIDsDealsDelay(abilityType)),
+		i.QueryEnumList(r, enums.T.DamageType, ids, ts.QpnDamageType, filters.GetTypedAbilityIDsByDamageType(abilityType)),
+		i.QueryEnumList(r, enums.T.AttackType, ids, ts.QpnAttackType, filters.GetTypedAbilityIDsByAttackType(abilityType)),
+		i.QueryEnumList(r, enums.T.TargetType, ids, ts.QpnTargetType, filters.GetTypedAbilityIDsByTargetType(abilityType)),
+		i.QueryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, filters.GetTypedAbilityIDsByDamageFormula(abilityType)),
+		i.QueryIntList(r, ids, ts.QpnRank, filters.GetTypedAbilityIDsByRank(abilityType)),
+		i.QueryNameIDListNul(r, ids, ts.QpnElement, apilookups.E.Elements.ResTypeSingle, lookup.L.Elements, filters.GetTypedAbilityIDsByElement(abilityType)),
+		i.QueryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, filters.GetTypedAbilityIDsByInflictedStatus(abilityType)),
+		i.QueryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, filters.GetTypedAbilityIDsByRemovedStatus(abilityType)),
+		i.QueryBool(r, ids, ts.QpnHelpBar, filters.GetTypedAbilityIDsByAppearsInHelpBar(abilityType)),
+		i.QueryBool2(r, ids, ts.QpnCanCrit, filters.GetTypedAbilityIDsCanCrit(abilityType)),
+		i.QueryBool2(r, ids, ts.QpnBDL, filters.GetTypedAbilityIDsBreakDmgLimit(abilityType)),
+		i.QueryBool2(r, ids, ts.QpnDarkable, filters.GetTypedAbilityIDsDarkable(abilityType)),
+		i.QueryBool2(r, ids, ts.QpnSilenceable, filters.GetTypedAbilityIDsSilenceable(abilityType)),
+		i.QueryBool2(r, ids, ts.QpnReflectable, filters.GetTypedAbilityIDsReflectable(abilityType)),
+		i.QueryBool2(r, ids, ts.QpnDelay, filters.GetTypedAbilityIDsDealsDelay(abilityType)),
 	})
 }

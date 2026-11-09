@@ -1,4 +1,5 @@
-package api
+// Package filters adoiadjio
+package filters
 
 import (
 	"net/http"
@@ -11,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.AutoAbilities
 
 	avlParams, err := i.QueryAvlRepGetParams(r)

@@ -1,4 +1,4 @@
-package api
+package filters
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func getMasterItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func GetMasterItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.AllItems
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
@@ -32,7 +32,7 @@ func getMasterItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int
 	return dbIDs, nil
 }
 
-func getMasterItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func GetMasterItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.AllItems
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
@@ -52,7 +52,7 @@ func getMasterItemsBySublocation(r *http.Request, ctx context.Context, id int32)
 	return dbIDs, nil
 }
 
-func getMasterItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func GetMasterItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.AllItems
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
@@ -72,7 +72,7 @@ func getMasterItemsByLocation(r *http.Request, ctx context.Context, id int32) ([
 	return dbIDs, nil
 }
 
-func getItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func GetItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.Items
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
@@ -92,7 +92,7 @@ func getItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, er
 	return dbIDs, nil
 }
 
-func getItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func GetItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.Items
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
@@ -112,7 +112,7 @@ func getItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]in
 	return dbIDs, nil
 }
 
-func getItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func GetItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.Items
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 

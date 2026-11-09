@@ -1,4 +1,4 @@
-package api
+package filters
 
 import (
 	"net/http"
@@ -11,7 +11,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func filterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.AllItems
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
@@ -49,7 +49,7 @@ func filterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Items
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
@@ -87,7 +87,7 @@ func filterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.KeyItems
 
 	avlParams, err := i.QueryAvlGetParams(r)
@@ -123,7 +123,7 @@ func filterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Spheres
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
@@ -161,7 +161,7 @@ func filterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterAvlPrimers(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlPrimers(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Primers
 
 	avlParams, err := i.QueryAvlGetParams(r)

@@ -1,4 +1,4 @@
-package api
+package filters
 
 import (
 	"net/http"
@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
-func filterAvlShops(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlShops(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Shops
 
 	avlParams, err := i.QueryAvlGetParams(r)
@@ -49,7 +49,7 @@ func filterAvlShops(r *http.Request, inputIDs []int32) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterAvlTreasures(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlTreasures(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Treasures
 
 	avlParams, err := i.QueryAvlGetParams(r)
@@ -72,7 +72,7 @@ func filterAvlTreasures(r *http.Request, inputIDs []int32) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterAvlQuests(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlQuests(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Quests
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
@@ -96,7 +96,7 @@ func filterAvlQuests(r *http.Request, inputIDs []int32) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterAvlSidequests(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlSidequests(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Sidequests
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
@@ -119,7 +119,7 @@ func filterAvlSidequests(r *http.Request, inputIDs []int32) ([]int32, error) {
 	return dbIDs, nil
 }
 
-func filterAvlSubquests(r *http.Request, inputIDs []int32) ([]int32, error) {
+func FilterAvlSubquests(r *http.Request, inputIDs []int32) ([]int32, error) {
 	i := apilookups.E.Subquests
 
 	avlParams, err := i.QueryAvlRepGetParams(r)

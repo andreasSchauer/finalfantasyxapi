@@ -11,6 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/filters"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -83,15 +84,15 @@ func retrieveMonsters(r *http.Request, i handlerinput.Main[seedtypes.Monster, ap
 	}
 
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryWrapper(r, ids, ts.QpnElementalResists, getMonstersByElemResists),
-		i.QueryIDListWrapper(r, ids, ts.QpnStatusResists, lookup.L.StatusConditions, getMonstersByStatusResists),
+		i.QueryWrapper(r, ids, ts.QpnElementalResists, filters.GetMonstersByElemResists),
+		i.QueryIDListWrapper(r, ids, ts.QpnStatusResists, lookup.L.StatusConditions, filters.GetMonstersByStatusResists),
 
-		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getMonstersByItem),
+		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, filters.GetMonstersByItem),
 		i.QueryID(r, ids, ts.QpnRonsoRage, lookup.L.RonsoRages, config.Cfg.DB.GetMonsterIDsByRonsoRage),
 		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetMonsterIDsByLocation),
 		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetMonsterIDsBySublocation),
 		i.QueryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetMonsterIDsByArea),
-		i.QueryIDWrapper(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, getMonstersByAutoAbility),
+		i.QueryIDWrapper(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, filters.GetMonstersByAutoAbility),
 
 		i.QueryIntList(r, ids, ts.QpnEmptySlots, config.Cfg.DB.GetMonsterIDsByEmptySlots),
 		i.QueryIntList(r, ids, ts.QpnDistance, config.Cfg.DB.GetMonsterIDsByDistance),

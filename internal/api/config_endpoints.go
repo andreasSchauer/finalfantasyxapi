@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/filters"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -26,7 +27,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetLocationIDs,
 		GetSingleFunc: getLocation,
 		RetrieveFunc:  retrieveLocations,
-		AvlFunc:       filterAvlLocations,
+		AvlFunc:       filters.FilterAvlLocations,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: CreateLocationSimple,
@@ -81,7 +82,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetSublocationIDs,
 		GetSingleFunc: getSublocation,
 		RetrieveFunc:  retrieveSublocations,
-		AvlFunc:       filterAvlSublocations,
+		AvlFunc:       filters.FilterAvlSublocations,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: CreateSublocationSimple,
@@ -130,7 +131,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetAreaIDs,
 		GetSingleFunc: getArea,
 		RetrieveFunc:  retrieveAreas,
-		AvlFunc:       filterAvlAreas,
+		AvlFunc:       filters.FilterAvlAreas,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: CreateAreaSimple,
@@ -171,7 +172,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetMonsterFormationIDs,
 		GetSingleFunc: getMonsterFormation,
 		RetrieveFunc:  retrieveMonsterFormations,
-		AvlFunc:       filterAvlMonsterFormations,
+		AvlFunc:       filters.FilterAvlMonsterFormations,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: CreateMonsterFormationSimple,
@@ -194,7 +195,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetShopIDs,
 		GetSingleFunc: getShop,
 		RetrieveFunc:  retrieveShops,
-		AvlFunc:       filterAvlShops,
+		AvlFunc:       filters.FilterAvlShops,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: CreateShopSimple,
@@ -211,7 +212,7 @@ func InitEndpoints() {
 		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.Treasure, apitypes.Treasure, apiresource.Unnamed],
 		RetrieveQuery: config.Cfg.DB.GetTreasureIDs,
 		GetSingleFunc: getTreasure,
-		AvlFunc:       filterAvlTreasures,
+		AvlFunc:       filters.FilterAvlTreasures,
 		RetrieveFunc:  retrieveTreasures,
 	}
 
@@ -225,7 +226,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetQuestIDs,
 		GetSingleFunc: getQuest,
 		RetrieveFunc:  retrieveQuests,
-		AvlFunc:       filterAvlQuests,
+		AvlFunc:       filters.FilterAvlQuests,
 	}
 
 	apilookups.E.Sidequests = handlerinput.Main[seedtypes.Sidequest, apitypes.Sidequest, apiresource.Quest]{
@@ -238,7 +239,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetSidequestIDs,
 		GetSingleFunc: getSidequest,
 		RetrieveFunc:  retrieveSidequests,
-		AvlFunc:       filterAvlSidequests,
+		AvlFunc:       filters.FilterAvlSidequests,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSubquests: {
 				DBQuery:     config.Cfg.DB.GetSidequestSubquestIDs,
@@ -257,7 +258,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetSubquestIDs,
 		GetSingleFunc: getSubquest,
 		RetrieveFunc:  retrieveSubquests,
-		AvlFunc:       filterAvlSubquests,
+		AvlFunc:       filters.FilterAvlSubquests,
 	}
 
 	apilookups.E.ArenaCreations = handlerinput.Main[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.Named]{
@@ -424,7 +425,7 @@ func InitEndpoints() {
 		RetrieveQuery:    config.Cfg.DB.GetMonsterIDs,
 		GetSingleFunc:    getMonster,
 		RetrieveFunc:     retrieveMonsters,
-		AvlFunc:          filterAvlMonsters,
+		AvlFunc:          filters.FilterAvlMonsters,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: CreateMonsterSimple,
@@ -470,7 +471,7 @@ func InitEndpoints() {
 		ObjLookup:        lookup.L.PlayerAbilities,
 		ObjLookupID:      lookup.L.PlayerAbilitiesID,
 		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.Named],
-		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypePlayerAbility),
+		GetMultipleQuery: filters.GetTypedAbilityIDsByName(database.AbilityTypePlayerAbility),
 		RetrieveQuery:    config.Cfg.DB.GetPlayerAbilityIDs,
 		GetSingleFunc:    getPlayerAbility,
 		RetrieveFunc:     retrievePlayerAbilities,
@@ -493,7 +494,7 @@ func InitEndpoints() {
 		ObjLookup:        lookup.L.OverdriveAbilities,
 		ObjLookupID:      lookup.L.OverdriveAbilitiesID,
 		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.Named],
-		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeOverdriveAbility),
+		GetMultipleQuery: filters.GetTypedAbilityIDsByName(database.AbilityTypeOverdriveAbility),
 		RetrieveQuery:    config.Cfg.DB.GetOverdriveAbilityIDs,
 		GetSingleFunc:    getOverdriveAbility,
 		RetrieveFunc:     retrieveOverdriveAbilities,
@@ -528,7 +529,7 @@ func InitEndpoints() {
 		ObjLookup:        lookup.L.TriggerCommands,
 		ObjLookupID:      lookup.L.TriggerCommandsID,
 		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.Named],
-		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeTriggerCommand),
+		GetMultipleQuery: filters.GetTypedAbilityIDsByName(database.AbilityTypeTriggerCommand),
 		RetrieveQuery:    config.Cfg.DB.GetTriggerCommandIDs,
 		GetSingleFunc:    getTriggerCommand,
 		RetrieveFunc:     retrieveTriggerCommands,
@@ -546,7 +547,7 @@ func InitEndpoints() {
 		ObjLookup:        lookup.L.MiscAbilities,
 		ObjLookupID:      lookup.L.MiscAbilitiesID,
 		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.Named],
-		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeMiscAbility),
+		GetMultipleQuery: filters.GetTypedAbilityIDsByName(database.AbilityTypeMiscAbility),
 		RetrieveQuery:    config.Cfg.DB.GetMiscAbilityIDs,
 		GetSingleFunc:    getMiscAbility,
 		RetrieveFunc:     retrieveMiscAbilities,
@@ -564,7 +565,7 @@ func InitEndpoints() {
 		ObjLookup:        lookup.L.EnemyAbilities,
 		ObjLookupID:      lookup.L.EnemyAbilitiesID,
 		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.Named],
-		GetMultipleQuery: getTypedAbilityIDsByName(database.AbilityTypeEnemyAbility),
+		GetMultipleQuery: filters.GetTypedAbilityIDsByName(database.AbilityTypeEnemyAbility),
 		RetrieveQuery:    config.Cfg.DB.GetEnemyAbilityIDs,
 		GetSingleFunc:    getEnemyAbility,
 		RetrieveFunc:     retrieveEnemyAbilities,
@@ -700,7 +701,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetMasterItemIDs,
 		GetSingleFunc: getMasterItem,
 		RetrieveFunc:  retrieveMasterItems,
-		AvlFunc:       filterAvlMasterItems,
+		AvlFunc:       filters.FilterAvlMasterItems,
 	}
 
 	apilookups.E.Items = handlerinput.Main[seedtypes.Item, apitypes.Item, apiresource.Named]{
@@ -713,7 +714,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetItemIDs,
 		GetSingleFunc: getItem,
 		RetrieveFunc:  retrieveItems,
-		AvlFunc:       filterAvlItems,
+		AvlFunc:       filters.FilterAvlItems,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnMixes: {
 				DBQuery:     config.Cfg.DB.GetItemMixIDs,
@@ -732,7 +733,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetSphereIDs,
 		GetSingleFunc: getSphere,
 		RetrieveFunc:  retrieveSpheres,
-		AvlFunc:       filterAvlSpheres,
+		AvlFunc:       filters.FilterAvlSpheres,
 	}
 
 	apilookups.E.KeyItems = handlerinput.Main[seedtypes.KeyItem, apitypes.KeyItem, apiresource.Named]{
@@ -745,7 +746,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetKeyItemIDs,
 		GetSingleFunc: getKeyItem,
 		RetrieveFunc:  retrieveKeyItems,
-		AvlFunc:       filterAvlKeyItems,
+		AvlFunc:       filters.FilterAvlKeyItems,
 	}
 
 	apilookups.E.Primers = handlerinput.Main[seedtypes.Primer, apitypes.Primer, apiresource.Named]{
@@ -758,7 +759,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetPrimerIDs,
 		GetSingleFunc: getPrimer,
 		RetrieveFunc:  retrievePrimers,
-		AvlFunc:       filterAvlPrimers,
+		AvlFunc:       filters.FilterAvlPrimers,
 	}
 
 	apilookups.E.Mixes = handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named]{
@@ -788,7 +789,7 @@ func InitEndpoints() {
 		RetrieveQuery: config.Cfg.DB.GetAutoAbilityIDs,
 		GetSingleFunc: getAutoAbility,
 		RetrieveFunc:  retrieveAutoAbilities,
-		AvlFunc:       filterAvlAutoAbilities,
+		AvlFunc:       filters.FilterAvlAutoAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: CreateAutoAbilitySimple,
