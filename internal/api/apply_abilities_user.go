@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
@@ -142,7 +143,7 @@ func populateReplAeon(repl unitRepl, queryParamUser queryparam.QueryParam) (unit
 
 	repl.replVals.Range = aeon.PhysAtkRange
 	repl.replVals.ShatterRate = aeon.PhysAtkShatterRate
-	repl.replVals.Accuracy = ah.ConvertObjPtr(aeon.PhysAtkAccuracy, ConvertAccuracy)
+	repl.replVals.Accuracy = ah.ConvertObjPtr(aeon.PhysAtkAccuracy, apiconv.ConvertAccuracy)
 	repl.replVals.DamageConstant = aeon.PhysAtkDmgConstant
 
 	return repl, nil

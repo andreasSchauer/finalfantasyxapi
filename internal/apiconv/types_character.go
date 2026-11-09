@@ -1,4 +1,4 @@
-package api
+package apiconv
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"

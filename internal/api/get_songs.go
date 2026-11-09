@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
@@ -39,8 +40,8 @@ func getSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song,
 		MusicSphereID:        song.MusicSphereID,
 		OstDisc:              song.OSTDisc,
 		OstTrackNumber:       song.OSTTrackNumber,
-		BackgroundMusic:      ah.ConvertObjSlice(song.BackgroundMusic, ConvertBackgroundMusic),
-		Cues:                 ah.ConvertObjSlice(song.Cues, ConvertCue),
+		BackgroundMusic:      ah.ConvertObjSlice(song.BackgroundMusic, apiconv.ConvertBackgroundMusic),
+		Cues:                 ah.ConvertObjSlice(song.Cues, apiconv.ConvertCue),
 		BossFights:           rel.BossFights,
 		FMVs:                 rel.FMVs,
 	}

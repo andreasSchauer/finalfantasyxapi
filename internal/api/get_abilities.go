@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
@@ -35,9 +36,9 @@ func getAbility(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes
 		Rank:               ability.Rank,
 		CanCopycat:         ability.CanCopycat,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
-		TypedAbility:       RefToNamedAPIResource(ability.GetAbilityRef()),
+		TypedAbility:       apiconv.RefToNamedAPIResource(ability.GetAbilityRef()),
 		Monsters:           monsters,
-		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, ConvertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 
 	return response, nil

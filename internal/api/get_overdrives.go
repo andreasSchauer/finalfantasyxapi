@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
@@ -34,7 +35,7 @@ func getOverdrive(r *http.Request, i handlerinput.Main[seedtypes.Overdrive, apit
 		Cursor:             overdrive.Cursor,
 		User:               handlerinput.NameToNamedAPIResource(apilookups.E.CharacterClasses, overdrive.User, nil),
 		OverdriveCommand:   handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.OverdriveCommands, overdrive.OverdriveCommand, nil),
-		OverdriveAbilities: RefsToNamedAPIResources(overdrive.OverdriveAbilities),
+		OverdriveAbilities: apiconv.RefsToNamedAPIResources(overdrive.OverdriveAbilities),
 	}
 
 	return response, nil

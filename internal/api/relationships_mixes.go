@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
@@ -36,5 +37,5 @@ func getMixCombinations(r *http.Request, mix seedtypes.Mix) ([]apitypes.MixCombi
 		})
 	}
 
-	return ah.ConvertObjSlice(combinations, ConvertMixCombination), nil
+	return ah.ConvertObjSlice(combinations, apiconv.ConvertMixCombination), nil
 }

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
@@ -26,7 +27,7 @@ func getAgilityTier(r *http.Request, i handlerinput.Main[seedtypes.AgilityTier, 
 		MonMinICV:   agilityTier.MonsterMinICV,
 		MonMaxICV:   agilityTier.MonsterMaxICV,
 		CharMaxICV:  agilityTier.CharacterMaxICV,
-		CharMinICVs: ah.ConvertObjSlice(agilityTier.CharacterMinICVs, ConvertAgilitySubtier),
+		CharMinICVs: ah.ConvertObjSlice(agilityTier.CharacterMinICVs, apiconv.ConvertAgilitySubtier),
 	}
 
 	return response, nil

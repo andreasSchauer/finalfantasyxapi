@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
@@ -29,10 +30,10 @@ func getMonsterFormation(r *http.Request, i handlerinput.Main[seedtypes.MonsterF
 		CanEscape:       formation.FormationData.CanEscape,
 		Notes:           formation.FormationData.Notes,
 		FormationLoot:   getFormationLoot(formation),
-		BossMusic:       ah.ConvertObjPtr(formation.FormationData.BossMusic, ConvertFormationBossSong),
+		BossMusic:       ah.ConvertObjPtr(formation.FormationData.BossMusic, apiconv.ConvertFormationBossSong),
 		Monsters:        apilookups.E.Monsters.ToResAmtsFromNames(formation.Monsters),
-		Areas:           ah.ConvertObjSlice(formation.EncounterAreas, ConvertEncounterArea),
-		TriggerCommands: ah.ConvertObjSlice(formation.TriggerCommands, ConvertFormationTriggerCommand),
+		Areas:           ah.ConvertObjSlice(formation.EncounterAreas, apiconv.ConvertEncounterArea),
+		TriggerCommands: ah.ConvertObjSlice(formation.TriggerCommands, apiconv.ConvertFormationTriggerCommand),
 	}
 
 	return response, nil

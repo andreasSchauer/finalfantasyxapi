@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
@@ -62,12 +63,12 @@ func getMonster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes
 		Areas:                rel.Areas,
 		Formations:           rel.Formations,
 		BaseStats:            apilookups.E.Stats.ToResAmtType(monster.BaseStats, th.NewBaseStat),
-		Items:                ah.ConvertObjPtr(monster.Items, ConvertMonsterItems),
-		Equipment:            ah.ConvertObjPtr(monster.Equipment, ConvertMonsterEquipment),
+		Items:                ah.ConvertObjPtr(monster.Items, apiconv.ConvertMonsterItems),
+		Equipment:            ah.ConvertObjPtr(monster.Equipment, apiconv.ConvertMonsterEquipment),
 		ElemResists:          getMonsterElemResists(monster.ElemResists),
 		StatusImmunities:     handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, monster.StatusImmunities),
 		StatusResists:        apilookups.E.StatusConditions.ToResAmtType(monster.StatusResists, th.NewStatusResist),
-		Abilities:            ah.ConvertObjSlice(monster.Abilities, ConvertMonsterAbility),
+		Abilities:            ah.ConvertObjSlice(monster.Abilities, apiconv.ConvertMonsterAbility),
 		AlteredStates:        getMonsterAlteredStates(r, monster),
 	}
 

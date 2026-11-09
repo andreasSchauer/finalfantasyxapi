@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
@@ -42,14 +43,14 @@ func getAutoAbility(r *http.Request, i handlerinput.Main[seedtypes.AutoAbility, 
 		GradualRecovery:        handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Stats, autoAbility.GradualRecovery, nil),
 		AutoItemUse:            handlerinput.NamesToNamedAPIResources(apilookups.E.Items, autoAbility.AutoItemUse),
 		OnHitElement:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Elements, autoAbility.OnHitElement, nil),
-		AddedElemResist:        ah.ConvertObjPtr(autoAbility.AddedElemResist, ConvertElemResist),
-		OnHitStatus:            ah.ConvertObjPtr(autoAbility.OnHitStatus, ConvertInflictedStatus),
+		AddedElemResist:        ah.ConvertObjPtr(autoAbility.AddedElemResist, apiconv.ConvertElemResist),
+		OnHitStatus:            ah.ConvertObjPtr(autoAbility.OnHitStatus, apiconv.ConvertInflictedStatus),
 		AddedStatusses:         handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, autoAbility.AddedStatusses),
-		AddedStatusResists:     ah.ConvertObjSlice(autoAbility.AddedStatusResists, ConvertStatusResist),
+		AddedStatusResists:     ah.ConvertObjSlice(autoAbility.AddedStatusResists, apiconv.ConvertStatusResist),
 		AddedProperty:          handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Properties, autoAbility.AddedProperty, nil),
 		ConversionTo:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Modifiers, autoAbility.ConversionTo, nil),
-		StatChanges:            ah.ConvertObjSlice(autoAbility.StatChanges, ConvertStatChange),
-		ModifierChanges:        ah.ConvertObjSlice(autoAbility.ModifierChanges, ConvertModifierChange),
+		StatChanges:            ah.ConvertObjSlice(autoAbility.StatChanges, apiconv.ConvertStatChange),
+		ModifierChanges:        ah.ConvertObjSlice(autoAbility.ModifierChanges, apiconv.ConvertModifierChange),
 		MonstersDrop:           rel.MonstersDrop,
 		MonstersItems:          rel.MonstersItems,
 		ShopsPreAirship:        rel.ShopsPreAirship,

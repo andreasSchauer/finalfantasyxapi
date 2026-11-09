@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
@@ -37,7 +38,7 @@ func getItemAbility(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, 
 		CanCopycat:         ability.CanCopycat,
 		RelatedStats:       handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, item.RelatedStats),
 		Cursor:             item.Cursor,
-		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, ConvertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
 	}
 
 	if item.Usability == string(database.ItemUsabilityOutsideBattle) || item.Usability == string(database.ItemUsabilityAlways) {

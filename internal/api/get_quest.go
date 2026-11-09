@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
@@ -23,10 +24,10 @@ func getQuest(r *http.Request, i handlerinput.Main[seedtypes.Quest, apitypes.Que
 		ID:           quest.ID,
 		Name:         quest.Name,
 		Type:         quest.Type,
-		TypedQuest:   QuestToQuestAPIResource(quest),
+		TypedQuest:   apiconv.QuestToQuestAPIResource(quest),
 		Availability: quest.Availability,
 		IsRepeatable: quest.IsRepeatable,
-		Completion:   ah.ConvertObjPtr(quest.Completion, ConvertQuestCompletion),
+		Completion:   ah.ConvertObjPtr(quest.Completion, apiconv.ConvertQuestCompletion),
 	}
 
 	return response, nil

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
@@ -29,7 +30,7 @@ func getSidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apit
 		UntypedQuest: handlerinput.IDToQuestAPIResource(apilookups.E.Quests, sidequest.Quest.ID),
 		Availability: sidequest.Availability,
 		IsRepeatable: sidequest.IsRepeatable,
-		Completion:   ah.ConvertObjPtr(sidequest.Completion, ConvertQuestCompletion),
+		Completion:   ah.ConvertObjPtr(sidequest.Completion, apiconv.ConvertQuestCompletion),
 		Subquests:    subquests,
 	}
 

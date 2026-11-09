@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
@@ -48,14 +49,14 @@ func getCharacterRelationships(r *http.Request, char seedtypes.Character) (apity
 	if !char.IsStoryBased {
 		g.Go(func() error {
 			var err error
-			rel.StdSphereGrid = ah.ConvertObjPtr(char.StdSphereGrid, ConvertSphereGrid)
+			rel.StdSphereGrid = ah.ConvertObjPtr(char.StdSphereGrid, apiconv.ConvertSphereGrid)
 			rel.StdSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterSgAbilityIDs)
 			return err
 		})
 
 		g.Go(func() error {
 			var err error
-			rel.ExpSphereGrid = ah.ConvertObjPtr(char.ExpSphereGrid, ConvertSphereGrid)
+			rel.ExpSphereGrid = ah.ConvertObjPtr(char.ExpSphereGrid, apiconv.ConvertSphereGrid)
 			rel.ExpSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterEgAbilityIDs)
 			return err
 		})

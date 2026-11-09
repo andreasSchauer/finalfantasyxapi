@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
@@ -58,7 +59,7 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 		rel.Priority = table.Priority
 		rel.RequiredSlots = table.RequiredSlots
 		rel.RequiredAutoAbilities = handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, table.RequiredAutoAbilities)
-		rel.SelectableAutoAbilities = ah.ConvertObjSlice(table.SelectableAutoAbilities, ConvertAbilityPool)
+		rel.SelectableAutoAbilities = ah.ConvertObjSlice(table.SelectableAutoAbilities, apiconv.ConvertAbilityPool)
 		return nil
 	})
 

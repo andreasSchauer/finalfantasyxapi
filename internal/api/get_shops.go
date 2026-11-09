@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
@@ -26,8 +27,8 @@ func getShop(r *http.Request, i handlerinput.Main[seedtypes.Shop, apitypes.Shop,
 		Area:        handlerinput.IDToAreaAPIResource(apilookups.E.Areas, shop.AreaID),
 		Notes:       shop.Notes,
 		Category:    shop.Category,
-		PreAirship:  ah.ConvertObjPtr(shop.PreAirship, ConvertSubShop),
-		PostAirship: ah.ConvertObjPtr(shop.PostAirship, ConvertSubShop),
+		PreAirship:  ah.ConvertObjPtr(shop.PreAirship, apiconv.ConvertSubShop),
+		PostAirship: ah.ConvertObjPtr(shop.PostAirship, apiconv.ConvertSubShop),
 	}
 
 	return response, nil

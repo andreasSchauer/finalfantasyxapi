@@ -1,4 +1,4 @@
-package api
+package apiconv
 
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"

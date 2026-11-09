@@ -1,4 +1,5 @@
-package api
+// Package apiconv asidjasdij
+package apiconv
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"

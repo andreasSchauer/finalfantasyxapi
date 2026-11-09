@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
@@ -50,7 +51,7 @@ func getAlts(as seedtypes.AlteredState) []apitypes.Alt {
 	alts := []apitypes.Alt{}
 
 	for _, change := range as.Changes {
-		altStateChange := ConvertAlt(change)
+		altStateChange := apiconv.ConvertAlt(change)
 		altStateChange.AlterationType = database.AlterationType(change.AlterationType)
 		altStateChange.Distance = change.Distance
 		alts = append(alts, altStateChange)

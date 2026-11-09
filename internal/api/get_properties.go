@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
@@ -28,7 +29,7 @@ func getProperty(r *http.Request, i handlerinput.Main[seedtypes.Property, apityp
 		Effect:         property.Effect,
 		NullifyArmored: property.NullifyArmored,
 		RelatedStats:   handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, property.RelatedStats),
-		ModifierChange: ah.ConvertObjPtr(property.ModifierChange, ConvertModifierChange),
+		ModifierChange: ah.ConvertObjPtr(property.ModifierChange, apiconv.ConvertModifierChange),
 		AutoAbilities:  rel.AutoAbilities,
 		Monsters:       rel.Monsters,
 	}
