@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
@@ -146,5 +146,5 @@ func TestRetrieveMixes(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Mixes.Endpoint, "RetrieveMixes", testSrv.HandleMixes, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.Mixes.Endpoint, "RetrieveMixes", testSrv.HandleMixes, compareAPIResourceLists[apiresource.Named])
 }

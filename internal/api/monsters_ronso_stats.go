@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -13,10 +14,10 @@ import (
 func applyRonsoStats(r *http.Request, mon apitypes.Monster, queryName ts.QueryParamName) ([]apitypes.BaseStat, error) {
 	allowedStatIDs := []int32{1, 3, 5, 7}
 	baseStats := mon.BaseStats
-	queryParam := Q.Monsters[queryName]
+	queryParam := apilookups.Q.Monsters[queryName]
 
 	kimahri, _ := lookup.L.Characters["kimahri"]
-	kimahriBS := E.Stats.ToResAmtType(kimahri.BaseStats, newBaseStat)
+	kimahriBS := apilookups.E.Stats.ToResAmtType(kimahri.BaseStats, newBaseStat)
 
 	kimahriStatCalcMap, err := getStatCalcMap(r, queryParam, kimahriBS, allowedStatIDs)
 	if errs.QueryIsEmpty(err) {

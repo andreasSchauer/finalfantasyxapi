@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
@@ -13,7 +13,7 @@ type testResAmount[A apiresource.APIResource] struct {
 
 func compareResAmounts[A apiresource.APIResource](test test, fieldName string, exp testResAmount[A], got apiresource.ResourceAmount[A]) {
 	test.t.Helper()
-	test.compIDAPIResource(fieldName+" - resource", api.E.AllItems.Endpoint, exp.item, got)
+	test.compIDAPIResource(fieldName+" - resource", apilookups.E.AllItems.Endpoint, exp.item, got)
 	test.compare(fieldName+" - amount", exp.amount, got.Amount)
 }
 

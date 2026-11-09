@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -56,7 +57,7 @@ func getUnitRepl[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *ht
 	queryParamBomb := i.QueryLookup[ts.QpnBombWpn]
 	queryParamCelestialWpn := i.QueryLookup[ts.QpnCelestialWeapon]
 
-	unitID, err := queryParamUser.ParseNameID(r, E.PlayerUnits.ResTypeSingle, E.PlayerUnits.ObjLookup)
+	unitID, err := queryParamUser.ParseNameID(r, apilookups.E.PlayerUnits.ResTypeSingle, apilookups.E.PlayerUnits.ObjLookup)
 	if err != nil {
 		return unitRepl{}, err
 	}
@@ -149,7 +150,7 @@ func populateReplAeon(repl unitRepl, queryParamUser queryparam.QueryParam) (unit
 
 func verifyAbilityUsage(ability apitypes.UserAbility, repl unitRepl, queryName ts.QueryParamName) error {
 	if !ability.CanUseAbility(repl.unit.Name) {
-		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, E.PlayerUnits.ResTypeSingle, repl.unit.Name, ability), nil)
+		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': %s '%s' can't learn %s", queryName, apilookups.E.PlayerUnits.ResTypeSingle, repl.unit.Name, ability), nil)
 	}
 
 	return nil

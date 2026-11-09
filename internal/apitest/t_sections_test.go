@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
@@ -127,7 +127,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.Areas.Endpoint,
+				endpoint:       apilookups.E.Areas.Endpoint,
 				handler:        testSrv.HandleAreas,
 			},
 			count: 6,
@@ -144,7 +144,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.Sublocations.Endpoint,
+				endpoint:       apilookups.E.Sublocations.Endpoint,
 				handler:        testSrv.HandleSublocations,
 			},
 			count: 8,
@@ -163,7 +163,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.Locations.Endpoint,
+				endpoint:       apilookups.E.Locations.Endpoint,
 				handler:        testSrv.HandleLocations,
 			},
 			count: 9,
@@ -183,7 +183,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.Aeons.Endpoint,
+				endpoint:       apilookups.E.Aeons.Endpoint,
 				handler:        testSrv.HandleAeons,
 			},
 			count: 4,
@@ -198,7 +198,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/characters/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.Characters.Endpoint,
+				endpoint:       apilookups.E.Characters.Endpoint,
 				handler:        testSrv.HandleCharacters,
 			},
 			count: 5,
@@ -214,7 +214,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/character-classes/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.CharacterClasses.Endpoint,
+				endpoint:       apilookups.E.CharacterClasses.Endpoint,
 				handler:        testSrv.HandleCharacterClasses,
 			},
 			count: 4,
@@ -229,7 +229,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.ArenaCreations.Endpoint,
+				endpoint:       apilookups.E.ArenaCreations.Endpoint,
 				handler:        testSrv.HandleArenaCreations,
 			},
 			count:   0,
@@ -239,7 +239,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.BlitzballPrizes.Endpoint,
+				endpoint:       apilookups.E.BlitzballPrizes.Endpoint,
 				handler:        testSrv.HandleBlitzballPrizes,
 			},
 			count:   0,
@@ -249,7 +249,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/fmvs/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.FMVs.Endpoint,
+				endpoint:       apilookups.E.FMVs.Endpoint,
 				handler:        testSrv.HandleFMVs,
 			},
 			count:   0,
@@ -259,7 +259,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.Monsters.Endpoint,
+				endpoint:       apilookups.E.Monsters.Endpoint,
 				handler:        testSrv.HandleMonsters,
 			},
 			count: 4,
@@ -274,7 +274,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.MonsterFormations.Endpoint,
+				endpoint:       apilookups.E.MonsterFormations.Endpoint,
 				handler:        testSrv.HandleMonsterFormations,
 			},
 			count: 2,
@@ -287,7 +287,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.OverdriveModes.Endpoint,
+				endpoint:       apilookups.E.OverdriveModes.Endpoint,
 				handler:        testSrv.HandleOverdriveModes,
 			},
 			count:   0,
@@ -297,7 +297,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/shops/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.Shops.Endpoint,
+				endpoint:       apilookups.E.Shops.Endpoint,
 				handler:        testSrv.HandleShops,
 			},
 			count: 1,
@@ -309,7 +309,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/songs/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.Songs.Endpoint,
+				endpoint:       apilookups.E.Songs.Endpoint,
 				handler:        testSrv.HandleSongs,
 			},
 			count:   0,
@@ -319,7 +319,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.Sidequests.Endpoint,
+				endpoint:       apilookups.E.Sidequests.Endpoint,
 				handler:        testSrv.HandleSidequests,
 			},
 			count: 1,
@@ -331,7 +331,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.Subquests.Endpoint,
+				endpoint:       apilookups.E.Subquests.Endpoint,
 				handler:        testSrv.HandleSubquests,
 			},
 			count:   0,
@@ -341,7 +341,7 @@ func TestSections(t *testing.T) {
 			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/sections",
 				expectedStatus: http.StatusOK,
-				endpoint:       api.E.Treasures.Endpoint,
+				endpoint:       apilookups.E.Treasures.Endpoint,
 				handler:        testSrv.HandleTreasures,
 			},
 			count:   0,

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -27,7 +28,7 @@ func getStat(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat,
 		MinVal:             stat.MinVal,
 		MaxVal:             stat.MaxVal,
 		MaxVal2:            stat.MaxVal2,
-		ActivationSphere:   handlerinput.NameToNamedAPIResource(E.Spheres, stat.ActivationSphere, nil),
+		ActivationSphere:   handlerinput.NameToNamedAPIResource(apilookups.E.Spheres, stat.ActivationSphere, nil),
 		Spheres:            rel.Spheres,
 		AutoAbilities:      rel.AutoAbilities,
 		PlayerAbilities:    rel.PlayerAbilities,

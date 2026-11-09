@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -17,7 +18,7 @@ type LocBasedMusicQueries struct {
 }
 
 func getMusicLocBased(ctx context.Context, item seedtypes.Lookupable, queries LocBasedMusicQueries) (*apitypes.LocBasedMusic, error) {
-	i := E.Songs
+	i := apilookups.E.Songs
 	var music apitypes.LocBasedMusic
 	g, ctx := errgroup.WithContext(ctx)
 

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -25,8 +26,8 @@ func getCharacter(r *http.Request, i handlerinput.Main[seedtypes.Character, apit
 	response := apitypes.Character{
 		ID:                     character.ID,
 		Name:                   character.Name,
-		UntypedUnit:            handlerinput.IDToTypedAPIResource(E.PlayerUnits, character.PlayerUnit.ID),
-		Area:                   handlerinput.LocAreaToAreaAPIResource(E.Areas, character.LocationArea),
+		UntypedUnit:            handlerinput.IDToTypedAPIResource(apilookups.E.PlayerUnits, character.PlayerUnit.ID),
+		Area:                   handlerinput.LocAreaToAreaAPIResource(apilookups.E.Areas, character.LocationArea),
 		IsStoryBased:           character.IsStoryBased,
 		CanFightUnderwater:     character.CanFightUnderwater,
 		PhysAtkRange:           character.PhysAtkRange,
@@ -35,7 +36,7 @@ func getCharacter(r *http.Request, i handlerinput.Main[seedtypes.Character, apit
 		CelestialWeapon:        rel.CelestialWeapon,
 		OverdriveCommand:       rel.OverdriveCommand,
 		CharacterClasses:       rel.CharacterClasses,
-		BaseStats:              E.Stats.ToResAmtType(character.BaseStats, newBaseStat),
+		BaseStats:              apilookups.E.Stats.ToResAmtType(character.BaseStats, newBaseStat),
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		StdSphereGrid:          rel.StdSphereGrid,
 		ExpSphereGrid:          rel.ExpSphereGrid,

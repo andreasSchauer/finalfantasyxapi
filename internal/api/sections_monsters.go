@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -15,7 +16,7 @@ import (
 )
 
 func createMonsterSimple(r *http.Request, id int32, subsection handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.Monsters
+	i := apilookups.E.Monsters
 	mon, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	areaIDs := subsection.Relations[id][handlerinput.RelationAreas]
@@ -71,10 +72,10 @@ func getMonsterSimpleBribeAmount(mon seedtypes.Monster, hp int32) *int32 {
 }
 
 func getMonsterSectionRelations(r *http.Request, monIDs []int32) (map[int32]map[handlerinput.Relation][]int32, error) {
-	i := E.Monsters
+	i := apilookups.E.Monsters
 	relations := make(map[int32]map[handlerinput.Relation][]int32)
 
-	monsterJunctions, err := i.GetDBJunctions(r.Context(), monIDs, E.Areas.ResTypeSingle, config.Cfg.DB.GetMonsterAreaIdPairs, juncMonsterArea)
+	monsterJunctions, err := i.GetDBJunctions(r.Context(), monIDs, apilookups.E.Areas.ResTypeSingle, config.Cfg.DB.GetMonsterAreaIdPairs, juncMonsterArea)
 	if err != nil {
 		return nil, err
 	}

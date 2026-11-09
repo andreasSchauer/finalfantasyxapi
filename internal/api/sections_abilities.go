@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -11,7 +12,7 @@ import (
 )
 
 func createAbilitySimple(r *http.Request, id int32, subsection handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.Abilities
+	i := apilookups.E.Abilities
 	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	typeStr := string(ability.Type)
 
@@ -30,7 +31,7 @@ func createAbilitySimple(r *http.Request, id int32, subsection handlerinput.Subs
 }
 
 func createEnemyAbilitySimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.EnemyAbilities
+	i := apilookups.E.EnemyAbilities
 	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	abilitySimple := sectiontypes.AbilitySimple{
@@ -47,7 +48,7 @@ func createEnemyAbilitySimple(_ *http.Request, id int32, _ handlerinput.Subsecti
 }
 
 func createItemAbilitySimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.ItemAbilities
+	i := apilookups.E.ItemAbilities
 	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	abilitySimple := sectiontypes.AbilitySimple{
@@ -64,7 +65,7 @@ func createItemAbilitySimple(_ *http.Request, id int32, _ handlerinput.Subsectio
 }
 
 func createOverdriveAbilitySimple(r *http.Request, id int32, subsection handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.OverdriveAbilities
+	i := apilookups.E.OverdriveAbilities
 	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	abilitySimple := sectiontypes.AbilitySimple{
@@ -81,7 +82,7 @@ func createOverdriveAbilitySimple(r *http.Request, id int32, subsection handleri
 }
 
 func createPlayerAbilitySimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.PlayerAbilities
+	i := apilookups.E.PlayerAbilities
 	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	playerAbilitySimple := sectiontypes.PlayerAbilitySimple{
@@ -99,7 +100,7 @@ func createPlayerAbilitySimple(_ *http.Request, id int32, _ handlerinput.Subsect
 }
 
 func createTriggerCommandSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.TriggerCommands
+	i := apilookups.E.TriggerCommands
 	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	abilitySimple := sectiontypes.AbilitySimple{
@@ -116,7 +117,7 @@ func createTriggerCommandSimple(_ *http.Request, id int32, _ handlerinput.Subsec
 }
 
 func createMiscAbilitySimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.MiscAbilities
+	i := apilookups.E.MiscAbilities
 	ability, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	abilitySimple := sectiontypes.AbilitySimple{

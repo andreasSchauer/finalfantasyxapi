@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -291,5 +291,5 @@ func TestRetrieveAeons(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Aeons.Endpoint, "RetrieveAeons", testSrv.HandleAeons, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.Aeons.Endpoint, "RetrieveAeons", testSrv.HandleAeons, compareAPIResourceLists[apiresource.Named])
 }

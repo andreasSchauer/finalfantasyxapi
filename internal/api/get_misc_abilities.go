@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -25,16 +26,16 @@ func getMiscAbility(r *http.Request, i handlerinput.Main[seedtypes.MiscAbility, 
 		Name:               ability.Name,
 		Version:            ability.Version,
 		Specification:      ability.Specification,
-		UntypedAbility:     handlerinput.IDToTypedAPIResource(E.Abilities, ability.Ability.ID),
+		UntypedAbility:     handlerinput.IDToTypedAPIResource(apilookups.E.Abilities, ability.Ability.ID),
 		Description:        ability.Description,
 		Effect:             ability.Effect,
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
-		LearnedBy:          handlerinput.NamesToNamedAPIResources(E.CharacterClasses, ability.LearnedBy),
-		Topmenu:            handlerinput.NamePtrToNamedAPIResPtr(E.Topmenus, ability.Topmenu, nil),
-		Submenu:            handlerinput.NamePtrToNamedAPIResPtr(E.Submenus, ability.Submenu, nil),
-		OpenSubmenu:        handlerinput.NamePtrToNamedAPIResPtr(E.Submenus, ability.OpenSubmenu, nil),
+		LearnedBy:          handlerinput.NamesToNamedAPIResources(apilookups.E.CharacterClasses, ability.LearnedBy),
+		Topmenu:            handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Topmenus, ability.Topmenu, nil),
+		Submenu:            handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, ability.Submenu, nil),
+		OpenSubmenu:        handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:             ability.Cursor,
 		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
 	}
@@ -57,7 +58,7 @@ func retrieveMiscAbilities(r *http.Request, i handlerinput.Main[seedtypes.MiscAb
 
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryIntList(r, ids, ts.QpnRank, getTypedAbilityIDsByRank(abilityType)),
-		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.ResTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetMiscAbilityIDsByCharClass),
+		i.QueryNameID(r, ids, ts.QpnUser, apilookups.E.CharacterClasses.ResTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetMiscAbilityIDsByCharClass),
 		i.QueryBool(r, ids, ts.QpnCopycat, getTypedAbilityIDsByCanCopycat(abilityType)),
 		i.QueryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(abilityType)),
 		i.QueryBool2(r, ids, ts.QpnUserAtk, getTypedAbilityIDsBasedOnUserAttack(abilityType)),

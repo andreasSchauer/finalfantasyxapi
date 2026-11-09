@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
@@ -231,7 +231,7 @@ func TestRetrieveSongs(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Songs.Endpoint, "RetrieveSongs", testSrv.HandleSongs, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.Songs.Endpoint, "RetrieveSongs", testSrv.HandleSongs, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestSubsectionSongs(t *testing.T) {
@@ -269,5 +269,5 @@ func TestSubsectionSongs(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Songs.Endpoint, "SubsectionSongs", nil, compareSimpleResourceLists[apiresource.Named, sectiontypes.SongSimple])
+	testIDList(t, tests, apilookups.E.Songs.Endpoint, "SubsectionSongs", nil, compareSimpleResourceLists[apiresource.Named, sectiontypes.SongSimple])
 }

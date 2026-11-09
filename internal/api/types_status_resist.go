@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -16,7 +17,7 @@ func newStatusResist(res apiresource.Named, resistance int32) apitypes.StatusRes
 
 func convertStatusResist(sr seedtypes.StatusResist) apitypes.StatusResist {
 	return apitypes.StatusResist{
-		StatusCondition: handlerinput.NameToNamedAPIResource(E.StatusConditions, sr.StatusCondition, nil),
+		StatusCondition: handlerinput.NameToNamedAPIResource(apilookups.E.StatusConditions, sr.StatusCondition, nil),
 		Resistance:      sr.Resistance,
 	}
 }

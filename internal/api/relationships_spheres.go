@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -12,7 +13,7 @@ import (
 func getSphereRelationships(r *http.Request, sphere seedtypes.Sphere) (apitypes.Sphere, error) {
 	item, _ := lookup.GetResourceByID(sphere.ItemID, lookup.L.ItemsID)
 
-	availabilityParams, err := E.Spheres.QueryAvlRelGetParams(r, item.ID)
+	availabilityParams, err := apilookups.E.Spheres.QueryAvlRelGetParams(r, item.ID)
 	if err != nil {
 		return apitypes.Sphere{}, err
 	}
@@ -23,7 +24,7 @@ func getSphereRelationships(r *http.Request, sphere seedtypes.Sphere) (apitypes.
 	}
 
 	rel := apitypes.Sphere{
-		Item:            handlerinput.NameToNamedAPIResource(E.Items, item.Name, nil),
+		Item:            handlerinput.NameToNamedAPIResource(apilookups.E.Items, item.Name, nil),
 		Description:     item.Description,
 		Effect:          item.Effect,
 		Monsters:        itemRel.Monsters,

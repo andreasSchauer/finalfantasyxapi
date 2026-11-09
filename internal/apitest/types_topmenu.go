@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
@@ -22,9 +22,9 @@ func (e expTopmenu) GetTestGeneral() testGeneral {
 func compareTopmenus(test test, exp expTopmenu, got apitypes.Topmenu) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
-	test.checkResIDsInSlice("submenus", api.E.Submenus.Endpoint, exp.submenus, got.Submenus)
-	test.checkResIDsInSlice("abilities", api.E.Abilities.Endpoint, exp.abilities, got.Abilities)
-	test.checkResIDsInSlice("overdrive commands", api.E.OverdriveCommands.Endpoint, exp.overdriveCommands, got.OverdriveCommands)
-	test.checkResIDsInSlice("overdrives", api.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
-	test.checkResIDsInSlice("aeon commands", api.E.AeonCommands.Endpoint, exp.aeonCommands, got.AeonCommands)
+	test.checkResIDsInSlice("submenus", apilookups.E.Submenus.Endpoint, exp.submenus, got.Submenus)
+	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, exp.abilities, got.Abilities)
+	test.checkResIDsInSlice("overdrive commands", apilookups.E.OverdriveCommands.Endpoint, exp.overdriveCommands, got.OverdriveCommands)
+	test.checkResIDsInSlice("overdrives", apilookups.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
+	test.checkResIDsInSlice("aeon commands", apilookups.E.AeonCommands.Endpoint, exp.aeonCommands, got.AeonCommands)
 }

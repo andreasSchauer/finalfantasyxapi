@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -42,14 +43,14 @@ func getMonster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes
 		IsUnderwater:         monster.IsUnderwater,
 		IsZombie:             monster.IsZombie,
 		Distance:             monster.Distance,
-		Properties:           handlerinput.NamesToNamedAPIResources(E.Properties, monster.Properties),
-		AutoAbilities:        handlerinput.NamesToNamedAPIResources(E.AutoAbilities, monster.AutoAbilities),
+		Properties:           handlerinput.NamesToNamedAPIResources(apilookups.E.Properties, monster.Properties),
+		AutoAbilities:        handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, monster.AutoAbilities),
 		AP:                   monster.AP,
 		APOverkill:           monster.APOverkill,
 		OverkillDamage:       monster.OverkillDamage,
 		Gil:                  monster.Gil,
 		StealGil:             monster.StealGil,
-		RonsoRages:           handlerinput.NamesToNamedAPIResources(E.RonsoRages, monster.RonsoRages),
+		RonsoRages:           handlerinput.NamesToNamedAPIResources(apilookups.E.RonsoRages, monster.RonsoRages),
 		DoomCountdown:        monster.DoomCountdown,
 		PoisonRate:           monster.PoisonRate,
 		ThreatenChance:       monster.ThreatenChance,
@@ -59,12 +60,12 @@ func getMonster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes
 		ScanText:             monster.ScanText,
 		Areas:                rel.Areas,
 		Formations:           rel.Formations,
-		BaseStats:            E.Stats.ToResAmtType(monster.BaseStats, newBaseStat),
+		BaseStats:            apilookups.E.Stats.ToResAmtType(monster.BaseStats, newBaseStat),
 		Items:                ah.ConvertObjPtr(monster.Items, convertMonsterItems),
 		Equipment:            ah.ConvertObjPtr(monster.Equipment, convertMonsterEquipment),
 		ElemResists:          getMonsterElemResists(monster.ElemResists),
-		StatusImmunities:     handlerinput.NamesToNamedAPIResources(E.StatusConditions, monster.StatusImmunities),
-		StatusResists:        E.StatusConditions.ToResAmtType(monster.StatusResists, newStatusResist),
+		StatusImmunities:     handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, monster.StatusImmunities),
+		StatusResists:        apilookups.E.StatusConditions.ToResAmtType(monster.StatusResists, newStatusResist),
 		Abilities:            ah.ConvertObjSlice(monster.Abilities, convertMonsterAbility),
 		AlteredStates:        getMonsterAlteredStates(r, monster),
 	}

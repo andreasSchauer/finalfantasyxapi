@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -13,7 +14,7 @@ import (
 )
 
 func getItemRelationships(r *http.Request, item seedtypes.Item) (apitypes.Item, error) {
-	availabilityParams, err := E.Items.QueryAvlRelGetParams(r, item.ID)
+	availabilityParams, err := apilookups.E.Items.QueryAvlRelGetParams(r, item.ID)
 	if err != nil {
 		return apitypes.Item{}, err
 	}
@@ -24,7 +25,7 @@ func getItemRelationships(r *http.Request, item seedtypes.Item) (apitypes.Item, 
 	}
 
 	if item.Category == string(database.ItemCategorySphere) {
-		sphereRes := handlerinput.NameToNamedAPIResource(E.Spheres, item.Name, nil)
+		sphereRes := handlerinput.NameToNamedAPIResource(apilookups.E.Spheres, item.Name, nil)
 		rel.Sphere = &sphereRes
 	}
 
@@ -36,7 +37,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
-		monsters, err := E.Monsters.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeMonster))
+		monsters, err := apilookups.E.Monsters.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeMonster))
 		if err != nil {
 			return err
 		}
@@ -45,59 +46,59 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 	})
 
 	g.Go(func() error {
-		treasures, err := E.Treasures.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeTreasure))
+		treasures, err := apilookups.E.Treasures.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeTreasure))
 		if err != nil {
 			return err
 		}
-		rel.Treasures = handlerinput.ItemAmtsToChildResAmts2(E.Treasures, treasures, item.ID)
+		rel.Treasures = handlerinput.ItemAmtsToChildResAmts2(apilookups.E.Treasures, treasures, item.ID)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = E.Shops.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeShop))
+		rel.Shops, err = apilookups.E.Shops.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeShop))
 		return err
 	})
 
 	g.Go(func() error {
-		quests, err := E.Quests.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeQuest))
+		quests, err := apilookups.E.Quests.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeQuest))
 		if err != nil {
 			return err
 		}
-		rel.Quests = handlerinput.ItemAmtsToChildResAmts(E.Quests, quests)
+		rel.Quests = handlerinput.ItemAmtsToChildResAmts(apilookups.E.Quests, quests)
 		return nil
 	})
 
 	g.Go(func() error {
-		blitzballPrizes, err := E.BlitzballPrizes.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeBlitzball))
+		blitzballPrizes, err := apilookups.E.BlitzballPrizes.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ViewSourceTypeBlitzball))
 		if err != nil {
 			return err
 		}
-		rel.BlitzballPrizes = handlerinput.ItemAmtsToChildResAmts2(E.BlitzballPrizes, blitzballPrizes, item.ID)
+		rel.BlitzballPrizes = handlerinput.ItemAmtsToChildResAmts2(apilookups.E.BlitzballPrizes, blitzballPrizes, item.ID)
 		return nil
 	})
 
 	g.Go(func() error {
-		playerAbilities, err := E.PlayerAbilities.DBGetRelations(ctx, item, config.Cfg.DB.GetItemPlayerAbilityIDs)
+		playerAbilities, err := apilookups.E.PlayerAbilities.DBGetRelations(ctx, item, config.Cfg.DB.GetItemPlayerAbilityIDs)
 		if err != nil {
 			return err
 		}
-		rel.AeonLearnAbilities = handlerinput.ItemAmtsToChildResAmts(E.PlayerAbilities, playerAbilities)
+		rel.AeonLearnAbilities = handlerinput.ItemAmtsToChildResAmts(apilookups.E.PlayerAbilities, playerAbilities)
 		return nil
 	})
 
 	g.Go(func() error {
-		autoAbilities, err := E.AutoAbilities.DBGetRelations(ctx, item, config.Cfg.DB.GetItemAutoAbilityIDs)
+		autoAbilities, err := apilookups.E.AutoAbilities.DBGetRelations(ctx, item, config.Cfg.DB.GetItemAutoAbilityIDs)
 		if err != nil {
 			return err
 		}
-		rel.AutoAbilities = handlerinput.ItemAmtsToChildResAmts(E.AutoAbilities, autoAbilities)
+		rel.AutoAbilities = handlerinput.ItemAmtsToChildResAmts(apilookups.E.AutoAbilities, autoAbilities)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Mixes, err = E.Mixes.DBGetRelations(ctx, item, config.Cfg.DB.GetItemMixIDs)
+		rel.Mixes, err = apilookups.E.Mixes.DBGetRelations(ctx, item, config.Cfg.DB.GetItemMixIDs)
 		return err
 	})
 

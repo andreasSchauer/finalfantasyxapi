@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
 func filterAvlShops(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Shops
+	i := apilookups.E.Shops
 
 	avlParams, err := i.QueryAvlGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -49,7 +50,7 @@ func filterAvlShops(r *http.Request, inputIDs []int32) ([]int32, error) {
 }
 
 func filterAvlTreasures(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Treasures
+	i := apilookups.E.Treasures
 
 	avlParams, err := i.QueryAvlGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -72,7 +73,7 @@ func filterAvlTreasures(r *http.Request, inputIDs []int32) ([]int32, error) {
 }
 
 func filterAvlQuests(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Quests
+	i := apilookups.E.Quests
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -96,7 +97,7 @@ func filterAvlQuests(r *http.Request, inputIDs []int32) ([]int32, error) {
 }
 
 func filterAvlSidequests(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Sidequests
+	i := apilookups.E.Sidequests
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -119,7 +120,7 @@ func filterAvlSidequests(r *http.Request, inputIDs []int32) ([]int32, error) {
 }
 
 func filterAvlSubquests(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Subquests
+	i := apilookups.E.Subquests
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -10,7 +11,7 @@ import (
 )
 
 func getMasterItemObtainable(r *http.Request, masterItem seedtypes.MasterItem) (apitypes.ObtainableFrom, error) {
-	availabilityParams, err := E.AllItems.QueryAvlRelGetParams(r, masterItem.ID)
+	availabilityParams, err := apilookups.E.AllItems.QueryAvlRelGetParams(r, masterItem.ID)
 	if err != nil {
 		return apitypes.ObtainableFrom{}, err
 	}

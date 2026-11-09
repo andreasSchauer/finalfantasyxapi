@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -131,5 +131,5 @@ func TestRetrieveEquipmentTables(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.EquipmentTables.Endpoint, "RetrieveEquipmentTables", testSrv.HandleEquipmentTables, compareAPIResourceLists[apiresource.Unnamed])
+	testIDList(t, tests, apilookups.E.EquipmentTables.Endpoint, "RetrieveEquipmentTables", testSrv.HandleEquipmentTables, compareAPIResourceLists[apiresource.Unnamed])
 }

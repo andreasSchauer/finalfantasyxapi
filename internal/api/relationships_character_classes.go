@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -18,13 +19,13 @@ func getCharClassRelationships(r *http.Request, class seedtypes.CharacterClass) 
 
 	g.Go(func() error {
 		var err error
-		rel.Members, err = E.PlayerUnits.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassUnitIDs)
+		rel.Members, err = apilookups.E.PlayerUnits.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassUnitIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultAbilities, err = E.Abilities.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassDefaultAbilityIDs)
+		rel.DefaultAbilities, err = apilookups.E.Abilities.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassDefaultAbilityIDs)
 		if err != nil {
 			return err
 		}
@@ -35,19 +36,19 @@ func getCharClassRelationships(r *http.Request, class seedtypes.CharacterClass) 
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultOverdrives, err = E.Overdrives.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassDefaultOverdriveIDs)
+		rel.DefaultOverdrives, err = apilookups.E.Overdrives.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassDefaultOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.LearnableOverdrives, err = E.Overdrives.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassLearnableOverdriveIDs)
+		rel.LearnableOverdrives, err = apilookups.E.Overdrives.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassLearnableOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Submenus, err = E.Submenus.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassSubmenuIDs)
+		rel.Submenus, err = apilookups.E.Submenus.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassSubmenuIDs)
 		return err
 	})
 
@@ -60,7 +61,7 @@ func getCharClassRelationships(r *http.Request, class seedtypes.CharacterClass) 
 }
 
 func getClassLearnableAbilities(ctx context.Context, class seedtypes.CharacterClass, defaultAbilities []apiresource.Typed) ([]apiresource.Typed, error) {
-	allAbilities, err := E.Abilities.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassLearnableAbilityIDs)
+	allAbilities, err := apilookups.E.Abilities.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
 		return nil, err
 	}

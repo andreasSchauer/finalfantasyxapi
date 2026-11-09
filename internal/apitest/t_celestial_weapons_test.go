@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
@@ -80,5 +80,5 @@ func TestRetrieveCelestialWeapons(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.CelestialWeapons.Endpoint, "RetrieveCelestialWeapons", testSrv.HandleCelestialWeapons, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.CelestialWeapons.Endpoint, "RetrieveCelestialWeapons", testSrv.HandleCelestialWeapons, compareAPIResourceLists[apiresource.Named])
 }

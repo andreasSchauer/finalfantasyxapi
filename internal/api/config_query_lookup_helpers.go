@@ -3,6 +3,7 @@ package api
 import (
 	"slices"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
@@ -11,7 +12,7 @@ import (
 )
 
 func assignDefaultParams(endpoint ts.EndpointName, eLookup, qLookup *map[ts.QueryParamName]queryparam.QueryParam) {
-	paramMap := queryparam.ParamSliceToMap(Q.DefaultParamSlice, endpoint)
+	paramMap := queryparam.ParamSliceToMap(apilookups.Q.DefaultParamSlice, endpoint)
 	*eLookup = paramMap
 	*qLookup = paramMap
 }
@@ -24,7 +25,7 @@ func assignQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource]
 }
 
 func completeQueryParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](params []queryparam.QueryParam, i handlerinput.Main[T, R, A]) map[ts.QueryParamName]queryparam.QueryParam {
-	params = slices.Concat(params, Q.DefaultParamSlice)
+	params = slices.Concat(params, apilookups.Q.DefaultParamSlice)
 
 	if hasSimpleView(i.Subsections) {
 		queryParamIDs := queryparam.QueryParam{
@@ -62,7 +63,7 @@ func hasSimpleView(sections map[ts.SectionName]handlerinput.Subsection) bool {
 
 func hasFilters(params []queryparam.QueryParam) bool {
 	for _, param := range params {
-		if param.ParamUse == queryparam.PuList && !hasParam(param, Q.DefaultParamSlice) {
+		if param.ParamUse == queryparam.PuList && !hasParam(param, apilookups.Q.DefaultParamSlice) {
 			return true
 		}
 	}

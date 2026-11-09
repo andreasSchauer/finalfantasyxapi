@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -23,8 +24,8 @@ func getFMV(r *http.Request, i handlerinput.Main[seedtypes.FMV, apitypes.FMV, ap
 		Name:                fmv.Name,
 		Translation:         fmv.Translation,
 		CutsceneDescription: fmv.CutsceneDescription,
-		Area:                handlerinput.LocAreaToAreaAPIResource(E.Areas, fmv.LocationArea),
-		Song:                handlerinput.NamePtrToNamedAPIResPtr(E.Songs, fmv.SongName, nil),
+		Area:                handlerinput.LocAreaToAreaAPIResource(apilookups.E.Areas, fmv.LocationArea),
+		Song:                handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Songs, fmv.SongName, nil),
 	}
 
 	return response, nil

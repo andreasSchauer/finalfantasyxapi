@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -25,7 +26,7 @@ func getOverdriveMode(r *http.Request, i handlerinput.Main[seedtypes.OverdriveMo
 		Effect:      mode.Effect,
 		Type:        mode.Type,
 		FillRate:    mode.FillRate,
-		Actions:     E.Characters.ToResAmtsFromNames(mode.ActionsToLearn),
+		Actions:     apilookups.E.Characters.ToResAmtsFromNames(mode.ActionsToLearn),
 	}
 
 	return response, nil

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -22,14 +23,14 @@ func getTreasure(r *http.Request, i handlerinput.Main[seedtypes.Treasure, apityp
 
 	response := apitypes.Treasure{
 		ID:              treasure.ID,
-		Area:            handlerinput.IDToAreaAPIResource(E.Areas, treasure.AreaID),
+		Area:            handlerinput.IDToAreaAPIResource(apilookups.E.Areas, treasure.AreaID),
 		Availability:    treasure.Availability,
 		IsAnimaTreasure: treasure.IsAnimaTreasure,
 		Notes:           treasure.Notes,
 		TreasureType:    treasure.TreasureType,
 		LootType:        treasure.LootType,
 		GilAmount:       treasure.GilAmount,
-		Items:           E.AllItems.ToResAmtsFromNames(treasure.Items),
+		Items:           apilookups.E.AllItems.ToResAmtsFromNames(treasure.Items),
 		Equipment:       ah.ConvertObjPtr(treasure.Equipment, convertFoundEquipment),
 	}
 

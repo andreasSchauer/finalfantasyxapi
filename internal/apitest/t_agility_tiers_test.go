@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -110,5 +110,5 @@ func TestRetrieveAgilityTiers(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.AgilityTiers.Endpoint, "RetrieveAgilityTiers", testSrv.HandleAgilityTiers, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.AgilityTiers.Endpoint, "RetrieveAgilityTiers", testSrv.HandleAgilityTiers, compareAPIResourceLists[apiresource.Named])
 }

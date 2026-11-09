@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -38,14 +39,14 @@ func getMasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, ap
 
 		response.Description = item.Description
 		response.Effect = item.Effect
-		response.TypedItem = handlerinput.NameToNamedAPIResource(E.Items, item.Name, nil)
+		response.TypedItem = handlerinput.NameToNamedAPIResource(apilookups.E.Items, item.Name, nil)
 
 	case database.ItemTypeKeyItem:
 		keyItem, _ := lookup.GetResource(masterItem, lookup.L.KeyItems)
 
 		response.Description = keyItem.Description
 		response.Effect = keyItem.Effect
-		response.TypedItem = handlerinput.NameToNamedAPIResource(E.KeyItems, keyItem.Name, nil)
+		response.TypedItem = handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, keyItem.Name, nil)
 	}
 
 	return response, nil
@@ -60,8 +61,8 @@ func retrieveMasterItems(r *http.Request, i handlerinput.Main[seedtypes.MasterIt
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnumList(r, enums.T.ItemType, ids, ts.QpnType, config.Cfg.DB.GetMasterItemIDsByType),
 		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetMasterItemIDsByMethods),
-		i.QueryIDWrapper(r, ids, ts.QpnLocation, E.Locations.ObjLookup, getMasterItemsByLocation),
-		i.QueryIDWrapper(r, ids, ts.QpnSublocation, E.Sublocations.ObjLookup, getMasterItemsBySublocation),
-		i.QueryIDWrapper(r, ids, ts.QpnArea, E.Areas.ObjLookup, getMasterItemsByArea),
+		i.QueryIDWrapper(r, ids, ts.QpnLocation, apilookups.E.Locations.ObjLookup, getMasterItemsByLocation),
+		i.QueryIDWrapper(r, ids, ts.QpnSublocation, apilookups.E.Sublocations.ObjLookup, getMasterItemsBySublocation),
+		i.QueryIDWrapper(r, ids, ts.QpnArea, apilookups.E.Areas.ObjLookup, getMasterItemsByArea),
 	})
 }

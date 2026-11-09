@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -15,20 +16,20 @@ func getMonsterRelationships(r *http.Request, monster seedtypes.Monster) (apityp
 	var rel apitypes.Monster
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := E.Monsters.QueryAvlRelGetParams(r, monster.ID)
+	availabilityParams, err := apilookups.E.Monsters.QueryAvlRelGetParams(r, monster.ID)
 	if err != nil {
 		return apitypes.Monster{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = E.Areas.QueryAvlRelRun(ctx, monster, availabilityParams, getMonsterAreaIDs())
+		rel.Areas, err = apilookups.E.Areas.QueryAvlRelRun(ctx, monster, availabilityParams, getMonsterAreaIDs())
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Formations, err = E.MonsterFormations.QueryAvlRelRun(ctx, monster, availabilityParams, getMonsterMonsterFormationIDs())
+		rel.Formations, err = apilookups.E.MonsterFormations.QueryAvlRelRun(ctx, monster, availabilityParams, getMonsterMonsterFormationIDs())
 		return err
 	})
 
@@ -127,13 +128,13 @@ func getMonsterAgilityParams(r *http.Request, mon apitypes.Monster) (*apitypes.A
 	}
 
 	agilityParams := apitypes.AgilityParams{
-		AgilityTier: handlerinput.IDToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
+		AgilityTier: handlerinput.IDToUnnamedAPIResource(apilookups.E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   tickspeed,
 		MinICV:      agilityTier.MonsterMinICV,
 		MaxICV:      agilityTier.MonsterMaxICV,
 	}
 
-	fs := handlerinput.NameToNamedAPIResource(E.AutoAbilities, "first strike", nil)
+	fs := handlerinput.NameToNamedAPIResource(apilookups.E.AutoAbilities, "first strike", nil)
 	if handlerinput.ResourcesContain(mon.AutoAbilities, fs) {
 		agilityParams.MinICV, agilityParams.MaxICV = getEqualICVs(-1)
 	}
@@ -155,7 +156,7 @@ func appliedStateHaste(mon apitypes.Monster) bool {
 
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
 func getMonsterBribeChances(mon apitypes.Monster) ([]apitypes.BribeChance, error) {
-	bribe := handlerinput.NameToNamedAPIResource(E.StatusConditions, "bribe", nil)
+	bribe := handlerinput.NameToNamedAPIResource(apilookups.E.StatusConditions, "bribe", nil)
 	if handlerinput.ResourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
 		return nil, nil
 	}

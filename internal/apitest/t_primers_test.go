@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
@@ -98,5 +98,5 @@ func TestRetrievePrimers(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Primers.Endpoint, "RetrievePrimers", testSrv.HandlePrimers, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.Primers.Endpoint, "RetrievePrimers", testSrv.HandlePrimers, compareAPIResourceLists[apiresource.Named])
 }

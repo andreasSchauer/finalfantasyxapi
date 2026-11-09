@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -14,9 +15,9 @@ import (
 )
 
 func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
-	i := E.Shops
+	i := apilookups.E.Shops
 
-	autoAbilityID, err := handlerinput.NullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.QueryLookup)
+	autoAbilityID, err := handlerinput.NullID(r, apilookups.E.AutoAbilities, ts.QpnAutoAbility, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -26,7 +27,7 @@ func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error)
 		return nil, err
 	}
 
-	charID, err := handlerinput.NullNameID(r, E.Characters, ts.QpnCharacter, i.QueryLookup)
+	charID, err := handlerinput.NullNameID(r, apilookups.E.Characters, ts.QpnCharacter, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -44,9 +45,9 @@ func filterShopsEquipment(r *http.Request, ctx context.Context) ([]int32, error)
 }
 
 func filterTreasuresEquipment(r *http.Request, ctx context.Context) ([]int32, error) {
-	i := E.Treasures
+	i := apilookups.E.Treasures
 
-	autoAbilityID, err := handlerinput.NullID(r, E.AutoAbilities, ts.QpnAutoAbility, i.QueryLookup)
+	autoAbilityID, err := handlerinput.NullID(r, apilookups.E.AutoAbilities, ts.QpnAutoAbility, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -56,7 +57,7 @@ func filterTreasuresEquipment(r *http.Request, ctx context.Context) ([]int32, er
 		return nil, err
 	}
 
-	charID, err := handlerinput.NullNameID(r, E.Characters, ts.QpnCharacter, i.QueryLookup)
+	charID, err := handlerinput.NullNameID(r, apilookups.E.Characters, ts.QpnCharacter, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

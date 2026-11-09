@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -20,15 +21,15 @@ func getSubquest(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apityp
 	response := apitypes.Subquest{
 		ID:              subquest.ID,
 		Name:            subquest.Name,
-		UntypedQuest:    handlerinput.IDToQuestAPIResource(E.Quests, subquest.Quest.ID),
-		ParentSidequest: handlerinput.IDToQuestAPIResource(E.Sidequests, subquest.SidequestID),
+		UntypedQuest:    handlerinput.IDToQuestAPIResource(apilookups.E.Quests, subquest.Quest.ID),
+		ParentSidequest: handlerinput.IDToQuestAPIResource(apilookups.E.Sidequests, subquest.SidequestID),
 		Availability:    subquest.Availability,
 		IsRepeatable:    subquest.IsRepeatable,
 		Completion:      convertQuestCompletion(*subquest.Completion),
 	}
 
 	if response.ParentSidequest.Sidequest == "monster arena" {
-		response.ArenaCreation = handlerinput.NamePtrToNamedAPIResPtr(E.ArenaCreations, &subquest.Name, nil)
+		response.ArenaCreation = handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.ArenaCreations, &subquest.Name, nil)
 	}
 
 	return response, nil

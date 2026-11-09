@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -30,7 +31,7 @@ func getMix(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, ap
 		ID:           mix.ID,
 		Name:         mix.Name,
 		Category:     mix.Category,
-		Overdrive:    handlerinput.NameToNamedAPIResource(E.Overdrives, overdrive.Name, nil),
+		Overdrive:    handlerinput.NameToNamedAPIResource(apilookups.E.Overdrives, overdrive.Name, nil),
 		Description:  overdrive.Description,
 		Effect:       overdrive.Effect,
 		Combinations: combinations,

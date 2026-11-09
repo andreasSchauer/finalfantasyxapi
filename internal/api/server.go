@@ -20,7 +20,7 @@ func (srv *Server) Init() error {
 }
 
 func (srv *Server) InitGlobals() {
-	enums.T.Init()
-	InitEndpoints(E)
-	InitQueryLookup(Q)
+	enums.InitEnums()
+	InitEndpoints()
+	InitQueryLookup()
 }

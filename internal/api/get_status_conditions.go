@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -32,8 +33,8 @@ func getStatusCondition(r *http.Request, i handlerinput.Main[seedtypes.StatusCon
 		Visualization:           status.Visualization,
 		Effect:                  status.Effect,
 		NullifyArmored:          status.NullifyArmored,
-		RelatedStats:            handlerinput.NamesToNamedAPIResources(E.Stats, status.RelatedStats),
-		RemovedStatusConditions: handlerinput.NamesToNamedAPIResources(E.StatusConditions, status.RemovedStatusConditions),
+		RelatedStats:            handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, status.RelatedStats),
+		RemovedStatusConditions: handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, status.RemovedStatusConditions),
 		AddedElemResist:         ah.ConvertObjPtr(status.AddedElemResist, convertElemResist),
 		StatChanges:             ah.ConvertObjSlice(status.StatChanges, convertStatChange),
 		ModifierChanges:         ah.ConvertObjSlice(status.ModifierChanges, convertModifierChange),

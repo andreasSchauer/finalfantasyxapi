@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -35,9 +36,9 @@ func getArenaCreation(r *http.Request, i handlerinput.Main[seedtypes.ArenaCreati
 		ID:                        creation.ID,
 		Name:                      creation.Name,
 		Category:                  creation.Category,
-		Monster:                   handlerinput.IDToNamedAPIResource(E.Monsters, *creation.MonsterID),
-		ParentSubquest:            handlerinput.IDToQuestAPIResource(E.Subquests, creation.SubquestID),
-		Reward:                    E.AllItems.ToResAmtFromName(ia),
+		Monster:                   handlerinput.IDToNamedAPIResource(apilookups.E.Monsters, *creation.MonsterID),
+		ParentSubquest:            handlerinput.IDToQuestAPIResource(apilookups.E.Subquests, creation.SubquestID),
+		Reward:                    apilookups.E.AllItems.ToResAmtFromName(ia),
 		RequiredCatchAmount:       creation.Amount,
 		UnlockedCreationsCategory: creation.CreationsUnlockedCategory,
 		RequiredMonsters:          monsters,
@@ -122,6 +123,6 @@ func getArenaCreationMonsters(r *http.Request, creation seedtypes.ArenaCreation)
 		return nil, err
 	}
 
-	monsters := E.Monsters.ToAPIResources(monsterIDs)
+	monsters := apilookups.E.Monsters.ToAPIResources(monsterIDs)
 	return monsters, nil
 }

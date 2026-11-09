@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
@@ -601,5 +601,5 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.AutoAbilities.Endpoint, "RetrieveAutoAbilities", testSrv.HandleAutoAbilities, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.AutoAbilities.Endpoint, "RetrieveAutoAbilities", testSrv.HandleAutoAbilities, compareAPIResourceLists[apiresource.Named])
 }

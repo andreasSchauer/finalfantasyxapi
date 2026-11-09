@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
@@ -22,7 +22,7 @@ func compareMixes(test test, exp expMix, got apitypes.Mix) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
 	test.compare("category", string(exp.category), got.Category)
-	test.compIDAPIResource("overdrive", api.E.Overdrives.Endpoint, exp.overdrive, got.Overdrive)
+	test.compIDAPIResource("overdrive", apilookups.E.Overdrives.Endpoint, exp.overdrive, got.Overdrive)
 	test.checkTestStructsInSlice("combinations", exp.combinations, got.Combinations, compareMixCombinations)
 }
 
@@ -38,6 +38,6 @@ func (mc testMixCombination) GetIndex() int {
 
 func compareMixCombinations(test test, fieldName string, exp testMixCombination, got apitypes.MixCombination) {
 	test.t.Helper()
-	test.compIDAPIResource(fieldName+" - first item", api.E.Items.Endpoint, exp.firstItem, got.FirstItem)
-	test.compIDAPIResource(fieldName+" - second item", api.E.Items.Endpoint, exp.secondItem, got.SecondItem)
+	test.compIDAPIResource(fieldName+" - first item", apilookups.E.Items.Endpoint, exp.firstItem, got.FirstItem)
+	test.compIDAPIResource(fieldName+" - second item", apilookups.E.Items.Endpoint, exp.secondItem, got.SecondItem)
 }

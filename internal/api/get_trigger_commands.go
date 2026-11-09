@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -29,15 +30,15 @@ func getTriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerCom
 		Name:               command.Name,
 		Version:            command.Version,
 		Specification:      command.Specification,
-		UntypedAbility:     handlerinput.IDToTypedAPIResource(E.Abilities, command.Ability.ID),
+		UntypedAbility:     handlerinput.IDToTypedAPIResource(apilookups.E.Abilities, command.Ability.ID),
 		Description:        command.Description,
 		Effect:             command.Effect,
 		Rank:               command.Rank,
 		AppearsInHelpBar:   command.AppearsInHelpBar,
 		CanCopycat:         command.CanCopycat,
 		UsedBy:             rel.UsedBy,
-		RelatedStats:       handlerinput.NamesToNamedAPIResources(E.Stats, command.RelatedStats),
-		Topmenu:            handlerinput.NamePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
+		RelatedStats:       handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, command.RelatedStats),
+		Topmenu:            handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Topmenus, command.Topmenu, nil),
 		Cursor:             command.Cursor,
 		MonsterFormations:  rel.MonsterFormations,
 		BattleInteractions: ah.ConvertObjSlice(command.BattleInteractions, convertBattleInteraction),
@@ -59,7 +60,7 @@ func retrieveTriggerCommands(r *http.Request, i handlerinput.Main[seedtypes.Trig
 	}
 
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.ResTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetTriggerCommandIDsByCharClass),
-		i.QueryNameID(r, ids, ts.QpnRelatedStat, E.Stats.ResTypeSingle, lookup.L.Stats, config.Cfg.DB.GetTriggerCommandIDsByRelatedStat),
+		i.QueryNameID(r, ids, ts.QpnUser, apilookups.E.CharacterClasses.ResTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetTriggerCommandIDsByCharClass),
+		i.QueryNameID(r, ids, ts.QpnRelatedStat, apilookups.E.Stats.ResTypeSingle, lookup.L.Stats, config.Cfg.DB.GetTriggerCommandIDsByRelatedStat),
 	})
 }

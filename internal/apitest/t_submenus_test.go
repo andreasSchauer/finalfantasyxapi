@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -118,5 +118,5 @@ func TestRetrieveSubmenus(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Submenus.Endpoint, "RetrieveSubmenus", testSrv.HandleSubmenus, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.Submenus.Endpoint, "RetrieveSubmenus", testSrv.HandleSubmenus, compareAPIResourceLists[apiresource.Named])
 }

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -32,7 +33,7 @@ func getItem(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes.Item,
 	response := apitypes.Item{
 		ID:                 item.ID,
 		Name:               item.Name,
-		UntypedItem:        handlerinput.IDToTypedAPIResource(E.AllItems, item.MasterItem.ID),
+		UntypedItem:        handlerinput.IDToTypedAPIResource(apilookups.E.AllItems, item.MasterItem.ID),
 		Category:           item.Category,
 		Description:        item.Description,
 		SgDescription:      item.SphereGridDescription,
@@ -40,10 +41,10 @@ func getItem(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes.Item,
 		Usability:          item.Usability,
 		BasePrice:          item.BasePrice,
 		SellValue:          item.SellValue,
-		ItemAbility:        handlerinput.NamePtrToNamedAPIResPtr(E.ItemAbilities, itemAbilityNamePtr, nil),
+		ItemAbility:        handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.ItemAbilities, itemAbilityNamePtr, nil),
 		Sphere:             rel.Sphere,
-		AvailableMenus:     handlerinput.NamesToNamedAPIResources(E.Submenus, item.AvailableMenus),
-		RelatedStats:       handlerinput.NamesToNamedAPIResources(E.Stats, item.RelatedStats),
+		AvailableMenus:     handlerinput.NamesToNamedAPIResources(apilookups.E.Submenus, item.AvailableMenus),
+		RelatedStats:       handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, item.RelatedStats),
 		Monsters:           rel.Monsters,
 		Treasures:          rel.Treasures,
 		Shops:              rel.Shops,
@@ -66,10 +67,10 @@ func retrieveItems(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnumList(r, enums.T.ItemCategory, ids, ts.QpnCategory, config.Cfg.DB.GetItemIDsCategory),
 		i.QueryBool2(r, ids, ts.QpnHasAbility, config.Cfg.DB.GetItemIDsWithAbility),
-		i.QueryNameID(r, ids, ts.QpnRelatedStat, E.Stats.ResTypeSingle, lookup.L.Stats, config.Cfg.DB.GetItemIDsByRelatedStat),
+		i.QueryNameID(r, ids, ts.QpnRelatedStat, apilookups.E.Stats.ResTypeSingle, lookup.L.Stats, config.Cfg.DB.GetItemIDsByRelatedStat),
 		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetItemIDsByMethods),
-		i.QueryIDWrapper(r, ids, ts.QpnLocation, E.Locations.ObjLookup, getItemsByLocation),
-		i.QueryIDWrapper(r, ids, ts.QpnSublocation, E.Sublocations.ObjLookup, getItemsBySublocation),
-		i.QueryIDWrapper(r, ids, ts.QpnArea, E.Areas.ObjLookup, getItemsByArea),
+		i.QueryIDWrapper(r, ids, ts.QpnLocation, apilookups.E.Locations.ObjLookup, getItemsByLocation),
+		i.QueryIDWrapper(r, ids, ts.QpnSublocation, apilookups.E.Sublocations.ObjLookup, getItemsBySublocation),
+		i.QueryIDWrapper(r, ids, ts.QpnArea, apilookups.E.Areas.ObjLookup, getItemsByArea),
 	})
 }

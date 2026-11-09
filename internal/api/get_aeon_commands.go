@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -30,9 +31,9 @@ func getAeonCommand(r *http.Request, i handlerinput.Main[seedtypes.AeonCommand, 
 		Description:       command.Description,
 		Effect:            command.Effect,
 		Cursor:            command.Cursor,
-		User:              handlerinput.NameToNamedAPIResource(E.CharacterClasses, userName, nil),
-		Topmenu:           handlerinput.NamePtrToNamedAPIResPtr(E.Topmenus, command.Topmenu, nil),
-		OpenSubmenu:       handlerinput.NamePtrToNamedAPIResPtr(E.Submenus, command.OpenSubmenu, nil),
+		User:              handlerinput.NameToNamedAPIResource(apilookups.E.CharacterClasses, userName, nil),
+		Topmenu:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Topmenus, command.Topmenu, nil),
+		OpenSubmenu:       handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, command.OpenSubmenu, nil),
 		PossibleAbilities: ah.ConvertObjSlice(command.PossibleAbilities, convertPossibleAbilityList),
 	}
 

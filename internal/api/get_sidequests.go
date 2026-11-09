@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -17,7 +18,7 @@ func getSidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apit
 		return apitypes.Sidequest{}, err
 	}
 
-	subquests, err := E.Subquests.DBGetRelations(r.Context(), sidequest, config.Cfg.DB.GetSidequestSubquestIDs)
+	subquests, err := apilookups.E.Subquests.DBGetRelations(r.Context(), sidequest, config.Cfg.DB.GetSidequestSubquestIDs)
 	if err != nil {
 		return apitypes.Sidequest{}, err
 	}
@@ -25,7 +26,7 @@ func getSidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apit
 	response := apitypes.Sidequest{
 		ID:           sidequest.ID,
 		Name:         sidequest.Name,
-		UntypedQuest: handlerinput.IDToQuestAPIResource(E.Quests, sidequest.Quest.ID),
+		UntypedQuest: handlerinput.IDToQuestAPIResource(apilookups.E.Quests, sidequest.Quest.ID),
 		Availability: sidequest.Availability,
 		IsRepeatable: sidequest.IsRepeatable,
 		Completion:   ah.ConvertObjPtr(sidequest.Completion, convertQuestCompletion),

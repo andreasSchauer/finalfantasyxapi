@@ -7,6 +7,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
@@ -45,7 +46,7 @@ func getElemResistIDs(query string, queryParam queryparam.QueryParam) ([]int32, 
 			return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid input for parameter '%s': '%s'. usage: '%s'", queryParam.Name, elementStr, queryParam.Usage), nil)
 		}
 
-		elementID, err := queryParam.CheckNameID(elementStr, E.Elements.ResTypeSingle, lookup.L.Elements)
+		elementID, err := queryParam.CheckNameID(elementStr, apilookups.E.Elements.ResTypeSingle, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -93,7 +94,7 @@ func getMonstersByStatusResists(r *http.Request, ctx context.Context, ids []int3
 }
 
 func verifyMonsterResistance(r *http.Request) (int32, error) {
-	queryParam := Q.Monsters[ts.QpnResistance]
+	queryParam := apilookups.Q.Monsters[ts.QpnResistance]
 
 	resistance, err := queryParam.ParseInt(r)
 	if err != nil {
@@ -104,7 +105,7 @@ func verifyMonsterResistance(r *http.Request) (int32, error) {
 }
 
 func getMonstersByAutoAbility(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := E.Monsters
+	i := apilookups.E.Monsters
 
 	queryParam := i.QueryLookup[ts.QpnIsForced]
 
@@ -125,7 +126,7 @@ func getMonstersByAutoAbility(r *http.Request, ctx context.Context, id int32) ([
 }
 
 func getMonstersByItem(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := E.Monsters
+	i := apilookups.E.Monsters
 
 	methods, err := getMonsterItemMethods(r)
 	if err != nil {
@@ -144,7 +145,7 @@ func getMonstersByItem(r *http.Request, ctx context.Context, id int32) ([]int32,
 }
 
 func getMonsterItemMethods(r *http.Request) ([]string, error) {
-	i := E.Monsters
+	i := apilookups.E.Monsters
 	paramMethods := i.QueryLookup[ts.QpnMethods]
 	aliasses := map[string][]string{
 		"steal": {"steal_common", "steal_rare"},

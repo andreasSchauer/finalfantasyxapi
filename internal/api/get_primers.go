@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -26,7 +27,7 @@ func getPrimer(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.P
 	response := apitypes.Primer{
 		ID:            primer.ID,
 		Name:          primer.Name,
-		KeyItem:       handlerinput.NameToNamedAPIResource(E.KeyItems, keyItem.Name, nil),
+		KeyItem:       handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, keyItem.Name, nil),
 		Description:   keyItem.Description,
 		AlBhedLetter:  primer.AlBhedLetter,
 		EnglishLetter: primer.EnglishLetter,

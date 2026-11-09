@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -26,8 +27,8 @@ func getAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon,
 	response := apitypes.Aeon{
 		ID:                     aeon.ID,
 		Name:                   aeon.Name,
-		UntypedUnit:            handlerinput.IDToTypedAPIResource(E.PlayerUnits, aeon.PlayerUnit.ID),
-		Area:                   handlerinput.LocAreaToAreaAPIResource(E.Areas, aeon.LocationArea),
+		UntypedUnit:            handlerinput.IDToTypedAPIResource(apilookups.E.PlayerUnits, aeon.PlayerUnit.ID),
+		Area:                   handlerinput.LocAreaToAreaAPIResource(apilookups.E.Areas, aeon.LocationArea),
 		UnlockCondition:        aeon.UnlockCondition,
 		IsOptional:             aeon.IsOptional,
 		BattlesToRegenerate:    aeon.BattlesToRegenerate,

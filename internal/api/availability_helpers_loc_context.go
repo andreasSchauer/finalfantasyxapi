@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -23,7 +24,7 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 	var locContextID sql.NullInt32
 	var locContextType string
 
-	locID, err := handlerinput.NullID(r, E.Locations, ts.QpnLocation, i.QueryLookup)
+	locID, err := handlerinput.NullID(r, apilookups.E.Locations, ts.QpnLocation, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -33,7 +34,7 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 		locContextType = string(ViewSourceTypeLocation)
 	}
 
-	subLocID, err := handlerinput.NullID(r, E.Sublocations, ts.QpnSublocation, i.QueryLookup)
+	subLocID, err := handlerinput.NullID(r, apilookups.E.Sublocations, ts.QpnSublocation, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}
@@ -43,7 +44,7 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 		locContextType = string(ViewSourceTypeSublocation)
 	}
 
-	areaID, err := handlerinput.NullID(r, E.Areas, ts.QpnArea, i.QueryLookup)
+	areaID, err := handlerinput.NullID(r, apilookups.E.Areas, ts.QpnArea, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return locContextParams{}, err
 	}

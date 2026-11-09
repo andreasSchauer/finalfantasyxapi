@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -35,8 +36,8 @@ func getPlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, ap
 			ID:               unit.ID,
 			Name:             unit.Name,
 			Type:             unit.Type,
-			TypedUnit:        handlerinput.NameToNamedAPIResource(E.Characters, unit.Name, nil),
-			Area:             handlerinput.LocAreaToAreaAPIResource(E.Areas, character.LocationArea),
+			TypedUnit:        handlerinput.NameToNamedAPIResource(apilookups.E.Characters, unit.Name, nil),
+			Area:             handlerinput.LocAreaToAreaAPIResource(apilookups.E.Areas, character.LocationArea),
 			CelestialWeapon:  rel.CelestialWeapon,
 			CharacterClasses: rel.CharacterClasses,
 		}
@@ -53,8 +54,8 @@ func getPlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, ap
 			ID:               unit.ID,
 			Name:             unit.Name,
 			Type:             unit.Type,
-			TypedUnit:        handlerinput.NameToNamedAPIResource(E.Aeons, unit.Name, nil),
-			Area:             handlerinput.LocAreaToAreaAPIResource(E.Areas, aeon.LocationArea),
+			TypedUnit:        handlerinput.NameToNamedAPIResource(apilookups.E.Aeons, unit.Name, nil),
+			Area:             handlerinput.LocAreaToAreaAPIResource(apilookups.E.Areas, aeon.LocationArea),
 			CelestialWeapon:  rel.CelestialWeapon,
 			CharacterClasses: rel.CharacterClasses,
 		}

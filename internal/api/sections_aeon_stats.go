@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -20,7 +21,7 @@ func convertXVal(x seedtypes.XVal) sectiontypes.Xval {
 }
 
 func newAeonStatTable(baseStats []seedtypes.BaseStat) sectiontypes.AeonStatTable {
-	stats := E.Stats.ToResAmtType(baseStats, newBaseStat)
+	stats := apilookups.E.Stats.ToResAmtType(baseStats, newBaseStat)
 	statMap := handlerinput.GetResAmtTypeMap(stats)
 	luckPtr := h.GetInt32Ptr(statMap["luck"])
 
@@ -43,7 +44,7 @@ func newAeonStatTable(baseStats []seedtypes.BaseStat) sectiontypes.AeonStatTable
 }
 
 func createAeonStatSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.Aeons
+	i := apilookups.E.Aeons
 	aeon, _ := lookup.GetResourceByID(id, lookup.L.AeonsID)
 
 	aeonStatSub := sectiontypes.AeonStatSimple{

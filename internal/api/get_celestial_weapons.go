@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -27,8 +28,8 @@ func getCelestialWeapon(r *http.Request, i handlerinput.Main[seedtypes.Celestial
 		ID:            celestialWeapon.ID,
 		Name:          celestialWeapon.Name,
 		Formula:       celestialWeapon.Formula,
-		Character:     handlerinput.NameToNamedAPIResource(E.Characters, celestialWeapon.Character, nil),
-		Aeon:          handlerinput.NamePtrToNamedAPIResPtr(E.Aeons, celestialWeapon.Aeon, nil),
+		Character:     handlerinput.NameToNamedAPIResource(apilookups.E.Characters, celestialWeapon.Character, nil),
+		Aeon:          handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Aeons, celestialWeapon.Aeon, nil),
 		AutoAbilities: rel.AutoAbilities,
 		Equipment:     rel.Equipment,
 		Crest:         rel.Crest,

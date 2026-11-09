@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -10,7 +11,7 @@ import (
 )
 
 func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Areas
+	i := apilookups.E.Areas
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -55,7 +56,7 @@ func filterAvlAreas(r *http.Request, inputIDs []int32) ([]int32, error) {
 }
 
 func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Sublocations
+	i := apilookups.E.Sublocations
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -100,7 +101,7 @@ func filterAvlSublocations(r *http.Request, inputIDs []int32) ([]int32, error) {
 }
 
 func filterAvlLocations(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Locations
+	i := apilookups.E.Locations
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -25,25 +26,25 @@ func getCharacterRelationships(r *http.Request, char seedtypes.Character) (apity
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = E.CelestialWeapons.DBGetRelationPtr(ctx, char, config.Cfg.DB.GetCharacterCelestialWeaponID)
+		rel.CelestialWeapon, err = apilookups.E.CelestialWeapons.DBGetRelationPtr(ctx, char, config.Cfg.DB.GetCharacterCelestialWeaponID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveCommand, err = E.OverdriveCommands.DBGetRelationPtr(ctx, char, config.Cfg.DB.GetCharacterOverdriveCommandID)
+		rel.OverdriveCommand, err = apilookups.E.OverdriveCommands.DBGetRelationPtr(ctx, char, config.Cfg.DB.GetCharacterOverdriveCommandID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = E.CharacterClasses.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterCharClassIDs)
+		rel.CharacterClasses, err = apilookups.E.CharacterClasses.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterDefaultAbilityIDs)
 		return err
 	})
 
@@ -51,14 +52,14 @@ func getCharacterRelationships(r *http.Request, char seedtypes.Character) (apity
 		g.Go(func() error {
 			var err error
 			rel.StdSphereGrid = ah.ConvertObjPtr(char.StdSphereGrid, convertSphereGrid)
-			rel.StdSphereGrid.PlayerAbilities, err = E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterSgAbilityIDs)
+			rel.StdSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterSgAbilityIDs)
 			return err
 		})
 
 		g.Go(func() error {
 			var err error
 			rel.ExpSphereGrid = ah.ConvertObjPtr(char.ExpSphereGrid, convertSphereGrid)
-			rel.ExpSphereGrid.PlayerAbilities, err = E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterEgAbilityIDs)
+			rel.ExpSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterEgAbilityIDs)
 			return err
 		})
 	}
@@ -100,7 +101,7 @@ func getCharacterModeAmts(char seedtypes.Character) []apiresource.ResourceAmount
 }
 
 func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.ResourceAmount[apiresource.Named], error) {
-	i := E.OverdriveModes
+	i := apilookups.E.OverdriveModes
 
 	mode, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	if len(mode.ActionsToLearn) == 0 {
@@ -119,7 +120,7 @@ func applyOsgStats(r *http.Request, char apitypes.Character) ([]apitypes.BaseSta
 	}
 
 	var statMap map[string]int32
-	queryParam := Q.Characters[ts.QpnOsgStats]
+	queryParam := apilookups.Q.Characters[ts.QpnOsgStats]
 
 	sgType, err := queryParam.ParseEnum(r, enums.T.SphereGridType)
 	if errs.QueryIsEmpty(err) {

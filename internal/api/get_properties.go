@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -26,7 +27,7 @@ func getProperty(r *http.Request, i handlerinput.Main[seedtypes.Property, apityp
 		Name:           property.Name,
 		Effect:         property.Effect,
 		NullifyArmored: property.NullifyArmored,
-		RelatedStats:   handlerinput.NamesToNamedAPIResources(E.Stats, property.RelatedStats),
+		RelatedStats:   handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, property.RelatedStats),
 		ModifierChange: ah.ConvertObjPtr(property.ModifierChange, convertModifierChange),
 		AutoAbilities:  rel.AutoAbilities,
 		Monsters:       rel.Monsters,

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -15,7 +16,7 @@ import (
 func getMixCombinations(r *http.Request, mix seedtypes.Mix) ([]apitypes.MixCombination, error) {
 	combinations := mix.PossibleCombinations
 
-	best, err := Q.Mixes[ts.QpnBest].ParseBool(r)
+	best, err := apilookups.Q.Mixes[ts.QpnBest].ParseBool(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -23,7 +24,7 @@ func getMixCombinations(r *http.Request, mix seedtypes.Mix) ([]apitypes.MixCombi
 		combinations = mix.BestCombinations
 	}
 
-	itemID, err := Q.Mixes[ts.QpnContainsItem].ParseNameID(r, E.Items.ResTypeSingle, E.Items.ObjLookup)
+	itemID, err := apilookups.Q.Mixes[ts.QpnContainsItem].ParseNameID(r, apilookups.E.Items.ResTypeSingle, apilookups.E.Items.ObjLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

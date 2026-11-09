@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
@@ -21,9 +21,9 @@ func (e expSublocation) GetTestGeneral() testGeneral {
 func compareSublocations(test test, exp expSublocation, got apitypes.Sublocation) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
-	test.compIDAPIResource("location", api.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)
+	test.compIDAPIResource("location", apilookups.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)
 	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)
-	test.checkResIDsInSlice("connected sublocations", api.E.Sublocations.Endpoint, exp.connectedSublocations, got.ConnectedSublocations)
-	test.checkResIDsInSlice("areas", api.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.checkResIDsInSlice("connected sublocations", apilookups.E.Sublocations.Endpoint, exp.connectedSublocations, got.ConnectedSublocations)
+	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, exp.areas, got.Areas)
 	compareLocRel(test, exp.expLocRel, got.LocRel)
 }

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -16,46 +17,46 @@ func getAutoAbilityRelationships(r *http.Request, autoAbility seedtypes.AutoAbil
 	g, ctx := errgroup.WithContext(r.Context())
 	var monsterItems []apiresource.Named
 
-	availabilityParams, err := E.AutoAbilities.QueryAvlRelGetParams(r, autoAbility.ID)
+	availabilityParams, err := apilookups.E.AutoAbilities.QueryAvlRelGetParams(r, autoAbility.ID)
 	if err != nil {
 		return apitypes.AutoAbility{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		monsterItems, err = E.Monsters.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilityItemMonsterIDs())
+		monsterItems, err = apilookups.E.Monsters.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilityItemMonsterIDs())
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersDrop, err = E.Monsters.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ViewSourceTypeMonster, nil))
+		rel.MonstersDrop, err = apilookups.E.Monsters.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ViewSourceTypeMonster, nil))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		preAirship := database.ShopTypePreAirship
-		rel.ShopsPreAirship, err = E.Shops.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ViewSourceTypeShop, &preAirship))
+		rel.ShopsPreAirship, err = apilookups.E.Shops.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ViewSourceTypeShop, &preAirship))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		postAirship := database.ShopTypePostAirship
-		rel.ShopsPostAirship, err = E.Shops.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ViewSourceTypeShop, &postAirship))
+		rel.ShopsPostAirship, err = apilookups.E.Shops.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ViewSourceTypeShop, &postAirship))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = E.Treasures.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ViewSourceTypeTreasure, nil))
+		rel.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ViewSourceTypeTreasure, nil))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.EquipmentTables, err = E.EquipmentTables.DBGetRelations(ctx, autoAbility, config.Cfg.DB.GetAutoAbilityEquipmentTableIDs)
+		rel.EquipmentTables, err = apilookups.E.EquipmentTables.DBGetRelations(ctx, autoAbility, config.Cfg.DB.GetAutoAbilityEquipmentTableIDs)
 		return err
 	})
 

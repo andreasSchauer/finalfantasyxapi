@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
@@ -25,12 +25,12 @@ func (e expEquipment) GetTestGeneral() testGeneral {
 func compareEquipment(test test, exp expEquipment, got apitypes.EquipmentName) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
-	test.compIDAPIResource("equipment table", api.E.EquipmentTables.Endpoint, exp.equipmentTable, got.EquipmentTable)
+	test.compIDAPIResource("equipment table", apilookups.E.EquipmentTables.Endpoint, exp.equipmentTable, got.EquipmentTable)
 	test.compare("priority", exp.priority, got.Priority)
-	test.compIDAPIResourcePtrs("celestial weapon", api.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
-	test.checkResIDsInSlice("required auto-abilities", api.E.AutoAbilities.Endpoint, exp.requiredAutoAbilities, got.RequiredAutoAbilities)
+	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
+	test.checkResIDsInSlice("required auto-abilities", apilookups.E.AutoAbilities.Endpoint, exp.requiredAutoAbilities, got.RequiredAutoAbilities)
 	test.compTestStructSlices("selectable auto-abilities", exp.selectableAutoAbilities, got.SelectableAutoAbilities, compareAbilityPools)
 	test.compare("required slots", exp.requiredSlots, got.RequiredSlots)
-	test.checkResIDsInSlice("treasures", api.E.Treasures.Endpoint, exp.treasures, got.Treasures)
-	test.checkResIDsInSlice("shops", api.E.Shops.Endpoint, exp.shops, got.Shops)
+	test.checkResIDsInSlice("treasures", apilookups.E.Treasures.Endpoint, exp.treasures, got.Treasures)
+	test.checkResIDsInSlice("shops", apilookups.E.Shops.Endpoint, exp.shops, got.Shops)
 }

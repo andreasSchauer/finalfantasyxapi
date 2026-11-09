@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -28,8 +29,8 @@ func getSubmenu(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes
 		Name:        submenu.Name,
 		Description: submenu.Description,
 		Effect:      submenu.Effect,
-		Topmenu:     handlerinput.NamePtrToNamedAPIResPtr(E.Topmenus, submenu.Topmenu, nil),
-		Users:       handlerinput.NamesToNamedAPIResources(E.CharacterClasses, submenu.Users),
+		Topmenu:     handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Topmenus, submenu.Topmenu, nil),
+		Users:       handlerinput.NamesToNamedAPIResources(apilookups.E.CharacterClasses, submenu.Users),
 		OpenedBy:    rel.OpenedBy,
 		Abilities:   rel.Abilities,
 	}
@@ -44,6 +45,6 @@ func retrieveSubmenus(r *http.Request, i handlerinput.Main[seedtypes.Submenu, ap
 	}
 
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryNameID(r, ids, ts.QpnTopmenu, E.Topmenus.ResTypeSingle, lookup.L.Topmenus, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuSubmenuIDs)),
+		i.QueryNameID(r, ids, ts.QpnTopmenu, apilookups.E.Topmenus.ResTypeSingle, lookup.L.Topmenus, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuSubmenuIDs)),
 	})
 }

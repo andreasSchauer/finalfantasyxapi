@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -11,7 +12,7 @@ import (
 )
 
 func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.AutoAbilities
+	i := apilookups.E.AutoAbilities
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -31,7 +32,7 @@ func filterAvlAutoAbilities(r *http.Request, inputIDs []int32) ([]int32, error) 
 		return nil, err
 	}
 
-	charID, err := handlerinput.NullID(r, E.Characters, ts.QpnCharacter, i.QueryLookup)
+	charID, err := handlerinput.NullID(r, apilookups.E.Characters, ts.QpnCharacter, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

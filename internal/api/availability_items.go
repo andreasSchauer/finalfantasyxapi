@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -11,7 +12,7 @@ import (
 )
 
 func filterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.AllItems
+	i := apilookups.E.AllItems
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -49,7 +50,7 @@ func filterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 }
 
 func filterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Items
+	i := apilookups.E.Items
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -87,7 +88,7 @@ func filterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 }
 
 func filterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.KeyItems
+	i := apilookups.E.KeyItems
 
 	avlParams, err := i.QueryAvlGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -123,7 +124,7 @@ func filterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 }
 
 func filterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Spheres
+	i := apilookups.E.Spheres
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -161,7 +162,7 @@ func filterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
 }
 
 func filterAvlPrimers(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Primers
+	i := apilookups.E.Primers
 
 	avlParams, err := i.QueryAvlGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {

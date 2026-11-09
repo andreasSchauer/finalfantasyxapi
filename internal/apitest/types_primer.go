@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
@@ -20,7 +20,7 @@ func (e expPrimer) GetTestGeneral() testGeneral {
 func comparePrimers(test test, exp expPrimer, got apitypes.Primer) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
-	test.compIDAPIResource("key item", api.E.KeyItems.Endpoint, exp.keyItem, got.KeyItem)
-	test.checkResIDsInSlice("areas", api.E.Areas.Endpoint, exp.areas, got.Areas)
-	test.checkResIDsInSlice("treasures", api.E.Treasures.Endpoint, exp.treasures, got.Treasures)
+	test.compIDAPIResource("key item", apilookups.E.KeyItems.Endpoint, exp.keyItem, got.KeyItem)
+	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.checkResIDsInSlice("treasures", apilookups.E.Treasures.Endpoint, exp.treasures, got.Treasures)
 }

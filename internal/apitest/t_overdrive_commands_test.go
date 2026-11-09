@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -82,5 +82,5 @@ func TestRetrieveOverdriveCommands(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.OverdriveCommands.Endpoint, "RetrieveOverdriveCommands", testSrv.HandleOverdriveCommands, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.OverdriveCommands.Endpoint, "RetrieveOverdriveCommands", testSrv.HandleOverdriveCommands, compareAPIResourceLists[apiresource.Named])
 }

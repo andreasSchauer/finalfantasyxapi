@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"slices"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -11,7 +12,7 @@ import (
 )
 
 func applyPossessedAeonStats(r *http.Request, mon apitypes.Monster) ([]apitypes.BaseStat, error) {
-	paramYunaStats := Q.Monsters[ts.QpnYunaStats]
+	paramYunaStats := apilookups.Q.Monsters[ts.QpnYunaStats]
 	if !slices.Contains(paramYunaStats.AllowedIDs, mon.ID) {
 		return mon.BaseStats, nil
 	}

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -15,13 +16,13 @@ func getTriggerCommandRelationships(r *http.Request, command seedtypes.TriggerCo
 
 	g.Go(func() error {
 		var err error
-		rel.MonsterFormations, err = E.MonsterFormations.DBGetRelations(ctx, command, config.Cfg.DB.GetTriggerCommandMonsterFormationIDs)
+		rel.MonsterFormations, err = apilookups.E.MonsterFormations.DBGetRelations(ctx, command, config.Cfg.DB.GetTriggerCommandMonsterFormationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.UsedBy, err = E.CharacterClasses.DBGetRelations(ctx, command, config.Cfg.DB.GetTriggerCommandCharClassIDs)
+		rel.UsedBy, err = apilookups.E.CharacterClasses.DBGetRelations(ctx, command, config.Cfg.DB.GetTriggerCommandCharClassIDs)
 		return err
 	})
 

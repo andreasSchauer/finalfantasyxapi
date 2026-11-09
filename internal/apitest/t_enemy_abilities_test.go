@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -196,7 +196,7 @@ func TestGetMultipleEnemyAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.EnemyAbilities.Endpoint, "GetMultipleEnemyAbilities", testSrv.HandleEnemyAbilities, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.EnemyAbilities.Endpoint, "GetMultipleEnemyAbilities", testSrv.HandleEnemyAbilities, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestRetrieveEnemyAbilities(t *testing.T) {
@@ -254,5 +254,5 @@ func TestRetrieveEnemyAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.EnemyAbilities.Endpoint, "RetrieveEnemyAbilities", testSrv.HandleEnemyAbilities, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.EnemyAbilities.Endpoint, "RetrieveEnemyAbilities", testSrv.HandleEnemyAbilities, compareAPIResourceLists[apiresource.Named])
 }

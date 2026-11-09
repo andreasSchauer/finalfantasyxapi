@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -21,7 +22,7 @@ func getPlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbili
 		return apitypes.PlayerAbility{}, err
 	}
 
-	monsters, err := E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetPlayerAbilityMonsterIDs)
+	monsters, err := apilookups.E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetPlayerAbilityMonsterIDs)
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
 	}
@@ -31,7 +32,7 @@ func getPlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbili
 		Name:                  ability.Name,
 		Version:               ability.Version,
 		Specification:         ability.Specification,
-		UntypedAbility:        handlerinput.IDToTypedAPIResource(E.Abilities, ability.Ability.ID),
+		UntypedAbility:        handlerinput.IDToTypedAPIResource(apilookups.E.Abilities, ability.Ability.ID),
 		Description:           ability.Description,
 		Effect:                ability.Effect,
 		Rank:                  ability.Rank,
@@ -40,14 +41,14 @@ func getPlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbili
 		CanUseOutsideBattle:   ability.CanUseOutsideBattle,
 		MpCost:                ability.MPCost,
 		Category:              ability.Category,
-		AeonLearnItem:         E.AllItems.ToResAmtFromNamePtr(ability.AeonLearnItem),
-		LearnedBy:             handlerinput.NamesToNamedAPIResources(E.CharacterClasses, ability.LearnedBy),
-		RelatedStats:          handlerinput.NamesToNamedAPIResources(E.Stats, ability.RelatedStats),
-		StandardGridCharacter: handlerinput.NamePtrToNamedAPIResPtr(E.Characters, ability.StandardGridPos, nil),
-		ExpertGridCharacter:   handlerinput.NamePtrToNamedAPIResPtr(E.Characters, ability.ExpertGridPos, nil),
-		Topmenu:               handlerinput.NamePtrToNamedAPIResPtr(E.Topmenus, ability.Topmenu, nil),
-		Submenu:               handlerinput.NamePtrToNamedAPIResPtr(E.Submenus, ability.Submenu, nil),
-		OpenSubmenu:           handlerinput.NamePtrToNamedAPIResPtr(E.Submenus, ability.OpenSubmenu, nil),
+		AeonLearnItem:         apilookups.E.AllItems.ToResAmtFromNamePtr(ability.AeonLearnItem),
+		LearnedBy:             handlerinput.NamesToNamedAPIResources(apilookups.E.CharacterClasses, ability.LearnedBy),
+		RelatedStats:          handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, ability.RelatedStats),
+		StandardGridCharacter: handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Characters, ability.StandardGridPos, nil),
+		ExpertGridCharacter:   handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Characters, ability.ExpertGridPos, nil),
+		Topmenu:               handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Topmenus, ability.Topmenu, nil),
+		Submenu:               handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, ability.Submenu, nil),
+		OpenSubmenu:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:                ability.Cursor,
 		Monsters:              monsters,
 		BattleInteractions:    ah.ConvertObjSlice(ability.BattleInteractions, convertBattleInteraction),
@@ -79,14 +80,14 @@ func retrievePlayerAbilities(r *http.Request, i handlerinput.Main[seedtypes.Play
 		i.QueryInt(r, ids, ts.QpnMpMin, config.Cfg.DB.GetPlayerAbilityIDsByMpCostMin),
 		i.QueryInt(r, ids, ts.QpnMpMax, config.Cfg.DB.GetPlayerAbilityIDsByMpCostMax),
 		i.QueryIntList(r, ids, ts.QpnRank, getTypedAbilityIDsByRank(abilityType)),
-		i.QueryNameIDListNul(r, ids, ts.QpnElement, E.Elements.ResTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(abilityType)),
-		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.ResTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetPlayerAbilityIDsByCharClass),
+		i.QueryNameIDListNul(r, ids, ts.QpnElement, apilookups.E.Elements.ResTypeSingle, lookup.L.Elements, getTypedAbilityIDsByElement(abilityType)),
+		i.QueryNameID(r, ids, ts.QpnUser, apilookups.E.CharacterClasses.ResTypeSingle, lookup.L.CharClasses, config.Cfg.DB.GetPlayerAbilityIDsByCharClass),
 		i.QueryID(r, ids, ts.QpnLearnItem, lookup.L.Items, config.Cfg.DB.GetPlayerAbilityIDsByLearnItem),
-		i.QueryNameID(r, ids, ts.QpnRelatedStat, E.Stats.ResTypeSingle, lookup.L.Stats, config.Cfg.DB.GetPlayerAbilityIDsByRelatedStat),
+		i.QueryNameID(r, ids, ts.QpnRelatedStat, apilookups.E.Stats.ResTypeSingle, lookup.L.Stats, config.Cfg.DB.GetPlayerAbilityIDsByRelatedStat),
 		i.QueryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, getTypedAbilityIDsByInflictedStatus(abilityType)),
 		i.QueryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, getTypedAbilityIDsByRemovedStatus(abilityType)),
-		i.QueryNameID(r, ids, ts.QpnStdSg, E.Characters.ResTypeSingle, lookup.L.Characters, handlerinput.ToIntManyNull(config.Cfg.DB.GetPlayerAbilityIDsStdSgChar)),
-		i.QueryNameID(r, ids, ts.QpnExpSg, E.Characters.ResTypeSingle, lookup.L.Characters, handlerinput.ToIntManyNull(config.Cfg.DB.GetPlayerAbilityIDsExpSgChar)),
+		i.QueryNameID(r, ids, ts.QpnStdSg, apilookups.E.Characters.ResTypeSingle, lookup.L.Characters, handlerinput.ToIntManyNull(config.Cfg.DB.GetPlayerAbilityIDsStdSgChar)),
+		i.QueryNameID(r, ids, ts.QpnExpSg, apilookups.E.Characters.ResTypeSingle, lookup.L.Characters, handlerinput.ToIntManyNull(config.Cfg.DB.GetPlayerAbilityIDsExpSgChar)),
 		i.QueryBool(r, ids, ts.QpnOutsideBattle, config.Cfg.DB.GetPlayerAbilityIDsCanUseOutsideBattle),
 		i.QueryBool(r, ids, ts.QpnCopycat, getTypedAbilityIDsByCanCopycat(abilityType)),
 		i.QueryBool(r, ids, ts.QpnHelpBar, getTypedAbilityIDsByAppearsInHelpBar(abilityType)),

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
@@ -60,5 +60,5 @@ func TestRetrieveRonsoRages(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.RonsoRages.Endpoint, "RetrieveRonsoRages", testSrv.HandleRonsoRages, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.RonsoRages.Endpoint, "RetrieveRonsoRages", testSrv.HandleRonsoRages, compareAPIResourceLists[apiresource.Named])
 }

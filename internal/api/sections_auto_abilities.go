@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -14,7 +15,7 @@ import (
 )
 
 func createAutoAbilitySimple(r *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.AutoAbilities
+	i := apilookups.E.AutoAbilities
 	autoAbility, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	autoAbilitySimple := sectiontypes.AutoAbilitySimple{

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
@@ -189,5 +189,5 @@ func TestRetrieveStatusConditions(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.StatusConditions.Endpoint, "RetrieveStatusConditions", testSrv.HandleStatusConditions, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.StatusConditions.Endpoint, "RetrieveStatusConditions", testSrv.HandleStatusConditions, compareAPIResourceLists[apiresource.Named])
 }

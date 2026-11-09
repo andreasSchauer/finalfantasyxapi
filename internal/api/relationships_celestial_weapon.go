@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -17,30 +18,30 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 	equipment, _ := lookup.GetResource(cw, lookup.L.EquipmentNames)
 
 	rel := apitypes.CelestialWeapon{
-		Equipment: handlerinput.NameToNamedAPIResource(E.Equipment, equipment.Name, nil),
-		Crest:     handlerinput.NameToNamedAPIResource(E.KeyItems, crest.Name, nil),
-		Sigil:     handlerinput.NameToNamedAPIResource(E.KeyItems, sigil.Name, nil),
+		Equipment: handlerinput.NameToNamedAPIResource(apilookups.E.Equipment, equipment.Name, nil),
+		Crest:     handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, crest.Name, nil),
+		Sigil:     handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, sigil.Name, nil),
 	}
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
-		tables, err := E.EquipmentTables.DBGetRelations(ctx, equipment, config.Cfg.DB.GetEquipmentEquipmentTableIDs)
+		tables, err := apilookups.E.EquipmentTables.DBGetRelations(ctx, equipment, config.Cfg.DB.GetEquipmentEquipmentTableIDs)
 		if err != nil {
 			return err
 		}
 		table, _ := lookup.GetResourceByID(tables[0].ID, lookup.L.EquipmentTablesID)
-		rel.AutoAbilities = handlerinput.NamesToNamedAPIResources(E.AutoAbilities, table.RequiredAutoAbilities)
+		rel.AutoAbilities = handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, table.RequiredAutoAbilities)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.WpnTreasure, err = E.Treasures.DBGetRelation(ctx, cw, handlerinput.ToIntOneNull(config.Cfg.DB.GetCelestialWeaponTreasureID))
+		rel.WpnTreasure, err = apilookups.E.Treasures.DBGetRelation(ctx, cw, handlerinput.ToIntOneNull(config.Cfg.DB.GetCelestialWeaponTreasureID))
 		return err
 	})
 
 	g.Go(func() error {
-		crestTreasures, err := E.Treasures.DBGetRelations(ctx, crest, config.Cfg.DB.GetKeyItemTreasureIDs)
+		crestTreasures, err := apilookups.E.Treasures.DBGetRelations(ctx, crest, config.Cfg.DB.GetKeyItemTreasureIDs)
 		if err != nil {
 			return err
 		}
@@ -49,7 +50,7 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 	})
 
 	g.Go(func() error {
-		sigilQuests, err := E.Quests.DBGetRelations(ctx, sigil, config.Cfg.DB.GetKeyItemQuestIDs)
+		sigilQuests, err := apilookups.E.Quests.DBGetRelations(ctx, sigil, config.Cfg.DB.GetKeyItemQuestIDs)
 		if err != nil {
 			return err
 		}

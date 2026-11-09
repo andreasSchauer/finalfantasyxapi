@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -18,26 +19,26 @@ func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (apityp
 	var rel apitypes.KeyItem
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := E.KeyItems.QueryAvlRelGetParams(r, keyItem.ID)
+	availabilityParams, err := apilookups.E.KeyItems.QueryAvlRelGetParams(r, keyItem.ID)
 	if err != nil {
 		return apitypes.KeyItem{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = E.Treasures.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ViewSourceTypeTreasure))
+		rel.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Quests, err = E.Quests.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ViewSourceTypeQuest))
+		rel.Quests, err = apilookups.E.Quests.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ViewSourceTypeQuest))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = E.Areas.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemAreaIDs())
+		rel.Areas, err = apilookups.E.Areas.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemAreaIDs())
 		return err
 	})
 
@@ -49,7 +50,7 @@ func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (apityp
 
 	var primer *apiresource.Named
 	if keyItem.Category == string(database.KeyItemCategoryPrimer) {
-		primerRes := handlerinput.NameToNamedAPIResource(E.Primers, keyItem.Name, nil)
+		primerRes := handlerinput.NameToNamedAPIResource(apilookups.E.Primers, keyItem.Name, nil)
 		primer = &primerRes
 	}
 	rel.Primer = primer
@@ -71,9 +72,9 @@ func getKeyItemCelestialWeapon(ctx context.Context, keyItem seedtypes.KeyItem) (
 
 	celestialID, err := config.Cfg.DB.GetKeyItemCelestialWeapon(ctx, database.KeyItemBase(keyItemBase))
 	if err != nil {
-		return nil, E.CelestialWeapons.ErrorDBOne(keyItem, err)
+		return nil, apilookups.E.CelestialWeapons.ErrorDBOne(keyItem, err)
 	}
 
-	celestialRes := handlerinput.IDToNamedAPIResource(E.CelestialWeapons, celestialID)
+	celestialRes := handlerinput.IDToNamedAPIResource(apilookups.E.CelestialWeapons, celestialID)
 	return &celestialRes, nil
 }

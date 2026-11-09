@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -23,13 +24,13 @@ func getStatusConditionRelationships(r *http.Request, status seedtypes.StatusCon
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = E.AutoAbilities.DBGetRelations(ctx, status, config.Cfg.DB.GetStatusConditionAutoAbilityIDs)
+		rel.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, status, config.Cfg.DB.GetStatusConditionAutoAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersResistance, err = E.Monsters.DBGetRelations(ctx, status, convGetStatusConditionResistingMonsterIDs(res.Resistance))
+		rel.MonstersResistance, err = apilookups.E.Monsters.DBGetRelations(ctx, status, convGetStatusConditionResistingMonsterIDs(res.Resistance))
 		return err
 	})
 
@@ -67,21 +68,21 @@ type StatusQueryResistance struct {
 func getStatusQueryResistance(r *http.Request) (StatusQueryResistance, error) {
 	var res StatusQueryResistance
 
-	queryParamResistance := Q.StatusConditions[ts.QpnResistance]
+	queryParamResistance := apilookups.Q.StatusConditions[ts.QpnResistance]
 	resistance, err := queryParamResistance.ParseInt(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.Resistance = int32(resistance)
 
-	queryParamMinRate := Q.StatusConditions[ts.QpnInflictMin]
+	queryParamMinRate := apilookups.Q.StatusConditions[ts.QpnInflictMin]
 	minRate, err := queryParamMinRate.ParseInt(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err
 	}
 	res.MinRate = int32(minRate)
 
-	queryParamMaxRate := Q.StatusConditions[ts.QpnInflictMax]
+	queryParamMaxRate := apilookups.Q.StatusConditions[ts.QpnInflictMax]
 	maxRate, err := queryParamMaxRate.ParseInt(r)
 	if errs.ErrExceptEmptyQuery(err) {
 		return StatusQueryResistance{}, err

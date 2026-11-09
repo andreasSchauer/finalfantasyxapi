@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -368,7 +368,7 @@ func TestRetrieveShops(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Shops.Endpoint, "RetrieveShops", testSrv.HandleShops, compareAPIResourceLists[apiresource.Unnamed])
+	testIDList(t, tests, apilookups.E.Shops.Endpoint, "RetrieveShops", testSrv.HandleShops, compareAPIResourceLists[apiresource.Unnamed])
 }
 
 func TestSubsectionShops(t *testing.T) {
@@ -396,5 +396,5 @@ func TestSubsectionShops(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Shops.Endpoint, "SubsectionShops", nil, compareSimpleResourceLists[apiresource.Unnamed, sectiontypes.ShopSimple])
+	testIDList(t, tests, apilookups.E.Shops.Endpoint, "SubsectionShops", nil, compareSimpleResourceLists[apiresource.Unnamed, sectiontypes.ShopSimple])
 }

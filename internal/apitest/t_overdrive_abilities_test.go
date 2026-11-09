@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -325,7 +325,7 @@ func TestGetMultipleOverdriveAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.OverdriveAbilities.Endpoint, "GetMultipleOverdriveAbilities", testSrv.HandleOverdriveAbilities, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.OverdriveAbilities.Endpoint, "GetMultipleOverdriveAbilities", testSrv.HandleOverdriveAbilities, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestRetrieveOverdriveAbilities(t *testing.T) {
@@ -393,7 +393,7 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.OverdriveAbilities.Endpoint, "RetrieveOverdriveAbilities", testSrv.HandleOverdriveAbilities, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.OverdriveAbilities.Endpoint, "RetrieveOverdriveAbilities", testSrv.HandleOverdriveAbilities, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestSubsectionOverdriveAbilities(t *testing.T) {
@@ -441,5 +441,5 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.OverdriveAbilities.Endpoint, "SubsectionOverdriveAbilities", nil, compareSimpleResourceLists[apiresource.Named, sectiontypes.AbilitySimple])
+	testIDList(t, tests, apilookups.E.OverdriveAbilities.Endpoint, "SubsectionOverdriveAbilities", nil, compareSimpleResourceLists[apiresource.Named, sectiontypes.AbilitySimple])
 }

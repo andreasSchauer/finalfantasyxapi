@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -15,50 +16,50 @@ func getAreaRelationships(r *http.Request, area seedtypes.Area) (apitypes.LocRel
 	var rel apitypes.LocRel
 	g, ctx := errgroup.WithContext(r.Context())
 
-	availabilityParams, err := E.Areas.QueryAvlRelGetParams(r, area.ID)
+	availabilityParams, err := apilookups.E.Areas.QueryAvlRelGetParams(r, area.ID)
 	if err != nil {
 		return apitypes.LocRel{}, err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Characters, err = E.Characters.DBGetRelations(ctx, area, handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaCharacterIDs))
+		rel.Characters, err = apilookups.E.Characters.DBGetRelations(ctx, area, handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaCharacterIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Aeons, err = E.Aeons.DBGetRelations(ctx, area, handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaAeonIDs))
+		rel.Aeons, err = apilookups.E.Aeons.DBGetRelations(ctx, area, handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaAeonIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = E.Shops.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ViewSourceTypeShop))
+		rel.Shops, err = apilookups.E.Shops.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ViewSourceTypeShop))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = E.Treasures.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ViewSourceTypeTreasure))
+		rel.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ViewSourceTypeTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Monsters, err = E.Monsters.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ViewSourceTypeMonster))
+		rel.Monsters, err = apilookups.E.Monsters.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ViewSourceTypeMonster))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Formations, err = E.MonsterFormations.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ViewSourceTypeMonsterFormation))
+		rel.Formations, err = apilookups.E.MonsterFormations.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ViewSourceTypeMonsterFormation))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Quests, err = E.Quests.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ViewSourceTypeQuest))
+		rel.Quests, err = apilookups.E.Quests.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ViewSourceTypeQuest))
 		return err
 	})
 
@@ -75,7 +76,7 @@ func getAreaRelationships(r *http.Request, area seedtypes.Area) (apitypes.LocRel
 
 	g.Go(func() error {
 		var err error
-		rel.FMVs, err = E.FMVs.DBGetRelations(ctx, area, config.Cfg.DB.GetAreaFmvIDs)
+		rel.FMVs, err = apilookups.E.FMVs.DBGetRelations(ctx, area, config.Cfg.DB.GetAreaFmvIDs)
 		return err
 	})
 
@@ -88,7 +89,7 @@ func getAreaRelationships(r *http.Request, area seedtypes.Area) (apitypes.LocRel
 }
 
 func getAreaConnectedAreas(area seedtypes.Area) ([]apitypes.AreaConnection, error) {
-	i := E.Areas
+	i := apilookups.E.Areas
 	connectedAreas := []apitypes.AreaConnection{}
 
 	for _, connArea := range area.ConnectedAreas {

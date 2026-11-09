@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
@@ -148,5 +148,5 @@ func TestRetrieveModifiers(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Modifiers.Endpoint, "RetrieveModifiers", testSrv.HandleModifiers, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.Modifiers.Endpoint, "RetrieveModifiers", testSrv.HandleModifiers, compareAPIResourceLists[apiresource.Named])
 }

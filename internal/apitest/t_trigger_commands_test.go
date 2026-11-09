@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -196,7 +196,7 @@ func TestGetMultipleTriggerCommands(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.TriggerCommands.Endpoint, "GetMultipleTriggerCommands", testSrv.HandleTriggerCommands, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.TriggerCommands.Endpoint, "GetMultipleTriggerCommands", testSrv.HandleTriggerCommands, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestRetrieveTriggerCommands(t *testing.T) {
@@ -234,5 +234,5 @@ func TestRetrieveTriggerCommands(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.TriggerCommands.Endpoint, "RetrieveTriggerCommands", testSrv.HandleTriggerCommands, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.TriggerCommands.Endpoint, "RetrieveTriggerCommands", testSrv.HandleTriggerCommands, compareAPIResourceLists[apiresource.Named])
 }

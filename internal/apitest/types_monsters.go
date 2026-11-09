@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -52,13 +52,13 @@ func compareMonsters(test test, exp expMonster, got apitypes.Monster) {
 	testMonsterDefaultState(test, exp.defaultState, got.AlteredStates)
 	test.compTestStructPtrs("items", exp.items, got.Items, compareMonsterItems)
 	test.compTestStructPtrs("equipment", exp.equipment, got.Equipment, compareMonsterEquipment)
-	test.checkResIDsInSlice("properties", api.E.Properties.Endpoint, exp.properties, got.Properties)
-	test.checkResIDsInSlice("auto-abilities", api.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice("ronso rages", api.E.RonsoRages.Endpoint, exp.ronsoRages, got.RonsoRages)
-	test.checkResIDsInSlice("areas", api.E.Areas.Endpoint, exp.areas, got.Areas)
-	test.checkResIDsInSlice("formations", api.E.MonsterFormations.Endpoint, exp.formations, got.Formations)
-	test.checkResIDsInSlice("status immunities", api.E.StatusConditions.Endpoint, exp.statusImmunities, got.StatusImmunities)
-	test.checkResIDsInSlice("abilities", api.E.Abilities.Endpoint, exp.abilities, got.Abilities)
+	test.checkResIDsInSlice("properties", apilookups.E.Properties.Endpoint, exp.properties, got.Properties)
+	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice("ronso rages", apilookups.E.RonsoRages.Endpoint, exp.ronsoRages, got.RonsoRages)
+	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.checkResIDsInSlice("formations", apilookups.E.MonsterFormations.Endpoint, exp.formations, got.Formations)
+	test.checkResIDsInSlice("status immunities", apilookups.E.StatusConditions.Endpoint, exp.statusImmunities, got.StatusImmunities)
+	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, exp.abilities, got.Abilities)
 }
 
 type testMonItems struct {
@@ -93,6 +93,6 @@ func compareMonsterEquipment(test test, _ string, exp testMonEquipment, got apit
 	test.t.Helper()
 	test.compStructs("ability slots", exp.abilitySlots, got.AbilitySlots)
 	test.compStructs("attached abilities", exp.attachedAbilities, got.AttachedAbilities)
-	test.checkResIDsInSlice("weapon abilities", api.E.AutoAbilities.Endpoint, exp.weaponAbilities, got.WeaponAbilities)
-	test.checkResIDsInSlice("armor abilities", api.E.AutoAbilities.Endpoint, exp.armorAbilities, got.ArmorAbilities)
+	test.checkResIDsInSlice("weapon abilities", apilookups.E.AutoAbilities.Endpoint, exp.weaponAbilities, got.WeaponAbilities)
+	test.checkResIDsInSlice("armor abilities", apilookups.E.AutoAbilities.Endpoint, exp.armorAbilities, got.ArmorAbilities)
 }

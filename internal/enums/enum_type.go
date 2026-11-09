@@ -1,3 +1,4 @@
+// Package enums bla bla
 package enums
 
 import (

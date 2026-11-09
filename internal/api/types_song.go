@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -11,7 +12,7 @@ func convertBackgroundMusic(bm seedtypes.BackgroundMusic) apitypes.BackgroundMus
 	return apitypes.BackgroundMusic{
 		Condition:              bm.Condition,
 		ReplacesEncounterMusic: bm.ReplacesEncounterMusic,
-		Areas:                  handlerinput.LocAreasToAreaAPIResources(E.Areas, bm.LocationAreas),
+		Areas:                  handlerinput.LocAreasToAreaAPIResources(apilookups.E.Areas, bm.LocationAreas),
 	}
 }
 
@@ -19,14 +20,14 @@ func convertCue(cue seedtypes.Cue) apitypes.Cue {
 	var triggerAreaPtr *apiresource.Area
 
 	if cue.TriggerLocationArea != nil {
-		triggerArea := handlerinput.LocAreaToAreaAPIResource(E.Areas, *cue.TriggerLocationArea)
+		triggerArea := handlerinput.LocAreaToAreaAPIResource(apilookups.E.Areas, *cue.TriggerLocationArea)
 		triggerAreaPtr = &triggerArea
 	}
 
 	return apitypes.Cue{
 		SceneDescription:       cue.SceneDescription,
 		TriggerArea:            triggerAreaPtr,
-		IncludedAreas:          handlerinput.LocAreasToAreaAPIResources(E.Areas, cue.IncludedAreas),
+		IncludedAreas:          handlerinput.LocAreasToAreaAPIResources(apilookups.E.Areas, cue.IncludedAreas),
 		ReplacesEncounterMusic: cue.ReplacesEncounterMusic,
 		ReplacesBGMusic:        cue.ReplacesBGMusic,
 		EndTrigger:             cue.EndTrigger,

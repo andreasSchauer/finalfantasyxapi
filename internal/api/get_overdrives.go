@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -31,8 +32,8 @@ func getOverdrive(r *http.Request, i handlerinput.Main[seedtypes.Overdrive, apit
 		UnlockCondition:    overdrive.UnlockCondition,
 		CountdownInSec:     overdrive.CountdownInSec,
 		Cursor:             overdrive.Cursor,
-		User:               handlerinput.NameToNamedAPIResource(E.CharacterClasses, overdrive.User, nil),
-		OverdriveCommand:   handlerinput.NamePtrToNamedAPIResPtr(E.OverdriveCommands, overdrive.OverdriveCommand, nil),
+		User:               handlerinput.NameToNamedAPIResource(apilookups.E.CharacterClasses, overdrive.User, nil),
+		OverdriveCommand:   handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.OverdriveCommands, overdrive.OverdriveCommand, nil),
 		OverdriveAbilities: refsToNamedAPIResources(overdrive.OverdriveAbilities),
 	}
 
@@ -47,6 +48,6 @@ func retrieveOverdrives(r *http.Request, i handlerinput.Main[seedtypes.Overdrive
 
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryIntList(r, ids, ts.QpnRank, config.Cfg.DB.GetOverdriveIDsByRank),
-		i.QueryNameID(r, ids, ts.QpnUser, E.CharacterClasses.ResTypeSingle, lookup.L.CharClasses, handlerinput.ToIntManyNull(config.Cfg.DB.GetOverdriveIDsByUser)),
+		i.QueryNameID(r, ids, ts.QpnUser, apilookups.E.CharacterClasses.ResTypeSingle, lookup.L.CharClasses, handlerinput.ToIntManyNull(config.Cfg.DB.GetOverdriveIDsByUser)),
 	})
 }

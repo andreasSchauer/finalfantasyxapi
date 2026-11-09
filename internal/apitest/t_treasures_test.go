@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -234,7 +234,7 @@ func TestRetrieveTreasures(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Treasures.Endpoint, "RetrieveTreasures", testSrv.HandleTreasures, compareAPIResourceLists[apiresource.Unnamed])
+	testIDList(t, tests, apilookups.E.Treasures.Endpoint, "RetrieveTreasures", testSrv.HandleTreasures, compareAPIResourceLists[apiresource.Unnamed])
 }
 
 func TestSubsectionTreasures(t *testing.T) {
@@ -272,5 +272,5 @@ func TestSubsectionTreasures(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.Treasures.Endpoint, "SubsectionTreasures", nil, compareSimpleResourceLists[apiresource.Unnamed, sectiontypes.TreasureSimple])
+	testIDList(t, tests, apilookups.E.Treasures.Endpoint, "SubsectionTreasures", nil, compareSimpleResourceLists[apiresource.Unnamed, sectiontypes.TreasureSimple])
 }

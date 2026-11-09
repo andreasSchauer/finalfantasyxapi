@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -19,31 +20,31 @@ func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, 
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = E.CelestialWeapons.DBGetRelationPtr(ctx, aeon, config.Cfg.DB.GetAeonCelestialWeaponID)
+		rel.CelestialWeapon, err = apilookups.E.CelestialWeapons.DBGetRelationPtr(ctx, aeon, config.Cfg.DB.GetAeonCelestialWeaponID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = E.CharacterClasses.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonCharClassIDs)
+		rel.CharacterClasses, err = apilookups.E.CharacterClasses.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AeonCommands, err = E.AeonCommands.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonAeonCommandIDs)
+		rel.AeonCommands, err = apilookups.E.AeonCommands.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonAeonCommandIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Overdrives, err = E.Overdrives.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonOverdriveIDs)
+		rel.Overdrives, err = apilookups.E.Overdrives.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonOverdriveIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = E.PlayerAbilities.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonDefaultAbilityIDs)
+		rel.DefaultPlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonDefaultAbilityIDs)
 		return err
 	})
 
@@ -57,7 +58,7 @@ func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, 
 
 func getAeonBaseStats(aeon seedtypes.Aeon) []apitypes.BaseStat {
 	baseStats := aeon.BaseStats.XVals[0].BaseStats
-	return E.Stats.ToResAmtType(baseStats, newBaseStat)
+	return apilookups.E.Stats.ToResAmtType(baseStats, newBaseStat)
 }
 
 func applyAeonStats(r *http.Request, aeon apitypes.Aeon, allowedStatIDs []int32) (apitypes.Aeon, error) {
@@ -77,7 +78,7 @@ func applyAeonStats(r *http.Request, aeon apitypes.Aeon, allowedStatIDs []int32)
 }
 
 func applyAeonStatsBattles(r *http.Request, aeon apitypes.Aeon, queryName ts.QueryParamName) ([]apitypes.BaseStat, error) {
-	queryParam := Q.Aeons[queryName]
+	queryParam := apilookups.Q.Aeons[queryName]
 	battles, err := queryParam.ParseInt(r)
 	if errs.QueryIsEmpty(err) {
 		return aeon.BaseStats, nil
@@ -94,16 +95,16 @@ func applyAeonStatsBattles(r *http.Request, aeon apitypes.Aeon, queryName ts.Que
 
 	seedAeon, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 	newBaseStats := seedAeon.BaseStats.XVals[i].BaseStats
-	baseStats := E.Stats.ToResAmtType(newBaseStats, newBaseStat)
+	baseStats := apilookups.E.Stats.ToResAmtType(newBaseStats, newBaseStat)
 
 	return baseStats, nil
 }
 
 func applyYunaStats(r *http.Request, aeon apitypes.Aeon, queryName ts.QueryParamName, allowedStatIDs []int32) ([]apitypes.BaseStat, error) {
-	queryParam := Q.Aeons[queryName]
+	queryParam := apilookups.Q.Aeons[queryName]
 
 	yuna := lookup.L.Characters["yuna"]
-	yunaBS := E.Stats.ToResAmtType(yuna.BaseStats, newBaseStat)
+	yunaBS := apilookups.E.Stats.ToResAmtType(yuna.BaseStats, newBaseStat)
 
 	yunaStatCalcMap, err := getStatCalcMap(r, queryParam, yunaBS, allowedStatIDs)
 	if errs.QueryIsEmpty(err) {
@@ -139,11 +140,11 @@ func calcAeonStats(aeon apitypes.Aeon, yuna map[string]int32) []apitypes.BaseSta
 func getAeonStatTables(aeon apitypes.Aeon) (map[string]float64, map[string]float64) {
 	aeonLookup, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 
-	aValsSlice := E.Stats.ToResAmtType(aeonLookup.BaseStats.AVals, newBaseStat)
+	aValsSlice := apilookups.E.Stats.ToResAmtType(aeonLookup.BaseStats.AVals, newBaseStat)
 	aValsInt := handlerinput.GetResAmtTypeMap(aValsSlice)
 	aVals := handlerinput.ResAmtMapToFloat(aValsInt)
 
-	bValsSlice := E.Stats.ToResAmtType(aeonLookup.BaseStats.BVals, newBaseStat)
+	bValsSlice := apilookups.E.Stats.ToResAmtType(aeonLookup.BaseStats.BVals, newBaseStat)
 	bValsInt := handlerinput.GetResAmtTypeMap(bValsSlice)
 	bVals := handlerinput.ResAmtMapToFloat(bValsInt)
 
@@ -197,7 +198,7 @@ func getUnitAgilityParams(r *http.Request, baseStats []apitypes.BaseStat) (apity
 	}
 
 	agilityParams := apitypes.AgilityParams{
-		AgilityTier: handlerinput.IDToUnnamedAPIResource(E.AgilityTiers, agilityTier.ID),
+		AgilityTier: handlerinput.IDToUnnamedAPIResource(apilookups.E.AgilityTiers, agilityTier.ID),
 		TickSpeed:   agilityTier.TickSpeed,
 		MinICV:      minICV,
 		MaxICV:      agilityTier.CharacterMaxICV,

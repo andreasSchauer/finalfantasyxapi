@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -26,7 +27,7 @@ func getSublocation(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, 
 	response := apitypes.Sublocation{
 		ID:                    sublocation.ID,
 		Name:                  sublocation.Name,
-		ParentLocation:        handlerinput.NameToNamedAPIResource(E.Locations, sublocation.Location, nil),
+		ParentLocation:        handlerinput.NameToNamedAPIResource(apilookups.E.Locations, sublocation.Location, nil),
 		Availability:          sublocation.Availability,
 		ConnectedSublocations: rel.ConnectedSublocations,
 		Areas:                 rel.Areas,

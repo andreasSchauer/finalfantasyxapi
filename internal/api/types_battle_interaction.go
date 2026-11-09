@@ -2,6 +2,7 @@ package api
 
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -19,7 +20,7 @@ func convertBattleInteraction(bi seedtypes.BattleInteraction) apitypes.BattleInt
 		SpecialAction:             bi.SpecialAction,
 		InflictedDelay:            ah.ConvertObjPtr(bi.InflictedDelay, convertInflictedDelay),
 		InflictedStatusConditions: ah.ConvertObjSlice(bi.InflictedStatusConditions, convertInflictedStatus),
-		RemovedStatusConditions:   handlerinput.NamesToNamedAPIResources(E.StatusConditions, bi.RemovedStatusConditions),
+		RemovedStatusConditions:   handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, bi.RemovedStatusConditions),
 		CopiedStatusConditions:    ah.ConvertObjSlice(bi.CopiedStatusConditions, convertInflictedStatus),
 		StatChanges:               ah.ConvertObjSlice(bi.StatChanges, convertStatChange),
 		ModifierChanges:           ah.ConvertObjSlice(bi.ModifierChanges, convertModifierChange),
@@ -52,7 +53,7 @@ func convertDamage(d seedtypes.Damage) apitypes.Damage {
 		CriticalPlusVal: d.CriticalPlusVal,
 		IsPiercing:      d.IsPiercing,
 		BreakDmgLimit:   d.BreakDmgLimit,
-		Element:         handlerinput.NamePtrToNamedAPIResPtr(E.Elements, d.Element, nil),
+		Element:         handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Elements, d.Element, nil),
 	}
 }
 
@@ -81,7 +82,7 @@ func convertInflictedDelay(id seedtypes.InflictedDelay) apitypes.InflictedDelay 
 
 func convertInflictedStatus(status seedtypes.InflictedStatus) apitypes.InflictedStatus {
 	return apitypes.InflictedStatus{
-		StatusCondition: handlerinput.NameToNamedAPIResource(E.StatusConditions, status.StatusCondition, nil),
+		StatusCondition: handlerinput.NameToNamedAPIResource(apilookups.E.StatusConditions, status.StatusCondition, nil),
 		Probability:     status.Probability,
 		DurationType:    status.DurationType,
 		Amount:          status.Amount,
@@ -90,7 +91,7 @@ func convertInflictedStatus(status seedtypes.InflictedStatus) apitypes.Inflicted
 
 func convertStatChange(sc seedtypes.StatChange) apitypes.StatChange {
 	return apitypes.StatChange{
-		Stat:            handlerinput.NameToNamedAPIResource(E.Stats, sc.StatName, nil),
+		Stat:            handlerinput.NameToNamedAPIResource(apilookups.E.Stats, sc.StatName, nil),
 		CalculationType: sc.CalculationType,
 		Value:           sc.Value,
 	}
@@ -98,7 +99,7 @@ func convertStatChange(sc seedtypes.StatChange) apitypes.StatChange {
 
 func convertModifierChange(mc seedtypes.ModifierChange) apitypes.ModifierChange {
 	return apitypes.ModifierChange{
-		Modifier:        handlerinput.NameToNamedAPIResource(E.Modifiers, mc.ModifierName, nil),
+		Modifier:        handlerinput.NameToNamedAPIResource(apilookups.E.Modifiers, mc.ModifierName, nil),
 		CalculationType: mc.CalculationType,
 		Value:           mc.Value,
 	}

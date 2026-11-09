@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
@@ -25,12 +25,12 @@ func (e expStat) GetTestGeneral() testGeneral {
 func compareStats(test test, exp expStat, got apitypes.Stat) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
-	test.checkResIDsInSlice("spheres", api.E.Spheres.Endpoint, exp.spheres, got.Spheres)
-	test.checkResIDsInSlice("auto-abilities", api.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice("player abilities", api.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
-	test.checkResIDsInSlice("overdrive abilities", api.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
-	test.checkResIDsInSlice("item abilities", api.E.ItemAbilities.Endpoint, exp.itemAbilities, got.ItemAbilities)
-	test.checkResIDsInSlice("trigger commands", api.E.TriggerCommands.Endpoint, exp.triggerCommands, got.TriggerCommands)
-	test.checkResIDsInSlice("status conditions", api.E.StatusConditions.Endpoint, exp.statusConditions, got.StatusConditions)
-	test.checkResIDsInSlice("properties", api.E.Properties.Endpoint, exp.properties, got.Properties)
+	test.checkResIDsInSlice("spheres", apilookups.E.Spheres.Endpoint, exp.spheres, got.Spheres)
+	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice("player abilities", apilookups.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
+	test.checkResIDsInSlice("overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
+	test.checkResIDsInSlice("item abilities", apilookups.E.ItemAbilities.Endpoint, exp.itemAbilities, got.ItemAbilities)
+	test.checkResIDsInSlice("trigger commands", apilookups.E.TriggerCommands.Endpoint, exp.triggerCommands, got.TriggerCommands)
+	test.checkResIDsInSlice("status conditions", apilookups.E.StatusConditions.Endpoint, exp.statusConditions, got.StatusConditions)
+	test.checkResIDsInSlice("properties", apilookups.E.Properties.Endpoint, exp.properties, got.Properties)
 }

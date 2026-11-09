@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
@@ -33,10 +33,10 @@ func compareMonsterFormations(test test, exp expMonsterFormation, got apitypes.M
 	test.compare("ap", exp.ap, got.AP)
 	test.compare("ap overkill", exp.apOverkill, got.ApOverkill)
 	test.compare("gil", exp.gil, got.Gil)
-	test.compIDAPIResourcePtrs("boss song", api.E.Songs.Endpoint, exp.bossMusic, got.BossMusic)
+	test.compIDAPIResourcePtrs("boss song", apilookups.E.Songs.Endpoint, exp.bossMusic, got.BossMusic)
 	test.checkResAmts("monsters", exp.monsters, got.Monsters)
 	test.compTestStructSlices("trigger commands", exp.triggerCommands, got.TriggerCommands, compareFormationTCs)
-	test.checkResIDsInSlice("areas", api.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, exp.areas, got.Areas)
 }
 
 type testFormationTC struct {
@@ -46,8 +46,8 @@ type testFormationTC struct {
 
 func compareFormationTCs(test test, fieldName string, exp testFormationTC, got apitypes.FormationTriggerCommand) {
 	test.t.Helper()
-	tcEndpoint := api.E.TriggerCommands.Endpoint
-	charClassesEndpoint := api.E.CharacterClasses.Endpoint
+	tcEndpoint := apilookups.E.TriggerCommands.Endpoint
+	charClassesEndpoint := apilookups.E.CharacterClasses.Endpoint
 
 	test.compIDAPIResource(fieldName+" - tc ability", tcEndpoint, exp.Ability, got.Ability)
 	test.checkResIDsInSlice(fieldName+" - tc users", charClassesEndpoint, exp.Users, got.Users)

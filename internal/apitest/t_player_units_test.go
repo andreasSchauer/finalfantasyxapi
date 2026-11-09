@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -141,5 +141,5 @@ func TestRetrievePlayerUnits(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.PlayerUnits.Endpoint, "RetrievePlayerUnits", testSrv.HandlePlayerUnits, compareAPIResourceLists[apiresource.Typed])
+	testIDList(t, tests, apilookups.E.PlayerUnits.Endpoint, "RetrievePlayerUnits", testSrv.HandlePlayerUnits, compareAPIResourceLists[apiresource.Typed])
 }

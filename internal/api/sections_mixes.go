@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -16,13 +17,13 @@ import (
 )
 
 func createMixSimple(r *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.Mixes
+	i := apilookups.E.Mixes
 	mix, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 	combinations := mix.PossibleCombinations
 
-	prefix := fmt.Sprintf("/api/%s", E.Items.Endpoint)
+	prefix := fmt.Sprintf("/api/%s", apilookups.E.Items.Endpoint)
 	path := strings.ToLower(r.URL.Path)
-	segments := getPathSegments(path, E.Items.Endpoint)
+	segments := getPathSegments(path, apilookups.E.Items.Endpoint)
 	isItemsSection := len(segments) == 2 && strings.HasPrefix(path, prefix)
 
 	if isItemsSection {

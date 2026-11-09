@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
 )
 
 func filterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.Monsters
+	i := apilookups.E.Monsters
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {
@@ -41,7 +42,7 @@ func filterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
 }
 
 func filterAvlMonsterFormations(r *http.Request, inputIDs []int32) ([]int32, error) {
-	i := E.MonsterFormations
+	i := apilookups.E.MonsterFormations
 
 	avlParams, err := i.QueryAvlRepGetParams(r)
 	if errs.ErrExceptEmptyQuery(err) {

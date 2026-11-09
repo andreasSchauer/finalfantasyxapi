@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -8,14 +9,14 @@ import (
 
 func newElemResist(element, affinity string) apitypes.ElementalResist {
 	return apitypes.ElementalResist{
-		Element:  handlerinput.NameToNamedAPIResource(E.Elements, element, nil),
+		Element:  handlerinput.NameToNamedAPIResource(apilookups.E.Elements, element, nil),
 		Affinity: affinity,
 	}
 }
 
 func convertElemResist(er seedtypes.ElementalResist) apitypes.ElementalResist {
 	return apitypes.ElementalResist{
-		Element:  handlerinput.NameToNamedAPIResource(E.Elements, er.Element, nil),
+		Element:  handlerinput.NameToNamedAPIResource(apilookups.E.Elements, er.Element, nil),
 		Affinity: er.Affinity,
 	}
 }

@@ -6,6 +6,7 @@ import (
 	"slices"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -48,7 +49,7 @@ func applyAlteredState(mon apitypes.Monster, altStateID int) apitypes.Monster {
 	}
 
 	defaultState := apitypes.AlteredState{
-		URL:         ah.CreateResourceURL(E.Monsters.Endpoint, mon.ID),
+		URL:         ah.CreateResourceURL(apilookups.E.Monsters.Endpoint, mon.ID),
 		Condition:   "default",
 		IsTemporary: false,
 	}
@@ -77,7 +78,7 @@ func applyAlteredState(mon apitypes.Monster, altStateID int) apitypes.Monster {
 }
 
 func getAltStateID(r *http.Request, mon apitypes.Monster, queryName ts.QueryParamName) (int, error) {
-	queryParam := Q.Monsters[queryName]
+	queryParam := apilookups.Q.Monsters[queryName]
 	query, err := queryParam.CheckEmpty(r)
 	if err != nil {
 		return 0, err

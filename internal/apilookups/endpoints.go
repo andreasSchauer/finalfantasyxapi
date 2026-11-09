@@ -2,13 +2,15 @@
 package apilookups
 
 import (
+	"slices"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
-
 
 var E = &Endpoints{}
 
@@ -67,4 +69,65 @@ type Endpoints struct {
 	TurnOrder          handlerinput.Service[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]
 	DropChance         handlerinput.Service[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]
 	CritChance         handlerinput.Service[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]
+}
+
+func (E *Endpoints) InitializeEndpointSlice() {
+	E.Endpoints.Slice = []ts.EndpointName{
+		E.Locations.Endpoint,
+		E.Sublocations.Endpoint,
+		E.Areas.Endpoint,
+		E.MonsterFormations.Endpoint,
+		E.Shops.Endpoint,
+		E.Treasures.Endpoint,
+		E.Quests.Endpoint,
+		E.Sidequests.Endpoint,
+		E.Subquests.Endpoint,
+		E.ArenaCreations.Endpoint,
+		E.BlitzballPrizes.Endpoint,
+		E.Songs.Endpoint,
+		E.FMVs.Endpoint,
+		E.PlayerUnits.Endpoint,
+		E.Characters.Endpoint,
+		E.Aeons.Endpoint,
+		E.CharacterClasses.Endpoint,
+		E.Monsters.Endpoint,
+		E.Abilities.Endpoint,
+		E.PlayerAbilities.Endpoint,
+		E.OverdriveAbilities.Endpoint,
+		E.ItemAbilities.Endpoint,
+		E.TriggerCommands.Endpoint,
+		E.MiscAbilities.Endpoint,
+		E.EnemyAbilities.Endpoint,
+		E.AeonCommands.Endpoint,
+		E.OverdriveCommands.Endpoint,
+		E.Overdrives.Endpoint,
+		E.RonsoRages.Endpoint,
+		E.Submenus.Endpoint,
+		E.Topmenus.Endpoint,
+		E.AllItems.Endpoint,
+		E.Items.Endpoint,
+		E.Spheres.Endpoint,
+		E.KeyItems.Endpoint,
+		E.Primers.Endpoint,
+		E.Mixes.Endpoint,
+		E.AutoAbilities.Endpoint,
+		E.EquipmentTables.Endpoint,
+		E.Equipment.Endpoint,
+		E.CelestialWeapons.Endpoint,
+		E.Stats.Endpoint,
+		E.Properties.Endpoint,
+		E.OverdriveModes.Endpoint,
+		E.Elements.Endpoint,
+		E.StatusConditions.Endpoint,
+		E.Modifiers.Endpoint,
+		E.AgilityTiers.Endpoint,
+		E.Enums.Endpoint,
+		E.Endpoints.Endpoint,
+		E.AlBhed.Endpoint,
+		E.TurnOrder.Endpoint,
+		E.DropChance.Endpoint,
+		E.CritChance.Endpoint,
+	}
+
+	slices.Sort(E.Endpoints.Slice)
 }

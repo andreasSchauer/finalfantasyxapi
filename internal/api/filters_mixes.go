@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -13,9 +14,9 @@ import (
 )
 
 func getMixesByItem(r *http.Request, ctx context.Context, firstItemID int32) ([]int32, error) {
-	i := E.Mixes
+	i := apilookups.E.Mixes
 
-	secondItemIDPtr, err := handlerinput.NullID(r, E.Items, ts.QpnSecondItem, i.QueryLookup)
+	secondItemIDPtr, err := handlerinput.NullID(r, apilookups.E.Items, ts.QpnSecondItem, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

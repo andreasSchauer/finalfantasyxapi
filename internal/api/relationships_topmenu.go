@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -16,31 +17,31 @@ func getTopmenuRelationships(r *http.Request, topmenu seedtypes.Topmenu) (apityp
 
 	g.Go(func() error {
 		var err error
-		rel.Submenus, err = E.Submenus.DBGetRelations(ctx, topmenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuSubmenuIDs))
+		rel.Submenus, err = apilookups.E.Submenus.DBGetRelations(ctx, topmenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuSubmenuIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveCommands, err = E.OverdriveCommands.DBGetRelations(ctx, topmenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuOverdriveCommandIDs))
+		rel.OverdriveCommands, err = apilookups.E.OverdriveCommands.DBGetRelations(ctx, topmenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuOverdriveCommandIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Overdrives, err = E.Overdrives.DBGetRelations(ctx, topmenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuOverdriveIDs))
+		rel.Overdrives, err = apilookups.E.Overdrives.DBGetRelations(ctx, topmenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuOverdriveIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AeonCommands, err = E.AeonCommands.DBGetRelations(ctx, topmenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuAeonCommandIDs))
+		rel.AeonCommands, err = apilookups.E.AeonCommands.DBGetRelations(ctx, topmenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuAeonCommandIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Abilities, err = E.Abilities.DBGetRelations(ctx, topmenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuAbilityIDs))
+		rel.Abilities, err = apilookups.E.Abilities.DBGetRelations(ctx, topmenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuAbilityIDs))
 		return err
 	})
 

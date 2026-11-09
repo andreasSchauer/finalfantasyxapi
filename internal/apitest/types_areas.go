@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
@@ -23,8 +23,8 @@ func compareAreas(test test, exp expArea, got apitypes.Area) {
 	test.t.Helper()
 	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
 	test.compare("displayName", exp.displayName, got.DisplayName)
-	test.compIDAPIResource("location", api.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)
-	test.compIDAPIResource("sublocation", api.E.Sublocations.Endpoint, exp.parentSublocation, got.ParentSublocation)
-	test.checkResIDsInSlice("connected areas", api.E.Areas.Endpoint, exp.connectedAreas, got.ConnectedAreas)
+	test.compIDAPIResource("location", apilookups.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)
+	test.compIDAPIResource("sublocation", apilookups.E.Sublocations.Endpoint, exp.parentSublocation, got.ParentSublocation)
+	test.checkResIDsInSlice("connected areas", apilookups.E.Areas.Endpoint, exp.connectedAreas, got.ConnectedAreas)
 	compareLocRel(test, exp.expLocRel, got.LocRel)
 }

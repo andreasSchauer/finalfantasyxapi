@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -31,7 +32,7 @@ func getMonsterAlteredStates(r *http.Request, mon seedtypes.Monster) []apitypes.
 		if r != nil {
 			q := r.URL.Query()
 			q.Set(string(ts.QpnAlteredState), strconv.Itoa(i+1))
-			url = ah.CreateResourceURLQuery(E.Monsters.Endpoint, mon.ID, q)
+			url = ah.CreateResourceURLQuery(apilookups.E.Monsters.Endpoint, mon.ID, q)
 		}
 
 		alteredState := apitypes.AlteredState{
@@ -62,11 +63,11 @@ func getAlts(as seedtypes.AlteredState) []apitypes.Alt {
 
 func convertAlt(asc seedtypes.Alt) apitypes.Alt {
 	return apitypes.Alt{
-		Properties:       h.SliceOrNil(handlerinput.NamesToNamedAPIResources(E.Properties, asc.Properties)),
-		AutoAbilities:    h.SliceOrNil(handlerinput.NamesToNamedAPIResources(E.AutoAbilities, asc.AutoAbilities)),
-		BaseStats:        h.SliceOrNil(E.Stats.ToResAmtType(asc.BaseStats, newBaseStat)),
+		Properties:       h.SliceOrNil(handlerinput.NamesToNamedAPIResources(apilookups.E.Properties, asc.Properties)),
+		AutoAbilities:    h.SliceOrNil(handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, asc.AutoAbilities)),
+		BaseStats:        h.SliceOrNil(apilookups.E.Stats.ToResAmtType(asc.BaseStats, newBaseStat)),
 		ElemResists:      h.SliceOrNil(namesToElemResists(asc.ElemResists)),
-		StatusImmunities: h.SliceOrNil(handlerinput.NamesToNamedAPIResources(E.StatusConditions, asc.StatusImmunities)),
+		StatusImmunities: h.SliceOrNil(handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, asc.StatusImmunities)),
 		AddedStatus:      ah.ConvertObjPtr(asc.AddedStatus, convertInflictedStatus),
 	}
 }

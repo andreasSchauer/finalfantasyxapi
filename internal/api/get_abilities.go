@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -20,7 +21,7 @@ func getAbility(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes
 		return apitypes.Ability{}, err
 	}
 
-	monsters, err := E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetAbilityMonsterIDs)
+	monsters, err := apilookups.E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetAbilityMonsterIDs)
 	if err != nil {
 		return apitypes.Ability{}, err
 	}
@@ -55,7 +56,7 @@ func retrieveAbilities(r *http.Request, i handlerinput.Main[seedtypes.Ability, a
 		i.QueryEnumList(r, enums.T.TargetType, ids, ts.QpnTargetType, config.Cfg.DB.GetAbilityIDsByTargetType),
 		i.QueryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, config.Cfg.DB.GetAbilityIDsByDamageFormula),
 		i.QueryIntList(r, ids, ts.QpnRank, config.Cfg.DB.GetAbilityIDsByRank),
-		i.QueryNameIDListNul(r, ids, ts.QpnElement, E.Elements.ResTypeSingle, lookup.L.Elements, config.Cfg.DB.GetAbilityIDsByElement),
+		i.QueryNameIDListNul(r, ids, ts.QpnElement, apilookups.E.Elements.ResTypeSingle, lookup.L.Elements, config.Cfg.DB.GetAbilityIDsByElement),
 		i.QueryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, config.Cfg.DB.GetAbilityIDsByInflictedStatus),
 		i.QueryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, config.Cfg.DB.GetAbilityIDsByRemovedStatus),
 		i.QueryID(r, ids, ts.QpnMonster, lookup.L.MonsterFormations, config.Cfg.DB.GetAbilityIDsByMonster),

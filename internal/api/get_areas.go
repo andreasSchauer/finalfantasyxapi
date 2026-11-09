@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
@@ -34,8 +35,8 @@ func getArea(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area,
 		Version:           area.Version,
 		Specification:     area.Specification,
 		DisplayName:       getAreaDisplayName(area),
-		ParentLocation:    handlerinput.NameToNamedAPIResource(E.Locations, area.Location, nil),
-		ParentSublocation: handlerinput.NameToNamedAPIResource(E.Sublocations, area.Sublocation, nil),
+		ParentLocation:    handlerinput.NameToNamedAPIResource(apilookups.E.Locations, area.Location, nil),
+		ParentSublocation: handlerinput.NameToNamedAPIResource(apilookups.E.Sublocations, area.Sublocation, nil),
 		Availability:      area.Availability,
 		HasSaveSphere:     area.HasSaveSphere,
 		AirshipDropOff:    area.AirshipDropOff,

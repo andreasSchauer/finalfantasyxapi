@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 )
@@ -85,5 +85,5 @@ func TestRetrieveFMVs(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.FMVs.Endpoint, "RetrieveFMVs", testSrv.HandleFMVs, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.FMVs.Endpoint, "RetrieveFMVs", testSrv.HandleFMVs, compareAPIResourceLists[apiresource.Named])
 }

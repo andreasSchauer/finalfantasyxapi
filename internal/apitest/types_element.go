@@ -1,7 +1,7 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 )
 
@@ -27,14 +27,14 @@ func (e expElement) GetTestGeneral() testGeneral {
 func compareElements(test test, exp expElement, got apitypes.Element) {
 	test.t.Helper()
 	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
-	test.compIDAPIResourcePtrs("status protection", api.E.StatusConditions.Endpoint, exp.statusProtection, got.StatusProtection)
-	test.checkResIDsInSlice("auto-abilities", api.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice("player abilities", api.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
-	test.checkResIDsInSlice("overdrive abilities", api.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
-	test.checkResIDsInSlice("item abilities", api.E.ItemAbilities.Endpoint, exp.itemAbilities, got.ItemAbilities)
-	test.checkResIDsInSlice("enemy abilities", api.E.EnemyAbilities.Endpoint, exp.enemyAbilities, got.EnemyAbilities)
-	test.checkResIDsInSlice("monsters weak", api.E.Monsters.Endpoint, exp.monstersWeak, got.MonstersWeak)
-	test.checkResIDsInSlice("monsters halved", api.E.Monsters.Endpoint, exp.monstersHalved, got.MonstersHalved)
-	test.checkResIDsInSlice("monsters immune", api.E.Monsters.Endpoint, exp.monstersImmune, got.MonstersImmune)
-	test.checkResIDsInSlice("monsters absorb", api.E.Monsters.Endpoint, exp.monstersAbsorb, got.MonstersAbsorb)
+	test.compIDAPIResourcePtrs("status protection", apilookups.E.StatusConditions.Endpoint, exp.statusProtection, got.StatusProtection)
+	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice("player abilities", apilookups.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
+	test.checkResIDsInSlice("overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
+	test.checkResIDsInSlice("item abilities", apilookups.E.ItemAbilities.Endpoint, exp.itemAbilities, got.ItemAbilities)
+	test.checkResIDsInSlice("enemy abilities", apilookups.E.EnemyAbilities.Endpoint, exp.enemyAbilities, got.EnemyAbilities)
+	test.checkResIDsInSlice("monsters weak", apilookups.E.Monsters.Endpoint, exp.monstersWeak, got.MonstersWeak)
+	test.checkResIDsInSlice("monsters halved", apilookups.E.Monsters.Endpoint, exp.monstersHalved, got.MonstersHalved)
+	test.checkResIDsInSlice("monsters immune", apilookups.E.Monsters.Endpoint, exp.monstersImmune, got.MonstersImmune)
+	test.checkResIDsInSlice("monsters absorb", apilookups.E.Monsters.Endpoint, exp.monstersAbsorb, got.MonstersAbsorb)
 }

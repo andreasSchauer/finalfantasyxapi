@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -12,9 +13,9 @@ import (
 )
 
 func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := E.AutoAbilities
+	i := apilookups.E.AutoAbilities
 
-	charIDPtr, err := handlerinput.NullNameID(r, E.Characters, ts.QpnCharacter, i.QueryLookup)
+	charIDPtr, err := handlerinput.NullNameID(r, apilookups.E.Characters, ts.QpnCharacter, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}
@@ -31,9 +32,9 @@ func getAutoAbilitiesByMonster(r *http.Request, ctx context.Context, id int32) (
 }
 
 func getAutoAbilitiesByShop(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := E.AutoAbilities
+	i := apilookups.E.AutoAbilities
 
-	charIDPtr, err := handlerinput.NullNameID(r, E.Characters, ts.QpnCharacter, i.QueryLookup)
+	charIDPtr, err := handlerinput.NullNameID(r, apilookups.E.Characters, ts.QpnCharacter, i.QueryLookup)
 	if errs.ErrExceptEmptyQuery(err) {
 		return nil, err
 	}

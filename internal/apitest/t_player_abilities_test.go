@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -307,7 +307,7 @@ func TestGetMultiplePlayerAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.PlayerAbilities.Endpoint, "GetMultiplePlayerAbilities", testSrv.HandlePlayerAbilities, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.PlayerAbilities.Endpoint, "GetMultiplePlayerAbilities", testSrv.HandlePlayerAbilities, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestRetrievePlayerAbilities(t *testing.T) {
@@ -443,7 +443,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.PlayerAbilities.Endpoint, "RetrievePlayerAbilities", testSrv.HandlePlayerAbilities, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.PlayerAbilities.Endpoint, "RetrievePlayerAbilities", testSrv.HandlePlayerAbilities, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestSubsectionPlayerAbilities(t *testing.T) {
@@ -491,5 +491,5 @@ func TestSubsectionPlayerAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.PlayerAbilities.Endpoint, "SubsectionPlayerAbilities", nil, compareSimpleResourceLists[apiresource.Named, sectiontypes.PlayerAbilitySimple])
+	testIDList(t, tests, apilookups.E.PlayerAbilities.Endpoint, "SubsectionPlayerAbilities", nil, compareSimpleResourceLists[apiresource.Named, sectiontypes.PlayerAbilitySimple])
 }

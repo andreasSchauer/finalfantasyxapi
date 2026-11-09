@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
@@ -100,5 +100,5 @@ func TestRetrieveBlitzballPrizes(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.BlitzballPrizes.Endpoint, "RetrieveBlitzballPositions", testSrv.HandleBlitzballPrizes, compareAPIResourceLists[apiresource.Unnamed])
+	testIDList(t, tests, apilookups.E.BlitzballPrizes.Endpoint, "RetrieveBlitzballPositions", testSrv.HandleBlitzballPrizes, compareAPIResourceLists[apiresource.Unnamed])
 }

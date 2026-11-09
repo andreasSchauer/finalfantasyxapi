@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
@@ -13,7 +14,7 @@ import (
 )
 
 func createLocationSimple(r *http.Request, id int32, subsection handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := E.Locations
+	i := apilookups.E.Locations
 	location, _ := lookup.GetResourceByID(id, i.ObjLookupID)
 
 	monsterIDs := subsection.Relations[id][handlerinput.RelationMonsters]
@@ -32,28 +33,28 @@ func createLocationSimple(r *http.Request, id int32, subsection handlerinput.Sub
 }
 
 func getLocationSectionRelations(r *http.Request, locIDs []int32) (map[int32]map[handlerinput.Relation][]int32, error) {
-	i := E.Locations
+	i := apilookups.E.Locations
 	relations := make(map[int32]map[handlerinput.Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())
 
 	var treasureJunctions []sectiontypes.Junction
 	g.Go(func() error {
 		var err error
-		treasureJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Treasures.ResTypeSingle, config.Cfg.DB.GetLocationTreasureIdPairs, juncLocationTreasure)
+		treasureJunctions, err = i.GetDBJunctions(ctx, locIDs, apilookups.E.Treasures.ResTypeSingle, config.Cfg.DB.GetLocationTreasureIdPairs, juncLocationTreasure)
 		return err
 	})
 
 	var shopJunctions []sectiontypes.Junction
 	g.Go(func() error {
 		var err error
-		shopJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Shops.ResTypeSingle, config.Cfg.DB.GetLocationShopIdPairs, juncLocationShop)
+		shopJunctions, err = i.GetDBJunctions(ctx, locIDs, apilookups.E.Shops.ResTypeSingle, config.Cfg.DB.GetLocationShopIdPairs, juncLocationShop)
 		return err
 	})
 
 	var monsterJunctions []sectiontypes.Junction
 	g.Go(func() error {
 		var err error
-		monsterJunctions, err = i.GetDBJunctions(ctx, locIDs, E.Monsters.ResTypeSingle, config.Cfg.DB.GetLocationMonsterIdPairs, juncLocationMonster)
+		monsterJunctions, err = i.GetDBJunctions(ctx, locIDs, apilookups.E.Monsters.ResTypeSingle, config.Cfg.DB.GetLocationMonsterIdPairs, juncLocationMonster)
 		return err
 	})
 

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 )
 
@@ -30,7 +30,7 @@ func TestRetrieveEndpoints(t *testing.T) {
 				requestURL:     "/api/endpoints",
 				expectedStatus: http.StatusOK,
 			},
-			count: len(api.E.Endpoints.Slice),
+			count: len(apilookups.E.Endpoints.Slice),
 			results: []string{
 				"/areas",
 				"/equipment-tables",

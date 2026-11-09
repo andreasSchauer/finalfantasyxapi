@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -12,7 +13,7 @@ import (
 )
 
 func getMasterItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := E.AllItems
+	i := apilookups.E.AllItems
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
@@ -32,7 +33,7 @@ func getMasterItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int
 }
 
 func getMasterItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := E.AllItems
+	i := apilookups.E.AllItems
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
@@ -52,7 +53,7 @@ func getMasterItemsBySublocation(r *http.Request, ctx context.Context, id int32)
 }
 
 func getMasterItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := E.AllItems
+	i := apilookups.E.AllItems
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
@@ -72,7 +73,7 @@ func getMasterItemsByLocation(r *http.Request, ctx context.Context, id int32) ([
 }
 
 func getItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := E.Items
+	i := apilookups.E.Items
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
@@ -92,7 +93,7 @@ func getItemsByArea(r *http.Request, ctx context.Context, id int32) ([]int32, er
 }
 
 func getItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := E.Items
+	i := apilookups.E.Items
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)
@@ -112,7 +113,7 @@ func getItemsBySublocation(r *http.Request, ctx context.Context, id int32) ([]in
 }
 
 func getItemsByLocation(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
-	i := E.Items
+	i := apilookups.E.Items
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
 	methods, err := queryParamMethods.ParseValueList(r)

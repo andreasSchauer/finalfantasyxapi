@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
@@ -284,7 +284,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.MonsterFormations.Endpoint, "RetrieveMonsterFormations", testSrv.HandleMonsterFormations, compareAPIResourceLists[apiresource.Unnamed])
+	testIDList(t, tests, apilookups.E.MonsterFormations.Endpoint, "RetrieveMonsterFormations", testSrv.HandleMonsterFormations, compareAPIResourceLists[apiresource.Unnamed])
 }
 
 func TestSubsectionMonsterFormations(t *testing.T) {
@@ -372,5 +372,5 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.MonsterFormations.Endpoint, "SubsectionMonsterFormations", nil, compareSimpleResourceLists[apiresource.Unnamed, sectiontypes.MonsterFormationSimple])
+	testIDList(t, tests, apilookups.E.MonsterFormations.Endpoint, "SubsectionMonsterFormations", nil, compareSimpleResourceLists[apiresource.Unnamed, sectiontypes.MonsterFormationSimple])
 }

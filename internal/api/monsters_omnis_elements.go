@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
@@ -60,7 +61,7 @@ func applyOmnisElements(r *http.Request, mon apitypes.Monster, queryName ts.Quer
 
 // verifies the input and counts the amounts of circles pointing to each element
 func parseOmnisQuery(r *http.Request, queryName ts.QueryParamName) (map[string]int, error) {
-	queryParam := Q.Monsters[queryName]
+	queryParam := apilookups.Q.Monsters[queryName]
 	query, err := queryParam.CheckEmpty(r)
 	if err != nil {
 		return nil, err

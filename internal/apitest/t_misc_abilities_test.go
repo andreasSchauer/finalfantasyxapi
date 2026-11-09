@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
@@ -289,7 +289,7 @@ func TestGetMultipleMiscAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.MiscAbilities.Endpoint, "GetMultipleMiscAbilities", testSrv.HandleMiscAbilities, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.MiscAbilities.Endpoint, "GetMultipleMiscAbilities", testSrv.HandleMiscAbilities, compareAPIResourceLists[apiresource.Named])
 }
 
 func TestRetrieveMiscAbilities(t *testing.T) {
@@ -337,5 +337,5 @@ func TestRetrieveMiscAbilities(t *testing.T) {
 		},
 	}
 
-	testIDList(t, tests, api.E.MiscAbilities.Endpoint, "RetrieveMiscAbilities", testSrv.HandleMiscAbilities, compareAPIResourceLists[apiresource.Named])
+	testIDList(t, tests, apilookups.E.MiscAbilities.Endpoint, "RetrieveMiscAbilities", testSrv.HandleMiscAbilities, compareAPIResourceLists[apiresource.Named])
 }
