@@ -1,4 +1,4 @@
-package api
+package sections
 
 import (
 	"net/http"
@@ -13,6 +13,22 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
 )
+
+func CreateAeonStatSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
+	i := apilookups.E.Aeons
+	aeon, _ := lookup.GetResourceByID(id, lookup.L.AeonsID)
+
+	aeonStatSub := sectiontypes.AeonStatSimple{
+		ID:    aeon.ID,
+		URL:   ah.CreateResourceURL(i.Endpoint, id),
+		Name:  aeon.Name,
+		AVals: newAeonStatTable(aeon.BaseStats.AVals),
+		BVals: newAeonStatTable(aeon.BaseStats.BVals),
+		XVals: ah.ConvertObjSlice(aeon.BaseStats.XVals, convertXVal),
+	}
+
+	return aeonStatSub, nil
+}
 
 func convertXVal(x seedtypes.XVal) sectiontypes.Xval {
 	return sectiontypes.Xval{
@@ -42,20 +58,4 @@ func newAeonStatTable(baseStats []seedtypes.BaseStat) sectiontypes.AeonStatTable
 		Evasion:      statMap["evasion"],
 		Accuracy:     statMap["accuracy"],
 	}
-}
-
-func CreateAeonStatSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := apilookups.E.Aeons
-	aeon, _ := lookup.GetResourceByID(id, lookup.L.AeonsID)
-
-	aeonStatSub := sectiontypes.AeonStatSimple{
-		ID:    aeon.ID,
-		URL:   ah.CreateResourceURL(i.Endpoint, id),
-		Name:  aeon.Name,
-		AVals: newAeonStatTable(aeon.BaseStats.AVals),
-		BVals: newAeonStatTable(aeon.BaseStats.BVals),
-		XVals: ah.ConvertObjSlice(aeon.BaseStats.XVals, convertXVal),
-	}
-
-	return aeonStatSub, nil
 }

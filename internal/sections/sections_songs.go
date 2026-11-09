@@ -1,4 +1,4 @@
-package api
+package sections
 
 import (
 	"context"
@@ -36,7 +36,7 @@ func CreateSongSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (api
 	return songSimple, nil
 }
 
-func getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
+func GetLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := config.Cfg.DB.GetLocationBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of location with id '%d'", err)
@@ -61,7 +61,7 @@ func getLocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	return ids, nil
 }
 
-func getSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
+func GetSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := config.Cfg.DB.GetSublocationBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of sublocation with id '%d'", err)
@@ -86,7 +86,7 @@ func getSublocationSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	return ids, nil
 }
 
-func getAreaSongIDs(ctx context.Context, id int32) ([]int32, error) {
+func GetAreaSongIDs(ctx context.Context, id int32) ([]int32, error) {
 	bgSongIDs, err := config.Cfg.DB.GetAreaBackgroundMusicSongIDs(ctx, id)
 	if err != nil {
 		return nil, errs.NewHTTPError(http.StatusInternalServerError, "couldn't get bg song ids of area with id '%d'", err)

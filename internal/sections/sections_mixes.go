@@ -1,4 +1,4 @@
-package api
+package sections
 
 import (
 	"fmt"

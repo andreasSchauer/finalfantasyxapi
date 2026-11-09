@@ -1,4 +1,4 @@
-package api
+package sections
 
 import (
 	"fmt"
@@ -29,13 +29,13 @@ func CreateAutoAbilitySimple(r *http.Request, id int32, _ handlerinput.Subsectio
 		AutoItemUse:         h.SliceOrNil(autoAbility.AutoItemUse),
 		OnHitElement:        autoAbility.OnHitElement,
 		AddedElemResist:     ah.ConvertObjPtr(autoAbility.AddedElemResist, convertElemResistSimple),
-		OnHitStatus:         ah.ConvertObjPtr(autoAbility.OnHitStatus, convertInflictedStatusSimple),
+		OnHitStatus:         ah.ConvertObjPtr(autoAbility.OnHitStatus, ConvertInflictedStatusSimple),
 		AddedStatusses:      h.SliceOrNil(autoAbility.AddedStatusses),
-		AddedStatusResists:  ah.ConvertObjSliceOrNil(autoAbility.AddedStatusResists, convertStatusResistSimple),
+		AddedStatusResists:  ah.ConvertObjSliceOrNil(autoAbility.AddedStatusResists, ConvertStatusResistSimple),
 		AddedProperty:       autoAbility.AddedProperty,
 		ConversionTo:        autoAbility.ConversionTo,
 		StatChanges:         ah.ConvertObjSliceOrNil(autoAbility.StatChanges, convertStatChangeSimple),
-		ModifierChanges:     ah.ConvertObjSliceOrNil(autoAbility.ModifierChanges, convertModChangeSimple),
+		ModifierChanges:     ah.ConvertObjSliceOrNil(autoAbility.ModifierChanges, ConvertModChangeSimple),
 	}
 
 	return autoAbilitySimple, nil
@@ -45,7 +45,7 @@ func convertElemResistSimple(er seedtypes.ElementalResist) string {
 	return fmt.Sprintf("%s: %s", er.Element, er.Affinity)
 }
 
-func convertStatusResistSimple(sr seedtypes.StatusResist) string {
+func ConvertStatusResistSimple(sr seedtypes.StatusResist) string {
 	if sr.Resistance == 254 {
 		return fmt.Sprintf("%s (immune)", sr.StatusCondition)
 	}

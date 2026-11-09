@@ -1,7 +1,8 @@
-package api
+package sections
 
 import (
 	"fmt"
+
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
@@ -9,15 +10,15 @@ import (
 
 func idToLocAreaString(areaID int32) string {
 	area, _ := lookup.GetResourceByID(areaID, lookup.L.AreasID)
-	return areaToLocAreaString(area)
+	return AreaToLocAreaString(area)
 }
 
 func locAreaString(locArea seedtypes.LocationArea) string {
 	area, _ := lookup.GetResource(locArea, lookup.L.Areas)
-	return areaToLocAreaString(area)
+	return AreaToLocAreaString(area)
 }
 
-func areaToLocAreaString(area seedtypes.Area) string {
+func AreaToLocAreaString(area seedtypes.Area) string {
 	locArea := area.GetLocationArea()
 	locAreaString := h.NameToString(area.Name, area.Version, area.Specification)
 

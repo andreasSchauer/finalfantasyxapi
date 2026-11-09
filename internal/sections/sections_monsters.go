@@ -1,4 +1,4 @@
-package api
+package sections
 
 import (
 	"fmt"
@@ -71,7 +71,7 @@ func getMonsterSimpleBribeAmount(mon seedtypes.Monster, hp int32) *int32 {
 	return &bribeAmount
 }
 
-func getMonsterSectionRelations(r *http.Request, monIDs []int32) (map[int32]map[handlerinput.Relation][]int32, error) {
+func GetMonsterSectionRelations(r *http.Request, monIDs []int32) (map[int32]map[handlerinput.Relation][]int32, error) {
 	i := apilookups.E.Monsters
 	relations := make(map[int32]map[handlerinput.Relation][]int32)
 

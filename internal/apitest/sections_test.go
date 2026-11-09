@@ -1,4 +1,4 @@
-package api
+package apitest
 
 import (
 	"reflect"
@@ -7,6 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/sections"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -36,7 +37,7 @@ func TestAreaToLocAreaString(t *testing.T) {
 
 	for i, tc := range tests {
 		area, _ := lookup.GetResourceByID(tc.input, lookup.L.AreasID)
-		got := areaToLocAreaString(area)
+		got := sections.AreaToLocAreaString(area)
 
 		if !reflect.DeepEqual(got, tc.exp) {
 			t.Errorf("areaToLocAreaString: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
@@ -66,7 +67,7 @@ func TestConvertStatusResistSimple(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := convertStatusResistSimple(tc.input)
+		got := sections.ConvertStatusResistSimple(tc.input)
 
 		if !reflect.DeepEqual(got, tc.exp) {
 			t.Errorf("convertStatusResistSimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
@@ -106,10 +107,10 @@ func TestConvertAccuracySimple(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := convertAccuracySimple(tc.input)
+		got := sections.ConvertAccuracySimple(tc.input)
 
 		if !reflect.DeepEqual(got, tc.exp) {
-			t.Errorf("convertStatusResistSimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
+			t.Errorf("convertAccuracySimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
 		}
 	}
 }
@@ -143,10 +144,10 @@ func TestConvertInflictedStatusSimple(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := convertInflictedStatusSimple(tc.input)
+		got := sections.ConvertInflictedStatusSimple(tc.input)
 
 		if !reflect.DeepEqual(got, tc.exp) {
-			t.Errorf("convertStatusResistSimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
+			t.Errorf("convertInflictedStatusSimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
 		}
 	}
 }
@@ -197,10 +198,10 @@ func TestFormatChange(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := formatChange(tc.name, string(tc.calcType), tc.val)
+		got := sections.FormatChange(tc.name, string(tc.calcType), tc.val)
 
 		if !reflect.DeepEqual(got, tc.exp) {
-			t.Errorf("convertStatusResistSimple: Testcase %d: name: %s, calc type: %s, val: %.3f. expected: %v, got: %v", i+1, tc.name, string(tc.calcType), tc.val, tc.exp, got)
+			t.Errorf("formatChange: Testcase %d: name: %s, calc type: %s, val: %.3f. expected: %v, got: %v", i+1, tc.name, string(tc.calcType), tc.val, tc.exp, got)
 		}
 	}
 }
@@ -229,10 +230,10 @@ func TestConvertModChangeSimple(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := convertModChangeSimple(tc.input)
+		got := sections.ConvertModChangeSimple(tc.input)
 
 		if !reflect.DeepEqual(got, tc.exp) {
-			t.Errorf("convertStatusResistSimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
+			t.Errorf("convertModChangeSimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, tc.exp, got)
 		}
 	}
 }
@@ -273,7 +274,7 @@ func TestFoundEquipmentAbilitiesStringPtr(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := foundEquipmentAbilitiesStringPtr(tc.input)
+		got := sections.FoundEquipmentAbilitiesStringPtr(tc.input)
 		match := false
 
 		if (got == nil && tc.exp == nil) ||
@@ -282,7 +283,7 @@ func TestFoundEquipmentAbilitiesStringPtr(t *testing.T) {
 		}
 
 		if !match {
-			t.Errorf("convertStatusResistSimple: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, h.DerefStringPtr(tc.exp), h.DerefStringPtr(got))
+			t.Errorf("foundEquipmentAbilitiesStringPtr: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, h.DerefStringPtr(tc.exp), h.DerefStringPtr(got))
 		}
 	}
 }
@@ -319,22 +320,22 @@ func TestPopulateTreasuresLocSimple(t *testing.T) {
 	}
 
 	for i, tc := range tests {
-		got := populateTreasuresLocSimple(tc.input)
+		got := sections.PopulateTreasuresLocSimple(tc.input)
 
 		if !reflect.DeepEqual(got.TreasureCount, tc.expTreasureCount) {
-			t.Errorf("convertStatusResistSimple: Testcase %d: input: %s. expected treasure count: %d, got: %d", i+1, h.FormatIntSlice(tc.input), tc.expTreasureCount, got.TreasureCount)
+			t.Errorf("populateTreasuresLocSimple: Testcase %d: input: %s. expected treasure count: %d, got: %d", i+1, h.FormatIntSlice(tc.input), tc.expTreasureCount, got.TreasureCount)
 		}
 
 		if !reflect.DeepEqual(len(got.Items), tc.expItemCount) {
-			t.Errorf("convertStatusResistSimple: Testcase %d: input: %s. expected item count: %d, got: %d", i+1, h.FormatIntSlice(tc.input), tc.expItemCount, len(got.Items))
+			t.Errorf("populateTreasuresLocSimple: Testcase %d: input: %s. expected item count: %d, got: %d", i+1, h.FormatIntSlice(tc.input), tc.expItemCount, len(got.Items))
 		}
 
 		if !reflect.DeepEqual(len(got.Equipment), tc.expEquipCount) {
-			t.Errorf("convertStatusResistSimple: Testcase %d: input: %s. expected equip count: %d, got: %d", i+1, h.FormatIntSlice(tc.input), tc.expEquipCount, len(got.Equipment))
+			t.Errorf("populateTreasuresLocSimple: Testcase %d: input: %s. expected equip count: %d, got: %d", i+1, h.FormatIntSlice(tc.input), tc.expEquipCount, len(got.Equipment))
 		}
 
 		if !reflect.DeepEqual(got.TotalGil, tc.expTotalGil) {
-			t.Errorf("convertStatusResistSimple: Testcase %d: input: %s. expected total gil: %d, got: %d", i+1, h.FormatIntSlice(tc.input), tc.expTotalGil, got.TotalGil)
+			t.Errorf("populateTreasuresLocSimple: Testcase %d: input: %s. expected total gil: %d, got: %d", i+1, h.FormatIntSlice(tc.input), tc.expTotalGil, got.TotalGil)
 		}
 	}
 }
@@ -405,7 +406,7 @@ func TestGetJunctionIDs(t *testing.T) {
 		for j, id := range tc.parentIDs {
 			var got []int32
 			initialLen := len(tc.input)
-			got, tc.input = GetJunctionIDs(id, tc.input)
+			got, tc.input = sections.GetJunctionIDs(id, tc.input)
 			combinedLen := len(got) + (len(tc.input))
 
 			if !reflect.DeepEqual(got, tc.expIDs[j]) {

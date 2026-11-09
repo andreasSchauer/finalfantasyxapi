@@ -1,4 +1,4 @@
-package api
+package sections
 
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
@@ -40,11 +40,11 @@ func getTreasuresLocSimple(id int32, subsection handlerinput.Subsection) *sectio
 		return nil
 	}
 
-	treasures := populateTreasuresLocSimple(treasureIDs)
+	treasures := PopulateTreasuresLocSimple(treasureIDs)
 	return &treasures
 }
 
-func populateTreasuresLocSimple(treasureIDs []int32) sectiontypes.TreasuresLocSimple {
+func PopulateTreasuresLocSimple(treasureIDs []int32) sectiontypes.TreasuresLocSimple {
 	treasures := sectiontypes.TreasuresLocSimple{
 		TreasureCount: len(treasureIDs),
 	}
@@ -76,6 +76,6 @@ func populateTreasuresLocSimple(treasureIDs []int32) sectiontypes.TreasuresLocSi
 func convertEquipmentSimple(equipment seedtypes.TreasureEquipment) sectiontypes.EquipmentSimple {
 	return sectiontypes.EquipmentSimple{
 		Name:          equipment.Name,
-		AutoAbilities: foundEquipmentAbilitiesStringPtr(equipment),
+		AutoAbilities: FoundEquipmentAbilitiesStringPtr(equipment),
 	}
 }

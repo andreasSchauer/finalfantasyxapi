@@ -1,4 +1,5 @@
-package api
+// Package sections asidjasdijasdij
+package sections
 
 import (
 	"net/http"

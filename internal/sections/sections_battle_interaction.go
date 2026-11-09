@@ -1,4 +1,4 @@
-package api
+package sections
 
 import (
 	"fmt"
@@ -18,20 +18,19 @@ func convertBattleInteractionSimple(bi seedtypes.BattleInteraction) sectiontypes
 		Target:                    bi.Target,
 		Range:                     bi.Range,
 		HitAmount:                 bi.HitAmount,
-		Accuracy:                  convertAccuracySimple(bi.Accuracy),
+		Accuracy:                  ConvertAccuracySimple(bi.Accuracy),
 		AffectedBy:                h.SliceOrNil(bi.AffectedBy),
 		Damage:                    ah.ConvertObjPtr(bi.Damage, convertDamageSimple),
 		Delay:                     ah.ConvertObjPtr(bi.InflictedDelay, convertInflictedDelaySimple),
-		InflictedStatusConditions: ah.ConvertObjSliceOrNil(bi.InflictedStatusConditions, convertInflictedStatusSimple),
+		InflictedStatusConditions: ah.ConvertObjSliceOrNil(bi.InflictedStatusConditions, ConvertInflictedStatusSimple),
 		RemovedStatusConditions:   h.SliceOrNil(bi.RemovedStatusConditions),
-		CopiedStatusConditions:    ah.ConvertObjSliceOrNil(bi.CopiedStatusConditions, convertInflictedStatusSimple),
+		CopiedStatusConditions:    ah.ConvertObjSliceOrNil(bi.CopiedStatusConditions, ConvertInflictedStatusSimple),
 		StatChanges:               ah.ConvertObjSliceOrNil(bi.StatChanges, convertStatChangeSimple),
-		ModChanges:                ah.ConvertObjSliceOrNil(bi.ModifierChanges, convertModChangeSimple),
+		ModChanges:                ah.ConvertObjSliceOrNil(bi.ModifierChanges, ConvertModChangeSimple),
 	}
 
 	return biSimple
 }
-
 
 func convertDamageSimple(d seedtypes.Damage) sectiontypes.DamageSimple {
 	return sectiontypes.DamageSimple{
@@ -62,7 +61,7 @@ func convertBreakDmgLimitSimple(breakDmgLimit string) string {
 	return ""
 }
 
-func convertAccuracySimple(acc seedtypes.Accuracy) string {
+func ConvertAccuracySimple(acc seedtypes.Accuracy) string {
 	switch acc.AccSource {
 	case string(database.AccSourceTypeRate):
 		if *acc.HitChance == 255 {
@@ -81,7 +80,7 @@ func convertInflictedDelaySimple(id seedtypes.InflictedDelay) string {
 	return id.DelayStrength
 }
 
-func convertInflictedStatusSimple(is seedtypes.InflictedStatus) string {
+func ConvertInflictedStatusSimple(is seedtypes.InflictedStatus) string {
 	var probabilityStr string
 
 	switch is.Probability {
@@ -99,11 +98,11 @@ func convertInflictedStatusSimple(is seedtypes.InflictedStatus) string {
 }
 
 func convertStatChangeSimple(sc seedtypes.StatChange) string {
-	return formatChange(sc.StatName, sc.CalculationType, sc.Value)
+	return FormatChange(sc.StatName, sc.CalculationType, sc.Value)
 }
 
-func convertModChangeSimple(mc seedtypes.ModifierChange) string {
-	formatted := formatChange(mc.ModifierName, mc.CalculationType, mc.Value)
+func ConvertModChangeSimple(mc seedtypes.ModifierChange) string {
+	formatted := FormatChange(mc.ModifierName, mc.CalculationType, mc.Value)
 	modifier, _ := lookup.GetResource(mc.ModifierName, lookup.L.Modifiers)
 
 	if modifier.Category == string(database.ModifierCategoryPercentage) {
@@ -113,7 +112,7 @@ func convertModChangeSimple(mc seedtypes.ModifierChange) string {
 	return formatted
 }
 
-func formatChange(name, calcType string, val float32) string {
+func FormatChange(name, calcType string, val float32) string {
 	formattedVal := strconv.FormatFloat(float64(val), 'f', -1, 32)
 
 	switch calcType {

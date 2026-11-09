@@ -1,4 +1,4 @@
-package api
+package sections
 
 import (
 	"net/http"
@@ -33,7 +33,7 @@ func CreateSublocationSimple(r *http.Request, id int32, subsection handlerinput.
 	return sublocationSimple, nil
 }
 
-func getSublocationSectionRelations(r *http.Request, subLocIDs []int32) (map[int32]map[handlerinput.Relation][]int32, error) {
+func GetSublocationSectionRelations(r *http.Request, subLocIDs []int32) (map[int32]map[handlerinput.Relation][]int32, error) {
 	i := apilookups.E.Sublocations
 	relations := make(map[int32]map[handlerinput.Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())

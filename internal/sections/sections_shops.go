@@ -1,4 +1,4 @@
-package api
+package sections
 
 import (
 	"fmt"
@@ -14,6 +14,23 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
 
+func CreateShopSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
+	i := apilookups.E.Shops
+	shop, _ := lookup.GetResourceByID(id, i.ObjLookupID)
+
+	shopSimple := sectiontypes.ShopSimple{
+		ID:          shop.ID,
+		URL:         ah.CreateResourceURL(i.Endpoint, id),
+		Area:        idToLocAreaString(shop.AreaID),
+		Category:    shop.Category,
+		Notes:       shop.Notes,
+		PreAirship:  ah.ConvertObjPtr(shop.PreAirship, convertSubShopSimple),
+		PostAirship: ah.ConvertObjPtr(shop.PostAirship, convertSubShopSimple),
+	}
+
+	return shopSimple, nil
+}
+
 func convertSubShopSimple(ss seedtypes.SubShop) sectiontypes.SubShopSimple {
 	return sectiontypes.SubShopSimple{
 		Items:     ah.ConvertObjSlice(ss.Items, shopItemNameString),
@@ -24,7 +41,7 @@ func convertSubShopSimple(ss seedtypes.SubShop) sectiontypes.SubShopSimple {
 func convertShopEquipmentSimple(se seedtypes.ShopEquipment) sectiontypes.ShopEquipmentSimple {
 	return sectiontypes.ShopEquipmentSimple{
 		EquipmentName: shopEquipmentNameString(se),
-		Abilities:     foundEquipmentAbilitiesStringPtr(se.TreasureEquipment),
+		Abilities:     FoundEquipmentAbilitiesStringPtr(se.TreasureEquipment),
 	}
 }
 
@@ -36,7 +53,7 @@ func shopEquipmentNameString(se seedtypes.ShopEquipment) string {
 	return fmt.Sprintf("%s - %d Gil", se.Name, se.Price)
 }
 
-func foundEquipmentAbilitiesStringPtr(fe seedtypes.TreasureEquipment) *string {
+func FoundEquipmentAbilitiesStringPtr(fe seedtypes.TreasureEquipment) *string {
 	zeroAbilities := len(fe.Abilities) == 0
 	zeroSlots := fe.EmptySlotsAmount == 0
 	slotsStr := fmt.Sprintf("(%d)", fe.EmptySlotsAmount)
@@ -56,21 +73,4 @@ func foundEquipmentAbilitiesStringPtr(fe seedtypes.TreasureEquipment) *string {
 		s := fmt.Sprintf("%s, %s", abilitiesStr, slotsStr)
 		return &s
 	}
-}
-
-func CreateShopSimple(_ *http.Request, id int32, _ handlerinput.Subsection) (apiresource.SimpleResource, error) {
-	i := apilookups.E.Shops
-	shop, _ := lookup.GetResourceByID(id, i.ObjLookupID)
-
-	shopSimple := sectiontypes.ShopSimple{
-		ID:          shop.ID,
-		URL:         ah.CreateResourceURL(i.Endpoint, id),
-		Area:        idToLocAreaString(shop.AreaID),
-		Category:    shop.Category,
-		Notes:       shop.Notes,
-		PreAirship:  ah.ConvertObjPtr(shop.PreAirship, convertSubShopSimple),
-		PostAirship: ah.ConvertObjPtr(shop.PostAirship, convertSubShopSimple),
-	}
-
-	return shopSimple, nil
 }

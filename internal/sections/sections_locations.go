@@ -1,4 +1,4 @@
-package api
+package sections
 
 import (
 	"net/http"
@@ -32,7 +32,7 @@ func CreateLocationSimple(r *http.Request, id int32, subsection handlerinput.Sub
 	return locationSimple, nil
 }
 
-func getLocationSectionRelations(r *http.Request, locIDs []int32) (map[int32]map[handlerinput.Relation][]int32, error) {
+func GetLocationSectionRelations(r *http.Request, locIDs []int32) (map[int32]map[handlerinput.Relation][]int32, error) {
 	i := apilookups.E.Locations
 	relations := make(map[int32]map[handlerinput.Relation][]int32)
 	g, ctx := errgroup.WithContext(r.Context())
