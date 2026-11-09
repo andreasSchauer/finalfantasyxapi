@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/filters"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/get"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/sections"
@@ -26,8 +27,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.LocationsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Location, apitypes.Location, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetLocationIDs,
-		GetSingleFunc: getLocation,
-		RetrieveFunc:  retrieveLocations,
+		GetSingleFunc: get.GetLocation,
+		RetrieveFunc:  get.RetrieveLocations,
 		AvlFunc:       filters.FilterAvlLocations,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
@@ -81,8 +82,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.SublocationsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Sublocation, apitypes.Sublocation, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetSublocationIDs,
-		GetSingleFunc: getSublocation,
-		RetrieveFunc:  retrieveSublocations,
+		GetSingleFunc: get.GetSublocation,
+		RetrieveFunc:  get.RetrieveSublocations,
 		AvlFunc:       filters.FilterAvlSublocations,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
@@ -130,8 +131,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.AreasID,
 		IDToResFunc:   handlerinput.IDToAreaAPIResource,
 		RetrieveQuery: config.Cfg.DB.GetAreaIDs,
-		GetSingleFunc: getArea,
-		RetrieveFunc:  retrieveAreas,
+		GetSingleFunc: get.GetArea,
+		RetrieveFunc:  get.RetrieveAreas,
 		AvlFunc:       filters.FilterAvlAreas,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
@@ -171,8 +172,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.MonsterFormationsID,
 		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.MonsterFormation, apitypes.MonsterFormation, apiresource.Unnamed],
 		RetrieveQuery: config.Cfg.DB.GetMonsterFormationIDs,
-		GetSingleFunc: getMonsterFormation,
-		RetrieveFunc:  retrieveMonsterFormations,
+		GetSingleFunc: get.GetMonsterFormation,
+		RetrieveFunc:  get.RetrieveMonsterFormations,
 		AvlFunc:       filters.FilterAvlMonsterFormations,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
@@ -194,8 +195,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.ShopsID,
 		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.Shop, apitypes.Shop, apiresource.Unnamed],
 		RetrieveQuery: config.Cfg.DB.GetShopIDs,
-		GetSingleFunc: getShop,
-		RetrieveFunc:  retrieveShops,
+		GetSingleFunc: get.GetShop,
+		RetrieveFunc:  get.RetrieveShops,
 		AvlFunc:       filters.FilterAvlShops,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
@@ -212,9 +213,9 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.TreasuresID,
 		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.Treasure, apitypes.Treasure, apiresource.Unnamed],
 		RetrieveQuery: config.Cfg.DB.GetTreasureIDs,
-		GetSingleFunc: getTreasure,
+		GetSingleFunc: get.GetTreasure,
 		AvlFunc:       filters.FilterAvlTreasures,
-		RetrieveFunc:  retrieveTreasures,
+		RetrieveFunc:  get.RetrieveTreasures,
 	}
 
 	apilookups.E.Quests = handlerinput.Main[seedtypes.Quest, apitypes.Quest, apiresource.Quest]{
@@ -225,8 +226,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.QuestsID,
 		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Quest, apitypes.Quest, apiresource.Quest],
 		RetrieveQuery: config.Cfg.DB.GetQuestIDs,
-		GetSingleFunc: getQuest,
-		RetrieveFunc:  retrieveQuests,
+		GetSingleFunc: get.GetQuest,
+		RetrieveFunc:  get.RetrieveQuests,
 		AvlFunc:       filters.FilterAvlQuests,
 	}
 
@@ -238,8 +239,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.SidequestsID,
 		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Sidequest, apitypes.Sidequest, apiresource.Quest],
 		RetrieveQuery: config.Cfg.DB.GetSidequestIDs,
-		GetSingleFunc: getSidequest,
-		RetrieveFunc:  retrieveSidequests,
+		GetSingleFunc: get.GetSidequest,
+		RetrieveFunc:  get.RetrieveSidequests,
 		AvlFunc:       filters.FilterAvlSidequests,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSubquests: {
@@ -257,8 +258,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.SubquestsID,
 		IDToResFunc:   handlerinput.IDToQuestAPIResource[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest],
 		RetrieveQuery: config.Cfg.DB.GetSubquestIDs,
-		GetSingleFunc: getSubquest,
-		RetrieveFunc:  retrieveSubquests,
+		GetSingleFunc: get.GetSubquest,
+		RetrieveFunc:  get.RetrieveSubquests,
 		AvlFunc:       filters.FilterAvlSubquests,
 	}
 
@@ -270,8 +271,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.ArenaCreationsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetArenaCreationIDs,
-		GetSingleFunc: getArenaCreation,
-		RetrieveFunc:  retrieveArenaCreations,
+		GetSingleFunc: get.GetArenaCreation,
+		RetrieveFunc:  get.RetrieveArenaCreations,
 	}
 
 	apilookups.E.BlitzballPrizes = handlerinput.Main[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.Named]{
@@ -282,8 +283,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.PositionsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetBlitzballPrizeIDs,
-		GetSingleFunc: getBlitzballPrize,
-		RetrieveFunc:  retrieveBlitzballPrizes,
+		GetSingleFunc: get.GetBlitzballPrize,
+		RetrieveFunc:  get.RetrieveBlitzballPrizes,
 	}
 
 	apilookups.E.Songs = handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named]{
@@ -294,8 +295,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.SongsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Song, apitypes.Song, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetSongIDs,
-		GetSingleFunc: getSong,
-		RetrieveFunc:  retrieveSongs,
+		GetSingleFunc: get.GetSong,
+		RetrieveFunc:  get.RetrieveSongs,
 	}
 
 	apilookups.E.FMVs = handlerinput.Main[seedtypes.FMV, apitypes.FMV, apiresource.Named]{
@@ -306,8 +307,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.FMVsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.FMV, apitypes.FMV, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetFmvIDs,
-		GetSingleFunc: getFMV,
-		RetrieveFunc:  retrieveFMVs,
+		GetSingleFunc: get.GetFMV,
+		RetrieveFunc:  get.RetrieveFMVs,
 	}
 
 	apilookups.E.PlayerUnits = handlerinput.Main[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.Typed]{
@@ -318,8 +319,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.PlayerUnitsID,
 		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.Typed],
 		RetrieveQuery: config.Cfg.DB.GetPlayerUnitIDs,
-		GetSingleFunc: getPlayerUnit,
-		RetrieveFunc:  retrievePlayerUnits,
+		GetSingleFunc: get.GetPlayerUnit,
+		RetrieveFunc:  get.RetrievePlayerUnits,
 	}
 
 	apilookups.E.Characters = handlerinput.Main[seedtypes.Character, apitypes.Character, apiresource.Named]{
@@ -330,8 +331,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.CharactersID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Character, apitypes.Character, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetCharacterIDs,
-		GetSingleFunc: getCharacter,
-		RetrieveFunc:  retrieveCharacters,
+		GetSingleFunc: get.GetCharacter,
+		RetrieveFunc:  get.RetrieveCharacters,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnDefaultAbilities: {
 				DBQuery:     config.Cfg.DB.GetCharacterDefaultAbilityIDs,
@@ -364,8 +365,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.AeonsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Aeon, apitypes.Aeon, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetAeonIDs,
-		GetSingleFunc: getAeon,
-		RetrieveFunc:  retrieveAeons,
+		GetSingleFunc: get.GetAeon,
+		RetrieveFunc:  get.RetrieveAeons,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnDefaultAbilities: {
 				DBQuery:     config.Cfg.DB.GetAeonDefaultAbilityIDs,
@@ -393,8 +394,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.CharClassesID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetCharacterClassesIDs,
-		GetSingleFunc: getCharacterClass,
-		RetrieveFunc:  retrieveCharacterClasses,
+		GetSingleFunc: get.GetCharacterClass,
+		RetrieveFunc:  get.RetrieveCharacterClasses,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnDefaultAbilities: {
 				DBQuery:     config.Cfg.DB.GetCharacterClassDefaultAbilityIDs,
@@ -424,8 +425,8 @@ func InitEndpoints() {
 		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.Monster, apitypes.Monster, apiresource.Named],
 		GetMultipleQuery: config.Cfg.DB.GetMonsterIDsByName,
 		RetrieveQuery:    config.Cfg.DB.GetMonsterIDs,
-		GetSingleFunc:    getMonster,
-		RetrieveFunc:     retrieveMonsters,
+		GetSingleFunc:    get.GetMonster,
+		RetrieveFunc:     get.RetrieveMonsters,
 		AvlFunc:          filters.FilterAvlMonsters,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
@@ -456,8 +457,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.AbilitiesID,
 		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.Ability, apitypes.Ability, apiresource.Typed],
 		RetrieveQuery: config.Cfg.DB.GetAbilityIDs,
-		GetSingleFunc: getAbility,
-		RetrieveFunc:  retrieveAbilities,
+		GetSingleFunc: get.GetAbility,
+		RetrieveFunc:  get.RetrieveAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: sections.CreateAbilitySimple,
@@ -474,8 +475,8 @@ func InitEndpoints() {
 		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.Named],
 		GetMultipleQuery: filters.GetTypedAbilityIDsByName(database.AbilityTypePlayerAbility),
 		RetrieveQuery:    config.Cfg.DB.GetPlayerAbilityIDs,
-		GetSingleFunc:    getPlayerAbility,
-		RetrieveFunc:     retrievePlayerAbilities,
+		GetSingleFunc:    get.GetPlayerAbility,
+		RetrieveFunc:     get.RetrievePlayerAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: sections.CreatePlayerAbilitySimple,
@@ -497,8 +498,8 @@ func InitEndpoints() {
 		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.Named],
 		GetMultipleQuery: filters.GetTypedAbilityIDsByName(database.AbilityTypeOverdriveAbility),
 		RetrieveQuery:    config.Cfg.DB.GetOverdriveAbilityIDs,
-		GetSingleFunc:    getOverdriveAbility,
-		RetrieveFunc:     retrieveOverdriveAbilities,
+		GetSingleFunc:    get.GetOverdriveAbility,
+		RetrieveFunc:     get.RetrieveOverdriveAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: sections.CreateOverdriveAbilitySimple,
@@ -514,8 +515,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.ItemAbilitiesID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetItemAbilityIDs,
-		GetSingleFunc: getItemAbility,
-		RetrieveFunc:  retrieveItemAbilities,
+		GetSingleFunc: get.GetItemAbility,
+		RetrieveFunc:  get.RetrieveItemAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: sections.CreateItemAbilitySimple,
@@ -532,8 +533,8 @@ func InitEndpoints() {
 		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.Named],
 		GetMultipleQuery: filters.GetTypedAbilityIDsByName(database.AbilityTypeTriggerCommand),
 		RetrieveQuery:    config.Cfg.DB.GetTriggerCommandIDs,
-		GetSingleFunc:    getTriggerCommand,
-		RetrieveFunc:     retrieveTriggerCommands,
+		GetSingleFunc:    get.GetTriggerCommand,
+		RetrieveFunc:     get.RetrieveTriggerCommands,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: sections.CreateTriggerCommandSimple,
@@ -550,8 +551,8 @@ func InitEndpoints() {
 		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.Named],
 		GetMultipleQuery: filters.GetTypedAbilityIDsByName(database.AbilityTypeMiscAbility),
 		RetrieveQuery:    config.Cfg.DB.GetMiscAbilityIDs,
-		GetSingleFunc:    getMiscAbility,
-		RetrieveFunc:     retrieveMiscAbilities,
+		GetSingleFunc:    get.GetMiscAbility,
+		RetrieveFunc:     get.RetrieveMiscAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: sections.CreateMiscAbilitySimple,
@@ -568,8 +569,8 @@ func InitEndpoints() {
 		IDToResFunc:      handlerinput.IDToNamedAPIResource[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.Named],
 		GetMultipleQuery: filters.GetTypedAbilityIDsByName(database.AbilityTypeEnemyAbility),
 		RetrieveQuery:    config.Cfg.DB.GetEnemyAbilityIDs,
-		GetSingleFunc:    getEnemyAbility,
-		RetrieveFunc:     retrieveEnemyAbilities,
+		GetSingleFunc:    get.GetEnemyAbility,
+		RetrieveFunc:     get.RetrieveEnemyAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: sections.CreateEnemyAbilitySimple,
@@ -590,8 +591,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.AeonCommandsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetAeonCommandIDs,
-		GetSingleFunc: getAeonCommand,
-		RetrieveFunc:  retrieveAeonCommands,
+		GetSingleFunc: get.GetAeonCommand,
+		RetrieveFunc:  get.RetrieveAeonCommands,
 	}
 
 	apilookups.E.OverdriveCommands = handlerinput.Main[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.Named]{
@@ -602,8 +603,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.OverdriveCommandsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetOverdriveCommandIDs,
-		GetSingleFunc: getOverdriveCommand,
-		RetrieveFunc:  retrieveOverdriveCommands,
+		GetSingleFunc: get.GetOverdriveCommand,
+		RetrieveFunc:  get.RetrieveOverdriveCommands,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnOverdriveAbilities: {
 				DBQuery:     handlerinput.ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveAbilityIDs),
@@ -624,8 +625,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.OverdrivesID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Overdrive, apitypes.Overdrive, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetOverdriveIDs,
-		GetSingleFunc: getOverdrive,
-		RetrieveFunc:  retrieveOverdrives,
+		GetSingleFunc: get.GetOverdrive,
+		RetrieveFunc:  get.RetrieveOverdrives,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: sections.CreateOverdriveSimple,
@@ -645,8 +646,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.RonsoRagesID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetRonsoRageIDs,
-		GetSingleFunc: getRonsoRage,
-		RetrieveFunc:  retrieveRonsoRages,
+		GetSingleFunc: get.GetRonsoRage,
+		RetrieveFunc:  get.RetrieveRonsoRages,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnMonsters: {
 				DBQuery:     config.Cfg.DB.GetRonsoRageMonsterIDs,
@@ -664,8 +665,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.SubmenusID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Submenu, apitypes.Submenu, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetSubmenuIDs,
-		GetSingleFunc: getSubmenu,
-		RetrieveFunc:  retrieveSubmenus,
+		GetSingleFunc: get.GetSubmenu,
+		RetrieveFunc:  get.RetrieveSubmenus,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnAbilities: {
 				DBQuery:     handlerinput.ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs),
@@ -682,8 +683,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.TopmenusID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Topmenu, apitypes.Topmenu, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetTopmenuIDs,
-		GetSingleFunc: getTopmenu,
-		RetrieveFunc:  retrieveTopmenus,
+		GetSingleFunc: get.GetTopmenu,
+		RetrieveFunc:  get.RetrieveTopmenus,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnAbilities: {
 				DBQuery:     handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuAbilityIDs),
@@ -700,8 +701,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.MasterItemsID,
 		IDToResFunc:   handlerinput.IDToTypedAPIResource[seedtypes.MasterItem, apitypes.MasterItem, apiresource.Typed],
 		RetrieveQuery: config.Cfg.DB.GetMasterItemIDs,
-		GetSingleFunc: getMasterItem,
-		RetrieveFunc:  retrieveMasterItems,
+		GetSingleFunc: get.GetMasterItem,
+		RetrieveFunc:  get.RetrieveMasterItems,
 		AvlFunc:       filters.FilterAvlMasterItems,
 	}
 
@@ -713,8 +714,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.ItemsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Item, apitypes.Item, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetItemIDs,
-		GetSingleFunc: getItem,
-		RetrieveFunc:  retrieveItems,
+		GetSingleFunc: get.GetItem,
+		RetrieveFunc:  get.RetrieveItems,
 		AvlFunc:       filters.FilterAvlItems,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnMixes: {
@@ -732,8 +733,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.SpheresID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Sphere, apitypes.Sphere, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetSphereIDs,
-		GetSingleFunc: getSphere,
-		RetrieveFunc:  retrieveSpheres,
+		GetSingleFunc: get.GetSphere,
+		RetrieveFunc:  get.RetrieveSpheres,
 		AvlFunc:       filters.FilterAvlSpheres,
 	}
 
@@ -745,8 +746,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.KeyItemsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.KeyItem, apitypes.KeyItem, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetKeyItemIDs,
-		GetSingleFunc: getKeyItem,
-		RetrieveFunc:  retrieveKeyItems,
+		GetSingleFunc: get.GetKeyItem,
+		RetrieveFunc:  get.RetrieveKeyItems,
 		AvlFunc:       filters.FilterAvlKeyItems,
 	}
 
@@ -758,8 +759,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.PrimersID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Primer, apitypes.Primer, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetPrimerIDs,
-		GetSingleFunc: getPrimer,
-		RetrieveFunc:  retrievePrimers,
+		GetSingleFunc: get.GetPrimer,
+		RetrieveFunc:  get.RetrievePrimers,
 		AvlFunc:       filters.FilterAvlPrimers,
 	}
 
@@ -771,8 +772,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.MixesID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Mix, apitypes.Mix, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetMixIDs,
-		GetSingleFunc: getMix,
-		RetrieveFunc:  retrieveMixes,
+		GetSingleFunc: get.GetMix,
+		RetrieveFunc:  get.RetrieveMixes,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
 				CreateSubFn: sections.CreateMixSimple,
@@ -788,8 +789,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.AutoAbilitiesID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetAutoAbilityIDs,
-		GetSingleFunc: getAutoAbility,
-		RetrieveFunc:  retrieveAutoAbilities,
+		GetSingleFunc: get.GetAutoAbility,
+		RetrieveFunc:  get.RetrieveAutoAbilities,
 		AvlFunc:       filters.FilterAvlAutoAbilities,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnSimple: {
@@ -806,8 +807,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.EquipmentTablesID,
 		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.Unnamed],
 		RetrieveQuery: config.Cfg.DB.GetEquipmentTableIDs,
-		GetSingleFunc: getEquipmentTable,
-		RetrieveFunc:  retrieveEquipmentTables,
+		GetSingleFunc: get.GetEquipmentTable,
+		RetrieveFunc:  get.RetrieveEquipmentTables,
 	}
 
 	apilookups.E.Equipment = handlerinput.Main[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.Named]{
@@ -818,8 +819,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.EquipmentNamesID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetEquipmentIDs,
-		GetSingleFunc: getEquipment,
-		RetrieveFunc:  retrieveEquipment,
+		GetSingleFunc: get.GetEquipment,
+		RetrieveFunc:  get.RetrieveEquipment,
 	}
 
 	apilookups.E.CelestialWeapons = handlerinput.Main[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.Named]{
@@ -830,8 +831,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.CelestialWeaponsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetCelestialWeaponIDs,
-		GetSingleFunc: getCelestialWeapon,
-		RetrieveFunc:  retrieveCelestialWeapons,
+		GetSingleFunc: get.GetCelestialWeapon,
+		RetrieveFunc:  get.RetrieveCelestialWeapons,
 		Subsections: map[ts.SectionName]handlerinput.Subsection{
 			ts.SnAutoAbilities: {
 				DBQuery:     sections.GetCelestialWeaponAutoAbilityIDs(),
@@ -848,8 +849,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.StatsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Stat, apitypes.Stat, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetStatIDs,
-		GetSingleFunc: getStat,
-		RetrieveFunc:  retrieveStats,
+		GetSingleFunc: get.GetStat,
+		RetrieveFunc:  get.RetrieveStats,
 	}
 
 	apilookups.E.Properties = handlerinput.Main[seedtypes.Property, apitypes.Property, apiresource.Named]{
@@ -860,8 +861,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.PropertiesID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Property, apitypes.Property, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetPropertyIDs,
-		GetSingleFunc: getProperty,
-		RetrieveFunc:  retrieveProperties,
+		GetSingleFunc: get.GetProperty,
+		RetrieveFunc:  get.RetrieveProperties,
 	}
 
 	apilookups.E.OverdriveModes = handlerinput.Main[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.Named]{
@@ -872,8 +873,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.OverdriveModesID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetOverdriveModeIDs,
-		GetSingleFunc: getOverdriveMode,
-		RetrieveFunc:  retrieveOverdriveModes,
+		GetSingleFunc: get.GetOverdriveMode,
+		RetrieveFunc:  get.RetrieveOverdriveModes,
 	}
 
 	apilookups.E.Elements = handlerinput.Main[seedtypes.Element, apitypes.Element, apiresource.Named]{
@@ -884,8 +885,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.ElementsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Element, apitypes.Element, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetElementIDs,
-		GetSingleFunc: getElement,
-		RetrieveFunc:  retrieveElements,
+		GetSingleFunc: get.GetElement,
+		RetrieveFunc:  get.RetrieveElements,
 	}
 
 	apilookups.E.StatusConditions = handlerinput.Main[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.Named]{
@@ -896,8 +897,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.StatusConditionsID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.StatusCondition, apitypes.StatusCondition, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetStatusConditionIDs,
-		GetSingleFunc: getStatusCondition,
-		RetrieveFunc:  retrieveStatusConditions,
+		GetSingleFunc: get.GetStatusCondition,
+		RetrieveFunc:  get.RetrieveStatusConditions,
 	}
 
 	apilookups.E.Modifiers = handlerinput.Main[seedtypes.Modifier, apitypes.Modifier, apiresource.Named]{
@@ -908,8 +909,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.ModifiersID,
 		IDToResFunc:   handlerinput.IDToNamedAPIResource[seedtypes.Modifier, apitypes.Modifier, apiresource.Named],
 		RetrieveQuery: config.Cfg.DB.GetModifierIDs,
-		GetSingleFunc: getModifier,
-		RetrieveFunc:  retrieveModifiers,
+		GetSingleFunc: get.GetModifier,
+		RetrieveFunc:  get.RetrieveModifiers,
 	}
 
 	apilookups.E.AgilityTiers = handlerinput.Main[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.Unnamed]{
@@ -920,8 +921,8 @@ func InitEndpoints() {
 		ObjLookupID:   lookup.L.AgilityTiersID,
 		IDToResFunc:   handlerinput.IDToUnnamedAPIResource[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.Unnamed],
 		RetrieveQuery: config.Cfg.DB.GetAgilityTierIDs,
-		GetSingleFunc: getAgilityTier,
-		RetrieveFunc:  retrieveAgilityTiers,
+		GetSingleFunc: get.GetAgilityTier,
+		RetrieveFunc:  get.RetrieveAgilityTiers,
 	}
 
 	apilookups.E.Enums = handlerinput.Enums{
