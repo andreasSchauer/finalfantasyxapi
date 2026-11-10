@@ -1,11 +1,11 @@
-package api
+package initlookup
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/queryparam"
 )
 
-func InitQueryLookup() {
+func Queries() {
 	defaultParams := queryparam.GetDefaultParams()
 
 	apilookups.Q.DefaultParamSlice = defaultParams

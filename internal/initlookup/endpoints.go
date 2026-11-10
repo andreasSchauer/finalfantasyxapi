@@ -1,4 +1,5 @@
-package api
+// Package initlookup aiojsajoid
+package initlookup
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/albhed"
@@ -22,7 +23,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func InitEndpoints() {
+func Endpoints() {
 	apilookups.E.Locations = handlerinput.Main[seedtypes.Location, apitypes.Location, apiresource.Named]{
 		Endpoint:      ts.EpLocations,
 		ResTypeSingle: ts.RTSLocations,

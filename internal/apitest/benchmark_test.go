@@ -1,8 +1,9 @@
-package dropchance
+package apitest
 
 import (
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/dropchance"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/servicetypes"
 )
 
@@ -20,7 +21,7 @@ func BenchmarkHandleDropChance(b *testing.B) {
 	b.ResetTimer()
 
 	for b.Loop() {
-		res, err := Handle(params)
+		res, err := dropchance.Handle(params)
 		if err != nil {
 			b.Fatalf("Calculation failed during benchmark: %v", err)
 		}
