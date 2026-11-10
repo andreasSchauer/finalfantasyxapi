@@ -8,12 +8,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"golang.org/x/sync/errgroup"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/typehelpers"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func GetAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named], id int32) (apitypes.Aeon, error) {
@@ -22,7 +23,7 @@ func GetAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon,
 		return apitypes.Aeon{}, err
 	}
 
-	rel, err := assemble.GetAeonRelationships(r, aeon)
+	rel, err := getAeonRelationships(r, aeon)
 	if err != nil {
 		return apitypes.Aeon{}, err
 	}
@@ -49,16 +50,63 @@ func GetAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon,
 		ArmorAbilities:         ah.ConvertObjSlice(aeon.Armor, apiconv.ConvertAeonEquipment),
 	}
 
-	return assemble.CompleteAeonResponse(r, response)
+	return CompleteAeonResponse(r, response)
 }
 
-func RetrieveAeons(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
+func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, error) {
+	var rel apitypes.Aeon
+	g, ctx := errgroup.WithContext(r.Context())
+
+	g.Go(func() error {
+		var err error
+		rel.CelestialWeapon, err = apilookups.E.CelestialWeapons.DBGetRelationPtr(ctx, aeon, config.Cfg.DB.GetAeonCelestialWeaponID)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.CharacterClasses, err = apilookups.E.CharacterClasses.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonCharClassIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.AeonCommands, err = apilookups.E.AeonCommands.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonAeonCommandIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Overdrives, err = apilookups.E.Overdrives.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonOverdriveIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.DefaultPlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonDefaultAbilityIDs)
+		return err
+	})
+
+	err := g.Wait()
 	if err != nil {
-		return nil, err
+		return apitypes.Aeon{}, err
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryBool(r, ids, ts.QpnOptional, config.Cfg.DB.GetAeonIDsOptional),
-	})
+	return rel, nil
+}
+
+func CompleteAeonResponse(r *http.Request, aeon apitypes.Aeon) (apitypes.Aeon, error) {
+	aeon, err := applyAeonStats(r, aeon, nil)
+	if err != nil {
+		return apitypes.Aeon{}, err
+	}
+
+	aeon.RegenAmounts = calcRegenAmounts(aeon.BaseStats)
+
+	aeon.AgilityParameters, err = getUnitAgilityParams(r, aeon.BaseStats)
+	if err != nil {
+		return apitypes.Aeon{}, err
+	}
+
+	return aeon, nil
 }

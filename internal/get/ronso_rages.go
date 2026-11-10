@@ -6,7 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -17,7 +18,7 @@ func GetRonsoRage(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apit
 		return apitypes.RonsoRage{}, err
 	}
 
-	rel, err := assemble.GetRonsoRageRelationships(r, ronsoRage)
+	rel, err := getRonsoRageRelationships(r, ronsoRage)
 	if err != nil {
 		return apitypes.RonsoRage{}, err
 	}
@@ -34,6 +35,14 @@ func GetRonsoRage(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apit
 	return response, nil
 }
 
-func RetrieveRonsoRages(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.Named]) ([]int32, error) {
-	return i.VerifyQueriesRetrieve(r)
+func getRonsoRageRelationships(r *http.Request, ronsoRage seedtypes.RonsoRage) (apitypes.RonsoRage, error) {
+	var rel apitypes.RonsoRage
+	var err error
+
+	rel.Monsters, err = apilookups.E.Monsters.DBGetRelations(r.Context(), ronsoRage, config.Cfg.DB.GetRonsoRageMonsterIDs)
+	if err != nil {
+		return apitypes.RonsoRage{}, err
+	}
+
+	return rel, nil
 }

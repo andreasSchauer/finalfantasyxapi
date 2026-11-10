@@ -3,11 +3,15 @@ package get
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"golang.org/x/sync/errgroup"
 )
 
 func GetPrimer(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.Primer, apiresource.Named], id int32) (apitypes.Primer, error) {
@@ -16,7 +20,7 @@ func GetPrimer(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.P
 		return apitypes.Primer{}, err
 	}
 
-	rel, err := assemble.GetPrimerRelationships(r, primer)
+	rel, err := getPrimerRelationships(r, primer)
 	if err != nil {
 		return apitypes.Primer{}, err
 	}
@@ -35,11 +39,31 @@ func GetPrimer(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.P
 	return response, nil
 }
 
-func RetrievePrimers(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.Primer, apiresource.Named]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
+func getPrimerRelationships(r *http.Request, primer seedtypes.Primer) (apitypes.Primer, error) {
+	keyItem, _ := lookup.GetResource(primer, lookup.L.KeyItems)
+
+	rel := apitypes.Primer{
+		KeyItem:     handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, keyItem.Name, nil),
+		Description: keyItem.Description,
+	}
+	g, ctx := errgroup.WithContext(r.Context())
+
+	g.Go(func() error {
+		var err error
+		rel.Treasures, err = apilookups.E.Treasures.DBGetRelations(ctx, primer, config.Cfg.DB.GetPrimerTreasureIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Areas, err = apilookups.E.Areas.DBGetRelations(ctx, primer, config.Cfg.DB.GetPrimerAreaIDs)
+		return err
+	})
+
+	err := g.Wait()
 	if err != nil {
-		return nil, err
+		return apitypes.Primer{}, err
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{})
+	return rel, nil
 }

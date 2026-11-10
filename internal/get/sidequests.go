@@ -8,7 +8,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -19,7 +20,7 @@ func GetSidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apit
 		return apitypes.Sidequest{}, err
 	}
 
-	rel, err := assemble.GetSidequestRelationships(r, sidequest)
+	rel, err := getSidequestRelationships(r, sidequest)
 	if err != nil {
 		return apitypes.Sidequest{}, err
 	}
@@ -37,11 +38,22 @@ func GetSidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apit
 	return response, nil
 }
 
-func RetrieveSidequests(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apitypes.Sidequest, apiresource.Quest]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
+func getSidequestRelationships(r *http.Request, sidequest seedtypes.Sidequest) (apitypes.Sidequest, error) {
+	var rel apitypes.Sidequest
+	var err error
+
+	rel.Subquests, err = apilookups.E.Subquests.DBGetRelations(r.Context(), sidequest, config.Cfg.DB.GetSidequestSubquestIDs)
 	if err != nil {
-		return nil, err
+		return apitypes.Sidequest{}, err
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{})
+	return rel, nil
+}
+
+func CompleteSubquestResponse(subquest apitypes.Subquest) apitypes.Subquest {
+	if subquest.ParentSidequest.Sidequest == "monster arena" {
+		subquest.ArenaCreation = handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.ArenaCreations, &subquest.Name, nil)
+	}
+
+	return subquest
 }

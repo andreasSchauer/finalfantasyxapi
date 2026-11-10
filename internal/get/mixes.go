@@ -3,14 +3,17 @@ package get
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/filters"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/errs"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -21,7 +24,7 @@ func GetMix(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, ap
 		return apitypes.Mix{}, err
 	}
 
-	rel, err := assemble.GetMixRelationships(r, mix)
+	rel, err := getMixRelationships(r, mix)
 	if err != nil {
 		return apitypes.Mix{}, err
 	}
@@ -39,14 +42,46 @@ func GetMix(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, ap
 	return response, nil
 }
 
-func RetrieveMixes(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
-	if err != nil {
-		return nil, err
+func getMixRelationships(r *http.Request, mix seedtypes.Mix) (apitypes.Mix, error) {
+	overdrive, _ := lookup.GetResourceByID(mix.OverdriveID, lookup.L.OverdrivesID)
+	var err error
+
+	rel := apitypes.Mix{
+		Overdrive:   handlerinput.NameToNamedAPIResource(apilookups.E.Overdrives, overdrive.Name, nil),
+		Description: overdrive.Description,
+		Effect:      overdrive.Effect,
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryEnumList(r, enums.T.MixCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMixIDsByCategory),
-		i.QueryIDWrapper(r, ids, ts.QpnReqItem, lookup.L.Items, filters.GetMixesByItem),
-	})
+	rel.Combinations, err = getMixCombinations(r, mix)
+	if err != nil {
+		return apitypes.Mix{}, err
+	}
+
+	return rel, nil
+}
+
+func getMixCombinations(r *http.Request, mix seedtypes.Mix) ([]apitypes.MixCombination, error) {
+	combinations := mix.PossibleCombinations
+
+	best, err := apilookups.Q.Mixes[ts.QpnBest].ParseBool(r)
+	if errs.ErrExceptEmptyQuery(err) {
+		return nil, err
+	}
+	if best {
+		combinations = mix.BestCombinations
+	}
+
+	itemID, err := apilookups.Q.Mixes[ts.QpnContainsItem].ParseNameID(r, apilookups.E.Items.ResTypeSingle, apilookups.E.Items.ObjLookup)
+	if errs.ErrExceptEmptyQuery(err) {
+		return nil, err
+	}
+	if itemID != 0 {
+		item, _ := lookup.GetResourceByID(itemID, lookup.L.ItemsID)
+
+		combinations = h.Filter(combinations, func(c seedtypes.MixCombination) bool {
+			return item.Name == c.FirstItem || item.Name == c.SecondItem
+		})
+	}
+
+	return ah.ConvertObjSlice(combinations, apiconv.ConvertMixCombination), nil
 }

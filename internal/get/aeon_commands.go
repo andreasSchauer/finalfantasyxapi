@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -19,7 +19,7 @@ func GetAeonCommand(r *http.Request, i handlerinput.Main[seedtypes.AeonCommand, 
 		return apitypes.AeonCommand{}, err
 	}
 
-	rel := assemble.GetAeonCommandRelationships(r, command)
+	rel := getAeonCommandRelationships(command)
 
 	response := apitypes.AeonCommand{
 		ID:                command.ID,
@@ -36,6 +36,15 @@ func GetAeonCommand(r *http.Request, i handlerinput.Main[seedtypes.AeonCommand, 
 	return response, nil
 }
 
-func RetrieveAeonCommands(r *http.Request, i handlerinput.Main[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.Named]) ([]int32, error) {
-	return i.VerifyQueriesRetrieve(r)
+func getAeonCommandRelationships(command seedtypes.AeonCommand) apitypes.AeonCommand {
+	var rel apitypes.AeonCommand
+	userName := command.PossibleAbilities[0].User
+
+	if len(command.PossibleAbilities) == 3 {
+		userName = "magus-sisters"
+	}
+
+	rel.User = handlerinput.NameToNamedAPIResource(apilookups.E.CharacterClasses, userName, nil)
+
+	return rel
 }

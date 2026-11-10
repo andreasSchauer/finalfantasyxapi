@@ -6,11 +6,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/filters"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"golang.org/x/sync/errgroup"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
@@ -21,7 +21,7 @@ func GetSublocation(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, 
 		return apitypes.Sublocation{}, err
 	}
 
-	rel, err := assemble.GetSublocationRelationships(r, sublocation)
+	rel, err := getSublocationRelationships(r, sublocation)
 	if err != nil {
 		return apitypes.Sublocation{}, err
 	}
@@ -39,25 +39,92 @@ func GetSublocation(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, 
 	return response, nil
 }
 
-func RetrieveSublocations(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, apitypes.Sublocation, apiresource.Named]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
+func getSublocationRelationships(r *http.Request, sublocation seedtypes.Sublocation) (apitypes.Sublocation, error) {
+	var rel apitypes.Sublocation
+	var locRel apitypes.LocRel
+	g, ctx := errgroup.WithContext(r.Context())
+
+	availabilityParams, err := apilookups.E.Sublocations.QueryAvlRelGetParams(r, sublocation.ID)
 	if err != nil {
-		return nil, err
+		return apitypes.Sublocation{}, err
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationSublocationIDs),
-		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetSublocationIDsWithMonster),
-		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, filters.GetSublocationsByItem),
-		i.QueryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, config.Cfg.DB.GetSublocationIDsWithKeyItem),
-		i.QueryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, config.Cfg.DB.GetSublocationIDsWithAutoAbility),
-		i.QueryBool2(r, ids, ts.QpnCharacters, config.Cfg.DB.GetSublocationIDsWithCharacters),
-		i.QueryBool2(r, ids, ts.QpnAeons, config.Cfg.DB.GetSublocationIDsWithAeons),
-		i.QueryBool2(r, ids, ts.QpnMonsters, config.Cfg.DB.GetSublocationIDsWithMonsters),
-		i.QueryBool2(r, ids, ts.QpnBossFights, config.Cfg.DB.GetSublocationIDsWithBosses),
-		i.QueryBool2(r, ids, ts.QpnShops, config.Cfg.DB.GetSublocationIDsWithShops),
-		i.QueryBool2(r, ids, ts.QpnTreasures, config.Cfg.DB.GetSublocationIDsWithTreasures),
-		i.QueryBool2(r, ids, ts.QpnSidequests, config.Cfg.DB.GetSublocationIDsWithSidequests),
-		i.QueryBool2(r, ids, ts.QpnFMVs, config.Cfg.DB.GetSublocationIDsWithFMVs),
+	g.Go(func() error {
+		var err error
+		rel.ConnectedSublocations, err = apilookups.E.Sublocations.DBGetRelations(r.Context(), sublocation, config.Cfg.DB.GetConnectedSublocationIDs)
+		return err
 	})
+
+	g.Go(func() error {
+		var err error
+		rel.Areas, err = apilookups.E.Areas.DBGetRelations(r.Context(), sublocation, config.Cfg.DB.GetSublocationAreaIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		locRel.Characters, err = apilookups.E.Characters.DBGetRelations(ctx, sublocation, config.Cfg.DB.GetSublocationCharacterIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		locRel.Aeons, err = apilookups.E.Aeons.DBGetRelations(ctx, sublocation, config.Cfg.DB.GetSublocationAeonIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		locRel.Shops, err = apilookups.E.Shops.QueryAvlRelRun(ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(ts.VstShop))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		locRel.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(ts.VstTreasure))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		locRel.Monsters, err = apilookups.E.Monsters.QueryAvlRelRun(ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(ts.VstMonster))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		locRel.Formations, err = apilookups.E.MonsterFormations.QueryAvlRelRun(ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(ts.VstMonsterFormation))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		locRel.Quests, err = apilookups.E.Quests.QueryAvlRelRun(ctx, sublocation, availabilityParams, getSublocationRelSourceIDs(ts.VstQuest))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		locRel.Music, err = getMusicLocBased(ctx, sublocation, LocBasedMusicQueries{
+			CueSongs:  config.Cfg.DB.GetSublocationCueSongIDs,
+			BmSongs:   config.Cfg.DB.GetSublocationBackgroundMusicSongIDs,
+			FMVSongs:  config.Cfg.DB.GetSublocationFMVSongIDs,
+			BossMusic: config.Cfg.DB.GetSublocationBossSongIDs,
+		})
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		locRel.FMVs, err = apilookups.E.FMVs.DBGetRelations(ctx, sublocation, config.Cfg.DB.GetSublocationFmvIDs)
+		return err
+	})
+
+	err = g.Wait()
+	if err != nil {
+		return apitypes.Sublocation{}, err
+	}
+
+	rel.LocRel = locRel
+	return rel, nil
 }

@@ -5,15 +5,13 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func GetSphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.Sphere, apiresource.Named], id int32) (apitypes.Sphere, error) {
@@ -22,7 +20,7 @@ func GetSphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.S
 		return apitypes.Sphere{}, err
 	}
 
-	rel, err := assemble.GetSphereRelationships(r, sphere)
+	rel, err := getSphereRelationships(r, sphere)
 	if err != nil {
 		return apitypes.Sphere{}, err
 	}
@@ -50,17 +48,29 @@ func GetSphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.S
 	return response, nil
 }
 
-func RetrieveSpheres(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.Sphere, apiresource.Named]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
+func getSphereRelationships(r *http.Request, sphere seedtypes.Sphere) (apitypes.Sphere, error) {
+	item, _ := lookup.GetResourceByID(sphere.ItemID, lookup.L.ItemsID)
+
+	availabilityParams, err := apilookups.E.Spheres.QueryAvlRelGetParams(r, item.ID)
 	if err != nil {
-		return nil, err
+		return apitypes.Sphere{}, err
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryEnumList(r, enums.T.SphereColor, ids, ts.QpnColor, config.Cfg.DB.GetSphereIDsByColor),
-		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetSphereIDsByLocation),
-		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSphereIDsBySublocation),
-		i.QueryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetSphereIDsByArea),
-		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetSphereIDsByMethods),
-	})
+	itemRel, err := runItemRelQueries(r, item, availabilityParams)
+	if err != nil {
+		return apitypes.Sphere{}, err
+	}
+
+	rel := apitypes.Sphere{
+		Item:            handlerinput.NameToNamedAPIResource(apilookups.E.Items, item.Name, nil),
+		Description:     item.Description,
+		Effect:          item.Effect,
+		Monsters:        itemRel.Monsters,
+		Treasures:       itemRel.Treasures,
+		Shops:           itemRel.Shops,
+		Quests:          itemRel.Quests,
+		BlitzballPrizes: itemRel.BlitzballPrizes,
+	}
+
+	return rel, nil
 }

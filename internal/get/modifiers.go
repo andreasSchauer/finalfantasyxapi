@@ -3,14 +3,15 @@ package get
 import (
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"golang.org/x/sync/errgroup"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func GetModifier(r *http.Request, i handlerinput.Main[seedtypes.Modifier, apitypes.Modifier, apiresource.Named], id int32) (apitypes.Modifier, error) {
@@ -19,7 +20,7 @@ func GetModifier(r *http.Request, i handlerinput.Main[seedtypes.Modifier, apityp
 		return apitypes.Modifier{}, err
 	}
 
-	rel, err := assemble.GetModifierRelationships(r, modifier)
+	rel, err := getModifierRelationships(r, modifier)
 	if err != nil {
 		return apitypes.Modifier{}, err
 	}
@@ -43,13 +44,62 @@ func GetModifier(r *http.Request, i handlerinput.Main[seedtypes.Modifier, apityp
 	return response, nil
 }
 
-func RetrieveModifiers(r *http.Request, i handlerinput.Main[seedtypes.Modifier, apitypes.Modifier, apiresource.Named]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
+func getModifierRelationships(r *http.Request, modifier seedtypes.Modifier) (apitypes.Modifier, error) {
+	var rel apitypes.Modifier
+	g, ctx := errgroup.WithContext(r.Context())
+
+	g.Go(func() error {
+		var err error
+		rel.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierAutoAbilityIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierPlayerAbilityIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.OverdriveAbilities, err = apilookups.E.OverdriveAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierOverdriveAbilityIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.ItemAbilities, err = apilookups.E.ItemAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierItemAbilityIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.TriggerCommands, err = apilookups.E.TriggerCommands.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierTriggerCommandIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.EnemyAbilities, err = apilookups.E.EnemyAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierEnemyAbilityIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.StatusConditions, err = apilookups.E.StatusConditions.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierStatusConditionIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Properties, err = apilookups.E.Properties.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierPropertyIDs)
+		return err
+	})
+
+	err := g.Wait()
 	if err != nil {
-		return nil, err
+		return apitypes.Modifier{}, err
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryEnumList(r, enums.T.ModifierCategory, ids, ts.QpnCategory, config.Cfg.DB.GetModifierIDsByCategory),
-	})
+	return rel, nil
 }

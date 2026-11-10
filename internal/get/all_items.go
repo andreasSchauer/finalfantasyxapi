@@ -6,13 +6,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/filters"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func GetMasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, apitypes.MasterItem, apiresource.Typed], id int32) (apitypes.MasterItem, error) {
@@ -21,7 +21,7 @@ func GetMasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, ap
 		return apitypes.MasterItem{}, err
 	}
 
-	rel, err := assemble.GetMasterItemRelationships(r, masterItem)
+	rel, err := getMasterItemRelationships(r, masterItem)
 	if err != nil {
 		return apitypes.MasterItem{}, err
 	}
@@ -33,20 +33,63 @@ func GetMasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, ap
 		ObtainableFrom: rel.ObtainableFrom,
 	}
 
-	return assemble.CompleteMasterItemResponse(r, response), nil
+	return CompleteMasterItemResponse(r, response), nil
 }
 
-func RetrieveMasterItems(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, apitypes.MasterItem, apiresource.Typed]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
+func getMasterItemRelationships(r *http.Request, masterItem seedtypes.MasterItem) (apitypes.MasterItem, error) {
+	var rel apitypes.MasterItem
+	var err error
+
+	rel.ObtainableFrom, err = getMasterItemObtainable(r, masterItem)
 	if err != nil {
-		return nil, err
+		return apitypes.MasterItem{}, err
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryEnumList(r, enums.T.ItemType, ids, ts.QpnType, config.Cfg.DB.GetMasterItemIDsByType),
-		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetMasterItemIDsByMethods),
-		i.QueryIDWrapper(r, ids, ts.QpnLocation, apilookups.E.Locations.ObjLookup, filters.GetMasterItemsByLocation),
-		i.QueryIDWrapper(r, ids, ts.QpnSublocation, apilookups.E.Sublocations.ObjLookup, filters.GetMasterItemsBySublocation),
-		i.QueryIDWrapper(r, ids, ts.QpnArea, apilookups.E.Areas.ObjLookup, filters.GetMasterItemsByArea),
+	return rel, nil
+}
+
+func getMasterItemObtainable(r *http.Request, masterItem seedtypes.MasterItem) (apitypes.ObtainableFrom, error) {
+	availabilityParams, err := apilookups.E.AllItems.QueryAvlRelGetParams(r, masterItem.ID)
+	if err != nil {
+		return apitypes.ObtainableFrom{}, err
+	}
+
+	bools, err := config.Cfg.DB.GetMasterItemObtainableBools(r.Context(), database.GetMasterItemObtainableBoolsParams{
+		MasterItemID: availabilityParams.ParentID,
+		Availability: availabilityParams.Availability,
+		Repeatable:   availabilityParams.Repeatable,
 	})
+	if err != nil {
+		return apitypes.ObtainableFrom{}, err
+	}
+
+	obtainable := apitypes.ObtainableFrom{
+		Monsters:        bools.Monsters,
+		Treasures:       bools.Treasures,
+		Shops:           bools.Shops,
+		Quests:          bools.Quests,
+		BlitzballPrizes: bools.Blitzball,
+	}
+
+	return obtainable, nil
+}
+
+func CompleteMasterItemResponse(r *http.Request, masterItem apitypes.MasterItem) apitypes.MasterItem {
+	switch masterItem.Type {
+	case database.ItemTypeItem:
+		item, _ := lookup.GetResource(masterItem.Name, lookup.L.Items)
+
+		masterItem.Description = item.Description
+		masterItem.Effect = item.Effect
+		masterItem.TypedItem = handlerinput.NameToNamedAPIResource(apilookups.E.Items, item.Name, nil)
+
+	case database.ItemTypeKeyItem:
+		keyItem, _ := lookup.GetResource(masterItem.Name, lookup.L.KeyItems)
+
+		masterItem.Description = keyItem.Description
+		masterItem.Effect = keyItem.Effect
+		masterItem.TypedItem = handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, keyItem.Name, nil)
+	}
+
+	return masterItem
 }

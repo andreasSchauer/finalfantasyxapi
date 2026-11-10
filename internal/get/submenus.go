@@ -1,17 +1,18 @@
 package get
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
+	"golang.org/x/sync/errgroup"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func GetSubmenu(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes.Submenu, apiresource.Named], id int32) (apitypes.Submenu, error) {
@@ -20,7 +21,7 @@ func GetSubmenu(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes
 		return apitypes.Submenu{}, err
 	}
 
-	rel, err := assemble.GetSubmenuRelationships(r, submenu)
+	rel, err := getSubmenuRelationships(r, submenu)
 	if err != nil {
 		return apitypes.Submenu{}, err
 	}
@@ -39,13 +40,63 @@ func GetSubmenu(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes
 	return response, nil
 }
 
-func RetrieveSubmenus(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes.Submenu, apiresource.Named]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
+func getSubmenuRelationships(r *http.Request, submenu seedtypes.Submenu) (apitypes.Submenu, error) {
+	var rel apitypes.Submenu
+	g, ctx := errgroup.WithContext(r.Context())
+
+	g.Go(func() error {
+		var err error
+		rel.Abilities, err = apilookups.E.Abilities.DBGetRelations(ctx, submenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.OpenedBy, err = createSubmenuOpenedBy(ctx, submenu)
+		return err
+	})
+
+	err := g.Wait()
+	if err != nil {
+		return apitypes.Submenu{}, err
+	}
+
+	return rel, nil
+}
+
+func createSubmenuOpenedBy(ctx context.Context, submenu seedtypes.Submenu) (*apitypes.MenuOpen, error) {
+	var menuOpen apitypes.MenuOpen
+	g, ctx := errgroup.WithContext(ctx)
+
+	g.Go(func() error {
+		var err error
+		menuOpen.Ability, err = apilookups.E.Abilities.DBGetRelationPtr(ctx, submenu, handlerinput.ToIntOneNull(config.Cfg.DB.GetSubmenuOpenedByAbilityID))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		menuOpen.AeonCommand, err = apilookups.E.AeonCommands.DBGetRelationPtr(ctx, submenu, handlerinput.ToIntOneNull(config.Cfg.DB.GetSubmenuOpenedByAeonCommandID))
+		return err
+	})
+
+	g.Go(func() error {
+		overdriveCommands, err := apilookups.E.OverdriveCommands.DBGetRelations(ctx, submenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetSubmenuOpenedByOverdriveCommandIDs))
+		if err != nil {
+			return err
+		}
+		menuOpen.OverdriveCommands = h.SliceOrNil(overdriveCommands)
+		return nil
+	})
+
+	err := g.Wait()
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryNameID(r, ids, ts.QpnTopmenu, apilookups.E.Topmenus.ResTypeSingle, lookup.L.Topmenus, handlerinput.ToIntManyNull(config.Cfg.DB.GetTopmenuSubmenuIDs)),
-	})
+	if menuOpen.IsZero() {
+		return nil, nil
+	}
+
+	return &menuOpen, nil
 }

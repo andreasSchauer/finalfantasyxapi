@@ -8,11 +8,9 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func GetBlitzballPrize(r *http.Request, i handlerinput.Main[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.Named], id int32) (apitypes.BlitzballPrize, error) {
@@ -30,15 +28,4 @@ func GetBlitzballPrize(r *http.Request, i handlerinput.Main[seedtypes.BlitzballP
 	}
 
 	return response, nil
-}
-
-func RetrieveBlitzballPrizes(r *http.Request, i handlerinput.Main[seedtypes.BlitzballPosition, apitypes.BlitzballPrize, apiresource.Named]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
-	if err != nil {
-		return nil, err
-	}
-
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryEnum(r, enums.T.BlitzballTournamentCategory, ids, ts.QpnCategory, config.Cfg.DB.GetBlitzballPrizeIDsByCategory),
-	})
 }

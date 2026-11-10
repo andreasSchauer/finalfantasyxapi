@@ -6,7 +6,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 )
@@ -17,7 +18,7 @@ func GetOverdriveCommand(r *http.Request, i handlerinput.Main[seedtypes.Overdriv
 		return apitypes.OverdriveCommand{}, err
 	}
 
-	rel, err := assemble.GetOverdriveCommandRelationships(r, command)
+	rel, err := getOverdriveCommandRelationships(r, command)
 	if err != nil {
 		return apitypes.OverdriveCommand{}, err
 	}
@@ -36,6 +37,14 @@ func GetOverdriveCommand(r *http.Request, i handlerinput.Main[seedtypes.Overdriv
 	return response, nil
 }
 
-func RetrieveOverdriveCommands(r *http.Request, i handlerinput.Main[seedtypes.OverdriveCommand, apitypes.OverdriveCommand, apiresource.Named]) ([]int32, error) {
-	return i.VerifyQueriesRetrieve(r)
+func getOverdriveCommandRelationships(r *http.Request, command seedtypes.OverdriveCommand) (apitypes.OverdriveCommand, error) {
+	var rel apitypes.OverdriveCommand
+	var err error
+
+	rel.Overdrives, err = apilookups.E.Overdrives.DBGetRelations(r.Context(), command, handlerinput.ToIntManyNull(config.Cfg.DB.GetOverdriveCommandOverdriveIDs))
+	if err != nil {
+		return apitypes.OverdriveCommand{}, err
+	}
+
+	return rel, nil
 }

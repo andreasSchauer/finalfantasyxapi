@@ -8,15 +8,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/filters"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func GetItemAbility(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.Named], id int32) (apitypes.ItemAbility, error) {
@@ -25,7 +22,7 @@ func GetItemAbility(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, 
 		return apitypes.ItemAbility{}, err
 	}
 
-	rel := assemble.GetItemAbilityRelationships(r, ability)
+	rel := getItemAbilityRelationships(ability)
 
 	response := apitypes.ItemAbility{
 		ID:                  ability.ID,
@@ -47,25 +44,21 @@ func GetItemAbility(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, 
 	return response, nil
 }
 
-func RetrieveItemAbilities(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.Named]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
-	if err != nil {
-		return nil, err
-	}
-	abilityType := database.AbilityTypeItemAbility
+func getItemAbilityRelationships(ability seedtypes.ItemAbility) apitypes.ItemAbility {
+	item, _ := lookup.GetResourceByID(ability.ID, lookup.L.ItemsID)
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryEnumList(r, enums.T.ItemCategory, ids, ts.QpnCategory, config.Cfg.DB.GetItemAbilityIDsByCategory),
-		i.QueryEnumList(r, enums.T.AttackType, ids, ts.QpnAttackType, filters.GetTypedAbilityIDsByAttackType(abilityType)),
-		i.QueryEnumList(r, enums.T.TargetType, ids, ts.QpnTargetType, filters.GetTypedAbilityIDsByTargetType(abilityType)),
-		i.QueryEnum(r, enums.T.DamageFormula, ids, ts.QpnDamageFormula, filters.GetTypedAbilityIDsByDamageFormula(abilityType)),
-		i.QueryNameIDListNul(r, ids, ts.QpnElement, apilookups.E.Elements.ResTypeSingle, lookup.L.Elements, filters.GetTypedAbilityIDsByElement(abilityType)),
-		i.QueryNameID(r, ids, ts.QpnRelatedStat, apilookups.E.Stats.ResTypeSingle, lookup.L.Stats, config.Cfg.DB.GetItemAbilityIDsByRelatedStat),
-		i.QueryIDNul(r, ids, ts.QpnStatusInflict, lookup.L.StatusConditions, filters.GetTypedAbilityIDsByInflictedStatus(abilityType)),
-		i.QueryIDNul(r, ids, ts.QpnStatusRemove, lookup.L.StatusConditions, filters.GetTypedAbilityIDsByRemovedStatus(abilityType)),
-		i.QueryBool2(r, ids, ts.QpnOutsideBattle, config.Cfg.DB.GetItemAbilityIDsCanUseOutsideBattle),
-		i.QueryBool2(r, ids, ts.QpnDelay, filters.GetTypedAbilityIDsDealsDelay(abilityType)),
-		i.QueryBool2(r, ids, ts.QpnStatChanges, filters.GetTypedAbilityIDsWithStatChanges(abilityType)),
-		i.QueryBool2(r, ids, ts.QpnModChanges, filters.GetTypedAbilityIDsWithModifierChanges(abilityType)),
-	})
+	rel := apitypes.ItemAbility{
+		Item:         handlerinput.IDToNamedAPIResource(apilookups.E.Items, item.ID),
+		Description:  item.Description,
+		Effect:       item.Effect,
+		Category:     item.Category,
+		RelatedStats: handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, item.RelatedStats),
+		Cursor:       item.Cursor,
+	}
+
+	if item.Usability == string(database.ItemUsabilityOutsideBattle) || item.Usability == string(database.ItemUsabilityAlways) {
+		rel.CanUseOutsideBattle = true
+	}
+
+	return rel
 }

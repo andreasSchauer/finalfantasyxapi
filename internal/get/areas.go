@@ -1,18 +1,17 @@
 package get
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/filters"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
+	"golang.org/x/sync/errgroup"
 )
 
 func GetArea(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area, apiresource.Area], id int32) (apitypes.Area, error) {
@@ -21,12 +20,12 @@ func GetArea(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area,
 		return apitypes.Area{}, err
 	}
 
-	connections, err := assemble.GetAreaConnectedAreas(area)
+	connections, err := GetAreaConnectedAreas(area)
 	if err != nil {
 		return apitypes.Area{}, err
 	}
 
-	rel, err := assemble.GetAreaRelationships(r, area)
+	rel, err := getAreaRelationships(r, area)
 	if err != nil {
 		return apitypes.Area{}, err
 	}
@@ -36,7 +35,7 @@ func GetArea(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area,
 		Name:              area.Name,
 		Version:           area.Version,
 		Specification:     area.Specification,
-		DisplayName:       assemble.GetAreaDisplayName(area),
+		DisplayName:       GetAreaDisplayName(area),
 		ParentLocation:    handlerinput.NameToNamedAPIResource(apilookups.E.Locations, area.Location, nil),
 		ParentSublocation: handlerinput.NameToNamedAPIResource(apilookups.E.Sublocations, area.Sublocation, nil),
 		Availability:      area.Availability,
@@ -51,31 +50,106 @@ func GetArea(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area,
 	return response, nil
 }
 
-func RetrieveAreas(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area, apiresource.Area]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
+func getAreaRelationships(r *http.Request, area seedtypes.Area) (apitypes.LocRel, error) {
+	var rel apitypes.LocRel
+	g, ctx := errgroup.WithContext(r.Context())
+
+	availabilityParams, err := apilookups.E.Areas.QueryAvlRelGetParams(r, area.ID)
 	if err != nil {
-		return nil, err
+		return apitypes.LocRel{}, err
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationAreaIDs),
-		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationAreaIDs),
-		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreaIDsWithMonster),
-		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, filters.GetAreasByItem),
-		i.QueryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, config.Cfg.DB.GetAreaIDsWithKeyItem),
-		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreasByMonster),
-		i.QueryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, config.Cfg.DB.GetAreaIDsWithAutoAbility),
-		i.QueryBool(r, ids, ts.QpnSaveSphere, config.Cfg.DB.GetAreaIDsWithSaveSphere),
-		i.QueryBool(r, ids, ts.QpnCompSphere, config.Cfg.DB.GetAreaIDsWithCompSphere),
-		i.QueryBool(r, ids, ts.QpnAirship, config.Cfg.DB.GetAreaIDsWithDropOff),
-		i.QueryBool(r, ids, ts.QpnChocobo, config.Cfg.DB.GetAreaIDsChocobo),
-		i.QueryBool2(r, ids, ts.QpnCharacters, config.Cfg.DB.GetAreaIDsWithCharacters),
-		i.QueryBool2(r, ids, ts.QpnAeons, config.Cfg.DB.GetAreaIDsWithAeons),
-		i.QueryBool2(r, ids, ts.QpnMonsters, config.Cfg.DB.GetAreaIDsWithMonsters),
-		i.QueryBool2(r, ids, ts.QpnBossFights, config.Cfg.DB.GetAreaIDsWithBosses),
-		i.QueryBool2(r, ids, ts.QpnShops, config.Cfg.DB.GetAreaIDsWithShops),
-		i.QueryBool2(r, ids, ts.QpnTreasures, config.Cfg.DB.GetAreaIDsWithTreasures),
-		i.QueryBool2(r, ids, ts.QpnSidequests, config.Cfg.DB.GetAreaIDsWithSidequests),
-		i.QueryBool2(r, ids, ts.QpnFMVs, config.Cfg.DB.GetAreaIDsWithFMVs),
+	g.Go(func() error {
+		var err error
+		rel.Characters, err = apilookups.E.Characters.DBGetRelations(ctx, area, handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaCharacterIDs))
+		return err
 	})
+
+	g.Go(func() error {
+		var err error
+		rel.Aeons, err = apilookups.E.Aeons.DBGetRelations(ctx, area, handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaAeonIDs))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Shops, err = apilookups.E.Shops.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstShop))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstTreasure))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Monsters, err = apilookups.E.Monsters.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstMonster))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Formations, err = apilookups.E.MonsterFormations.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstMonsterFormation))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Quests, err = apilookups.E.Quests.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstQuest))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Music, err = getMusicLocBased(ctx, area, LocBasedMusicQueries{
+			CueSongs:  handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaCueSongIDs),
+			BmSongs:   config.Cfg.DB.GetAreaBackgroundMusicSongIDs,
+			FMVSongs:  config.Cfg.DB.GetAreaFMVSongIDs,
+			BossMusic: config.Cfg.DB.GetAreaBossSongIDs,
+		})
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.FMVs, err = apilookups.E.FMVs.DBGetRelations(ctx, area, config.Cfg.DB.GetAreaFmvIDs)
+		return err
+	})
+
+	err = g.Wait()
+	if err != nil {
+		return apitypes.LocRel{}, err
+	}
+
+	return rel, nil
+}
+
+func GetAreaConnectedAreas(area seedtypes.Area) ([]apitypes.AreaConnection, error) {
+	i := apilookups.E.Areas
+	connectedAreas := []apitypes.AreaConnection{}
+
+	for _, connArea := range area.ConnectedAreas {
+		connection := apitypes.AreaConnection{
+			Area:           handlerinput.LocAreaToAreaAPIResource(i, connArea.LocationArea),
+			ConnectionType: connArea.ConnectionType,
+			IsStoryBased:   connArea.IsStoryBased,
+			Notes:          connArea.Notes,
+		}
+
+		connectedAreas = append(connectedAreas, connection)
+	}
+
+	return connectedAreas, nil
+}
+
+func GetAreaDisplayName(area seedtypes.Area) string {
+	sublocName := area.Sublocation
+
+	if sublocName == area.Name {
+		return area.Name
+	}
+
+	return fmt.Sprintf("%s - %s", sublocName, area.Name)
 }

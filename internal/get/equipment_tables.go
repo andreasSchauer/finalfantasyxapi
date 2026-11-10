@@ -8,13 +8,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func GetEquipmentTable(r *http.Request, i handlerinput.Main[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.Unnamed], id int32) (apitypes.EquipmentTable, error) {
@@ -23,7 +22,7 @@ func GetEquipmentTable(r *http.Request, i handlerinput.Main[seedtypes.EquipmentT
 		return apitypes.EquipmentTable{}, err
 	}
 
-	rel, err := assemble.GetEquipmentTableRelationships(r, table)
+	rel, err := getEquipmentTableRelationships(r, table)
 	if err != nil {
 		return apitypes.EquipmentTable{}, err
 	}
@@ -44,15 +43,18 @@ func GetEquipmentTable(r *http.Request, i handlerinput.Main[seedtypes.EquipmentT
 	return response, nil
 }
 
-func RetrieveEquipmentTables(r *http.Request, i handlerinput.Main[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.Unnamed]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
-	if err != nil {
-		return nil, err
+func getEquipmentTableRelationships(r *http.Request, table seedtypes.EquipmentTable) (apitypes.EquipmentTable, error) {
+	var rel apitypes.EquipmentTable
+	var err error
+
+	if table.SpecificCharacter == nil || table.Classification != string(database.EquipClassCelestialWeapon) {
+		return rel, nil
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryIDList(r, ids, ts.QpnAutoAbilities, lookup.L.AutoAbilities, config.Cfg.DB.GetEquipmentTableIDsByAutoAbility),
-		i.QueryEnum(r, enums.T.EquipType, ids, ts.QpnType, config.Cfg.DB.GetEquipmentTableIDsEquipType),
-		i.QueryBool2(r, ids, ts.QpnCelestialWeapon, config.Cfg.DB.GetEquipmentTableIDsCelestialWeapon),
-	})
+	rel.CelestialWeapon, err = apilookups.E.CelestialWeapons.DBGetRelationPtr(r.Context(), table, config.Cfg.DB.GetEquipmentTableCelestialWeaponID)
+	if err != nil {
+		return apitypes.EquipmentTable{}, err
+	}
+
+	return rel, nil
 }

@@ -1,16 +1,18 @@
 package get
 
 import (
+	"context"
 	"net/http"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"golang.org/x/sync/errgroup"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func GetCharacterClass(r *http.Request, i handlerinput.Main[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.Named], id int32) (apitypes.CharacterClass, error) {
@@ -19,7 +21,7 @@ func GetCharacterClass(r *http.Request, i handlerinput.Main[seedtypes.CharacterC
 		return apitypes.CharacterClass{}, err
 	}
 
-	rel, err := assemble.GetCharClassRelationships(r, class)
+	rel, err := getCharClassRelationships(r, class)
 	if err != nil {
 		return apitypes.CharacterClass{}, err
 	}
@@ -39,13 +41,59 @@ func GetCharacterClass(r *http.Request, i handlerinput.Main[seedtypes.CharacterC
 	return response, nil
 }
 
-func RetrieveCharacterClasses(r *http.Request, i handlerinput.Main[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.Named]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
+func getCharClassRelationships(r *http.Request, class seedtypes.CharacterClass) (apitypes.CharacterClass, error) {
+	var rel apitypes.CharacterClass
+	g, ctx := errgroup.WithContext(r.Context())
+
+	g.Go(func() error {
+		var err error
+		rel.Members, err = apilookups.E.PlayerUnits.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassUnitIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.DefaultAbilities, err = apilookups.E.Abilities.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassDefaultAbilityIDs)
+		if err != nil {
+			return err
+		}
+
+		rel.LearnableAbilities, err = getClassLearnableAbilities(ctx, class, rel.DefaultAbilities)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.DefaultOverdrives, err = apilookups.E.Overdrives.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassDefaultOverdriveIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.LearnableOverdrives, err = apilookups.E.Overdrives.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassLearnableOverdriveIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Submenus, err = apilookups.E.Submenus.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassSubmenuIDs)
+		return err
+	})
+
+	err := g.Wait()
+	if err != nil {
+		return apitypes.CharacterClass{}, err
+	}
+
+	return rel, nil
+}
+
+func getClassLearnableAbilities(ctx context.Context, class seedtypes.CharacterClass, defaultAbilities []apiresource.Typed) ([]apiresource.Typed, error) {
+	allAbilities, err := apilookups.E.Abilities.DBGetRelations(ctx, class, config.Cfg.DB.GetCharacterClassLearnableAbilityIDs)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryEnumList(r, enums.T.CharacterClassCategory, ids, ts.QpnCategory, config.Cfg.DB.GetCharacterClassesIDsByCategory),
-	})
+	learnableAbilities := handlerinput.RemoveResourcesURL(allAbilities, defaultAbilities)
+	return learnableAbilities, nil
 }

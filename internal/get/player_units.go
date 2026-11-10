@@ -6,14 +6,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func GetPlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.Typed], id int32) (apitypes.PlayerUnit, error) {
@@ -28,7 +25,7 @@ func GetPlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, ap
 	case database.UnitTypeCharacter:
 		character, _ := lookup.GetResource(unit, lookup.L.Characters)
 
-		rel, err := assemble.GetCharacterRelationships(r, character)
+		rel, err := getCharacterRelationships(r, character)
 		if err != nil {
 			return apitypes.PlayerUnit{}, err
 		}
@@ -46,7 +43,7 @@ func GetPlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, ap
 	case database.UnitTypeAeon:
 		aeon, _ := lookup.GetResource(unit, lookup.L.Aeons)
 
-		rel, err := assemble.GetAeonRelationships(r, aeon)
+		rel, err := getAeonRelationships(r, aeon)
 		if err != nil {
 			return apitypes.PlayerUnit{}, err
 		}
@@ -63,15 +60,4 @@ func GetPlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, ap
 	}
 
 	return response, nil
-}
-
-func RetrievePlayerUnits(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.Typed]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
-	if err != nil {
-		return nil, err
-	}
-
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryEnum(r, enums.T.UnitType, ids, ts.QpnType, config.Cfg.DB.GetPlayerUnitIDsByType),
-	})
 }

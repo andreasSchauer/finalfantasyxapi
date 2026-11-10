@@ -8,9 +8,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	"golang.org/x/sync/errgroup"
 )
 
 func GetProperty(r *http.Request, i handlerinput.Main[seedtypes.Property, apitypes.Property, apiresource.Named], id int32) (apitypes.Property, error) {
@@ -19,7 +21,7 @@ func GetProperty(r *http.Request, i handlerinput.Main[seedtypes.Property, apityp
 		return apitypes.Property{}, err
 	}
 
-	rel, err := assemble.GetPropertyRelationships(r, property)
+	rel, err := getPropertyRelationships(r, property)
 	if err != nil {
 		return apitypes.Property{}, err
 	}
@@ -38,6 +40,26 @@ func GetProperty(r *http.Request, i handlerinput.Main[seedtypes.Property, apityp
 	return response, nil
 }
 
-func RetrieveProperties(r *http.Request, i handlerinput.Main[seedtypes.Property, apitypes.Property, apiresource.Named]) ([]int32, error) {
-	return i.VerifyQueriesRetrieve(r)
+func getPropertyRelationships(r *http.Request, property seedtypes.Property) (apitypes.Property, error) {
+	var rel apitypes.Property
+	g, ctx := errgroup.WithContext(r.Context())
+
+	g.Go(func() error {
+		var err error
+		rel.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, property, handlerinput.ToIntManyNull(config.Cfg.DB.GetPropertyAutoAbilityIDs))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.Monsters, err = apilookups.E.Monsters.DBGetRelations(ctx, property, config.Cfg.DB.GetPropertyMonsterIDs)
+		return err
+	})
+
+	err := g.Wait()
+	if err != nil {
+		return apitypes.Property{}, err
+	}
+
+	return rel, nil
 }

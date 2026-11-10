@@ -5,15 +5,15 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiconv"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/assemble"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/enums"
+	"golang.org/x/sync/errgroup"
+
 	"github.com/andreasSchauer/finalfantasyxapi/internal/handlerinput"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
-	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
 func GetSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named], id int32) (apitypes.Song, error) {
@@ -22,7 +22,7 @@ func GetSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song,
 		return apitypes.Song{}, err
 	}
 
-	rel, err := assemble.GetSongRelationships(r, song)
+	rel, err := getSongRelationships(r, song)
 	if err != nil {
 		return apitypes.Song{}, err
 	}
@@ -54,19 +54,33 @@ func GetSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song,
 	return response, nil
 }
 
-func RetrieveSongs(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named]) ([]int32, error) {
-	ids, err := i.VerifyQueriesRetrieve(r)
+func getSongRelationships(r *http.Request, song seedtypes.Song) (apitypes.Song, error) {
+	var rel apitypes.Song
+	g, ctx := errgroup.WithContext(r.Context())
+
+	g.Go(func() error {
+		var err error
+		rel.BossFights, err = apilookups.E.MonsterFormations.DBGetRelations(ctx, song, handlerinput.ToIntManyNull(config.Cfg.DB.GetSongMonsterFormationIDs))
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		rel.FMVs, err = apilookups.E.FMVs.DBGetRelations(ctx, song, handlerinput.ToIntManyNull(config.Cfg.DB.GetSongFmvIDs))
+		return err
+	})
+
+	err := g.Wait()
 	if err != nil {
-		return nil, err
+		return apitypes.Song{}, err
 	}
 
-	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationSongIDs),
-		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationSongIDs),
-		i.QueryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetAreaSongIDs),
-		i.QueryBool2(r, ids, ts.QpnSpecialUse, config.Cfg.DB.GetSongIDsWithSpecialUseCase),
-		i.QueryBool2(r, ids, ts.QpnFMVs, config.Cfg.DB.GetSongIDsWithFMVs),
-		i.QueryEnum(r, enums.T.Composer, ids, ts.QpnComposer, handlerinput.ToEnumQuery(enums.T.Composer, config.Cfg.DB.GetSongIDsByComposer)),
-		i.QueryEnum(r, enums.T.Arranger, ids, ts.QpnArranger, handlerinput.ToEnumQuery(enums.T.Arranger, config.Cfg.DB.GetSongIDsByArranger)),
-	})
+	if song.Credits != nil {
+		rel.Composer = song.Credits.Composer
+		rel.Arranger = song.Credits.Arranger
+		rel.Performer = song.Credits.Performer
+		rel.Lyricist = song.Credits.Lyricist
+	}
+
+	return rel, nil
 }
