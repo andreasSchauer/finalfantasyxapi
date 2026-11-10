@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/typestrings"
 )
 
-func HandleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A], idStr, sectionName string) {
+func handleSubsection[T seedtypes.Lookupable, R any, A apiresource.APIResource](w http.ResponseWriter, r *http.Request, i handlerinput.Main[T, R, A], idStr, sectionName string) {
 	parseRes, err := ParseID(idStr, i.ResTypeSingle, len(i.ObjLookup))
 	if HandleHTTPError(w, err) {
 		return
