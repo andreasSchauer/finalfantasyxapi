@@ -3,8 +3,8 @@ package lookup
 import (
 	"fmt"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func GetResourceByID[T seedtypes.LookupableID](id int32, lookup map[int32]T) (T, error) {

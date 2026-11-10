@@ -1,0 +1,61 @@
+package servicetypes
+
+import (
+	"fmt"
+	"strings"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
+)
+
+type ParamsDoc struct {
+	GeneralRules *string    `json:"general_rules"`
+	Fields       []FieldDoc `json:"fields"`
+}
+
+func (d ParamsDoc) CompileRules() ParamsRules {
+	return compileParamsRules(d.Fields)
+}
+
+type FieldDoc struct {
+	Field             ts.FieldName        `json:"field"`
+	Type              string              `json:"type"`
+	ExampleUses       []string            `json:"example_uses,omitempty"`
+	Required          bool                `json:"required"`
+	RequiredOr        []ts.FieldName      `json:"required_or,omitempty"`
+	RequiresAll       []ts.FieldName      `json:"requires_all,omitempty"`
+	RequiresOne       []ts.FieldName      `json:"requires_one,omitempty"`
+	ConflictsWith     []ts.FieldName      `json:"conflicts_with,omitempty"`
+	DefaultVal        any                 `json:"default_val,omitempty"`
+	MinVal            *int32              `json:"min_val,omitempty"`
+	MaxVal            *int32              `json:"max_val,omitempty"`
+	MaxArrayLen       *int                `json:"max_array_len,omitempty"`
+	AllowedIDs        []int32             `json:"allowed_ids,omitempty"`
+	ParentIDField     *ts.FieldName       `json:"parent_id_field,omitempty"`
+	AllowedIDValPairs []AllowedIDValPairs `json:"allowed_id_val_pairs"`
+	EnumValues        []string            `json:"enum_values,omitempty"`
+	Description       string              `json:"description"`
+	ChildProps        []FieldDoc          `json:"child_properties,omitempty"`
+	ChildMinVal       *int32              `json:"child_min_val,omitempty"`
+	ChildMaxVal       *int32              `json:"child_max_val,omitempty"`
+}
+
+type AllowedIDValPairs struct {
+	ID     int32   `json:"id"`
+	Values []int32 `json:"values"`
+	MaxVal int32   `json:"-"`
+}
+
+func (e AllowedIDValPairs) format() string {
+	return fmt.Sprintf("id: %d, vals: %s", e.ID, h.IntSliceToString(e.Values))
+}
+
+func FormatAllowedIDValPairs(entries []AllowedIDValPairs) string {
+	slice := make([]string, len(entries))
+
+	for i := range entries {
+		slice[i] = entries[i].format()
+	}
+
+	return strings.Join(slice, " | ")
+}

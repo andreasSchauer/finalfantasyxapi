@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"slices"
 
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func (L *Lookup) Cache() error {

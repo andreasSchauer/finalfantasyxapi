@@ -1,0 +1,60 @@
+package apitest
+
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
+)
+
+type expSidequest struct {
+	testGeneral
+	expUnique
+	untypedQuest int32
+	completion   *testQuestCompletion
+	subquests    []int32
+}
+
+func (e expSidequest) GetTestGeneral() testGeneral {
+	return e.testGeneral
+}
+
+func compareSidequests(test test, exp expSidequest, got apitypes.Sidequest) {
+	test.t.Helper()
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("untyped quest", apilookups.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
+	test.compTestStructPtrs("completion", exp.completion, got.Completion, compareQuestCompletions)
+	test.checkResIDsInSlice("subquests", apilookups.E.Subquests.Endpoint, exp.subquests, got.Subquests)
+}
+
+type expSubquest struct {
+	testGeneral
+	expUnique
+	untypedQuest    int32
+	parentSidequest int32
+	completion      testQuestCompletion
+	arenaCreation   *int32
+}
+
+func (e expSubquest) GetTestGeneral() testGeneral {
+	return e.testGeneral
+}
+
+func compareSubquests(test test, exp expSubquest, got apitypes.Subquest) {
+	test.t.Helper()
+	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compIDAPIResource("untyped quest", apilookups.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
+	test.compIDAPIResource("parent sidequest", apilookups.E.Sidequests.Endpoint, exp.parentSidequest, got.ParentSidequest)
+	compareQuestCompletions(test, "completion", exp.completion, got.Completion)
+	test.compIDAPIResourcePtrs("arena creation", apilookups.E.ArenaCreations.Endpoint, exp.arenaCreation, got.ArenaCreation)
+}
+
+type testQuestCompletion struct {
+	areas  []int32
+	reward testResAmount[apiresource.Typed]
+}
+
+func compareQuestCompletions(test test, fieldName string, exp testQuestCompletion, got apitypes.QuestCompletion) {
+	test.t.Helper()
+	test.checkResIDsInSlice(fieldName+" - areas", apilookups.E.Areas.Endpoint, exp.areas, got.Areas)
+	compareResAmounts(test, fieldName+" - rewards", exp.reward, got.Reward)
+}

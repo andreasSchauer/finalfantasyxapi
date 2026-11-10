@@ -1,0 +1,31 @@
+package retrieve
+
+import (
+	"net/http"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/general/config"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
+)
+
+func RetrieveSongs(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named]) ([]int32, error) {
+	ids, err := i.VerifyQueriesRetrieve(r)
+	if err != nil {
+		return nil, err
+	}
+
+	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
+		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationSongIDs),
+		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationSongIDs),
+		i.QueryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetAreaSongIDs),
+		i.QueryBool2(r, ids, ts.QpnSpecialUse, config.Cfg.DB.GetSongIDsWithSpecialUseCase),
+		i.QueryBool2(r, ids, ts.QpnFMVs, config.Cfg.DB.GetSongIDsWithFMVs),
+		i.QueryEnum(r, enums.T.Composer, ids, ts.QpnComposer, handlerinput.ToEnumQuery(enums.T.Composer, config.Cfg.DB.GetSongIDsByComposer)),
+		i.QueryEnum(r, enums.T.Arranger, ids, ts.QpnArranger, handlerinput.ToEnumQuery(enums.T.Arranger, config.Cfg.DB.GetSongIDsByArranger)),
+	})
+}

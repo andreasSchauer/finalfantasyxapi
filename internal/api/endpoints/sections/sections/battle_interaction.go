@@ -1,0 +1,139 @@
+package sections
+
+import (
+	"fmt"
+	"strconv"
+	"strings"
+
+	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/sections/sectiontypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
+)
+
+func convertBattleInteractionSimple(bi seedtypes.BattleInteraction) sectiontypes.BattleInteractionSimple {
+	biSimple := sectiontypes.BattleInteractionSimple{
+		Target:                    bi.Target,
+		Range:                     bi.Range,
+		HitAmount:                 bi.HitAmount,
+		Accuracy:                  ConvertAccuracySimple(bi.Accuracy),
+		AffectedBy:                h.SliceOrNil(bi.AffectedBy),
+		Damage:                    ah.ConvertObjPtr(bi.Damage, convertDamageSimple),
+		Delay:                     ah.ConvertObjPtr(bi.InflictedDelay, convertInflictedDelaySimple),
+		InflictedStatusConditions: ah.ConvertObjSliceOrNil(bi.InflictedStatusConditions, ConvertInflictedStatusSimple),
+		RemovedStatusConditions:   h.SliceOrNil(bi.RemovedStatusConditions),
+		CopiedStatusConditions:    ah.ConvertObjSliceOrNil(bi.CopiedStatusConditions, ConvertInflictedStatusSimple),
+		StatChanges:               ah.ConvertObjSliceOrNil(bi.StatChanges, convertStatChangeSimple),
+		ModChanges:                ah.ConvertObjSliceOrNil(bi.ModifierChanges, ConvertModChangeSimple),
+	}
+
+	return biSimple
+}
+
+func convertDamageSimple(d seedtypes.Damage) sectiontypes.DamageSimple {
+	return sectiontypes.DamageSimple{
+		AttackType:    d.AttackType,
+		DamageType:    d.DamageType,
+		HP:            ah.ConvertObjPtr(d.HP, convertClassDamageSimple),
+		MP:            ah.ConvertObjPtr(d.MP, convertClassDamageSimple),
+		CTB:           ah.ConvertObjPtr(d.CTB, convertClassDamageSimple),
+		CanCritical:   h.PtrIsNotNil(d.Critical),
+		BreakDmgLimit: ah.ConvertObjPtr(d.BreakDmgLimit, convertBreakDmgLimitSimple),
+		Element:       d.Element,
+	}
+}
+
+func convertClassDamageSimple(dc seedtypes.ClassDamage) string {
+	return fmt.Sprintf("formula: %s, power: %d", dc.DamageFormula, dc.DamageConstant)
+}
+
+func convertBreakDmgLimitSimple(breakDmgLimit string) string {
+	switch breakDmgLimit {
+	case string(database.BreakDmgLmtTypeAlways):
+		return "always"
+
+	case string(database.BreakDmgLmtTypeAutoAbility):
+		return "with auto-ability"
+	}
+
+	return ""
+}
+
+func ConvertAccuracySimple(acc seedtypes.Accuracy) string {
+	switch acc.AccSource {
+	case string(database.AccSourceTypeRate):
+		if *acc.HitChance == 255 {
+			return "always hits"
+		}
+		return fmt.Sprintf("%d", *acc.HitChance) + "% base chance of hitting"
+
+	case string(database.AccSourceTypeAccuracy):
+		return fmt.Sprintf("based on accuracy with %.1f modifier", *acc.AccModifier)
+	}
+
+	return ""
+}
+
+func convertInflictedDelaySimple(id seedtypes.InflictedDelay) string {
+	return id.DelayStrength
+}
+
+func ConvertInflictedStatusSimple(is seedtypes.InflictedStatus) string {
+	var probabilityStr string
+
+	switch is.Probability {
+	case 255:
+		probabilityStr = "always"
+
+	case 254:
+		probabilityStr = "infinite %"
+
+	default:
+		probabilityStr = strconv.Itoa(int(is.Probability)) + "%"
+	}
+
+	return fmt.Sprintf("%s (%s)", is.StatusCondition, probabilityStr)
+}
+
+func convertStatChangeSimple(sc seedtypes.StatChange) string {
+	return FormatChange(sc.StatName, sc.CalculationType, sc.Value)
+}
+
+func ConvertModChangeSimple(mc seedtypes.ModifierChange) string {
+	formatted := FormatChange(mc.ModifierName, mc.CalculationType, mc.Value)
+	modifier, _ := lookup.GetResource(mc.ModifierName, lookup.L.Modifiers)
+
+	if modifier.Category == string(database.ModifierCategoryPercentage) {
+		formatted += "%"
+	}
+
+	return formatted
+}
+
+func FormatChange(name, calcType string, val float32) string {
+	formattedVal := strconv.FormatFloat(float64(val), 'f', -1, 32)
+
+	switch calcType {
+	case string(database.CalculationTypeAddedValue):
+		if strings.HasPrefix(formattedVal, "-") {
+			return fmt.Sprintf("%s %s", name, formattedVal)
+		}
+		return fmt.Sprintf("%s +%s", name, formattedVal)
+
+	case string(database.CalculationTypeAddedPercentage):
+		if strings.HasPrefix(formattedVal, "-") {
+			return fmt.Sprintf("%s %s", name, formattedVal) + "%"
+		}
+		return fmt.Sprintf("%s +%s", name, formattedVal) + "%"
+
+	case string(database.CalculationTypeMultiplyHighest), string(database.CalculationTypeMultiply):
+		return fmt.Sprintf("%s x%s", name, formattedVal)
+
+	case string(database.CalculationTypeSetValue):
+		return fmt.Sprintf("%s = %d", name, int32(val))
+	}
+
+	return ""
+}

@@ -1,0 +1,86 @@
+package dropchance
+
+import (
+	"runtime"
+	"sync"
+	"sync/atomic"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
+)
+
+type equipmentMatchParams struct {
+	WantedAbilities   []seedtypes.AutoAbility
+	WantedIndices     [][]int32
+	OptionalAbilities bool
+	MinEmptySlots     *int32
+	EquipmentSlots    int32
+	ShotAmt           int32
+	AbilityWheel      abilityWheel
+}
+
+func (p equipmentMatchParams) calcChance() float64 {
+	baseEquipment, baseEqLen := p.initEquipment()
+
+	matcher := equipmentMatcher{
+		wantedIndices:     p.WantedIndices,
+		wantedLen:         h.Len32(p.WantedAbilities),
+		minEmptySlots:     p.MinEmptySlots,
+		equipmentSlots:    p.EquipmentSlots,
+		optionalAbilities: p.OptionalAbilities,
+	}
+
+	if p.ShotAmt == 0 {
+		if matcher.Match(&baseEquipment, baseEqLen) {
+			return 1
+		}
+
+		return 0
+	}
+
+	assembler := equipmentAssembler{
+		indexedNames:   p.AbilityWheel.IndexedNames,
+		clashes:        p.AbilityWheel.Clashes,
+		equipment:      baseEquipment,
+		eqLen:          baseEqLen,
+		equipmentSlots: p.EquipmentSlots,
+		shotAmt:        p.ShotAmt,
+	}
+
+	totalCombinations := h.PowInt(7, p.ShotAmt)
+	var globalMatchingRows atomic.Int32
+	numWorkers := int32(runtime.NumCPU())
+	chunkSize := totalCombinations / numWorkers
+	var wg sync.WaitGroup
+
+	for workerID := range numWorkers {
+		startIdx := workerID * chunkSize
+		endIdx := startIdx + chunkSize
+
+		if workerID == numWorkers-1 {
+			endIdx = totalCombinations
+		}
+
+		wg.Add(1)
+		go func(start, end int32) {
+			defer wg.Done()
+			var localMatches int32
+
+			for i := start; i < end; i++ {
+				equipment, eqLen := assembler.assemble(i)
+
+				if matcher.Match(&equipment, eqLen) {
+					localMatches++
+				}
+			}
+
+			if localMatches > 0 {
+				globalMatchingRows.Add(localMatches)
+			}
+		}(startIdx, endIdx)
+	}
+
+	wg.Wait()
+
+	return float64(globalMatchingRows.Load()) / float64(totalCombinations)
+}

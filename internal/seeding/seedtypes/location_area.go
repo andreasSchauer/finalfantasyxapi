@@ -1,0 +1,31 @@
+package seedtypes
+
+import (
+	"fmt"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+)
+
+type LocationArea struct {
+	Location    string `json:"location"`
+	Sublocation string `json:"sublocation"`
+	Area        string `json:"area"`
+	Version     *int32 `json:"version"`
+}
+
+func (la LocationArea) ToKeyFields() []any {
+	return []any{
+		la.Location,
+		la.Sublocation,
+		la.Area,
+		h.DerefOrNil(la.Version),
+	}
+}
+
+func (la LocationArea) String() string {
+	return fmt.Sprintf("location area with location: %s, sublocation: %s, area: '%s'", la.Location, la.Sublocation, h.NameToString(la.Area, la.Version, nil))
+}
+
+func (la LocationArea) GetLocationArea() LocationArea {
+	return la
+}

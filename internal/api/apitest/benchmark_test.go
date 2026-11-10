@@ -1,0 +1,30 @@
+package apitest
+
+import (
+	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/endpoints/dropchance"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
+)
+
+var benchMarkResult servicetypes.DropChanceResponse
+
+func BenchmarkHandleDropChance(b *testing.B) {
+	params := servicetypes.DropChanceParams{
+		Monster:           261,
+		PartyMembers:      []int32{1, 2, 3, 4, 5, 6, 7},
+		AutoAbilities:     []int32{31, 30},
+		OptionalAbilities: true,
+	}
+
+	b.ReportAllocs()
+	b.ResetTimer()
+
+	for b.Loop() {
+		res, err := dropchance.Handle(params)
+		if err != nil {
+			b.Fatalf("Calculation failed during benchmark: %v", err)
+		}
+		benchMarkResult = res
+	}
+}

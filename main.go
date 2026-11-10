@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/config"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/general/config"
 )
 
 func main() {

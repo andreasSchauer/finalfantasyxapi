@@ -1,0 +1,51 @@
+package seedtypes
+
+import (
+	"fmt"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+)
+
+type FMV struct {
+	ID                  int32        `json:"id"`
+	Name                string       `json:"name"`
+	Translation         *string      `json:"translation"`
+	CutsceneDescription string       `json:"cutscene_description"`
+	SongName            *string      `json:"music"`
+	LocationArea        LocationArea `json:"location_area"`
+	SongID              *int32       `json:"song_id"`
+	AreaID              int32        `json:"area_id"`
+}
+
+func (f FMV) ToHashFields() []any {
+	return []any{
+		fmt.Sprintf("%T", f),
+		f.Name,
+		h.DerefOrNil(f.Translation),
+		f.CutsceneDescription,
+		h.DerefOrNil(f.SongName),
+		h.DerefOrNil(f.SongID),
+		f.AreaID,
+	}
+}
+
+func (f FMV) ToKeyFields() []any {
+	return []any{
+		f.Name,
+	}
+}
+
+func (f FMV) GetID() int32 {
+	return f.ID
+}
+
+func (f FMV) String() string {
+	return fmt.Sprintf("fmv %s", f.Name)
+}
+
+func (f FMV) GetResParamsNamed() ResParamsNamed {
+	return ResParamsNamed{
+		ID:   f.ID,
+		Name: f.Name,
+	}
+}

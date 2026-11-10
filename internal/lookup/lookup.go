@@ -2,8 +2,8 @@
 package lookup
 
 import (
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seedtypes"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 var L Lookup

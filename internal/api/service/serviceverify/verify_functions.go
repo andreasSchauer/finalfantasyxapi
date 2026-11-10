@@ -1,0 +1,85 @@
+package serviceverify
+
+import (
+	"fmt"
+	"net/http"
+	"slices"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
+)
+
+type verifyFn[T any] func(ParamsVerifyer, T, ts.FieldName) (T, error)
+
+func vfEnum(v ParamsVerifyer, typedVal string, fieldName ts.FieldName) (string, error) {
+	doc := v.paramsRules[fieldName].Doc
+
+	if doc.EnumValues == nil {
+		return typedVal, nil
+	}
+
+	if !slices.Contains(doc.EnumValues, typedVal) {
+		return "", errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("value '%s' of field '%s' is not a valid enum value. allowed values: %s", typedVal, fieldName, h.FormatStringSlice(doc.EnumValues)), nil)
+	}
+
+	return typedVal, nil
+}
+
+func vfArray[T any](v ParamsVerifyer, arr []T, fieldName ts.FieldName) ([]T, error) {
+	if arr == nil {
+		return arr, errs.ErrNullArray
+	}
+
+	doc := v.paramsRules[fieldName].Doc
+
+	if len(arr) == 0 {
+		return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("empty array used for field '%s'. the use of empty arrays is not supported by this api. omit the field, or use 'null' instead", fieldName), nil)
+	}
+
+	if doc.MaxArrayLen == nil {
+		return arr, nil
+	}
+
+	if len(arr) > *doc.MaxArrayLen {
+		return nil, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("too many items in array of field '%s'. got: %d, maximum allowed: %d", fieldName, len(arr), *doc.MaxArrayLen), nil)
+	}
+
+	return arr, nil
+}
+
+func vfID(v ParamsVerifyer, val int32, fieldName ts.FieldName) (int32, error) {
+	doc := v.paramsRules[fieldName].Doc
+
+	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "id", false)
+}
+
+func vfInt(v ParamsVerifyer, val int32, fieldName ts.FieldName) (int32, error) {
+	doc := v.paramsRules[fieldName].Doc
+
+	return vfIntRange(val, doc.MinVal, doc.MaxVal, fieldName, "value", false)
+}
+
+func vfArrayChildID(v ParamsVerifyer, val int32, fieldName ts.FieldName) (int32, error) {
+	doc := v.paramsRules[fieldName].Doc
+
+	return vfIntRange(val, doc.ChildMinVal, doc.ChildMaxVal, fieldName, "id", true)
+}
+
+func vfIntRange(val int32, minVal, maxVal *int32, fieldName ts.FieldName, intType string, isArray bool) (int32, error) {
+	errStart := errs.GetFieldRangeErrStart(val, fieldName, intType, isArray)
+
+	if minVal != nil && maxVal != nil && (val < *minVal || val > *maxVal) {
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. allowed range: %d to %d", errStart, *minVal, *maxVal), nil)
+	}
+
+	if minVal != nil && val < *minVal {
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. lowest allowed value: %d", errStart, *minVal), nil)
+	}
+
+	if maxVal != nil && val > *maxVal {
+		return 0, errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("%s. highest allowed value: %d", errStart, *maxVal), nil)
+	}
+
+	return val, nil
+}

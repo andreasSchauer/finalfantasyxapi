@@ -1,0 +1,37 @@
+package seedtypes
+
+import (
+	"fmt"
+
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+)
+
+type FormationTriggerCommand struct {
+	ID int32 `json:"id"`
+	AbilityReference
+	TriggerCommandID int32    `json:"trigger_command_id"`
+	Condition        *string  `json:"condition"`
+	UseAmount        *int32   `json:"use_amount"`
+	Users            []string `json:"users"`
+}
+
+func (tc FormationTriggerCommand) ToHashFields() []any {
+	return []any{
+		fmt.Sprintf("%T", tc),
+		tc.TriggerCommandID,
+		h.DerefOrNil(tc.Condition),
+		h.DerefOrNil(tc.UseAmount),
+	}
+}
+
+func (tc FormationTriggerCommand) GetID() int32 {
+	return tc.ID
+}
+
+func (tc *FormationTriggerCommand) SetID(id int32) {
+	tc.ID = id
+}
+
+func (tc FormationTriggerCommand) String() string {
+	return fmt.Sprintf("formation trigger command with %s", tc.AbilityReference)
+}

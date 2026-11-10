@@ -1,0 +1,197 @@
+package apitest
+
+import (
+	"net/http"
+	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
+	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
+)
+
+func TestAlBhed(t *testing.T) {
+	t.Parallel()
+	requestURL := "/api/al-bhed"
+
+	tests := []expAlBhedResponse{
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid or corrupt payload in request body",
+				requestBody:    []byte(string("asjdasoi")),
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "field 'text' can't be empty",
+				requestBody: map[ts.FieldName]any{
+					ts.PfnDirection: "to-english",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "value 'bla' of field 'direction' is not a valid enum value. allowed values: 'to-al-bhed', 'to-english'",
+				requestBody: map[ts.FieldName]any{
+					ts.PfnText:      "father",
+					ts.PfnDirection: "bla",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "wrong format. all brackets must be closed",
+				requestBody: map[ts.FieldName]any{
+					ts.PfnText: "v[ath",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket",
+				requestBody: map[ts.FieldName]any{
+					ts.PfnText: "v]ath",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket",
+				requestBody: map[ts.FieldName]any{
+					ts.PfnText: "v[a[th",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "wrong format. all brackets must be closed",
+				requestBody: map[ts.FieldName]any{
+					ts.PfnText: "v[ath",
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusBadRequest,
+				expectedErr:    "invalid field: 'monster_id'",
+				requestBody: map[ts.FieldName]any{
+					ts.PfnMonsterID: 1,
+				},
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusOK,
+				requestBody: map[ts.FieldName]any{
+					ts.PfnText: "I am cool",
+				},
+			},
+			AlBhedResponse: servicetypes.AlBhedResponse{
+				TranslatedText: "E ys luum",
+				OriginalText:   "I am cool",
+				Direction:      "to-al-bhed",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusOK,
+				requestBody: map[ts.FieldName]any{
+					ts.PfnText: "father",
+				},
+			},
+			AlBhedResponse: servicetypes.AlBhedResponse{
+				TranslatedText: "vydran",
+				OriginalText:   "father",
+				Direction:      "to-al-bhed",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusOK,
+				requestBody: map[ts.FieldName]any{
+					ts.PfnText: "f[y]the[n]",
+				},
+			},
+			AlBhedResponse: servicetypes.AlBhedResponse{
+				TranslatedText: "vydran",
+				OriginalText:   "f[y]the[n]",
+				Direction:      "to-al-bhed",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusOK,
+				requestBody: map[ts.FieldName]any{
+					ts.PfnText: "f[Ydr]er",
+				},
+			},
+			AlBhedResponse: servicetypes.AlBhedResponse{
+				TranslatedText: "vYdran",
+				OriginalText:   "f[Ydr]er",
+				Direction:      "to-al-bhed",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusOK,
+				requestBody: map[ts.FieldName]any{
+					ts.PfnText:      "v[ath]an",
+					ts.PfnDirection: "to-english",
+				},
+			},
+			AlBhedResponse: servicetypes.AlBhedResponse{
+				TranslatedText: "father",
+				OriginalText:   "v[ath]an",
+				Direction:      "to-english",
+			},
+		},
+		{
+			testGeneral: testGeneral{
+				requestURL:     requestURL,
+				method:         http.MethodPost,
+				expectedStatus: http.StatusOK,
+				requestBody: map[ts.FieldName]any{
+					ts.PfnText: "!?,. 1234567890",
+				},
+			},
+			AlBhedResponse: servicetypes.AlBhedResponse{
+				TranslatedText: "!?,. 1234567890",
+				OriginalText:   "!?,. 1234567890",
+				Direction:      "to-al-bhed",
+			},
+		},
+	}
+
+	testServiceResponsesPost(t, tests, "AlBhed", testSrv.HandleAlBhedPost, compareAlBhedResponses)
+}
