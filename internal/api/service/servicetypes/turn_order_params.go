@@ -54,7 +54,7 @@ turnOrderMon
 - override those values based on overrides
 - do the other path where you can directly assign the three values
 - add the status
--
+- I could make some of the functions also methods of turnorderparams
 
 */
 
