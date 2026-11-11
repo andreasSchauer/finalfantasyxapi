@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveCharacters(r *http.Request, i handlerinput.Main[seedtypes.Character, apitypes.Character, apiresource.Named]) ([]int32, error) {
+func Characters(r *http.Request, i handlerinput.Main[seedtypes.Character, apitypes.Character, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

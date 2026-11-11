@@ -1,11 +1,11 @@
-package apiconv
+package apiconvert
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertSphereGrid(sg seedtypes.SphereGrid) apitypes.SphereGrid {
+func SphereGrid(sg seedtypes.SphereGrid) apitypes.SphereGrid {
 	return apitypes.SphereGrid{
 		StatTable:  sg.StatTable,
 		Lv1Locks:   sg.Lv1Locks,

@@ -23,15 +23,6 @@ func NewParamsVerifyer(paramsRules servicetypes.ParamsRules, userValues map[ts.F
 	}
 }
 
-func (v ParamsVerifyer) hasVal(fieldName ts.FieldName) bool {
-	jsonVal, ok := v.userValues[fieldName]
-	return ok && jsonVal != nil
-}
-
-func (v ParamsVerifyer) hasNoVal(fieldName ts.FieldName) bool {
-	return !v.hasVal(fieldName)
-}
-
 func (v ParamsVerifyer) CheckFields() error {
 	for fieldName := range v.userValues {
 		_, exists := v.paramsRules[fieldName]
@@ -52,6 +43,15 @@ func (v ParamsVerifyer) newFieldVerifyer[T any](val T, fieldName ts.FieldName) f
 		paramsRules:  v.paramsRules,
 		userValues:   v.userValues,
 	}
+}
+
+func (v ParamsVerifyer) hasVal(fieldName ts.FieldName) bool {
+	jsonVal, ok := v.userValues[fieldName]
+	return ok && jsonVal != nil
+}
+
+func (v ParamsVerifyer) hasNoVal(fieldName ts.FieldName) bool {
+	return !v.hasVal(fieldName)
 }
 
 func (v ParamsVerifyer) field[T any](val T, fieldName ts.FieldName) (T, error) {

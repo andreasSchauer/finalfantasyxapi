@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/general/config"
@@ -16,7 +16,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named], id int32) (apitypes.Song, error) {
+func Song(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named], id int32) (apitypes.Song, error) {
 	song, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Song{}, err
@@ -45,8 +45,8 @@ func GetSong(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song,
 		MusicSphereID:        song.MusicSphereID,
 		OstDisc:              song.OSTDisc,
 		OstTrackNumber:       song.OSTTrackNumber,
-		BackgroundMusic:      ah.ConvertObjSlice(song.BackgroundMusic, apiconv.ConvertBackgroundMusic),
-		Cues:                 ah.ConvertObjSlice(song.Cues, apiconv.ConvertCue),
+		BackgroundMusic:      ah.ConvertObjSlice(song.BackgroundMusic, apiconvert.BackgroundMusic),
+		Cues:                 ah.ConvertObjSlice(song.Cues, apiconvert.Cue),
 		BossFights:           rel.BossFights,
 		FMVs:                 rel.FMVs,
 	}

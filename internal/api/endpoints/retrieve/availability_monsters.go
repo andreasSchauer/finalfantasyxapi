@@ -30,9 +30,9 @@ func FilterAvlMonsters(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Availability:   avlParams.Availabilities,
 		IsRepeatable:   avlParams.IsRepeatable,
 		PreAirship:     avlParams.PreAirship,
-		AvlType:        locContext.AvlType,
-		LocContextID:   locContext.ID,
-		LocContextType: locContext.Type,
+		AvlType:        locContext.avlType,
+		LocContextID:   locContext.id,
+		LocContextType: locContext.locCtxType,
 	})
 	if err != nil {
 		return nil, i.ErrorAvl(err)
@@ -62,9 +62,9 @@ func FilterAvlMonsterFormations(r *http.Request, inputIDs []int32) ([]int32, err
 		Availability:   avlParams.Availabilities,
 		IsRepeatable:   avlParams.IsRepeatable,
 		PreAirship:     avlParams.PreAirship,
-		AvlType:        locContext.AvlType,
-		LocContextID:   locContext.ID,
-		LocContextType: locContext.Type,
+		AvlType:        locContext.avlType,
+		LocContextID:   locContext.id,
+		LocContextType: locContext.locCtxType,
 	})
 	if err != nil {
 		return nil, i.ErrorAvl(err)

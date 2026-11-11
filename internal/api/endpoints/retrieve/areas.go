@@ -13,7 +13,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveAreas(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area, apiresource.Area]) ([]int32, error) {
+func Areas(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area, apiresource.Area]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
@@ -23,7 +23,7 @@ func RetrieveAreas(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes
 		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationAreaIDs),
 		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationAreaIDs),
 		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreaIDsWithMonster),
-		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, GetAreasByItem),
+		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getAreasByItem),
 		i.QueryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, config.Cfg.DB.GetAreaIDsWithKeyItem),
 		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetAreasByMonster),
 		i.QueryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, config.Cfg.DB.GetAreaIDsWithAutoAbility),

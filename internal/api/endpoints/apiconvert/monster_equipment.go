@@ -1,4 +1,4 @@
-package apiconv
+package apiconvert
 
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertMonsterEquipment(equipment seedtypes.MonsterEquipment) apitypes.MonsterEquipment {
+func MonsterEquipment(equipment seedtypes.MonsterEquipment) apitypes.MonsterEquipment {
 	monEquipment := apitypes.MonsterEquipment{
 		DropChance:        equipment.DropChance,
 		Power:             equipment.Power,

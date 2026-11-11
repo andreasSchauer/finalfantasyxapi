@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -16,7 +16,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetEquipmentTable(r *http.Request, i handlerinput.Main[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.Unnamed], id int32) (apitypes.EquipmentTable, error) {
+func EquipmentTable(r *http.Request, i handlerinput.Main[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.Unnamed], id int32) (apitypes.EquipmentTable, error) {
 	table, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.EquipmentTable{}, err
@@ -35,9 +35,9 @@ func GetEquipmentTable(r *http.Request, i handlerinput.Main[seedtypes.EquipmentT
 		Priority:                table.Priority,
 		CelestialWeapon:         rel.CelestialWeapon,
 		RequiredAutoAbilities:   handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, table.RequiredAutoAbilities),
-		SelectableAutoAbilities: ah.ConvertObjSlice(table.SelectableAutoAbilities, apiconv.ConvertAbilityPool),
+		SelectableAutoAbilities: ah.ConvertObjSlice(table.SelectableAutoAbilities, apiconvert.AbilityPool),
 		RequiredSlots:           table.RequiredSlots,
-		Equipment:               ah.ConvertObjSlice(table.EquipmentNames, apiconv.ConvertEquipmentName),
+		Equipment:               ah.ConvertObjSlice(table.EquipmentNames, apiconvert.EquipmentName),
 	}
 
 	return response, nil

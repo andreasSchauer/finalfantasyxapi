@@ -13,7 +13,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveSublocations(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, apitypes.Sublocation, apiresource.Named]) ([]int32, error) {
+func Sublocations(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, apitypes.Sublocation, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func RetrieveSublocations(r *http.Request, i handlerinput.Main[seedtypes.Subloca
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetLocationSublocationIDs),
 		i.QueryID(r, ids, ts.QpnMonster, lookup.L.Monsters, config.Cfg.DB.GetSublocationIDsWithMonster),
-		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, GetSublocationsByItem),
+		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, getSublocationsByItem),
 		i.QueryID(r, ids, ts.QpnKeyItem, lookup.L.KeyItems, config.Cfg.DB.GetSublocationIDsWithKeyItem),
 		i.QueryID(r, ids, ts.QpnAutoAbility, lookup.L.AutoAbilities, config.Cfg.DB.GetSublocationIDsWithAutoAbility),
 		i.QueryBool2(r, ids, ts.QpnCharacters, config.Cfg.DB.GetSublocationIDsWithCharacters),

@@ -14,7 +14,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetModifier(r *http.Request, i handlerinput.Main[seedtypes.Modifier, apitypes.Modifier, apiresource.Named], id int32) (apitypes.Modifier, error) {
+func Modifier(r *http.Request, i handlerinput.Main[seedtypes.Modifier, apitypes.Modifier, apiresource.Named], id int32) (apitypes.Modifier, error) {
 	modifier, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Modifier{}, err

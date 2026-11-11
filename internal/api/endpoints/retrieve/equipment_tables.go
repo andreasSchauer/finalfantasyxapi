@@ -13,7 +13,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveEquipmentTables(r *http.Request, i handlerinput.Main[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.Unnamed]) ([]int32, error) {
+func EquipmentTables(r *http.Request, i handlerinput.Main[seedtypes.EquipmentTable, apitypes.EquipmentTable, apiresource.Unnamed]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

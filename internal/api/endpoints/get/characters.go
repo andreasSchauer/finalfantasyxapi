@@ -7,7 +7,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
@@ -20,7 +20,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetCharacter(r *http.Request, i handlerinput.Main[seedtypes.Character, apitypes.Character, apiresource.Named], id int32) (apitypes.Character, error) {
+func Character(r *http.Request, i handlerinput.Main[seedtypes.Character, apitypes.Character, apiresource.Named], id int32) (apitypes.Character, error) {
 	character, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Character{}, err
@@ -51,7 +51,7 @@ func GetCharacter(r *http.Request, i handlerinput.Main[seedtypes.Character, apit
 		OverdriveModes:         rel.OverdriveModes,
 	}
 
-	return CompleteCharacterResponse(r, response)
+	return completeCharacterResponse(r, response)
 }
 
 func getCharacterRelationships(r *http.Request, char seedtypes.Character) (apitypes.Character, error) {
@@ -87,14 +87,14 @@ func getCharacterRelationships(r *http.Request, char seedtypes.Character) (apity
 	if !char.IsStoryBased {
 		g.Go(func() error {
 			var err error
-			rel.StdSphereGrid = ah.ConvertObjPtr(char.StdSphereGrid, apiconv.ConvertSphereGrid)
+			rel.StdSphereGrid = ah.ConvertObjPtr(char.StdSphereGrid, apiconvert.SphereGrid)
 			rel.StdSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterSgAbilityIDs)
 			return err
 		})
 
 		g.Go(func() error {
 			var err error
-			rel.ExpSphereGrid = ah.ConvertObjPtr(char.ExpSphereGrid, apiconv.ConvertSphereGrid)
+			rel.ExpSphereGrid = ah.ConvertObjPtr(char.ExpSphereGrid, apiconvert.SphereGrid)
 			rel.ExpSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterEgAbilityIDs)
 			return err
 		})
@@ -150,7 +150,7 @@ func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.Resource
 	return modeAmount, nil
 }
 
-func CompleteCharacterResponse(r *http.Request, char apitypes.Character) (apitypes.Character, error) {
+func completeCharacterResponse(r *http.Request, char apitypes.Character) (apitypes.Character, error) {
 	char, err := applyOsgStats(r, char)
 	if err != nil {
 		return apitypes.Character{}, err

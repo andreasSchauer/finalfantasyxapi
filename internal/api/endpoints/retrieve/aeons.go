@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveAeons(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named]) ([]int32, error) {
+func Aeons(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

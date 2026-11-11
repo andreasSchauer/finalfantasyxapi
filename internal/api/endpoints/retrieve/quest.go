@@ -12,7 +12,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveQuests(r *http.Request, i handlerinput.Main[seedtypes.Quest, apitypes.Quest, apiresource.Quest]) ([]int32, error) {
+func Quests(r *http.Request, i handlerinput.Main[seedtypes.Quest, apitypes.Quest, apiresource.Quest]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

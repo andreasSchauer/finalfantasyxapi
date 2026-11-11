@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
@@ -15,7 +15,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetMiscAbility(r *http.Request, i handlerinput.Main[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.Named], id int32) (apitypes.MiscAbility, error) {
+func MiscAbility(r *http.Request, i handlerinput.Main[seedtypes.MiscAbility, apitypes.MiscAbility, apiresource.Named], id int32) (apitypes.MiscAbility, error) {
 	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.MiscAbility{}, err
@@ -37,10 +37,10 @@ func GetMiscAbility(r *http.Request, i handlerinput.Main[seedtypes.MiscAbility, 
 		Submenu:            handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, ability.Submenu, nil),
 		OpenSubmenu:        handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:             ability.Cursor,
-		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconvert.BattleInteraction),
 	}
 
-	battleInteractions, err := ApplyUser(r, i, response, ts.QpnAbilityUser)
+	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.MiscAbility{}, err
 	}

@@ -6,14 +6,14 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetAeonCommand(r *http.Request, i handlerinput.Main[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.Named], id int32) (apitypes.AeonCommand, error) {
+func AeonCommand(r *http.Request, i handlerinput.Main[seedtypes.AeonCommand, apitypes.AeonCommand, apiresource.Named], id int32) (apitypes.AeonCommand, error) {
 	command, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.AeonCommand{}, err
@@ -30,7 +30,7 @@ func GetAeonCommand(r *http.Request, i handlerinput.Main[seedtypes.AeonCommand, 
 		User:              rel.User,
 		Topmenu:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Topmenus, command.Topmenu, nil),
 		OpenSubmenu:       handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, command.OpenSubmenu, nil),
-		PossibleAbilities: ah.ConvertObjSlice(command.PossibleAbilities, apiconv.ConvertPossibleAbilityList),
+		PossibleAbilities: ah.ConvertObjSlice(command.PossibleAbilities, apiconvert.PossibleAbilityList),
 	}
 
 	return response, nil

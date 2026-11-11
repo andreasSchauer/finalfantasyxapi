@@ -14,9 +14,9 @@ import (
 )
 
 type locContextParams struct {
-	AvlType string
-	ID      sql.NullInt32
-	Type    sql.NullString
+	avlType    string
+	id         sql.NullInt32
+	locCtxType sql.NullString
 }
 
 func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A]) (locContextParams, error) {
@@ -61,9 +61,9 @@ func getLocContextParams[T seedtypes.Lookupable, R any, A apiresource.APIResourc
 	}
 
 	params := locContextParams{
-		AvlType: string(avlType),
-		ID:      locContextID,
-		Type:    h.GetNullString(locCtxTypePtr),
+		avlType:    string(avlType),
+		id:         locContextID,
+		locCtxType: h.GetNullString(locCtxTypePtr),
 	}
 
 	return params, nil

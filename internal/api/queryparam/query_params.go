@@ -13,7 +13,7 @@ func GetDefaultParams() []QueryParam {
 			Description: "Sets the amount of displayed entries in a list response. If not set manually, the default is 20. The value 'max' can also be used to forgo pagination of lists entirely.",
 			Type:        ts.QptInt,
 			ParamUse:    PuList,
-			SpecialInputs: []SpecialQueryInput{
+			SpecialInputs: []specialQueryInput{
 				{
 					Key: ts.QsvMax,
 					Val: 9999,
@@ -1035,7 +1035,7 @@ func GetMonstersParams() []QueryParam {
 			ParamUse:        PuList,
 			RequiresAll:     []ts.QueryParamName{ts.QpnStatusResists},
 			AllowedIntRange: []int{1, 254},
-			SpecialInputs: []SpecialQueryInput{
+			SpecialInputs: []specialQueryInput{
 				{
 					Key: ts.QsvImmune,
 					Val: 254,
@@ -2604,7 +2604,7 @@ func GetStatusConditionsParams() []QueryParam {
 			Type:            ts.QptInt,
 			ParamUse:        PuSingle,
 			AllowedIntRange: []int{1, 255},
-			SpecialInputs: []SpecialQueryInput{
+			SpecialInputs: []specialQueryInput{
 				{
 					Key: ts.QsvInfinite,
 					Val: 254,
@@ -2622,7 +2622,7 @@ func GetStatusConditionsParams() []QueryParam {
 			Type:            ts.QptInt,
 			ParamUse:        PuSingle,
 			AllowedIntRange: []int{1, 255},
-			SpecialInputs: []SpecialQueryInput{
+			SpecialInputs: []specialQueryInput{
 				{
 					Key: ts.QsvInfinite,
 					Val: 254,
@@ -2640,7 +2640,7 @@ func GetStatusConditionsParams() []QueryParam {
 			Type:            ts.QptInt,
 			ParamUse:        PuSingle,
 			AllowedIntRange: []int{1, 254},
-			SpecialInputs: []SpecialQueryInput{
+			SpecialInputs: []specialQueryInput{
 				{
 					Key: ts.QsvImmune,
 					Val: 254,

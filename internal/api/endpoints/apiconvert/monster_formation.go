@@ -1,4 +1,4 @@
-package apiconv
+package apiconvert
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertEncounterArea(ea seedtypes.EncounterArea) apitypes.EncounterArea {
+func EncounterArea(ea seedtypes.EncounterArea) apitypes.EncounterArea {
 	return apitypes.EncounterArea{
 		Area:          handlerinput.LocAreaToAreaAPIResource(apilookups.E.Areas, ea.LocationArea),
 		Specification: ea.Specification,
@@ -15,7 +15,7 @@ func ConvertEncounterArea(ea seedtypes.EncounterArea) apitypes.EncounterArea {
 	}
 }
 
-func ConvertFormationTriggerCommand(tc seedtypes.FormationTriggerCommand) apitypes.FormationTriggerCommand {
+func FormationTriggerCommand(tc seedtypes.FormationTriggerCommand) apitypes.FormationTriggerCommand {
 	return apitypes.FormationTriggerCommand{
 		Ability:   handlerinput.NameToNamedAPIResource(apilookups.E.TriggerCommands, tc.Name, tc.Version),
 		Condition: tc.Condition,
@@ -24,7 +24,7 @@ func ConvertFormationTriggerCommand(tc seedtypes.FormationTriggerCommand) apityp
 	}
 }
 
-func ConvertFormationBossSong(bossMusic seedtypes.FormationBossSong) apitypes.FormationBossSong {
+func FormationBossSong(bossMusic seedtypes.FormationBossSong) apitypes.FormationBossSong {
 	return apitypes.FormationBossSong{
 		Song:             handlerinput.NameToNamedAPIResource(apilookups.E.Songs, bossMusic.Song, nil),
 		CelebrateVictory: bossMusic.CelebrateVictory,

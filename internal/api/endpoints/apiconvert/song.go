@@ -1,4 +1,4 @@
-package apiconv
+package apiconvert
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertBackgroundMusic(bm seedtypes.BackgroundMusic) apitypes.BackgroundMusic {
+func BackgroundMusic(bm seedtypes.BackgroundMusic) apitypes.BackgroundMusic {
 	return apitypes.BackgroundMusic{
 		Condition:              bm.Condition,
 		ReplacesEncounterMusic: bm.ReplacesEncounterMusic,
@@ -16,7 +16,7 @@ func ConvertBackgroundMusic(bm seedtypes.BackgroundMusic) apitypes.BackgroundMus
 	}
 }
 
-func ConvertCue(cue seedtypes.Cue) apitypes.Cue {
+func Cue(cue seedtypes.Cue) apitypes.Cue {
 	var triggerAreaPtr *apiresource.Area
 
 	if cue.TriggerLocationArea != nil {

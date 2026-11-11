@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/general/config"
@@ -17,7 +17,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named], id int32) (apitypes.Aeon, error) {
+func Aeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, apiresource.Named], id int32) (apitypes.Aeon, error) {
 	aeon, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Aeon{}, err
@@ -39,18 +39,18 @@ func GetAeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon,
 		PhysAtkDmgConstant:     aeon.PhysAtkDmgConstant,
 		PhysAtkRange:           aeon.PhysAtkRange,
 		PhysAtkShatterRate:     aeon.PhysAtkShatterRate,
-		PhysAtkAccuracy:        ah.ConvertObjPtr(aeon.PhysAtkAccuracy, apiconv.ConvertAccuracy),
+		PhysAtkAccuracy:        ah.ConvertObjPtr(aeon.PhysAtkAccuracy, apiconvert.Accuracy),
 		CelestialWeapon:        rel.CelestialWeapon,
 		CharacterClasses:       rel.CharacterClasses,
 		BaseStats:              th.GetAeonBaseStats(aeon),
 		AeonCommands:           rel.AeonCommands,
 		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
 		Overdrives:             rel.Overdrives,
-		WeaponAbilities:        ah.ConvertObjSlice(aeon.Weapon, apiconv.ConvertAeonEquipment),
-		ArmorAbilities:         ah.ConvertObjSlice(aeon.Armor, apiconv.ConvertAeonEquipment),
+		WeaponAbilities:        ah.ConvertObjSlice(aeon.Weapon, apiconvert.AeonEquipment),
+		ArmorAbilities:         ah.ConvertObjSlice(aeon.Armor, apiconvert.AeonEquipment),
 	}
 
-	return CompleteAeonResponse(r, response)
+	return completeAeonResponse(r, response)
 }
 
 func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, error) {
@@ -95,7 +95,7 @@ func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, 
 	return rel, nil
 }
 
-func CompleteAeonResponse(r *http.Request, aeon apitypes.Aeon) (apitypes.Aeon, error) {
+func completeAeonResponse(r *http.Request, aeon apitypes.Aeon) (apitypes.Aeon, error) {
 	aeon, err := applyAeonStats(r, aeon, nil)
 	if err != nil {
 		return apitypes.Aeon{}, err

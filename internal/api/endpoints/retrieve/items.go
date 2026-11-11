@@ -15,7 +15,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveItems(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes.Item, apiresource.Named]) ([]int32, error) {
+func Items(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes.Item, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
@@ -26,8 +26,8 @@ func RetrieveItems(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes
 		i.QueryBool2(r, ids, ts.QpnHasAbility, config.Cfg.DB.GetItemIDsWithAbility),
 		i.QueryNameID(r, ids, ts.QpnRelatedStat, apilookups.E.Stats.ResTypeSingle, lookup.L.Stats, config.Cfg.DB.GetItemIDsByRelatedStat),
 		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetItemIDsByMethods),
-		i.QueryIDWrapper(r, ids, ts.QpnLocation, apilookups.E.Locations.ObjLookup, GetItemsByLocation),
-		i.QueryIDWrapper(r, ids, ts.QpnSublocation, apilookups.E.Sublocations.ObjLookup, GetItemsBySublocation),
-		i.QueryIDWrapper(r, ids, ts.QpnArea, apilookups.E.Areas.ObjLookup, GetItemsByArea),
+		i.QueryIDWrapper(r, ids, ts.QpnLocation, apilookups.E.Locations.ObjLookup, getItemsByLocation),
+		i.QueryIDWrapper(r, ids, ts.QpnSublocation, apilookups.E.Sublocations.ObjLookup, getItemsBySublocation),
+		i.QueryIDWrapper(r, ids, ts.QpnArea, apilookups.E.Areas.ObjLookup, getItemsByArea),
 	})
 }

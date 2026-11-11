@@ -13,7 +13,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveKeyItems(r *http.Request, i handlerinput.Main[seedtypes.KeyItem, apitypes.KeyItem, apiresource.Named]) ([]int32, error) {
+func KeyItems(r *http.Request, i handlerinput.Main[seedtypes.KeyItem, apitypes.KeyItem, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

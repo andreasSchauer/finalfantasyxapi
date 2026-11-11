@@ -18,7 +18,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetMonstersByElemResists(r *http.Request, ctx context.Context, query string, queryParam queryparam.QueryParam) ([]int32, error) {
+func getMonstersByElemResists(r *http.Request, ctx context.Context, query string, queryParam queryparam.QueryParam) ([]int32, error) {
 	ids, err := getElemResistIDs(query, queryParam)
 	if err != nil {
 		return nil, err

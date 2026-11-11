@@ -12,15 +12,15 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-type StatusInteractionQueries struct {
-	Abilities        handlerinput.DBQueryIntMany
-	StatusConditions handlerinput.DBQueryIntMany
+type statusInteractionQueries struct {
+	abilities        handlerinput.DBQueryIntMany
+	statusConditions handlerinput.DBQueryIntMany
 }
 
-func getStatusInfliction(ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*apitypes.StatusInfliction, error) {
+func getStatusInfliction(ctx context.Context, status seedtypes.StatusCondition, queries statusInteractionQueries) (*apitypes.StatusInfliction, error) {
 	var statusInfliction apitypes.StatusInfliction
 
-	abilities, err := apilookups.E.Abilities.DBGetRelations(ctx, status, queries.Abilities)
+	abilities, err := apilookups.E.Abilities.DBGetRelations(ctx, status, queries.abilities)
 	if err != nil {
 		return nil, err
 	}
@@ -33,14 +33,14 @@ func getStatusInfliction(ctx context.Context, status seedtypes.StatusCondition, 
 	return &statusInfliction, nil
 }
 
-func getStatusRemoval(ctx context.Context, status seedtypes.StatusCondition, queries StatusInteractionQueries) (*apitypes.StatusRemoval, error) {
-	abilities, err := apilookups.E.Abilities.DBGetRelations(ctx, status, queries.Abilities)
+func getStatusRemoval(ctx context.Context, status seedtypes.StatusCondition, queries statusInteractionQueries) (*apitypes.StatusRemoval, error) {
+	abilities, err := apilookups.E.Abilities.DBGetRelations(ctx, status, queries.abilities)
 	if err != nil {
 		return nil, err
 	}
 	statusRemoval := populateStatusRemoval(abilities)
 
-	statusRemoval.StatusConditions, err = apilookups.E.StatusConditions.DBGetRelations(ctx, status, queries.StatusConditions)
+	statusRemoval.StatusConditions, err = apilookups.E.StatusConditions.DBGetRelations(ctx, status, queries.statusConditions)
 	if err != nil {
 		return nil, err
 	}

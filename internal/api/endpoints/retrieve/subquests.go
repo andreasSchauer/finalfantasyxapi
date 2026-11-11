@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveSubquests(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest]) ([]int32, error) {
+func Subquests(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

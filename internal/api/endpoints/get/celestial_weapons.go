@@ -15,7 +15,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetCelestialWeapon(r *http.Request, i handlerinput.Main[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.Named], id int32) (apitypes.CelestialWeapon, error) {
+func CelestialWeapon(r *http.Request, i handlerinput.Main[seedtypes.CelestialWeapon, apitypes.CelestialWeapon, apiresource.Named], id int32) (apitypes.CelestialWeapon, error) {
 	celestialWeapon, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.CelestialWeapon{}, err

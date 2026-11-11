@@ -9,6 +9,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveStats(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat, apiresource.Named]) ([]int32, error) {
+func Stats(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat, apiresource.Named]) ([]int32, error) {
 	return i.VerifyQueriesRetrieve(r)
 }

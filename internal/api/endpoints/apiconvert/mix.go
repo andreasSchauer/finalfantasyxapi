@@ -1,4 +1,4 @@
-package apiconv
+package apiconvert
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertMixCombination(mc seedtypes.MixCombination) apitypes.MixCombination {
+func MixCombination(mc seedtypes.MixCombination) apitypes.MixCombination {
 	return apitypes.MixCombination{
 		FirstItem:  handlerinput.NameToNamedAPIResource(apilookups.E.Items, mc.FirstItem, nil),
 		SecondItem: handlerinput.NameToNamedAPIResource(apilookups.E.Items, mc.SecondItem, nil),

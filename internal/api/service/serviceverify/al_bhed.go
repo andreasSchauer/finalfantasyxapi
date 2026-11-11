@@ -5,7 +5,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-func VerifyAlBhedParams(v ParamsVerifyer, params servicetypes.AlBhedParams) (servicetypes.AlBhedParams, error) {
+func AlBhedParams(v ParamsVerifyer, params servicetypes.AlBhedParams) (servicetypes.AlBhedParams, error) {
 	var err error
 
 	params.Text, err = v.string(params.Text, ts.PfnText)

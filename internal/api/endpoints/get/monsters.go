@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"golang.org/x/sync/errgroup"
@@ -18,7 +18,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetMonster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes.Monster, apiresource.Named], id int32) (apitypes.Monster, error) {
+func Monster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes.Monster, apiresource.Named], id int32) (apitypes.Monster, error) {
 	monster, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Monster{}, err
@@ -64,22 +64,22 @@ func GetMonster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes
 		Areas:                rel.Areas,
 		Formations:           rel.Formations,
 		BaseStats:            apilookups.E.Stats.ToResAmtType(monster.BaseStats, th.NewBaseStat),
-		Items:                ah.ConvertObjPtr(monster.Items, apiconv.ConvertMonsterItems),
-		Equipment:            ah.ConvertObjPtr(monster.Equipment, apiconv.ConvertMonsterEquipment),
+		Items:                ah.ConvertObjPtr(monster.Items, apiconvert.MonsterItems),
+		Equipment:            ah.ConvertObjPtr(monster.Equipment, apiconvert.MonsterEquipment),
 		ElemResists:          rel.ElemResists,
 		StatusImmunities:     handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, monster.StatusImmunities),
 		StatusResists:        apilookups.E.StatusConditions.ToResAmtType(monster.StatusResists, th.NewStatusResist),
-		Abilities:            ah.ConvertObjSlice(monster.Abilities, apiconv.ConvertMonsterAbility),
+		Abilities:            ah.ConvertObjSlice(monster.Abilities, apiconvert.MonsterAbility),
 		AlteredStates:        rel.AlteredStates,
 	}
 
-	return CompleteMonsterResponse(r, response)
+	return completeMonsterResponse(r, response)
 }
 
 func getMonsterRelationships(r *http.Request, monster seedtypes.Monster) (apitypes.Monster, error) {
 	rel := apitypes.Monster{
-		ElemResists:   GetMonsterElemResists(monster.ElemResists),
-		AlteredStates: GetMonsterAlteredStates(r, monster),
+		ElemResists:   MonsterElemResists(monster.ElemResists),
+		AlteredStates: MonsterAlteredStates(r, monster),
 	}
 
 	g, ctx := errgroup.WithContext(r.Context())
@@ -109,7 +109,7 @@ func getMonsterRelationships(r *http.Request, monster seedtypes.Monster) (apityp
 	return rel, nil
 }
 
-func CompleteMonsterResponse(r *http.Request, mon apitypes.Monster) (apitypes.Monster, error) {
+func completeMonsterResponse(r *http.Request, mon apitypes.Monster) (apitypes.Monster, error) {
 	mon, err := applyAlteredStateFromQuery(r, mon, ts.QpnAlteredState)
 	if err != nil {
 		return apitypes.Monster{}, err
@@ -152,7 +152,7 @@ func CompleteMonsterResponse(r *http.Request, mon apitypes.Monster) (apitypes.Mo
 	return mon, nil
 }
 
-func GetMonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.ElementalResist {
+func MonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.ElementalResist {
 	elemResists := th.NamesToElemResists(resists)
 	elemResistMap := handlerinput.GetResourceMap(elemResists)
 

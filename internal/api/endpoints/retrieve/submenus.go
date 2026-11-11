@@ -13,7 +13,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveSubmenus(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes.Submenu, apiresource.Named]) ([]int32, error) {
+func Submenus(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes.Submenu, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
@@ -15,7 +15,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func GetProperty(r *http.Request, i handlerinput.Main[seedtypes.Property, apitypes.Property, apiresource.Named], id int32) (apitypes.Property, error) {
+func Property(r *http.Request, i handlerinput.Main[seedtypes.Property, apitypes.Property, apiresource.Named], id int32) (apitypes.Property, error) {
 	property, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Property{}, err
@@ -32,7 +32,7 @@ func GetProperty(r *http.Request, i handlerinput.Main[seedtypes.Property, apityp
 		Effect:         property.Effect,
 		NullifyArmored: property.NullifyArmored,
 		RelatedStats:   handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, property.RelatedStats),
-		ModifierChange: ah.ConvertObjPtr(property.ModifierChange, apiconv.ConvertModifierChange),
+		ModifierChange: ah.ConvertObjPtr(property.ModifierChange, apiconvert.ModifierChange),
 		AutoAbilities:  rel.AutoAbilities,
 		Monsters:       rel.Monsters,
 	}

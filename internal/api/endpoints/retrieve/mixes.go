@@ -15,7 +15,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveMixes(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named]) ([]int32, error) {
+func Mixes(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
@@ -23,6 +23,6 @@ func RetrieveMixes(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.
 
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnumList(r, enums.T.MixCategory, ids, ts.QpnCategory, config.Cfg.DB.GetMixIDsByCategory),
-		i.QueryIDWrapper(r, ids, ts.QpnReqItem, lookup.L.Items, GetMixesByItem),
+		i.QueryIDWrapper(r, ids, ts.QpnReqItem, lookup.L.Items, getMixesByItem),
 	})
 }

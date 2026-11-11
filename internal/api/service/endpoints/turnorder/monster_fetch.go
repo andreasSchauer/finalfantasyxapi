@@ -66,7 +66,7 @@ func getFirstTurnAglTier(monID int32) *seedtypes.AgilityTier {
 	baseStats := altState.Alts[0].BaseStats
 
 	aglBS := th.GetBaseStat("agility", baseStats)
-	tier := GetTierByAgility(aglBS.Value)
+	tier := getTierByAgility(aglBS.Value)
 
 	return &tier
 }

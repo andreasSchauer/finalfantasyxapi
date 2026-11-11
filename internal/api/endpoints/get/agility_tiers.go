@@ -5,14 +5,14 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetAgilityTier(r *http.Request, i handlerinput.Main[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.Unnamed], id int32) (apitypes.AgilityTier, error) {
+func AgilityTier(r *http.Request, i handlerinput.Main[seedtypes.AgilityTier, apitypes.AgilityTier, apiresource.Unnamed], id int32) (apitypes.AgilityTier, error) {
 	agilityTier, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.AgilityTier{}, err
@@ -26,7 +26,7 @@ func GetAgilityTier(r *http.Request, i handlerinput.Main[seedtypes.AgilityTier, 
 		MonMinICV:   agilityTier.MonsterMinICV,
 		MonMaxICV:   agilityTier.MonsterMaxICV,
 		CharMaxICV:  agilityTier.CharacterMaxICV,
-		CharMinICVs: ah.ConvertObjSlice(agilityTier.CharacterMinICVs, apiconv.ConvertAgilitySubtier),
+		CharMinICVs: ah.ConvertObjSlice(agilityTier.CharacterMinICVs, apiconvert.AgilitySubtier),
 	}
 
 	return response, nil

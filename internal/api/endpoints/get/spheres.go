@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 
@@ -14,7 +14,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetSphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.Sphere, apiresource.Named], id int32) (apitypes.Sphere, error) {
+func Sphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.Sphere, apiresource.Named], id int32) (apitypes.Sphere, error) {
 	sphere, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Sphere{}, err
@@ -37,7 +37,7 @@ func GetSphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.S
 		TargetNodePosition: sphere.TargetNodePosition,
 		TargetNodeState:    sphere.TargetNodeState,
 		TargetableNodes:    sphere.TargetableNodes,
-		CreatedNode:        ah.ConvertObjPtr(sphere.CreatedNode, apiconv.ConvertCreatedNode),
+		CreatedNode:        ah.ConvertObjPtr(sphere.CreatedNode, apiconvert.CreatedNode),
 		Monsters:           rel.Monsters,
 		Treasures:          rel.Treasures,
 		Shops:              rel.Shops,

@@ -8,7 +8,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
@@ -22,7 +22,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func GetEquipment(r *http.Request, i handlerinput.Main[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.Named], id int32) (apitypes.EquipmentName, error) {
+func Equipment(r *http.Request, i handlerinput.Main[seedtypes.EquipmentName, apitypes.EquipmentName, apiresource.Named], id int32) (apitypes.EquipmentName, error) {
 	equipment, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.EquipmentName{}, err
@@ -90,7 +90,7 @@ func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentNam
 		rel.Priority = table.Priority
 		rel.RequiredSlots = table.RequiredSlots
 		rel.RequiredAutoAbilities = handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, table.RequiredAutoAbilities)
-		rel.SelectableAutoAbilities = ah.ConvertObjSlice(table.SelectableAutoAbilities, apiconv.ConvertAbilityPool)
+		rel.SelectableAutoAbilities = ah.ConvertObjSlice(table.SelectableAutoAbilities, apiconvert.AbilityPool)
 		return nil
 	})
 

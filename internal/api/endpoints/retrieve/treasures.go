@@ -14,7 +14,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveTreasures(r *http.Request, i handlerinput.Main[seedtypes.Treasure, apitypes.Treasure, apiresource.Unnamed]) ([]int32, error) {
+func Treasures(r *http.Request, i handlerinput.Main[seedtypes.Treasure, apitypes.Treasure, apiresource.Unnamed]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
@@ -25,7 +25,7 @@ func RetrieveTreasures(r *http.Request, i handlerinput.Main[seedtypes.Treasure, 
 		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetSublocationTreasureIDs),
 		i.QueryID(r, ids, ts.QpnArea, lookup.L.Areas, config.Cfg.DB.GetAreaTreasureIDs),
 		i.QueryID(r, ids, ts.QpnItem, lookup.L.Items, config.Cfg.DB.GetTreasureIDsByItem),
-		i.QueryJoined(r, ids, []ts.QueryParamName{ts.QpnAutoAbility, ts.QpnEmptySlots, ts.QpnCharacter}, FilterTreasuresEquipment),
+		i.QueryJoined(r, ids, []ts.QueryParamName{ts.QpnAutoAbility, ts.QpnEmptySlots, ts.QpnCharacter}, filterTreasuresEquipment),
 		i.QueryBool(r, ids, ts.QpnAnima, config.Cfg.DB.GetTreasureIDsByIsAnimaTreasure),
 		i.QueryEnum(r, enums.T.LootType, ids, ts.QpnLootType, config.Cfg.DB.GetTreasureIDsByLootType),
 		i.QueryEnum(r, enums.T.TreasureType, ids, ts.QpnTreasureType, config.Cfg.DB.GetTreasureIDsByTreasureType),

@@ -13,7 +13,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveSongs(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named]) ([]int32, error) {
+func Songs(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -41,10 +41,10 @@ type QueryParam struct {
 	AllowedIntRange    []int               `json:"allowed_int_range,omitempty"`
 	AllowedResTypes    []string            `json:"allowed_res_types,omitempty"`
 	DefaultVal         *int                `json:"default_value,omitempty"`
-	SpecialInputs      []SpecialQueryInput `json:"special_inputs,omitempty"`
+	SpecialInputs      []specialQueryInput `json:"special_inputs,omitempty"`
 }
 
-type SpecialQueryInput struct {
+type specialQueryInput struct {
 	Key ts.QuerySpecialVal `json:"key"`
 	Val int                `json:"value"`
 }

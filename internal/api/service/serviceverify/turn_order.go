@@ -5,7 +5,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-func VerifyTurnOrderParams(v ParamsVerifyer, params servicetypes.TurnOrderParams) (servicetypes.TurnOrderParams, error) {
+func TurnOrderParams(v ParamsVerifyer, params servicetypes.TurnOrderParams) (servicetypes.TurnOrderParams, error) {
 	var err error
 
 	params.TurnsAmt, err = v.int(params.TurnsAmt, ts.PfnTurnsAmt)

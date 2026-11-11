@@ -5,14 +5,14 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetOverdrive(r *http.Request, i handlerinput.Main[seedtypes.Overdrive, apitypes.Overdrive, apiresource.Named], id int32) (apitypes.Overdrive, error) {
+func Overdrive(r *http.Request, i handlerinput.Main[seedtypes.Overdrive, apitypes.Overdrive, apiresource.Named], id int32) (apitypes.Overdrive, error) {
 	overdrive, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Overdrive{}, err
@@ -33,7 +33,7 @@ func GetOverdrive(r *http.Request, i handlerinput.Main[seedtypes.Overdrive, apit
 		Cursor:             overdrive.Cursor,
 		User:               handlerinput.NameToNamedAPIResource(apilookups.E.CharacterClasses, overdrive.User, nil),
 		OverdriveCommand:   handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.OverdriveCommands, overdrive.OverdriveCommand, nil),
-		OverdriveAbilities: apiconv.RefsToNamedAPIResources(overdrive.OverdriveAbilities),
+		OverdriveAbilities: apiconvert.RefsToNamedAPIResources(overdrive.OverdriveAbilities),
 	}
 
 	return response, nil

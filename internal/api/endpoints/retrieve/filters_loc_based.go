@@ -12,7 +12,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-func GetAreasByItem(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getAreasByItem(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.Areas
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 
@@ -32,7 +32,7 @@ func GetAreasByItem(r *http.Request, ctx context.Context, id int32) ([]int32, er
 	return dbIDs, nil
 }
 
-func GetSublocationsByItem(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
+func getSublocationsByItem(r *http.Request, ctx context.Context, id int32) ([]int32, error) {
 	i := apilookups.E.Sublocations
 	queryParamMethods := i.QueryLookup[ts.QpnMethods]
 

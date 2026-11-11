@@ -7,7 +7,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
@@ -34,7 +34,7 @@ type biReplacement struct {
 	DamageFormula  *string
 }
 
-func ApplyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A], ability apitypes.UserAbility, queryName ts.QueryParamName) ([]apitypes.BattleInteraction, error) {
+func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http.Request, i handlerinput.Main[T, R, A], ability apitypes.UserAbility, queryName ts.QueryParamName) ([]apitypes.BattleInteraction, error) {
 	repl, err := getUnitRepl(r, i, queryName)
 	if errs.QueryIsEmpty(err) {
 		return ability.GetBattleInteractions(), nil
@@ -143,7 +143,7 @@ func (repl *unitRepl) populateAeon(queryParamUser queryparam.QueryParam) error {
 
 	repl.replVals.Range = aeon.PhysAtkRange
 	repl.replVals.ShatterRate = aeon.PhysAtkShatterRate
-	repl.replVals.Accuracy = ah.ConvertObjPtr(aeon.PhysAtkAccuracy, apiconv.ConvertAccuracy)
+	repl.replVals.Accuracy = ah.ConvertObjPtr(aeon.PhysAtkAccuracy, apiconvert.Accuracy)
 	repl.replVals.DamageConstant = aeon.PhysAtkDmgConstant
 
 	return nil

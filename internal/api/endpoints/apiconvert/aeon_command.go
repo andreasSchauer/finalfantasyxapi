@@ -1,4 +1,4 @@
-package apiconv
+package apiconvert
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertPossibleAbilityList(pa seedtypes.PossibleAbilityList) apitypes.PossibleAbilityList {
+func PossibleAbilityList(pa seedtypes.PossibleAbilityList) apitypes.PossibleAbilityList {
 	return apitypes.PossibleAbilityList{
 		User:      handlerinput.NameToNamedAPIResource(apilookups.E.CharacterClasses, pa.User, nil),
 		Abilities: handlerinput.KeysToTypedAPIResources(apilookups.E.Abilities, pa.Abilities),

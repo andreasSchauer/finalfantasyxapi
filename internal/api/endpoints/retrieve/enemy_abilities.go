@@ -16,7 +16,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveEnemyAbilities(r *http.Request, i handlerinput.Main[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.Named]) ([]int32, error) {
+func EnemyAbilities(r *http.Request, i handlerinput.Main[seedtypes.EnemyAbility, apitypes.EnemyAbility, apiresource.Named]) ([]int32, error) {
 	abilityType := database.AbilityTypeEnemyAbility
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {

@@ -13,7 +13,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func GetElement(r *http.Request, i handlerinput.Main[seedtypes.Element, apitypes.Element, apiresource.Named], id int32) (apitypes.Element, error) {
+func Element(r *http.Request, i handlerinput.Main[seedtypes.Element, apitypes.Element, apiresource.Named], id int32) (apitypes.Element, error) {
 	element, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Element{}, err

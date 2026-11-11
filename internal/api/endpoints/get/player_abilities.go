@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
@@ -16,7 +16,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetPlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.Named], id int32) (apitypes.PlayerAbility, error) {
+func PlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbility, apitypes.PlayerAbility, apiresource.Named], id int32) (apitypes.PlayerAbility, error) {
 	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
@@ -51,10 +51,10 @@ func GetPlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbili
 		OpenSubmenu:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:                ability.Cursor,
 		Monsters:              rel.Monsters,
-		BattleInteractions:    ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
+		BattleInteractions:    ah.ConvertObjSlice(ability.BattleInteractions, apiconvert.BattleInteraction),
 	}
 
-	battleInteractions, err := ApplyUser(r, i, response, ts.QpnAbilityUser)
+	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
 	}

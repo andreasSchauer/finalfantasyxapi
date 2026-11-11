@@ -37,9 +37,9 @@ func FilterAvlMasterItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Availability:   avlParams.Availabilities,
 		IsRepeatable:   avlParams.IsRepeatable,
 		PreAirship:     avlParams.PreAirship,
-		AvlType:        locContext.AvlType,
-		LocContextID:   locContext.ID,
-		LocContextType: locContext.Type,
+		AvlType:        locContext.avlType,
+		LocContextID:   locContext.id,
+		LocContextType: locContext.locCtxType,
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {
@@ -75,9 +75,9 @@ func FilterAvlItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Availability:   avlParams.Availabilities,
 		IsRepeatable:   avlParams.IsRepeatable,
 		PreAirship:     avlParams.PreAirship,
-		AvlType:        locContext.AvlType,
-		LocContextID:   locContext.ID,
-		LocContextType: locContext.Type,
+		AvlType:        locContext.avlType,
+		LocContextID:   locContext.id,
+		LocContextType: locContext.locCtxType,
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {
@@ -112,8 +112,8 @@ func FilterAvlKeyItems(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Ids:            inputIDs,
 		Availability:   avlParams.Availabilities,
 		PreAirship:     avlParams.PreAirship,
-		LocContextID:   locContext.ID,
-		LocContextType: locContext.Type,
+		LocContextID:   locContext.id,
+		LocContextType: locContext.locCtxType,
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {
@@ -149,9 +149,9 @@ func FilterAvlSpheres(r *http.Request, inputIDs []int32) ([]int32, error) {
 		Availability:   avlParams.Availabilities,
 		IsRepeatable:   avlParams.IsRepeatable,
 		PreAirship:     avlParams.PreAirship,
-		AvlType:        locContext.AvlType,
-		LocContextID:   locContext.ID,
-		LocContextType: locContext.Type,
+		AvlType:        locContext.avlType,
+		LocContextID:   locContext.id,
+		LocContextType: locContext.locCtxType,
 		Methods:        h.SliceOrNil(methods),
 	})
 	if err != nil {

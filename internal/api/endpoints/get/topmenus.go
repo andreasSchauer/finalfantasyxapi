@@ -13,7 +13,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func GetTopmenu(r *http.Request, i handlerinput.Main[seedtypes.Topmenu, apitypes.Topmenu, apiresource.Named], id int32) (apitypes.Topmenu, error) {
+func Topmenu(r *http.Request, i handlerinput.Main[seedtypes.Topmenu, apitypes.Topmenu, apiresource.Named], id int32) (apitypes.Topmenu, error) {
 	topmenu, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Topmenu{}, err

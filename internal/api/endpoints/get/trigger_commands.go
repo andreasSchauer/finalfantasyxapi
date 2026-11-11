@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/general/config"
@@ -17,7 +17,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetTriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.Named], id int32) (apitypes.TriggerCommand, error) {
+func TriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerCommand, apitypes.TriggerCommand, apiresource.Named], id int32) (apitypes.TriggerCommand, error) {
 	command, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
@@ -44,10 +44,10 @@ func GetTriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerCom
 		Topmenu:            handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Topmenus, command.Topmenu, nil),
 		Cursor:             command.Cursor,
 		MonsterFormations:  rel.MonsterFormations,
-		BattleInteractions: ah.ConvertObjSlice(command.BattleInteractions, apiconv.ConvertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(command.BattleInteractions, apiconvert.BattleInteraction),
 	}
 
-	battleInteractions, err := ApplyUser(r, i, response, ts.QpnAbilityUser)
+	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
 	}

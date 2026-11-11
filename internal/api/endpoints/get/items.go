@@ -17,7 +17,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetItem(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes.Item, apiresource.Named], id int32) (apitypes.Item, error) {
+func Item(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes.Item, apiresource.Named], id int32) (apitypes.Item, error) {
 	item, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Item{}, err

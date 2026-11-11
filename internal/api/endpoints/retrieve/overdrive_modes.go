@@ -12,7 +12,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveOverdriveModes(r *http.Request, i handlerinput.Main[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.Named]) ([]int32, error) {
+func OverdriveModes(r *http.Request, i handlerinput.Main[seedtypes.OverdriveMode, apitypes.OverdriveMode, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

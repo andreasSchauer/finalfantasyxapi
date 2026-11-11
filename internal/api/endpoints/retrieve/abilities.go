@@ -14,7 +14,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveAbilities(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes.Ability, apiresource.Typed]) ([]int32, error) {
+func Abilities(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes.Ability, apiresource.Typed]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

@@ -14,14 +14,14 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveMonsters(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes.Monster, apiresource.Named]) ([]int32, error) {
+func Monsters(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes.Monster, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
 	}
 
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
-		i.QueryWrapper(r, ids, ts.QpnElementalResists, GetMonstersByElemResists),
+		i.QueryWrapper(r, ids, ts.QpnElementalResists, getMonstersByElemResists),
 		i.QueryIDListWrapper(r, ids, ts.QpnStatusResists, lookup.L.StatusConditions, GetMonstersByStatusResists),
 
 		i.QueryIDWrapper(r, ids, ts.QpnItem, lookup.L.Items, GetMonstersByItem),

@@ -15,7 +15,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetSublocation(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, apitypes.Sublocation, apiresource.Named], id int32) (apitypes.Sublocation, error) {
+func Sublocation(r *http.Request, i handlerinput.Main[seedtypes.Sublocation, apitypes.Sublocation, apiresource.Named], id int32) (apitypes.Sublocation, error) {
 	sublocation, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Sublocation{}, err
@@ -105,11 +105,11 @@ func getSublocationRelationships(r *http.Request, sublocation seedtypes.Sublocat
 
 	g.Go(func() error {
 		var err error
-		locRel.Music, err = getMusicLocBased(ctx, sublocation, LocBasedMusicQueries{
-			CueSongs:  config.Cfg.DB.GetSublocationCueSongIDs,
-			BmSongs:   config.Cfg.DB.GetSublocationBackgroundMusicSongIDs,
-			FMVSongs:  config.Cfg.DB.GetSublocationFMVSongIDs,
-			BossMusic: config.Cfg.DB.GetSublocationBossSongIDs,
+		locRel.Music, err = getMusicLocBased(ctx, sublocation, locBasedMusicQueries{
+			cueSongs:  config.Cfg.DB.GetSublocationCueSongIDs,
+			bmSongs:   config.Cfg.DB.GetSublocationBackgroundMusicSongIDs,
+			fmvSongs:  config.Cfg.DB.GetSublocationFMVSongIDs,
+			bossMusic: config.Cfg.DB.GetSublocationBossSongIDs,
 		})
 		return err
 	})

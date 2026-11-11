@@ -1,4 +1,4 @@
-package apiconv
+package apiconvert
 
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
@@ -8,22 +8,22 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertBattleInteraction(bi seedtypes.BattleInteraction) apitypes.BattleInteraction {
+func BattleInteraction(bi seedtypes.BattleInteraction) apitypes.BattleInteraction {
 	battleInteraction := apitypes.BattleInteraction{
 		Target:                    bi.Target,
 		BasedOnUserAttack:         bi.BasedOnUserAttack,
 		Range:                     bi.Range,
 		Damage:                    ah.ConvertObjPtr(bi.Damage, convertDamage),
 		ShatterRate:               bi.ShatterRate,
-		Accuracy:                  ConvertAccuracy(bi.Accuracy),
+		Accuracy:                  Accuracy(bi.Accuracy),
 		HitAmount:                 bi.HitAmount,
 		SpecialAction:             bi.SpecialAction,
 		InflictedDelay:            ah.ConvertObjPtr(bi.InflictedDelay, convertInflictedDelay),
-		InflictedStatusConditions: ah.ConvertObjSlice(bi.InflictedStatusConditions, ConvertInflictedStatus),
+		InflictedStatusConditions: ah.ConvertObjSlice(bi.InflictedStatusConditions, InflictedStatus),
 		RemovedStatusConditions:   handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, bi.RemovedStatusConditions),
-		CopiedStatusConditions:    ah.ConvertObjSlice(bi.CopiedStatusConditions, ConvertInflictedStatus),
-		StatChanges:               ah.ConvertObjSlice(bi.StatChanges, ConvertStatChange),
-		ModifierChanges:           ah.ConvertObjSlice(bi.ModifierChanges, ConvertModifierChange),
+		CopiedStatusConditions:    ah.ConvertObjSlice(bi.CopiedStatusConditions, InflictedStatus),
+		StatChanges:               ah.ConvertObjSlice(bi.StatChanges, StatChange),
+		ModifierChanges:           ah.ConvertObjSlice(bi.ModifierChanges, ModifierChange),
 	}
 
 	for _, status := range bi.AffectedBy {
@@ -65,7 +65,7 @@ func convertClassDamage(ad seedtypes.ClassDamage) apitypes.ClassDamage {
 	}
 }
 
-func ConvertAccuracy(a seedtypes.Accuracy) apitypes.Accuracy {
+func Accuracy(a seedtypes.Accuracy) apitypes.Accuracy {
 	return apitypes.Accuracy{
 		AccSource:   a.AccSource,
 		HitChance:   a.HitChance,
@@ -80,7 +80,7 @@ func convertInflictedDelay(id seedtypes.InflictedDelay) apitypes.InflictedDelay 
 	}
 }
 
-func ConvertInflictedStatus(status seedtypes.InflictedStatus) apitypes.InflictedStatus {
+func InflictedStatus(status seedtypes.InflictedStatus) apitypes.InflictedStatus {
 	return apitypes.InflictedStatus{
 		StatusCondition: handlerinput.NameToNamedAPIResource(apilookups.E.StatusConditions, status.StatusCondition, nil),
 		Probability:     status.Probability,
@@ -89,7 +89,7 @@ func ConvertInflictedStatus(status seedtypes.InflictedStatus) apitypes.Inflicted
 	}
 }
 
-func ConvertStatChange(sc seedtypes.StatChange) apitypes.StatChange {
+func StatChange(sc seedtypes.StatChange) apitypes.StatChange {
 	return apitypes.StatChange{
 		Stat:            handlerinput.NameToNamedAPIResource(apilookups.E.Stats, sc.StatName, nil),
 		CalculationType: sc.CalculationType,
@@ -97,7 +97,7 @@ func ConvertStatChange(sc seedtypes.StatChange) apitypes.StatChange {
 	}
 }
 
-func ConvertModifierChange(mc seedtypes.ModifierChange) apitypes.ModifierChange {
+func ModifierChange(mc seedtypes.ModifierChange) apitypes.ModifierChange {
 	return apitypes.ModifierChange{
 		Modifier:        handlerinput.NameToNamedAPIResource(apilookups.E.Modifiers, mc.ModifierName, nil),
 		CalculationType: mc.CalculationType,

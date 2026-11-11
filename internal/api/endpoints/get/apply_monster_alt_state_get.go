@@ -6,7 +6,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
@@ -21,7 +21,7 @@ func getAlteredStatesAlterations(states []apitypes.AlteredState) []apitypes.Alte
 	return states
 }
 
-func GetMonsterAlteredStates(r *http.Request, mon seedtypes.Monster) []apitypes.AlteredState {
+func MonsterAlteredStates(r *http.Request, mon seedtypes.Monster) []apitypes.AlteredState {
 	alteredStates := []apitypes.AlteredState{}
 
 	for i, altState := range mon.AlteredStates {
@@ -51,7 +51,7 @@ func getAlts(as seedtypes.AlteredState) []apitypes.Alt {
 	alts := []apitypes.Alt{}
 
 	for _, change := range as.Changes {
-		altStateChange := apiconv.ConvertAlt(change)
+		altStateChange := apiconvert.Alt(change)
 		altStateChange.AlterationType = database.AlterationType(change.AlterationType)
 		altStateChange.Distance = change.Distance
 		alts = append(alts, altStateChange)

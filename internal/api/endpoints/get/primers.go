@@ -14,7 +14,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func GetPrimer(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.Primer, apiresource.Named], id int32) (apitypes.Primer, error) {
+func Primer(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.Primer, apiresource.Named], id int32) (apitypes.Primer, error) {
 	primer, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Primer{}, err

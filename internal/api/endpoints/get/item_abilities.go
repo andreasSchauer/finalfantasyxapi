@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -16,7 +16,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetItemAbility(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.Named], id int32) (apitypes.ItemAbility, error) {
+func ItemAbility(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, apitypes.ItemAbility, apiresource.Named], id int32) (apitypes.ItemAbility, error) {
 	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.ItemAbility{}, err
@@ -38,7 +38,7 @@ func GetItemAbility(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, 
 		CanCopycat:          ability.CanCopycat,
 		RelatedStats:        rel.RelatedStats,
 		Cursor:              rel.Cursor,
-		BattleInteractions:  ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
+		BattleInteractions:  ah.ConvertObjSlice(ability.BattleInteractions, apiconvert.BattleInteraction),
 	}
 
 	return response, nil

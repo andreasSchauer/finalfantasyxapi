@@ -12,7 +12,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetRonsoRage(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.Named], id int32) (apitypes.RonsoRage, error) {
+func RonsoRage(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.Named], id int32) (apitypes.RonsoRage, error) {
 	ronsoRage, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.RonsoRage{}, err

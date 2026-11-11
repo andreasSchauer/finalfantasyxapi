@@ -6,14 +6,14 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetTreasure(r *http.Request, i handlerinput.Main[seedtypes.Treasure, apitypes.Treasure, apiresource.Unnamed], id int32) (apitypes.Treasure, error) {
+func Treasure(r *http.Request, i handlerinput.Main[seedtypes.Treasure, apitypes.Treasure, apiresource.Unnamed], id int32) (apitypes.Treasure, error) {
 	treasure, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Treasure{}, err
@@ -29,7 +29,7 @@ func GetTreasure(r *http.Request, i handlerinput.Main[seedtypes.Treasure, apityp
 		LootType:        treasure.LootType,
 		GilAmount:       treasure.GilAmount,
 		Items:           apilookups.E.AllItems.ToResAmtsFromNames(treasure.Items),
-		Equipment:       ah.ConvertObjPtr(treasure.Equipment, apiconv.ConvertFoundEquipment),
+		Equipment:       ah.ConvertObjPtr(treasure.Equipment, apiconvert.FoundEquipment),
 	}
 
 	return response, nil

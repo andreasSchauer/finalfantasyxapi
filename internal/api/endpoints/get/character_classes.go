@@ -15,7 +15,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetCharacterClass(r *http.Request, i handlerinput.Main[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.Named], id int32) (apitypes.CharacterClass, error) {
+func CharacterClass(r *http.Request, i handlerinput.Main[seedtypes.CharacterClass, apitypes.CharacterClass, apiresource.Named], id int32) (apitypes.CharacterClass, error) {
 	class, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.CharacterClass{}, err

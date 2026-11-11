@@ -1,4 +1,4 @@
-package apiconv
+package apiconvert
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
@@ -7,9 +7,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertElemResist(er seedtypes.ElementalResist) apitypes.ElementalResist {
-	return apitypes.ElementalResist{
-		Element:  handlerinput.NameToNamedAPIResource(apilookups.E.Elements, er.Element, nil),
-		Affinity: er.Affinity,
+func StatusResist(sr seedtypes.StatusResist) apitypes.StatusResist {
+	return apitypes.StatusResist{
+		StatusCondition: handlerinput.NameToNamedAPIResource(apilookups.E.StatusConditions, sr.StatusCondition, nil),
+		Resistance:      sr.Resistance,
 	}
 }

@@ -5,7 +5,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-func VerifyCritChanceParams(v ParamsVerifyer, params servicetypes.CritChanceParams) (servicetypes.CritChanceParams, error) {
+func CritChanceParams(v ParamsVerifyer, params servicetypes.CritChanceParams) (servicetypes.CritChanceParams, error) {
 	var err error
 
 	params.Ability, err = v.obj(params.Ability, ts.PfnAbility, vfAbilityCritChance)

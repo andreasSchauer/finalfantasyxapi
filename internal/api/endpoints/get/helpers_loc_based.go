@@ -10,39 +10,39 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-type LocBasedMusicQueries struct {
-	CueSongs  handlerinput.DBQueryIntMany
-	BmSongs   handlerinput.DBQueryIntMany
-	FMVSongs  handlerinput.DBQueryIntMany
-	BossMusic handlerinput.DBQueryIntMany
+type locBasedMusicQueries struct {
+	cueSongs  handlerinput.DBQueryIntMany
+	bmSongs   handlerinput.DBQueryIntMany
+	fmvSongs  handlerinput.DBQueryIntMany
+	bossMusic handlerinput.DBQueryIntMany
 }
 
-func getMusicLocBased(ctx context.Context, item seedtypes.Lookupable, queries LocBasedMusicQueries) (*apitypes.LocBasedMusic, error) {
+func getMusicLocBased(ctx context.Context, item seedtypes.Lookupable, queries locBasedMusicQueries) (*apitypes.LocBasedMusic, error) {
 	i := apilookups.E.Songs
 	var music apitypes.LocBasedMusic
 	g, ctx := errgroup.WithContext(ctx)
 
 	g.Go(func() error {
 		var err error
-		music.Cues, err = i.DBGetRelations(ctx, item, queries.CueSongs)
+		music.Cues, err = i.DBGetRelations(ctx, item, queries.cueSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.BackgroundMusic, err = i.DBGetRelations(ctx, item, queries.BmSongs)
+		music.BackgroundMusic, err = i.DBGetRelations(ctx, item, queries.bmSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.FMVs, err = i.DBGetRelations(ctx, item, queries.FMVSongs)
+		music.FMVs, err = i.DBGetRelations(ctx, item, queries.fmvSongs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		music.BossMusic, err = i.DBGetRelations(ctx, item, queries.BossMusic)
+		music.BossMusic, err = i.DBGetRelations(ctx, item, queries.bossMusic)
 		return err
 	})
 

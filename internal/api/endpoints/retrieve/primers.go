@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrievePrimers(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.Primer, apiresource.Named]) ([]int32, error) {
+func Primers(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.Primer, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

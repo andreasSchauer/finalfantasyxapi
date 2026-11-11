@@ -1,4 +1,4 @@
-package apiconv
+package apiconvert
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
@@ -7,9 +7,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertStatusResist(sr seedtypes.StatusResist) apitypes.StatusResist {
-	return apitypes.StatusResist{
-		StatusCondition: handlerinput.NameToNamedAPIResource(apilookups.E.StatusConditions, sr.StatusCondition, nil),
-		Resistance:      sr.Resistance,
+func AeonEquipment(ae seedtypes.AeonEquipment) apitypes.AeonEquipment {
+	return apitypes.AeonEquipment{
+		AutoAbility:     handlerinput.NameToNamedAPIResource(apilookups.E.AutoAbilities, ae.AutoAbility, nil),
+		CelestialWeapon: ae.CelestialWeapon,
 	}
 }

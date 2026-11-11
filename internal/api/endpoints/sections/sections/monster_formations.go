@@ -21,7 +21,7 @@ func CreateMonsterFormationSimple(_ *http.Request, id int32, _ handlerinput.Subs
 		URL:            ah.CreateResourceURL(i.Endpoint, id),
 		Category:       formation.FormationData.Category,
 		IsForcedAmbush: formation.FormationData.IsForcedAmbush,
-		FormationLoot:  get.GetFormationLoot(formation),
+		FormationLoot:  get.FormationLoot(formation),
 		Monsters:       ah.ConvertObjSlice(formation.Monsters, monsterAmountString),
 		Areas:          locAreaStrings(formation.EncounterAreas),
 	}

@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
@@ -17,7 +17,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetOverdriveAbility(r *http.Request, i handlerinput.Main[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.Named], id int32) (apitypes.OverdriveAbility, error) {
+func OverdriveAbility(r *http.Request, i handlerinput.Main[seedtypes.OverdriveAbility, apitypes.OverdriveAbility, apiresource.Named], id int32) (apitypes.OverdriveAbility, error) {
 	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.OverdriveAbility{}, err
@@ -41,7 +41,7 @@ func GetOverdriveAbility(r *http.Request, i handlerinput.Main[seedtypes.Overdriv
 		OverdriveCommand:   rel.OverdriveCommand,
 		User:               rel.User,
 		RelatedStats:       handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, ability.RelatedStats),
-		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconvert.BattleInteraction),
 	}
 
 	return response, nil

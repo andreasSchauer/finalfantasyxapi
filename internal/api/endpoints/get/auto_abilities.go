@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -16,7 +16,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func GetAutoAbility(r *http.Request, i handlerinput.Main[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.Named], id int32) (apitypes.AutoAbility, error) {
+func AutoAbility(r *http.Request, i handlerinput.Main[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.Named], id int32) (apitypes.AutoAbility, error) {
 	autoAbility, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.AutoAbility{}, err
@@ -43,14 +43,14 @@ func GetAutoAbility(r *http.Request, i handlerinput.Main[seedtypes.AutoAbility, 
 		GradualRecovery:        handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Stats, autoAbility.GradualRecovery, nil),
 		AutoItemUse:            handlerinput.NamesToNamedAPIResources(apilookups.E.Items, autoAbility.AutoItemUse),
 		OnHitElement:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Elements, autoAbility.OnHitElement, nil),
-		AddedElemResist:        ah.ConvertObjPtr(autoAbility.AddedElemResist, apiconv.ConvertElemResist),
-		OnHitStatus:            ah.ConvertObjPtr(autoAbility.OnHitStatus, apiconv.ConvertInflictedStatus),
+		AddedElemResist:        ah.ConvertObjPtr(autoAbility.AddedElemResist, apiconvert.ElemResist),
+		OnHitStatus:            ah.ConvertObjPtr(autoAbility.OnHitStatus, apiconvert.InflictedStatus),
 		AddedStatusses:         handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, autoAbility.AddedStatusses),
-		AddedStatusResists:     ah.ConvertObjSlice(autoAbility.AddedStatusResists, apiconv.ConvertStatusResist),
+		AddedStatusResists:     ah.ConvertObjSlice(autoAbility.AddedStatusResists, apiconvert.StatusResist),
 		AddedProperty:          handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Properties, autoAbility.AddedProperty, nil),
 		ConversionTo:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Modifiers, autoAbility.ConversionTo, nil),
-		StatChanges:            ah.ConvertObjSlice(autoAbility.StatChanges, apiconv.ConvertStatChange),
-		ModifierChanges:        ah.ConvertObjSlice(autoAbility.ModifierChanges, apiconv.ConvertModifierChange),
+		StatChanges:            ah.ConvertObjSlice(autoAbility.StatChanges, apiconvert.StatChange),
+		ModifierChanges:        ah.ConvertObjSlice(autoAbility.ModifierChanges, apiconvert.ModifierChange),
 		MonstersDrop:           rel.MonstersDrop,
 		MonstersItems:          rel.MonstersItems,
 		ShopsPreAirship:        rel.ShopsPreAirship,

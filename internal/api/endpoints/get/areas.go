@@ -14,13 +14,13 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func GetArea(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area, apiresource.Area], id int32) (apitypes.Area, error) {
+func Area(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area, apiresource.Area], id int32) (apitypes.Area, error) {
 	area, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Area{}, err
 	}
 
-	connections, err := GetAreaConnectedAreas(area)
+	connections, err := getAreaConnectedAreas(area)
 	if err != nil {
 		return apitypes.Area{}, err
 	}
@@ -35,7 +35,7 @@ func GetArea(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area,
 		Name:              area.Name,
 		Version:           area.Version,
 		Specification:     area.Specification,
-		DisplayName:       GetAreaDisplayName(area),
+		DisplayName:       getAreaDisplayName(area),
 		ParentLocation:    handlerinput.NameToNamedAPIResource(apilookups.E.Locations, area.Location, nil),
 		ParentSublocation: handlerinput.NameToNamedAPIResource(apilookups.E.Sublocations, area.Sublocation, nil),
 		Availability:      area.Availability,
@@ -103,11 +103,11 @@ func getAreaRelationships(r *http.Request, area seedtypes.Area) (apitypes.LocRel
 
 	g.Go(func() error {
 		var err error
-		rel.Music, err = getMusicLocBased(ctx, area, LocBasedMusicQueries{
-			CueSongs:  handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaCueSongIDs),
-			BmSongs:   config.Cfg.DB.GetAreaBackgroundMusicSongIDs,
-			FMVSongs:  config.Cfg.DB.GetAreaFMVSongIDs,
-			BossMusic: config.Cfg.DB.GetAreaBossSongIDs,
+		rel.Music, err = getMusicLocBased(ctx, area, locBasedMusicQueries{
+			cueSongs:  handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaCueSongIDs),
+			bmSongs:   config.Cfg.DB.GetAreaBackgroundMusicSongIDs,
+			fmvSongs:  config.Cfg.DB.GetAreaFMVSongIDs,
+			bossMusic: config.Cfg.DB.GetAreaBossSongIDs,
 		})
 		return err
 	})
@@ -126,7 +126,7 @@ func getAreaRelationships(r *http.Request, area seedtypes.Area) (apitypes.LocRel
 	return rel, nil
 }
 
-func GetAreaConnectedAreas(area seedtypes.Area) ([]apitypes.AreaConnection, error) {
+func getAreaConnectedAreas(area seedtypes.Area) ([]apitypes.AreaConnection, error) {
 	i := apilookups.E.Areas
 	connectedAreas := []apitypes.AreaConnection{}
 
@@ -144,7 +144,7 @@ func GetAreaConnectedAreas(area seedtypes.Area) ([]apitypes.AreaConnection, erro
 	return connectedAreas, nil
 }
 
-func GetAreaDisplayName(area seedtypes.Area) string {
+func getAreaDisplayName(area seedtypes.Area) string {
 	sublocName := area.Sublocation
 
 	if sublocName == area.Name {

@@ -6,7 +6,7 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/get"
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/typehelpers"
@@ -37,11 +37,11 @@ func QuickAssembleMon(monID int32, altStatePtr *int32) (apitypes.Monster, error)
 		ThreatenChance:   monsterLookup.ThreatenChance,
 		ZanmatoLevel:     monsterLookup.ZanmatoLevel,
 		BaseStats:        apilookups.E.Stats.ToResAmtType(monsterLookup.BaseStats, th.NewBaseStat),
-		ElemResists:      get.GetMonsterElemResists(monsterLookup.ElemResists),
+		ElemResists:      get.MonsterElemResists(monsterLookup.ElemResists),
 		StatusImmunities: handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, monsterLookup.StatusImmunities),
 		StatusResists:    apilookups.E.StatusConditions.ToResAmtType(monsterLookup.StatusResists, th.NewStatusResist),
-		Abilities:        ah.ConvertObjSlice(monsterLookup.Abilities, apiconv.ConvertMonsterAbility),
-		AlteredStates:    get.GetMonsterAlteredStates(nil, monsterLookup),
+		Abilities:        ah.ConvertObjSlice(monsterLookup.Abilities, apiconvert.MonsterAbility),
+		AlteredStates:    get.MonsterAlteredStates(nil, monsterLookup),
 	}
 
 	monster, err := get.ApplyAlteredStateFromJSON(monster, altStatePtr)

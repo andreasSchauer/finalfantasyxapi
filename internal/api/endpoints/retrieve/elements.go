@@ -10,6 +10,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveElements(r *http.Request, i handlerinput.Main[seedtypes.Element, apitypes.Element, apiresource.Named]) ([]int32, error) {
+func Elements(r *http.Request, i handlerinput.Main[seedtypes.Element, apitypes.Element, apiresource.Named]) ([]int32, error) {
 	return i.VerifyQueriesRetrieve(r)
 }

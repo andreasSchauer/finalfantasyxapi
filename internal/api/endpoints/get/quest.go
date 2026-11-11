@@ -5,14 +5,14 @@ import (
 
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetQuest(r *http.Request, i handlerinput.Main[seedtypes.Quest, apitypes.Quest, apiresource.Quest], id int32) (apitypes.Quest, error) {
+func Quest(r *http.Request, i handlerinput.Main[seedtypes.Quest, apitypes.Quest, apiresource.Quest], id int32) (apitypes.Quest, error) {
 	quest, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Quest{}, err
@@ -22,10 +22,10 @@ func GetQuest(r *http.Request, i handlerinput.Main[seedtypes.Quest, apitypes.Que
 		ID:           quest.ID,
 		Name:         quest.Name,
 		Type:         quest.Type,
-		TypedQuest:   apiconv.QuestToQuestAPIResource(quest),
+		TypedQuest:   apiconvert.QuestToQuestAPIResource(quest),
 		Availability: quest.Availability,
 		IsRepeatable: quest.IsRepeatable,
-		Completion:   ah.ConvertObjPtr(quest.Completion, apiconv.ConvertQuestCompletion),
+		Completion:   ah.ConvertObjPtr(quest.Completion, apiconvert.QuestCompletion),
 	}
 
 	return response, nil

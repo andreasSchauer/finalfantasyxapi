@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
@@ -14,7 +14,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetSidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apitypes.Sidequest, apiresource.Quest], id int32) (apitypes.Sidequest, error) {
+func Sidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apitypes.Sidequest, apiresource.Quest], id int32) (apitypes.Sidequest, error) {
 	sidequest, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Sidequest{}, err
@@ -31,7 +31,7 @@ func GetSidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apit
 		UntypedQuest: handlerinput.IDToQuestAPIResource(apilookups.E.Quests, sidequest.Quest.ID),
 		Availability: sidequest.Availability,
 		IsRepeatable: sidequest.IsRepeatable,
-		Completion:   ah.ConvertObjPtr(sidequest.Completion, apiconv.ConvertQuestCompletion),
+		Completion:   ah.ConvertObjPtr(sidequest.Completion, apiconvert.QuestCompletion),
 		Subquests:    rel.Subquests,
 	}
 
@@ -50,7 +50,7 @@ func getSidequestRelationships(r *http.Request, sidequest seedtypes.Sidequest) (
 	return rel, nil
 }
 
-func CompleteSubquestResponse(subquest apitypes.Subquest) apitypes.Subquest {
+func completeSubquestResponse(subquest apitypes.Subquest) apitypes.Subquest {
 	if subquest.ParentSidequest.Sidequest == "monster arena" {
 		subquest.ArenaCreation = handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.ArenaCreations, &subquest.Name, nil)
 	}

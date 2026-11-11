@@ -17,7 +17,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetArenaCreation(r *http.Request, i handlerinput.Main[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.Named], id int32) (apitypes.ArenaCreation, error) {
+func ArenaCreation(r *http.Request, i handlerinput.Main[seedtypes.ArenaCreation, apitypes.ArenaCreation, apiresource.Named], id int32) (apitypes.ArenaCreation, error) {
 	creation, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.ArenaCreation{}, err

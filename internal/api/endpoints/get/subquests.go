@@ -5,14 +5,14 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetSubquest(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest], id int32) (apitypes.Subquest, error) {
+func Subquest(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apitypes.Subquest, apiresource.Quest], id int32) (apitypes.Subquest, error) {
 	subquest, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Subquest{}, err
@@ -25,8 +25,8 @@ func GetSubquest(r *http.Request, i handlerinput.Main[seedtypes.Subquest, apityp
 		ParentSidequest: handlerinput.IDToQuestAPIResource(apilookups.E.Sidequests, subquest.SidequestID),
 		Availability:    subquest.Availability,
 		IsRepeatable:    subquest.IsRepeatable,
-		Completion:      apiconv.ConvertQuestCompletion(*subquest.Completion),
+		Completion:      apiconvert.QuestCompletion(*subquest.Completion),
 	}
 
-	return CompleteSubquestResponse(response), nil
+	return completeSubquestResponse(response), nil
 }

@@ -1,4 +1,4 @@
-package apiconv
+package apiconvert
 
 import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
@@ -8,15 +8,15 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertQuestCompletion(qc seedtypes.QuestCompletion) apitypes.QuestCompletion {
+func QuestCompletion(qc seedtypes.QuestCompletion) apitypes.QuestCompletion {
 	return apitypes.QuestCompletion{
 		Condition: qc.Condition,
-		Areas:     ah.ConvertObjSlice(qc.Areas, ConvertCompletionArea),
+		Areas:     ah.ConvertObjSlice(qc.Areas, CompletionArea),
 		Reward:    apilookups.E.AllItems.ToResAmtFromName(qc.Reward),
 	}
 }
 
-func ConvertCompletionArea(cl seedtypes.CompletionArea) apitypes.CompletionArea {
+func CompletionArea(cl seedtypes.CompletionArea) apitypes.CompletionArea {
 	return apitypes.CompletionArea{
 		Area:  handlerinput.LocAreaToAreaAPIResource(apilookups.E.Areas, cl.LocationArea),
 		Notes: cl.Notes,

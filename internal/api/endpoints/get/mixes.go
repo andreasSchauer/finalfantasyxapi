@@ -6,7 +6,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
@@ -18,7 +18,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetMix(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named], id int32) (apitypes.Mix, error) {
+func Mix(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, apiresource.Named], id int32) (apitypes.Mix, error) {
 	mix, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Mix{}, err
@@ -83,5 +83,5 @@ func getMixCombinations(r *http.Request, mix seedtypes.Mix) ([]apitypes.MixCombi
 		})
 	}
 
-	return ah.ConvertObjSlice(combinations, apiconv.ConvertMixCombination), nil
+	return ah.ConvertObjSlice(combinations, apiconvert.MixCombination), nil
 }

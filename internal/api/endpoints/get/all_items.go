@@ -15,7 +15,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetMasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, apitypes.MasterItem, apiresource.Typed], id int32) (apitypes.MasterItem, error) {
+func MasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, apitypes.MasterItem, apiresource.Typed], id int32) (apitypes.MasterItem, error) {
 	masterItem, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.MasterItem{}, err
@@ -33,7 +33,7 @@ func GetMasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, ap
 		ObtainableFrom: rel.ObtainableFrom,
 	}
 
-	return CompleteMasterItemResponse(r, response), nil
+	return completeMasterItemResponse(r, response), nil
 }
 
 func getMasterItemRelationships(r *http.Request, masterItem seedtypes.MasterItem) (apitypes.MasterItem, error) {
@@ -74,7 +74,7 @@ func getMasterItemObtainable(r *http.Request, masterItem seedtypes.MasterItem) (
 	return obtainable, nil
 }
 
-func CompleteMasterItemResponse(r *http.Request, masterItem apitypes.MasterItem) apitypes.MasterItem {
+func completeMasterItemResponse(r *http.Request, masterItem apitypes.MasterItem) apitypes.MasterItem {
 	switch masterItem.Type {
 	case database.ItemTypeItem:
 		item, _ := lookup.GetResource(masterItem.Name, lookup.L.Items)

@@ -9,6 +9,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveRonsoRages(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.Named]) ([]int32, error) {
+func RonsoRages(r *http.Request, i handlerinput.Main[seedtypes.RonsoRage, apitypes.RonsoRage, apiresource.Named]) ([]int32, error) {
 	return i.VerifyQueriesRetrieve(r)
 }

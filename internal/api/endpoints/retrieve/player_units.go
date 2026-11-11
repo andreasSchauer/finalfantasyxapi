@@ -12,7 +12,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrievePlayerUnits(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.Typed]) ([]int32, error) {
+func PlayerUnits(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, apitypes.PlayerUnit, apiresource.Typed]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err

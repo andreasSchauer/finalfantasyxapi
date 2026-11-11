@@ -15,7 +15,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func GetStat(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat, apiresource.Named], id int32) (apitypes.Stat, error) {
+func Stat(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat, apiresource.Named], id int32) (apitypes.Stat, error) {
 	stat, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Stat{}, err
@@ -47,14 +47,14 @@ func GetStat(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat,
 	return response, nil
 }
 
-type StatQueries struct {
-	AutoAbilities      handlerinput.DBQueryIntMany
-	PlayerAbilities    handlerinput.DBQueryIntMany
-	OverdriveAbilities handlerinput.DBQueryIntMany
-	ItemAbilities      handlerinput.DBQueryIntMany
-	TriggerCommands    handlerinput.DBQueryIntMany
-	StatusConditions   handlerinput.DBQueryIntMany
-	Properties         handlerinput.DBQueryIntMany
+type statQueries struct {
+	autoAbilities      handlerinput.DBQueryIntMany
+	playerAbilities    handlerinput.DBQueryIntMany
+	overdriveAbilities handlerinput.DBQueryIntMany
+	itemAbilities      handlerinput.DBQueryIntMany
+	triggerCommands    handlerinput.DBQueryIntMany
+	statusConditions   handlerinput.DBQueryIntMany
+	properties         handlerinput.DBQueryIntMany
 }
 
 func getStatRelationships(r *http.Request, stat seedtypes.Stat) (apitypes.Stat, error) {
@@ -74,44 +74,44 @@ func getStatRelationships(r *http.Request, stat seedtypes.Stat) (apitypes.Stat, 
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, stat, queries.AutoAbilities)
+		rel.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, stat, queries.autoAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, stat, queries.PlayerAbilities)
+		rel.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, stat, queries.playerAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = apilookups.E.OverdriveAbilities.DBGetRelations(ctx, stat, queries.OverdriveAbilities)
+		rel.OverdriveAbilities, err = apilookups.E.OverdriveAbilities.DBGetRelations(ctx, stat, queries.overdriveAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = apilookups.E.ItemAbilities.DBGetRelations(ctx, stat, queries.ItemAbilities)
+		rel.ItemAbilities, err = apilookups.E.ItemAbilities.DBGetRelations(ctx, stat, queries.itemAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.TriggerCommands, err = apilookups.E.TriggerCommands.DBGetRelations(ctx, stat, queries.TriggerCommands)
+		rel.TriggerCommands, err = apilookups.E.TriggerCommands.DBGetRelations(ctx, stat, queries.triggerCommands)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.StatusConditions, err = apilookups.E.StatusConditions.DBGetRelations(ctx, stat, queries.StatusConditions)
+		rel.StatusConditions, err = apilookups.E.StatusConditions.DBGetRelations(ctx, stat, queries.statusConditions)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		if queries.Properties != nil {
-			rel.Properties, err = apilookups.E.Properties.DBGetRelations(ctx, stat, queries.Properties)
+		if queries.properties != nil {
+			rel.Properties, err = apilookups.E.Properties.DBGetRelations(ctx, stat, queries.properties)
 			return err
 		}
 		return nil
@@ -125,33 +125,33 @@ func getStatRelationships(r *http.Request, stat seedtypes.Stat) (apitypes.Stat, 
 	return rel, nil
 }
 
-func getStatQueries(r *http.Request) (StatQueries, error) {
+func getStatQueries(r *http.Request) (statQueries, error) {
 	changesOnly, err := apilookups.Q.Stats[ts.QpnChangesOnly].ParseBool(r)
 	if errs.ErrExceptEmptyQuery(err) {
-		return StatQueries{}, err
+		return statQueries{}, err
 	}
 
-	var queries StatQueries
+	var queries statQueries
 
 	if changesOnly {
-		queries = StatQueries{
-			AutoAbilities:      config.Cfg.DB.GetStatAutoAbilityIDsStatChange,
-			PlayerAbilities:    config.Cfg.DB.GetStatPlayerAbilityIDsStatChange,
-			OverdriveAbilities: config.Cfg.DB.GetStatOverdriveAbilityIDsStatChange,
-			ItemAbilities:      config.Cfg.DB.GetStatItemAbilityIDsStatChange,
-			TriggerCommands:    config.Cfg.DB.GetStatTriggerCommandIDsStatChange,
-			StatusConditions:   config.Cfg.DB.GetStatStatusConditionIDsStatChange,
-			Properties:         nil,
+		queries = statQueries{
+			autoAbilities:      config.Cfg.DB.GetStatAutoAbilityIDsStatChange,
+			playerAbilities:    config.Cfg.DB.GetStatPlayerAbilityIDsStatChange,
+			overdriveAbilities: config.Cfg.DB.GetStatOverdriveAbilityIDsStatChange,
+			itemAbilities:      config.Cfg.DB.GetStatItemAbilityIDsStatChange,
+			triggerCommands:    config.Cfg.DB.GetStatTriggerCommandIDsStatChange,
+			statusConditions:   config.Cfg.DB.GetStatStatusConditionIDsStatChange,
+			properties:         nil,
 		}
 	} else {
-		queries = StatQueries{
-			AutoAbilities:      config.Cfg.DB.GetStatAutoAbilityIDs,
-			PlayerAbilities:    config.Cfg.DB.GetStatPlayerAbilityIDs,
-			OverdriveAbilities: config.Cfg.DB.GetStatOverdriveAbilityIDs,
-			ItemAbilities:      config.Cfg.DB.GetStatItemAbilityIDs,
-			TriggerCommands:    config.Cfg.DB.GetStatTriggerCommandIDs,
-			StatusConditions:   config.Cfg.DB.GetStatStatusConditionIDs,
-			Properties:         config.Cfg.DB.GetStatPropertyIDs,
+		queries = statQueries{
+			autoAbilities:      config.Cfg.DB.GetStatAutoAbilityIDs,
+			playerAbilities:    config.Cfg.DB.GetStatPlayerAbilityIDs,
+			overdriveAbilities: config.Cfg.DB.GetStatOverdriveAbilityIDs,
+			itemAbilities:      config.Cfg.DB.GetStatItemAbilityIDs,
+			triggerCommands:    config.Cfg.DB.GetStatTriggerCommandIDs,
+			statusConditions:   config.Cfg.DB.GetStatStatusConditionIDs,
+			properties:         config.Cfg.DB.GetStatPropertyIDs,
 		}
 	}
 

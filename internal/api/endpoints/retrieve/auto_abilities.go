@@ -14,7 +14,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveAutoAbilities(r *http.Request, i handlerinput.Main[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.Named]) ([]int32, error) {
+func AutoAbilities(r *http.Request, i handlerinput.Main[seedtypes.AutoAbility, apitypes.AutoAbility, apiresource.Named]) ([]int32, error) {
 	ids, err := i.VerifyQueriesRetrieve(r)
 	if err != nil {
 		return nil, err
@@ -23,9 +23,9 @@ func RetrieveAutoAbilities(r *http.Request, i handlerinput.Main[seedtypes.AutoAb
 	return i.FilterIDs(r, ids, []handlerinput.IDFilter{
 		i.QueryEnumList(r, enums.T.AutoAbilityCategory, ids, ts.QpnCategory, config.Cfg.DB.GetAutoAbilityIDsByCategory),
 		i.QueryEnum(r, enums.T.EquipType, ids, ts.QpnType, config.Cfg.DB.GetAutoAbilityIDsByEquipType),
-		i.QueryIDWrapper(r, ids, ts.QpnMonster, lookup.L.Monsters, GetAutoAbilitiesByMonster),
+		i.QueryIDWrapper(r, ids, ts.QpnMonster, lookup.L.Monsters, getAutoAbilitiesByMonster),
 		i.QueryID(r, ids, "monster_items", lookup.L.Monsters, config.Cfg.DB.GetAutoAbilityIDsByMonsterItems),
-		i.QueryIDWrapper(r, ids, ts.QpnShop, lookup.L.Shops, GetAutoAbilitiesByShop),
+		i.QueryIDWrapper(r, ids, ts.QpnShop, lookup.L.Shops, getAutoAbilitiesByShop),
 		i.QueryValueList(r, ids, ts.QpnMethods, config.Cfg.DB.GetAutoAbilityIDsByMethods),
 		i.QueryID(r, ids, ts.QpnLocation, lookup.L.Locations, config.Cfg.DB.GetAutoAbilityIDsByLocation),
 		i.QueryID(r, ids, ts.QpnSublocation, lookup.L.Sublocations, config.Cfg.DB.GetAutoAbilityIDsBySublocation),

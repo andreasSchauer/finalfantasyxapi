@@ -7,7 +7,7 @@ import (
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconv"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/general/config"
@@ -16,7 +16,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetAbility(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes.Ability, apiresource.Typed], id int32) (apitypes.Ability, error) {
+func Ability(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes.Ability, apiresource.Typed], id int32) (apitypes.Ability, error) {
 	ability, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Ability{}, err
@@ -36,9 +36,9 @@ func GetAbility(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes
 		Rank:               ability.Rank,
 		CanCopycat:         ability.CanCopycat,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
-		TypedAbility:       apiconv.RefToNamedAPIResource(ability.GetAbilityRef()),
+		TypedAbility:       apiconvert.RefToNamedAPIResource(ability.GetAbilityRef()),
 		Monsters:           rel.Monsters,
-		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconv.ConvertBattleInteraction),
+		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconvert.BattleInteraction),
 	}
 
 	return response, nil

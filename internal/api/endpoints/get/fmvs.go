@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetFMV(r *http.Request, i handlerinput.Main[seedtypes.FMV, apitypes.FMV, apiresource.Named], id int32) (apitypes.FMV, error) {
+func FMV(r *http.Request, i handlerinput.Main[seedtypes.FMV, apitypes.FMV, apiresource.Named], id int32) (apitypes.FMV, error) {
 	fmv, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.FMV{}, err

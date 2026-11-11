@@ -15,7 +15,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetSubmenu(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes.Submenu, apiresource.Named], id int32) (apitypes.Submenu, error) {
+func Submenu(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes.Submenu, apiresource.Named], id int32) (apitypes.Submenu, error) {
 	submenu, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Submenu{}, err

@@ -9,6 +9,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func RetrieveProperties(r *http.Request, i handlerinput.Main[seedtypes.Property, apitypes.Property, apiresource.Named]) ([]int32, error) {
+func Properties(r *http.Request, i handlerinput.Main[seedtypes.Property, apitypes.Property, apiresource.Named]) ([]int32, error) {
 	return i.VerifyQueriesRetrieve(r)
 }

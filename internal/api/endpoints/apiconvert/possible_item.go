@@ -1,4 +1,4 @@
-package apiconv
+package apiconvert
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
@@ -6,6 +6,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertPossibleItem(item seedtypes.PossibleItem) apitypes.PossibleItem {
+func PossibleItem(item seedtypes.PossibleItem) apitypes.PossibleItem {
 	return th.NewPossibleItem(item.ItemAmount, item.Chance)
 }

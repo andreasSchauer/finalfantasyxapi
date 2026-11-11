@@ -15,7 +15,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func GetLocation(r *http.Request, i handlerinput.Main[seedtypes.Location, apitypes.Location, apiresource.Named], id int32) (apitypes.Location, error) {
+func Location(r *http.Request, i handlerinput.Main[seedtypes.Location, apitypes.Location, apiresource.Named], id int32) (apitypes.Location, error) {
 	location, err := i.VerifyQueriesGet(r, id)
 	if err != nil {
 		return apitypes.Location{}, err
@@ -104,11 +104,11 @@ func getLocationRelationships(r *http.Request, location seedtypes.Location) (api
 
 	g.Go(func() error {
 		var err error
-		locRel.Music, err = getMusicLocBased(ctx, location, LocBasedMusicQueries{
-			CueSongs:  config.Cfg.DB.GetLocationCueSongIDs,
-			BmSongs:   config.Cfg.DB.GetLocationBackgroundMusicSongIDs,
-			FMVSongs:  config.Cfg.DB.GetLocationFMVSongIDs,
-			BossMusic: config.Cfg.DB.GetLocationBossSongIDs,
+		locRel.Music, err = getMusicLocBased(ctx, location, locBasedMusicQueries{
+			cueSongs:  config.Cfg.DB.GetLocationCueSongIDs,
+			bmSongs:   config.Cfg.DB.GetLocationBackgroundMusicSongIDs,
+			fmvSongs:  config.Cfg.DB.GetLocationFMVSongIDs,
+			bossMusic: config.Cfg.DB.GetLocationBossSongIDs,
 		})
 		return err
 	})

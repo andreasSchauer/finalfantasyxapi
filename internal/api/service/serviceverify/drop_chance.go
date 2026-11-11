@@ -10,7 +10,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-func VerifyDropChanceParams(v ParamsVerifyer, params servicetypes.DropChanceParams) (servicetypes.DropChanceParams, error) {
+func DropChanceParams(v ParamsVerifyer, params servicetypes.DropChanceParams) (servicetypes.DropChanceParams, error) {
 	var err error
 
 	params.Monster, err = v.id(params.Monster, ts.PfnMonsterID)

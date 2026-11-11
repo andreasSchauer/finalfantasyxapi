@@ -1,4 +1,4 @@
-package apiconv
+package apiconvert
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func ConvertFoundEquipment(fe seedtypes.TreasureEquipment) apitypes.FoundEquipment {
+func FoundEquipment(fe seedtypes.TreasureEquipment) apitypes.FoundEquipment {
 	return apitypes.FoundEquipment{
 		EquipmentName:    handlerinput.NameToNamedAPIResource(apilookups.E.Equipment, fe.Name, nil),
 		Abilities:        handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, fe.Abilities),
