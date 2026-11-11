@@ -13,7 +13,7 @@ import (
 
 func TestGetAbility(t *testing.T) {
 	t.Parallel()
-	tests := []expAbility{
+	tests := []Ability{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/abilities/841",
@@ -32,14 +32,14 @@ func TestGetAbility(t *testing.T) {
 					"battle interactions 1 inflicted status conditions": 1,
 				},
 			},
-			expNameVer:       newExpNameVer(736, "self destruct", 1),
+			NameVer:       newExpNameVer(736, "self destruct", 1),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: true,
 			canCopyCat:       false,
 			abilityType:      database.AbilityTypeEnemyAbility,
 			typedAbility:     "/enemy-abilities/339",
 			monsters:         []int32{38, 176},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(3),
@@ -49,15 +49,15 @@ func TestGetAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypePhysical,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaSpecialNoVar,
 							damageConstant: 12,
 						},
@@ -70,8 +70,8 @@ func TestGetAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 				{
 					target:         "self",
@@ -82,7 +82,7 @@ func TestGetAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
@@ -92,8 +92,8 @@ func TestGetAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{7},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -108,14 +108,14 @@ func TestGetAbility(t *testing.T) {
 					"battle interactions 0 inflicted status conditions": 5,
 				},
 			},
-			expNameVer:       newExpNameVer(269, "hyper mighty g", 0),
+			NameVer:       newExpNameVer(269, "hyper mighty g", 0),
 			rank:             h.GetInt32Ptr(6),
 			appearsInHelpBar: true,
 			canCopyCat:       false,
 			abilityType:      database.AbilityTypeOverdriveAbility,
 			typedAbility:     "/overdrive-abilities/167",
 			monsters:         []int32{},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "all-allies",
 					abilityRange:   nil,
@@ -125,15 +125,15 @@ func TestGetAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeHeal,
 						damageType: database.DamageTypeSpecial,
-						ctb: &expClassDamage{
+						ctb: &ClassDamage{
 							damageFormula:  database.DamageFormulaCtbCurrent,
 							damageConstant: 8,
 						},
@@ -146,8 +146,8 @@ func TestGetAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{29, 26, 21, 28, 30},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -161,14 +161,14 @@ func TestGetAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			expNameVer:       newExpNameVer(72, "blizzard", 0),
+			NameVer:       newExpNameVer(72, "blizzard", 0),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: true,
 			canCopyCat:       true,
 			abilityType:      database.AbilityTypePlayerAbility,
 			typedAbility:     "/player-abilities/72",
 			monsters:         []int32{45, 47, 65, 86, 94, 167},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(4),
@@ -178,15 +178,15 @@ func TestGetAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    true,
 					reflectable:    true,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypeMagical,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaMagVsMdf,
 							damageConstant: 12,
 						},
@@ -199,8 +199,8 @@ func TestGetAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -211,7 +211,7 @@ func TestGetAbility(t *testing.T) {
 
 func TestRetrieveAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/abilities?type=7",
@@ -351,7 +351,7 @@ func TestRetrieveAbilities(t *testing.T) {
 
 func TestSubsectionAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/character-classes/1/default-abilities",

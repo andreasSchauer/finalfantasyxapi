@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expStat struct {
+type Stat struct {
 	testGeneral
-	expUnique
+	Unique
 	spheres            []int32
 	autoAbilities      []int32
 	playerAbilities    []int32
@@ -18,13 +18,13 @@ type expStat struct {
 	properties         []int32
 }
 
-func (e expStat) GetTestGeneral() testGeneral {
+func (e Stat) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareStats(test test, exp expStat, got apitypes.Stat) {
+func compareStats(test test, exp Stat, got apitypes.Stat) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.checkResIDsInSlice("spheres", apilookups.E.Spheres.Endpoint, exp.spheres, got.Spheres)
 	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
 	test.checkResIDsInSlice("player abilities", apilookups.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)

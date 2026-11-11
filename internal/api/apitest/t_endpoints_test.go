@@ -10,7 +10,7 @@ import (
 
 func TestRetrieveEndpoints(t *testing.T) {
 	t.Parallel()
-	tests := []expListPaths{
+	tests := []ListPaths{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/endpoints/1",

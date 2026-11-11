@@ -7,9 +7,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type expTreasure struct {
+type Treasure struct {
 	testGeneral
-	expIDOnly
+	IDOnly
 	area            int32
 	availability    database.AvailabilityType
 	isAnimaTreasure bool
@@ -20,13 +20,13 @@ type expTreasure struct {
 	equipment       *testFoundEquipment
 }
 
-func (e expTreasure) GetTestGeneral() testGeneral {
+func (e Treasure) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTreasures(test test, exp expTreasure, got apitypes.Treasure) {
+func compareTreasures(test test, exp Treasure, got apitypes.Treasure) {
 	test.t.Helper()
-	test.compareExpIDOnly(exp.expIDOnly, got.ID)
+	test.compareExpIDOnly(exp.IDOnly, got.ID)
 	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, exp.area, got.Area)
 	test.compare("availability", string(exp.availability), got.Availability)
 	test.compare("is anima treasure", exp.isAnimaTreasure, got.IsAnimaTreasure)

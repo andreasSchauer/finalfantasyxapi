@@ -10,7 +10,7 @@ import (
 
 func TestGetRonsoRage(t *testing.T) {
 	t.Parallel()
-	tests := []expRonsoRage{
+	tests := []RonsoRage{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/ronso-rages/13",
@@ -26,7 +26,7 @@ func TestGetRonsoRage(t *testing.T) {
 					"monsters": 5,
 				},
 			},
-			expUnique: newExpUnique(4, "self destruct"),
+			Unique: newExpUnique(4, "self destruct"),
 			overdrive: 39,
 			monsters:  []int32{38, 109, 167, 176, 245},
 		},
@@ -38,7 +38,7 @@ func TestGetRonsoRage(t *testing.T) {
 					"monsters": 3,
 				},
 			},
-			expUnique: newExpUnique(8, "doom"),
+			Unique: newExpUnique(8, "doom"),
 			overdrive: 43,
 			monsters:  []int32{154, 167, 210},
 		},
@@ -49,7 +49,7 @@ func TestGetRonsoRage(t *testing.T) {
 
 func TestRetrieveRonsoRages(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/ronso-rages",

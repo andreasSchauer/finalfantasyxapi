@@ -14,7 +14,7 @@ func TestDropChance(t *testing.T) {
 	t.Parallel()
 	requestURL := "/api/drop-chance"
 
-	tests := []expDropChanceResponse{
+	tests := []DropChanceResponse{
 		{
 			testGeneral: testGeneral{
 				requestURL:     requestURL,

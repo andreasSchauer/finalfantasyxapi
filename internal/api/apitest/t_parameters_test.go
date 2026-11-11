@@ -11,7 +11,7 @@ import (
 
 func TestParameters(t *testing.T) {
 	t.Parallel()
-	tests := []expListNames{
+	tests := []ListNames{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/parameters?ass=max",

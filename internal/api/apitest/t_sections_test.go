@@ -122,7 +122,7 @@ func TestSubsections(t *testing.T) {
 
 func TestSections(t *testing.T) {
 	t.Parallel()
-	tests := []expListNames{
+	tests := []ListNames{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/sections",

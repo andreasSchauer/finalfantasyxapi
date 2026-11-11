@@ -10,7 +10,7 @@ import (
 
 func TestGetBlitzballPrize(t *testing.T) {
 	t.Parallel()
-	tests := []expBlitzballPrize{
+	tests := []BlitzballPrize{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/9",
@@ -41,7 +41,7 @@ func TestGetBlitzballPrize(t *testing.T) {
 					"items": 8,
 				},
 			},
-			expIDOnly: newExpIDOnly(1),
+			IDOnly: newExpIDOnly(1),
 			category:  "league",
 			slot:      "1st",
 			items: []testPossibleItem{
@@ -59,7 +59,7 @@ func TestGetBlitzballPrize(t *testing.T) {
 					"items": 3,
 				},
 			},
-			expIDOnly: newExpIDOnly(8),
+			IDOnly: newExpIDOnly(8),
 			category:  "tournament",
 			slot:      "top-scorer",
 			items: []testPossibleItem{
@@ -74,7 +74,7 @@ func TestGetBlitzballPrize(t *testing.T) {
 
 func TestRetrieveBlitzballPrizes(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes?category=asd",

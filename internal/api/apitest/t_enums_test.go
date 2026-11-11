@@ -51,7 +51,7 @@ func TestGetEnum(t *testing.T) {
 
 func TestRetrieveEnums(t *testing.T) {
 	t.Parallel()
-	tests := []expListPaths{
+	tests := []ListPaths{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/enums/ability_type?ass=1",

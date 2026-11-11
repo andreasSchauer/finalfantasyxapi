@@ -75,66 +75,66 @@ func (t testGeneral) getTestName(name string, caseNum int) string {
 	return fmt.Sprintf("%s-%d: %s", name, caseNum, context)
 }
 
-type expNameVer struct {
+type NameVer struct {
 	id      int32
 	name    string
 	version *int32
 }
 
-func newExpNameVer(id int32, name string, version int32) expNameVer {
+func newExpNameVer(id int32, name string, version int32) NameVer {
 	vPtr := new(version)
 	if version == 0 {
 		vPtr = nil
 	}
 
-	return expNameVer{
+	return NameVer{
 		id:      id,
 		name:    name,
 		version: vPtr,
 	}
 }
 
-func (test test) compareExpNameVer(exp expNameVer, gotID int32, gotName string, gotVer *int32) {
+func (test test) compareExpNameVer(exp NameVer, gotID int32, gotName string, gotVer *int32) {
 	test.t.Helper()
 	test.compare("id", exp.id, gotID)
 	test.compare("name", exp.name, gotName)
 	test.compare("version", exp.version, gotVer)
 }
 
-type expUnique struct {
+type Unique struct {
 	id   int32
 	name string
 }
 
-func newExpUnique(id int32, name string) expUnique {
-	return expUnique{
+func newExpUnique(id int32, name string) Unique {
+	return Unique{
 		id:   id,
 		name: name,
 	}
 }
 
-func (test test) compareExpUnique(exp expUnique, gotID int32, gotName string) {
+func (test test) compareExpUnique(exp Unique, gotID int32, gotName string) {
 	test.t.Helper()
 	test.compare("id", exp.id, gotID)
 	test.compare("name", exp.name, gotName)
 }
 
-type expIDOnly struct {
+type IDOnly struct {
 	id int32
 }
 
-func newExpIDOnly(id int32) expIDOnly {
-	return expIDOnly{
+func newExpIDOnly(id int32) IDOnly {
+	return IDOnly{
 		id: id,
 	}
 }
 
-func (test test) compareExpIDOnly(exp expIDOnly, gotID int32) {
+func (test test) compareExpIDOnly(exp IDOnly, gotID int32) {
 	test.t.Helper()
 	test.compare("id", exp.id, gotID)
 }
 
-type expListIDs struct {
+type ListIDs struct {
 	testGeneral
 	count          int
 	previous       *string
@@ -143,7 +143,7 @@ type expListIDs struct {
 	results        []int32
 }
 
-func (l expListIDs) GetListParams() apiresource.ListParams {
+func (l ListIDs) GetListParams() apiresource.ListParams {
 	return apiresource.ListParams{
 		Count:    l.count,
 		Previous: l.previous,
@@ -151,7 +151,7 @@ func (l expListIDs) GetListParams() apiresource.ListParams {
 	}
 }
 
-type expListPaths struct {
+type ListPaths struct {
 	testGeneral
 	count    int
 	previous *string
@@ -159,7 +159,7 @@ type expListPaths struct {
 	results  []string
 }
 
-func (l expListPaths) GetListParams() apiresource.ListParams {
+func (l ListPaths) GetListParams() apiresource.ListParams {
 	return apiresource.ListParams{
 		Count:    l.count,
 		Previous: l.previous,
@@ -167,7 +167,7 @@ func (l expListPaths) GetListParams() apiresource.ListParams {
 	}
 }
 
-type expListNames struct {
+type ListNames struct {
 	testGeneral
 	count    int
 	previous *string
@@ -175,7 +175,7 @@ type expListNames struct {
 	results  []ts.NamedParam
 }
 
-func (l expListNames) GetListParams() apiresource.ListParams {
+func (l ListNames) GetListParams() apiresource.ListParams {
 	return apiresource.ListParams{
 		Count:    l.count,
 		Previous: l.previous,

@@ -11,7 +11,7 @@ import (
 
 func TestGetMix(t *testing.T) {
 	t.Parallel()
-	tests := []expMix{
+	tests := []Mix{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/mixes/65",
@@ -28,7 +28,7 @@ func TestGetMix(t *testing.T) {
 					"combinations": 62,
 				},
 			},
-			expUnique: newExpUnique(23, "tidal wave"),
+			Unique: newExpUnique(23, "tidal wave"),
 			category:  database.MixCategoryWaterElemental,
 			overdrive: 74,
 			combinations: []testMixCombination{
@@ -58,7 +58,7 @@ func TestGetMix(t *testing.T) {
 					"combinations": 2,
 				},
 			},
-			expUnique: newExpUnique(23, "tidal wave"),
+			Unique: newExpUnique(23, "tidal wave"),
 			category:  database.MixCategoryWaterElemental,
 			overdrive: 74,
 			combinations: []testMixCombination{
@@ -83,7 +83,7 @@ func TestGetMix(t *testing.T) {
 					"combinations": 15,
 				},
 			},
-			expUnique: newExpUnique(34, "ultra potion"),
+			Unique: newExpUnique(34, "ultra potion"),
 			category:  database.MixCategoryRecovery,
 			overdrive: 85,
 			combinations: []testMixCombination{
@@ -111,7 +111,7 @@ func TestGetMix(t *testing.T) {
 
 func TestRetrieveMixes(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/mixes?limit=max",

@@ -103,7 +103,7 @@ func testServiceResponsesPost[E testCase, G any](t *testing.T, tests []E, testFu
 
 // compareAPIResourceLists for normal API Resources
 // compareSimpleResourceLists for Subsections
-func testIDList[G any](t *testing.T, tests []expListIDs, endpoint ts.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, ts.EndpointName, expListIDs, G)) {
+func testIDList[G any](t *testing.T, tests []ListIDs, endpoint ts.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, ts.EndpointName, ListIDs, G)) {
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()
@@ -133,7 +133,7 @@ func testIDList[G any](t *testing.T, tests []expListIDs, endpoint ts.EndpointNam
 }
 
 // compareAPIResourceListPaths for api resources
-func testPathList[G any](t *testing.T, tests []expListPaths, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, expListPaths, G)) {
+func testPathList[G any](t *testing.T, tests []ListPaths, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, ListPaths, G)) {
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.testGeneral
@@ -159,7 +159,7 @@ func testPathList[G any](t *testing.T, tests []expListPaths, testFuncName string
 
 // compareParameterLists for /parameters lists
 // compareSectionLists for /sections lists
-func testNameList[G any](t *testing.T, tests []expListNames, testFuncName string, compFunc func(test, ts.EndpointName, expListNames, G)) {
+func testNameList[G any](t *testing.T, tests []ListNames, testFuncName string, compFunc func(test, ts.EndpointName, ListNames, G)) {
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.testGeneral

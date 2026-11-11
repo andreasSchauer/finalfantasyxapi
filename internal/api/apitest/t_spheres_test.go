@@ -11,7 +11,7 @@ import (
 
 func TestGetSphere(t *testing.T) {
 	t.Parallel()
-	tests := []expSphere{
+	tests := []Sphere{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/spheres/31",
@@ -32,7 +32,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique:   newExpUnique(4, "ability sphere"),
+			Unique:   newExpUnique(4, "ability sphere"),
 			item:        73,
 			createdNode: nil,
 			monsters: []testMonItemAmts{
@@ -67,7 +67,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique: newExpUnique(16, "hp sphere"),
+			Unique: newExpUnique(16, "hp sphere"),
 			item:      85,
 			createdNode: &apitypes.CreatedNode{
 				Node:  "hp",
@@ -116,7 +116,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique: newExpUnique(16, "hp sphere"),
+			Unique: newExpUnique(16, "hp sphere"),
 			item:      85,
 			createdNode: &apitypes.CreatedNode{
 				Node:  "hp",
@@ -153,7 +153,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique:       newExpUnique(26, "clear sphere"),
+			Unique:       newExpUnique(26, "clear sphere"),
 			item:            95,
 			createdNode:     nil,
 			monsters:        []testMonItemAmts{},
@@ -175,7 +175,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique:       newExpUnique(26, "clear sphere"),
+			Unique:       newExpUnique(26, "clear sphere"),
 			item:            95,
 			createdNode:     nil,
 			monsters:        []testMonItemAmts{},
@@ -197,7 +197,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique:   newExpUnique(2, "mana sphere"),
+			Unique:   newExpUnique(2, "mana sphere"),
 			item:        71,
 			createdNode: nil,
 			monsters: []testMonItemAmts{
@@ -228,7 +228,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique:   newExpUnique(2, "mana sphere"),
+			Unique:   newExpUnique(2, "mana sphere"),
 			item:        71,
 			createdNode: nil,
 			monsters: []testMonItemAmts{
@@ -259,7 +259,7 @@ func TestGetSphere(t *testing.T) {
 
 func TestRetrieveSpheres(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/spheres?limit=max",

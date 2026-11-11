@@ -6,42 +6,42 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expSidequest struct {
+type Sidequest struct {
 	testGeneral
-	expUnique
+	Unique
 	untypedQuest int32
 	completion   *testQuestCompletion
 	subquests    []int32
 }
 
-func (e expSidequest) GetTestGeneral() testGeneral {
+func (e Sidequest) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSidequests(test test, exp expSidequest, got apitypes.Sidequest) {
+func compareSidequests(test test, exp Sidequest, got apitypes.Sidequest) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped quest", apilookups.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
 	test.compTestStructPtrs("completion", exp.completion, got.Completion, compareQuestCompletions)
 	test.checkResIDsInSlice("subquests", apilookups.E.Subquests.Endpoint, exp.subquests, got.Subquests)
 }
 
-type expSubquest struct {
+type Subquest struct {
 	testGeneral
-	expUnique
+	Unique
 	untypedQuest    int32
 	parentSidequest int32
 	completion      testQuestCompletion
 	arenaCreation   *int32
 }
 
-func (e expSubquest) GetTestGeneral() testGeneral {
+func (e Subquest) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSubquests(test test, exp expSubquest, got apitypes.Subquest) {
+func compareSubquests(test test, exp Subquest, got apitypes.Subquest) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped quest", apilookups.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
 	test.compIDAPIResource("parent sidequest", apilookups.E.Sidequests.Endpoint, exp.parentSidequest, got.ParentSidequest)
 	compareQuestCompletions(test, "completion", exp.completion, got.Completion)

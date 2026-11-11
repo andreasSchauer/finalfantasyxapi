@@ -12,7 +12,7 @@ import (
 
 func TestGetEnemyAbility(t *testing.T) {
 	t.Parallel()
-	tests := []expEnemyAbility{
+	tests := []EnemyAbility{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/enemy-abilities/444",
@@ -31,13 +31,13 @@ func TestGetEnemyAbility(t *testing.T) {
 					"battle interactions 0 removed status conditions": 10,
 				},
 			},
-			expNameVer:       newExpNameVer(56, "attack", 40),
+			NameVer:       newExpNameVer(56, "attack", 40),
 			rank:             h.GetInt32Ptr(1),
 			appearsInHelpBar: false,
 			canCopyCat:       false,
 			untypedAbility:   453,
 			monsters:         []int32{297},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(1),
@@ -47,15 +47,15 @@ func TestGetEnemyAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypePhysical,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaStrVsDef,
 							damageConstant: 16,
 						},
@@ -69,8 +69,8 @@ func TestGetEnemyAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{21, 22, 23, 24, 25, 26, 27, 28, 29, 30},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -84,13 +84,13 @@ func TestGetEnemyAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			expNameVer:       newExpNameVer(228, "karma", 2),
+			NameVer:       newExpNameVer(228, "karma", 2),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: true,
 			canCopyCat:       false,
 			untypedAbility:   625,
 			monsters:         []int32{265},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(3),
@@ -100,15 +100,15 @@ func TestGetEnemyAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypeSpecial,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaSpecialKills,
 							damageConstant: 100,
 						},
@@ -122,8 +122,8 @@ func TestGetEnemyAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -139,13 +139,13 @@ func TestGetEnemyAbility(t *testing.T) {
 					"battle interactions 0 copied status conditions":  18,
 				},
 			},
-			expNameVer:       newExpNameVer(393, "swallow", 2),
+			NameVer:       newExpNameVer(393, "swallow", 2),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: false,
 			canCopyCat:       false,
 			untypedAbility:   790,
 			monsters:         []int32{227},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(3),
@@ -155,7 +155,7 @@ func TestGetEnemyAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
@@ -165,8 +165,8 @@ func TestGetEnemyAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{4, 10, 12, 14, 16, 17, 18, 19, 20},
 					copiedStatusConditions:    []int32{4, 12, 14, 16, 20, 21, 27, 28, 24, 25},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -177,7 +177,7 @@ func TestGetEnemyAbility(t *testing.T) {
 
 func TestGetMultipleEnemyAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/enemy-abilities/attack?limit=max",
@@ -201,7 +201,7 @@ func TestGetMultipleEnemyAbilities(t *testing.T) {
 
 func TestRetrieveEnemyAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/enemy-abilities?limit=max",

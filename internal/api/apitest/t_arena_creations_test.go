@@ -11,7 +11,7 @@ import (
 
 func TestGetArenaCreation(t *testing.T) {
 	t.Parallel()
-	tests := []expArenaCreation{
+	tests := []ArenaCreation{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/36",
@@ -42,7 +42,7 @@ func TestGetArenaCreation(t *testing.T) {
 					"required monsters": 10,
 				},
 			},
-			expUnique:           newExpUnique(13, "vorban"),
+			Unique:           newExpUnique(13, "vorban"),
 			category:            "area",
 			monster:             268,
 			parentSubquest:      13,
@@ -59,7 +59,7 @@ func TestGetArenaCreation(t *testing.T) {
 					"required monsters": 5,
 				},
 			},
-			expUnique:           newExpUnique(19, "one-eye"),
+			Unique:           newExpUnique(19, "one-eye"),
 			category:            "species",
 			monster:             274,
 			parentSubquest:      19,
@@ -76,7 +76,7 @@ func TestGetArenaCreation(t *testing.T) {
 					"required monsters": 0,
 				},
 			},
-			expUnique:                 newExpUnique(31, "th'uban"),
+			Unique:                 newExpUnique(31, "th'uban"),
 			category:                  "original",
 			monster:                   286,
 			parentSubquest:            31,
@@ -92,7 +92,7 @@ func TestGetArenaCreation(t *testing.T) {
 
 func TestRetrieveArenaCreations(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations?category=asd",

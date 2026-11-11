@@ -14,7 +14,7 @@ import (
 
 func TestGetMonster(t *testing.T) {
 	t.Parallel()
-	tests := []expMonster{
+	tests := []Monster{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/308",
@@ -164,7 +164,7 @@ func TestGetMonster(t *testing.T) {
 					"abilities":         1,
 				},
 			},
-			expNameVer: newExpNameVer(27, "yellow element", 0),
+			NameVer: newExpNameVer(27, "yellow element", 0),
 			agility: &testAgilityParams{
 				agilityTier: 6,
 				tickSpeed:   16,
@@ -300,7 +300,7 @@ func TestGetMonster(t *testing.T) {
 					"other items": 3,
 				},
 			},
-			expNameVer:   newExpNameVer(156, "magic urn", 1),
+			NameVer:   newExpNameVer(156, "magic urn", 1),
 			agility:      nil,
 			regenAmounts: nil,
 			items: &testMonItems{
@@ -344,7 +344,7 @@ func TestGetMonster(t *testing.T) {
 					"abilities":         11,
 				},
 			},
-			expNameVer: newExpNameVer(86, "spherimorph", 0),
+			NameVer: newExpNameVer(86, "spherimorph", 0),
 			agility: &testAgilityParams{
 				agilityTier: 10,
 				tickSpeed:   12,
@@ -451,7 +451,7 @@ func TestGetMonster(t *testing.T) {
 					"altered states":    1,
 				},
 			},
-			expNameVer: newExpNameVer(105, "sand worm", 0),
+			NameVer: newExpNameVer(105, "sand worm", 0),
 			appliedState: &testAppliedState{
 				condition:   "While 'Readying Quake'.",
 				isTemporary: true,
@@ -499,7 +499,7 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 2,
 				},
 			},
-			expNameVer: newExpNameVer(287, "neslug", 0),
+			NameVer: newExpNameVer(287, "neslug", 0),
 			appliedState: &testAppliedState{
 				condition:   "While hidden in its shell.",
 				isTemporary: true,
@@ -561,7 +561,7 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 2,
 				},
 			},
-			expNameVer: newExpNameVer(287, "neslug", 0),
+			NameVer: newExpNameVer(287, "neslug", 0),
 			appliedState: &testAppliedState{
 				condition:   "Without its shell.",
 				isTemporary: false,
@@ -611,7 +611,7 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 1,
 				},
 			},
-			expNameVer: newExpNameVer(114, "evrae", 0),
+			NameVer: newExpNameVer(114, "evrae", 0),
 			appliedState: &testAppliedState{
 				condition:   "When the Airship is far away.",
 				isTemporary: false,
@@ -649,7 +649,7 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 1,
 				},
 			},
-			expNameVer: newExpNameVer(305, "penance", 0),
+			NameVer: newExpNameVer(305, "penance", 0),
 			appliedState: &testAppliedState{
 				condition:     "When HP falls below 9000000.",
 				isTemporary:   false,
@@ -695,7 +695,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: newExpNameVer(211, "seymour omnis", 0),
+			NameVer: newExpNameVer(211, "seymour omnis", 0),
 			elemResists: []testElemResist{
 				{
 					element:  1,
@@ -743,7 +743,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: newExpNameVer(211, "seymour omnis", 0),
+			NameVer: newExpNameVer(211, "seymour omnis", 0),
 			elemResists: []testElemResist{
 				{
 					element:  1,
@@ -791,7 +791,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: newExpNameVer(211, "seymour omnis", 0),
+			NameVer: newExpNameVer(211, "seymour omnis", 0),
 			elemResists: []testElemResist{
 				{
 					element:  1,
@@ -840,7 +840,7 @@ func TestGetMonster(t *testing.T) {
 					"ronso rages": 4,
 				},
 			},
-			expNameVer: newExpNameVer(167, "biran ronso", 0),
+			NameVer: newExpNameVer(167, "biran ronso", 0),
 			agility: &testAgilityParams{
 				agilityTier: 19,
 				tickSpeed:   3,
@@ -880,7 +880,7 @@ func TestGetMonster(t *testing.T) {
 					"ronso rages": 4,
 				},
 			},
-			expNameVer: newExpNameVer(168, "yenke ronso", 0),
+			NameVer: newExpNameVer(168, "yenke ronso", 0),
 			agility: &testAgilityParams{
 				agilityTier: 12,
 				tickSpeed:   10,
@@ -919,7 +919,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: newExpNameVer(168, "yenke ronso", 0),
+			NameVer: newExpNameVer(168, "yenke ronso", 0),
 			agility: &testAgilityParams{
 				agilityTier: 2,
 				tickSpeed:   26,
@@ -959,7 +959,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: newExpNameVer(273, "vidatu", 0),
+			NameVer: newExpNameVer(273, "vidatu", 0),
 			regenAmounts: []testRegenAmount{
 				{
 					index:    0,
@@ -1012,7 +1012,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: newExpNameVer(216, "valefor", 1),
+			NameVer: newExpNameVer(216, "valefor", 1),
 			agility: &testAgilityParams{
 				agilityTier: 15,
 				tickSpeed:   7,
@@ -1056,7 +1056,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: newExpNameVer(216, "valefor", 1),
+			NameVer: newExpNameVer(216, "valefor", 1),
 			agility: &testAgilityParams{
 				agilityTier: 14,
 				tickSpeed:   8,
@@ -1100,7 +1100,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: newExpNameVer(216, "valefor", 1),
+			NameVer: newExpNameVer(216, "valefor", 1),
 			agility: &testAgilityParams{
 				agilityTier: 15,
 				tickSpeed:   7,
@@ -1148,7 +1148,7 @@ func TestGetMonster(t *testing.T) {
 					"formation": 1,
 				},
 			},
-			expNameVer: newExpNameVer(87, "evil eye", 1),
+			NameVer: newExpNameVer(87, "evil eye", 1),
 			areas:      []int32{159},
 			formations: []int32{134},
 		},
@@ -1180,7 +1180,7 @@ func TestGetMonster(t *testing.T) {
 					"formation": 2,
 				},
 			},
-			expNameVer: newExpNameVer(87, "evil eye", 1),
+			NameVer: newExpNameVer(87, "evil eye", 1),
 			areas:      []int32{159},
 			formations: []int32{128, 132},
 		},
@@ -1212,7 +1212,7 @@ func TestGetMonster(t *testing.T) {
 					"formation": 2,
 				},
 			},
-			expNameVer: newExpNameVer(87, "evil eye", 1),
+			NameVer: newExpNameVer(87, "evil eye", 1),
 			areas:      []int32{154, 157},
 			formations: []int32{128, 132},
 		},
@@ -1240,7 +1240,7 @@ func TestGetMonster(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expNameVer: newExpNameVer(93, "seymour", 0),
+			NameVer: newExpNameVer(93, "seymour", 0),
 			agility: &testAgilityParams{
 				agilityTier: 12,
 				tickSpeed:   10,
@@ -1256,7 +1256,7 @@ func TestGetMonster(t *testing.T) {
 
 func TestGetMultipleMonsters(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/guado_guardian",
@@ -1296,7 +1296,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 
 func TestRetrieveMonsters(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters?limit=asd",
@@ -1660,7 +1660,7 @@ func TestRetrieveMonsters(t *testing.T) {
 
 func TestSubsectionMonsters(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/?ids=1&location=15",

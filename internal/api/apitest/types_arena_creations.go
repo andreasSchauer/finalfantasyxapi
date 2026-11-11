@@ -6,9 +6,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expArenaCreation struct {
+type ArenaCreation struct {
 	testGeneral
-	expUnique
+	Unique
 	category                  string
 	monster                   int32
 	parentSubquest            int32
@@ -18,13 +18,13 @@ type expArenaCreation struct {
 	requiredMonsters          []int32
 }
 
-func (e expArenaCreation) GetTestGeneral() testGeneral {
+func (e ArenaCreation) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareArenaCreations(test test, exp expArenaCreation, got apitypes.ArenaCreation) {
+func compareArenaCreations(test test, exp ArenaCreation, got apitypes.ArenaCreation) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compare("category", exp.category, got.Category)
 	test.compIDAPIResource("monster", apilookups.E.Monsters.Endpoint, exp.monster, got.Monster)
 	test.compIDAPIResource("parent subquest", apilookups.E.Subquests.Endpoint, exp.parentSubquest, got.ParentSubquest)

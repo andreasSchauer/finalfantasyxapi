@@ -6,9 +6,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type expKeyItem struct {
+type KeyItem struct {
 	testGeneral
-	expUnique
+	Unique
 	untypedItem     int32
 	category        database.KeyItemCategory
 	celestialWeapon *int32
@@ -18,13 +18,13 @@ type expKeyItem struct {
 	quests          []int32
 }
 
-func (e expKeyItem) GetTestGeneral() testGeneral {
+func (e KeyItem) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareKeyItems(test test, exp expKeyItem, got apitypes.KeyItem) {
+func compareKeyItems(test test, exp KeyItem, got apitypes.KeyItem) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped item", apilookups.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
 	test.compare("category", string(exp.category), got.Category)
 	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)

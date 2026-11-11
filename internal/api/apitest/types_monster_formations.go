@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expMonsterFormation struct {
+type MonsterFormation struct {
 	testGeneral
-	expIDOnly
+	IDOnly
 	category        string
 	isForcedAmbush  bool
 	canEscape       bool
@@ -20,13 +20,13 @@ type expMonsterFormation struct {
 	triggerCommands []testFormationTC
 }
 
-func (e expMonsterFormation) GetTestGeneral() testGeneral {
+func (e MonsterFormation) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareMonsterFormations(test test, exp expMonsterFormation, got apitypes.MonsterFormation) {
+func compareMonsterFormations(test test, exp MonsterFormation, got apitypes.MonsterFormation) {
 	test.t.Helper()
-	test.compareExpIDOnly(exp.expIDOnly, got.ID)
+	test.compareExpIDOnly(exp.IDOnly, got.ID)
 	test.compare("category", exp.category, got.Category)
 	test.compare("is forced ambush", exp.isForcedAmbush, got.IsForcedAmbush)
 	test.compare("can escape", exp.canEscape, got.CanEscape)

@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expAeon struct {
+type Aeon struct {
 	testGeneral
-	expUnique
+	Unique
 	untypedUnit            int32
 	area                   int32
 	battlesToRegen         int32
@@ -19,17 +19,17 @@ type expAeon struct {
 	aeonCommands           []int32
 	defaultPlayerAbilities []int32
 	overdrives             []int32
-	weaponAbilities        []expAeonEquipment
-	armorAbilities         []expAeonEquipment
+	weaponAbilities        []AeonEquipment
+	armorAbilities         []AeonEquipment
 }
 
-func (e expAeon) GetTestGeneral() testGeneral {
+func (e Aeon) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAeons(test test, exp expAeon, got apitypes.Aeon) {
+func compareAeons(test test, exp Aeon, got apitypes.Aeon) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped unit", apilookups.E.PlayerUnits.Endpoint, exp.untypedUnit, got.UntypedUnit)
 	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, exp.area, got.Area)
 	test.compare("battles to regenerate", exp.battlesToRegen, got.BattlesToRegenerate)
@@ -44,12 +44,12 @@ func compareAeons(test test, exp expAeon, got apitypes.Aeon) {
 	test.compTestStructSlices("armor abilities", exp.armorAbilities, got.ArmorAbilities, compareAeonEquipment)
 }
 
-type expAeonEquipment struct {
+type AeonEquipment struct {
 	autoAbility     int32
 	celestialWeapon bool
 }
 
-func compareAeonEquipment(test test, _ string, exp expAeonEquipment, got apitypes.AeonEquipment) {
+func compareAeonEquipment(test test, _ string, exp AeonEquipment, got apitypes.AeonEquipment) {
 	test.t.Helper()
 	test.compIDAPIResource("auto ability", apilookups.E.AutoAbilities.Endpoint, exp.autoAbility, got.AutoAbility)
 	test.compare("celestial weapon", exp.celestialWeapon, got.CelestialWeapon)

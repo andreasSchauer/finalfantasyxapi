@@ -6,22 +6,22 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type expShop struct {
+type Shop struct {
 	testGeneral
-	expIDOnly
+	IDOnly
 	area        int32
 	category    database.ShopCategory
 	preAirship  *testSubShop
 	postAirship *testSubShop
 }
 
-func (e expShop) GetTestGeneral() testGeneral {
+func (e Shop) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareShops(test test, exp expShop, got apitypes.Shop) {
+func compareShops(test test, exp Shop, got apitypes.Shop) {
 	test.t.Helper()
-	test.compareExpIDOnly(exp.expIDOnly, got.ID)
+	test.compareExpIDOnly(exp.IDOnly, got.ID)
 	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, exp.area, got.Area)
 	test.compare("category", string(exp.category), got.Category)
 	test.compTestStructPtrs("pre airship", exp.preAirship, got.PreAirship, compareSubShops)

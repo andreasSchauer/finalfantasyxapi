@@ -13,7 +13,7 @@ import (
 
 func TestGetOverdriveAbility(t *testing.T) {
 	t.Parallel()
-	tests := []expOverdriveAbility{
+	tests := []OverdriveAbility{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-abilities/191",
@@ -31,12 +31,12 @@ func TestGetOverdriveAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			expNameVer:       newExpNameVer(20, "thunder shot", 1),
+			NameVer:       newExpNameVer(20, "thunder shot", 1),
 			rank:             h.GetInt32Ptr(4),
 			untypedAbility:   122,
 			overdriveCommand: h.GetInt32Ptr(3),
 			overdrives:       []int32{13, 16},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "random-enemy",
 					abilityRange:   h.GetInt32Ptr(3),
@@ -46,15 +46,15 @@ func TestGetOverdriveAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypeSpecial,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaStrVsDef,
 							damageConstant: 34,
 						},
@@ -68,8 +68,8 @@ func TestGetOverdriveAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -85,12 +85,12 @@ func TestGetOverdriveAbility(t *testing.T) {
 					"battle interactions 0 removed status conditions":   10,
 				},
 			},
-			expNameVer:       newExpNameVer(159, "final elixir", 0),
+			NameVer:       newExpNameVer(159, "final elixir", 0),
 			rank:             h.GetInt32Ptr(6),
 			untypedAbility:   261,
 			overdriveCommand: h.GetInt32Ptr(7),
 			overdrives:       []int32{93},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "all-allies",
 					abilityRange:   nil,
@@ -100,19 +100,19 @@ func TestGetOverdriveAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeHeal,
 						damageType: database.DamageTypeSpecial,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaPercentageMax,
 							damageConstant: 16,
 						},
-						mp: &expClassDamage{
+						mp: &ClassDamage{
 							damageFormula:  database.DamageFormulaPercentageMax,
 							damageConstant: 16,
 						},
@@ -126,8 +126,8 @@ func TestGetOverdriveAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{40},
 					removedStatusConditions:   []int32{1, 2, 3, 4, 9, 10, 12, 13, 14, 16},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -143,12 +143,12 @@ func TestGetOverdriveAbility(t *testing.T) {
 					"battle interactions 0 mod changes":                 4,
 				},
 			},
-			expNameVer:       newExpNameVer(163, "ultra nulall", 0),
+			NameVer:       newExpNameVer(163, "ultra nulall", 0),
 			rank:             h.GetInt32Ptr(6),
 			untypedAbility:   265,
 			overdriveCommand: h.GetInt32Ptr(7),
 			overdrives:       []int32{97},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "all-allies",
 					abilityRange:   nil,
@@ -158,7 +158,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
@@ -168,7 +168,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{22, 23, 24, 25},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges: []expStatChange{
+					statChanges: []StatChange{
 						{
 							stat:            3,
 							calculationType: "added-value",
@@ -180,7 +180,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 							value:           5,
 						},
 					},
-					modifierChanges: []expModChange{
+					modifierChanges: []ModChange{
 						{
 							modifier:        3,
 							calculationType: "added-value",
@@ -215,12 +215,12 @@ func TestGetOverdriveAbility(t *testing.T) {
 					"battle interactions": 2,
 				},
 			},
-			expNameVer:       newExpNameVer(7, "blitz ace", 1),
+			NameVer:       newExpNameVer(7, "blitz ace", 1),
 			rank:             h.GetInt32Ptr(7),
 			untypedAbility:   109,
 			overdriveCommand: h.GetInt32Ptr(1),
 			overdrives:       []int32{4},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-enemy",
 					abilityRange:   h.GetInt32Ptr(1),
@@ -230,15 +230,15 @@ func TestGetOverdriveAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypeSpecial,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaStrVsDef,
 							damageConstant: 4,
 						},
@@ -252,8 +252,8 @@ func TestGetOverdriveAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 				{
 					target:         "single-enemy",
@@ -264,15 +264,15 @@ func TestGetOverdriveAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypeSpecial,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaStrVsDef,
 							damageConstant: 24,
 						},
@@ -286,8 +286,8 @@ func TestGetOverdriveAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -298,7 +298,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 
 func TestGetMultipleOverdriveAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-abilities/grand_summon",
@@ -330,7 +330,7 @@ func TestGetMultipleOverdriveAbilities(t *testing.T) {
 
 func TestRetrieveOverdriveAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-abilities?limit=max",
@@ -398,7 +398,7 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 
 func TestSubsectionOverdriveAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrives/14/overdrive-abilities",

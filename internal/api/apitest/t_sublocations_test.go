@@ -12,7 +12,7 @@ import (
 
 func TestGetSublocation(t *testing.T) {
 	t.Parallel()
-	tests := []expSublocation{
+	tests := []Sublocation{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/0",
@@ -62,11 +62,11 @@ func TestGetSublocation(t *testing.T) {
 					"fmvs":                   0,
 				},
 			},
-			expUnique:             newExpUnique(35, "calm lands"),
+			Unique:             newExpUnique(35, "calm lands"),
 			parentLocation:        20,
 			connectedSublocations: []int32{26, 36, 38, 39},
 			areas:                 []int32{200, 201, 202, 203, 204, 205},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				shops:      []int32{31, 32, 33},
 				treasures:  []int32{265, 268, 270, 272},
 				monsters:   []int32{138, 142, 149, 259, 270, 282, 292},
@@ -98,11 +98,11 @@ func TestGetSublocation(t *testing.T) {
 					"quests":                 0,
 				},
 			},
-			expUnique:             newExpUnique(26, "macalania woods"),
+			Unique:             newExpUnique(26, "macalania woods"),
 			parentLocation:        15,
 			connectedSublocations: []int32{25, 27, 34, 35},
 			areas:                 []int32{141, 143, 146, 149, 153},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				characters: []int32{},
 				aeons:      []int32{},
 				shops:      []int32{22},
@@ -132,11 +132,11 @@ func TestGetSublocation(t *testing.T) {
 					"quests":                 0,
 				},
 			},
-			expUnique:             newExpUnique(26, "macalania woods"),
+			Unique:             newExpUnique(26, "macalania woods"),
 			parentLocation:        15,
 			connectedSublocations: []int32{25, 27, 34, 35},
 			areas:                 []int32{141, 143, 146, 149, 153},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				characters: []int32{},
 				aeons:      []int32{},
 				shops:      []int32{},
@@ -166,11 +166,11 @@ func TestGetSublocation(t *testing.T) {
 					"quests":                 5,
 				},
 			},
-			expUnique:             newExpUnique(26, "macalania woods"),
+			Unique:             newExpUnique(26, "macalania woods"),
 			parentLocation:        15,
 			connectedSublocations: []int32{25, 27, 34, 35},
 			areas:                 []int32{141, 143, 146, 149, 153},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				characters: []int32{},
 				aeons:      []int32{},
 				shops:      []int32{},
@@ -202,11 +202,11 @@ func TestGetSublocation(t *testing.T) {
 					"fmvs":                   2,
 				},
 			},
-			expUnique:             newExpUnique(14, "stadium"),
+			Unique:             newExpUnique(14, "stadium"),
 			parentLocation:        8,
 			connectedSublocations: []int32{15},
 			areas:                 []int32{68, 69, 70, 71, 72, 73, 74},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				characters: []int32{6},
 				aeons:      []int32{},
 				shops:      []int32{5},
@@ -248,11 +248,11 @@ func TestGetSublocation(t *testing.T) {
 					"fmvs":                   3,
 				},
 			},
-			expUnique:             newExpUnique(7, "besaid"),
+			Unique:             newExpUnique(7, "besaid"),
 			parentLocation:        4,
 			connectedSublocations: []int32{8, 9},
 			areas:                 []int32{20, 24, 29, 31, 35},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				characters: []int32{3},
 				aeons:      []int32{1},
 				treasures:  []int32{15, 18, 24, 40, 44},
@@ -275,7 +275,7 @@ func TestGetSublocation(t *testing.T) {
 
 func TestRetrieveSublocations(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?limit=max",
@@ -451,7 +451,7 @@ func TestRetrieveSublocations(t *testing.T) {
 
 func TestSubsectionSublocations(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/5/connected/",

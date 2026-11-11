@@ -11,7 +11,7 @@ import (
 
 func TestGetAeon(t *testing.T) {
 	t.Parallel()
-	tests := []expAeon{
+	tests := []Aeon{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/11",
@@ -35,7 +35,7 @@ func TestGetAeon(t *testing.T) {
 					"armor abilities":   4,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   3,
 				name: "ixion",
 			},
@@ -65,7 +65,7 @@ func TestGetAeon(t *testing.T) {
 			aeonCommands:           []int32{},
 			defaultPlayerAbilities: []int32{49, 50, 70, 74, 90},
 			overdrives:             []int32{120},
-			weaponAbilities: []expAeonEquipment{
+			weaponAbilities: []AeonEquipment{
 				{
 					autoAbility:     54,
 					celestialWeapon: false,
@@ -79,7 +79,7 @@ func TestGetAeon(t *testing.T) {
 					celestialWeapon: true,
 				},
 			},
-			armorAbilities: []expAeonEquipment{
+			armorAbilities: []AeonEquipment{
 				{
 					autoAbility:     1,
 					celestialWeapon: false,
@@ -116,7 +116,7 @@ func TestGetAeon(t *testing.T) {
 				},
 			},
 			untypedUnit: 17,
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   9,
 				name: "sandy",
 			},
@@ -184,7 +184,7 @@ func TestGetAeon(t *testing.T) {
 					"overdrives":        2,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   1,
 				name: "valefor",
 			},
@@ -233,7 +233,7 @@ func TestGetAeon(t *testing.T) {
 				},
 				expLengths: map[string]int{},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   1,
 				name: "valefor",
 			},
@@ -264,7 +264,7 @@ func TestGetAeon(t *testing.T) {
 
 func TestRetrieveAeons(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/aeons",

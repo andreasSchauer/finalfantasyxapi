@@ -21,7 +21,7 @@ func (l gotSimpleResourceList[T, S]) GetResults() []S {
 	return l.Results
 }
 
-func compareSimpleResourceLists[T apiresource.APIResource, S apiresource.SimpleResource](test test, endpoint ts.EndpointName, expList expListIDs, gotList gotSimpleResourceList[T, S]) {
+func compareSimpleResourceLists[T apiresource.APIResource, S apiresource.SimpleResource](test test, endpoint ts.EndpointName, expList ListIDs, gotList gotSimpleResourceList[T, S]) {
 	test.t.Helper()
 	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
 

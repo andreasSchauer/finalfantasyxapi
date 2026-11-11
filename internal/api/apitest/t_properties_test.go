@@ -10,7 +10,7 @@ import (
 
 func TestGetProperty(t *testing.T) {
 	t.Parallel()
-	tests := []expProperty{
+	tests := []Property{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/properties/14",
@@ -28,7 +28,7 @@ func TestGetProperty(t *testing.T) {
 					"monsters":       53,
 				},
 			},
-			expUnique:     newExpUnique(1, "armored"),
+			Unique:     newExpUnique(1, "armored"),
 			autoAbilities: []int32{},
 			monsters:      []int32{5, 29, 79, 107, 197, 277, 292},
 		},
@@ -42,7 +42,7 @@ func TestGetProperty(t *testing.T) {
 					"monsters":       0,
 				},
 			},
-			expUnique:     newExpUnique(4, "piercing"),
+			Unique:     newExpUnique(4, "piercing"),
 			autoAbilities: []int32{2},
 			monsters:      []int32{},
 		},
@@ -56,7 +56,7 @@ func TestGetProperty(t *testing.T) {
 					"monsters":       123,
 				},
 			},
-			expUnique:     newExpUnique(11, "delayproof"),
+			Unique:     newExpUnique(11, "delayproof"),
 			autoAbilities: []int32{54},
 			monsters:      []int32{5, 33, 70, 136, 193, 235, 262, 282, 307},
 		},
@@ -67,7 +67,7 @@ func TestGetProperty(t *testing.T) {
 
 func TestRetrieveProperties(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/properties",

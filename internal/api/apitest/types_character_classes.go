@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expCharacterClass struct {
+type CharacterClass struct {
 	testGeneral
-	expUnique
+	Unique
 	category            string
 	members             []int32
 	defaultAbilities    []int32
@@ -17,13 +17,13 @@ type expCharacterClass struct {
 	submenus            []int32
 }
 
-func (e expCharacterClass) GetTestGeneral() testGeneral {
+func (e CharacterClass) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareCharacterClasses(test test, exp expCharacterClass, got apitypes.CharacterClass) {
+func compareCharacterClasses(test test, exp CharacterClass, got apitypes.CharacterClass) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compare("category", exp.category, got.Category)
 	test.checkResIDsInSlice("members", apilookups.E.PlayerUnits.Endpoint, exp.members, got.Members)
 	test.checkResIDsInSlice("default abilities", apilookups.E.Abilities.Endpoint, exp.defaultAbilities, got.DefaultAbilities)

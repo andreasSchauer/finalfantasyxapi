@@ -12,7 +12,7 @@ import (
 
 func TestGetItem(t *testing.T) {
 	t.Parallel()
-	tests := []expItem{
+	tests := []Item{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/items/113",
@@ -36,7 +36,7 @@ func TestGetItem(t *testing.T) {
 					"mixes":                21,
 				},
 			},
-			expUnique:   newExpUnique(69, "three stars"),
+			Unique:   newExpUnique(69, "three stars"),
 			untypedItem: 69,
 			category:    database.ItemCategorySupport,
 			monsters: []testMonItemAmts{
@@ -93,7 +93,7 @@ func TestGetItem(t *testing.T) {
 					"quests":   0,
 				},
 			},
-			expUnique: newExpUnique(69, "three stars"),
+			Unique: newExpUnique(69, "three stars"),
 			monsters: []testMonItemAmts{
 				{
 					index:   0,
@@ -129,7 +129,7 @@ func TestGetItem(t *testing.T) {
 					"mixes":                24,
 				},
 			},
-			expUnique:   newExpUnique(26, "fire gem"),
+			Unique:   newExpUnique(26, "fire gem"),
 			untypedItem: 26,
 			category:    database.ItemCategoryOffensive,
 			monsters: []testMonItemAmts{
@@ -174,7 +174,7 @@ func TestGetItem(t *testing.T) {
 					"mixes":                16,
 				},
 			},
-			expUnique:   newExpUnique(2, "hi-potion"),
+			Unique:   newExpUnique(2, "hi-potion"),
 			untypedItem: 2,
 			category:    database.ItemCategoryHealing,
 			monsters: []testMonItemAmts{
@@ -226,7 +226,7 @@ func TestGetItem(t *testing.T) {
 					"mixes":                9,
 				},
 			},
-			expUnique:   newExpUnique(64, "stamina tablet"),
+			Unique:   newExpUnique(64, "stamina tablet"),
 			untypedItem: 64,
 			category:    database.ItemCategorySupport,
 			monsters: []testMonItemAmts{
@@ -270,7 +270,7 @@ func TestGetItem(t *testing.T) {
 					"mixes":                9,
 				},
 			},
-			expUnique:   newExpUnique(64, "stamina tablet"),
+			Unique:   newExpUnique(64, "stamina tablet"),
 			untypedItem: 64,
 			category:    database.ItemCategorySupport,
 			monsters: []testMonItemAmts{
@@ -310,7 +310,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique: newExpUnique(55, "chocobo wing"),
+			Unique: newExpUnique(55, "chocobo wing"),
 			monsters: []testMonItemAmts{
 				{
 					index:   0,
@@ -352,7 +352,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique: newExpUnique(55, "chocobo wing"),
+			Unique: newExpUnique(55, "chocobo wing"),
 			monsters: []testMonItemAmts{
 				{
 					index:     0,
@@ -391,7 +391,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique: newExpUnique(55, "chocobo wing"),
+			Unique: newExpUnique(55, "chocobo wing"),
 			monsters:  []testMonItemAmts{},
 			treasures: nil,
 			shops:     []int32{},
@@ -419,7 +419,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique: newExpUnique(55, "chocobo wing"),
+			Unique: newExpUnique(55, "chocobo wing"),
 			monsters: []testMonItemAmts{
 				{
 					index:     0,
@@ -456,7 +456,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 2,
 				},
 			},
-			expUnique: newExpUnique(2, "hi-potion"),
+			Unique: newExpUnique(2, "hi-potion"),
 			monsters: []testMonItemAmts{
 				{
 					index:     0,
@@ -509,7 +509,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 2,
 				},
 			},
-			expUnique: newExpUnique(2, "hi-potion"),
+			Unique: newExpUnique(2, "hi-potion"),
 			monsters: []testMonItemAmts{
 				{
 					index:     0,
@@ -556,7 +556,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			expUnique: newExpUnique(2, "hi-potion"),
+			Unique: newExpUnique(2, "hi-potion"),
 			monsters: []testMonItemAmts{
 				{
 					index:       0,
@@ -583,7 +583,7 @@ func TestGetItem(t *testing.T) {
 
 func TestRetrieveItems(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/items?methods=shop,treasures",

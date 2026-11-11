@@ -5,20 +5,20 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expRonsoRage struct {
+type RonsoRage struct {
 	testGeneral
-	expUnique
+	Unique
 	overdrive int32
 	monsters  []int32
 }
 
-func (e expRonsoRage) GetTestGeneral() testGeneral {
+func (e RonsoRage) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareRonsoRages(test test, exp expRonsoRage, got apitypes.RonsoRage) {
+func compareRonsoRages(test test, exp RonsoRage, got apitypes.RonsoRage) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compIDAPIResource("overdrive", apilookups.E.Overdrives.Endpoint, exp.overdrive, got.Overdrive)
 	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, exp.monsters, got.Monsters)
 }

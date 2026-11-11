@@ -7,9 +7,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type expMonster struct {
+type Monster struct {
 	testGeneral
-	expNameVer
+	NameVer
 	appliedState     *testAppliedState
 	agility          *testAgilityParams
 	species          database.MonsterSpecies
@@ -32,13 +32,13 @@ type expMonster struct {
 	abilities        []int32
 }
 
-func (e expMonster) GetTestGeneral() testGeneral {
+func (e Monster) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareMonsters(test test, exp expMonster, got apitypes.Monster) {
+func compareMonsters(test test, exp Monster, got apitypes.Monster) {
 	test.t.Helper()
-	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compareExpNameVer(exp.NameVer, got.ID, got.Name, got.Version)
 	test.compare("species", string(exp.species), got.Species)
 	test.compare("ctb icon type", string(exp.ctbIconType), got.CTBIconType)
 	test.compare("distance", exp.distance, got.Distance)

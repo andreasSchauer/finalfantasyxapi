@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expAutoAbility struct {
+type AutoAbility struct {
 	testGeneral
-	expUnique
+	Unique
 	monstersDrop     []int32
 	monstersItems    []testMonItemAmts
 	shopsPreAirship  []int32
@@ -16,13 +16,13 @@ type expAutoAbility struct {
 	equipmentTables  []int32
 }
 
-func (e expAutoAbility) GetTestGeneral() testGeneral {
+func (e AutoAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAutoAbilities(test test, exp expAutoAbility, got apitypes.AutoAbility) {
+func compareAutoAbilities(test test, exp AutoAbility, got apitypes.AutoAbility) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.checkResIDsInSlice("monsters drop", apilookups.E.Monsters.Endpoint, exp.monstersDrop, got.MonstersDrop)
 	test.checkTestStructsInSlice("monsters items", exp.monstersItems, got.MonstersItems, compareMonItemAmts)
 	test.checkResIDsInSlice("treasures", apilookups.E.Treasures.Endpoint, exp.treasures, got.Treasures)

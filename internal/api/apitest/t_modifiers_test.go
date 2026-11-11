@@ -10,7 +10,7 @@ import (
 
 func TestGetModifier(t *testing.T) {
 	t.Parallel()
-	tests := []expModifier{
+	tests := []Modifier{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/modifiers/32",
@@ -34,7 +34,7 @@ func TestGetModifier(t *testing.T) {
 					"properties":          0,
 				},
 			},
-			expUnique:          newExpUnique(3, "buff-factor-str-based"),
+			Unique:          newExpUnique(3, "buff-factor-str-based"),
 			autoAbilities:      []int32{},
 			playerAbilities:    []int32{27},
 			overdriveAbilities: []int32{162, 163, 170},
@@ -60,7 +60,7 @@ func TestGetModifier(t *testing.T) {
 					"properties":          0,
 				},
 			},
-			expUnique:          newExpUnique(16, "mp-cost"),
+			Unique:          newExpUnique(16, "mp-cost"),
 			autoAbilities:      []int32{40, 42, 43},
 			playerAbilities:    []int32{},
 			overdriveAbilities: []int32{174, 175},
@@ -86,7 +86,7 @@ func TestGetModifier(t *testing.T) {
 					"properties":          0,
 				},
 			},
-			expUnique:          newExpUnique(18, "overdrive-gauge"),
+			Unique:          newExpUnique(18, "overdrive-gauge"),
 			autoAbilities:      []int32{},
 			playerAbilities:    []int32{},
 			overdriveAbilities: []int32{},
@@ -112,7 +112,7 @@ func TestGetModifier(t *testing.T) {
 					"properties":          1,
 				},
 			},
-			expUnique:          newExpUnique(20, "physical-damage-taken"),
+			Unique:          newExpUnique(20, "physical-damage-taken"),
 			autoAbilities:      []int32{103, 104, 105, 106},
 			playerAbilities:    []int32{},
 			overdriveAbilities: []int32{},
@@ -129,7 +129,7 @@ func TestGetModifier(t *testing.T) {
 
 func TestRetrieveModifiers(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/modifiers?limit=max",

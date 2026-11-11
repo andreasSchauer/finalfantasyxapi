@@ -12,7 +12,7 @@ import (
 
 func TestGetMonsterFormation(t *testing.T) {
 	t.Parallel()
-	tests := []expMonsterFormation{
+	tests := []MonsterFormation{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/332",
@@ -31,7 +31,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			expIDOnly:      newExpIDOnly(27),
+			IDOnly:      newExpIDOnly(27),
 			category:       "boss-fight",
 			isForcedAmbush: false,
 			canEscape:      false,
@@ -59,7 +59,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			expIDOnly:      newExpIDOnly(77),
+			IDOnly:      newExpIDOnly(77),
 			category:       "random-encounter",
 			isForcedAmbush: false,
 			canEscape:      true,
@@ -82,7 +82,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 2,
 				},
 			},
-			expIDOnly:      newExpIDOnly(137),
+			IDOnly:      newExpIDOnly(137),
 			category:       "boss-fight",
 			isForcedAmbush: false,
 			canEscape:      false,
@@ -118,7 +118,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			expIDOnly:      newExpIDOnly(265),
+			IDOnly:      newExpIDOnly(265),
 			category:       "random-encounter",
 			isForcedAmbush: true,
 			canEscape:      true,
@@ -138,7 +138,7 @@ func TestGetMonsterFormation(t *testing.T) {
 
 func TestRetrieveMonsterFormations(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?limit=asd",
@@ -289,7 +289,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 
 func TestSubsectionMonsterFormations(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/23/monster-formations",

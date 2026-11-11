@@ -12,7 +12,7 @@ import (
 
 func TestGetLocation(t *testing.T) {
 	t.Parallel()
-	tests := []expLocation{
+	tests := []Location{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/0",
@@ -55,10 +55,10 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                2,
 				},
 			},
-			expUnique:          newExpUnique(15, "macalania"),
+			Unique:          newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
 			sublocations:       []int32{26, 27, 28},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				characters: []int32{},
 				aeons:      []int32{4},
 				shops:      []int32{22, 25, 36},
@@ -96,10 +96,10 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                2,
 				},
 			},
-			expUnique:          newExpUnique(15, "macalania"),
+			Unique:          newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
 			sublocations:       []int32{26, 27, 28},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				characters: []int32{},
 				aeons:      []int32{4},
 				shops:      []int32{},
@@ -137,10 +137,10 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                2,
 				},
 			},
-			expUnique:          newExpUnique(15, "macalania"),
+			Unique:          newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
 			sublocations:       []int32{26, 27, 28},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				characters: []int32{},
 				aeons:      []int32{4},
 				shops:      []int32{24},
@@ -178,10 +178,10 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                2,
 				},
 			},
-			expUnique:          newExpUnique(15, "macalania"),
+			Unique:          newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
 			sublocations:       []int32{26, 27, 28},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				characters: []int32{},
 				aeons:      []int32{4},
 				shops:      []int32{22, 23, 25, 26},
@@ -229,9 +229,9 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                0,
 				},
 			},
-			expUnique:    newExpUnique(26, "omega ruins"),
+			Unique:    newExpUnique(26, "omega ruins"),
 			sublocations: []int32{43},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				treasures:  []int32{327, 332, 337, 342},
 				monsters:   []int32{190, 201, 210, 239, 245, 250, 255},
 				formations: []int32{258, 262, 265, 283, 289, 296},
@@ -249,7 +249,7 @@ func TestGetLocation(t *testing.T) {
 
 func TestRetrieveLocations(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations?limit=max",
@@ -417,7 +417,7 @@ func TestRetrieveLocations(t *testing.T) {
 
 func TestSubsectionLocations(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/5/connected/",

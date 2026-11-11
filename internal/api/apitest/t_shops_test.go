@@ -13,7 +13,7 @@ import (
 
 func TestGetShop(t *testing.T) {
 	t.Parallel()
-	tests := []expShop{
+	tests := []Shop{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/shops/37",
@@ -47,7 +47,7 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 14,
 				},
 			},
-			expIDOnly: newExpIDOnly(2),
+			IDOnly: newExpIDOnly(2),
 			area:      47,
 			category:  database.ShopCategoryStandard,
 			preAirship: &testSubShop{
@@ -127,7 +127,7 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 5,
 				},
 			},
-			expIDOnly: newExpIDOnly(16),
+			IDOnly: newExpIDOnly(16),
 			area:      121,
 			category:  database.ShopCategoryStandard,
 			preAirship: &testSubShop{
@@ -198,7 +198,7 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 0,
 				},
 			},
-			expIDOnly: newExpIDOnly(31),
+			IDOnly: newExpIDOnly(31),
 			area:      200,
 			category:  database.ShopCategoryTravelAgency,
 			preAirship: &testSubShop{
@@ -237,7 +237,7 @@ func TestGetShop(t *testing.T) {
 
 func TestRetrieveShops(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/shops?limit=max",
@@ -373,7 +373,7 @@ func TestRetrieveShops(t *testing.T) {
 
 func TestSubsectionShops(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/8/shops/",

@@ -10,7 +10,7 @@ import (
 
 func TestGetCharacterClass(t *testing.T) {
 	t.Parallel()
-	tests := []expCharacterClass{
+	tests := []CharacterClass{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/character-classes/23",
@@ -32,7 +32,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             11,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   1,
 				name: "characters",
 			},
@@ -58,7 +58,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             4,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   3,
 				name: "standard-aeons",
 			},
@@ -84,7 +84,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             0,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   4,
 				name: "magus-sisters",
 			},
@@ -110,7 +110,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             1,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   6,
 				name: "yuna",
 			},
@@ -136,7 +136,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             1,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   8,
 				name: "lulu",
 			},
@@ -162,7 +162,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             1,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   19,
 				name: "yojimbo",
 			},
@@ -181,7 +181,7 @@ func TestGetCharacterClass(t *testing.T) {
 
 func TestRetrieveCharacterClasses(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/character-classes?limit=max",

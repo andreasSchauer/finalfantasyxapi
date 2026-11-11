@@ -15,7 +15,7 @@ func TestTurnOrder(t *testing.T) {
 	t.Parallel()
 	requestURL := "/api/turn-order"
 
-	tests := []expTurnOrderResponse{
+	tests := []TurnOrderResponse{
 		{
 			testGeneral: testGeneral{
 				requestURL:     requestURL,

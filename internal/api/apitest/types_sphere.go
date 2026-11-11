@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expSphere struct {
+type Sphere struct {
 	testGeneral
-	expUnique
+	Unique
 	item            int32
 	createdNode     *apitypes.CreatedNode
 	monsters        []testMonItemAmts
@@ -17,13 +17,13 @@ type expSphere struct {
 	blitzballPrizes map[int32]int32
 }
 
-func (e expSphere) GetTestGeneral() testGeneral {
+func (e Sphere) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSpheres(test test, exp expSphere, got apitypes.Sphere) {
+func compareSpheres(test test, exp Sphere, got apitypes.Sphere) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compIDAPIResource("item", apilookups.E.Items.Endpoint, exp.item, got.Item)
 	test.compStructPtrs("created node", exp.createdNode, got.CreatedNode)
 	test.checkTestStructsInSlice("monsters", exp.monsters, got.Monsters, compareMonItemAmts)

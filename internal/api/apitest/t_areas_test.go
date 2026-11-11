@@ -12,7 +12,7 @@ import (
 
 func TestGetArea(t *testing.T) {
 	t.Parallel()
-	tests := []expArea{
+	tests := []Area{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/0",
@@ -63,12 +63,12 @@ func TestGetArea(t *testing.T) {
 					"fmvs":            0,
 				},
 			},
-			expNameVer:        newExpNameVer(143, "north", 1),
+			NameVer:        newExpNameVer(143, "north", 1),
 			displayName:       "macalania woods - north",
 			parentLocation:    15,
 			parentSublocation: 26,
 			connectedAreas:    []int32{142, 147},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				treasures:  []int32{191},
 				monsters:   []int32{81, 84, 85},
 				formations: []int32{120, 122, 125},
@@ -108,12 +108,12 @@ func TestGetArea(t *testing.T) {
 					"fmvs":            0,
 				},
 			},
-			expNameVer:        newExpNameVer(36, "besaid village", 0),
+			NameVer:        newExpNameVer(36, "besaid village", 0),
 			displayName:       "besaid village",
 			parentLocation:    4,
 			parentSublocation: 8,
 			connectedAreas:    []int32{26, 37, 41},
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				characters: []int32{2, 4},
 				treasures:  []int32{33, 37},
 				music: &testLocMusic{
@@ -142,11 +142,11 @@ func TestGetArea(t *testing.T) {
 					"quests":     0,
 				},
 			},
-			expNameVer:        newExpNameVer(159, "road", 1),
+			NameVer:        newExpNameVer(159, "road", 1),
 			displayName:       "macalania - road",
 			parentLocation:    15,
 			parentSublocation: 28,
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				shops:      []int32{},
 				treasures:  []int32{},
 				monsters:   []int32{87, 88, 89, 90},
@@ -175,11 +175,11 @@ func TestGetArea(t *testing.T) {
 					"quests":     0,
 				},
 			},
-			expNameVer:        newExpNameVer(159, "road", 1),
+			NameVer:        newExpNameVer(159, "road", 1),
 			displayName:       "macalania - road",
 			parentLocation:    15,
 			parentSublocation: 28,
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				shops:      []int32{},
 				treasures:  []int32{},
 				monsters:   []int32{297},
@@ -208,11 +208,11 @@ func TestGetArea(t *testing.T) {
 					"quests":     30,
 				},
 			},
-			expNameVer:        newExpNameVer(203, "arena", 0),
+			NameVer:        newExpNameVer(203, "arena", 0),
 			displayName:       "calm lands - arena",
 			parentLocation:    20,
 			parentSublocation: 35,
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				shops:      []int32{},
 				treasures:  []int32{},
 				monsters:   []int32{256, 263, 267, 279, 288, 292},
@@ -241,11 +241,11 @@ func TestGetArea(t *testing.T) {
 					"quests":     0,
 				},
 			},
-			expNameVer:        newExpNameVer(203, "arena", 0),
+			NameVer:        newExpNameVer(203, "arena", 0),
 			displayName:       "calm lands - arena",
 			parentLocation:    20,
 			parentSublocation: 35,
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				shops:      []int32{},
 				treasures:  []int32{},
 				monsters:   []int32{261, 262, 264, 265, 266, 283, 291},
@@ -274,11 +274,11 @@ func TestGetArea(t *testing.T) {
 					"quests":     7,
 				},
 			},
-			expNameVer:        newExpNameVer(203, "arena", 0),
+			NameVer:        newExpNameVer(203, "arena", 0),
 			displayName:       "calm lands - arena",
 			parentLocation:    20,
 			parentSublocation: 35,
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				shops:      []int32{33},
 				treasures:  []int32{271},
 				monsters:   []int32{},
@@ -318,11 +318,11 @@ func TestGetArea(t *testing.T) {
 					"fmvs":            0,
 				},
 			},
-			expNameVer:        newExpNameVer(68, "main gate", 0),
+			NameVer:        newExpNameVer(68, "main gate", 0),
 			displayName:       "stadium - main gate",
 			parentLocation:    8,
 			parentSublocation: 14,
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				shops: []int32{5},
 				music: &testLocMusic{
 					cuesMusic: []int32{35},
@@ -349,11 +349,11 @@ func TestGetArea(t *testing.T) {
 					"quests": 9,
 				},
 			},
-			expNameVer:        newExpNameVer(138, "agency front", 0),
+			NameVer:        newExpNameVer(138, "agency front", 0),
 			displayName:       "thunder plains - agency front",
 			parentLocation:    14,
 			parentSublocation: 25,
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				quests: []int32{88, 89, 90, 91, 92, 93, 94, 95, 96},
 			},
 		},
@@ -382,11 +382,11 @@ func TestGetArea(t *testing.T) {
 					"fmvs":       6,
 				},
 			},
-			expNameVer:        newExpNameVer(42, "deck", 0),
+			NameVer:        newExpNameVer(42, "deck", 0),
 			displayName:       "ss liki - deck",
 			parentLocation:    5,
 			parentSublocation: 9,
-			expLocRel: expLocRel{
+			LocRel: LocRel{
 				characters: []int32{5},
 				treasures:  []int32{45},
 				monsters:   []int32{19, 20, 21, 22},
@@ -407,7 +407,7 @@ func TestGetArea(t *testing.T) {
 
 func TestRetrieveAreas(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas?comp_sphere=fa",
@@ -670,7 +670,7 @@ func TestRetrieveAreas(t *testing.T) {
 
 func TestSubsectionAreas(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/areas/36/connected/",

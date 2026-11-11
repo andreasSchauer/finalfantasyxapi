@@ -5,7 +5,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-func compareParameterLists(test test, _ ts.EndpointName, exp expListNames, got handlerinput.QueryParameterList) {
+func compareParameterLists(test test, _ ts.EndpointName, exp ListNames, got handlerinput.QueryParameterList) {
 	test.t.Helper()
 	test.compareListParams(exp.GetListParams(), got.GetListParams())
 	gotNames := []string{}
@@ -17,7 +17,7 @@ func compareParameterLists(test test, _ ts.EndpointName, exp expListNames, got h
 	test.checkStringsInSlice("results", exp.results, gotNames)
 }
 
-func compareSectionLists(test test, endpoint ts.EndpointName, exp expListNames, got handlerinput.SectionList) {
+func compareSectionLists(test test, endpoint ts.EndpointName, exp ListNames, got handlerinput.SectionList) {
 	test.t.Helper()
 	test.compareListParams(exp.GetListParams(), got.GetListParams())
 

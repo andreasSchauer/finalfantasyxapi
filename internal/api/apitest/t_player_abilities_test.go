@@ -13,7 +13,7 @@ import (
 
 func TestGetPlayerAbility(t *testing.T) {
 	t.Parallel()
-	tests := []expPlayerAbility{
+	tests := []PlayerAbility{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities/103",
@@ -31,7 +31,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			expNameVer:       newExpNameVer(10, "delay buster", 0),
+			NameVer:       newExpNameVer(10, "delay buster", 0),
 			rank:             h.GetInt32Ptr(8),
 			appearsInHelpBar: true,
 			canCopyCat:       true,
@@ -42,7 +42,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			stdChar:          h.GetInt32Ptr(1),
 			expChar:          h.GetInt32Ptr(1),
 			monsters:         []int32{},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(1),
@@ -52,15 +52,15 @@ func TestGetPlayerAbility(t *testing.T) {
 					darkable:       true,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "accuracy",
 						hitChance:   nil,
 						accModifier: h.GetFloat32Ptr(2.5),
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypePhysical,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaStrVsDef,
 							damageConstant: 14,
 						},
@@ -70,14 +70,14 @@ func TestGetPlayerAbility(t *testing.T) {
 						breakDmgLmt:     h.GetStrPtr("auto-ability"),
 						element:         nil,
 					},
-					inflictedDelay: &expInflictedDelay{
+					inflictedDelay: &InflictedDelay{
 						delayStrength: "strong",
 					},
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -91,7 +91,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			expNameVer:       newExpNameVer(10, "delay buster", 0),
+			NameVer:       newExpNameVer(10, "delay buster", 0),
 			rank:             h.GetInt32Ptr(8),
 			appearsInHelpBar: true,
 			canCopyCat:       true,
@@ -102,7 +102,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			stdChar:          h.GetInt32Ptr(1),
 			expChar:          h.GetInt32Ptr(1),
 			monsters:         []int32{},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(1),
@@ -112,15 +112,15 @@ func TestGetPlayerAbility(t *testing.T) {
 					darkable:       true,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "accuracy",
 						hitChance:   nil,
 						accModifier: h.GetFloat32Ptr(1),
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypePhysical,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaClstlHpLow,
 							damageConstant: 16,
 						},
@@ -130,14 +130,14 @@ func TestGetPlayerAbility(t *testing.T) {
 						breakDmgLmt:     h.GetStrPtr("auto-ability"),
 						element:         nil,
 					},
-					inflictedDelay: &expInflictedDelay{
+					inflictedDelay: &InflictedDelay{
 						delayStrength: "strong",
 					},
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -150,7 +150,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 0,
 				},
 			},
-			expNameVer:         newExpNameVer(24, "use", 0),
+			NameVer:         newExpNameVer(24, "use", 0),
 			rank:               h.GetInt32Ptr(2),
 			appearsInHelpBar:   false,
 			canCopyCat:         true,
@@ -161,7 +161,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			stdChar:            h.GetInt32Ptr(7),
 			expChar:            h.GetInt32Ptr(7),
 			monsters:           []int32{},
-			battleInteractions: []expBattleInteraction{},
+			battleInteractions: []BattleInteraction{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -175,7 +175,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions 0 mod changes":  1,
 				},
 			},
-			expNameVer:       newExpNameVer(27, "cheer", 0),
+			NameVer:       newExpNameVer(27, "cheer", 0),
 			rank:             h.GetInt32Ptr(2),
 			appearsInHelpBar: true,
 			canCopyCat:       true,
@@ -186,7 +186,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			stdChar:          h.GetInt32Ptr(1),
 			expChar:          h.GetInt32Ptr(1),
 			monsters:         []int32{},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "all-allies",
 					abilityRange:   nil,
@@ -196,7 +196,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
@@ -206,14 +206,14 @@ func TestGetPlayerAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges: []expStatChange{
+					statChanges: []StatChange{
 						{
 							stat:            3,
 							calculationType: "added-value",
 							value:           1,
 						},
 					},
-					modifierChanges: []expModChange{
+					modifierChanges: []ModChange{
 						{
 							modifier:        3,
 							calculationType: "added-value",
@@ -233,7 +233,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			expNameVer:       newExpNameVer(47, "curaga", 0),
+			NameVer:       newExpNameVer(47, "curaga", 0),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: true,
 			canCopyCat:       true,
@@ -244,7 +244,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			stdChar:          h.GetInt32Ptr(2),
 			expChar:          h.GetInt32Ptr(2),
 			monsters:         []int32{187, 195, 223, 226, 272, 275, 287},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(4),
@@ -254,15 +254,15 @@ func TestGetPlayerAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    true,
 					reflectable:    true,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeHeal,
 						damageType: database.DamageTypeMagical,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaHealing,
 							damageConstant: 80,
 						},
@@ -276,8 +276,8 @@ func TestGetPlayerAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -288,7 +288,7 @@ func TestGetPlayerAbility(t *testing.T) {
 
 func TestGetMultiplePlayerAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities/wakizashi",
@@ -312,7 +312,7 @@ func TestGetMultiplePlayerAbilities(t *testing.T) {
 
 func TestRetrievePlayerAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?limit=max",
@@ -448,7 +448,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 
 func TestSubsectionPlayerAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/characters/2/default-abilities",

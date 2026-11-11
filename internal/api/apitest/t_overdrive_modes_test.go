@@ -11,7 +11,7 @@ import (
 
 func TestGetOverdriveMode(t *testing.T) {
 	t.Parallel()
-	tests := []expOverdriveMode{
+	tests := []OverdriveMode{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/ally/2",
@@ -44,7 +44,7 @@ func TestGetOverdriveMode(t *testing.T) {
 					"actions": 7,
 				},
 			},
-			expUnique:   newExpUnique(14, "ally"),
+			Unique:   newExpUnique(14, "ally"),
 			description: "Charges on character's turn.",
 			modeType:    "per-action",
 			fillRate:    h.GetFloat32Ptr(0.03),
@@ -66,7 +66,7 @@ func TestGetOverdriveMode(t *testing.T) {
 					"description": true,
 				},
 			},
-			expUnique: newExpUnique(3, "comrade"),
+			Unique: newExpUnique(3, "comrade"),
 			effect:    "The gauge fills when an ally takes damage.",
 			modeType:  "formula",
 			fillRate:  nil,
@@ -89,7 +89,7 @@ func TestGetOverdriveMode(t *testing.T) {
 					"actions": 0,
 				},
 			},
-			expUnique: newExpUnique(1, "stoic"),
+			Unique: newExpUnique(1, "stoic"),
 			modeType:  "formula",
 		},
 	}
@@ -99,7 +99,7 @@ func TestGetOverdriveMode(t *testing.T) {
 
 func TestRetrieveOverdriveModes(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=f",

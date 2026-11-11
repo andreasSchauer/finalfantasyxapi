@@ -13,7 +13,7 @@ import (
 
 func TestGetTreasure(t *testing.T) {
 	t.Parallel()
-	tests := []expTreasure{
+	tests := []Treasure{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/a",
@@ -56,7 +56,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIDOnly:       newExpIDOnly(199),
+			IDOnly:       newExpIDOnly(199),
 			area:            158,
 			availability:    database.AvailabilityTypePreStory,
 			isAnimaTreasure: false,
@@ -75,7 +75,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIDOnly:       newExpIDOnly(13),
+			IDOnly:       newExpIDOnly(13),
 			area:            15,
 			availability:    database.AvailabilityTypePreStory,
 			isAnimaTreasure: false,
@@ -94,7 +94,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIDOnly:       newExpIDOnly(62),
+			IDOnly:       newExpIDOnly(62),
 			area:            60,
 			availability:    database.AvailabilityTypeAlways,
 			isAnimaTreasure: true,
@@ -115,7 +115,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIDOnly:       newExpIDOnly(284),
+			IDOnly:       newExpIDOnly(284),
 			area:            212,
 			availability:    database.AvailabilityTypeAlways,
 			isAnimaTreasure: false,
@@ -132,7 +132,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expIDOnly:       newExpIDOnly(45),
+			IDOnly:       newExpIDOnly(45),
 			area:            42,
 			availability:    database.AvailabilityTypePost,
 			isAnimaTreasure: false,
@@ -151,7 +151,7 @@ func TestGetTreasure(t *testing.T) {
 
 func TestRetrieveTreasures(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?limit=max",
@@ -239,7 +239,7 @@ func TestRetrieveTreasures(t *testing.T) {
 
 func TestSubsectionTreasures(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/6/treasures",

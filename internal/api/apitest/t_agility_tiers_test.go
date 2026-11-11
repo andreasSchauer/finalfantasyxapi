@@ -12,7 +12,7 @@ import (
 
 func TestGetAgilityTier(t *testing.T) {
 	t.Parallel()
-	tests := []expAgilityTier{
+	tests := []AgilityTier{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/agility-tiers/20",
@@ -29,7 +29,7 @@ func TestGetAgilityTier(t *testing.T) {
 					"char min icvs": 9,
 				},
 			},
-			expIDOnly:   newExpIDOnly(15),
+			IDOnly:   newExpIDOnly(15),
 			fromAgility: 35,
 			toAgility:   43,
 			tickSpeed:   7,
@@ -91,7 +91,7 @@ func TestGetAgilityTier(t *testing.T) {
 
 func TestRetrieveAgilityTiers(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/agility-tiers",

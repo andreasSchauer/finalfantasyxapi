@@ -12,7 +12,7 @@ import (
 
 func TestGetMiscAbility(t *testing.T) {
 	t.Parallel()
-	tests := []expMiscAbility{
+	tests := []MiscAbility{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/misc-abilities/25",
@@ -64,7 +64,7 @@ func TestGetMiscAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			expNameVer:       newExpNameVer(1, "attack", 1),
+			NameVer:       newExpNameVer(1, "attack", 1),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: false,
 			canCopyCat:       true,
@@ -72,7 +72,7 @@ func TestGetMiscAbility(t *testing.T) {
 			topmenu:          h.GetInt32Ptr(1),
 			submenu:          nil,
 			openSubmenu:      nil,
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(4),
@@ -82,15 +82,15 @@ func TestGetMiscAbility(t *testing.T) {
 					darkable:       true,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "accuracy",
 						hitChance:   nil,
 						accModifier: h.GetFloat32Ptr(1),
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypePhysical,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaClstlHpHigh,
 							damageConstant: 16,
 						},
@@ -104,8 +104,8 @@ func TestGetMiscAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -118,7 +118,7 @@ func TestGetMiscAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			expNameVer:       newExpNameVer(1, "attack", 1),
+			NameVer:       newExpNameVer(1, "attack", 1),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: false,
 			canCopyCat:       true,
@@ -126,7 +126,7 @@ func TestGetMiscAbility(t *testing.T) {
 			topmenu:          h.GetInt32Ptr(1),
 			submenu:          nil,
 			openSubmenu:      nil,
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(4),
@@ -136,15 +136,15 @@ func TestGetMiscAbility(t *testing.T) {
 					darkable:       true,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "accuracy",
 						hitChance:   nil,
 						accModifier: h.GetFloat32Ptr(1),
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypePhysical,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaStrVsDef,
 							damageConstant: 18,
 						},
@@ -158,8 +158,8 @@ func TestGetMiscAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -172,7 +172,7 @@ func TestGetMiscAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			expNameVer:       newExpNameVer(2, "attack", 2),
+			NameVer:       newExpNameVer(2, "attack", 2),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: false,
 			canCopyCat:       false,
@@ -180,7 +180,7 @@ func TestGetMiscAbility(t *testing.T) {
 			topmenu:          h.GetInt32Ptr(1),
 			submenu:          nil,
 			openSubmenu:      nil,
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(1),
@@ -190,15 +190,15 @@ func TestGetMiscAbility(t *testing.T) {
 					darkable:       true,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypePhysical,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaStrVsDef,
 							damageConstant: 14,
 						},
@@ -212,8 +212,8 @@ func TestGetMiscAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -226,7 +226,7 @@ func TestGetMiscAbility(t *testing.T) {
 					"battle interactions": 0,
 				},
 			},
-			expNameVer:         newExpNameVer(10, "switch", 1),
+			NameVer:         newExpNameVer(10, "switch", 1),
 			rank:               h.GetInt32Ptr(0),
 			appearsInHelpBar:   false,
 			canCopyCat:         false,
@@ -234,7 +234,7 @@ func TestGetMiscAbility(t *testing.T) {
 			topmenu:            nil,
 			submenu:            h.GetInt32Ptr(13),
 			openSubmenu:        nil,
-			battleInteractions: []expBattleInteraction{},
+			battleInteractions: []BattleInteraction{},
 		},
 		{
 			testGeneral: testGeneral{
@@ -245,7 +245,7 @@ func TestGetMiscAbility(t *testing.T) {
 					"battle interactions": 0,
 				},
 			},
-			expNameVer:         newExpNameVer(4, "weapon", 0),
+			NameVer:         newExpNameVer(4, "weapon", 0),
 			rank:               h.GetInt32Ptr(1),
 			appearsInHelpBar:   false,
 			canCopyCat:         false,
@@ -253,7 +253,7 @@ func TestGetMiscAbility(t *testing.T) {
 			topmenu:            h.GetInt32Ptr(2),
 			submenu:            nil,
 			openSubmenu:        h.GetInt32Ptr(7),
-			battleInteractions: []expBattleInteraction{},
+			battleInteractions: []BattleInteraction{},
 		},
 	}
 
@@ -262,7 +262,7 @@ func TestGetMiscAbility(t *testing.T) {
 
 func TestGetMultipleMiscAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/misc-abilities/attack",
@@ -294,7 +294,7 @@ func TestGetMultipleMiscAbilities(t *testing.T) {
 
 func TestRetrieveMiscAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/misc-abilities?limit=max",

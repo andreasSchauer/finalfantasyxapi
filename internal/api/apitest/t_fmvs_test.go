@@ -11,7 +11,7 @@ import (
 
 func TestGetFMV(t *testing.T) {
 	t.Parallel()
-	tests := []expFMV{
+	tests := []FMV{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/fmvs/a",
@@ -38,7 +38,7 @@ func TestGetFMV(t *testing.T) {
 				requestURL:     "/api/fmvs/9",
 				expectedStatus: http.StatusOK,
 			},
-			expUnique: newExpUnique(9, "fear on the sea"),
+			Unique: newExpUnique(9, "fear on the sea"),
 			area:      42,
 			song:      h.GetInt32Ptr(16),
 		},
@@ -47,7 +47,7 @@ func TestGetFMV(t *testing.T) {
 				requestURL:     "/api/fmvs/38",
 				expectedStatus: http.StatusOK,
 			},
-			expUnique: newExpUnique(38, "the last chapter"),
+			Unique: newExpUnique(38, "the last chapter"),
 			area:      218,
 			song:      h.GetInt32Ptr(77),
 		},
@@ -58,7 +58,7 @@ func TestGetFMV(t *testing.T) {
 
 func TestRetrieveFMVs(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/fmvs?limit=max",

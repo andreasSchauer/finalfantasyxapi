@@ -12,7 +12,7 @@ import (
 
 func TestGetTriggerCommand(t *testing.T) {
 	t.Parallel()
-	tests := []expTriggerCommand{
+	tests := []TriggerCommand{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/trigger-commands/13",
@@ -32,7 +32,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					"monster-formations":                 3,
 				},
 			},
-			expNameVer:        newExpNameVer(4, "talk", 1),
+			NameVer:        newExpNameVer(4, "talk", 1),
 			rank:              h.GetInt32Ptr(3),
 			appearsInHelpBar:  true,
 			canCopyCat:        false,
@@ -40,7 +40,7 @@ func TestGetTriggerCommand(t *testing.T) {
 			topmenu:           h.GetInt32Ptr(3),
 			usedBy:            []int32{5, 9, 10},
 			monsterFormations: []int32{137, 192, 235},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "self",
 					abilityRange:   nil,
@@ -50,7 +50,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
@@ -60,14 +60,14 @@ func TestGetTriggerCommand(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges: []expStatChange{
+					statChanges: []StatChange{
 						{
 							stat:            3,
 							calculationType: "added-value",
 							value:           10,
 						},
 					},
-					modifierChanges: []expModChange{},
+					modifierChanges: []ModChange{},
 				},
 			},
 		},
@@ -83,7 +83,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					"monster-formations":                1,
 				},
 			},
-			expNameVer:        newExpNameVer(6, "talk", 3),
+			NameVer:        newExpNameVer(6, "talk", 3),
 			rank:              h.GetInt32Ptr(3),
 			appearsInHelpBar:  true,
 			canCopyCat:        false,
@@ -91,7 +91,7 @@ func TestGetTriggerCommand(t *testing.T) {
 			topmenu:           h.GetInt32Ptr(3),
 			usedBy:            []int32{5},
 			monsterFormations: []int32{270},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-enemy",
 					abilityRange:   nil,
@@ -101,7 +101,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
@@ -111,8 +111,8 @@ func TestGetTriggerCommand(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges: []expModChange{
+					statChanges:               []StatChange{},
+					modifierChanges: []ModChange{
 						{
 							modifier:        18,
 							calculationType: "set-value",
@@ -133,7 +133,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					"monster-formations":  1,
 				},
 			},
-			expNameVer:        newExpNameVer(12, "struggle", 0),
+			NameVer:        newExpNameVer(12, "struggle", 0),
 			rank:              h.GetInt32Ptr(3),
 			appearsInHelpBar:  true,
 			canCopyCat:        false,
@@ -141,7 +141,7 @@ func TestGetTriggerCommand(t *testing.T) {
 			topmenu:           h.GetInt32Ptr(3),
 			usedBy:            []int32{5, 7, 11},
 			monsterFormations: []int32{7},
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-enemy",
 					abilityRange:   h.GetInt32Ptr(4),
@@ -151,15 +151,15 @@ func TestGetTriggerCommand(t *testing.T) {
 					darkable:       true,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypePhysical,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaStrVsDef,
 							damageConstant: 16,
 						},
@@ -173,8 +173,8 @@ func TestGetTriggerCommand(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -185,7 +185,7 @@ func TestGetTriggerCommand(t *testing.T) {
 
 func TestGetMultipleTriggerCommands(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/trigger-commands/talk",
@@ -201,7 +201,7 @@ func TestGetMultipleTriggerCommands(t *testing.T) {
 
 func TestRetrieveTriggerCommands(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/trigger-commands?limit=max",

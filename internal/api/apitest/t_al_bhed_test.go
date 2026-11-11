@@ -12,7 +12,7 @@ func TestAlBhed(t *testing.T) {
 	t.Parallel()
 	requestURL := "/api/al-bhed"
 
-	tests := []expAlBhedResponse{
+	tests := []AlBhedResponse{
 		{
 			testGeneral: testGeneral{
 				requestURL:     requestURL,

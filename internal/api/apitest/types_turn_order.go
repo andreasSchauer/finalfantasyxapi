@@ -4,17 +4,17 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 )
 
-type expTurnOrderResponse struct {
+type TurnOrderResponse struct {
 	testGeneral
 	servicetypes.TurnOrderResponse
 	testTurnOrder []testBattleTurn
 }
 
-func (e expTurnOrderResponse) GetTestGeneral() testGeneral {
+func (e TurnOrderResponse) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTurnOrderResponses(test test, exp expTurnOrderResponse, got servicetypes.TurnOrderResponse) {
+func compareTurnOrderResponses(test test, exp TurnOrderResponse, got servicetypes.TurnOrderResponse) {
 	test.t.Helper()
 	test.compare("turns amt", exp.TurnsAmt, got.TurnsAmt)
 	test.compare("ign first turn", exp.IgnFirstTurn, got.IgnFirstTurn)

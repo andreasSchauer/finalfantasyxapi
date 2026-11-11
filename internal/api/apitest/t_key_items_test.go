@@ -12,7 +12,7 @@ import (
 
 func TestGetKeyItem(t *testing.T) {
 	t.Parallel()
-	tests := []expKeyItem{
+	tests := []KeyItem{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/key-items/61",
@@ -31,7 +31,7 @@ func TestGetKeyItem(t *testing.T) {
 					"quests":    0,
 				},
 			},
-			expUnique:       newExpUnique(39, "al bhed primer v"),
+			Unique:       newExpUnique(39, "al bhed primer v"),
 			untypedItem:     151,
 			category:        database.KeyItemCategoryPrimer,
 			celestialWeapon: nil,
@@ -51,7 +51,7 @@ func TestGetKeyItem(t *testing.T) {
 					"quests":    0,
 				},
 			},
-			expUnique:       newExpUnique(23, "mercury crest"),
+			Unique:       newExpUnique(23, "mercury crest"),
 			untypedItem:     135,
 			category:        database.KeyItemCategoryCelestial,
 			celestialWeapon: h.GetInt32Ptr(7),
@@ -71,7 +71,7 @@ func TestGetKeyItem(t *testing.T) {
 					"quests":    1,
 				},
 			},
-			expUnique:       newExpUnique(8, "mark of conquest"),
+			Unique:       newExpUnique(8, "mark of conquest"),
 			untypedItem:     120,
 			category:        database.KeyItemCategoryOther,
 			celestialWeapon: nil,
@@ -91,7 +91,7 @@ func TestGetKeyItem(t *testing.T) {
 					"quests":    0,
 				},
 			},
-			expUnique:       newExpUnique(39, "al bhed primer v"),
+			Unique:       newExpUnique(39, "al bhed primer v"),
 			untypedItem:     151,
 			category:        database.KeyItemCategoryPrimer,
 			celestialWeapon: nil,
@@ -111,7 +111,7 @@ func TestGetKeyItem(t *testing.T) {
 					"quests":    0,
 				},
 			},
-			expUnique:       newExpUnique(39, "al bhed primer v"),
+			Unique:       newExpUnique(39, "al bhed primer v"),
 			untypedItem:     151,
 			category:        database.KeyItemCategoryPrimer,
 			celestialWeapon: nil,
@@ -127,7 +127,7 @@ func TestGetKeyItem(t *testing.T) {
 
 func TestRetrieveKeyItems(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?methods=a",

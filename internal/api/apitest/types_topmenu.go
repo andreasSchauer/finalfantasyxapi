@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expTopmenu struct {
+type Topmenu struct {
 	testGeneral
-	expUnique
+	Unique
 	submenus          []int32
 	abilities         []int32
 	overdriveCommands []int32
@@ -15,13 +15,13 @@ type expTopmenu struct {
 	aeonCommands      []int32
 }
 
-func (e expTopmenu) GetTestGeneral() testGeneral {
+func (e Topmenu) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTopmenus(test test, exp expTopmenu, got apitypes.Topmenu) {
+func compareTopmenus(test test, exp Topmenu, got apitypes.Topmenu) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.checkResIDsInSlice("submenus", apilookups.E.Submenus.Endpoint, exp.submenus, got.Submenus)
 	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, exp.abilities, got.Abilities)
 	test.checkResIDsInSlice("overdrive commands", apilookups.E.OverdriveCommands.Endpoint, exp.overdriveCommands, got.OverdriveCommands)

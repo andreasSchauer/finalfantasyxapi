@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expEquipment struct {
+type Equipment struct {
 	testGeneral
-	expUnique
+	Unique
 	equipmentTable          int32
 	priority                *int32
 	celestialWeapon         *int32
@@ -18,13 +18,13 @@ type expEquipment struct {
 	shops                   []int32
 }
 
-func (e expEquipment) GetTestGeneral() testGeneral {
+func (e Equipment) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareEquipment(test test, exp expEquipment, got apitypes.EquipmentName) {
+func compareEquipment(test test, exp Equipment, got apitypes.EquipmentName) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compIDAPIResource("equipment table", apilookups.E.EquipmentTables.Endpoint, exp.equipmentTable, got.EquipmentTable)
 	test.compare("priority", exp.priority, got.Priority)
 	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)

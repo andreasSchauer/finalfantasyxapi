@@ -10,7 +10,7 @@ import (
 
 func TestGetPrimer(t *testing.T) {
 	t.Parallel()
-	tests := []expPrimer{
+	tests := []Primer{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/primers/27",
@@ -28,7 +28,7 @@ func TestGetPrimer(t *testing.T) {
 					"treasures": 2,
 				},
 			},
-			expUnique: newExpUnique(1, "al bhed primer i"),
+			Unique: newExpUnique(1, "al bhed primer i"),
 			keyItem:   35,
 			areas:     []int32{15, 167},
 			treasures: []int32{13, 215},
@@ -43,7 +43,7 @@ func TestGetPrimer(t *testing.T) {
 					"treasures": 1,
 				},
 			},
-			expUnique: newExpUnique(22, "al bhed primer xxii"),
+			Unique: newExpUnique(22, "al bhed primer xxii"),
 			keyItem:   56,
 			areas:     []int32{195},
 			treasures: []int32{252},
@@ -55,7 +55,7 @@ func TestGetPrimer(t *testing.T) {
 
 func TestRetrievePrimers(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/primers?limit=max",

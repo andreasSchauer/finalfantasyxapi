@@ -5,7 +5,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expLocRel struct {
+type LocRel struct {
 	characters []int32
 	aeons      []int32
 	shops      []int32
@@ -17,7 +17,7 @@ type expLocRel struct {
 	music      *testLocMusic
 }
 
-func compareLocRel(test test, exp expLocRel, got apitypes.LocRel) {
+func compareLocRel(test test, exp LocRel, got apitypes.LocRel) {
 	test.t.Helper()
 	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)
 	test.checkResIDsInSlice("characters", apilookups.E.Characters.Endpoint, exp.characters, got.Characters)

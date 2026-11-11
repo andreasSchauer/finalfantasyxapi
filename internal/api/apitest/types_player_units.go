@@ -6,9 +6,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type expPlayerUnit struct {
+type PlayerUnit struct {
 	testGeneral
-	expUnique
+	Unique
 	unitType         database.UnitType
 	typedUnit        string
 	area             int32
@@ -16,13 +16,13 @@ type expPlayerUnit struct {
 	characterClasses []int32
 }
 
-func (e expPlayerUnit) GetTestGeneral() testGeneral {
+func (e PlayerUnit) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func comparePlayerUnits(test test, exp expPlayerUnit, got apitypes.PlayerUnit) {
+func comparePlayerUnits(test test, exp PlayerUnit, got apitypes.PlayerUnit) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compare("unit type", string(exp.unitType), string(got.Type))
 	test.compPathAPIResource("typed unit", exp.typedUnit, got.TypedUnit)
 	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, exp.area, got.Area)

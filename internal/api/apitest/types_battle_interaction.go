@@ -6,7 +6,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type expBattleInteraction struct {
+type BattleInteraction struct {
 	target                    string
 	abilityRange              *int32
 	hitAmount                 int32
@@ -16,17 +16,17 @@ type expBattleInteraction struct {
 	darkable                  bool
 	silenceable               bool
 	reflectable               bool
-	accuracy                  expAccuracy
-	damage                    *expDamage
-	inflictedDelay            *expInflictedDelay
+	accuracy                  Accuracy
+	damage                    *Damage
+	inflictedDelay            *InflictedDelay
 	inflictedStatusConditions []int32
 	removedStatusConditions   []int32
 	copiedStatusConditions    []int32
-	statChanges               []expStatChange
-	modifierChanges           []expModChange
+	statChanges               []StatChange
+	modifierChanges           []ModChange
 }
 
-func compareBattleInteractions(test test, fieldName string, exp expBattleInteraction, got apitypes.BattleInteraction) {
+func compareBattleInteractions(test test, fieldName string, exp BattleInteraction, got apitypes.BattleInteraction) {
 	test.t.Helper()
 	test.compare(fieldName+" target", exp.target, got.Target)
 	test.compare(fieldName+" range", exp.abilityRange, got.Range)
@@ -47,24 +47,24 @@ func compareBattleInteractions(test test, fieldName string, exp expBattleInterac
 	test.compTestStructSlices(fieldName+" mod changes", exp.modifierChanges, got.ModifierChanges, compareModChanges)
 }
 
-type expAccuracy struct {
+type Accuracy struct {
 	accSource   string
 	hitChance   *int32
 	accModifier *float32
 }
 
-func compareAccuracies(test test, fieldName string, exp expAccuracy, got apitypes.Accuracy) {
+func compareAccuracies(test test, fieldName string, exp Accuracy, got apitypes.Accuracy) {
 	test.compare(fieldName+" acc source", exp.accSource, got.AccSource)
 	test.compare(fieldName+" hit chance", exp.hitChance, got.HitChance)
 	test.compare(fieldName+" acc modifier", exp.accModifier, got.AccModifier)
 }
 
-type expDamage struct {
+type Damage struct {
 	attackType      database.AttackType
 	damageType      database.DamageType
-	hp              *expClassDamage
-	mp              *expClassDamage
-	ctb             *expClassDamage
+	hp              *ClassDamage
+	mp              *ClassDamage
+	ctb             *ClassDamage
 	critical        *string
 	criticalPlusVal *int32
 	isPiercing      bool
@@ -72,7 +72,7 @@ type expDamage struct {
 	element         *int32
 }
 
-func compareDamages(test test, fieldName string, exp expDamage, got apitypes.Damage) {
+func compareDamages(test test, fieldName string, exp Damage, got apitypes.Damage) {
 	test.compare(fieldName+" attack type", string(exp.attackType), got.AttackType)
 	test.compare(fieldName+" damage type", string(exp.damageType), got.DamageType)
 	test.compTestStructPtrs(fieldName+" hp", exp.hp, got.HP, compareClassDamages)
@@ -85,43 +85,43 @@ func compareDamages(test test, fieldName string, exp expDamage, got apitypes.Dam
 	test.compIDAPIResourcePtrs(fieldName+" element", apilookups.E.Elements.Endpoint, exp.element, got.Element)
 }
 
-type expClassDamage struct {
+type ClassDamage struct {
 	damageFormula  database.DamageFormula
 	damageConstant int32
 }
 
-func compareClassDamages(test test, fieldName string, exp expClassDamage, got apitypes.ClassDamage) {
+func compareClassDamages(test test, fieldName string, exp ClassDamage, got apitypes.ClassDamage) {
 	test.compare(fieldName+" - damage formula", string(exp.damageFormula), got.DamageFormula)
 	test.compare(fieldName+" - damage constant", exp.damageConstant, got.DamageConstant)
 }
 
-type expInflictedDelay struct {
+type InflictedDelay struct {
 	delayStrength string
 }
 
-func compareInflictedDelays(test test, fieldName string, exp expInflictedDelay, got apitypes.InflictedDelay) {
+func compareInflictedDelays(test test, fieldName string, exp InflictedDelay, got apitypes.InflictedDelay) {
 	test.compare(fieldName+" delay strength", exp.delayStrength, got.DelayStrength)
 }
 
-type expStatChange struct {
+type StatChange struct {
 	stat            int32
 	calculationType string
 	value           float32
 }
 
-func compareStatChanges(test test, fieldName string, exp expStatChange, got apitypes.StatChange) {
+func compareStatChanges(test test, fieldName string, exp StatChange, got apitypes.StatChange) {
 	test.compIDAPIResource(fieldName+" - sc stat", apilookups.E.Stats.Endpoint, exp.stat, got.Stat)
 	test.compare(fieldName+" - calculation type", exp.calculationType, got.CalculationType)
 	test.compare(fieldName+" - value", exp.value, got.Value)
 }
 
-type expModChange struct {
+type ModChange struct {
 	modifier        int32
 	calculationType string
 	value           float32
 }
 
-func compareModChanges(test test, fieldName string, exp expModChange, got apitypes.ModifierChange) {
+func compareModChanges(test test, fieldName string, exp ModChange, got apitypes.ModifierChange) {
 	test.compIDAPIResource(fieldName+" - mc modifier", apilookups.E.Modifiers.Endpoint, exp.modifier, got.Modifier)
 	test.compare(fieldName+" - calculation type", exp.calculationType, got.CalculationType)
 	test.compare(fieldName+" - value", exp.value, got.Value)

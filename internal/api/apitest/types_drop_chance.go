@@ -4,16 +4,16 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 )
 
-type expDropChanceResponse struct {
+type DropChanceResponse struct {
 	testGeneral
 	servicetypes.DropChanceResponse
 }
 
-func (e expDropChanceResponse) GetTestGeneral() testGeneral {
+func (e DropChanceResponse) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareDropChanceResponses(test test, exp expDropChanceResponse, got servicetypes.DropChanceResponse) {
+func compareDropChanceResponses(test test, exp DropChanceResponse, got servicetypes.DropChanceResponse) {
 	test.t.Helper()
 	test.compare("drop chance fin blow", exp.DropChanceFinBlow, got.DropChanceFinBlow)
 	test.compare("drop chance no fin blow", exp.DropChanceNoFinBlow, got.DropChanceNoFinBlow)

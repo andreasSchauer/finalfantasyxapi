@@ -11,7 +11,7 @@ import (
 
 func TestGetQuest(t *testing.T) {
 	t.Parallel()
-	tests := []expQuest{
+	tests := []Quest{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/quests/99",
@@ -26,7 +26,7 @@ func TestGetQuest(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   1,
 				name: "monster arena",
 			},
@@ -40,7 +40,7 @@ func TestGetQuest(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   47,
 				name: "valefor - first win",
 			},
@@ -56,7 +56,7 @@ func TestGetQuest(t *testing.T) {
 					"character classes": 2,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   80,
 				name: "6 or 7 guardian spheres",
 			},
@@ -70,7 +70,7 @@ func TestGetQuest(t *testing.T) {
 
 func TestRetrieveQuests(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/quests?limit=max",

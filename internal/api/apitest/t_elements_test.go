@@ -11,7 +11,7 @@ import (
 
 func TestGetElement(t *testing.T) {
 	t.Parallel()
-	tests := []expElement{
+	tests := []Element{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/elements/6",
@@ -36,7 +36,7 @@ func TestGetElement(t *testing.T) {
 					"monsters absorb":     19,
 				},
 			},
-			expUnique:          newExpUnique(2, "lightning"),
+			Unique:          newExpUnique(2, "lightning"),
 			statusProtection:   h.GetInt32Ptr(23),
 			autoAbilities:      []int32{6, 58, 59, 60},
 			playerAbilities:    []int32{70, 74, 78},
@@ -55,7 +55,7 @@ func TestGetElement(t *testing.T) {
 
 func TestRetrieveElements(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/elements",

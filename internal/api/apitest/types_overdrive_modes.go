@@ -4,9 +4,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expOverdriveMode struct {
+type OverdriveMode struct {
 	testGeneral
-	expUnique
+	Unique
 	description   string
 	effect        string
 	modeType      string
@@ -14,13 +14,13 @@ type expOverdriveMode struct {
 	actionsAmount map[string]int32
 }
 
-func (e expOverdriveMode) GetTestGeneral() testGeneral {
+func (e OverdriveMode) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareOverdriveModes(test test, exp expOverdriveMode, got apitypes.OverdriveMode) {
+func compareOverdriveModes(test test, exp OverdriveMode, got apitypes.OverdriveMode) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compare("description", exp.description, got.Description)
 	test.compare("effect", exp.effect, got.Effect)
 	test.compare("type", exp.modeType, got.Type)

@@ -5,20 +5,20 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expFMV struct {
+type FMV struct {
 	testGeneral
-	expUnique
+	Unique
 	area int32
 	song *int32
 }
 
-func (e expFMV) GetTestGeneral() testGeneral {
+func (e FMV) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareFMVs(test test, exp expFMV, got apitypes.FMV) {
+func compareFMVs(test test, exp FMV, got apitypes.FMV) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, exp.area, got.Area)
 	test.compIDAPIResourcePtrs("song", apilookups.E.Songs.Endpoint, exp.song, got.Song)
 }

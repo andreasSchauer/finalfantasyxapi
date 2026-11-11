@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expSong struct {
+type Song struct {
 	testGeneral
-	expUnique
+	Unique
 	composer          *string
 	arranger          *string
 	durationInSeconds int32
@@ -18,13 +18,13 @@ type expSong struct {
 	fmvs              []int32
 }
 
-func (e expSong) GetTestGeneral() testGeneral {
+func (e Song) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSongs(test test, exp expSong, got apitypes.Song) {
+func compareSongs(test test, exp Song, got apitypes.Song) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compare("composer", exp.composer, got.Composer)
 	test.compare("arranger", exp.arranger, got.Arranger)
 	test.compare("duration in seconds", exp.durationInSeconds, got.DurationInSeconds)

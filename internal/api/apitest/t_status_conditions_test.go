@@ -10,7 +10,7 @@ import (
 
 func TestGetStatusCondition(t *testing.T) {
 	t.Parallel()
-	tests := []expStatusCondition{
+	tests := []StatusCondition{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/status-conditions/46",
@@ -34,7 +34,7 @@ func TestGetStatusCondition(t *testing.T) {
 					"inflicted by - status conditions":   0,
 				},
 			},
-			expUnique:          newExpUnique(5, "death"),
+			Unique:          newExpUnique(5, "death"),
 			autoAbilities:      []int32{19, 20, 54, 77, 78},
 			monstersResistance: []int32{},
 			inflictedBy: &testStatusInfliction{
@@ -67,7 +67,7 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     0,
 				},
 			},
-			expUnique:          newExpUnique(9, "petrification"),
+			Unique:          newExpUnique(9, "petrification"),
 			autoAbilities:      []int32{17, 18, 54, 75, 76, 129},
 			monstersResistance: []int32{2, 5, 55, 92, 129, 157, 189, 216, 237, 272, 295, 307},
 			inflictedBy: &testStatusInfliction{
@@ -106,7 +106,7 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     3,
 				},
 			},
-			expUnique:          newExpUnique(21, "haste"),
+			Unique:          newExpUnique(21, "haste"),
 			autoAbilities:      []int32{96, 101},
 			monstersResistance: []int32{3, 33, 135, 156, 199, 252, 253},
 			inflictedBy: &testStatusInfliction{
@@ -145,7 +145,7 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     2,
 				},
 			},
-			expUnique:          newExpUnique(31, "boost"),
+			Unique:          newExpUnique(31, "boost"),
 			autoAbilities:      []int32{},
 			monstersResistance: []int32{3, 33, 69, 108, 135, 253},
 			inflictedBy: &testStatusInfliction{
@@ -170,7 +170,7 @@ func TestGetStatusCondition(t *testing.T) {
 
 func TestRetrieveStatusConditions(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/status-conditions?limit=max",

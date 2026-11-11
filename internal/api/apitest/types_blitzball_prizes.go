@@ -4,21 +4,21 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expBlitzballPrize struct {
+type BlitzballPrize struct {
 	testGeneral
-	expIDOnly
+	IDOnly
 	category string
 	slot     string
 	items    []testPossibleItem
 }
 
-func (e expBlitzballPrize) GetTestGeneral() testGeneral {
+func (e BlitzballPrize) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareBlitzballPrizes(test test, exp expBlitzballPrize, got apitypes.BlitzballPrize) {
+func compareBlitzballPrizes(test test, exp BlitzballPrize, got apitypes.BlitzballPrize) {
 	test.t.Helper()
-	test.compareExpIDOnly(exp.expIDOnly, got.ID)
+	test.compareExpIDOnly(exp.IDOnly, got.ID)
 	test.compare("category", exp.category, got.Category)
 	test.compare("slot", exp.slot, got.Slot)
 	test.checkTestStructsInSlice("items", exp.items, got.Items, comparePossibleItems)

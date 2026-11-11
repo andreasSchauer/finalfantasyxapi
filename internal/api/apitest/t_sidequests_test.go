@@ -10,7 +10,7 @@ import (
 
 func TestGetSidequest(t *testing.T) {
 	t.Parallel()
-	tests := []expSidequest{
+	tests := []Sidequest{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/11",
@@ -49,7 +49,7 @@ func TestGetSidequest(t *testing.T) {
 					"subquests":          16,
 				},
 			},
-			expUnique:    newExpUnique(2, "remiem temple"),
+			Unique:    newExpUnique(2, "remiem temple"),
 			untypedQuest: 2,
 			completion: &testQuestCompletion{
 				areas:  []int32{207},
@@ -66,7 +66,7 @@ func TestGetSidequest(t *testing.T) {
 					"subquests": 9,
 				},
 			},
-			expUnique:    newExpUnique(4, "chocobo training"),
+			Unique:    newExpUnique(4, "chocobo training"),
 			untypedQuest: 4,
 			completion:   nil,
 			subquests:    []int32{59, 62, 64, 65, 67},
@@ -81,7 +81,7 @@ func TestGetSidequest(t *testing.T) {
 					"subquests":          0,
 				},
 			},
-			expUnique:    newExpUnique(9, "al bhed primers"),
+			Unique:    newExpUnique(9, "al bhed primers"),
 			untypedQuest: 9,
 			completion: &testQuestCompletion{
 				areas:  []int32{183, 180},
@@ -96,7 +96,7 @@ func TestGetSidequest(t *testing.T) {
 
 func TestRetrieveSidequests(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests",

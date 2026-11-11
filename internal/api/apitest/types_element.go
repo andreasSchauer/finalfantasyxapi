@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expElement struct {
+type Element struct {
 	testGeneral
-	expUnique
+	Unique
 	statusProtection   *int32
 	autoAbilities      []int32
 	playerAbilities    []int32
@@ -20,13 +20,13 @@ type expElement struct {
 	monstersAbsorb     []int32
 }
 
-func (e expElement) GetTestGeneral() testGeneral {
+func (e Element) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareElements(test test, exp expElement, got apitypes.Element) {
+func compareElements(test test, exp Element, got apitypes.Element) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compIDAPIResourcePtrs("status protection", apilookups.E.StatusConditions.Endpoint, exp.statusProtection, got.StatusProtection)
 	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
 	test.checkResIDsInSlice("player abilities", apilookups.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)

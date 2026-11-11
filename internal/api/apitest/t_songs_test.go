@@ -12,7 +12,7 @@ import (
 
 func TestGetSong(t *testing.T) {
 	t.Parallel()
-	tests := []expSong{
+	tests := []Song{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/songs/a",
@@ -46,7 +46,7 @@ func TestGetSong(t *testing.T) {
 					"fmvs":             0,
 				},
 			},
-			expUnique:         newExpUnique(44, "twilight"),
+			Unique:         newExpUnique(44, "twilight"),
 			composer:          h.GetStrPtr("junya nakano"),
 			arranger:          h.GetStrPtr("junya nakano"),
 			durationInSeconds: 280,
@@ -96,7 +96,7 @@ func TestGetSong(t *testing.T) {
 					"fmvs":             1,
 				},
 			},
-			expUnique:         newExpUnique(78, "a fleeting dream"),
+			Unique:         newExpUnique(78, "a fleeting dream"),
 			composer:          h.GetStrPtr("nobuo uematsu"),
 			arranger:          h.GetStrPtr("masashi hamauzu"),
 			durationInSeconds: 264,
@@ -149,7 +149,7 @@ func TestGetSong(t *testing.T) {
 					"fmvs":             1,
 				},
 			},
-			expUnique:         newExpUnique(80, "challenge"),
+			Unique:         newExpUnique(80, "challenge"),
 			composer:          h.GetStrPtr("masashi hamauzu"),
 			arranger:          h.GetStrPtr("masashi hamauzu"),
 			durationInSeconds: 258,
@@ -164,7 +164,7 @@ func TestGetSong(t *testing.T) {
 
 func TestRetrieveSongs(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/songs?limit=max",
@@ -236,7 +236,7 @@ func TestRetrieveSongs(t *testing.T) {
 
 func TestSubsectionSongs(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/locations/25/songs",

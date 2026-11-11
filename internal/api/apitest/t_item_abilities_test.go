@@ -12,7 +12,7 @@ import (
 
 func TestGetItemAbility(t *testing.T) {
 	t.Parallel()
-	tests := []expItemAbility{
+	tests := []ItemAbility{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/item-abilities/70",
@@ -29,7 +29,7 @@ func TestGetItemAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			expUnique:           newExpUnique(2, "hi-potion"),
+			Unique:           newExpUnique(2, "hi-potion"),
 			rank:                h.GetInt32Ptr(2),
 			appearsInHelpBar:    true,
 			canCopyCat:          true,
@@ -37,7 +37,7 @@ func TestGetItemAbility(t *testing.T) {
 			item:                2,
 			category:            database.ItemCategoryHealing,
 			CanUseOutsideBattle: true,
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(3),
@@ -47,15 +47,15 @@ func TestGetItemAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeHeal,
 						damageType: database.DamageTypeSpecial,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaSpecialNoVar,
 							damageConstant: 20,
 						},
@@ -69,8 +69,8 @@ func TestGetItemAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -84,7 +84,7 @@ func TestGetItemAbility(t *testing.T) {
 					"battle interactions 0 inflicted status conditions": 1,
 				},
 			},
-			expUnique:           newExpUnique(48, "gold hourglass"),
+			Unique:           newExpUnique(48, "gold hourglass"),
 			rank:                h.GetInt32Ptr(2),
 			appearsInHelpBar:    true,
 			canCopyCat:          true,
@@ -92,7 +92,7 @@ func TestGetItemAbility(t *testing.T) {
 			item:                48,
 			category:            database.ItemCategoryOffensive,
 			CanUseOutsideBattle: false,
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "target-party",
 					abilityRange:   h.GetInt32Ptr(3),
@@ -102,15 +102,15 @@ func TestGetItemAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAttack,
 						damageType: database.DamageTypeSpecial,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaSpecialVar,
 							damageConstant: 20,
 						},
@@ -120,14 +120,14 @@ func TestGetItemAbility(t *testing.T) {
 						breakDmgLmt:     nil,
 						element:         nil,
 					},
-					inflictedDelay: &expInflictedDelay{
+					inflictedDelay: &InflictedDelay{
 						delayStrength: "weak",
 					},
 					inflictedStatusConditions: []int32{14},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -140,7 +140,7 @@ func TestGetItemAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			expUnique:           newExpUnique(62, "soul spring"),
+			Unique:           newExpUnique(62, "soul spring"),
 			rank:                h.GetInt32Ptr(2),
 			appearsInHelpBar:    true,
 			canCopyCat:          true,
@@ -148,7 +148,7 @@ func TestGetItemAbility(t *testing.T) {
 			item:                62,
 			category:            database.ItemCategoryOffensive,
 			CanUseOutsideBattle: false,
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "single-target",
 					abilityRange:   h.GetInt32Ptr(3),
@@ -158,19 +158,19 @@ func TestGetItemAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
 					},
-					damage: &expDamage{
+					damage: &Damage{
 						attackType: database.AttackTypeAbsorb,
 						damageType: database.DamageTypeSpecial,
-						hp: &expClassDamage{
+						hp: &ClassDamage{
 							damageFormula:  database.DamageFormulaSpecialVar,
 							damageConstant: 30,
 						},
-						mp: &expClassDamage{
+						mp: &ClassDamage{
 							damageFormula:  database.DamageFormulaSpecialVar,
 							damageConstant: 30,
 						},
@@ -184,8 +184,8 @@ func TestGetItemAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges:           []expModChange{},
+					statChanges:               []StatChange{},
+					modifierChanges:           []ModChange{},
 				},
 			},
 		},
@@ -199,7 +199,7 @@ func TestGetItemAbility(t *testing.T) {
 					"battle interactions 0 stat changes": 1,
 				},
 			},
-			expUnique:           newExpUnique(66, "stamina tonic"),
+			Unique:           newExpUnique(66, "stamina tonic"),
 			rank:                h.GetInt32Ptr(2),
 			appearsInHelpBar:    true,
 			canCopyCat:          true,
@@ -207,7 +207,7 @@ func TestGetItemAbility(t *testing.T) {
 			item:                66,
 			category:            database.ItemCategorySupport,
 			CanUseOutsideBattle: false,
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "all-allies",
 					abilityRange:   nil,
@@ -217,7 +217,7 @@ func TestGetItemAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
@@ -227,14 +227,14 @@ func TestGetItemAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges: []expStatChange{
+					statChanges: []StatChange{
 						{
 							stat:            1,
 							calculationType: "multiply-highest",
 							value:           2,
 						},
 					},
-					modifierChanges: []expModChange{},
+					modifierChanges: []ModChange{},
 				},
 			},
 		},
@@ -248,7 +248,7 @@ func TestGetItemAbility(t *testing.T) {
 					"battle interactions 0 mod changes": 1,
 				},
 			},
-			expUnique:           newExpUnique(69, "three stars"),
+			Unique:           newExpUnique(69, "three stars"),
 			rank:                h.GetInt32Ptr(2),
 			appearsInHelpBar:    true,
 			canCopyCat:          true,
@@ -256,7 +256,7 @@ func TestGetItemAbility(t *testing.T) {
 			item:                69,
 			category:            database.ItemCategorySupport,
 			CanUseOutsideBattle: false,
-			battleInteractions: []expBattleInteraction{
+			battleInteractions: []BattleInteraction{
 				{
 					target:         "all-allies",
 					abilityRange:   nil,
@@ -266,7 +266,7 @@ func TestGetItemAbility(t *testing.T) {
 					darkable:       false,
 					silenceable:    false,
 					reflectable:    false,
-					accuracy: expAccuracy{
+					accuracy: Accuracy{
 						accSource:   "rate",
 						hitChance:   h.GetInt32Ptr(255),
 						accModifier: nil,
@@ -276,8 +276,8 @@ func TestGetItemAbility(t *testing.T) {
 					inflictedStatusConditions: []int32{},
 					removedStatusConditions:   []int32{},
 					copiedStatusConditions:    []int32{},
-					statChanges:               []expStatChange{},
-					modifierChanges: []expModChange{
+					statChanges:               []StatChange{},
+					modifierChanges: []ModChange{
 						{
 							modifier:        16,
 							calculationType: "set-value",
@@ -294,7 +294,7 @@ func TestGetItemAbility(t *testing.T) {
 
 func TestRetrieveItemAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/item-abilities?limit=max",

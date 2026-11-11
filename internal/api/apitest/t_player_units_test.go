@@ -12,7 +12,7 @@ import (
 
 func TestGetPlayerUnit(t *testing.T) {
 	t.Parallel()
-	tests := []expPlayerUnit{
+	tests := []PlayerUnit{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/player-units/19",
@@ -29,7 +29,7 @@ func TestGetPlayerUnit(t *testing.T) {
 					"character classes": 2,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   1,
 				name: "tidus",
 			},
@@ -48,7 +48,7 @@ func TestGetPlayerUnit(t *testing.T) {
 					"character classes": 1,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   8,
 				name: "seymour",
 			},
@@ -67,7 +67,7 @@ func TestGetPlayerUnit(t *testing.T) {
 					"character classes": 3,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   10,
 				name: "ifrit",
 			},
@@ -86,7 +86,7 @@ func TestGetPlayerUnit(t *testing.T) {
 					"character classes": 2,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   15,
 				name: "yojimbo",
 			},
@@ -105,7 +105,7 @@ func TestGetPlayerUnit(t *testing.T) {
 					"character classes": 3,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   16,
 				name: "cindy",
 			},
@@ -122,7 +122,7 @@ func TestGetPlayerUnit(t *testing.T) {
 
 func TestRetrievePlayerUnits(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/player-units",

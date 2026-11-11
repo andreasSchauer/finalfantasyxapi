@@ -8,14 +8,14 @@ import (
 )
 
 // checks the basic fields of an apiresource.APIResourceList (count, pagination urls) and then checks for the stated resources
-func compareAPIResourceLists[A apiresource.APIResource](test test, endpoint ts.EndpointName, expList expListIDs, gotList apiresource.APIResourceList[A]) {
+func compareAPIResourceLists[A apiresource.APIResource](test test, endpoint ts.EndpointName, expList ListIDs, gotList apiresource.APIResourceList[A]) {
 	test.t.Helper()
 	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
 	test.checkResIDsInSlice("results", endpoint, expList.results, gotList.GetResults())
 }
 
 // checks the basic fields of an apiresource.APIResourceList (count, pagination urls) and then checks for the stated resource paths
-func compareAPIResourceListPaths[A apiresource.APIResource](test test, expList expListPaths, gotList apiresource.APIResourceList[A]) {
+func compareAPIResourceListPaths[A apiresource.APIResource](test test, expList ListPaths, gotList apiresource.APIResourceList[A]) {
 	test.t.Helper()
 	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
 	test.checkResPathsInSlice("results", expList.results, gotList.GetResults())

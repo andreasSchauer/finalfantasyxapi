@@ -12,7 +12,7 @@ import (
 
 func TestGetSubquest(t *testing.T) {
 	t.Parallel()
-	tests := []expSubquest{
+	tests := []Subquest{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/89",
@@ -43,7 +43,7 @@ func TestGetSubquest(t *testing.T) {
 					"completions": 1,
 				},
 			},
-			expUnique:       newExpUnique(5, "jormungand"),
+			Unique:       newExpUnique(5, "jormungand"),
 			untypedQuest:    15,
 			parentSidequest: 1,
 			completion: testQuestCompletion{
@@ -61,7 +61,7 @@ func TestGetSubquest(t *testing.T) {
 					"completions": 2,
 				},
 			},
-			expUnique:       newExpUnique(39, "ifrit - first win"),
+			Unique:       newExpUnique(39, "ifrit - first win"),
 			untypedQuest:    49,
 			parentSidequest: 2,
 			completion: testQuestCompletion{
@@ -79,7 +79,7 @@ func TestGetSubquest(t *testing.T) {
 					"completions": 2,
 				},
 			},
-			expUnique:       newExpUnique(76, "first hunt after acquiring the airship"),
+			Unique:       newExpUnique(76, "first hunt after acquiring the airship"),
 			untypedQuest:    86,
 			parentSidequest: 6,
 			completion: testQuestCompletion{
@@ -95,7 +95,7 @@ func TestGetSubquest(t *testing.T) {
 
 func TestRetrieveSubquests(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/subquests?limit=max",
@@ -159,7 +159,7 @@ func TestRetrieveSubquests(t *testing.T) {
 
 func TestSubsectionSubquests(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/1/subquests",

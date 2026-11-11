@@ -12,7 +12,7 @@ import (
 
 func TestGetCharacter(t *testing.T) {
 	t.Parallel()
-	tests := []expCharacter{
+	tests := []Character{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/characters/9",
@@ -32,7 +32,7 @@ func TestGetCharacter(t *testing.T) {
 					"exp sg abilities":  11,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   1,
 				name: "tidus",
 			},
@@ -84,10 +84,10 @@ func TestGetCharacter(t *testing.T) {
 				},
 			},
 			defaultPlayerAbilities: []int32{},
-			stdSphereGrid: &expSphereGrid{
+			stdSphereGrid: &SphereGrid{
 				playerAbilities: []int32{9, 10, 13, 22, 27, 38, 56, 59},
 			},
-			expSphereGrid: &expSphereGrid{
+			expSphereGrid: &SphereGrid{
 				playerAbilities: []int32{10, 22, 25, 57, 58, 59},
 			},
 			overdriveModes: map[string]int32{
@@ -110,7 +110,7 @@ func TestGetCharacter(t *testing.T) {
 					"exp sg abilities":  4,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   5,
 				name: "kimahri",
 			},
@@ -162,10 +162,10 @@ func TestGetCharacter(t *testing.T) {
 				},
 			},
 			defaultPlayerAbilities: []int32{33},
-			stdSphereGrid: &expSphereGrid{
+			stdSphereGrid: &SphereGrid{
 				playerAbilities: []int32{12, 32, 33, 52, 87},
 			},
-			expSphereGrid: &expSphereGrid{
+			expSphereGrid: &SphereGrid{
 				playerAbilities: []int32{12, 32, 33, 52},
 			},
 			overdriveModes: map[string]int32{
@@ -190,7 +190,7 @@ func TestGetCharacter(t *testing.T) {
 					"exp sg abilities":  19,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   4,
 				name: "lulu",
 			},
@@ -220,10 +220,10 @@ func TestGetCharacter(t *testing.T) {
 				"accuracy":      13,
 			},
 			defaultPlayerAbilities: []int32{69, 70, 71, 72},
-			stdSphereGrid: &expSphereGrid{
+			stdSphereGrid: &SphereGrid{
 				playerAbilities: []int32{21, 29, 43, 69, 74, 78, 83, 86},
 			},
-			expSphereGrid: &expSphereGrid{
+			expSphereGrid: &SphereGrid{
 				playerAbilities: []int32{29, 30, 43, 70, 74, 75, 79, 81, 87},
 			},
 			overdriveModes: map[string]int32{
@@ -246,7 +246,7 @@ func TestGetCharacter(t *testing.T) {
 					"default abilities": 15,
 				},
 			},
-			expUnique: expUnique{
+			Unique: Unique{
 				id:   8,
 				name: "seymour",
 			},
@@ -287,7 +287,7 @@ func TestGetCharacter(t *testing.T) {
 
 func TestRetrieveCharacters(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/characters",

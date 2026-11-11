@@ -5,23 +5,23 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expLocation struct {
+type Location struct {
 	testGeneral
-	expUnique
+	Unique
 	connectedLocations []int32
 	sublocations       []int32
-	expLocRel
+	LocRel
 }
 
-func (e expLocation) GetTestGeneral() testGeneral {
+func (e Location) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareLocations(test test, exp expLocation, got apitypes.Location) {
+func compareLocations(test test, exp Location, got apitypes.Location) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)
 	test.checkResIDsInSlice("connected locations", apilookups.E.Locations.Endpoint, exp.connectedLocations, got.ConnectedLocations)
 	test.checkResIDsInSlice("sublocations", apilookups.E.Sublocations.Endpoint, exp.sublocations, got.Sublocations)
-	compareLocRel(test, exp.expLocRel, got.LocRel)
+	compareLocRel(test, exp.LocRel, got.LocRel)
 }

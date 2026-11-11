@@ -6,25 +6,25 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type expAbility struct {
+type Ability struct {
 	testGeneral
-	expNameVer
+	NameVer
 	rank               *int32
 	appearsInHelpBar   bool
 	canCopyCat         bool
 	abilityType        database.AbilityType
 	typedAbility       string
 	monsters           []int32
-	battleInteractions []expBattleInteraction
+	battleInteractions []BattleInteraction
 }
 
-func (e expAbility) GetTestGeneral() testGeneral {
+func (e Ability) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAbilities(test test, exp expAbility, got apitypes.Ability) {
+func compareAbilities(test test, exp Ability, got apitypes.Ability) {
 	test.t.Helper()
-	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compareExpNameVer(exp.NameVer, got.ID, got.Name, got.Version)
 	test.compare("ability type", string(exp.abilityType), string(got.Type))
 	test.compare("rank", exp.rank, got.Rank)
 	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
@@ -35,24 +35,24 @@ func compareAbilities(test test, exp expAbility, got apitypes.Ability) {
 	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
-type expEnemyAbility struct {
+type EnemyAbility struct {
 	testGeneral
-	expNameVer
+	NameVer
 	rank               *int32
 	appearsInHelpBar   bool
 	canCopyCat         bool
 	untypedAbility     int32
 	monsters           []int32
-	battleInteractions []expBattleInteraction
+	battleInteractions []BattleInteraction
 }
 
-func (e expEnemyAbility) GetTestGeneral() testGeneral {
+func (e EnemyAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareEnemyAbilities(test test, exp expEnemyAbility, got apitypes.EnemyAbility) {
+func compareEnemyAbilities(test test, exp EnemyAbility, got apitypes.EnemyAbility) {
 	test.t.Helper()
-	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compareExpNameVer(exp.NameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", exp.rank, got.Rank)
 	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	test.compare("can copycat", exp.canCopyCat, got.CanCopycat)
@@ -61,9 +61,9 @@ func compareEnemyAbilities(test test, exp expEnemyAbility, got apitypes.EnemyAbi
 	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
-type expItemAbility struct {
+type ItemAbility struct {
 	testGeneral
-	expUnique
+	Unique
 	rank                *int32
 	appearsInHelpBar    bool
 	canCopyCat          bool
@@ -71,16 +71,16 @@ type expItemAbility struct {
 	item                int32
 	category            database.ItemCategory
 	CanUseOutsideBattle bool
-	battleInteractions  []expBattleInteraction
+	battleInteractions  []BattleInteraction
 }
 
-func (e expItemAbility) GetTestGeneral() testGeneral {
+func (e ItemAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareItemAbilities(test test, exp expItemAbility, got apitypes.ItemAbility) {
+func compareItemAbilities(test test, exp ItemAbility, got apitypes.ItemAbility) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compare("rank", exp.rank, got.Rank)
 	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	test.compare("can copycat", exp.canCopyCat, got.CanCopycat)
@@ -91,9 +91,9 @@ func compareItemAbilities(test test, exp expItemAbility, got apitypes.ItemAbilit
 	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
-type expPlayerAbility struct {
+type PlayerAbility struct {
 	testGeneral
-	expNameVer
+	NameVer
 	rank               *int32
 	appearsInHelpBar   bool
 	canCopyCat         bool
@@ -104,16 +104,16 @@ type expPlayerAbility struct {
 	stdChar            *int32
 	expChar            *int32
 	monsters           []int32
-	battleInteractions []expBattleInteraction
+	battleInteractions []BattleInteraction
 }
 
-func (e expPlayerAbility) GetTestGeneral() testGeneral {
+func (e PlayerAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func comparePlayerAbilities(test test, exp expPlayerAbility, got apitypes.PlayerAbility) {
+func comparePlayerAbilities(test test, exp PlayerAbility, got apitypes.PlayerAbility) {
 	test.t.Helper()
-	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compareExpNameVer(exp.NameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", exp.rank, got.Rank)
 	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	test.compare("can copycat", exp.canCopyCat, got.CanCopycat)
@@ -127,23 +127,23 @@ func comparePlayerAbilities(test test, exp expPlayerAbility, got apitypes.Player
 	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
-type expOverdriveAbility struct {
+type OverdriveAbility struct {
 	testGeneral
-	expNameVer
+	NameVer
 	rank               *int32
 	untypedAbility     int32
 	overdriveCommand   *int32
 	overdrives         []int32
-	battleInteractions []expBattleInteraction
+	battleInteractions []BattleInteraction
 }
 
-func (e expOverdriveAbility) GetTestGeneral() testGeneral {
+func (e OverdriveAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareOverdriveAbilities(test test, exp expOverdriveAbility, got apitypes.OverdriveAbility) {
+func compareOverdriveAbilities(test test, exp OverdriveAbility, got apitypes.OverdriveAbility) {
 	test.t.Helper()
-	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compareExpNameVer(exp.NameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", exp.rank, got.Rank)
 	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, exp.untypedAbility, got.UntypedAbility)
 	test.compIDAPIResourcePtrs("overdrive command", apilookups.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
@@ -151,9 +151,9 @@ func compareOverdriveAbilities(test test, exp expOverdriveAbility, got apitypes.
 	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
-type expMiscAbility struct {
+type MiscAbility struct {
 	testGeneral
-	expNameVer
+	NameVer
 	rank               *int32
 	appearsInHelpBar   bool
 	canCopyCat         bool
@@ -161,16 +161,16 @@ type expMiscAbility struct {
 	topmenu            *int32
 	submenu            *int32
 	openSubmenu        *int32
-	battleInteractions []expBattleInteraction
+	battleInteractions []BattleInteraction
 }
 
-func (e expMiscAbility) GetTestGeneral() testGeneral {
+func (e MiscAbility) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareMiscAbilities(test test, exp expMiscAbility, got apitypes.MiscAbility) {
+func compareMiscAbilities(test test, exp MiscAbility, got apitypes.MiscAbility) {
 	test.t.Helper()
-	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compareExpNameVer(exp.NameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", exp.rank, got.Rank)
 	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	test.compare("can copycat", exp.canCopyCat, got.CanCopycat)
@@ -181,9 +181,9 @@ func compareMiscAbilities(test test, exp expMiscAbility, got apitypes.MiscAbilit
 	test.compTestStructSlices("battle interactions", exp.battleInteractions, got.BattleInteractions, compareBattleInteractions)
 }
 
-type expTriggerCommand struct {
+type TriggerCommand struct {
 	testGeneral
-	expNameVer
+	NameVer
 	rank               *int32
 	appearsInHelpBar   bool
 	canCopyCat         bool
@@ -191,16 +191,16 @@ type expTriggerCommand struct {
 	topmenu            *int32
 	usedBy             []int32
 	monsterFormations  []int32
-	battleInteractions []expBattleInteraction
+	battleInteractions []BattleInteraction
 }
 
-func (e expTriggerCommand) GetTestGeneral() testGeneral {
+func (e TriggerCommand) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTriggerCommands(test test, exp expTriggerCommand, got apitypes.TriggerCommand) {
+func compareTriggerCommands(test test, exp TriggerCommand, got apitypes.TriggerCommand) {
 	test.t.Helper()
-	test.compareExpNameVer(exp.expNameVer, got.ID, got.Name, got.Version)
+	test.compareExpNameVer(exp.NameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", exp.rank, got.Rank)
 	test.compare("appears in help bar", exp.appearsInHelpBar, got.AppearsInHelpBar)
 	test.compare("can copycat", exp.canCopyCat, got.CanCopycat)

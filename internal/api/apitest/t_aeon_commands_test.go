@@ -11,7 +11,7 @@ import (
 
 func TestGetAeonCommand(t *testing.T) {
 	t.Parallel()
-	tests := []expAeonCommand{
+	tests := []AeonCommand{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/aeon-commands/10",
@@ -28,11 +28,11 @@ func TestGetAeonCommand(t *testing.T) {
 					"possible abilities 0 - abilities": 6,
 				},
 			},
-			expUnique:   newExpUnique(1, "pay"),
+			Unique:   newExpUnique(1, "pay"),
 			user:        19,
 			topmenu:     h.GetInt32Ptr(1),
 			openSubmenu: h.GetInt32Ptr(12),
-			possibleAbilities: []expPossibleAbilityList{
+			possibleAbilities: []PossibleAbilityList{
 				{
 					user:      19,
 					abilities: []int32{94, 95, 96, 97, 98, 382},
@@ -50,11 +50,11 @@ func TestGetAeonCommand(t *testing.T) {
 					"possible abilities 2 - abilities": 17,
 				},
 			},
-			expUnique:   newExpUnique(2, "do as you will."),
+			Unique:   newExpUnique(2, "do as you will."),
 			user:        4,
 			topmenu:     h.GetInt32Ptr(1),
 			openSubmenu: nil,
-			possibleAbilities: []expPossibleAbilityList{
+			possibleAbilities: []PossibleAbilityList{
 				{
 					user:      20,
 					abilities: []int32{375, 54, 55, 66, 80, 102},
@@ -78,11 +78,11 @@ func TestGetAeonCommand(t *testing.T) {
 					"possible abilities 0 - abilities": 10,
 				},
 			},
-			expUnique:   newExpUnique(7, "defense!"),
+			Unique:   newExpUnique(7, "defense!"),
 			user:        21,
 			topmenu:     h.GetInt32Ptr(1),
 			openSubmenu: nil,
-			possibleAbilities: []expPossibleAbilityList{
+			possibleAbilities: []PossibleAbilityList{
 				{
 					user:      21,
 					abilities: []int32{375, 100, 45, 46, 61, 68, 102},
@@ -96,7 +96,7 @@ func TestGetAeonCommand(t *testing.T) {
 
 func TestRetrieveAeonCommands(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/aeon-commands",

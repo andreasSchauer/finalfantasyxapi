@@ -11,7 +11,7 @@ import (
 
 func TestGetSubmenu(t *testing.T) {
 	t.Parallel()
-	tests := []expSubmenu{
+	tests := []Submenu{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/submenus/16",
@@ -29,11 +29,11 @@ func TestGetSubmenu(t *testing.T) {
 					"opened by - overdrive commands": 1,
 				},
 			},
-			expUnique: newExpUnique(1, "summon"),
+			Unique: newExpUnique(1, "summon"),
 			topmenu:   h.GetInt32Ptr(1),
 			users:     []int32{6},
 			abilities: []int32{390, 391, 392, 393, 394, 395, 396, 397},
-			openedBy: &expMenuOpen{
+			openedBy: &MenuOpen{
 				ability:           nil,
 				aeonCommand:       nil,
 				overdriveCommands: []int32{2},
@@ -48,7 +48,7 @@ func TestGetSubmenu(t *testing.T) {
 					"abilities": 22,
 				},
 			},
-			expUnique: newExpUnique(3, "special"),
+			Unique: newExpUnique(3, "special"),
 			topmenu:   h.GetInt32Ptr(1),
 			users:     []int32{1, 3},
 			abilities: []int32{23, 27, 32, 33, 38, 41, 44},
@@ -63,11 +63,11 @@ func TestGetSubmenu(t *testing.T) {
 					"abilities": 0,
 				},
 			},
-			expUnique: newExpUnique(9, "use"),
+			Unique: newExpUnique(9, "use"),
 			topmenu:   nil,
 			users:     []int32{1},
 			abilities: []int32{},
-			openedBy: &expMenuOpen{
+			openedBy: &MenuOpen{
 				ability:           h.GetInt32Ptr(24),
 				aeonCommand:       nil,
 				overdriveCommands: nil,
@@ -82,11 +82,11 @@ func TestGetSubmenu(t *testing.T) {
 					"abilities": 0,
 				},
 			},
-			expUnique: newExpUnique(12, "gil yojimbo"),
+			Unique: newExpUnique(12, "gil yojimbo"),
 			topmenu:   h.GetInt32Ptr(1),
 			users:     []int32{19},
 			abilities: []int32{},
-			openedBy: &expMenuOpen{
+			openedBy: &MenuOpen{
 				ability:           nil,
 				aeonCommand:       h.GetInt32Ptr(1),
 				overdriveCommands: nil,
@@ -99,7 +99,7 @@ func TestGetSubmenu(t *testing.T) {
 
 func TestRetrieveSubmenus(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/submenus",

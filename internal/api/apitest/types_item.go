@@ -6,9 +6,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-type expItem struct {
+type Item struct {
 	testGeneral
-	expUnique
+	Unique
 	untypedItem        int32
 	category           database.ItemCategory
 	monsters           []testMonItemAmts
@@ -21,13 +21,13 @@ type expItem struct {
 	mixes              []int32
 }
 
-func (e expItem) GetTestGeneral() testGeneral {
+func (e Item) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareItems(test test, exp expItem, got apitypes.Item) {
+func compareItems(test test, exp Item, got apitypes.Item) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped item", apilookups.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
 	test.compare("category", string(exp.category), got.Category)
 	test.checkTestStructsInSlice("monsters", exp.monsters, got.Monsters, compareMonItemAmts)

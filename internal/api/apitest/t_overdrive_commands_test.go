@@ -11,7 +11,7 @@ import (
 
 func TestGetOverdriveCommand(t *testing.T) {
 	t.Parallel()
-	tests := []expOverdriveCommand{
+	tests := []OverdriveCommand{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-commands/8",
@@ -27,7 +27,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 					"overdrives": 8,
 				},
 			},
-			expUnique:   newExpUnique(2, "grand summon"),
+			Unique:   newExpUnique(2, "grand summon"),
 			rank:        0,
 			user:        6,
 			topmenu:     h.GetInt32Ptr(3),
@@ -42,7 +42,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 					"overdrives": 4,
 				},
 			},
-			expUnique:   newExpUnique(3, "slots"),
+			Unique:   newExpUnique(3, "slots"),
 			rank:        5,
 			user:        7,
 			topmenu:     h.GetInt32Ptr(3),
@@ -57,7 +57,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 					"overdrives": 64,
 				},
 			},
-			expUnique:   newExpUnique(7, "mix"),
+			Unique:   newExpUnique(7, "mix"),
 			rank:        5,
 			user:        11,
 			topmenu:     h.GetInt32Ptr(3),
@@ -71,7 +71,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 
 func TestRetrieveOverdriveCommands(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-commands",

@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expOverdrive struct {
+type Overdrive struct {
 	testGeneral
-	expUnique
+	Unique
 	rank               *int32
 	countdownInSec     *int32
 	user               int32
@@ -15,13 +15,13 @@ type expOverdrive struct {
 	overdriveAbilities []int32
 }
 
-func (e expOverdrive) GetTestGeneral() testGeneral {
+func (e Overdrive) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareOverdrives(test test, exp expOverdrive, got apitypes.Overdrive) {
+func compareOverdrives(test test, exp Overdrive, got apitypes.Overdrive) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compare("rank", exp.rank, got.Rank)
 	test.compare("countdown in sec", exp.countdownInSec, got.CountdownInSec)
 	test.compIDAPIResource("user", apilookups.E.CharacterClasses.Endpoint, exp.user, got.User)

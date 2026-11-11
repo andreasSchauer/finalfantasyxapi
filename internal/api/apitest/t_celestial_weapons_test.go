@@ -10,7 +10,7 @@ import (
 
 func TestGetCelestialWeapon(t *testing.T) {
 	t.Parallel()
-	tests := []expCelestialWeapon{
+	tests := []CelestialWeapon{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/celestial-weapons/8",
@@ -27,7 +27,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 					"auto-abilities": 4,
 				},
 			},
-			expUnique:     newExpUnique(3, "world champion"),
+			Unique:     newExpUnique(3, "world champion"),
 			equipment:     3,
 			autoAbilities: []int32{51, 49, 44, 38},
 			crest:         19,
@@ -45,7 +45,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 					"auto-abilities": 4,
 				},
 			},
-			expUnique:     newExpUnique(6, "masamune"),
+			Unique:     newExpUnique(6, "masamune"),
 			equipment:     6,
 			autoAbilities: []int32{51, 49, 3, 37},
 			crest:         15,
@@ -61,7 +61,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 
 func TestRetrieveCelestialWeapons(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/celestial-weapons",

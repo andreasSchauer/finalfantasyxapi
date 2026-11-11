@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expCharacter struct {
+type Character struct {
 	testGeneral
-	expUnique
+	Unique
 	untypedUnit            int32
 	area                   int32
 	weaponType             string
@@ -19,18 +19,18 @@ type expCharacter struct {
 	baseStats              map[string]int32
 	regenAmounts           []testRegenAmount
 	defaultPlayerAbilities []int32
-	stdSphereGrid          *expSphereGrid
-	expSphereGrid          *expSphereGrid
+	stdSphereGrid          *SphereGrid
+	expSphereGrid          *SphereGrid
 	overdriveModes         map[string]int32
 }
 
-func (e expCharacter) GetTestGeneral() testGeneral {
+func (e Character) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareCharacters(test test, exp expCharacter, got apitypes.Character) {
+func compareCharacters(test test, exp Character, got apitypes.Character) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped unit", apilookups.E.PlayerUnits.Endpoint, exp.untypedUnit, got.UntypedUnit)
 	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, exp.area, got.Area)
 	test.compare("weapon type", exp.weaponType, got.WeaponType)
@@ -47,11 +47,11 @@ func compareCharacters(test test, exp expCharacter, got apitypes.Character) {
 	test.checkResAmts("overdrive modes", exp.overdriveModes, got.OverdriveModes)
 }
 
-type expSphereGrid struct {
+type SphereGrid struct {
 	playerAbilities []int32
 }
 
-func compareSphereGrids(test test, fieldName string, exp expSphereGrid, got apitypes.SphereGrid) {
+func compareSphereGrids(test test, fieldName string, exp SphereGrid, got apitypes.SphereGrid) {
 	test.t.Helper()
 	test.checkResIDsInSlice(fieldName+" abilities", apilookups.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
 }

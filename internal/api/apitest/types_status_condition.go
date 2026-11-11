@@ -5,22 +5,22 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expStatusCondition struct {
+type StatusCondition struct {
 	testGeneral
-	expUnique
+	Unique
 	autoAbilities      []int32
 	inflictedBy        *testStatusInfliction
 	removedBy          *testStatusRemoval
 	monstersResistance []int32
 }
 
-func (e expStatusCondition) GetTestGeneral() testGeneral {
+func (e StatusCondition) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareStatusConditions(test test, exp expStatusCondition, got apitypes.StatusCondition) {
+func compareStatusConditions(test test, exp StatusCondition, got apitypes.StatusCondition) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
 	test.compTestStructPtrs("inflicted by", exp.inflictedBy, got.InflictedBy, compareStatusInflictions)
 	test.compTestStructPtrs("removed by", exp.removedBy, got.RemovedBy, compareStatusRemovals)

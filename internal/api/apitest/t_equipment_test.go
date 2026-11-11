@@ -11,7 +11,7 @@ import (
 
 func TestGetEquipment(t *testing.T) {
 	t.Parallel()
-	tests := []expEquipment{
+	tests := []Equipment{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/1053",
@@ -38,7 +38,7 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     0,
 				},
 			},
-			expUnique:               newExpUnique(1, "caladbolg"),
+			Unique:               newExpUnique(1, "caladbolg"),
 			equipmentTable:          1,
 			priority:                h.GetInt32Ptr(1),
 			celestialWeapon:         h.GetInt32Ptr(1),
@@ -60,7 +60,7 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     0,
 				},
 			},
-			expUnique:               newExpUnique(1, "caladbolg"),
+			Unique:               newExpUnique(1, "caladbolg"),
 			equipmentTable:          8,
 			priority:                h.GetInt32Ptr(1),
 			celestialWeapon:         h.GetInt32Ptr(1),
@@ -82,7 +82,7 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     0,
 				},
 			},
-			expUnique:               newExpUnique(1, "caladbolg"),
+			Unique:               newExpUnique(1, "caladbolg"),
 			equipmentTable:          9,
 			priority:                h.GetInt32Ptr(1),
 			celestialWeapon:         h.GetInt32Ptr(1),
@@ -104,7 +104,7 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     0,
 				},
 			},
-			expUnique:               newExpUnique(8, "brotherhood"),
+			Unique:               newExpUnique(8, "brotherhood"),
 			equipmentTable:          10,
 			priority:                h.GetInt32Ptr(2),
 			celestialWeapon:         nil,
@@ -126,7 +126,7 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     0,
 				},
 			},
-			expUnique:               newExpUnique(8, "brotherhood"),
+			Unique:               newExpUnique(8, "brotherhood"),
 			equipmentTable:          11,
 			priority:                h.GetInt32Ptr(2),
 			celestialWeapon:         nil,
@@ -148,7 +148,7 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     1,
 				},
 			},
-			expUnique:               newExpUnique(333, "scout"),
+			Unique:               newExpUnique(333, "scout"),
 			equipmentTable:          58,
 			priority:                h.GetInt32Ptr(49),
 			celestialWeapon:         nil,
@@ -171,7 +171,7 @@ func TestGetEquipment(t *testing.T) {
 					"shops":     0,
 				},
 			},
-			expUnique:             newExpUnique(945, "mythril armguard"),
+			Unique:             newExpUnique(945, "mythril armguard"),
 			equipmentTable:        147,
 			priority:              h.GetInt32Ptr(69),
 			celestialWeapon:       nil,
@@ -209,7 +209,7 @@ func TestGetEquipment(t *testing.T) {
 					"shops":     0,
 				},
 			},
-			expUnique: newExpUnique(805, "lucid ring"),
+			Unique: newExpUnique(805, "lucid ring"),
 			treasures: []int32{194},
 			shops:     []int32{},
 		},
@@ -230,7 +230,7 @@ func TestGetEquipment(t *testing.T) {
 					"shops":     0,
 				},
 			},
-			expUnique: newExpUnique(805, "lucid ring"),
+			Unique: newExpUnique(805, "lucid ring"),
 			treasures: []int32{261},
 			shops:     []int32{},
 		},
@@ -251,7 +251,7 @@ func TestGetEquipment(t *testing.T) {
 					"shops":     1,
 				},
 			},
-			expUnique: newExpUnique(805, "lucid ring"),
+			Unique: newExpUnique(805, "lucid ring"),
 			treasures: []int32{},
 			shops:     []int32{5},
 		},
@@ -262,7 +262,7 @@ func TestGetEquipment(t *testing.T) {
 
 func TestRetrieveEquipment(t *testing.T) {
 	t.Parallel()
-	tests := []expListIDs{
+	tests := []ListIDs{
 		{
 			testGeneral: testGeneral{
 				requestURL:     "/api/equipment?limit=max",

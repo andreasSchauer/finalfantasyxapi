@@ -5,9 +5,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type expModifier struct {
+type Modifier struct {
 	testGeneral
-	expUnique
+	Unique
 	autoAbilities      []int32
 	playerAbilities    []int32
 	overdriveAbilities []int32
@@ -18,13 +18,13 @@ type expModifier struct {
 	properties         []int32
 }
 
-func (e expModifier) GetTestGeneral() testGeneral {
+func (e Modifier) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareModifiers(test test, exp expModifier, got apitypes.Modifier) {
+func compareModifiers(test test, exp Modifier, got apitypes.Modifier) {
 	test.t.Helper()
-	test.compareExpUnique(exp.expUnique, got.ID, got.Name)
+	test.compareExpUnique(exp.Unique, got.ID, got.Name)
 	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, exp.autoAbilities, got.AutoAbilities)
 	test.checkResIDsInSlice("player abilities", apilookups.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
 	test.checkResIDsInSlice("overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, exp.overdriveAbilities, got.OverdriveAbilities)
