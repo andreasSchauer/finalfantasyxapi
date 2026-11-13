@@ -15,42 +15,42 @@ func TestGetTreasure(t *testing.T) {
 	t.Parallel()
 	tests := []Treasure{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/a",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid id 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/343",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "treasure with provided id '343' doesn't exist. max id: 342",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/3/a",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "endpoint /treasures doesn't have any subsections",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/a/3",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. usage: '/api/treasures', '/api/treasures/{id}'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/2/2",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/treasures/sections for valid subsections",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/199",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -63,13 +63,13 @@ func TestGetTreasure(t *testing.T) {
 			treasureType:    database.TreasureTypeChest,
 			lootType:        database.LootTypeItem,
 			gilAmount:       nil,
-			items: []TestResAmount[apiresource.Typed]{
+			items: []testResAmount[apiresource.Typed]{
 				newTestResAmount[apiresource.Typed](82, 1),
 			},
 			equipment: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/13",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -82,13 +82,13 @@ func TestGetTreasure(t *testing.T) {
 			treasureType:    database.TreasureTypeObject,
 			lootType:        database.LootTypeItem,
 			gilAmount:       nil,
-			items: []TestResAmount[apiresource.Typed]{
+			items: []testResAmount[apiresource.Typed]{
 				newTestResAmount[apiresource.Typed](147, 1),
 			},
 			equipment: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/62",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -102,14 +102,14 @@ func TestGetTreasure(t *testing.T) {
 			lootType:        database.LootTypeEquipment,
 			gilAmount:       nil,
 			items:           nil,
-			equipment: &TestFoundEquipment{
+			equipment: &testFoundEquipment{
 				equipmentName:    877,
 				abilities:        []int32{55, 64, 58},
 				emptySlotsAmount: 0,
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/284",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -126,7 +126,7 @@ func TestGetTreasure(t *testing.T) {
 			equipment:       nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/45",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -139,7 +139,7 @@ func TestGetTreasure(t *testing.T) {
 			treasureType:    database.TreasureTypeGift,
 			lootType:        database.LootTypeItem,
 			gilAmount:       nil,
-			items: []TestResAmount[apiresource.Typed]{
+			items: []testResAmount[apiresource.Typed]{
 				newTestResAmount[apiresource.Typed](97, 1),
 			},
 			equipment: nil,
@@ -153,7 +153,7 @@ func TestRetrieveTreasures(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -161,7 +161,7 @@ func TestRetrieveTreasures(t *testing.T) {
 			results: []int32{1, 28, 53, 84, 123, 127, 167, 191, 214, 286, 300, 342},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?location=4&loot_type=item&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -169,7 +169,7 @@ func TestRetrieveTreasures(t *testing.T) {
 			results: []int32{15, 18, 20, 23, 35, 37, 41, 44},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?sublocation=43&treasure_type=chest", // omega ruins
 				expectedStatus: http.StatusOK,
 			},
@@ -177,7 +177,7 @@ func TestRetrieveTreasures(t *testing.T) {
 			results: []int32{328, 330, 335, 337, 339, 342},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?area=212", // gagazet - mountain trail
 				expectedStatus: http.StatusOK,
 			},
@@ -185,7 +185,7 @@ func TestRetrieveTreasures(t *testing.T) {
 			results: []int32{284, 285, 286, 287, 288, 289},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?anima=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -193,7 +193,7 @@ func TestRetrieveTreasures(t *testing.T) {
 			results: []int32{39, 62, 150, 210, 253, 302},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?availability=pre-story&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -201,7 +201,7 @@ func TestRetrieveTreasures(t *testing.T) {
 			results: []int32{1, 23, 91, 119, 139, 206, 239, 261, 263},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?availability=post&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -209,7 +209,7 @@ func TestRetrieveTreasures(t *testing.T) {
 			results: []int32{5, 30, 43, 64, 81, 109, 153, 211, 308, 342},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?availability=always&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -217,7 +217,7 @@ func TestRetrieveTreasures(t *testing.T) {
 			results: []int32{2, 54, 80, 108, 147, 179, 214, 265, 295, 303},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?availability=pre-story&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -225,7 +225,7 @@ func TestRetrieveTreasures(t *testing.T) {
 			results: []int32{1, 55, 112, 206, 248, 267},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures?availability=post-story",
 				expectedStatus: http.StatusOK,
 			},
@@ -241,7 +241,7 @@ func TestSubsectionTreasures(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/6/treasures",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleLocations,
@@ -251,7 +251,7 @@ func TestSubsectionTreasures(t *testing.T) {
 			results:        []int32{50, 53, 55, 59, 62, 65, 66},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/21/treasures",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleSublocations,
@@ -261,7 +261,7 @@ func TestSubsectionTreasures(t *testing.T) {
 			results:        []int32{167, 168, 169, 170, 171},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/223/treasures",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAreas,

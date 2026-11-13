@@ -12,21 +12,21 @@ func TestRetrieveEndpoints(t *testing.T) {
 	t.Parallel()
 	tests := []ListPaths{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/endpoints/1",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. '/endpoints' doesn't support single-resource requests",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/endpoints/1/1",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. usage: '/api/endpoints'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/endpoints",
 				expectedStatus: http.StatusOK,
 			},

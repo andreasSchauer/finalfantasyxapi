@@ -13,7 +13,7 @@ func TestParameters(t *testing.T) {
 	t.Parallel()
 	tests := []ListNames{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/parameters?ass=max",
 				expectedStatus: http.StatusBadRequest,
 				endpoint:       apilookups.E.Areas.Endpoint,
@@ -22,7 +22,7 @@ func TestParameters(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/parameters?treasures=true",
 				expectedStatus: http.StatusBadRequest,
 				endpoint:       apilookups.E.Areas.Endpoint,
@@ -31,7 +31,7 @@ func TestParameters(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/enums/parameters?ass=max",
 				expectedStatus: http.StatusBadRequest,
 				endpoint:       apilookups.E.Enums.Endpoint,
@@ -40,7 +40,7 @@ func TestParameters(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Areas.Endpoint,
@@ -50,7 +50,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnLimit, ts.QpnOffset, ts.QpnItem, ts.QpnSaveSphere, ts.QpnSublocation, ts.QpnIDs}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Sublocations.Endpoint,
@@ -60,7 +60,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnLocation, ts.QpnItem, ts.QpnMethods, ts.QpnAeons, ts.QpnShops, ts.QpnFMVs, ts.QpnIDs}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Locations.Endpoint,
@@ -70,7 +70,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnKeyItem, ts.QpnCharacters, ts.QpnAeons, ts.QpnTreasures, ts.QpnSidequests, ts.QpnIDs, ts.QpnFlip}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.ArenaCreations.Endpoint,
@@ -80,7 +80,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnLimit, ts.QpnOffset, ts.QpnCategory}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.BlitzballPrizes.Endpoint,
@@ -90,7 +90,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnLimit, ts.QpnOffset, ts.QpnCategory}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/fmvs/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.FMVs.Endpoint,
@@ -101,7 +101,7 @@ func TestParameters(t *testing.T) {
 		},
 
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Monsters.Endpoint,
@@ -111,7 +111,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnKimahriStats, ts.QpnAlteredState, ts.QpnOmnisElements, ts.QpnStatusResists, ts.QpnAutoAbility, ts.QpnArea, ts.QpnDistance, ts.QpnUnderwater, ts.QpnSpecies, ts.QpnIDs, ts.QpnYunaStats}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.MonsterFormations.Endpoint,
@@ -121,7 +121,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnMonster, ts.QpnLocation, ts.QpnAmbush, ts.QpnCategory, ts.QpnIDs}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.OverdriveModes.Endpoint,
@@ -131,7 +131,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnLimit, ts.QpnOffset, ts.QpnType}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/shops/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Shops.Endpoint,
@@ -141,7 +141,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnLocation, ts.QpnAutoAbility, ts.QpnItems, ts.QpnEquipment, ts.QpnAvailability, ts.QpnIDs}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/songs/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Songs.Endpoint,
@@ -151,7 +151,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnArea, ts.QpnFMVs, ts.QpnComposer, ts.QpnSpecialUse}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Sidequests.Endpoint,
@@ -161,7 +161,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnLimit, ts.QpnOffset, ts.QpnAvailability}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Subquests.Endpoint,
@@ -171,7 +171,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnLimit, ts.QpnOffset, ts.QpnAvailability, ts.QpnRepeatable}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/treasures/parameters?limit=max",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Treasures.Endpoint,
@@ -181,7 +181,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnSublocation, ts.QpnLootType, ts.QpnTreasureType, ts.QpnAnima, ts.QpnAvailability}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/enums/parameters",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Enums.Endpoint,
@@ -191,7 +191,7 @@ func TestParameters(t *testing.T) {
 			results: ts.QpnsToNamedParams([]ts.QueryParamName{ts.QpnLimit, ts.QpnOffset}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/enums/parameters?limit=1",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Enums.Endpoint,

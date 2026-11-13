@@ -14,14 +14,14 @@ func TestGetMonsterFormation(t *testing.T) {
 	t.Parallel()
 	tests := []MonsterFormation{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/332",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "monster-formation with provided id '332' doesn't exist. max id: 331",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/27",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -44,10 +44,10 @@ func TestGetMonsterFormation(t *testing.T) {
 				"sinscale - 3":       4,
 			},
 			areas:           []int32{42},
-			triggerCommands: []TestFormationTC{},
+			triggerCommands: []testFormationTC{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/77",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -72,7 +72,7 @@ func TestGetMonsterFormation(t *testing.T) {
 			areas: []int32{99, 100, 106},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/137",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -96,7 +96,7 @@ func TestGetMonsterFormation(t *testing.T) {
 				"guado guardian - 1": 2,
 			},
 			areas: []int32{164},
-			triggerCommands: []TestFormationTC{
+			triggerCommands: []testFormationTC{
 				{
 					Ability: 4,
 					Users:   []int32{5},
@@ -108,7 +108,7 @@ func TestGetMonsterFormation(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations/265",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -129,7 +129,7 @@ func TestGetMonsterFormation(t *testing.T) {
 				"great malboro": 1,
 			},
 			areas:           []int32{234, 236, 237},
-			triggerCommands: []TestFormationTC{},
+			triggerCommands: []testFormationTC{},
 		},
 	}
 
@@ -140,14 +140,14 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?limit=asd",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit={int|'max'}'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -155,7 +155,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{1, 175, 238, 307, 331},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?monster=44",
 				expectedStatus: http.StatusOK,
 			},
@@ -163,7 +163,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{63, 64, 67, 68, 69},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?location=12",
 				expectedStatus: http.StatusOK,
 			},
@@ -171,7 +171,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{90, 93, 98, 102, 105},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?sublocation=7", // besaid
 				expectedStatus: http.StatusOK,
 			},
@@ -179,7 +179,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{9, 15, 19, 24, 25},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?area=232", // sin - city of dying dreams
 				expectedStatus: http.StatusOK,
 			},
@@ -187,7 +187,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{257, 258, 262, 266},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?ambush=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -195,7 +195,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{226, 265, 298},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?category=boss-fight&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -203,7 +203,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{3, 37, 83, 137, 189, 204, 245, 270, 296},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?availability=post&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -211,7 +211,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{7, 20, 70, 171, 213, 266, 287, 314, 331},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?availability=pre-story&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -219,7 +219,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{1, 2, 28, 37, 134, 164, 178, 203, 245, 254},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?repeatable=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -227,7 +227,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{9, 35, 58, 81, 103, 148, 165, 193, 239, 280, 319, 331},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?category=boss-fight&repeatable=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -235,7 +235,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{226, 227},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?availability=always&location=23",
 				expectedStatus: http.StatusOK,
 			},
@@ -243,7 +243,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{230, 233, 234, 237, 240, 244},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?availability=post&location=25",
 				expectedStatus: http.StatusOK,
 			},
@@ -251,7 +251,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{256, 260, 265, 266, 269},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?availability=pre-story&sublocation=34", // highbridge
 				expectedStatus: http.StatusOK,
 			},
@@ -259,7 +259,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{174, 190, 191, 192},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?availability=story&area=234", // sin - the nucleus
 				expectedStatus: http.StatusOK,
 			},
@@ -267,7 +267,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{260, 262, 263, 265, 266, 267, 268, 269},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?availability=post&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -275,7 +275,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			results: []int32{7, 20, 70, 78, 83, 171, 213, 255, 264, 295, 310, 331},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monster-formations?escape=false&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -291,7 +291,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/23/monster-formations",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleLocations,
@@ -301,7 +301,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			results:        []int32{228, 231, 235, 237, 240, 244, 245},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/4/monster-formations",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleLocations,
@@ -311,7 +311,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			results:        []int32{9, 13, 15, 18, 21, 23, 25},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/38/monster-formations",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleSublocations,
@@ -321,7 +321,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			results:        []int32{198, 202, 216, 217, 221, 224, 227},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/18/monster-formations",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleSublocations,
@@ -331,7 +331,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			results:        []int32{86, 89, 90, 93, 95},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/89/monster-formations",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAreas,
@@ -341,7 +341,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			results:        []int32{46, 49, 54, 57, 58, 59},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/areas/170/monster-formations",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAreas,
@@ -351,7 +351,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			results:        []int32{140, 144, 149, 150, 153, 155},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/200/monster-formations",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsters,
@@ -361,7 +361,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			results:        []int32{170},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/monsters/155/monster-formations",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsters,

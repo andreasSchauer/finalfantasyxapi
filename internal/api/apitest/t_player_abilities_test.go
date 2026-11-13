@@ -15,14 +15,14 @@ func TestGetPlayerAbility(t *testing.T) {
 	t.Parallel()
 	tests := []PlayerAbility{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities/103",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "player ability with provided id '103' doesn't exist. max id: 102",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities/10?ability_user=shiva",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -82,7 +82,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities/10?ability_user=auron&celestial_weapon=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -142,7 +142,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities/24",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -164,7 +164,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			battleInteractions: []BattleInteraction{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities/27",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -224,7 +224,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities/47",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -290,7 +290,7 @@ func TestGetMultiplePlayerAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities/wakizashi",
 				expectedStatus: http.StatusMultipleChoices,
 			},
@@ -298,7 +298,7 @@ func TestGetMultiplePlayerAbilities(t *testing.T) {
 			results: []int32{96, 97},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities/auto-life",
 				expectedStatus: http.StatusMultipleChoices,
 			},
@@ -314,7 +314,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -322,7 +322,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results: []int32{1, 22, 57, 78, 99, 102},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?category=2&help_bar=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -332,7 +332,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results:  []int32{24, 40, 42, 43},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?related_stat=3&darkable=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -342,7 +342,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results:  []int32{11},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?copycat=true&std_sg=3&user_atk=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -352,7 +352,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results:  []int32{28, 84, 85},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?status_inflict=none&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -362,7 +362,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results:  []int32{20, 24, 28, 36, 39, 43, 53, 76, 86, 96, 102},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?silenceable=true&reflectable=false&user=3",
 				expectedStatus: http.StatusOK,
 			},
@@ -372,7 +372,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results:  []int32{82, 87},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?mp=20&exp_sg=2",
 				expectedStatus: http.StatusOK,
 			},
@@ -382,7 +382,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results:  []int32{47},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?mp_min=20&learn_item=59",
 				expectedStatus: http.StatusOK,
 			},
@@ -392,7 +392,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results:  []int32{64},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?mp_max=10&element=3",
 				expectedStatus: http.StatusOK,
 			},
@@ -402,7 +402,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results:  []int32{71, 75},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?element=fire,ice",
 				expectedStatus: http.StatusOK,
 			},
@@ -412,7 +412,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results:  []int32{69, 72, 73, 76, 77, 80},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?element=none&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -422,7 +422,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results:  []int32{1, 12, 24, 34, 43, 55, 67, 95, 102},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?delay=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -432,7 +432,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			results:  []int32{9, 10, 88},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/player-abilities?outside_battle=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -450,7 +450,7 @@ func TestSubsectionPlayerAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/characters/2/default-abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleCharacters,
@@ -460,7 +460,7 @@ func TestSubsectionPlayerAbilities(t *testing.T) {
 			results:        []int32{45, 53},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/characters/2/std-sg-abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleCharacters,
@@ -470,7 +470,7 @@ func TestSubsectionPlayerAbilities(t *testing.T) {
 			results:        []int32{26, 42, 47, 53, 60, 62, 66},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/characters/2/exp-sg-abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleCharacters,
@@ -480,7 +480,7 @@ func TestSubsectionPlayerAbilities(t *testing.T) {
 			results:        []int32{14, 45, 49, 54, 60, 64, 65},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/1/default-abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAeons,

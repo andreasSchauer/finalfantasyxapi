@@ -13,14 +13,14 @@ func TestGetAeon(t *testing.T) {
 	t.Parallel()
 	tests := []Aeon{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/11",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "aeon with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/3",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -42,7 +42,7 @@ func TestGetAeon(t *testing.T) {
 			untypedUnit:    11,
 			area:           114,
 			battlesToRegen: 20,
-			agility: TestAgilityParams{
+			agility: testAgilityParams{
 				agilityTier: 7,
 				tickSpeed:   15,
 				minICV:      h.GetInt32Ptr(43),
@@ -99,7 +99,7 @@ func TestGetAeon(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/9?battles=347&yuna_stats=strength:24",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -122,7 +122,7 @@ func TestGetAeon(t *testing.T) {
 			},
 			area:           208,
 			battlesToRegen: 30,
-			agility: TestAgilityParams{
+			agility: testAgilityParams{
 				agilityTier: 12,
 				tickSpeed:   10,
 				minICV:      h.GetInt32Ptr(26),
@@ -142,7 +142,7 @@ func TestGetAeon(t *testing.T) {
 				"evasion":       27,
 				"accuracy":      18,
 			},
-			regenAmounts: []TestRegenAmount{
+			regenAmounts: []testRegenAmount{
 				{
 					index:    0,
 					ticks:    0,
@@ -169,7 +169,7 @@ func TestGetAeon(t *testing.T) {
 			overdrives:             []int32{124},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/1?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -191,7 +191,7 @@ func TestGetAeon(t *testing.T) {
 			untypedUnit:    9,
 			area:           33,
 			battlesToRegen: 8,
-			agility: TestAgilityParams{
+			agility: testAgilityParams{
 				agilityTier: 15,
 				tickSpeed:   7,
 				minICV:      h.GetInt32Ptr(20),
@@ -216,7 +216,7 @@ func TestGetAeon(t *testing.T) {
 			overdrives:             []int32{117, 118},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeons/1?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15&battles=600",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -238,7 +238,7 @@ func TestGetAeon(t *testing.T) {
 				name: "valefor",
 			},
 			untypedUnit: 9,
-			agility: TestAgilityParams{
+			agility: testAgilityParams{
 				agilityTier: 15,
 				tickSpeed:   7,
 				minICV:      h.GetInt32Ptr(20),
@@ -266,7 +266,7 @@ func TestRetrieveAeons(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeons",
 				expectedStatus: http.StatusOK,
 			},
@@ -274,7 +274,7 @@ func TestRetrieveAeons(t *testing.T) {
 			results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeons?optional=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -282,7 +282,7 @@ func TestRetrieveAeons(t *testing.T) {
 			results: []int32{6, 7, 8, 9, 10},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeons?optional=false",
 				expectedStatus: http.StatusOK,
 			},

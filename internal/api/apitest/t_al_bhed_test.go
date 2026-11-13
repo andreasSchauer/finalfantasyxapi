@@ -14,7 +14,7 @@ func TestAlBhed(t *testing.T) {
 
 	tests := []AlBhedResponse{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
@@ -23,7 +23,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
@@ -34,7 +34,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
@@ -46,7 +46,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
@@ -57,7 +57,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
@@ -68,7 +68,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
@@ -79,7 +79,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
@@ -90,7 +90,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusBadRequest,
@@ -101,7 +101,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
@@ -116,7 +116,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
@@ -131,7 +131,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
@@ -146,7 +146,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
@@ -161,7 +161,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,
@@ -177,7 +177,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     requestURL,
 				method:         http.MethodPost,
 				expectedStatus: http.StatusOK,

@@ -12,14 +12,14 @@ func TestGetTopmenu(t *testing.T) {
 	t.Parallel()
 	tests := []Topmenu{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/topmenus/5",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "topmenu with provided id '5' doesn't exist. max id: 4",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/topmenus/1",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -38,7 +38,7 @@ func TestGetTopmenu(t *testing.T) {
 			aeonCommands:      []int32{1, 2, 3, 4, 5, 6, 7, 8, 9},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/topmenus/2",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -57,7 +57,7 @@ func TestGetTopmenu(t *testing.T) {
 			aeonCommands:      []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/topmenus/3",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -84,7 +84,7 @@ func TestRetrieveTopmenus(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/topmenus",
 				expectedStatus: http.StatusOK,
 			},

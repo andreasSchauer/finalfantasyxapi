@@ -13,28 +13,28 @@ func TestGetArenaCreation(t *testing.T) {
 	t.Parallel()
 	tests := []ArenaCreation{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/36",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "arena creation with provided id '36' doesn't exist. max id: 35",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/a",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "arena creation not found: 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/a/2",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. usage: '/api/arena-creations', '/api/arena-creations/{id}', '/api/arena-creations/{name}'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/13",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -51,7 +51,7 @@ func TestGetArenaCreation(t *testing.T) {
 			requiredMonsters:    []int32{239, 243, 245, 248},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/one-eye",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -68,7 +68,7 @@ func TestGetArenaCreation(t *testing.T) {
 			requiredMonsters:    []int32{40, 73, 87, 170, 240},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations/31",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -94,14 +94,14 @@ func TestRetrieveArenaCreations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations?category=asd",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid enum value 'asd' used for parameter 'category'. use /api/arena-creations/parameters to see allowed values",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -109,7 +109,7 @@ func TestRetrieveArenaCreations(t *testing.T) {
 			results: []int32{1, 11, 14, 20, 27, 31, 35},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/arena-creations?category=species&limit=max",
 				expectedStatus: http.StatusOK,
 			},

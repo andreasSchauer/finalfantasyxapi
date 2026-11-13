@@ -12,14 +12,14 @@ func TestGetProperty(t *testing.T) {
 	t.Parallel()
 	tests := []Property{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/properties/14",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "property with provided id '14' doesn't exist. max id: 13",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/properties/1",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -33,7 +33,7 @@ func TestGetProperty(t *testing.T) {
 			monsters:      []int32{5, 29, 79, 107, 197, 277, 292},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/properties/4",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -47,7 +47,7 @@ func TestGetProperty(t *testing.T) {
 			monsters:      []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/properties/11",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -69,7 +69,7 @@ func TestRetrieveProperties(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/properties",
 				expectedStatus: http.StatusOK,
 			},

@@ -14,14 +14,14 @@ func TestGetAgilityTier(t *testing.T) {
 	t.Parallel()
 	tests := []AgilityTier{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/agility-tiers/20",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "agility tier with provided id '20' doesn't exist. max id: 19",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/agility-tiers/15",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -93,7 +93,7 @@ func TestRetrieveAgilityTiers(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/agility-tiers",
 				expectedStatus: http.StatusOK,
 			},
@@ -101,7 +101,7 @@ func TestRetrieveAgilityTiers(t *testing.T) {
 			results: []int32{1, 3, 7, 8, 12, 17, 19},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/agility-tiers?agility=95",
 				expectedStatus: http.StatusOK,
 			},

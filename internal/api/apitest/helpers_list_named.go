@@ -5,7 +5,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-func compareParameterLists(test Test, _ ts.EndpointName, exp ListNames, got handlerinput.QueryParameterList) {
+func compareParameterLists(test test, _ ts.EndpointName, exp ListNames, got handlerinput.QueryParameterList) {
 	test.t.Helper()
 	test.compareListParams(exp.GetListParams(), got.GetListParams())
 	gotNames := []string{}
@@ -17,7 +17,7 @@ func compareParameterLists(test Test, _ ts.EndpointName, exp ListNames, got hand
 	test.checkStringsInSlice("results", exp.results, gotNames)
 }
 
-func compareSectionLists(test Test, endpoint ts.EndpointName, exp ListNames, got handlerinput.SectionList) {
+func compareSectionLists(test test, endpoint ts.EndpointName, exp ListNames, got handlerinput.SectionList) {
 	test.t.Helper()
 	test.compareListParams(exp.GetListParams(), got.GetListParams())
 
@@ -25,7 +25,7 @@ func compareSectionLists(test Test, endpoint ts.EndpointName, exp ListNames, got
 }
 
 // checks if the provided slice of strings contains all stated strings
-func (test Test) checkStringsInSlice(fieldName string, expNames []ts.NamedParam, gotNames []string) {
+func (test test) checkStringsInSlice(fieldName string, expNames []ts.NamedParam, gotNames []string) {
 	test.t.Helper()
 	test.checkSliceBasic(fieldName, expNames, gotNames)
 

@@ -11,7 +11,7 @@ import (
 func TestServiceBody(t *testing.T) {
 	t.Parallel()
 
-	tests := []TestGeneral{
+	tests := []testGeneral{
 		{
 			requestURL:     "/api/al-bhed/body",
 			expectedStatus: http.StatusOK,
@@ -65,7 +65,7 @@ func TestServiceBody(t *testing.T) {
 func TestServiceBodyDocs(t *testing.T) {
 	t.Parallel()
 
-	tests := []TestGeneral{
+	tests := []testGeneral{
 		{
 			requestURL:     "/api/al-bhed/body/docs",
 			expectedStatus: http.StatusOK,
@@ -89,7 +89,7 @@ func TestServiceBodyDocs(t *testing.T) {
 func TestAlBhedBodySamples(t *testing.T) {
 	t.Parallel()
 
-	tests := []TestGeneral{
+	tests := []testGeneral{
 		{
 			requestURL:     "/api/al-bhed/body/samples",
 			expectedStatus: http.StatusOK,
@@ -103,7 +103,7 @@ func TestAlBhedBodySamples(t *testing.T) {
 func TestTurnOrderBodySamples(t *testing.T) {
 	t.Parallel()
 
-	tests := []TestGeneral{
+	tests := []testGeneral{
 		{
 			requestURL:     "/api/turn-order/body/samples",
 			expectedStatus: http.StatusOK,
@@ -117,7 +117,7 @@ func TestTurnOrderBodySamples(t *testing.T) {
 func TestDropChanceBodySamples(t *testing.T) {
 	t.Parallel()
 
-	tests := []TestGeneral{
+	tests := []testGeneral{
 		{
 			requestURL:     "/api/drop-chance/body/samples",
 			expectedStatus: http.StatusOK,

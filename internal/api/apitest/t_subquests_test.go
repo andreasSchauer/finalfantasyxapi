@@ -14,28 +14,28 @@ func TestGetSubquest(t *testing.T) {
 	t.Parallel()
 	tests := []Subquest{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/89",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "subquest with provided id '89' doesn't exist. max id: 88",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/10/a",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "endpoint /subquests doesn't have any subsections",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/a",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid id 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/5",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -46,14 +46,14 @@ func TestGetSubquest(t *testing.T) {
 			Unique:       newExpUnique(5, "jormungand"),
 			untypedQuest:    15,
 			parentSidequest: 1,
-			completion: TestQuestCompletion{
+			completion: testQuestCompletion{
 				areas:  []int32{203},
 				reward: newTestResAmount[apiresource.Typed](50, 99),
 			},
 			arenaCreation: h.GetInt32Ptr(5),
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/39",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -64,14 +64,14 @@ func TestGetSubquest(t *testing.T) {
 			Unique:       newExpUnique(39, "ifrit - first win"),
 			untypedQuest:    49,
 			parentSidequest: 2,
-			completion: TestQuestCompletion{
+			completion: testQuestCompletion{
 				areas:  []int32{207},
 				reward: newTestResAmount[apiresource.Typed](3, 30),
 			},
 			arenaCreation: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests/76",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -82,7 +82,7 @@ func TestGetSubquest(t *testing.T) {
 			Unique:       newExpUnique(76, "first hunt after acquiring the airship"),
 			untypedQuest:    86,
 			parentSidequest: 6,
-			completion: TestQuestCompletion{
+			completion: testQuestCompletion{
 				areas:  []int32{142, 143},
 				reward: newTestResAmount[apiresource.Typed](98, 1),
 			},
@@ -97,7 +97,7 @@ func TestRetrieveSubquests(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -105,7 +105,7 @@ func TestRetrieveSubquests(t *testing.T) {
 			results: []int32{1, 5, 17, 28, 30, 34, 44, 51, 56, 66, 72, 79, 88},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests?availability=post&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -113,7 +113,7 @@ func TestRetrieveSubquests(t *testing.T) {
 			results: []int32{1, 8, 12, 23, 33, 52, 68, 71, 76},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests?repeatable=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -121,7 +121,7 @@ func TestRetrieveSubquests(t *testing.T) {
 			results: []int32{38, 42, 44, 50, 52, 60, 64, 66},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests?availability=always&repeatable=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -129,7 +129,7 @@ func TestRetrieveSubquests(t *testing.T) {
 			results: []int32{38, 40, 50, 60, 64, 66},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests?availability=post&repeatable=false&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -137,7 +137,7 @@ func TestRetrieveSubquests(t *testing.T) {
 			results: []int32{1, 14, 24, 35, 70, 77},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests?availability=pre-story",
 				expectedStatus: http.StatusOK,
 			},
@@ -145,7 +145,7 @@ func TestRetrieveSubquests(t *testing.T) {
 			results: []int32{87},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/subquests?availability=post&repeatable=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -161,7 +161,7 @@ func TestSubsectionSubquests(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/1/subquests",
 				expectedStatus: http.StatusOK,
 			},
@@ -170,7 +170,7 @@ func TestSubsectionSubquests(t *testing.T) {
 			results:        []int32{1, 8, 12, 14, 18, 23, 31, 36},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/2/subquests",
 				expectedStatus: http.StatusOK,
 			},
@@ -179,7 +179,7 @@ func TestSubsectionSubquests(t *testing.T) {
 			results:        []int32{37, 40, 41, 43, 44, 46, 49, 52},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/4/subquests",
 				expectedStatus: http.StatusOK,
 			},
@@ -188,7 +188,7 @@ func TestSubsectionSubquests(t *testing.T) {
 			results:        []int32{59, 62, 66, 67},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/9/subquests",
 				expectedStatus: http.StatusOK,
 			},

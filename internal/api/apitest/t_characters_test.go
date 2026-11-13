@@ -14,14 +14,14 @@ func TestGetCharacter(t *testing.T) {
 	t.Parallel()
 	tests := []Character{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/characters/9",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "character with provided id '9' doesn't exist. max id: 8",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/characters/1?osg_stats=standard",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -38,7 +38,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 			untypedUnit: 1,
 			area:        1,
-			agility: TestAgilityParams{
+			agility: testAgilityParams{
 				agilityTier: 16,
 				tickSpeed:   6,
 				minICV:      h.GetInt32Ptr(17),
@@ -61,7 +61,7 @@ func TestGetCharacter(t *testing.T) {
 				"evasion":       29,
 				"accuracy":      29,
 			},
-			regenAmounts: []TestRegenAmount{
+			regenAmounts: []testRegenAmount{
 				{
 					index:    0,
 					ticks:    0,
@@ -99,7 +99,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/characters/5",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -116,7 +116,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 			untypedUnit: 5,
 			area:        42,
-			agility: TestAgilityParams{
+			agility: testAgilityParams{
 				agilityTier: 6,
 				tickSpeed:   16,
 				minICV:      h.GetInt32Ptr(46),
@@ -139,7 +139,7 @@ func TestGetCharacter(t *testing.T) {
 				"evasion":       5,
 				"accuracy":      5,
 			},
-			regenAmounts: []TestRegenAmount{
+			regenAmounts: []testRegenAmount{
 				{
 					index:    0,
 					ticks:    0,
@@ -177,7 +177,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/characters/4?osg_stats=expert",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -196,7 +196,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 			untypedUnit: 4,
 			area:        36,
-			agility: TestAgilityParams{
+			agility: testAgilityParams{
 				agilityTier: 12,
 				tickSpeed:   10,
 				minICV:      h.GetInt32Ptr(26),
@@ -235,7 +235,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/characters/8",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -252,7 +252,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 			untypedUnit: 8,
 			area:        102,
-			agility: TestAgilityParams{
+			agility: testAgilityParams{
 				agilityTier: 12,
 				tickSpeed:   10,
 				minICV:      h.GetInt32Ptr(28),
@@ -289,7 +289,7 @@ func TestRetrieveCharacters(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/characters",
 				expectedStatus: http.StatusOK,
 			},
@@ -297,7 +297,7 @@ func TestRetrieveCharacters(t *testing.T) {
 			results: []int32{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/characters?story_based=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -305,7 +305,7 @@ func TestRetrieveCharacters(t *testing.T) {
 			results: []int32{8},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/characters?underwater=true",
 				expectedStatus: http.StatusOK,
 			},

@@ -13,28 +13,28 @@ func TestGetOverdriveMode(t *testing.T) {
 	t.Parallel()
 	tests := []OverdriveMode{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/ally/2",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. usage: '/api/overdrive-modes', '/api/overdrive-modes/{id}', '/api/overdrive-modes/{name}'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/18",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "overdrive mode with provided id '18' doesn't exist. max id: 17",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/a",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "overdrive mode not found: 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/ally/",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -59,7 +59,7 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/3",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -77,7 +77,7 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/1/",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -101,14 +101,14 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=f",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid enum value 'f' used for parameter 'type'. use /api/overdrive-modes/parameters to see allowed values",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes/",
 				expectedStatus: http.StatusOK,
 			},
@@ -118,7 +118,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			results:  []int32{1, 8, 17},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=formula",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -130,7 +130,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			results: []int32{1, 2, 3, 4},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/overdrive-modes?type=2",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{

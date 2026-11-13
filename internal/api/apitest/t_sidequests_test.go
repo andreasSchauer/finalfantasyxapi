@@ -12,35 +12,35 @@ func TestGetSidequest(t *testing.T) {
 	t.Parallel()
 	tests := []Sidequest{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/11",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "sidequest with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/11/a",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "sidequest with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/a",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "sidequest not found: 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/10/a",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "subsection 'a' does not exist for endpoint /sidequests. supported subsections: 'subquests'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/2",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -51,14 +51,14 @@ func TestGetSidequest(t *testing.T) {
 			},
 			Unique:    newExpUnique(2, "remiem temple"),
 			untypedQuest: 2,
-			completion: &TestQuestCompletion{
+			completion: &testQuestCompletion{
 				areas:  []int32{207},
 				reward: newTestResAmount[apiresource.Typed](126, 1),
 			},
 			subquests: []int32{37, 39, 42, 44, 45, 49, 52},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/4",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -72,7 +72,7 @@ func TestGetSidequest(t *testing.T) {
 			subquests:    []int32{59, 62, 64, 65, 67},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests/9",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -83,7 +83,7 @@ func TestGetSidequest(t *testing.T) {
 			},
 			Unique:    newExpUnique(9, "al bhed primers"),
 			untypedQuest: 9,
-			completion: &TestQuestCompletion{
+			completion: &testQuestCompletion{
 				areas:  []int32{183, 180},
 				reward: newTestResAmount[apiresource.Typed](111, 99),
 			},
@@ -98,7 +98,7 @@ func TestRetrieveSidequests(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests",
 				expectedStatus: http.StatusOK,
 			},
@@ -106,7 +106,7 @@ func TestRetrieveSidequests(t *testing.T) {
 			results: []int32{1, 2, 3, 5, 6, 9, 10},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests?availability=post",
 				expectedStatus: http.StatusOK,
 			},
@@ -114,7 +114,7 @@ func TestRetrieveSidequests(t *testing.T) {
 			results: []int32{1, 2, 5, 6, 9},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests?availability=always",
 				expectedStatus: http.StatusOK,
 			},
@@ -122,7 +122,7 @@ func TestRetrieveSidequests(t *testing.T) {
 			results: []int32{3, 4, 7, 8, 10},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sidequests?availability=post",
 				expectedStatus: http.StatusOK,
 			},

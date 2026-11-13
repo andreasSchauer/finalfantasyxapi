@@ -12,14 +12,14 @@ func TestGetStatusCondition(t *testing.T) {
 	t.Parallel()
 	tests := []StatusCondition{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/status-conditions/46",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "status condition with provided id '46' doesn't exist. max id: 45",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/status-conditions/5?inflict_min=always",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -37,7 +37,7 @@ func TestGetStatusCondition(t *testing.T) {
 			Unique:          newExpUnique(5, "death"),
 			autoAbilities:      []int32{19, 20, 54, 77, 78},
 			monstersResistance: []int32{},
-			inflictedBy: &TestStatusInfliction{
+			inflictedBy: &testStatusInfliction{
 				playerAbilities:    []int32{98},
 				overdriveAbilities: []int32{},
 				itemAbilities:      []int32{},
@@ -47,7 +47,7 @@ func TestGetStatusCondition(t *testing.T) {
 			removedBy: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/status-conditions/9?inflict_max=60",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -70,14 +70,14 @@ func TestGetStatusCondition(t *testing.T) {
 			Unique:          newExpUnique(9, "petrification"),
 			autoAbilities:      []int32{17, 18, 54, 75, 76, 129},
 			monstersResistance: []int32{2, 5, 55, 92, 129, 157, 189, 216, 237, 272, 295, 307},
-			inflictedBy: &TestStatusInfliction{
+			inflictedBy: &testStatusInfliction{
 				playerAbilities:    []int32{},
 				overdriveAbilities: []int32{},
 				itemAbilities:      []int32{},
 				miscAbilities:      []int32{},
 				enemyAbilities:     []int32{21, 29, 178, 183, 377, 379, 381},
 			},
-			removedBy: &TestStatusRemoval{
+			removedBy: &testStatusRemoval{
 				playerAbilities:    []int32{53},
 				overdriveAbilities: []int32{152, 153, 158, 159},
 				itemAbilities:      []int32{12, 16, 21},
@@ -86,7 +86,7 @@ func TestGetStatusCondition(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/status-conditions/21?inflict_min=infinite&resistance=immune",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -109,14 +109,14 @@ func TestGetStatusCondition(t *testing.T) {
 			Unique:          newExpUnique(21, "haste"),
 			autoAbilities:      []int32{96, 101},
 			monstersResistance: []int32{3, 33, 135, 156, 199, 252, 253},
-			inflictedBy: &TestStatusInfliction{
+			inflictedBy: &testStatusInfliction{
 				playerAbilities:    []int32{56, 57},
 				overdriveAbilities: []int32{165, 166, 167},
 				itemAbilities:      []int32{54, 55},
 				miscAbilities:      []int32{},
 				enemyAbilities:     []int32{},
 			},
-			removedBy: &TestStatusRemoval{
+			removedBy: &testStatusRemoval{
 				playerAbilities:    []int32{63, 90},
 				overdriveAbilities: []int32{},
 				itemAbilities:      []int32{63},
@@ -125,7 +125,7 @@ func TestGetStatusCondition(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/status-conditions/31",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -148,14 +148,14 @@ func TestGetStatusCondition(t *testing.T) {
 			Unique:          newExpUnique(31, "boost"),
 			autoAbilities:      []int32{},
 			monstersResistance: []int32{3, 33, 69, 108, 135, 253},
-			inflictedBy: &TestStatusInfliction{
+			inflictedBy: &testStatusInfliction{
 				playerAbilities:    []int32{},
 				overdriveAbilities: []int32{},
 				itemAbilities:      []int32{},
 				miscAbilities:      []int32{8},
 				enemyAbilities:     []int32{},
 			},
-			removedBy: &TestStatusRemoval{
+			removedBy: &testStatusRemoval{
 				playerAbilities:    []int32{},
 				overdriveAbilities: []int32{},
 				itemAbilities:      []int32{},
@@ -172,7 +172,7 @@ func TestRetrieveStatusConditions(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/status-conditions?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -180,7 +180,7 @@ func TestRetrieveStatusConditions(t *testing.T) {
 			results: []int32{1, 8, 14, 16, 22, 38, 45},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/status-conditions/?category=2",
 				expectedStatus: http.StatusOK,
 			},

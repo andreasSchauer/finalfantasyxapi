@@ -13,14 +13,14 @@ func TestGetQuest(t *testing.T) {
 	t.Parallel()
 	tests := []Quest{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests/99",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "quest with provided id '99' doesn't exist. max id: 98",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests/1",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -34,7 +34,7 @@ func TestGetQuest(t *testing.T) {
 			typedQuest: "/sidequests/1",
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests/47",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -48,7 +48,7 @@ func TestGetQuest(t *testing.T) {
 			typedQuest: "/subquests/37",
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests/80",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -72,7 +72,7 @@ func TestRetrieveQuests(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -80,7 +80,7 @@ func TestRetrieveQuests(t *testing.T) {
 			results: []int32{1, 3, 17, 18, 25, 37, 44, 58, 65, 77, 83, 91, 98},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests?type=sidequest",
 				expectedStatus: http.StatusOK,
 			},
@@ -88,7 +88,7 @@ func TestRetrieveQuests(t *testing.T) {
 			results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests?repeatable=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -96,7 +96,7 @@ func TestRetrieveQuests(t *testing.T) {
 			results: []int32{48, 54, 60, 70, 76},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests?limit=max&availability=post",
 				expectedStatus: http.StatusOK,
 			},
@@ -104,7 +104,7 @@ func TestRetrieveQuests(t *testing.T) {
 			results: []int32{1, 6, 11, 24, 34, 46, 62, 80, 87},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests?availability=post&repeatable=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -112,7 +112,7 @@ func TestRetrieveQuests(t *testing.T) {
 			results: []int32{58, 62},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests?availability=always&repeatable=false&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -120,7 +120,7 @@ func TestRetrieveQuests(t *testing.T) {
 			results: []int32{3, 10, 38, 59, 77, 92, 98},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests?availability=pre-story",
 				expectedStatus: http.StatusOK,
 			},
@@ -128,7 +128,7 @@ func TestRetrieveQuests(t *testing.T) {
 			results: []int32{97},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/quests?availability=always&limit=max",
 				expectedStatus: http.StatusOK,
 			},

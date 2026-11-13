@@ -14,28 +14,28 @@ func TestGetSublocation(t *testing.T) {
 	t.Parallel()
 	tests := []Sublocation{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/0",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "sublocation with provided id '0' doesn't exist. max id: 43",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/44",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "sublocation with provided id '44' doesn't exist. max id: 43",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/a",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "sublocation not found: 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/35/",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -72,14 +72,14 @@ func TestGetSublocation(t *testing.T) {
 				monsters:   []int32{138, 142, 149, 259, 270, 282, 292},
 				formations: []int32{193, 198, 205, 306, 312, 320, 331},
 				quests:     []int32{1, 11, 19, 34, 42, 45, 46, 69, 74, 77},
-				music: &TestLocMusic{
+				music: &testLocMusic{
 					bgMusic:   []int32{71, 73},
 					bossMusic: []int32{16},
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/26?rel_availability=pre-story",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -113,7 +113,7 @@ func TestGetSublocation(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/26?rel_availability=always&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -147,7 +147,7 @@ func TestGetSublocation(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/26?rel_availability=always&rel_repeatable=false",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -181,7 +181,7 @@ func TestGetSublocation(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/14/",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -214,7 +214,7 @@ func TestGetSublocation(t *testing.T) {
 				monsters:   []int32{34, 35, 36},
 				formations: []int32{38, 39, 40},
 				quests:     []int32{97, 98},
-				music: &TestLocMusic{
+				music: &testLocMusic{
 					bgMusic:   []int32{17, 32, 34},
 					cuesMusic: []int32{16, 35, 36},
 					fmvsMusic: []int32{16, 20},
@@ -224,7 +224,7 @@ func TestGetSublocation(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/beSaiD",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -260,7 +260,7 @@ func TestGetSublocation(t *testing.T) {
 				formations: []int32{9, 13, 17, 22, 25},
 				quests:     []int32{},
 				fmvs:       []int32{5, 6, 8},
-				music: &TestLocMusic{
+				music: &testLocMusic{
 					bgMusic:   []int32{18, 20, 22, 23, 27},
 					cuesMusic: []int32{17},
 					fmvsMusic: []int32{17, 23, 34},
@@ -277,7 +277,7 @@ func TestRetrieveSublocations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -285,7 +285,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{1, 25, 43},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?monsters=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -293,7 +293,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{2, 3, 8, 19, 23, 24, 36},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?characters=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -301,7 +301,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{1, 7, 8, 9, 14, 17, 20},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?aeons=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -309,7 +309,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{4, 7, 12, 19, 28, 33, 37, 38},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?key_item=36",
 				expectedStatus: http.StatusOK,
 			},
@@ -317,7 +317,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{8},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?location=8",
 				expectedStatus: http.StatusOK,
 			},
@@ -325,7 +325,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{14, 15},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?item=1&methods=treasure&boss_fights=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -333,7 +333,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{1, 7, 9, 17},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?shops=true&treasures=true&sidequests=true&fmvs=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -341,7 +341,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{14, 26, 32},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=pre-airship&item=56&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
@@ -349,7 +349,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{25, 27, 35, 38, 41},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=post-game&item=56&methods=monster&pre_airship=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -357,7 +357,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{25, 35, 38, 41, 43},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=always&auto_ability=4&item=27&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
@@ -365,7 +365,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{25},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=post&monsters=true&treasures=false&item=53",
 				expectedStatus: http.StatusOK,
 			},
@@ -373,7 +373,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{32, 39},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=pre-story&monster=31",
 				expectedStatus: http.StatusOK,
 			},
@@ -381,7 +381,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{15},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=always&monster=87&repeatable=true&boss_fights=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -389,7 +389,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{28},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=pre-story",
 				expectedStatus: http.StatusOK,
 			},
@@ -397,7 +397,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{1, 2, 5, 6, 31, 33},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=post&sidequests=true&boss_fights=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -405,7 +405,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{30, 32, 35},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=post&monsters=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -413,7 +413,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{4, 17, 30, 37, 41, 43},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=post&monsters=false&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -421,7 +421,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{1, 2, 5, 14, 21, 24, 28, 31, 40},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=always&monster=48",
 				expectedStatus: http.StatusOK,
 			},
@@ -429,7 +429,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{17, 18, 20},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=pre-story&shops=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -437,7 +437,7 @@ func TestRetrieveSublocations(t *testing.T) {
 			results: []int32{13, 21, 28, 32, 34, 39},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations?availability=always&key_item=23",
 				expectedStatus: http.StatusOK,
 			},
@@ -453,7 +453,7 @@ func TestSubsectionSublocations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/5/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleSublocations,
@@ -463,7 +463,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			results:        []int32{6, 7},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/12/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleSublocations,
@@ -473,7 +473,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			results:        []int32{11},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/27/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleSublocations,
@@ -483,7 +483,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			results:        []int32{26, 28, 29},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/35/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleSublocations,
@@ -493,7 +493,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			results:        []int32{26, 36, 38, 39},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/simple?availability=pre-story",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleSublocations,
@@ -505,7 +505,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			results: []int32{1, 2, 5, 6, 31, 33},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/sublocations/simple?availability=post&sidequests=true&boss_fights=true",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleSublocations,
@@ -517,7 +517,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			results: []int32{30, 32, 35},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/15/sublocations/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleLocations,
@@ -527,7 +527,7 @@ func TestSubsectionSublocations(t *testing.T) {
 			results:        []int32{26, 27, 28},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/8/sublocations/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleLocations,

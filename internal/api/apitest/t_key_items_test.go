@@ -14,14 +14,14 @@ func TestGetKeyItem(t *testing.T) {
 	t.Parallel()
 	tests := []KeyItem{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items/61",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "key-item with provided id '61' doesn't exist. max id: 60",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items/39",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -41,7 +41,7 @@ func TestGetKeyItem(t *testing.T) {
 			quests:          []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items/23",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -61,7 +61,7 @@ func TestGetKeyItem(t *testing.T) {
 			quests:          []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items/8",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -81,7 +81,7 @@ func TestGetKeyItem(t *testing.T) {
 			quests:          []int32{1},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items/39?rel_availability=always",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -101,7 +101,7 @@ func TestGetKeyItem(t *testing.T) {
 			quests:          []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items/39?rel_availability=pre-story",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -129,14 +129,14 @@ func TestRetrieveKeyItems(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?methods=a",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value 'a' used for parameter 'methods'. allowed values: 'treasure', 'quest'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -144,7 +144,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{1, 16, 27, 48, 54, 60},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?availability=post&category=2",
 				expectedStatus: http.StatusOK,
 			},
@@ -152,7 +152,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{14, 16, 18, 24},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?methods=quest",
 				expectedStatus: http.StatusOK,
 			},
@@ -160,7 +160,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{3, 8, 9, 16, 22, 24},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?location=15",
 				expectedStatus: http.StatusOK,
 			},
@@ -168,7 +168,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{4, 18, 25, 32, 49, 50},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?sublocation=14", // stadium (luca)
 				expectedStatus: http.StatusOK,
 			},
@@ -176,7 +176,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{19, 20, 28, 40},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?area=236", // omega ruins bottom
 				expectedStatus: http.StatusOK,
 			},
@@ -184,7 +184,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{60},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?availability=post",
 				expectedStatus: http.StatusOK,
 			},
@@ -192,7 +192,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{8, 14, 16, 18, 24, 60},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?availability=post-game&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -200,7 +200,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{3, 8, 11, 16, 26, 43, 60},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?availability=story",
 				expectedStatus: http.StatusOK,
 			},
@@ -208,7 +208,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{1, 2, 5, 6, 53, 54, 55, 56},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?availability=always&location=8",
 				expectedStatus: http.StatusOK,
 			},
@@ -216,7 +216,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{19, 20, 28, 40, 41},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?availability=always&sublocation=26", // macalania woods
 				expectedStatus: http.StatusOK,
 			},
@@ -224,7 +224,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{4, 25, 32, 49},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?availability=pre-airship&area=201", // calm lands - central
 				expectedStatus: http.StatusOK,
 			},
@@ -232,7 +232,7 @@ func TestRetrieveKeyItems(t *testing.T) {
 			results: []int32{6, 12},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/key-items?availability=pre-airship&methods=quest",
 				expectedStatus: http.StatusOK,
 			},

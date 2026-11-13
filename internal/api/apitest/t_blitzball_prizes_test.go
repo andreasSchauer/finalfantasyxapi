@@ -12,28 +12,28 @@ func TestGetBlitzballPrize(t *testing.T) {
 	t.Parallel()
 	tests := []BlitzballPrize{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/9",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "blitzball prize table with provided id '9' doesn't exist. max id: 8",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/9/2",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/blitzball-prizes/sections for valid subsections",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/a",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid id 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/1",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -44,14 +44,14 @@ func TestGetBlitzballPrize(t *testing.T) {
 			IDOnly: newExpIDOnly(1),
 			category:  "league",
 			slot:      "1st",
-			items: []TestPossibleItem{
+			items: []testPossibleItem{
 				newTestPossibleItem(1, 69, 1, 15),
 				newTestPossibleItem(4, 53, 1, 10),
 				newTestPossibleItem(6, 96, 1, 10),
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes/8",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -62,7 +62,7 @@ func TestGetBlitzballPrize(t *testing.T) {
 			IDOnly: newExpIDOnly(8),
 			category:  "tournament",
 			slot:      "top-scorer",
-			items: []TestPossibleItem{
+			items: []testPossibleItem{
 				newTestPossibleItem(0, 5, 1, 20),
 				newTestPossibleItem(2, 101, 1, 20),
 			},
@@ -76,14 +76,14 @@ func TestRetrieveBlitzballPrizes(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes?category=asd",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid enum value 'asd' used for parameter 'category'. use /api/blitzball-prizes/parameters to see allowed values",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes",
 				expectedStatus: http.StatusOK,
 			},
@@ -91,7 +91,7 @@ func TestRetrieveBlitzballPrizes(t *testing.T) {
 			results: []int32{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/blitzball-prizes?category=league",
 				expectedStatus: http.StatusOK,
 			},

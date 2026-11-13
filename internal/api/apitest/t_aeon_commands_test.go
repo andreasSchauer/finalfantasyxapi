@@ -13,14 +13,14 @@ func TestGetAeonCommand(t *testing.T) {
 	t.Parallel()
 	tests := []AeonCommand{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeon-commands/10",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "aeon command with provided id '10' doesn't exist. max id: 9",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeon-commands/1",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -40,7 +40,7 @@ func TestGetAeonCommand(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeon-commands/2",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -70,7 +70,7 @@ func TestGetAeonCommand(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeon-commands/7",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -98,7 +98,7 @@ func TestRetrieveAeonCommands(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/aeon-commands",
 				expectedStatus: http.StatusOK,
 			},

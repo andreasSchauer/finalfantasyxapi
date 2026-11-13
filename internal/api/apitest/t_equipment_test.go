@@ -13,21 +13,21 @@ func TestGetEquipment(t *testing.T) {
 	t.Parallel()
 	tests := []Equipment{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/1053",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "equipment with provided id '1053' doesn't exist. max id: 1052",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/1?table=4",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value '4' used for parameter 'table'. 'table' can range from 1 to 3 for this resource",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/1?table=1",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -43,13 +43,13 @@ func TestGetEquipment(t *testing.T) {
 			priority:                h.GetInt32Ptr(1),
 			celestialWeapon:         h.GetInt32Ptr(1),
 			requiredAutoAbilities:   []int32{51, 49, 38, 39},
-			selectableAutoAbilities: []TestAbilityPool{},
+			selectableAutoAbilities: []testAbilityPool{},
 			requiredSlots:           nil,
 			treasures:               []int32{270},
 			shops:                   []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/1?table=2",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -65,13 +65,13 @@ func TestGetEquipment(t *testing.T) {
 			priority:                h.GetInt32Ptr(1),
 			celestialWeapon:         h.GetInt32Ptr(1),
 			requiredAutoAbilities:   []int32{53, 48},
-			selectableAutoAbilities: []TestAbilityPool{},
+			selectableAutoAbilities: []testAbilityPool{},
 			requiredSlots:           h.GetInt32Ptr(2),
 			treasures:               []int32{270},
 			shops:                   []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/1?table=3",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -87,13 +87,13 @@ func TestGetEquipment(t *testing.T) {
 			priority:                h.GetInt32Ptr(1),
 			celestialWeapon:         h.GetInt32Ptr(1),
 			requiredAutoAbilities:   []int32{53},
-			selectableAutoAbilities: []TestAbilityPool{},
+			selectableAutoAbilities: []testAbilityPool{},
 			requiredSlots:           h.GetInt32Ptr(3),
 			treasures:               []int32{270},
 			shops:                   []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/8",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -109,13 +109,13 @@ func TestGetEquipment(t *testing.T) {
 			priority:                h.GetInt32Ptr(2),
 			celestialWeapon:         nil,
 			requiredAutoAbilities:   []int32{30, 31, 7, 1},
-			selectableAutoAbilities: []TestAbilityPool{},
+			selectableAutoAbilities: []testAbilityPool{},
 			requiredSlots:           nil,
 			treasures:               []int32{36, 174},
 			shops:                   []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/8?table=2",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -131,13 +131,13 @@ func TestGetEquipment(t *testing.T) {
 			priority:                h.GetInt32Ptr(2),
 			celestialWeapon:         nil,
 			requiredAutoAbilities:   []int32{30},
-			selectableAutoAbilities: []TestAbilityPool{},
+			selectableAutoAbilities: []testAbilityPool{},
 			requiredSlots:           h.GetInt32Ptr(3),
 			treasures:               []int32{36, 174},
 			shops:                   []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/333?rel_availability=pre-story",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -153,13 +153,13 @@ func TestGetEquipment(t *testing.T) {
 			priority:                h.GetInt32Ptr(49),
 			celestialWeapon:         nil,
 			requiredAutoAbilities:   []int32{1},
-			selectableAutoAbilities: []TestAbilityPool{},
+			selectableAutoAbilities: []testAbilityPool{},
 			requiredSlots:           nil,
 			treasures:               []int32{},
 			shops:                   []int32{2},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/945",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -176,7 +176,7 @@ func TestGetEquipment(t *testing.T) {
 			priority:              h.GetInt32Ptr(69),
 			celestialWeapon:       nil,
 			requiredAutoAbilities: []int32{},
-			selectableAutoAbilities: []TestAbilityPool{
+			selectableAutoAbilities: []testAbilityPool{
 				{
 					index:         0,
 					autoAbilities: []int32{106, 105, 104, 103},
@@ -193,7 +193,7 @@ func TestGetEquipment(t *testing.T) {
 			shops:         []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/805?rel_availability=always",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -214,7 +214,7 @@ func TestGetEquipment(t *testing.T) {
 			shops:     []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/805?rel_availability=pre-story",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -235,7 +235,7 @@ func TestGetEquipment(t *testing.T) {
 			shops:     []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment/805?rel_availability=post",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -264,7 +264,7 @@ func TestRetrieveEquipment(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -272,7 +272,7 @@ func TestRetrieveEquipment(t *testing.T) {
 			results: []int32{1, 123, 265, 373, 429, 555, 767, 998, 1009, 1052},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment?auto_abilities=10,12,14,16&character=1",
 				expectedStatus: http.StatusOK,
 			},
@@ -280,7 +280,7 @@ func TestRetrieveEquipment(t *testing.T) {
 			results: []int32{100, 149},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment?type=armor&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -288,7 +288,7 @@ func TestRetrieveEquipment(t *testing.T) {
 			results: []int32{472, 677, 793, 822, 999, 1052},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/equipment?celestial_weapon=true",
 				expectedStatus: http.StatusOK,
 			},

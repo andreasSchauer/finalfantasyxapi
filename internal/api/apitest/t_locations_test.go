@@ -14,28 +14,28 @@ func TestGetLocation(t *testing.T) {
 	t.Parallel()
 	tests := []Location{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/0",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "location with provided id '0' doesn't exist. max id: 26",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/27",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "location with provided id '27' doesn't exist. max id: 26",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/a",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "location not found: 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/15/",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -67,7 +67,7 @@ func TestGetLocation(t *testing.T) {
 				formations: []int32{120, 125, 129, 135, 137},
 				quests:     []int32{10, 82, 83, 84, 85, 86, 87},
 				fmvs:       []int32{27, 36},
-				music: &TestLocMusic{
+				music: &testLocMusic{
 					bgMusic:   []int32{12, 22, 30, 43, 52, 55, 56},
 					cuesMusic: []int32{4, 57, 59},
 					fmvsMusic: []int32{70},
@@ -76,7 +76,7 @@ func TestGetLocation(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/15?rel_availability=always&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -108,7 +108,7 @@ func TestGetLocation(t *testing.T) {
 				formations: []int32{120, 123, 125, 127, 129, 132},
 				quests:     []int32{},
 				fmvs:       []int32{27, 36},
-				music: &TestLocMusic{
+				music: &testLocMusic{
 					bgMusic:   []int32{12, 22, 30, 43, 52, 55, 56},
 					cuesMusic: []int32{4, 57, 59},
 					fmvsMusic: []int32{70},
@@ -117,7 +117,7 @@ func TestGetLocation(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/15?rel_availability=always&rel_repeatable=false",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -149,7 +149,7 @@ func TestGetLocation(t *testing.T) {
 				formations: []int32{136},
 				quests:     []int32{10, 82, 83, 84, 85},
 				fmvs:       []int32{27, 36},
-				music: &TestLocMusic{
+				music: &testLocMusic{
 					bgMusic:   []int32{12, 22, 30, 43, 52, 55, 56},
 					cuesMusic: []int32{4, 57, 59},
 					fmvsMusic: []int32{70},
@@ -158,7 +158,7 @@ func TestGetLocation(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/15?rel_availability=pre-story",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -190,7 +190,7 @@ func TestGetLocation(t *testing.T) {
 				formations: []int32{126, 130, 131, 133, 134, 135, 137},
 				quests:     []int32{},
 				fmvs:       []int32{27, 36},
-				music: &TestLocMusic{
+				music: &testLocMusic{
 					bgMusic:   []int32{12, 22, 30, 43, 52, 55, 56},
 					cuesMusic: []int32{4, 57, 59},
 					fmvsMusic: []int32{70},
@@ -199,7 +199,7 @@ func TestGetLocation(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/OmeGa_rUInS",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -236,7 +236,7 @@ func TestGetLocation(t *testing.T) {
 				monsters:   []int32{190, 201, 210, 239, 245, 250, 255},
 				formations: []int32{258, 262, 265, 283, 289, 296},
 				quests:     []int32{},
-				music: &TestLocMusic{
+				music: &testLocMusic{
 					bgMusic:   []int32{81, 82},
 					bossMusic: []int32{16, 80},
 				},
@@ -251,7 +251,7 @@ func TestRetrieveLocations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -259,7 +259,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{1, 6, 18, 26},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?monsters=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -267,7 +267,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{7, 13},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?characters=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -275,7 +275,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{1, 4, 5, 8, 10, 12},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?aeons=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -283,7 +283,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{2, 4, 6, 11, 15, 19, 21, 22},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?item=45&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
@@ -291,7 +291,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{18, 20, 25, 26},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?key_item=13",
 				expectedStatus: http.StatusOK,
 			},
@@ -299,7 +299,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{4},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?boss_fights=true&shops=true&treasures=true&sidequests=true&fmvs=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -307,7 +307,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{8, 15, 18},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=pre-airship&item=56&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
@@ -315,7 +315,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{14, 15, 20, 22, 24},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=post-game&item=56&methods=monster&pre_airship=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -323,7 +323,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{14, 20, 22, 24, 26},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=always&auto_ability=4&item=27&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
@@ -331,7 +331,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{14},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=post&monsters=true&treasures=false&item=53",
 				expectedStatus: http.StatusOK,
 			},
@@ -339,7 +339,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{18, 23},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=pre-story&monster=31",
 				expectedStatus: http.StatusOK,
 			},
@@ -347,7 +347,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{8},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=always&monster=87&repeatable=true&boss_fights=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -355,7 +355,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{15},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=pre-story",
 				expectedStatus: http.StatusOK,
 			},
@@ -363,7 +363,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{1, 3, 17},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=post&sidequests=true&boss_fights=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -371,7 +371,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{16, 18, 20},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=post&monsters=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -379,7 +379,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{2, 16, 20, 23, 24, 26},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=post&monsters=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -387,7 +387,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{1, 7, 12, 15, 19, 22},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=always&monster=48",
 				expectedStatus: http.StatusOK,
 			},
@@ -395,7 +395,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{10, 11, 12},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=pre-story&shops=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -403,7 +403,7 @@ func TestRetrieveLocations(t *testing.T) {
 			results: []int32{7, 12, 15, 20, 23},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations?availability=always&key_item=23",
 				expectedStatus: http.StatusOK,
 			},
@@ -419,7 +419,7 @@ func TestSubsectionLocations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/5/connected/",
 				expectedStatus: http.StatusOK,
 			},
@@ -428,7 +428,7 @@ func TestSubsectionLocations(t *testing.T) {
 			results:        []int32{4, 6},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/11/connected/",
 				expectedStatus: http.StatusOK,
 			},
@@ -437,7 +437,7 @@ func TestSubsectionLocations(t *testing.T) {
 			results:        []int32{10, 12},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/locations/20/connected/",
 				expectedStatus: http.StatusOK,
 			},

@@ -12,14 +12,14 @@ func TestGetModifier(t *testing.T) {
 	t.Parallel()
 	tests := []Modifier{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/modifiers/32",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "modifier with provided id '32' doesn't exist. max id: 31",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/modifiers/3",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -45,7 +45,7 @@ func TestGetModifier(t *testing.T) {
 			properties:         []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/modifiers/16",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -71,7 +71,7 @@ func TestGetModifier(t *testing.T) {
 			properties:         []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/modifiers/18",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -97,7 +97,7 @@ func TestGetModifier(t *testing.T) {
 			properties:         []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/modifiers/20",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -131,7 +131,7 @@ func TestRetrieveModifiers(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/modifiers?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -139,7 +139,7 @@ func TestRetrieveModifiers(t *testing.T) {
 			results: []int32{1, 7, 12, 17, 20, 25, 31},
 		},
 		{
-			TestGeneral: TestGeneral{
+			testGeneral: testGeneral{
 				requestURL:     "/api/modifiers?category=percentage",
 				expectedStatus: http.StatusOK,
 			},
