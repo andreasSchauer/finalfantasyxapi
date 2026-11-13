@@ -20,42 +20,6 @@ func (test test) compStructs[T any](fieldName string, exp, got T) {
 	}
 }
 
-func (test test) compStructsWithFn[T any](fieldName string, exp, got T, compFn compFnEqual[T]) {
-	test.t.Helper()
-
-	if test.dontCheck != nil && test.dontCheck[fieldName] {
-		return
-	}
-
-	compFn(test, fieldName, exp, got)
-}
-
-func (test test) compStructPtrsWithFn[T any](fieldName string, exp, got *T, compFn compFnEqual[T]) {
-	test.t.Helper()
-
-	if test.dontCheck != nil && test.dontCheck[fieldName] {
-		return
-	}
-
-	if !test.presencePtrs(fieldName, exp, got) {
-		return
-	}
-
-	compFn(test, fieldName, *exp, *got)
-}
-
-func (test test) compStructSlicesWithFn[T any](fieldName string, exp, got []T, compFn compFnEqual[T]) {
-	test.t.Helper()
-	err := test.checkSliceBasic(fieldName, exp, got)
-	if errors.Is(err, errIgnoredField) {
-		return
-	}
-
-	for i := range exp {
-		compFn(test, fieldName, exp[i], got[i])
-	}
-}
-
 // checks if two struct pointers with the same type are equal. ptr presence is checked via compPtr
 // itemAmount == itemAmount (both ptrs)
 func (test test) compStructPtrs[T any](fieldName string, exp, got *T) {

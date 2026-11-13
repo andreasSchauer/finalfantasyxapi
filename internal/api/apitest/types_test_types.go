@@ -30,8 +30,8 @@ fields that are implicitly ignored by leaving them blank:
 - slices, structs, pointers to structs of some kind that have nil checks in the function body
 */
 
+// compFnDifferent will soon not be necessary anymore
 type compFnVals[T any] func(string, T, T)
-type compFnEqual[T any] func(test, string, T, T)
 type compFnDifferent[E, G any] func(test, string, E, G)
 
 type testStructIdx interface {

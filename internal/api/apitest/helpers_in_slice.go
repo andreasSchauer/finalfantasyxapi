@@ -7,19 +7,7 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-// checks the basic fields of an apiresource.APIResourceList (count, pagination urls) and then checks for the stated resources
-func compareAPIResourceLists[A apiresource.APIResource](test test, endpoint ts.EndpointName, expList ListIDs, gotList apiresource.APIResourceList[A]) {
-	test.t.Helper()
-	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
-	test.checkResIDsInSlice("results", endpoint, expList.results, gotList.GetResults())
-}
 
-// checks the basic fields of an apiresource.APIResourceList (count, pagination urls) and then checks for the stated resource paths
-func compareAPIResourceListPaths[A apiresource.APIResource](test test, expList ListPaths, gotList apiresource.APIResourceList[A]) {
-	test.t.Helper()
-	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
-	test.checkResPathsInSlice("results", expList.results, gotList.GetResults())
-}
 
 // checks if both slices are present and if the provided slice of resources contains all stated resources
 func (test test) checkResPathsInSlice[T apiresource.HasAPIResource](fieldName string, expPaths []string, gotRes []T) {
@@ -54,6 +42,28 @@ func (test test) checkResIDsInSlice[T apiresource.HasAPIResource](fieldName stri
 		_, ok := gotMap[expURL]
 		if !ok {
 			test.t.Errorf("'%s' doesn't contain all wanted resources. missing '%s'.\n\n", fieldName, ah.CompleteTestPath(endpoint, expID))
+		}
+	}
+}
+
+// checks if the provided slice of strings contains all stated strings
+func (test test) checkStringsInSlice(fieldName string, expNames []ts.NamedParam, gotNames []string) {
+	test.t.Helper()
+	test.checkSliceBasic(fieldName, expNames, gotNames)
+
+	gotMap := make(map[string]bool)
+	for _, gotName := range gotNames {
+		gotMap[gotName] = true
+	}
+
+	if len(gotMap) != len(gotNames) {
+		test.t.Errorf("there appear to be duplicates in '%s'\n\n", fieldName)
+	}
+
+	for _, expName := range expNames {
+		_, ok := gotMap[string(expName)]
+		if !ok {
+			test.t.Errorf("%s doesn't contain all wanted names. missing '%s'.\n\n", fieldName, expName)
 		}
 	}
 }
