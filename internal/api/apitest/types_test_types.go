@@ -31,14 +31,14 @@ fields that are implicitly ignored by leaving them blank:
 */
 
 type compFnVals[T any] func(string, T, T)
-type compFnEqual[T any] func(test, string, T, T)
-type compFnDifferent[E, G any] func(test, string, E, G)
+type compFnEqual[T any] func(Test, string, T, T)
+type compFnDifferent[E, G any] func(Test, string, E, G)
 
-type testStructIdx interface {
+type TestStructIdx interface {
 	GetIndex() int
 }
 
-type test struct {
+type Test struct {
 	t          *testing.T
 	srv        *api.Server
 	name       string
@@ -46,7 +46,7 @@ type test struct {
 	dontCheck  map[string]bool
 }
 
-type testGeneral struct {
+type TestGeneral struct {
 	requestURL     string
 	expectedStatus int
 	expectedErr    string
@@ -58,11 +58,11 @@ type testGeneral struct {
 	requestBody    any
 }
 
-func (t testGeneral) GetTestGeneral() testGeneral {
+func (t TestGeneral) GetTestGeneral() TestGeneral {
 	return t
 }
 
-func (t testGeneral) getTestName(name string, caseNum int) string {
+func (t TestGeneral) getTestName(name string, caseNum int) string {
 	context := fmt.Sprintf("url: %s", t.requestURL)
 
 	if t.requestBody != nil {
@@ -94,13 +94,6 @@ func newExpNameVer(id int32, name string, version int32) NameVer {
 	}
 }
 
-func (test test) compareExpNameVer(exp NameVer, gotID int32, gotName string, gotVer *int32) {
-	test.t.Helper()
-	test.compare("id", exp.id, gotID)
-	test.compare("name", exp.name, gotName)
-	test.compare("version", exp.version, gotVer)
-}
-
 type Unique struct {
 	id   int32
 	name string
@@ -113,12 +106,6 @@ func newExpUnique(id int32, name string) Unique {
 	}
 }
 
-func (test test) compareExpUnique(exp Unique, gotID int32, gotName string) {
-	test.t.Helper()
-	test.compare("id", exp.id, gotID)
-	test.compare("name", exp.name, gotName)
-}
-
 type IDOnly struct {
 	id int32
 }
@@ -129,13 +116,8 @@ func newExpIDOnly(id int32) IDOnly {
 	}
 }
 
-func (test test) compareExpIDOnly(exp IDOnly, gotID int32) {
-	test.t.Helper()
-	test.compare("id", exp.id, gotID)
-}
-
 type ListIDs struct {
-	testGeneral
+	TestGeneral
 	count          int
 	previous       *string
 	next           *string
@@ -152,7 +134,7 @@ func (l ListIDs) GetListParams() apiresource.ListParams {
 }
 
 type ListPaths struct {
-	testGeneral
+	TestGeneral
 	count    int
 	previous *string
 	next     *string
@@ -168,7 +150,7 @@ func (l ListPaths) GetListParams() apiresource.ListParams {
 }
 
 type ListNames struct {
-	testGeneral
+	TestGeneral
 	count    int
 	previous *string
 	next     *string
@@ -181,11 +163,4 @@ func (l ListNames) GetListParams() apiresource.ListParams {
 		Previous: l.previous,
 		Next:     l.next,
 	}
-}
-
-func (test test) compareListParams(exp, got apiresource.ListParams) {
-	test.t.Helper()
-	test.compare("count", exp.Count, got.Count)
-	test.compPageURL("previous", exp.Previous, got.Previous)
-	test.compPageURL("next", exp.Next, got.Next)
 }

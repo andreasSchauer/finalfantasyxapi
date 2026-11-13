@@ -6,7 +6,7 @@ import (
 )
 
 // checks presence of two pointers
-func (test test) presencePtrs[E, G any](fieldName string, exp *E, got *G) bool {
+func (test Test) presencePtrs[E, G any](fieldName string, exp *E, got *G) bool {
 	test.t.Helper()
 
 	switch {
@@ -27,7 +27,7 @@ func (test test) presencePtrs[E, G any](fieldName string, exp *E, got *G) bool {
 }
 
 // checks presence of two pointers, where one of them is or has an api resource
-func (test test) presenceResPtrs[T apiresource.HasAPIResource](fieldName string, expPathPtr *string, gotResPtr *T) bool {
+func (test Test) presenceResPtrs[T apiresource.HasAPIResource](fieldName string, expPathPtr *string, gotResPtr *T) bool {
 	test.t.Helper()
 
 	switch {
@@ -50,7 +50,7 @@ func (test test) presenceResPtrs[T apiresource.HasAPIResource](fieldName string,
 }
 
 // checks presence of two struct slices
-func (test test) presenceSlices[E, G any](fieldName string, exp []E, got []G) bool {
+func (test Test) presenceSlices[E, G any](fieldName string, exp []E, got []G) bool {
 	test.t.Helper()
 
 	switch {
@@ -70,7 +70,7 @@ func (test test) presenceSlices[E, G any](fieldName string, exp []E, got []G) bo
 	}
 }
 
-func (test test) presenceDefaultAltStates(exp *testDefaultState, gotStates []apitypes.AlteredState) bool {
+func (test Test) presenceDefaultAltStates(exp *TestDefaultState, gotStates []apitypes.AlteredState) bool {
 	test.t.Helper()
 	switch {
 	case exp == nil && len(gotStates) == 0:

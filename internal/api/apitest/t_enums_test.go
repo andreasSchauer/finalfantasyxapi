@@ -9,7 +9,7 @@ import (
 
 func TestGetEnum(t *testing.T) {
 	t.Parallel()
-	tests := []testGeneral{
+	tests := []TestGeneral{
 		{
 			requestURL:     "/api/enums/1/",
 			expectedStatus: http.StatusNotFound,
@@ -53,14 +53,14 @@ func TestRetrieveEnums(t *testing.T) {
 	t.Parallel()
 	tests := []ListPaths{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/enums/ability_type?ass=1",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "parameter 'ass' does not exist for endpoint /enums. use /api/enums/parameters for available parameters",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/enums?limit=max",
 				expectedStatus: http.StatusOK,
 			},

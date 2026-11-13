@@ -13,28 +13,28 @@ func TestGetFMV(t *testing.T) {
 	t.Parallel()
 	tests := []FMV{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/fmvs/a",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "fmv not found: 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/fmvs/53",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "fmv with provided id '53' doesn't exist. max id: 52",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/fmvs/2/2",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/fmvs/sections for valid subsections",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/fmvs/9",
 				expectedStatus: http.StatusOK,
 			},
@@ -43,7 +43,7 @@ func TestGetFMV(t *testing.T) {
 			song:      h.GetInt32Ptr(16),
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/fmvs/38",
 				expectedStatus: http.StatusOK,
 			},
@@ -60,7 +60,7 @@ func TestRetrieveFMVs(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/fmvs?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -68,7 +68,7 @@ func TestRetrieveFMVs(t *testing.T) {
 			results: []int32{1, 13, 27, 34, 45, 46, 52},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/fmvs?location=15",
 				expectedStatus: http.StatusOK,
 			},
@@ -76,7 +76,7 @@ func TestRetrieveFMVs(t *testing.T) {
 			results: []int32{27, 36},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/fmvs?location=5",
 				expectedStatus: http.StatusOK,
 			},

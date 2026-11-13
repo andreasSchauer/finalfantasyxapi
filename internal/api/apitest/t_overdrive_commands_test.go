@@ -13,14 +13,14 @@ func TestGetOverdriveCommand(t *testing.T) {
 	t.Parallel()
 	tests := []OverdriveCommand{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-commands/8",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "overdrive command with provided id '8' doesn't exist. max id: 7",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-commands/2",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -35,7 +35,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 			overdrives:  []int32{5, 6, 7, 8, 9, 10, 11, 12},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-commands/3",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -50,7 +50,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 			overdrives:  []int32{13, 14, 15, 16},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-commands/7",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -73,7 +73,7 @@ func TestRetrieveOverdriveCommands(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-commands",
 				expectedStatus: http.StatusOK,
 			},

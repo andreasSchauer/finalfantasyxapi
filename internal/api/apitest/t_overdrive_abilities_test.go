@@ -15,14 +15,14 @@ func TestGetOverdriveAbility(t *testing.T) {
 	t.Parallel()
 	tests := []OverdriveAbility{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities/191",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "overdrive ability with provided id '191' doesn't exist. max id: 190",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities/20",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -74,7 +74,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities/159",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -132,7 +132,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities/163",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -206,7 +206,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities/7",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -300,7 +300,7 @@ func TestGetMultipleOverdriveAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities/grand_summon",
 				expectedStatus: http.StatusMultipleChoices,
 			},
@@ -308,7 +308,7 @@ func TestGetMultipleOverdriveAbilities(t *testing.T) {
 			results: []int32{9, 10, 11, 12, 13, 14, 15, 16},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities/dragon_fang",
 				expectedStatus: http.StatusMultipleChoices,
 			},
@@ -316,7 +316,7 @@ func TestGetMultipleOverdriveAbilities(t *testing.T) {
 			results: []int32{107, 108, 109},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities/fire_fury",
 				expectedStatus: http.StatusMultipleChoices,
 			},
@@ -332,7 +332,7 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -342,7 +342,7 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 			results:  []int32{1, 26, 83, 99, 176, 190},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities?rank=6&can_crit=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -352,7 +352,7 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 			results:  []int32{113, 115, 120, 123, 126, 127, 190},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities?status_remove=10",
 				expectedStatus: http.StatusOK,
 			},
@@ -362,7 +362,7 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 			results:  []int32{152, 153, 158, 159},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities?stat_changes=true&mod_changes=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -372,7 +372,7 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 			results:  []int32{162, 163, 170, 173},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities?user=5",
 				expectedStatus: http.StatusOK,
 			},
@@ -382,7 +382,7 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 			results:  []int32{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-abilities?related_stat=5",
 				expectedStatus: http.StatusOK,
 			},
@@ -400,7 +400,7 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrives/14/overdrive-abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleOverdrives,
@@ -410,7 +410,7 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 			results:        []int32{26, 27, 28, 29, 30, 31},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-commands/1/overdrive-abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleOverdriveCommands,
@@ -420,7 +420,7 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 			results:        []int32{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/characters/1/overdrive-abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleCharacters,
@@ -430,7 +430,7 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 			results:        []int32{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/aeons/1/overdrive-abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAeons,

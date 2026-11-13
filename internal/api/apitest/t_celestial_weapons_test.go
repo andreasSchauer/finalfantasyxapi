@@ -12,14 +12,14 @@ func TestGetCelestialWeapon(t *testing.T) {
 	t.Parallel()
 	tests := []CelestialWeapon{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/celestial-weapons/8",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "celestial weapon with provided id '8' doesn't exist. max id: 7",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/celestial-weapons/3",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -37,7 +37,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 			sigilQuest:    98,
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/celestial-weapons/6",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -63,7 +63,7 @@ func TestRetrieveCelestialWeapons(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/celestial-weapons",
 				expectedStatus: http.StatusOK,
 			},
@@ -71,7 +71,7 @@ func TestRetrieveCelestialWeapons(t *testing.T) {
 			results: []int32{1, 2, 3, 4, 5, 6, 7},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/celestial-weapons?formula=hp-high",
 				expectedStatus: http.StatusOK,
 			},

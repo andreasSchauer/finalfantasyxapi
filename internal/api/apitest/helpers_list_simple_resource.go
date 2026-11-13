@@ -21,7 +21,7 @@ func (l gotSimpleResourceList[T, S]) GetResults() []S {
 	return l.Results
 }
 
-func compareSimpleResourceLists[T apiresource.APIResource, S apiresource.SimpleResource](test test, endpoint ts.EndpointName, expList ListIDs, gotList gotSimpleResourceList[T, S]) {
+func compareSimpleResourceLists[T apiresource.APIResource, S apiresource.SimpleResource](test Test, endpoint ts.EndpointName, expList ListIDs, gotList gotSimpleResourceList[T, S]) {
 	test.t.Helper()
 	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
 
@@ -31,7 +31,7 @@ func compareSimpleResourceLists[T apiresource.APIResource, S apiresource.SimpleR
 	test.checkSubResIDsInSlice("results", endpoint, expList.results, gotList.GetResults())
 }
 
-func (test test) checkSubResIDsInSlice[T apiresource.SimpleResource](fieldName string, endpoint ts.EndpointName, expIDs []int32, gotRes []T) {
+func (test Test) checkSubResIDsInSlice[T apiresource.SimpleResource](fieldName string, endpoint ts.EndpointName, expIDs []int32, gotRes []T) {
 	test.t.Helper()
 	test.checkSliceBasic(fieldName, expIDs, gotRes)
 

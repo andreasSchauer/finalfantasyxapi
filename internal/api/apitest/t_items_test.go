@@ -14,14 +14,14 @@ func TestGetItem(t *testing.T) {
 	t.Parallel()
 	tests := []Item{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/113",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "item with provided id '113' doesn't exist. max id: 112",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/69",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -39,7 +39,7 @@ func TestGetItem(t *testing.T) {
 			Unique:   newExpUnique(69, "three stars"),
 			untypedItem: 69,
 			category:    database.ItemCategorySupport,
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:   0,
 					monster: 203,
@@ -75,7 +75,7 @@ func TestGetItem(t *testing.T) {
 			mixes: []int32{6, 12, 26, 49, 62, 64},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/69?rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -94,7 +94,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(69, "three stars"),
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:   0,
 					monster: 203,
@@ -114,7 +114,7 @@ func TestGetItem(t *testing.T) {
 			quests: nil,
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/26",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -132,7 +132,7 @@ func TestGetItem(t *testing.T) {
 			Unique:   newExpUnique(26, "fire gem"),
 			untypedItem: 26,
 			category:    database.ItemCategoryOffensive,
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:   0,
 					monster: 109,
@@ -159,7 +159,7 @@ func TestGetItem(t *testing.T) {
 			mixes: []int32{1, 6, 15, 31, 55, 63},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/2",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -177,7 +177,7 @@ func TestGetItem(t *testing.T) {
 			Unique:   newExpUnique(2, "hi-potion"),
 			untypedItem: 2,
 			category:    database.ItemCategoryHealing,
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:     1,
 					monster:   39,
@@ -211,7 +211,7 @@ func TestGetItem(t *testing.T) {
 			mixes:         []int32{34, 40, 51, 56, 61},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/64",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -229,7 +229,7 @@ func TestGetItem(t *testing.T) {
 			Unique:   newExpUnique(64, "stamina tablet"),
 			untypedItem: 64,
 			category:    database.ItemCategorySupport,
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:   0,
 					monster: 69,
@@ -255,7 +255,7 @@ func TestGetItem(t *testing.T) {
 			mixes: []int32{42, 56, 60, 63, 64},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/64?rel_availability=pre-story",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -273,7 +273,7 @@ func TestGetItem(t *testing.T) {
 			Unique:   newExpUnique(64, "stamina tablet"),
 			untypedItem: 64,
 			category:    database.ItemCategorySupport,
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:       0,
 					monster:     195,
@@ -292,7 +292,7 @@ func TestGetItem(t *testing.T) {
 			mixes: []int32{42, 56, 60, 63, 64},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/55?rel_availability=post",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -311,7 +311,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(55, "chocobo wing"),
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:   0,
 					monster: 242,
@@ -334,7 +334,7 @@ func TestGetItem(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/55?rel_availability=always",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -353,7 +353,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(55, "chocobo wing"),
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:     0,
 					monster:   100,
@@ -373,7 +373,7 @@ func TestGetItem(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/55?rel_availability=always&rel_repeatable=false",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -392,7 +392,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(55, "chocobo wing"),
-			monsters:  []testMonItemAmts{},
+			monsters:  []TestMonItemAmts{},
 			treasures: nil,
 			shops:     []int32{},
 			quests: map[int32]int32{
@@ -401,7 +401,7 @@ func TestGetItem(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/55?rel_availability=always&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -420,7 +420,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(55, "chocobo wing"),
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:     0,
 					monster:   100,
@@ -438,7 +438,7 @@ func TestGetItem(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/2?rel_availability=always",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -457,7 +457,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(2, "hi-potion"),
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:     0,
 					monster:   39,
@@ -491,7 +491,7 @@ func TestGetItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/2?rel_availability=always&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -510,7 +510,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(2, "hi-potion"),
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:     0,
 					monster:   39,
@@ -538,7 +538,7 @@ func TestGetItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items/2?rel_availability=post",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -557,7 +557,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(2, "hi-potion"),
-			monsters: []testMonItemAmts{
+			monsters: []TestMonItemAmts{
 				{
 					index:       0,
 					monster:     239,
@@ -585,14 +585,14 @@ func TestRetrieveItems(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?methods=shop,treasures",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value 'treasures' used for parameter 'methods'. allowed values: 'monster', 'treasure', 'shop', 'quest', 'blitzball'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -600,7 +600,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{1, 42, 67, 78, 90, 110, 112},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?category=healing,support&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -608,7 +608,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{1, 5, 11, 21, 23, 54, 59, 64, 69},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?category=healing,support&limit=max&flip=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -616,7 +616,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{17, 29, 41, 49, 73, 86, 106, 112},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?methods=treasure,blitzball&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -624,7 +624,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{1, 2, 9, 11, 12, 13, 16, 21, 71, 85, 101, 111},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?has_ability=true&related_stat=mp",
 				expectedStatus: http.StatusOK,
 			},
@@ -632,7 +632,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{65, 67, 68, 69},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?location=17&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -640,7 +640,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{1, 7, 21, 34, 76, 102, 111},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?sublocation=13", // ss winno
 				expectedStatus: http.StatusOK,
 			},
@@ -648,7 +648,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{1, 2, 9, 11},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?area=237&limit=max", // omega ruins top
 				expectedStatus: http.StatusOK,
 			},
@@ -656,7 +656,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{4, 23, 60, 89, 110},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=post",
 				expectedStatus: http.StatusOK,
 			},
@@ -664,7 +664,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{23, 45, 67, 68, 76, 79, 88, 99},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=post-story&location=18&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
@@ -672,7 +672,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{3, 5, 43, 45, 58, 61, 83, 96},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=post-game&repeatable=false&pre_airship=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -680,7 +680,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=post-game&repeatable=false&pre_airship=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -688,7 +688,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=post-game&repeatable=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -696,7 +696,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{1, 17, 19, 38, 54, 67, 88, 100, 112},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=post&repeatable=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -704,7 +704,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{23, 45, 67, 68, 76, 88, 90, 95, 105},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=always&repeatable=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -712,7 +712,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{1, 7, 21, 37, 56, 69, 80, 104, 112},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=always&repeatable=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -720,7 +720,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{85, 86, 87, 89, 90, 94, 105},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=story&sublocation=26", // macalania woods
 				expectedStatus: http.StatusOK,
 			},
@@ -728,7 +728,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{6, 82},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=post-game&area=23", // besaid - waterfall way (1)
 				expectedStatus: http.StatusOK,
 			},
@@ -736,7 +736,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{1, 9, 30, 31, 32, 38, 41, 70, 71, 72},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=always&methods=shop",
 				expectedStatus: http.StatusOK,
 			},
@@ -744,7 +744,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{1, 2, 9, 14, 20, 36, 100},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?availability=always&methods=shop&location=12",
 				expectedStatus: http.StatusOK,
 			},
@@ -752,7 +752,7 @@ func TestRetrieveItems(t *testing.T) {
 			results: []int32{1, 9, 11, 12, 13, 14},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/items?repeatable=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},

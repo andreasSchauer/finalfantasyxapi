@@ -10,7 +10,7 @@ import (
 
 func TestSubsections(t *testing.T) {
 	t.Parallel()
-	tests := []testGeneral{
+	tests := []TestGeneral{
 		{
 			requestURL:     "/api/treasures/1/simple?availability=post",
 			expectedStatus: http.StatusBadRequest,
@@ -124,7 +124,7 @@ func TestSections(t *testing.T) {
 	t.Parallel()
 	tests := []ListNames{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Areas.Endpoint,
@@ -141,7 +141,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/sublocations/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Sublocations.Endpoint,
@@ -160,7 +160,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/locations/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Locations.Endpoint,
@@ -180,7 +180,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/aeons/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Aeons.Endpoint,
@@ -195,7 +195,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/characters/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Characters.Endpoint,
@@ -211,7 +211,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.CharacterClasses.Endpoint,
@@ -226,7 +226,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/arena-creations/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.ArenaCreations.Endpoint,
@@ -236,7 +236,7 @@ func TestSections(t *testing.T) {
 			results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/blitzball-prizes/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.BlitzballPrizes.Endpoint,
@@ -246,7 +246,7 @@ func TestSections(t *testing.T) {
 			results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/fmvs/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.FMVs.Endpoint,
@@ -256,7 +256,7 @@ func TestSections(t *testing.T) {
 			results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Monsters.Endpoint,
@@ -271,7 +271,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monster-formations/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.MonsterFormations.Endpoint,
@@ -284,7 +284,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/overdrive-modes/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.OverdriveModes.Endpoint,
@@ -294,7 +294,7 @@ func TestSections(t *testing.T) {
 			results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/shops/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Shops.Endpoint,
@@ -306,7 +306,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/songs/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Songs.Endpoint,
@@ -316,7 +316,7 @@ func TestSections(t *testing.T) {
 			results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/sidequests/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Sidequests.Endpoint,
@@ -328,7 +328,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/subquests/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Subquests.Endpoint,
@@ -338,7 +338,7 @@ func TestSections(t *testing.T) {
 			results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/treasures/sections",
 				expectedStatus: http.StatusOK,
 				endpoint:       apilookups.E.Treasures.Endpoint,

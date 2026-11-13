@@ -14,28 +14,28 @@ func TestGetArea(t *testing.T) {
 	t.Parallel()
 	tests := []Area{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/0",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "area with provided id '0' doesn't exist. max id: 237",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/238",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "area with provided id '238' doesn't exist. max id: 237",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/a",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid id 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/143/",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -73,13 +73,13 @@ func TestGetArea(t *testing.T) {
 				monsters:   []int32{81, 84, 85},
 				formations: []int32{120, 122, 125},
 				quests:     []int32{83, 85, 86, 87},
-				music: &testLocMusic{
+				music: &TestLocMusic{
 					bgMusic: []int32{30},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/36",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -116,13 +116,13 @@ func TestGetArea(t *testing.T) {
 			LocRel: LocRel{
 				characters: []int32{2, 4},
 				treasures:  []int32{33, 37},
-				music: &testLocMusic{
+				music: &TestLocMusic{
 					bgMusic: []int32{19},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/159?rel_availability=pre-story&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -155,7 +155,7 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/159?rel_availability=always&rel_repeatable=false",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -188,7 +188,7 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/203?rel_availability=post",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -221,7 +221,7 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/203?rel_availability=always&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -254,7 +254,7 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/203?rel_availability=always&rel_repeatable=false",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -287,7 +287,7 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/68",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -324,14 +324,14 @@ func TestGetArea(t *testing.T) {
 			parentSublocation: 14,
 			LocRel: LocRel{
 				shops: []int32{5},
-				music: &testLocMusic{
+				music: &TestLocMusic{
 					cuesMusic: []int32{35},
 					bgMusic:   []int32{32, 34},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/138",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -358,7 +358,7 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/42",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -392,7 +392,7 @@ func TestGetArea(t *testing.T) {
 				monsters:   []int32{19, 20, 21, 22},
 				formations: []int32{26, 27},
 				fmvs:       []int32{9, 12, 13, 14},
-				music: &testLocMusic{
+				music: &TestLocMusic{
 					bgMusic:   []int32{28},
 					cuesMusic: []int32{},
 					fmvsMusic: []int32{16},
@@ -409,35 +409,35 @@ func TestRetrieveAreas(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?comp_sphere=fa",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid boolean value 'fa' used for parameter 'comp_sphere'. usage: '?comp_sphere={bool}'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?item=113",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "provided id '113' used for parameter 'item' is out of range. max id: 112",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?key_item=61",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "provided id '61' used for parameter 'key_item' is out of range. max id: 60",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?location=0",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "provided id '0' used for parameter 'location' is out of range. max id: 26",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/",
 				expectedStatus: http.StatusOK,
 			},
@@ -446,7 +446,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{1, 5, 20},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -454,7 +454,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{1, 50, 237},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?offset=50&limit=30",
 				expectedStatus: http.StatusOK,
 			},
@@ -464,7 +464,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results:  []int32{51, 80},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?monsters=true&chocobo=true&save_sphere=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -472,7 +472,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{87, 96, 201},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?item=7&availability=post-game&monsters=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -480,7 +480,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{35, 75, 127, 138, 206},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?item=3&methods=quest,monster",
 				expectedStatus: http.StatusOK,
 			},
@@ -488,7 +488,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{26, 77, 138, 159, 174, 190, 207},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?characters=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -496,7 +496,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{1, 20, 102},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?sidequests=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -504,7 +504,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{74, 138, 142, 143, 145, 180, 183, 201},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?key_item=37",
 				expectedStatus: http.StatusOK,
 			},
@@ -512,7 +512,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{46, 167},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=post&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -520,7 +520,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{13, 27, 105, 208, 233, 237},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?location=13&treasures=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -528,7 +528,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{127, 130, 132, 134, 136},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?shops=true&airship=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -536,7 +536,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{47, 68, 91, 139, 199, 211},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?sublocation=27&boss_fights=true", // lake macalania
 				expectedStatus: http.StatusOK,
 			},
@@ -544,7 +544,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{156},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?comp_sphere=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -552,7 +552,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{6, 91, 155, 176, 182},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?fmvs=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -560,7 +560,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{3, 34, 49, 125, 179, 235},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=pre-airship&item=56&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
@@ -568,7 +568,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{137, 140, 156, 204, 209, 223},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=post-game&item=56&methods=monster&pre_airship=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -576,7 +576,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{137, 140, 203, 209, 223, 236, 237},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=always&auto_ability=4&item=27&methods=monster",
 				expectedStatus: http.StatusOK,
 			},
@@ -584,7 +584,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{137, 140},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=post&monsters=true&treasures=false&item=53",
 				expectedStatus: http.StatusOK,
 			},
@@ -592,7 +592,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{26, 99, 100, 170, 190, 211, 228},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=pre-story&monster=31",
 				expectedStatus: http.StatusOK,
 			},
@@ -600,7 +600,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{76, 77, 78},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=pre-story&shops=true&monster=87&repeatable=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -608,7 +608,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{159},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=post-story",
 				expectedStatus: http.StatusOK,
 			},
@@ -616,7 +616,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{234, 235},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=post&sidequests=true&boss_fights=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -624,7 +624,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{170, 203},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=post&monsters=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -632,7 +632,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{7, 26, 106, 170, 207, 230, 237},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=post&monsters=false&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -640,7 +640,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{1, 18, 63, 74, 110, 136, 153, 180, 229, 235},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=always&monster=48",
 				expectedStatus: http.StatusOK,
 			},
@@ -648,7 +648,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{99, 100, 104, 107, 117},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=pre-story&shops=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -656,7 +656,7 @@ func TestRetrieveAreas(t *testing.T) {
 			results: []int32{65, 96, 123, 147, 183, 200, 212},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas?availability=always&key_item=23",
 				expectedStatus: http.StatusOK,
 			},
@@ -672,7 +672,7 @@ func TestSubsectionAreas(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/36/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAreas,
@@ -682,7 +682,7 @@ func TestSubsectionAreas(t *testing.T) {
 			results:        []int32{26, 30, 37, 38, 39, 40, 41},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/209/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAreas,
@@ -692,7 +692,7 @@ func TestSubsectionAreas(t *testing.T) {
 			results:        []int32{205, 210},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/9/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAreas,
@@ -702,7 +702,7 @@ func TestSubsectionAreas(t *testing.T) {
 			results:        []int32{8, 10, 11, 15},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/235/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAreas,
@@ -712,7 +712,7 @@ func TestSubsectionAreas(t *testing.T) {
 			results:        []int32{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/149/connected/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAreas,
@@ -722,7 +722,7 @@ func TestSubsectionAreas(t *testing.T) {
 			results:        []int32{141, 150, 199},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/45/areas/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsters,
@@ -732,7 +732,7 @@ func TestSubsectionAreas(t *testing.T) {
 			results:        []int32{87, 88, 89, 92, 93},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/140/areas/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsters,
@@ -742,7 +742,7 @@ func TestSubsectionAreas(t *testing.T) {
 			results:        []int32{200, 201, 202, 209},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/66/areas/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsters,
@@ -752,7 +752,7 @@ func TestSubsectionAreas(t *testing.T) {
 			results:        []int32{125},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/sublocations/42/areas/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleSublocations,
@@ -762,7 +762,7 @@ func TestSubsectionAreas(t *testing.T) {
 			results:        []int32{229, 230, 231, 232, 233, 234, 235},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/locations/10/areas/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleLocations,

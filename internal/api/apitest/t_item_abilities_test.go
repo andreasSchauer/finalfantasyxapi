@@ -14,14 +14,14 @@ func TestGetItemAbility(t *testing.T) {
 	t.Parallel()
 	tests := []ItemAbility{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/item-abilities/70",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "item ability with provided id '70' doesn't exist. max id: 69",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/item-abilities/2",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -75,7 +75,7 @@ func TestGetItemAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/item-abilities/48",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -132,7 +132,7 @@ func TestGetItemAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/item-abilities/62",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -190,7 +190,7 @@ func TestGetItemAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/item-abilities/66",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -239,7 +239,7 @@ func TestGetItemAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/item-abilities/69",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -296,7 +296,7 @@ func TestRetrieveItemAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/item-abilities?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -306,7 +306,7 @@ func TestRetrieveItemAbilities(t *testing.T) {
 			results:  []int32{1, 13, 27, 38, 39, 42, 55, 69},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/item-abilities?category=2&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -316,7 +316,7 @@ func TestRetrieveItemAbilities(t *testing.T) {
 			results:  []int32{24, 27, 35, 43, 50, 60},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/item-abilities?attack_type=heal&outside_battle=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -326,7 +326,7 @@ func TestRetrieveItemAbilities(t *testing.T) {
 			results:  []int32{9, 10, 21, 22, 23, 54, 55},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/item-abilities?related_stat=1",
 				expectedStatus: http.StatusOK,
 			},

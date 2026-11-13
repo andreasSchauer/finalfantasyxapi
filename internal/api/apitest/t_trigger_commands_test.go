@@ -14,14 +14,14 @@ func TestGetTriggerCommand(t *testing.T) {
 	t.Parallel()
 	tests := []TriggerCommand{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/trigger-commands/13",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "trigger command with provided id '13' doesn't exist. max id: 12",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/trigger-commands/4",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -72,7 +72,7 @@ func TestGetTriggerCommand(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/trigger-commands/6",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -123,7 +123,7 @@ func TestGetTriggerCommand(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/trigger-commands/12?ability_user=wakka&celestial_weapon=false",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -187,7 +187,7 @@ func TestGetMultipleTriggerCommands(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/trigger-commands/talk",
 				expectedStatus: http.StatusMultipleChoices,
 			},
@@ -203,7 +203,7 @@ func TestRetrieveTriggerCommands(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/trigger-commands?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -213,7 +213,7 @@ func TestRetrieveTriggerCommands(t *testing.T) {
 			results:  []int32{1, 4, 7, 9, 11, 12},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/trigger-commands?related_stat=6",
 				expectedStatus: http.StatusOK,
 			},
@@ -223,7 +223,7 @@ func TestRetrieveTriggerCommands(t *testing.T) {
 			results:  []int32{5},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/trigger-commands?user=7",
 				expectedStatus: http.StatusOK,
 			},

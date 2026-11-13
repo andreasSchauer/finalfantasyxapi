@@ -1,49 +1,35 @@
 package apitest
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type testResAmount[A apiresource.APIResource] struct {
+type TestResAmount[A apiresource.APIResource] struct {
 	item   int32
 	amount int32
 }
 
-func compareResAmounts[A apiresource.APIResource](test test, fieldName string, exp testResAmount[A], got apiresource.ResourceAmount[A]) {
-	test.t.Helper()
-	test.compIDAPIResource(fieldName+" - resource", apilookups.E.AllItems.Endpoint, exp.item, got)
-	test.compare(fieldName+" - amount", exp.amount, got.Amount)
-}
-
-func newTestResAmount[A apiresource.APIResource](itemID int32, amount int32) testResAmount[A] {
-	return testResAmount[A]{
+func newTestResAmount[A apiresource.APIResource](itemID int32, amount int32) TestResAmount[A] {
+	return TestResAmount[A]{
 		item:   itemID,
 		amount: amount,
 	}
 }
 
-type testPossibleItem struct {
+type TestPossibleItem struct {
 	index int
-	testResAmount[apiresource.Typed]
+	TestResAmount[apiresource.Typed]
 	chance int32
 }
 
-func newTestPossibleItem(idx int, itemID int32, amount, chance int32) testPossibleItem {
-	return testPossibleItem{
+func newTestPossibleItem(idx int, itemID int32, amount, chance int32) TestPossibleItem {
+	return TestPossibleItem{
 		index:         idx,
-		testResAmount: newTestResAmount[apiresource.Typed](itemID, amount),
+		TestResAmount: newTestResAmount[apiresource.Typed](itemID, amount),
 		chance:        chance,
 	}
 }
 
-func (t testPossibleItem) GetIndex() int {
+func (t TestPossibleItem) GetIndex() int {
 	return t.index
-}
-
-func comparePossibleItems(test test, fieldName string, exp testPossibleItem, got apitypes.PossibleItem) {
-	test.t.Helper()
-	compareResAmounts(test, fieldName+" - itemAmount", exp.testResAmount, got.ResourceAmount)
-	test.compare(fieldName+" - chance", exp.chance, got.Chance)
 }

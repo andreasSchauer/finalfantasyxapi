@@ -14,14 +14,14 @@ func TestGetPlayerUnit(t *testing.T) {
 	t.Parallel()
 	tests := []PlayerUnit{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/player-units/19",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "player unit with provided id '19' doesn't exist. max id: 18",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/player-units/1",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -40,7 +40,7 @@ func TestGetPlayerUnit(t *testing.T) {
 			characterClasses: []int32{1, 5},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/player-units/8",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -59,7 +59,7 @@ func TestGetPlayerUnit(t *testing.T) {
 			characterClasses: []int32{12},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/player-units/10",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -78,7 +78,7 @@ func TestGetPlayerUnit(t *testing.T) {
 			characterClasses: []int32{2, 3, 14},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/player-units/15",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -97,7 +97,7 @@ func TestGetPlayerUnit(t *testing.T) {
 			characterClasses: []int32{2, 19},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/player-units/16",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -124,7 +124,7 @@ func TestRetrievePlayerUnits(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/player-units",
 				expectedStatus: http.StatusOK,
 			},
@@ -132,7 +132,7 @@ func TestRetrievePlayerUnits(t *testing.T) {
 			results: []int32{1, 3, 4, 8, 12, 17, 18},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/player-units?type=aeon",
 				expectedStatus: http.StatusOK,
 			},

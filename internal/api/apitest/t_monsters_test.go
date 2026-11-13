@@ -16,133 +16,133 @@ func TestGetMonster(t *testing.T) {
 	t.Parallel()
 	tests := []Monster{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/308",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "monster with provided id '308' doesn't exist. max id: 307",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/a",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "monster not found: 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/a/2",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "monster not found: 'a', version '2'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/1/?ids=1",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/a/2/3",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "wrong format. usage: '/api/monsters', '/api/monsters/{id}', '/api/monsters/{name}', '/api/monsters/{name}/{version}', '/api/monsters/id/{subsection}'. supported subsections: 'abilities', 'areas', 'monster-formations', 'simple'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/211?has_overdrive=true",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid usage of parameter 'has_overdrive'. parameter 'has_overdrive' can only be used with list-endpoints",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/1?altered_state=1",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "monster 'sinscale - 1 (dream zanarkand)' has no altered states",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/105?altered_state=5",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "provided id '5' used for parameter 'altered_state' is out of range. max id: 1",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/210?omnis_elements=iifii",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid id '210'. parameter 'omnis_elements' can only be used with ids: '211'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/211?omnis_elements=iifii",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid input. omnis_elements must contain a combination of exactly four letters. valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/211?omnis_elements=iftw",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid letter 't' for omnis_elements. use any four-letter-combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/169?kimahri_stats=hp:1000",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid id '169'. parameter 'kimahri_stats' can only be used with ids: '167', '168'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/168?kimahri_stats=hp:100000",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "hp in 'kimahri_stats' can't be higher than 99999",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/168?kimahri_stats=hp-3000,strength:255",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid input for parameter 'kimahri_stats': 'hp-3000' . usage: '?kimahri_stats={stat}:{int},...'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/167?kimahri_stats=defense:5",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid stat 'defense' in 'kimahri_stats'. 'kimahri_stats' only uses 'hp', 'strength', 'magic', 'agility'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/1?yuna_stats=hp:200",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid id '1'. parameter 'yuna_stats' can only be used with ids: '216', '217', '218', '219', '220', '221', '222', '223', '224', '225'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/216?yuna_stats=hp:999999",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "hp in 'yuna_stats' can't be higher than 99999",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/216?yuna_stats=evasion:999999",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "evasion in 'yuna_stats' can't be higher than 255",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/27",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -165,7 +165,7 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(27, "yellow element", 0),
-			agility: &testAgilityParams{
+			agility: &TestAgilityParams{
 				agilityTier: 6,
 				tickSpeed:   16,
 				minICV:      h.GetInt32Ptr(48),
@@ -184,7 +184,7 @@ func TestGetMonster(t *testing.T) {
 				"magic":   18,
 				"evasion": 0,
 			},
-			regenAmounts: []testRegenAmount{
+			regenAmounts: []TestRegenAmount{
 				{
 					index:    0,
 					ticks:    0,
@@ -206,9 +206,9 @@ func TestGetMonster(t *testing.T) {
 					healedHP: 135,
 				},
 			},
-			items: &testMonItems{
+			items: &TestMonItems{
 				itemDropChance: 255,
-				items: map[string]*testResAmount[apiresource.Typed]{
+				items: map[string]*TestResAmount[apiresource.Typed]{
 					"steal common": h.GetStructPtr(newTestResAmount[apiresource.Typed](27, 1)),
 					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.Typed](28, 1)),
 					"drop common":  h.GetStructPtr(newTestResAmount[apiresource.Typed](71, 1)),
@@ -234,7 +234,7 @@ func TestGetMonster(t *testing.T) {
 					Chance: 100,
 				},
 			},
-			equipment: &testMonEquipment{
+			equipment: &TestMonEquipment{
 				abilitySlots: apitypes.MonsterEquipmentSlots{
 					MinAmount: 1,
 					MaxAmount: 2,
@@ -266,7 +266,7 @@ func TestGetMonster(t *testing.T) {
 				weaponAbilities: []int32{2, 6, 26},
 				armorAbilities:  []int32{58},
 			},
-			elemResists: []testElemResist{
+			elemResists: []TestElemResist{
 				{element: 1, affinity: database.ElementalAffinityHalved},
 				{element: 2, affinity: database.ElementalAffinityAbsorb},
 				{element: 3, affinity: database.ElementalAffinityWeak},
@@ -280,7 +280,7 @@ func TestGetMonster(t *testing.T) {
 			abilities: []int32{70},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/magIc_urn/1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -303,13 +303,13 @@ func TestGetMonster(t *testing.T) {
 			NameVer:   newExpNameVer(156, "magic urn", 1),
 			agility:      nil,
 			regenAmounts: nil,
-			items: &testMonItems{
+			items: &TestMonItems{
 				itemDropChance: 0,
-				items: map[string]*testResAmount[apiresource.Typed]{
+				items: map[string]*TestResAmount[apiresource.Typed]{
 					"steal common": h.GetStructPtr(newTestResAmount[apiresource.Typed](1, 1)),
 					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.Typed](1, 1)),
 				},
-				otherItems: []testPossibleItem{
+				otherItems: []TestPossibleItem{
 					newTestPossibleItem(0, 9, 1, 60),
 					newTestPossibleItem(1, 64, 1, 20),
 					newTestPossibleItem(2, 7, 1, 20),
@@ -317,7 +317,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/sphErimorph?altered_state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -345,22 +345,22 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(86, "spherimorph", 0),
-			agility: &testAgilityParams{
+			agility: &TestAgilityParams{
 				agilityTier: 10,
 				tickSpeed:   12,
 				minICV:      h.GetInt32Ptr(36),
 				maxICV:      h.GetInt32Ptr(40),
 			},
-			appliedState: &testAppliedState{
+			appliedState: &TestAppliedState{
 				condition:   "Fire-elemental.",
 				isTemporary: false,
 			},
 			properties: []int32{1},
 			areas:      []int32{148},
 			formations: []int32{126},
-			items: &testMonItems{
+			items: &TestMonItems{
 				itemDropChance: 255,
-				items: map[string]*testResAmount[apiresource.Typed]{
+				items: map[string]*TestResAmount[apiresource.Typed]{
 					"steal common": h.GetStructPtr(newTestResAmount[apiresource.Typed](5, 1)),
 					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.Typed](6, 1)),
 					"drop common":  h.GetStructPtr(newTestResAmount[apiresource.Typed](82, 1)),
@@ -368,7 +368,7 @@ func TestGetMonster(t *testing.T) {
 					"bribe":        nil,
 				},
 			},
-			equipment: &testMonEquipment{
+			equipment: &TestMonEquipment{
 				abilitySlots: apitypes.MonsterEquipmentSlots{
 					MinAmount: 2,
 					MaxAmount: 3,
@@ -400,7 +400,7 @@ func TestGetMonster(t *testing.T) {
 				weaponAbilities: []int32{2, 5, 6},
 				armorAbilities:  []int32{55, 58, 61, 64},
 			},
-			elemResists: []testElemResist{
+			elemResists: []TestElemResist{
 				{element: 1, affinity: database.ElementalAffinityAbsorb},
 				{element: 2, affinity: database.ElementalAffinityAbsorb},
 				{element: 3, affinity: database.ElementalAffinityAbsorb},
@@ -412,10 +412,10 @@ func TestGetMonster(t *testing.T) {
 				"poison": 90,
 			},
 			abilities: []int32{69, 70, 71, 72, 415, 481, 548, 565, 705, 804, 831},
-			defaultState: &testDefaultState{
+			defaultState: &TestDefaultState{
 				IsTemporary: false,
-				Change: &testAltStateChange{
-					ElemResists: []testElemResist{
+				Change: &TestAltStateChange{
+					ElemResists: []TestElemResist{
 						{element: 1, affinity: database.ElementalAffinityVaries},
 						{element: 2, affinity: database.ElementalAffinityVaries},
 						{element: 3, affinity: database.ElementalAffinityVaries},
@@ -425,7 +425,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/105?altered_state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -452,7 +452,7 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(105, "sand worm", 0),
-			appliedState: &testAppliedState{
+			appliedState: &TestAppliedState{
 				condition:   "While 'Readying Quake'.",
 				isTemporary: true,
 			},
@@ -462,20 +462,20 @@ func TestGetMonster(t *testing.T) {
 				"darkness":    50,
 				"power break": 50,
 			},
-			defaultState: &testDefaultState{
+			defaultState: &TestDefaultState{
 				IsTemporary: false,
-				Gain: &testAltStateGain{
+				Gain: &TestAltStateGain{
 					StatusResists: map[string]int32{
 						"sleep": 80,
 					},
 				},
-				Loss: &testAltStateLoss{
+				Loss: &TestAltStateLoss{
 					StatusImmunities: []int32{13, 32},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/neslug?altered_state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -500,11 +500,11 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(287, "neslug", 0),
-			appliedState: &testAppliedState{
+			appliedState: &TestAppliedState{
 				condition:   "While hidden in its shell.",
 				isTemporary: true,
 			},
-			regenAmounts: []testRegenAmount{
+			regenAmounts: []TestRegenAmount{
 				{
 					index:    0,
 					ticks:    0,
@@ -528,16 +528,16 @@ func TestGetMonster(t *testing.T) {
 			},
 			properties:    []int32{6, 8},
 			autoAbilities: []int32{102},
-			defaultState: &testDefaultState{
+			defaultState: &TestDefaultState{
 				IsTemporary: false,
-				Loss: &testAltStateLoss{
+				Loss: &TestAltStateLoss{
 					Properties:    []int32{6},
 					AutoAbilities: []int32{102},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/neslug?altered_state=2",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -562,11 +562,11 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(287, "neslug", 0),
-			appliedState: &testAppliedState{
+			appliedState: &TestAppliedState{
 				condition:   "Without its shell.",
 				isTemporary: false,
 			},
-			agility: &testAgilityParams{
+			agility: &TestAgilityParams{
 				agilityTier: 18,
 				tickSpeed:   4,
 				minICV:      h.GetInt32Ptr(12),
@@ -577,9 +577,9 @@ func TestGetMonster(t *testing.T) {
 			baseStats: map[string]int32{
 				"agility": 120,
 			},
-			defaultState: &testDefaultState{
+			defaultState: &TestDefaultState{
 				IsTemporary: false,
-				Change: &testAltStateChange{
+				Change: &TestAltStateChange{
 					BaseStats: map[string]int32{
 						"agility": 43,
 					},
@@ -587,7 +587,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/evrae?altered_state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -612,20 +612,20 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(114, "evrae", 0),
-			appliedState: &testAppliedState{
+			appliedState: &TestAppliedState{
 				condition:   "When the Airship is far away.",
 				isTemporary: false,
 			},
 			distance: 4,
-			defaultState: &testDefaultState{
+			defaultState: &TestDefaultState{
 				IsTemporary: false,
-				Change: &testAltStateChange{
+				Change: &TestAltStateChange{
 					Distance: h.GetInt32Ptr(1),
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/penance?altered_state=1",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -650,29 +650,29 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(305, "penance", 0),
-			appliedState: &testAppliedState{
+			appliedState: &TestAppliedState{
 				condition:     "When HP falls below 9000000.",
 				isTemporary:   false,
 				appliedStatus: h.GetInt32Ptr(21),
 			},
-			agility: &testAgilityParams{
+			agility: &TestAgilityParams{
 				agilityTier: 19,
 				tickSpeed:   1,
 				minICV:      h.GetInt32Ptr(9),
 				maxICV:      h.GetInt32Ptr(10),
 			},
-			defaultState: &testDefaultState{
+			defaultState: &TestDefaultState{
 				IsTemporary: false,
-				Gain: &testAltStateGain{
+				Gain: &TestAltStateGain{
 					AutoAbilities: []int32{99},
 				},
-				Loss: &testAltStateLoss{
+				Loss: &TestAltStateLoss{
 					Status: h.GetInt32Ptr(21),
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/211?omnis_elements=iLfw",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -696,7 +696,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(211, "seymour omnis", 0),
-			elemResists: []testElemResist{
+			elemResists: []TestElemResist{
 				{
 					element:  1,
 					affinity: database.ElementalAffinityHalved,
@@ -720,7 +720,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/211?omnis_elements=iiff",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -744,7 +744,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(211, "seymour omnis", 0),
-			elemResists: []testElemResist{
+			elemResists: []TestElemResist{
 				{
 					element:  1,
 					affinity: database.ElementalAffinityImmune,
@@ -768,7 +768,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/211?omnis_elements=iiii",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -792,7 +792,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(211, "seymour omnis", 0),
-			elemResists: []testElemResist{
+			elemResists: []TestElemResist{
 				{
 					element:  1,
 					affinity: database.ElementalAffinityWeak,
@@ -816,7 +816,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/biran_ronso?kimahri_stats=hP:1000,strEngth:255,mAgic:255,agIlity:255",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -841,7 +841,7 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(167, "biran ronso", 0),
-			agility: &testAgilityParams{
+			agility: &TestAgilityParams{
 				agilityTier: 19,
 				tickSpeed:   3,
 				minICV:      h.GetInt32Ptr(9),
@@ -856,7 +856,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp:3500,strength:35,magic:45,agility:28",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -881,7 +881,7 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(168, "yenke ronso", 0),
-			agility: &testAgilityParams{
+			agility: &TestAgilityParams{
 				agilityTier: 12,
 				tickSpeed:   10,
 				minICV:      h.GetInt32Ptr(30),
@@ -896,7 +896,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp:1500",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -920,7 +920,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(168, "yenke ronso", 0),
-			agility: &testAgilityParams{
+			agility: &TestAgilityParams{
 				agilityTier: 2,
 				tickSpeed:   26,
 				minICV:      h.GetInt32Ptr(84),
@@ -934,7 +934,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/vidatu",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -960,7 +960,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(273, "vidatu", 0),
-			regenAmounts: []testRegenAmount{
+			regenAmounts: []TestRegenAmount{
 				{
 					index:    0,
 					ticks:    0,
@@ -989,7 +989,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/216?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -1013,7 +1013,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(216, "valefor", 1),
-			agility: &testAgilityParams{
+			agility: &TestAgilityParams{
 				agilityTier: 15,
 				tickSpeed:   7,
 				minICV:      h.GetInt32Ptr(-1),
@@ -1033,7 +1033,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/216?battles=600",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -1057,7 +1057,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(216, "valefor", 1),
-			agility: &testAgilityParams{
+			agility: &TestAgilityParams{
 				agilityTier: 14,
 				tickSpeed:   8,
 				minICV:      h.GetInt32Ptr(-1),
@@ -1077,7 +1077,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/216?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15&battles=600",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -1101,7 +1101,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(216, "valefor", 1),
-			agility: &testAgilityParams{
+			agility: &TestAgilityParams{
 				agilityTier: 15,
 				tickSpeed:   7,
 				minICV:      h.GetInt32Ptr(-1),
@@ -1121,7 +1121,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/87?rel_availability=pre-story&rel_repeatable=false",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -1153,7 +1153,7 @@ func TestGetMonster(t *testing.T) {
 			formations: []int32{134},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/87?rel_availability=pre-story&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -1185,7 +1185,7 @@ func TestGetMonster(t *testing.T) {
 			formations: []int32{128, 132},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/87?rel_availability=always&rel_repeatable=true",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -1217,7 +1217,7 @@ func TestGetMonster(t *testing.T) {
 			formations: []int32{128, 132},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/seymour",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -1241,7 +1241,7 @@ func TestGetMonster(t *testing.T) {
 				expLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(93, "seymour", 0),
-			agility: &testAgilityParams{
+			agility: &TestAgilityParams{
 				agilityTier: 12,
 				tickSpeed:   10,
 				minICV:      h.GetInt32Ptr(-1),
@@ -1258,7 +1258,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/guado_guardian",
 				expectedStatus: http.StatusMultipleChoices,
 			},
@@ -1266,7 +1266,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 			results: []int32{94, 96, 113},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/yojimbo",
 				expectedStatus: http.StatusMultipleChoices,
 			},
@@ -1274,7 +1274,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 			results: []int32{165, 222, 235},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/mimic",
 				expectedStatus: http.StatusMultipleChoices,
 			},
@@ -1282,7 +1282,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 			results: []int32{249, 250, 251, 252},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/%3F%3F%3F",
 				expectedStatus: http.StatusMultipleChoices,
 			},
@@ -1298,126 +1298,126 @@ func TestRetrieveMonsters(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?limit=asd",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit={int|'max'}'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?ids=1,33,22,68,",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?elemental_resists=weak",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid input for parameter 'elemental_resists': 'weak'. usage: '?elemental_resists={element|id}:{affinity|id},...'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?elemental_resists=fire-weak,water:absorb",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid input for parameter 'elemental_resists': 'fire-weak'. usage: '?elemental_resists={element|id}:{affinity|id},...'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/?omnis_elements=ffff",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid usage of parameter 'omnis_elements'. parameter 'omnis_elements' can only be used with single-resource-endpoints",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?elemental_resists=weak:fire",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "unknown element 'weak' used for parameter 'elemental_resists'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?elemental_resists=fire:weak,fire:neutral",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "duplicate use of id '1' for parameter 'elemental_resists'. each element can only be used once",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?status_resists=4&resistance=350",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value '350' used for parameter 'resistance'. value must be an integer ranging from 1 to 254",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?status_resists=4&resistance=frank",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value 'frank' used for parameter 'resistance'. usage: '?resistance={int|'immune'}'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?resistance=50",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid usage of parameter 'resistance'. when using parameter 'resistance', the following parameter(s) must be present: 'status_resists'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?methods=steal",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid usage of parameter 'methods'. when using parameter 'methods', the following parameter(s) must be present: 'item'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?item=22&methods=steals",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value 'steals' used for parameter 'methods'. allowed values: 'steal', 'drop', 'bribe', 'other'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?item=asf&methods=drop",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid id 'asf' used for parameter 'item'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?distance=5",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value '5' used for parameter 'distance'. value must be an integer ranging from 1 to 4",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?distance=frank",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid value 'frank' used for parameter 'distance'. usage: '?distance={int},...|{int}-{int}'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?ronso_rage=13",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "provided id '13' used for parameter 'ronso_rage' is out of range. max id: 12",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?species=wywrm",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid enum value 'wywrm' used for parameter 'species'. use /api/monsters/parameters to see allowed values",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -1427,7 +1427,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results:  []int32{1, 175, 238, 307},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?elemental_resists=FIre:weAk,water:neutral",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -1438,7 +1438,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{11, 23, 64, 148},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?limit=max&status_resists=37",
 				expectedStatus: http.StatusOK,
 			},
@@ -1446,7 +1446,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{32, 127, 211, 233, 295},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?limit=max&status_resists=1,4,10&resistance=50",
 				expectedStatus: http.StatusOK,
 			},
@@ -1454,7 +1454,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{3, 128, 188, 227, 249},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?limit=max&status_resists=4&resistance=immune",
 				expectedStatus: http.StatusOK,
 			},
@@ -1462,7 +1462,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{5, 67, 100, 151, 258},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?limit=max&item=7",
 				expectedStatus: http.StatusOK,
 			},
@@ -1470,7 +1470,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{32, 91, 156, 192, 295, 305},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?item=7&methods=drop",
 				expectedStatus: http.StatusOK,
 			},
@@ -1478,7 +1478,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{32, 91},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?auto_ability=24",
 				expectedStatus: http.StatusOK,
 			},
@@ -1486,7 +1486,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{199, 200, 209, 244, 257, 279, 285},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?auto_ability=2&is_forced=false",
 				expectedStatus: http.StatusOK,
 			},
@@ -1494,7 +1494,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{167, 168, 202},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?empty_slots=3",
 				expectedStatus: http.StatusOK,
 			},
@@ -1502,7 +1502,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{74, 80, 118, 119, 161, 201, 244, 247},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?ronso_rage=12",
 				expectedStatus: http.StatusOK,
 			},
@@ -1510,7 +1510,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{255, 292},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?location=15",
 				expectedStatus: http.StatusOK,
 			},
@@ -1518,7 +1518,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{80, 90, 297},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?sublocation=26", // macalania woods
 				expectedStatus: http.StatusOK,
 			},
@@ -1526,7 +1526,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{80, 86},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?area=89", // mi'ihen highroad - central
 				expectedStatus: http.StatusOK,
 			},
@@ -1534,7 +1534,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{38, 45},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?distance=2&availability=pre-story",
 				expectedStatus: http.StatusOK,
 			},
@@ -1542,7 +1542,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{57, 58, 92, 119, 194},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?repeatable=true&capture=false&has_overdrive=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -1550,7 +1550,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{229, 236, 299},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?underwater=true&category=bOss",
 				expectedStatus: http.StatusOK,
 			},
@@ -1558,7 +1558,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{5, 71, 291},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?zombie=true&species=wyRm",
 				expectedStatus: http.StatusOK,
 			},
@@ -1566,7 +1566,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{134},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?creation_area=DJose",
 				expectedStatus: http.StatusOK,
 			},
@@ -1574,7 +1574,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{60, 63, 67},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?availability=post&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -1582,7 +1582,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{201, 202, 210, 227, 246, 268, 284, 307},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?availability=post&location=4",
 				expectedStatus: http.StatusOK,
 			},
@@ -1590,7 +1590,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{293},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?availability=post-game&location=4",
 				expectedStatus: http.StatusOK,
 			},
@@ -1598,7 +1598,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{16, 17, 18, 293},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?availability=post&location=23",
 				expectedStatus: http.StatusOK,
 			},
@@ -1606,7 +1606,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{301},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?availability=post&location=25",
 				expectedStatus: http.StatusOK,
 			},
@@ -1614,7 +1614,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{170, 201, 202, 203, 208, 210, 247},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?availability=post-game&area=140", // thunder plains - north
 				expectedStatus: http.StatusOK,
 			},
@@ -1622,7 +1622,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{72, 74, 78, 295, 296},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?availability=story&sublocation=35", // calm lands
 				expectedStatus: http.StatusOK,
 			},
@@ -1630,7 +1630,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{149, 150},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?availability=story&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -1638,7 +1638,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{1, 8, 23, 57, 109, 127, 185, 217, 226},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?availability=story&repeatable=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -1646,7 +1646,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			results: []int32{7, 31, 111, 118, 130, 209},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters?availability=post-game&repeatable=false&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -1662,7 +1662,7 @@ func TestSubsectionMonsters(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/?ids=1&location=15",
 				expectedStatus: http.StatusBadRequest,
 				handler:        testSrv.HandleMonsters,
@@ -1670,7 +1670,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/simple?limit=max",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsters,
@@ -1682,7 +1682,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			results: []int32{1, 22, 33, 68, 123, 199, 278, 307},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/simple?ids=1-21",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsters,
@@ -1694,7 +1694,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			results: []int32{1, 7, 18, 21},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/simple?ids=1,33,22,22,22,22,68,",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsters,
@@ -1706,7 +1706,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			results: []int32{1, 22, 33, 68},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/simple?ids=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsters,
@@ -1718,7 +1718,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			results: []int32{1, 5, 16, 18, 21},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/89/monsters/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAreas,
@@ -1728,7 +1728,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			results:        []int32{38, 39, 40, 42, 43, 45},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/23/monsters/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAreas,
@@ -1738,7 +1738,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			results:        []int32{15, 16, 17, 18},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/areas/236/monsters/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleAreas,
@@ -1749,7 +1749,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			results:        []int32{190, 201, 210, 239, 245, 249, 253},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monster-formations/193/monsters/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsterFormations,
@@ -1759,7 +1759,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			results:        []int32{143, 145, 148},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monster-formations/140/monsters/",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsterFormations,
@@ -1769,7 +1769,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			results:        []int32{104, 99, 103},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/simple?ids=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1",
 				expectedStatus: http.StatusBadRequest,
 				handler:        testSrv.HandleMonsters,

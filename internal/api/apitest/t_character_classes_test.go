@@ -12,14 +12,14 @@ func TestGetCharacterClass(t *testing.T) {
 	t.Parallel()
 	tests := []CharacterClass{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes/23",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "character class with provided id '23' doesn't exist. max id: 22",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes/1",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -45,7 +45,7 @@ func TestGetCharacterClass(t *testing.T) {
 			submenus:            []int32{2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 15},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes/3",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -71,7 +71,7 @@ func TestGetCharacterClass(t *testing.T) {
 			submenus:            []int32{2, 3, 4, 5},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes/4",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -97,7 +97,7 @@ func TestGetCharacterClass(t *testing.T) {
 			submenus:            []int32{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes/6",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -123,7 +123,7 @@ func TestGetCharacterClass(t *testing.T) {
 			submenus:            []int32{1},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes/8",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -149,7 +149,7 @@ func TestGetCharacterClass(t *testing.T) {
 			submenus:            []int32{14},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes/19",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -183,7 +183,7 @@ func TestRetrieveCharacterClasses(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -191,7 +191,7 @@ func TestRetrieveCharacterClasses(t *testing.T) {
 			results: []int32{1, 5, 8, 12, 13, 17, 22},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes?category=1",
 				expectedStatus: http.StatusOK,
 			},
@@ -199,7 +199,7 @@ func TestRetrieveCharacterClasses(t *testing.T) {
 			results: []int32{1, 2, 3, 4},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes?category=character",
 				expectedStatus: http.StatusOK,
 			},
@@ -207,7 +207,7 @@ func TestRetrieveCharacterClasses(t *testing.T) {
 			results: []int32{5, 7, 8, 9, 10, 12},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes?category=aeon",
 				expectedStatus: http.StatusOK,
 			},

@@ -7,7 +7,7 @@ import (
 )
 
 // checks if two standard-type values or pointers of a field are equal
-func (test test) compare(fieldName string, exp, got any) {
+func (test Test) compare(fieldName string, exp, got any) {
 	t := test.t
 	dontCheck := test.dontCheck
 	t.Helper()
@@ -92,42 +92,42 @@ func (test test) compare(fieldName string, exp, got any) {
 	}
 }
 
-func (test test) compInt(fieldName string, exp, got int) {
+func (test Test) compInt(fieldName string, exp, got int) {
 	test.t.Helper()
 	if exp != got {
 		test.t.Errorf("expected %s %d, got %d\n\n", fieldName, exp, got)
 	}
 }
 
-func (test test) compInt32(fieldName string, exp, got int32) {
+func (test Test) compInt32(fieldName string, exp, got int32) {
 	test.t.Helper()
 	if exp != got {
 		test.t.Errorf("expected %s %d, got %d\n\n", fieldName, exp, got)
 	}
 }
 
-func (test test) compFloat32(fieldName string, exp, got float32) {
+func (test Test) compFloat32(fieldName string, exp, got float32) {
 	test.t.Helper()
 	if exp != got {
 		test.t.Errorf("expected %s %.2f, got %.2f\n\n", fieldName, exp, got)
 	}
 }
 
-func (test test) compFloat64(fieldName string, exp, got float64) {
+func (test Test) compFloat64(fieldName string, exp, got float64) {
 	test.t.Helper()
 	if exp != got {
 		test.t.Errorf("expected %s %f, got %f\n\n", fieldName, exp, got)
 	}
 }
 
-func (test test) compString(fieldName, exp, got string) {
+func (test Test) compString(fieldName, exp, got string) {
 	test.t.Helper()
 	if exp != "" && exp != got {
 		test.t.Errorf("expected %s %s, got %s\n\n", fieldName, exp, got)
 	}
 }
 
-func (test test) compBool(fieldName string, exp, got bool) {
+func (test Test) compBool(fieldName string, exp, got bool) {
 	test.t.Helper()
 	if exp != got {
 		test.t.Errorf("expected %s %t, got %t\n\n", fieldName, exp, got)
@@ -135,7 +135,7 @@ func (test test) compBool(fieldName string, exp, got bool) {
 }
 
 // can be used for any direct pointer comparisons
-func (test test) compPtr[T any](fieldName string, exp, got *T, compFn compFnVals[T]) {
+func (test Test) compPtr[T any](fieldName string, exp, got *T, compFn compFnVals[T]) {
 	test.t.Helper()
 	if !test.presencePtrs(fieldName, exp, got) {
 		return
@@ -143,28 +143,28 @@ func (test test) compPtr[T any](fieldName string, exp, got *T, compFn compFnVals
 	compFn(fieldName, *exp, *got)
 }
 
-func (test test) compInt32Ptr(fieldName string, exp, got *int32) {
+func (test Test) compInt32Ptr(fieldName string, exp, got *int32) {
 	test.t.Helper()
 	test.compPtr(fieldName, exp, got, test.compInt32)
 }
 
-func (test test) compFloat32Ptr(fieldName string, exp, got *float32) {
+func (test Test) compFloat32Ptr(fieldName string, exp, got *float32) {
 	test.t.Helper()
 	test.compPtr(fieldName, exp, got, test.compFloat32)
 }
 
-func (test test) compFloat64Ptr(fieldName string, exp, got *float64) {
+func (test Test) compFloat64Ptr(fieldName string, exp, got *float64) {
 	test.t.Helper()
 	test.compPtr(fieldName, exp, got, test.compFloat64)
 }
 
-func (test test) compStringPtr(fieldName string, exp, got *string) {
+func (test Test) compStringPtr(fieldName string, exp, got *string) {
 	test.t.Helper()
 	test.compPtr(fieldName, exp, got, test.compString)
 }
 
 // compares the length of the gotSlice with the length found in expLengths[fieldName], if given
-func (test test) compLength(fieldName string, got int) {
+func (test Test) compLength(fieldName string, got int) {
 	test.t.Helper()
 	exp, ok := test.expLengths[fieldName]
 	if ok {
@@ -173,7 +173,7 @@ func (test test) compLength(fieldName string, got int) {
 }
 
 // compares the expected pagination path with the got url
-func (test test) compPageURL(fieldName string, expPathPtr, gotURLPtr *string) {
+func (test Test) compPageURL(fieldName string, expPathPtr, gotURLPtr *string) {
 	test.t.Helper()
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
 		return
@@ -190,7 +190,7 @@ func (test test) compPageURL(fieldName string, expPathPtr, gotURLPtr *string) {
 	test.compare(fieldName, expURLPtr, gotURLPtr)
 }
 
-func (test test) compareSlices[T any](fieldName string, exp, got []T) {
+func (test Test) compareSlices[T any](fieldName string, exp, got []T) {
 	test.t.Helper()
 	err := test.checkSliceBasic(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {

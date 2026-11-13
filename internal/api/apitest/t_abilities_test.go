@@ -15,14 +15,14 @@ func TestGetAbility(t *testing.T) {
 	t.Parallel()
 	tests := []Ability{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities/841",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "ability with provided id '841' doesn't exist. max id: 840",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities/736",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -98,7 +98,7 @@ func TestGetAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities/269",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -152,7 +152,7 @@ func TestGetAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities/72",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -213,21 +213,21 @@ func TestRetrieveAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?type=7",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "provided id '7' used for parameter 'type' doesn't exist. max id: 6",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?type=asd",
 				expectedStatus: http.StatusBadRequest,
 				expectedErr:    "invalid enum value 'asd' used for parameter 'type'. use /api/abilities/parameters to see allowed values",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -237,7 +237,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results:  []int32{1, 133, 299, 333, 555, 666, 840},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?monster=86",
 				expectedStatus: http.StatusOK,
 			},
@@ -247,7 +247,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results:  []int32{69, 70, 71, 72, 415, 481, 548, 565, 705, 804, 831},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?type=2&help_bar=false&rank=5&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -257,7 +257,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results:  []int32{111, 112, 113, 114, 115, 116, 117, 118},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?type=3&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -267,7 +267,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results:  []int32{293, 295, 310, 337, 344, 352, 361},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?delay=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -277,7 +277,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results:  []int32{9, 10, 88, 138, 340, 546, 709, 803},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?status_inflict=4&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -287,7 +287,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results:  []int32{3, 6, 8, 134, 226, 333, 422, 708, 752},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?bdl=true&limit=max",
 				expectedStatus: http.StatusOK,
 			},
@@ -297,7 +297,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results:  []int32{1, 5, 65, 89, 128, 170, 205, 399, 449, 530, 623, 830},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?copycat=true&target_type=single-enemy&user_atk=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -305,7 +305,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results: []int32{20, 21},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?darkable=true&attack_type=absorb",
 				expectedStatus: http.StatusOK,
 			},
@@ -313,7 +313,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results: []int32{538, 539},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?silenceable=true&reflectable=true&damage_type=magical&element=1",
 				expectedStatus: http.StatusOK,
 			},
@@ -321,7 +321,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results: []int32{69, 73, 77, 565, 665},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?damage_formula=special-var&can_crit=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -329,7 +329,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results: []int32{220, 225, 229, 328, 329},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?status_remove=4",
 				expectedStatus: http.StatusOK,
 			},
@@ -337,7 +337,7 @@ func TestRetrieveAbilities(t *testing.T) {
 			results: []int32{53, 254, 260, 308, 672, 790},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/abilities?stat_changes=true&mod_changes=true",
 				expectedStatus: http.StatusOK,
 			},
@@ -353,7 +353,7 @@ func TestSubsectionAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes/1/default-abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleCharacterClasses,
@@ -363,7 +363,7 @@ func TestSubsectionAbilities(t *testing.T) {
 			results:        []int32{374, 376, 377, 378, 379},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/character-classes/1/learnable-abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleCharacterClasses,
@@ -373,7 +373,7 @@ func TestSubsectionAbilities(t *testing.T) {
 			results:        []int32{1, 13, 24, 53, 66, 78, 374, 379},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/submenus/2/abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleSubmenus,
@@ -383,7 +383,7 @@ func TestSubsectionAbilities(t *testing.T) {
 			results:        []int32{1, 5, 8, 13, 17, 19, 22},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/topmenus/2/abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleTopmenus,
@@ -393,7 +393,7 @@ func TestSubsectionAbilities(t *testing.T) {
 			results:        []int32{377, 378, 379, 380, 381, 382},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/monsters/185/abilities",
 				expectedStatus: http.StatusOK,
 				handler:        testSrv.HandleMonsters,

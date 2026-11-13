@@ -12,14 +12,14 @@ func TestGetStat(t *testing.T) {
 	t.Parallel()
 	tests := []Stat{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/stats/11",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "stat with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/stats/2?changes_only=true",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -43,7 +43,7 @@ func TestGetStat(t *testing.T) {
 			statusConditions:   []int32{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/stats/3",
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
@@ -69,7 +69,7 @@ func TestGetStat(t *testing.T) {
 			properties:         []int32{},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/stats/4",
 				expectedStatus: http.StatusOK,
 				dontCheck: map[string]bool{
@@ -97,7 +97,7 @@ func TestRetrieveStats(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/stats",
 				expectedStatus: http.StatusOK,
 			},

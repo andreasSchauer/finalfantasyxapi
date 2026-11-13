@@ -12,14 +12,14 @@ func TestGetRonsoRage(t *testing.T) {
 	t.Parallel()
 	tests := []RonsoRage{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/ronso-rages/13",
 				expectedStatus: http.StatusNotFound,
 				expectedErr:    "ronso rage with provided id '13' doesn't exist. max id: 12",
 			},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/ronso-rages/4",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -31,7 +31,7 @@ func TestGetRonsoRage(t *testing.T) {
 			monsters:  []int32{38, 109, 167, 176, 245},
 		},
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/ronso-rages/8",
 				expectedStatus: http.StatusOK,
 				expLengths: map[string]int{
@@ -51,7 +51,7 @@ func TestRetrieveRonsoRages(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
+			TestGeneral: TestGeneral{
 				requestURL:     "/api/ronso-rages",
 				expectedStatus: http.StatusOK,
 			},

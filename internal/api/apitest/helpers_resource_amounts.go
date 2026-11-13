@@ -8,7 +8,7 @@ import (
 )
 
 // expects a map[res.GetKey()]Amount and checks, if all stated resources are present and their respective amounts match. Used for pure ResourceAmount fields.
-func (test test) checkResAmts[A apiresource.APIResource](fieldName string, exp map[string]int32, got []apiresource.ResourceAmount[A]) {
+func (test Test) checkResAmts[A apiresource.APIResource](fieldName string, exp map[string]int32, got []apiresource.ResourceAmount[A]) {
 	test.t.Helper()
 	test.compLength(fieldName, len(got))
 
@@ -23,7 +23,7 @@ func (test test) checkResAmts[A apiresource.APIResource](fieldName string, exp m
 	}
 }
 
-func (test test) checkResAmtsID[A apiresource.APIResource](fieldName string, exp map[int32]int32, got []apiresource.ResourceAmount[A]) {
+func (test Test) checkResAmtsID[A apiresource.APIResource](fieldName string, exp map[int32]int32, got []apiresource.ResourceAmount[A]) {
 	test.t.Helper()
 	test.compLength(fieldName, len(got))
 
@@ -39,7 +39,7 @@ func (test test) checkResAmtsID[A apiresource.APIResource](fieldName string, exp
 }
 
 // expects a map[res.GetKey()]Amount and checks, if all stated resources are present and their respective amounts match. Used for ResourceAmount-ish types with different field names.
-func (test test) checkResAmtTypes[T apiresource.ResourceAmountType[A], A apiresource.APIResource](fieldName string, exp map[string]int32, got []T) {
+func (test Test) checkResAmtTypes[T apiresource.ResourceAmountType[A], A apiresource.APIResource](fieldName string, exp map[string]int32, got []T) {
 	test.t.Helper()
 	gotResAmts := handlerinput.ResAmtTypesToStructs(got)
 	test.checkResAmts(fieldName, exp, gotResAmts)
