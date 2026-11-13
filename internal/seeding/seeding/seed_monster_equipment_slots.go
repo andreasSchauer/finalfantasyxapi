@@ -54,7 +54,7 @@ func extractMonsterEquipmentSlots() ([]seedtypes.MonsterEquipmentSlots, error) {
 		}
 
 		abilitySlots := &mon.Equipment.AbilitySlots
-		abilitySlots.MonsterEquipmentID, err = GetHashID(mon.Equipment)
+		abilitySlots.MonsterEquipmentID, err = getHashID(mon.Equipment)
 		if err != nil {
 			return nil, err
 		}
@@ -63,7 +63,7 @@ func extractMonsterEquipmentSlots() ([]seedtypes.MonsterEquipmentSlots, error) {
 		slots = append(slots, *abilitySlots)
 
 		attachedAbilities := &mon.Equipment.AttachedAbilities
-		attachedAbilities.MonsterEquipmentID, err = GetHashID(mon.Equipment)
+		attachedAbilities.MonsterEquipmentID, err = getHashID(mon.Equipment)
 		if err != nil {
 			return nil, err
 		}

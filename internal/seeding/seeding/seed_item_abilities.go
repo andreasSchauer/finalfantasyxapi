@@ -60,7 +60,7 @@ func extractItemAbilities() ([]seedtypes.ItemAbility, error) {
 		ability.Type = database.AbilityTypeItemAbility
 		ability.ItemID = item.ID
 
-		ability.Ability.ID, err = GetHashID(ability.Ability)
+		ability.Ability.ID, err = getHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}

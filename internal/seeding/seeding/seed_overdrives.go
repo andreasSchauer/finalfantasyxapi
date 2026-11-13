@@ -87,7 +87,7 @@ func extractOverdrives() ([]seedtypes.Overdrive, error) {
 			return nil, err
 		}
 
-		overdrive.Attributes.ID, err = GetHashID(overdrive.Attributes)
+		overdrive.Attributes.ID, err = getHashID(overdrive.Attributes)
 		if err != nil {
 			return nil, err
 		}

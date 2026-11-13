@@ -48,7 +48,7 @@ func extractOverdriveAbilities() ([]seedtypes.OverdriveAbility, error) {
 	for i := range rawJSON.overdriveAbilities {
 		ability := &rawJSON.overdriveAbilities[i]
 
-		ability.Ability.ID, err = GetHashID(ability.Ability)
+		ability.Ability.ID, err = getHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}

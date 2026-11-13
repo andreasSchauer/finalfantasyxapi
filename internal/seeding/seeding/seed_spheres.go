@@ -68,7 +68,7 @@ func extractSpheres() ([]seedtypes.Sphere, error) {
 		}
 
 		if sphere.CreatedNode != nil {
-			sphere.CreatedNode.ID, err = GetHashID(*sphere.CreatedNode)
+			sphere.CreatedNode.ID, err = getHashID(*sphere.CreatedNode)
 			if err != nil {
 				return nil, err
 			}

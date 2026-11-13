@@ -62,7 +62,7 @@ func extractMiscAbilities() ([]seedtypes.MiscAbility, error) {
 	for i := range rawJSON.miscAbilities {
 		ability := &rawJSON.miscAbilities[i]
 
-		ability.Ability.ID, err = GetHashID(ability.Ability)
+		ability.Ability.ID, err = getHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}

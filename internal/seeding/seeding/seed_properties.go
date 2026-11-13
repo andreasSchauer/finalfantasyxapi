@@ -57,7 +57,7 @@ func extractProperties() ([]seedtypes.Property, error) {
 		property := &rawJSON.properties[i]
 
 		if property.ModifierChange != nil {
-			property.ModifierChange.ID, err = GetHashID(property.ModifierChange)
+			property.ModifierChange.ID, err = getHashID(property.ModifierChange)
 			if err != nil {
 				return nil, err
 			}

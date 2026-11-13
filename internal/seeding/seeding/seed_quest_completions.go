@@ -53,7 +53,7 @@ func extractQuestCompletions() ([]seedtypes.QuestCompletion, error) {
 
 		if sidequest.Completion != nil {
 			completion := sidequest.Completion
-			completion.Reward.ID, err = GetHashID(completion.Reward)
+			completion.Reward.ID, err = getHashID(completion.Reward)
 			if err != nil {
 				return nil, err
 			}
@@ -71,7 +71,7 @@ func extractQuestCompletions() ([]seedtypes.QuestCompletion, error) {
 
 			if subquest.Completion != nil {
 				completion := subquest.Completion
-				completion.Reward.ID, err = GetHashID(completion.Reward)
+				completion.Reward.ID, err = getHashID(completion.Reward)
 				if err != nil {
 					return nil, err
 				}
@@ -129,7 +129,7 @@ func extractCompletionAreas() ([]seedtypes.CompletionArea, error) {
 		sidequest := &rawJSON.sidequests[i]
 
 		if sidequest.Completion != nil {
-			sidequest.Completion.ID, err = GetHashID(sidequest.Completion)
+			sidequest.Completion.ID, err = getHashID(sidequest.Completion)
 			if err != nil {
 				return nil, err
 			}
@@ -146,7 +146,7 @@ func extractCompletionAreas() ([]seedtypes.CompletionArea, error) {
 			subquest := &sidequest.Subquests[j]
 
 			if subquest.Completion != nil {
-				subquest.Completion.ID, err = GetHashID(subquest.Completion)
+				subquest.Completion.ID, err = getHashID(subquest.Completion)
 				if err != nil {
 					return nil, err
 				}

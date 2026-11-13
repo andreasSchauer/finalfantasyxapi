@@ -71,13 +71,13 @@ func prepareAlts(states []seedtypes.AlteredState) ([]seedtypes.Alt, error) {
 		for j := range state.Changes {
 			change := &state.Changes[j]
 
-			change.AlteredStateID, err = GetHashID(state)
+			change.AlteredStateID, err = getHashID(state)
 			if err != nil {
 				return nil, err
 			}
 
 			if change.AddedStatus != nil {
-				change.AddedStatus.ID, err = GetHashID(change.AddedStatus)
+				change.AddedStatus.ID, err = getHashID(change.AddedStatus)
 				if err != nil {
 					return nil, err
 				}

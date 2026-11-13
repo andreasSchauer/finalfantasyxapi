@@ -48,7 +48,7 @@ func extractPossibleItems() ([]seedtypes.PossibleItem, error) {
 		for j := range pos.Items {
 			item := &pos.Items[j]
 
-			item.ItemAmount.ID, err = GetHashID(item.ItemAmount)
+			item.ItemAmount.ID, err = getHashID(item.ItemAmount)
 			if err != nil {
 				return nil, err
 			}
@@ -67,7 +67,7 @@ func extractPossibleItems() ([]seedtypes.PossibleItem, error) {
 		for j := range mon.Items.OtherItems {
 			item := &mon.Items.OtherItems[j]
 
-			item.ItemAmount.ID, err = GetHashID(item.ItemAmount)
+			item.ItemAmount.ID, err = getHashID(item.ItemAmount)
 			if err != nil {
 				return nil, err
 			}

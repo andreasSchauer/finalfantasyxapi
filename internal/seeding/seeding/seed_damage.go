@@ -138,20 +138,20 @@ func prepareDamages(battleInteractions []seedtypes.BattleInteraction) ([]seedtyp
 
 		if bi.Damage != nil {
 			if bi.Damage.HP != nil {
-				bi.Damage.HP.ID, err = GetHashID(bi.Damage.HP)
+				bi.Damage.HP.ID, err = getHashID(bi.Damage.HP)
 				if err != nil {
 					return nil, err
 				}
 			}
 
 			if bi.Damage.MP != nil {
-				bi.Damage.MP.ID, err = GetHashID(bi.Damage.MP)
+				bi.Damage.MP.ID, err = getHashID(bi.Damage.MP)
 				if err != nil {
 					return nil, err
 				}
 			}
 			if bi.Damage.CTB != nil {
-				bi.Damage.CTB.ID, err = GetHashID(bi.Damage.CTB)
+				bi.Damage.CTB.ID, err = getHashID(bi.Damage.CTB)
 				if err != nil {
 					return nil, err
 				}

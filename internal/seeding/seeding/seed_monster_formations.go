@@ -54,12 +54,12 @@ func extractMonsterFormations() ([]seedtypes.MonsterFormation, error) {
 	for i := range rawJSON.monsterFormations {
 		mf := &rawJSON.monsterFormations[i]
 
-		mf.FormationData.ID, err = GetHashID(mf.FormationData)
+		mf.FormationData.ID, err = getHashID(mf.FormationData)
 		if err != nil {
 			return nil, err
 		}
 
-		mf.MonsterSelection.ID, err = GetHashID(mf.MonsterSelection)
+		mf.MonsterSelection.ID, err = getHashID(mf.MonsterSelection)
 		if err != nil {
 			return nil, err
 		}

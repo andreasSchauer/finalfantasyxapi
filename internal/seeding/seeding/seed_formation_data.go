@@ -57,7 +57,7 @@ func extractFormationData() ([]seedtypes.FormationData, error) {
 		mfData := &rawJSON.monsterFormations[i].FormationData
 
 		if mfData.BossMusic != nil {
-			mfData.BossMusic.ID, err = GetHashID(mfData.BossMusic)
+			mfData.BossMusic.ID, err = getHashID(mfData.BossMusic)
 			if err != nil {
 				return nil, err
 			}

@@ -28,10 +28,11 @@ func processAeonCommandsPossibleAbilities(desc string) (JunctionParams, error) {
 					return JunctionParams{}, err
 				}
 
-				j := ThreeWayJunction{}
-				j.GrandparentID = command.ID
-				j.ParentID = class.ID
-				j.ChildID = ability.ID
+				j := ThreeWayJunction{
+					GrandparentID: command.ID,
+					ParentID: class.ID,
+					ChildID: ability.ID,
+				}
 				dataHash := generateJunctionHash(j, desc)
 
 				params.DataHashes = append(params.DataHashes, dataHash)

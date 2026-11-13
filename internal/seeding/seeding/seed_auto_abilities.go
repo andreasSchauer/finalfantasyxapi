@@ -106,21 +106,21 @@ func extractAutoAbilities() ([]seedtypes.AutoAbility, error) {
 		}
 
 		if ability.RequiredItem != nil {
-			ability.RequiredItem.ID, err = GetHashID(ability.RequiredItem)
+			ability.RequiredItem.ID, err = getHashID(ability.RequiredItem)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if ability.AddedElemResist != nil {
-			ability.AddedElemResist.ID, err = GetHashID(ability.AddedElemResist)
+			ability.AddedElemResist.ID, err = getHashID(ability.AddedElemResist)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if ability.OnHitStatus != nil {
-			ability.OnHitStatus.ID, err = GetHashID(ability.OnHitStatus)
+			ability.OnHitStatus.ID, err = getHashID(ability.OnHitStatus)
 			if err != nil {
 				return nil, err
 			}

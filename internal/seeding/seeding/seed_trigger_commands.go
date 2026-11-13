@@ -58,7 +58,7 @@ func extractTriggerCommands() ([]seedtypes.TriggerCommand, error) {
 	for i := range rawJSON.triggerCommands {
 		command := &rawJSON.triggerCommands[i]
 
-		command.Ability.ID, err = GetHashID(command.Ability)
+		command.Ability.ID, err = getHashID(command.Ability)
 		if err != nil {
 			return nil, err
 		}

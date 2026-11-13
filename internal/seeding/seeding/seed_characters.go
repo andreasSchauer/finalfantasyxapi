@@ -62,7 +62,7 @@ func extractCharacters() ([]seedtypes.Character, error) {
 	for i := range rawJSON.characters {
 		char := &rawJSON.characters[i]
 
-		char.PlayerUnit.ID, err = GetHashID(char.PlayerUnit)
+		char.PlayerUnit.ID, err = getHashID(char.PlayerUnit)
 		if err != nil {
 			return nil, err
 		}
@@ -73,14 +73,14 @@ func extractCharacters() ([]seedtypes.Character, error) {
 		}
 
 		if char.StdSphereGrid != nil {
-			char.StdSphereGrid.ID, err = GetHashID(*char.StdSphereGrid)
+			char.StdSphereGrid.ID, err = getHashID(*char.StdSphereGrid)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if char.ExpSphereGrid != nil {
-			char.ExpSphereGrid.ID, err = GetHashID(*char.ExpSphereGrid)
+			char.ExpSphereGrid.ID, err = getHashID(*char.ExpSphereGrid)
 			if err != nil {
 				return nil, err
 			}

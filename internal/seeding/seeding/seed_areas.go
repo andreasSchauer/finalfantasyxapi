@@ -68,7 +68,7 @@ func extractAreas() ([]seedtypes.Area, error) {
 		for j := range location.Sublocations {
 			sublocation := &location.Sublocations[j]
 
-			sublocation.ID, err = GetHashID(sublocation)
+			sublocation.ID, err = getHashID(sublocation)
 			if err != nil {
 				return nil, err
 			}
@@ -96,7 +96,7 @@ func completeAreas(areas []seedtypes.Area) error {
 			return err
 		}
 
-		area.ID, err = GetHashID(area)
+		area.ID, err = getHashID(area)
 		if err != nil {
 			return err
 		}

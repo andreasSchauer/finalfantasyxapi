@@ -74,7 +74,7 @@ func extractPlayerAbilities() ([]seedtypes.PlayerAbility, error) {
 	for i := range rawJSON.playerAbilities {
 		ability := &rawJSON.playerAbilities[i]
 
-		ability.Ability.ID, err = GetHashID(ability.Ability)
+		ability.Ability.ID, err = getHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}
@@ -105,7 +105,7 @@ func extractPlayerAbilities() ([]seedtypes.PlayerAbility, error) {
 		}
 
 		if ability.AeonLearnItem != nil {
-			ability.AeonLearnItem.ID, err = GetHashID(ability.AeonLearnItem)
+			ability.AeonLearnItem.ID, err = getHashID(ability.AeonLearnItem)
 			if err != nil {
 				return nil, err
 			}

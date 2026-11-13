@@ -52,7 +52,7 @@ func extractEnemyAbilities() ([]seedtypes.EnemyAbility, error) {
 	for i := range rawJSON.enemyAbilities {
 		ability := &rawJSON.enemyAbilities[i]
 
-		ability.Ability.ID, err = GetHashID(ability.Ability)
+		ability.Ability.ID, err = getHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}

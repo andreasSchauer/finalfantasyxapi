@@ -48,7 +48,7 @@ func extractSidequests() ([]seedtypes.Sidequest, error) {
 	for i := range rawJSON.sidequests {
 		sidequest := &rawJSON.sidequests[i]
 
-		sidequest.Quest.ID, err = GetHashID(sidequest.Quest)
+		sidequest.Quest.ID, err = getHashID(sidequest.Quest)
 		if err != nil {
 			return nil, err
 		}
@@ -119,7 +119,7 @@ func extractSubquests() ([]seedtypes.Subquest, error) {
 			subquest := &sidequest.Subquests[j]
 			subquest.SidequestID = sidequest.ID
 
-			subquest.Quest.ID, err = GetHashID(subquest.Quest)
+			subquest.Quest.ID, err = getHashID(subquest.Quest)
 			if err != nil {
 				return nil, err
 			}

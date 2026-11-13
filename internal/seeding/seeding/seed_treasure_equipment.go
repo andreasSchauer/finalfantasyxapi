@@ -55,7 +55,7 @@ func extractTreasureEquipment() ([]seedtypes.TreasureEquipment, error) {
 				continue
 			}
 
-			treasure.Equipment.TreasureID, err = GetHashID(treasure)
+			treasure.Equipment.TreasureID, err = getHashID(treasure)
 			if err != nil {
 				return nil, err
 			}

@@ -63,7 +63,7 @@ func extractStatusConditions() ([]seedtypes.StatusCondition, error) {
 		status := &rawJSON.statusConditions[i]
 
 		if status.AddedElemResist != nil {
-			status.AddedElemResist.ID, err = GetHashID(status.AddedElemResist)
+			status.AddedElemResist.ID, err = getHashID(status.AddedElemResist)
 			if err != nil {
 				return nil, err
 			}

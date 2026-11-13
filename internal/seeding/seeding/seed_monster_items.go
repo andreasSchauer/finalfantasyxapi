@@ -73,49 +73,49 @@ func extractMonsterItems() ([]seedtypes.MonsterItems, error) {
 		monItems.MonsterID = mon.ID
 
 		if monItems.StealCommon != nil {
-			monItems.StealCommon.ID, err = GetHashID(monItems.StealCommon)
+			monItems.StealCommon.ID, err = getHashID(monItems.StealCommon)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.StealRare != nil {
-			monItems.StealRare.ID, err = GetHashID(monItems.StealRare)
+			monItems.StealRare.ID, err = getHashID(monItems.StealRare)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.DropCommon != nil {
-			monItems.DropCommon.ID, err = GetHashID(monItems.DropCommon)
+			monItems.DropCommon.ID, err = getHashID(monItems.DropCommon)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.DropRare != nil {
-			monItems.DropRare.ID, err = GetHashID(monItems.DropRare)
+			monItems.DropRare.ID, err = getHashID(monItems.DropRare)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.SecondaryDropCommon != nil {
-			monItems.SecondaryDropCommon.ID, err = GetHashID(monItems.SecondaryDropCommon)
+			monItems.SecondaryDropCommon.ID, err = getHashID(monItems.SecondaryDropCommon)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.SecondaryDropRare != nil {
-			monItems.SecondaryDropRare.ID, err = GetHashID(monItems.SecondaryDropRare)
+			monItems.SecondaryDropRare.ID, err = getHashID(monItems.SecondaryDropRare)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if monItems.Bribe != nil {
-			monItems.Bribe.ID, err = GetHashID(monItems.Bribe)
+			monItems.Bribe.ID, err = getHashID(monItems.Bribe)
 			if err != nil {
 				return nil, err
 			}

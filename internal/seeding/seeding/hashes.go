@@ -17,7 +17,7 @@ func generateJunctionHash(j Junction, desc string) string {
 	return h.CombineFields(j.ToHashFieldsJ(desc))
 }
 
-func GetHashID(hs seedtypes.Hashable) (int32, error) {
+func getHashID(hs seedtypes.Hashable) (int32, error) {
 	id, ok := hashes[generateDataHash(hs)]
 	if !ok {
 		return 0, fmt.Errorf("no data hash available for %s", h.CombineFields(hs.ToHashFields()))

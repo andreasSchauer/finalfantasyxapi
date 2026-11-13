@@ -131,13 +131,13 @@ func prepareBattleInteractions(bis []seedtypes.BattleInteraction) ([]seedtypes.B
 	for j := range bis {
 		bi := &bis[j]
 
-		bi.Accuracy.ID, err = GetHashID(bi.Accuracy)
+		bi.Accuracy.ID, err = getHashID(bi.Accuracy)
 		if err != nil {
 			return nil, err
 		}
 
 		if bi.InflictedDelay != nil {
-			bi.InflictedDelay.ID, err = GetHashID(bi.InflictedDelay)
+			bi.InflictedDelay.ID, err = getHashID(bi.InflictedDelay)
 			if err != nil {
 				return nil, err
 			}

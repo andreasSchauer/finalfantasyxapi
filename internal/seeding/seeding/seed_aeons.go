@@ -67,7 +67,7 @@ func extractAeons() ([]seedtypes.Aeon, error) {
 	for i := range rawJSON.aeons {
 		aeon := &rawJSON.aeons[i]
 
-		aeon.PlayerUnit.ID, err = GetHashID(aeon.PlayerUnit)
+		aeon.PlayerUnit.ID, err = getHashID(aeon.PlayerUnit)
 		if err != nil {
 			return nil, err
 		}
@@ -78,7 +78,7 @@ func extractAeons() ([]seedtypes.Aeon, error) {
 		}
 
 		if aeon.PhysAtkAccuracy != nil {
-			aeon.PhysAtkAccuracy.ID, err = GetHashID(aeon.PhysAtkAccuracy)
+			aeon.PhysAtkAccuracy.ID, err = getHashID(aeon.PhysAtkAccuracy)
 			if err != nil {
 				return nil, err
 			}

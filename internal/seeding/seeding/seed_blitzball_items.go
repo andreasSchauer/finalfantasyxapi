@@ -81,7 +81,7 @@ func extractBlitzballItems() ([]seedtypes.BlitzballItem, error) {
 			item := &pos.Items[j]
 			item.PositionID = pos.ID
 
-			item.PossibleItem.ID, err = GetHashID(item.PossibleItem)
+			item.PossibleItem.ID, err = getHashID(item.PossibleItem)
 			if err != nil {
 				return nil, err
 			}

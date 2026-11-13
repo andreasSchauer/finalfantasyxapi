@@ -56,7 +56,7 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 
 	for i := range rawJSON.playerAbilities {
 		ability := &rawJSON.playerAbilities[i]
-		ability.Attributes.ID, err = GetHashID(ability.Attributes)
+		ability.Attributes.ID, err = getHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -67,7 +67,7 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 
 	for i := range rawJSON.overdriveAbilities {
 		ability := &rawJSON.overdriveAbilities[i]
-		ability.Attributes.ID, err = GetHashID(ability.Attributes)
+		ability.Attributes.ID, err = getHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -83,7 +83,7 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 			continue
 		}
 
-		item.Attributes.ID, err = GetHashID(item.Attributes)
+		item.Attributes.ID, err = getHashID(item.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -94,7 +94,7 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 
 	for i := range rawJSON.triggerCommands {
 		command := &rawJSON.triggerCommands[i]
-		command.Attributes.ID, err = GetHashID(command.Attributes)
+		command.Attributes.ID, err = getHashID(command.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -105,7 +105,7 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 
 	for i := range rawJSON.miscAbilities {
 		ability := &rawJSON.miscAbilities[i]
-		ability.Attributes.ID, err = GetHashID(ability.Attributes)
+		ability.Attributes.ID, err = getHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -116,7 +116,7 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 
 	for i := range rawJSON.enemyAbilities {
 		ability := &rawJSON.enemyAbilities[i]
-		ability.Attributes.ID, err = GetHashID(ability.Attributes)
+		ability.Attributes.ID, err = getHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}

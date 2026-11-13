@@ -75,7 +75,7 @@ func extractSongs() ([]seedtypes.Song, error) {
 		song := &rawJSON.songs[i]
 
 		if song.Credits != nil {
-			song.Credits.ID, err = GetHashID(*song.Credits)
+			song.Credits.ID, err = getHashID(*song.Credits)
 			if err != nil {
 				return nil, err
 			}
