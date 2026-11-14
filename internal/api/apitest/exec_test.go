@@ -14,11 +14,16 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-type testCase interface {
+type testCase[G any] interface {
 	GetTestGeneral() testGeneral
+	testType[G]
 }
 
-func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
+type testType[G any] interface {
+	Compare(test, G)
+}
+
+func testSingleResources[E testCase[G], G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request)) {
 	t.Helper()
 
 	for i, exp := range tests {
@@ -33,7 +38,7 @@ func testSingleResources[E testCase, G any](t *testing.T, tests []E, testFuncNam
 				return
 			}
 
-			compFunc(testObj, exp, got)
+			exp.Compare(testObj, got)
 		})
 	}
 }
@@ -81,7 +86,7 @@ func testServiceResponsesGet[G any](t *testing.T, tests []testGeneral, testFuncN
 	}
 }
 
-func testServiceResponsesPost[E testCase, G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, E, G)) {
+func testServiceResponsesPost[E testCase[G], G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request)) {
 	t.Helper()
 
 	for i, exp := range tests {
@@ -96,7 +101,7 @@ func testServiceResponsesPost[E testCase, G any](t *testing.T, tests []E, testFu
 				return
 			}
 
-			compFunc(test, exp, got)
+			exp.Compare(test, got)
 		})
 	}
 }

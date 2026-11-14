@@ -48,7 +48,7 @@ func (test test) compStructSlices[T any](fieldName string, exp, got []T) {
 
 // checks if a pointer to a test struct is equal to a pointer to the original struct. uses a compare function.
 // testItemAmount == itemAmount (both Ptrs)
-func (test test) compTestStructPtrs[E, G any](fieldName string, exp *E, got *G, compFn compFnDifferent[E, G]) {
+func (test test) compTestStructPtrs[E testStruct[G], G any](fieldName string, exp *E, got *G) {
 	test.t.Helper()
 
 	if test.dontCheck != nil && test.dontCheck[fieldName] {
@@ -59,12 +59,13 @@ func (test test) compTestStructPtrs[E, G any](fieldName string, exp *E, got *G, 
 		return
 	}
 
-	compFn(test, fieldName, *exp, *got)
+	e := *exp
+	e.Compare(test, fieldName, *got)
 }
 
 // checks if a slice of test structs is equal to the slice of original structs, meaning it contains every entry of the original struct in the correct order. uses a compare function. if the slice is not nullable, it needs to be explicitely ignored.
 // []testItemAmount == []itemAmount
-func (test test) compTestStructSlices[E, G any](fieldName string, exp []E, got []G, compFn compFnDifferent[E, G]) {
+func (test test) compTestStructSlices[E testStruct[G], G any](fieldName string, exp []E, got []G) {
 	test.t.Helper()
 	err := test.checkSliceBasic(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
@@ -73,12 +74,12 @@ func (test test) compTestStructSlices[E, G any](fieldName string, exp []E, got [
 
 	for i := range exp {
 		subName := fmt.Sprintf("%s %d", fieldName, i)
-		compFn(test, subName, exp[i], got[i])
+		exp[i].Compare(test, subName, got[i])
 	}
 }
 
 // checks if all stated testStructs with index are present in the gotStruct slice by using a testStruct's targetIndex.
-func (test test) checkTestStructsInSlice[E testStructIdx, G any](fieldName string, exp []E, got []G, compFn compFnDifferent[E, G]) {
+func (test test) checkTestStructsInSlice[E testStructIdx[G], G any](fieldName string, exp []E, got []G) {
 	test.t.Helper()
 	err := test.checkSliceBasic(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
@@ -88,7 +89,7 @@ func (test test) checkTestStructsInSlice[E testStructIdx, G any](fieldName strin
 	for _, item := range exp {
 		i := item.GetIndex()
 		subName := fmt.Sprintf("%s %d", fieldName, i)
-		compFn(test, subName, item, got[i])
+		item.Compare(test, subName, got[i])
 	}
 }
 

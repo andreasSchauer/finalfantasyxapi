@@ -42,7 +42,7 @@ func TestGetArenaCreation(t *testing.T) {
 					"required monsters": 10,
 				},
 			},
-			Unique:           newExpUnique(13, "vorban"),
+			Unique:              newExpUnique(13, "vorban"),
 			category:            "area",
 			monster:             268,
 			parentSubquest:      13,
@@ -59,7 +59,7 @@ func TestGetArenaCreation(t *testing.T) {
 					"required monsters": 5,
 				},
 			},
-			Unique:           newExpUnique(19, "one-eye"),
+			Unique:              newExpUnique(19, "one-eye"),
 			category:            "species",
 			monster:             274,
 			parentSubquest:      19,
@@ -76,7 +76,7 @@ func TestGetArenaCreation(t *testing.T) {
 					"required monsters": 0,
 				},
 			},
-			Unique:                 newExpUnique(31, "th'uban"),
+			Unique:                    newExpUnique(31, "th'uban"),
 			category:                  "original",
 			monster:                   286,
 			parentSubquest:            31,
@@ -87,7 +87,7 @@ func TestGetArenaCreation(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetArenaCreation", testSrv.HandleArenaCreations, compareArenaCreations)
+	testSingleResources(t, tests, "GetArenaCreation", testSrv.HandleArenaCreations)
 }
 
 func TestRetrieveArenaCreations(t *testing.T) {

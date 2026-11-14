@@ -28,7 +28,7 @@ func TestGetPrimer(t *testing.T) {
 					"treasures": 2,
 				},
 			},
-			Unique: newExpUnique(1, "al bhed primer i"),
+			Unique:    newExpUnique(1, "al bhed primer i"),
 			keyItem:   35,
 			areas:     []int32{15, 167},
 			treasures: []int32{13, 215},
@@ -43,14 +43,14 @@ func TestGetPrimer(t *testing.T) {
 					"treasures": 1,
 				},
 			},
-			Unique: newExpUnique(22, "al bhed primer xxii"),
+			Unique:    newExpUnique(22, "al bhed primer xxii"),
 			keyItem:   56,
 			areas:     []int32{195},
 			treasures: []int32{252},
 		},
 	}
 
-	testSingleResources(t, tests, "GetPrimer", testSrv.HandlePrimers, comparePrimers)
+	testSingleResources(t, tests, "GetPrimer", testSrv.HandlePrimers)
 }
 
 func TestRetrievePrimers(t *testing.T) {

@@ -21,14 +21,14 @@ func (e CharacterClass) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareCharacterClasses(test test, exp CharacterClass, got apitypes.CharacterClass) {
+func (e CharacterClass) Compare(test test, got apitypes.CharacterClass) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compare("category", exp.category, got.Category)
-	test.checkResIDsInSlice("members", apilookups.E.PlayerUnits.Endpoint, exp.members, got.Members)
-	test.checkResIDsInSlice("default abilities", apilookups.E.Abilities.Endpoint, exp.defaultAbilities, got.DefaultAbilities)
-	test.checkResIDsInSlice("learnable abilities", apilookups.E.Abilities.Endpoint, exp.learnableAbilities, got.LearnableAbilities)
-	test.checkResIDsInSlice("default overdrives", apilookups.E.Overdrives.Endpoint, exp.defaultOverdrives, got.DefaultOverdrives)
-	test.checkResIDsInSlice("learnable overdrives", apilookups.E.Overdrives.Endpoint, exp.learnableOverdrives, got.LearnableOverdrives)
-	test.checkResIDsInSlice("submenus", apilookups.E.Submenus.Endpoint, exp.submenus, got.Submenus)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compare("category", e.category, got.Category)
+	test.checkResIDsInSlice("members", apilookups.E.PlayerUnits.Endpoint, e.members, got.Members)
+	test.checkResIDsInSlice("default abilities", apilookups.E.Abilities.Endpoint, e.defaultAbilities, got.DefaultAbilities)
+	test.checkResIDsInSlice("learnable abilities", apilookups.E.Abilities.Endpoint, e.learnableAbilities, got.LearnableAbilities)
+	test.checkResIDsInSlice("default overdrives", apilookups.E.Overdrives.Endpoint, e.defaultOverdrives, got.DefaultOverdrives)
+	test.checkResIDsInSlice("learnable overdrives", apilookups.E.Overdrives.Endpoint, e.learnableOverdrives, got.LearnableOverdrives)
+	test.checkResIDsInSlice("submenus", apilookups.E.Submenus.Endpoint, e.submenus, got.Submenus)
 }

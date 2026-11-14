@@ -64,7 +64,7 @@ func TestGetMiscAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:       newExpNameVer(1, "attack", 1),
+			NameVer:          newExpNameVer(1, "attack", 1),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: false,
 			canCopyCat:       true,
@@ -118,7 +118,7 @@ func TestGetMiscAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:       newExpNameVer(1, "attack", 1),
+			NameVer:          newExpNameVer(1, "attack", 1),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: false,
 			canCopyCat:       true,
@@ -172,7 +172,7 @@ func TestGetMiscAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:       newExpNameVer(2, "attack", 2),
+			NameVer:          newExpNameVer(2, "attack", 2),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: false,
 			canCopyCat:       false,
@@ -226,7 +226,7 @@ func TestGetMiscAbility(t *testing.T) {
 					"battle interactions": 0,
 				},
 			},
-			NameVer:         newExpNameVer(10, "switch", 1),
+			NameVer:            newExpNameVer(10, "switch", 1),
 			rank:               h.GetInt32Ptr(0),
 			appearsInHelpBar:   false,
 			canCopyCat:         false,
@@ -245,7 +245,7 @@ func TestGetMiscAbility(t *testing.T) {
 					"battle interactions": 0,
 				},
 			},
-			NameVer:         newExpNameVer(4, "weapon", 0),
+			NameVer:            newExpNameVer(4, "weapon", 0),
 			rank:               h.GetInt32Ptr(1),
 			appearsInHelpBar:   false,
 			canCopyCat:         false,
@@ -257,7 +257,7 @@ func TestGetMiscAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetMiscAbility", testSrv.HandleMiscAbilities, compareMiscAbilities)
+	testSingleResources(t, tests, "GetMiscAbility", testSrv.HandleMiscAbilities)
 }
 
 func TestGetMultipleMiscAbilities(t *testing.T) {

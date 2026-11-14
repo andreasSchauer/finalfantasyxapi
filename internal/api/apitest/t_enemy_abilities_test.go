@@ -31,7 +31,7 @@ func TestGetEnemyAbility(t *testing.T) {
 					"battle interactions 0 removed status conditions": 10,
 				},
 			},
-			NameVer:       newExpNameVer(56, "attack", 40),
+			NameVer:          newExpNameVer(56, "attack", 40),
 			rank:             h.GetInt32Ptr(1),
 			appearsInHelpBar: false,
 			canCopyCat:       false,
@@ -84,7 +84,7 @@ func TestGetEnemyAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:       newExpNameVer(228, "karma", 2),
+			NameVer:          newExpNameVer(228, "karma", 2),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: true,
 			canCopyCat:       false,
@@ -139,7 +139,7 @@ func TestGetEnemyAbility(t *testing.T) {
 					"battle interactions 0 copied status conditions":  18,
 				},
 			},
-			NameVer:       newExpNameVer(393, "swallow", 2),
+			NameVer:          newExpNameVer(393, "swallow", 2),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: false,
 			canCopyCat:       false,
@@ -172,7 +172,7 @@ func TestGetEnemyAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetEnemyAbility", testSrv.HandleEnemyAbilities, compareEnemyAbilities)
+	testSingleResources(t, tests, "GetEnemyAbility", testSrv.HandleEnemyAbilities)
 }
 
 func TestGetMultipleEnemyAbilities(t *testing.T) {

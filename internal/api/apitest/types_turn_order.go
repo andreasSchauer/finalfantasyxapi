@@ -14,31 +14,16 @@ func (e TurnOrderResponse) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTurnOrderResponses(test test, exp TurnOrderResponse, got servicetypes.TurnOrderResponse) {
+func (e TurnOrderResponse) Compare(test test, got servicetypes.TurnOrderResponse) {
 	test.t.Helper()
-	test.compare("turns amt", exp.TurnsAmt, got.TurnsAmt)
-	test.compare("ign first turn", exp.IgnFirstTurn, got.IgnFirstTurn)
-	test.compare("ign immunities", exp.IgnImmunities, got.IgnImmunities)
-	test.compare("battle start", exp.BattleStart, got.BattleStart)
-	test.compare("rng", exp.RNG, got.RNG)
-	test.compTestStructSlices("player party", exp.PlayerParty, got.PlayerParty, compareParticipants)
-	test.compTestStructSlices("opponent party", exp.OpponentParty, got.OpponentParty, compareParticipants)
-	test.checkTestStructsInSlice("turn order", exp.testTurnOrder, got.TurnOrder, compareBattleTurns)
-}
-
-func compareParticipants(test test, fieldName string, exp, got servicetypes.Participant) {
-	test.t.Helper()
-	test.compare(fieldName+" name", exp.Name, got.Name)
-	test.compare(fieldName+" party", string(exp.Party), string(got.Party))
-	test.compare(fieldName+" agility", exp.Agility, got.Agility)
-	test.compare(fieldName+" tick speed", exp.TickSpeed, got.TickSpeed)
-	test.compare(fieldName+" min icv", exp.MinICV, got.MinICV)
-	test.compare(fieldName+" max icv", exp.MaxICV, got.MaxICV)
-	test.compare(fieldName+" first strike", exp.FirstStrike, got.FirstStrike)
-	test.compare(fieldName+" status", exp.Status, got.Status)
-	test.compare(fieldName+" alt state", exp.AltState, got.AltState)
-	test.compare(fieldName+" turns received", exp.TurnsReceived, got.TurnsReceived)
-	test.compare(fieldName+" turns percent", exp.TurnsPercent, got.TurnsPercent)
+	test.compare("turns amt", e.TurnsAmt, got.TurnsAmt)
+	test.compare("ign first turn", e.IgnFirstTurn, got.IgnFirstTurn)
+	test.compare("ign immunities", e.IgnImmunities, got.IgnImmunities)
+	test.compare("battle start", e.BattleStart, got.BattleStart)
+	test.compare("rng", e.RNG, got.RNG)
+	test.compStructSlices("player party", e.PlayerParty, got.PlayerParty)
+	test.compStructSlices("opponent party", got.OpponentParty, got.OpponentParty)
+	test.checkTestStructsInSlice("turn order", e.testTurnOrder, got.TurnOrder)
 }
 
 type testBattleTurn struct {
@@ -49,14 +34,14 @@ type testBattleTurn struct {
 	party       servicetypes.BattleParty
 }
 
-func (t testBattleTurn) GetIndex() int {
-	return t.index
+func (e testBattleTurn) GetIndex() int {
+	return e.index
 }
 
-func compareBattleTurns(test test, fieldName string, exp testBattleTurn, got servicetypes.BattleTurn) {
+func (e testBattleTurn) Compare(test test, fieldName string, got servicetypes.BattleTurn) {
 	test.t.Helper()
-	test.compare(fieldName+" turn", exp.turn, got.Turn)
-	test.compare(fieldName+" current tick", exp.currentTick, got.CurrentTick)
-	test.compare(fieldName+" name", exp.name, got.Name)
-	test.compare(fieldName+" party", string(exp.party), string(got.Party))
+	test.compare(fieldName+" turn", e.turn, got.Turn)
+	test.compare(fieldName+" current tick", e.currentTick, got.CurrentTick)
+	test.compare(fieldName+" name", e.name, got.Name)
+	test.compare(fieldName+" party", string(e.party), string(got.Party))
 }

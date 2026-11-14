@@ -29,7 +29,7 @@ func TestGetSubmenu(t *testing.T) {
 					"opened by - overdrive commands": 1,
 				},
 			},
-			Unique: newExpUnique(1, "summon"),
+			Unique:    newExpUnique(1, "summon"),
 			topmenu:   h.GetInt32Ptr(1),
 			users:     []int32{6},
 			abilities: []int32{390, 391, 392, 393, 394, 395, 396, 397},
@@ -48,7 +48,7 @@ func TestGetSubmenu(t *testing.T) {
 					"abilities": 22,
 				},
 			},
-			Unique: newExpUnique(3, "special"),
+			Unique:    newExpUnique(3, "special"),
 			topmenu:   h.GetInt32Ptr(1),
 			users:     []int32{1, 3},
 			abilities: []int32{23, 27, 32, 33, 38, 41, 44},
@@ -63,7 +63,7 @@ func TestGetSubmenu(t *testing.T) {
 					"abilities": 0,
 				},
 			},
-			Unique: newExpUnique(9, "use"),
+			Unique:    newExpUnique(9, "use"),
 			topmenu:   nil,
 			users:     []int32{1},
 			abilities: []int32{},
@@ -82,7 +82,7 @@ func TestGetSubmenu(t *testing.T) {
 					"abilities": 0,
 				},
 			},
-			Unique: newExpUnique(12, "gil yojimbo"),
+			Unique:    newExpUnique(12, "gil yojimbo"),
 			topmenu:   h.GetInt32Ptr(1),
 			users:     []int32{19},
 			abilities: []int32{},
@@ -94,7 +94,7 @@ func TestGetSubmenu(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetSubmenu", testSrv.HandleSubmenus, compareSubmenus)
+	testSingleResources(t, tests, "GetSubmenu", testSrv.HandleSubmenus)
 }
 
 func TestRetrieveSubmenus(t *testing.T) {

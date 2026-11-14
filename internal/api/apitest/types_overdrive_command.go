@@ -19,12 +19,12 @@ func (e OverdriveCommand) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareOverdriveCommands(test test, exp OverdriveCommand, got apitypes.OverdriveCommand) {
+func (e OverdriveCommand) Compare(test test, got apitypes.OverdriveCommand) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compare("rank", exp.rank, got.Rank)
-	test.compIDAPIResource("user", apilookups.E.CharacterClasses.Endpoint, exp.user, got.User)
-	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	test.compIDAPIResource("open submenu", apilookups.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
-	test.checkResIDsInSlice("overdrives", apilookups.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compare("rank", e.rank, got.Rank)
+	test.compIDAPIResource("user", apilookups.E.CharacterClasses.Endpoint, e.user, got.User)
+	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.topmenu, got.Topmenu)
+	test.compIDAPIResource("open submenu", apilookups.E.Submenus.Endpoint, e.openSubmenu, got.OpenSubmenu)
+	test.checkResIDsInSlice("overdrives", apilookups.E.Overdrives.Endpoint, e.overdrives, got.Overdrives)
 }

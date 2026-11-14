@@ -117,7 +117,7 @@ func TestGetPlayerUnit(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetPlayerUnits", testSrv.HandlePlayerUnits, comparePlayerUnits)
+	testSingleResources(t, tests, "GetPlayerUnits", testSrv.HandlePlayerUnits)
 }
 
 func TestRetrievePlayerUnits(t *testing.T) {

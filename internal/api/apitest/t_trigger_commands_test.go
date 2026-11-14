@@ -32,7 +32,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					"monster-formations":                 3,
 				},
 			},
-			NameVer:        newExpNameVer(4, "talk", 1),
+			NameVer:           newExpNameVer(4, "talk", 1),
 			rank:              h.GetInt32Ptr(3),
 			appearsInHelpBar:  true,
 			canCopyCat:        false,
@@ -83,7 +83,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					"monster-formations":                1,
 				},
 			},
-			NameVer:        newExpNameVer(6, "talk", 3),
+			NameVer:           newExpNameVer(6, "talk", 3),
 			rank:              h.GetInt32Ptr(3),
 			appearsInHelpBar:  true,
 			canCopyCat:        false,
@@ -133,7 +133,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					"monster-formations":  1,
 				},
 			},
-			NameVer:        newExpNameVer(12, "struggle", 0),
+			NameVer:           newExpNameVer(12, "struggle", 0),
 			rank:              h.GetInt32Ptr(3),
 			appearsInHelpBar:  true,
 			canCopyCat:        false,
@@ -180,7 +180,7 @@ func TestGetTriggerCommand(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetTriggerCommand", testSrv.HandleTriggerCommands, compareTriggerCommands)
+	testSingleResources(t, tests, "GetTriggerCommand", testSrv.HandleTriggerCommands)
 }
 
 func TestGetMultipleTriggerCommands(t *testing.T) {

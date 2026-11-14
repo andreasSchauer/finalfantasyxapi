@@ -25,19 +25,19 @@ func (e Item) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareItems(test test, exp Item, got apitypes.Item) {
+func (e Item) Compare(test test, got apitypes.Item) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compIDAPIResource("untyped item", apilookups.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
-	test.compare("category", string(exp.category), got.Category)
-	test.checkTestStructsInSlice("monsters", exp.monsters, got.Monsters, compareMonItemAmts)
-	test.checkResAmtsID("treasures", exp.treasures, got.Treasures)
-	test.checkResIDsInSlice("shops", apilookups.E.Shops.Endpoint, exp.shops, got.Shops)
-	test.checkResAmtsID("quests", exp.quests, got.Quests)
-	test.checkResAmtsID("blitzball prizes", exp.blitzballPrizes, got.BlitzballPrizes)
-	test.checkResAmtsID("aeon learn abilities", exp.aeonLearnAbilities, got.AeonLearnAbilities)
-	test.checkResAmts("auto abilities", exp.autoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice("mixes", apilookups.E.Mixes.Endpoint, exp.mixes, got.Mixes)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compIDAPIResource("untyped item", apilookups.E.AllItems.Endpoint, e.untypedItem, got.UntypedItem)
+	test.compare("category", string(e.category), got.Category)
+	test.checkTestStructsInSlice("monsters", e.monsters, got.Monsters)
+	test.checkResAmtsID("treasures", e.treasures, got.Treasures)
+	test.checkResIDsInSlice("shops", apilookups.E.Shops.Endpoint, e.shops, got.Shops)
+	test.checkResAmtsID("quests", e.quests, got.Quests)
+	test.checkResAmtsID("blitzball prizes", e.blitzballPrizes, got.BlitzballPrizes)
+	test.checkResAmtsID("aeon learn abilities", e.aeonLearnAbilities, got.AeonLearnAbilities)
+	test.checkResAmts("auto abilities", e.autoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice("mixes", apilookups.E.Mixes.Endpoint, e.mixes, got.Mixes)
 }
 
 type testMonItemAmts struct {
@@ -53,19 +53,19 @@ type testMonItemAmts struct {
 	other               int32
 }
 
-func (t testMonItemAmts) GetIndex() int {
-	return t.index
+func (e testMonItemAmts) GetIndex() int {
+	return e.index
 }
 
-func compareMonItemAmts(test test, fieldName string, exp testMonItemAmts, got apitypes.MonItemAmts) {
+func (e testMonItemAmts) Compare(test test, fieldName string, got apitypes.MonItemAmts) {
 	test.t.Helper()
-	test.compIDAPIResource(fieldName+" - monster", apilookups.E.Monsters.Endpoint, exp.monster, got.Monster)
-	test.compare(fieldName+" - steal common", exp.stealCommon, got.StealCommon)
-	test.compare(fieldName+" - steal rare", exp.stealRare, got.StealRare)
-	test.compare(fieldName+" - drop common", exp.dropCommon, got.DropCommon)
-	test.compare(fieldName+" - drop rare", exp.dropRare, got.DropRare)
-	test.compare(fieldName+" - secondary drop common", exp.secondaryDropCommon, got.SecondaryDropCommon)
-	test.compare(fieldName+" - secondary drop rare", exp.secondaryDropRare, got.SecondaryDropRare)
-	test.compare(fieldName+" - bribe", exp.bribe, got.Bribe)
-	test.compare(fieldName+" - other", exp.other, got.Other)
+	test.compIDAPIResource(fieldName+" - monster", apilookups.E.Monsters.Endpoint, e.monster, got.Monster)
+	test.compare(fieldName+" - steal common", e.stealCommon, got.StealCommon)
+	test.compare(fieldName+" - steal rare", e.stealRare, got.StealRare)
+	test.compare(fieldName+" - drop common", e.dropCommon, got.DropCommon)
+	test.compare(fieldName+" - drop rare", e.dropRare, got.DropRare)
+	test.compare(fieldName+" - secondary drop common", e.secondaryDropCommon, got.SecondaryDropCommon)
+	test.compare(fieldName+" - secondary drop rare", e.secondaryDropRare, got.SecondaryDropRare)
+	test.compare(fieldName+" - bribe", e.bribe, got.Bribe)
+	test.compare(fieldName+" - other", e.other, got.Other)
 }

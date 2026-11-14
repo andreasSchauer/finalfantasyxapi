@@ -28,7 +28,7 @@ func TestGetAeonCommand(t *testing.T) {
 					"possible abilities 0 - abilities": 6,
 				},
 			},
-			Unique:   newExpUnique(1, "pay"),
+			Unique:      newExpUnique(1, "pay"),
 			user:        19,
 			topmenu:     h.GetInt32Ptr(1),
 			openSubmenu: h.GetInt32Ptr(12),
@@ -50,7 +50,7 @@ func TestGetAeonCommand(t *testing.T) {
 					"possible abilities 2 - abilities": 17,
 				},
 			},
-			Unique:   newExpUnique(2, "do as you will."),
+			Unique:      newExpUnique(2, "do as you will."),
 			user:        4,
 			topmenu:     h.GetInt32Ptr(1),
 			openSubmenu: nil,
@@ -78,7 +78,7 @@ func TestGetAeonCommand(t *testing.T) {
 					"possible abilities 0 - abilities": 10,
 				},
 			},
-			Unique:   newExpUnique(7, "defense!"),
+			Unique:      newExpUnique(7, "defense!"),
 			user:        21,
 			topmenu:     h.GetInt32Ptr(1),
 			openSubmenu: nil,
@@ -91,7 +91,7 @@ func TestGetAeonCommand(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetAeonCommand", testSrv.HandleAeonCommands, compareAeonCommands)
+	testSingleResources(t, tests, "GetAeonCommand", testSrv.HandleAeonCommands)
 }
 
 func TestRetrieveAeonCommands(t *testing.T) {

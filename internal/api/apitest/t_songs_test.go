@@ -46,7 +46,7 @@ func TestGetSong(t *testing.T) {
 					"fmvs":             0,
 				},
 			},
-			Unique:         newExpUnique(44, "twilight"),
+			Unique:            newExpUnique(44, "twilight"),
 			composer:          h.GetStrPtr("junya nakano"),
 			arranger:          h.GetStrPtr("junya nakano"),
 			durationInSeconds: 280,
@@ -96,7 +96,7 @@ func TestGetSong(t *testing.T) {
 					"fmvs":             1,
 				},
 			},
-			Unique:         newExpUnique(78, "a fleeting dream"),
+			Unique:            newExpUnique(78, "a fleeting dream"),
 			composer:          h.GetStrPtr("nobuo uematsu"),
 			arranger:          h.GetStrPtr("masashi hamauzu"),
 			durationInSeconds: 264,
@@ -149,7 +149,7 @@ func TestGetSong(t *testing.T) {
 					"fmvs":             1,
 				},
 			},
-			Unique:         newExpUnique(80, "challenge"),
+			Unique:            newExpUnique(80, "challenge"),
 			composer:          h.GetStrPtr("masashi hamauzu"),
 			arranger:          h.GetStrPtr("masashi hamauzu"),
 			durationInSeconds: 258,
@@ -159,7 +159,7 @@ func TestGetSong(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetSongs", testSrv.HandleSongs, compareSongs)
+	testSingleResources(t, tests, "GetSongs", testSrv.HandleSongs)
 }
 
 func TestRetrieveSongs(t *testing.T) {

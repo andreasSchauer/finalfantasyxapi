@@ -18,13 +18,13 @@ func (e AeonCommand) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAeonCommands(test test, exp AeonCommand, got apitypes.AeonCommand) {
+func (e AeonCommand) Compare(test test, got apitypes.AeonCommand) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compIDAPIResource("user", apilookups.E.CharacterClasses.Endpoint, exp.user, got.User)
-	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	test.compIDAPIResourcePtrs("open submenu", apilookups.E.Submenus.Endpoint, exp.openSubmenu, got.OpenSubmenu)
-	test.compTestStructSlices("possible abilities", exp.possibleAbilities, got.PossibleAbilities, comparePosAbilityList)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compIDAPIResource("user", apilookups.E.CharacterClasses.Endpoint, e.user, got.User)
+	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.topmenu, got.Topmenu)
+	test.compIDAPIResourcePtrs("open submenu", apilookups.E.Submenus.Endpoint, e.openSubmenu, got.OpenSubmenu)
+	test.compTestStructSlices("possible abilities", e.possibleAbilities, got.PossibleAbilities)
 }
 
 type PossibleAbilityList struct {
@@ -32,8 +32,8 @@ type PossibleAbilityList struct {
 	abilities []int32
 }
 
-func comparePosAbilityList(test test, fieldName string, exp PossibleAbilityList, got apitypes.PossibleAbilityList) {
+func (e PossibleAbilityList) Compare(test test, fieldName string, got apitypes.PossibleAbilityList) {
 	test.t.Helper()
-	test.compIDAPIResource(fieldName+" - user", apilookups.E.CharacterClasses.Endpoint, exp.user, got.User)
-	test.checkResIDsInSlice(fieldName+" - abilities", apilookups.E.Abilities.Endpoint, exp.abilities, got.Abilities)
+	test.compIDAPIResource(fieldName+" - user", apilookups.E.CharacterClasses.Endpoint, e.user, got.User)
+	test.checkResIDsInSlice(fieldName+" - abilities", apilookups.E.Abilities.Endpoint, e.abilities, got.Abilities)
 }

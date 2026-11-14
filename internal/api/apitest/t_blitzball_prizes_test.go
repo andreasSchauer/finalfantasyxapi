@@ -41,9 +41,9 @@ func TestGetBlitzballPrize(t *testing.T) {
 					"items": 8,
 				},
 			},
-			IDOnly: newExpIDOnly(1),
-			category:  "league",
-			slot:      "1st",
+			IDOnly:   newExpIDOnly(1),
+			category: "league",
+			slot:     "1st",
 			items: []testPossibleItem{
 				newTestPossibleItem(1, 69, 1, 15),
 				newTestPossibleItem(4, 53, 1, 10),
@@ -59,9 +59,9 @@ func TestGetBlitzballPrize(t *testing.T) {
 					"items": 3,
 				},
 			},
-			IDOnly: newExpIDOnly(8),
-			category:  "tournament",
-			slot:      "top-scorer",
+			IDOnly:   newExpIDOnly(8),
+			category: "tournament",
+			slot:     "top-scorer",
 			items: []testPossibleItem{
 				newTestPossibleItem(0, 5, 1, 20),
 				newTestPossibleItem(2, 101, 1, 20),
@@ -69,7 +69,7 @@ func TestGetBlitzballPrize(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetBlitzballPrize", testSrv.HandleBlitzballPrizes, compareBlitzballPrizes)
+	testSingleResources(t, tests, "GetBlitzballPrize", testSrv.HandleBlitzballPrizes)
 }
 
 func TestRetrieveBlitzballPrizes(t *testing.T) {

@@ -65,7 +65,7 @@ func TestGetQuest(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetQuests", testSrv.HandleQuests, compareQuests)
+	testSingleResources(t, tests, "GetQuests", testSrv.HandleQuests)
 }
 
 func TestRetrieveQuests(t *testing.T) {

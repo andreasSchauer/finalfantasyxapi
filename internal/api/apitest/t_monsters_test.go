@@ -300,7 +300,7 @@ func TestGetMonster(t *testing.T) {
 					"other items": 3,
 				},
 			},
-			NameVer:   newExpNameVer(156, "magic urn", 1),
+			NameVer:      newExpNameVer(156, "magic urn", 1),
 			agility:      nil,
 			regenAmounts: nil,
 			items: &testMonItems{
@@ -1148,7 +1148,7 @@ func TestGetMonster(t *testing.T) {
 					"formation": 1,
 				},
 			},
-			NameVer: newExpNameVer(87, "evil eye", 1),
+			NameVer:    newExpNameVer(87, "evil eye", 1),
 			areas:      []int32{159},
 			formations: []int32{134},
 		},
@@ -1180,7 +1180,7 @@ func TestGetMonster(t *testing.T) {
 					"formation": 2,
 				},
 			},
-			NameVer: newExpNameVer(87, "evil eye", 1),
+			NameVer:    newExpNameVer(87, "evil eye", 1),
 			areas:      []int32{159},
 			formations: []int32{128, 132},
 		},
@@ -1212,7 +1212,7 @@ func TestGetMonster(t *testing.T) {
 					"formation": 2,
 				},
 			},
-			NameVer: newExpNameVer(87, "evil eye", 1),
+			NameVer:    newExpNameVer(87, "evil eye", 1),
 			areas:      []int32{154, 157},
 			formations: []int32{128, 132},
 		},
@@ -1251,7 +1251,7 @@ func TestGetMonster(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetMonster", testSrv.HandleMonsters, compareMonsters)
+	testSingleResources(t, tests, "GetMonster", testSrv.HandleMonsters)
 }
 
 func TestGetMultipleMonsters(t *testing.T) {

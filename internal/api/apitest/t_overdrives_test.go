@@ -28,7 +28,7 @@ func TestGetOverdrive(t *testing.T) {
 					"overdrive abilities": 7,
 				},
 			},
-			Unique:          newExpUnique(15, "status reels"),
+			Unique:             newExpUnique(15, "status reels"),
 			rank:               h.GetInt32Ptr(4),
 			countdownInSec:     h.GetInt32Ptr(20),
 			user:               7,
@@ -43,7 +43,7 @@ func TestGetOverdrive(t *testing.T) {
 					"overdrive abilities": 3,
 				},
 			},
-			Unique:          newExpUnique(50, "banishing blade"),
+			Unique:             newExpUnique(50, "banishing blade"),
 			rank:               h.GetInt32Ptr(6),
 			countdownInSec:     h.GetInt32Ptr(4),
 			user:               10,
@@ -58,7 +58,7 @@ func TestGetOverdrive(t *testing.T) {
 					"overdrive abilities": 1,
 				},
 			},
-			Unique:          newExpUnique(64, "burning soul"),
+			Unique:             newExpUnique(64, "burning soul"),
 			rank:               h.GetInt32Ptr(6),
 			countdownInSec:     nil,
 			user:               11,
@@ -73,7 +73,7 @@ func TestGetOverdrive(t *testing.T) {
 					"overdrive abilities": 1,
 				},
 			},
-			Unique:          newExpUnique(124, "delta attack"),
+			Unique:             newExpUnique(124, "delta attack"),
 			rank:               h.GetInt32Ptr(6),
 			countdownInSec:     nil,
 			user:               4,
@@ -82,7 +82,7 @@ func TestGetOverdrive(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetOverdrive", testSrv.HandleOverdrives, compareOverdrives)
+	testSingleResources(t, tests, "GetOverdrive", testSrv.HandleOverdrives)
 }
 
 func TestRetrieveOverdrives(t *testing.T) {

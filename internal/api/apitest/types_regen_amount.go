@@ -10,12 +10,12 @@ type testRegenAmount struct {
 	healedHP int32
 }
 
-func (t testRegenAmount) GetIndex() int {
-	return t.index
+func (e testRegenAmount) GetIndex() int {
+	return e.index
 }
 
-func compareRegenAmounts(test test, fieldName string, exp testRegenAmount, got apitypes.RegenAmount) {
+func (e testRegenAmount) Compare(test test, fieldName string, got apitypes.RegenAmount) {
 	test.t.Helper()
-	test.compare(fieldName+" - ticks", exp.ticks, got.Ticks)
-	test.compare(fieldName+" - healed hp", exp.healedHP, got.HealedHP)
+	test.compare(fieldName+" - ticks", e.ticks, got.Ticks)
+	test.compare(fieldName+" - healed hp", e.healedHP, got.HealedHP)
 }

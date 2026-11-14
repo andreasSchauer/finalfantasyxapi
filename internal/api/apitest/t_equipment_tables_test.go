@@ -30,7 +30,7 @@ func TestGetEquipmentTable(t *testing.T) {
 					"equipment":                 1,
 				},
 			},
-			IDOnly:               newExpIDOnly(2),
+			IDOnly:                  newExpIDOnly(2),
 			celestialWeapon:         h.GetInt32Ptr(2),
 			specificCharacter:       h.GetInt32Ptr(2),
 			requiredAutoAbilities:   []int32{51, 49, 44, 43},
@@ -49,7 +49,7 @@ func TestGetEquipmentTable(t *testing.T) {
 					"equipment":                 7,
 				},
 			},
-			IDOnly:               newExpIDOnly(20),
+			IDOnly:                  newExpIDOnly(20),
 			celestialWeapon:         nil,
 			specificCharacter:       nil,
 			requiredAutoAbilities:   []int32{45},
@@ -70,7 +70,7 @@ func TestGetEquipmentTable(t *testing.T) {
 					"equipment": 7,
 				},
 			},
-			IDOnly:             newExpIDOnly(145),
+			IDOnly:                newExpIDOnly(145),
 			celestialWeapon:       nil,
 			specificCharacter:     nil,
 			requiredAutoAbilities: []int32{},
@@ -91,7 +91,7 @@ func TestGetEquipmentTable(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetEquipmentTable", testSrv.HandleEquipmentTables, compareEquipmentTables)
+	testSingleResources(t, tests, "GetEquipmentTable", testSrv.HandleEquipmentTables)
 }
 
 func TestRetrieveEquipmentTables(t *testing.T) {

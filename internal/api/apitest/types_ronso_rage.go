@@ -16,9 +16,9 @@ func (e RonsoRage) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareRonsoRages(test test, exp RonsoRage, got apitypes.RonsoRage) {
+func (e RonsoRage) Compare(test test, got apitypes.RonsoRage) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compIDAPIResource("overdrive", apilookups.E.Overdrives.Endpoint, exp.overdrive, got.Overdrive)
-	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, exp.monsters, got.Monsters)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compIDAPIResource("overdrive", apilookups.E.Overdrives.Endpoint, e.overdrive, got.Overdrive)
+	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.monsters, got.Monsters)
 }

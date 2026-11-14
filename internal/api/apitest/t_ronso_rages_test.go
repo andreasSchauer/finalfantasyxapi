@@ -26,7 +26,7 @@ func TestGetRonsoRage(t *testing.T) {
 					"monsters": 5,
 				},
 			},
-			Unique: newExpUnique(4, "self destruct"),
+			Unique:    newExpUnique(4, "self destruct"),
 			overdrive: 39,
 			monsters:  []int32{38, 109, 167, 176, 245},
 		},
@@ -38,13 +38,13 @@ func TestGetRonsoRage(t *testing.T) {
 					"monsters": 3,
 				},
 			},
-			Unique: newExpUnique(8, "doom"),
+			Unique:    newExpUnique(8, "doom"),
 			overdrive: 43,
 			monsters:  []int32{154, 167, 210},
 		},
 	}
 
-	testSingleResources(t, tests, "GetRonsoRage", testSrv.HandleRonsoRages, compareRonsoRages)
+	testSingleResources(t, tests, "GetRonsoRage", testSrv.HandleRonsoRages)
 }
 
 func TestRetrieveRonsoRages(t *testing.T) {

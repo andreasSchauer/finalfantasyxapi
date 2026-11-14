@@ -29,7 +29,7 @@ func TestGetAgilityTier(t *testing.T) {
 					"char min icvs": 9,
 				},
 			},
-			IDOnly:   newExpIDOnly(15),
+			IDOnly:      newExpIDOnly(15),
 			fromAgility: 35,
 			toAgility:   43,
 			tickSpeed:   7,
@@ -86,7 +86,7 @@ func TestGetAgilityTier(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetAgilityTier", testSrv.HandleAgilityTiers, compareAgilityTiers)
+	testSingleResources(t, tests, "GetAgilityTier", testSrv.HandleAgilityTiers)
 }
 
 func TestRetrieveAgilityTiers(t *testing.T) {

@@ -282,7 +282,7 @@ func TestGetCharacter(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetCharacter", testSrv.HandleCharacters, compareCharacters)
+	testSingleResources(t, tests, "GetCharacter", testSrv.HandleCharacters)
 }
 
 func TestRetrieveCharacters(t *testing.T) {

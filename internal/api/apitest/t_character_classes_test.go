@@ -176,7 +176,7 @@ func TestGetCharacterClass(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetCharacterClass", testSrv.HandleCharacterClasses, compareCharacterClasses)
+	testSingleResources(t, tests, "GetCharacterClass", testSrv.HandleCharacterClasses)
 }
 
 func TestRetrieveCharacterClasses(t *testing.T) {

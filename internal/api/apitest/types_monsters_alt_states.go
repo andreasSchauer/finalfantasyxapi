@@ -13,10 +13,10 @@ type testAppliedState struct {
 	appliedStatus *int32
 }
 
-func compareMonsterAppliedStates(test test, _ string, exp testAppliedState, got apitypes.AppliedState) {
-	test.compare("applied state condition", exp.condition, got.Condition)
-	test.compare("applied state isTemporary", exp.isTemporary, got.IsTemporary)
-	test.compIDAPIResourcePtrs("applied status", apilookups.E.StatusConditions.Endpoint, exp.appliedStatus, got.AppliedStatus)
+func (e testAppliedState) Compare(test test, _ string, got apitypes.AppliedState) {
+	test.compare("applied state condition", e.condition, got.Condition)
+	test.compare("applied state isTemporary", e.isTemporary, got.IsTemporary)
+	test.compIDAPIResourcePtrs("applied status", apilookups.E.StatusConditions.Endpoint, e.appliedStatus, got.AppliedStatus)
 }
 
 type testDefaultState struct {
@@ -43,9 +43,9 @@ func testMonsterDefaultState(test test, exp *testDefaultState, gotStates []apity
 	}
 
 	test.compare("default state is temporary", exp.IsTemporary, got.IsTemporary)
-	test.compTestStructPtrs("alt state change", exp.Change, got.Change, compareAltStateChanges)
-	test.compTestStructPtrs("alt state gain", exp.Gain, got.Gain, compareAltStateGains)
-	test.compTestStructPtrs("alt state loss", exp.Loss, got.Loss, compareAltStateLosses)
+	test.compTestStructPtrs("alt state change", exp.Change, got.Change)
+	test.compTestStructPtrs("alt state gain", exp.Gain, got.Gain)
+	test.compTestStructPtrs("alt state loss", exp.Loss, got.Loss)
 }
 
 type testAltStateChange struct {
@@ -54,12 +54,12 @@ type testAltStateChange struct {
 	ElemResists []testElemResist
 }
 
-func compareAltStateChanges(test test, fieldName string, exp testAltStateChange, got apitypes.AltStateChange) {
+func ( e testAltStateChange) Compare(test test, fieldName string, got apitypes.AltStateChange) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
-	test.compare(desc+"distance", exp.Distance, got.Distance)
-	test.checkResAmtTypes(desc+"base stats", exp.BaseStats, got.BaseStats)
-	test.compTestStructSlices(desc+"elemental resists", exp.ElemResists, got.ElemResists, compareElemResists)
+	test.compare(desc+"distance", e.Distance, got.Distance)
+	test.checkResAmtTypes(desc+"base stats", e.BaseStats, got.BaseStats)
+	test.compTestStructSlices(desc+"elemental resists", e.ElemResists, got.ElemResists)
 }
 
 type testAltStateGain struct {
@@ -70,14 +70,14 @@ type testAltStateGain struct {
 	Status           *apitypes.InflictedStatus
 }
 
-func compareAltStateGains(test test, fieldName string, exp testAltStateGain, got apitypes.AltStateGain) {
+func (e testAltStateGain) Compare(test test, fieldName string, got apitypes.AltStateGain) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
-	test.checkResIDsInSlice(desc+"properties", apilookups.E.Properties.Endpoint, exp.Properties, got.Properties)
-	test.checkResIDsInSlice(desc+"auto-abilities", apilookups.E.AutoAbilities.Endpoint, exp.AutoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice(desc+"status immunities", apilookups.E.StatusConditions.Endpoint, exp.StatusImmunities, got.StatusImmunities)
-	test.checkResAmtTypes(desc+"status resists", exp.StatusResists, got.StatusResists)
-	test.compStructPtrs(desc+"added status", exp.Status, got.Status)
+	test.checkResIDsInSlice(desc+"properties", apilookups.E.Properties.Endpoint, e.Properties, got.Properties)
+	test.checkResIDsInSlice(desc+"auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice(desc+"status immunities", apilookups.E.StatusConditions.Endpoint, e.StatusImmunities, got.StatusImmunities)
+	test.checkResAmtTypes(desc+"status resists", e.StatusResists, got.StatusResists)
+	test.compStructPtrs(desc+"added status", e.Status, got.Status)
 }
 
 type testAltStateLoss struct {
@@ -87,11 +87,11 @@ type testAltStateLoss struct {
 	Status           *int32
 }
 
-func compareAltStateLosses(test test, fieldName string, exp testAltStateLoss, got apitypes.AltStateLoss) {
+func (e testAltStateLoss) Compare(test test, fieldName string, got apitypes.AltStateLoss) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
-	test.checkResIDsInSlice(desc+"properties", apilookups.E.Properties.Endpoint, exp.Properties, got.Properties)
-	test.checkResIDsInSlice(desc+"auto-abilities", apilookups.E.AutoAbilities.Endpoint, exp.AutoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice(desc+"status immunities", apilookups.E.StatusConditions.Endpoint, exp.StatusImmunities, got.StatusImmunities)
-	test.compIDAPIResourcePtrs(desc+"removed status", apilookups.E.StatusConditions.Endpoint, exp.Status, got.Status)
+	test.checkResIDsInSlice(desc+"properties", apilookups.E.Properties.Endpoint, e.Properties, got.Properties)
+	test.checkResIDsInSlice(desc+"auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice(desc+"status immunities", apilookups.E.StatusConditions.Endpoint, e.StatusImmunities, got.StatusImmunities)
+	test.compIDAPIResourcePtrs(desc+"removed status", apilookups.E.StatusConditions.Endpoint, e.Status, got.Status)
 }

@@ -30,7 +30,7 @@ func TestGetTopmenu(t *testing.T) {
 					"aeon commands":      9,
 				},
 			},
-			Unique:         newExpUnique(1, "main"),
+			Unique:            newExpUnique(1, "main"),
 			submenus:          []int32{1, 2, 3, 4, 5, 6, 12},
 			abilities:         []int32{88, 89, 90, 91, 92, 93, 374, 375},
 			overdriveCommands: []int32{},
@@ -49,7 +49,7 @@ func TestGetTopmenu(t *testing.T) {
 					"aeon commands":      0,
 				},
 			},
-			Unique:         newExpUnique(2, "right"),
+			Unique:            newExpUnique(2, "right"),
 			submenus:          []int32{7, 8},
 			abilities:         []int32{377, 378, 379, 380, 381, 382},
 			overdriveCommands: []int32{},
@@ -68,7 +68,7 @@ func TestGetTopmenu(t *testing.T) {
 					"aeon commands":      0,
 				},
 			},
-			Unique:         newExpUnique(3, "left"),
+			Unique:            newExpUnique(3, "left"),
 			submenus:          []int32{},
 			abilities:         []int32{362, 364, 367, 370, 372, 373},
 			overdriveCommands: []int32{1, 2, 3, 4, 5, 6, 7},
@@ -77,7 +77,7 @@ func TestGetTopmenu(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetTopmenu", testSrv.HandleTopmenus, compareTopmenus)
+	testSingleResources(t, tests, "GetTopmenu", testSrv.HandleTopmenus)
 }
 
 func TestRetrieveTopmenus(t *testing.T) {

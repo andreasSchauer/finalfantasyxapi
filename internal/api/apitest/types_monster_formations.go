@@ -24,19 +24,19 @@ func (e MonsterFormation) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareMonsterFormations(test test, exp MonsterFormation, got apitypes.MonsterFormation) {
+func (e MonsterFormation) Compare(test test, got apitypes.MonsterFormation) {
 	test.t.Helper()
-	test.compareExpIDOnly(exp.IDOnly, got.ID)
-	test.compare("category", exp.category, got.Category)
-	test.compare("is forced ambush", exp.isForcedAmbush, got.IsForcedAmbush)
-	test.compare("can escape", exp.canEscape, got.CanEscape)
-	test.compare("ap", exp.ap, got.AP)
-	test.compare("ap overkill", exp.apOverkill, got.ApOverkill)
-	test.compare("gil", exp.gil, got.Gil)
-	test.compIDAPIResourcePtrs("boss song", apilookups.E.Songs.Endpoint, exp.bossMusic, got.BossMusic)
-	test.checkResAmts("monsters", exp.monsters, got.Monsters)
-	test.compTestStructSlices("trigger commands", exp.triggerCommands, got.TriggerCommands, compareFormationTCs)
-	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.compareExpIDOnly(e.IDOnly, got.ID)
+	test.compare("category", e.category, got.Category)
+	test.compare("is forced ambush", e.isForcedAmbush, got.IsForcedAmbush)
+	test.compare("can escape", e.canEscape, got.CanEscape)
+	test.compare("ap", e.ap, got.AP)
+	test.compare("ap overkill", e.apOverkill, got.ApOverkill)
+	test.compare("gil", e.gil, got.Gil)
+	test.compIDAPIResourcePtrs("boss song", apilookups.E.Songs.Endpoint, e.bossMusic, got.BossMusic)
+	test.checkResAmts("monsters", e.monsters, got.Monsters)
+	test.compTestStructSlices("trigger commands", e.triggerCommands, got.TriggerCommands)
+	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, e.areas, got.Areas)
 }
 
 type testFormationTC struct {
@@ -44,11 +44,11 @@ type testFormationTC struct {
 	Users   []int32
 }
 
-func compareFormationTCs(test test, fieldName string, exp testFormationTC, got apitypes.FormationTriggerCommand) {
+func (e testFormationTC) Compare(test test, fieldName string, got apitypes.FormationTriggerCommand) {
 	test.t.Helper()
 	tcEndpoint := apilookups.E.TriggerCommands.Endpoint
 	charClassesEndpoint := apilookups.E.CharacterClasses.Endpoint
 
-	test.compIDAPIResource(fieldName+" - tc ability", tcEndpoint, exp.Ability, got.Ability)
-	test.checkResIDsInSlice(fieldName+" - tc users", charClassesEndpoint, exp.Users, got.Users)
+	test.compIDAPIResource(fieldName+" - tc ability", tcEndpoint, e.Ability, got.Ability)
+	test.checkResIDsInSlice(fieldName+" - tc users", charClassesEndpoint, e.Users, got.Users)
 }

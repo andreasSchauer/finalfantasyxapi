@@ -18,12 +18,12 @@ func (e Sublocation) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSublocations(test test, exp Sublocation, got apitypes.Sublocation) {
+func (e Sublocation) Compare(test test, got apitypes.Sublocation) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compIDAPIResource("location", apilookups.E.Locations.Endpoint, exp.parentLocation, got.ParentLocation)
-	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)
-	test.checkResIDsInSlice("connected sublocations", apilookups.E.Sublocations.Endpoint, exp.connectedSublocations, got.ConnectedSublocations)
-	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, exp.areas, got.Areas)
-	compareLocRel(test, exp.LocRel, got.LocRel)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compIDAPIResource("location", apilookups.E.Locations.Endpoint, e.parentLocation, got.ParentLocation)
+	test.compTestStructPtrs("music", e.music, got.Music)
+	test.checkResIDsInSlice("connected sublocations", apilookups.E.Sublocations.Endpoint, e.connectedSublocations, got.ConnectedSublocations)
+	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, e.areas, got.Areas)
+	e.LocRel.Compare(test, got.LocRel)
 }

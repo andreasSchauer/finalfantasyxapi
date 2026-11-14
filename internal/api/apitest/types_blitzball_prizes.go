@@ -16,10 +16,10 @@ func (e BlitzballPrize) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareBlitzballPrizes(test test, exp BlitzballPrize, got apitypes.BlitzballPrize) {
+func (e BlitzballPrize) Compare(test test, got apitypes.BlitzballPrize) {
 	test.t.Helper()
-	test.compareExpIDOnly(exp.IDOnly, got.ID)
-	test.compare("category", exp.category, got.Category)
-	test.compare("slot", exp.slot, got.Slot)
-	test.checkTestStructsInSlice("items", exp.items, got.Items, comparePossibleItems)
+	test.compareExpIDOnly(e.IDOnly, got.ID)
+	test.compare("category", e.category, got.Category)
+	test.compare("slot", e.slot, got.Slot)
+	test.checkTestStructsInSlice("items", e.items, got.Items)
 }

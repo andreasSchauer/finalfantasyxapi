@@ -27,7 +27,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 					"overdrives": 8,
 				},
 			},
-			Unique:   newExpUnique(2, "grand summon"),
+			Unique:      newExpUnique(2, "grand summon"),
 			rank:        0,
 			user:        6,
 			topmenu:     h.GetInt32Ptr(3),
@@ -42,7 +42,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 					"overdrives": 4,
 				},
 			},
-			Unique:   newExpUnique(3, "slots"),
+			Unique:      newExpUnique(3, "slots"),
 			rank:        5,
 			user:        7,
 			topmenu:     h.GetInt32Ptr(3),
@@ -57,7 +57,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 					"overdrives": 64,
 				},
 			},
-			Unique:   newExpUnique(7, "mix"),
+			Unique:      newExpUnique(7, "mix"),
 			rank:        5,
 			user:        11,
 			topmenu:     h.GetInt32Ptr(3),
@@ -66,7 +66,7 @@ func TestGetOverdriveCommand(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetOverdriveCommand", testSrv.HandleOverdriveCommands, compareOverdriveCommands)
+	testSingleResources(t, tests, "GetOverdriveCommand", testSrv.HandleOverdriveCommands)
 }
 
 func TestRetrieveOverdriveCommands(t *testing.T) {

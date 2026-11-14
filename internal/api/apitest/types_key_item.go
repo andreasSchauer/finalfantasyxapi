@@ -22,14 +22,14 @@ func (e KeyItem) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareKeyItems(test test, exp KeyItem, got apitypes.KeyItem) {
+func (e KeyItem) Compare(test test, got apitypes.KeyItem) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compIDAPIResource("untyped item", apilookups.E.AllItems.Endpoint, exp.untypedItem, got.UntypedItem)
-	test.compare("category", string(exp.category), got.Category)
-	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
-	test.compIDAPIResourcePtrs("primer", apilookups.E.Primers.Endpoint, exp.primer, got.Primer)
-	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, exp.areas, got.Areas)
-	test.checkResIDsInSlice("treasures", apilookups.E.Treasures.Endpoint, exp.treasures, got.Treasures)
-	test.checkResIDsInSlice("quests", apilookups.E.Quests.Endpoint, exp.quests, got.Quests)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compIDAPIResource("untyped item", apilookups.E.AllItems.Endpoint, e.untypedItem, got.UntypedItem)
+	test.compare("category", string(e.category), got.Category)
+	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, e.celestialWeapon, got.CelestialWeapon)
+	test.compIDAPIResourcePtrs("primer", apilookups.E.Primers.Endpoint, e.primer, got.Primer)
+	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, e.areas, got.Areas)
+	test.checkResIDsInSlice("treasures", apilookups.E.Treasures.Endpoint, e.treasures, got.Treasures)
+	test.checkResIDsInSlice("quests", apilookups.E.Quests.Endpoint, e.quests, got.Quests)
 }

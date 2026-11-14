@@ -17,17 +17,17 @@ type LocRel struct {
 	music      *testLocMusic
 }
 
-func compareLocRel(test test, exp LocRel, got apitypes.LocRel) {
+func (e LocRel) Compare(test test, got apitypes.LocRel) {
 	test.t.Helper()
-	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)
-	test.checkResIDsInSlice("characters", apilookups.E.Characters.Endpoint, exp.characters, got.Characters)
-	test.checkResIDsInSlice("aeons", apilookups.E.Aeons.Endpoint, exp.aeons, got.Aeons)
-	test.checkResIDsInSlice("shops", apilookups.E.Shops.Endpoint, exp.shops, got.Shops)
-	test.checkResIDsInSlice("treasures", apilookups.E.Treasures.Endpoint, exp.treasures, got.Treasures)
-	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, exp.monsters, got.Monsters)
-	test.checkResIDsInSlice("formations", apilookups.E.MonsterFormations.Endpoint, exp.formations, got.Formations)
-	test.checkResIDsInSlice("quests", apilookups.E.Quests.Endpoint, exp.quests, got.Quests)
-	test.checkResIDsInSlice("fmvs", apilookups.E.FMVs.Endpoint, exp.fmvs, got.FMVs)
+	test.compTestStructPtrs("music", e.music, got.Music)
+	test.checkResIDsInSlice("characters", apilookups.E.Characters.Endpoint, e.characters, got.Characters)
+	test.checkResIDsInSlice("aeons", apilookups.E.Aeons.Endpoint, e.aeons, got.Aeons)
+	test.checkResIDsInSlice("shops", apilookups.E.Shops.Endpoint, e.shops, got.Shops)
+	test.checkResIDsInSlice("treasures", apilookups.E.Treasures.Endpoint, e.treasures, got.Treasures)
+	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.monsters, got.Monsters)
+	test.checkResIDsInSlice("formations", apilookups.E.MonsterFormations.Endpoint, e.formations, got.Formations)
+	test.checkResIDsInSlice("quests", apilookups.E.Quests.Endpoint, e.quests, got.Quests)
+	test.checkResIDsInSlice("fmvs", apilookups.E.FMVs.Endpoint, e.fmvs, got.FMVs)
 }
 
 type testLocMusic struct {
@@ -37,12 +37,12 @@ type testLocMusic struct {
 	bossMusic []int32
 }
 
-func compareLocMusic(test test, _ string, exp testLocMusic, got apitypes.LocBasedMusic) {
+func (e testLocMusic) Compare(test test, _ string, got apitypes.LocBasedMusic) {
 	test.t.Helper()
 	songsEndpoint := apilookups.E.Songs.Endpoint
 
-	test.checkResIDsInSlice("bg music", songsEndpoint, exp.bgMusic, got.BackgroundMusic)
-	test.checkResIDsInSlice("cues music", songsEndpoint, exp.cuesMusic, got.Cues)
-	test.checkResIDsInSlice("fmvs music", songsEndpoint, exp.fmvsMusic, got.FMVs)
-	test.checkResIDsInSlice("boss music", songsEndpoint, exp.bossMusic, got.BossMusic)
+	test.checkResIDsInSlice("bg music", songsEndpoint, e.bgMusic, got.BackgroundMusic)
+	test.checkResIDsInSlice("cues music", songsEndpoint, e.cuesMusic, got.Cues)
+	test.checkResIDsInSlice("fmvs music", songsEndpoint, e.fmvsMusic, got.FMVs)
+	test.checkResIDsInSlice("boss music", songsEndpoint, e.bossMusic, got.BossMusic)
 }

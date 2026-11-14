@@ -17,11 +17,11 @@ func (e Location) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareLocations(test test, exp Location, got apitypes.Location) {
+func (e Location) Compare(test test, got apitypes.Location) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compTestStructPtrs("music", exp.music, got.Music, compareLocMusic)
-	test.checkResIDsInSlice("connected locations", apilookups.E.Locations.Endpoint, exp.connectedLocations, got.ConnectedLocations)
-	test.checkResIDsInSlice("sublocations", apilookups.E.Sublocations.Endpoint, exp.sublocations, got.Sublocations)
-	compareLocRel(test, exp.LocRel, got.LocRel)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compTestStructPtrs("music", e.music, got.Music)
+	test.checkResIDsInSlice("connected locations", apilookups.E.Locations.Endpoint, e.connectedLocations, got.ConnectedLocations)
+	test.checkResIDsInSlice("sublocations", apilookups.E.Sublocations.Endpoint, e.sublocations, got.Sublocations)
+	e.LocRel.Compare(test, got.LocRel)
 }

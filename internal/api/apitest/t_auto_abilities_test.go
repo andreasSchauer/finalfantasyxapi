@@ -32,7 +32,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:    newExpUnique(50, "gillionaire"),
+			Unique:       newExpUnique(50, "gillionaire"),
 			monstersDrop: []int32{302},
 			monstersItems: []testMonItemAmts{
 				{
@@ -75,7 +75,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:    newExpUnique(2, "piercing"),
+			Unique:       newExpUnique(2, "piercing"),
 			monstersDrop: []int32{201, 206, 210, 243, 248, 287},
 			monstersItems: []testMonItemAmts{
 				{
@@ -108,7 +108,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:    newExpUnique(2, "piercing"),
+			Unique:       newExpUnique(2, "piercing"),
 			monstersDrop: []int32{16, 25, 41, 54, 78, 139, 163, 183, 192},
 			monstersItems: []testMonItemAmts{
 				{
@@ -146,7 +146,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:    newExpUnique(45, "triple ap"),
+			Unique:       newExpUnique(45, "triple ap"),
 			monstersDrop: []int32{},
 			monstersItems: []testMonItemAmts{
 				{
@@ -179,7 +179,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   1,
 				},
 			},
-			Unique:        newExpUnique(55, "fire ward"),
+			Unique:           newExpUnique(55, "fire ward"),
 			monstersDrop:     []int32{109, 118, 119},
 			monstersItems:    []testMonItemAmts{},
 			shopsPreAirship:  []int32{4, 10},
@@ -201,7 +201,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   1,
 				},
 			},
-			Unique:    newExpUnique(55, "fire ward"),
+			Unique:       newExpUnique(55, "fire ward"),
 			monstersDrop: []int32{38, 53, 141, 151, 176, 191, 192, 239},
 			monstersItems: []testMonItemAmts{
 				{
@@ -236,7 +236,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   3,
 				},
 			},
-			Unique:    newExpUnique(10, "darkstrike"),
+			Unique:       newExpUnique(10, "darkstrike"),
 			monstersDrop: []int32{185, 200, 257, 279, 285},
 			monstersItems: []testMonItemAmts{
 				{
@@ -275,7 +275,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:    newExpUnique(89, "sos nulblaze"),
+			Unique:       newExpUnique(89, "sos nulblaze"),
 			monstersDrop: []int32{31, 71, 102, 143, 158, 181},
 			monstersItems: []testMonItemAmts{
 				{
@@ -320,7 +320,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          4,
 				},
 			},
-			Unique:    newExpUnique(1, "sensor"),
+			Unique:       newExpUnique(1, "sensor"),
 			monstersDrop: []int32{16, 64, 99},
 			monstersItems: []testMonItemAmts{
 				{
@@ -360,7 +360,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          0,
 				},
 			},
-			Unique:    newExpUnique(1, "sensor"),
+			Unique:       newExpUnique(1, "sensor"),
 			monstersDrop: []int32{16, 64, 99},
 			monstersItems: []testMonItemAmts{
 				{
@@ -401,7 +401,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          1,
 				},
 			},
-			Unique:    newExpUnique(1, "sensor"),
+			Unique:       newExpUnique(1, "sensor"),
 			monstersDrop: []int32{11, 47, 94, 113},
 			monstersItems: []testMonItemAmts{
 				{
@@ -442,7 +442,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          0,
 				},
 			},
-			Unique:    newExpUnique(51, "break damage limit"),
+			Unique:       newExpUnique(51, "break damage limit"),
 			monstersDrop: []int32{299},
 			monstersItems: []testMonItemAmts{
 				{
@@ -480,7 +480,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          0,
 				},
 			},
-			Unique:    newExpUnique(51, "break damage limit"),
+			Unique:       newExpUnique(51, "break damage limit"),
 			monstersDrop: []int32{293, 298, 302, 305},
 			monstersItems: []testMonItemAmts{
 				{
@@ -505,7 +505,7 @@ func TestGetAutoAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetAutoAbility", testSrv.HandleAutoAbilities, compareAutoAbilities)
+	testSingleResources(t, tests, "GetAutoAbility", testSrv.HandleAutoAbilities)
 }
 
 func TestRetrieveAutoAbilities(t *testing.T) {

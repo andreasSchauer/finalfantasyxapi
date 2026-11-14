@@ -1,8 +1,6 @@
 package apitest
 
 import (
-	"errors"
-
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 )
 
@@ -188,16 +186,4 @@ func (test test) compPageURL(fieldName string, expPathPtr, gotURLPtr *string) {
 	}
 
 	test.compare(fieldName, expURLPtr, gotURLPtr)
-}
-
-func (test test) compareSlices[T any](fieldName string, exp, got []T) {
-	test.t.Helper()
-	err := test.checkSliceBasic(fieldName, exp, got)
-	if errors.Is(err, errIgnoredField) {
-		return
-	}
-
-	for i := range exp {
-		test.compare(fieldName, exp[i], got[i])
-	}
 }

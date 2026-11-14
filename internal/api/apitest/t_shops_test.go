@@ -47,9 +47,9 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 14,
 				},
 			},
-			IDOnly: newExpIDOnly(2),
-			area:      47,
-			category:  database.ShopCategoryStandard,
+			IDOnly:   newExpIDOnly(2),
+			area:     47,
+			category: database.ShopCategoryStandard,
 			preAirship: &testSubShop{
 				items: []testShopItem{},
 				equipment: []testShopEquipment{
@@ -127,9 +127,9 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 5,
 				},
 			},
-			IDOnly: newExpIDOnly(16),
-			area:      121,
-			category:  database.ShopCategoryStandard,
+			IDOnly:   newExpIDOnly(16),
+			area:     121,
+			category: database.ShopCategoryStandard,
 			preAirship: &testSubShop{
 				items: []testShopItem{
 					newTestShopItem(0, 1, 100),
@@ -198,9 +198,9 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 0,
 				},
 			},
-			IDOnly: newExpIDOnly(31),
-			area:      200,
-			category:  database.ShopCategoryTravelAgency,
+			IDOnly:   newExpIDOnly(31),
+			area:     200,
+			category: database.ShopCategoryTravelAgency,
 			preAirship: &testSubShop{
 				items: []testShopItem{
 					newTestShopItem(1, 2, 500),
@@ -232,7 +232,7 @@ func TestGetShop(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetShop", testSrv.HandleShops, compareShops)
+	testSingleResources(t, tests, "GetShop", testSrv.HandleShops)
 }
 
 func TestRetrieveShops(t *testing.T) {

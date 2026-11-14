@@ -16,9 +16,9 @@ func (e FMV) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareFMVs(test test, exp FMV, got apitypes.FMV) {
+func (e FMV) Compare(test test, got apitypes.FMV) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, exp.area, got.Area)
-	test.compIDAPIResourcePtrs("song", apilookups.E.Songs.Endpoint, exp.song, got.Song)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.area, got.Area)
+	test.compIDAPIResourcePtrs("song", apilookups.E.Songs.Endpoint, e.song, got.Song)
 }

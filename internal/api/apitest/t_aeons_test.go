@@ -259,7 +259,7 @@ func TestGetAeon(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetAeon", testSrv.HandleAeons, compareAeons)
+	testSingleResources(t, tests, "GetAeon", testSrv.HandleAeons)
 }
 
 func TestRetrieveAeons(t *testing.T) {

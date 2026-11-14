@@ -18,12 +18,12 @@ func (e Mix) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareMixes(test test, exp Mix, got apitypes.Mix) {
+func (e Mix) Compare(test test, got apitypes.Mix) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compare("category", string(exp.category), got.Category)
-	test.compIDAPIResource("overdrive", apilookups.E.Overdrives.Endpoint, exp.overdrive, got.Overdrive)
-	test.checkTestStructsInSlice("combinations", exp.combinations, got.Combinations, compareMixCombinations)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compare("category", string(e.category), got.Category)
+	test.compIDAPIResource("overdrive", apilookups.E.Overdrives.Endpoint, e.overdrive, got.Overdrive)
+	test.checkTestStructsInSlice("combinations", e.combinations, got.Combinations)
 }
 
 type testMixCombination struct {
@@ -32,12 +32,12 @@ type testMixCombination struct {
 	secondItem int32
 }
 
-func (mc testMixCombination) GetIndex() int {
-	return mc.index
+func (e testMixCombination) GetIndex() int {
+	return e.index
 }
 
-func compareMixCombinations(test test, fieldName string, exp testMixCombination, got apitypes.MixCombination) {
+func (e testMixCombination) Compare(test test, fieldName string, got apitypes.MixCombination) {
 	test.t.Helper()
-	test.compIDAPIResource(fieldName+" - first item", apilookups.E.Items.Endpoint, exp.firstItem, got.FirstItem)
-	test.compIDAPIResource(fieldName+" - second item", apilookups.E.Items.Endpoint, exp.secondItem, got.SecondItem)
+	test.compIDAPIResource(fieldName+" - first item", apilookups.E.Items.Endpoint, e.firstItem, got.FirstItem)
+	test.compIDAPIResource(fieldName+" - second item", apilookups.E.Items.Endpoint, e.secondItem, got.SecondItem)
 }

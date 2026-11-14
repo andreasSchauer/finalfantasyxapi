@@ -18,13 +18,13 @@ func (e Submenu) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSubmenus(test test, exp Submenu, got apitypes.Submenu) {
+func (e Submenu) Compare(test test, got apitypes.Submenu) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, exp.topmenu, got.Topmenu)
-	test.checkResIDsInSlice("users", apilookups.E.CharacterClasses.Endpoint, exp.users, got.Users)
-	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, exp.abilities, got.Abilities)
-	test.compTestStructPtrs("opened by", exp.openedBy, got.OpenedBy, compareMenuOpen)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.topmenu, got.Topmenu)
+	test.checkResIDsInSlice("users", apilookups.E.CharacterClasses.Endpoint, e.users, got.Users)
+	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, e.abilities, got.Abilities)
+	test.compTestStructPtrs("opened by", e.openedBy, got.OpenedBy)
 }
 
 type MenuOpen struct {
@@ -33,9 +33,9 @@ type MenuOpen struct {
 	overdriveCommands []int32
 }
 
-func compareMenuOpen(test test, fieldName string, exp MenuOpen, got apitypes.MenuOpen) {
+func (e MenuOpen) Compare(test test, fieldName string, got apitypes.MenuOpen) {
 	test.t.Helper()
-	test.compIDAPIResourcePtrs(fieldName+" - ability", apilookups.E.Abilities.Endpoint, exp.ability, got.Ability)
-	test.compIDAPIResourcePtrs(fieldName+" - aeon command", apilookups.E.AeonCommands.Endpoint, exp.aeonCommand, got.AeonCommand)
-	test.checkResIDsInSlice(fieldName+" - overdrive commands", apilookups.E.OverdriveCommands.Endpoint, exp.overdriveCommands, got.OverdriveCommands)
+	test.compIDAPIResourcePtrs(fieldName+" - ability", apilookups.E.Abilities.Endpoint, e.ability, got.Ability)
+	test.compIDAPIResourcePtrs(fieldName+" - aeon command", apilookups.E.AeonCommands.Endpoint, e.aeonCommand, got.AeonCommand)
+	test.checkResIDsInSlice(fieldName+" - overdrive commands", apilookups.E.OverdriveCommands.Endpoint, e.overdriveCommands, got.OverdriveCommands)
 }

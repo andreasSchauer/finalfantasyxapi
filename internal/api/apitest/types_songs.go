@@ -22,17 +22,17 @@ func (e Song) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSongs(test test, exp Song, got apitypes.Song) {
+func (e Song) Compare(test test, got apitypes.Song) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compare("composer", exp.composer, got.Composer)
-	test.compare("arranger", exp.arranger, got.Arranger)
-	test.compare("duration in seconds", exp.durationInSeconds, got.DurationInSeconds)
-	test.compare("can loop", exp.canLoop, got.CanLoop)
-	test.checkTestStructsInSlice("background music", exp.backgroundMusic, got.BackgroundMusic, compareBackgroundMusic)
-	test.checkTestStructsInSlice("cues", exp.cues, got.Cues, compareCues)
-	test.checkResIDsInSlice("boss fights", apilookups.E.MonsterFormations.Endpoint, exp.bossFights, got.BossFights)
-	test.checkResIDsInSlice("fmvs", apilookups.E.FMVs.Endpoint, exp.fmvs, got.FMVs)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compare("composer", e.composer, got.Composer)
+	test.compare("arranger", e.arranger, got.Arranger)
+	test.compare("duration in seconds", e.durationInSeconds, got.DurationInSeconds)
+	test.compare("can loop", e.canLoop, got.CanLoop)
+	test.checkTestStructsInSlice("background music", e.backgroundMusic, got.BackgroundMusic)
+	test.checkTestStructsInSlice("cues", e.cues, got.Cues)
+	test.checkResIDsInSlice("boss fights", apilookups.E.MonsterFormations.Endpoint, e.bossFights, got.BossFights)
+	test.checkResIDsInSlice("fmvs", apilookups.E.FMVs.Endpoint, e.fmvs, got.FMVs)
 }
 
 type testBackgroundMusic struct {
@@ -41,14 +41,14 @@ type testBackgroundMusic struct {
 	areas                  []int32
 }
 
-func (t testBackgroundMusic) GetIndex() int {
-	return t.index
+func (e testBackgroundMusic) GetIndex() int {
+	return e.index
 }
 
-func compareBackgroundMusic(test test, _ string, exp testBackgroundMusic, got apitypes.BackgroundMusic) {
+func (e testBackgroundMusic) Compare(test test, _ string, got apitypes.BackgroundMusic) {
 	test.t.Helper()
-	test.compare("bg music - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
-	test.checkResIDsInSlice("bg music - areas", apilookups.E.Areas.Endpoint, exp.areas, got.Areas)
+	test.compare("bg music - replaces encounter music", e.replacesEncounterMusic, got.ReplacesEncounterMusic)
+	test.checkResIDsInSlice("bg music - areas", apilookups.E.Areas.Endpoint, e.areas, got.Areas)
 }
 
 type testCue struct {
@@ -59,14 +59,14 @@ type testCue struct {
 	replacesBGMusic        *string
 }
 
-func (t testCue) GetIndex() int {
-	return t.index
+func (e testCue) GetIndex() int {
+	return e.index
 }
 
-func compareCues(test test, fieldName string, exp testCue, got apitypes.Cue) {
+func (e testCue) Compare(test test, fieldName string, got apitypes.Cue) {
 	test.t.Helper()
-	test.compIDAPIResourcePtrs(fieldName+" - trigger area", apilookups.E.Areas.Endpoint, exp.triggerArea, got.TriggerArea)
-	test.checkResIDsInSlice(fieldName+" - included areas", apilookups.E.Areas.Endpoint, exp.includedAreas, got.IncludedAreas)
-	test.compare(fieldName+" - replaces encounter music", exp.replacesEncounterMusic, got.ReplacesEncounterMusic)
-	test.compare(fieldName+" - replaces bg music", exp.replacesBGMusic, got.ReplacesBGMusic)
+	test.compIDAPIResourcePtrs(fieldName+" - trigger area", apilookups.E.Areas.Endpoint, e.triggerArea, got.TriggerArea)
+	test.checkResIDsInSlice(fieldName+" - included areas", apilookups.E.Areas.Endpoint, e.includedAreas, got.IncludedAreas)
+	test.compare(fieldName+" - replaces encounter music", e.replacesEncounterMusic, got.ReplacesEncounterMusic)
+	test.compare(fieldName+" - replaces bg music", e.replacesBGMusic, got.ReplacesBGMusic)
 }

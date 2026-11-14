@@ -28,7 +28,7 @@ func TestGetProperty(t *testing.T) {
 					"monsters":       53,
 				},
 			},
-			Unique:     newExpUnique(1, "armored"),
+			Unique:        newExpUnique(1, "armored"),
 			autoAbilities: []int32{},
 			monsters:      []int32{5, 29, 79, 107, 197, 277, 292},
 		},
@@ -42,7 +42,7 @@ func TestGetProperty(t *testing.T) {
 					"monsters":       0,
 				},
 			},
-			Unique:     newExpUnique(4, "piercing"),
+			Unique:        newExpUnique(4, "piercing"),
 			autoAbilities: []int32{2},
 			monsters:      []int32{},
 		},
@@ -56,13 +56,13 @@ func TestGetProperty(t *testing.T) {
 					"monsters":       123,
 				},
 			},
-			Unique:     newExpUnique(11, "delayproof"),
+			Unique:        newExpUnique(11, "delayproof"),
 			autoAbilities: []int32{54},
 			monsters:      []int32{5, 33, 70, 136, 193, 235, 262, 282, 307},
 		},
 	}
 
-	testSingleResources(t, tests, "GetProperty", testSrv.HandleProperties, compareProperties)
+	testSingleResources(t, tests, "GetProperty", testSrv.HandleProperties)
 }
 
 func TestRetrieveProperties(t *testing.T) {

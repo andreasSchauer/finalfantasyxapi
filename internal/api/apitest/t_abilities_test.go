@@ -32,7 +32,7 @@ func TestGetAbility(t *testing.T) {
 					"battle interactions 1 inflicted status conditions": 1,
 				},
 			},
-			NameVer:       newExpNameVer(736, "self destruct", 1),
+			NameVer:          newExpNameVer(736, "self destruct", 1),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: true,
 			canCopyCat:       false,
@@ -108,7 +108,7 @@ func TestGetAbility(t *testing.T) {
 					"battle interactions 0 inflicted status conditions": 5,
 				},
 			},
-			NameVer:       newExpNameVer(269, "hyper mighty g", 0),
+			NameVer:          newExpNameVer(269, "hyper mighty g", 0),
 			rank:             h.GetInt32Ptr(6),
 			appearsInHelpBar: true,
 			canCopyCat:       false,
@@ -161,7 +161,7 @@ func TestGetAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:       newExpNameVer(72, "blizzard", 0),
+			NameVer:          newExpNameVer(72, "blizzard", 0),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: true,
 			canCopyCat:       true,
@@ -206,7 +206,7 @@ func TestGetAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetAbility", testSrv.HandleAbilities, compareAbilities)
+	testSingleResources(t, tests, "GetAbility", testSrv.HandleAbilities)
 }
 
 func TestRetrieveAbilities(t *testing.T) {

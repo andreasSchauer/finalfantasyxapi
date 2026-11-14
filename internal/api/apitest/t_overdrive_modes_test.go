@@ -44,7 +44,7 @@ func TestGetOverdriveMode(t *testing.T) {
 					"actions": 7,
 				},
 			},
-			Unique:   newExpUnique(14, "ally"),
+			Unique:      newExpUnique(14, "ally"),
 			description: "Charges on character's turn.",
 			modeType:    "per-action",
 			fillRate:    h.GetFloat32Ptr(0.03),
@@ -66,10 +66,10 @@ func TestGetOverdriveMode(t *testing.T) {
 					"description": true,
 				},
 			},
-			Unique: newExpUnique(3, "comrade"),
-			effect:    "The gauge fills when an ally takes damage.",
-			modeType:  "formula",
-			fillRate:  nil,
+			Unique:   newExpUnique(3, "comrade"),
+			effect:   "The gauge fills when an ally takes damage.",
+			modeType: "formula",
+			fillRate: nil,
 			actionsAmount: map[string]int32{
 				"tidus": 300,
 				"wakka": 100,
@@ -89,12 +89,12 @@ func TestGetOverdriveMode(t *testing.T) {
 					"actions": 0,
 				},
 			},
-			Unique: newExpUnique(1, "stoic"),
-			modeType:  "formula",
+			Unique:   newExpUnique(1, "stoic"),
+			modeType: "formula",
 		},
 	}
 
-	testSingleResources(t, tests, "GetOverdriveMode", testSrv.HandleOverdriveModes, compareOverdriveModes)
+	testSingleResources(t, tests, "GetOverdriveMode", testSrv.HandleOverdriveModes)
 }
 
 func TestRetrieveOverdriveModes(t *testing.T) {

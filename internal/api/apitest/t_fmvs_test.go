@@ -39,8 +39,8 @@ func TestGetFMV(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			Unique: newExpUnique(9, "fear on the sea"),
-			area:      42,
-			song:      h.GetInt32Ptr(16),
+			area:   42,
+			song:   h.GetInt32Ptr(16),
 		},
 		{
 			testGeneral: testGeneral{
@@ -48,12 +48,12 @@ func TestGetFMV(t *testing.T) {
 				expectedStatus: http.StatusOK,
 			},
 			Unique: newExpUnique(38, "the last chapter"),
-			area:      218,
-			song:      h.GetInt32Ptr(77),
+			area:   218,
+			song:   h.GetInt32Ptr(77),
 		},
 	}
 
-	testSingleResources(t, tests, "GetFMV", testSrv.HandleFMVs, compareFMVs)
+	testSingleResources(t, tests, "GetFMV", testSrv.HandleFMVs)
 }
 
 func TestRetrieveFMVs(t *testing.T) {

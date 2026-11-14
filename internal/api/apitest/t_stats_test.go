@@ -33,7 +33,7 @@ func TestGetStat(t *testing.T) {
 					"status conditions":   0,
 				},
 			},
-			Unique:          newExpUnique(2, "mp"),
+			Unique:             newExpUnique(2, "mp"),
 			spheres:            []int32{2, 6, 11, 17, 26},
 			autoAbilities:      []int32{115, 116, 117, 118},
 			playerAbilities:    []int32{},
@@ -58,7 +58,7 @@ func TestGetStat(t *testing.T) {
 					"properties":          0,
 				},
 			},
-			Unique:          newExpUnique(3, "strength"),
+			Unique:             newExpUnique(3, "strength"),
 			spheres:            []int32{1, 6, 11, 18, 26},
 			autoAbilities:      []int32{29, 30, 31, 32, 51},
 			playerAbilities:    []int32{11, 27},
@@ -85,12 +85,12 @@ func TestGetStat(t *testing.T) {
 					"properties": 2,
 				},
 			},
-			Unique:  newExpUnique(4, "defense"),
+			Unique:     newExpUnique(4, "defense"),
 			properties: []int32{1, 4},
 		},
 	}
 
-	testSingleResources(t, tests, "GetStat", testSrv.HandleStats, compareStats)
+	testSingleResources(t, tests, "GetStat", testSrv.HandleStats)
 }
 
 func TestRetrieveStats(t *testing.T) {

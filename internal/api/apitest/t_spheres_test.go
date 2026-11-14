@@ -32,7 +32,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:   newExpUnique(4, "ability sphere"),
+			Unique:      newExpUnique(4, "ability sphere"),
 			item:        73,
 			createdNode: nil,
 			monsters: []testMonItemAmts{
@@ -68,7 +68,7 @@ func TestGetSphere(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(16, "hp sphere"),
-			item:      85,
+			item:   85,
 			createdNode: &apitypes.CreatedNode{
 				Node:  "hp",
 				Value: 300,
@@ -117,7 +117,7 @@ func TestGetSphere(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(16, "hp sphere"),
-			item:      85,
+			item:   85,
 			createdNode: &apitypes.CreatedNode{
 				Node:  "hp",
 				Value: 300,
@@ -153,7 +153,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:       newExpUnique(26, "clear sphere"),
+			Unique:          newExpUnique(26, "clear sphere"),
 			item:            95,
 			createdNode:     nil,
 			monsters:        []testMonItemAmts{},
@@ -175,7 +175,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:       newExpUnique(26, "clear sphere"),
+			Unique:          newExpUnique(26, "clear sphere"),
 			item:            95,
 			createdNode:     nil,
 			monsters:        []testMonItemAmts{},
@@ -197,7 +197,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:   newExpUnique(2, "mana sphere"),
+			Unique:      newExpUnique(2, "mana sphere"),
 			item:        71,
 			createdNode: nil,
 			monsters: []testMonItemAmts{
@@ -228,7 +228,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:   newExpUnique(2, "mana sphere"),
+			Unique:      newExpUnique(2, "mana sphere"),
 			item:        71,
 			createdNode: nil,
 			monsters: []testMonItemAmts{
@@ -254,7 +254,7 @@ func TestGetSphere(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetSphere", testSrv.HandleSpheres, compareSpheres)
+	testSingleResources(t, tests, "GetSphere", testSrv.HandleSpheres)
 }
 
 func TestRetrieveSpheres(t *testing.T) {

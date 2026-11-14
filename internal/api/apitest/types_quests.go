@@ -18,12 +18,12 @@ func (e Sidequest) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSidequests(test test, exp Sidequest, got apitypes.Sidequest) {
+func (e Sidequest) Compare(test test, got apitypes.Sidequest) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compIDAPIResource("untyped quest", apilookups.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
-	test.compTestStructPtrs("completion", exp.completion, got.Completion, compareQuestCompletions)
-	test.checkResIDsInSlice("subquests", apilookups.E.Subquests.Endpoint, exp.subquests, got.Subquests)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compIDAPIResource("untyped quest", apilookups.E.Quests.Endpoint, e.untypedQuest, got.UntypedQuest)
+	test.compTestStructPtrs("completion", e.completion, got.Completion)
+	test.checkResIDsInSlice("subquests", apilookups.E.Subquests.Endpoint, e.subquests, got.Subquests)
 }
 
 type Subquest struct {
@@ -39,13 +39,13 @@ func (e Subquest) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareSubquests(test test, exp Subquest, got apitypes.Subquest) {
+func (e Subquest) Compare(test test, got apitypes.Subquest) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compIDAPIResource("untyped quest", apilookups.E.Quests.Endpoint, exp.untypedQuest, got.UntypedQuest)
-	test.compIDAPIResource("parent sidequest", apilookups.E.Sidequests.Endpoint, exp.parentSidequest, got.ParentSidequest)
-	compareQuestCompletions(test, "completion", exp.completion, got.Completion)
-	test.compIDAPIResourcePtrs("arena creation", apilookups.E.ArenaCreations.Endpoint, exp.arenaCreation, got.ArenaCreation)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compIDAPIResource("untyped quest", apilookups.E.Quests.Endpoint, e.untypedQuest, got.UntypedQuest)
+	test.compIDAPIResource("parent sidequest", apilookups.E.Sidequests.Endpoint, e.parentSidequest, got.ParentSidequest)
+	e.completion.Compare(test, "completion", got.Completion)
+	test.compIDAPIResourcePtrs("arena creation", apilookups.E.ArenaCreations.Endpoint, e.arenaCreation, got.ArenaCreation)
 }
 
 type testQuestCompletion struct {
@@ -53,8 +53,8 @@ type testQuestCompletion struct {
 	reward testResAmount[apiresource.Typed]
 }
 
-func compareQuestCompletions(test test, fieldName string, exp testQuestCompletion, got apitypes.QuestCompletion) {
+func (e testQuestCompletion) Compare(test test, fieldName string, got apitypes.QuestCompletion) {
 	test.t.Helper()
-	test.checkResIDsInSlice(fieldName+" - areas", apilookups.E.Areas.Endpoint, exp.areas, got.Areas)
-	compareResAmounts(test, fieldName+" - rewards", exp.reward, got.Reward)
+	test.checkResIDsInSlice(fieldName+" - areas", apilookups.E.Areas.Endpoint, e.areas, got.Areas)
+	e.reward.Compare(test, fieldName+" - rewards", got.Reward)
 }

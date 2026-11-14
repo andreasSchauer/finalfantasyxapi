@@ -36,7 +36,7 @@ func TestGetElement(t *testing.T) {
 					"monsters absorb":     19,
 				},
 			},
-			Unique:          newExpUnique(2, "lightning"),
+			Unique:             newExpUnique(2, "lightning"),
 			statusProtection:   h.GetInt32Ptr(23),
 			autoAbilities:      []int32{6, 58, 59, 60},
 			playerAbilities:    []int32{70, 74, 78},
@@ -50,7 +50,7 @@ func TestGetElement(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetElement", testSrv.HandleElements, compareElements)
+	testSingleResources(t, tests, "GetElement", testSrv.HandleElements)
 }
 
 func TestRetrieveElements(t *testing.T) {

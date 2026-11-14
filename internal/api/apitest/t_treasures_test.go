@@ -56,7 +56,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			IDOnly:       newExpIDOnly(199),
+			IDOnly:          newExpIDOnly(199),
 			area:            158,
 			availability:    database.AvailabilityTypePreStory,
 			isAnimaTreasure: false,
@@ -75,7 +75,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			IDOnly:       newExpIDOnly(13),
+			IDOnly:          newExpIDOnly(13),
 			area:            15,
 			availability:    database.AvailabilityTypePreStory,
 			isAnimaTreasure: false,
@@ -94,7 +94,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			IDOnly:       newExpIDOnly(62),
+			IDOnly:          newExpIDOnly(62),
 			area:            60,
 			availability:    database.AvailabilityTypeAlways,
 			isAnimaTreasure: true,
@@ -115,7 +115,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			IDOnly:       newExpIDOnly(284),
+			IDOnly:          newExpIDOnly(284),
 			area:            212,
 			availability:    database.AvailabilityTypeAlways,
 			isAnimaTreasure: false,
@@ -132,7 +132,7 @@ func TestGetTreasure(t *testing.T) {
 				dontCheck:      map[string]bool{},
 				expLengths:     map[string]int{},
 			},
-			IDOnly:       newExpIDOnly(45),
+			IDOnly:          newExpIDOnly(45),
 			area:            42,
 			availability:    database.AvailabilityTypePost,
 			isAnimaTreasure: false,
@@ -146,7 +146,7 @@ func TestGetTreasure(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetTreasure", testSrv.HandleTreasures, compareTreasures)
+	testSingleResources(t, tests, "GetTreasure", testSrv.HandleTreasures)
 }
 
 func TestRetrieveTreasures(t *testing.T) {

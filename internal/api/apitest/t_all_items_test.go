@@ -26,7 +26,7 @@ func TestGetAllItem(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 			},
-			Unique: newExpUnique(4, "mega-potion"),
+			Unique:    newExpUnique(4, "mega-potion"),
 			typedItem: "/items/4",
 			itemType:  database.ItemTypeItem,
 			obtainableFrom: apitypes.ObtainableFrom{
@@ -43,7 +43,7 @@ func TestGetAllItem(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 			},
-			Unique: newExpUnique(111, "underdog's secret"),
+			Unique:    newExpUnique(111, "underdog's secret"),
 			typedItem: "/items/111",
 			itemType:  database.ItemTypeItem,
 			obtainableFrom: apitypes.ObtainableFrom{
@@ -60,7 +60,7 @@ func TestGetAllItem(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 			},
-			Unique: newExpUnique(130, "saturn sigil"),
+			Unique:    newExpUnique(130, "saturn sigil"),
 			typedItem: "/key-items/18",
 			itemType:  database.ItemTypeKeyItem,
 			obtainableFrom: apitypes.ObtainableFrom{
@@ -77,7 +77,7 @@ func TestGetAllItem(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 			},
-			Unique: newExpUnique(2, "hi-potion"),
+			Unique:    newExpUnique(2, "hi-potion"),
 			typedItem: "/items/2",
 			itemType:  database.ItemTypeItem,
 			obtainableFrom: apitypes.ObtainableFrom{
@@ -94,7 +94,7 @@ func TestGetAllItem(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 			},
-			Unique: newExpUnique(2, "hi-potion"),
+			Unique:    newExpUnique(2, "hi-potion"),
 			typedItem: "/items/2",
 			itemType:  database.ItemTypeItem,
 			obtainableFrom: apitypes.ObtainableFrom{
@@ -111,7 +111,7 @@ func TestGetAllItem(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 			},
-			Unique: newExpUnique(2, "hi-potion"),
+			Unique:    newExpUnique(2, "hi-potion"),
 			typedItem: "/items/2",
 			itemType:  database.ItemTypeItem,
 			obtainableFrom: apitypes.ObtainableFrom{
@@ -128,7 +128,7 @@ func TestGetAllItem(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 			},
-			Unique: newExpUnique(55, "chocobo wing"),
+			Unique:    newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
 			itemType:  database.ItemTypeItem,
 			obtainableFrom: apitypes.ObtainableFrom{
@@ -145,7 +145,7 @@ func TestGetAllItem(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 			},
-			Unique: newExpUnique(55, "chocobo wing"),
+			Unique:    newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
 			itemType:  database.ItemTypeItem,
 			obtainableFrom: apitypes.ObtainableFrom{
@@ -162,7 +162,7 @@ func TestGetAllItem(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 			},
-			Unique: newExpUnique(55, "chocobo wing"),
+			Unique:    newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
 			itemType:  database.ItemTypeItem,
 			obtainableFrom: apitypes.ObtainableFrom{
@@ -179,7 +179,7 @@ func TestGetAllItem(t *testing.T) {
 				expectedStatus: http.StatusOK,
 				dontCheck:      map[string]bool{},
 			},
-			Unique: newExpUnique(55, "chocobo wing"),
+			Unique:    newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
 			itemType:  database.ItemTypeItem,
 			obtainableFrom: apitypes.ObtainableFrom{
@@ -192,7 +192,7 @@ func TestGetAllItem(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetMasterItem", testSrv.HandleAllItems, compareMasterItems)
+	testSingleResources(t, tests, "GetMasterItem", testSrv.HandleAllItems)
 }
 
 func TestRetrieveAllItems(t *testing.T) {

@@ -24,17 +24,17 @@ func (e Treasure) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTreasures(test test, exp Treasure, got apitypes.Treasure) {
+func (e Treasure) Compare(test test, got apitypes.Treasure) {
 	test.t.Helper()
-	test.compareExpIDOnly(exp.IDOnly, got.ID)
-	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, exp.area, got.Area)
-	test.compare("availability", string(exp.availability), got.Availability)
-	test.compare("is anima treasure", exp.isAnimaTreasure, got.IsAnimaTreasure)
-	test.compare("treasure type", string(exp.treasureType), got.TreasureType)
-	test.compare("loot type", string(exp.lootType), got.LootType)
-	test.compare("gil amount", exp.gilAmount, got.GilAmount)
-	test.compTestStructSlices("items", exp.items, got.Items, compareResAmounts)
-	test.compTestStructPtrs("equipment", exp.equipment, got.Equipment, compareFoundEquipment)
+	test.compareExpIDOnly(e.IDOnly, got.ID)
+	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.area, got.Area)
+	test.compare("availability", string(e.availability), got.Availability)
+	test.compare("is anima treasure", e.isAnimaTreasure, got.IsAnimaTreasure)
+	test.compare("treasure type", string(e.treasureType), got.TreasureType)
+	test.compare("loot type", string(e.lootType), got.LootType)
+	test.compare("gil amount", e.gilAmount, got.GilAmount)
+	test.compTestStructSlices("items", e.items, got.Items)
+	test.compTestStructPtrs("equipment", e.equipment, got.Equipment)
 }
 
 type testFoundEquipment struct {
@@ -43,12 +43,12 @@ type testFoundEquipment struct {
 	emptySlotsAmount int32
 }
 
-func compareFoundEquipment(test test, fieldName string, exp testFoundEquipment, got apitypes.FoundEquipment) {
+func (e testFoundEquipment) Compare(test test, fieldName string, got apitypes.FoundEquipment) {
 	test.t.Helper()
 	enEndpoint := apilookups.E.Equipment.Endpoint
 	aaEndpoint := apilookups.E.AutoAbilities.Endpoint
 
-	test.compIDAPIResource(fieldName+" - equipment name", enEndpoint, exp.equipmentName, got.EquipmentName)
-	test.checkResIDsInSlice(fieldName+" - abilities", aaEndpoint, exp.abilities, got.Abilities)
-	test.compare(fieldName+" - empty slots amount", exp.emptySlotsAmount, got.EmptySlotsAmount)
+	test.compIDAPIResource(fieldName+" - equipment name", enEndpoint, e.equipmentName, got.EquipmentName)
+	test.checkResIDsInSlice(fieldName+" - abilities", aaEndpoint, e.abilities, got.Abilities)
+	test.compare(fieldName+" - empty slots amount", e.emptySlotsAmount, got.EmptySlotsAmount)
 }

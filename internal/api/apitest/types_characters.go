@@ -28,30 +28,30 @@ func (e Character) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareCharacters(test test, exp Character, got apitypes.Character) {
+func (e Character) Compare(test test, got apitypes.Character) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compIDAPIResource("untyped unit", apilookups.E.PlayerUnits.Endpoint, exp.untypedUnit, got.UntypedUnit)
-	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, exp.area, got.Area)
-	test.compare("weapon type", exp.weaponType, got.WeaponType)
-	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
-	test.compare("celestial formula", exp.celestialFormula, got.CelestialFormula)
-	test.compIDAPIResourcePtrs("overdrive command", apilookups.E.OverdriveCommands.Endpoint, exp.overdriveCommand, got.OverdriveCommand)
-	test.checkResIDsInSlice("character classes", apilookups.E.CharacterClasses.Endpoint, exp.characterClasses, got.CharacterClasses)
-	compareAgilityParams(test, "agility params", exp.agility, got.AgilityParameters)
-	test.checkResAmtTypes("base stats", exp.baseStats, got.BaseStats)
-	test.checkTestStructsInSlice("regen amounts", exp.regenAmounts, got.RegenAmounts, compareRegenAmounts)
-	test.checkResIDsInSlice("default abilities", apilookups.E.PlayerAbilities.Endpoint, exp.defaultPlayerAbilities, got.DefaultPlayerAbilities)
-	test.compTestStructPtrs("std sg", exp.stdSphereGrid, got.StdSphereGrid, compareSphereGrids)
-	test.compTestStructPtrs("exp sg", exp.expSphereGrid, got.ExpSphereGrid, compareSphereGrids)
-	test.checkResAmts("overdrive modes", exp.overdriveModes, got.OverdriveModes)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compIDAPIResource("untyped unit", apilookups.E.PlayerUnits.Endpoint, e.untypedUnit, got.UntypedUnit)
+	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.area, got.Area)
+	test.compare("weapon type", e.weaponType, got.WeaponType)
+	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, e.celestialWeapon, got.CelestialWeapon)
+	test.compare("celestial formula", e.celestialFormula, got.CelestialFormula)
+	test.compIDAPIResourcePtrs("overdrive command", apilookups.E.OverdriveCommands.Endpoint, e.overdriveCommand, got.OverdriveCommand)
+	test.checkResIDsInSlice("character classes", apilookups.E.CharacterClasses.Endpoint, e.characterClasses, got.CharacterClasses)
+	e.agility.Compare(test, "agility params", got.AgilityParameters)
+	test.checkResAmtTypes("base stats", e.baseStats, got.BaseStats)
+	test.checkTestStructsInSlice("regen amounts", e.regenAmounts, got.RegenAmounts)
+	test.checkResIDsInSlice("default abilities", apilookups.E.PlayerAbilities.Endpoint, e.defaultPlayerAbilities, got.DefaultPlayerAbilities)
+	test.compTestStructPtrs("std sg", e.stdSphereGrid, got.StdSphereGrid)
+	test.compTestStructPtrs("exp sg", e.expSphereGrid, got.ExpSphereGrid)
+	test.checkResAmts("overdrive modes", e.overdriveModes, got.OverdriveModes)
 }
 
 type SphereGrid struct {
 	playerAbilities []int32
 }
 
-func compareSphereGrids(test test, fieldName string, exp SphereGrid, got apitypes.SphereGrid) {
+func (e SphereGrid) Compare(test test, fieldName string, got apitypes.SphereGrid) {
 	test.t.Helper()
-	test.checkResIDsInSlice(fieldName+" abilities", apilookups.E.PlayerAbilities.Endpoint, exp.playerAbilities, got.PlayerAbilities)
+	test.checkResIDsInSlice(fieldName+" abilities", apilookups.E.PlayerAbilities.Endpoint, e.playerAbilities, got.PlayerAbilities)
 }

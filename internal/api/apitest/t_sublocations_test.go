@@ -62,7 +62,7 @@ func TestGetSublocation(t *testing.T) {
 					"fmvs":                   0,
 				},
 			},
-			Unique:             newExpUnique(35, "calm lands"),
+			Unique:                newExpUnique(35, "calm lands"),
 			parentLocation:        20,
 			connectedSublocations: []int32{26, 36, 38, 39},
 			areas:                 []int32{200, 201, 202, 203, 204, 205},
@@ -98,7 +98,7 @@ func TestGetSublocation(t *testing.T) {
 					"quests":                 0,
 				},
 			},
-			Unique:             newExpUnique(26, "macalania woods"),
+			Unique:                newExpUnique(26, "macalania woods"),
 			parentLocation:        15,
 			connectedSublocations: []int32{25, 27, 34, 35},
 			areas:                 []int32{141, 143, 146, 149, 153},
@@ -132,7 +132,7 @@ func TestGetSublocation(t *testing.T) {
 					"quests":                 0,
 				},
 			},
-			Unique:             newExpUnique(26, "macalania woods"),
+			Unique:                newExpUnique(26, "macalania woods"),
 			parentLocation:        15,
 			connectedSublocations: []int32{25, 27, 34, 35},
 			areas:                 []int32{141, 143, 146, 149, 153},
@@ -166,7 +166,7 @@ func TestGetSublocation(t *testing.T) {
 					"quests":                 5,
 				},
 			},
-			Unique:             newExpUnique(26, "macalania woods"),
+			Unique:                newExpUnique(26, "macalania woods"),
 			parentLocation:        15,
 			connectedSublocations: []int32{25, 27, 34, 35},
 			areas:                 []int32{141, 143, 146, 149, 153},
@@ -202,7 +202,7 @@ func TestGetSublocation(t *testing.T) {
 					"fmvs":                   2,
 				},
 			},
-			Unique:             newExpUnique(14, "stadium"),
+			Unique:                newExpUnique(14, "stadium"),
 			parentLocation:        8,
 			connectedSublocations: []int32{15},
 			areas:                 []int32{68, 69, 70, 71, 72, 73, 74},
@@ -248,7 +248,7 @@ func TestGetSublocation(t *testing.T) {
 					"fmvs":                   3,
 				},
 			},
-			Unique:             newExpUnique(7, "besaid"),
+			Unique:                newExpUnique(7, "besaid"),
 			parentLocation:        4,
 			connectedSublocations: []int32{8, 9},
 			areas:                 []int32{20, 24, 29, 31, 35},
@@ -270,7 +270,7 @@ func TestGetSublocation(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetSublocation", testSrv.HandleSublocations, compareSublocations)
+	testSingleResources(t, tests, "GetSublocation", testSrv.HandleSublocations)
 }
 
 func TestRetrieveSublocations(t *testing.T) {

@@ -31,7 +31,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			IDOnly:      newExpIDOnly(27),
+			IDOnly:         newExpIDOnly(27),
 			category:       "boss-fight",
 			isForcedAmbush: false,
 			canEscape:      false,
@@ -59,7 +59,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			IDOnly:      newExpIDOnly(77),
+			IDOnly:         newExpIDOnly(77),
 			category:       "random-encounter",
 			isForcedAmbush: false,
 			canEscape:      true,
@@ -82,7 +82,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 2,
 				},
 			},
-			IDOnly:      newExpIDOnly(137),
+			IDOnly:         newExpIDOnly(137),
 			category:       "boss-fight",
 			isForcedAmbush: false,
 			canEscape:      false,
@@ -118,7 +118,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			IDOnly:      newExpIDOnly(265),
+			IDOnly:         newExpIDOnly(265),
 			category:       "random-encounter",
 			isForcedAmbush: true,
 			canEscape:      true,
@@ -133,7 +133,7 @@ func TestGetMonsterFormation(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetMonsterFormation", testSrv.HandleMonsterFormations, compareMonsterFormations)
+	testSingleResources(t, tests, "GetMonsterFormation", testSrv.HandleMonsterFormations)
 }
 
 func TestRetrieveMonsterFormations(t *testing.T) {

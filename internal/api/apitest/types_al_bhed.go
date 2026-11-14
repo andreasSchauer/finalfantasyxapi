@@ -11,9 +11,9 @@ func (e AlBhedResponse) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareAlBhedResponses(test test, exp AlBhedResponse, got servicetypes.AlBhedResponse) {
+func (e AlBhedResponse) Compare(test test, got servicetypes.AlBhedResponse) {
 	test.t.Helper()
-	test.compare("translated text", exp.TranslatedText, got.TranslatedText)
-	test.compare("original text", exp.OriginalText, got.OriginalText)
-	test.compare("direction", exp.Direction, got.Direction)
+	test.compare("translated text", e.TranslatedText, got.TranslatedText)
+	test.compare("original text", e.OriginalText, got.OriginalText)
+	test.compare("direction", e.Direction, got.Direction)
 }

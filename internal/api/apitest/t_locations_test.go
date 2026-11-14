@@ -55,7 +55,7 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                2,
 				},
 			},
-			Unique:          newExpUnique(15, "macalania"),
+			Unique:             newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
 			sublocations:       []int32{26, 27, 28},
 			LocRel: LocRel{
@@ -96,7 +96,7 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                2,
 				},
 			},
-			Unique:          newExpUnique(15, "macalania"),
+			Unique:             newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
 			sublocations:       []int32{26, 27, 28},
 			LocRel: LocRel{
@@ -137,7 +137,7 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                2,
 				},
 			},
-			Unique:          newExpUnique(15, "macalania"),
+			Unique:             newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
 			sublocations:       []int32{26, 27, 28},
 			LocRel: LocRel{
@@ -178,7 +178,7 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                2,
 				},
 			},
-			Unique:          newExpUnique(15, "macalania"),
+			Unique:             newExpUnique(15, "macalania"),
 			connectedLocations: []int32{14, 16, 19, 20},
 			sublocations:       []int32{26, 27, 28},
 			LocRel: LocRel{
@@ -229,7 +229,7 @@ func TestGetLocation(t *testing.T) {
 					"fmvs":                0,
 				},
 			},
-			Unique:    newExpUnique(26, "omega ruins"),
+			Unique:       newExpUnique(26, "omega ruins"),
 			sublocations: []int32{43},
 			LocRel: LocRel{
 				treasures:  []int32{327, 332, 337, 342},
@@ -244,7 +244,7 @@ func TestGetLocation(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetLocation", testSrv.HandleLocations, compareLocations)
+	testSingleResources(t, tests, "GetLocation", testSrv.HandleLocations)
 }
 
 func TestRetrieveLocations(t *testing.T) {

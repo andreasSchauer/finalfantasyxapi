@@ -31,7 +31,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:       newExpNameVer(20, "thunder shot", 1),
+			NameVer:          newExpNameVer(20, "thunder shot", 1),
 			rank:             h.GetInt32Ptr(4),
 			untypedAbility:   122,
 			overdriveCommand: h.GetInt32Ptr(3),
@@ -85,7 +85,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 					"battle interactions 0 removed status conditions":   10,
 				},
 			},
-			NameVer:       newExpNameVer(159, "final elixir", 0),
+			NameVer:          newExpNameVer(159, "final elixir", 0),
 			rank:             h.GetInt32Ptr(6),
 			untypedAbility:   261,
 			overdriveCommand: h.GetInt32Ptr(7),
@@ -143,7 +143,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 					"battle interactions 0 mod changes":                 4,
 				},
 			},
-			NameVer:       newExpNameVer(163, "ultra nulall", 0),
+			NameVer:          newExpNameVer(163, "ultra nulall", 0),
 			rank:             h.GetInt32Ptr(6),
 			untypedAbility:   265,
 			overdriveCommand: h.GetInt32Ptr(7),
@@ -215,7 +215,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 					"battle interactions": 2,
 				},
 			},
-			NameVer:       newExpNameVer(7, "blitz ace", 1),
+			NameVer:          newExpNameVer(7, "blitz ace", 1),
 			rank:             h.GetInt32Ptr(7),
 			untypedAbility:   109,
 			overdriveCommand: h.GetInt32Ptr(1),
@@ -293,7 +293,7 @@ func TestGetOverdriveAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetOverdriveAbility", testSrv.HandleOverdriveAbilities, compareOverdriveAbilities)
+	testSingleResources(t, tests, "GetOverdriveAbility", testSrv.HandleOverdriveAbilities)
 }
 
 func TestGetMultipleOverdriveAbilities(t *testing.T) {

@@ -27,7 +27,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 					"auto-abilities": 4,
 				},
 			},
-			Unique:     newExpUnique(3, "world champion"),
+			Unique:        newExpUnique(3, "world champion"),
 			equipment:     3,
 			autoAbilities: []int32{51, 49, 44, 38},
 			crest:         19,
@@ -45,7 +45,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 					"auto-abilities": 4,
 				},
 			},
-			Unique:     newExpUnique(6, "masamune"),
+			Unique:        newExpUnique(6, "masamune"),
 			equipment:     6,
 			autoAbilities: []int32{51, 49, 3, 37},
 			crest:         15,
@@ -56,7 +56,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetCelestialWeapon", testSrv.HandleCelestialWeapons, compareCelestialWeapons)
+	testSingleResources(t, tests, "GetCelestialWeapon", testSrv.HandleCelestialWeapons)
 }
 
 func TestRetrieveCelestialWeapons(t *testing.T) {

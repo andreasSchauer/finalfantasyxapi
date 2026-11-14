@@ -13,12 +13,12 @@ func (e DropChanceResponse) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareDropChanceResponses(test test, exp DropChanceResponse, got servicetypes.DropChanceResponse) {
+func (e DropChanceResponse) Compare(test test, got servicetypes.DropChanceResponse) {
 	test.t.Helper()
-	test.compare("drop chance fin blow", exp.DropChanceFinBlow, got.DropChanceFinBlow)
-	test.compare("drop chance no fin blow", exp.DropChanceNoFinBlow, got.DropChanceNoFinBlow)
-	test.compStructs("wanted equipment", exp.WantedEquipment, got.WantedEquipment)
-	test.compStructs("equipment match chances", exp.EquipmentMatchChances, got.EquipmentMatchChances)
-	test.compStructs("character chances", exp.CharacterChances, got.CharacterChances)
-	test.compStructs("monster drop chances", exp.MonsterChances, got.MonsterChances)
+	test.compare("drop chance fin blow", e.DropChanceFinBlow, got.DropChanceFinBlow)
+	test.compare("drop chance no fin blow", e.DropChanceNoFinBlow, got.DropChanceNoFinBlow)
+	test.compStructs("wanted equipment", e.WantedEquipment, got.WantedEquipment)
+	test.compStructs("equipment match chances", e.EquipmentMatchChances, got.EquipmentMatchChances)
+	test.compStructs("character chances", e.CharacterChances, got.CharacterChances)
+	test.compStructs("monster drop chances", e.MonsterChances, got.MonsterChances)
 }

@@ -31,7 +31,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:       newExpNameVer(10, "delay buster", 0),
+			NameVer:          newExpNameVer(10, "delay buster", 0),
 			rank:             h.GetInt32Ptr(8),
 			appearsInHelpBar: true,
 			canCopyCat:       true,
@@ -91,7 +91,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:       newExpNameVer(10, "delay buster", 0),
+			NameVer:          newExpNameVer(10, "delay buster", 0),
 			rank:             h.GetInt32Ptr(8),
 			appearsInHelpBar: true,
 			canCopyCat:       true,
@@ -150,7 +150,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 0,
 				},
 			},
-			NameVer:         newExpNameVer(24, "use", 0),
+			NameVer:            newExpNameVer(24, "use", 0),
 			rank:               h.GetInt32Ptr(2),
 			appearsInHelpBar:   false,
 			canCopyCat:         true,
@@ -175,7 +175,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions 0 mod changes":  1,
 				},
 			},
-			NameVer:       newExpNameVer(27, "cheer", 0),
+			NameVer:          newExpNameVer(27, "cheer", 0),
 			rank:             h.GetInt32Ptr(2),
 			appearsInHelpBar: true,
 			canCopyCat:       true,
@@ -233,7 +233,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:       newExpNameVer(47, "curaga", 0),
+			NameVer:          newExpNameVer(47, "curaga", 0),
 			rank:             h.GetInt32Ptr(3),
 			appearsInHelpBar: true,
 			canCopyCat:       true,
@@ -283,7 +283,7 @@ func TestGetPlayerAbility(t *testing.T) {
 		},
 	}
 
-	testSingleResources(t, tests, "GetPlayerAbility", testSrv.HandlePlayerAbilities, comparePlayerAbilities)
+	testSingleResources(t, tests, "GetPlayerAbility", testSrv.HandlePlayerAbilities)
 }
 
 func TestGetMultiplePlayerAbilities(t *testing.T) {

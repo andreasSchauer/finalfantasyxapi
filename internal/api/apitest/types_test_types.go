@@ -32,10 +32,14 @@ fields that are implicitly ignored by leaving them blank:
 
 // compFnDifferent will soon not be necessary anymore
 type compFnVals[T any] func(string, T, T)
-type compFnDifferent[E, G any] func(test, string, E, G)
 
-type testStructIdx interface {
+type testStructIdx[G any] interface {
 	GetIndex() int
+	testStruct[G]
+}
+
+type testStruct[G any] interface {
+	Compare(test, string, G)
 }
 
 type test struct {
@@ -94,11 +98,11 @@ func newExpNameVer(id int32, name string, version int32) NameVer {
 	}
 }
 
-func (test test) compareExpNameVer(exp NameVer, gotID int32, gotName string, gotVer *int32) {
+func (test test) compareExpNameVer(e NameVer, gotID int32, gotName string, gotVer *int32) {
 	test.t.Helper()
-	test.compare("id", exp.id, gotID)
-	test.compare("name", exp.name, gotName)
-	test.compare("version", exp.version, gotVer)
+	test.compare("id", e.id, gotID)
+	test.compare("name", e.name, gotName)
+	test.compare("version", e.version, gotVer)
 }
 
 type Unique struct {
@@ -113,10 +117,10 @@ func newExpUnique(id int32, name string) Unique {
 	}
 }
 
-func (test test) compareExpUnique(exp Unique, gotID int32, gotName string) {
+func (test test) compareExpUnique(e Unique, gotID int32, gotName string) {
 	test.t.Helper()
-	test.compare("id", exp.id, gotID)
-	test.compare("name", exp.name, gotName)
+	test.compare("id", e.id, gotID)
+	test.compare("name", e.name, gotName)
 }
 
 type IDOnly struct {
@@ -129,9 +133,9 @@ func newExpIDOnly(id int32) IDOnly {
 	}
 }
 
-func (test test) compareExpIDOnly(exp IDOnly, gotID int32) {
+func (test test) compareExpIDOnly(e IDOnly, gotID int32) {
 	test.t.Helper()
-	test.compare("id", exp.id, gotID)
+	test.compare("id", e.id, gotID)
 }
 
 type ListIDs struct {

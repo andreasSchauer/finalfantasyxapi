@@ -1529,5 +1529,5 @@ func TestTurnOrder(t *testing.T) {
 		},
 	}
 
-	testServiceResponsesPost(t, tests, "TurnOrder", testSrv.HandleTurnOrderPost, compareTurnOrderResponses)
+	testServiceResponsesPost(t, tests, "TurnOrder", testSrv.HandleTurnOrderPost)
 }

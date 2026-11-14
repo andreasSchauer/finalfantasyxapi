@@ -19,12 +19,12 @@ func (e Topmenu) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func compareTopmenus(test test, exp Topmenu, got apitypes.Topmenu) {
+func (e Topmenu) Compare(test test, got apitypes.Topmenu) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.checkResIDsInSlice("submenus", apilookups.E.Submenus.Endpoint, exp.submenus, got.Submenus)
-	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, exp.abilities, got.Abilities)
-	test.checkResIDsInSlice("overdrive commands", apilookups.E.OverdriveCommands.Endpoint, exp.overdriveCommands, got.OverdriveCommands)
-	test.checkResIDsInSlice("overdrives", apilookups.E.Overdrives.Endpoint, exp.overdrives, got.Overdrives)
-	test.checkResIDsInSlice("aeon commands", apilookups.E.AeonCommands.Endpoint, exp.aeonCommands, got.AeonCommands)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.checkResIDsInSlice("submenus", apilookups.E.Submenus.Endpoint, e.submenus, got.Submenus)
+	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, e.abilities, got.Abilities)
+	test.checkResIDsInSlice("overdrive commands", apilookups.E.OverdriveCommands.Endpoint, e.overdriveCommands, got.OverdriveCommands)
+	test.checkResIDsInSlice("overdrives", apilookups.E.Overdrives.Endpoint, e.overdrives, got.Overdrives)
+	test.checkResIDsInSlice("aeon commands", apilookups.E.AeonCommands.Endpoint, e.aeonCommands, got.AeonCommands)
 }

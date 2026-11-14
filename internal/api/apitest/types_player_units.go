@@ -20,12 +20,12 @@ func (e PlayerUnit) GetTestGeneral() testGeneral {
 	return e.testGeneral
 }
 
-func comparePlayerUnits(test test, exp PlayerUnit, got apitypes.PlayerUnit) {
+func (e PlayerUnit) Compare(test test, got apitypes.PlayerUnit) {
 	test.t.Helper()
-	test.compareExpUnique(exp.Unique, got.ID, got.Name)
-	test.compare("unit type", string(exp.unitType), string(got.Type))
-	test.compPathAPIResource("typed unit", exp.typedUnit, got.TypedUnit)
-	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, exp.area, got.Area)
-	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, exp.celestialWeapon, got.CelestialWeapon)
-	test.checkResIDsInSlice("character classes", apilookups.E.CharacterClasses.Endpoint, exp.characterClasses, got.CharacterClasses)
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compare("unit type", string(e.unitType), string(got.Type))
+	test.compPathAPIResource("typed unit", e.typedUnit, got.TypedUnit)
+	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.area, got.Area)
+	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, e.celestialWeapon, got.CelestialWeapon)
+	test.checkResIDsInSlice("character classes", apilookups.E.CharacterClasses.Endpoint, e.characterClasses, got.CharacterClasses)
 }
