@@ -44,7 +44,7 @@ func TestGetBlitzballPrize(t *testing.T) {
 			IDOnly:   newExpIDOnly(1),
 			Category: "league",
 			Slot:     "1st",
-			Items: []testPossibleItem{
+			Items: []TestPossibleItem{
 				newTestPossibleItem(1, 69, 1, 15),
 				newTestPossibleItem(4, 53, 1, 10),
 				newTestPossibleItem(6, 96, 1, 10),
@@ -62,7 +62,7 @@ func TestGetBlitzballPrize(t *testing.T) {
 			IDOnly:   newExpIDOnly(8),
 			Category: "tournament",
 			Slot:     "top-scorer",
-			Items: []testPossibleItem{
+			Items: []TestPossibleItem{
 				newTestPossibleItem(0, 5, 1, 20),
 				newTestPossibleItem(2, 101, 1, 20),
 			},

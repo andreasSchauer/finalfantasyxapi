@@ -70,7 +70,7 @@ func (test Test) presenceSlices[E, G any](fieldName string, exp []E, got []G) bo
 	}
 }
 
-func (test Test) presenceDefaultAltStates(exp *testDefaultState, gotStates []apitypes.AlteredState) bool {
+func (test Test) presenceDefaultAltStates(exp *TestDefaultState, gotStates []apitypes.AlteredState) bool {
 	test.T.Helper()
 	switch {
 	case exp == nil && len(gotStates) == 0:

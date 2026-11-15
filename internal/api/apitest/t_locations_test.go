@@ -67,7 +67,7 @@ func TestGetLocation(t *testing.T) {
 				Formations: []int32{120, 125, 129, 135, 137},
 				Quests:     []int32{10, 82, 83, 84, 85, 86, 87},
 				Fmvs:       []int32{27, 36},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					BgMusic:   []int32{12, 22, 30, 43, 52, 55, 56},
 					CuesMusic: []int32{4, 57, 59},
 					FmvsMusic: []int32{70},
@@ -108,7 +108,7 @@ func TestGetLocation(t *testing.T) {
 				Formations: []int32{120, 123, 125, 127, 129, 132},
 				Quests:     []int32{},
 				Fmvs:       []int32{27, 36},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					BgMusic:   []int32{12, 22, 30, 43, 52, 55, 56},
 					CuesMusic: []int32{4, 57, 59},
 					FmvsMusic: []int32{70},
@@ -149,7 +149,7 @@ func TestGetLocation(t *testing.T) {
 				Formations: []int32{136},
 				Quests:     []int32{10, 82, 83, 84, 85},
 				Fmvs:       []int32{27, 36},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					BgMusic:   []int32{12, 22, 30, 43, 52, 55, 56},
 					CuesMusic: []int32{4, 57, 59},
 					FmvsMusic: []int32{70},
@@ -190,7 +190,7 @@ func TestGetLocation(t *testing.T) {
 				Formations: []int32{126, 130, 131, 133, 134, 135, 137},
 				Quests:     []int32{},
 				Fmvs:       []int32{27, 36},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					BgMusic:   []int32{12, 22, 30, 43, 52, 55, 56},
 					CuesMusic: []int32{4, 57, 59},
 					FmvsMusic: []int32{70},
@@ -236,7 +236,7 @@ func TestGetLocation(t *testing.T) {
 				Monsters:   []int32{190, 201, 210, 239, 245, 250, 255},
 				Formations: []int32{258, 262, 265, 283, 289, 296},
 				Quests:     []int32{},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					BgMusic:   []int32{81, 82},
 					BossMusic: []int32{16, 80},
 				},

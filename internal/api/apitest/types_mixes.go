@@ -11,7 +11,7 @@ type Mix struct {
 	Unique
 	Category     database.MixCategory
 	Overdrive    int32
-	Combinations []testMixCombination
+	Combinations []TestMixCombination
 }
 
 func (e Mix) GetTestGeneral() TestGeneral {
@@ -26,17 +26,17 @@ func (e Mix) Compare(test Test, got apitypes.Mix) {
 	test.checkTestStructsInSlice("combinations", e.Combinations, got.Combinations)
 }
 
-type testMixCombination struct {
+type TestMixCombination struct {
 	Index      int
 	FirstItem  int32
 	SecondItem int32
 }
 
-func (e testMixCombination) GetIndex() int {
+func (e TestMixCombination) GetIndex() int {
 	return e.Index
 }
 
-func (e testMixCombination) Compare(test Test, fieldName string, got apitypes.MixCombination) {
+func (e TestMixCombination) Compare(test Test, fieldName string, got apitypes.MixCombination) {
 	test.T.Helper()
 	test.compIDAPIResource(fieldName+" - first item", apilookups.E.Items.Endpoint, e.FirstItem, got.FirstItem)
 	test.compIDAPIResource(fieldName+" - second item", apilookups.E.Items.Endpoint, e.SecondItem, got.SecondItem)

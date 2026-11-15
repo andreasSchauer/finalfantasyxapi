@@ -73,7 +73,7 @@ func TestGetArea(t *testing.T) {
 				Monsters:   []int32{81, 84, 85},
 				Formations: []int32{120, 122, 125},
 				Quests:     []int32{83, 85, 86, 87},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					BgMusic: []int32{30},
 				},
 			},
@@ -116,7 +116,7 @@ func TestGetArea(t *testing.T) {
 			LocRel: LocRel{
 				Characters: []int32{2, 4},
 				Treasures:  []int32{33, 37},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					BgMusic: []int32{19},
 				},
 			},
@@ -324,7 +324,7 @@ func TestGetArea(t *testing.T) {
 			ParentSublocation: 14,
 			LocRel: LocRel{
 				Shops: []int32{5},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					CuesMusic: []int32{35},
 					BgMusic:   []int32{32, 34},
 				},
@@ -392,7 +392,7 @@ func TestGetArea(t *testing.T) {
 				Monsters:   []int32{19, 20, 21, 22},
 				Formations: []int32{26, 27},
 				Fmvs:       []int32{9, 12, 13, 14},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					BgMusic:   []int32{28},
 					CuesMusic: []int32{},
 					FmvsMusic: []int32{16},

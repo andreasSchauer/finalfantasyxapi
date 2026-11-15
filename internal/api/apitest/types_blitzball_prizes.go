@@ -9,7 +9,7 @@ type BlitzballPrize struct {
 	IDOnly
 	Category string
 	Slot     string
-	Items    []testPossibleItem
+	Items    []TestPossibleItem
 }
 
 func (e BlitzballPrize) GetTestGeneral() TestGeneral {

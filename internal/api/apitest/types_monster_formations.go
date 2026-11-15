@@ -17,7 +17,7 @@ type MonsterFormation struct {
 	Gil             int32
 	Monsters        map[string]int32
 	Areas           []int32
-	TriggerCommands []testFormationTC
+	TriggerCommands []TestFormationTC
 }
 
 func (e MonsterFormation) GetTestGeneral() TestGeneral {
@@ -39,12 +39,12 @@ func (e MonsterFormation) Compare(test Test, got apitypes.MonsterFormation) {
 	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, e.Areas, got.Areas)
 }
 
-type testFormationTC struct {
+type TestFormationTC struct {
 	Ability int32
 	Users   []int32
 }
 
-func (e testFormationTC) Compare(test Test, fieldName string, got apitypes.FormationTriggerCommand) {
+func (e TestFormationTC) Compare(test Test, fieldName string, got apitypes.FormationTriggerCommand) {
 	test.T.Helper()
 	tcEndpoint := apilookups.E.TriggerCommands.Endpoint
 	charClassesEndpoint := apilookups.E.CharacterClasses.Endpoint

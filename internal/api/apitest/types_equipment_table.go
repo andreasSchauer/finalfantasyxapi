@@ -11,7 +11,7 @@ type EquipmentTable struct {
 	CelestialWeapon         *int32
 	SpecificCharacter       *int32
 	RequiredAutoAbilities   []int32
-	SelectableAutoAbilities []testAbilityPool
+	SelectableAutoAbilities []TestAbilityPool
 	RequiredSlots           *int32
 	Equipment               []int32
 }
@@ -31,13 +31,13 @@ func (e EquipmentTable) Compare(test Test, got apitypes.EquipmentTable) {
 	test.checkResIDsInSlice("equipment", apilookups.E.Equipment.Endpoint, e.Equipment, got.Equipment)
 }
 
-type testAbilityPool struct {
+type TestAbilityPool struct {
 	Index         int
 	AutoAbilities []int32
 	ReqAmount     int32
 }
 
-func (e testAbilityPool) Compare(test Test, fieldName string, got apitypes.AbilityPool) {
+func (e TestAbilityPool) Compare(test Test, fieldName string, got apitypes.AbilityPool) {
 	test.T.Helper()
 	test.checkResIDsInSlice(fieldName+" - auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)
 	test.compare(fieldName+" - required amount", e.ReqAmount, got.ReqAmount)

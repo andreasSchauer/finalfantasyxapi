@@ -15,9 +15,9 @@ type Character struct {
 	CelestialFormula       *string
 	OverdriveCommand       *int32
 	CharacterClasses       []int32
-	Agility                testAgilityParams
+	Agility                TestAgilityParams
 	BaseStats              map[string]int32
-	RegenAmounts           []testRegenAmount
+	RegenAmounts           []TestRegenAmount
 	DefaultPlayerAbilities []int32
 	StdSphereGrid          *SphereGrid
 	ExpSphereGrid          *SphereGrid

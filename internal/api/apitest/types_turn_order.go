@@ -7,7 +7,7 @@ import (
 type TurnOrderResponse struct {
 	TestGeneral
 	servicetypes.TurnOrderResponse
-	TestTurnOrder []testBattleTurn
+	TestTurnOrder []TestBattleTurn
 }
 
 func (e TurnOrderResponse) GetTestGeneral() TestGeneral {
@@ -26,7 +26,7 @@ func (e TurnOrderResponse) Compare(test Test, got servicetypes.TurnOrderResponse
 	test.checkTestStructsInSlice("turn order", e.TestTurnOrder, got.TurnOrder)
 }
 
-type testBattleTurn struct {
+type TestBattleTurn struct {
 	Index       int
 	Turn        int32
 	CurrentTick int32
@@ -34,11 +34,11 @@ type testBattleTurn struct {
 	Party       servicetypes.BattleParty
 }
 
-func (e testBattleTurn) GetIndex() int {
+func (e TestBattleTurn) GetIndex() int {
 	return e.Index
 }
 
-func (e testBattleTurn) Compare(test Test, fieldName string, got servicetypes.BattleTurn) {
+func (e TestBattleTurn) Compare(test Test, fieldName string, got servicetypes.BattleTurn) {
 	test.T.Helper()
 	test.compare(fieldName+" turn", e.Turn, got.Turn)
 	test.compare(fieldName+" current tick", e.CurrentTick, got.CurrentTick)

@@ -44,7 +44,7 @@ func TestGetMonsterFormation(t *testing.T) {
 				"sinscale - 3":       4,
 			},
 			Areas:           []int32{42},
-			TriggerCommands: []testFormationTC{},
+			TriggerCommands: []TestFormationTC{},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -96,7 +96,7 @@ func TestGetMonsterFormation(t *testing.T) {
 				"guado guardian - 1": 2,
 			},
 			Areas: []int32{164},
-			TriggerCommands: []testFormationTC{
+			TriggerCommands: []TestFormationTC{
 				{
 					Ability: 4,
 					Users:   []int32{5},
@@ -129,7 +129,7 @@ func TestGetMonsterFormation(t *testing.T) {
 				"great malboro": 1,
 			},
 			Areas:           []int32{234, 236, 237},
-			TriggerCommands: []testFormationTC{},
+			TriggerCommands: []TestFormationTC{},
 		},
 	}
 

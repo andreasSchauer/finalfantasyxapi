@@ -443,7 +443,7 @@ func TestTurnOrder(t *testing.T) {
 				},
 				OpponentParty: []servicetypes.Participant{},
 			},
-			TestTurnOrder: []testBattleTurn{
+			TestTurnOrder: []TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -532,7 +532,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []testBattleTurn{
+			TestTurnOrder: []TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -629,7 +629,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []testBattleTurn{
+			TestTurnOrder: []TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -747,7 +747,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []testBattleTurn{
+			TestTurnOrder: []TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -878,7 +878,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []testBattleTurn{
+			TestTurnOrder: []TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -985,7 +985,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []testBattleTurn{
+			TestTurnOrder: []TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -1085,7 +1085,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []testBattleTurn{
+			TestTurnOrder: []TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -1187,7 +1187,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []testBattleTurn{
+			TestTurnOrder: []TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -1300,7 +1300,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []testBattleTurn{
+			TestTurnOrder: []TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -1525,7 +1525,7 @@ func TestTurnOrder(t *testing.T) {
 				},
 				OpponentParty: []servicetypes.Participant{},
 			},
-			TestTurnOrder: []testBattleTurn{},
+			TestTurnOrder: []TestBattleTurn{},
 		},
 	}
 

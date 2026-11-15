@@ -11,11 +11,11 @@ type Aeon struct {
 	UntypedUnit            int32
 	Area                   int32
 	BattlesToRegen         int32
-	Agility                testAgilityParams
+	Agility                TestAgilityParams
 	CelestialWeapon        *int32
 	CharacterClasses       []int32
 	BaseStats              map[string]int32
-	RegenAmounts           []testRegenAmount
+	RegenAmounts           []TestRegenAmount
 	AeonCommands           []int32
 	DefaultPlayerAbilities []int32
 	Overdrives             []int32

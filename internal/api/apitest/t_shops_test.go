@@ -50,12 +50,12 @@ func TestGetShop(t *testing.T) {
 			IDOnly:   newExpIDOnly(2),
 			Area:     47,
 			Category: database.ShopCategoryStandard,
-			PreAirship: &testSubShop{
-				Items: []testShopItem{},
-				Equipment: []testShopEquipment{
+			PreAirship: &TestSubShop{
+				Items: []TestShopItem{},
+				Equipment: []TestShopEquipment{
 					{
 						Index: 1,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    332,
 							Abilities:        []int32{1},
 							EmptySlotsAmount: 0,
@@ -64,7 +64,7 @@ func TestGetShop(t *testing.T) {
 					},
 					{
 						Index: 4,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    335,
 							Abilities:        []int32{2, 1},
 							EmptySlotsAmount: 0,
@@ -73,7 +73,7 @@ func TestGetShop(t *testing.T) {
 					},
 					{
 						Index: 8,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    1034,
 							Abilities:        []int32{111},
 							EmptySlotsAmount: 0,
@@ -82,12 +82,12 @@ func TestGetShop(t *testing.T) {
 					},
 				},
 			},
-			PostAirship: &testSubShop{
-				Items: []testShopItem{},
-				Equipment: []testShopEquipment{
+			PostAirship: &TestSubShop{
+				Items: []TestShopItem{},
+				Equipment: []TestShopEquipment{
 					{
 						Index: 5,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    336,
 							Abilities:        []int32{2, 1},
 							EmptySlotsAmount: 2,
@@ -96,7 +96,7 @@ func TestGetShop(t *testing.T) {
 					},
 					{
 						Index: 6,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    337,
 							Abilities:        []int32{2, 1},
 							EmptySlotsAmount: 2,
@@ -105,7 +105,7 @@ func TestGetShop(t *testing.T) {
 					},
 					{
 						Index: 11,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    940,
 							Abilities:        []int32{111},
 							EmptySlotsAmount: 3,
@@ -130,17 +130,17 @@ func TestGetShop(t *testing.T) {
 			IDOnly:   newExpIDOnly(16),
 			Area:     121,
 			Category: database.ShopCategoryStandard,
-			PreAirship: &testSubShop{
-				Items: []testShopItem{
+			PreAirship: &TestSubShop{
+				Items: []TestShopItem{
 					newTestShopItem(0, 1, 100),
 					newTestShopItem(1, 9, 200),
 					newTestShopItem(3, 13, 100),
 					newTestShopItem(4, 14, 100),
 				},
-				Equipment: []testShopEquipment{
+				Equipment: []TestShopEquipment{
 					{
 						Index: 0,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    331,
 							Abilities:        []int32{30, 1},
 							EmptySlotsAmount: 0,
@@ -149,7 +149,7 @@ func TestGetShop(t *testing.T) {
 					},
 					{
 						Index: 3,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    272,
 							Abilities:        []int32{2, 5, 8},
 							EmptySlotsAmount: 0,
@@ -158,16 +158,16 @@ func TestGetShop(t *testing.T) {
 					},
 				},
 			},
-			PostAirship: &testSubShop{
-				Items: []testShopItem{
+			PostAirship: &TestSubShop{
+				Items: []TestShopItem{
 					newTestShopItem(1, 9, 115),
 					newTestShopItem(4, 14, 57),
 					newTestShopItem(5, 12, 57),
 				},
-				Equipment: []testShopEquipment{
+				Equipment: []TestShopEquipment{
 					{
 						Index: 2,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    347,
 							Abilities:        []int32{30, 8},
 							EmptySlotsAmount: 0,
@@ -176,7 +176,7 @@ func TestGetShop(t *testing.T) {
 					},
 					{
 						Index: 4,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    329,
 							Abilities:        []int32{2, 9},
 							EmptySlotsAmount: 0,
@@ -201,16 +201,16 @@ func TestGetShop(t *testing.T) {
 			IDOnly:   newExpIDOnly(31),
 			Area:     200,
 			Category: database.ShopCategoryTravelAgency,
-			PreAirship: &testSubShop{
-				Items: []testShopItem{
+			PreAirship: &TestSubShop{
+				Items: []TestShopItem{
 					newTestShopItem(1, 2, 500),
 					newTestShopItem(4, 13, 50),
 					newTestShopItem(9, 19, 100),
 				},
-				Equipment: []testShopEquipment{
+				Equipment: []TestShopEquipment{
 					{
 						Index: 0,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    395,
 							Abilities:        []int32{35, 33},
 							EmptySlotsAmount: 2,
@@ -219,7 +219,7 @@ func TestGetShop(t *testing.T) {
 					},
 					{
 						Index: 4,
-						Equipment: testFoundEquipment{
+						Equipment: TestFoundEquipment{
 							EquipmentName:    765,
 							Abilities:        []int32{76, 70},
 							EmptySlotsAmount: 0,

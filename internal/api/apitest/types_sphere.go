@@ -10,7 +10,7 @@ type Sphere struct {
 	Unique
 	Item            int32
 	CreatedNode     *apitypes.CreatedNode
-	Monsters        []testMonItemAmts
+	Monsters        []TestMonItemAmts
 	Treasures       map[int32]int32
 	Shops           []int32
 	Quests          map[int32]int32

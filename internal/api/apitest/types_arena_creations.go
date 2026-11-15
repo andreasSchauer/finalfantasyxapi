@@ -12,7 +12,7 @@ type ArenaCreation struct {
 	Category                  string
 	Monster                   int32
 	ParentSubquest            int32
-	Reward                    testResAmount[apiresource.Typed]
+	Reward                    TestResAmount[apiresource.Typed]
 	RequiredCatchAmount       int32
 	UnlockedCreationsCategory *string
 	RequiredMonsters          []int32

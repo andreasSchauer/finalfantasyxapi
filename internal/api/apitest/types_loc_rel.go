@@ -14,7 +14,7 @@ type LocRel struct {
 	Formations []int32
 	Quests     []int32
 	Fmvs       []int32
-	Music      *testLocMusic
+	Music      *TestLocMusic
 }
 
 func (e LocRel) Compare(test Test, got apitypes.LocRel) {
@@ -30,14 +30,14 @@ func (e LocRel) Compare(test Test, got apitypes.LocRel) {
 	test.checkResIDsInSlice("fmvs", apilookups.E.FMVs.Endpoint, e.Fmvs, got.FMVs)
 }
 
-type testLocMusic struct {
+type TestLocMusic struct {
 	BgMusic   []int32
 	CuesMusic []int32
 	FmvsMusic []int32
 	BossMusic []int32
 }
 
-func (e testLocMusic) Compare(test Test, _ string, got apitypes.LocBasedMusic) {
+func (e TestLocMusic) Compare(test Test, _ string, got apitypes.LocBasedMusic) {
 	test.T.Helper()
 	songsEndpoint := apilookups.E.Songs.Endpoint
 

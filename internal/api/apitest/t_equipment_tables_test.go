@@ -34,7 +34,7 @@ func TestGetEquipmentTable(t *testing.T) {
 			CelestialWeapon:         h.GetInt32Ptr(2),
 			SpecificCharacter:       h.GetInt32Ptr(2),
 			RequiredAutoAbilities:   []int32{51, 49, 44, 43},
-			SelectableAutoAbilities: []testAbilityPool{},
+			SelectableAutoAbilities: []TestAbilityPool{},
 			RequiredSlots:           nil,
 			Equipment:               []int32{2},
 		},
@@ -53,7 +53,7 @@ func TestGetEquipmentTable(t *testing.T) {
 			CelestialWeapon:         nil,
 			SpecificCharacter:       nil,
 			RequiredAutoAbilities:   []int32{45},
-			SelectableAutoAbilities: []testAbilityPool{},
+			SelectableAutoAbilities: []TestAbilityPool{},
 			RequiredSlots:           nil,
 			Equipment:               []int32{65, 66, 67, 68, 69, 70, 71},
 		},
@@ -74,7 +74,7 @@ func TestGetEquipmentTable(t *testing.T) {
 			CelestialWeapon:       nil,
 			SpecificCharacter:     nil,
 			RequiredAutoAbilities: []int32{},
-			SelectableAutoAbilities: []testAbilityPool{
+			SelectableAutoAbilities: []TestAbilityPool{
 				{
 					Index:         0,
 					AutoAbilities: []int32{114, 113, 112, 111},

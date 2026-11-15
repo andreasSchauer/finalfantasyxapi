@@ -7,26 +7,26 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
-type testAppliedState struct {
+type TestAppliedState struct {
 	Condition     string
 	IsTemporary   bool
 	AppliedStatus *int32
 }
 
-func (e testAppliedState) Compare(test Test, _ string, got apitypes.AppliedState) {
+func (e TestAppliedState) Compare(test Test, _ string, got apitypes.AppliedState) {
 	test.compare("applied state condition", e.Condition, got.Condition)
 	test.compare("applied state isTemporary", e.IsTemporary, got.IsTemporary)
 	test.compIDAPIResourcePtrs("applied status", apilookups.E.StatusConditions.Endpoint, e.AppliedStatus, got.AppliedStatus)
 }
 
-type testDefaultState struct {
+type TestDefaultState struct {
 	IsTemporary bool
-	Change      *testAltStateChange
-	Gain        *testAltStateGain
-	Loss        *testAltStateLoss
+	Change      *TestAltStateChange
+	Gain        *TestAltStateGain
+	Loss        *TestAltStateLoss
 }
 
-func testMonsterDefaultState(test Test, exp *testDefaultState, gotStates []apitypes.AlteredState) {
+func testMonsterDefaultState(test Test, exp *TestDefaultState, gotStates []apitypes.AlteredState) {
 	if test.DontCheck != nil && test.DontCheck["default state"] {
 		return
 	}
@@ -48,13 +48,13 @@ func testMonsterDefaultState(test Test, exp *testDefaultState, gotStates []apity
 	test.compTestStructPtrs("alt state loss", exp.Loss, got.Loss)
 }
 
-type testAltStateChange struct {
+type TestAltStateChange struct {
 	Distance    *int32
 	BaseStats   map[string]int32
-	ElemResists []testElemResist
+	ElemResists []TestElemResist
 }
 
-func (e testAltStateChange) Compare(test Test, fieldName string, got apitypes.AltStateChange) {
+func (e TestAltStateChange) Compare(test Test, fieldName string, got apitypes.AltStateChange) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
 	test.compare(desc+"distance", e.Distance, got.Distance)
@@ -62,7 +62,7 @@ func (e testAltStateChange) Compare(test Test, fieldName string, got apitypes.Al
 	test.compTestStructSlices(desc+"elemental resists", e.ElemResists, got.ElemResists)
 }
 
-type testAltStateGain struct {
+type TestAltStateGain struct {
 	Properties       []int32
 	AutoAbilities    []int32
 	StatusImmunities []int32
@@ -70,7 +70,7 @@ type testAltStateGain struct {
 	Status           *apitypes.InflictedStatus
 }
 
-func (e testAltStateGain) Compare(test Test, fieldName string, got apitypes.AltStateGain) {
+func (e TestAltStateGain) Compare(test Test, fieldName string, got apitypes.AltStateGain) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
 	test.checkResIDsInSlice(desc+"properties", apilookups.E.Properties.Endpoint, e.Properties, got.Properties)
@@ -80,14 +80,14 @@ func (e testAltStateGain) Compare(test Test, fieldName string, got apitypes.AltS
 	test.compStructPtrs(desc+"added status", e.Status, got.Status)
 }
 
-type testAltStateLoss struct {
+type TestAltStateLoss struct {
 	Properties       []int32
 	AutoAbilities    []int32
 	StatusImmunities []int32
 	Status           *int32
 }
 
-func (e testAltStateLoss) Compare(test Test, fieldName string, got apitypes.AltStateLoss) {
+func (e TestAltStateLoss) Compare(test Test, fieldName string, got apitypes.AltStateLoss) {
 	desc := fmt.Sprintf("%s -", fieldName)
 
 	test.checkResIDsInSlice(desc+"properties", apilookups.E.Properties.Endpoint, e.Properties, got.Properties)

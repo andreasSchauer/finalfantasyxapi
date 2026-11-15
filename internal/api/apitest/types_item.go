@@ -11,7 +11,7 @@ type Item struct {
 	Unique
 	UntypedItem        int32
 	Category           database.ItemCategory
-	Monsters           []testMonItemAmts
+	Monsters           []TestMonItemAmts
 	Treasures          map[int32]int32
 	Shops              []int32
 	Quests             map[int32]int32
@@ -40,7 +40,7 @@ func (e Item) Compare(test Test, got apitypes.Item) {
 	test.checkResIDsInSlice("mixes", apilookups.E.Mixes.Endpoint, e.Mixes, got.Mixes)
 }
 
-type testMonItemAmts struct {
+type TestMonItemAmts struct {
 	Index               int
 	Monster             int32
 	StealCommon         int32
@@ -53,11 +53,11 @@ type testMonItemAmts struct {
 	Other               int32
 }
 
-func (e testMonItemAmts) GetIndex() int {
+func (e TestMonItemAmts) GetIndex() int {
 	return e.Index
 }
 
-func (e testMonItemAmts) Compare(test Test, fieldName string, got apitypes.MonItemAmts) {
+func (e TestMonItemAmts) Compare(test Test, fieldName string, got apitypes.MonItemAmts) {
 	test.T.Helper()
 	test.compIDAPIResource(fieldName+" - monster", apilookups.E.Monsters.Endpoint, e.Monster, got.Monster)
 	test.compare(fieldName+" - steal common", e.StealCommon, got.StealCommon)

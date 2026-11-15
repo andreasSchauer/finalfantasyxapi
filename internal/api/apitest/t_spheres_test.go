@@ -35,7 +35,7 @@ func TestGetSphere(t *testing.T) {
 			Unique:      newExpUnique(4, "ability sphere"),
 			Item:        73,
 			CreatedNode: nil,
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:      3,
 					Monster:    96,
@@ -73,7 +73,7 @@ func TestGetSphere(t *testing.T) {
 				Node:  "hp",
 				Value: 300,
 			},
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:    0,
 					Monster:  28,
@@ -122,7 +122,7 @@ func TestGetSphere(t *testing.T) {
 				Node:  "hp",
 				Value: 300,
 			},
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:    0,
 					Monster:  28,
@@ -156,7 +156,7 @@ func TestGetSphere(t *testing.T) {
 			Unique:          newExpUnique(26, "clear sphere"),
 			Item:            95,
 			CreatedNode:     nil,
-			Monsters:        []testMonItemAmts{},
+			Monsters:        []TestMonItemAmts{},
 			Treasures:       nil,
 			Shops:           []int32{33},
 			Quests:          nil,
@@ -178,7 +178,7 @@ func TestGetSphere(t *testing.T) {
 			Unique:          newExpUnique(26, "clear sphere"),
 			Item:            95,
 			CreatedNode:     nil,
-			Monsters:        []testMonItemAmts{},
+			Monsters:        []TestMonItemAmts{},
 			Treasures:       nil,
 			Shops:           []int32{33},
 			Quests:          nil,
@@ -200,7 +200,7 @@ func TestGetSphere(t *testing.T) {
 			Unique:      newExpUnique(2, "mana sphere"),
 			Item:        71,
 			CreatedNode: nil,
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:      0,
 					Monster:    107,
@@ -231,7 +231,7 @@ func TestGetSphere(t *testing.T) {
 			Unique:      newExpUnique(2, "mana sphere"),
 			Item:        71,
 			CreatedNode: nil,
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:      1,
 					Monster:    205,

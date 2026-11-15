@@ -51,14 +51,14 @@ func TestGetSong(t *testing.T) {
 			Arranger:          h.GetStrPtr("junya nakano"),
 			DurationInSeconds: 280,
 			CanLoop:           true,
-			BackgroundMusic: []testBackgroundMusic{
+			BackgroundMusic: []TestBackgroundMusic{
 				{
 					Index:                  0,
 					ReplacesEncounterMusic: false,
 					Areas:                  []int32{232, 233, 234},
 				},
 			},
-			Cues: []testCue{
+			Cues: []TestCue{
 				{
 					Index:                  0,
 					TriggerArea:            h.GetInt32Ptr(103),
@@ -101,14 +101,14 @@ func TestGetSong(t *testing.T) {
 			Arranger:          h.GetStrPtr("masashi hamauzu"),
 			DurationInSeconds: 264,
 			CanLoop:           true,
-			BackgroundMusic: []testBackgroundMusic{
+			BackgroundMusic: []TestBackgroundMusic{
 				{
 					Index:                  0,
 					ReplacesEncounterMusic: true,
 					Areas:                  []int32{219, 220},
 				},
 			},
-			Cues: []testCue{
+			Cues: []TestCue{
 				{
 					Index:                  0,
 					TriggerArea:            h.GetInt32Ptr(42),

@@ -72,7 +72,7 @@ func TestGetSublocation(t *testing.T) {
 				Monsters:   []int32{138, 142, 149, 259, 270, 282, 292},
 				Formations: []int32{193, 198, 205, 306, 312, 320, 331},
 				Quests:     []int32{1, 11, 19, 34, 42, 45, 46, 69, 74, 77},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					BgMusic:   []int32{71, 73},
 					BossMusic: []int32{16},
 				},
@@ -214,7 +214,7 @@ func TestGetSublocation(t *testing.T) {
 				Monsters:   []int32{34, 35, 36},
 				Formations: []int32{38, 39, 40},
 				Quests:     []int32{97, 98},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					BgMusic:   []int32{17, 32, 34},
 					CuesMusic: []int32{16, 35, 36},
 					FmvsMusic: []int32{16, 20},
@@ -260,7 +260,7 @@ func TestGetSublocation(t *testing.T) {
 				Formations: []int32{9, 13, 17, 22, 25},
 				Quests:     []int32{},
 				Fmvs:       []int32{5, 6, 8},
-				Music: &testLocMusic{
+				Music: &TestLocMusic{
 					BgMusic:   []int32{18, 20, 22, 23, 27},
 					CuesMusic: []int32{17},
 					FmvsMusic: []int32{17, 23, 34},

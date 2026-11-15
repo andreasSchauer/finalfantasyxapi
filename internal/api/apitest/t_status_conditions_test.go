@@ -37,7 +37,7 @@ func TestGetStatusCondition(t *testing.T) {
 			Unique:             newExpUnique(5, "death"),
 			AutoAbilities:      []int32{19, 20, 54, 77, 78},
 			MonstersResistance: []int32{},
-			InflictedBy: &testStatusInfliction{
+			InflictedBy: &TestStatusInfliction{
 				PlayerAbilities:    []int32{98},
 				OverdriveAbilities: []int32{},
 				ItemAbilities:      []int32{},
@@ -70,14 +70,14 @@ func TestGetStatusCondition(t *testing.T) {
 			Unique:             newExpUnique(9, "petrification"),
 			AutoAbilities:      []int32{17, 18, 54, 75, 76, 129},
 			MonstersResistance: []int32{2, 5, 55, 92, 129, 157, 189, 216, 237, 272, 295, 307},
-			InflictedBy: &testStatusInfliction{
+			InflictedBy: &TestStatusInfliction{
 				PlayerAbilities:    []int32{},
 				OverdriveAbilities: []int32{},
 				ItemAbilities:      []int32{},
 				MiscAbilities:      []int32{},
 				EnemyAbilities:     []int32{21, 29, 178, 183, 377, 379, 381},
 			},
-			RemovedBy: &testStatusRemoval{
+			RemovedBy: &TestStatusRemoval{
 				PlayerAbilities:    []int32{53},
 				OverdriveAbilities: []int32{152, 153, 158, 159},
 				ItemAbilities:      []int32{12, 16, 21},
@@ -109,14 +109,14 @@ func TestGetStatusCondition(t *testing.T) {
 			Unique:             newExpUnique(21, "haste"),
 			AutoAbilities:      []int32{96, 101},
 			MonstersResistance: []int32{3, 33, 135, 156, 199, 252, 253},
-			InflictedBy: &testStatusInfliction{
+			InflictedBy: &TestStatusInfliction{
 				PlayerAbilities:    []int32{56, 57},
 				OverdriveAbilities: []int32{165, 166, 167},
 				ItemAbilities:      []int32{54, 55},
 				MiscAbilities:      []int32{},
 				EnemyAbilities:     []int32{},
 			},
-			RemovedBy: &testStatusRemoval{
+			RemovedBy: &TestStatusRemoval{
 				PlayerAbilities:    []int32{63, 90},
 				OverdriveAbilities: []int32{},
 				ItemAbilities:      []int32{63},
@@ -148,14 +148,14 @@ func TestGetStatusCondition(t *testing.T) {
 			Unique:             newExpUnique(31, "boost"),
 			AutoAbilities:      []int32{},
 			MonstersResistance: []int32{3, 33, 69, 108, 135, 253},
-			InflictedBy: &testStatusInfliction{
+			InflictedBy: &TestStatusInfliction{
 				PlayerAbilities:    []int32{},
 				OverdriveAbilities: []int32{},
 				ItemAbilities:      []int32{},
 				MiscAbilities:      []int32{8},
 				EnemyAbilities:     []int32{},
 			},
-			RemovedBy: &testStatusRemoval{
+			RemovedBy: &TestStatusRemoval{
 				PlayerAbilities:    []int32{},
 				OverdriveAbilities: []int32{},
 				ItemAbilities:      []int32{},

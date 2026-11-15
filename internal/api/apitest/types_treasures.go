@@ -16,8 +16,8 @@ type Treasure struct {
 	TreasureType    database.TreasureType
 	LootType        database.LootType
 	GilAmount       *int32
-	Items           []testResAmount[apiresource.Typed]
-	Equipment       *testFoundEquipment
+	Items           []TestResAmount[apiresource.Typed]
+	Equipment       *TestFoundEquipment
 }
 
 func (e Treasure) GetTestGeneral() TestGeneral {
@@ -37,13 +37,13 @@ func (e Treasure) Compare(test Test, got apitypes.Treasure) {
 	test.compTestStructPtrs("equipment", e.Equipment, got.Equipment)
 }
 
-type testFoundEquipment struct {
+type TestFoundEquipment struct {
 	EquipmentName    int32
 	Abilities        []int32
 	EmptySlotsAmount int32
 }
 
-func (e testFoundEquipment) Compare(test Test, fieldName string, got apitypes.FoundEquipment) {
+func (e TestFoundEquipment) Compare(test Test, fieldName string, got apitypes.FoundEquipment) {
 	test.T.Helper()
 	enEndpoint := apilookups.E.Equipment.Endpoint
 	aaEndpoint := apilookups.E.AutoAbilities.Endpoint

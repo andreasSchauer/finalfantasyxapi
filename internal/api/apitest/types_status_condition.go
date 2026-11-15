@@ -9,8 +9,8 @@ type StatusCondition struct {
 	TestGeneral
 	Unique
 	AutoAbilities      []int32
-	InflictedBy        *testStatusInfliction
-	RemovedBy          *testStatusRemoval
+	InflictedBy        *TestStatusInfliction
+	RemovedBy          *TestStatusRemoval
 	MonstersResistance []int32
 }
 
@@ -27,7 +27,7 @@ func (e StatusCondition) Compare(test Test, got apitypes.StatusCondition) {
 	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.MonstersResistance, got.MonstersResistance)
 }
 
-type testStatusInfliction struct {
+type TestStatusInfliction struct {
 	PlayerAbilities    []int32
 	OverdriveAbilities []int32
 	ItemAbilities      []int32
@@ -35,7 +35,7 @@ type testStatusInfliction struct {
 	EnemyAbilities     []int32
 }
 
-func (e testStatusInfliction) Compare(test Test, fieldName string, got apitypes.StatusInfliction) {
+func (e TestStatusInfliction) Compare(test Test, fieldName string, got apitypes.StatusInfliction) {
 	test.T.Helper()
 	test.checkResIDsInSlice(fieldName+" - player abilities", apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
 	test.checkResIDsInSlice(fieldName+" - overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.OverdriveAbilities, got.OverdriveAbilities)
@@ -44,7 +44,7 @@ func (e testStatusInfliction) Compare(test Test, fieldName string, got apitypes.
 	test.checkResIDsInSlice(fieldName+" - enemy abilities", apilookups.E.EnemyAbilities.Endpoint, e.EnemyAbilities, got.EnemyAbilities)
 }
 
-type testStatusRemoval struct {
+type TestStatusRemoval struct {
 	PlayerAbilities    []int32
 	OverdriveAbilities []int32
 	ItemAbilities      []int32
@@ -52,7 +52,7 @@ type testStatusRemoval struct {
 	StatusConditions   []int32
 }
 
-func (e testStatusRemoval) Compare(test Test, fieldName string, got apitypes.StatusRemoval) {
+func (e TestStatusRemoval) Compare(test Test, fieldName string, got apitypes.StatusRemoval) {
 	test.T.Helper()
 	test.checkResIDsInSlice(fieldName+" - player abilities", apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
 	test.checkResIDsInSlice(fieldName+" - overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.OverdriveAbilities, got.OverdriveAbilities)

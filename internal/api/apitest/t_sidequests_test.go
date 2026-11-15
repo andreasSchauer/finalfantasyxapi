@@ -51,7 +51,7 @@ func TestGetSidequest(t *testing.T) {
 			},
 			Unique:       newExpUnique(2, "remiem temple"),
 			UntypedQuest: 2,
-			Completion: &testQuestCompletion{
+			Completion: &TestQuestCompletion{
 				Areas:  []int32{207},
 				Reward: newTestResAmount[apiresource.Typed](126, 1),
 			},
@@ -83,7 +83,7 @@ func TestGetSidequest(t *testing.T) {
 			},
 			Unique:       newExpUnique(9, "al bhed primers"),
 			UntypedQuest: 9,
-			Completion: &testQuestCompletion{
+			Completion: &TestQuestCompletion{
 				Areas:  []int32{183, 180},
 				Reward: newTestResAmount[apiresource.Typed](111, 99),
 			},

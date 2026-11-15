@@ -10,8 +10,8 @@ import (
 type Monster struct {
 	TestGeneral
 	NameVer
-	AppliedState     *testAppliedState
-	Agility          *testAgilityParams
+	AppliedState     *TestAppliedState
+	Agility          *TestAgilityParams
 	Species          database.MonsterSpecies
 	CtbIconType      database.CtbIconType
 	Distance         int32
@@ -21,14 +21,14 @@ type Monster struct {
 	Areas            []int32
 	Formations       []int32
 	BaseStats        map[string]int32
-	RegenAmounts     []testRegenAmount
-	Items            *testMonItems
+	RegenAmounts     []TestRegenAmount
+	Items            *TestMonItems
 	BribeChances     []apitypes.BribeChance
-	Equipment        *testMonEquipment
-	ElemResists      []testElemResist
+	Equipment        *TestMonEquipment
+	ElemResists      []TestElemResist
 	StatusImmunities []int32
 	StatusResists    map[string]int32
-	DefaultState     *testDefaultState
+	DefaultState     *TestDefaultState
 	Abilities        []int32
 }
 
@@ -61,13 +61,13 @@ func (e Monster) Compare(test Test, got apitypes.Monster) {
 	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, e.Abilities, got.Abilities)
 }
 
-type testMonItems struct {
+type TestMonItems struct {
 	ItemDropChance int32
-	Items          map[string]*testResAmount[apiresource.Typed]
-	OtherItems     []testPossibleItem
+	Items          map[string]*TestResAmount[apiresource.Typed]
+	OtherItems     []TestPossibleItem
 }
 
-func (e testMonItems) Compare(test Test, fieldName string, got apitypes.MonsterItems) {
+func (e TestMonItems) Compare(test Test, fieldName string, got apitypes.MonsterItems) {
 	test.T.Helper()
 	itemMap := e.Items
 
@@ -82,14 +82,14 @@ func (e testMonItems) Compare(test Test, fieldName string, got apitypes.MonsterI
 	test.compTestStructSlices("other items", e.OtherItems, got.OtherItems)
 }
 
-type testMonEquipment struct {
+type TestMonEquipment struct {
 	AbilitySlots      apitypes.MonsterEquipmentSlots
 	AttachedAbilities apitypes.MonsterEquipmentSlots
 	WeaponAbilities   []int32
 	ArmorAbilities    []int32
 }
 
-func (e testMonEquipment) Compare(test Test, _ string, got apitypes.MonsterEquipment) {
+func (e TestMonEquipment) Compare(test Test, _ string, got apitypes.MonsterEquipment) {
 	test.T.Helper()
 	test.compStructs("ability slots", e.AbilitySlots, got.AbilitySlots)
 	test.compStructs("attached abilities", e.AttachedAbilities, got.AttachedAbilities)

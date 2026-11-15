@@ -38,7 +38,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 			UntypedUnit: 1,
 			Area:        1,
-			Agility: testAgilityParams{
+			Agility: TestAgilityParams{
 				AgilityTier: 16,
 				TickSpeed:   6,
 				MinICV:      h.GetInt32Ptr(17),
@@ -61,7 +61,7 @@ func TestGetCharacter(t *testing.T) {
 				"evasion":       29,
 				"accuracy":      29,
 			},
-			RegenAmounts: []testRegenAmount{
+			RegenAmounts: []TestRegenAmount{
 				{
 					Index:    0,
 					Ticks:    0,
@@ -116,7 +116,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 			UntypedUnit: 5,
 			Area:        42,
-			Agility: testAgilityParams{
+			Agility: TestAgilityParams{
 				AgilityTier: 6,
 				TickSpeed:   16,
 				MinICV:      h.GetInt32Ptr(46),
@@ -139,7 +139,7 @@ func TestGetCharacter(t *testing.T) {
 				"evasion":       5,
 				"accuracy":      5,
 			},
-			RegenAmounts: []testRegenAmount{
+			RegenAmounts: []TestRegenAmount{
 				{
 					Index:    0,
 					Ticks:    0,
@@ -196,7 +196,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 			UntypedUnit: 4,
 			Area:        36,
-			Agility: testAgilityParams{
+			Agility: TestAgilityParams{
 				AgilityTier: 12,
 				TickSpeed:   10,
 				MinICV:      h.GetInt32Ptr(26),
@@ -252,7 +252,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 			UntypedUnit: 8,
 			Area:        102,
-			Agility: testAgilityParams{
+			Agility: TestAgilityParams{
 				AgilityTier: 12,
 				TickSpeed:   10,
 				MinICV:      h.GetInt32Ptr(28),

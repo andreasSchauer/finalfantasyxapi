@@ -12,7 +12,7 @@ type Equipment struct {
 	Priority                *int32
 	CelestialWeapon         *int32
 	RequiredAutoAbilities   []int32
-	SelectableAutoAbilities []testAbilityPool
+	SelectableAutoAbilities []TestAbilityPool
 	RequiredSlots           *int32
 	Treasures               []int32
 	Shops                   []int32

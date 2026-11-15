@@ -63,7 +63,7 @@ func TestGetTreasure(t *testing.T) {
 			TreasureType:    database.TreasureTypeChest,
 			LootType:        database.LootTypeItem,
 			GilAmount:       nil,
-			Items: []testResAmount[apiresource.Typed]{
+			Items: []TestResAmount[apiresource.Typed]{
 				newTestResAmount[apiresource.Typed](82, 1),
 			},
 			Equipment: nil,
@@ -82,7 +82,7 @@ func TestGetTreasure(t *testing.T) {
 			TreasureType:    database.TreasureTypeObject,
 			LootType:        database.LootTypeItem,
 			GilAmount:       nil,
-			Items: []testResAmount[apiresource.Typed]{
+			Items: []TestResAmount[apiresource.Typed]{
 				newTestResAmount[apiresource.Typed](147, 1),
 			},
 			Equipment: nil,
@@ -102,7 +102,7 @@ func TestGetTreasure(t *testing.T) {
 			LootType:        database.LootTypeEquipment,
 			GilAmount:       nil,
 			Items:           nil,
-			Equipment: &testFoundEquipment{
+			Equipment: &TestFoundEquipment{
 				EquipmentName:    877,
 				Abilities:        []int32{55, 64, 58},
 				EmptySlotsAmount: 0,
@@ -139,7 +139,7 @@ func TestGetTreasure(t *testing.T) {
 			TreasureType:    database.TreasureTypeGift,
 			LootType:        database.LootTypeItem,
 			GilAmount:       nil,
-			Items: []testResAmount[apiresource.Typed]{
+			Items: []TestResAmount[apiresource.Typed]{
 				newTestResAmount[apiresource.Typed](97, 1),
 			},
 			Equipment: nil,

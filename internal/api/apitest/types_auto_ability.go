@@ -9,7 +9,7 @@ type AutoAbility struct {
 	TestGeneral
 	Unique
 	MonstersDrop     []int32
-	MonstersItems    []testMonItemAmts
+	MonstersItems    []TestMonItemAmts
 	ShopsPreAirship  []int32
 	ShopsPostAirship []int32
 	Treasures        []int32

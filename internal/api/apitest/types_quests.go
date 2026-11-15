@@ -10,7 +10,7 @@ type Sidequest struct {
 	TestGeneral
 	Unique
 	UntypedQuest int32
-	Completion   *testQuestCompletion
+	Completion   *TestQuestCompletion
 	Subquests    []int32
 }
 
@@ -31,7 +31,7 @@ type Subquest struct {
 	Unique
 	UntypedQuest    int32
 	ParentSidequest int32
-	Completion      testQuestCompletion
+	Completion      TestQuestCompletion
 	ArenaCreation   *int32
 }
 
@@ -48,12 +48,12 @@ func (e Subquest) Compare(test Test, got apitypes.Subquest) {
 	test.compIDAPIResourcePtrs("arena creation", apilookups.E.ArenaCreations.Endpoint, e.ArenaCreation, got.ArenaCreation)
 }
 
-type testQuestCompletion struct {
+type TestQuestCompletion struct {
 	Areas  []int32
-	Reward testResAmount[apiresource.Typed]
+	Reward TestResAmount[apiresource.Typed]
 }
 
-func (e testQuestCompletion) Compare(test Test, fieldName string, got apitypes.QuestCompletion) {
+func (e TestQuestCompletion) Compare(test Test, fieldName string, got apitypes.QuestCompletion) {
 	test.T.Helper()
 	test.checkResIDsInSlice(fieldName+" - areas", apilookups.E.Areas.Endpoint, e.Areas, got.Areas)
 	e.Reward.Compare(test, fieldName+" - rewards", got.Reward)

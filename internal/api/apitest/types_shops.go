@@ -11,8 +11,8 @@ type Shop struct {
 	IDOnly
 	Area        int32
 	Category    database.ShopCategory
-	PreAirship  *testSubShop
-	PostAirship *testSubShop
+	PreAirship  *TestSubShop
+	PostAirship *TestSubShop
 }
 
 func (e Shop) GetTestGeneral() TestGeneral {
@@ -28,52 +28,52 @@ func (e Shop) Compare(test Test, got apitypes.Shop) {
 	test.compTestStructPtrs("post airship", e.PostAirship, got.PostAirship)
 }
 
-type testSubShop struct {
-	Items     []testShopItem
-	Equipment []testShopEquipment
+type TestSubShop struct {
+	Items     []TestShopItem
+	Equipment []TestShopEquipment
 }
 
-func (e testSubShop) Compare(test Test, fieldName string, got apitypes.SubShop) {
+func (e TestSubShop) Compare(test Test, fieldName string, got apitypes.SubShop) {
 	test.T.Helper()
 	test.checkTestStructsInSlice(fieldName+" - items", e.Items, got.Items)
 	test.checkTestStructsInSlice(fieldName+" - equipment", e.Equipment, got.Equipment)
 }
 
-type testShopItem struct {
+type TestShopItem struct {
 	Index int
 	Item  int32
 	Price int32
 }
 
-func newTestShopItem(idx int, itemID, price int32) testShopItem {
-	return testShopItem{
+func newTestShopItem(idx int, itemID, price int32) TestShopItem {
+	return TestShopItem{
 		Index: idx,
 		Item:  itemID,
 		Price: price,
 	}
 }
 
-func (e testShopItem) GetIndex() int {
+func (e TestShopItem) GetIndex() int {
 	return e.Index
 }
 
-func (e testShopItem) Compare(test Test, fieldName string, got apitypes.ShopItem) {
+func (e TestShopItem) Compare(test Test, fieldName string, got apitypes.ShopItem) {
 	test.T.Helper()
 	test.compIDAPIResource(fieldName+" - item", apilookups.E.Items.Endpoint, e.Item, got.Item)
 	test.compare(fieldName+" - price", e.Price, got.Price)
 }
 
-type testShopEquipment struct {
+type TestShopEquipment struct {
 	Index     int
-	Equipment testFoundEquipment
+	Equipment TestFoundEquipment
 	Price     int32
 }
 
-func (e testShopEquipment) GetIndex() int {
+func (e TestShopEquipment) GetIndex() int {
 	return e.Index
 }
 
-func (e testShopEquipment) Compare(test Test, fieldName string, got apitypes.ShopEquipment) {
+func (e TestShopEquipment) Compare(test Test, fieldName string, got apitypes.ShopEquipment) {
 	test.T.Helper()
 	e.Equipment.Compare(test, fieldName+" - found equipment", got.Equipment)
 	test.compare(fieldName+" - price", e.Price, got.Price)

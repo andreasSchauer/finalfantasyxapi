@@ -46,7 +46,7 @@ func TestGetSubquest(t *testing.T) {
 			Unique:          newExpUnique(5, "jormungand"),
 			UntypedQuest:    15,
 			ParentSidequest: 1,
-			Completion: testQuestCompletion{
+			Completion: TestQuestCompletion{
 				Areas:  []int32{203},
 				Reward: newTestResAmount[apiresource.Typed](50, 99),
 			},
@@ -64,7 +64,7 @@ func TestGetSubquest(t *testing.T) {
 			Unique:          newExpUnique(39, "ifrit - first win"),
 			UntypedQuest:    49,
 			ParentSidequest: 2,
-			Completion: testQuestCompletion{
+			Completion: TestQuestCompletion{
 				Areas:  []int32{207},
 				Reward: newTestResAmount[apiresource.Typed](3, 30),
 			},
@@ -82,7 +82,7 @@ func TestGetSubquest(t *testing.T) {
 			Unique:          newExpUnique(76, "first hunt after acquiring the airship"),
 			UntypedQuest:    86,
 			ParentSidequest: 6,
-			Completion: testQuestCompletion{
+			Completion: TestQuestCompletion{
 				Areas:  []int32{142, 143},
 				Reward: newTestResAmount[apiresource.Typed](98, 1),
 			},

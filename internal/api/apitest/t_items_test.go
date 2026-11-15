@@ -39,7 +39,7 @@ func TestGetItem(t *testing.T) {
 			Unique:      newExpUnique(69, "three stars"),
 			UntypedItem: 69,
 			Category:    database.ItemCategorySupport,
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 203,
@@ -94,7 +94,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(69, "three stars"),
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 203,
@@ -132,7 +132,7 @@ func TestGetItem(t *testing.T) {
 			Unique:      newExpUnique(26, "fire gem"),
 			UntypedItem: 26,
 			Category:    database.ItemCategoryOffensive,
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 109,
@@ -177,7 +177,7 @@ func TestGetItem(t *testing.T) {
 			Unique:      newExpUnique(2, "hi-potion"),
 			UntypedItem: 2,
 			Category:    database.ItemCategoryHealing,
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:     1,
 					Monster:   39,
@@ -229,7 +229,7 @@ func TestGetItem(t *testing.T) {
 			Unique:      newExpUnique(64, "stamina tablet"),
 			UntypedItem: 64,
 			Category:    database.ItemCategorySupport,
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 69,
@@ -273,7 +273,7 @@ func TestGetItem(t *testing.T) {
 			Unique:      newExpUnique(64, "stamina tablet"),
 			UntypedItem: 64,
 			Category:    database.ItemCategorySupport,
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:       0,
 					Monster:     195,
@@ -311,7 +311,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(55, "chocobo wing"),
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 242,
@@ -353,7 +353,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(55, "chocobo wing"),
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:     0,
 					Monster:   100,
@@ -392,7 +392,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique:    newExpUnique(55, "chocobo wing"),
-			Monsters:  []testMonItemAmts{},
+			Monsters:  []TestMonItemAmts{},
 			Treasures: nil,
 			Shops:     []int32{},
 			Quests: map[int32]int32{
@@ -420,7 +420,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(55, "chocobo wing"),
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:     0,
 					Monster:   100,
@@ -457,7 +457,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(2, "hi-potion"),
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:     0,
 					Monster:   39,
@@ -510,7 +510,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(2, "hi-potion"),
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:     0,
 					Monster:   39,
@@ -557,7 +557,7 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(2, "hi-potion"),
-			Monsters: []testMonItemAmts{
+			Monsters: []TestMonItemAmts{
 				{
 					Index:       0,
 					Monster:     239,

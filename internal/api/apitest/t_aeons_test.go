@@ -42,7 +42,7 @@ func TestGetAeon(t *testing.T) {
 			UntypedUnit:    11,
 			Area:           114,
 			BattlesToRegen: 20,
-			Agility: testAgilityParams{
+			Agility: TestAgilityParams{
 				AgilityTier: 7,
 				TickSpeed:   15,
 				MinICV:      h.GetInt32Ptr(43),
@@ -122,7 +122,7 @@ func TestGetAeon(t *testing.T) {
 			},
 			Area:           208,
 			BattlesToRegen: 30,
-			Agility: testAgilityParams{
+			Agility: TestAgilityParams{
 				AgilityTier: 12,
 				TickSpeed:   10,
 				MinICV:      h.GetInt32Ptr(26),
@@ -142,7 +142,7 @@ func TestGetAeon(t *testing.T) {
 				"evasion":       27,
 				"accuracy":      18,
 			},
-			RegenAmounts: []testRegenAmount{
+			RegenAmounts: []TestRegenAmount{
 				{
 					Index:    0,
 					Ticks:    0,
@@ -191,7 +191,7 @@ func TestGetAeon(t *testing.T) {
 			UntypedUnit:    9,
 			Area:           33,
 			BattlesToRegen: 8,
-			Agility: testAgilityParams{
+			Agility: TestAgilityParams{
 				AgilityTier: 15,
 				TickSpeed:   7,
 				MinICV:      h.GetInt32Ptr(20),
@@ -238,7 +238,7 @@ func TestGetAeon(t *testing.T) {
 				Name: "valefor",
 			},
 			UntypedUnit: 9,
-			Agility: testAgilityParams{
+			Agility: TestAgilityParams{
 				AgilityTier: 15,
 				TickSpeed:   7,
 				MinICV:      h.GetInt32Ptr(20),
