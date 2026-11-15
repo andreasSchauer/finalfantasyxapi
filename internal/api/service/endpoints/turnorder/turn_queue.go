@@ -4,47 +4,18 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-func readyTurnQueue(participants []servicetypes.Participant, rng string) []turnParams {
-	var turnQueue []turnParams
+
+func readyTurnQueue(participants []servicetypes.Participant, rng string) []servicetypes.TurnParams {
+	var turnQueue []servicetypes.TurnParams
 
 	for _, participant := range participants {
 		if participant.TickSpeed == 0 || participant.MinICV == nil || participant.MaxICV == nil {
 			continue
 		}
 
-		params := turnParams{
-			Name:        participant.Name,
-			PriorityKey: participant.GetKey(),
-			Party:       participant.Party,
-			Agility:     participant.Agility,
-			TickSpeed:   participant.TickSpeed,
-		}
-
-		switch rng {
-		case string(database.TurnOrderRngBest):
-			switch participant.Party {
-			case servicetypes.BattlePartyPlayer:
-				params.TicksNextTurn = *participant.MinICV
-
-			case servicetypes.BattlePartyOpponent:
-				params.TicksNextTurn = *participant.MaxICV
-			}
-
-		case string(database.TurnOrderRngWorst):
-			switch participant.Party {
-			case servicetypes.BattlePartyPlayer:
-				params.TicksNextTurn = *participant.MaxICV
-
-			case servicetypes.BattlePartyOpponent:
-				params.TicksNextTurn = *participant.MinICV
-			}
-
-		case string(database.TurnOrderRngMedian):
-			params.TicksNextTurn = (*participant.MinICV + *participant.MaxICV) / 2
-		}
+		params := participant.GetTurnParams(rng)
 
 		turnQueue = append(turnQueue, params)
 	}
@@ -52,13 +23,13 @@ func readyTurnQueue(participants []servicetypes.Participant, rng string) []turnP
 	return sortTurnQueue(turnQueue)
 }
 
-func sortTurnQueue(turnQueue []turnParams) []turnParams {
+func sortTurnQueue(turnQueue []servicetypes.TurnParams) []servicetypes.TurnParams {
 	slices.SortStableFunc(turnQueue, sortTurnQueueTicks)
 
 	return turnQueue
 }
 
-func sortTurnQueueTicks(a, b turnParams) int {
+func sortTurnQueueTicks(a, b servicetypes.TurnParams) int {
 	if a.TicksNextTurn < b.TicksNextTurn {
 		return -1
 	}
@@ -70,7 +41,7 @@ func sortTurnQueueTicks(a, b turnParams) int {
 	return sortTurnQueueAgility(a, b)
 }
 
-func sortTurnQueueAgility(a, b turnParams) int {
+func sortTurnQueueAgility(a, b servicetypes.TurnParams) int {
 	if a.Agility > b.Agility {
 		return -1
 	}
@@ -82,7 +53,7 @@ func sortTurnQueueAgility(a, b turnParams) int {
 	return sortTurnQueuePriority(a, b)
 }
 
-func sortTurnQueuePriority(a, b turnParams) int {
+func sortTurnQueuePriority(a, b servicetypes.TurnParams) int {
 	priorities := getPriorityMap()
 
 	aVal, ok := priorities[a.PriorityKey]

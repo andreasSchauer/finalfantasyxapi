@@ -8,14 +8,6 @@ import (
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
-type turnParams struct {
-	Name          string
-	Party         servicetypes.BattleParty
-	PriorityKey   string
-	Agility       int32
-	TickSpeed     int32
-	TicksNextTurn int32
-}
 
 func Handle(params servicetypes.TurnOrderParams) (servicetypes.TurnOrderResponse, error) {
 	var err error
