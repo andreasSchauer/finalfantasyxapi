@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -27,7 +28,7 @@ func Loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for i, c := range commands {
-		params.DataHash[i] = generateDataHash(c)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
 		params.AbilityID[i] = c.Ability.ID
 		params.Description[i] = c.Description
 		params.Effect[i] = c.Effect
@@ -42,10 +43,10 @@ func Loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Context) error 
 
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
-		rawJSON.triggerCommands[i].ID = row.ID
+		seedhelpers.RawJSON.TriggerCommands[i].ID = row.ID
 		lookup.L.TriggerCommands[seedtypes.Key(commands[i])] = commands[i]
 		lookup.L.TriggerCommandsID[row.ID] = commands[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -55,15 +56,15 @@ func extractTriggerCommands() ([]seedtypes.TriggerCommand, error) {
 	commands := []seedtypes.TriggerCommand{}
 	var err error
 
-	for i := range rawJSON.triggerCommands {
-		command := &rawJSON.triggerCommands[i]
+	for i := range seedhelpers.RawJSON.TriggerCommands {
+		command := &seedhelpers.RawJSON.TriggerCommands[i]
 
-		command.Ability.ID, err = getHashID(command.Ability)
+		command.Ability.ID, err = seedhelpers.GetHashID(command.Ability)
 		if err != nil {
 			return nil, err
 		}
 
-		command.TopmenuID, err = assignFKPtr(command.Topmenu, lookup.L.Topmenus)
+		command.TopmenuID, err = seedhelpers.AssignFKPtr(command.Topmenu, lookup.L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
@@ -71,12 +72,12 @@ func extractTriggerCommands() ([]seedtypes.TriggerCommand, error) {
 		commands = append(commands, *command)
 	}
 
-	return dedupeRows(commands, hashes), nil
+	return dedupeRows(commands, seedhelpers.Hashes), nil
 }
 
 func completeTriggerCommands() error {
-	for i := range rawJSON.triggerCommands {
-		ability := &rawJSON.triggerCommands[i]
+	for i := range seedhelpers.RawJSON.TriggerCommands {
+		ability := &seedhelpers.RawJSON.TriggerCommands[i]
 
 		err := completeBattleInteractions(ability.BattleInteractions)
 		if err != nil {

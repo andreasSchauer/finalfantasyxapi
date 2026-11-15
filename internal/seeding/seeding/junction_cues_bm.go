@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -25,7 +26,7 @@ func SeedJuncCuesIncludedAreas(qtx *database.Queries, ctx context.Context) error
 func getCues() []seedtypes.Cue {
 	cues := []seedtypes.Cue{}
 
-	for _, song := range rawJSON.songs {
+	for _, song := range seedhelpers.RawJSON.Songs {
 		cues = append(cues, song.Cues...)
 	}
 

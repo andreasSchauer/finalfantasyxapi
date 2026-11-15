@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -25,7 +26,7 @@ func Loop6SeedShopEquipment(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, se := range equipment {
-		params.DataHash[i] = generateDataHash(se)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(se)
 		params.ShopID[i] = se.ShopID
 		params.EquipmentNameID[i] = se.EquipmentNameID
 		params.ShopType[i] = se.ShopType
@@ -39,7 +40,7 @@ func Loop6SeedShopEquipment(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -49,8 +50,8 @@ func extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 	shopEquipment := []seedtypes.ShopEquipment{}
 	var err error
 
-	for i := range rawJSON.shops {
-		shop := &rawJSON.shops[i]
+	for i := range seedhelpers.RawJSON.Shops {
+		shop := &seedhelpers.RawJSON.Shops[i]
 
 		if shop.PreAirship != nil {
 			for j := range shop.PreAirship.Equipment {
@@ -59,7 +60,7 @@ func extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 				equipment.ShopID = shop.ID
 				equipment.ShopType = database.ShopTypePreAirship
 
-				equipment.EquipmentNameID, err = assignFK(equipment.Name, lookup.L.EquipmentNames)
+				equipment.EquipmentNameID, err = seedhelpers.AssignFK(equipment.Name, lookup.L.EquipmentNames)
 				if err != nil {
 					return nil, err
 				}
@@ -75,7 +76,7 @@ func extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 				equipment.ShopID = shop.ID
 				equipment.ShopType = database.ShopTypePostAirship
 
-				equipment.EquipmentNameID, err = assignFK(equipment.Name, lookup.L.EquipmentNames)
+				equipment.EquipmentNameID, err = seedhelpers.AssignFK(equipment.Name, lookup.L.EquipmentNames)
 				if err != nil {
 					return nil, err
 				}
@@ -85,5 +86,5 @@ func extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 		}
 	}
 
-	return dedupeRows(shopEquipment, hashes), nil
+	return dedupeRows(shopEquipment, seedhelpers.Hashes), nil
 }

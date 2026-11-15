@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -26,7 +27,7 @@ func Loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, d := range drops {
-		params.DataHash[i] = generateDataHash(d)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(d)
 		params.AutoAbilityID[i] = d.AutoAbilityID
 		params.IsForced[i] = d.IsForced
 		params.Probability[i] = h.GetNullInt32(d.Probability)
@@ -39,7 +40,7 @@ func Loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -49,8 +50,8 @@ func extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
 	drops := []seedtypes.EquipmentDrop{}
 	var err error
 
-	for i := range rawJSON.monsters {
-		mon := &rawJSON.monsters[i]
+	for i := range seedhelpers.RawJSON.Monsters {
+		mon := &seedhelpers.RawJSON.Monsters[i]
 
 		if mon.Equipment == nil {
 			continue
@@ -60,7 +61,7 @@ func extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
 			drop := &mon.Equipment.WeaponAbilities[j]
 			drop.Type = database.EquipTypeWeapon
 
-			drop.AutoAbilityID, err = assignFK(drop.Ability, lookup.L.AutoAbilities)
+			drop.AutoAbilityID, err = seedhelpers.AssignFK(drop.Ability, lookup.L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}
@@ -72,7 +73,7 @@ func extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
 			drop := &mon.Equipment.ArmorAbilities[j]
 			drop.Type = database.EquipTypeArmor
 
-			drop.AutoAbilityID, err = assignFK(drop.Ability, lookup.L.AutoAbilities)
+			drop.AutoAbilityID, err = seedhelpers.AssignFK(drop.Ability, lookup.L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}
@@ -81,5 +82,5 @@ func extractEquipmentDrops() ([]seedtypes.EquipmentDrop, error) {
 		}
 	}
 
-	return dedupeRows(drops, hashes), nil
+	return dedupeRows(drops, seedhelpers.Hashes), nil
 }

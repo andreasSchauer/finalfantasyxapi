@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -28,7 +29,7 @@ func Loop3SeedAeonCommands(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, ac := range commands {
-		params.DataHash[i] = generateDataHash(ac)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(ac)
 		params.Name[i] = ac.Name
 		params.Description[i] = ac.Description
 		params.Effect[i] = ac.Effect
@@ -44,10 +45,10 @@ func Loop3SeedAeonCommands(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		commands[i].ID = row.ID
-		rawJSON.aeonCommands[i].ID = row.ID
+		seedhelpers.RawJSON.AeonCommands[i].ID = row.ID
 		lookup.L.AeonCommands[seedtypes.Key(commands[i])] = commands[i]
 		lookup.L.AeonCommandsID[row.ID] = commands[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -57,15 +58,15 @@ func extractAeonCommands() ([]seedtypes.AeonCommand, error) {
 	commands := []seedtypes.AeonCommand{}
 	var err error
 
-	for i := range rawJSON.aeonCommands {
-		command := &rawJSON.aeonCommands[i]
+	for i := range seedhelpers.RawJSON.AeonCommands {
+		command := &seedhelpers.RawJSON.AeonCommands[i]
 
-		command.TopmenuID, err = assignFKPtr(command.Topmenu, lookup.L.Topmenus)
+		command.TopmenuID, err = seedhelpers.AssignFKPtr(command.Topmenu, lookup.L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		command.SubmenuID, err = assignFKPtr(command.OpenSubmenu, lookup.L.Submenus)
+		command.SubmenuID, err = seedhelpers.AssignFKPtr(command.OpenSubmenu, lookup.L.Submenus)
 		if err != nil {
 			return nil, err
 		}
@@ -73,5 +74,5 @@ func extractAeonCommands() ([]seedtypes.AeonCommand, error) {
 		commands = append(commands, *command)
 	}
 
-	return dedupeRows(commands, hashes), nil
+	return dedupeRows(commands, seedhelpers.Hashes), nil
 }

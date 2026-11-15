@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -25,7 +26,7 @@ func Loop4SeedFormationTriggerCommands(qtx *database.Queries, ctx context.Contex
 	}
 
 	for i, c := range commands {
-		params.DataHash[i] = generateDataHash(c)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
 		params.TriggerCommandID[i] = c.TriggerCommandID
 		params.Condition[i] = h.GetNullString(c.Condition)
 		params.UseAmount[i] = h.GetNullInt32(c.UseAmount)
@@ -37,7 +38,7 @@ func Loop4SeedFormationTriggerCommands(qtx *database.Queries, ctx context.Contex
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -47,13 +48,13 @@ func extractFormationTriggerCommands() ([]seedtypes.FormationTriggerCommand, err
 	commands := []seedtypes.FormationTriggerCommand{}
 	var err error
 
-	for i := range rawJSON.monsterFormations {
-		mf := &rawJSON.monsterFormations[i]
+	for i := range seedhelpers.RawJSON.MonsterFormations {
+		mf := &seedhelpers.RawJSON.MonsterFormations[i]
 
 		for j := range mf.TriggerCommands {
 			command := &mf.TriggerCommands[j]
 
-			command.TriggerCommandID, err = assignFK(command.AbilityReference.Untyped(), lookup.L.TriggerCommands)
+			command.TriggerCommandID, err = seedhelpers.AssignFK(command.AbilityReference.Untyped(), lookup.L.TriggerCommands)
 			if err != nil {
 				return nil, err
 			}
@@ -62,5 +63,5 @@ func extractFormationTriggerCommands() ([]seedtypes.FormationTriggerCommand, err
 		}
 	}
 
-	return dedupeRows(commands, hashes), nil
+	return dedupeRows(commands, seedhelpers.Hashes), nil
 }

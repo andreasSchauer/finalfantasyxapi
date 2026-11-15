@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -22,7 +23,7 @@ func Loop5SeedMixes(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, m := range mixes {
-		params.DataHash[i] = generateDataHash(m)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(m)
 		params.OverdriveID[i] = m.OverdriveID
 		params.Category[i] = database.MixCategory(m.Category)
 	}
@@ -34,10 +35,10 @@ func Loop5SeedMixes(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		mixes[i].ID = row.ID
-		rawJSON.mixes[i].ID = row.ID
+		seedhelpers.RawJSON.Mixes[i].ID = row.ID
 		lookup.L.Mixes[seedtypes.Key(mixes[i])] = mixes[i]
 		lookup.L.MixesID[row.ID] = mixes[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -47,14 +48,14 @@ func extractMixes() ([]seedtypes.Mix, error) {
 	mixes := []seedtypes.Mix{}
 	var err error
 
-	for i := range rawJSON.mixes {
-		mix := &rawJSON.mixes[i]
+	for i := range seedhelpers.RawJSON.Mixes {
+		mix := &seedhelpers.RawJSON.Mixes[i]
 
 		obj := seedtypes.LookupObject{
 			Name: mix.Name,
 		}
 
-		mix.OverdriveID, err = assignFK(seedtypes.Key(obj), lookup.L.Overdrives)
+		mix.OverdriveID, err = seedhelpers.AssignFK(seedtypes.Key(obj), lookup.L.Overdrives)
 		if err != nil {
 			return nil, err
 		}
@@ -62,12 +63,12 @@ func extractMixes() ([]seedtypes.Mix, error) {
 		mixes = append(mixes, *mix)
 	}
 
-	return dedupeRows(mixes, hashes), nil
+	return dedupeRows(mixes, seedhelpers.Hashes), nil
 }
 
 func completeMixes() error {
-	for i := range rawJSON.mixes {
-		mix := &rawJSON.mixes[i]
+	for i := range seedhelpers.RawJSON.Mixes {
+		mix := &seedhelpers.RawJSON.Mixes[i]
 
 		err := assignIDs(mix.PossibleCombinations)
 		if err != nil {
@@ -96,7 +97,7 @@ func Loop6SeedMixCombinations(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for i, c := range combos {
-		params.DataHash[i] = generateDataHash(c)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
 		params.MixID[i] = c.MixID
 		params.FirstItemID[i] = c.FirstItemID
 		params.SecondItemID[i] = c.SecondItemID
@@ -109,7 +110,7 @@ func Loop6SeedMixCombinations(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -119,8 +120,8 @@ func extractMixCombinations() ([]seedtypes.MixCombination, error) {
 	combos := []seedtypes.MixCombination{}
 	var err error
 
-	for i := range rawJSON.mixes {
-		mix := &rawJSON.mixes[i]
+	for i := range seedhelpers.RawJSON.Mixes {
+		mix := &seedhelpers.RawJSON.Mixes[i]
 		bestComboMap := getBestComboMap(*mix)
 
 		for j := range mix.PossibleCombinations {
@@ -130,12 +131,12 @@ func extractMixCombinations() ([]seedtypes.MixCombination, error) {
 			key := seedtypes.Key(combo)
 			combo.IsBestCombo = bestComboMap[key]
 
-			combo.FirstItemID, err = assignFK(combo.FirstItem, lookup.L.Items)
+			combo.FirstItemID, err = seedhelpers.AssignFK(combo.FirstItem, lookup.L.Items)
 			if err != nil {
 				return nil, err
 			}
 
-			combo.SecondItemID, err = assignFK(combo.SecondItem, lookup.L.Items)
+			combo.SecondItemID, err = seedhelpers.AssignFK(combo.SecondItem, lookup.L.Items)
 			if err != nil {
 				return nil, err
 			}
@@ -150,7 +151,7 @@ func extractMixCombinations() ([]seedtypes.MixCombination, error) {
 		}
 	}
 
-	return dedupeRows(combos, hashes), nil
+	return dedupeRows(combos, seedhelpers.Hashes), nil
 }
 
 func getBestComboMap(mix seedtypes.Mix) map[string]bool {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -35,7 +36,7 @@ func SeedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
 		ShopType:   make([]database.ShopType, 0),
 	}
 
-	for _, shop := range rawJSON.shops {
+	for _, shop := range seedhelpers.RawJSON.Shops {
 		if shop.PreAirship != nil {
 			for _, item := range shop.PreAirship.Items {
 				j := ShopJunction{
@@ -43,7 +44,7 @@ func SeedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
 					ChildID:  item.ID,
 					ShopType: shop.PreAirship.Type,
 				}
-				dataHash := generateJunctionHash(j, desc)
+				dataHash := GenerateJunctionHash(j, desc)
 
 				params.DataHash = append(params.DataHash, dataHash)
 				params.ShopID = append(params.ShopID, shop.ID)
@@ -59,7 +60,7 @@ func SeedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
 					ChildID:  item.ID,
 					ShopType: shop.PostAirship.Type,
 				}
-				dataHash := generateJunctionHash(j, desc)
+				dataHash := GenerateJunctionHash(j, desc)
 
 				params.DataHash = append(params.DataHash, dataHash)
 				params.ShopID = append(params.ShopID, shop.ID)
@@ -75,7 +76,7 @@ func SeedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
 func getShopEquipment() []seedtypes.ShopEquipment {
 	shopEquipment := []seedtypes.ShopEquipment{}
 
-	for _, shop := range rawJSON.shops {
+	for _, shop := range seedhelpers.RawJSON.Shops {
 		if shop.PreAirship != nil {
 			shopEquipment = append(shopEquipment, shop.PreAirship.Equipment...)
 		}

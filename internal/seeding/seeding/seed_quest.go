@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -24,7 +25,7 @@ func Loop1SeedQuests(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, q := range quests {
-		params.DataHash[i] = generateDataHash(q)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(q)
 		params.Name[i] = q.Name
 		params.Type[i] = q.Type
 		params.Availability[i] = database.AvailabilityType(q.Availability)
@@ -40,7 +41,7 @@ func Loop1SeedQuests(qtx *database.Queries, ctx context.Context) error {
 		quests[i].ID = row.ID
 		lookup.L.Quests[seedtypes.Key(quests[i])] = quests[i]
 		lookup.L.QuestsID[row.ID] = quests[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -49,15 +50,15 @@ func Loop1SeedQuests(qtx *database.Queries, ctx context.Context) error {
 func extractQuests() ([]seedtypes.Quest, error) {
 	quests := []seedtypes.Quest{}
 
-	for i := range rawJSON.sidequests {
-		quest := &rawJSON.sidequests[i].Quest
+	for i := range seedhelpers.RawJSON.Sidequests {
+		quest := &seedhelpers.RawJSON.Sidequests[i].Quest
 		quest.Type = database.QuestTypeSidequest
 
 		quests = append(quests, *quest)
 	}
 
-	for i := range rawJSON.sidequests {
-		sidequest := &rawJSON.sidequests[i]
+	for i := range seedhelpers.RawJSON.Sidequests {
+		sidequest := &seedhelpers.RawJSON.Sidequests[i]
 
 		for j := range sidequest.Subquests {
 			quest := &sidequest.Subquests[j].Quest
@@ -67,5 +68,5 @@ func extractQuests() ([]seedtypes.Quest, error) {
 		}
 	}
 
-	return dedupeRows(quests, hashes), nil
+	return dedupeRows(quests, seedhelpers.Hashes), nil
 }

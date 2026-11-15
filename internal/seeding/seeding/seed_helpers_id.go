@@ -2,7 +2,8 @@ package seeding
 
 import (
 	"fmt"
-	
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -13,7 +14,7 @@ type needsID interface {
 }
 
 func assignID(obj needsID) error {
-	id, ok := hashes[generateDataHash(obj)]
+	id, ok := seedhelpers.Hashes[seedhelpers.GenerateDataHash(obj)]
 	if !ok {
 		return fmt.Errorf("no id found for %s", obj)
 	}

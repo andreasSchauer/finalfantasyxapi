@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -23,7 +24,7 @@ func Loop6SeedAeonEquipment(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, e := range equipment {
-		params.DataHash[i] = generateDataHash(e)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(e)
 		params.AutoAbilityID[i] = e.AutoAbilityID
 		params.CelestialWpn[i] = e.CelestialWeapon
 		params.EquipType[i] = database.EquipType(e.EquipType)
@@ -35,7 +36,7 @@ func Loop6SeedAeonEquipment(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -45,14 +46,14 @@ func extractAeonEquipment() ([]seedtypes.AeonEquipment, error) {
 	equipment := []seedtypes.AeonEquipment{}
 	var err error
 
-	for i := range rawJSON.aeons {
-		aeon := &rawJSON.aeons[i]
+	for i := range seedhelpers.RawJSON.Aeons {
+		aeon := &seedhelpers.RawJSON.Aeons[i]
 
 		for j := range aeon.Weapon {
 			ae := &aeon.Weapon[j]
 			ae.EquipType = string(database.EquipTypeWeapon)
 
-			ae.AutoAbilityID, err = assignFK(ae.AutoAbility, lookup.L.AutoAbilities)
+			ae.AutoAbilityID, err = seedhelpers.AssignFK(ae.AutoAbility, lookup.L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}
@@ -64,7 +65,7 @@ func extractAeonEquipment() ([]seedtypes.AeonEquipment, error) {
 			ae := &aeon.Armor[j]
 			ae.EquipType = string(database.EquipTypeArmor)
 
-			ae.AutoAbilityID, err = assignFK(ae.AutoAbility, lookup.L.AutoAbilities)
+			ae.AutoAbilityID, err = seedhelpers.AssignFK(ae.AutoAbility, lookup.L.AutoAbilities)
 			if err != nil {
 				return nil, err
 			}
@@ -73,5 +74,5 @@ func extractAeonEquipment() ([]seedtypes.AeonEquipment, error) {
 		}
 	}
 
-	return dedupeRows(equipment, hashes), nil
+	return dedupeRows(equipment, seedhelpers.Hashes), nil
 }

@@ -1,6 +1,9 @@
 package seeding
 
-import "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
+)
 
 type JunctionParams struct {
 	DataHashes          []string
@@ -18,7 +21,7 @@ func processJunctions[P, C seedtypes.Hashable](desc string, parents []P, getChil
 	}
 
 	for _, p := range parents {
-		pID, err := getHashID(p)
+		pID, err := seedhelpers.GetHashID(p)
 		if err != nil {
 			return JunctionParams{}, err
 		}
@@ -29,7 +32,7 @@ func processJunctions[P, C seedtypes.Hashable](desc string, parents []P, getChil
 		}
 
 		for _, c := range children {
-			cID, err := getHashID(c)
+			cID, err := seedhelpers.GetHashID(c)
 			if err != nil {
 				return JunctionParams{}, err
 			}
@@ -38,7 +41,7 @@ func processJunctions[P, C seedtypes.Hashable](desc string, parents []P, getChil
 				ParentID: pID,
 				ChildID:  cID,
 			}
-			dataHash := generateJunctionHash(j, desc)
+			dataHash := GenerateJunctionHash(j, desc)
 
 			params.DataHashes = append(params.DataHashes, dataHash)
 			params.ParentIDs = append(params.ParentIDs, pID)
@@ -57,7 +60,7 @@ func processThreewayJunctions[GP, P, C seedtypes.Hashable](desc string, grandPar
 		ChildIDs:       make([]int32, 0),
 	}
 	for _, gp := range grandParents {
-		gpID, err := getHashID(gp)
+		gpID, err := seedhelpers.GetHashID(gp)
 		if err != nil {
 			return JunctionParams{}, err
 		}
@@ -68,7 +71,7 @@ func processThreewayJunctions[GP, P, C seedtypes.Hashable](desc string, grandPar
 		}
 
 		for _, p := range parents {
-			pID, err := getHashID(p)
+			pID, err := seedhelpers.GetHashID(p)
 			if err != nil {
 				return JunctionParams{}, err
 			}
@@ -79,7 +82,7 @@ func processThreewayJunctions[GP, P, C seedtypes.Hashable](desc string, grandPar
 			}
 
 			for _, c := range children {
-				cID, err := getHashID(c)
+				cID, err := seedhelpers.GetHashID(c)
 				if err != nil {
 					return JunctionParams{}, err
 				}
@@ -88,7 +91,7 @@ func processThreewayJunctions[GP, P, C seedtypes.Hashable](desc string, grandPar
 				j.GrandparentID = gpID
 				j.ParentID = pID
 				j.ChildID = cID
-				dataHash := generateJunctionHash(j, desc)
+				dataHash := GenerateJunctionHash(j, desc)
 
 				params.DataHashes = append(params.DataHashes, dataHash)
 				params.GrandParentIDs = append(params.GrandParentIDs, gpID)

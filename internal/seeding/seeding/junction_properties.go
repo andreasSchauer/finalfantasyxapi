@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -14,7 +15,7 @@ func getPropertyRelatedStats(p seedtypes.Property) ([]seedtypes.Stat, error) {
 
 func SeedJuncPropertiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "properties + related stats"
-	jParams, err := processJunctions(desc, rawJSON.properties, getPropertyRelatedStats)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Properties, getPropertyRelatedStats)
 	if err != nil {
 		return err
 	}

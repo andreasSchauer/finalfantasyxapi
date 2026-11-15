@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -20,7 +21,7 @@ func Loop2SeedMonsterEquipment(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for i, e := range equipments {
-		params.DataHash[i] = generateDataHash(e)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(e)
 		params.MonsterID[i] = e.MonsterID
 		params.DropChance[i] = e.DropChance
 		params.Power[i] = e.Power
@@ -33,7 +34,7 @@ func Loop2SeedMonsterEquipment(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -42,8 +43,8 @@ func Loop2SeedMonsterEquipment(qtx *database.Queries, ctx context.Context) error
 func extractMonsterEquipment() []seedtypes.MonsterEquipment {
 	equipments := []seedtypes.MonsterEquipment{}
 
-	for i := range rawJSON.monsters {
-		mon := &rawJSON.monsters[i]
+	for i := range seedhelpers.RawJSON.Monsters {
+		mon := &seedhelpers.RawJSON.Monsters[i]
 
 		if mon.Equipment != nil {
 			mon.Equipment.MonsterID = mon.ID
@@ -51,7 +52,7 @@ func extractMonsterEquipment() []seedtypes.MonsterEquipment {
 		}
 	}
 
-	return dedupeRows(equipments, hashes)
+	return dedupeRows(equipments, seedhelpers.Hashes)
 }
 
 func completeMonsterEquipment(equipment *seedtypes.MonsterEquipment) error {

@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -21,7 +22,7 @@ func Loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for i, music := range bm {
-		params.DataHash[i] = generateDataHash(music)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(music)
 		params.Condition[i] = h.GetNullString(music.Condition)
 		params.ReplacesEncounterMusic[i] = music.ReplacesEncounterMusic
 	}
@@ -32,7 +33,7 @@ func Loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -41,11 +42,11 @@ func Loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Context) error 
 func extractBackgroundMusic() []seedtypes.BackgroundMusic {
 	bgMusic := []seedtypes.BackgroundMusic{}
 
-	for _, song := range rawJSON.songs {
+	for _, song := range seedhelpers.RawJSON.Songs {
 		bgMusic = append(bgMusic, song.BackgroundMusic...)
 	}
 
-	return dedupeRows(bgMusic, hashes)
+	return dedupeRows(bgMusic, seedhelpers.Hashes)
 }
 
 func Loop4SeedCues(qtx *database.Queries, ctx context.Context) error {
@@ -65,7 +66,7 @@ func Loop4SeedCues(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, c := range cues {
-		params.DataHash[i] = generateDataHash(c)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
 		params.SongID[i] = c.SongID
 		params.SceneDescription[i] = c.SceneDescription
 		params.TriggerAreaID[i] = h.GetNullInt32(c.TriggerAreaID)
@@ -80,7 +81,7 @@ func Loop4SeedCues(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -90,15 +91,15 @@ func extractCues() ([]seedtypes.Cue, error) {
 	cues := []seedtypes.Cue{}
 	var err error
 
-	for i := range rawJSON.songs {
-		song := &rawJSON.songs[i]
+	for i := range seedhelpers.RawJSON.Songs {
+		song := &seedhelpers.RawJSON.Songs[i]
 
 		for j := range song.Cues {
 			cue := &song.Cues[j]
 			cue.SongID = song.ID
 
 			if cue.TriggerLocationArea != nil {
-				cue.TriggerAreaID, err = assignFKPtr(cue.TriggerLocationArea, lookup.L.Areas)
+				cue.TriggerAreaID, err = seedhelpers.AssignFKPtr(cue.TriggerLocationArea, lookup.L.Areas)
 				if err != nil {
 					return nil, err
 				}
@@ -108,5 +109,5 @@ func extractCues() ([]seedtypes.Cue, error) {
 		}
 	}
 
-	return dedupeRows(cues, hashes), nil
+	return dedupeRows(cues, seedhelpers.Hashes), nil
 }

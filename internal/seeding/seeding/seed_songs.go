@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -35,7 +36,7 @@ func Loop2SeedSongs(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, s := range songs {
-		params.DataHash[i] = generateDataHash(s)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
 		params.Name[i] = s.Name
 		params.StreamingName[i] = h.GetNullString(s.StreamingName)
 		params.InGameName[i] = h.GetNullString(s.InGameName)
@@ -58,10 +59,10 @@ func Loop2SeedSongs(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		songs[i].ID = row.ID
-		rawJSON.songs[i].ID = row.ID
+		seedhelpers.RawJSON.Songs[i].ID = row.ID
 		lookup.L.Songs[seedtypes.Key(songs[i])] = songs[i]
 		lookup.L.SongsID[row.ID] = songs[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -71,11 +72,11 @@ func extractSongs() ([]seedtypes.Song, error) {
 	songs := []seedtypes.Song{}
 	var err error
 
-	for i := range rawJSON.songs {
-		song := &rawJSON.songs[i]
+	for i := range seedhelpers.RawJSON.Songs {
+		song := &seedhelpers.RawJSON.Songs[i]
 
 		if song.Credits != nil {
-			song.Credits.ID, err = getHashID(*song.Credits)
+			song.Credits.ID, err = seedhelpers.GetHashID(*song.Credits)
 			if err != nil {
 				return nil, err
 			}
@@ -83,12 +84,12 @@ func extractSongs() ([]seedtypes.Song, error) {
 		songs = append(songs, *song)
 	}
 
-	return dedupeRows(songs, hashes), nil
+	return dedupeRows(songs, seedhelpers.Hashes), nil
 }
 
 func completeSongs() error {
-	for i := range rawJSON.songs {
-		song := &rawJSON.songs[i]
+	for i := range seedhelpers.RawJSON.Songs {
+		song := &seedhelpers.RawJSON.Songs[i]
 
 		err := assignIDs(song.BackgroundMusic)
 		if err != nil {
@@ -119,7 +120,7 @@ func Loop1SeedSongCredits(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, c := range credits {
-		params.DataHash[i] = generateDataHash(c)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
 		params.Composer[i] = database.ToNullComposer(c.Composer)
 		params.Arranger[i] = database.ToNullArranger(c.Arranger)
 		params.Performer[i] = h.GetNullString(c.Performer)
@@ -132,7 +133,7 @@ func Loop1SeedSongCredits(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -141,11 +142,11 @@ func Loop1SeedSongCredits(qtx *database.Queries, ctx context.Context) error {
 func extractSongCredits() []seedtypes.SongCredits {
 	credits := []seedtypes.SongCredits{}
 
-	for _, song := range rawJSON.songs {
+	for _, song := range seedhelpers.RawJSON.Songs {
 		if song.Credits != nil {
 			credits = append(credits, *song.Credits)
 		}
 	}
 
-	return dedupeRows(credits, hashes)
+	return dedupeRows(credits, seedhelpers.Hashes)
 }

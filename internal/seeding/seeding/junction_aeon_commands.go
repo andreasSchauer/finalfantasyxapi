@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 )
 
 func processAeonCommandsPossibleAbilities(desc string) (JunctionParams, error) {
@@ -15,7 +16,7 @@ func processAeonCommandsPossibleAbilities(desc string) (JunctionParams, error) {
 		ChildIDs:       make([]int32, 0),
 	}
 
-	for _, command := range rawJSON.aeonCommands {
+	for _, command := range seedhelpers.RawJSON.AeonCommands {
 		for _, list := range command.PossibleAbilities {
 			class, err := lookup.GetResource(list.User, lookup.L.CharClasses)
 			if err != nil {
@@ -33,7 +34,7 @@ func processAeonCommandsPossibleAbilities(desc string) (JunctionParams, error) {
 					ParentID:      class.ID,
 					ChildID:       ability.ID,
 				}
-				dataHash := generateJunctionHash(j, desc)
+				dataHash := GenerateJunctionHash(j, desc)
 
 				params.DataHashes = append(params.DataHashes, dataHash)
 				params.GrandParentIDs = append(params.GrandParentIDs, command.ID)

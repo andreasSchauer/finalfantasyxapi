@@ -1,4 +1,4 @@
-package seeding
+package seedhelpers
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func assignFK[T any, R seedtypes.Lookupable](key T, l map[string]R) (int32, error) {
+func AssignFK[T any, R seedtypes.Lookupable](key T, l map[string]R) (int32, error) {
 	result, err := lookup.GetResource(key, l)
 	if err != nil {
 		return 0, fmt.Errorf("couldn't assign foreign key: %v", err)
@@ -17,7 +17,7 @@ func assignFK[T any, R seedtypes.Lookupable](key T, l map[string]R) (int32, erro
 	return id, nil
 }
 
-func assignFKPtr[T any, R seedtypes.Lookupable](key *T, l map[string]R) (*int32, error) {
+func AssignFKPtr[T any, R seedtypes.Lookupable](key *T, l map[string]R) (*int32, error) {
 	if key == nil {
 		return nil, nil
 	}

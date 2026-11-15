@@ -5,13 +5,8 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 )
-
-type DefaultAbilitiesEntry struct {
-	Name             string                       `json:"name"`
-	DefaultAbilities []seedtypes.AbilityReference `json:"default_abilities"`
-}
 
 func SeedJuncDefaultAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "default abilities"
@@ -21,7 +16,7 @@ func SeedJuncDefaultAbilities(qtx *database.Queries, ctx context.Context) error 
 		AbilityID: make([]int32, 0),
 	}
 
-	for _, entry := range rawJSON.defaultAbilities {
+	for _, entry := range seedhelpers.RawJSON.DefaultAbilities {
 		class, err := lookup.GetResource(entry.Name, lookup.L.CharClasses)
 		if err != nil {
 			return err
@@ -37,7 +32,7 @@ func SeedJuncDefaultAbilities(qtx *database.Queries, ctx context.Context) error 
 				ParentID: class.ID,
 				ChildID:  ability.ID,
 			}
-			dataHash := generateJunctionHash(j, desc)
+			dataHash := GenerateJunctionHash(j, desc)
 
 			params.DataHash = append(params.DataHash, dataHash)
 			params.ClassID = append(params.ClassID, class.ID)

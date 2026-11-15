@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -29,7 +30,7 @@ func Loop2SeedItems(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, item := range items {
-		params.DataHash[i] = generateDataHash(item)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(item)
 		params.MasterItemID[i] = item.MasterItem.ID
 		params.Description[i] = item.Description
 		params.Effect[i] = item.Effect
@@ -46,10 +47,10 @@ func Loop2SeedItems(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		items[i].ID = row.ID
-		rawJSON.items[i].ID = row.ID
+		seedhelpers.RawJSON.Items[i].ID = row.ID
 		lookup.L.Items[seedtypes.Key(items[i])] = items[i]
 		lookup.L.ItemsID[row.ID] = items[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -59,10 +60,10 @@ func extractItems() ([]seedtypes.Item, error) {
 	items := []seedtypes.Item{}
 	var err error
 
-	for i := range rawJSON.items {
-		item := &rawJSON.items[i]
+	for i := range seedhelpers.RawJSON.Items {
+		item := &seedhelpers.RawJSON.Items[i]
 
-		item.MasterItem.ID, err = assignFK(item.Name, lookup.L.MasterItems)
+		item.MasterItem.ID, err = seedhelpers.AssignFK(item.Name, lookup.L.MasterItems)
 		if err != nil {
 			return nil, err
 		}
@@ -71,12 +72,12 @@ func extractItems() ([]seedtypes.Item, error) {
 		items = append(items, *item)
 	}
 
-	return dedupeRows(items, hashes), nil
+	return dedupeRows(items, seedhelpers.Hashes), nil
 }
 
 func completeItems() error {
-	for i := range rawJSON.items {
-		item := &rawJSON.items[i]
+	for i := range seedhelpers.RawJSON.Items {
+		item := &seedhelpers.RawJSON.Items[i]
 
 		if len(item.BattleInteractions) > 0 {
 			item.ItemAbility.ID = item.ID

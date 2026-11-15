@@ -8,11 +8,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func Loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Context) error {
-	agilityTiers := dedupeRows(rawJSON.agilityTiers, hashes)
+	agilityTiers := dedupeRows(seedhelpers.RawJSON.AgilityTiers, seedhelpers.Hashes)
 
 	params := database.CreateAgilityTierBulkParams{
 		DataHash:        make([]string, len(agilityTiers)),
@@ -25,7 +26,7 @@ func Loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, a := range agilityTiers {
-		params.DataHash[i] = generateDataHash(a)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
 		params.MinAgility[i] = a.MinAgility
 		params.MaxAgility[i] = a.MaxAgility
 		params.TickSpeed[i] = a.TickSpeed
@@ -41,9 +42,9 @@ func Loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		agilityTiers[i].ID = row.ID
-		rawJSON.agilityTiers[i].ID = row.ID
+		seedhelpers.RawJSON.AgilityTiers[i].ID = row.ID
 		lookup.L.AgilityTiersID[row.ID] = agilityTiers[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -61,7 +62,7 @@ func Loop2SeedAgilitySubtiers(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for i, s := range subtiers {
-		params.DataHash[i] = generateDataHash(s)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
 		params.AgilityTierID[i] = s.AgilityTierID
 		params.MinAgility[i] = s.MinAgility
 		params.MaxAgility[i] = s.MaxAgility
@@ -74,7 +75,7 @@ func Loop2SeedAgilitySubtiers(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -83,8 +84,8 @@ func Loop2SeedAgilitySubtiers(qtx *database.Queries, ctx context.Context) error 
 func extractAgilitySubtiers() []seedtypes.AgilitySubtier {
 	subtiers := []seedtypes.AgilitySubtier{}
 
-	for i := range rawJSON.agilityTiers {
-		tier := &rawJSON.agilityTiers[i]
+	for i := range seedhelpers.RawJSON.AgilityTiers {
+		tier := &seedhelpers.RawJSON.AgilityTiers[i]
 
 		for j := range tier.CharacterMinICVs {
 			subtier := &tier.CharacterMinICVs[j]
@@ -93,12 +94,12 @@ func extractAgilitySubtiers() []seedtypes.AgilitySubtier {
 		}
 	}
 
-	return dedupeRows(subtiers, hashes)
+	return dedupeRows(subtiers, seedhelpers.Hashes)
 }
 
 func completeAgilityTiers() error {
-	for i := range rawJSON.agilityTiers {
-		tier := &rawJSON.agilityTiers[i]
+	for i := range seedhelpers.RawJSON.AgilityTiers {
+		tier := &seedhelpers.RawJSON.AgilityTiers[i]
 
 		err := assignIDs(tier.CharacterMinICVs)
 		if err != nil {

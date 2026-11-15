@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -22,7 +23,7 @@ func Loop5SeedBaseStats(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, s := range stats {
-		params.DataHash[i] = generateDataHash(s)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
 		params.StatID[i] = s.StatID
 		params.Value[i] = s.Value
 	}
@@ -33,7 +34,7 @@ func Loop5SeedBaseStats(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -42,8 +43,8 @@ func Loop5SeedBaseStats(qtx *database.Queries, ctx context.Context) error {
 func extractBaseStats() ([]seedtypes.BaseStat, error) {
 	stats := []seedtypes.BaseStat{}
 
-	for i := range rawJSON.characters {
-		char := &rawJSON.characters[i]
+	for i := range seedhelpers.RawJSON.Characters {
+		char := &seedhelpers.RawJSON.Characters[i]
 
 		statsNew, err := prepareBaseStats(char.BaseStats)
 		if err != nil {
@@ -53,8 +54,8 @@ func extractBaseStats() ([]seedtypes.BaseStat, error) {
 		stats = append(stats, statsNew...)
 	}
 
-	for i := range rawJSON.monsters {
-		mon := &rawJSON.monsters[i]
+	for i := range seedhelpers.RawJSON.Monsters {
+		mon := &seedhelpers.RawJSON.Monsters[i]
 
 		statsNew, err := prepareBaseStats(mon.BaseStats)
 		if err != nil {
@@ -72,8 +73,8 @@ func extractBaseStats() ([]seedtypes.BaseStat, error) {
 		}
 	}
 
-	for i := range rawJSON.aeonStats {
-		aeon := &rawJSON.aeonStats[i]
+	for i := range seedhelpers.RawJSON.AeonStats {
+		aeon := &seedhelpers.RawJSON.AeonStats[i]
 
 		aVals, err := prepareBaseStats(aeon.AVals)
 		if err != nil {
@@ -98,7 +99,7 @@ func extractBaseStats() ([]seedtypes.BaseStat, error) {
 		}
 	}
 
-	return dedupeRows(stats, hashes), nil
+	return dedupeRows(stats, seedhelpers.Hashes), nil
 }
 
 func extractAltStateBaseStats(state *seedtypes.AlteredState) ([]seedtypes.BaseStat, error) {
@@ -115,7 +116,7 @@ func extractAltStateBaseStats(state *seedtypes.AlteredState) ([]seedtypes.BaseSt
 		for j := range change.BaseStats {
 			bs := &change.BaseStats[j]
 
-			bs.StatID, err = assignFK(bs.StatName, lookup.L.Stats)
+			bs.StatID, err = seedhelpers.AssignFK(bs.StatName, lookup.L.Stats)
 			if err != nil {
 				return nil, err
 			}
@@ -134,7 +135,7 @@ func prepareBaseStats(stats []seedtypes.BaseStat) ([]seedtypes.BaseStat, error) 
 	for i := range stats {
 		bs := &stats[i]
 
-		bs.StatID, err = assignFK(bs.StatName, lookup.L.Stats)
+		bs.StatID, err = seedhelpers.AssignFK(bs.StatName, lookup.L.Stats)
 		if err != nil {
 			return nil, err
 		}

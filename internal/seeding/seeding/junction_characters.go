@@ -4,12 +4,13 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func SeedJuncCharactersBaseStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "characters + base stats"
-	jParams, err := processJunctions(desc, rawJSON.characters, getCharacterBaseStats)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Characters, getCharacterBaseStats)
 	if err != nil {
 		return err
 	}

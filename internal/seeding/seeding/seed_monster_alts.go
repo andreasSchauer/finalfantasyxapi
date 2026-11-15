@@ -7,6 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -25,7 +26,7 @@ func Loop5SeedAlts(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, c := range changes {
-		params.DataHash[i] = generateDataHash(c)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
 		params.AlteredStateID[i] = c.AlteredStateID
 		params.AlterationType[i] = database.AlterationType(c.AlterationType)
 		params.Distance[i] = h.GetNullInt32(c.Distance)
@@ -38,7 +39,7 @@ func Loop5SeedAlts(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -47,8 +48,8 @@ func Loop5SeedAlts(qtx *database.Queries, ctx context.Context) error {
 func extractAlts() ([]seedtypes.Alt, error) {
 	changes := []seedtypes.Alt{}
 
-	for i := range rawJSON.monsters {
-		mon := &rawJSON.monsters[i]
+	for i := range seedhelpers.RawJSON.Monsters {
+		mon := &seedhelpers.RawJSON.Monsters[i]
 
 		changesNew, err := prepareAlts(mon.AlteredStates)
 		if err != nil {
@@ -58,7 +59,7 @@ func extractAlts() ([]seedtypes.Alt, error) {
 		changes = append(changes, changesNew...)
 	}
 
-	return dedupeRows(changes, hashes), nil
+	return dedupeRows(changes, seedhelpers.Hashes), nil
 }
 
 func prepareAlts(states []seedtypes.AlteredState) ([]seedtypes.Alt, error) {
@@ -71,13 +72,13 @@ func prepareAlts(states []seedtypes.AlteredState) ([]seedtypes.Alt, error) {
 		for j := range state.Changes {
 			change := &state.Changes[j]
 
-			change.AlteredStateID, err = getHashID(state)
+			change.AlteredStateID, err = seedhelpers.GetHashID(state)
 			if err != nil {
 				return nil, err
 			}
 
 			if change.AddedStatus != nil {
-				change.AddedStatus.ID, err = getHashID(change.AddedStatus)
+				change.AddedStatus.ID, err = seedhelpers.GetHashID(change.AddedStatus)
 				if err != nil {
 					return nil, err
 				}

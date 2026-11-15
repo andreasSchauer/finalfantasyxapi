@@ -8,11 +8,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func Loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Context) error {
-	modes := dedupeRows(rawJSON.overdriveModes, hashes)
+	modes := dedupeRows(seedhelpers.RawJSON.OverdriveModes, seedhelpers.Hashes)
 
 	params := database.CreateOverdriveModeBulkParams{
 		DataHash:    make([]string, len(modes)),
@@ -24,7 +25,7 @@ func Loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, m := range modes {
-		params.DataHash[i] = generateDataHash(m)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(m)
 		params.Name[i] = m.Name
 		params.Description[i] = m.Description
 		params.Effect[i] = m.Effect
@@ -39,18 +40,18 @@ func Loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		modes[i].ID = row.ID
-		rawJSON.overdriveModes[i].ID = row.ID
+		seedhelpers.RawJSON.OverdriveModes[i].ID = row.ID
 		lookup.L.OverdriveModes[seedtypes.Key(modes[i])] = modes[i]
 		lookup.L.OverdriveModesID[row.ID] = modes[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
 func completeOverdriveModes() error {
-	for i := range rawJSON.overdriveModes {
-		mode := &rawJSON.overdriveModes[i]
+	for i := range seedhelpers.RawJSON.OverdriveModes {
+		mode := &seedhelpers.RawJSON.OverdriveModes[i]
 
 		err := assignIDs(mode.ActionsToLearn)
 		if err != nil {
@@ -77,7 +78,7 @@ func Loop5SeedOdModeActions(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, a := range actions {
-		params.DataHash[i] = generateDataHash(a)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
 		params.UserID[i] = a.UserID
 		params.Amount[i] = a.Amount
 	}
@@ -88,7 +89,7 @@ func Loop5SeedOdModeActions(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -98,13 +99,13 @@ func extractOdModeActions() ([]seedtypes.ActionToLearn, error) {
 	actions := []seedtypes.ActionToLearn{}
 	var err error
 
-	for i := range rawJSON.overdriveModes {
-		mode := &rawJSON.overdriveModes[i]
+	for i := range seedhelpers.RawJSON.OverdriveModes {
+		mode := &seedhelpers.RawJSON.OverdriveModes[i]
 
 		for j := range mode.ActionsToLearn {
 			action := &mode.ActionsToLearn[j]
 
-			action.UserID, err = assignFK(action.User, lookup.L.Characters)
+			action.UserID, err = seedhelpers.AssignFK(action.User, lookup.L.Characters)
 			if err != nil {
 				return nil, err
 			}
@@ -113,5 +114,5 @@ func extractOdModeActions() ([]seedtypes.ActionToLearn, error) {
 		}
 	}
 
-	return dedupeRows(actions, hashes), nil
+	return dedupeRows(actions, seedhelpers.Hashes), nil
 }

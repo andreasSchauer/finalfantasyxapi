@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -19,7 +20,7 @@ func Loop2SeedAlteredStates(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, s := range states {
-		params.DataHash[i] = generateDataHash(s)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
 		params.MonsterID[i] = s.MonsterID
 		params.Condition[i] = s.Condition
 		params.IsTemporary[i] = s.IsTemporary
@@ -31,7 +32,7 @@ func Loop2SeedAlteredStates(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -40,8 +41,8 @@ func Loop2SeedAlteredStates(qtx *database.Queries, ctx context.Context) error {
 func extractMonsterAlteredStates() []seedtypes.AlteredState {
 	states := []seedtypes.AlteredState{}
 
-	for i := range rawJSON.monsters {
-		mon := &rawJSON.monsters[i]
+	for i := range seedhelpers.RawJSON.Monsters {
+		mon := &seedhelpers.RawJSON.Monsters[i]
 
 		for j := range mon.AlteredStates {
 			state := &mon.AlteredStates[j]
@@ -50,7 +51,7 @@ func extractMonsterAlteredStates() []seedtypes.AlteredState {
 		}
 	}
 
-	return dedupeRows(states, hashes)
+	return dedupeRows(states, seedhelpers.Hashes)
 }
 
 func completeAlteredStates(states []seedtypes.AlteredState) error {

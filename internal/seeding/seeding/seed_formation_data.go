@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -28,7 +29,7 @@ func Loop4SeedFormationData(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, d := range data {
-		params.DataHash[i] = generateDataHash(d)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(d)
 		params.Category[i] = database.MonsterFormationCategory(d.Category)
 		params.Availability[i] = database.AvailabilityType(d.Availability)
 		params.IsForcedAmbush[i] = d.IsForcedAmbush
@@ -43,7 +44,7 @@ func Loop4SeedFormationData(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -53,11 +54,11 @@ func extractFormationData() ([]seedtypes.FormationData, error) {
 	data := []seedtypes.FormationData{}
 	var err error
 
-	for i := range rawJSON.monsterFormations {
-		mfData := &rawJSON.monsterFormations[i].FormationData
+	for i := range seedhelpers.RawJSON.MonsterFormations {
+		mfData := &seedhelpers.RawJSON.MonsterFormations[i].FormationData
 
 		if mfData.BossMusic != nil {
-			mfData.BossMusic.ID, err = getHashID(mfData.BossMusic)
+			mfData.BossMusic.ID, err = seedhelpers.GetHashID(mfData.BossMusic)
 			if err != nil {
 				return nil, err
 			}
@@ -66,7 +67,7 @@ func extractFormationData() ([]seedtypes.FormationData, error) {
 		data = append(data, *mfData)
 	}
 
-	return dedupeRows(data, hashes), nil
+	return dedupeRows(data, seedhelpers.Hashes), nil
 }
 
 func Loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.Context) error {
@@ -82,7 +83,7 @@ func Loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.Context) err
 	}
 
 	for i, s := range songs {
-		params.DataHash[i] = generateDataHash(s)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
 		params.SongID[i] = s.SongID
 		params.CelebrateVictory[i] = s.CelebrateVictory
 	}
@@ -93,7 +94,7 @@ func Loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.Context) err
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -103,14 +104,14 @@ func extractFormationBossSongs() ([]seedtypes.FormationBossSong, error) {
 	songs := []seedtypes.FormationBossSong{}
 	var err error
 
-	for i := range rawJSON.monsterFormations {
-		data := &rawJSON.monsterFormations[i].FormationData
+	for i := range seedhelpers.RawJSON.MonsterFormations {
+		data := &seedhelpers.RawJSON.MonsterFormations[i].FormationData
 
 		if data.BossMusic == nil {
 			continue
 		}
 
-		data.BossMusic.SongID, err = assignFK(data.BossMusic.Song, lookup.L.Songs)
+		data.BossMusic.SongID, err = seedhelpers.AssignFK(data.BossMusic.Song, lookup.L.Songs)
 		if err != nil {
 			return nil, err
 		}
@@ -118,5 +119,5 @@ func extractFormationBossSongs() ([]seedtypes.FormationBossSong, error) {
 		songs = append(songs, *data.BossMusic)
 	}
 
-	return dedupeRows(songs, hashes), nil
+	return dedupeRows(songs, seedhelpers.Hashes), nil
 }

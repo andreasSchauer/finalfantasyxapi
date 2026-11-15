@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -22,7 +23,7 @@ func Loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, n := range names {
-		params.DataHash[i] = generateDataHash(n)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(n)
 		params.CharacterID[i] = n.CharacterID
 		params.Name[i] = n.Name
 	}
@@ -36,7 +37,7 @@ func Loop5SeedEquipmentNames(qtx *database.Queries, ctx context.Context) error {
 		names[i].ID = row.ID
 		lookup.L.EquipmentNames[seedtypes.Key(names[i])] = names[i]
 		lookup.L.EquipmentNamesID[row.ID] = names[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -46,13 +47,13 @@ func extractEquipmentNames() ([]seedtypes.EquipmentName, error) {
 	names := []seedtypes.EquipmentName{}
 	var err error
 
-	for i := range rawJSON.equipment {
-		table := &rawJSON.equipment[i]
+	for i := range seedhelpers.RawJSON.Equipment {
+		table := &seedhelpers.RawJSON.Equipment[i]
 
 		for j := range table.EquipmentNames {
 			name := &table.EquipmentNames[j]
 
-			name.CharacterID, err = assignFK(name.CharacterName, lookup.L.Characters)
+			name.CharacterID, err = seedhelpers.AssignFK(name.CharacterName, lookup.L.Characters)
 			if err != nil {
 				return nil, err
 			}
@@ -61,5 +62,5 @@ func extractEquipmentNames() ([]seedtypes.EquipmentName, error) {
 		}
 	}
 
-	return dedupeRows(names, hashes), nil
+	return dedupeRows(names, seedhelpers.Hashes), nil
 }

@@ -8,11 +8,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func Loop1SeedElements(qtx *database.Queries, ctx context.Context) error {
-	elements := dedupeRows(rawJSON.elements, hashes)
+	elements := dedupeRows(seedhelpers.RawJSON.Elements, seedhelpers.Hashes)
 
 	params := database.CreateElementBulkParams{
 		DataHash: make([]string, len(elements)),
@@ -20,7 +21,7 @@ func Loop1SeedElements(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, e := range elements {
-		params.DataHash[i] = generateDataHash(e)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(e)
 		params.Name[i] = e.Name
 	}
 
@@ -31,10 +32,10 @@ func Loop1SeedElements(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		elements[i].ID = row.ID
-		rawJSON.elements[i].ID = row.ID
+		seedhelpers.RawJSON.Elements[i].ID = row.ID
 		lookup.L.Elements[seedtypes.Key(elements[i])] = elements[i]
 		lookup.L.ElementsID[row.ID] = elements[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -54,7 +55,7 @@ func loop2UpdateElements(qtx *database.Queries, ctx context.Context) error {
 
 	for i, e := range elements {
 		params.ID[i] = e.ID
-		params.DataHash[i] = generateDataHash(e)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(e)
 		params.OppositeElementID[i] = h.GetNullInt32(e.OppositeElementID)
 	}
 
@@ -64,7 +65,7 @@ func loop2UpdateElements(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -74,16 +75,16 @@ func extractUpdatedElements() ([]seedtypes.Element, error) {
 	elements := []seedtypes.Element{}
 	var err error
 
-	for i := range rawJSON.elements {
-		element := &rawJSON.elements[i]
+	for i := range seedhelpers.RawJSON.Elements {
+		element := &seedhelpers.RawJSON.Elements[i]
 
 		if element.OppositeElement == nil {
 			continue
 		}
 
-		delete(hashes, generateDataHash(element))
+		delete(seedhelpers.Hashes, seedhelpers.GenerateDataHash(element))
 
-		element.OppositeElementID, err = assignFKPtr(element.OppositeElement, lookup.L.Elements)
+		element.OppositeElementID, err = seedhelpers.AssignFKPtr(element.OppositeElement, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -91,5 +92,5 @@ func extractUpdatedElements() ([]seedtypes.Element, error) {
 		elements = append(elements, *element)
 	}
 
-	return dedupeRows(elements, hashes), nil
+	return dedupeRows(elements, seedhelpers.Hashes), nil
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -30,7 +31,7 @@ func Loop7SeedArenaCreations(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, c := range creations {
-		params.DataHash[i] = generateDataHash(c)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
 		params.SubquestID[i] = c.SubquestID
 		params.Category[i] = database.MaCreationCategory(c.Category)
 		params.RequiredArea[i] = database.ToNullMaCreationArea(c.RequiredArea)
@@ -48,10 +49,10 @@ func Loop7SeedArenaCreations(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		creations[i].ID = row.ID
-		rawJSON.monsterArenaCreations[i].ID = row.ID
+		seedhelpers.RawJSON.MonsterArenaCreations[i].ID = row.ID
 		lookup.L.ArenaCreations[seedtypes.Key(creations[i])] = creations[i]
 		lookup.L.ArenaCreationsID[row.ID] = creations[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -61,10 +62,10 @@ func extractArenaCreations() ([]seedtypes.ArenaCreation, error) {
 	creations := []seedtypes.ArenaCreation{}
 	var err error
 
-	for i := range rawJSON.monsterArenaCreations {
-		creation := &rawJSON.monsterArenaCreations[i]
+	for i := range seedhelpers.RawJSON.MonsterArenaCreations {
+		creation := &seedhelpers.RawJSON.MonsterArenaCreations[i]
 
-		creation.SubquestID, err = assignFK(creation.Name, lookup.L.Subquests)
+		creation.SubquestID, err = seedhelpers.AssignFK(creation.Name, lookup.L.Subquests)
 		if err != nil {
 			return nil, err
 		}
@@ -73,7 +74,7 @@ func extractArenaCreations() ([]seedtypes.ArenaCreation, error) {
 			Name: creation.Name,
 		}
 
-		creation.MonsterID, err = assignFKPtr(&obj, lookup.L.Monsters)
+		creation.MonsterID, err = seedhelpers.AssignFKPtr(&obj, lookup.L.Monsters)
 		if err != nil {
 			return nil, err
 		}
@@ -81,5 +82,5 @@ func extractArenaCreations() ([]seedtypes.ArenaCreation, error) {
 		creations = append(creations, *creation)
 	}
 
-	return dedupeRows(creations, hashes), nil
+	return dedupeRows(creations, seedhelpers.Hashes), nil
 }

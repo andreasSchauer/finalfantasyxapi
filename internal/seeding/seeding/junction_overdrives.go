@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -14,7 +15,7 @@ func getOverdriveOverdriveAbilities(o seedtypes.Overdrive) ([]seedtypes.Overdriv
 
 func SeedJuncOverdrivesOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "overdrives + overdrive abilities"
-	jParams, err := processJunctions(desc, rawJSON.overdrives, getOverdriveOverdriveAbilities)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Overdrives, getOverdriveOverdriveAbilities)
 	if err != nil {
 		return err
 	}
@@ -34,7 +35,7 @@ func SeedJuncDefaultOverdriveAbilities(qtx *database.Queries, ctx context.Contex
 		AbilityID: make([]int32, 0),
 	}
 
-	for _, overdrive := range rawJSON.overdrives {
+	for _, overdrive := range seedhelpers.RawJSON.Overdrives {
 		if overdrive.UnlockCondition != nil {
 			continue
 		}
@@ -54,7 +55,7 @@ func SeedJuncDefaultOverdriveAbilities(qtx *database.Queries, ctx context.Contex
 				ParentID: class.ID,
 				ChildID:  oa.ID,
 			}
-			dataHash := generateJunctionHash(j, desc)
+			dataHash := GenerateJunctionHash(j, desc)
 
 			params.DataHash = append(params.DataHash, dataHash)
 			params.ClassID = append(params.ClassID, class.ID)

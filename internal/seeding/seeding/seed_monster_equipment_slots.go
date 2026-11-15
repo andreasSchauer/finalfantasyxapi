@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -23,7 +24,7 @@ func Loop3SeedMonsterEquipmentSlots(qtx *database.Queries, ctx context.Context) 
 	}
 
 	for i, s := range slots {
-		params.DataHash[i] = generateDataHash(s)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
 		params.MonsterEquipmentID[i] = s.MonsterEquipmentID
 		params.MinAmount[i] = s.MinAmount
 		params.MaxAmount[i] = s.MaxAmount
@@ -36,7 +37,7 @@ func Loop3SeedMonsterEquipmentSlots(qtx *database.Queries, ctx context.Context) 
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -46,15 +47,15 @@ func extractMonsterEquipmentSlots() ([]seedtypes.MonsterEquipmentSlots, error) {
 	slots := []seedtypes.MonsterEquipmentSlots{}
 	var err error
 
-	for i := range rawJSON.monsters {
-		mon := &rawJSON.monsters[i]
+	for i := range seedhelpers.RawJSON.Monsters {
+		mon := &seedhelpers.RawJSON.Monsters[i]
 
 		if mon.Equipment == nil {
 			continue
 		}
 
 		abilitySlots := &mon.Equipment.AbilitySlots
-		abilitySlots.MonsterEquipmentID, err = getHashID(mon.Equipment)
+		abilitySlots.MonsterEquipmentID, err = seedhelpers.GetHashID(mon.Equipment)
 		if err != nil {
 			return nil, err
 		}
@@ -63,7 +64,7 @@ func extractMonsterEquipmentSlots() ([]seedtypes.MonsterEquipmentSlots, error) {
 		slots = append(slots, *abilitySlots)
 
 		attachedAbilities := &mon.Equipment.AttachedAbilities
-		attachedAbilities.MonsterEquipmentID, err = getHashID(mon.Equipment)
+		attachedAbilities.MonsterEquipmentID, err = seedhelpers.GetHashID(mon.Equipment)
 		if err != nil {
 			return nil, err
 		}
@@ -72,7 +73,7 @@ func extractMonsterEquipmentSlots() ([]seedtypes.MonsterEquipmentSlots, error) {
 		slots = append(slots, *attachedAbilities)
 	}
 
-	return dedupeRows(slots, hashes), nil
+	return dedupeRows(slots, seedhelpers.Hashes), nil
 }
 
 func Loop1SeedEquipmentSlotsChances(qtx *database.Queries, ctx context.Context) error {
@@ -85,7 +86,7 @@ func Loop1SeedEquipmentSlotsChances(qtx *database.Queries, ctx context.Context) 
 	}
 
 	for i, c := range chances {
-		params.DataHash[i] = generateDataHash(c)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
 		params.Amount[i] = c.Amount
 		params.Chance[i] = c.Chance
 	}
@@ -96,7 +97,7 @@ func Loop1SeedEquipmentSlotsChances(qtx *database.Queries, ctx context.Context) 
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -105,12 +106,12 @@ func Loop1SeedEquipmentSlotsChances(qtx *database.Queries, ctx context.Context) 
 func extractEquipmentSlotsChances() []seedtypes.EquipmentSlotsChance {
 	chances := []seedtypes.EquipmentSlotsChance{}
 
-	for _, m := range rawJSON.monsters {
+	for _, m := range seedhelpers.RawJSON.Monsters {
 		if m.Equipment != nil {
 			chances = append(chances, m.Equipment.AbilitySlots.Chances...)
 			chances = append(chances, m.Equipment.AttachedAbilities.Chances...)
 		}
 	}
 
-	return dedupeRows(chances, hashes)
+	return dedupeRows(chances, seedhelpers.Hashes)
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -14,7 +15,7 @@ func getAutoAbilityAddedStatusResists(a seedtypes.AutoAbility) ([]seedtypes.Stat
 
 func SeedJuncAutoAbilitiesAddedStatusResists(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + added status resists"
-	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityAddedStatusResists)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.AutoAbilities, getAutoAbilityAddedStatusResists)
 	if err != nil {
 		return err
 	}
@@ -32,7 +33,7 @@ func getAutoAbilityAddedStatusses(a seedtypes.AutoAbility) ([]seedtypes.StatusCo
 
 func SeedJuncAutoAbilitiesAddedStatusses(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + added statusses"
-	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityAddedStatusses)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.AutoAbilities, getAutoAbilityAddedStatusses)
 	if err != nil {
 		return err
 	}
@@ -50,7 +51,7 @@ func getAutoAbilityAutoItems(a seedtypes.AutoAbility) ([]seedtypes.Item, error) 
 
 func SeedJuncAutoAbilitiesAutoItems(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + auto items"
-	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityAutoItems)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.AutoAbilities, getAutoAbilityAutoItems)
 	if err != nil {
 		return err
 	}
@@ -68,7 +69,7 @@ func getAutoAbilityLockedOutAbilities(a seedtypes.AutoAbility) ([]seedtypes.Auto
 
 func SeedJuncAutoAbilitiesLockedOutAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + locked out"
-	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityLockedOutAbilities)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.AutoAbilities, getAutoAbilityLockedOutAbilities)
 	if err != nil {
 		return err
 	}
@@ -86,7 +87,7 @@ func getAutoAbilityModifierChanges(a seedtypes.AutoAbility) ([]seedtypes.Modifie
 
 func SeedJuncAutoAbilitiesModifierChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + modifier changes"
-	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityModifierChanges)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.AutoAbilities, getAutoAbilityModifierChanges)
 	if err != nil {
 		return err
 	}
@@ -104,7 +105,7 @@ func getAutoAbilityRelatedStats(a seedtypes.AutoAbility) ([]seedtypes.Stat, erro
 
 func SeedJuncAutoAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + related stats"
-	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityRelatedStats)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.AutoAbilities, getAutoAbilityRelatedStats)
 	if err != nil {
 		return err
 	}
@@ -122,7 +123,7 @@ func getAutoAbilityStatChanges(a seedtypes.AutoAbility) ([]seedtypes.StatChange,
 
 func SeedJuncAutoAbilitiesStatChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "auto-abilities + stat changes"
-	jParams, err := processJunctions(desc, rawJSON.autoAbilities, getAutoAbilityStatChanges)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.AutoAbilities, getAutoAbilityStatChanges)
 	if err != nil {
 		return err
 	}

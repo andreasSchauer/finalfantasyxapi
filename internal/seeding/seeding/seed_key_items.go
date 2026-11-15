@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -24,7 +25,7 @@ func Loop2SeedKeyItems(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, ki := range keyItems {
-		params.DataHash[i] = generateDataHash(ki)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(ki)
 		params.MasterItemID[i] = ki.MasterItem.ID
 		params.Category[i] = database.KeyItemCategory(ki.Category)
 		params.Description[i] = ki.Description
@@ -38,10 +39,10 @@ func Loop2SeedKeyItems(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		keyItems[i].ID = row.ID
-		rawJSON.keyItems[i].ID = row.ID
+		seedhelpers.RawJSON.KeyItems[i].ID = row.ID
 		lookup.L.KeyItems[seedtypes.Key(keyItems[i])] = keyItems[i]
 		lookup.L.KeyItemsID[row.ID] = keyItems[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -51,10 +52,10 @@ func extractKeyItems() ([]seedtypes.KeyItem, error) {
 	keyItems := []seedtypes.KeyItem{}
 	var err error
 
-	for i := range rawJSON.keyItems {
-		keyItem := &rawJSON.keyItems[i]
+	for i := range seedhelpers.RawJSON.KeyItems {
+		keyItem := &seedhelpers.RawJSON.KeyItems[i]
 
-		keyItem.MasterItem.ID, err = assignFK(keyItem.Name, lookup.L.MasterItems)
+		keyItem.MasterItem.ID, err = seedhelpers.AssignFK(keyItem.Name, lookup.L.MasterItems)
 		if err != nil {
 			return nil, err
 		}
@@ -63,5 +64,5 @@ func extractKeyItems() ([]seedtypes.KeyItem, error) {
 		keyItems = append(keyItems, *keyItem)
 	}
 
-	return dedupeRows(keyItems, hashes), nil
+	return dedupeRows(keyItems, seedhelpers.Hashes), nil
 }

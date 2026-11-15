@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -28,7 +29,7 @@ func Loop4SeedStats(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, s := range stats {
-		params.DataHash[i] = generateDataHash(s)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
 		params.Name[i] = s.Name
 		params.Effect[i] = s.Effect
 		params.MinVal[i] = s.MinVal
@@ -44,10 +45,10 @@ func Loop4SeedStats(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		stats[i].ID = row.ID
-		rawJSON.stats[i].ID = row.ID
+		seedhelpers.RawJSON.Stats[i].ID = row.ID
 		lookup.L.Stats[seedtypes.Key(stats[i])] = stats[i]
 		lookup.L.StatsID[row.ID] = stats[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -57,10 +58,10 @@ func extractStats() ([]seedtypes.Stat, error) {
 	stats := []seedtypes.Stat{}
 	var err error
 
-	for i := range rawJSON.stats {
-		stat := &rawJSON.stats[i]
+	for i := range seedhelpers.RawJSON.Stats {
+		stat := &seedhelpers.RawJSON.Stats[i]
 
-		stat.SphereID, err = assignFKPtr(&stat.ActivationSphere, lookup.L.Spheres)
+		stat.SphereID, err = seedhelpers.AssignFKPtr(&stat.ActivationSphere, lookup.L.Spheres)
 		if err != nil {
 			return nil, err
 		}
@@ -68,5 +69,5 @@ func extractStats() ([]seedtypes.Stat, error) {
 		stats = append(stats, *stat)
 	}
 
-	return dedupeRows(stats, hashes), nil
+	return dedupeRows(stats, seedhelpers.Hashes), nil
 }

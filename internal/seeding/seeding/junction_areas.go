@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -24,7 +25,7 @@ func SeedJuncAreaConnectedAreas(qtx *database.Queries, ctx context.Context) erro
 func getAreas() []seedtypes.Area {
 	areas := []seedtypes.Area{}
 
-	for _, location := range rawJSON.locations {
+	for _, location := range seedhelpers.RawJSON.Locations {
 		for _, sublocation := range location.Sublocations {
 			areas = append(areas, sublocation.Areas...)
 		}

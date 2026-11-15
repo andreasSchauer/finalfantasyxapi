@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -22,7 +23,7 @@ func Loop2SeedElementalResists(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for i, er := range resists {
-		params.DataHash[i] = generateDataHash(er)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(er)
 		params.ElementID[i] = er.ElementID
 		params.Affinity[i] = database.ElementalAffinity(er.Affinity)
 	}
@@ -36,7 +37,7 @@ func Loop2SeedElementalResists(qtx *database.Queries, ctx context.Context) error
 		resists[i].ID = row.ID
 		lookup.L.ElementalResists[seedtypes.Key(resists[i])] = resists[i]
 		lookup.L.ElementalResistsID[row.ID] = resists[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -46,14 +47,14 @@ func extractElementalResists() ([]seedtypes.ElementalResist, error) {
 	resists := []seedtypes.ElementalResist{}
 	var err error
 
-	for i := range rawJSON.autoAbilities {
-		autoAbility := &rawJSON.autoAbilities[i]
+	for i := range seedhelpers.RawJSON.AutoAbilities {
+		autoAbility := &seedhelpers.RawJSON.AutoAbilities[i]
 
 		if autoAbility.AddedElemResist == nil {
 			continue
 		}
 
-		autoAbility.AddedElemResist.ElementID, err = assignFK(autoAbility.AddedElemResist.Element, lookup.L.Elements)
+		autoAbility.AddedElemResist.ElementID, err = seedhelpers.AssignFK(autoAbility.AddedElemResist.Element, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -61,13 +62,13 @@ func extractElementalResists() ([]seedtypes.ElementalResist, error) {
 		resists = append(resists, *autoAbility.AddedElemResist)
 	}
 
-	for i := range rawJSON.monsters {
-		monster := &rawJSON.monsters[i]
+	for i := range seedhelpers.RawJSON.Monsters {
+		monster := &seedhelpers.RawJSON.Monsters[i]
 
 		for j := range monster.ElemResists {
 			resist := &monster.ElemResists[j]
 
-			resist.ElementID, err = assignFK(resist.Element, lookup.L.Elements)
+			resist.ElementID, err = seedhelpers.AssignFK(resist.Element, lookup.L.Elements)
 			if err != nil {
 				return nil, err
 			}
@@ -85,14 +86,14 @@ func extractElementalResists() ([]seedtypes.ElementalResist, error) {
 		}
 	}
 
-	for i := range rawJSON.statusConditions {
-		condition := rawJSON.statusConditions[i]
+	for i := range seedhelpers.RawJSON.StatusConditions {
+		condition := seedhelpers.RawJSON.StatusConditions[i]
 
 		if condition.AddedElemResist == nil {
 			continue
 		}
 
-		condition.AddedElemResist.ElementID, err = assignFK(condition.AddedElemResist.Element, lookup.L.Elements)
+		condition.AddedElemResist.ElementID, err = seedhelpers.AssignFK(condition.AddedElemResist.Element, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
@@ -100,7 +101,7 @@ func extractElementalResists() ([]seedtypes.ElementalResist, error) {
 		resists = append(resists, *condition.AddedElemResist)
 	}
 
-	return dedupeRows(resists, hashes), nil
+	return dedupeRows(resists, seedhelpers.Hashes), nil
 }
 
 func extractAltStateElemResists(state *seedtypes.AlteredState) ([]seedtypes.ElementalResist, error) {
@@ -117,7 +118,7 @@ func extractAltStateElemResists(state *seedtypes.AlteredState) ([]seedtypes.Elem
 		for j := range change.ElemResists {
 			resist := &change.ElemResists[j]
 
-			resist.ElementID, err = assignFK(resist.Element, lookup.L.Elements)
+			resist.ElementID, err = seedhelpers.AssignFK(resist.Element, lookup.L.Elements)
 			if err != nil {
 				return nil, err
 			}

@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -29,7 +30,7 @@ func Loop4SeedCharacters(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, c := range chars {
-		params.DataHash[i] = generateDataHash(c)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
 		params.UnitID[i] = c.PlayerUnit.ID
 		params.IsStoryBased[i] = c.IsStoryBased
 		params.WeaponType[i] = database.WeaponType(c.WeaponType)
@@ -46,10 +47,10 @@ func Loop4SeedCharacters(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		chars[i].ID = row.ID
-		rawJSON.characters[i].ID = row.ID
+		seedhelpers.RawJSON.Characters[i].ID = row.ID
 		lookup.L.Characters[seedtypes.Key(chars[i])] = chars[i]
 		lookup.L.CharactersID[row.ID] = chars[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -59,28 +60,28 @@ func extractCharacters() ([]seedtypes.Character, error) {
 	chars := []seedtypes.Character{}
 	var err error
 
-	for i := range rawJSON.characters {
-		char := &rawJSON.characters[i]
+	for i := range seedhelpers.RawJSON.Characters {
+		char := &seedhelpers.RawJSON.Characters[i]
 
-		char.PlayerUnit.ID, err = getHashID(char.PlayerUnit)
+		char.PlayerUnit.ID, err = seedhelpers.GetHashID(char.PlayerUnit)
 		if err != nil {
 			return nil, err
 		}
 
-		char.AreaID, err = assignFKPtr(&char.LocationArea, lookup.L.Areas)
+		char.AreaID, err = seedhelpers.AssignFKPtr(&char.LocationArea, lookup.L.Areas)
 		if err != nil {
 			return nil, err
 		}
 
 		if char.StdSphereGrid != nil {
-			char.StdSphereGrid.ID, err = getHashID(*char.StdSphereGrid)
+			char.StdSphereGrid.ID, err = seedhelpers.GetHashID(*char.StdSphereGrid)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if char.ExpSphereGrid != nil {
-			char.ExpSphereGrid.ID, err = getHashID(*char.ExpSphereGrid)
+			char.ExpSphereGrid.ID, err = seedhelpers.GetHashID(*char.ExpSphereGrid)
 			if err != nil {
 				return nil, err
 			}
@@ -89,12 +90,12 @@ func extractCharacters() ([]seedtypes.Character, error) {
 		chars = append(chars, *char)
 	}
 
-	return dedupeRows(chars, hashes), nil
+	return dedupeRows(chars, seedhelpers.Hashes), nil
 }
 
 func completeCharacters() error {
-	for i := range rawJSON.characters {
-		character := &rawJSON.characters[i]
+	for i := range seedhelpers.RawJSON.Characters {
+		character := &seedhelpers.RawJSON.Characters[i]
 		err := assignIDs(character.BaseStats)
 		if err != nil {
 			return err

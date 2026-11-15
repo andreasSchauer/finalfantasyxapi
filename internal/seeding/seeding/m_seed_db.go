@@ -9,6 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 	"github.com/pressly/goose/v3"
 )
@@ -19,7 +20,7 @@ func LoadDatabase(db *database.Queries, dbConn *sql.DB) error {
 	ctx := context.Background()
 	lookup.L.Init()
 
-	err := rawJSON.loadFiles()
+	err := seedhelpers.RawJSON.LoadFiles()
 	if err != nil {
 		return err
 	}
@@ -202,7 +203,7 @@ func dedupeRows[T seedtypes.Hashable](rows []T, hashes map[string]int32) []T {
 	new := []T{}
 
 	for _, row := range rows {
-		hash := generateDataHash(row)
+		hash := seedhelpers.GenerateDataHash(row)
 
 		_, ok := hashes[hash]
 		if ok || seen[hash] {

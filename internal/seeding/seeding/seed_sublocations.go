@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -20,7 +21,7 @@ func Loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, s := range sublocations {
-		params.DataHash[i] = generateDataHash(s)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
 		params.LocationID[i] = s.LocationID
 		params.Name[i] = s.Name
 		params.Availability[i] = database.AvailabilityType(s.Availability)
@@ -35,7 +36,7 @@ func Loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
 		sublocations[i].ID = row.ID
 		lookup.L.Sublocations[seedtypes.Key(sublocations[i])] = sublocations[i]
 		lookup.L.SublocationsID[row.ID] = sublocations[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -44,8 +45,8 @@ func Loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
 func extractSublocations() []seedtypes.Sublocation {
 	sublocations := []seedtypes.Sublocation{}
 
-	for i := range rawJSON.locations {
-		location := &rawJSON.locations[i]
+	for i := range seedhelpers.RawJSON.Locations {
+		location := &seedhelpers.RawJSON.Locations[i]
 
 		for j := range location.Sublocations {
 			sublocation := &location.Sublocations[j]
@@ -55,7 +56,7 @@ func extractSublocations() []seedtypes.Sublocation {
 		}
 	}
 
-	return dedupeRows(sublocations, hashes)
+	return dedupeRows(sublocations, seedhelpers.Hashes)
 }
 
 func completeSublocations(sublocations []seedtypes.Sublocation) error {

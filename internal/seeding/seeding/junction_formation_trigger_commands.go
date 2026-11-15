@@ -5,13 +5,14 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func getFormationTriggerCommands() []seedtypes.FormationTriggerCommand {
 	commands := []seedtypes.FormationTriggerCommand{}
 
-	for _, formation := range rawJSON.monsterFormations {
+	for _, formation := range seedhelpers.RawJSON.MonsterFormations {
 		commands = append(commands, formation.TriggerCommands...)
 	}
 

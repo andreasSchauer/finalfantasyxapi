@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -18,7 +19,7 @@ func Loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, r := range rages {
-		params.DataHash[i] = generateDataHash(r)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(r)
 		params.OverdriveID[i] = r.Overdrive.ID
 	}
 
@@ -31,7 +32,7 @@ func Loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context) error {
 		rages[i].ID = row.ID
 		lookup.L.RonsoRages[seedtypes.Key(rages[i])] = rages[i]
 		lookup.L.RonsoRagesID[row.ID] = rages[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -40,7 +41,7 @@ func Loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context) error {
 func extractRonsoRages() []seedtypes.RonsoRage {
 	rages := []seedtypes.RonsoRage{}
 
-	for _, overdrive := range rawJSON.overdrives {
+	for _, overdrive := range seedhelpers.RawJSON.Overdrives {
 		if overdrive.User != "kimahri" {
 			continue
 		}
@@ -53,5 +54,5 @@ func extractRonsoRages() []seedtypes.RonsoRage {
 		rages = append(rages, rage)
 	}
 
-	return dedupeRows(rages, hashes)
+	return dedupeRows(rages, seedhelpers.Hashes)
 }

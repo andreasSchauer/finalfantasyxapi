@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -23,7 +24,7 @@ func Loop3SeedPrimers(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, p := range primers {
-		params.DataHash[i] = generateDataHash(p)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(p)
 		params.KeyItemID[i] = p.KeyItemID
 		params.AlBhedLetter[i] = p.AlBhedLetter
 		params.EnglishLetter[i] = p.EnglishLetter
@@ -36,10 +37,10 @@ func Loop3SeedPrimers(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		primers[i].ID = row.ID
-		rawJSON.primers[i].ID = row.ID
+		seedhelpers.RawJSON.Primers[i].ID = row.ID
 		lookup.L.Primers[seedtypes.Key(primers[i])] = primers[i]
 		lookup.L.PrimersID[row.ID] = primers[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -49,10 +50,10 @@ func extractPrimers() ([]seedtypes.Primer, error) {
 	primers := []seedtypes.Primer{}
 	var err error
 
-	for i := range rawJSON.primers {
-		primer := &rawJSON.primers[i]
+	for i := range seedhelpers.RawJSON.Primers {
+		primer := &seedhelpers.RawJSON.Primers[i]
 
-		primer.KeyItemID, err = assignFK(primer.Name, lookup.L.KeyItems)
+		primer.KeyItemID, err = seedhelpers.AssignFK(primer.Name, lookup.L.KeyItems)
 		if err != nil {
 			return nil, err
 		}
@@ -60,5 +61,5 @@ func extractPrimers() ([]seedtypes.Primer, error) {
 		primers = append(primers, *primer)
 	}
 
-	return dedupeRows(primers, hashes), nil
+	return dedupeRows(primers, seedhelpers.Hashes), nil
 }

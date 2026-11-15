@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -14,7 +15,7 @@ func getItemRelatedStats(i seedtypes.Item) ([]seedtypes.Stat, error) {
 
 func SeedJuncItemsRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "items + related stats"
-	jParams, err := processJunctions(desc, rawJSON.items, getItemRelatedStats)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Items, getItemRelatedStats)
 	if err != nil {
 		return err
 	}
@@ -32,7 +33,7 @@ func getItemAvailableMenus(i seedtypes.Item) ([]seedtypes.Submenu, error) {
 
 func SeedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "items + available menus"
-	jParams, err := processJunctions(desc, rawJSON.items, getItemAvailableMenus)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Items, getItemAvailableMenus)
 	if err != nil {
 		return err
 	}

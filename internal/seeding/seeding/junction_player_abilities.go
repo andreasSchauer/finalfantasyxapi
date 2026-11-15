@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -14,7 +15,7 @@ func getPlayerAbilityLearnedBy(pa seedtypes.PlayerAbility) ([]seedtypes.Characte
 
 func SeedJuncPlayerAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "player abilities + learned by"
-	jParams, err := processJunctions(desc, rawJSON.playerAbilities, getPlayerAbilityLearnedBy)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.PlayerAbilities, getPlayerAbilityLearnedBy)
 	if err != nil {
 		return err
 	}
@@ -32,7 +33,7 @@ func getPlayerAbilityRelatedStats(pa seedtypes.PlayerAbility) ([]seedtypes.Stat,
 
 func SeedJuncPlayerAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "player abilites + related stats"
-	jParams, err := processJunctions(desc, rawJSON.playerAbilities, getPlayerAbilityRelatedStats)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.PlayerAbilities, getPlayerAbilityRelatedStats)
 	if err != nil {
 		return err
 	}

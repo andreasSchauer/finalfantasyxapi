@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -19,7 +20,7 @@ func Loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, mi := range items {
-		params.DataHash[i] = generateDataHash(mi)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(mi)
 		params.Name[i] = mi.Name
 		params.Type[i] = mi.Type
 	}
@@ -33,7 +34,7 @@ func Loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
 		items[i].ID = row.ID
 		lookup.L.MasterItems[seedtypes.Key(items[i])] = items[i]
 		lookup.L.MasterItemsID[row.ID] = items[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -42,15 +43,15 @@ func Loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
 func extractMasterItems() []seedtypes.MasterItem {
 	masterItems := []seedtypes.MasterItem{}
 
-	for _, i := range rawJSON.items {
+	for _, i := range seedhelpers.RawJSON.Items {
 		i.MasterItem.Type = database.ItemTypeItem
 		masterItems = append(masterItems, i.MasterItem)
 	}
 
-	for _, i := range rawJSON.keyItems {
+	for _, i := range seedhelpers.RawJSON.KeyItems {
 		i.MasterItem.Type = database.ItemTypeKeyItem
 		masterItems = append(masterItems, i.MasterItem)
 	}
 
-	return dedupeRows(masterItems, hashes)
+	return dedupeRows(masterItems, seedhelpers.Hashes)
 }

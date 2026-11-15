@@ -5,6 +5,7 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -31,7 +32,7 @@ func getAeonBaseStatsA(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
 
 func SeedJuncAeonBaseStatsA(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + base stats a"
-	jParams, err := processJunctions(desc, rawJSON.aeons, getAeonBaseStatsA)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Aeons, getAeonBaseStatsA)
 	if err != nil {
 		return err
 	}
@@ -49,7 +50,7 @@ func getAeonBaseStatsB(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
 
 func SeedJuncAeonBaseStatsB(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + base stats b"
-	jParams, err := processJunctions(desc, rawJSON.aeons, getAeonBaseStatsB)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Aeons, getAeonBaseStatsB)
 	if err != nil {
 		return err
 	}
@@ -70,14 +71,14 @@ func SeedJuncAeonBaseStatsX(qtx *database.Queries, ctx context.Context) error {
 		Battles:    make([]int32, 0),
 	}
 
-	for _, aeon := range rawJSON.aeons {
+	for _, aeon := range seedhelpers.RawJSON.Aeons {
 		for _, xVal := range aeon.BaseStats.XVals {
 			for _, baseStat := range xVal.BaseStats {
 				j := AeonXStatJunction{}
 				j.ParentID = aeon.ID
 				j.ChildID = baseStat.ID
 				j.Battles = xVal.Battles
-				dataHash := generateJunctionHash(j, desc)
+				dataHash := GenerateJunctionHash(j, desc)
 
 				params.DataHash = append(params.DataHash, dataHash)
 				params.AeonID = append(params.AeonID, aeon.ID)

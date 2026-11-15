@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -28,7 +29,7 @@ func Loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for i, t := range tables {
-		params.DataHash[i] = generateDataHash(t)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(t)
 		params.Type[i] = database.EquipType(t.Type)
 		params.Classification[i] = database.EquipClass(t.Classification)
 		params.SpecificCharacterID[i] = h.GetNullInt32(t.SpecificCharacterID)
@@ -44,10 +45,10 @@ func Loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Context) error 
 
 	for i, row := range dbRows {
 		tables[i].ID = row.ID
-		rawJSON.equipment[i].ID = row.ID
+		seedhelpers.RawJSON.Equipment[i].ID = row.ID
 		lookup.L.EquipmentTables[seedtypes.Key(tables[i])] = tables[i]
 		lookup.L.EquipmentTablesID[row.ID] = tables[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -57,10 +58,10 @@ func extractEquipmentTables() ([]seedtypes.EquipmentTable, error) {
 	tables := []seedtypes.EquipmentTable{}
 	var err error
 
-	for i := range rawJSON.equipment {
-		table := &rawJSON.equipment[i]
+	for i := range seedhelpers.RawJSON.Equipment {
+		table := &seedhelpers.RawJSON.Equipment[i]
 
-		table.SpecificCharacterID, err = assignFKPtr(table.SpecificCharacter, lookup.L.Characters)
+		table.SpecificCharacterID, err = seedhelpers.AssignFKPtr(table.SpecificCharacter, lookup.L.Characters)
 		if err != nil {
 			return nil, err
 		}
@@ -68,12 +69,12 @@ func extractEquipmentTables() ([]seedtypes.EquipmentTable, error) {
 		tables = append(tables, *table)
 	}
 
-	return dedupeRows(tables, hashes), nil
+	return dedupeRows(tables, seedhelpers.Hashes), nil
 }
 
 func completeEquipment() error {
-	for i := range rawJSON.equipment {
-		table := &rawJSON.equipment[i]
+	for i := range seedhelpers.RawJSON.Equipment {
+		table := &seedhelpers.RawJSON.Equipment[i]
 		err := assignIDs(table.SelectableAutoAbilities)
 		if err != nil {
 			return err
@@ -102,7 +103,7 @@ func Loop6SeedAbilityPools(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, p := range pools {
-		params.DataHash[i] = generateDataHash(p)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(p)
 		params.EquipmentTableID[i] = p.EquipmentTableID
 		params.PoolIdx[i] = p.PoolIdx
 		params.ReqAmount[i] = p.ReqAmount
@@ -114,7 +115,7 @@ func Loop6SeedAbilityPools(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -123,8 +124,8 @@ func Loop6SeedAbilityPools(qtx *database.Queries, ctx context.Context) error {
 func extractAbilityPools() []seedtypes.AbilityPool {
 	pools := []seedtypes.AbilityPool{}
 
-	for i := range rawJSON.equipment {
-		table := &rawJSON.equipment[i]
+	for i := range seedhelpers.RawJSON.Equipment {
+		table := &seedhelpers.RawJSON.Equipment[i]
 
 		for j := range table.SelectableAutoAbilities {
 			pool := &table.SelectableAutoAbilities[j]
@@ -134,5 +135,5 @@ func extractAbilityPools() []seedtypes.AbilityPool {
 		}
 	}
 
-	return dedupeRows(pools, hashes)
+	return dedupeRows(pools, seedhelpers.Hashes)
 }

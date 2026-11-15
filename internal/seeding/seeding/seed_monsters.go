@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -16,7 +17,7 @@ func Loop1SeedMonsters(qtx *database.Queries, ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	monsters := dedupeRows(rawJSON.monsters, hashes)
+	monsters := dedupeRows(seedhelpers.RawJSON.Monsters, seedhelpers.Hashes)
 
 	params := database.CreateMonsterBulkParams{
 		DataHash:             make([]string, len(monsters)),
@@ -50,7 +51,7 @@ func Loop1SeedMonsters(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, m := range monsters {
-		params.DataHash[i] = generateDataHash(m)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(m)
 		params.Name[i] = m.Name
 		params.Version[i] = h.GetNullInt32(m.Version)
 		params.Specification[i] = h.GetNullString(m.Specification)
@@ -87,18 +88,18 @@ func Loop1SeedMonsters(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		monsters[i].ID = row.ID
-		rawJSON.monsters[i].ID = row.ID
+		seedhelpers.RawJSON.Monsters[i].ID = row.ID
 		lookup.L.Monsters[seedtypes.Key(monsters[i])] = monsters[i]
 		lookup.L.MonstersID[row.ID] = monsters[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
 func completeMonsters() error {
-	for i := range rawJSON.monsters {
-		mon := &rawJSON.monsters[i]
+	for i := range seedhelpers.RawJSON.Monsters {
+		mon := &seedhelpers.RawJSON.Monsters[i]
 
 		err := assignIDs(mon.ElemResists)
 		if err != nil {
@@ -145,7 +146,7 @@ func completeMonsters() error {
 func completeMonstersElements() error {
 	elements := []string{"fire", "lightning", "water", "ice", "holy"}
 
-	for i, mon := range rawJSON.monsters {
+	for i, mon := range seedhelpers.RawJSON.Monsters {
 		elemResistLookup := make(map[string]string)
 
 		for _, elemResist := range mon.ElemResists {
@@ -163,7 +164,7 @@ func completeMonstersElements() error {
 				resists = append(resists, elemResist)
 			}
 		}
-		rawJSON.monsters[i].ElemResists = resists
+		seedhelpers.RawJSON.Monsters[i].ElemResists = resists
 	}
 
 	return nil

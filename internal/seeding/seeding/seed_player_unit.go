@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -19,7 +20,7 @@ func Loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, m := range units {
-		params.DataHash[i] = generateDataHash(m)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(m)
 		params.Name[i] = m.Name
 		params.Type[i] = m.Type
 	}
@@ -33,7 +34,7 @@ func Loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context) error {
 		units[i].ID = row.ID
 		lookup.L.PlayerUnits[seedtypes.Key(units[i])] = units[i]
 		lookup.L.PlayerUnitsID[row.ID] = units[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -42,17 +43,17 @@ func Loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context) error {
 func extractPlayerUnits() []seedtypes.PlayerUnit {
 	playerUnits := []seedtypes.PlayerUnit{}
 
-	for i := range rawJSON.characters {
-		c := &rawJSON.characters[i]
+	for i := range seedhelpers.RawJSON.Characters {
+		c := &seedhelpers.RawJSON.Characters[i]
 		c.PlayerUnit.Type = database.UnitTypeCharacter
 		playerUnits = append(playerUnits, c.PlayerUnit)
 	}
 
-	for i := range rawJSON.aeons {
-		a := &rawJSON.aeons[i]
+	for i := range seedhelpers.RawJSON.Aeons {
+		a := &seedhelpers.RawJSON.Aeons[i]
 		a.PlayerUnit.Type = database.UnitTypeAeon
 		playerUnits = append(playerUnits, a.PlayerUnit)
 	}
 
-	return dedupeRows(playerUnits, hashes)
+	return dedupeRows(playerUnits, seedhelpers.Hashes)
 }

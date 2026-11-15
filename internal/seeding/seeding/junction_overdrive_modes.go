@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -13,7 +14,7 @@ func getOverdriveModeActions(om seedtypes.OverdriveMode) ([]seedtypes.ActionToLe
 
 func SeedJuncOverdriveModeActions(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "overdrive modes + actions"
-	jParams, err := processJunctions(desc, rawJSON.overdriveModes, getOverdriveModeActions)
+	jParams, err := processJunctions(desc, seedhelpers.RawJSON.OverdriveModes, getOverdriveModeActions)
 	if err != nil {
 		return err
 	}

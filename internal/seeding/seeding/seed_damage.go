@@ -8,6 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -32,7 +33,7 @@ func Loop2SeedDamages(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, d := range damages {
-		params.DataHash[i] = generateDataHash(d)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(d)
 		params.AttackType[i] = database.AttackType(d.AttackType)
 		params.DamageType[i] = database.DamageType(d.DamageType)
 		params.HpClassID[i] = h.ObjPtrToNullInt32ID(d.HP)
@@ -51,7 +52,7 @@ func Loop2SeedDamages(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -60,8 +61,8 @@ func Loop2SeedDamages(qtx *database.Queries, ctx context.Context) error {
 func extractDamages() ([]seedtypes.Damage, error) {
 	damages := []seedtypes.Damage{}
 
-	for i := range rawJSON.playerAbilities {
-		ability := &rawJSON.playerAbilities[i]
+	for i := range seedhelpers.RawJSON.PlayerAbilities {
+		ability := &seedhelpers.RawJSON.PlayerAbilities[i]
 
 		newDamages, err := prepareDamages(ability.BattleInteractions)
 		if err != nil {
@@ -71,8 +72,8 @@ func extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range rawJSON.overdriveAbilities {
-		ability := &rawJSON.overdriveAbilities[i]
+	for i := range seedhelpers.RawJSON.OverdriveAbilities {
+		ability := &seedhelpers.RawJSON.OverdriveAbilities[i]
 
 		newDamages, err := prepareDamages(ability.BattleInteractions)
 		if err != nil {
@@ -82,8 +83,8 @@ func extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range rawJSON.items {
-		item := &rawJSON.items[i]
+	for i := range seedhelpers.RawJSON.Items {
+		item := &seedhelpers.RawJSON.Items[i]
 
 		newDamages, err := prepareDamages(item.BattleInteractions)
 		if err != nil {
@@ -93,8 +94,8 @@ func extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range rawJSON.triggerCommands {
-		command := &rawJSON.triggerCommands[i]
+	for i := range seedhelpers.RawJSON.TriggerCommands {
+		command := &seedhelpers.RawJSON.TriggerCommands[i]
 
 		newDamages, err := prepareDamages(command.BattleInteractions)
 		if err != nil {
@@ -104,8 +105,8 @@ func extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range rawJSON.miscAbilities {
-		ability := &rawJSON.miscAbilities[i]
+	for i := range seedhelpers.RawJSON.MiscAbilities {
+		ability := &seedhelpers.RawJSON.MiscAbilities[i]
 
 		newDamages, err := prepareDamages(ability.BattleInteractions)
 		if err != nil {
@@ -115,8 +116,8 @@ func extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range rawJSON.enemyAbilities {
-		ability := &rawJSON.enemyAbilities[i]
+	for i := range seedhelpers.RawJSON.EnemyAbilities {
+		ability := &seedhelpers.RawJSON.EnemyAbilities[i]
 
 		newDamages, err := prepareDamages(ability.BattleInteractions)
 		if err != nil {
@@ -126,7 +127,7 @@ func extractDamages() ([]seedtypes.Damage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	return dedupeRows(damages, hashes), nil
+	return dedupeRows(damages, seedhelpers.Hashes), nil
 }
 
 func prepareDamages(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.Damage, error) {
@@ -138,26 +139,26 @@ func prepareDamages(battleInteractions []seedtypes.BattleInteraction) ([]seedtyp
 
 		if bi.Damage != nil {
 			if bi.Damage.HP != nil {
-				bi.Damage.HP.ID, err = getHashID(bi.Damage.HP)
+				bi.Damage.HP.ID, err = seedhelpers.GetHashID(bi.Damage.HP)
 				if err != nil {
 					return nil, err
 				}
 			}
 
 			if bi.Damage.MP != nil {
-				bi.Damage.MP.ID, err = getHashID(bi.Damage.MP)
+				bi.Damage.MP.ID, err = seedhelpers.GetHashID(bi.Damage.MP)
 				if err != nil {
 					return nil, err
 				}
 			}
 			if bi.Damage.CTB != nil {
-				bi.Damage.CTB.ID, err = getHashID(bi.Damage.CTB)
+				bi.Damage.CTB.ID, err = seedhelpers.GetHashID(bi.Damage.CTB)
 				if err != nil {
 					return nil, err
 				}
 			}
 
-			bi.Damage.ElementID, err = assignFKPtr(bi.Damage.Element, lookup.L.Elements)
+			bi.Damage.ElementID, err = seedhelpers.AssignFKPtr(bi.Damage.Element, lookup.L.Elements)
 			if err != nil {
 				return nil, err
 			}

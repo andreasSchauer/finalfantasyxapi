@@ -6,11 +6,12 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func Loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.Context) error {
-	positions := dedupeRows(rawJSON.blitzballPositions, hashes)
+	positions := dedupeRows(seedhelpers.RawJSON.BlitzballPositions, seedhelpers.Hashes)
 
 	params := database.CreateBlitzballPositionBulkParams{
 		DataHash: make([]string, len(positions)),
@@ -19,7 +20,7 @@ func Loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.Context) err
 	}
 
 	for i, p := range positions {
-		params.DataHash[i] = generateDataHash(p)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(p)
 		params.Category[i] = database.BlitzballTournamentCategory(p.Category)
 		params.Slot[i] = database.BlitzballPositionSlot(p.Slot)
 	}
@@ -31,10 +32,10 @@ func Loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.Context) err
 
 	for i, row := range dbRows {
 		positions[i].ID = row.ID
-		rawJSON.blitzballPositions[i].ID = row.ID
+		seedhelpers.RawJSON.BlitzballPositions[i].ID = row.ID
 		lookup.L.Positions[seedtypes.Key(positions[i])] = positions[i]
 		lookup.L.PositionsID[row.ID] = positions[i]
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -53,7 +54,7 @@ func Loop4SeedBlitzballItems(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, bi := range items {
-		params.DataHash[i] = generateDataHash(bi)
+		params.DataHash[i] = seedhelpers.GenerateDataHash(bi)
 		params.PositionID[i] = bi.PositionID
 		params.PossibleItemID[i] = bi.PossibleItem.ID
 	}
@@ -64,7 +65,7 @@ func Loop4SeedBlitzballItems(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		hashes[row.DataHash] = row.ID
+		seedhelpers.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -74,14 +75,14 @@ func extractBlitzballItems() ([]seedtypes.BlitzballItem, error) {
 	items := []seedtypes.BlitzballItem{}
 	var err error
 
-	for i := range rawJSON.blitzballPositions {
-		pos := &rawJSON.blitzballPositions[i]
+	for i := range seedhelpers.RawJSON.BlitzballPositions {
+		pos := &seedhelpers.RawJSON.BlitzballPositions[i]
 
 		for j := range pos.Items {
 			item := &pos.Items[j]
 			item.PositionID = pos.ID
 
-			item.PossibleItem.ID, err = getHashID(item.PossibleItem)
+			item.PossibleItem.ID, err = seedhelpers.GetHashID(item.PossibleItem)
 			if err != nil {
 				return nil, err
 			}
@@ -90,12 +91,12 @@ func extractBlitzballItems() ([]seedtypes.BlitzballItem, error) {
 		}
 	}
 
-	return dedupeRows(items, hashes), nil
+	return dedupeRows(items, seedhelpers.Hashes), nil
 }
 
 func completeBlitzballPositions() error {
-	for i := range rawJSON.blitzballPositions {
-		pos := &rawJSON.blitzballPositions[i]
+	for i := range seedhelpers.RawJSON.BlitzballPositions {
+		pos := &seedhelpers.RawJSON.BlitzballPositions[i]
 		err := assignIDs(pos.Items)
 		if err != nil {
 			return err
